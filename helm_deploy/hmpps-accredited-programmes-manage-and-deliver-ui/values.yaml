@@ -1,21 +1,21 @@
 generic-service:
-  nameOverride: hmpps-template-typescript
-  productId: 'UNASSIGNED' # productId for the product that this belongs too, i.e. DPS001, see README.md for details
+  nameOverride: hmpps-accredited-programmes-manage-and-deliver-ui
+  productId: 'HMPPS527' # productId for the product that this belongs too, i.e. DPS001, see README.md for details
 
   # the IRSA service account name for accessing AWS resources
-  # serviceAccountName: "hmpps-template-typescript"
+  # serviceAccountName: "hmpps-accredited-programmes-manage-and-deliver-ui"
 
   replicaCount: 4
 
   image:
-    repository: ghcr.io/ministryofjustice/hmpps-template-typescript
+    repository: ghcr.io/ministryofjustice/hmpps-accredited-programmes-manage-and-deliver-ui
     tag: app_version # override at deployment time
     port: 3000
 
   ingress:
     enabled: true
     host: app-hostname.local # override per environment
-    tlsSecretName: hmpps-template-typescript-cert
+    tlsSecretName: hmpps-accredited-programmes-manage-and-deliver-ui-cert
 
   livenessProbe:
     httpGet:
@@ -32,7 +32,7 @@ generic-service:
     REDIS_TLS_ENABLED: 'true'
     TOKEN_VERIFICATION_ENABLED: 'true'
     AUDIT_SQS_REGION: 'eu-west-2'
-    AUDIT_SERVICE_NAME: 'UNASSIGNED' # Your audit service name
+    AUDIT_SERVICE_NAME: 'HMPPS527' # Your audit service name
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
@@ -41,18 +41,18 @@ generic-service:
 
   namespace_secrets:
     # These secrets are created by terraform.
-    hmpps-template-typescript-client-creds:
+    hmpps-accredited-programmes-manage-and-deliver-ui-client-creds:
       CLIENT_CREDS_CLIENT_ID: 'CLIENT_CREDS_CLIENT_ID'
       CLIENT_CREDS_CLIENT_SECRET: 'CLIENT_CREDS_CLIENT_SECRET'
-    hmpps-template-typescript-auth-code:
+    hmpps-accredited-programmes-manage-and-deliver-ui-auth-code:
       AUTH_CODE_CLIENT_ID: 'AUTH_CODE_CLIENT_ID'
       AUTH_CODE_CLIENT_SECRET: 'AUTH_CODE_CLIENT_SECRET'    
-    hmpps-template-typescript-session-secret:
+    hmpps-accredited-programmes-manage-and-deliver-ui-session-secret:
       SESSION_SECRET: 'SESSION_SECRET'
-    hmpps-template-typescript-elasticache-redis:
+    hmpps-accredited-programmes-manage-and-deliver-ui-elasticache-redis:
       REDIS_HOST: 'primary_endpoint_address'
       REDIS_AUTH_TOKEN: 'auth_token'
-    hmpps-template-typescript-application-insights:
+    hmpps-accredited-programmes-manage-and-deliver-ui-application-insights:
       APPLICATIONINSIGHTS_CONNECTION_STRING: "APPLICATIONINSIGHTS_CONNECTION_STRING"
     # This secret will need to be created in your namespace (note it isn't in hmpps-templates-dev)
     # IRSA configuration in your namespace will also be required, and then uncomment serviceAccountName above.
@@ -64,4 +64,4 @@ generic-service:
       - internal
 
 generic-prometheus-alerts:
-  targetApplication: hmpps-template-typescript
+  targetApplication: hmpps-accredited-programmes-manage-and-deliver-ui
