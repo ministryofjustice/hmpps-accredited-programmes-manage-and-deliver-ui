@@ -15,7 +15,8 @@ generic-service:
   ingress:
     enabled: true
     host: app-hostname.local # override per environment
-    tlsSecretName: hmpps-accredited-programmes-manage-and-deliver-ui-cert
+    tlsSecretName: hmpps-manage-and-deliver-accredited-programmes-ui-cert
+
 
   livenessProbe:
     httpGet:
