@@ -46,10 +46,10 @@ generic-service:
       CLIENT_CREDS_CLIENT_SECRET: 'CLIENT_CREDS_CLIENT_SECRET'
     hmpps-accredited-programmes-manage-and-deliver-ui-auth-code:
       AUTH_CODE_CLIENT_ID: 'AUTH_CODE_CLIENT_ID'
-      AUTH_CODE_CLIENT_SECRET: 'AUTH_CODE_CLIENT_SECRET'    
+      AUTH_CODE_CLIENT_SECRET: 'AUTH_CODE_CLIENT_SECRET'
     hmpps-accredited-programmes-manage-and-deliver-ui-session-secret:
       SESSION_SECRET: 'SESSION_SECRET'
-    hmpps-accredited-programmes-manage-and-deliver-ui-elasticache-redis:
+    elasticache-redis:
       REDIS_HOST: 'primary_endpoint_address'
       REDIS_AUTH_TOKEN: 'auth_token'
     hmpps-accredited-programmes-manage-and-deliver-ui-application-insights:
