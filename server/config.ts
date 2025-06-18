@@ -1,5 +1,3 @@
-import { AgentConfig } from '@ministryofjustice/hmpps-rest-client'
-
 const production = process.env.NODE_ENV === 'production'
 
 function get<T>(name: string, fallback: T, options = { requireInProduction: false }): T | string {
@@ -13,6 +11,28 @@ function get<T>(name: string, fallback: T, options = { requireInProduction: fals
 }
 
 const requiredInProduction = { requireInProduction: true }
+
+export class AgentConfig {
+  // Sets the working socket to timeout after timeout milliseconds of inactivity on the working socket.
+  timeout: number
+
+  constructor(timeout = 8000) {
+    this.timeout = timeout
+  }
+}
+
+export interface ApiConfig {
+  url: string
+  timeout: {
+    // sets maximum time to wait for the first byte to arrive from the server, but it does not limit how long the
+    // entire download can take.
+    response: number
+    // sets a deadline for the entire request (including all uploads, redirects, server processing time) to complete.
+    // If the response isn't fully downloaded within that time, the request will be aborted.
+    deadline: number
+  }
+  agent: AgentConfig
+}
 
 const auditConfig = () => {
   const auditEnabled = get('AUDIT_ENABLED', 'false') === 'true'
@@ -57,9 +77,13 @@ export default {
         deadline: Number(get('HMPPS_AUTH_TIMEOUT_DEADLINE', 10000)),
       },
       agent: new AgentConfig(Number(get('HMPPS_AUTH_TIMEOUT_RESPONSE', 10000))),
-      authClientId: get('AUTH_CODE_CLIENT_ID', 'clientid', requiredInProduction),
+      authClientId: get('AUTH_CODE_CLIENT_ID', 'hmpps-find-and-refer-an-intervention-ui', requiredInProduction),
       authClientSecret: get('AUTH_CODE_CLIENT_SECRET', 'clientsecret', requiredInProduction),
-      systemClientId: get('CLIENT_CREDS_CLIENT_ID', 'clientid', requiredInProduction),
+      systemClientId: get(
+        'CLIENT_CREDS_CLIENT_ID',
+        'hmpps-find-and-refer-an-intervention-ui-client',
+        requiredInProduction,
+      ),
       systemClientSecret: get('CLIENT_CREDS_CLIENT_SECRET', 'clientsecret', requiredInProduction),
     },
     tokenVerification: {

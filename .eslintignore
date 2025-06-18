@@ -1,0 +1,6 @@
+node_modules
+public
+assets
+reporter-config.json
+dist/
+test_results
