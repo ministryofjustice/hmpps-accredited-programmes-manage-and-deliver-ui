@@ -1,0 +1,10 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+<h1>This is a Test Page </h1>
+<p>Test getting data from the service</p>
+{% endblock %}

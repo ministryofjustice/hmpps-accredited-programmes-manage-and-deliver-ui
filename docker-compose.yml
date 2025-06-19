@@ -13,6 +13,16 @@ services:
       - SERVER_PORT=9090
       - SPRING_PROFILES_ACTIVE=dev
 
+  postgres:
+    image: postgres:17
+    container_name: postgres
+    networks:
+      - hmpps
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: dev
 
 networks:
   hmpps:

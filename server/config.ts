@@ -96,6 +96,18 @@ export default {
       agent: new AgentConfig(Number(get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000))),
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
     },
+    accreditedProgrammesManageAndDeliverService: {
+      url: get(
+        'FIND_AND_REFER_URL',
+        'https://accredited-programmes-manage-and-deliver-api-dev.hmpps.service.justice.gov.uk',
+        requiredInProduction,
+      ),
+      timeout: {
+        response: 10000,
+        deadline: 10000,
+      },
+      agent: new AgentConfig(),
+    },
   },
   sqs: {
     audit: auditConfig(),
