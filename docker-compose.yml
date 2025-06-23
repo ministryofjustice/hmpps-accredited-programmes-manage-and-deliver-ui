@@ -1,7 +1,9 @@
 services:
 
   hmpps-auth:
-    image: quay.io/hmpps/hmpps-auth:latest
+    build:
+      context: ../hmpps-auth
+      dockerfile: Dockerfile
     networks:
       - hmpps
     container_name: hmpps-auth
@@ -13,16 +15,46 @@ services:
       - SERVER_PORT=9090
       - SPRING_PROFILES_ACTIVE=dev
 
-  postgres:
+  postgresql:
     image: postgres:17
-    container_name: postgres
+    container_name: postgresql
     networks:
       - hmpps
     ports:
       - "5432:5432"
+    healthcheck:
+      test: [ "CMD", "pg_isready", "--username=admin", "--dbname=postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: dev
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin_password
+
+  hmpps-accredited-programmes-manage-and-deliver-api:
+    container_name: hmpps-accredited-programmes-manage-and-deliver-api
+    build:
+      context: ../hmpps-accredited-programmes-manage-and-deliver-api
+      dockerfile: Dockerfile
+    networks:
+      - hmpps
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health/ping" ]
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      hmpps-auth:
+        condition: service_healthy
+    environment:
+      - SERVER_PORT=8080
+      - HMPPS_AUTH_URL=http://hmpps-auth:9090/auth
+      - SPRING_PROFILES_ACTIVE=dev, local
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin_password
+
 
 networks:
   hmpps:

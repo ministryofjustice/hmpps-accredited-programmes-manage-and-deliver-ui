@@ -3,6 +3,10 @@ import type { HmppsAuthClient, RestClientBuilderWithoutToken } from '.'
 import RestClient from './restClient'
 import config, { ApiConfig } from '../config'
 
+export interface DummyData {
+  message: string
+}
+
 export default class AccreditedProgrammesManageAndDeliverService {
   constructor(private readonly hmppsAuthClientBuilder: RestClientBuilderWithoutToken<HmppsAuthClient>) {}
 
@@ -13,13 +17,13 @@ export default class AccreditedProgrammesManageAndDeliverService {
       token,
     )
 
-  async getDummy(username: Express.User['username']): Promise<string> {
+  async getDummy(username: Express.User['username']): Promise<DummyData> {
     const hmppsAuthClient = this.hmppsAuthClientBuilder()
     const systemToken = await hmppsAuthClient.getSystemClientToken(username)
     const restClient = this.createRestClient(systemToken)
     return (await restClient.get({
       path: `/hello-world`,
       headers: { Accept: 'application/json' },
-    })) as string
+    })) as DummyData
   }
 }
