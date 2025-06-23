@@ -77,7 +77,11 @@ export default {
         deadline: Number(get('HMPPS_AUTH_TIMEOUT_DEADLINE', 10000)),
       },
       agent: new AgentConfig(Number(get('HMPPS_AUTH_TIMEOUT_RESPONSE', 10000))),
-      authClientId: get('AUTH_CODE_CLIENT_ID', 'hmpps-accredited-programmes-manage-and-deliver-ui', requiredInProduction),
+      authClientId: get(
+        'AUTH_CODE_CLIENT_ID', 
+        'hmpps-accredited-programmes-manage-and-deliver-ui', 
+        requiredInProduction
+      ),
       authClientSecret: get('AUTH_CODE_CLIENT_SECRET', 'clientsecret', requiredInProduction),
       systemClientId: get(
         'CLIENT_CREDS_CLIENT_ID',
