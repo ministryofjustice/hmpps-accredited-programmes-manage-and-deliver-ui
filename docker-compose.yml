@@ -12,6 +12,11 @@ services:
     environment:
       - SERVER_PORT=9090
       - SPRING_PROFILES_ACTIVE=dev
+      - DELIUS_ENABLED=true
+      - DELIUS_ENDPOINT_URL=http://wiremock:8080/delius
+      - DELIUS_ENDPOINT_TIMEOUT=1s
+      - DELIUS_CLIENT_CLIENT-ID=delius-auth-api-client
+      - DELIUS_CLIENT_CLIENT-SECRET=delius-auth-api-client
 
   postgresql:
     image: postgres:17
@@ -40,11 +45,6 @@ services:
       - "8080:8080"
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8080/health/ping" ]
-    depends_on:
-      postgresql:
-        condition: service_healthy
-      hmpps-auth:
-        condition: service_healthy
     environment:
       - SERVER_PORT=8080
       - HMPPS_AUTH_URL=http://hmpps-auth:9090/auth
@@ -52,6 +52,17 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/postgres
       - SPRING_DATASOURCE_USERNAME=admin
       - SPRING_DATASOURCE_PASSWORD=admin_password
+
+  wiremock:
+    image: wiremock/wiremock
+    networks:
+      - hmpps
+    restart: always
+    ports:
+      - "9092:8080"
+    volumes:
+      - ./wiremock_mappings:/home/wiremock/mappings
+    command: '--verbose'
 
 
 networks:
