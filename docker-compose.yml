@@ -1,9 +1,7 @@
 services:
 
   hmpps-auth:
-    build:
-      context: ../hmpps-auth
-      dockerfile: Dockerfile
+    image: quay.io/hmpps/hmpps-auth:latest
     networks:
       - hmpps
     container_name: hmpps-auth
