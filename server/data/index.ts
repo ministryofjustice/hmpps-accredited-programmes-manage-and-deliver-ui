@@ -11,10 +11,19 @@ const applicationInfo = applicationInfoSupplier()
 initialiseAppInsights()
 buildAppInsightsClient(applicationInfo)
 
-import { createRedisClient } from './redisClient'
 import config from '../config'
 import HmppsAuditClient from './hmppsAuditClient'
+import HmppsAuthClient from './hmppsAuthClient'
+import { createRedisClient } from './redisClient'
+
 import logger from '../../logger'
+
+type RestClientBuilder<T> = (token: Express.User['token']) => T
+type RestClientBuilderWithoutToken<T> = () => T
+
+const tokenStore = new InMemoryTokenStore()
+
+const hmppsAuthClientBuilder: RestClientBuilderWithoutToken<HmppsAuthClient> = () => new HmppsAuthClient(tokenStore)
 
 export const dataAccess = () => {
   const hmppsAuthClient = new AuthenticationClient(
@@ -32,4 +41,5 @@ export const dataAccess = () => {
 
 export type DataAccess = ReturnType<typeof dataAccess>
 
-export { AuthenticationClient, HmppsAuditClient }
+export { HmppsAuditClient, HmppsAuthClient, hmppsAuthClientBuilder }
+export type { RestClientBuilder, RestClientBuilderWithoutToken }
