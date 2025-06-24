@@ -101,7 +101,7 @@ export default {
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
     },
     accreditedProgrammesManageAndDeliverService: {
-      url: get('ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_URI', 'http://localhost:8080', requiredInProduction),
+      url: get('ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_URL', 'http://localhost:8080', requiredInProduction),
       timeout: {
         response: 10000,
         deadline: 10000,
