@@ -39,4 +39,10 @@ export default function nunjucksSetup(app: express.Express): void {
 
   njkEnv.addFilter('initialiseName', initialiseName)
   njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)
+  njkEnv.addFilter('json', (value, spaces) => {
+    if (value instanceof nunjucks.runtime.SafeString) {
+      value = value.toString()
+    }
+    return JSON.stringify(value, null, spaces).replace(/</g, '\\u003c')
+  })
 }

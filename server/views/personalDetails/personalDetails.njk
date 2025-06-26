@@ -1,0 +1,10 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+<h1>Personal Details</h1>
+<p>{{presenter.personalDetails | json}}</p>
+{% endblock %}
