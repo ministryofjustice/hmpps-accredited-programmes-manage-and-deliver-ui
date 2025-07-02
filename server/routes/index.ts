@@ -4,12 +4,14 @@ import asyncMiddleware from '../middleware/asyncMiddleware'
 import type { Services } from '../services'
 import { Page } from '../services/auditService'
 import TestPageController from '../testPage/testPageController'
+import CaselistController from '../caselist/caselistController'
 
 export default function routes({ auditService, accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
   const testPageController = new TestPageController(accreditedProgrammesManageAndDeliverService)
+  const caselistController = new CaselistController(accreditedProgrammesManageAndDeliverService)
 
   get('/', async (req, res, next) => {
     await auditService.logPageView(Page.EXAMPLE_PAGE, { who: res.locals.user.username, correlationId: req.id })
@@ -19,6 +21,14 @@ export default function routes({ auditService, accreditedProgrammesManageAndDeli
 
   get('/test', async (req, res, next) => {
     await testPageController.showTestPage(req, res)
+  })
+
+  get('/pdu/open-referrals', async (req, res, next) => {
+    await caselistController.showOpenCaselist(req, res)
+  })
+
+  get('/pdu/closed-referrals', async (req, res, next) => {
+    await caselistController.showClosedCaselist(req, res)
   })
 
   return router
