@@ -1,6 +1,6 @@
 import type { SystemToken } from '@hmpps-auth'
-import type { HmppsAuthClient, RestClientBuilderWithoutToken } from '.'
-import RestClient from './restClient'
+import type { HmppsAuthClient, RestClientBuilderWithoutToken } from '../data'
+import RestClient from '../data/restClient'
 import config, { ApiConfig } from '../config'
 import Caselist from '../models/caseList'
 

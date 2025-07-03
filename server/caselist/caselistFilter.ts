@@ -1,5 +1,5 @@
 import { Request } from 'express'
-import { CaselistFilterParams } from '../data/accreditedProgrammesManageAndDeliverService'
+import { CaselistFilterParams } from '../services/accreditedProgrammesManageAndDeliverService'
 
 export default class CaselistFilter {
   referralStatus: string | undefined

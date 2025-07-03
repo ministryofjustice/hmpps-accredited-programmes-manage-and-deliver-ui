@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import AccreditedProgrammesManageAndDeliverService from '../data/accreditedProgrammesManageAndDeliverService'
+import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
 import CaselistPresenter, { CaselistPageSection } from './caselistPresenter'
 import CaselistView from './caselistView'

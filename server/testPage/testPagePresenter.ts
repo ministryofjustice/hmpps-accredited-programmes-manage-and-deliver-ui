@@ -1,4 +1,4 @@
-import { DummyData } from '../data/accreditedProgrammesManageAndDeliverService'
+import { DummyData } from '../services/accreditedProgrammesManageAndDeliverService'
 
 export default class TestPagePresenter {
   constructor(private testData: DummyData) {

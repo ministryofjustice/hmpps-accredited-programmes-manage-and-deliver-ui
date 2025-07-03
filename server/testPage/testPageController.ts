@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 
 import AccreditedProgrammesManageAndDeliverService, {
   DummyData,
-} from '../data/accreditedProgrammesManageAndDeliverService'
+} from '../services/accreditedProgrammesManageAndDeliverService'
 import TestPagePresenter from './testPagePresenter'
 import TestPageView from './testPageView'
 import ControllerUtils from '../utils/controllerUtils'
