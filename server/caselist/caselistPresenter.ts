@@ -32,36 +32,7 @@ export default class CaselistPresenter {
             'aria-sort': 'ascending',
           },
         },
-        {
-          text: 'Probation Office',
-          attributes: {
-            'aria-sort': 'none',
-          },
-        },
-        {
-          text: 'Sentence and Date',
-          attributes: {
-            'aria-sort': 'none',
-          },
-        },
-        {
-          text: 'PSS end date',
-          attributes: {
-            'aria-sort': 'none',
-          },
-        },
-        {
-          text: 'Sentence',
-          attributes: {
-            'aria-sort': 'none',
-          },
-        },
-        {
-          text: 'Cohort',
-          attributes: {
-            'aria-sort': 'none',
-          },
-        },
+
         {
           text: 'Referral status',
           attributes: {
@@ -78,11 +49,7 @@ export default class CaselistPresenter {
     this.caselist.referrals.forEach(referral => {
       referralData.push([
         { html: `<a href='#'>${referral.personName}</a><br><span>${referral.personCrn}</span>` },
-        { text: 'Brighton Probation Office' },
-        { text: '20 May 2025 Licence end date' },
-        { text: '21 Dec 2025' },
-        { text: 'ORA Adult custody (inc PSS) (11 months)' },
-        { text: 'Sexual offence' },
+
         { text: 'Referral submitted' },
       ])
     })
@@ -168,7 +135,7 @@ export default class CaselistPresenter {
 
         clearLink: {
           text: 'Clear filters',
-          href: `/`,
+          href: this.section === 1 ? '/pdu/open-referrals' : '/pdu/closed-referrals',
         },
         categories,
       }

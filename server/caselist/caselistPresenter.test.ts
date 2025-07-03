@@ -17,7 +17,7 @@ describe(`filters.`, () => {
           },
           clearLink: {
             text: 'Clear filters',
-            href: `/`,
+            href: `/pdu/open-referrals`,
           },
           categories: [
             {

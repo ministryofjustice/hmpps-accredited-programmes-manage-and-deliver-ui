@@ -2,6 +2,7 @@ import type { SystemToken } from '@hmpps-auth'
 import type { HmppsAuthClient, RestClientBuilderWithoutToken } from '.'
 import RestClient from './restClient'
 import config, { ApiConfig } from '../config'
+import Caselist from '../models/caseList'
 
 export interface DummyData {
   message: string
@@ -42,23 +43,23 @@ export default class AccreditedProgrammesManageAndDeliverService {
     })) as DummyData
   }
 
-  async getOpenCaselist(username: Express.User['username']): Promise<string> {
+  async getOpenCaselist(username: Express.User['username']): Promise<Caselist> {
     const hmppsAuthClient = this.hmppsAuthClientBuilder()
     const systemToken = await hmppsAuthClient.getSystemClientToken(username)
     const restClient = this.createRestClient(systemToken)
     return (await restClient.get({
       path: `/pages/caselist/open`,
       headers: { Accept: 'application/json' },
-    })) as string
+    })) as Caselist
   }
 
-  async getClosedCaselist(username: Express.User['username']): Promise<DummyData> {
+  async getClosedCaselist(username: Express.User['username']): Promise<Caselist> {
     const hmppsAuthClient = this.hmppsAuthClientBuilder()
     const systemToken = await hmppsAuthClient.getSystemClientToken(username)
     const restClient = this.createRestClient(systemToken)
     return (await restClient.get({
       path: `/pages/caselist/closed`,
       headers: { Accept: 'application/json' },
-    })) as DummyData
+    })) as Caselist
   }
 }

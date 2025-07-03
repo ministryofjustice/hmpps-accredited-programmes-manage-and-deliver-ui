@@ -34,7 +34,8 @@
 
         submit: {
           attributes: {
-            "data-test-id": "submit-button"
+            "data-test-id": "submit-button",
+            disabled: true
           }
         },
 
@@ -43,7 +44,6 @@
         }) }}
       </form>
   </div>
-  </p>
   <div class="govuk-grid-column-three-quarters">
     {{ mojSubNavigation(subNavArgs) }}
     {{ govukTable(presenter.getCaseloadTableArgs()) }}
