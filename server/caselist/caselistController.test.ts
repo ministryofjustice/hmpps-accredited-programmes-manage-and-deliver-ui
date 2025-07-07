@@ -1,4 +1,5 @@
 import { Express } from 'express'
+import * as cheerio from 'cheerio'
 import request from 'supertest'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
@@ -23,30 +24,35 @@ beforeEach(() => {
       accreditedProgrammesManageAndDeliverService,
     },
   })
+  const caseList = caselistItem.build()
+  accreditedProgrammesManageAndDeliverService.getOpenCaselist.mockResolvedValue(caseList)
+  accreditedProgrammesManageAndDeliverService.getClosedCaselist.mockResolvedValue(caseList)
 })
 
-describe(`GET /pdu/open-referrals`, () => {
-  it('calls api to get open referrals', async () => {
-    const caseList = caselistItem.build()
-    accreditedProgrammesManageAndDeliverService.getOpenCaselist.mockResolvedValue(caseList)
-    await request(app)
-      .get(`/pdu/open-referrals`)
-      .expect(200)
-      .expect(res => {
-        expect(res.text).toContain('Referrals in Brighton and Hove')
-      })
-  })
-})
-
-describe(`GET /pdu/closed-referrals`, () => {
-  it('calls api to get open referrals', async () => {
-    const caseList = caselistItem.build()
-    accreditedProgrammesManageAndDeliverService.getClosedCaselist.mockResolvedValue(caseList)
-    await request(app)
-      .get(`/pdu/closed-referrals`)
-      .expect(200)
-      .expect(res => {
-        expect(res.text).toContain('Referrals in Brighton and Hove')
-      })
-  })
+describe(`Caselist controller`, () => {
+  test.each([
+    ['/pdu/open-referrals?cohort=sexual-offence&referralStatus=court-order', 'sexual-offence', 'court-order'],
+    [`/pdu/open-referrals`, undefined, undefined],
+    ['/pdu/closed-referrals', undefined, undefined],
+    [
+      '/pdu/open-referrals?cohort=general-offence&referralStatus=programme-complete',
+      'general-offence',
+      'programme-complete',
+    ],
+  ])(
+    `should set the correct filters based on the url provided %s`,
+    async (url: string, cohortValue, referralStatusValue) => {
+      await request(app)
+        .get(url)
+        .expect(200)
+        .expect(res => {
+          expect(res.ok)
+          const $ = cheerio.load(res.text)
+          const cohortInput = $('#cohort option[selected]').val()
+          expect(cohortInput).toBe(cohortValue)
+          const referralStatusInput = $('#referralStatus option[selected]').val()
+          expect(referralStatusInput).toBe(referralStatusValue)
+        })
+    },
+  )
 })

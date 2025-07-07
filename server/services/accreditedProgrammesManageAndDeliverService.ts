@@ -17,12 +17,6 @@ export interface PaginationParams {
   sort?: string[]
 }
 
-export interface CaselistFilterParams {
-  nameOrCrn?: string
-  referralStatus?: string
-  cohort?: string
-}
-
 export default class AccreditedProgrammesManageAndDeliverService {
   constructor(private readonly hmppsAuthClientBuilder: RestClientBuilderWithoutToken<HmppsAuthClient>) {}
 
