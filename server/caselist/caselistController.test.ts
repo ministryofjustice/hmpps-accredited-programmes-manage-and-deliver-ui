@@ -30,10 +30,13 @@ describe(`GET /pdu/open-referrals`, () => {
     const caseList = caselistItem.build()
     accreditedProgrammesManageAndDeliverService.getOpenCaselist.mockResolvedValue(caseList)
     await request(app)
-      .get(`/pdu/open-referrals`)
+      .get(`/pdu/open-referrals?cohort=sexual-offence`)
       .expect(200)
       .expect(res => {
-        expect(res.text).toContain('Referrals in Brighton and Hove')
+        expect(res.ok)
+        // TODO: Install e.g. cheerio and test the HTML response
+        // TODO: Test that the query params exist
+        // TODO: Select on the body to find the 'cohort' input, and assert it has the `value` of `sexual-offence`
       })
   })
 })

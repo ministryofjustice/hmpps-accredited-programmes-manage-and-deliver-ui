@@ -11,33 +11,34 @@ export default class CaselistController {
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
   ) {}
 
-  async showOpenCaselist(req: Request, res: Response): Promise<void> {
+  private getCaselistData(req: Request): { username: string; queryParamsAsString: string; filter: CaselistFilter } {
     const { username } = req.user
-    const openReferralList = await this.accreditedProgrammesManageAndDeliverService.getOpenCaselist(username)
     const filter = CaselistFilter.fromRequest(req)
-    req.session.filterParams = req.originalUrl.split('?').pop()
-    const presenter = new CaselistPresenter(
-      CaselistPageSection.Open,
-      openReferralList,
-      filter,
-      req.session.filterParams,
-    )
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [_url, queryParamsAsString] = req.originalUrl.split('?')
+
+    return { filter, queryParamsAsString, username }
+  }
+
+  async showOpenCaselist(req: Request, res: Response): Promise<void> {
+    const { filter, queryParamsAsString, username } = this.getCaselistData(req)
+
+    const openCaseList = await this.accreditedProgrammesManageAndDeliverService.getOpenCaselist(username)
+
+    const presenter = new CaselistPresenter(CaselistPageSection.Open, openCaseList, filter, queryParamsAsString)
+
     const view = new CaselistView(presenter)
 
     ControllerUtils.renderWithLayout(res, view)
   }
 
   async showClosedCaselist(req: Request, res: Response): Promise<void> {
-    const { username } = req.user
-    const closedReferralList = await this.accreditedProgrammesManageAndDeliverService.getClosedCaselist(username)
-    const filter = CaselistFilter.fromRequest(req)
-    req.session.filterParams = req.originalUrl.split('?').pop()
-    const presenter = new CaselistPresenter(
-      CaselistPageSection.Closed,
-      closedReferralList,
-      filter,
-      req.session.filterParams,
-    )
+    const { username, filter, queryParamsAsString } = this.getCaselistData(req)
+
+    const closedCaseList = await this.accreditedProgrammesManageAndDeliverService.getClosedCaselist(username)
+
+    const presenter = new CaselistPresenter(CaselistPageSection.Closed, closedCaseList, filter, queryParamsAsString)
+
     const view = new CaselistView(presenter)
 
     ControllerUtils.renderWithLayout(res, view)
