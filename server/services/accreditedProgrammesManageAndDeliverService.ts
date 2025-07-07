@@ -4,10 +4,6 @@ import RestClient from '../data/restClient'
 import config, { ApiConfig } from '../config'
 import Caselist from '../models/caseList'
 
-export interface DummyData {
-  message: string
-}
-
 export interface PaginationParams {
   // Page number to retrieve -- starts from 1
   page?: number
@@ -26,16 +22,6 @@ export default class AccreditedProgrammesManageAndDeliverService {
       config.apis.accreditedProgrammesManageAndDeliverService as ApiConfig,
       token,
     )
-
-  async getDummy(username: Express.User['username']): Promise<DummyData> {
-    const hmppsAuthClient = this.hmppsAuthClientBuilder()
-    const systemToken = await hmppsAuthClient.getSystemClientToken(username)
-    const restClient = this.createRestClient(systemToken)
-    return (await restClient.get({
-      path: `/hello-world`,
-      headers: { Accept: 'application/json' },
-    })) as DummyData
-  }
 
   async getOpenCaselist(username: Express.User['username']): Promise<Caselist> {
     const hmppsAuthClient = this.hmppsAuthClientBuilder()
