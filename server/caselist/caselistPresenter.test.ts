@@ -80,7 +80,7 @@ describe(`filters.`, () => {
         { value: 'sexual-offence', text: 'Sexual Offence' },
       ]
       expect(presenter.generateSelectValues(valuesToAddToSelect, testObject.filter.referralStatus)).toEqual([
-        { disabled: true, selected: true, text: 'Select' },
+        { text: 'Select' },
         { selected: false, text: 'General Offence', value: 'general-offence' },
         { selected: false, text: 'Sexual Offence', value: 'sexual-offence' },
       ])
@@ -94,7 +94,7 @@ describe(`filters.`, () => {
 
       const valuesToAddToSelect: { value: string; text: string }[] = []
       expect(presenter.generateSelectValues(valuesToAddToSelect, testObject.filter.referralStatus)).toEqual([
-        { disabled: true, selected: true, text: 'Select' },
+        { text: 'Select' },
       ])
     })
   })

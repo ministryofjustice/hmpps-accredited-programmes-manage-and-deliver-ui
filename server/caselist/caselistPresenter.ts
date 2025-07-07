@@ -111,8 +111,6 @@ export default class CaselistPresenter {
     const selectOptions: SelectArgsItem[] = [
       {
         text: 'Select',
-        disabled: true,
-        selected: true,
       },
     ]
     options.map(option =>
