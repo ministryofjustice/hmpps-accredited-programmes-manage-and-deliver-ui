@@ -1,6 +1,6 @@
 import { dataAccess, hmppsAuthClientBuilder } from '../data'
 import AuditService from './auditService'
-import AccreditedProgrammesManageAndDeliverService from '../data/accreditedProgrammesManageAndDeliverService'
+import AccreditedProgrammesManageAndDeliverService from './accreditedProgrammesManageAndDeliverService'
 
 export const services = () => {
   const { applicationInfo, hmppsAuditClient } = dataAccess()
