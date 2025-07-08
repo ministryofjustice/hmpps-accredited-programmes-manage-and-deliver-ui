@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import PersonalDetailsPresenter from './personalDetailsPresenter'
 import PersonalDetailsView from './personalDetailsView'
 import ControllerUtils from '../utils/controllerUtils'
-import AccreditedProgrammesManageAndDeliverService from '../data/accreditedProgrammesManageAndDeliverService'
+import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 
 export default class PersonalDetailsController {
   constructor(
