@@ -13,7 +13,23 @@ export default class PersonalDetailsController {
   async showPersonalDetailsPage(req: Request, res: Response): Promise<void> {
     const { username } = req.user
     const { id } = req.params
-    const personalDetails = await this.accreditedProgrammesManageAndDeliverService.getPersonalDetails(username, id)
+    // const personalDetails = await this.accreditedProgrammesManageAndDeliverService.getPersonalDetails(username, id)
+    const personalDetails = {
+      crn: '1234',
+      nomsNumber: 'CN1234',
+      name: {
+        forename: 'Steve',
+        surname: 'Sticks',
+      },
+      dateOfBirth: 'Jan 01 1990',
+      ethnicity: 'British',
+      gender: 'Male',
+      probationDeliveryUnit: {
+        code: 'LDN',
+        description: 'London',
+      },
+      setting: 'Community',
+    }
     const presenter = new PersonalDetailsPresenter(personalDetails)
     const view = new PersonalDetailsView(presenter)
 

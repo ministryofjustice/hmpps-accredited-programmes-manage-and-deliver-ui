@@ -1,10 +1,44 @@
 {% extends "../partials/layout.njk" %}
-{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
+{% from "govuk/components/header/macro.njk" import govukHeader %}
 
+
+{% block main %}
+{{ govukPhaseBanner({
+  tag: {
+    text: "Prototype"
+  },
+  html: 'This is a new service - your <a class="govuk-link" href="#">feedback</a> will help us improve it.'
+}) }}
+<section class="key-details-bar" aria-label="Key details">
+  <div class="key-details-bar__key-details govuk-width-container govuk-body">
+    <div class="prisoner-info">
+      <div class="key-details-bar__top-block">
+        <span class="govuk-visually-hidden">Name:</span>
+        <span class="key-details-bar__name"><strong>Alex River</strong></span>
+      </div>
+      <div class="key-details-bar__bottom-block">
+        <span class="govuk-body govuk-!-margin-right-2"><strong>CRN: </strong>X123445</span> |
+        <span class="govuk-body govuk-!-margin-right-2 govuk-!-margin-left-2"><strong>Date of birth: </strong>5 February 1991 (33 years old)</span> |
+        <span class="govuk-body  govuk-!-margin-left-2"><strong>Tier: </strong>C2</span>
+      </div>
+    </div>
+  </div>
+</section>
 {% block content %}
-<h1>Personal Details</h1>
-<p>{{presenter.personalDetails | json}}</p>
+<div class="govuk-width-container">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h1>Personal Details</h1>
+      <p>{{presenter.personalDetails | json}}</p>
+    </div>
+  </div>
+</div>
 {% endblock %}
+{% endblock %}
+
+
+
