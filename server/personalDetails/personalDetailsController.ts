@@ -11,8 +11,8 @@ export default class PersonalDetailsController {
   ) {}
 
   async showPersonalDetailsPage(req: Request, res: Response): Promise<void> {
-    const { username } = req.user
-    const { id } = req.params
+    // const { username } = req.user
+    // const { id } = req.params
     // const personalDetails = await this.accreditedProgrammesManageAndDeliverService.getPersonalDetails(username, id)
     const personalDetails = {
       crn: '1234',
