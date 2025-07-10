@@ -19,6 +19,25 @@ export default class PersonalDetailsPresenter {
     this.personalDetails = personalDetails
   }
 
+  getSubHeaderArgs(): {
+    heading: { text: string; classes: string }
+    items: { text: string; classes: string; href?: string }[]
+  } {
+    return {
+      heading: {
+        text: 'Referral to Building Choices: moderate intensity',
+        classes: 'govuk-heading-l',
+      },
+      items: [
+        {
+          text: 'Back to referrals',
+          classes: 'govuk-button--secondary',
+          href: '/pdu/open-referrals',
+        },
+      ],
+    }
+  }
+
   getHorizontalSubNavArgs(): { items: { text: string; href: string; active: boolean }[] } {
     return {
       items: [
