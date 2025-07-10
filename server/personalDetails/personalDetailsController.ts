@@ -11,8 +11,13 @@ export default class PersonalDetailsController {
   ) {}
 
   async showPersonalDetailsPage(req: Request, res: Response): Promise<void> {
+    const splitUrl = req.originalUrl.split('?section=')
+    let subNavValue = splitUrl[1]
+    if (subNavValue === undefined) {
+      subNavValue = 'personalDetails'
+    }
     // const { username } = req.user
-    // const { id } = req.params
+    const { id } = req.params
     // const personalDetails = await this.accreditedProgrammesManageAndDeliverService.getPersonalDetails(username, id)
     const personalDetails = {
       crn: '1234',
@@ -30,7 +35,7 @@ export default class PersonalDetailsController {
       },
       setting: 'Community',
     }
-    const presenter = new PersonalDetailsPresenter(personalDetails)
+    const presenter = new PersonalDetailsPresenter(personalDetails, subNavValue, id)
     const view = new PersonalDetailsView(presenter)
 
     ControllerUtils.renderWithLayout(res, view)
