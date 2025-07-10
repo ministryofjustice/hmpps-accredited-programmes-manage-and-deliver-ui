@@ -1,11 +1,13 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
-
-{% set pageTitle = applicationName + " - Home" %}
-{% set mainClasses = "app-container govuk-body" %}
 {% from "govuk/components/header/macro.njk" import govukHeader %}
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 {%- from "moj/components/side-navigation/macro.njk" import mojSideNavigation -%}
+{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
 {% block main %}
 {{ govukPhaseBanner({
   tag: {
@@ -30,54 +32,56 @@
 </section>
 {% block content %}
 <div class="govuk-width-container" id="main-content">
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      <h1 class="govuk-heading-l">Referral to Building Choices: moderate intensity</h1>
-      {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
-      <p>{{presenter.personalDetails | json}}</p>
-    </div>
+  <div class="govuk-main-wrapper">
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
-        <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+        {{ mojPageHeaderActions(presenter.getSubHeaderArgs()) }}
+        {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
+        <p>{{presenter.personalDetails | json}}</p>
       </div>
-    </div>
-    <div class="govuk-grid-row">
-
-      <div class="govuk-grid-column-one-third">
-
-        {{ mojSideNavigation(presenter.getVerticalSubNavArgs()) }}
-
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+          <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+        </div>
       </div>
-      <div class="govuk-grid-column-two-thirds">
-        {% if presenter.subNavValue == 'programmeHistory' %}
-        <div>
-          Programme History
+      <div class="govuk-grid-row">
+
+        <div class="govuk-grid-column-one-third">
+
+          {{ mojSideNavigation(presenter.getVerticalSubNavArgs()) }}
+
         </div>
-        {% elif presenter.subNavValue == 'offenceHistory' %}
-        <div>
-          Offence History
-        </div>
-        {% elif presenter.subNavValue == 'sentenceInformation' %}
-        <div>
-          Sentence Information
-        </div>
-        {% elif presenter.subNavValue == 'availability' %}
-        <div>
-          Availability
-        </div>
-        {% elif presenter.subNavValue == 'location' %}
-        <div>
-          Location
-        </div>
-        {% elif presenter.subNavValue == 'additionalInformation' %}
-        <div>
-          Additional Information
-        </div>
-        {% else %}
+        <div class="govuk-grid-column-two-thirds">
+          {% if presenter.subNavValue == 'programmeHistory' %}
           <div>
-            Personal Details
+            Programme History
           </div>
-        {% endif %}
+          {% elif presenter.subNavValue == 'offenceHistory' %}
+          <div>
+            Offence History
+          </div>
+          {% elif presenter.subNavValue == 'sentenceInformation' %}
+          <div>
+            Sentence Information
+          </div>
+          {% elif presenter.subNavValue == 'availability' %}
+          <div>
+            Availability
+          </div>
+          {% elif presenter.subNavValue == 'location' %}
+          <div>
+            Location
+          </div>
+          {% elif presenter.subNavValue == 'additionalInformation' %}
+          <div>
+            Additional Information
+          </div>
+          {% else %}
+            <div>
+              Personal Details
+            </div>
+          {% endif %}
+        </div>
       </div>
     </div>
   </div>
