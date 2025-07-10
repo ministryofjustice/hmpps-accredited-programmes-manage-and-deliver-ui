@@ -12,7 +12,7 @@ export enum PersonalDetailsPageSection {
 
 export default class PersonalDetailsPresenter {
   constructor(
-    private personalDetails: PersonalDetails | null,
+    private personalDetails: PersonalDetails,
     readonly subNavValue: string,
     readonly id: string,
   ) {
