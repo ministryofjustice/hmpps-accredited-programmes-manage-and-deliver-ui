@@ -40,8 +40,13 @@
       <div class="govuk-grid-column-full">
         {{ mojPageHeaderActions(presenter.getSubHeaderArgs()) }}
         {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
-        <p>{{presenter.personalDetails | json}}</p>
+        <div class="govuk-grid-column-three-quarters">
+          <h2 class="govuk-heading-m">Referral summary</h2>
+          {{ govukSummaryList(referralSummary) }}
+        </div>
       </div>
+    </div>
+
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
           <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
@@ -87,7 +92,7 @@
           {% endif %}
         </div>
       </div>
-    </div>
+
   </div>
 </div>
 

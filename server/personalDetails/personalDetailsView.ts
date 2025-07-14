@@ -1,26 +1,30 @@
 import PersonalDetailsPresenter from './personalDetailsPresenter'
 import { InsetTextArgs, SummaryListArgs } from '../utils/govukFrontendTypes'
-import { SummaryListItem } from '../utils/summaryList'
 import ViewUtils from '../utils/viewUtils'
 
 export default class PersonalDetailsView {
   constructor(private readonly presenter: PersonalDetailsPresenter) {}
 
-  // static summary(items: SummaryListItem[]): SummaryListArgs {
-  //   return {
-  //     ...ViewUtils.summaryListArgs(items),
-  //   }
-  // }
-
   get summary(): SummaryListArgs {
     return {
-      ...ViewUtils.summaryListArgsWithSummaryCard(this.presenter.referralSummaryList(), 'Personal details'),
+      ...ViewUtils.summaryListArgsWithSummaryCard(this.presenter.personalDetailsSummaryList(), 'Personal details'),
+    }
+  }
+
+  get referralSummary(): SummaryListArgs {
+    return {
+      ...ViewUtils.summaryListArgs(
+        this.presenter.referralSummaryList(),
+        { showBorders: false },
+        'govuk-!-margin-bottom-0',
+      ),
     }
   }
 
   get importFromDeliusText(): InsetTextArgs {
     return {
-      text: 'some text',
+      text: 'Imported from NDelius on 1 August 2023, last updated on 4 January 2023',
+      classes: 'govuk-!-margin-top-0',
     }
   }
 
@@ -30,6 +34,7 @@ export default class PersonalDetailsView {
       {
         presenter: this.presenter,
         summary: this.summary,
+        referralSummary: this.referralSummary,
         importFromDeliusText: this.importFromDeliusText,
       },
     ]

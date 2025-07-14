@@ -1,5 +1,6 @@
 import PersonalDetails from '../models/PersonalDetails'
 import { SummaryListItem } from '../utils/summaryList'
+import DateUtils from '../utils/dateUtils'
 
 export enum PersonalDetailsPageSection {
   PersonalDetailsTab = 'personalDetails',
@@ -109,7 +110,10 @@ export default class PersonalDetailsPresenter {
     }
   }
 
-  referralSummaryList(): SummaryListItem[] {
+  personalDetailsSummaryList(): SummaryListItem[] {
+    const ageYears = DateUtils.age(this.personalDetails.dateOfBirth)
+    const ageMonths = DateUtils.ageMonths(this.personalDetails.dateOfBirth)
+    const ageMonthsStr = ageMonths === 1 ? `, ${ageMonths} month` : `, ${ageMonths} months`
     return [
       {
         key: 'Name',
@@ -121,7 +125,9 @@ export default class PersonalDetailsPresenter {
       },
       {
         key: 'Date of birth',
-        lines: [this.personalDetails.dateOfBirth],
+        lines: [
+          `${DateUtils.formattedDate(this.personalDetails.dateOfBirth)} (${ageYears} years${ageMonths === 0 ? '' : ageMonthsStr} old)`,
+        ],
       },
       {
         key: 'Ethnicity',
@@ -138,6 +144,36 @@ export default class PersonalDetailsPresenter {
       {
         key: 'Probation delivery unit',
         lines: [this.personalDetails.probationDeliveryUnit.description],
+      },
+    ]
+  }
+
+  referralSummaryList(): SummaryListItem[] {
+    return [
+      {
+        key: 'Applicant Name',
+        lines: [`${this.personalDetails.name.forename} ${this.personalDetails.name.surname}`],
+      },
+      {
+        key: 'Programme Name',
+        lines: ['Building Choices: moderate intensity'],
+      },
+      {
+        key: 'Programme strand',
+        lines: ['Sexual Offence'],
+      },
+      {
+        key: 'Date referred',
+        lines: ['11 June 2023'],
+      },
+      {
+        key: 'Probation practitioner',
+        lines: ['Tom Saunders'],
+      },
+      {
+        key: 'Probation practitioner email address',
+        lines: ['text'],
+        valueLink: '<a href="mailto:tom.saunders@justice.gov.uk">tom.saunders@justice.gov.uk</a>',
       },
     ]
   }
