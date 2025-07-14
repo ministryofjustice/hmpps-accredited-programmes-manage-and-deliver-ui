@@ -17,17 +17,19 @@ export interface PaginationParams {
 export default class AccreditedProgrammesManageAndDeliverService {
   constructor(private readonly hmppsAuthClientBuilder: RestClientBuilderWithoutToken<HmppsAuthClient>) {}
 
-  createRestClient = (token: Express.User['token'] | SystemToken): RestClient =>
-    new RestClient(
-      'Accredited Programmes Manage And Deliver Service API Client',
-      config.apis.accreditedProgrammesManageAndDeliverService as ApiConfig,
-      token,
-    )
-
-  async getOpenCaselist(username: Express.User['username']): Promise<Caselist> {
+  async createRestClientFromUsername(username: Express.User['username']): Promise<RestClient> {
     const hmppsAuthClient = this.hmppsAuthClientBuilder()
     const systemToken = await hmppsAuthClient.getSystemClientToken(username)
-    const restClient = this.createRestClient(systemToken)
+
+    return new RestClient(
+      'Accredited Programmes Manage And Deliver Service API Client',
+      config.apis.accreditedProgrammesManageAndDeliverService as ApiConfig,
+      systemToken,
+    )
+  }
+
+  async getOpenCaselist(username: Express.User['username']): Promise<Caselist> {
+    const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/pages/caselist/open`,
       headers: { Accept: 'application/json' },
@@ -35,9 +37,7 @@ export default class AccreditedProgrammesManageAndDeliverService {
   }
 
   async getClosedCaselist(username: Express.User['username']): Promise<Caselist> {
-    const hmppsAuthClient = this.hmppsAuthClientBuilder()
-    const systemToken = await hmppsAuthClient.getSystemClientToken(username)
-    const restClient = this.createRestClient(systemToken)
+    const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/pages/caselist/closed`,
       headers: { Accept: 'application/json' },
@@ -45,9 +45,7 @@ export default class AccreditedProgrammesManageAndDeliverService {
   }
 
   async getPersonalDetails(username: Express.User['username'], id: string): Promise<PersonalDetails> {
-    const hmppsAuthClient = this.hmppsAuthClientBuilder()
-    const systemToken = await hmppsAuthClient.getSystemClientToken(username)
-    const restClient = this.createRestClient(systemToken)
+    const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/referral/${id}`,
       headers: { Accept: 'application/json' },
