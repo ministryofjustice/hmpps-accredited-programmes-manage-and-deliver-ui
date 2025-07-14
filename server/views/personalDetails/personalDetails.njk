@@ -1,9 +1,12 @@
 {% extends "../partials/layout.njk" %}
-{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 {% from "govuk/components/header/macro.njk" import govukHeader %}
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 {%- from "moj/components/side-navigation/macro.njk" import mojSideNavigation -%}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -78,7 +81,8 @@
           </div>
           {% else %}
             <div>
-              Personal Details
+               {{ govukInsetText(importFromDeliusText) }}
+               {{ govukSummaryList(summary) }}
             </div>
           {% endif %}
         </div>
@@ -86,7 +90,6 @@
     </div>
   </div>
 </div>
-
 
 {% endblock %}
 {% endblock %}

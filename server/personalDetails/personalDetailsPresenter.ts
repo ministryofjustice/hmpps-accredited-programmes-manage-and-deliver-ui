@@ -1,4 +1,5 @@
 import PersonalDetails from '../models/PersonalDetails'
+import { SummaryListItem } from '../utils/summaryList'
 
 export enum PersonalDetailsPageSection {
   PersonalDetailsTab = 'personalDetails',
@@ -106,5 +107,38 @@ export default class PersonalDetailsPresenter {
       ],
       classes: 'govuk-!-padding-top-0',
     }
+  }
+
+  referralSummaryList(): SummaryListItem[] {
+    return [
+      {
+        key: 'Name',
+        lines: [`${this.personalDetails.name.forename} ${this.personalDetails.name.surname}`],
+      },
+      {
+        key: 'crn',
+        lines: [this.personalDetails.crn],
+      },
+      {
+        key: 'Date of birth',
+        lines: [this.personalDetails.dateOfBirth],
+      },
+      {
+        key: 'Ethnicity',
+        lines: [this.personalDetails.ethnicity],
+      },
+      {
+        key: 'Gender',
+        lines: [this.personalDetails.gender],
+      },
+      {
+        key: 'Setting',
+        lines: [this.personalDetails.setting],
+      },
+      {
+        key: 'Probation delivery unit',
+        lines: [this.personalDetails.probationDeliveryUnit.description],
+      },
+    ]
   }
 }
