@@ -22,7 +22,6 @@ export default class LayoutView {
   // }
 
   get renderArgs(): [string, Record<string, unknown>] {
-    console.log(this.serviceUserBannerView)
     return [
       this.content.renderArgs[0],
       {
