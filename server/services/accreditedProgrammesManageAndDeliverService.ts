@@ -1,4 +1,3 @@
-import type { SystemToken } from '@hmpps-auth'
 import type { HmppsAuthClient, RestClientBuilderWithoutToken } from '../data'
 import RestClient from '../data/restClient'
 import config, { ApiConfig } from '../config'
