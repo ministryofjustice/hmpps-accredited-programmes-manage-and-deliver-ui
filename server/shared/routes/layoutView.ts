@@ -17,10 +17,6 @@ export default class LayoutView {
       : null
   }
 
-  // get renderArgs(): [string, Record<string, unknown>] {
-  //   return this.content.renderArgs
-  // }
-
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       this.content.renderArgs[0],
