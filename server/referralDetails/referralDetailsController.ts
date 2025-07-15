@@ -1,16 +1,16 @@
 import { Request, Response } from 'express'
 
-import PersonalDetailsPresenter from './personalDetailsPresenter'
-import PersonalDetailsView from './personalDetailsView'
+import ReferralDetailsPresenter from './referralDetailsPresenter'
+import ReferralDetailsView from './referralDetailsView'
 import ControllerUtils from '../utils/controllerUtils'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 
-export default class PersonalDetailsController {
+export default class ReferralDetailsController {
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
   ) {}
 
-  async showPersonalDetailsPage(req: Request, res: Response): Promise<void> {
+  async showReferralDetailsPage(req: Request, res: Response): Promise<void> {
     const splitUrl = req.originalUrl.split('?section=')
     let subNavValue = splitUrl[1]
     if (subNavValue === undefined) {
@@ -26,7 +26,7 @@ export default class PersonalDetailsController {
         forename: 'Steve',
         surname: 'Sticks',
       },
-      dateOfBirth: 'Jan 01 1990',
+      dateOfBirth: '1980-01-01',
       ethnicity: 'British',
       gender: 'Male',
       probationDeliveryUnit: {
@@ -35,8 +35,8 @@ export default class PersonalDetailsController {
       },
       setting: 'Community',
     }
-    const presenter = new PersonalDetailsPresenter(personalDetails, subNavValue, id)
-    const view = new PersonalDetailsView(presenter)
+    const presenter = new ReferralDetailsPresenter(personalDetails, subNavValue, id)
+    const view = new ReferralDetailsView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, personalDetails)
   }

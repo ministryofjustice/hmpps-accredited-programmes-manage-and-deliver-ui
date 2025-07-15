@@ -2,7 +2,7 @@ import PersonalDetails from '../models/PersonalDetails'
 import { SummaryListItem } from '../utils/summaryList'
 import DateUtils from '../utils/dateUtils'
 
-export enum PersonalDetailsPageSection {
+export enum ReferralDetailsPageSection {
   PersonalDetailsTab = 'personalDetails',
   ProgrammeHistoryTab = 'programmeHistory',
   OffenceHistoryTab = 'offenceHistory',
@@ -12,13 +12,13 @@ export enum PersonalDetailsPageSection {
   AdditionalInformationTab = 'additionalInformation',
 }
 
-export default class PersonalDetailsPresenter {
+export default class ReferralDetailsPresenter {
   constructor(
     private personalDetails: PersonalDetails,
     readonly subNavValue: string,
     readonly id: string,
   ) {
-    this.personalDetails = personalDetails
+    // this.personalDetails = personalDetails
   }
 
   getSubHeaderArgs(): {
@@ -73,37 +73,37 @@ export default class PersonalDetailsPresenter {
         {
           text: 'Personal Details',
           href: `/personalDetails/${this.id}?section=personalDetails`,
-          active: this.subNavValue === PersonalDetailsPageSection.PersonalDetailsTab,
+          active: this.subNavValue === ReferralDetailsPageSection.PersonalDetailsTab,
         },
         {
           text: 'Programme History',
           href: `/personalDetails/${this.id}?section=programmeHistory`,
-          active: this.subNavValue === PersonalDetailsPageSection.ProgrammeHistoryTab,
+          active: this.subNavValue === ReferralDetailsPageSection.ProgrammeHistoryTab,
         },
         {
           text: 'Offence History',
           href: `/personalDetails/${this.id}?section=offenceHistory`,
-          active: this.subNavValue === PersonalDetailsPageSection.OffenceHistoryTab,
+          active: this.subNavValue === ReferralDetailsPageSection.OffenceHistoryTab,
         },
         {
           text: 'Sentence Information',
           href: `/personalDetails/${this.id}?section=sentenceInformation`,
-          active: this.subNavValue === PersonalDetailsPageSection.SentenceInformationTab,
+          active: this.subNavValue === ReferralDetailsPageSection.SentenceInformationTab,
         },
         {
           text: 'Availability',
           href: `/personalDetails/${this.id}?section=availability`,
-          active: this.subNavValue === PersonalDetailsPageSection.AvailabilityTab,
+          active: this.subNavValue === ReferralDetailsPageSection.AvailabilityTab,
         },
         {
           text: 'Location',
           href: `/personalDetails/${this.id}?section=location`,
-          active: this.subNavValue === PersonalDetailsPageSection.LocationTab,
+          active: this.subNavValue === ReferralDetailsPageSection.LocationTab,
         },
         {
           text: 'Additional Information',
           href: `/personalDetails/${this.id}?section=additionalInformation`,
-          active: this.subNavValue === PersonalDetailsPageSection.AdditionalInformationTab,
+          active: this.subNavValue === ReferralDetailsPageSection.AdditionalInformationTab,
         },
       ],
       classes: 'govuk-!-padding-top-0',
