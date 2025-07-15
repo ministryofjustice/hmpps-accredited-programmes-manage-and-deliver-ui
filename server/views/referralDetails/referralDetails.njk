@@ -1,5 +1,4 @@
 {% extends "../partials/layout.njk" %}
-{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 {% from "govuk/components/header/macro.njk" import govukHeader %}
@@ -70,10 +69,7 @@
             Additional Information
           </div>
           {% else %}
-            <div>
-               {{ govukInsetText(importFromDeliusText) }}
-               {{ govukSummaryList(summary) }}
-            </div>
+            {% include "./personalDetails.njk" %}
           {% endif %}
         </div>
       </div>

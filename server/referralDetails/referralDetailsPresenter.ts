@@ -17,9 +17,7 @@ export default class ReferralDetailsPresenter {
     private personalDetails: PersonalDetails,
     readonly subNavValue: string,
     readonly id: string,
-  ) {
-    // this.personalDetails = personalDetails
-  }
+  ) {}
 
   getSubHeaderArgs(): {
     heading: { text: string; classes: string }
