@@ -29,7 +29,7 @@ export default class CaselistController {
 
     const view = new CaselistView(presenter)
 
-    ControllerUtils.renderWithLayout(res, view)
+    ControllerUtils.renderWithLayout(res, view, null)
   }
 
   async showClosedCaselist(req: Request, res: Response): Promise<void> {
@@ -41,6 +41,6 @@ export default class CaselistController {
 
     const view = new CaselistView(presenter)
 
-    ControllerUtils.renderWithLayout(res, view)
+    ControllerUtils.renderWithLayout(res, view, null)
   }
 }
