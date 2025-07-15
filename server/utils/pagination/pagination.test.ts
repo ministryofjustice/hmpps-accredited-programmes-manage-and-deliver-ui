@@ -1,5 +1,5 @@
+import pageFactory from '../../testutils/factories/pageFactory'
 import Pagination from './pagination'
-import pageFactory from '../../testutils/factories/page'
 
 describe(Pagination, () => {
   describe('when constructing pagination arguments', () => {

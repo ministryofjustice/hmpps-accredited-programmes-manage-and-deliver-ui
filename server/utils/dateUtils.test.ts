@@ -1,7 +1,7 @@
-import moment from 'moment-timezone'
-import DateUtils from './dateUtils'
+import moment from 'moment'
 import CalendarDay from './calendarDay'
 import ClockTime from './clockTime'
+import DateUtils from './dateUtils'
 
 describe('DateUtils', () => {
   describe('formattedDayOfWeek', () => {

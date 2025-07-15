@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# script/manageAndDeliverApiTypes: Generate types from the Manage and Delivery API.
+#  
+
+npx openapi-typescript http://localhost:8080/v3/api-docs --output ./server/@types/manageAndDeliverApi/imported/index.d.ts

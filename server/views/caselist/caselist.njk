@@ -11,13 +11,13 @@
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block content %}
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <span class="govuk-caption-xl">Referrals in Brighton and Hove</span>
-    <h1 class="govuk-heading-l">{{ presenter.text.pageHeading }}</h1>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-xl">Referrals in Brighton and Hove</span>
+      <h1 class="govuk-heading-l">{{ presenter.text.pageHeading }}</h1>
+    </div>
   </div>
-</div>
-<div class="govuk-grid-row">
+  <div class="govuk-grid-row">
 
     {%- set filterOptionsHtml %}
 
@@ -43,13 +43,14 @@
         optionsHtml: filterOptionsHtml
         }) }}
       </form>
-  </div>
-  <div class="govuk-grid-column-three-quarters">
-    {{ mojSubNavigation(subNavArgs) }}
-    {{ govukTable(presenter.getCaseloadTableArgs()) }}
-  </div>
+    </div>
+    <div class="govuk-grid-column-three-quarters">
+      {{ mojSubNavigation(subNavArgs) }}
+      {{ govukTable(presenter.getCaseloadTableArgs()) }}
 
-</div>
+      {% include "../partials/pagination.njk" %}
+    </div>
 
+  </div>
 
 {% endblock %}

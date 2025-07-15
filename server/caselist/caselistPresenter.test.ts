@@ -1,6 +1,10 @@
+import { ReferralCaseListItem } from '@manage-and-deliver-api'
+
+import { Page } from '../shared/models/pagination'
+import pageFactory from '../testutils/factories/pageFactory'
+import referralCaseListItemFactory from '../testutils/factories/referralCaseListItem'
 import CaselistFilter from './caselistFilter'
 import CaselistPresenter from './caselistPresenter'
-import caselistItemFactory from '../testutils/factories/caselistItem'
 
 describe(`filters.`, () => {
   describe(`generateFilterPane`, () => {
@@ -54,7 +58,11 @@ describe(`filters.`, () => {
         },
       }
 
-      const presenter = new CaselistPresenter(1, caselistItemFactory.build(), testObject.filter, '')
+      const referralCaseListItem = referralCaseListItemFactory.build()
+      const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+        .pageContent([referralCaseListItem])
+        .build() as Page<ReferralCaseListItem>
+      const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '')
       expect(presenter.generateFilterPane()).toEqual(testObject.expectedResult)
     })
 
@@ -62,8 +70,11 @@ describe(`filters.`, () => {
       const testObject = {
         filter: { referralStatus: undefined, cohort: undefined, nameOrCrn: undefined } as CaselistFilter,
       }
-
-      const presenter = new CaselistPresenter(1, caselistItemFactory.build(), testObject.filter, '')
+      const referralCaseListItem = referralCaseListItemFactory.build()
+      const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+        .pageContent([referralCaseListItem])
+        .build() as Page<ReferralCaseListItem>
+      const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '')
       expect(presenter.generateFilterPane()).toEqual(null)
     })
   })
@@ -73,7 +84,11 @@ describe(`filters.`, () => {
       const testObject = {
         filter: { referralStatus: undefined, cohort: undefined, nameOrCrn: undefined } as CaselistFilter,
       }
-      const presenter = new CaselistPresenter(1, caselistItemFactory.build(), testObject.filter, '')
+      const referralCaseListItem = referralCaseListItemFactory.build()
+      const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+        .pageContent([referralCaseListItem])
+        .build() as Page<ReferralCaseListItem>
+      const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '')
 
       const valuesToAddToSelect = [
         { value: 'general-offence', text: 'General Offence' },
@@ -90,7 +105,11 @@ describe(`filters.`, () => {
       const testObject = {
         filter: { referralStatus: undefined, cohort: undefined, nameOrCrn: undefined } as CaselistFilter,
       }
-      const presenter = new CaselistPresenter(1, caselistItemFactory.build(), testObject.filter, '')
+      const referralCaseListItem = referralCaseListItemFactory.build()
+      const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+        .pageContent([referralCaseListItem])
+        .build() as Page<ReferralCaseListItem>
+      const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '')
 
       const valuesToAddToSelect: { value: string; text: string }[] = []
       expect(presenter.generateSelectValues(valuesToAddToSelect, testObject.filter.referralStatus)).toEqual([
@@ -104,7 +123,11 @@ describe(`filters.`, () => {
       const testObject = {
         filter: { referralStatus: 'not-eligible', cohort: 'general-offence', nameOrCrn: 'Some Name' } as CaselistFilter,
       }
-      const presenter = new CaselistPresenter(1, caselistItemFactory.build(), testObject.filter, '')
+      const referralCaseListItem = referralCaseListItemFactory.build()
+      const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+        .pageContent([referralCaseListItem])
+        .build() as Page<ReferralCaseListItem>
+      const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '')
 
       expect(presenter.generateSelectedFilters()).toEqual([
         { heading: { text: 'Referral Status' }, items: [{ text: 'Not eligible' }] },
@@ -117,7 +140,11 @@ describe(`filters.`, () => {
       const testObject = {
         filter: { referralStatus: undefined, cohort: undefined, nameOrCrn: undefined } as CaselistFilter,
       }
-      const presenter = new CaselistPresenter(1, caselistItemFactory.build(), testObject.filter, '')
+      const referralCaseListItem = referralCaseListItemFactory.build()
+      const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+        .pageContent([referralCaseListItem])
+        .build() as Page<ReferralCaseListItem>
+      const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '')
 
       expect(presenter.generateSelectedFilters()).toEqual([])
     })

@@ -1,8 +1,9 @@
+import { ReferralCaseListItem } from '@manage-and-deliver-api'
+import config, { ApiConfig } from '../config'
 import type { HmppsAuthClient, RestClientBuilderWithoutToken } from '../data'
 import RestClient from '../data/restClient'
-import config, { ApiConfig } from '../config'
-import Caselist from '../models/caseList'
 import PersonalDetails from '../models/PersonalDetails'
+import { Page } from '../shared/models/pagination'
 
 export interface PaginationParams {
   // Page number to retrieve -- starts from 1
@@ -27,20 +28,28 @@ export default class AccreditedProgrammesManageAndDeliverService {
     )
   }
 
-  async getOpenCaselist(username: Express.User['username']): Promise<Caselist> {
+  async getOpenCaselist(
+    username: Express.User['username'],
+    paginationParams: PaginationParams,
+  ): Promise<Page<ReferralCaseListItem>> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/pages/caselist/open`,
       headers: { Accept: 'application/json' },
-    })) as Caselist
+      query: { ...paginationParams },
+    })) as Page<ReferralCaseListItem>
   }
 
-  async getClosedCaselist(username: Express.User['username']): Promise<Caselist> {
+  async getClosedCaselist(
+    username: Express.User['username'],
+    paginationParams: PaginationParams,
+  ): Promise<Page<ReferralCaseListItem>> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/pages/caselist/closed`,
       headers: { Accept: 'application/json' },
-    })) as Caselist
+      query: { ...paginationParams },
+    })) as Page<ReferralCaseListItem>
   }
 
   async getPersonalDetails(username: Express.User['username'], id: string): Promise<PersonalDetails> {
