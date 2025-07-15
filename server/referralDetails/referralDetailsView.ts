@@ -1,9 +1,9 @@
-import PersonalDetailsPresenter from './personalDetailsPresenter'
+import ReferralDetailsPresenter from './referralDetailsPresenter'
 import { InsetTextArgs, SummaryListArgs } from '../utils/govukFrontendTypes'
 import ViewUtils from '../utils/viewUtils'
 
-export default class PersonalDetailsView {
-  constructor(private readonly presenter: PersonalDetailsPresenter) {}
+export default class ReferralDetailsView {
+  constructor(private readonly presenter: ReferralDetailsPresenter) {}
 
   get summary(): SummaryListArgs {
     return {
@@ -30,7 +30,7 @@ export default class PersonalDetailsView {
 
   get renderArgs(): [string, Record<string, unknown>] {
     return [
-      'personalDetails/personalDetails',
+      'referralDetails/referralDetails',
       {
         presenter: this.presenter,
         summary: this.summary,
