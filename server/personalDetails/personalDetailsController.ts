@@ -38,6 +38,6 @@ export default class PersonalDetailsController {
     const presenter = new PersonalDetailsPresenter(personalDetails, subNavValue, id)
     const view = new PersonalDetailsView(presenter)
 
-    ControllerUtils.renderWithLayout(res, view)
+    ControllerUtils.renderWithLayout(res, view, personalDetails)
   }
 }
