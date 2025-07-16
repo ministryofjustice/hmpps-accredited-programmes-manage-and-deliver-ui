@@ -29,7 +29,7 @@ export default class CaselistController {
 
     const openCaseList = await this.accreditedProgrammesManageAndDeliverService.getOpenCaselist(username, {
       page: pageNumber ? Number(pageNumber) - 1 : 0,
-      size: 1,
+      size: 10,
     })
 
     const presenter = new CaselistPresenter(CaselistPageSection.Open, openCaseList, filter, req.session.filterParams)

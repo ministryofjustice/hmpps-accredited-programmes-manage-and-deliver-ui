@@ -69,12 +69,12 @@ export default class CaselistPresenter {
     return {
       items: [
         {
-          text: 'Open referrals',
+          text: `Open referrals (${this.referralCaseListItems.totalElements})`,
           href: `/pdu/open-referrals`,
           active: this.section === CaselistPageSection.Open,
         },
         {
-          text: 'Closed referrals',
+          text: `Closed referrals (${this.referralCaseListItems.totalElements})`,
           href: `/pdu/closed-referrals`,
           active: this.section === CaselistPageSection.Closed,
         },
