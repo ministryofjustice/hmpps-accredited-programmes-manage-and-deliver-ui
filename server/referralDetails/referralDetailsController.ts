@@ -24,7 +24,7 @@ export default class ReferralDetailsController {
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
   ) {}
 
-  async showReferralDetailsPage(req: Request, res: Response) {
+  async showReferralDetailsPage() {
     // const personalDetails = await this.accreditedProgrammesManageAndDeliverService.getPersonalDetails(username, id)
     const personalDetails = {
       crn: '1234',
@@ -52,7 +52,7 @@ export default class ReferralDetailsController {
     const { id } = req.params
     const subNavValue = 'personalDetails'
 
-    const sharedReferralDetailsData = await this.showReferralDetailsPage(req, res)
+    const sharedReferralDetailsData = await this.showReferralDetailsPage()
 
     const presenter = new PersonalDetailsPresenter(sharedReferralDetailsData.personalDetails, subNavValue, id)
     const view = new PersonalDetailsView(presenter)
@@ -64,7 +64,7 @@ export default class ReferralDetailsController {
     const { id } = req.params
     const subNavValue = 'programmeHistory'
 
-    const sharedReferralDetailsData = await this.showReferralDetailsPage(req, res)
+    const sharedReferralDetailsData = await this.showReferralDetailsPage()
 
     const presenter = new ProgrammeHistoryPresenter(sharedReferralDetailsData.personalDetails, subNavValue, id)
     const view = new ProgrammeHistoryView(presenter)
@@ -76,7 +76,7 @@ export default class ReferralDetailsController {
     const { id } = req.params
     const subNavValue = 'offenceHistory'
 
-    const sharedReferralDetailsData = await this.showReferralDetailsPage(req, res)
+    const sharedReferralDetailsData = await this.showReferralDetailsPage()
 
     const presenter = new OffenceHistoryPresenter(sharedReferralDetailsData.personalDetails, subNavValue, id)
     const view = new OffenceHistoryView(presenter)
@@ -88,7 +88,7 @@ export default class ReferralDetailsController {
     const { id } = req.params
     const subNavValue = 'sentenceInformation'
 
-    const sharedReferralDetailsData = await this.showReferralDetailsPage(req, res)
+    const sharedReferralDetailsData = await this.showReferralDetailsPage()
 
     const presenter = new SentenceInformationPresenter(sharedReferralDetailsData.personalDetails, subNavValue, id)
     const view = new SentenceInformationView(presenter)
@@ -100,7 +100,7 @@ export default class ReferralDetailsController {
     const { id } = req.params
     const subNavValue = 'availability'
 
-    const sharedReferralDetailsData = await this.showReferralDetailsPage(req, res)
+    const sharedReferralDetailsData = await this.showReferralDetailsPage()
 
     const presenter = new AvailabilityPresenter(sharedReferralDetailsData.personalDetails, subNavValue, id)
     const view = new AvailabilityView(presenter)
@@ -112,7 +112,7 @@ export default class ReferralDetailsController {
     const { id } = req.params
     const subNavValue = 'location'
 
-    const sharedReferralDetailsData = await this.showReferralDetailsPage(req, res)
+    const sharedReferralDetailsData = await this.showReferralDetailsPage()
 
     const presenter = new LocationPresenter(sharedReferralDetailsData.personalDetails, subNavValue, id)
     const view = new LocationView(presenter)
@@ -124,7 +124,7 @@ export default class ReferralDetailsController {
     const { id } = req.params
     const subNavValue = 'additionalInformation'
 
-    const sharedReferralDetailsData = await this.showReferralDetailsPage(req, res)
+    const sharedReferralDetailsData = await this.showReferralDetailsPage()
 
     const presenter = new AdditionalInformationPresenter(sharedReferralDetailsData.personalDetails, subNavValue, id)
     const view = new AdditionalInformationView(presenter)
@@ -134,7 +134,7 @@ export default class ReferralDetailsController {
 
   async showAddAvailabilityPage(req: Request, res: Response): Promise<void> {
     // const { username } = req.user
-    const { id } = req.params
+    // const { id } = req.params
     // const personalDetails = await this.accreditedProgrammesManageAndDeliverService.getPersonalDetails(username, id)
     const personalDetails = {
       crn: '1234',

@@ -1,5 +1,4 @@
 import AddAvailabilityPresenter from './addAvailabilityPresenter'
-import { ButtonArgs, CheckboxesArgs } from '../../utils/govukFrontendTypes'
 
 export default class AddAvailabilityView {
   constructor(private readonly presenter: AddAvailabilityPresenter) {}
@@ -20,7 +19,8 @@ export default class AddAvailabilityView {
       hint: {
         text: 'Select all that apply.',
       },
-      items: [...this.presenter.checkboxItems,
+      items: [
+        ...this.presenter.checkboxItems,
         {
           divider: 'or',
           classes: 'govuk-fieldset__heading',
@@ -28,8 +28,6 @@ export default class AddAvailabilityView {
       ],
     }
   }
-
-
 
   get renderArgs(): [string, Record<string, unknown>] {
     return [
