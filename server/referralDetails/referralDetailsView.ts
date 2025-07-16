@@ -21,6 +21,14 @@ export default class ReferralDetailsView {
     }
   }
 
+  get offenceHistorySummaries(): SummaryListArgs[] {
+    const summaries: SummaryListArgs[] = []
+    this.presenter.offenceHistorySummaryLists().forEach(summary => {
+      summaries.push(ViewUtils.summaryListArgsWithSummaryCard(summary.summary, summary.title))
+    })
+    return summaries
+  }
+
   get importFromDeliusText(): InsetTextArgs {
     return {
       text: 'Imported from NDelius on 1 August 2023, last updated on 4 January 2023',
@@ -36,6 +44,7 @@ export default class ReferralDetailsView {
         summary: this.summary,
         referralSummary: this.referralSummary,
         importFromDeliusText: this.importFromDeliusText,
+        offenceHistorySummaries: this.offenceHistorySummaries,
       },
     ]
   }
