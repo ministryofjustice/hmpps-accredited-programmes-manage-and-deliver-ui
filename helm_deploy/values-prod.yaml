@@ -3,13 +3,15 @@
 
 generic-service:
   ingress:
-    host: accredited-programmes-manage-and-deliver-ui.hmpps.service.justice.gov.uk
+    host: accredited-programmes-manage-and-deliver.hmpps.service.justice.gov.uk
 
   env:
-    INGRESS_URL: "https://accredited-programmes-manage-and-deliver-ui.hmpps.service.justice.gov.uk"
+    INGRESS_URL: "https://accredited-programmes-manage-and-deliver.hmpps.service.justice.gov.uk"
     HMPPS_AUTH_URL: "https://sign-in.hmpps.service.justice.gov.uk/auth"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api.prison.service.justice.gov.uk"
     EXAMPLE_API_URL: 'https://template-kotlin.hmpps.service.justice.gov.uk'
+    ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_URL: 'https://accredited-programmes-manage-and-deliver-api.hmpps.service.justice.gov.uk'
+    ENVIRONMENT_NAME: prod
     AUDIT_ENABLED: "false"
 
 generic-prometheus-alerts:

@@ -5,14 +5,15 @@ generic-service:
   replicaCount: 2
 
   ingress:
-    host: accredited-programmes-manage-and-deliver-ui-preprod.hmpps.service.justice.gov.uk
+    host: accredited-programmes-manage-and-deliver-preprod.hmpps.service.justice.gov.uk
 
   env:
-    INGRESS_URL: "https://accredited-programmes-manage-and-deliver-ui-preprod.hmpps.service.justice.gov.uk"
+    INGRESS_URL: "https://accredited-programmes-manage-and-deliver-preprod.hmpps.service.justice.gov.uk"
     HMPPS_AUTH_URL: "https://sign-in-preprod.hmpps.service.justice.gov.uk/auth"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-preprod.prison.service.justice.gov.uk"
     EXAMPLE_API_URL: 'https://template-kotlin-preprod.hmpps.service.justice.gov.uk'
-    ENVIRONMENT_NAME: PRE-PRODUCTION
+    ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_URL: 'https://accredited-programmes-manage-and-deliver-api-preprod.hmpps.service.justice.gov.uk'
+    ENVIRONMENT_NAME: preprod
     AUDIT_ENABLED: "false"
 
 generic-prometheus-alerts:
