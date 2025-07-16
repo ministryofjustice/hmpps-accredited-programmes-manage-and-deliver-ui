@@ -1,0 +1,41 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+{% from "govuk/components/header/macro.njk" import govukHeader %}
+
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block main %}
+{{ govukPhaseBanner({
+  tag: {
+    text: "Prototype"
+  },
+  html: 'This is a new service - your <a class="govuk-link" href="#">feedback</a> will help us improve it.'
+}) }}
+{% block content %}
+<div class="govuk-width-container" id="main-content">
+  <div class="govuk-main-wrapper">
+
+
+    {{ govukCheckboxes(checkboxArgs) }}
+<!--    <div class="govuk-grid-row">-->
+<!--    </div>-->
+
+<!--      <div class="govuk-grid-row">-->
+
+<!--      </div>-->
+<!--      <div class="govuk-grid-row">-->
+
+
+<!--      </div>-->
+
+</div>
+
+{% endblock %}
+{% endblock %}
+
+
+

@@ -1,5 +1,5 @@
 import ReferralDetailsPresenter from './referralDetailsPresenter'
-import { InsetTextArgs, SummaryListArgs } from '../utils/govukFrontendTypes'
+import { ButtonArgs, InsetTextArgs, SummaryListArgs } from '../utils/govukFrontendTypes'
 import ViewUtils from '../utils/viewUtils'
 
 export default class ReferralDetailsView {
@@ -36,6 +36,13 @@ export default class ReferralDetailsView {
     }
   }
 
+  get availabilityButtonArgs(): ButtonArgs {
+    return {
+      text: 'Add availability',
+      href: `/add-availability/${this.presenter.id}`,
+    }
+  }
+
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       'referralDetails/referralDetails',
@@ -45,6 +52,7 @@ export default class ReferralDetailsView {
         referralSummary: this.referralSummary,
         importFromDeliusText: this.importFromDeliusText,
         offenceHistorySummaries: this.offenceHistorySummaries,
+        availabilityButtonArgs: this.availabilityButtonArgs,
       },
     ]
   }

@@ -31,5 +31,9 @@ export default function routes({ auditService, accreditedProgrammesManageAndDeli
     await referralDetailsController.showReferralDetailsPage(req, res)
   })
 
+  get('/add-availability/:id', async (req, res, next) => {
+    await referralDetailsController.showAddAvailabilityPage(req, res)
+  })
+
   return router
 }
