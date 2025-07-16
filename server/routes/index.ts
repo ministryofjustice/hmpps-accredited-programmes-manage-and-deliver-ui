@@ -27,8 +27,36 @@ export default function routes({ auditService, accreditedProgrammesManageAndDeli
     await caselistController.showClosedCaselist(req, res)
   })
 
-  get('/personalDetails/:id', async (req, res, next) => {
-    await referralDetailsController.showReferralDetailsPage(req, res)
+  get('/referral-details/:id/personal-details', async (req, res, next) => {
+    await referralDetailsController.showPersonalDetailsPage(req, res)
+  })
+
+  get('/referral-details/:id/programme-history', async (req, res, next) => {
+    await referralDetailsController.showProgrammeHistoryPage(req, res)
+  })
+
+  get('/referral-details/:id/offence-history', async (req, res, next) => {
+    await referralDetailsController.showOffenceHistoryPage(req, res)
+  })
+
+  get('/referral-details/:id/sentence-information', async (req, res, next) => {
+    await referralDetailsController.showSentenceInformationPage(req, res)
+  })
+
+  get('/referral-details/:id/availability', async (req, res, next) => {
+    await referralDetailsController.showAvailabilityPage(req, res)
+  })
+
+  get('/referral-details/:id/location', async (req, res, next) => {
+    await referralDetailsController.showLocationPage(req, res)
+  })
+
+  get('/referral-details/:id/additional-information', async (req, res, next) => {
+    await referralDetailsController.showAdditionalInformationPage(req, res)
+  })
+
+  get('/add-availability/:id', async (req, res, next) => {
+    await referralDetailsController.showAddAvailabilityPage(req, res)
   })
 
   return router

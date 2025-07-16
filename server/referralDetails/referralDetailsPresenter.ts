@@ -1,6 +1,8 @@
 import PersonalDetails from '../models/PersonalDetails'
 import { SummaryListItem } from '../utils/summaryList'
 import DateUtils from '../utils/dateUtils'
+import { SummaryListArgs } from '../utils/govukFrontendTypes'
+import ViewUtils from '../utils/viewUtils'
 
 export enum ReferralDetailsPageSection {
   PersonalDetailsTab = 'personalDetails',
@@ -13,11 +15,17 @@ export enum ReferralDetailsPageSection {
 }
 
 export default class ReferralDetailsPresenter {
-  constructor(
+  protected constructor(
     private personalDetails: PersonalDetails,
     readonly subNavValue: string,
     readonly id: string,
   ) {}
+
+  get referralSummary(): SummaryListArgs {
+    return {
+      ...ViewUtils.summaryListArgs(this.referralSummaryList(), { showBorders: false }, 'govuk-!-margin-bottom-0'),
+    }
+  }
 
   getSubHeaderArgs(): {
     heading: { text: string; classes: string }
@@ -70,37 +78,37 @@ export default class ReferralDetailsPresenter {
       items: [
         {
           text: 'Personal Details',
-          href: `/personalDetails/${this.id}?section=personalDetails`,
+          href: `/referral-details/${this.id}/personal-details`,
           active: this.subNavValue === ReferralDetailsPageSection.PersonalDetailsTab,
         },
         {
           text: 'Programme History',
-          href: `/personalDetails/${this.id}?section=programmeHistory`,
+          href: `/referral-details/${this.id}/programme-history`,
           active: this.subNavValue === ReferralDetailsPageSection.ProgrammeHistoryTab,
         },
         {
           text: 'Offence History',
-          href: `/personalDetails/${this.id}?section=offenceHistory`,
+          href: `/referral-details/${this.id}/offence-history`,
           active: this.subNavValue === ReferralDetailsPageSection.OffenceHistoryTab,
         },
         {
           text: 'Sentence Information',
-          href: `/personalDetails/${this.id}?section=sentenceInformation`,
+          href: `/referral-details/${this.id}/sentence-information`,
           active: this.subNavValue === ReferralDetailsPageSection.SentenceInformationTab,
         },
         {
           text: 'Availability',
-          href: `/personalDetails/${this.id}?section=availability`,
+          href: `/referral-details/${this.id}/availability`,
           active: this.subNavValue === ReferralDetailsPageSection.AvailabilityTab,
         },
         {
           text: 'Location',
-          href: `/personalDetails/${this.id}?section=location`,
+          href: `/referral-details/${this.id}/location`,
           active: this.subNavValue === ReferralDetailsPageSection.LocationTab,
         },
         {
           text: 'Additional Information',
-          href: `/personalDetails/${this.id}?section=additionalInformation`,
+          href: `/referral-details/${this.id}/additional-information`,
           active: this.subNavValue === ReferralDetailsPageSection.AdditionalInformationTab,
         },
       ],
@@ -174,61 +182,5 @@ export default class ReferralDetailsPresenter {
         valueLink: '<a href="mailto:tom.saunders@justice.gov.uk">tom.saunders@justice.gov.uk</a>',
       },
     ]
-  }
-
-  offenceHistorySummaryLists(): { title: string; summary: SummaryListItem[] }[] {
-    const summaries = []
-    summaries.push({
-      title: 'Index Offence',
-      summary: [
-        {
-          key: 'Offence',
-          lines: ['Publishing or causing to be published a tobacco advertisement - 09144'],
-        },
-        {
-          key: 'Category',
-          lines: ['Public Health Offences'],
-        },
-        {
-          key: 'Offence date',
-          lines: ['11 June 2020'],
-        },
-      ],
-    })
-    summaries.push({
-      title: 'Additional offence (08000)',
-      summary: [
-        {
-          key: 'Offence',
-          lines: ['Absconding from lawful custody - 08000'],
-        },
-        {
-          key: 'Category',
-          lines: ['Absconding from lawful custody'],
-        },
-        {
-          key: 'Offence date',
-          lines: ['18 January 2013'],
-        },
-      ],
-    })
-    summaries.push({
-      title: 'Additional offence (08000)',
-      summary: [
-        {
-          key: 'Offence',
-          lines: ['\tClass unspecified - permitting premises to be used - 09329'],
-        },
-        {
-          key: 'Category',
-          lines: ['Permitting premises to be used for unlawful (drug-related) purposes'],
-        },
-        {
-          key: 'Offence date',
-          lines: ['23 September 2000'],
-        },
-      ],
-    })
-    return summaries
   }
 }
