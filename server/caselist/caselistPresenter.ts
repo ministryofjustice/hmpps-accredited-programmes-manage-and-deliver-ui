@@ -55,7 +55,9 @@ export default class CaselistPresenter {
     const referralData: ({ html: string; text?: undefined } | { text: string; html?: undefined })[][] = []
     this.referralCaseListItems.content.forEach(referral => {
       referralData.push([
-        { html: `<a href='#'>${referral.personName}</a><br><span>${referral.crn}</span>` },
+        {
+          html: `<a href='/personalDetails/${referral.referralId}'>${referral.personName}</a><br><span>${referral.crn}</span>`,
+        },
 
         { text: referral.referralStatus },
       ])

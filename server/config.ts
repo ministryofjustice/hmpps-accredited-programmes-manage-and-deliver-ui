@@ -69,9 +69,9 @@ export default {
   },
   apis: {
     hmppsAuth: {
-      url: get('HMPPS_AUTH_URL', 'http://localhost:9090/auth', requiredInProduction),
+      url: get('HMPPS_AUTH_URL', 'http://localhost:8090/auth', requiredInProduction),
       healthPath: '/health/ping',
-      externalUrl: get('HMPPS_AUTH_EXTERNAL_URL', get('HMPPS_AUTH_URL', 'http://localhost:9090/auth')),
+      externalUrl: get('HMPPS_AUTH_EXTERNAL_URL', get('HMPPS_AUTH_URL', 'http://localhost:8090/auth')),
       timeout: {
         response: Number(get('HMPPS_AUTH_TIMEOUT_RESPONSE', 10000)),
         deadline: Number(get('HMPPS_AUTH_TIMEOUT_DEADLINE', 10000)),

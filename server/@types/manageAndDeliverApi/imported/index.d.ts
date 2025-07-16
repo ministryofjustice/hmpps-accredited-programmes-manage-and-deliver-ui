@@ -207,26 +207,46 @@ export interface components {
       size?: number
       sort?: string[]
     }
-    PagedReferralCaseListItem: {
+    PageReferralCaseListItem: {
+      /** Format: int64 */
+      totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
+      /** Format: int32 */
+      size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
-      totalPages: number
+      number?: number
+      sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
+      empty?: boolean
+    }
+    PageableObject: {
       /** Format: int64 */
-      totalElements: number
+      offset?: number
+      sort?: components['schemas']['SortObject']
+      paged?: boolean
       /** Format: int32 */
-      pageSize: number
+      pageNumber?: number
       /** Format: int32 */
-      pageNumber: number
-      first: boolean
-      last: boolean
-      /** Format: int32 */
-      numberOfElements: number
-      empty: boolean
+      pageSize?: number
+      unpaged?: boolean
     }
     ReferralCaseListItem: {
+      /** Format: uuid */
+      referralId: string
       crn: string
       personName: string
       referralStatus: string
+    }
+    SortObject: {
+      empty?: boolean
+      sorted?: boolean
+      unsorted?: boolean
     }
   }
   responses: never
@@ -439,7 +459,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['PagedReferralCaseListItem']
+          'application/json': components['schemas']['PageReferralCaseListItem']
         }
       }
       /** @description Bad Request */
