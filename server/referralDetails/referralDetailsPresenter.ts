@@ -13,7 +13,7 @@ export enum ReferralDetailsPageSection {
 }
 
 export default class ReferralDetailsPresenter {
-  constructor(
+  protected constructor(
     private personalDetails: PersonalDetails,
     readonly subNavValue: string,
     readonly id: string,
@@ -70,37 +70,37 @@ export default class ReferralDetailsPresenter {
       items: [
         {
           text: 'Personal Details',
-          href: `/personalDetails/${this.id}?section=personalDetails`,
+          href: `/referral-details/${this.id}/personal-details`,
           active: this.subNavValue === ReferralDetailsPageSection.PersonalDetailsTab,
         },
         {
           text: 'Programme History',
-          href: `/personalDetails/${this.id}?section=programmeHistory`,
+          href: `/referral-details/${this.id}/programme-history`,
           active: this.subNavValue === ReferralDetailsPageSection.ProgrammeHistoryTab,
         },
         {
           text: 'Offence History',
-          href: `/personalDetails/${this.id}?section=offenceHistory`,
+          href: `/referral-details/${this.id}/offence-history`,
           active: this.subNavValue === ReferralDetailsPageSection.OffenceHistoryTab,
         },
         {
           text: 'Sentence Information',
-          href: `/personalDetails/${this.id}?section=sentenceInformation`,
+          href: `/referral-details/${this.id}/sentence-information`,
           active: this.subNavValue === ReferralDetailsPageSection.SentenceInformationTab,
         },
         {
           text: 'Availability',
-          href: `/personalDetails/${this.id}?section=availability`,
+          href: `/referral-details/${this.id}/availability`,
           active: this.subNavValue === ReferralDetailsPageSection.AvailabilityTab,
         },
         {
           text: 'Location',
-          href: `/personalDetails/${this.id}?section=location`,
+          href: `/referral-details/${this.id}/location`,
           active: this.subNavValue === ReferralDetailsPageSection.LocationTab,
         },
         {
           text: 'Additional Information',
-          href: `/personalDetails/${this.id}?section=additionalInformation`,
+          href: `/referral-details/${this.id}/additional-information`,
           active: this.subNavValue === ReferralDetailsPageSection.AdditionalInformationTab,
         },
       ],
