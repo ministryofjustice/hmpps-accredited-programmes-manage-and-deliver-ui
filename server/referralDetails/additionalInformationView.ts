@@ -1,23 +1,13 @@
 import { SummaryListArgs } from '../utils/govukFrontendTypes'
 import ViewUtils from '../utils/viewUtils'
-import AvailabilityPresenter from './availabilityPresenter'
+import AdditionalInformationPresenter from './additionalInformationPresenter'
 
 export default class AdditionalInformationView {
-  constructor(private readonly presenter: AvailabilityPresenter) {}
+  constructor(private readonly presenter: AdditionalInformationPresenter) {}
 
   get summary(): SummaryListArgs {
     return {
       ...ViewUtils.summaryListArgsWithSummaryCard(this.presenter.personalDetailsSummaryList(), 'Personal details'),
-    }
-  }
-
-  get referralSummary(): SummaryListArgs {
-    return {
-      ...ViewUtils.summaryListArgs(
-        this.presenter.referralSummaryList(),
-        { showBorders: false },
-        'govuk-!-margin-bottom-0',
-      ),
     }
   }
 
@@ -27,7 +17,6 @@ export default class AdditionalInformationView {
       {
         presenter: this.presenter,
         summary: this.summary,
-        referralSummary: this.referralSummary,
       },
     ]
   }

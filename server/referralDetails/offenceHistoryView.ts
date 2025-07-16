@@ -1,24 +1,23 @@
-import { SummaryListArgs } from '../utils/govukFrontendTypes'
+import { InsetTextArgs, SummaryListArgs } from '../utils/govukFrontendTypes'
 import ViewUtils from '../utils/viewUtils'
-import AvailabilityPresenter from './availabilityPresenter'
+import OffenceHistoryPresenter from './offenceHistoryPresenter'
 
 export default class OffenceHistoryView {
-  constructor(private readonly presenter: AvailabilityPresenter) {}
+  constructor(private readonly presenter: OffenceHistoryPresenter) {}
 
-  get summary(): SummaryListArgs {
+  get importFromDeliusText(): InsetTextArgs {
     return {
-      ...ViewUtils.summaryListArgsWithSummaryCard(this.presenter.personalDetailsSummaryList(), 'Personal details'),
+      text: 'Imported from NDelius on 1 August 2023, last updated on 4 January 2023',
+      classes: 'govuk-!-margin-top-0',
     }
   }
 
-  get referralSummary(): SummaryListArgs {
-    return {
-      ...ViewUtils.summaryListArgs(
-        this.presenter.referralSummaryList(),
-        { showBorders: false },
-        'govuk-!-margin-bottom-0',
-      ),
-    }
+  get offenceHistorySummaries(): SummaryListArgs[] {
+    const summaries: SummaryListArgs[] = []
+    this.presenter.offenceHistorySummaryLists().forEach(summary => {
+      summaries.push(ViewUtils.summaryListArgsWithSummaryCard(summary.summary, summary.title))
+    })
+    return summaries
   }
 
   get renderArgs(): [string, Record<string, unknown>] {
@@ -26,8 +25,8 @@ export default class OffenceHistoryView {
       'referralDetails/referralDetails',
       {
         presenter: this.presenter,
-        summary: this.summary,
-        referralSummary: this.referralSummary,
+        offenceHistorySummaries: this.offenceHistorySummaries,
+        importFromDeliusText: this.importFromDeliusText,
       },
     ]
   }

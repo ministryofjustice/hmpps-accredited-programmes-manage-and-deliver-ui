@@ -1,33 +1,8 @@
 import ReferralDetailsPresenter from './referralDetailsPresenter'
-import { ButtonArgs, InsetTextArgs, SummaryListArgs } from '../utils/govukFrontendTypes'
-import ViewUtils from '../utils/viewUtils'
+import { InsetTextArgs } from '../utils/govukFrontendTypes'
 
 export default class ReferralDetailsView {
   constructor(private readonly presenter: ReferralDetailsPresenter) {}
-
-  get summary(): SummaryListArgs {
-    return {
-      ...ViewUtils.summaryListArgsWithSummaryCard(this.presenter.personalDetailsSummaryList(), 'Personal details'),
-    }
-  }
-
-  get referralSummary(): SummaryListArgs {
-    return {
-      ...ViewUtils.summaryListArgs(
-        this.presenter.referralSummaryList(),
-        { showBorders: false },
-        'govuk-!-margin-bottom-0',
-      ),
-    }
-  }
-
-  get offenceHistorySummaries(): SummaryListArgs[] {
-    const summaries: SummaryListArgs[] = []
-    this.presenter.offenceHistorySummaryLists().forEach(summary => {
-      summaries.push(ViewUtils.summaryListArgsWithSummaryCard(summary.summary, summary.title))
-    })
-    return summaries
-  }
 
   get importFromDeliusText(): InsetTextArgs {
     return {
@@ -36,23 +11,12 @@ export default class ReferralDetailsView {
     }
   }
 
-  get availabilityButtonArgs(): ButtonArgs {
-    return {
-      text: 'Add availability',
-      href: `/add-availability/${this.presenter.id}`,
-    }
-  }
-
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       'referralDetails/referralDetails',
       {
         presenter: this.presenter,
-        summary: this.summary,
-        referralSummary: this.referralSummary,
         importFromDeliusText: this.importFromDeliusText,
-        offenceHistorySummaries: this.offenceHistorySummaries,
-        availabilityButtonArgs: this.availabilityButtonArgs,
       },
     ]
   }

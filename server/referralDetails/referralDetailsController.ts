@@ -1,11 +1,9 @@
 import { Request, Response } from 'express'
 
-import ReferralDetailsView from './referralDetailsView'
 import ControllerUtils from '../utils/controllerUtils'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import AddAvailabilityPresenter from './addAvailability/addAvailabilityPresenter'
 import AddAvailabilityView from './addAvailability/addAvailabilityView'
-import PersonalDetails from '../models/PersonalDetails'
 import AvailabilityPresenter from './availabilityPresenter'
 import AvailabilityView from './availabilityView'
 import PersonalDetailsPresenter from './personalDetailsPresenter'
@@ -18,6 +16,8 @@ import LocationPresenter from './locationPresenter'
 import LocationView from './locationView'
 import AdditionalInformationPresenter from './additionalInformationPresenter'
 import AdditionalInformationView from './additionalInformationView'
+import OffenceHistoryPresenter from './offenceHistoryPresenter'
+import OffenceHistoryView from './offenceHistoryView'
 
 export default class ReferralDetailsController {
   constructor(
@@ -78,8 +78,8 @@ export default class ReferralDetailsController {
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(req, res)
 
-    const presenter = new ProgrammeHistoryPresenter(sharedReferralDetailsData.personalDetails, subNavValue, id)
-    const view = new ProgrammeHistoryView(presenter)
+    const presenter = new OffenceHistoryPresenter(sharedReferralDetailsData.personalDetails, subNavValue, id)
+    const view = new OffenceHistoryView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData.personalDetails)
   }

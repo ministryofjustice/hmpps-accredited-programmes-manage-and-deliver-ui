@@ -1,23 +1,13 @@
 import { InsetTextArgs, SummaryListArgs } from '../utils/govukFrontendTypes'
 import ViewUtils from '../utils/viewUtils'
-import AvailabilityPresenter from './availabilityPresenter'
+import PersonalDetailsPresenter from './personalDetailsPresenter'
 
 export default class PersonalDetailsView {
-  constructor(private readonly presenter: AvailabilityPresenter) {}
+  constructor(private readonly presenter: PersonalDetailsPresenter) {}
 
   get summary(): SummaryListArgs {
     return {
       ...ViewUtils.summaryListArgsWithSummaryCard(this.presenter.personalDetailsSummaryList(), 'Personal details'),
-    }
-  }
-
-  get referralSummary(): SummaryListArgs {
-    return {
-      ...ViewUtils.summaryListArgs(
-        this.presenter.referralSummaryList(),
-        { showBorders: false },
-        'govuk-!-margin-bottom-0',
-      ),
     }
   }
 
@@ -34,7 +24,6 @@ export default class PersonalDetailsView {
       {
         presenter: this.presenter,
         summary: this.summary,
-        referralSummary: this.referralSummary,
         importFromDeliusText: this.importFromDeliusText,
       },
     ]
