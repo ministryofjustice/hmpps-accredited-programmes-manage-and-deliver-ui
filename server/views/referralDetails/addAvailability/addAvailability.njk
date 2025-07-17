@@ -1,4 +1,6 @@
 {% extends "../../partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
@@ -18,24 +20,36 @@
 {% block content %}
 <div class="govuk-width-container" id="main-content">
   <div class="govuk-main-wrapper">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
 
+        <form method="post" novalidate>
+          <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            {{ govukCheckboxes(checkboxArgs) }}
 
-    {{ govukCheckboxes(checkboxArgs) }}
-<!--    <div class="govuk-grid-row">-->
-<!--    </div>-->
+            {{govukCharacterCount(otherDetailsTextAreaArgs) }}
 
-<!--      <div class="govuk-grid-row">-->
+            <div class="govuk-button-group">
+              {{ govukButton({ text: "Save and continue", preventDoubleClick: true }) }}
+              <a href="" data-cy="cancel" class="govuk-link">Cancel</a>
+            </div>
 
-<!--      </div>-->
-<!--      <div class="govuk-grid-row">-->
+        </form>
+      </div>
+    </div>
 
-
-<!--      </div>-->
-
+  </div>
 </div>
 
 {% endblock %}
 {% endblock %}
+
+
+
+
+
+
+
 
 
 

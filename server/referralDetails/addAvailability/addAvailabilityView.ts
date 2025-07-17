@@ -7,25 +7,32 @@ export default class AddAvailabilityView {
     return {
       idPrefix: 'notify-probation-practitioner',
       name: 'notify-probation-practitioner',
+      classes: 'availability-checkboxes',
       fieldset: {
         legend: {
-          // html: `<label class='govuk-label govuk-label--m govuk-!-margin-bottom-4'> ${ViewUtils.escape(
-          //   this.presenter.questionnaire.notifyProbationPractitionerCheckboxQuestion.text
-          // )}</label>`,
-          // isPageHeading: false,
+          text: this.presenter.text.checkboxes.pageTitle,
+          isPageHeading: true,
+          classes: 'govuk-fieldset__legend--l',
         },
       },
       // errorMessage: ViewUtils.govukErrorMessage(this.inputsPresenter.fields.notifyProbationPractitioner.errorMessage),
       hint: {
-        text: 'Select all that apply.',
+        text: 'Add any availability details you know. You can also add or update this later.',
       },
-      items: [
-        ...this.presenter.checkboxItems,
-        {
-          divider: 'or',
-          classes: 'govuk-fieldset__heading',
-        },
-      ],
+      items: [...this.presenter.checkboxItems],
+    }
+  }
+
+  private otherDetailsTextAreaArgs() {
+    return {
+      name: 'other--availability-details-text-area',
+      id: 'other--availability-details-text-area',
+      maxlength: '2000',
+      label: {
+        text: this.presenter.text.otherDetailsTextArea.label,
+        classes: 'govuk-label--m',
+      },
+      // value: this.presenter.fields.accessibilityNeeds,
     }
   }
 
@@ -35,6 +42,7 @@ export default class AddAvailabilityView {
       {
         presenter: this.presenter,
         checkboxArgs: this.checkboxArgs(),
+        otherDetailsTextAreaArgs: this.otherDetailsTextAreaArgs(),
       },
     ]
   }
