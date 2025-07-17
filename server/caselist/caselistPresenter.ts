@@ -123,6 +123,7 @@ export default class CaselistPresenter {
     const selectOptions: SelectArgsItem[] = [
       {
         text: 'Select',
+        value: '',
       },
     ]
     options.map(option =>
