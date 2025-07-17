@@ -18,6 +18,7 @@ import AdditionalInformationPresenter from './additionalInformationPresenter'
 import AdditionalInformationView from './additionalInformationView'
 import OffenceHistoryPresenter from './offenceHistoryPresenter'
 import OffenceHistoryView from './offenceHistoryView'
+import PersonalDetails from '../models/PersonalDetails'
 
 export default class ReferralDetailsController {
   constructor(
@@ -136,7 +137,7 @@ export default class ReferralDetailsController {
     // const { username } = req.user
     // const { id } = req.params
     // const personalDetails = await this.accreditedProgrammesManageAndDeliverService.getPersonalDetails(username, id)
-    const personalDetails = {
+    const personalDetails: PersonalDetails = {
       crn: '1234',
       nomsNumber: 'CN1234',
       name: {
@@ -153,7 +154,7 @@ export default class ReferralDetailsController {
       setting: 'Community',
     }
 
-    const presenter = new AddAvailabilityPresenter()
+    const presenter = new AddAvailabilityPresenter(personalDetails)
     const view = new AddAvailabilityView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, personalDetails)
