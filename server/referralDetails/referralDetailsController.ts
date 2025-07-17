@@ -21,6 +21,8 @@ import OffenceHistoryView from './offenceHistoryView'
 import PersonalDetails from '../models/PersonalDetails'
 import AddAvailabilityForm from './addAvailability/AddAvailabilityForm'
 import { FormValidationError } from '../utils/formValidationError'
+import AddAvailabilityDatesPresenter from './addAvailabilityDates/addAvailabilityDatesPresenter'
+import AddAvailabilityDatesView from './addAvailabilityDates/addAvailabilityDatesView'
 
 export default class ReferralDetailsController {
   constructor(
@@ -169,6 +171,30 @@ export default class ReferralDetailsController {
 
     const presenter = new AddAvailabilityPresenter(personalDetails, formError, userInputData)
     const view = new AddAvailabilityView(presenter)
+
+    ControllerUtils.renderWithLayout(res, view, personalDetails)
+  }
+
+  async showAddAvailabilityDatesPage(req: Request, res: Response): Promise<void> {
+    const personalDetails: PersonalDetails = {
+      crn: '1234',
+      nomsNumber: 'CN1234',
+      name: {
+        forename: 'Steve',
+        surname: 'Sticks',
+      },
+      dateOfBirth: '1980-01-01',
+      ethnicity: 'British',
+      gender: 'Male',
+      probationDeliveryUnit: {
+        code: 'LDN',
+        description: 'London',
+      },
+      setting: 'Community',
+    }
+
+    const presenter = new AddAvailabilityDatesPresenter(personalDetails)
+    const view = new AddAvailabilityDatesView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, personalDetails)
   }
