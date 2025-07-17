@@ -1,12 +1,13 @@
 import AddAvailabilityPresenter from './addAvailabilityPresenter'
+import ViewUtils from '../../utils/viewUtils'
 
 export default class AddAvailabilityView {
   constructor(private readonly presenter: AddAvailabilityPresenter) {}
 
   private checkboxArgs() {
     return {
-      idPrefix: 'notify-probation-practitioner',
-      name: 'notify-probation-practitioner',
+      idPrefix: 'availability-checkboxes',
+      name: 'availability-checkboxes',
       classes: 'availability-checkboxes',
       fieldset: {
         legend: {
@@ -15,7 +16,7 @@ export default class AddAvailabilityView {
           classes: 'govuk-fieldset__legend--l',
         },
       },
-      // errorMessage: ViewUtils.govukErrorMessage(this.inputsPresenter.fields.notifyProbationPractitioner.errorMessage),
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.availabilityCheckboxes.errorMessage),
       hint: {
         text: 'Add any availability details you know. You can also add or update this later.',
       },
@@ -25,14 +26,14 @@ export default class AddAvailabilityView {
 
   private otherDetailsTextAreaArgs() {
     return {
-      name: 'other--availability-details-text-area',
-      id: 'other--availability-details-text-area',
+      name: 'other-availability-details-text-area',
+      id: 'other-availability-details-text-area',
       maxlength: '2000',
       label: {
         text: this.presenter.text.otherDetailsTextArea.label,
         classes: 'govuk-label--m',
       },
-      // value: this.presenter.fields.accessibilityNeeds,
+      value: this.presenter.fields.otherDetailsTextArea.value,
     }
   }
 
@@ -43,6 +44,7 @@ export default class AddAvailabilityView {
         presenter: this.presenter,
         checkboxArgs: this.checkboxArgs(),
         otherDetailsTextAreaArgs: this.otherDetailsTextAreaArgs(),
+        errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
       },
     ]
   }

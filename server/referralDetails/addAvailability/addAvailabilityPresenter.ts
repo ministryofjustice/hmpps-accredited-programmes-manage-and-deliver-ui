@@ -1,7 +1,21 @@
 import PersonalDetails from '../../models/PersonalDetails'
+import { FormValidationError } from '../../utils/formValidationError'
+import PresenterUtils from '../../utils/presenterUtils'
 
 export default class AddAvailabilityPresenter {
-  constructor(private readonly personalDetails: PersonalDetails) {}
+  constructor(
+    private readonly personalDetails: PersonalDetails,
+    private readonly validationError: FormValidationError | null = null,
+    private readonly userInputData: Record<string, unknown> | null = null,
+  ) {}
+
+  get utils() {
+    return new PresenterUtils(this.userInputData)
+  }
+
+  get errorSummary() {
+    return PresenterUtils.errorSummary(this.validationError)
+  }
 
   get text() {
     return {
@@ -10,7 +24,7 @@ export default class AddAvailabilityPresenter {
       },
       otherDetailsTextArea: {
         label: 'Other availability details (optional)',
-      }
+      },
     }
   }
 
@@ -108,8 +122,15 @@ export default class AddAvailabilityPresenter {
     },
   ]
 
-  // readonly fields = {
-  //   accessibilityNeeds: this.utils.stringValue(this.referral.referral.accessibilityNeeds, 'accessibility-needs'),
-  //   reasonForChange: this.utils.stringValue(null, AccessibilityNeedsForm.amendAccessibilityNeedsReasonForChangeId),
-  // }
+  get fields() {
+    return {
+      availabilityCheckboxes: {
+        value: this.utils.stringValue(null, 'availability-checkboxes'),
+        errorMessage: PresenterUtils.errorMessage(this.validationError, 'availability-checkboxes'),
+      },
+      otherDetailsTextArea: {
+        value: this.utils.stringValue(null, 'other-availability-details-text-area'),
+      },
+    }
+  }
 }

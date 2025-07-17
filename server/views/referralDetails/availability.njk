@@ -4,7 +4,7 @@
 
  <div>
    {{ govukInsetText(importFromDeliusText) }}
-   <p>No availability details added for Alex River</p>
+   <p>No availability details added for {{ presenter.personalDetails.name.forename }} {{ presenter.personalDetails.name.surname }}</p>
 
    {{ govukButton(availabilityButtonArgs) }}
 </div>

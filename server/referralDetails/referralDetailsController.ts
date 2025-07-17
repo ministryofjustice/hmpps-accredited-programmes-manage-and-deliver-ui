@@ -19,6 +19,8 @@ import AdditionalInformationView from './additionalInformationView'
 import OffenceHistoryPresenter from './offenceHistoryPresenter'
 import OffenceHistoryView from './offenceHistoryView'
 import PersonalDetails from '../models/PersonalDetails'
+import AddAvailabilityForm from './addAvailability/AddAvailabilityForm'
+import { FormValidationError } from '../utils/formValidationError'
 
 export default class ReferralDetailsController {
   constructor(
@@ -134,6 +136,17 @@ export default class ReferralDetailsController {
   }
 
   async showAddAvailabilityPage(req: Request, res: Response): Promise<void> {
+    let formError: FormValidationError | null = null
+    let userInputData = null
+    if (req.method === 'POST') {
+      const data = await new AddAvailabilityForm(req).data()
+
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+        userInputData = req.body
+      }
+    }
     // const { username } = req.user
     // const { id } = req.params
     // const personalDetails = await this.accreditedProgrammesManageAndDeliverService.getPersonalDetails(username, id)
@@ -154,7 +167,7 @@ export default class ReferralDetailsController {
       setting: 'Community',
     }
 
-    const presenter = new AddAvailabilityPresenter(personalDetails)
+    const presenter = new AddAvailabilityPresenter(personalDetails, formError, userInputData)
     const view = new AddAvailabilityView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, personalDetails)
