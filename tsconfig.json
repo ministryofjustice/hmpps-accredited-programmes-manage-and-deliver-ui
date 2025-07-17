@@ -14,7 +14,8 @@
     "experimentalDecorators": true,
     "typeRoots": ["./server/@types", "./node_modules/@types"],
     "paths": {
-      "@hmpps-auth": ["./server/@types/hmppsAuth/index.d.ts"]
+      "@hmpps-auth": ["./server/@types/hmppsAuth/index.d.ts"],
+      "@manage-and-deliver-api": ["./server/@types/manageAndDeliverApi/index.d.ts"]
     }
   },
   "exclude": [

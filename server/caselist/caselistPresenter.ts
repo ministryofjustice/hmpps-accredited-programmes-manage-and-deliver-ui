@@ -1,5 +1,7 @@
-import Caselist from '../models/caseList'
+import { ReferralCaseListItem } from '@manage-and-deliver-api'
+import { Page } from '../shared/models/pagination'
 import { SelectArgs, SelectArgsItem, TableArgs } from '../utils/govukFrontendTypes'
+import Pagination from '../utils/pagination/pagination'
 import CaselistFilter from './caselistFilter'
 import CaselistUtils from './caseListUtils'
 
@@ -9,12 +11,17 @@ export enum CaselistPageSection {
 }
 
 export default class CaselistPresenter {
+  public readonly pagination: Pagination
+
   constructor(
     readonly section: CaselistPageSection,
-    readonly caselist: Caselist,
+    readonly referralCaseListItems: Page<ReferralCaseListItem>,
     readonly filter: CaselistFilter,
     readonly params: string,
-  ) {}
+  ) {
+    this.pagination = new Pagination(referralCaseListItems, params)
+    this.referralCaseListItems = referralCaseListItems
+  }
 
   readonly text = {
     pageHeading: `Building Choices: moderate intensity`,
@@ -46,11 +53,13 @@ export default class CaselistPresenter {
 
   generateTableRows() {
     const referralData: ({ html: string; text?: undefined } | { text: string; html?: undefined })[][] = []
-    this.caselist.referrals.forEach(referral => {
+    this.referralCaseListItems.content.forEach(referral => {
       referralData.push([
-        { html: `<a href='#'>${referral.personName}</a><br><span>${referral.personCrn}</span>` },
+        {
+          html: `<a href='/personalDetails/${referral.referralId}'>${referral.personName}</a><br><span>${referral.crn}</span>`,
+        },
 
-        { text: 'Referral submitted' },
+        { text: referral.referralStatus },
       ])
     })
     return referralData
@@ -60,12 +69,12 @@ export default class CaselistPresenter {
     return {
       items: [
         {
-          text: 'Open referrals',
+          text: `Open referrals (${this.referralCaseListItems.totalElements})`,
           href: `/pdu/open-referrals`,
           active: this.section === CaselistPageSection.Open,
         },
         {
-          text: 'Closed referrals',
+          text: `Closed referrals (${this.referralCaseListItems.totalElements})`,
           href: `/pdu/closed-referrals`,
           active: this.section === CaselistPageSection.Closed,
         },
@@ -102,7 +111,6 @@ export default class CaselistPresenter {
         text: 'Referral status',
         classes: 'govuk-label--s',
       },
-      classes: 'test',
       items: this.generateSelectValues(CaselistUtils.referralStatus, this.filter.referralStatus),
     }
   }

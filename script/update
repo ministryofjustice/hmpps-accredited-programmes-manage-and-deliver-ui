@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# script/update: Update the application to run for its current checkout.
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+echo "==> Pulling latest backing service images..."
+
+docker compose pull
+
+echo "==> Updating govuk-frontend types..."
+
+npm run generate-frontend-types
+
+echo "==> Updating Manage and Deliver API types..."
+
+script/generateApiTypes/manageAndDeliverApiTypes

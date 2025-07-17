@@ -1,6 +1,6 @@
-import moment from 'moment-timezone'
-import ClockTime from './clockTime'
+import moment from 'moment'
 import CalendarDay from './calendarDay'
+import ClockTime from './clockTime'
 
 type casing = 'lowercase' | 'capitalized'
 export default class DateUtils {
