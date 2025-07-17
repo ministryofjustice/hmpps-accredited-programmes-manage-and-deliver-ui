@@ -9,6 +9,7 @@ import CaselistController from '../caselist/caselistController'
 export default function routes({ auditService, accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const post = (path: string, handler: RequestHandler): Router => router.post(path, asyncMiddleware(handler))
 
   const caselistController = new CaselistController(accreditedProgrammesManageAndDeliverService)
   const referralDetailsController = new ReferralDetailsController(accreditedProgrammesManageAndDeliverService)
@@ -56,6 +57,10 @@ export default function routes({ auditService, accreditedProgrammesManageAndDeli
   })
 
   get('/add-availability/:id', async (req, res, next) => {
+    await referralDetailsController.showAddAvailabilityPage(req, res)
+  })
+
+  post('/add-availability/:id', async (req, res, next) => {
     await referralDetailsController.showAddAvailabilityPage(req, res)
   })
 

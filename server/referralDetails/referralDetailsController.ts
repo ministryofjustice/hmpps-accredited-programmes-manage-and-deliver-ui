@@ -19,6 +19,8 @@ import ProgrammeHistoryPresenter from './programmeHistoryPresenter'
 import ProgrammeHistoryView from './programmeHistoryView'
 import SentenceInformationPresenter from './sentenceInformationPresenter'
 import SentenceInformationView from './sentenceInformationView'
+import AddAvailabilityForm from './addAvailability/AddAvailabilityForm'
+import { FormValidationError } from '../utils/formValidationError'
 
 export default class ReferralDetailsController {
   constructor(
@@ -125,9 +127,18 @@ export default class ReferralDetailsController {
     const { username } = req.user
     const { id } = req.params
     const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
-    // const personalDetails = await this.accreditedProgrammesManageAndDeliverService.getPersonalDetails(username, id)
+    let formError: FormValidationError | null = null
+    let userInputData = null
+    if (req.method === 'POST') {
+      const data = await new AddAvailabilityForm(req).data()
 
-    const presenter = new AddAvailabilityPresenter(personalDetails)
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+        userInputData = req.body
+      }
+    }
+    const presenter = new AddAvailabilityPresenter(personalDetails, formError, userInputData)
     const view = new AddAvailabilityView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
