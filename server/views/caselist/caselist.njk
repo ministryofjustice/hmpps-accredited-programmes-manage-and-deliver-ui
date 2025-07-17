@@ -21,7 +21,7 @@
 
     {%- set filterOptionsHtml %}
 
-    {{ govukInput(presenter.searchByNameOrCrnArgs) }}
+    {{ govukInput(presenter.searchBycrnOrPersonNameArgs) }}
     {{ govukSelect(presenter.searchByCohortArgs()) }}
     {{ govukSelect(presenter.searchByStatusArgs()) }}
     {% endset -%}
@@ -34,8 +34,7 @@
 
         submit: {
           attributes: {
-            "data-test-id": "submit-button",
-            disabled: true
+            "data-test-id": "submit-button"
           }
         },
 

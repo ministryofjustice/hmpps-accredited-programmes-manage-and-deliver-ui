@@ -1,4 +1,5 @@
 import { ReferralCaseListItem } from '@manage-and-deliver-api'
+import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
 import type { HmppsAuthClient, RestClientBuilderWithoutToken } from '../data'
 import RestClient from '../data/restClient'
@@ -31,24 +32,28 @@ export default class AccreditedProgrammesManageAndDeliverService {
   async getOpenCaselist(
     username: Express.User['username'],
     paginationParams: PaginationParams,
+    filter: CaselistFilterParams,
   ): Promise<Page<ReferralCaseListItem>> {
     const restClient = await this.createRestClientFromUsername(username)
+    const filterQuery: Record<string, unknown> = { ...filter }
     return (await restClient.get({
       path: `/pages/caselist/open`,
       headers: { Accept: 'application/json' },
-      query: { ...paginationParams },
+      query: { ...paginationParams, ...filterQuery },
     })) as Page<ReferralCaseListItem>
   }
 
   async getClosedCaselist(
     username: Express.User['username'],
     paginationParams: PaginationParams,
+    filter: CaselistFilterParams,
   ): Promise<Page<ReferralCaseListItem>> {
     const restClient = await this.createRestClientFromUsername(username)
+    const filterQuery: Record<string, unknown> = { ...filter }
     return (await restClient.get({
       path: `/pages/caselist/closed`,
       headers: { Accept: 'application/json' },
-      query: { ...paginationParams },
+      query: { ...paginationParams, ...filterQuery },
     })) as Page<ReferralCaseListItem>
   }
 

@@ -7,14 +7,14 @@ describe(CaselistFilter, () => {
       const query = {
         referralStatus: 'referral-submitted',
         cohort: 'sexual-offence',
-        nameOrCrn: 'Building',
+        crnOrPersonName: 'Building',
       }
 
       const filter = CaselistFilter.fromRequest({ query } as unknown as Request)
 
       expect(filter.referralStatus).toEqual('referral-submitted')
       expect(filter.cohort).toEqual('sexual-offence')
-      expect(filter.nameOrCrn).toEqual('Building')
+      expect(filter.crnOrPersonName).toEqual('Building')
     })
   })
 
@@ -24,7 +24,7 @@ describe(CaselistFilter, () => {
         const filter = new CaselistFilter()
         expect(filter.referralStatus).toBeUndefined()
         expect(filter.cohort).toBeUndefined()
-        expect(filter.nameOrCrn).toBeUndefined()
+        expect(filter.crnOrPersonName).toBeUndefined()
       })
     })
 
@@ -43,12 +43,12 @@ describe(CaselistFilter, () => {
       })
     })
 
-    describe('nameOrCrn', () => {
-      it('correctly sets nameOrCrn ', () => {
+    describe('crnOrPersonName', () => {
+      it('correctly sets crnOrPersonName ', () => {
         const filter = new CaselistFilter()
-        filter.nameOrCrn = 'Hello'
+        filter.crnOrPersonName = 'Hello'
 
-        expect(filter.params.nameOrCrn).toEqual('Hello')
+        expect(filter.params.crnOrPersonName).toEqual('Hello')
       })
     })
   })

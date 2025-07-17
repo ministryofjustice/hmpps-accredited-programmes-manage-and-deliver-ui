@@ -27,12 +27,22 @@ export default class CaselistController {
     const { filter, username } = this.getCaselistData(req)
     const pageNumber = req.query.page
 
-    const openCaseList = await this.accreditedProgrammesManageAndDeliverService.getOpenCaselist(username, {
-      page: pageNumber ? Number(pageNumber) - 1 : 0,
-      size: 10,
-    })
+    const openCaseList = await this.accreditedProgrammesManageAndDeliverService.getOpenCaselist(
+      username,
+      {
+        page: pageNumber ? Number(pageNumber) - 1 : 0,
+        size: 10,
+      },
+      filter.params,
+    )
 
-    const presenter = new CaselistPresenter(CaselistPageSection.Open, openCaseList, filter, req.session.filterParams)
+    const presenter = new CaselistPresenter(
+      CaselistPageSection.Open,
+      openCaseList,
+      filter,
+      req.session.filterParams,
+      true,
+    )
 
     const view = new CaselistView(presenter)
 
@@ -43,16 +53,21 @@ export default class CaselistController {
     const { username, filter } = this.getCaselistData(req)
     const pageNumber = req.query.page
 
-    const closedCaseList = await this.accreditedProgrammesManageAndDeliverService.getClosedCaselist(username, {
-      page: pageNumber ? Number(pageNumber) - 1 : 0,
-      size: 10,
-    })
+    const closedCaseList = await this.accreditedProgrammesManageAndDeliverService.getClosedCaselist(
+      username,
+      {
+        page: pageNumber ? Number(pageNumber) - 1 : 0,
+        size: 10,
+      },
+      filter.params,
+    )
 
     const presenter = new CaselistPresenter(
       CaselistPageSection.Closed,
       closedCaseList,
       filter,
       req.session.filterParams,
+      false,
     )
 
     const view = new CaselistView(presenter)
