@@ -6,13 +6,13 @@ export default class CaselistFilter {
 
   cohort: string | undefined
 
-  nameOrCrn: string | undefined
+  crnOrPersonName: string | undefined
 
   static fromRequest(request: Request): CaselistFilter {
     const filter = new CaselistFilter()
     filter.referralStatus = request.query.referralStatus as string | undefined
     filter.cohort = request.query.cohort as string | undefined
-    filter.nameOrCrn = request.query.nameOrCrn as string | undefined
+    filter.crnOrPersonName = request.query.crnOrPersonName as string | undefined
     return filter
   }
 
@@ -25,8 +25,8 @@ export default class CaselistFilter {
     if (this.cohort !== undefined) {
       params.cohort = this.cohort
     }
-    if (this.nameOrCrn !== undefined) {
-      params.nameOrCrn = this.nameOrCrn.trim()
+    if (this.crnOrPersonName !== undefined) {
+      params.crnOrPersonName = this.crnOrPersonName.trim()
     }
 
     return params

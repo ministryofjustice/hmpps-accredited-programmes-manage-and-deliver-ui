@@ -13,14 +13,18 @@ export enum CaselistPageSection {
 export default class CaselistPresenter {
   public readonly pagination: Pagination
 
+  public readonly openOrClosedUrl: string
+
   constructor(
     readonly section: CaselistPageSection,
     readonly referralCaseListItems: Page<ReferralCaseListItem>,
     readonly filter: CaselistFilter,
     readonly params: string,
+    readonly isOpenReferrals: boolean,
   ) {
     this.pagination = new Pagination(referralCaseListItems, params)
     this.referralCaseListItems = referralCaseListItems
+    this.openOrClosedUrl = isOpenReferrals ? 'open-referrals' : 'closed-referrals'
   }
 
   readonly text = {
@@ -82,9 +86,9 @@ export default class CaselistPresenter {
     }
   }
 
-  readonly searchByNameOrCrnArgs = {
-    id: 'nameOrCrn',
-    name: 'nameOrCrn',
+  readonly searchBycrnOrPersonNameArgs = {
+    id: 'crnOrPersonName',
+    name: 'crnOrPersonName',
     label: {
       text: 'Search by name or CRN',
       classes: 'govuk-label--s',
@@ -174,7 +178,6 @@ export default class CaselistPresenter {
     if (this.filter.cohort) {
       const searchParams = new URLSearchParams(this.params)
       searchParams.delete('cohort')
-      searchParams.delete('referralStatus')
       const paramAttributes = CaselistUtils.cohorts.filter(cohort => cohort.value === this.filter.cohort)
       selectedFilters.push({
         heading: {
@@ -189,18 +192,17 @@ export default class CaselistPresenter {
       })
     }
 
-    if (this.filter.nameOrCrn) {
+    if (this.filter.crnOrPersonName) {
       const searchParams = new URLSearchParams(this.params)
-      searchParams.delete('nameOrCrn')
-
+      searchParams.delete('crnOrPersonName')
       selectedFilters.push({
         heading: {
           text: 'Name Or Crn',
         },
         items: [
           {
-            // href: `/interventions/${this.setting}${searchParams.size === 0 ? '' : `?${searchParams.toString()}`}`,
-            text: this.filter.nameOrCrn,
+            href: `/pdu/${this.openOrClosedUrl}${searchParams.size === 0 ? '' : `?${searchParams.toString()}`}`,
+            text: this.filter.crnOrPersonName,
           },
         ],
       })
