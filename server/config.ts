@@ -102,6 +102,7 @@ export default {
     },
     accreditedProgrammesManageAndDeliverService: {
       url: get('ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_URL', 'http://localhost:8080', requiredInProduction),
+      healthPath: '/health',
       timeout: {
         response: 10000,
         deadline: 10000,
