@@ -52,6 +52,39 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/availability': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Create a new availability */
+    post: operations['createAvailability']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/service-user/{identifier}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: operations['getServiceUserByCrnOrPrisonerNumber']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/referral/{id}': {
     parameters: {
       query?: never
@@ -92,7 +125,8 @@ export interface paths {
       path?: never
       cookie?: never
     }
-    get: operations['getOpenCaseListReferrals']
+    /** Get all referrals for the case list view */
+    get: operations['getCaseListReferrals']
     put?: never
     post?: never
     delete?: never
@@ -101,14 +135,15 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/hello-world': {
+  '/availability/referral/{referralId}': {
     parameters: {
       query?: never
       header?: never
       path?: never
       cookie?: never
     }
-    get: operations['helloWorld']
+    /** Get all availabilities for a referral */
+    get: operations['getAvailabilityByReferralId']
     put?: never
     post?: never
     delete?: never
@@ -158,6 +193,93 @@ export interface components {
       /** Format: int32 */
       messagesFoundCount: number
     }
+    Availability: {
+      /**
+       * Format: uuid
+       * @description Unique ID of the availability
+       * @example null
+       */
+      id?: string
+      /**
+       * Format: uuid
+       * @description The ID of the referral
+       * @example d3f55f38-7c7b-4b6e-9aa1-e7d7f9e3e785
+       */
+      referralId: string
+      /**
+       * Format: date-time
+       * @description Start date of the availability
+       * @example 2025-07-10
+       */
+      startDate?: string
+      /**
+       * Format: date-time
+       * @description End date of the availability
+       * @example 2025-07-20
+       */
+      endDate?: string
+      /**
+       * @description Additional details
+       * @example Available for remote sessions
+       */
+      otherDetails?: string
+      /**
+       * @description User who last modified this record
+       * @example admin_user
+       */
+      lastModifiedBy?: string
+      /**
+       * Format: date-time
+       * @description Timestamp when last modified
+       * @example 2025-07-10T12:00:00
+       */
+      lastModifiedAt?: string
+      availabilities: components['schemas']['DailyAvailabilityModel'][]
+    }
+    DailyAvailabilityModel: {
+      /** @enum {string} */
+      label: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
+      slots: components['schemas']['Slot'][]
+    }
+    Slot: {
+      label: string
+      value: boolean
+    }
+    CreateAvailability: {
+      /**
+       * Format: uuid
+       * @description The ID of the referral
+       * @example d3f55f38-7c7b-4b6e-9aa1-e7d7f9e3e785
+       */
+      referralId: string
+      /**
+       * Format: date-time
+       * @description Start date of the availability, Start date of the availability, will default to current date if no value is passed in
+       * @example 2025-07-10
+       */
+      startDate?: string
+      /**
+       * Format: date-time
+       * @description End date of the availability
+       * @example 2025-07-20
+       */
+      endDate?: string
+      /**
+       * @description Additional details
+       * @example Available for remote sessions
+       */
+      otherDetails?: string
+      availabilities: components['schemas']['DailyAvailabilityModel'][]
+    }
+    ServiceUser: {
+      name?: string
+      crn: string
+      /** Format: date */
+      dob: string
+      gender?: string
+      ethnicity?: string
+      currentPdu?: string
+    }
     Referral: {
       /**
        * Format: uuid
@@ -200,42 +322,6 @@ export interface components {
       messagesReturnedCount: number
       messages: components['schemas']['DlqMessage'][]
     }
-    Pageable: {
-      /** Format: int32 */
-      page?: number
-      /** Format: int32 */
-      size?: number
-      sort?: string[]
-    }
-    PageReferralCaseListItem: {
-      /** Format: int64 */
-      totalElements?: number
-      /** Format: int32 */
-      totalPages?: number
-      /** Format: int32 */
-      size?: number
-      content?: components['schemas']['ReferralCaseListItem'][]
-      /** Format: int32 */
-      number?: number
-      sort?: components['schemas']['SortObject']
-      first?: boolean
-      last?: boolean
-      /** Format: int32 */
-      numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
-      empty?: boolean
-    }
-    PageableObject: {
-      /** Format: int64 */
-      offset?: number
-      sort?: components['schemas']['SortObject']
-      paged?: boolean
-      /** Format: int32 */
-      pageNumber?: number
-      /** Format: int32 */
-      pageSize?: number
-      unpaged?: boolean
-    }
     ReferralCaseListItem: {
       /** Format: uuid */
       referralId: string
@@ -243,10 +329,12 @@ export interface components {
       personName: string
       referralStatus: string
     }
-    SortObject: {
-      empty?: boolean
-      sorted?: boolean
-      unsorted?: boolean
+    Pageable: {
+      /** Format: int32 */
+      page?: number
+      /** Format: int32 */
+      size?: number
+      sort?: string[]
     }
   }
   responses: never
@@ -348,6 +436,88 @@ export interface operations {
       }
     }
   }
+  createAvailability: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateAvailability']
+      }
+    }
+    responses: {
+      /** @description Availability created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Availability']
+        }
+      }
+      /** @description Bad input */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Availability']
+        }
+      }
+      /** @description Unauthorised. The request was unauthorised. */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getServiceUserByCrnOrPrisonerNumber: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        identifier: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ServiceUser']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ServiceUser']
+        }
+      }
+    }
+  }
   getReferralById: {
     parameters: {
       query?: never
@@ -440,10 +610,11 @@ export interface operations {
       }
     }
   }
-  getOpenCaseListReferrals: {
+  getCaseListReferrals: {
     parameters: {
       query: {
         pageable: components['schemas']['Pageable']
+        crnOrPersonName?: string
       }
       header?: never
       path: {
@@ -453,13 +624,13 @@ export interface operations {
     }
     requestBody?: never
     responses: {
-      /** @description OK */
+      /** @description Paged list of all open/closed referrals for a PDU */
       200: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['PageReferralCaseListItem']
+          'application/json': components['schemas']['ReferralCaseListItem']
         }
       }
       /** @description Bad Request */
@@ -473,33 +644,43 @@ export interface operations {
       }
     }
   }
-  helloWorld: {
+  getAvailabilityByReferralId: {
     parameters: {
       query?: never
       header?: never
-      path?: never
+      path: {
+        /** @description The id (UUID) of a referral */
+        referralId: string
+      }
       cookie?: never
     }
     requestBody?: never
     responses: {
-      /** @description OK */
+      /** @description Information about the availability for a given referral */
       200: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          'application/json': {
-            [key: string]: string
-          }
+          'application/json': components['schemas']['Availability']
         }
       }
-      /** @description Bad Request */
+      /** @description Bad input */
       400: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          '*/*': components['schemas']['ErrorResponse']
+          'application/json': components['schemas']['Availability']
+        }
+      }
+      /** @description Unauthorised. The request was unauthorised. */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
     }

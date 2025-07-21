@@ -1,6 +1,6 @@
 import type { components } from './imported'
 
-type PagedReferralCaseListItem = components['schemas']['PagedReferralCaseListItem']
 type ReferralCaseListItem = components['schemas']['ReferralCaseListItem']
+type Availability = components['schemas']['Availability']
 
-export type { PagedReferralCaseListItem, ReferralCaseListItem }
+export type { ReferralCaseListItem, Availability }

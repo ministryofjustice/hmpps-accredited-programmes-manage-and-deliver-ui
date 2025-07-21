@@ -1,4 +1,4 @@
-import { ReferralCaseListItem } from '@manage-and-deliver-api'
+import { Availability, ReferralCaseListItem } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
 import type { HmppsAuthClient, RestClientBuilderWithoutToken } from '../data'
@@ -63,5 +63,13 @@ export default class AccreditedProgrammesManageAndDeliverService {
       path: `/referral/${id}`,
       headers: { Accept: 'application/json' },
     })) as PersonalDetails
+  }
+
+  async getAvailability(username: Express.User['username'], referralId: string): Promise<Availability> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/availability/referral/${referralId}`,
+      headers: { Accept: 'application/json' },
+    })) as Availability
   }
 }

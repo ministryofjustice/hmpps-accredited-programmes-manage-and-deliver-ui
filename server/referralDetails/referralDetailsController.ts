@@ -161,9 +161,12 @@ export default class ReferralDetailsController {
         userInputData = req.body
       }
     }
-    // const { username } = req.user
-    // const { id } = req.params
-    // const personalDetails = await this.accreditedProgrammesManageAndDeliverService.getPersonalDetails(username, id)
+    const { username } = req.user
+    const { id } = req.params
+    const availability = await this.accreditedProgrammesManageAndDeliverService.getAvailability(
+      username,
+      '6885d1f6-5958-40e0-9448-1ff8cc37e64',
+    )
     const personalDetails: PersonalDetails = {
       crn: '1234',
       nomsNumber: 'CN1234',
@@ -181,7 +184,13 @@ export default class ReferralDetailsController {
       setting: 'Community',
     }
 
-    const presenter = new AddAvailabilityPresenter(personalDetails, formError, userInputData, req.session.originPage)
+    const presenter = new AddAvailabilityPresenter(
+      personalDetails,
+      formError,
+      userInputData,
+      req.session.originPage,
+      availability,
+    )
     const view = new AddAvailabilityView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, personalDetails)
