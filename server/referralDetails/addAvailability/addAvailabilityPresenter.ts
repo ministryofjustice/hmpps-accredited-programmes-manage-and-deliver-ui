@@ -36,7 +36,7 @@ export default class AddAvailabilityPresenter {
     const checkboxes: { divider?: string; value?: string; text?: string; checked?: boolean }[] = []
     this.availability.availabilities.forEach(day => {
       checkboxes.push({
-        divider: convertToTitleCase(day.label),
+        divider: day.label,
       })
       day.slots.forEach(slot => {
         checkboxes.push({
