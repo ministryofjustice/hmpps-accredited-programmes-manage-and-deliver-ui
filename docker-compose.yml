@@ -1,16 +1,15 @@
 services:
-
   hmpps-auth:
     image: quay.io/hmpps/hmpps-auth:latest
     networks:
       - hmpps
     container_name: hmpps-auth
     ports:
-      - "9090:9090"
+      - '8090:8090'
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/auth/health"]
+      test: ['CMD', 'curl', '-f', 'http://localhost:8080/auth/health']
     environment:
-      - SERVER_PORT=9090
+      - SERVER_PORT=8090
       - SPRING_PROFILES_ACTIVE=dev
       - DELIUS_ENABLED=true
       - DELIUS_ENDPOINT_URL=http://wiremock:8080/delius
@@ -24,9 +23,9 @@ services:
     networks:
       - hmpps
     ports:
-      - "5432:5432"
+      - '5432:5432'
     healthcheck:
-      test: [ "CMD", "pg_isready", "--username=admin", "--dbname=postgres" ]
+      test: ['CMD', 'pg_isready', '--username=admin', '--dbname=postgres']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -42,12 +41,12 @@ services:
     networks:
       - hmpps
     ports:
-      - "8080:8080"
+      - '8080:8080'
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8080/health/ping" ]
+      test: ['CMD', 'curl', '-f', 'http://localhost:8080/health/ping']
     environment:
       - SERVER_PORT=8080
-      - HMPPS_AUTH_URL=http://hmpps-auth:9090/auth
+      - HMPPS_AUTH_URL=http://hmpps-auth:8090/auth
       - SPRING_PROFILES_ACTIVE=dev, local
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/postgres
       - SPRING_DATASOURCE_USERNAME=admin
@@ -64,7 +63,7 @@ services:
       - hmpps
     restart: always
     ports:
-      - "9092:8080"
+      - '9092:8080'
     volumes:
       - ./wiremock_mappings:/home/wiremock/mappings
     command: '--verbose'
@@ -75,16 +74,15 @@ services:
       - hmpps
     container_name: hmpps-mandd-localstack
     ports:
-      - "4566:4566"
-      - "8999:8080"
+      - '4566:4566'
+      - '8999:8080'
     environment:
       - SERVICES=sns,sqs
       - DEBUG=${DEBUG- }
       - DOCKER_HOST=unix:///var/run/docker.sock
     volumes:
-      - "${TMPDIR:-/tmp/localstack}:/var/lib/localstack"
-      - "/var/run/docker.sock:/var/run/docker.sock"
-
+      - '${TMPDIR:-/tmp/localstack}:/var/lib/localstack'
+      - '/var/run/docker.sock:/var/run/docker.sock'
 
 networks:
   hmpps:

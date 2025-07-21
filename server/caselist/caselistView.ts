@@ -10,6 +10,7 @@ export default class CaselistView {
         presenter: this.presenter,
         subNavArgs: this.presenter.getSubNavArgs(),
         selectedFilters: this.presenter.generateFilterPane(),
+        pagination: this.presenter.pagination.mojPaginationArgs,
       },
     ]
   }

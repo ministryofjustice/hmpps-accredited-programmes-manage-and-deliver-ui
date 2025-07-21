@@ -1821,7 +1821,6 @@ export interface GovukFrontendNotificationBanner {
     - if you do not set `type`, `titleText` defaults to `"Important"`
     - if you set `type` to `success`, `titleText` defaults to `"Success"`
     - if you set `titleHtml`, this option is ignored
-
   */
   titleText?: string | null
 
