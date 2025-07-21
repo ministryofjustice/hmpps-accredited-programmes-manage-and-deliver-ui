@@ -1,3 +1,12 @@
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+
+{{ govukPhaseBanner({
+  tag: {
+    text: "Prototype"
+  },
+  html: 'This is a new service - your <a class="govuk-link" href="#">feedback</a> will help us improve it.'
+}) }}
+
 <section class="key-details-bar" aria-label="Key details">
   <div class="key-details-bar__key-details govuk-width-container govuk-body">
     <div class="prisoner-info">

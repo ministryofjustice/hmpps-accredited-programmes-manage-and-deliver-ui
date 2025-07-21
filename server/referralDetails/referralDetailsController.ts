@@ -62,6 +62,8 @@ export default class ReferralDetailsController {
     const presenter = new PersonalDetailsPresenter(sharedReferralDetailsData.personalDetails, subNavValue, id)
     const view = new PersonalDetailsView(presenter)
 
+    req.session.originPage = req.originalUrl
+
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData.personalDetails)
   }
 
@@ -73,6 +75,8 @@ export default class ReferralDetailsController {
 
     const presenter = new ProgrammeHistoryPresenter(sharedReferralDetailsData.personalDetails, subNavValue, id)
     const view = new ProgrammeHistoryView(presenter)
+
+    req.session.originPage = req.originalUrl
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData.personalDetails)
   }
@@ -86,6 +90,8 @@ export default class ReferralDetailsController {
     const presenter = new OffenceHistoryPresenter(sharedReferralDetailsData.personalDetails, subNavValue, id)
     const view = new OffenceHistoryView(presenter)
 
+    req.session.originPage = req.originalUrl
+
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData.personalDetails)
   }
 
@@ -97,6 +103,8 @@ export default class ReferralDetailsController {
 
     const presenter = new SentenceInformationPresenter(sharedReferralDetailsData.personalDetails, subNavValue, id)
     const view = new SentenceInformationView(presenter)
+
+    req.session.originPage = req.originalUrl
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData.personalDetails)
   }
@@ -110,6 +118,8 @@ export default class ReferralDetailsController {
     const presenter = new AvailabilityPresenter(sharedReferralDetailsData.personalDetails, subNavValue, id)
     const view = new AvailabilityView(presenter)
 
+    req.session.originPage = req.originalUrl
+
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData.personalDetails)
   }
 
@@ -121,6 +131,8 @@ export default class ReferralDetailsController {
 
     const presenter = new LocationPresenter(sharedReferralDetailsData.personalDetails, subNavValue, id)
     const view = new LocationView(presenter)
+
+    req.session.originPage = req.originalUrl
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData.personalDetails)
   }
@@ -169,7 +181,7 @@ export default class ReferralDetailsController {
       setting: 'Community',
     }
 
-    const presenter = new AddAvailabilityPresenter(personalDetails, formError, userInputData)
+    const presenter = new AddAvailabilityPresenter(personalDetails, formError, userInputData, req.session.originPage)
     const view = new AddAvailabilityView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, personalDetails)

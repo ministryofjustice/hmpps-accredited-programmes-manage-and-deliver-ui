@@ -3,22 +3,17 @@
 {% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 {% from "govuk/components/header/macro.njk" import govukHeader %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block main %}
-{{ govukPhaseBanner({
-  tag: {
-    text: "Prototype"
-  },
-  html: 'This is a new service - your <a class="govuk-link" href="#">feedback</a> will help us improve it.'
-}) }}
 {% block content %}
 <div class="govuk-width-container" id="main-content">
+  {{ govukBackLink(backLinkArgs) }}
   <div class="govuk-main-wrapper">
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
@@ -34,7 +29,7 @@
 
             <div class="govuk-button-group">
               {{ govukButton({ text: "Save and continue", preventDoubleClick: true }) }}
-              <a href="" data-cy="cancel" class="govuk-link">Cancel</a>
+              <a class="govuk-link" href={{ backlinkUri }}>Cancel</a>
             </div>
 
         </form>

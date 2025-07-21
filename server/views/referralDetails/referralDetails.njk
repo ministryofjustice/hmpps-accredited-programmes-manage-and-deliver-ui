@@ -1,6 +1,5 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 {% from "govuk/components/header/macro.njk" import govukHeader %}
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 {%- from "moj/components/side-navigation/macro.njk" import mojSideNavigation -%}
@@ -11,12 +10,6 @@
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block main %}
-{{ govukPhaseBanner({
-  tag: {
-    text: "Prototype"
-  },
-  html: 'This is a new service - your <a class="govuk-link" href="#">feedback</a> will help us improve it.'
-}) }}
 {% block content %}
 <div class="govuk-width-container" id="main-content">
   <div class="govuk-main-wrapper">
