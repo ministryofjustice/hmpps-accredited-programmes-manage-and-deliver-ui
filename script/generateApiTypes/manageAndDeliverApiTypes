@@ -1,6 +1,6 @@
 #!/bin/sh
 
 # script/manageAndDeliverApiTypes: Generate types from the Manage and Delivery API.
-#  
+#
 
 npx openapi-typescript https://accredited-programmes-manage-and-deliver-api-dev.hmpps.service.justice.gov.uk/v3/api-docs --output ./server/@types/manageAndDeliverApi/imported/index.d.ts

@@ -1,7 +1,6 @@
 import type { components } from './imported'
 
 type ReferralCaseListItem = components['schemas']['ReferralCaseListItem']
-type ReferralDetails = components['schemas']['ReferralDetails']
-type PersonalDetails = components['schemas']['PersonalDetails']
+type Availability = components['schemas']['Availability']
 
-export type { PersonalDetails, ReferralCaseListItem, ReferralDetails }
+export type { ReferralCaseListItem, Availability }

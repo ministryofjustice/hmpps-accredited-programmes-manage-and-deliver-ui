@@ -152,7 +152,35 @@ export default class ReferralDetailsController {
         userInputData = req.body
       }
     }
-    const presenter = new AddAvailabilityPresenter(personalDetails, formError, userInputData)
+
+    const availability = await this.accreditedProgrammesManageAndDeliverService.getAvailability(
+      username,
+      '6885d1f6-5958-40e0-9448-1ff8cc37e64',
+    )
+    const personalDetails: PersonalDetails = {
+      crn: '1234',
+      nomsNumber: 'CN1234',
+      name: {
+        forename: 'Steve',
+        surname: 'Sticks',
+      },
+      dateOfBirth: '1980-01-01',
+      ethnicity: 'British',
+      gender: 'Male',
+      probationDeliveryUnit: {
+        code: 'LDN',
+        description: 'London',
+      },
+      setting: 'Community',
+    }
+
+    const presenter = new AddAvailabilityPresenter(
+      personalDetails,
+      formError,
+      userInputData,
+      req.session.originPage,
+      availability,
+    )
     const view = new AddAvailabilityView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)

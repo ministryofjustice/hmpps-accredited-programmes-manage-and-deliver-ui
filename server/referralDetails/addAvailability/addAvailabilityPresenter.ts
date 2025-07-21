@@ -1,6 +1,8 @@
+import { Availability } from '@manage-and-deliver-api'
 import PersonalDetails from '../../models/PersonalDetails'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
+import { convertToTitleCase } from '../../utils/utils'
 
 export default class AddAvailabilityPresenter {
   constructor(
@@ -8,6 +10,7 @@ export default class AddAvailabilityPresenter {
     private readonly validationError: FormValidationError | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
     readonly backlinkUri: string | null,
+    private readonly availability: Availability,
   ) {}
 
   get utils() {
@@ -29,99 +32,22 @@ export default class AddAvailabilityPresenter {
     }
   }
 
-  readonly checkboxItems = [
-    {
-      divider: 'Mondays',
-    },
-    {
-      value: 'monday-daytime',
-      text: `daytime`,
-      // checked: this.presenter.filter.gender?.includes('Male') ?? false,
-    },
-    {
-      value: 'monday-evening',
-      text: 'evening',
-      // checked: this.presenter.filter.gender?.includes('Female') ?? false,
-    },
-    {
-      divider: 'Tuesdays',
-    },
-    {
-      value: 'tuesday-daytime',
-      text: 'daytime',
-      // checked: this.presenter.filter.gender?.includes('Male') ?? false,
-    },
-    {
-      value: 'tuesday-evening',
-      text: 'evening',
-      // checked: this.presenter.filter.gender?.includes('Female') ?? false,
-    },
-    {
-      divider: 'Wednesdays',
-    },
-    {
-      value: 'wednesday-daytime',
-      text: 'daytime',
-      // checked: this.presenter.filter.gender?.includes('Male') ?? false,
-    },
-    {
-      value: 'wednesday-evening',
-      text: 'evening',
-      // checked: this.presenter.filter.gender?.includes('Female') ?? false,
-    },
-    {
-      divider: 'Thursdays',
-    },
-    {
-      value: 'thursday-daytime',
-      text: 'daytime',
-      // checked: this.presenter.filter.gender?.includes('Male') ?? false,
-    },
-    {
-      value: 'thursday-evening',
-      text: 'evening',
-      // checked: this.presenter.filter.gender?.includes('Female') ?? false,
-    },
-    {
-      divider: 'Fridays',
-    },
-    {
-      value: 'friday-daytime',
-      text: 'daytime',
-      // checked: this.presenter.filter.gender?.includes('Male') ?? false,
-    },
-    {
-      value: 'friday-evening',
-      text: 'evening',
-      // checked: this.presenter.filter.gender?.includes('Female') ?? false,
-    },
-    {
-      divider: 'Saturdays',
-    },
-    {
-      value: 'saturday-daytime',
-      text: 'daytime',
-      // checked: this.presenter.filter.gender?.includes('Male') ?? false,
-    },
-    {
-      value: 'saturday-evening',
-      text: 'evening',
-      // checked: this.presenter.filter.gender?.includes('Female') ?? false,
-    },
-    {
-      divider: 'Sunday',
-    },
-    {
-      value: 'sunday-daytime',
-      text: 'daytime',
-      // checked: this.presenter.filter.gender?.includes('Male') ?? false,
-    },
-    {
-      value: 'sunday-evening',
-      text: 'evening',
-      // checked: this.presenter.filter.gender?.includes('Female') ?? false,
-    },
-  ]
+  generateCheckboxItems() {
+    const checkboxes: { divider?: string; value?: string; text?: string; checked?: boolean }[] = []
+    this.availability.availabilities.forEach(day => {
+      checkboxes.push({
+        divider: convertToTitleCase(day.label),
+      })
+      day.slots.forEach(slot => {
+        checkboxes.push({
+          value: `${day.label}-${slot.label}`,
+          text: slot.label,
+          checked: slot.value,
+        })
+      })
+    })
+    return checkboxes
+  }
 
   get fields() {
     return {

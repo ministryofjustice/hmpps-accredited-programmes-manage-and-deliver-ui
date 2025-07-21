@@ -20,7 +20,7 @@ export default class AddAvailabilityView {
       hint: {
         text: 'Add any availability details you know. You can also add or update this later.',
       },
-      items: [...this.presenter.checkboxItems],
+      items: this.presenter.generateCheckboxItems(),
     }
   }
 
