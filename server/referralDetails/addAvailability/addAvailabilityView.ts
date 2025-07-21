@@ -37,6 +37,13 @@ export default class AddAvailabilityView {
     }
   }
 
+  private backLinkArgs() {
+    return {
+      text: 'Back',
+      href: this.presenter.backlinkUri,
+    }
+  }
+
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       'referralDetails/addAvailability/addAvailability',
@@ -45,6 +52,8 @@ export default class AddAvailabilityView {
         checkboxArgs: this.checkboxArgs(),
         otherDetailsTextAreaArgs: this.otherDetailsTextAreaArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
+        backLinkArgs: this.backLinkArgs(),
+        backlinkUri: this.presenter.backlinkUri,
       },
     ]
   }

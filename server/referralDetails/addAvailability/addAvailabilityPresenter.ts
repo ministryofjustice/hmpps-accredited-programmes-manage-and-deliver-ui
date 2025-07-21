@@ -7,6 +7,7 @@ export default class AddAvailabilityPresenter {
     private readonly personalDetails: PersonalDetails,
     private readonly validationError: FormValidationError | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
+    readonly backlinkUri: string | null,
   ) {}
 
   get utils() {
