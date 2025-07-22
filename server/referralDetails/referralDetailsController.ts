@@ -162,8 +162,8 @@ export default class ReferralDetailsController {
         userInputData = req.body
       } else {
         const valuesToUpdateMap = new Map()
-
-        data.paramsForUpdate.forEach(item => {
+        const paramsArray = Array.isArray(data.paramsForUpdate) ? data.paramsForUpdate : [data.paramsForUpdate]
+        paramsArray.forEach(item => {
           const [day, time] = item.split('-')
 
           if (!valuesToUpdateMap.has(day)) {
@@ -173,8 +173,9 @@ export default class ReferralDetailsController {
           valuesToUpdateMap.get(day).slots.push({ label: time, value: true })
         })
         valuesToUpdate = Array.from(valuesToUpdateMap.values())
+        console.log('*******', JSON.stringify(valuesToUpdate))
+        // return res.redirect(`/add-availability-dates/${id}`)
       }
-      console.log(JSON.stringify(valuesToUpdate))
     }
     const { username } = req.user
     const availability = await this.accreditedProgrammesManageAndDeliverService.getAvailability(
