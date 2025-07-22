@@ -145,12 +145,26 @@ export default class ReferralDetailsController {
     let userInputData = null
     if (req.method === 'POST') {
       const data = await new AddAvailabilityForm(req).data()
-
+      let valuesToUpdate = []
       if (data.error) {
         res.status(400)
         formError = data.error
         userInputData = req.body
+      } else {
+        const valuesToUpdateMap = new Map()
+
+        data.paramsForUpdate.forEach(item => {
+          const [day, time] = item.split('-')
+
+          if (!valuesToUpdateMap.has(day)) {
+            valuesToUpdateMap.set(day, { label: day, slots: [] })
+          }
+
+          valuesToUpdateMap.get(day).slots.push({ label: time, value: true })
+        })
+        valuesToUpdate = Array.from(valuesToUpdateMap.values())
       }
+      console.log(JSON.stringify(valuesToUpdate))
     }
 
     const availability = await this.accreditedProgrammesManageAndDeliverService.getAvailability(
@@ -187,6 +201,7 @@ export default class ReferralDetailsController {
   }
 
   async showAddAvailabilityDatesPage(req: Request, res: Response): Promise<void> {
+    const { id } = req.params
     const personalDetails: PersonalDetails = {
       crn: '1234',
       nomsNumber: 'CN1234',
@@ -205,7 +220,7 @@ export default class ReferralDetailsController {
     }
 
     const presenter = new AddAvailabilityDatesPresenter(personalDetails)
-    const view = new AddAvailabilityDatesView(presenter)
+    const view = new AddAvailabilityDatesView(presenter, id)
 
     ControllerUtils.renderWithLayout(res, view, personalDetails)
   }
