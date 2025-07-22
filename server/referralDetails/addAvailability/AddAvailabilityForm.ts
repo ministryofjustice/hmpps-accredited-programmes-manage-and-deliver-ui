@@ -7,7 +7,7 @@ import errorMessages from '../../utils/errorMessages'
 export default class AddAvailabilityForm {
   constructor(private readonly request: Request) {}
 
-  async data(): Promise<FormData<string>> {
+  async data(): Promise<FormData<string[]>> {
     const validationResult = await FormUtils.runValidations({
       request: this.request,
       validations: AddAvailabilityForm.validations,
