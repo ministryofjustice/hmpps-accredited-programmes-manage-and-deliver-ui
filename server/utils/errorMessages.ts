@@ -35,7 +35,8 @@ const returnedError = {
 
 export default {
   addAvailability: {
-    empty: 'Need to confirm error message.',
+    availabilitiesEmpty: `Select times the person is available or select 'cancel'.`,
+    otherAvailabilityDetailsEmpty: 'Availability details must be 2,000 characters or fewer.',
   },
   returnedError,
   userHeaderTypes,

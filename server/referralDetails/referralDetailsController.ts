@@ -145,25 +145,13 @@ export default class ReferralDetailsController {
     let userInputData = null
     if (req.method === 'POST') {
       const data = await new AddAvailabilityForm(req).data()
-      let valuesToUpdate = []
+
       if (data.error) {
         res.status(400)
         formError = data.error
         userInputData = req.body
       } else {
-        const valuesToUpdateMap = new Map()
-        const paramsArray = Array.isArray(data.paramsForUpdate) ? data.paramsForUpdate : [data.paramsForUpdate]
-        paramsArray.forEach(item => {
-          const [day, time] = item.split('-')
-
-          if (!valuesToUpdateMap.has(day)) {
-            valuesToUpdateMap.set(day, { label: day, slots: [] })
-          }
-
-          valuesToUpdateMap.get(day).slots.push({ label: time, value: true })
-        })
-        valuesToUpdate = Array.from(valuesToUpdateMap.values())
-        console.log('*******', JSON.stringify(valuesToUpdate))
+        console.log('*******', JSON.stringify(data))
         // return res.redirect(`/add-availability-dates/${id}`)
       }
     }
