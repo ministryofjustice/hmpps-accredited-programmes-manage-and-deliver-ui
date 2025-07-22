@@ -34,6 +34,7 @@ export default class AddAvailabilityView {
         classes: 'govuk-label--m',
       },
       value: this.presenter.fields.otherDetailsTextArea.value,
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.otherDetailsTextArea.errorMessage),
     }
   }
 

@@ -57,6 +57,7 @@ export default class AddAvailabilityPresenter {
       },
       otherDetailsTextArea: {
         value: this.utils.stringValue(null, 'other-availability-details-text-area'),
+        errorMessage: PresenterUtils.errorMessage(this.validationError, 'other-availability-details-text-area'),
       },
     }
   }

@@ -143,6 +143,7 @@
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-no-only-tests": "^3.3.0",
     "eslint-plugin-prettier": "^5.5.1",
+    "@faker-js/faker": "^9.9.0",
     "fishery": "^2.3.1",
     "glob": "^11.0.3",
     "husky": "^9.1.7",
