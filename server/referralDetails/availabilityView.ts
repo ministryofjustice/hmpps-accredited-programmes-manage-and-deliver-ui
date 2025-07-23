@@ -25,6 +25,8 @@ export default class AvailabilityView {
         presenter: this.presenter,
         importFromDeliusText: this.importFromDeliusText,
         availabilityButtonArgs: this.availabilityButtonArgs,
+        availability: this.presenter.availability,
+        availabilityTableArgs: this.presenter.getAvailabilityTableArgs(),
       },
     ]
   }
