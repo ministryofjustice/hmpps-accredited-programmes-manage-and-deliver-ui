@@ -60,7 +60,7 @@ export default class CaselistPresenter {
     this.referralCaseListItems.content.forEach(referral => {
       referralData.push([
         {
-          html: `<a href='/personalDetails/${referral.referralId}'>${referral.personName}</a><br><span>${referral.crn}</span>`,
+          html: `<a href='/referral-details/${referral.referralId}/personal-details'>${referral.personName}</a><br><span>${referral.crn}</span>`,
         },
 
         { text: referral.referralStatus },
