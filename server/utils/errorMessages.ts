@@ -41,6 +41,7 @@ export default {
   addAvailabilityDates: {
     requireEndDateEmpty: `Select whether the availability details will change on a specific date.`,
     endDateEmpty: `Enter a date in the format 17/5/2024 or select the calendar icon to pick a date.`,
+    endDateInPast: 'Enter or select a date in the future',
   },
   returnedError,
   userHeaderTypes,

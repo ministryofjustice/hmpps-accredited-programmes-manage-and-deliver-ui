@@ -18,8 +18,8 @@ describe(`AddAvailabilityForm`, () => {
     })
 
     describe('when yes is selected for end date and an end date is provided', () => {
-      test.each(['01/01/2025', '1/1/2055', '11/1/2125', '1/11/2125', '11/11/2125'])(
-        'returns params for update',
+      test.each(['01/01/2125', '1/1/2155', '11/1/2125', '1/11/2125', '11/11/2125'])(
+        'returns params for update %s',
         async date => {
           const request = TestUtils.createRequest({
             'end-date': 'Yes',
@@ -54,8 +54,8 @@ describe(`AddAvailabilityForm`, () => {
     })
 
     describe('when yes is selected for end date and an end date is not the correct format', () => {
-      test.each(['cheese', '2025/01/01', '2052/1/1', '5th July 2025'])(
-        'correctly validates incorrect date',
+      test.each(['cheese', '2125/01/01', '2152/1/1', '5th July 2125'])(
+        'correctly validates incorrect date %s',
         async date => {
           const request = TestUtils.createRequest({
             'end-date': 'Yes',
@@ -73,6 +73,25 @@ describe(`AddAvailabilityForm`, () => {
           ])
         },
       )
+    })
+
+    describe('when yes is selected for end date and an end date is today or in the past', () => {
+      test.each([currentDate, '01/01/2025'])('correctly validates incorrect date %s', async date => {
+        const request = TestUtils.createRequest({
+          'end-date': 'Yes',
+          date,
+        })
+
+        const data = await new AddAvailabilityDatesForm(request).data()
+
+        expect(data.error?.errors).toStrictEqual([
+          {
+            errorSummaryLinkedField: 'date',
+            formFields: ['date'],
+            message: `Enter or select a date in the future`,
+          },
+        ])
+      })
     })
 
     describe('when no option is selected from the radio buttons', () => {
