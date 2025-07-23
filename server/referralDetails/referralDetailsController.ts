@@ -102,7 +102,17 @@ export default class ReferralDetailsController {
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
 
-    const presenter = new AvailabilityPresenter(sharedReferralDetailsData, subNavValue, id)
+    const availability = await this.accreditedProgrammesManageAndDeliverService.getAvailability(
+      username,
+      '6885d1f6-5958-40e0-9448-1ff8cc37e64',
+    )
+
+    const presenter = new AvailabilityPresenter(
+      sharedReferralDetailsData.personalDetails,
+      subNavValue,
+      id,
+      availability,
+    )
     const view = new AvailabilityView(presenter)
 
     req.session.originPage = req.originalUrl
