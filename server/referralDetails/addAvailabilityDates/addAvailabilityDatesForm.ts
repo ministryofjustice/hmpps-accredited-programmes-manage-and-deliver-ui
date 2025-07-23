@@ -39,7 +39,19 @@ export default class AddAvailabilityDatesForm {
       body('date')
         .if(body('end-date').equals('Yes'))
         .matches(dateRegex)
-        .withMessage(errorMessages.addAvailabilityDates.endDateEmpty),
+        .withMessage(errorMessages.addAvailabilityDates.endDateEmpty)
+        .bail()
+        .custom(value => {
+          // Convert DD/MM/YYYY to Date object
+          const [day, month, year] = value.split('/')
+          const inputDate = new Date(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(day, 10))
+          const minDate = new Date()
+
+          if (inputDate <= minDate) {
+            throw new Error(errorMessages.addAvailabilityDates.endDateInPast)
+          }
+          return true
+        }),
     ]
   }
 }
