@@ -4,6 +4,7 @@
 {%- from "moj/components/date-picker/macro.njk" import mojDatePicker -%}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -15,50 +16,22 @@
   <div class="govuk-main-wrapper">
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
+        {% if errorSummary !== null %}
+        {{ govukErrorSummary(errorSummary) }}
+        {% endif %}
+        <form method="post" novalidate>
+          <input type="hidden" name="_csrf" value="{{csrfToken}}">
         {% set dateHtml %}
-        {{ mojDatePicker({
-          id: "date",
-          name: "date",
-          label: {
-            text: "Date"
-          },
-          hint: {
-            text: "For example, 17/5/2024."
-          }
-        }) }}
+        {{ mojDatePicker(datePickerArgs) }}
         {% endset -%}
 
-        {{ govukRadios({
-          name: "contact",
-          fieldset: {
-            legend: {
-              text: "Do you want to add an end date for this availability?",
-              isPageHeading: true,
-              classes: "govuk-fieldset__legend--l"
-            }
-          },
-          hint: {
-            text: "If you know this availability will change, for example if someone is starting a new job or travelling, add the date it will change."
-          },
-          items: [
-            {
-              value: "yes",
-              text: "Yes",
-              conditional: {
-                html: dateHtml
-              }
-            },
-            {
-              value: "no",
-              text: "No"
-            }
-          ]
-        }) }}
+        {{ govukRadios(radioArgs(dateHtml)) }}
 
         <div class="govuk-button-group">
           {{ govukButton({ text: "Submit", preventDoubleClick: true }) }}
           <a class="govuk-link" href={{ backlinkUri }}>Cancel</a>
         </div>
+        </form>
       </div>
     </div>
   </div>
