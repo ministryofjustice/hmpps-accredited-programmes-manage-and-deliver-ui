@@ -22,9 +22,8 @@ permissions:
   packages: write
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  # This will cancel all running build/test/release pipelines that are not on the main branch
-  # If this pipeline is on the main branch, it will wait until existing runs complete
+  # only cancel in progress when on a branch - use SHA on main to ensure uniqueness
+  group: ${{ github.workflow }}-${{ github.ref == 'refs/heads/main' && github.sha || github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
