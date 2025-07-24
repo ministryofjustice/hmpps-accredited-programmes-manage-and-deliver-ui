@@ -21,9 +21,6 @@ import SentenceInformationPresenter from './sentenceInformationPresenter'
 import SentenceInformationView from './sentenceInformationView'
 import AddAvailabilityForm from './addAvailability/AddAvailabilityForm'
 import { FormValidationError } from '../utils/formValidationError'
-import AddAvailabilityDatesPresenter from './addAvailabilityDates/addAvailabilityDatesPresenter'
-import AddAvailabilityDatesView from './addAvailabilityDates/addAvailabilityDatesView'
-import AddAvailabilityDatesForm from './addAvailabilityDates/addAvailabilityDatesForm'
 
 export default class ReferralDetailsController {
   constructor(
@@ -197,42 +194,5 @@ export default class ReferralDetailsController {
     const view = new AddAvailabilityView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
-  }
-
-  async showAddAvailabilityDatesPage(req: Request, res: Response): Promise<void> {
-    const { id } = req.params
-    let formError: FormValidationError | null = null
-    let userInputData = null
-    if (req.method === 'POST') {
-      const data = await new AddAvailabilityDatesForm(req).data()
-      if (data.error) {
-        res.status(400)
-        formError = data.error
-        userInputData = req.body
-      } else {
-        // res.redirect(`/add-availability-dates/${id}`)
-      }
-    }
-    const personalDetails: PersonalDetails = {
-      crn: '1234',
-      nomsNumber: 'CN1234',
-      name: {
-        forename: 'Steve',
-        surname: 'Sticks',
-      },
-      dateOfBirth: '1980-01-01',
-      ethnicity: 'British',
-      gender: 'Male',
-      probationDeliveryUnit: {
-        code: 'LDN',
-        description: 'London',
-      },
-      setting: 'Community',
-    }
-
-    const presenter = new AddAvailabilityDatesPresenter(personalDetails, formError, userInputData)
-    const view = new AddAvailabilityDatesView(presenter, id)
-
-    return ControllerUtils.renderWithLayout(res, view, personalDetails)
   }
 }

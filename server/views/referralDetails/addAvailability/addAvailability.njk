@@ -6,6 +6,8 @@
 {% from "govuk/components/header/macro.njk" import govukHeader %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{%- from "moj/components/date-picker/macro.njk" import mojDatePicker -%}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -27,8 +29,14 @@
 
             {{govukCharacterCount(otherDetailsTextAreaArgs) }}
 
+          {% set dateHtml %}
+            {{ mojDatePicker(datePickerArgs) }}
+          {% endset -%}
+
+          {{ govukRadios(radioArgs(dateHtml)) }}
+
             <div class="govuk-button-group">
-              {{ govukButton({ text: "Save and continue", preventDoubleClick: true }) }}
+              {{ govukButton({ text: "Submit", preventDoubleClick: true }) }}
               <a class="govuk-link" href={{ backlinkUri }}>Cancel</a>
             </div>
 

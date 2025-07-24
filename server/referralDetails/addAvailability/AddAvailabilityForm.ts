@@ -26,17 +26,37 @@ export default class AddAvailabilityForm {
       paramsForUpdate: {
         availabilities: this.formatAvailabilities(this.request.body['availability-checkboxes']),
         otherDetails: this.request.body['other-availability-details-text-area'],
+        startDate: new Date().toLocaleDateString('en-GB'),
+        ...(this.request.body['end-date'] === 'Yes' && { endDate: this.request.body.date }),
       },
       error: null,
     }
   }
 
   static get validations(): ValidationChain[] {
+    const dateRegex = /\b(0?[1-9]|[12]\d|3[01])\/(0?[1-9]|1[0-2])\/(\d{4})\b/g
     return [
       body('availability-checkboxes').notEmpty().withMessage(errorMessages.addAvailability.availabilitiesEmpty),
       body('other-availability-details-text-area')
         .isLength({ max: 2000 })
         .withMessage(errorMessages.addAvailability.otherAvailabilityDetailsEmpty),
+      body('end-date').notEmpty().withMessage(errorMessages.addAvailabilityDates.requireEndDateEmpty),
+      body('date')
+        .if(body('end-date').equals('Yes'))
+        .matches(dateRegex)
+        .withMessage(errorMessages.addAvailabilityDates.endDateEmpty)
+        .bail()
+        .custom(value => {
+          // Convert DD/MM/YYYY to Date object
+          const [day, month, year] = value.split('/')
+          const inputDate = new Date(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(day, 10))
+          const minDate = new Date()
+
+          if (inputDate <= minDate) {
+            throw new Error(errorMessages.addAvailabilityDates.endDateInPast)
+          }
+          return true
+        }),
     ]
   }
 
