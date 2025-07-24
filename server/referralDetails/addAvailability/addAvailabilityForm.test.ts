@@ -4,16 +4,19 @@ import TestUtils from '../../testutils/testUtils'
 
 describe(`AddAvailabilityForm`, () => {
   describe('data', () => {
-    describe('when an availability value is passed', () => {
+    const currentDate = new Date().toLocaleDateString('en-GB')
+    describe('when all mandatory fields are passed', () => {
       it('returns params for update', async () => {
         const request = TestUtils.createRequest({
           'availability-checkboxes': 'sunday-daytime',
+          'end-date': 'No',
         })
         const data = await new AddAvailabilityForm(request).data()
 
         expect(data.paramsForUpdate).toStrictEqual({
           availabilities: [{ label: 'sunday', slots: [{ label: 'daytime', value: true }] }],
           otherDetails: undefined,
+          startDate: currentDate,
         })
       })
     })
@@ -23,6 +26,7 @@ describe(`AddAvailabilityForm`, () => {
         const request = TestUtils.createRequest({
           'availability-checkboxes': ['sunday-daytime', 'sunday-evening', 'monday-daytime'],
           'other-availability-details-text-area': 'Some extra information',
+          'end-date': 'No',
         })
         const data = await new AddAvailabilityForm(request).data()
 
@@ -38,11 +42,12 @@ describe(`AddAvailabilityForm`, () => {
             { label: 'monday', slots: [{ label: 'daytime', value: true }] },
           ],
           otherDetails: 'Some extra information',
+          startDate: currentDate,
         })
       })
     })
 
-    describe('when both availabilities and other details fail validation rules', () => {
+    describe('when both availabilities, other details, and date radio fail validation rules', () => {
       it('returns an error including both fields', async () => {
         const otherDetails = faker.string.alphanumeric(2001)
 
@@ -62,6 +67,94 @@ describe(`AddAvailabilityForm`, () => {
             errorSummaryLinkedField: 'other-availability-details-text-area',
             formFields: ['other-availability-details-text-area'],
             message: 'Availability details must be 2,000 characters or fewer.',
+          },
+          {
+            errorSummaryLinkedField: 'end-date',
+            formFields: ['end-date'],
+            message: 'Select whether the availability details will change on a specific date.',
+          },
+        ])
+      })
+    })
+
+    describe('when yes is selected for end date and an end date is provided', () => {
+      test.each(['01/01/2125', '1/1/2155', '11/1/2125', '1/11/2125', '11/11/2125'])(
+        'returns params for update %s',
+        async date => {
+          const request = TestUtils.createRequest({
+            'availability-checkboxes': 'sunday-daytime',
+            'end-date': 'Yes',
+            date,
+          })
+
+          const data = await new AddAvailabilityForm(request).data()
+
+          expect(data.paramsForUpdate).toStrictEqual({
+            availabilities: [{ label: 'sunday', slots: [{ label: 'daytime', value: true }] }],
+            otherDetails: undefined,
+            startDate: currentDate,
+            endDate: date,
+          })
+        },
+      )
+    })
+
+    describe('when yes is selected for end date and an end date is not provided', () => {
+      it('returns the correct error', async () => {
+        const request = TestUtils.createRequest({
+          'availability-checkboxes': 'sunday-daytime',
+          'end-date': 'Yes',
+        })
+        const data = await new AddAvailabilityForm(request).data()
+
+        expect(data.error?.errors).toStrictEqual([
+          {
+            errorSummaryLinkedField: 'date',
+            formFields: ['date'],
+            message: `Enter a date in the format 17/5/2024 or select the calendar icon to pick a date.`,
+          },
+        ])
+      })
+    })
+
+    describe('when yes is selected for end date and an end date is not the correct format', () => {
+      test.each(['cheese', '2125/01/01', '2152/1/1', '5th July 2125'])(
+        'correctly validates incorrect date %s',
+        async date => {
+          const request = TestUtils.createRequest({
+            'availability-checkboxes': 'sunday-daytime',
+            'end-date': 'Yes',
+            date,
+          })
+
+          const data = await new AddAvailabilityForm(request).data()
+
+          expect(data.error?.errors).toStrictEqual([
+            {
+              errorSummaryLinkedField: 'date',
+              formFields: ['date'],
+              message: `Enter a date in the format 17/5/2024 or select the calendar icon to pick a date.`,
+            },
+          ])
+        },
+      )
+    })
+
+    describe('when yes is selected for end date and an end date is today or in the past', () => {
+      test.each([currentDate, '01/01/2025'])('correctly validates incorrect date %s', async date => {
+        const request = TestUtils.createRequest({
+          'availability-checkboxes': 'sunday-daytime',
+          'end-date': 'Yes',
+          date,
+        })
+
+        const data = await new AddAvailabilityForm(request).data()
+
+        expect(data.error?.errors).toStrictEqual([
+          {
+            errorSummaryLinkedField: 'date',
+            formFields: ['date'],
+            message: `Enter or select a date in the future`,
           },
         ])
       })
