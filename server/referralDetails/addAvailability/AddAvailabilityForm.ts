@@ -31,7 +31,7 @@ export default class AddAvailabilityForm {
         referralId: this.referralId,
         availabilities: this.formatAvailabilities(this.request.body['availability-checkboxes']),
         otherDetails: this.request.body['other-availability-details-text-area'],
-        startDate: new Date().toISOString(),
+        startDate: new Date().toISOString().split('T')[0],
         ...(this.request.body['end-date'] === 'Yes' && { endDate: this.formatDate(this.request.body.date) }),
       },
       error: null,
@@ -82,10 +82,6 @@ export default class AddAvailabilityForm {
 
   formatDate(date: string) {
     const [day, month, year] = date.split('/')
-    const inputDate = new Date(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(day, 10))
-    console.log(`\n\n\n\n\n\nformatted date: ${inputDate.toLocaleDateString()} `)
-    console.log(`formatted date iso string: ${inputDate.toISOString()} \n\n\n\n\n\n\n`)
-    console.log(`formatted date iso string: ${inputDate.toISOString().split('T')[0]} \n\n\n\n\n\n\n`)
-    return inputDate.toISOString()
+    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
   }
 }
