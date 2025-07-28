@@ -23,7 +23,7 @@
           {{ govukErrorSummary(errorSummary) }}
         {% endif %}
 
-        <form method="post" novalidate>
+        <form method="post" novalidate action="{{ presenter.locationButtonFormAction }}">
           <input type="hidden" name="_csrf" value="{{csrfToken}}">
             {{ govukCheckboxes(checkboxArgs) }}
 

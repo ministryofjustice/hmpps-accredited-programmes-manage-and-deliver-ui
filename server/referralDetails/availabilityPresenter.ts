@@ -11,6 +11,10 @@ export default class AvailabilityPresenter extends ReferralDetailsPresenter {
     super(details, subNavValue, id)
   }
 
+  get showAvailability(): boolean {
+    return this.availability.id !== null
+  }
+
   getAvailabilityTableArgs() {
     // Get all the possible headings out of the object e.g. daytime, evening
     const uniqueSlotLabels = [

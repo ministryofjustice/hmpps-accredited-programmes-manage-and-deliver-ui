@@ -1,4 +1,4 @@
-import { Availability, PersonalDetails, ReferralCaseListItem, ReferralDetails } from '@manage-and-deliver-api'
+import { Availability, CreateAvailability, ReferralCaseListItem, UpdateAvailability, PersonalDetails, ReferralDetails } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
 import type { HmppsAuthClient, RestClientBuilderWithoutToken } from '../data'
@@ -77,6 +77,30 @@ export default class AccreditedProgrammesManageAndDeliverService {
     return (await restClient.get({
       path: `/availability/referral/${referralId}`,
       headers: { Accept: 'application/json' },
+    })) as Availability
+  }
+
+  async addAvailability(
+    username: Express.User['username'],
+    createAvailabilityParams: CreateAvailability,
+  ): Promise<Availability> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.post({
+      path: `/availability`,
+      headers: { Accept: 'application/json' },
+      data: createAvailabilityParams,
+    })) as Availability
+  }
+
+  async updateAvailability(
+    username: Express.User['username'],
+    updateAvailabilityParams: UpdateAvailability,
+  ): Promise<Availability> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.put({
+      path: `/availability`,
+      headers: { Accept: 'application/json' },
+      data: updateAvailabilityParams,
     })) as Availability
   }
 }

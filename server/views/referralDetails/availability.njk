@@ -5,9 +5,12 @@
 
  <div>
    {{ govukInsetText(importFromDeliusText) }}
-   <p>No availability details added for {{ presenter.personalDetails.name.forename }} {{ presenter.personalDetails.name.surname }}</p>
 
-   {{ govukTable(availabilityTableArgs) }}
+   {% if showAvailability %}
+      {{ govukTable(availabilityTableArgs) }}
+   {% else %}
+      <p>No availability details added for {{ presenter.personalDetails.name.forename }} {{ presenter.personalDetails.name.surname }}</p>
+   {% endif %}
 
    {{ govukButton(availabilityButtonArgs) }}
 </div>

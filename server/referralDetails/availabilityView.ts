@@ -14,7 +14,9 @@ export default class AvailabilityView {
   get availabilityButtonArgs(): ButtonArgs {
     return {
       text: 'Add availability',
-      href: `/add-availability/${this.presenter.id}`,
+      href: this.presenter.availability.id
+        ? `referral/${this.presenter.id}/update-availability/${this.presenter.availability.id}`
+        : `/add-availability/${this.presenter.id}`,
     }
   }
 
@@ -27,6 +29,7 @@ export default class AvailabilityView {
         availabilityButtonArgs: this.availabilityButtonArgs,
         availability: this.presenter.availability,
         availabilityTableArgs: this.presenter.getAvailabilityTableArgs(),
+        showAvailability: this.presenter.showAvailability,
       },
     ]
   }

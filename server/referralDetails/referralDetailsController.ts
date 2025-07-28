@@ -101,7 +101,8 @@ export default class ReferralDetailsController {
 
     const availability = await this.accreditedProgrammesManageAndDeliverService.getAvailability(
       username,
-      '6885d1f6-5958-40e0-9448-1ff8cc37e64',
+      '81229aaa-bb3a-4705-8015-99052bafab58',
+      // '6885d1f6-5958-40e0-9448-1ff8cc37e64',
     )
 
     const presenter = new AvailabilityPresenter(
@@ -145,28 +146,54 @@ export default class ReferralDetailsController {
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
 
-  async showAddAvailabilityPage(req: Request, res: Response): Promise<void> {
-    const { username } = req.user
+  async updateAvailability(req: Request, res: Response): Promise<void> {
+    const { availabilityId } = req.params
+    await this.showAddAvailabilityPage(req, res, availabilityId)
+  }
+
+  async showAddAvailabilityPage(req: Request, res: Response, availabilityId: string = null): Promise<void> {
     const { id } = req.params
+    const { username } = req.user
     const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
+
     let formError: FormValidationError | null = null
     let userInputData = null
     if (req.method === 'POST') {
-      const data = await new AddAvailabilityForm(req).data()
+      const data = await new AddAvailabilityForm(req, id).data()
 
       if (data.error) {
         res.status(400)
         formError = data.error
         userInputData = req.body
       } else {
-        return res.redirect(`/add-availability-dates/${id}`)
+        console.log(JSON.stringify(data.paramsForUpdate))
+        let result
+        if (availabilityId) {
+          result = await this.accreditedProgrammesManageAndDeliverService.updateAvailability(username, {
+            ...data.paramsForUpdate,
+            availabilityId,
+          })
+        } else {
+          result = await this.accreditedProgrammesManageAndDeliverService.addAvailability(
+            username,
+            data.paramsForUpdate,
+          )
+        }
+
+        // console.log("successful")
+        // console.log(result)
+        // return res.redirect(`/add-availability-dates/${referralId}`)
       }
     }
 
     const availability = await this.accreditedProgrammesManageAndDeliverService.getAvailability(
       username,
-      '6885d1f6-5958-40e0-9448-1ff8cc37e64',
+      '81229aaa-bb3a-4705-8015-99052bafab58',
+      // '6885d1f6-5958-40e0-9448-1ff8cc37e64',
     )
+    console.log('get availability')
+    console.log(JSON.stringify(availability))
+    console.log('get availability')
     const personalDetails: PersonalDetails = {
       crn: '1234',
       nomsNumber: 'CN1234',
@@ -190,6 +217,7 @@ export default class ReferralDetailsController {
       userInputData,
       req.session.originPage,
       availability,
+      id,
     )
     const view = new AddAvailabilityView(presenter)
 

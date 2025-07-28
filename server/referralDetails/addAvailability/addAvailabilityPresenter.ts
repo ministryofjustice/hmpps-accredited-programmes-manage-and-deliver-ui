@@ -2,7 +2,6 @@ import { Availability } from '@manage-and-deliver-api'
 import PersonalDetails from '../../models/PersonalDetails'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
-import { convertToTitleCase } from '../../utils/utils'
 
 export default class AddAvailabilityPresenter {
   constructor(
@@ -11,6 +10,7 @@ export default class AddAvailabilityPresenter {
     private readonly userInputData: Record<string, unknown> | null = null,
     readonly backlinkUri: string | null,
     private readonly availability: Availability,
+    private readonly referralId: string | null = null,
   ) {}
 
   get utils() {
@@ -19,6 +19,12 @@ export default class AddAvailabilityPresenter {
 
   get errorSummary() {
     return PresenterUtils.errorSummary(this.validationError)
+  }
+
+  get locationButtonFormAction(): string {
+    return this.availability.id
+      ? `/referral/${this.referralId}/update-availability/${this.availability.id}`
+      : `/add-availability/${this.referralId}`
   }
 
   get text() {

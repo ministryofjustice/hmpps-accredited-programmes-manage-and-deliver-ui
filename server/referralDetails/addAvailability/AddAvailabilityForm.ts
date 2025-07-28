@@ -6,14 +6,18 @@ import { FormData } from '../../utils/forms/formData'
 import errorMessages from '../../utils/errorMessages'
 
 export default class AddAvailabilityForm {
-  constructor(private readonly request: Request) {}
+  constructor(
+    private readonly request: Request,
+    private readonly referralId: string,
+  ) {}
 
-  async data(): Promise<FormData<Partial<CreateAvailability>>> {
+  async data(): Promise<FormData<CreateAvailability>> {
     const validationResult = await FormUtils.runValidations({
       request: this.request,
       validations: AddAvailabilityForm.validations,
     })
 
+    // this.formatDates(this.request.body.date)
     const error = FormUtils.validationErrorFromResult(validationResult)
     if (error) {
       return {
@@ -24,10 +28,11 @@ export default class AddAvailabilityForm {
 
     return {
       paramsForUpdate: {
+        referralId: this.referralId,
         availabilities: this.formatAvailabilities(this.request.body['availability-checkboxes']),
         otherDetails: this.request.body['other-availability-details-text-area'],
-        startDate: new Date().toLocaleDateString('en-GB'),
-        ...(this.request.body['end-date'] === 'Yes' && { endDate: this.request.body.date }),
+        startDate: new Date().toISOString(),
+        ...(this.request.body['end-date'] === 'Yes' && { endDate: this.formatDate(this.request.body.date) }),
       },
       error: null,
     }
@@ -73,5 +78,14 @@ export default class AddAvailabilityForm {
       valuesToUpdateMap.get(day).slots.push({ label: time, value: true })
     })
     return Array.from(valuesToUpdateMap.values())
+  }
+
+  formatDate(date: string) {
+    const [day, month, year] = date.split('/')
+    const inputDate = new Date(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(day, 10))
+    console.log(`\n\n\n\n\n\nformatted date: ${inputDate.toLocaleDateString()} `)
+    console.log(`formatted date iso string: ${inputDate.toISOString()} \n\n\n\n\n\n\n`)
+    console.log(`formatted date iso string: ${inputDate.toISOString().split('T')[0]} \n\n\n\n\n\n\n`)
+    return inputDate.toISOString()
   }
 }

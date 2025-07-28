@@ -5,13 +5,14 @@ import TestUtils from '../../testutils/testUtils'
 describe(`AddAvailabilityForm`, () => {
   describe('data', () => {
     const currentDate = new Date().toLocaleDateString('en-GB')
+    const referralId = faker.string.uuid()
     describe('when all mandatory fields are passed', () => {
       it('returns params for update', async () => {
         const request = TestUtils.createRequest({
           'availability-checkboxes': 'sunday-daytime',
           'end-date': 'No',
         })
-        const data = await new AddAvailabilityForm(request).data()
+        const data = await new AddAvailabilityForm(request, referralId).data()
 
         expect(data.paramsForUpdate).toStrictEqual({
           availabilities: [{ label: 'sunday', slots: [{ label: 'daytime', value: true }] }],
@@ -28,7 +29,7 @@ describe(`AddAvailabilityForm`, () => {
           'other-availability-details-text-area': 'Some extra information',
           'end-date': 'No',
         })
-        const data = await new AddAvailabilityForm(request).data()
+        const data = await new AddAvailabilityForm(request, referralId).data()
 
         expect(data.paramsForUpdate).toStrictEqual({
           availabilities: [
@@ -55,7 +56,7 @@ describe(`AddAvailabilityForm`, () => {
           'availability-checkboxes': '',
           'other-availability-details-text-area': otherDetails,
         })
-        const data = await new AddAvailabilityForm(request).data()
+        const data = await new AddAvailabilityForm(request, referralId).data()
 
         expect(data.error?.errors).toStrictEqual([
           {
@@ -87,7 +88,7 @@ describe(`AddAvailabilityForm`, () => {
             date,
           })
 
-          const data = await new AddAvailabilityForm(request).data()
+          const data = await new AddAvailabilityForm(request, referralId).data()
 
           expect(data.paramsForUpdate).toStrictEqual({
             availabilities: [{ label: 'sunday', slots: [{ label: 'daytime', value: true }] }],
@@ -105,7 +106,7 @@ describe(`AddAvailabilityForm`, () => {
           'availability-checkboxes': 'sunday-daytime',
           'end-date': 'Yes',
         })
-        const data = await new AddAvailabilityForm(request).data()
+        const data = await new AddAvailabilityForm(request, referralId).data()
 
         expect(data.error?.errors).toStrictEqual([
           {
@@ -127,7 +128,7 @@ describe(`AddAvailabilityForm`, () => {
             date,
           })
 
-          const data = await new AddAvailabilityForm(request).data()
+          const data = await new AddAvailabilityForm(request, referralId).data()
 
           expect(data.error?.errors).toStrictEqual([
             {
@@ -148,7 +149,7 @@ describe(`AddAvailabilityForm`, () => {
           date,
         })
 
-        const data = await new AddAvailabilityForm(request).data()
+        const data = await new AddAvailabilityForm(request, referralId).data()
 
         expect(data.error?.errors).toStrictEqual([
           {
