@@ -37,7 +37,7 @@ export default class ReferralDetailsController {
     const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
     const personalDetails = await this.accreditedProgrammesManageAndDeliverService.getPersonalDetails(id, username)
 
-    const presenter = new PersonalDetailsPresenter(sharedReferralDetailsData, subNavValue, id)
+    const presenter = new PersonalDetailsPresenter(sharedReferralDetailsData, subNavValue, id, personalDetails)
     const view = new PersonalDetailsView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)

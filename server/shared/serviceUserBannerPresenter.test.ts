@@ -2,9 +2,9 @@ import { ReferralDetails } from '@manage-and-deliver-api'
 import ServiceUserBannerPresenter from './serviceUserBannerPresenter'
 
 describe('ServiceUserBannerPresenter', () => {
-  const serviceUser = {
+  const referralDetails = {
     id: 'aabbadf7-a427-436e-b1a4-f27dd5893c24',
-    crn: 'CRN-555555',
+    crn: 'X123456',
     personName: 'David Alex Clarke',
     interventionName: 'Building Choices',
     createdAt: '2025-07-28T11:17:47',
@@ -14,25 +14,25 @@ describe('ServiceUserBannerPresenter', () => {
   } as ReferralDetails
   describe('dateOfBirth', () => {
     it('returns a formatted date of birth or not found message', () => {
-      serviceUser.dateOfBirth = '1989-02-10'
+      referralDetails.dateOfBirth = '1989-02-10'
 
-      const presenterWithDOB = new ServiceUserBannerPresenter(serviceUser)
+      const presenterWithDOB = new ServiceUserBannerPresenter(referralDetails)
       expect(presenterWithDOB.dateOfBirth).toEqual('10 February 1989 (36 years old)')
     })
   })
 
   describe('name', () => {
     it('returns a formatted full name', () => {
-      serviceUser.personName = 'Ben jones'
+      referralDetails.personName = 'Ben jones'
 
-      const presenter = new ServiceUserBannerPresenter(serviceUser)
+      const presenter = new ServiceUserBannerPresenter(referralDetails)
       expect(presenter.name).toEqual('Ben Jones')
     })
   })
 
   describe('crn', () => {
     it('returns the service user crn', () => {
-      const presenter = new ServiceUserBannerPresenter(serviceUser)
+      const presenter = new ServiceUserBannerPresenter(referralDetails)
 
       expect(presenter.crn).toEqual('X123456')
     })

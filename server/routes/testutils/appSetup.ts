@@ -2,13 +2,14 @@ import express, { Express } from 'express'
 import { NotFound } from 'http-errors'
 
 import { randomUUID } from 'crypto'
-import routes from '../index'
-import nunjucksSetup from '../../utils/nunjucksSetup'
 import errorHandler from '../../errorHandler'
-import type { Services } from '../../services'
-import AuditService from '../../services/auditService'
 import { HmppsUser } from '../../interfaces/hmppsUser'
 import setUpWebSession from '../../middleware/setUpWebSession'
+import type { Services } from '../../services'
+import AccreditedProgrammesManageAndDeliverService from '../../services/accreditedProgrammesManageAndDeliverService'
+import AuditService from '../../services/auditService'
+import nunjucksSetup from '../../utils/nunjucksSetup'
+import routes from '../index'
 
 jest.mock('../../services/auditService')
 
@@ -57,6 +58,9 @@ export function appWithAllRoutes({
   production = false,
   services = {
     auditService: new AuditService(null) as jest.Mocked<AuditService>,
+    accreditedProgrammesManageAndDeliverService: new AccreditedProgrammesManageAndDeliverService(
+      null,
+    ) as jest.Mocked<AccreditedProgrammesManageAndDeliverService>,
   },
   userSupplier = () => user,
 }: {

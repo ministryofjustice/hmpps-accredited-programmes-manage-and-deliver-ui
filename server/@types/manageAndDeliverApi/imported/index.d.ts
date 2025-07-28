@@ -347,7 +347,7 @@ export interface components {
       /**
        * Format: date-time
        * @description Timestamp of when this referral was created.
-       * @example 2025-06-14 12:56:23
+       * @example 11
        */
       createdAt: string
       /**
@@ -409,6 +409,12 @@ export interface components {
        * @example North London PDU
        */
       probationDeliveryUnit: string
+      /**
+       * Format: date
+       * @description The date this data was fetched from nDelius.
+       * @example 1
+       */
+      dateRetrieved: string
     }
     DlqMessage: {
       body: {

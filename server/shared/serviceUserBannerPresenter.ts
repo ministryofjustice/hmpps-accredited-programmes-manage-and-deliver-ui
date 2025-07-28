@@ -3,21 +3,21 @@ import DateUtils from '../utils/dateUtils'
 import { convertToTitleCase } from '../utils/utils'
 
 export default class ServiceUserBannerPresenter {
-  constructor(private readonly serviceUser: ReferralDetails) {}
+  constructor(private readonly referralDetails: ReferralDetails) {}
 
   get name(): string {
-    return convertToTitleCase(`${this.serviceUser.personName}`)
+    return convertToTitleCase(`${this.referralDetails.personName}`)
   }
 
   get dateOfBirth(): string {
-    if (this.serviceUser.dateOfBirth) {
-      const ageYears = DateUtils.age(this.serviceUser.dateOfBirth)
-      return `${DateUtils.formattedDate(this.serviceUser.dateOfBirth)} (${ageYears} years old)`
+    if (this.referralDetails.dateOfBirth) {
+      const ageYears = DateUtils.age(this.referralDetails.dateOfBirth)
+      return `${DateUtils.formattedDate(this.referralDetails.dateOfBirth)} (${ageYears} years old)`
     }
     return 'Not found'
   }
 
   get crn(): string {
-    return this.serviceUser.crn
+    return this.referralDetails.crn
   }
 }

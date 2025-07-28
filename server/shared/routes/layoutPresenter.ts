@@ -4,7 +4,7 @@ import ServiceUserBannerPresenter from '../serviceUserBannerPresenter'
 export default class LayoutPresenter {
   readonly serviceUserBannerPresenter: ServiceUserBannerPresenter | null
 
-  constructor(readonly serviceUser: ReferralDetails) {
-    this.serviceUserBannerPresenter = this.serviceUser ? new ServiceUserBannerPresenter(this.serviceUser) : null
+  constructor(readonly referralDetails: ReferralDetails) {
+    this.serviceUserBannerPresenter = this.referralDetails ? new ServiceUserBannerPresenter(this.referralDetails) : null
   }
 }

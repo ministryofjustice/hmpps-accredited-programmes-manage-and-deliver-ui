@@ -1,10 +1,10 @@
-import PersonalDetails from '../models/PersonalDetails'
-import ReferralDetailsPresenter from './referralDetailsPresenter'
+import { ReferralDetails } from '@manage-and-deliver-api'
 import { SummaryListItem } from '../utils/summaryList'
+import ReferralDetailsPresenter from './referralDetailsPresenter'
 
 export default class OffenceHistoryPresenter extends ReferralDetailsPresenter {
   constructor(
-    readonly details: PersonalDetails,
+    readonly details: ReferralDetails,
     readonly subNavValue: string,
     readonly id: string,
   ) {

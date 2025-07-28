@@ -1,5 +1,4 @@
-import { PersonalDetails, ReferralDetails } from '@manage-and-deliver-api'
-import DateUtils from '../utils/dateUtils'
+import { ReferralDetails } from '@manage-and-deliver-api'
 import { SummaryListArgs } from '../utils/govukFrontendTypes'
 import { SummaryListItem } from '../utils/summaryList'
 import ViewUtils from '../utils/viewUtils'
@@ -16,10 +15,9 @@ export enum ReferralDetailsPageSection {
 
 export default class ReferralDetailsPresenter {
   protected constructor(
-    private referralDetails: ReferralDetails,
+    readonly referralDetails: ReferralDetails,
     readonly subNavValue: string,
     readonly id: string,
-    private personalDetails: PersonalDetails,
   ) {}
 
   get referralSummary(): SummaryListArgs {
@@ -74,85 +72,71 @@ export default class ReferralDetailsPresenter {
     }
   }
 
-  getVerticalSubNavArgs(): { items: { text: string; href: string; active: boolean }[]; classes: string } {
+  getVerticalSubNavArgs(): {
+    items: { text: string; href: string; active: boolean; attributes: object | null }[]
+    classes: string
+  } {
     return {
       items: [
         {
           text: 'Personal Details',
-          href: `/referral-details/${this.id}/personal-details`,
+          href: `/referral-details/${this.id}/personal-details/#personal-details`,
           active: this.subNavValue === ReferralDetailsPageSection.PersonalDetailsTab,
+          attributes: {
+            id: 'personal-details',
+          },
         },
         {
           text: 'Programme History',
-          href: `/referral-details/${this.id}/programme-history`,
+          href: `/referral-details/${this.id}/programme-history/#programme-history`,
           active: this.subNavValue === ReferralDetailsPageSection.ProgrammeHistoryTab,
+          attributes: {
+            id: 'programme-history',
+          },
         },
         {
           text: 'Offence History',
-          href: `/referral-details/${this.id}/offence-history`,
+          href: `/referral-details/${this.id}/offence-history/#offence-history`,
           active: this.subNavValue === ReferralDetailsPageSection.OffenceHistoryTab,
+          attributes: {
+            id: 'offence-history',
+          },
         },
         {
           text: 'Sentence Information',
-          href: `/referral-details/${this.id}/sentence-information`,
+          href: `/referral-details/${this.id}/sentence-information/#sentence-information`,
           active: this.subNavValue === ReferralDetailsPageSection.SentenceInformationTab,
+          attributes: {
+            id: 'sentence-information',
+          },
         },
         {
           text: 'Availability',
-          href: `/referral-details/${this.id}/availability`,
+          href: `/referral-details/${this.id}/availability/#availability`,
           active: this.subNavValue === ReferralDetailsPageSection.AvailabilityTab,
+          attributes: {
+            id: 'availability',
+          },
         },
         {
           text: 'Location',
-          href: `/referral-details/${this.id}/location`,
+          href: `/referral-details/${this.id}/location/#location`,
           active: this.subNavValue === ReferralDetailsPageSection.LocationTab,
+          attributes: {
+            id: 'location',
+          },
         },
         {
           text: 'Additional Information',
-          href: `/referral-details/${this.id}/additional-information`,
+          href: `/referral-details/${this.id}/additional-information/#additional-information`,
           active: this.subNavValue === ReferralDetailsPageSection.AdditionalInformationTab,
+          attributes: {
+            id: 'additional-information',
+          },
         },
       ],
       classes: 'govuk-!-padding-top-0',
     }
-  }
-
-  personalDetailsSummaryList(): SummaryListItem[] {
-    const ageYears = DateUtils.age(this.personalDetails.dateOfBirth)
-    const ageMonths = DateUtils.ageMonths(this.personalDetails.dateOfBirth)
-    const ageMonthsStr = ageMonths === 1 ? `, ${ageMonths} month` : `, ${ageMonths} months`
-    return [
-      {
-        key: 'Name',
-        lines: [`${this.personalDetails.name}`],
-      },
-      {
-        key: 'crn',
-        lines: [this.personalDetails.crn],
-      },
-      {
-        key: 'Date of birth',
-        lines: [
-          `${DateUtils.formattedDate(this.personalDetails.dateOfBirth)} (${ageYears} years${ageMonths === 0 ? '' : ageMonthsStr} old)`,
-        ],
-      },
-      {
-        key: 'Ethnicity',
-        lines: [this.personalDetails.ethnicity],
-      },
-      {
-        key: 'Gender',
-        lines: [this.personalDetails.gender],
-      },
-      {
-        key: 'Setting',
-        lines: [this.personalDetails.setting],
-      },
-      {
-        key: 'Probation delivery unit',
-        lines: [this.personalDetails.probationDeliveryUnit],
-      },
-    ]
   }
 
   referralSummaryList(): SummaryListItem[] {
