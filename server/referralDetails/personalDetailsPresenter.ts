@@ -1,9 +1,9 @@
-import PersonalDetails from '../models/PersonalDetails'
+import { ReferralDetails } from '@manage-and-deliver-api'
 import ReferralDetailsPresenter from './referralDetailsPresenter'
 
 export default class PersonalDetailsPresenter extends ReferralDetailsPresenter {
   constructor(
-    readonly details: PersonalDetails,
+    readonly details: ReferralDetails,
     readonly subNavValue: string,
     readonly id: string,
   ) {

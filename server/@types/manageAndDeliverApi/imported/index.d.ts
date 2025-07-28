@@ -52,7 +52,25 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/referral/{id}': {
+  '/availability': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /** Update availability */
+    put: operations['updateAvailability']
+    /** Create a new availability */
+    post: operations['createAvailability']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/referral-details/{id}': {
     parameters: {
       query?: never
       header?: never
@@ -60,7 +78,24 @@ export interface paths {
       cookie?: never
     }
     /** Retrieve a referral */
-    get: operations['getReferralById']
+    get: operations['getReferralDetailsById']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/referral-details/{id}/personal-details': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Retrieve personal details for a referral */
+    get: operations['getPersonalDetailsByIdentifier']
     put?: never
     post?: never
     delete?: never
@@ -85,14 +120,15 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/pages/caselist/{openOrClosed}': {
+  '/pni-score/{crn}': {
     parameters: {
       query?: never
       header?: never
       path?: never
       cookie?: never
     }
-    get: operations['getOpenCaseListReferrals']
+    /** Retrieve PNI Score */
+    get: operations['getPniScoreByCrn']
     put?: never
     post?: never
     delete?: never
@@ -101,14 +137,32 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/hello-world': {
+  '/pages/caselist/{openOrClosed}': {
     parameters: {
       query?: never
       header?: never
       path?: never
       cookie?: never
     }
-    get: operations['helloWorld']
+    /** Get all referrals for the case list view */
+    get: operations['getCaseListReferrals']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/availability/referral/{referralId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Get all availabilities for a referral */
+    get: operations['getAvailabilityByReferralId']
     put?: never
     post?: never
     delete?: never
@@ -158,7 +212,117 @@ export interface components {
       /** Format: int32 */
       messagesFoundCount: number
     }
-    Referral: {
+    Availability: {
+      /**
+       * Format: uuid
+       * @description Unique ID of the availability
+       * @example null
+       */
+      id?: string
+      /**
+       * Format: uuid
+       * @description The ID of the referral
+       * @example d3f55f38-7c7b-4b6e-9aa1-e7d7f9e3e785
+       */
+      referralId: string
+      /**
+       * Format: date-time
+       * @description Start date of the availability
+       * @example 2025-07-10
+       */
+      startDate?: string
+      /**
+       * Format: date-time
+       * @description End date of the availability
+       * @example 2025-07-20
+       */
+      endDate?: string
+      /**
+       * @description Additional details
+       * @example Available for remote sessions
+       */
+      otherDetails?: string
+      /**
+       * @description User who last modified this record
+       * @example admin_user
+       */
+      lastModifiedBy?: string
+      /**
+       * Format: date-time
+       * @description Timestamp when last modified
+       * @example 2025-07-10T12:00:00
+       */
+      lastModifiedAt?: string
+      availabilities: components['schemas']['DailyAvailabilityModel'][]
+    }
+    DailyAvailabilityModel: {
+      /** @enum {string} */
+      label: 'Mondays' | 'Tuesdays' | 'Wednesdays' | 'Thursdays' | 'Fridays' | 'Saturdays' | 'Sundays'
+      slots: components['schemas']['Slot'][]
+    }
+    Slot: {
+      label: string
+      value: boolean
+    }
+    UpdateAvailability: {
+      /**
+       * Format: uuid
+       * @description The ID of the availability to update
+       * @example d3f55f38-7c7b-4b6e-9aa1-e7d7f9e3e7893
+       */
+      availabilityId: string
+      /**
+       * Format: uuid
+       * @description The ID of the referral
+       * @example d3f55f38-7c7b-4b6e-9aa1-e7d7f9e3e785
+       */
+      referralId: string
+      /**
+       * Format: date-time
+       * @description Start date of the availability, Start date of the availability, will default to current date if no value is passed in
+       * @example 2025-07-10
+       */
+      startDate?: string
+      /**
+       * Format: date-time
+       * @description End date of the availability
+       * @example 2025-07-20
+       */
+      endDate?: string
+      /**
+       * @description Additional details
+       * @example Available for remote sessions
+       */
+      otherDetails?: string
+      availabilities: components['schemas']['DailyAvailabilityModel'][]
+    }
+    CreateAvailability: {
+      /**
+       * Format: uuid
+       * @description The ID of the referral
+       * @example d3f55f38-7c7b-4b6e-9aa1-e7d7f9e3e785
+       */
+      referralId: string
+      /**
+       * Format: date-time
+       * @description Start date of the availability, Start date of the availability, will default to current date if no value is passed in
+       * @example 2025-07-10
+       */
+      startDate?: string
+      /**
+       * Format: date-time
+       * @description End date of the availability
+       * @example 2025-07-20
+       */
+      endDate?: string
+      /**
+       * @description Additional details
+       * @example Available for remote sessions
+       */
+      otherDetails?: string
+      availabilities: components['schemas']['DailyAvailabilityModel'][]
+    }
+    ReferralDetails: {
       /**
        * Format: uuid
        * @description The unique id of this referral.
@@ -166,26 +330,85 @@ export interface components {
        */
       id: string
       /**
+       * @description The crn associated with this referral.
+       * @example X933590
+       */
+      crn: string
+      /**
        * @description The name of the person associated with this referral.
        * @example John Doe
        */
       personName: string
       /**
-       * @description The CRN identifier of the person associated with this referral.
-       * @example X12345
+       * @description The name of the Intervention for this referral.
+       * @example Building Choices
        */
-      crn: string
+      interventionName: string
       /**
        * Format: date-time
-       * @description The date and time that this referral was created.
-       * @example 2025-07-09T10:15:30
+       * @description Timestamp of when this referral was created.
+       * @example 2025-06-14 12:56:23
        */
       createdAt: string
       /**
-       * @description The current referral status.
-       * @example Created
+       * Format: date
+       * @description The date of birth of the person being referred.
+       * @example 15
        */
-      status: string
+      dateOfBirth: string
+      /**
+       * @description The name of the probation practitioner associated with this referral.
+       * @example Tom Saunders
+       */
+      probationPractitionerName: string
+      /**
+       * @description The email of the probation practitioner associated with this referral.
+       * @example tom.saunders@justice.gov.uk
+       */
+      probationPractitionerEmail: string
+    }
+    PersonalDetails: {
+      /**
+       * @description The crn associated with this referral.
+       * @example X933590
+       */
+      crn: string
+      /**
+       * @description The full name of the person being referred.
+       * @example John Smith
+       */
+      name: string
+      /**
+       * Format: date
+       * @description The date of birth of the person being referred.
+       * @example 15
+       */
+      dateOfBirth: string
+      /**
+       * @description The ethnicity of the person being referred.
+       * @example White
+       */
+      ethnicity: string
+      /**
+       * @description The age of the person being referred.
+       * @example 38
+       */
+      age: string
+      /**
+       * @description The gender of the person being referred.
+       * @example Male
+       */
+      gender: string
+      /**
+       * @description The setting where the referral will be delivered.
+       * @example Community
+       */
+      setting: string
+      /**
+       * @description The probation delivery unit responsible for this referral.
+       * @example North London PDU
+       */
+      probationDeliveryUnit: string
     }
     DlqMessage: {
       body: {
@@ -200,41 +423,120 @@ export interface components {
       messagesReturnedCount: number
       messages: components['schemas']['DlqMessage'][]
     }
-    Pageable: {
-      /** Format: int32 */
-      page?: number
-      /** Format: int32 */
-      size?: number
-      sort?: string[]
+    /** @description Domain scores from PNI assessment */
+    DomainScores: {
+      /** @description Sex domain assessment scores */
+      SexDomainScore: components['schemas']['SexDomainScore']
+      /** @description Thinking domain assessment scores */
+      ThinkingDomainScore: components['schemas']['ThinkingDomainScore']
+      /** @description Relationship domain assessment scores */
+      RelationshipDomainScore: components['schemas']['RelationshipDomainScore']
+      /** @description Self-management domain assessment scores */
+      SelfManagementDomainScore: components['schemas']['SelfManagementDomainScore']
     }
-    PageReferralCaseListItem: {
-      /** Format: int64 */
-      totalElements?: number
-      /** Format: int32 */
-      totalPages?: number
-      /** Format: int32 */
-      size?: number
-      content?: components['schemas']['ReferralCaseListItem'][]
-      /** Format: int32 */
-      number?: number
-      sort?: components['schemas']['SortObject']
-      first?: boolean
-      last?: boolean
-      /** Format: int32 */
-      numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
-      empty?: boolean
+    IndividualCognitiveScores: {
+      /**
+       * Format: int32
+       * @example 2
+       */
+      proCriminalAttitudes?: number
+      /**
+       * Format: int32
+       * @example 2
+       */
+      hostileOrientation?: number
     }
-    PageableObject: {
-      /** Format: int64 */
-      offset?: number
-      sort?: components['schemas']['SortObject']
-      paged?: boolean
+    IndividualRelationshipScores: {
+      /**
+       * Format: int32
+       * @example 1
+       */
+      curRelCloseFamily?: number
+      /**
+       * Format: int32
+       * @example 1
+       */
+      prevCloseRelationships?: number
+      /**
+       * Format: int32
+       * @example 1
+       */
+      easilyInfluenced?: number
+      /**
+       * Format: int32
+       * @example 1
+       */
+      aggressiveControllingBehaviour?: number
+    }
+    IndividualSelfManagementScores: {
+      /**
+       * Format: int32
+       * @example 2
+       */
+      impulsivity?: number
+      /**
+       * Format: int32
+       * @example 1
+       */
+      temperControl?: number
+      /**
+       * Format: int32
+       * @example 0
+       */
+      problemSolvingSkills?: number
       /** Format: int32 */
-      pageNumber?: number
-      /** Format: int32 */
-      pageSize?: number
-      unpaged?: boolean
+      difficultiesCoping?: number
+    }
+    IndividualSexScores: {
+      /**
+       * Format: int32
+       * @example 1
+       */
+      sexualPreOccupation?: number
+      /**
+       * Format: int32
+       * @example 1
+       */
+      offenceRelatedSexualInterests?: number
+      /**
+       * Format: int32
+       * @example 1
+       */
+      emotionalCongruence?: number
+    }
+    /** @description Represents an individual's Programme Needs Identifier (PNI) score assessment */
+    PniScore: {
+      /**
+       * @description The overall intensity level derived from the PNI assessment
+       * @example HIGH
+       * @enum {string}
+       */
+      overallIntensity: 'HIGH' | 'MODERATE' | 'ALTERNATIVE_PATHWAY' | 'MISSING_INFORMATION'
+      /** @description Detailed scores across different assessment domains */
+      domainScores: components['schemas']['DomainScores']
+    }
+    RelationshipDomainScore: {
+      /** @enum {string} */
+      overallRelationshipDomainLevel?: 'HIGH_NEED' | 'MEDIUM_NEED' | 'LOW_NEED'
+      individualRelationshipScores: components['schemas']['IndividualRelationshipScores']
+    }
+    SelfManagementDomainScore: {
+      /** @enum {string} */
+      overallSelfManagementDomainLevel?: 'HIGH_NEED' | 'MEDIUM_NEED' | 'LOW_NEED'
+      individualSelfManagementScores: components['schemas']['IndividualSelfManagementScores']
+    }
+    SexDomainScore: {
+      /**
+       * @example 2
+       * @enum {string}
+       */
+      overallSexDomainLevel: 'HIGH_NEED' | 'MEDIUM_NEED' | 'LOW_NEED'
+      individualSexScores: components['schemas']['IndividualSexScores']
+    }
+    ThinkingDomainScore: {
+      /** @enum {string} */
+      overallThinkingDomainLevel?: 'HIGH_NEED' | 'MEDIUM_NEED' | 'LOW_NEED'
+      individualThinkingScores: components['schemas']['IndividualCognitiveScores']
     }
     ReferralCaseListItem: {
       /** Format: uuid */
@@ -243,10 +545,12 @@ export interface components {
       personName: string
       referralStatus: string
     }
-    SortObject: {
-      empty?: boolean
-      sorted?: boolean
-      unsorted?: boolean
+    Pageable: {
+      /** Format: int32 */
+      page?: number
+      /** Format: int32 */
+      size?: number
+      sort?: string[]
     }
   }
   responses: never
@@ -348,7 +652,91 @@ export interface operations {
       }
     }
   }
-  getReferralById: {
+  updateAvailability: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateAvailability']
+      }
+    }
+    responses: {
+      /** @description Availability updated */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Availability']
+        }
+      }
+      /** @description Bad input */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Availability']
+        }
+      }
+      /** @description Unauthorised. The request was unauthorised. */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  createAvailability: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateAvailability']
+      }
+    }
+    responses: {
+      /** @description Availability created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Availability']
+        }
+      }
+      /** @description Bad input */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Availability']
+        }
+      }
+      /** @description Unauthorised. The request was unauthorised. */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getReferralDetailsById: {
     parameters: {
       query?: never
       header?: never
@@ -366,7 +754,66 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['Referral']
+          'application/json': components['schemas']['ReferralDetails']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access this referral. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The referral does not exist */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getPersonalDetailsByIdentifier: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id (UUID) of a referral */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Information about the referral */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PersonalDetails']
         }
       }
       /** @description Bad Request */
@@ -440,10 +887,70 @@ export interface operations {
       }
     }
   }
-  getOpenCaseListReferrals: {
+  getPniScoreByCrn: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The unique crn of an individual */
+        crn: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The PNI Score and associated domain scores for this CRN */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PniScore']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access this PNI Score. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The PNI Score does not exist for this CRN */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getCaseListReferrals: {
     parameters: {
       query: {
         pageable: components['schemas']['Pageable']
+        crnOrPersonName?: string
       }
       header?: never
       path: {
@@ -453,13 +960,13 @@ export interface operations {
     }
     requestBody?: never
     responses: {
-      /** @description OK */
+      /** @description Paged list of all open/closed referrals for a PDU */
       200: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['PageReferralCaseListItem']
+          'application/json': components['schemas']['ReferralCaseListItem']
         }
       }
       /** @description Bad Request */
@@ -473,33 +980,43 @@ export interface operations {
       }
     }
   }
-  helloWorld: {
+  getAvailabilityByReferralId: {
     parameters: {
       query?: never
       header?: never
-      path?: never
+      path: {
+        /** @description The id (UUID) of a referral */
+        referralId: string
+      }
       cookie?: never
     }
     requestBody?: never
     responses: {
-      /** @description OK */
+      /** @description Information about the availability for a given referral */
       200: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          'application/json': {
-            [key: string]: string
-          }
+          'application/json': components['schemas']['Availability']
         }
       }
-      /** @description Bad Request */
+      /** @description Bad input */
       400: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          '*/*': components['schemas']['ErrorResponse']
+          'application/json': components['schemas']['Availability']
+        }
+      }
+      /** @description Unauthorised. The request was unauthorised. */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
     }

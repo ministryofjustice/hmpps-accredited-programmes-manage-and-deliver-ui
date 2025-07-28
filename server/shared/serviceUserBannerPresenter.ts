@@ -1,13 +1,12 @@
+import { ReferralDetails } from '@manage-and-deliver-api'
 import DateUtils from '../utils/dateUtils'
 import { convertToTitleCase } from '../utils/utils'
 
 export default class ServiceUserBannerPresenter {
-  constructor(
-    private readonly serviceUser: { name: { forename: string; surname: string }; dateOfBirth: string; crn: string },
-  ) {}
+  constructor(private readonly serviceUser: ReferralDetails) {}
 
   get name(): string {
-    return convertToTitleCase(`${this.serviceUser.name.forename} ${this.serviceUser.name.surname}`)
+    return convertToTitleCase(`${this.serviceUser.personName}`)
   }
 
   get dateOfBirth(): string {

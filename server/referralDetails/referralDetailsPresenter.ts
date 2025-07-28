@@ -1,7 +1,7 @@
-import PersonalDetails from '../models/PersonalDetails'
-import { SummaryListItem } from '../utils/summaryList'
+import { PersonalDetails, ReferralDetails } from '@manage-and-deliver-api'
 import DateUtils from '../utils/dateUtils'
 import { SummaryListArgs } from '../utils/govukFrontendTypes'
+import { SummaryListItem } from '../utils/summaryList'
 import ViewUtils from '../utils/viewUtils'
 
 export enum ReferralDetailsPageSection {
@@ -16,9 +16,10 @@ export enum ReferralDetailsPageSection {
 
 export default class ReferralDetailsPresenter {
   protected constructor(
-    private personalDetails: PersonalDetails,
+    private referralDetails: ReferralDetails,
     readonly subNavValue: string,
     readonly id: string,
+    private personalDetails: PersonalDetails,
   ) {}
 
   get referralSummary(): SummaryListArgs {
@@ -123,7 +124,7 @@ export default class ReferralDetailsPresenter {
     return [
       {
         key: 'Name',
-        lines: [`${this.personalDetails.name.forename} ${this.personalDetails.name.surname}`],
+        lines: [`${this.personalDetails.name}`],
       },
       {
         key: 'crn',
@@ -149,7 +150,7 @@ export default class ReferralDetailsPresenter {
       },
       {
         key: 'Probation delivery unit',
-        lines: [this.personalDetails.probationDeliveryUnit.description],
+        lines: [this.personalDetails.probationDeliveryUnit],
       },
     ]
   }
@@ -158,28 +159,28 @@ export default class ReferralDetailsPresenter {
     return [
       {
         key: 'Applicant Name',
-        lines: [`${this.personalDetails.name.forename} ${this.personalDetails.name.surname}`],
+        lines: [`${this.referralDetails.personName}`],
       },
       {
         key: 'Programme Name',
-        lines: ['Building Choices: moderate intensity'],
+        lines: [`${this.referralDetails.interventionName}`],
       },
       {
         key: 'Programme strand',
-        lines: ['Sexual Offence'],
+        lines: ['PLACEHOLDER'],
       },
       {
         key: 'Date referred',
-        lines: ['11 June 2023'],
+        lines: [`${this.referralDetails.createdAt}`],
       },
       {
         key: 'Probation practitioner',
-        lines: ['Tom Saunders'],
+        lines: [`${this.referralDetails.probationPractitionerName}`],
       },
       {
         key: 'Probation practitioner email address',
-        lines: ['text'],
-        valueLink: '<a href="mailto:tom.saunders@justice.gov.uk">tom.saunders@justice.gov.uk</a>',
+        lines: [`${this.referralDetails.probationPractitionerEmail}`],
+        valueLink: `<a href="mailto:${this.referralDetails.probationPractitionerEmail}">tom.saunders@justice.gov.uk</a>`,
       },
     ]
   }
