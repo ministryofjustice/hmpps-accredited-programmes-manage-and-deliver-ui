@@ -60,7 +60,8 @@ export interface paths {
       cookie?: never
     }
     get?: never
-    put?: never
+    /** Update availability */
+    put: operations['updateAvailability']
     /** Create a new availability */
     post: operations['createAvailability']
     delete?: never
@@ -69,23 +70,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/service-user/{identifier}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['getServiceUserByCrnOrPrisonerNumber']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/referral/{id}': {
+  '/referral-details/{id}': {
     parameters: {
       query?: never
       header?: never
@@ -241,13 +226,11 @@ export interface components {
        */
       referralId: string
       /**
-       * Format: date-time
        * @description Start date of the availability
        * @example 2025-07-10
        */
       startDate?: string
       /**
-       * Format: date-time
        * @description End date of the availability
        * @example 2025-07-20
        */
@@ -263,7 +246,6 @@ export interface components {
        */
       lastModifiedBy?: string
       /**
-       * Format: date-time
        * @description Timestamp when last modified
        * @example 2025-07-10T12:00:00
        */
@@ -272,14 +254,20 @@ export interface components {
     }
     DailyAvailabilityModel: {
       /** @enum {string} */
-      label: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
+      label: 'Mondays' | 'Tuesdays' | 'Wednesdays' | 'Thursdays' | 'Fridays' | 'Saturdays' | 'Sundays'
       slots: components['schemas']['Slot'][]
     }
     Slot: {
       label: string
       value: boolean
     }
-    CreateAvailability: {
+    UpdateAvailability: {
+      /**
+       * Format: uuid
+       * @description The ID of the availability to update
+       * @example d3f55f38-7c7b-4b6e-9aa1-e7d7f9e3e7893
+       */
+      availabilityId: string
       /**
        * Format: uuid
        * @description The ID of the referral
@@ -287,13 +275,11 @@ export interface components {
        */
       referralId: string
       /**
-       * Format: date-time
        * @description Start date of the availability, Start date of the availability, will default to current date if no value is passed in
        * @example 2025-07-10
        */
       startDate?: string
       /**
-       * Format: date-time
        * @description End date of the availability
        * @example 2025-07-20
        */
@@ -305,16 +291,31 @@ export interface components {
       otherDetails?: string
       availabilities: components['schemas']['DailyAvailabilityModel'][]
     }
-    ServiceUser: {
-      name?: string
-      crn: string
-      /** Format: date */
-      dob: string
-      gender?: string
-      ethnicity?: string
-      currentPdu?: string
+    CreateAvailability: {
+      /**
+       * Format: uuid
+       * @description The ID of the referral
+       * @example d3f55f38-7c7b-4b6e-9aa1-e7d7f9e3e785
+       */
+      referralId: string
+      /**
+       * @description Start date of the availability, Start date of the availability, will default to current date if no value is passed in
+       * @example 2025-07-10
+       */
+      startDate?: string
+      /**
+       * @description End date of the availability
+       * @example 2025-07-20
+       */
+      endDate?: string
+      /**
+       * @description Additional details
+       * @example Available for remote sessions
+       */
+      otherDetails?: string
+      availabilities: components['schemas']['DailyAvailabilityModel'][]
     }
-    Referral: {
+    ReferralDetails: {
       /**
        * Format: uuid
        * @description The unique id of this referral.
@@ -337,7 +338,7 @@ export interface components {
        */
       interventionName: string
       /**
-       * Format: date-time
+       * Format: date
        * @description Timestamp of when this referral was created.
        * @example 11
        */
@@ -420,6 +421,121 @@ export interface components {
       /** Format: int32 */
       messagesReturnedCount: number
       messages: components['schemas']['DlqMessage'][]
+    }
+    /** @description Domain scores from PNI assessment */
+    DomainScores: {
+      /** @description Sex domain assessment scores */
+      SexDomainScore: components['schemas']['SexDomainScore']
+      /** @description Thinking domain assessment scores */
+      ThinkingDomainScore: components['schemas']['ThinkingDomainScore']
+      /** @description Relationship domain assessment scores */
+      RelationshipDomainScore: components['schemas']['RelationshipDomainScore']
+      /** @description Self-management domain assessment scores */
+      SelfManagementDomainScore: components['schemas']['SelfManagementDomainScore']
+    }
+    IndividualCognitiveScores: {
+      /**
+       * Format: int32
+       * @example 2
+       */
+      proCriminalAttitudes?: number
+      /**
+       * Format: int32
+       * @example 2
+       */
+      hostileOrientation?: number
+    }
+    IndividualRelationshipScores: {
+      /**
+       * Format: int32
+       * @example 1
+       */
+      curRelCloseFamily?: number
+      /**
+       * Format: int32
+       * @example 1
+       */
+      prevCloseRelationships?: number
+      /**
+       * Format: int32
+       * @example 1
+       */
+      easilyInfluenced?: number
+      /**
+       * Format: int32
+       * @example 1
+       */
+      aggressiveControllingBehaviour?: number
+    }
+    IndividualSelfManagementScores: {
+      /**
+       * Format: int32
+       * @example 2
+       */
+      impulsivity?: number
+      /**
+       * Format: int32
+       * @example 1
+       */
+      temperControl?: number
+      /**
+       * Format: int32
+       * @example 0
+       */
+      problemSolvingSkills?: number
+      /** Format: int32 */
+      difficultiesCoping?: number
+    }
+    IndividualSexScores: {
+      /**
+       * Format: int32
+       * @example 1
+       */
+      sexualPreOccupation?: number
+      /**
+       * Format: int32
+       * @example 1
+       */
+      offenceRelatedSexualInterests?: number
+      /**
+       * Format: int32
+       * @example 1
+       */
+      emotionalCongruence?: number
+    }
+    /** @description Represents an individual's Programme Needs Identifier (PNI) score assessment */
+    PniScore: {
+      /**
+       * @description The overall intensity level derived from the PNI assessment
+       * @example HIGH
+       * @enum {string}
+       */
+      overallIntensity: 'HIGH' | 'MODERATE' | 'ALTERNATIVE_PATHWAY' | 'MISSING_INFORMATION'
+      /** @description Detailed scores across different assessment domains */
+      domainScores: components['schemas']['DomainScores']
+    }
+    RelationshipDomainScore: {
+      /** @enum {string} */
+      overallRelationshipDomainLevel?: 'HIGH_NEED' | 'MEDIUM_NEED' | 'LOW_NEED'
+      individualRelationshipScores: components['schemas']['IndividualRelationshipScores']
+    }
+    SelfManagementDomainScore: {
+      /** @enum {string} */
+      overallSelfManagementDomainLevel?: 'HIGH_NEED' | 'MEDIUM_NEED' | 'LOW_NEED'
+      individualSelfManagementScores: components['schemas']['IndividualSelfManagementScores']
+    }
+    SexDomainScore: {
+      /**
+       * @example 2
+       * @enum {string}
+       */
+      overallSexDomainLevel: 'HIGH_NEED' | 'MEDIUM_NEED' | 'LOW_NEED'
+      individualSexScores: components['schemas']['IndividualSexScores']
+    }
+    ThinkingDomainScore: {
+      /** @enum {string} */
+      overallThinkingDomainLevel?: 'HIGH_NEED' | 'MEDIUM_NEED' | 'LOW_NEED'
+      individualThinkingScores: components['schemas']['IndividualCognitiveScores']
     }
     ReferralCaseListItem: {
       /** Format: uuid */
@@ -531,88 +647,6 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  createAvailability: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreateAvailability']
-      }
-    }
-    responses: {
-      /** @description Availability created */
-      201: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['Availability']
-        }
-      }
-      /** @description Bad input */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['Availability']
-        }
-      }
-      /** @description Unauthorised. The request was unauthorised. */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getServiceUserByCrnOrPrisonerNumber: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        identifier: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ServiceUser']
-        }
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ServiceUser']
         }
       }
     }
@@ -848,6 +882,65 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getPniScoreByCrn: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The unique crn of an individual */
+        crn: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The PNI Score and associated domain scores for this CRN */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['PniScore']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access this PNI Score. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The PNI Score does not exist for this CRN */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
     }

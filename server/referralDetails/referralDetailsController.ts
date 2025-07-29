@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { ReferralDetails } from '@manage-and-deliver-api'
+import { PersonalDetails, ReferralDetails } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
 import AddAvailabilityPresenter from './addAvailability/addAvailabilityPresenter'
@@ -100,14 +100,10 @@ export default class ReferralDetailsController {
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
 
-    const availability = await this.accreditedProgrammesManageAndDeliverService.getAvailability(
-      username,
-      '81229aaa-bb3a-4705-8015-99052bafab58',
-      // '6885d1f6-5958-40e0-9448-1ff8cc37e64',
-    )
+    const availability = await this.accreditedProgrammesManageAndDeliverService.getAvailability(username, id)
 
     const presenter = new AvailabilityPresenter(
-      sharedReferralDetailsData.personalDetails,
+      sharedReferralDetailsData,
       subNavValue,
       id,
       availability,
@@ -168,43 +164,21 @@ export default class ReferralDetailsController {
         formError = data.error
         userInputData = req.body
       } else {
-        let result
         if (availabilityId) {
-          result = await this.accreditedProgrammesManageAndDeliverService.updateAvailability(username, {
+          await this.accreditedProgrammesManageAndDeliverService.updateAvailability(username, {
             ...data.paramsForUpdate,
             availabilityId,
           })
         } else {
-          result = await this.accreditedProgrammesManageAndDeliverService.addAvailability(
-            username,
-            data.paramsForUpdate,
-          )
+          await this.accreditedProgrammesManageAndDeliverService.addAvailability(username, data.paramsForUpdate)
         }
         return res.redirect(`/referral-details/${id}/availability?detailsUpdated=true`)
       }
     }
 
-    const availability = await this.accreditedProgrammesManageAndDeliverService.getAvailability(
-      username,
-      '81229aaa-bb3a-4705-8015-99052bafab58',
-      // '6885d1f6-5958-40e0-9448-1ff8cc37e64',
-    )
-    const personalDetails: PersonalDetails = {
-      crn: '1234',
-      nomsNumber: 'CN1234',
-      name: {
-        forename: 'Steve',
-        surname: 'Sticks',
-      },
-      dateOfBirth: '1980-01-01',
-      ethnicity: 'British',
-      gender: 'Male',
-      probationDeliveryUnit: {
-        code: 'LDN',
-        description: 'London',
-      },
-      setting: 'Community',
-    }
+    const availability = await this.accreditedProgrammesManageAndDeliverService.getAvailability(username, id)
+
+    const personalDetails = await this.accreditedProgrammesManageAndDeliverService.getPersonalDetails(id, username)
 
     const presenter = new AddAvailabilityPresenter(
       personalDetails,
@@ -216,6 +190,6 @@ export default class ReferralDetailsController {
     )
     const view = new AddAvailabilityView(presenter)
 
-    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    return ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
 }

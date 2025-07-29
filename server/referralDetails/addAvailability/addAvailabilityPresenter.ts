@@ -1,5 +1,4 @@
-import { Availability } from '@manage-and-deliver-api'
-import PersonalDetails from '../../models/PersonalDetails'
+import { Availability, PersonalDetails } from '@manage-and-deliver-api'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
 
@@ -30,7 +29,7 @@ export default class AddAvailabilityPresenter {
   get text() {
     return {
       checkboxes: {
-        pageTitle: `When is ${this.personalDetails.name.forename} ${this.personalDetails.name.surname} available to attend a programme?`,
+        pageTitle: `When is ${this.personalDetails.name} available to attend a programme?`,
       },
       otherDetailsTextArea: {
         label: 'Other availability details (optional)',
