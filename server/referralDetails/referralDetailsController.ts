@@ -95,6 +95,7 @@ export default class ReferralDetailsController {
   async showAvailabilityPage(req: Request, res: Response): Promise<void> {
     const { id } = req.params
     const { username } = req.user
+    const { detailsUpdated } = req.query
     const subNavValue = 'availability'
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
@@ -110,6 +111,7 @@ export default class ReferralDetailsController {
       subNavValue,
       id,
       availability,
+      detailsUpdated === 'true',
     )
     const view = new AvailabilityView(presenter)
 
@@ -166,7 +168,6 @@ export default class ReferralDetailsController {
         formError = data.error
         userInputData = req.body
       } else {
-        console.log(JSON.stringify(data.paramsForUpdate))
         let result
         if (availabilityId) {
           result = await this.accreditedProgrammesManageAndDeliverService.updateAvailability(username, {
@@ -179,10 +180,7 @@ export default class ReferralDetailsController {
             data.paramsForUpdate,
           )
         }
-
-        // console.log("successful")
-        // console.log(result)
-        // return res.redirect(`/add-availability-dates/${referralId}`)
+        return res.redirect(`/referral-details/${id}/availability?detailsUpdated=true`)
       }
     }
 
@@ -191,9 +189,6 @@ export default class ReferralDetailsController {
       '81229aaa-bb3a-4705-8015-99052bafab58',
       // '6885d1f6-5958-40e0-9448-1ff8cc37e64',
     )
-    console.log('get availability')
-    console.log(JSON.stringify(availability))
-    console.log('get availability')
     const personalDetails: PersonalDetails = {
       crn: '1234',
       nomsNumber: 'CN1234',

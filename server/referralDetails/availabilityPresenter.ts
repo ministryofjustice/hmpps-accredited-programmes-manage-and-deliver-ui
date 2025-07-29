@@ -7,6 +7,7 @@ export default class AvailabilityPresenter extends ReferralDetailsPresenter {
     readonly subNavValue: string,
     readonly id: string,
     readonly availability: Availability,
+    readonly isAvailabilityUpdated: boolean | null = null,
   ) {
     super(details, subNavValue, id)
   }

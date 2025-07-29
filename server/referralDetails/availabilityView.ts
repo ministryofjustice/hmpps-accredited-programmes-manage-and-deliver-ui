@@ -6,17 +6,26 @@ export default class AvailabilityView {
 
   get importFromDeliusText(): InsetTextArgs {
     return {
-      text: 'Imported from NDelius on 1 August 2023, last updated on 4 January 2023',
+      text: `Last updated ${this.presenter.availability.lastModifiedAt} by ${this.presenter.availability.lastModifiedBy}`,
       classes: 'govuk-!-margin-top-0',
     }
   }
 
   get availabilityButtonArgs(): ButtonArgs {
     return {
-      text: 'Add availability',
+      text: this.presenter.availability.id ? 'Change availability' : 'Add availability',
       href: this.presenter.availability.id
-        ? `referral/${this.presenter.id}/update-availability/${this.presenter.availability.id}`
+        ? `/referral/${this.presenter.id}/update-availability/${this.presenter.availability.id}`
         : `/add-availability/${this.presenter.id}`,
+    }
+  }
+
+  private successMessageArgs() {
+    return {
+      variant: 'success',
+      title: 'Availability details added successfully.',
+      showTitleAsHeading: true,
+      dismissible: true,
     }
   }
 
@@ -30,6 +39,8 @@ export default class AvailabilityView {
         availability: this.presenter.availability,
         availabilityTableArgs: this.presenter.getAvailabilityTableArgs(),
         showAvailability: this.presenter.showAvailability,
+        isAvailabilityUpdated: this.presenter.isAvailabilityUpdated,
+        successMessageArgs: this.successMessageArgs(),
       },
     ]
   }
