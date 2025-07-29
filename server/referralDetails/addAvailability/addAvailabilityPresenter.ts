@@ -23,7 +23,7 @@ export default class AddAvailabilityPresenter {
   get locationButtonFormAction(): string {
     return this.availability.id
       ? `/referral/${this.referralId}/update-availability/${this.availability.id}`
-      : `/add-availability/${this.referralId}`
+      : `/referral/${this.referralId}/add-availability`
   }
 
   get text() {

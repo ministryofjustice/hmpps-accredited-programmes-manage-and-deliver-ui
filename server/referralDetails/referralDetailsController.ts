@@ -150,14 +150,14 @@ export default class ReferralDetailsController {
   }
 
   async showAddAvailabilityPage(req: Request, res: Response, availabilityId: string = null): Promise<void> {
-    const { id } = req.params
+    const { referralId } = req.params
     const { username } = req.user
-    const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
+    const sharedReferralDetailsData = await this.showReferralDetailsPage(referralId, username)
 
     let formError: FormValidationError | null = null
     let userInputData = null
     if (req.method === 'POST') {
-      const data = await new AddAvailabilityForm(req, id).data()
+      const data = await new AddAvailabilityForm(req, referralId).data()
 
       if (data.error) {
         res.status(400)
@@ -172,13 +172,16 @@ export default class ReferralDetailsController {
         } else {
           await this.accreditedProgrammesManageAndDeliverService.addAvailability(username, data.paramsForUpdate)
         }
-        return res.redirect(`/referral-details/${id}/availability?detailsUpdated=true`)
+        return res.redirect(`/referral-details/${referralId}/availability?detailsUpdated=true`)
       }
     }
 
-    const availability = await this.accreditedProgrammesManageAndDeliverService.getAvailability(username, id)
+    const availability = await this.accreditedProgrammesManageAndDeliverService.getAvailability(username, referralId)
 
-    const personalDetails = await this.accreditedProgrammesManageAndDeliverService.getPersonalDetails(id, username)
+    const personalDetails = await this.accreditedProgrammesManageAndDeliverService.getPersonalDetails(
+      referralId,
+      username,
+    )
 
     const presenter = new AddAvailabilityPresenter(
       personalDetails,
@@ -186,7 +189,7 @@ export default class ReferralDetailsController {
       userInputData,
       req.session.originPage,
       availability,
-      id,
+      referralId,
     )
     const view = new AddAvailabilityView(presenter)
 

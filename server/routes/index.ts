@@ -56,19 +56,19 @@ export default function routes({ auditService, accreditedProgrammesManageAndDeli
     await referralDetailsController.showAdditionalInformationPage(req, res)
   })
 
-  get('/add-availability/:id', async (req, res, next) => {
+  get('/referral/:referralId/add-availability', async (req, res, next) => {
     await referralDetailsController.showAddAvailabilityPage(req, res)
   })
 
-  post('/add-availability/:id', async (req, res, next) => {
+  post('/referral/:referralId/add-availability', async (req, res, next) => {
     await referralDetailsController.showAddAvailabilityPage(req, res)
   })
 
-  get('/referral/:id/update-availability/:availabilityId', async (req, res, next) => {
+  get('/referral/:referralId/update-availability/:availabilityId', async (req, res, next) => {
     await referralDetailsController.updateAvailability(req, res)
   })
 
-  post('/referral/:id/update-availability/:availabilityId', async (req, res, next) => {
+  post('/referral/:referralId/update-availability/:availabilityId', async (req, res, next) => {
     await referralDetailsController.updateAvailability(req, res)
   })
 
