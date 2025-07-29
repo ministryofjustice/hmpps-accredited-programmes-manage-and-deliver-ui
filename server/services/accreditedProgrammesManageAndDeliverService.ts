@@ -1,9 +1,8 @@
-import { ReferralCaseListItem } from '@manage-and-deliver-api'
+import { PersonalDetails, ReferralCaseListItem, ReferralDetails } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
 import type { HmppsAuthClient, RestClientBuilderWithoutToken } from '../data'
 import RestClient from '../data/restClient'
-import PersonalDetails from '../models/PersonalDetails'
 import { Page } from '../shared/models/pagination'
 
 export interface PaginationParams {
@@ -57,10 +56,18 @@ export default class AccreditedProgrammesManageAndDeliverService {
     })) as Page<ReferralCaseListItem>
   }
 
-  async getPersonalDetails(username: Express.User['username'], id: string): Promise<PersonalDetails> {
+  async getReferralDetails(referralId: string, username: Express.User['username']): Promise<ReferralDetails> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
-      path: `/referral/${id}`,
+      path: `/referral-details/${referralId}`,
+      headers: { Accept: 'application/json' },
+    })) as ReferralDetails
+  }
+
+  async getPersonalDetails(referralId: string, username: Express.User['username']): Promise<PersonalDetails> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/referral-details/${referralId}/personal-details`,
       headers: { Accept: 'application/json' },
     })) as PersonalDetails
   }

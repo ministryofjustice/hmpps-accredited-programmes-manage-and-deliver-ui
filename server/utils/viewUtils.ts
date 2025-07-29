@@ -1,6 +1,6 @@
 import * as nunjucks from 'nunjucks'
-import { ListStyle, SummaryListItem, SummaryListItemContent } from './summaryList'
 import { ErrorSummaryArgs, SummaryListArgs, SummaryListArgsRowActionsItem } from './govukFrontendTypes'
+import { ListStyle, SummaryListItem, SummaryListItemContent } from './summaryList'
 // import AuthUserDetails from '../shared/models/hmppsAuth/authUserDetails'
 
 export type SortableTableHeaders = {
