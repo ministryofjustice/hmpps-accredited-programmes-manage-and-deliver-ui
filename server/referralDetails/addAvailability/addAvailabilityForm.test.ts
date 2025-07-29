@@ -4,7 +4,7 @@ import TestUtils from '../../testutils/testUtils'
 
 describe(`AddAvailabilityForm`, () => {
   describe('data', () => {
-    const currentDate = new Date().toLocaleDateString('en-GB')
+    const currentDate = new Date().toISOString().split('T')[0]
     const referralId = faker.string.uuid()
     describe('when all mandatory fields are passed', () => {
       it('returns params for update', async () => {
@@ -18,6 +18,7 @@ describe(`AddAvailabilityForm`, () => {
           availabilities: [{ label: 'sunday', slots: [{ label: 'daytime', value: true }] }],
           otherDetails: undefined,
           startDate: currentDate,
+          referralId,
         })
       })
     })
@@ -44,6 +45,7 @@ describe(`AddAvailabilityForm`, () => {
           ],
           otherDetails: 'Some extra information',
           startDate: currentDate,
+          referralId,
         })
       })
     })
@@ -79,13 +81,21 @@ describe(`AddAvailabilityForm`, () => {
     })
 
     describe('when yes is selected for end date and an end date is provided', () => {
-      test.each(['01/01/2125', '1/1/2155', '11/1/2125', '1/11/2125', '11/11/2125'])(
-        'returns params for update %s',
-        async date => {
+      const testCases = [
+        { input: '01/01/2125', expectedResult: '2125-01-01' },
+        { input: '1/1/2155', expectedResult: '2155-01-01' },
+        { input: '11/1/2125', expectedResult: '2125-01-11' },
+        { input: '1/11/2125', expectedResult: '2125-11-01' },
+        { input: '11/11/2125', expectedResult: '2125-11-11' },
+      ]
+
+      test.each(testCases)(
+        'returns params for update, correctly converting "$input" to "$expectedResult"',
+        async ({ input, expectedResult }) => {
           const request = TestUtils.createRequest({
             'availability-checkboxes': 'sunday-daytime',
             'end-date': 'Yes',
-            date,
+            date: input,
           })
 
           const data = await new AddAvailabilityForm(request, referralId).data()
@@ -94,7 +104,8 @@ describe(`AddAvailabilityForm`, () => {
             availabilities: [{ label: 'sunday', slots: [{ label: 'daytime', value: true }] }],
             otherDetails: undefined,
             startDate: currentDate,
-            endDate: date,
+            endDate: expectedResult,
+            referralId,
           })
         },
       )
@@ -142,23 +153,26 @@ describe(`AddAvailabilityForm`, () => {
     })
 
     describe('when yes is selected for end date and an end date is today or in the past', () => {
-      test.each([currentDate, '01/01/2025'])('correctly validates incorrect date %s', async date => {
-        const request = TestUtils.createRequest({
-          'availability-checkboxes': 'sunday-daytime',
-          'end-date': 'Yes',
-          date,
-        })
+      test.each([new Date().toLocaleDateString('en-GB'), '01/01/2025'])(
+        'correctly validates incorrect date %s',
+        async date => {
+          const request = TestUtils.createRequest({
+            'availability-checkboxes': 'sunday-daytime',
+            'end-date': 'Yes',
+            date,
+          })
 
-        const data = await new AddAvailabilityForm(request, referralId).data()
+          const data = await new AddAvailabilityForm(request, referralId).data()
 
-        expect(data.error?.errors).toStrictEqual([
-          {
-            errorSummaryLinkedField: 'date',
-            formFields: ['date'],
-            message: `Enter or select a date in the future`,
-          },
-        ])
-      })
+          expect(data.error?.errors).toStrictEqual([
+            {
+              errorSummaryLinkedField: 'date',
+              formFields: ['date'],
+              message: `Enter or select a date in the future`,
+            },
+          ])
+        },
+      )
     })
   })
 })
