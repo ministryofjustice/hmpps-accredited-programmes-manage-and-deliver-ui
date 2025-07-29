@@ -6,10 +6,8 @@ export default class AvailabilityView {
   constructor(private readonly presenter: AvailabilityPresenter) {}
 
   get importFromDeliusText(): InsetTextArgs {
-    console.log(JSON.stringify(this.presenter.availability))
-    console.log(new Date(this.presenter.availability.lastModifiedAt))
     return {
-      text: `Last updated ${this.presenter.availability.lastModifiedAt} by ${this.presenter.availability.lastModifiedBy}`,
+      text: `Last updated ${DateUtils.formattedDate(this.presenter.availability.lastModifiedAt)} by ${this.presenter.availability.lastModifiedBy}`,
       classes: 'govuk-!-margin-top-0',
     }
   }

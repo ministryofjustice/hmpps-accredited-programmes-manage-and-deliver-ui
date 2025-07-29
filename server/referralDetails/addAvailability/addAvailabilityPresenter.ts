@@ -56,6 +56,15 @@ export default class AddAvailabilityPresenter {
   }
 
   get fields() {
+    let formattedEndDate = ''
+    if (this.availability.endDate) {
+      const [year, month, day] = this.availability.endDate.split('-')
+      formattedEndDate = `${day}/${month}/${year}`
+    }
+    let endDateRequired = null
+    if (this.availability.id) {
+      endDateRequired = this.availability.endDate ? 'Yes' : 'No'
+    }
     return {
       availabilityCheckboxes: {
         value: this.utils.stringValue(null, 'availability-checkboxes'),
@@ -66,11 +75,11 @@ export default class AddAvailabilityPresenter {
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'other-availability-details-text-area'),
       },
       endDateRequired: {
-        value: this.utils.stringValue(this.availability.endDate ? 'Yes' : 'No', 'end-date'),
+        value: this.utils.stringValue(endDateRequired, 'end-date'),
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'end-date'),
       },
       endDate: {
-        value: this.utils.stringValue(null, 'date'),
+        value: this.utils.stringValue(formattedEndDate, 'date'),
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'date'),
       },
     }
