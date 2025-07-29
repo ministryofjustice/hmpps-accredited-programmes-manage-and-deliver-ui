@@ -51,6 +51,7 @@ export default class AddAvailabilityView {
       name: 'date',
       label: {
         text: 'Date',
+        classes: 'govuk-label govuk-label--s',
       },
       hint: {
         text: 'For example, 17/5/2024.',
@@ -67,8 +68,8 @@ export default class AddAvailabilityView {
       fieldset: {
         legend: {
           text: 'Do you want to add an end date for this availability?',
-          isPageHeading: true,
-          classes: 'govuk-fieldset__legend--l',
+          classes: 'govuk-fieldset__legend--m',
+          isPageHeading: false,
         },
       },
       hint: {

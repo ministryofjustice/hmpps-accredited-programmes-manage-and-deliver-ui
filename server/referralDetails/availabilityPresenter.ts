@@ -25,7 +25,7 @@ export default class AvailabilityPresenter extends ReferralDetailsPresenter {
     // Create a list of all the headings adding 'Day' of the first column - ['Day', 'daytime', 'evening']
     const headings = [{ text: 'Day' }]
     uniqueSlotLabels.forEach(slot => {
-      headings.push({ text: slot })
+      headings.push({ text: slot.charAt(0).toUpperCase() + slot.slice(1) })
     })
 
     // Loop through the object and find the correct value true or false for every slot for every day and assign it the correct tag colour

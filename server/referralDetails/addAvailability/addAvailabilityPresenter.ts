@@ -62,11 +62,11 @@ export default class AddAvailabilityPresenter {
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'availability-checkboxes'),
       },
       otherDetailsTextArea: {
-        value: this.utils.stringValue(null, 'other-availability-details-text-area'),
+        value: this.utils.stringValue(this.availability.otherDetails, 'other-availability-details-text-area'),
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'other-availability-details-text-area'),
       },
       endDateRequired: {
-        value: this.utils.stringValue(null, 'end-date'),
+        value: this.utils.stringValue(this.availability.endDate ? 'Yes' : 'No', 'end-date'),
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'end-date'),
       },
       endDate: {
