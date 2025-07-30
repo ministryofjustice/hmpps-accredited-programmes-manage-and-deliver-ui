@@ -6,8 +6,6 @@ import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import personalDetailsFactory from '../testutils/factories/personalDetailsFactory'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
-import TestUtils from '../testutils/testUtils'
-import AddAvailabilityForm from './addAvailability/AddAvailabilityForm'
 import availabilityFactory from '../testutils/factories/availabilityFactory'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
@@ -20,6 +18,8 @@ const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesMana
 
 let app: Express
 
+const referralDetails: ReferralDetails = referralDetailsFactory.build()
+
 afterEach(() => {
   jest.resetAllMocks()
 })
@@ -29,68 +29,13 @@ beforeEach(() => {
       accreditedProgrammesManageAndDeliverService,
     },
   })
+  accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
 })
 
-//  function referralDetailsAssertions(res: request.SuperAgentStatic.Response){
-//   const referralDetails: ReferralDetails = referralDetailsFactory.build()
-//   expect(res.text).toContain(`${referralDetails.crn}`)
-//   expect(res.text).toContain(referralDetails.personName)
-// }
-
 describe('referral-details', () => {
-  // const referralDetails: ReferralDetails = referralDetailsFactory.build()
-  // const personalDetails: PersonalDetails = personalDetailsFactory.build()
-  //
-  //
-  //
-  // const subNavUrls: { name: string, url: string }[] = [
-  //   {
-  //     name: 'personal-details',
-  //     url: `/referral-details/${randomUUID()}/personal-details`,
-  //   },
-  //   {
-  //     name: 'personal-details',
-  //     url: `/referral-details/${randomUUID()}/programme-history`,
-  //   },
-  //   {
-  //     name: 'personal-details',
-  //     url: `/referral-details/${randomUUID()}/offence-history`,
-  //   },
-  //   {
-  //     name: 'personal-details',
-  //     url: `/referral-details/${randomUUID()}/sentence-information`,
-  //   },
-  //   {
-  //     name: 'personal-details',
-  //     url: `/referral-details/${randomUUID()}/availability`,
-  //   },
-  //   {
-  //     name: 'personal-details',
-  //     url: `/referral-details/${randomUUID()}/location`,
-  //   },
-  //   {
-  //     name: 'personal-details',
-  //     url: `/referral-details/${randomUUID()}/additional-information`,
-  //   },
-  // ]
-  //
-  // test.each(subNavUrls)('for subnav "$name"', async ({ url }) => {
-  //   accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
-  //   accreditedProgrammesManageAndDeliverService.getPersonalDetails.mockResolvedValue(personalDetails)
-  //   await request(app)
-  //     .get(url)
-  //     .expect(200)
-  //     .expect(res => {
-  //       expect(res.text).toContain(referralDetails.crn)
-  //       expect(res.text).toContain(referralDetails.personName)
-  //     })
-  // })
-
   describe(`GET /referral-details/:id/personal-details`, () => {
     it('loads the referral details page with personal details sub-nav', async () => {
-      const referralDetails: ReferralDetails = referralDetailsFactory.build()
       const personalDetails: PersonalDetails = personalDetailsFactory.build()
-      accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
       accreditedProgrammesManageAndDeliverService.getPersonalDetails.mockResolvedValue(personalDetails)
       return request(app)
         .get(`/referral-details/${randomUUID()}/personal-details`)
@@ -105,8 +50,6 @@ describe('referral-details', () => {
 
   describe(`GET /referral-details/:id/programme-history`, () => {
     it('loads the referral details page with programme history sub-nav', async () => {
-      const referralDetails: ReferralDetails = referralDetailsFactory.build()
-      accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
       return request(app)
         .get(`/referral-details/${randomUUID()}/programme-history`)
         .expect(200)
@@ -120,8 +63,6 @@ describe('referral-details', () => {
 
   describe(`GET /referral-details/:id/offence-history`, () => {
     it('loads the referral details page with offence history sub-nav', async () => {
-      const referralDetails: ReferralDetails = referralDetailsFactory.build()
-      accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
       return request(app)
         .get(`/referral-details/${randomUUID()}/offence-history`)
         .expect(200)
@@ -135,8 +76,6 @@ describe('referral-details', () => {
 
   describe(`GET /referral-details/:id/sentence-information`, () => {
     it('loads the referral details page with sentence information sub-nav', async () => {
-      const referralDetails: ReferralDetails = referralDetailsFactory.build()
-      accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
       return request(app)
         .get(`/referral-details/${randomUUID()}/sentence-information`)
         .expect(200)
@@ -150,10 +89,7 @@ describe('referral-details', () => {
 
   describe(`GET /referral-details/:id/availability`, () => {
     it('loads the referral details page with availability sub-nav', async () => {
-      const referralDetails: ReferralDetails = referralDetailsFactory.build()
       const availability: Availability = availabilityFactory.defaultAvailability().build()
-
-      accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
       accreditedProgrammesManageAndDeliverService.getAvailability.mockResolvedValue(availability)
 
       return request(app)
@@ -162,7 +98,80 @@ describe('referral-details', () => {
         .expect(res => {
           expect(res.text).toContain(referralDetails.crn)
           expect(res.text).toContain(referralDetails.personName)
-          expect(res.text).toContain('availability')
+          expect(res.text).toContain('No availability details added for')
+          expect(res.text).toContain('Add availability')
+        })
+    })
+  })
+
+  describe(`GET /referral-details/:id/location`, () => {
+    it('loads the referral details page with locations sub-nav', async () => {
+      accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
+
+      return request(app)
+        .get(`/referral-details/${randomUUID()}/location`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain(referralDetails.crn)
+          expect(res.text).toContain(referralDetails.personName)
+          expect(res.text).toContain('Location')
+        })
+    })
+  })
+
+  describe(`GET /referral-details/:id/additional-information`, () => {
+    it('loads the referral details page with additional information sub-nav', async () => {
+      return request(app)
+        .get(`/referral-details/${randomUUID()}/additional-information`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain(referralDetails.crn)
+          expect(res.text).toContain(referralDetails.personName)
+          expect(res.text).toContain('Additional Information')
+        })
+    })
+  })
+})
+
+describe(`Add Availability`, () => {
+  describe(`GET /referral/:referralId/add-availability`, () => {
+    it('loads the add availability page successfully', async () => {
+      const availability: Availability = availabilityFactory.defaultAvailability().build()
+      const personalDetails: PersonalDetails = personalDetailsFactory.build()
+
+      accreditedProgrammesManageAndDeliverService.getAvailability.mockResolvedValue(availability)
+      accreditedProgrammesManageAndDeliverService.getPersonalDetails.mockResolvedValue(personalDetails)
+
+      return request(app)
+        .get(`/referral/${randomUUID()}/add-availability`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain(`When is ${referralDetails.personName} available to attend a programme`)
+        })
+    })
+  })
+
+  describe(`POST /referral/:referralId/add-availability`, () => {
+    it('posts to the add availability page and redirects successfully', async () => {
+      const referralId = randomUUID()
+      const availability: Availability = availabilityFactory.defaultAvailability().build()
+      const personalDetails: PersonalDetails = personalDetailsFactory.build()
+
+      accreditedProgrammesManageAndDeliverService.getAvailability.mockResolvedValue(availability)
+      accreditedProgrammesManageAndDeliverService.getPersonalDetails.mockResolvedValue(personalDetails)
+
+      return request(app)
+        .post(`/referral/${referralId}/add-availability`)
+        .type('form')
+        .send({
+          'availability-checkboxes': ['Mondays-daytime', 'Sundays-evening'],
+          'other-availability-details-text-area': 'text',
+          'end-date': 'Yes',
+          date: '31/7/9225',
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain(`Redirecting to /referral-details/${referralId}/availability?detailsUpdated=true`)
         })
     })
   })
