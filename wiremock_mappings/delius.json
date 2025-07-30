@@ -82,15 +82,10 @@
           "crn": "X718255",
           "name": {
             "forename": "David",
-            "middleNames": "Alex",
             "surname": "Clarke"
           },
           "dateOfBirth": "1981-04-15",
           "age": 48,
-          "ethnicity": {
-            "code": "W1",
-            "description": "White"
-          },
           "sex": {
             "code": "M",
             "description": "Male"

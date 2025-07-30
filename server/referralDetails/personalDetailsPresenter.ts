@@ -55,6 +55,6 @@ export default class PersonalDetailsPresenter extends ReferralDetailsPresenter {
         key: 'Probation delivery unit',
         lines: [this.personalDetails.probationDeliveryUnit],
       },
-    ]
+    ].filter(item => item.lines.every(line => line !== null))
   }
 }
