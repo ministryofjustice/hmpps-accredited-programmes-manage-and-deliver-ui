@@ -78,7 +78,10 @@ export default AvailabilityFactory.define(({ sequence }) => ({
   availabilities: [
     {
       label: 'Mondays' as DailyAvailabilityModel['label'],
-      slots: [{ label: 'a', value: false }],
+      slots: [
+        { label: 'daytime', value: false },
+        { label: 'evening', value: false },
+      ],
     },
   ],
 }))
