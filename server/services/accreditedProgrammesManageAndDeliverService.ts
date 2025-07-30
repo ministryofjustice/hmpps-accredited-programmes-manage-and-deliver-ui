@@ -1,4 +1,11 @@
-import { Availability, CreateAvailability, ReferralCaseListItem, UpdateAvailability, PersonalDetails, ReferralDetails } from '@manage-and-deliver-api'
+import {
+  Availability,
+  CreateAvailability,
+  ReferralCaseListItem,
+  UpdateAvailability,
+  PersonalDetails,
+  ReferralDetails,
+} from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
 import type { HmppsAuthClient, RestClientBuilderWithoutToken } from '../data'

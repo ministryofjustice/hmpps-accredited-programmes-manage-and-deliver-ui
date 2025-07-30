@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { PersonalDetails, ReferralDetails } from '@manage-and-deliver-api'
+import { ReferralDetails } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
 import AddAvailabilityPresenter from './addAvailability/addAvailabilityPresenter'

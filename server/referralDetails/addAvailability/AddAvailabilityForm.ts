@@ -17,7 +17,6 @@ export default class AddAvailabilityForm {
       validations: AddAvailabilityForm.validations,
     })
 
-    // this.formatDates(this.request.body.date)
     const error = FormUtils.validationErrorFromResult(validationResult)
     if (error) {
       return {
