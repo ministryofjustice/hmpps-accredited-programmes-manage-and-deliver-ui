@@ -164,8 +164,8 @@ export default class ReferralDetailsPresenter {
       {
         key: 'Probation practitioner email address',
         lines: [`${this.referralDetails.probationPractitionerEmail}`],
-        valueLink: `<a href="mailto:${this.referralDetails.probationPractitionerEmail}">tom.saunders@justice.gov.uk</a>`,
+        valueLink: `<a href="mailto:${this.referralDetails.probationPractitionerEmail}">${this.referralDetails.probationPractitionerEmail}</a>`,
       },
-    ]
+    ].filter(item => item.lines.every(line => line !== null))
   }
 }
