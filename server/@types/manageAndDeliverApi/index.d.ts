@@ -6,6 +6,7 @@ type CreateAvailability = components['schemas']['CreateAvailability']
 type UpdateAvailability = components['schemas']['UpdateAvailability']
 type ReferralDetails = components['schemas']['ReferralDetails']
 type PersonalDetails = components['schemas']['PersonalDetails']
+type DailyAvailabilityModel = components['schemas']['DailyAvailabilityModel']
 
 export type {
   ReferralCaseListItem,
@@ -14,4 +15,5 @@ export type {
   UpdateAvailability,
   ReferralDetails,
   PersonalDetails,
+  DailyAvailabilityModel,
 }
