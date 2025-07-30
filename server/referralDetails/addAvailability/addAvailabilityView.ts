@@ -1,31 +1,95 @@
 import AddAvailabilityPresenter from './addAvailabilityPresenter'
+import ViewUtils from '../../utils/viewUtils'
 
 export default class AddAvailabilityView {
   constructor(private readonly presenter: AddAvailabilityPresenter) {}
 
   private checkboxArgs() {
     return {
-      idPrefix: 'notify-probation-practitioner',
-      name: 'notify-probation-practitioner',
+      idPrefix: 'availability-checkboxes',
+      name: 'availability-checkboxes',
+      classes: 'availability-checkboxes',
       fieldset: {
         legend: {
-          // html: `<label class='govuk-label govuk-label--m govuk-!-margin-bottom-4'> ${ViewUtils.escape(
-          //   this.presenter.questionnaire.notifyProbationPractitionerCheckboxQuestion.text
-          // )}</label>`,
-          // isPageHeading: false,
+          text: this.presenter.text.checkboxes.pageTitle,
+          isPageHeading: true,
+          classes: 'govuk-fieldset__legend--l',
         },
       },
-      // errorMessage: ViewUtils.govukErrorMessage(this.inputsPresenter.fields.notifyProbationPractitioner.errorMessage),
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.availabilityCheckboxes.errorMessage),
       hint: {
-        text: 'Select all that apply.',
+        text: 'Add any availability details you know. You can also add or update this later.',
+      },
+      items: this.presenter.generateCheckboxItems(),
+    }
+  }
+
+  private otherDetailsTextAreaArgs() {
+    return {
+      name: 'other-availability-details-text-area',
+      id: 'other-availability-details-text-area',
+      maxlength: '2000',
+      label: {
+        text: this.presenter.text.otherDetailsTextArea.label,
+        classes: 'govuk-label--m',
+      },
+      value: this.presenter.fields.otherDetailsTextArea.value,
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.otherDetailsTextArea.errorMessage),
+    }
+  }
+
+  private backLinkArgs() {
+    return {
+      text: 'Back',
+      href: this.presenter.backlinkUri,
+    }
+  }
+
+  private datePickerArgs() {
+    return {
+      id: 'date',
+      name: 'date',
+      label: {
+        text: 'Date',
+        classes: 'govuk-label govuk-label--s',
+      },
+      hint: {
+        text: 'For example, 17/5/2024.',
+      },
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.endDate.errorMessage),
+      value: this.presenter.fields.endDate.value,
+      minDate: new Date().toLocaleDateString('en-GB'),
+    }
+  }
+
+  private radioArgs(dateHtml: string) {
+    return {
+      name: 'end-date',
+      fieldset: {
+        legend: {
+          text: 'Do you want to add an end date for this availability?',
+          classes: 'govuk-fieldset__legend--m',
+          isPageHeading: false,
+        },
+      },
+      hint: {
+        text: 'If you know this availability will change, for example if someone is starting a new job or travelling, add the date it will change.',
       },
       items: [
-        ...this.presenter.checkboxItems,
         {
-          divider: 'or',
-          classes: 'govuk-fieldset__heading',
+          value: 'Yes',
+          text: 'Yes',
+          conditional: {
+            html: dateHtml,
+          },
+        },
+        {
+          value: 'No',
+          text: 'No',
         },
       ],
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.endDateRequired.errorMessage),
+      value: this.presenter.fields.endDateRequired.value,
     }
   }
 
@@ -35,6 +99,12 @@ export default class AddAvailabilityView {
       {
         presenter: this.presenter,
         checkboxArgs: this.checkboxArgs(),
+        otherDetailsTextAreaArgs: this.otherDetailsTextAreaArgs(),
+        radioArgs: this.radioArgs.bind(this),
+        datePickerArgs: this.datePickerArgs(),
+        errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
+        backLinkArgs: this.backLinkArgs(),
+        backlinkUri: this.presenter.backlinkUri,
       },
     ]
   }

@@ -1,10 +1,20 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{%- from "moj/components/alert/macro.njk" import mojAlert -%}
 
  <div>
-   {{ govukInsetText(importFromDeliusText) }}
-   <p>No availability details added for Alex River</p>
+   {% if showAvailability %}
+      {% if isAvailabilityUpdated %}
+       {{ mojAlert(successMessageArgs) }}
+      {% endif %}
+      {{ govukInsetText(importFromDeliusText) }}
+      <p>This is {{ presenter.details.personName }}'s general availability to attend an Accredited Programme.</p>
+      {{ govukTable(availabilityTableArgs) }}
+   {% else %}
+      <p>No availability details added for {{ presenter.details.personName }}</p>
+   {% endif %}
 
-<!--   {{ govukButton(availabilityButtonArgs) }}-->
+   {{ govukButton(availabilityButtonArgs) }}
 </div>

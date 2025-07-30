@@ -19,6 +19,8 @@ import ProgrammeHistoryPresenter from './programmeHistoryPresenter'
 import ProgrammeHistoryView from './programmeHistoryView'
 import SentenceInformationPresenter from './sentenceInformationPresenter'
 import SentenceInformationView from './sentenceInformationView'
+import AddAvailabilityForm from './addAvailability/AddAvailabilityForm'
+import { FormValidationError } from '../utils/formValidationError'
 
 export default class ReferralDetailsController {
   constructor(
@@ -40,6 +42,8 @@ export default class ReferralDetailsController {
     const presenter = new PersonalDetailsPresenter(sharedReferralDetailsData, subNavValue, id, personalDetails)
     const view = new PersonalDetailsView(presenter)
 
+    req.session.originPage = req.originalUrl
+
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
 
@@ -52,6 +56,8 @@ export default class ReferralDetailsController {
 
     const presenter = new ProgrammeHistoryPresenter(sharedReferralDetailsData, subNavValue, id)
     const view = new ProgrammeHistoryView(presenter)
+
+    req.session.originPage = req.originalUrl
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -66,6 +72,8 @@ export default class ReferralDetailsController {
     const presenter = new OffenceHistoryPresenter(sharedReferralDetailsData, subNavValue, id)
     const view = new OffenceHistoryView(presenter)
 
+    req.session.originPage = req.originalUrl
+
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
 
@@ -79,18 +87,31 @@ export default class ReferralDetailsController {
     const presenter = new SentenceInformationPresenter(sharedReferralDetailsData, subNavValue, id)
     const view = new SentenceInformationView(presenter)
 
+    req.session.originPage = req.originalUrl
+
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
 
   async showAvailabilityPage(req: Request, res: Response): Promise<void> {
     const { id } = req.params
     const { username } = req.user
+    const { detailsUpdated } = req.query
     const subNavValue = 'availability'
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
 
-    const presenter = new AvailabilityPresenter(sharedReferralDetailsData, subNavValue, id)
+    const availability = await this.accreditedProgrammesManageAndDeliverService.getAvailability(username, id)
+
+    const presenter = new AvailabilityPresenter(
+      sharedReferralDetailsData,
+      subNavValue,
+      id,
+      availability,
+      detailsUpdated === 'true',
+    )
     const view = new AvailabilityView(presenter)
+
+    req.session.originPage = req.originalUrl
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -104,6 +125,8 @@ export default class ReferralDetailsController {
 
     const presenter = new LocationPresenter(sharedReferralDetailsData, subNavValue, id)
     const view = new LocationView(presenter)
+
+    req.session.originPage = req.originalUrl
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -121,15 +144,55 @@ export default class ReferralDetailsController {
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
 
-  async showAddAvailabilityPage(req: Request, res: Response): Promise<void> {
-    const { username } = req.user
-    const { id } = req.params
-    const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
-    // const personalDetails = await this.accreditedProgrammesManageAndDeliverService.getPersonalDetails(username, id)
+  async updateAvailability(req: Request, res: Response): Promise<void> {
+    const { availabilityId } = req.params
+    await this.showAddAvailabilityPage(req, res, availabilityId)
+  }
 
-    const presenter = new AddAvailabilityPresenter()
+  async showAddAvailabilityPage(req: Request, res: Response, availabilityId: string = null): Promise<void> {
+    const { referralId } = req.params
+    const { username } = req.user
+    const sharedReferralDetailsData = await this.showReferralDetailsPage(referralId, username)
+
+    let formError: FormValidationError | null = null
+    let userInputData = null
+    if (req.method === 'POST') {
+      const data = await new AddAvailabilityForm(req, referralId).data()
+
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+        userInputData = req.body
+      } else {
+        if (availabilityId) {
+          await this.accreditedProgrammesManageAndDeliverService.updateAvailability(username, {
+            ...data.paramsForUpdate,
+            availabilityId,
+          })
+        } else {
+          await this.accreditedProgrammesManageAndDeliverService.addAvailability(username, data.paramsForUpdate)
+        }
+        return res.redirect(`/referral-details/${referralId}/availability?detailsUpdated=true`)
+      }
+    }
+
+    const availability = await this.accreditedProgrammesManageAndDeliverService.getAvailability(username, referralId)
+
+    const personalDetails = await this.accreditedProgrammesManageAndDeliverService.getPersonalDetails(
+      referralId,
+      username,
+    )
+
+    const presenter = new AddAvailabilityPresenter(
+      personalDetails,
+      formError,
+      userInputData,
+      req.session.originPage,
+      availability,
+      referralId,
+    )
     const view = new AddAvailabilityView(presenter)
 
-    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    return ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
 }

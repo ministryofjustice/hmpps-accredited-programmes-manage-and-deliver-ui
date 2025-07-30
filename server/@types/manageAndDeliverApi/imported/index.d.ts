@@ -226,13 +226,11 @@ export interface components {
        */
       referralId: string
       /**
-       * Format: date-time
        * @description Start date of the availability
        * @example 2025-07-10
        */
       startDate?: string
       /**
-       * Format: date-time
        * @description End date of the availability
        * @example 2025-07-20
        */
@@ -248,7 +246,6 @@ export interface components {
        */
       lastModifiedBy?: string
       /**
-       * Format: date-time
        * @description Timestamp when last modified
        * @example 2025-07-10T12:00:00
        */
@@ -278,13 +275,11 @@ export interface components {
        */
       referralId: string
       /**
-       * Format: date-time
        * @description Start date of the availability, Start date of the availability, will default to current date if no value is passed in
        * @example 2025-07-10
        */
       startDate?: string
       /**
-       * Format: date-time
        * @description End date of the availability
        * @example 2025-07-20
        */
@@ -304,13 +299,11 @@ export interface components {
        */
       referralId: string
       /**
-       * Format: date-time
        * @description Start date of the availability, Start date of the availability, will default to current date if no value is passed in
        * @example 2025-07-10
        */
       startDate?: string
       /**
-       * Format: date-time
        * @description End date of the availability
        * @example 2025-07-20
        */
@@ -345,7 +338,7 @@ export interface components {
        */
       interventionName: string
       /**
-       * Format: date-time
+       * Format: date
        * @description Timestamp of when this referral was created.
        * @example 11
        */

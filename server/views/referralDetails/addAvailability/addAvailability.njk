@@ -1,41 +1,61 @@
 {% extends "../../partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 {% from "govuk/components/header/macro.njk" import govukHeader %}
-
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{%- from "moj/components/date-picker/macro.njk" import mojDatePicker -%}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block main %}
-{{ govukPhaseBanner({
-  tag: {
-    text: "Prototype"
-  },
-  html: 'This is a new service - your <a class="govuk-link" href="#">feedback</a> will help us improve it.'
-}) }}
 {% block content %}
 <div class="govuk-width-container" id="main-content">
+  {{ govukBackLink(backLinkArgs) }}
   <div class="govuk-main-wrapper">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        {% if errorSummary !== null %}
+          {{ govukErrorSummary(errorSummary) }}
+        {% endif %}
 
+        <form method="post" novalidate action="{{ presenter.locationButtonFormAction }}">
+          <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            {{ govukCheckboxes(checkboxArgs) }}
 
-    {{ govukCheckboxes(checkboxArgs) }}
-<!--    <div class="govuk-grid-row">-->
-<!--    </div>-->
+            {{govukCharacterCount(otherDetailsTextAreaArgs) }}
 
-<!--      <div class="govuk-grid-row">-->
+          {% set dateHtml %}
+            {{ mojDatePicker(datePickerArgs) }}
+          {% endset -%}
 
-<!--      </div>-->
-<!--      <div class="govuk-grid-row">-->
+          {{ govukRadios(radioArgs(dateHtml)) }}
 
+            <div class="govuk-button-group">
+              {{ govukButton({ text: "Submit", preventDoubleClick: true }) }}
+              <a class="govuk-link" href={{ backlinkUri }}>Cancel</a>
+            </div>
 
-<!--      </div>-->
+        </form>
+      </div>
+    </div>
 
+  </div>
 </div>
 
 {% endblock %}
 {% endblock %}
+
+
+
+
+
+
+
 
 
 

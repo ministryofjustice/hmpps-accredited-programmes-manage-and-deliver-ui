@@ -9,6 +9,7 @@ import CaselistController from '../caselist/caselistController'
 export default function routes({ auditService, accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+  const post = (path: string, handler: RequestHandler): Router => router.post(path, asyncMiddleware(handler))
 
   const caselistController = new CaselistController(accreditedProgrammesManageAndDeliverService)
   const referralDetailsController = new ReferralDetailsController(accreditedProgrammesManageAndDeliverService)
@@ -55,8 +56,20 @@ export default function routes({ auditService, accreditedProgrammesManageAndDeli
     await referralDetailsController.showAdditionalInformationPage(req, res)
   })
 
-  get('/add-availability/:id', async (req, res, next) => {
+  get('/referral/:referralId/add-availability', async (req, res, next) => {
     await referralDetailsController.showAddAvailabilityPage(req, res)
+  })
+
+  post('/referral/:referralId/add-availability', async (req, res, next) => {
+    await referralDetailsController.showAddAvailabilityPage(req, res)
+  })
+
+  get('/referral/:referralId/update-availability/:availabilityId', async (req, res, next) => {
+    await referralDetailsController.updateAvailability(req, res)
+  })
+
+  post('/referral/:referralId/update-availability/:availabilityId', async (req, res, next) => {
+    await referralDetailsController.updateAvailability(req, res)
   })
 
   return router
