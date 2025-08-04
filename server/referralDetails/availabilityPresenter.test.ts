@@ -82,8 +82,6 @@ describe(`getAvailabilityTableArgs.`, () => {
     }
     const presenter = new AvailabilityPresenter(referralDetails, 'availability', '12345', availability)
     expect(presenter.getAvailabilityTableArgs()).toEqual({
-      caption: 'Dates and amounts',
-      captionClasses: 'govuk-table__caption--m',
       firstCellIsHeader: true,
       head: [{ text: 'Day' }, { text: 'Daytime' }, { text: 'Evening' }, { text: 'Nighttime' }],
       rows: [

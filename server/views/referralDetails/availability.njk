@@ -12,9 +12,15 @@
       {{ govukInsetText(importFromDeliusText) }}
       <p>This is {{ presenter.details.personName }}'s general availability to attend an Accredited Programme.</p>
       {{ govukTable(availabilityTableArgs) }}
+
+      {% if presenter.availability.otherDetails !== '' %}
+        <h3 class="govuk-heading-s">Other availability details</h3>
+        <p class="govuk-body">{{ presenter.availability.otherDetails }}</p>
+      {% endif %}
    {% else %}
       <p>No availability details added for {{ presenter.details.personName }}</p>
    {% endif %}
 
    {{ govukButton(availabilityButtonArgs) }}
-</div>
+
+ </div>

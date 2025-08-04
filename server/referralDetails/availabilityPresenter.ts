@@ -47,8 +47,6 @@ export default class AvailabilityPresenter extends ReferralDetailsPresenter {
     })
 
     return {
-      caption: 'Dates and amounts',
-      captionClasses: 'govuk-table__caption--m',
       firstCellIsHeader: true,
       head: headings,
       rows,
