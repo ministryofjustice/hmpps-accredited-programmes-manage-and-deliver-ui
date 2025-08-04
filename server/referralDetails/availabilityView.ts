@@ -12,6 +12,12 @@ export default class AvailabilityView {
     }
   }
 
+  get generalAvailabilityText(): string {
+    return this.presenter.availability.endDate
+      ? `This is ${this.presenter.details.personName}'s general availability until ${DateUtils.formattedDate(this.presenter.availability.endDate)}.`
+      : `This is ${this.presenter.details.personName}'s general availability to attend an Accredited Programme.`
+  }
+
   get availabilityButtonArgs(): ButtonArgs {
     return {
       text: this.presenter.availability.id ? 'Change availability' : 'Add availability',
@@ -42,6 +48,7 @@ export default class AvailabilityView {
         showAvailability: this.presenter.showAvailability,
         isAvailabilityUpdated: this.presenter.isAvailabilityUpdated,
         successMessageArgs: this.successMessageArgs(),
+        generalAvailabilityText: this.generalAvailabilityText,
       },
     ]
   }
