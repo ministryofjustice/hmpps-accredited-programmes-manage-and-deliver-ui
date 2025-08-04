@@ -38,6 +38,30 @@ export default class AddAvailabilityPresenter {
   }
 
   generateCheckboxItems() {
+    // Remember the values selected if the page is re-created after form errors
+    if (this.fields.availabilityCheckboxes.value !== '') {
+      const selections = this.fields.availabilityCheckboxes.value.split(',').map(s => s.trim())
+      selections.forEach(selection => {
+        const [dayLabel, slotLabel] = selection.split('-')
+
+        // Find the matching day
+        const dayIndex = this.availability.availabilities.findIndex(
+          day => day.label.toLowerCase() === dayLabel.toLowerCase(),
+        )
+
+        if (dayIndex !== -1) {
+          // Find the matching slot within that day
+          const slotIndex = this.availability.availabilities[dayIndex].slots.findIndex(
+            slot => slot.label.toLowerCase() === slotLabel.toLowerCase(),
+          )
+
+          if (slotIndex !== -1) {
+            // Set the value to true
+            this.availability.availabilities[dayIndex].slots[slotIndex].value = true
+          }
+        }
+      })
+    }
     const checkboxes: { divider?: string; value?: string; text?: string; checked?: boolean }[] = []
     this.availability.availabilities.forEach(day => {
       checkboxes.push({
