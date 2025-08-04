@@ -10,7 +10,7 @@
        {{ mojAlert(successMessageArgs) }}
       {% endif %}
       {{ govukInsetText(importFromDeliusText) }}
-      <p>This is {{ presenter.details.personName }}'s general availability to attend an Accredited Programme.</p>
+      <p>{{ generalAvailabilityText }}</p>
       {{ govukTable(availabilityTableArgs) }}
 
       {% if presenter.availability.otherDetails !== '' %}
