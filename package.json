@@ -106,6 +106,7 @@
     "timezone-support": "^3.1.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.9.0",
     "@jgoz/esbuild-plugin-typecheck": "^4.0.3",
     "@ministryofjustice/eslint-config-hmpps": "^0.0.2",
     "@tsconfig/node22": "^22.0.2",
@@ -122,9 +123,9 @@
     "@types/passport": "^1.0.17",
     "@types/passport-oauth2": "^1.8.0",
     "@types/superagent": "^8.1.9",
-    "@typescript-eslint/eslint-plugin": "^8.38.0",
-    "@typescript-eslint/parser": "^8.38.0",
     "@types/supertest": "^6.0.3",
+    "@typescript-eslint/eslint-plugin": "^8.39.0",
+    "@typescript-eslint/parser": "^8.39.0",
     "audit-ci": "^7.1.0",
     "aws-sdk-client-mock": "^4.1.0",
     "cheerio": "^1.1.2",
@@ -144,7 +145,6 @@
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-no-only-tests": "^3.3.0",
     "eslint-plugin-prettier": "^5.5.3",
-    "@faker-js/faker": "^9.9.0",
     "fishery": "^2.3.1",
     "glob": "^11.0.3",
     "husky": "^9.1.7",
@@ -162,7 +162,7 @@
     "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2",
-    "typescript-eslint": "^8.38.0"
+    "typescript-eslint": "^8.39.0"
   },
   "overrides": {
     "@jgoz/esbuild-plugin-typecheck": {
