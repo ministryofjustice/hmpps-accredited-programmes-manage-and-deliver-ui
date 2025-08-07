@@ -1,4 +1,4 @@
-import { Availability, PersonalDetails, ReferralDetails } from '@manage-and-deliver-api'
+import { Availability, OffenceHistory, PersonalDetails, ReferralDetails } from '@manage-and-deliver-api'
 import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import request from 'supertest'
@@ -7,6 +7,7 @@ import AccreditedProgrammesManageAndDeliverService from '../services/accreditedP
 import personalDetailsFactory from '../testutils/factories/personalDetailsFactory'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 import availabilityFactory from '../testutils/factories/availabilityFactory'
+import offenceHistoryFactory from '../testutils/factories/offenceHistoryFactory'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
@@ -63,13 +64,15 @@ describe('referral-details', () => {
 
   describe(`GET /referral-details/:id/offence-history`, () => {
     it('loads the referral details page with offence history sub-nav', async () => {
+      const offenceHistory: OffenceHistory = offenceHistoryFactory.build()
+      accreditedProgrammesManageAndDeliverService.getOffenceHistory.mockResolvedValue(offenceHistory)
       return request(app)
         .get(`/referral-details/${randomUUID()}/offence-history`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(referralDetails.crn)
           expect(res.text).toContain(referralDetails.personName)
-          expect(res.text).toContain('offence-history')
+          expect(res.text).toContain('Absconding from lawful custody')
         })
     })
   })

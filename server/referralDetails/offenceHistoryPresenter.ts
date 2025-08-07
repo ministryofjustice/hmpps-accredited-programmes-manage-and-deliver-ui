@@ -1,12 +1,23 @@
 import { ReferralDetails } from '@manage-and-deliver-api'
 import { SummaryListItem } from '../utils/summaryList'
 import ReferralDetailsPresenter from './referralDetailsPresenter'
+import DateUtils from '../utils/dateUtils'
 
 export default class OffenceHistoryPresenter extends ReferralDetailsPresenter {
   constructor(
     readonly details: ReferralDetails,
     readonly subNavValue: string,
     readonly id: string,
+    readonly offenceHistory: {
+      mainOffence: { offence: string; offenceCode: string; category: string; offenceDate: string; categoryCode: string }
+      additionalOffences: {
+        offence: string
+        offenceCode: string
+        category: string
+        offenceDate: string
+        categoryCode: string
+      }[]
+    },
   ) {
     super(details, subNavValue, id)
   }
@@ -18,51 +29,36 @@ export default class OffenceHistoryPresenter extends ReferralDetailsPresenter {
       summary: [
         {
           key: 'Offence',
-          lines: ['Publishing or causing to be published a tobacco advertisement - 09144'],
+          lines: [`${this.offenceHistory.mainOffence.offence} - ${this.offenceHistory.mainOffence.offenceCode}`],
         },
         {
           key: 'Category',
-          lines: ['Public Health Offences'],
+          lines: [this.offenceHistory.mainOffence.category],
         },
         {
           key: 'Offence date',
-          lines: ['11 June 2020'],
+          lines: [DateUtils.formattedDate(new Date(this.offenceHistory.mainOffence.offenceDate))],
         },
       ],
     })
-    summaries.push({
-      title: 'Additional offence (08000)',
-      summary: [
-        {
-          key: 'Offence',
-          lines: ['Absconding from lawful custody - 08000'],
-        },
-        {
-          key: 'Category',
-          lines: ['Absconding from lawful custody'],
-        },
-        {
-          key: 'Offence date',
-          lines: ['18 January 2013'],
-        },
-      ],
-    })
-    summaries.push({
-      title: 'Additional offence (08000)',
-      summary: [
-        {
-          key: 'Offence',
-          lines: ['\tClass unspecified - permitting premises to be used - 09329'],
-        },
-        {
-          key: 'Category',
-          lines: ['Permitting premises to be used for unlawful (drug-related) purposes'],
-        },
-        {
-          key: 'Offence date',
-          lines: ['23 September 2000'],
-        },
-      ],
+    this.offenceHistory.additionalOffences.forEach(offence => {
+      summaries.push({
+        title: `Additional offence (${offence.offenceCode})`,
+        summary: [
+          {
+            key: 'Offence',
+            lines: [`${offence.offence} - ${offence.offenceCode}`],
+          },
+          {
+            key: 'Category',
+            lines: [offence.category],
+          },
+          {
+            key: 'Offence date',
+            lines: [DateUtils.formattedDate(new Date(offence.offenceDate))],
+          },
+        ],
+      })
     })
     return summaries
   }

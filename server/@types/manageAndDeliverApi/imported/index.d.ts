@@ -104,6 +104,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/referral-details/{id}/offence-history': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Retrieve offence history for a referral */
+    get: operations['getOffenceHistoryByReferralId']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/queue-admin/get-dlq-messages/{dlqName}': {
     parameters: {
       query?: never
@@ -359,6 +376,12 @@ export interface components {
        * @example tom.saunders@justice.gov.uk
        */
       probationPractitionerEmail: string
+      /**
+       * @description The offence cohort this referral is classified as.
+       * @example SEXUAL_OFFENCE
+       * @enum {string}
+       */
+      cohort: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
     }
     PersonalDetails: {
       /**
@@ -395,8 +418,9 @@ export interface components {
       /**
        * @description The setting where the referral will be delivered.
        * @example Community
+       * @enum {string}
        */
-      setting: string
+      setting: 'COMMUNITY' | 'CUSTODY' | 'REMAND' | 'PRE_RELEASE'
       /**
        * @description The probation delivery unit responsible for this referral.
        * @example North London PDU
@@ -408,6 +432,42 @@ export interface components {
        * @example 1
        */
       dateRetrieved: string
+    }
+    /** @description Details of an offence committed by an offender */
+    Offence: {
+      /**
+       * Format: date
+       * @description The date when the offence was committed
+       * @example 11
+       */
+      offenceDate: string
+      /**
+       * @description The description of the offence
+       * @example Theft
+       */
+      offence: string
+      /**
+       * @description The code identifying the offence
+       * @example 68
+       */
+      offenceCode: string
+      /**
+       * @description The category of the offence
+       * @example Theft and burglary offences
+       */
+      category: string
+      /**
+       * @description The code identifying the offence category
+       * @example 12
+       */
+      categoryCode: string
+    }
+    /** @description Represents an individual's history of offences, including their main offence and any additional offences */
+    OffenceHistory: {
+      /** @description The primary offence committed */
+      mainOffence: components['schemas']['Offence']
+      /** @description List of additional or secondary offences */
+      additionalOffences: components['schemas']['Offence'][]
     }
     DlqMessage: {
       body: {
@@ -467,6 +527,35 @@ export interface components {
        */
       aggressiveControllingBehaviour?: number
     }
+    IndividualRiskScores: {
+      /**
+       * @description The Offender Group Reconviction Scale 3 (OGRS3) risk level
+       * @example Medium
+       */
+      ogrs3Risk?: string
+      /**
+       * @description The OVP(OASys Violence Predictor) Risk level
+       * @example High
+       */
+      ovpRisk?: string
+      /**
+       * @description ospDc - OASys Sexual Reconviction Predictor Direct Contact
+       * @example 0
+       */
+      ospDc?: string
+      /**
+       * @description OASys Sexual Reconviction Predictor Indecent Images of Children
+       * @example 1
+       */
+      ospIic?: string
+      /**
+       * @description rsr - Risk of Serious Recidivism
+       * @example 5
+       */
+      rsr?: string
+      /** @description SARA (Spousal Assault Risk Assessment) related risk score */
+      sara?: components['schemas']['Sara']
+    }
     IndividualSelfManagementScores: {
       /**
        * Format: int32
@@ -513,11 +602,47 @@ export interface components {
       overallIntensity: 'HIGH' | 'MODERATE' | 'ALTERNATIVE_PATHWAY' | 'MISSING_INFORMATION'
       /** @description Detailed scores across different assessment domains */
       domainScores: components['schemas']['DomainScores']
+      /** @example riskScores */
+      RiskScore: components['schemas']['RiskScore']
+      /** @example ['impulsivity is missing '] */
+      validationErrors: string[]
     }
     RelationshipDomainScore: {
       /** @enum {string} */
       overallRelationshipDomainLevel?: 'HIGH_NEED' | 'MEDIUM_NEED' | 'LOW_NEED'
       individualRelationshipScores: components['schemas']['IndividualRelationshipScores']
+    }
+    RiskScore: {
+      /**
+       * @description classification associated with PNI Eg. HIGH_RISK, MEDIUM_RISK, LOW_RISK
+       * @example High Risk
+       */
+      classification: string
+      /** @example 2 */
+      IndividualRiskScores: components['schemas']['IndividualRiskScores']
+    }
+    Sara: {
+      /**
+       * @description The highest of what is being returned based on saraRiskOfViolenceTowardsPartner and saraRiskOfViolenceTowardsOthers
+       * @example LOW
+       * @enum {string}
+       */
+      highestRisk?: 'NOT_APPLICABLE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH'
+      /**
+       * @description Risk of violence towards partner
+       * @example LOW
+       */
+      saraRiskOfViolenceTowardsPartner?: string
+      /**
+       * @description Risk of violence towards others
+       * @example LOW
+       */
+      saraRiskOfViolenceTowardsOthers?: string
+      /**
+       * @description Assessment ID relevant to the SARA version of the assessment
+       * @example 2512235167
+       */
+      assessmentId?: string
     }
     SelfManagementDomainScore: {
       /** @enum {string} */
@@ -843,6 +968,65 @@ export interface operations {
         }
       }
       /** @description The referral does not exist */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getOffenceHistoryByReferralId: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id (UUID) of a referral */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Information about the offence history */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['OffenceHistory']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access this referral. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The offence history for the referral does not exist */
       404: {
         headers: {
           [name: string]: unknown
