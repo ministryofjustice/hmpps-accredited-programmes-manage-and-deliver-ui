@@ -221,14 +221,3 @@
     }
   ]
 }
-
-//{...
-//  "request": {
-//    "method": "POST",
-//    "urlPattern":"/template.*",
-//    "queryParameters" : {
-//      "param1" : {
-//        "matches" : "(\\btest1\\b|\\btest2\\b|\\test3\\b)"
-//      }
-//    }
-//  },...
