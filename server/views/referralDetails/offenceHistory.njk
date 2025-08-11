@@ -2,7 +2,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 <div>
-  {{ govukInsetText(importFromDeliusText) }}
   {% for item in offenceHistorySummaries %}
     {{ govukSummaryList(item) }}
   {% endfor %}
