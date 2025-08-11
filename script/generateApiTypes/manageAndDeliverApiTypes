@@ -3,7 +3,7 @@
 # script/manageAndDeliverApiTypes: Generate types from the Manage and Delivery API.
 #
 
-#npx openapi-typescript https://accredited-programmes-manage-and-deliver-api-dev.hmpps.service.justice.gov.uk/v3/api-docs --output ./server/@types/manageAndDeliverApi/imported/index.d.ts
+npx openapi-typescript https://accredited-programmes-manage-and-deliver-api-dev.hmpps.service.justice.gov.uk/v3/api-docs --output ./server/@types/manageAndDeliverApi/imported/index.d.ts
 
 # Uncomment to point to local api container for types (useful if doing implementing full feature work).
- npx openapi-typescript http://localhost:8080/v3/api-docs --output ./server/@types/manageAndDeliverApi/imported/index.d.ts
+# npx openapi-typescript http://localhost:8080/v3/api-docs --output ./server/@types/manageAndDeliverApi/imported/index.d.ts
