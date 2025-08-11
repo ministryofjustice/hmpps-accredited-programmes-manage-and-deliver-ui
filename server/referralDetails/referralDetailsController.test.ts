@@ -65,6 +65,7 @@ describe('referral-details', () => {
   describe(`GET /referral-details/:id/offence-history`, () => {
     it('loads the referral details page with offence history sub-nav', async () => {
       const offenceHistory: OffenceHistory = offenceHistoryFactory.build()
+      offenceHistory.mainOffence.offence = 'Absconding from lawful custody'
       accreditedProgrammesManageAndDeliverService.getOffenceHistory.mockResolvedValue(offenceHistory)
       return request(app)
         .get(`/referral-details/${randomUUID()}/offence-history`)

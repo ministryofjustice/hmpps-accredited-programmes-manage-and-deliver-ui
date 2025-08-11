@@ -13,9 +13,9 @@ export default OffenceHistoryFactory.define(() => ({
   },
   additionalOffences: [
     {
-      offence: 'Absconding from lawful custody',
+      offence: 'An offence',
       offenceCode: '08000',
-      category: 'Absconding from lawful custody',
+      category: 'An offence',
       offenceDate: '2013-01-13',
       categoryCode: '02',
     },
