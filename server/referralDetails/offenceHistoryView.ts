@@ -1,4 +1,4 @@
-import { InsetTextArgs, SummaryListArgs } from '../utils/govukFrontendTypes'
+import { SummaryListArgs } from '../utils/govukFrontendTypes'
 import ViewUtils from '../utils/viewUtils'
 import OffenceHistoryPresenter from './offenceHistoryPresenter'
 
