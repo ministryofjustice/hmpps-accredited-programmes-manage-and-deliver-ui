@@ -9,7 +9,13 @@ export default class OffenceHistoryPresenter extends ReferralDetailsPresenter {
     readonly subNavValue: string,
     readonly id: string,
     readonly offenceHistory: {
-      mainOffence: { offence: string; offenceCode: string; category: string; offenceDate: string; categoryCode: string }
+      mainOffence: {
+        offence: string
+        offenceCode: string
+        category: string
+        offenceDate: string
+        categoryCode: string
+      }
       additionalOffences: {
         offence: string
         offenceCode: string
