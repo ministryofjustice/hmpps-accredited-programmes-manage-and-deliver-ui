@@ -5,6 +5,7 @@ import {
   UpdateAvailability,
   PersonalDetails,
   ReferralDetails,
+  OffenceHistory,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -109,5 +110,13 @@ export default class AccreditedProgrammesManageAndDeliverService {
       headers: { Accept: 'application/json' },
       data: updateAvailabilityParams,
     })) as Availability
+  }
+
+  async getOffenceHistory(username: Express.User['username'], referralId: string): Promise<OffenceHistory> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/referral-details/${referralId}/offence-history`,
+      headers: { Accept: 'application/json' },
+    })) as OffenceHistory
   }
 }

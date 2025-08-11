@@ -68,8 +68,9 @@ export default class ReferralDetailsController {
     const subNavValue = 'offenceHistory'
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
+    const offenceHistory = await this.accreditedProgrammesManageAndDeliverService.getOffenceHistory(username, id)
 
-    const presenter = new OffenceHistoryPresenter(sharedReferralDetailsData, subNavValue, id)
+    const presenter = new OffenceHistoryPresenter(sharedReferralDetailsData, subNavValue, id, offenceHistory)
     const view = new OffenceHistoryView(presenter)
 
     req.session.originPage = req.originalUrl

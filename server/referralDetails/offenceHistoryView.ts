@@ -1,16 +1,9 @@
-import { InsetTextArgs, SummaryListArgs } from '../utils/govukFrontendTypes'
+import { SummaryListArgs } from '../utils/govukFrontendTypes'
 import ViewUtils from '../utils/viewUtils'
 import OffenceHistoryPresenter from './offenceHistoryPresenter'
 
 export default class OffenceHistoryView {
   constructor(private readonly presenter: OffenceHistoryPresenter) {}
-
-  get importFromDeliusText(): InsetTextArgs {
-    return {
-      text: 'Imported from NDelius on 1 August 2023, last updated on 4 January 2023',
-      classes: 'govuk-!-margin-top-0',
-    }
-  }
 
   get offenceHistorySummaries(): SummaryListArgs[] {
     const summaries: SummaryListArgs[] = []
@@ -26,7 +19,6 @@ export default class OffenceHistoryView {
       {
         presenter: this.presenter,
         offenceHistorySummaries: this.offenceHistorySummaries,
-        importFromDeliusText: this.importFromDeliusText,
       },
     ]
   }

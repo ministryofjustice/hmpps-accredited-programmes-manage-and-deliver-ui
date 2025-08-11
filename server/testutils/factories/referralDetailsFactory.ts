@@ -13,4 +13,5 @@ export default ReferralDetailsFactory.define(({ sequence }) => ({
   dateOfBirth: '15 March 1985',
   probationPractitionerName: 'Prob Officer',
   probationPractitionerEmail: 'prob.officer@example.com',
+  cohort: 'GENERAL_OFFENCE' as 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE',
 }))

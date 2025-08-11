@@ -12,6 +12,7 @@ describe(`getAvailabilityTableArgs.`, () => {
       dateOfBirth: '1990-02-02',
       probationPractitionerName: 'Dave Davies',
       probationPractitionerEmail: 'dave.davies@moj.com',
+      cohort: 'GENERAL_OFFENCE',
     }
     const availability: Availability = {
       id: '533f391d-a4dd-4a3f-b53d-e8ff2ab5db86',
