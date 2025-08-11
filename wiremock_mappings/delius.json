@@ -149,6 +149,86 @@
           ]
         }
       }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPathPattern": "/case/.*/sentence/.*"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "description": "ORA Community Order (6 Months)",
+          "startDate": "2024-09-24",
+          "expectedEndDate": "2025-03-23",
+          "custodial": false,
+          "licenceConditions": [],
+          "requirements": [
+            {
+              "code": "RARREQ",
+              "description": "Rehabilitation Activity Requirement (RAR)"
+            },
+            {
+              "code": "724",
+              "description": "Building Skills for Recovery (BSR)"
+            },
+            {
+              "code": "CSPE06",
+              "description": "Curfew"
+            }
+          ],
+          "postSentenceSupervisionRequirements": []
+        },
+        "transformers": ["response-template"]
+      }
+    },
+
+    {
+      "request": {
+        "method": "GET",
+        "urlPathPattern": "/case/X718250/sentence/.*"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "description": "Adult Custody < 12m (11 Months)",
+          "startDate": "2025-06-19",
+          "expectedEndDate": "2026-05-18",
+          "custodial": true,
+          "releaseType": "Adult Licence",
+          "licenceConditions": [
+            {
+              "code": "LC77",
+              "description": "Building Better Relationships (BBR)"
+            }
+          ],
+          "requirements": [],
+          "postSentenceSupervisionRequirements": [
+            {
+              "code": "TMP13",
+              "description": "Women"
+            }
+          ]
+        },
+        "transformers": ["response-template"]
+      }
     }
   ]
 }
+
+//{...
+//  "request": {
+//    "method": "POST",
+//    "urlPattern":"/template.*",
+//    "queryParameters" : {
+//      "param1" : {
+//        "matches" : "(\\btest1\\b|\\btest2\\b|\\test3\\b)"
+//      }
+//    }
+//  },...

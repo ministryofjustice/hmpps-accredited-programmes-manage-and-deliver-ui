@@ -7,6 +7,7 @@ type UpdateAvailability = components['schemas']['UpdateAvailability']
 type ReferralDetails = components['schemas']['ReferralDetails']
 type PersonalDetails = components['schemas']['PersonalDetails']
 type DailyAvailabilityModel = components['schemas']['DailyAvailabilityModel']
+type SentenceInformation = components['schemas']['SentenceInformation']
 type OffenceHistory = components['schemas']['OffenceHistory']
 
 export type {
@@ -17,5 +18,6 @@ export type {
   ReferralDetails,
   PersonalDetails,
   DailyAvailabilityModel,
+  SentenceInformation,
   OffenceHistory,
 }

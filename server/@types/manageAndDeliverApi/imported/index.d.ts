@@ -87,6 +87,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/referral-details/{id}/sentence-information': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Retrieve sentence information for a referral */
+    get: operations['getSentenceInformationByReferralId']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/referral-details/{id}/personal-details': {
     parameters: {
       query?: never
@@ -383,6 +400,68 @@ export interface components {
        */
       cohort: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
     }
+    CodeDescription: {
+      code: string
+      description: string
+    }
+    SentenceInformation: {
+      /**
+       * @description The type of sentence.
+       * @example ORA community order
+       */
+      sentenceType?: string
+      /**
+       * @description The release type.
+       * @example Released on licence
+       */
+      releaseType?: string
+      /**
+       * @description A list of the licence conditions.
+       * @example ['Accredited programme: Building Choices']
+       */
+      licenceConditions?: components['schemas']['CodeDescription'][]
+      /**
+       * Format: date
+       * @description The end date of the licence.
+       * @example 10
+       */
+      licenceEndDate?: string
+      /**
+       * Format: date
+       * @description The start date of the post supervision.
+       * @example 10
+       */
+      postSentenceSupervisionStartDate?: string
+      /**
+       * Format: date
+       * @description The end date of the post supervision.
+       * @example 10
+       */
+      postSentenceSupervisionEndDate?: string
+      /**
+       * Format: date
+       * @description The date two thirds of the way to the end of the sentence.
+       * @example 10
+       */
+      twoThirdsPoint?: string
+      /**
+       * @description A list of the order requirements.
+       * @example ['Accredited programme: Building Choices']
+       */
+      orderRequirements?: components['schemas']['CodeDescription'][]
+      /**
+       * Format: date
+       * @description The end date of the order.
+       * @example 10
+       */
+      orderEndDate?: string
+      /**
+       * Format: date
+       * @description The date this data was fetched from nDelius.
+       * @example 1
+       */
+      dateRetrieved: string
+    }
     PersonalDetails: {
       /**
        * @description The crn associated with this referral.
@@ -668,6 +747,7 @@ export interface components {
       crn: string
       personName: string
       referralStatus: string
+      cohort: string
     }
     Pageable: {
       /** Format: int32 */
@@ -879,6 +959,65 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ReferralDetails']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access this referral. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The referral does not exist */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getSentenceInformationByReferralId: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id (UUID) of a referral */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Information about the sentence */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['SentenceInformation']
         }
       }
       /** @description Bad Request */
@@ -1133,7 +1272,10 @@ export interface operations {
     parameters: {
       query: {
         pageable: components['schemas']['Pageable']
+        /** @description CRN or persons name */
         crnOrPersonName?: string
+        /** @description Filter by the cohort of the referral Eg: SEXUAL_OFFENCE or GENERAL_OFFENCE */
+        cohort?: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
       }
       header?: never
       path: {

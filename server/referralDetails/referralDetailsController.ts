@@ -84,40 +84,10 @@ export default class ReferralDetailsController {
     const subNavValue = 'sentenceInformation'
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
-    // const sentenceInformation = await this.accreditedProgrammesManageAndDeliverService.getSentenceInformation(username, id)
-
-    const sentenceInformation = {
-      description: 'string',
-      startDate: '2025-07-31',
-      expectedEndDate: '2025-07-31',
-      licenceExpiryDate: '2025-07-31',
-      postSentenceSupervisionEndDate: '2025-07-31',
-      twoThirdsSupervisionDate: '2025-07-31',
-      custodial: true,
-      releaseType: 'string',
-      licenceConditions: [
-        {
-          code: 'string',
-          description: 'string',
-        },
-        {
-          code: 'string 2',
-          description: 'string 2',
-        },
-      ],
-      requirements: [
-        {
-          code: 'string',
-          description: 'string',
-        },
-      ],
-      postSentenceSupervisionRequirements: [
-        {
-          code: 'string',
-          description: 'string',
-        },
-      ],
-    }
+    const sentenceInformation = await this.accreditedProgrammesManageAndDeliverService.getSentenceInformation(
+      username,
+      id,
+    )
 
     const presenter = new SentenceInformationPresenter(sharedReferralDetailsData, subNavValue, id, sentenceInformation)
     const view = new SentenceInformationView(presenter)
