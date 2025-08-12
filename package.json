@@ -74,7 +74,7 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.859.0",
+    "@aws-sdk/client-sqs": "^3.862.0",
     "@ministryofjustice/frontend": "^5.1.5",
     "@ministryofjustice/hmpps-auth-clients": "^0.0.1",
     "@ministryofjustice/hmpps-monitoring": "^0.0.1",
@@ -144,7 +144,7 @@
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-no-only-tests": "^3.3.0",
-    "eslint-plugin-prettier": "^5.5.3",
+    "eslint-plugin-prettier": "^5.5.4",
     "fishery": "^2.3.1",
     "glob": "^11.0.3",
     "husky": "^9.1.7",
