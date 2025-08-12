@@ -95,7 +95,7 @@ describe('referral-details', () => {
         .expect(res => {
           expect(res.text).toContain(referralDetails.crn)
           expect(res.text).toContain(referralDetails.personName)
-          expect(res.text).toContain('Sentence')
+          expect(res.text).toContain('Sentence details')
         })
     })
   })

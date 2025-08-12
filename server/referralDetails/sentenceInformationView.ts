@@ -7,10 +7,7 @@ export default class SentenceInformationView {
 
   get sentenceDetailsSummary(): SummaryListArgs {
     return {
-      ...ViewUtils.summaryListArgsWithSummaryCard(
-        this.presenter.sentenceInformationSummaryList(),
-        'Sentence Information',
-      ),
+      ...ViewUtils.summaryListArgsWithSummaryCard(this.presenter.sentenceInformationSummaryList(), 'Sentence details'),
     }
   }
 
