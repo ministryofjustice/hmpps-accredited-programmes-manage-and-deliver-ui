@@ -22,8 +22,6 @@ export default class PersonalDetailsPresenter extends ReferralDetailsPresenter {
   }
 
   personalDetailsSummaryList(): SummaryListItem[] {
-    const ageMonths = DateUtils.ageMonths(this.personalDetails.dateOfBirth)
-    const ageMonthsStr = ageMonths === 1 ? `, ${ageMonths} month` : `, ${ageMonths} months`
     return [
       {
         key: 'Name',
@@ -35,9 +33,7 @@ export default class PersonalDetailsPresenter extends ReferralDetailsPresenter {
       },
       {
         key: 'Date of birth',
-        lines: [
-          `${DateUtils.formattedDate(this.personalDetails.dateOfBirth)} (${this.personalDetails.age} years${ageMonths === 0 ? '' : ageMonthsStr} old)`,
-        ],
+        lines: [`${DateUtils.formattedDate(this.personalDetails.dateOfBirth)} (${this.personalDetails.age} old)`],
       },
       {
         key: 'Ethnicity',
