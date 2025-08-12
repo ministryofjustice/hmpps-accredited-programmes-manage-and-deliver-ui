@@ -15,9 +15,7 @@ export default function routes({ auditService, accreditedProgrammesManageAndDeli
   const referralDetailsController = new ReferralDetailsController(accreditedProgrammesManageAndDeliverService)
 
   get('/', async (req, res, next) => {
-    await auditService.logPageView(Page.EXAMPLE_PAGE, { who: res.locals.user.username, correlationId: req.id })
-
-    return res.render('pages/index')
+    await caselistController.showOpenCaselist(req, res)
   })
 
   get('/pdu/open-referrals', async (req, res, next) => {
