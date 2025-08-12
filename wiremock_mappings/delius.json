@@ -85,7 +85,7 @@
             "surname": "Clarke"
           },
           "dateOfBirth": "1981-04-15",
-          "age": 48,
+          "age": "48 years 3 months",
           "sex": {
             "code": "M",
             "description": "Male"
