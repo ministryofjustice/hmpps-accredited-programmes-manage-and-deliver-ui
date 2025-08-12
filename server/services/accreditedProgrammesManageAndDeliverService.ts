@@ -5,6 +5,7 @@ import {
   UpdateAvailability,
   PersonalDetails,
   ReferralDetails,
+  SentenceInformation,
   OffenceHistory,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
@@ -86,6 +87,14 @@ export default class AccreditedProgrammesManageAndDeliverService {
       path: `/availability/referral/${referralId}`,
       headers: { Accept: 'application/json' },
     })) as Availability
+  }
+
+  async getSentenceInformation(username: Express.User['username'], referralId: string): Promise<SentenceInformation> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/referral-details/${referralId}/sentence-information`,
+      headers: { Accept: 'application/json' },
+    })) as SentenceInformation
   }
 
   async addAvailability(

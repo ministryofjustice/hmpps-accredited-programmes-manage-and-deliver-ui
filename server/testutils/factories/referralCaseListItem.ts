@@ -8,4 +8,5 @@ export default ReferralCaseListItemFactory.define(({ sequence }) => ({
   crn: '1232314',
   personName: 'feksoipgjes',
   referralStatus: 'fjewioghjewoi',
+  cohort: 'GENERAL_OFFENCE',
 }))

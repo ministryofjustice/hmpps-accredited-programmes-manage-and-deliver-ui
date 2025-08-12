@@ -1,4 +1,10 @@
-import { Availability, OffenceHistory, PersonalDetails, ReferralDetails } from '@manage-and-deliver-api'
+import {
+  Availability,
+  OffenceHistory,
+  PersonalDetails,
+  ReferralDetails,
+  SentenceInformation,
+} from '@manage-and-deliver-api'
 import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import request from 'supertest'
@@ -7,6 +13,7 @@ import AccreditedProgrammesManageAndDeliverService from '../services/accreditedP
 import personalDetailsFactory from '../testutils/factories/personalDetailsFactory'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 import availabilityFactory from '../testutils/factories/availabilityFactory'
+import sentenceInformationFactory from '../testutils/factories/sentenceInformationFactory'
 import offenceHistoryFactory from '../testutils/factories/offenceHistoryFactory'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
@@ -80,13 +87,15 @@ describe('referral-details', () => {
 
   describe(`GET /referral-details/:id/sentence-information`, () => {
     it('loads the referral details page with sentence information sub-nav', async () => {
+      const sentenceInformation: SentenceInformation = sentenceInformationFactory.licence().build()
+      accreditedProgrammesManageAndDeliverService.getSentenceInformation.mockResolvedValue(sentenceInformation)
       return request(app)
         .get(`/referral-details/${randomUUID()}/sentence-information`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(referralDetails.crn)
           expect(res.text).toContain(referralDetails.personName)
-          expect(res.text).toContain('sentence-information')
+          expect(res.text).toContain('Sentence details')
         })
     })
   })

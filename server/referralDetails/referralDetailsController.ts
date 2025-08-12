@@ -84,8 +84,12 @@ export default class ReferralDetailsController {
     const subNavValue = 'sentenceInformation'
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
+    const sentenceInformation = await this.accreditedProgrammesManageAndDeliverService.getSentenceInformation(
+      username,
+      id,
+    )
 
-    const presenter = new SentenceInformationPresenter(sharedReferralDetailsData, subNavValue, id)
+    const presenter = new SentenceInformationPresenter(sharedReferralDetailsData, subNavValue, id, sentenceInformation)
     const view = new SentenceInformationView(presenter)
 
     req.session.originPage = req.originalUrl
