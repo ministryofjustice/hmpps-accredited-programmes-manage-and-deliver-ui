@@ -1,21 +1,34 @@
 import type { Express } from 'express'
 import request from 'supertest'
-import { appWithAllRoutes, user } from './testutils/appSetup'
-import AuditService, { Page } from '../services/auditService'
+import { ReferralCaseListItem } from '@manage-and-deliver-api'
+import { appWithAllRoutes } from './testutils/appSetup'
+import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import referralCaseListItemFactory from '../testutils/factories/referralCaseListItem'
+import { Page } from '../shared/models/pagination'
+import pageFactory from '../testutils/factories/pageFactory'
 
-jest.mock('../services/auditService')
+const hmppsAuthClientBuilder = jest.fn()
+jest.mock('../services/accreditedProgrammesManageAndDeliverService')
+jest.mock('../data/hmppsAuthClient')
 
-const auditService = new AuditService(null) as jest.Mocked<AuditService>
+const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
+  hmppsAuthClientBuilder,
+) as jest.Mocked<AccreditedProgrammesManageAndDeliverService>
 
 let app: Express
 
 beforeEach(() => {
   app = appWithAllRoutes({
     services: {
-      auditService,
+      accreditedProgrammesManageAndDeliverService,
     },
-    userSupplier: () => user,
   })
+  const referralCaseListItem = referralCaseListItemFactory.build()
+  const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+    .pageContent([referralCaseListItem])
+    .build() as Page<ReferralCaseListItem>
+  accreditedProgrammesManageAndDeliverService.getOpenCaselist.mockResolvedValue(referralCaseListItemPage)
+  accreditedProgrammesManageAndDeliverService.getClosedCaselist.mockResolvedValue(referralCaseListItemPage)
 })
 
 afterEach(() => {
@@ -23,19 +36,13 @@ afterEach(() => {
 })
 
 describe('GET /', () => {
-  it('should render index page', () => {
-    auditService.logPageView.mockResolvedValue(null)
-
+  it('should render case list page', () => {
     return request(app)
       .get('/')
       .expect('Content-Type', /html/)
       .expect(200)
       .expect(res => {
-        expect(res.text).toContain('This site is under construction...')
-        expect(auditService.logPageView).toHaveBeenCalledWith(Page.EXAMPLE_PAGE, {
-          who: user.username,
-          correlationId: expect.any(String),
-        })
+        expect(res.text).toContain('Open referrals')
       })
   })
 })
