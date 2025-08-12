@@ -547,6 +547,12 @@ export interface components {
       mainOffence: components['schemas']['Offence']
       /** @description List of additional or secondary offences */
       additionalOffences: components['schemas']['Offence'][]
+      /**
+       * Format: date
+       * @description The date the offence history was imported from NDelius
+       * @example 11
+       */
+      importedDate: string
     }
     DlqMessage: {
       body: {
@@ -747,7 +753,11 @@ export interface components {
       crn: string
       personName: string
       referralStatus: string
-      cohort: string
+      /**
+       * @description Offence classification based on assessment
+       * @enum {string}
+       */
+      cohort: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
     }
     Pageable: {
       /** Format: int32 */
@@ -1138,13 +1148,13 @@ export interface operations {
           'application/json': components['schemas']['OffenceHistory']
         }
       }
-      /** @description Bad Request */
+      /** @description The offence history could not be retrieved due to missing data on the referral */
       400: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          '*/*': components['schemas']['ErrorResponse']
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description The request was unauthorised */
@@ -1276,6 +1286,8 @@ export interface operations {
         crnOrPersonName?: string
         /** @description Filter by the cohort of the referral Eg: SEXUAL_OFFENCE or GENERAL_OFFENCE */
         cohort?: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
+        /** @description Filter by the status of the referral */
+        status?: string
       }
       header?: never
       path: {
