@@ -1,4 +1,4 @@
-import { ReferralDetails } from '@manage-and-deliver-api'
+import { OffenceHistory, ReferralDetails } from '@manage-and-deliver-api'
 import { SummaryListItem } from '../utils/summaryList'
 import ReferralDetailsPresenter from './referralDetailsPresenter'
 import DateUtils from '../utils/dateUtils'
@@ -8,22 +8,7 @@ export default class OffenceHistoryPresenter extends ReferralDetailsPresenter {
     readonly details: ReferralDetails,
     readonly subNavValue: string,
     readonly id: string,
-    readonly offenceHistory: {
-      mainOffence: {
-        offence: string
-        offenceCode: string
-        category: string
-        offenceDate: string
-        categoryCode: string
-      }
-      additionalOffences: {
-        offence: string
-        offenceCode: string
-        category: string
-        offenceDate: string
-        categoryCode: string
-      }[]
-    },
+    readonly offenceHistory: OffenceHistory,
   ) {
     super(details, subNavValue, id)
   }
