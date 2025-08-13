@@ -2,6 +2,7 @@ import { ReferralDetails } from '@manage-and-deliver-api'
 import { SummaryListArgs } from '../utils/govukFrontendTypes'
 import { SummaryListItem } from '../utils/summaryList'
 import ViewUtils from '../utils/viewUtils'
+import ReferralLayoutPresenter, { HorizontalNavValues } from '../shared/referral/referralLayoutPresenter'
 
 export enum ReferralDetailsPageSection {
   PersonalDetailsTab = 'personalDetails',
@@ -13,62 +14,18 @@ export enum ReferralDetailsPageSection {
   AdditionalInformationTab = 'additionalInformation',
 }
 
-export default class ReferralDetailsPresenter {
+export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
   protected constructor(
     readonly referralDetails: ReferralDetails,
     readonly subNavValue: string,
     readonly id: string,
-  ) {}
+  ) {
+    super(HorizontalNavValues.referralDetailsTab, id)
+  }
 
   get referralSummary(): SummaryListArgs {
     return {
       ...ViewUtils.summaryListArgs(this.referralSummaryList(), { showBorders: false }, 'govuk-!-margin-bottom-0'),
-    }
-  }
-
-  getSubHeaderArgs(): {
-    heading: { text: string; classes: string }
-    items: { text: string; classes: string; href?: string }[]
-  } {
-    return {
-      heading: {
-        text: 'Referral to Building Choices: moderate intensity',
-        classes: 'govuk-heading-l',
-      },
-      items: [
-        {
-          text: 'Back to referrals',
-          classes: 'govuk-button--secondary',
-          href: '/pdu/open-referrals',
-        },
-      ],
-    }
-  }
-
-  getHorizontalSubNavArgs(): { items: { text: string; href: string; active: boolean }[] } {
-    return {
-      items: [
-        {
-          text: 'Referral details',
-          href: `/personalDetails/${this.id}`,
-          active: true,
-        },
-        {
-          text: 'Risks and needs',
-          href: '#2',
-          active: false,
-        },
-        {
-          text: 'Programme needs identifier',
-          href: '#3',
-          active: false,
-        },
-        {
-          text: 'Status history',
-          href: '#4',
-          active: false,
-        },
-      ],
     }
   }
 
