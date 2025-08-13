@@ -1,5 +1,5 @@
 export interface CaselistFilterParams {
   crnOrPersonName?: string
-  referralStatus?: string
+  status?: string
   cohort?: string
 }

@@ -6,67 +6,67 @@ export default class CaselistUtils {
 
   static referralStatus = [
     {
-      value: 'referral-submitted',
+      value: 'REFERRAL_SUBMITTED',
       text: 'Referral submitted',
     },
     {
-      value: 'referral-submitted-hold',
+      value: 'ON_HOLD_REFERRAL_SUBMITTED',
       text: 'On hold - referral submitted',
     },
     {
-      value: 'court-order',
+      value: 'COURT_ORDER',
       text: 'Court order',
     },
     {
-      value: 'returned-court',
+      value: 'RETURNED_TO_COURT',
       text: 'Returned to court',
     },
     {
-      value: 'awaiting-assessment',
+      value: 'AWAITING_ASSESSMENT',
       text: 'Awaiting assessment',
     },
     {
-      value: 'awaiting-assessment-hold',
+      value: 'ON_HOLD_AWAITING_ASSESSMENT',
       text: 'On hold - awaiting assessment',
     },
     {
-      value: 'assessment-started',
+      value: 'ASSESSMENT_STARTED',
       text: 'Assessment started',
     },
     {
-      value: 'assessment-started-hold',
+      value: 'ON_HOLD_ASSESSMENT_STARTED',
       text: 'On hold - assessment started',
     },
     {
-      value: 'assessed-suitable',
+      value: 'ASSESSED_SUITABLE',
       text: 'Assessed as suitable',
     },
     {
-      value: 'suitable-not-ready',
+      value: 'SUITABLE_NOT_READY',
       text: 'Suitable but not ready',
     },
     {
-      value: 'on-programme',
+      value: 'ON_PROGRAMME',
       text: 'On programme',
     },
     {
-      value: 'not-eligible',
+      value: 'NOT_ELIGIBLE',
       text: 'Not eligible',
     },
     {
-      value: 'not-suitable',
+      value: 'NOT_SUITABLE',
       text: 'Not suitable',
     },
     {
-      value: 'withdrawn',
+      value: 'WITHDRAWN',
       text: 'Withdrawn',
     },
     {
-      value: 'deselected',
+      value: 'DESELECTED',
       text: 'Deselected',
     },
     {
-      value: 'programme-complete',
+      value: 'PROGRAMME_COMPLETE',
       text: 'Programme complete',
     },
   ]
