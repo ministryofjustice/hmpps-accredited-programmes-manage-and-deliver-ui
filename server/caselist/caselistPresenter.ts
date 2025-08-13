@@ -109,13 +109,13 @@ export default class CaselistPresenter {
 
   searchByStatusArgs(): SelectArgs {
     return {
-      id: 'referralStatus',
-      name: 'referralStatus',
+      id: 'status',
+      name: 'status',
       label: {
         text: 'Referral status',
         classes: 'govuk-label--s',
       },
-      items: this.generateSelectValues(CaselistUtils.referralStatus, this.filter.referralStatus),
+      items: this.generateSelectValues(CaselistUtils.referralStatus, this.filter.status),
     }
   }
 
@@ -157,11 +157,11 @@ export default class CaselistPresenter {
   generateSelectedFilters() {
     const selectedFilters = []
 
-    if (this.filter.referralStatus) {
+    if (this.filter.status) {
       const searchParams = new URLSearchParams(this.params)
-      searchParams.delete('referralStatus')
+      searchParams.delete('status')
       const paramAttributes = CaselistUtils.referralStatus.filter(
-        referralStatus => referralStatus.value === this.filter.referralStatus,
+        referralStatus => referralStatus.value === this.filter.status,
       )
       selectedFilters.push({
         heading: {
@@ -169,7 +169,7 @@ export default class CaselistPresenter {
         },
         items: [
           {
-            // href: `/interventions/${this.setting}${searchParams.size === 0 ? '' : `?${searchParams.toString()}`}`,
+            href: `/pdu/${this.openOrClosedUrl}${searchParams.size === 0 ? '' : `?${searchParams.toString()}`}`,
             text: paramAttributes[0].text,
           },
         ],

@@ -2,7 +2,7 @@ import { Request } from 'express'
 import { CaselistFilterParams } from './CaseListFilterParams'
 
 export default class CaselistFilter {
-  referralStatus: string | undefined
+  status: string | undefined
 
   cohort: string | undefined
 
@@ -10,7 +10,7 @@ export default class CaselistFilter {
 
   static fromRequest(request: Request): CaselistFilter {
     const filter = new CaselistFilter()
-    filter.referralStatus = request.query.referralStatus as string | undefined
+    filter.status = request.query.status as string | undefined
     filter.cohort = request.query.cohort as string | undefined
     filter.crnOrPersonName = request.query.crnOrPersonName as string | undefined
     return filter
@@ -19,8 +19,8 @@ export default class CaselistFilter {
   get params(): CaselistFilterParams {
     const params: CaselistFilterParams = {}
 
-    if (this.referralStatus !== undefined) {
-      params.referralStatus = this.referralStatus
+    if (this.status !== undefined) {
+      params.status = this.status
     }
     if (this.cohort !== undefined) {
       params.cohort = this.cohort
