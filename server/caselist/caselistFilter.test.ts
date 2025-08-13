@@ -6,14 +6,14 @@ describe(CaselistFilter, () => {
     it('creates a filter from the request’s query params', () => {
       const query = {
         status: 'REFERRAL_SUBMITTED',
-        cohort: 'sexual-offence',
+        cohort: 'SEXUAL_OFFENCE',
         crnOrPersonName: 'Building',
       }
 
       const filter = CaselistFilter.fromRequest({ query } as unknown as Request)
 
       expect(filter.status).toEqual('REFERRAL_SUBMITTED')
-      expect(filter.cohort).toEqual('sexual-offence')
+      expect(filter.cohort).toEqual('SEXUAL_OFFENCE')
       expect(filter.crnOrPersonName).toEqual('Building')
     })
   })
@@ -37,8 +37,8 @@ describe(CaselistFilter, () => {
 
       it('correctly sets cohort if only one type is passed', () => {
         const filter = new CaselistFilter()
-        filter.cohort = 'sexual-offence'
-        expect(filter.params.cohort).toEqual('sexual-offence')
+        filter.cohort = 'SEXUAL_OFFENCE'
+        expect(filter.params.cohort).toEqual('SEXUAL_OFFENCE')
       })
     })
 

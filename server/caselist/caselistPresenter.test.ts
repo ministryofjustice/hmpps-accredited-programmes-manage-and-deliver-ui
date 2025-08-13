@@ -12,7 +12,7 @@ describe(`filters`, () => {
       const testObject = {
         filter: {
           status: 'AWAITING_ASSESSMENT',
-          cohort: 'sexual-offence',
+          cohort: 'SEXUAL_OFFENCE',
           crnOrPersonName: 'Name',
         } as CaselistFilter,
         expectedResult: {
@@ -94,13 +94,13 @@ describe(`filters`, () => {
       const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '', true)
 
       const valuesToAddToSelect = [
-        { value: 'general-offence', text: 'General Offence' },
-        { value: 'sexual-offence', text: 'Sexual Offence' },
+        { value: 'GENERAL_OFFENCE', text: 'General Offence' },
+        { value: 'SEXUAL_OFFENCE', text: 'Sexual Offence' },
       ]
       expect(presenter.generateSelectValues(valuesToAddToSelect, testObject.filter.status)).toEqual([
         { text: 'Select', value: '' },
-        { selected: false, text: 'General Offence', value: 'general-offence' },
-        { selected: false, text: 'Sexual Offence', value: 'sexual-offence' },
+        { selected: false, text: 'General Offence', value: 'GENERAL_OFFENCE' },
+        { selected: false, text: 'Sexual Offence', value: 'SEXUAL_OFFENCE' },
       ])
     })
 
@@ -126,7 +126,7 @@ describe(`filters`, () => {
       const testObject = {
         filter: {
           status: 'NOT_ELIGIBLE',
-          cohort: 'general-offence',
+          cohort: 'GENERAL_OFFENCE',
           crnOrPersonName: 'Some Name',
         } as CaselistFilter,
       }
