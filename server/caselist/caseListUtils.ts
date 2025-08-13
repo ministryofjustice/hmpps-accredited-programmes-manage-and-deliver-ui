@@ -1,7 +1,7 @@
 export default class CaselistUtils {
   static cohorts = [
-    { value: 'general-offence', text: 'General Offence' },
-    { value: 'sexual-offence', text: 'Sexual Offence' },
+    { value: 'GENERAL_OFFENCE', text: 'General Offence' },
+    { value: 'SEXUAL_OFFENCE', text: 'Sexual Offence' },
   ]
 
   static referralStatus = [

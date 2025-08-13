@@ -37,10 +37,10 @@ beforeEach(() => {
 
 describe(`Caselist controller`, () => {
   test.each([
-    ['/pdu/open-referrals?cohort=sexual-offence&status=COURT_ORDER', 'sexual-offence', 'COURT_ORDER'],
+    ['/pdu/open-referrals?cohort=SEXUAL_OFFENCE&status=COURT_ORDER', 'SEXUAL_OFFENCE', 'COURT_ORDER'],
     [`/pdu/open-referrals`, undefined, undefined],
     ['/pdu/closed-referrals', undefined, undefined],
-    ['/pdu/open-referrals?cohort=general-offence&status=PROGRAMME_COMPLETE', 'general-offence', 'PROGRAMME_COMPLETE'],
+    ['/pdu/open-referrals?cohort=GENERAL_OFFENCE&status=PROGRAMME_COMPLETE', 'GENERAL_OFFENCE', 'PROGRAMME_COMPLETE'],
   ])(
     `should set the correct filters based on the url provided %s`,
     async (url: string, cohortValue, referralStatusValue) => {
