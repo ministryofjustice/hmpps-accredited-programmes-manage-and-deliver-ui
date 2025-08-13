@@ -1,4 +1,4 @@
-import { ReferralDetails } from '@manage-and-deliver-api'
+import { CohortEnum, ReferralDetails } from '@manage-and-deliver-api'
 import { Factory } from 'fishery'
 import { now } from 'moment'
 
@@ -13,5 +13,5 @@ export default ReferralDetailsFactory.define(({ sequence }) => ({
   dateOfBirth: '15 March 1985',
   probationPractitionerName: 'Prob Officer',
   probationPractitionerEmail: 'prob.officer@example.com',
-  cohort: 'GENERAL_OFFENCE' as 'GENERAL_OFFENCE' | 'SEXUAL_OFFENCE',
+  cohort: 'SEXUAL_OFFENCE' as CohortEnum,
 }))

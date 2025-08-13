@@ -41,6 +41,7 @@ describe(`filters`, () => {
               },
               items: [
                 {
+                  href: '/pdu/open-referrals',
                   text: 'Sexual Offence',
                 },
               ],
@@ -137,7 +138,7 @@ describe(`filters`, () => {
 
       expect(presenter.generateSelectedFilters()).toEqual([
         { heading: { text: 'Referral Status' }, items: [{ href: '/pdu/open-referrals', text: 'Not eligible' }] },
-        { heading: { text: 'Cohort' }, items: [{ text: 'General Offence' }] },
+        { heading: { text: 'Cohort' }, items: [{ href: '/pdu/open-referrals', text: 'General Offence' }] },
         { heading: { text: 'Name Or Crn' }, items: [{ href: '/pdu/open-referrals', text: 'Some Name' }] },
       ])
     })

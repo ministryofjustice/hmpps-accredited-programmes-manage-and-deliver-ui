@@ -1,4 +1,4 @@
-import { ReferralCaseListItem } from '@manage-and-deliver-api'
+import { CohortEnum, ReferralCaseListItem } from '@manage-and-deliver-api'
 import { Page } from '../shared/models/pagination'
 import { SelectArgs, SelectArgsItem, TableArgs } from '../utils/govukFrontendTypes'
 import Pagination from '../utils/pagination/pagination'
@@ -8,6 +8,11 @@ import CaselistUtils from './caseListUtils'
 export enum CaselistPageSection {
   Open = 1,
   Closed = 2,
+}
+
+const cohortConfigMap: Record<CohortEnum, string> = {
+  SEXUAL_OFFENCE: 'Sexual Offence',
+  GENERAL_OFFENCE: 'General Offence',
 }
 
 export default class CaselistPresenter {
@@ -50,6 +55,13 @@ export default class CaselistPresenter {
             'aria-sort': 'none',
           },
         },
+
+        {
+          text: 'Cohort',
+          attributes: {
+            'aria-sort': 'none',
+          },
+        },
       ],
       rows: this.generateTableRows(),
     }
@@ -64,6 +76,8 @@ export default class CaselistPresenter {
         },
 
         { text: referral.referralStatus },
+
+        { text: cohortConfigMap[referral.cohort] },
       ])
     })
     return referralData
@@ -186,7 +200,7 @@ export default class CaselistPresenter {
         },
         items: [
           {
-            // href: `/interventions/${this.setting}${searchParams.size === 0 ? '' : `?${searchParams.toString()}`}`,
+            href: `/pdu/${this.openOrClosedUrl}${searchParams.size === 0 ? '' : `?${searchParams.toString()}`}`,
             text: paramAttributes[0].text,
           },
         ],

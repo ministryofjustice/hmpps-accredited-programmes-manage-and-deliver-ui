@@ -1,4 +1,4 @@
-import { ReferralCaseListItem } from '@manage-and-deliver-api'
+import { CohortEnum, ReferralCaseListItem } from '@manage-and-deliver-api'
 import { Factory } from 'fishery'
 
 class ReferralCaseListItemFactory extends Factory<ReferralCaseListItem> {}
@@ -8,5 +8,5 @@ export default ReferralCaseListItemFactory.define(({ sequence }) => ({
   crn: '1232314',
   personName: 'feksoipgjes',
   referralStatus: 'fjewioghjewoi',
-  cohort: 'GENERAL_OFFENCE',
+  cohort: 'GENERAL_OFFENCE' as CohortEnum,
 }))
