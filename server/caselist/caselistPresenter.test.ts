@@ -30,6 +30,7 @@ describe(`filters.`, () => {
               },
               items: [
                 {
+                  href: '/pdu/open-referrals',
                   text: 'Awaiting assessment',
                 },
               ],
@@ -40,6 +41,7 @@ describe(`filters.`, () => {
               },
               items: [
                 {
+                  href: '/pdu/open-referrals',
                   text: 'Sexual Offence',
                 },
               ],
@@ -135,8 +137,8 @@ describe(`filters.`, () => {
       const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '', true)
 
       expect(presenter.generateSelectedFilters()).toEqual([
-        { heading: { text: 'Referral Status' }, items: [{ text: 'Not eligible' }] },
-        { heading: { text: 'Cohort' }, items: [{ text: 'General Offence' }] },
+        { heading: { text: 'Referral Status' }, items: [{ href: '/pdu/open-referrals', text: 'Not eligible' }] },
+        { heading: { text: 'Cohort' }, items: [{ href: '/pdu/open-referrals', text: 'General Offence' }] },
         { heading: { text: 'Name Or Crn' }, items: [{ href: '/pdu/open-referrals', text: 'Some Name' }] },
       ])
     })
