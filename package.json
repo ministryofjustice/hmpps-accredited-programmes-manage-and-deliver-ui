@@ -108,7 +108,7 @@
   "devDependencies": {
     "@faker-js/faker": "^9.9.0",
     "@jgoz/esbuild-plugin-typecheck": "^4.0.3",
-    "@ministryofjustice/eslint-config-hmpps": "^0.0.2",
+    "@ministryofjustice/eslint-config-hmpps": "^0.0.3",
     "@tsconfig/node22": "^22.0.2",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
