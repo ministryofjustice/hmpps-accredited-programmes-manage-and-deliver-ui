@@ -37,14 +37,10 @@ beforeEach(() => {
 
 describe(`Caselist controller`, () => {
   test.each([
-    ['/pdu/open-referrals?cohort=sexual-offence&referralStatus=court-order', 'sexual-offence', 'court-order'],
+    ['/pdu/open-referrals?cohort=sexual-offence&status=COURT_ORDER', 'sexual-offence', 'COURT_ORDER'],
     [`/pdu/open-referrals`, undefined, undefined],
     ['/pdu/closed-referrals', undefined, undefined],
-    [
-      '/pdu/open-referrals?cohort=general-offence&referralStatus=programme-complete',
-      'general-offence',
-      'programme-complete',
-    ],
+    ['/pdu/open-referrals?cohort=general-offence&status=PROGRAMME_COMPLETE', 'general-offence', 'PROGRAMME_COMPLETE'],
   ])(
     `should set the correct filters based on the url provided %s`,
     async (url: string, cohortValue, referralStatusValue) => {
@@ -56,7 +52,7 @@ describe(`Caselist controller`, () => {
           const $ = cheerio.load(res.text)
           const cohortInput = $('#cohort option[selected]').val()
           expect(cohortInput).toBe(cohortValue)
-          const referralStatusInput = $('#referralStatus option[selected]').val()
+          const referralStatusInput = $('#status option[selected]').val()
           expect(referralStatusInput).toBe(referralStatusValue)
         })
     },

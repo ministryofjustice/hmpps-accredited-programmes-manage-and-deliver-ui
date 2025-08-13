@@ -6,12 +6,12 @@ import referralCaseListItemFactory from '../testutils/factories/referralCaseList
 import CaselistFilter from './caselistFilter'
 import CaselistPresenter from './caselistPresenter'
 
-describe(`filters.`, () => {
+describe(`filters`, () => {
   describe(`generateFilterPane`, () => {
     it('should return the correct filter pane object for filters supplied', () => {
       const testObject = {
         filter: {
-          status: 'awaiting-assessment',
+          status: 'AWAITING_ASSESSMENT',
           cohort: 'sexual-offence',
           crnOrPersonName: 'Name',
         } as CaselistFilter,
@@ -30,6 +30,7 @@ describe(`filters.`, () => {
               },
               items: [
                 {
+                  href: '/pdu/open-referrals',
                   text: 'Awaiting assessment',
                 },
               ],
@@ -123,7 +124,7 @@ describe(`filters.`, () => {
     it('should generate correct filters base on input params', () => {
       const testObject = {
         filter: {
-          status: 'not-eligible',
+          status: 'NOT_ELIGIBLE',
           cohort: 'general-offence',
           crnOrPersonName: 'Some Name',
         } as CaselistFilter,
@@ -135,7 +136,7 @@ describe(`filters.`, () => {
       const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '', true)
 
       expect(presenter.generateSelectedFilters()).toEqual([
-        { heading: { text: 'Referral Status' }, items: [{ text: 'Not eligible' }] },
+        { heading: { text: 'Referral Status' }, items: [{ href: '/pdu/open-referrals', text: 'Not eligible' }] },
         { heading: { text: 'Cohort' }, items: [{ text: 'General Offence' }] },
         { heading: { text: 'Name Or Crn' }, items: [{ href: '/pdu/open-referrals', text: 'Some Name' }] },
       ])

@@ -179,7 +179,7 @@ And then, to build the assets and start the app with esbuild:
 
 #### Updating the API for docker
 
-NB: if issues are encountered with starting the M&D API in docker, or to force a fresh docker image re-build following API updates,
+NB: If caching issues are encountered with starting the M&D API in docker, or to force a fresh docker image re-build following API updates,
 use the following command prior to running `docker compose up` :
 
 `docker-compose build --no-cache hmpps-accredited-programmes-manage-and-deliver-api`

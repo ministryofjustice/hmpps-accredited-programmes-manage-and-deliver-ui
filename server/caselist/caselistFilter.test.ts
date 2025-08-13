@@ -5,14 +5,14 @@ describe(CaselistFilter, () => {
   describe('.fromRequest', () => {
     it('creates a filter from the request’s query params', () => {
       const query = {
-        referralStatus: 'referral-submitted',
+        status: 'REFERRAL_SUBMITTED',
         cohort: 'sexual-offence',
         crnOrPersonName: 'Building',
       }
 
       const filter = CaselistFilter.fromRequest({ query } as unknown as Request)
 
-      expect(filter.status).toEqual('referral-submitted')
+      expect(filter.status).toEqual('REFERRAL_SUBMITTED')
       expect(filter.cohort).toEqual('sexual-offence')
       expect(filter.crnOrPersonName).toEqual('Building')
     })
@@ -31,9 +31,8 @@ describe(CaselistFilter, () => {
     describe('referralStatus', () => {
       it('correctly sets referralStatus if only one type is passed', () => {
         const filter = new CaselistFilter()
-        filter.status = 'referral-submitted-hold'
-
-        expect(filter.params.status).toEqual('referral-submitted-hold')
+        filter.status = 'ON_HOLD_REFERRAL_SUBMITTED'
+        expect(filter.params.status).toEqual('ON_HOLD_REFERRAL_SUBMITTED')
       })
 
       it('correctly sets cohort if only one type is passed', () => {
