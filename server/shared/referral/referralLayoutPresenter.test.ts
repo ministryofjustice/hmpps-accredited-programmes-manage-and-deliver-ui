@@ -25,7 +25,7 @@ describe(`getHorizontalSubNavArgs.`, () => {
       },
       {
         text: 'Risks and needs',
-        href: `/referral/${referralId}/risks-and-needs`,
+        href: `/referral/${referralId}/risks-and-alerts`,
         active: false,
       },
       {

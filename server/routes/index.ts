@@ -4,6 +4,7 @@ import asyncMiddleware from '../middleware/asyncMiddleware'
 import type { Services } from '../services'
 import ReferralDetailsController from '../referralDetails/referralDetailsController'
 import CaselistController from '../caselist/caselistController'
+import RisksAndNeedsController from '../risksAndNeeds/risksAndNeedsController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
@@ -12,6 +13,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   const caselistController = new CaselistController(accreditedProgrammesManageAndDeliverService)
   const referralDetailsController = new ReferralDetailsController(accreditedProgrammesManageAndDeliverService)
+  const risksAndNeedsController = new RisksAndNeedsController(accreditedProgrammesManageAndDeliverService)
 
   get('/', async (req, res, next) => {
     await caselistController.showOpenCaselist(req, res)
@@ -67,6 +69,63 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   post('/referral/:referralId/update-availability/:availabilityId', async (req, res, next) => {
     await referralDetailsController.updateAvailability(req, res)
+  })
+
+  // Risks And Needs
+  // get('/referral/:referralId/risks-and-needs', async (req, res, next) => {
+  //   await risksAndNeedsController.showRisksAndAlertsPage(req, res)
+  // })
+
+  get('/referral/:referralId/risks-and-alerts', async (req, res, next) => {
+    await risksAndNeedsController.showRisksAndAlertsPage(req, res)
+  })
+
+  get('/referral/:referralId/learning-needs', async (req, res, next) => {
+    await risksAndNeedsController.showLearningNeedsPage(req, res)
+  })
+
+  get('/referral/:referralId/offence-analysis', async (req, res, next) => {
+    await risksAndNeedsController.showOffenceAnalysisPage(req, res)
+  })
+
+  get('/referral/:referralId/education-training-and-employment', async (req, res, next) => {
+    await risksAndNeedsController.showEducationTrainingAndEmploymentPage(req, res)
+  })
+
+  get('/referral/:referralId/relationships', async (req, res, next) => {
+    await risksAndNeedsController.showRelationshipsPage(req, res)
+  })
+
+  get('/referral/:referralId/lifestyle-and-associates', async (req, res, next) => {
+    await risksAndNeedsController.showLifestyleAndAssociatesPage(req, res)
+  })
+
+  get('/referral/:referralId/drug-misuse', async (req, res, next) => {
+    await risksAndNeedsController.showDrugMisusePage(req, res)
+  })
+
+  get('/referral/:referralId/alcohol-misuse', async (req, res, next) => {
+    await risksAndNeedsController.showAlcoholMisusePage(req, res)
+  })
+
+  get('/referral/:referralId/emotional-wellbeing', async (req, res, next) => {
+    await risksAndNeedsController.showEmotionalWellbeingPage(req, res)
+  })
+
+  get('/referral/:referralId/thinking-and-behaving', async (req, res, next) => {
+    await risksAndNeedsController.showThinkingAndBehavingPage(req, res)
+  })
+
+  get('/referral/:referralId/attitudes', async (req, res, next) => {
+    await risksAndNeedsController.showAttitudesPage(req, res)
+  })
+
+  get('/referral/:referralId/health', async (req, res, next) => {
+    await risksAndNeedsController.showHealthPage(req, res)
+  })
+
+  get('/referral/:referralId/rosh-analysis', async (req, res, next) => {
+    await risksAndNeedsController.showRoshAnalysisPage(req, res)
   })
 
   return router
