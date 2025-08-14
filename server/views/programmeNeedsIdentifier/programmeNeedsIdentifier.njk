@@ -1,0 +1,81 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/header/macro.njk" import govukHeader %}
+{%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
+{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block main %}
+{% block content %}
+<div class="govuk-width-container" id="main-content">
+  <div class="govuk-main-wrapper">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        {{ mojPageHeaderActions(presenter.getSubHeaderArgs()) }}
+        {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
+      </div>
+      <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-heading-m">Programme needs identifier</h2>
+        <p class="govuk-body govuk-!-margin-bottom-0">This is {{this.presenter.details.personName}}'s eligibility for Accredited Programmes, based on their risk and need scores.</p>
+
+        <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+      </div>
+      <div class="govuk-grid-column-three-quarters">
+        <h2 class="govuk-heading-m">How is this calculated?</h2>
+        <p class="govuk-body">Eligibility is based on a combination of:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li><a href={{ riskAndNeedsUrl }} class="govuk-link">risk scores</a></li>
+          <li>the programme needs identifier (PNI), which uses the following scores</li>
+        </ul>
+        {{ govukSummaryList({
+          card: {
+            title: {
+              text: "Sex"
+            },
+          classes: "govuk-!-margin-top-8"
+          },
+          rows: [
+            {
+              key: {
+                text: "11.11 - Sexual Pre-occupation"
+              },
+              value: {
+                text: "0"
+              }
+            },
+            {
+              key: {
+                text: "11.12 - Offence related Sexual Interests"
+              },
+              value: {
+                text: "0"
+              }
+            },
+            {
+              key: {
+                text: "6.12 Emotional congruence with children or feeling closer to children than adults"
+              },
+              value: {
+                text: "0"
+              }
+            },
+            {
+              key: {
+                text: "Sex result"
+              },
+              value: {
+                text: "Low need"
+              }
+            }
+          ]
+        }) }}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% endblock %}

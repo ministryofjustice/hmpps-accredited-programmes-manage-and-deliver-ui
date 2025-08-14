@@ -4,6 +4,7 @@ import asyncMiddleware from '../middleware/asyncMiddleware'
 import type { Services } from '../services'
 import ReferralDetailsController from '../referralDetails/referralDetailsController'
 import CaselistController from '../caselist/caselistController'
+import ProgrammeNeedsIdentifierController from '../programmeNeedsIdentifier/programmeNeedsIdentifierController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
@@ -12,6 +13,9 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   const caselistController = new CaselistController(accreditedProgrammesManageAndDeliverService)
   const referralDetailsController = new ReferralDetailsController(accreditedProgrammesManageAndDeliverService)
+  const programmeNeedsIdenfitierController = new ProgrammeNeedsIdentifierController(
+    accreditedProgrammesManageAndDeliverService,
+  )
 
   get('/', async (req, res, next) => {
     await caselistController.showOpenCaselist(req, res)
@@ -67,6 +71,10 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   post('/referral/:referralId/update-availability/:availabilityId', async (req, res, next) => {
     await referralDetailsController.updateAvailability(req, res)
+  })
+
+  get('/referral/:referralId/programme-needs-identifier', async (req, res, next) => {
+    await programmeNeedsIdenfitierController.showProgrammeNeedsIdentifierPage(req, res)
   })
 
   return router

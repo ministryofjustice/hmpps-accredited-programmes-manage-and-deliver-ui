@@ -30,7 +30,7 @@ describe(`getHorizontalSubNavArgs.`, () => {
       },
       {
         text: 'Programme needs identifier',
-        href: '#3',
+        href: `/referral/${referralId}/programme-needs-identifier`,
         active: false,
       },
       {
