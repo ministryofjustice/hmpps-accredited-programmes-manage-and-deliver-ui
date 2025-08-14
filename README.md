@@ -8,7 +8,7 @@ Template github repo used for new Typescript based projects.
 # Instructions
 
 If this is a HMPPS project then the project will be created as part of bootstrapping -
-see https://github.com/ministryofjustice/hmpps-project-bootstrap. You are able to specify a template application using
+see <https://github.com/ministryofjustice/hmpps-project-bootstrap>. You are able to specify a template application using
 the `github_template_repo` attribute to clone without the need to manually do this yourself within GitHub.
 
 This project is community managed by the mojdt `#typescript` slack channel.
@@ -85,12 +85,13 @@ lost within non-production issues.
 ### Production kubernetes alerts
 
 This is the severity label for production, determined by the `custom severity label`. See the above
-#non-production-kubernetes-alerts for more information. This is configured in `helm_deploy/values-prod.yaml`.
+
+# non-production-kubernetes-alerts for more information. This is configured in `helm_deploy/values-prod.yaml`
 
 ### Product ID
 
 This is so that we can link a component to a product and thus provide team and product information in the Developer
-Portal. Refer to the developer portal at https://developer-portal.hmpps.service.justice.gov.uk/products to find your
+Portal. Refer to the developer portal at <https://developer-portal.hmpps.service.justice.gov.uk/products> to find your
 product id. This is configured in `helm_deploy/<project_name>/values.yaml`.
 
 ## Manually branding from template app
@@ -154,9 +155,21 @@ The template app is, by default, configured not to use REDIS when running locall
 
 The easiest way to run the app is to use docker compose to create the service and all dependencies.
 
-`docker compose pull`
+```zsh
+docker compose pull
+```
 
-`docker compose up`
+```zsh
+docker compose up
+```
+
+### Running against local api image
+
+If you wish to test changes against a locally built image of the `accredited-programmes-manage-and-deliver-api` then run the following command
+
+```zsh
+docker compose up --build
+```
 
 ### Running the app for development
 
@@ -197,8 +210,8 @@ for the in-memory DB used by Auth
 
 ### Run linter
 
-* `npm run lint` runs `eslint`.
-* `npm run typecheck` runs the TypeScript compiler `tsc`.
+- `npm run lint` runs `eslint`.
+- `npm run typecheck` runs the TypeScript compiler `tsc`.
 
 ### Run unit tests
 
