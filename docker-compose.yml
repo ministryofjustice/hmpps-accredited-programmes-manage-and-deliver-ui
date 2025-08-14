@@ -34,6 +34,7 @@ services:
       - POSTGRES_PASSWORD=admin_password
 
   hmpps-accredited-programmes-manage-and-deliver-api:
+    image: ghcr.io/ministryofjustice/hmpps-accredited-programmes-manage-and-deliver-api:latest
     container_name: hmpps-accredited-programmes-manage-and-deliver-api
     build:
       context: ../hmpps-accredited-programmes-manage-and-deliver-api
@@ -55,7 +56,7 @@ services:
       - HMPPS_SQS_PROVIDER=localstack
       - HMPPS_SQS_LOCALSTACKURL=http://localstack:4566
       - SERVICES_NDELIUS_INTEGRATION_API_BASE_URL=http://wiremock:8080
-#      - API_CLIENT_SECRET=${API_CLIENT_SECRET}
+      #      - API_CLIENT_SECRET=${API_CLIENT_SECRET}
       # JVM debug options
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
     depends_on:
