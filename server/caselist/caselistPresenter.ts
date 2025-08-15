@@ -171,8 +171,24 @@ export default class CaselistPresenter {
   generateSelectedFilters() {
     const selectedFilters = []
 
-    if (this.filter.status) {
-      const searchParams = new URLSearchParams(this.params)
+    const filterParams: Record<string, string> = {}
+
+    if (this.filter.status?.trim()) {
+      filterParams.status = this.filter.status.trim()
+    }
+    if (this.filter.cohort?.trim()) {
+      filterParams.cohort = this.filter.cohort.trim()
+    }
+    if (this.filter.crnOrPersonName?.trim()) {
+      filterParams.crnOrPersonName = this.filter.crnOrPersonName.trim()
+    }
+
+    console.log('---------------- filterParams')
+    console.log('filterParams', JSON.stringify(filterParams, null, 2))
+    console.log('---------------- filterParams')
+
+    if (this.filter.status?.trim()) {
+      const searchParams = new URLSearchParams(filterParams)
       searchParams.delete('status')
       const paramAttributes = CaselistUtils.referralStatus.filter(
         referralStatus => referralStatus.value === this.filter.status,
@@ -190,8 +206,8 @@ export default class CaselistPresenter {
       })
     }
 
-    if (this.filter.cohort) {
-      const searchParams = new URLSearchParams(this.params)
+    if (this.filter.cohort?.trim()) {
+      const searchParams = new URLSearchParams(filterParams)
       searchParams.delete('cohort')
       const paramAttributes = CaselistUtils.cohorts.filter(cohort => cohort.value === this.filter.cohort)
       selectedFilters.push({
@@ -207,8 +223,8 @@ export default class CaselistPresenter {
       })
     }
 
-    if (this.filter.crnOrPersonName) {
-      const searchParams = new URLSearchParams(this.params)
+    if (this.filter.crnOrPersonName?.trim()) {
+      const searchParams = new URLSearchParams(filterParams)
       searchParams.delete('crnOrPersonName')
       selectedFilters.push({
         heading: {
@@ -217,12 +233,13 @@ export default class CaselistPresenter {
         items: [
           {
             href: `/pdu/${this.openOrClosedUrl}${searchParams.size === 0 ? '' : `?${searchParams.toString()}`}`,
-            text: this.filter.crnOrPersonName,
+            text: this.filter.crnOrPersonName.trim(),
           },
         ],
       })
     }
 
+    console.log('selectedFilters', JSON.stringify(selectedFilters, null, 2))
     return selectedFilters
   }
 }
