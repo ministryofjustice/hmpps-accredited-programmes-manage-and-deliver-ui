@@ -121,7 +121,7 @@
     {
       "request": {
         "method": "GET",
-        "urlPattern": "/assessments/pni/D002399\\?community=true"
+        "urlPattern": "/assessments/pni/.*\\?community=true"
       },
       "response": {
         "status": 200,
