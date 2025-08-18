@@ -3,32 +3,32 @@ import { Request, Response } from 'express'
 import { ReferralDetails } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
-import RisksAndNeedsPresenter from './risksAndNeedsPresenter'
-import RisksAndNeedsView from './risksAndNeedsView'
-import RisksAndAlertsPresenter from './risksAndAlerts/risksAndAlertsPresenter'
-import RisksAndAlertsView from './risksAndAlerts/risksAndAlertsView'
-import LearningAndNeedsPresenter from './learningAndNeeds/learningAndNeedsPresenter'
-import LearningAndNeedsView from './learningAndNeeds/learningAndNeedsView'
-import OffenceAnalysisPresenter from './offenceAnalysis/offenceAnalysisPresenter'
-import OffenceAnalysisView from './offenceAnalysis/offenceAnalysisView'
-import EducationTrainingAndEmploymentPresenter from './educationTrainingAndEmployment/educationTrainingAndEmploymentPresenter'
-import EducationTrainingAndEmploymentView from './educationTrainingAndEmployment/educationTrainingAndEmploymentView'
-import LifestyleAndAssociatesPresenter from './lifestyleAndAssociates/lifestyleAndAssociatesPresenter'
-import LifestyleAndAssociatesView from './lifestyleAndAssociates/lifestyleAndAssociatesView'
-import DrugMisusePresenter from './drugMisuse/drugMisusePresenter'
-import DrugMisuseView from './drugMisuse/drugMisuseView'
 import AlcoholMisusePresenter from './alcoholMisuse/alcoholMisusePresenter'
 import AlcoholMisuseView from './alcoholMisuse/alcoholMisuseView'
-import EmotionalWellbeingView from './emotionalWellbeing/emotionalWellbeingView'
-import EmotionalWellbeingPresenter from './emotionalWellbeing/emotionalWellbeingPresenter'
-import ThinkingAndBehavingPresenter from './thinkingAndBehaving/thinkingAndBehavingPresenter'
-import ThinkingAndBehavingView from './thinkingAndBehaving/thinkingAndBehavingView'
 import AttitudesPresenter from './attitudes/attitudesPresenter'
 import AttitudesView from './attitudes/attitudesView'
+import DrugMisusePresenter from './drugMisuse/drugMisusePresenter'
+import DrugMisuseView from './drugMisuse/drugMisuseView'
+import EducationTrainingAndEmploymentPresenter from './educationTrainingAndEmployment/educationTrainingAndEmploymentPresenter'
+import EducationTrainingAndEmploymentView from './educationTrainingAndEmployment/educationTrainingAndEmploymentView'
+import EmotionalWellbeingPresenter from './emotionalWellbeing/emotionalWellbeingPresenter'
+import EmotionalWellbeingView from './emotionalWellbeing/emotionalWellbeingView'
 import HealthPresenter from './health/healthPresenter'
 import HealthView from './health/healthView'
+import LearningAndNeedsPresenter from './learningAndNeeds/learningAndNeedsPresenter'
+import LearningAndNeedsView from './learningAndNeeds/learningAndNeedsView'
+import LifestyleAndAssociatesPresenter from './lifestyleAndAssociates/lifestyleAndAssociatesPresenter'
+import LifestyleAndAssociatesView from './lifestyleAndAssociates/lifestyleAndAssociatesView'
+import OffenceAnalysisPresenter from './offenceAnalysis/offenceAnalysisPresenter'
+import OffenceAnalysisView from './offenceAnalysis/offenceAnalysisView'
+import RisksAndAlertsPresenter from './risksAndAlerts/risksAndAlertsPresenter'
+import RisksAndAlertsView from './risksAndAlerts/risksAndAlertsView'
+import RisksAndNeedsPresenter from './risksAndNeedsPresenter'
+import RisksAndNeedsView from './risksAndNeedsView'
 import RoshAnalysisPresenter from './roshAnalysis/roshAnalysisPresenter'
 import RoshAnalysisView from './roshAnalysis/roshAnalysisView'
+import ThinkingAndBehavingPresenter from './thinkingAndBehaving/thinkingAndBehavingPresenter'
+import ThinkingAndBehavingView from './thinkingAndBehaving/thinkingAndBehavingView'
 
 export default class RisksAndNeedsController {
   constructor(
@@ -202,7 +202,12 @@ export default class RisksAndNeedsController {
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
 
-    const presenter = new RoshAnalysisPresenter(subNavValue, referralId)
+    const roshAnalysis = await this.accreditedProgrammesManageAndDeliverService.getRoshAnalysis(
+      username,
+      sharedReferralDetailsData.crn,
+    )
+
+    const presenter = new RoshAnalysisPresenter(subNavValue, referralId, roshAnalysis)
     const view = new RoshAnalysisView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)

@@ -10,16 +10,18 @@ type DailyAvailabilityModel = components['schemas']['DailyAvailabilityModel']
 type SentenceInformation = components['schemas']['SentenceInformation']
 type CohortEnum = components['schemas']['ReferralDetails']['cohort']
 type OffenceHistory = components['schemas']['OffenceHistory']
+type RoshAnalysis = components['schemas']['RoshAnalysis']
 
 export type {
-  ReferralCaseListItem,
   Availability,
-  CreateAvailability,
-  UpdateAvailability,
-  ReferralDetails,
-  PersonalDetails,
-  DailyAvailabilityModel,
   CohortEnum,
-  SentenceInformation,
+  CreateAvailability,
+  DailyAvailabilityModel,
   OffenceHistory,
+  PersonalDetails,
+  ReferralCaseListItem,
+  ReferralDetails,
+  RoshAnalysis,
+  SentenceInformation,
+  UpdateAvailability,
 }
