@@ -19,13 +19,13 @@ export default class CaselistFilter {
   get params(): CaselistFilterParams {
     const params: CaselistFilterParams = {}
 
-    if (this.status !== undefined) {
+    if (this.status) {
       params.status = this.status
     }
-    if (this.cohort !== undefined) {
+    if (this.cohort) {
       params.cohort = this.cohort
     }
-    if (this.crnOrPersonName !== undefined) {
+    if (this.crnOrPersonName?.trim()) {
       params.crnOrPersonName = this.crnOrPersonName.trim()
     }
 

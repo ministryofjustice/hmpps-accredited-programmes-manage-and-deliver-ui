@@ -1,0 +1,97 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/header/macro.njk" import govukHeader %}
+{%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
+{%- from "moj/components/side-navigation/macro.njk" import mojSideNavigation -%}
+{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block main %}
+  {% block content %}
+    <div class="govuk-width-container" id="main-content">
+      <div class="govuk-main-wrapper">
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full">
+            {{ mojPageHeaderActions(presenter.getSubHeaderArgs()) }}
+            {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
+            <div class="govuk-grid-column-three-quarters">
+              <h2 class="govuk-heading-m">Risks and needs</h2>
+              <p class="govuk-body govuk-!-margin-bottom-0">{{ presenter.pageDescription }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full">
+            <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+          </div>
+        </div>
+        <div class="govuk-grid-row">
+
+          <div class="govuk-grid-column-one-third">
+
+            {{ mojSideNavigation(presenter.getVerticalSubNavArgs()) }}
+
+          </div>
+          <div class="govuk-grid-column-two-thirds">
+            {% if presenter.subNavValue == 'learningNeeds' %}
+              <div>
+            learningNeeds
+          </div>
+            {% elif presenter.subNavValue == 'offenceAnalysis' %}
+              <div>
+            offenceAnalysis
+          </div>
+            {% elif presenter.subNavValue == 'educationTrainingAndEmployment' %}
+              <div>
+            educationTrainingAndEmployment
+          </div>
+            {% elif presenter.subNavValue == 'relationships' %}
+              <div>
+            relationships
+          </div>
+            {% elif presenter.subNavValue == 'lifestyleAndAssociates' %}
+              <div>
+            lifestyleAndAssociates
+          </div>
+            {% elif presenter.subNavValue == 'drugMisuse' %}
+              <div>
+            drugMisuse
+          </div>
+            {% elif presenter.subNavValue == 'alcoholMisuse' %}
+              <div>
+            alcoholMisuse
+          </div>
+            {% elif presenter.subNavValue == 'emotionalWellbeing' %}
+              <div>
+            emotionalWellbeing
+          </div>
+            {% elif presenter.subNavValue == 'thinkingAndBehaviour' %}
+              <div>
+            thinkingAndBehaviour
+          </div>
+            {% elif presenter.subNavValue == 'attitudes' %}
+              <div>
+            attitudes
+          </div>
+            {% elif presenter.subNavValue == 'health' %}
+              <div>
+            health
+          </div>
+            {% elif presenter.subNavValue == 'roshAnalysis' %}
+              <div>
+                {% include "./roshAnalysis.njk" %}
+              </div>
+            {% else %}
+              {% include "./risksAndAlerts.njk" %}
+            {% endif %}
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  {% endblock %}
+{% endblock %}

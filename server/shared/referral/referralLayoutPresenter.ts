@@ -40,7 +40,7 @@ export default class ReferralLayoutPresenter {
         },
         {
           text: 'Risks and needs',
-          href: `/referral/${this.referralId}/risks-and-needs`,
+          href: `/referral/${this.referralId}/risks-and-alerts`,
           active: this.horizontalNavValue === HorizontalNavValues.risksAndNeedsTab,
         },
         {

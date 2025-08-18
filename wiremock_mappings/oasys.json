@@ -1,0 +1,190 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "urlPattern": "/assessments/timeline/.*",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "crn": "D002399",
+          "timeline": [
+            {
+              "id": 9635383,
+              "completedAt": "2024-08-01T14:20:00",
+              "type": "LAYER3",
+              "status": "COMPLETE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "request": {
+        "urlPattern": "/assessments/.*/section/sectionroshfull",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "assessmentPk": 9635383,
+          "assessmentType": "LAYER3",
+          "dateCompleted": "2024-08-01T14:20:00",
+          "assessorSignedDate": "2024-08-01T14:20:00",
+          "initiationDate": "2022-11-28T15:01:05",
+          "assessmentStatus": "COMPLETE",
+          "superStatus": "COMPLETE",
+          "laterWIPAssessmentExists": false,
+          "latestWIPDate": null,
+          "laterSignLockAssessmentExists": false,
+          "latestSignLockDate": null,
+          "laterPartCompUnsignedAssessmentExists": false,
+          "latestPartCompUnsignedDate": null,
+          "laterPartCompSignedAssessmentExists": false,
+          "latestPartCompSignedDate": null,
+          "laterCompleteAssessmentExists": false,
+          "latestCompleteDate": "2024-08-01T14:20:00",
+          "currentOffenceDetails": "Ms Puckett admits he went to Mr X's address on 23rd march 2010. She went there in order to buy cannabis. This meeting had been pre- arranged and Ms Puckett went there with another man. Mr X sold an ounce of cannabis for #120 to Ms Puckett.  Together, Ms Puckett and the other man queried the quality of the ounce of cannabis. Ms Puckett asked for her money back.  Mr X told them there was nothing wrong with the cannabis and asked them both to leave. Ms Puckett grabbed Mr X and said she wanted her money back.  Mr X said something.  Ms Puckett then punched him once with her fist. Mr X then attacked Ms Puckett with an implement from the side or the back of the sofa. He struck Ms Puckett to the back of the head. In the course of the struggle Ms Puckett accepts that she came into possession of the implement with shich Mr X had attacked her. During the course of the struggle Ms Puckett accepts that she struck Mr X with the implement 2 or 3 times. As a result she is guilty of unlawful wounding.",
+          "previousConcernsSelfHarmSuicide": null,
+          "childProtectionConferencesDetails": null,
+          "previousConcernsEscape": null,
+          "currentACCT": null,
+          "analysisCoping": null,
+          "currentConcernsEscapeText": null,
+          "previousConcernsVulnerability": null,
+          "currentVulnerability": null,
+          "currentConcernsDisruptive": null,
+          "currentConcernsEscape": null,
+          "analysisVulnerabilities": null,
+          "analysisBehavioursIncidents": null,
+          "previousConcernsBreachOfTrust": null,
+          "riskToIdentifiableChildren": null,
+          "previousConcernsCustodyCoping": null,
+          "previousConcernsEscapeText": null,
+          "currentConcernsRiskOfSelfHarm": null,
+          "situationWithRiskToIdentifiableChildren": null,
+          "currentConcernsRiskOfSuicide": null,
+          "pastSelfHarmConcerns": null,
+          "pastSuicideConcerns": null,
+          "dateChildSafeguardingIssuesKnownToAssessor": "",
+          "otherAgencies": null,
+          "localAuthorityKeyWorker": null,
+          "dateChildProtectionIssuesKnownToAssessor": "",
+          "currentConcernsCustody": null,
+          "analysisControlBehaveTrust": null,
+          "previousConcernsHostelCoping": null,
+          "currentConcernsDisruptiveText": null,
+          "situationGiveDetails": null,
+          "currentConcernsHostel": null,
+          "tickRiskOfSeriousHarm": null,
+          "analysisSuicideSelfharm": null,
+          "bookNumber": null,
+          "currentConcernsVulnerability": null,
+          "childProtectionConferences": null,
+          "currentConcernsSelfHarmSuicide": null,
+          "riskOfSeriousHarm": null,
+          "previousVulnerability": null,
+          "currentConcernsBreachOfTrust": null,
+          "previousConcernsDisruptiveText": null,
+          "previousConcernsDisruptive": null,
+          "additionalInformation": null,
+          "previousCustodyHostelCoping": null,
+          "previousConcernsBreachOfTrustText": null,
+          "currentConcernsBreachOfTrustText": null,
+          "currentCustodyHostelCoping": null,
+          "analysisEscapeAbscond": null,
+          "identifyBehavioursIncidents": null,
+          "previousWhereAndWhen": "March 1988 on pub premises in Winchester when he was 17. Affray - Portsmouth area",
+          "previousWhatDone": "Sect 20 GBH in 1998 ? Had a fight in a pub and stabbed victim twice. She had been drinking. Said the victim was older than she was ? a soldier. Said he carried knife ? described it as small knife, with bottle opener on it; Affray ? 2004 ? described as pub brawl ? she had gone to pub after work ? only had one pint but says other friends had been drinking all day. She went to assistance of a mate ? got 28 days imprisonment ? had served 14 days on remand so released immediately. Was on licence at the time.",
+          "currentSources": "Interview, CPS documentation, basis of plea.",
+          "currentWhyDone": "Ms Puckett stated that as she had been attempting to address her long standing addiction to heroin, with the support of a Drug Rehabilitation Requirement as part of a community order, he had been using cannabis as a substitute in order to assuage symptoms of withdrawal or stress.  She had said that the deal to purchase cannabis had been set up by a third party and that he had not met the victim prior to the offence.  She recalled paying for cannabis only to find that it had been clearly mixed with cooking herbs 9sage) and getting into an altercation which escalated when the victim refused to reimburse him. She admitted to instigating violence in the first place by punching the victim, out of a mixture of frustration and anger. She said that the situation quickly got out of control when the victim produced a metal bar and hit him with it.",
+          "currentAnyoneElsePresent": "See above - Mr Manette was in the company of another, although he was not apprehended or charged for this offence. ",
+          "currentWhoVictims": "Male-outnumbered by Mr Manette and his associate (not charged). The victims girlfriend was present and alerted the police.  She has maintained that she has been left with significant anxiety issues since the offence, as has the victim.",
+          "currentHowDone": "Appears to have been unprovoked violence - although basis of plea indicates otherwise. In any event this was impulsive, excessive violence using a weapon (metal pole)",
+          "currentWhereAndWhen": "At the victim's home address, in the evening",
+          "previousSources": "Interview, previous convictions.  Details not verified Info solely from Ms Puckett",
+          "previousWhyDone": "GBH - She states he acted in self defence but was under the influence of alcohol at the time. Affray - not drunk - only one pint - but with mates and protecting a mate she says.",
+          "previousAnyoneElsePresent": "Other people were in the pub on both occasions",
+          "previousWhoVictims": "Male stranger on both occasions",
+          "previousHowDone": "GBH - she says this was not planned; she states he acted in self defence as the victim was a lot bigger than her and she feared that she would have been worse off.  She used a small pen knife to stab victim. Affray - no evidence to suggest it was planned.",
+          "assessor": {
+            "name": "LevelOne CentralSupport"
+          },
+          "crn": "D002399"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPattern": "/assessments/pni/D002399\\?community=true"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "pniCalculation": {
+            "sexDomain": {
+              "level": "L",
+              "score": 0
+            },
+            "thinkingDomain": {
+              "level": "M",
+              "score": 1
+            },
+            "relationshipDomain": {
+              "level": "M",
+              "score": 1
+            },
+            "selfManagementDomain": {
+              "level": "M",
+              "score": 1
+            },
+            "riskLevel": "L",
+            "needLevel": "M",
+            "totalDomainScore": 3,
+            "pni": "A",
+            "saraRiskLevel": {
+              "toPartner": 1,
+              "toOther": 1
+            }
+          },
+          "assessment": {
+            "id": 9635383,
+            "ogrs3Risk": "LOW",
+            "ovpRisk": "LOW",
+            "osp": {
+              "cdc": "NOT_APPLICABLE",
+              "iiic": "NOT_APPLICABLE"
+            },
+            "rsrPercentage": 0.55,
+            "offenderAge": 47,
+            "questions": {
+              "everCommittedSexualOffence": "NO",
+              "openSexualOffendingQuestions": "NO",
+              "sexualPreOccupation": "MISSING",
+              "offenceRelatedSexualInterests": "MISSING",
+              "emotionalCongruence": "MISSING",
+              "proCriminalAttitudes": "SOME",
+              "hostileOrientation": "SOME",
+              "relCloseFamily": "NONE",
+              "prevCloseRelationships": "NONE",
+              "easilyInfluenced": "SOME",
+              "aggressiveControllingBehaviour": "SIGNIFICANT",
+              "impulsivity": "SOME",
+              "temperControl": "NONE",
+              "problemSolvingSkills": "SOME",
+              "difficultiesCoping": "NONE"
+            }
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    }
+  ]
+}
