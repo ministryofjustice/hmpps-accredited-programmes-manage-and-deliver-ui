@@ -6,6 +6,7 @@ $govuk-page-width: $moj-page-width;
 
 @import "govuk-frontend/dist/govuk/index";
 @import "@ministryofjustice/frontend/moj/all";
+@import "risk/rosh-widget";
 
 @import './components/header-bar';
 @import './components/service-user-banner';

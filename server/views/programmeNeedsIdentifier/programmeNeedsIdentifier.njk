@@ -3,7 +3,7 @@
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-
+{% from "components/rosh-widget/macro.njk" import roshWidget %}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -17,10 +17,17 @@
         {{ mojPageHeaderActions(presenter.getSubHeaderArgs()) }}
         {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
       </div>
-      <div class="govuk-grid-column-two-thirds">
+      <div class="govuk-grid-column-three-quarters">
         <h2 class="govuk-heading-m">Programme needs identifier</h2>
-        <p class="govuk-body govuk-!-margin-bottom-0">This is {{this.presenter.details.personName}}'s eligibility for Accredited Programmes, based on their risk and need scores.</p>
-
+        <p class="govuk-body govuk-!-margin-bottom-6">This is {{this.presenter.details.personName}}'s eligibility for Accredited Programmes, based on their risk and need scores.</p>
+      </div>
+      <div class="govuk-grid-column-three-quarters">
+        <div class="rosh-widget rosh-widget--medium govuk-!-margin-bottom-6">
+          <h2 class="govuk-heading-s govuk-!-margin-bottom-1">
+            <span class="orange"><strong>MODERATE INTENSITY</strong></span>
+          </h2>
+          <p class="govuk-body govuk-!-margin-bottom-1">Based on the risk and need scores, Alex River may be eligible for moderate intensity Accredited Programmes.</p>
+        </div>
         <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
       </div>
       <div class="govuk-grid-column-three-quarters">
