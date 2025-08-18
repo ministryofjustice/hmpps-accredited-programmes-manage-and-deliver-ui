@@ -7,6 +7,10 @@ $high-score-border-colour: #d4351c;
 $very-high-score-colour: #711a0d;
 $very-high-score-border-colour: #942514;
 $unknown-score-border-colour: #fd0;
+$alternative-score-colour: #505a5f;
+$alternative-score-border-colour: #b3b4b6;
+$missing-score-colour: #1d70b8;
+$missing-score-border-colour: #1d70b8;
 
 .rosh-widget {
   border: 2px solid govuk-colour('black');
@@ -21,6 +25,22 @@ $unknown-score-border-colour: #fd0;
 
 .rosh-widget--unknown {
   border: 2px solid $unknown-score-border-colour;
+}
+
+.rosh-widget--missing, .rosh-widget--error{
+  border: 2px solid $missing-score-border-colour;
+
+  & h3 {
+    color: $missing-score-colour;
+  }
+}
+
+.rosh-widget--alternative {
+  border: 2px solid $alternative-score-border-colour;
+
+  & h3 {
+    color: $alternative-score-colour;
+  }
 }
 
 .rosh-widget--low {
@@ -68,6 +88,10 @@ $unknown-score-border-colour: #fd0;
       font-weight: bold;
     }
   }
+}
+
+.rosh-widget__risk--alternative {
+  color: $low-score-colour;
 }
 
 .rosh-widget__risk--low {

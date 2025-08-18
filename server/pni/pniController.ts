@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
-import ProgrammeNeedsIdentifierPresenter from './programmeNeedsIdentifierPresenter'
+import PniPresenter from './pniPresenter'
 import ControllerUtils from '../utils/controllerUtils'
-import ProgrammeNeedsIdentifierView from './programmeNeedsIdentifierView'
+import PniView from './pniView'
 
-export default class ProgrammeNeedsIdentifierController {
+export default class PniController {
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
   ) {}
@@ -17,9 +17,10 @@ export default class ProgrammeNeedsIdentifierController {
       referralId,
       username,
     )
+    const pniScore = await this.accreditedProgrammesManageAndDeliverService.getPniScore(username, referralDetails.crn)
 
-    const presenter = new ProgrammeNeedsIdentifierPresenter(referralId, referralDetails)
-    const view = new ProgrammeNeedsIdentifierView(presenter)
+    const presenter = new PniPresenter(referralId, referralDetails, pniScore)
+    const view = new PniView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, referralDetails)
   }

@@ -10,6 +10,7 @@ type DailyAvailabilityModel = components['schemas']['DailyAvailabilityModel']
 type SentenceInformation = components['schemas']['SentenceInformation']
 type CohortEnum = components['schemas']['ReferralDetails']['cohort']
 type OffenceHistory = components['schemas']['OffenceHistory']
+type PniScore = components['schemas']['PniScore']
 
 export type {
   ReferralCaseListItem,
@@ -22,4 +23,5 @@ export type {
   CohortEnum,
   SentenceInformation,
   OffenceHistory,
+  PniScore,
 }

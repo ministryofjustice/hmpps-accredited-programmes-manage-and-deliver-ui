@@ -17,19 +17,22 @@
         {{ mojPageHeaderActions(presenter.getSubHeaderArgs()) }}
         {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
       </div>
+
       <div class="govuk-grid-column-three-quarters">
         <h2 class="govuk-heading-m">Programme needs identifier</h2>
-        <p class="govuk-body govuk-!-margin-bottom-6">This is {{this.presenter.details.personName}}'s eligibility for Accredited Programmes, based on their risk and need scores.</p>
+        <p class="govuk-body govuk-!-margin-bottom-6">This is {{presenter.details.personName}}'s eligibility for Accredited Programmes, based on their risk and need scores.</p>
       </div>
+
       <div class="govuk-grid-column-three-quarters">
-        <div class="rosh-widget rosh-widget--medium govuk-!-margin-bottom-6">
-          <h2 class="govuk-heading-s govuk-!-margin-bottom-1">
-            <span class="orange"><strong>MODERATE INTENSITY</strong></span>
-          </h2>
-          <p class="govuk-body govuk-!-margin-bottom-1">Based on the risk and need scores, Alex River may be eligible for moderate intensity Accredited Programmes.</p>
+        <div class="{{pathwayDetails.class}}">
+          <h3 class="govuk-heading-s govuk-!-margin-bottom-1">
+            <span><strong>{{pathwayDetails.headingText}}</strong></span>
+          </h3>
+          <p class="govuk-body govuk-!-margin-bottom-1">{{pathwayDetails.bodyText}}</p>
         </div>
         <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
       </div>
+
       <div class="govuk-grid-column-three-quarters">
         <h2 class="govuk-heading-m">How is this calculated?</h2>
         <p class="govuk-body">Eligibility is based on a combination of:</p>
@@ -37,48 +40,10 @@
           <li><a href={{ riskAndNeedsUrl }} class="govuk-link">risk scores</a></li>
           <li>the programme needs identifier (PNI), which uses the following scores</li>
         </ul>
-        {{ govukSummaryList({
-          card: {
-            title: {
-              text: "Sex"
-            },
-          classes: "govuk-!-margin-top-8"
-          },
-          rows: [
-            {
-              key: {
-                text: "11.11 - Sexual Pre-occupation"
-              },
-              value: {
-                text: "0"
-              }
-            },
-            {
-              key: {
-                text: "11.12 - Offence related Sexual Interests"
-              },
-              value: {
-                text: "0"
-              }
-            },
-            {
-              key: {
-                text: "6.12 Emotional congruence with children or feeling closer to children than adults"
-              },
-              value: {
-                text: "0"
-              }
-            },
-            {
-              key: {
-                text: "Sex result"
-              },
-              value: {
-                text: "Low need"
-              }
-            }
-          ]
-        }) }}
+        {{ govukSummaryList(sexSummary) }}
+        {{ govukSummaryList(thinkingSummary) }}
+        {{ govukSummaryList(relationshipsSummary) }}
+        {{ govukSummaryList(selfManagementSummary) }}
       </div>
     </div>
   </div>
