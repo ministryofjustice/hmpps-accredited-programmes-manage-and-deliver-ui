@@ -117,6 +117,74 @@
           "Content-Type": "application/json"
         }
       }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPattern": "/assessments/pni/.*\\?community=true"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "pniCalculation": {
+            "sexDomain": {
+              "level": "L",
+              "score": 0
+            },
+            "thinkingDomain": {
+              "level": "M",
+              "score": 1
+            },
+            "relationshipDomain": {
+              "level": "M",
+              "score": 1
+            },
+            "selfManagementDomain": {
+              "level": "M",
+              "score": 1
+            },
+            "riskLevel": "L",
+            "needLevel": "M",
+            "totalDomainScore": 3,
+            "pni": "A",
+            "saraRiskLevel": {
+              "toPartner": 1,
+              "toOther": 1
+            }
+          },
+          "assessment": {
+            "id": 9635383,
+            "ogrs3Risk": "LOW",
+            "ovpRisk": "LOW",
+            "osp": {
+              "cdc": "NOT_APPLICABLE",
+              "iiic": "NOT_APPLICABLE"
+            },
+            "rsrPercentage": 0.55,
+            "offenderAge": 47,
+            "questions": {
+              "everCommittedSexualOffence": "NO",
+              "openSexualOffendingQuestions": "NO",
+              "sexualPreOccupation": "MISSING",
+              "offenceRelatedSexualInterests": "MISSING",
+              "emotionalCongruence": "MISSING",
+              "proCriminalAttitudes": "SOME",
+              "hostileOrientation": "SOME",
+              "relCloseFamily": "NONE",
+              "prevCloseRelationships": "NONE",
+              "easilyInfluenced": "SOME",
+              "aggressiveControllingBehaviour": "SIGNIFICANT",
+              "impulsivity": "SOME",
+              "temperControl": "NONE",
+              "problemSolvingSkills": "SOME",
+              "difficultiesCoping": "NONE"
+            }
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
     }
   ]
 }

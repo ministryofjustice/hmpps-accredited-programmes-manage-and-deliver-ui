@@ -5,7 +5,7 @@ class PersonalDetailsFactory extends Factory<PersonalDetails> {}
 
 export default PersonalDetailsFactory.define(() => ({
   crn: 'X933590',
-  name: 'ALex River',
+  name: 'Alex River',
   dateOfBirth: '15 March 1985',
   ethnicity: 'White',
   gender: 'Male',

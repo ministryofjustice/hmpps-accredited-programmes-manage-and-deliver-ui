@@ -11,6 +11,7 @@ type SentenceInformation = components['schemas']['SentenceInformation']
 type CohortEnum = components['schemas']['ReferralDetails']['cohort']
 type OffenceHistory = components['schemas']['OffenceHistory']
 type RoshAnalysis = components['schemas']['RoshAnalysis']
+type PniScore = components['schemas']['PniScore']
 
 export type {
   Availability,
@@ -24,4 +25,5 @@ export type {
   RoshAnalysis,
   SentenceInformation,
   UpdateAvailability,
+  PniScore,
 }

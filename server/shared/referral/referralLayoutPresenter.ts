@@ -45,7 +45,7 @@ export default class ReferralLayoutPresenter {
         },
         {
           text: 'Programme needs identifier',
-          href: '#3',
+          href: `/referral/${this.referralId}/programme-needs-identifier`,
           active: this.horizontalNavValue === HorizontalNavValues.programmeNeedsIdentifierTab,
         },
         {

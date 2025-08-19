@@ -4,6 +4,7 @@ import asyncMiddleware from '../middleware/asyncMiddleware'
 import type { Services } from '../services'
 import ReferralDetailsController from '../referralDetails/referralDetailsController'
 import CaselistController from '../caselist/caselistController'
+import PniController from '../pni/pniController'
 import RisksAndNeedsController from '../risksAndNeeds/risksAndNeedsController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
@@ -14,6 +15,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const caselistController = new CaselistController(accreditedProgrammesManageAndDeliverService)
   const referralDetailsController = new ReferralDetailsController(accreditedProgrammesManageAndDeliverService)
   const risksAndNeedsController = new RisksAndNeedsController(accreditedProgrammesManageAndDeliverService)
+  const programmeNeedsIdenfitierController = new PniController(accreditedProgrammesManageAndDeliverService)
 
   get('/', async (req, res, next) => {
     await caselistController.showOpenCaselist(req, res)
@@ -126,6 +128,10 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   get('/referral/:referralId/rosh-analysis', async (req, res, next) => {
     await risksAndNeedsController.showRoshAnalysisPage(req, res)
+  })
+
+  get('/referral/:referralId/programme-needs-identifier', async (req, res, next) => {
+    await programmeNeedsIdenfitierController.showProgrammeNeedsIdentifierPage(req, res)
   })
 
   return router
