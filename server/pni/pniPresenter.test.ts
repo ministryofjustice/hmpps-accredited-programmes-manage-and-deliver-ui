@@ -1,62 +1,12 @@
 import { PniScore, ReferralDetails } from '@manage-and-deliver-api'
 import PniPresenter from './pniPresenter'
+import pniScoreFactory from '../testutils/factories/pniScoreFactory'
+import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 
 describe('PniPresenter', () => {
-  const pniScore: PniScore = {
-    domainScores: {
-      RelationshipDomainScore: {
-        individualRelationshipScores: {
-          aggressiveControllingBehaviour: 0,
-          curRelCloseFamily: 1,
-          easilyInfluenced: 2,
-          prevCloseRelationships: 3,
-        },
-        overallRelationshipDomainLevel: 'LOW_NEED',
-      },
-      SelfManagementDomainScore: {
-        individualSelfManagementScores: {
-          difficultiesCoping: 0,
-          impulsivity: 1,
-          problemSolvingSkills: 2,
-          temperControl: 3,
-        },
-        overallSelfManagementDomainLevel: 'MEDIUM_NEED',
-      },
-      SexDomainScore: {
-        individualSexScores: {
-          emotionalCongruence: 0,
-          offenceRelatedSexualInterests: 1,
-          sexualPreOccupation: 2,
-        },
-        overallSexDomainLevel: 'HIGH_NEED',
-      },
-      ThinkingDomainScore: {
-        individualThinkingScores: {
-          hostileOrientation: 1,
-          proCriminalAttitudes: 2,
-        },
-        overallThinkingDomainLevel: 'MEDIUM_NEED',
-      },
-    },
-    RiskScore: {
-      IndividualRiskScores: {},
-      classification: 'MEDIUM_RISK',
-    },
-    validationErrors: [],
-    overallIntensity: 'HIGH',
-  }
+  const pniScore: PniScore = pniScoreFactory.build()
 
-  const referralDetails: ReferralDetails = {
-    id: '1234',
-    crn: '1234',
-    personName: 'Steve Sticks',
-    interventionName: 'An Intervention',
-    createdAt: '2025-01-01',
-    dateOfBirth: '1990-02-02',
-    probationPractitionerName: 'Dave Davies',
-    probationPractitionerEmail: 'dave.davies@moj.com',
-    cohort: 'GENERAL_OFFENCE',
-  }
+  const referralDetails: ReferralDetails = referralDetailsFactory.build()
 
   describe('needScoreToString', () => {
     const presenter = new PniPresenter('12345', referralDetails, pniScore)
@@ -77,7 +27,7 @@ describe('PniPresenter', () => {
 
       expect(pathwayContent).toEqual({
         bodyText:
-          'Based on the risk and need scores, Steve Sticks may be eligible for the high intensity Accredited Programmes pathway.',
+          'Based on the risk and need scores, Alex River may be eligible for the high intensity Accredited Programmes pathway.',
         class: 'rosh-widget rosh-widget--high govuk-!-margin-bottom-6',
         headingText: 'HIGH INTENSITY',
       })
@@ -90,7 +40,7 @@ describe('PniPresenter', () => {
 
       expect(pathwayContent).toEqual({
         bodyText:
-          'Based on the risk and need scores, Steve Sticks may be eligible for the moderate intensity Accredited Programmes pathway.',
+          'Based on the risk and need scores, Alex River may be eligible for the moderate intensity Accredited Programmes pathway.',
         class: 'rosh-widget rosh-widget--medium govuk-!-margin-bottom-6',
         headingText: 'MODERATE INTENSITY',
       })
@@ -103,7 +53,7 @@ describe('PniPresenter', () => {
 
       expect(pathwayContent).toEqual({
         bodyText:
-          'Based on the risk and need scores, Steve Sticks may not be eligible for either the moderate or high intensity Accredited Programmes pathway. Speak to the Offender Management team about other options.',
+          'Based on the risk and need scores, Alex River may not be eligible for either the moderate or high intensity Accredited Programmes pathway. Speak to the Offender Management team about other options.',
         class: 'rosh-widget rosh-widget--alternative govuk-!-margin-bottom-6',
         headingText: 'NOT ELIGIBLE',
       })
