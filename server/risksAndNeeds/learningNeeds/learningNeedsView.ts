@@ -5,7 +5,6 @@ import ViewUtils from '../../utils/viewUtils'
 export default class LearningNeedsView {
   constructor(private readonly presenter: LearningNeedsPresenter) {}
 
-
   get assessmentCompletedText(): InsetTextArgs {
     return {
       text: `Assessment completed ${this.presenter.learningNeeds.assessmentCompleted}`,

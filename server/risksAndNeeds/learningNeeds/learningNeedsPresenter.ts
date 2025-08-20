@@ -1,7 +1,6 @@
 import { LearningNeeds } from '@manage-and-deliver-api'
 import RisksAndNeedsPresenter from '../risksAndNeedsPresenter'
 import { SummaryListItem } from '../../utils/summaryList'
-import { InsetTextArgs } from '../../utils/govukFrontendTypes'
 
 export default class LearningNeedsPresenter extends RisksAndNeedsPresenter {
   constructor(
@@ -11,13 +10,6 @@ export default class LearningNeedsPresenter extends RisksAndNeedsPresenter {
   ) {
     super(subNavValue, referralId)
   }
-
-  // get assessmentCompletedText(): InsetTextArgs {
-  //   return {
-  //     text: `Assessment completed ${this.learningNeeds.assessmentCompleted}`,
-  //     classes: 'govuk-!-margin-top-0',
-  //   }
-  // }
 
   learningNeedsSummaryList(): SummaryListItem[] {
     const { problemAreas } = this.learningNeeds
