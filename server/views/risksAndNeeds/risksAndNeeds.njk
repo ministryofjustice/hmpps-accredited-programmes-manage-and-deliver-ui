@@ -38,7 +38,8 @@
           <div class="govuk-grid-column-two-thirds">
             {% if presenter.subNavValue == 'learningNeeds' %}
               <div>
-            learningNeeds
+                  {% include "./learningNeeds.njk" %}
+              </div>
           </div>
             {% elif presenter.subNavValue == 'offenceAnalysis' %}
               <div>

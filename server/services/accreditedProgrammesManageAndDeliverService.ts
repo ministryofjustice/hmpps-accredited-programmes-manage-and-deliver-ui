@@ -7,6 +7,7 @@ import {
   RoshAnalysis,
   SentenceInformation,
   OffenceHistory,
+  LearningNeeds,
   PniScore,
   UpdateAvailability,
 } from '@manage-and-deliver-api'
@@ -97,6 +98,14 @@ export default class AccreditedProgrammesManageAndDeliverService {
       path: `/referral-details/${referralId}/sentence-information`,
       headers: { Accept: 'application/json' },
     })) as SentenceInformation
+  }
+
+  async getLearningNeeds(username: Express.User['username'], crn: string): Promise<LearningNeeds> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/risks-and-needs/${crn}/learning-needs`,
+      headers: { Accept: 'application/json' },
+    })) as LearningNeeds
   }
 
   async addAvailability(

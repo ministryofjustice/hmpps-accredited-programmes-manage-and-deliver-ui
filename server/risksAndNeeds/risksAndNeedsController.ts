@@ -15,8 +15,8 @@ import EmotionalWellbeingPresenter from './emotionalWellbeing/emotionalWellbeing
 import EmotionalWellbeingView from './emotionalWellbeing/emotionalWellbeingView'
 import HealthPresenter from './health/healthPresenter'
 import HealthView from './health/healthView'
-import LearningAndNeedsPresenter from './learningAndNeeds/learningAndNeedsPresenter'
-import LearningAndNeedsView from './learningAndNeeds/learningAndNeedsView'
+import LearningNeedsPresenter from './learningNeeds/learningNeedsPresenter'
+import LearningNeedsView from './learningNeeds/learningNeedsView'
 import LifestyleAndAssociatesPresenter from './lifestyleAndAssociates/lifestyleAndAssociatesPresenter'
 import LifestyleAndAssociatesView from './lifestyleAndAssociates/lifestyleAndAssociatesView'
 import OffenceAnalysisPresenter from './offenceAnalysis/offenceAnalysisPresenter'
@@ -58,9 +58,12 @@ export default class RisksAndNeedsController {
     const subNavValue = 'learningNeeds'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
-
-    const presenter = new LearningAndNeedsPresenter(subNavValue, referralId)
-    const view = new LearningAndNeedsView(presenter)
+    const learningNeeds = await this.accreditedProgrammesManageAndDeliverService.getLearningNeeds(
+      username,
+      sharedReferralDetailsData.crn,
+    )
+    const presenter = new LearningNeedsPresenter(subNavValue, referralId, learningNeeds)
+    const view = new LearningNeedsView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }

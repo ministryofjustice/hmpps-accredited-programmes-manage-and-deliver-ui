@@ -1,10 +1,11 @@
-import { ReferralDetails, RoshAnalysis } from '@manage-and-deliver-api'
+import { LearningNeeds, ReferralDetails, RoshAnalysis } from '@manage-and-deliver-api'
 import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import request from 'supertest'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
+import learningNeedsFactory from '../testutils/factories/risksAndNeeds/learningNeedsFactory'
 import roshAnalysisFactory from '../testutils/factories/risksAndNeeds/roshAnalysisFactory'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
@@ -51,6 +52,67 @@ describe('Rosh Analysis', () => {
           expect(res.text).toContain(roshAnalysis.identifyBehavioursIncidents)
           expect(res.text).toContain(roshAnalysis.analysisBehaviourIncidents)
         })
+    })
+  })
+})
+
+describe('Learning Needs', () => {
+  describe('GET /referral/:id/learning-needs', () => {
+    it('loads the risks and needs page with learning needs sub-nav and displays all learning needs data', async () => {
+      const learningNeeds: LearningNeeds = learningNeedsFactory.build()
+      accreditedProgrammesManageAndDeliverService.getLearningNeeds.mockResolvedValue(learningNeeds)
+
+      const referralId = randomUUID()
+      return request(app)
+        .get(`/referral/${referralId}/learning-needs`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain(learningNeeds.workRelatedSkills)
+          expect(res.text).toContain(learningNeeds.problemsReadWriteNum)
+          expect(res.text).toContain(learningNeeds.learningDifficulties)
+          expect(res.text).toContain(learningNeeds.qualifications)
+          expect(res.text).toContain(learningNeeds.basicSkillsScore)
+          expect(res.text).toContain(learningNeeds.basicSkillsScoreDescription)
+          learningNeeds.problemAreas?.forEach(problemArea => {
+            expect(res.text).toContain(problemArea)
+          })
+        })
+    })
+
+    it('handles learning needs with minimal data', async () => {
+      const learningNeeds: LearningNeeds = learningNeedsFactory.build({
+        workRelatedSkills: undefined,
+        problemsReadWriteNum: undefined,
+        learningDifficulties: undefined,
+        problemAreas: [],
+        qualifications: undefined,
+        basicSkillsScore: undefined,
+        basicSkillsScoreDescription: undefined,
+      })
+      accreditedProgrammesManageAndDeliverService.getLearningNeeds.mockResolvedValue(learningNeeds)
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/learning-needs`).expect(200)
+    })
+
+    it('calls the service with correct parameters', async () => {
+      const learningNeeds: LearningNeeds = learningNeedsFactory.build()
+      accreditedProgrammesManageAndDeliverService.getLearningNeeds.mockResolvedValue(learningNeeds)
+
+      const referralId = randomUUID()
+      await request(app).get(`/referral/${referralId}/learning-needs`).expect(200)
+
+      expect(accreditedProgrammesManageAndDeliverService.getLearningNeeds).toHaveBeenCalledWith(
+        'user1',
+        referralDetails.crn,
+      )
+    })
+
+    it('handles service errors gracefully', async () => {
+      accreditedProgrammesManageAndDeliverService.getLearningNeeds.mockRejectedValue(new Error('Service unavailable'))
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/learning-needs`).expect(500)
     })
   })
 })

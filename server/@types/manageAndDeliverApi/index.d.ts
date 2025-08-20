@@ -10,6 +10,7 @@ type DailyAvailabilityModel = components['schemas']['DailyAvailabilityModel']
 type SentenceInformation = components['schemas']['SentenceInformation']
 type CohortEnum = components['schemas']['ReferralDetails']['cohort']
 type OffenceHistory = components['schemas']['OffenceHistory']
+type LearningNeeds = components['schemas']['LearningNeeds']
 type RoshAnalysis = components['schemas']['RoshAnalysis']
 type PniScore = components['schemas']['PniScore']
 
@@ -26,4 +27,5 @@ export type {
   SentenceInformation,
   UpdateAvailability,
   PniScore,
+  LearningNeeds,
 }
