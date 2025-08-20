@@ -29,6 +29,7 @@ import HealthPresenter from './health/healthPresenter'
 import HealthView from './health/healthView'
 import RoshAnalysisPresenter from './roshAnalysis/roshAnalysisPresenter'
 import RoshAnalysisView from './roshAnalysis/roshAnalysisView'
+import HealthUtils from "../referralDetails/risksAndNeeds/healthUtils";
 
 export default class RisksAndNeedsController {
   constructor(
@@ -192,7 +193,18 @@ export default class RisksAndNeedsController {
     const presenter = new HealthPresenter(subNavValue, referralId)
     const view = new HealthView(presenter)
 
-    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    const health = await await this.accreditedProgrammesManageAndDeliverService.getHealth(sharedReferralDetailsData.crn, username)
+
+    const templateLocals = health
+      ? {
+        hasData: true,
+        healthSummaryListRows: HealthUtils.healthSummaryListRows(health),
+      }
+      : {
+        hasData: false,
+      }
+
+    return ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
 
   async showRoshAnalysisPage(req: Request, res: Response): Promise<void> {

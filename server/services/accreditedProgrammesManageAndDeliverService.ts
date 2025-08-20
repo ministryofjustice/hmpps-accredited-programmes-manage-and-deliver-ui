@@ -6,7 +6,7 @@ import {
   PersonalDetails,
   ReferralDetails,
   SentenceInformation,
-  OffenceHistory,
+  OffenceHistory, Health,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -128,4 +128,13 @@ export default class AccreditedProgrammesManageAndDeliverService {
       headers: { Accept: 'application/json' },
     })) as OffenceHistory
   }
+
+  async getHealth(username: Express.User['username'], crn: string): Promise<Health> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/risks-and-needs/${crn}/health`,
+      headers: { Accept: 'application/json' },
+    })) as Health
+  }
+
 }
