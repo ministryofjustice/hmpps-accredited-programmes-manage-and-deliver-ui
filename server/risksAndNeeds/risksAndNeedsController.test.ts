@@ -1,12 +1,14 @@
-import { LearningNeeds, ReferralDetails, RoshAnalysis } from '@manage-and-deliver-api'
+import { Health, LearningNeeds, ReferralDetails, RoshAnalysis } from '@manage-and-deliver-api'
 import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import request from 'supertest'
+import * as cheerio from 'cheerio'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 import learningNeedsFactory from '../testutils/factories/risksAndNeeds/learningNeedsFactory'
 import roshAnalysisFactory from '../testutils/factories/risksAndNeeds/roshAnalysisFactory'
+import healthFactory from '../testutils/factories/risksAndNeeds/healthFactory'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
@@ -113,6 +115,57 @@ describe('Learning Needs', () => {
 
       const referralId = randomUUID()
       return request(app).get(`/referral/${referralId}/learning-needs`).expect(500)
+    })
+  })
+})
+
+describe('Health section of risks and needs', () => {
+  describe('GET /referral/:id/health', () => {
+    it('loads the risks and needs page with health sub-nav and displays all health related data', async () => {
+      const health: Health = healthFactory.build()
+      accreditedProgrammesManageAndDeliverService.getHealth.mockResolvedValue(health)
+
+      const referralId = randomUUID()
+      return request(app)
+        .get(`/referral/${referralId}/health`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Assessment completed 23 August 2025')
+          expect(res.text).toContain(health.description)
+
+          const $ = cheerio.load(res.text)
+          const element = $(`span[data-test-id='any-health-condition']`)
+          expect(element).not.toBeNull()
+        })
+    })
+
+    it('handles health info with minimal data', async () => {
+      const health: Health = healthFactory.build({
+        anyHealthConditions: undefined,
+        description: undefined,
+      })
+      accreditedProgrammesManageAndDeliverService.getHealth.mockResolvedValue(health)
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/health`).expect(200)
+    })
+
+    it('calls the service with correct parameters', async () => {
+      const referralId = randomUUID()
+
+      const health: Health = healthFactory.build()
+      accreditedProgrammesManageAndDeliverService.getHealth.mockResolvedValue(health)
+
+      await request(app).get(`/referral/${referralId}/health`).expect(200)
+
+      expect(accreditedProgrammesManageAndDeliverService.getHealth).toHaveBeenCalledWith('user1', referralDetails.crn)
+    })
+
+    it('handles service errors gracefully', async () => {
+      accreditedProgrammesManageAndDeliverService.getHealth.mockRejectedValue(new Error('Service unavailable'))
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/health`).expect(500)
     })
   })
 })
