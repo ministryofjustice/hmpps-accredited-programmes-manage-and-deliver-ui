@@ -191,8 +191,12 @@ export default class RisksAndNeedsController {
     const subNavValue = 'health'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
+    const health = await await this.accreditedProgrammesManageAndDeliverService.getHealth(
+      username,
+      sharedReferralDetailsData.crn,
+    )
 
-    const presenter = new HealthPresenter(subNavValue, referralId)
+    const presenter = new HealthPresenter(subNavValue, referralId, health)
     const view = new HealthView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)

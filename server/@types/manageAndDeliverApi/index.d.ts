@@ -13,6 +13,7 @@ type OffenceHistory = components['schemas']['OffenceHistory']
 type LearningNeeds = components['schemas']['LearningNeeds']
 type RoshAnalysis = components['schemas']['RoshAnalysis']
 type PniScore = components['schemas']['PniScore']
+type Health = components['schemas']['Health']
 
 export type {
   Availability,
@@ -28,4 +29,5 @@ export type {
   UpdateAvailability,
   PniScore,
   LearningNeeds,
+  Health,
 }
