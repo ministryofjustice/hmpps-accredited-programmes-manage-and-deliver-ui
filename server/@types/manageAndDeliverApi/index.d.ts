@@ -12,18 +12,20 @@ type CohortEnum = components['schemas']['ReferralDetails']['cohort']
 type OffenceHistory = components['schemas']['OffenceHistory']
 type RoshAnalysis = components['schemas']['RoshAnalysis']
 type PniScore = components['schemas']['PniScore']
+type OffenceAnalysis = components['schemas']['OffenceAnalysis']
 
 export type {
   Availability,
   CohortEnum,
   CreateAvailability,
   DailyAvailabilityModel,
+  OffenceAnalysis,
   OffenceHistory,
   PersonalDetails,
+  PniScore,
   ReferralCaseListItem,
   ReferralDetails,
   RoshAnalysis,
   SentenceInformation,
   UpdateAvailability,
-  PniScore,
 }

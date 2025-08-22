@@ -126,60 +126,136 @@
       "response": {
         "status": 200,
         "jsonBody": {
-          "pniCalculation": {
-            "sexDomain": {
-              "level": "L",
-              "score": 0
-            },
-            "thinkingDomain": {
-              "level": "M",
-              "score": 1
-            },
-            "relationshipDomain": {
-              "level": "M",
-              "score": 1
-            },
-            "selfManagementDomain": {
-              "level": "M",
-              "score": 1
-            },
-            "riskLevel": "L",
-            "needLevel": "M",
-            "totalDomainScore": 3,
-            "pni": "A",
-            "saraRiskLevel": {
-              "toPartner": 1,
-              "toOther": 1
-            }
+          "assessmentPk": 10544541,
+          "assessmentType": "LAYER3",
+          "dateCompleted": "2025-08-06T12:41:19",
+          "assessorSignedDate": "2025-08-06T12:41:19",
+          "initiationDate": "2025-08-06T12:28:11",
+          "assessmentStatus": "COMPLETE",
+          "superStatus": "COMPLETE",
+          "laterWIPAssessmentExists": true,
+          "latestWIPDate": "2025-08-07T15:58:20",
+          "laterSignLockAssessmentExists": false,
+          "latestSignLockDate": null,
+          "laterPartCompUnsignedAssessmentExists": false,
+          "latestPartCompUnsignedDate": "2023-01-31T15:50:58",
+          "laterPartCompSignedAssessmentExists": false,
+          "latestPartCompSignedDate": null,
+          "laterCompleteAssessmentExists": false,
+          "latestCompleteDate": "2025-08-06T12:41:19",
+          "offenceAnalysis": "On 28/09/2022, Mr Davies was sentencted at xxx Magistrate's Court for the offence of causing intentional harassment, alarm or distress to 12 weeks Adult Custody inc PSS. The details of the offence are as follows:\r\n    \r\n    On 27/09/22 at 1220 at Old Market Square, xxx, This is a case of Section 5 threatening behaviour in xxx City Centre witnessed by Community Protection Officers. On Thursday 27th September 2022 between 12:20 and 12:40 the defendant has become embroiled in a street altercation with another male that has resulted in a fight. Patrolling Officers are advised by a member of public of the fight and attend and intervene. The defendant has been argumentative and refused to calm down, eventually climbing onto a wall and punching the other male to the side of the head. Although the aggreived party has not wished to pursue a complaint, the threats and act of violence has occurred in front of attending Officers wearing BWV.\r\n    \r\n    Roger SMITH has stated that he was in uniform on foot patrol when he has been informed of a fight on Long Row. Whilst walking up to the incident he has seen a male now known to be defendant punching another male in the head. During the incident defendant has been shouting and was agitated. \r\n    \r\n    Senior CPO 4190 BLACK statement states that whilst on foot patrol she has been approached by a member of the public who has informed her of a fight. When BLACK has approached Debenhams Long Row she has seen a group of people near the flower beds and has activated her BWV E7123. BLACK has approached the defendant who was shouting and gesturing towards other people. The defendant has then approached another male and has punched him in the side of the head.",
+          "whatWasInvolved": null,
+          "whichWeapon": null,
+          "numberOfOthersInvolved": null,
+          "othersInvolved": null,
+          "typeOfWeapon": null,
+          "otherMotivationText": null,
+          "thrillSeeking": "No",
+          "sexual": "No",
+          "racial": "No",
+          "other": "No",
+          "financial": "Yes",
+          "emotional": "Yes",
+          "addictions": "Yes",
+          "offenceLinkedToHarm": "Yes",
+          "offenceLinkedToReoffending": "Mr Davies has poor emotional control and difficulties solving problems in a pro-social manner. His attitudes that condone violence raise significant concerns as he has continued to use this as a technique and response to conflict. This has been the case when sober and under the influence but appears to be significantly exacerbated when under the influence of alcohol and substances. The risk Mr Davies poses is high when under the influence of alcohol. It is my assessment that analysis of offence issues are linked to the risk of serious harm. ",
+          "offenceMotivation": "Mr Davies states he does not remember much about the incident but knows he was under the influence of alcohol and amphetamine. He states the group of men had been making some comments that Mr Davies interpreted as being supportive of domestic abuse. He states he \\\"saw red\\\" at these comments and this is the reason the assault occured. However, Mr Davies does dispute himself whether his recollection of events is correct and at the time of Police interview answered no comment. This raises some concern regarding his thinking skills and problem solving and is likely to have been exacerbated by him being under the influence of alcohol and substances. ",
+          "peerGroupInfluences": "Yes",
+          "otherInvolved": "No",
+          "recognisesImpact": "Yes",
+          "victimImpact": "Physical harm due to violence used towards the victim. Psychological harm as the incident happened in the day in a public place. The wider public may also be experiencing emotional trauma had they been witness to the incident. ",
+          "victimPerpetratorRel": "The victim was an acquaintance of Mr Davies. Mr Davies reports he knew of him but they would not be considered friends. ",
+          "victimInfo": "None known. ",
+          "whatOccurred": ["Were the victim(s) stranger(s) to the offender"],
+          "involveCarryingWeapon": "No",
+          "involveSexualElement": "No",
+          "involvePhysicalDamage": "No",
+          "involveExcessiveViolence": "No",
+          "involveDomesticAbuse": "No",
+          "involveArson": "No",
+          "involveViolenceOrThreat": "Yes",
+          "partOfEstablishedPattern": "Yes",
+          "escalationOfSeriousness": "Yes",
+          "patternOffending": "Mr Davies has accrued 24 previous convictions. He started offending at a very young age and the majority of earlier offences relate to thefts and criminal damage and violence. The violence would seem to becoming more frequent with the violence being used also increasing. I would consider this to be part of a pattern of similar offending behaviour. \r\n    \r\n    There are clear issues relating to managing emotions especially within relationships and managing himself whilst under the influence of alcohol. The pattern of offending indicates that Mr Davies poses a continued risk to people of a similar lifestyle and staff, particularly police officers. ",
+          "acceptsResponsibility": "Mr Davies accepts that his behaviour whilst under the influence of alcohol is of concern and states when he has had a drink he is \\\"like a different person\\\". However, he continued alcohol misuse is of concern given the link to violent offending. Furthermore, he discloses amphetamine use at the time of the offence. \r\n    \r\n    Mr Davies does show motivation and take responsibilty to overcome his alcohol misuse following release from Custody but usually soon after release he begins drinking excessively again. Mr Davies does not seek to victim blame or minimise his behaviours but states his behaviours were due to comments made supportive of domestic abuse. Mr Davies states he was angry at this and is why he reacted in such a way. Following the most recent release, Mr Davies has displayed good motivation to engage and overcome his alcohol misuse. ",
+          "acceptsResponsibilityYesNo": "Yes",
+          "disinhibitors": ["Alcohol", "Drugs", "Emotional state"],
+          "assessor": {
+            "name": "david Atkins"
           },
-          "assessment": {
-            "id": 9635383,
-            "ogrs3Risk": "LOW",
-            "ovpRisk": "LOW",
-            "osp": {
-              "cdc": "NOT_APPLICABLE",
-              "iiic": "NOT_APPLICABLE"
-            },
-            "rsrPercentage": 0.55,
-            "offenderAge": 47,
-            "questions": {
-              "everCommittedSexualOffence": "NO",
-              "openSexualOffendingQuestions": "NO",
-              "sexualPreOccupation": "MISSING",
-              "offenceRelatedSexualInterests": "MISSING",
-              "emotionalCongruence": "MISSING",
-              "proCriminalAttitudes": "SOME",
-              "hostileOrientation": "SOME",
-              "relCloseFamily": "NONE",
-              "prevCloseRelationships": "NONE",
-              "easilyInfluenced": "SOME",
-              "aggressiveControllingBehaviour": "SIGNIFICANT",
-              "impulsivity": "SOME",
-              "temperControl": "NONE",
-              "problemSolvingSkills": "SOME",
-              "difficultiesCoping": "NONE"
-            }
-          }
+          "crn": "X371199"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPattern": "/assessments/.*/section/section2"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "assessmentPk": 9635383,
+          "assessmentType": "LAYER3",
+          "dateCompleted": "2024-08-01T14:20:00",
+          "assessorSignedDate": "2024-08-01T14:20:00",
+          "initiationDate": "2022-11-28T15:01:05",
+          "assessmentStatus": "COMPLETE",
+          "superStatus": "COMPLETE",
+          "laterWIPAssessmentExists": false,
+          "latestWIPDate": null,
+          "laterSignLockAssessmentExists": false,
+          "latestSignLockDate": null,
+          "laterPartCompUnsignedAssessmentExists": false,
+          "latestPartCompUnsignedDate": null,
+          "laterPartCompSignedAssessmentExists": false,
+          "latestPartCompSignedDate": null,
+          "laterCompleteAssessmentExists": false,
+          "latestCompleteDate": "2024-08-01T14:20:00",
+          "offenceAnalysis": "Ms Puckett admits he went to Mr X's address on 23rd march 2010. He went there in order to buy cannabis. This meeting had been pre- arranged and Ms Puckett went there with another man. Mr X sold an ounce of cannabis for #120 to Ms Puckett.  Together, Ms Puckett and the other man queried the quality of the ounce of cannabis. Ms Puckett asked for her money back.  Mr X told them there was nothing wrong with the cannabis and asked them both to leave. Ms Puckett grabbed Mr X and said she wanted her money back.  Mr X said something.  Ms Puckett then punched him once with her fist. Mr X then attacked Ms Puckett with an implement from the side or the back of the sofa. He struck Ms Puckett to the back of the head. In the course of the struggle Ms Puckett accepts that he came into possession of the implement with shich Mr X had attacked her. During the course of the struggle Ms Puckett accepts that she struck Mr X with the implement 2 or 3 times. As a result she is guilty of unlawful wounding.",
+          "othersInvolved": null,
+          "typeOfWeapon": null,
+          "whatOccurred": null,
+          "whatWasInvolved": null,
+          "otherMotivationText": null,
+          "numberOfOthersInvolved": null,
+          "thrillSeeking": "No",
+          "sexual": "No",
+          "racial": "No",
+          "other": "No",
+          "financial": "No",
+          "emotional": "No",
+          "addictions": "Yes",
+          "offenceLinkedToHarm": "Yes",
+          "offenceLinkedToReoffending": "The index offence is assessed as harm related and there is an identifiable victim Ms Black...",
+          "offenceMotivation": "Ms Puckett stated that as she had been attempting to address his long standing addiction to heroin, with the support of a Drug Rehabilitation Requirement as part of a community order, he had been using cannabis as a substitute in order to assuage symptoms of withdrawal or stress.  She had said that the deal to purchase cannabis had been set up by a third party and that he had not met the victim prior to the offence.  She recalled paying for cannabis only to find that it had been clearly mixed with cooking herbs 9sage) and getting into an altercation which escalated when the victim refused to reimburse him. She admitted to instigating violence in the first place by punching the victim, out of a mixture of frustration and anger. She said that the situation quickly got out of control when the victim produced a metal bar and hit him with it.",
+          "peerGroupInfluences": "No",
+          "otherInvolved": "No",
+          "recognisesImpact": "Yes",
+          "victimImpact": "The victim required medical attention in the Emergency Department at Anyshire General Hospital. He suffered a laceration to his head which was closed with surgical glue.  In addtion he had bruising to his face and upper body. He was discharged with self care head injury advice on the same occasion.  The victim referred to feeling frightened as a consequence of the offence, fearful of being attacked again and experiencing stress and sleep disturbances. The victim's girlfriend spoke of suffering from an anxiety disorder which had worsened since the incident, which had left her feeling sick, fearful and unable to cope.",
+          "victimPerpetratorRel": "Ms Puckett told me that he did not know the victim, prior to the incident; the drug deal having been arranged via a third party.",
+          "victimInfo": "here are significant discrepanices between the victim's account of the offence. This offence will have been more intimidating for the victim due to the presence of Ms Puckett's companion as the victim was alone other than her girlfriend who left to alert the police to what was happening.",
+          "involveCarryingWeapon": "Yes",
+          "involveSexualElement": "No",
+          "involvePhysicalDamage": "No",
+          "involveExcessiveViolence": "No",
+          "involveDomesticAbuse": "No",
+          "involveArson": "No",
+          "involveViolenceOrThreat": "Yes",
+          "whichWeapon": "Iron bar",
+          "partOfEstablishedPattern": "Yes",
+          "escalationOfSeriousness": "No",
+          "patternOffending": "Mr Smith has an unenviable record of 25 previous convictions recorded to his detriment, relating to 68 offences. These date back to when he would have been aged 17.  The majority of these have been for theft and kindred offences, reflecting a pattern of acquisitive offending inextricably linked to drug use. In the past he has received virtually the full gamut of sentencing options available to the courts and he is no stranger to the prison system. He has previously served two relatively lengthy sentences (03/10/2001 ? 5 years, 15/04/2005 ? 4 years) for offences of Supplying/Being Concerned in the Supply of Class A drugs. In relation to the nature of the current offence, Mr Smith has one earlier conviction for an offence of wounding (section 20) which he received 9 months Youth Custody as a result. More recently, he appeared before Northampton Crown Court for an offence of Affray in November 2004 when the matter was dealt with by way of a custodial penalty of 28 days. Mr Smith last appeared before a court on 25/02/2010 for offences of Theft from a Dwelling and Failing to Surrender to Custody at the Appointed Time. The matter resulted in the current Community Order being imposed by the Milton Keynes Magistrates court, comprising a 6 months Supervision Requirement and a Drug Rehabilitation Requirement. It would appear that the current offence represents a concerning escalation in the seriousness of Mr Smith?s offending; his use of violence clearly increases the risk of harm he is assessed as posing.",
+          "acceptsResponsibility": "Ms Pucket acknowledged that his response to this particular situation had been disproportionately violent and dangerous.  She commented that he generally disapproves of the use of violence as a means of settling disputes, and consequently she is angry with himself for behaving in such a manner.  She understands that the victim suffered significant injury and that both he and his girlfriend herself the experience deeply distressing. However, her view that the victim had attempted to sell him inferior  cannabis in the first place prevents her from fully accepting responsibility for the offence, or from expressing direct remorse regarding the impact on the victim and his girlfriend.",
+          "acceptsResponsibilityYesNo": "Yes",
+          "disinhibitors": ["Alcohol", "Drugs"],
+          "assessor": {
+            "name": "LevelOne CentralSupport"
+          },
+          "crn": "D002399"
         },
         "headers": {
           "Content-Type": "application/json"

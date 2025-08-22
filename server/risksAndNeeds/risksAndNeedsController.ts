@@ -71,8 +71,12 @@ export default class RisksAndNeedsController {
     const subNavValue = 'offenceAnalysis'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
+    const offenceAnalysis = await this.accreditedProgrammesManageAndDeliverService.getOffenceAnalysis(
+      username,
+      sharedReferralDetailsData.crn,
+    )
 
-    const presenter = new OffenceAnalysisPresenter(subNavValue, referralId)
+    const presenter = new OffenceAnalysisPresenter(subNavValue, referralId, offenceAnalysis)
     const view = new OffenceAnalysisView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
@@ -201,7 +205,6 @@ export default class RisksAndNeedsController {
     const subNavValue = 'roshAnalysis'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
-
     const roshAnalysis = await this.accreditedProgrammesManageAndDeliverService.getRoshAnalysis(
       username,
       sharedReferralDetailsData.crn,

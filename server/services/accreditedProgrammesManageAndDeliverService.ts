@@ -1,13 +1,14 @@
 import {
   Availability,
   CreateAvailability,
+  OffenceAnalysis,
+  OffenceHistory,
   PersonalDetails,
+  PniScore,
   ReferralCaseListItem,
   ReferralDetails,
   RoshAnalysis,
   SentenceInformation,
-  OffenceHistory,
-  PniScore,
   UpdateAvailability,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
@@ -145,5 +146,13 @@ export default class AccreditedProgrammesManageAndDeliverService {
       path: `/risks-and-needs/${crn}/rosh-analysis`,
       headers: { Accept: 'application/json' },
     })) as RoshAnalysis
+  }
+
+  async getOffenceAnalysis(username: Express.User['username'], crn: string): Promise<OffenceAnalysis> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/risks-and-needs/${crn}/offence-analysis`,
+      headers: { Accept: 'application/json' },
+    })) as OffenceAnalysis
   }
 }

@@ -70,6 +70,91 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/risks-and-needs/{crn}/rosh-analysis': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** ROSH details as held by Oasys */
+    get: operations['getRoshAnalysisByCrn']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/risks-and-needs/{crn}/risks-and-alerts': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Risks details as held by Oasys */
+    get: operations['getRisksByCrn']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/risks-and-needs/{crn}/offence-analysis': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Offence Analysis details as held by Oasys */
+    get: operations['getOffenceAnalysisByCrn']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/risks-and-needs/{crn}/learning-needs': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Retrieve a person's Learning needs as held in Oasys */
+    get: operations['getLearningNeeds']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/risks-and-needs/{crn}/health': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Health details as held by Oasys */
+    get: operations['getHealth']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/referral-details/{id}': {
     parameters: {
       query?: never
@@ -348,6 +433,350 @@ export interface components {
        */
       otherDetails?: string
       availabilities: components['schemas']['DailyAvailabilityModel'][]
+    }
+    RoshAnalysis: {
+      /** Format: date */
+      assessmentCompleted: string
+      /**
+       * @description The details of the current offence.
+       * @example Tax evasion
+       */
+      offenceDetails?: string
+      /**
+       * @description The where and when of the current offence.
+       * @example At home
+       */
+      whereAndWhen?: string
+      /**
+       * @description How the offence was committed for the current offence.
+       * @example false
+       */
+      howDone?: string
+      /**
+       * @description The victims of the current offence.
+       * @example hmrc
+       */
+      whoVictims?: string
+      /**
+       * @description Text describing if anyone else was present for the current offence.
+       * @example company secretary
+       */
+      anyoneElsePresent?: string
+      /**
+       * @description The motivation for the current offence.
+       * @example Greed
+       */
+      whyDone?: string
+      /**
+       * @description The source of this information for the current offence.
+       * @example crown court
+       */
+      sources?: string
+      /**
+       * @description Identify behaviours / incidents that evidence the individual’s ability to cause serious harm and when they happened
+       * @example Physical assault on cellmate requiring medical attention on 22nd March 2024. Weapon possession (improvised blade) discovered during cell search on 8th February 2024.
+       */
+      identifyBehavioursIncidents?: string
+      /**
+       * @description Provide an analysis of any patterns related to these behaviours / incidents, for example: victims, triggers, locations, impact.
+       * @example Escalating violence in evenings when challenged, targeting vulnerable individuals, causing injuries requiring medical attention.
+       */
+      analysisBehaviourIncidents?: string
+    }
+    RiskOfSeriousRecidivism: {
+      /**
+       * @description Risk of Serious Recidivism score
+       * @example 3.45
+       */
+      scoreLevel?: string
+      /**
+       * @description Risk of Serious Recidivism level
+       * @example Medium
+       * @enum {number}
+       */
+      percentageScore?: 'Low' | 'Medium' | 'High'
+      /**
+       * @description Other person(s) at risk - Children
+       * @example Low
+       */
+      ospcScore?: string
+      /**
+       * @description Other person(s) at risk - Intimate
+       * @example High
+       */
+      ospiScore?: string
+    }
+    Risks: {
+      /** Format: date */
+      assessmentCompleted: string
+      /** @description Offender Group Reconviction scale */
+      offenderGroupReconviction?: components['schemas']['Score']
+      /** @description Offender Violence Predictor */
+      offenderViolencePredictor?: components['schemas']['Score']
+      /** @description Spousal Assault Risk Assessment */
+      sara?: components['schemas']['Sara']
+      /** @description Risk of Serious Recidivism */
+      riskOfSeriousRecidivism?: components['schemas']['RiskOfSeriousRecidivism']
+      /** @description Risk of Serious Harm */
+      riskOfSeriousHarm?: components['schemas']['RoshSummary']
+      /**
+       * @description Active alerts for a person
+       * @example ["Domestic Abuse History","MAPPA","Domestic Abuse Victim",]
+       */
+      alerts?: string[]
+      /**
+       * Format: date
+       * @description The date this data was fetched from nDelius.
+       * @example 1
+       */
+      dateRetrieved: string
+      /**
+       * Format: date
+       * @description The date this data was fetched from nDelius.
+       * @example 1
+       */
+      lastUpdated: string
+    }
+    RoshSummary: {
+      /**
+       * @description Risk towards prisoners in Custody
+       * @example Medium
+       * @enum {string}
+       */
+      riskPrisonersCustody?: 'Low' | 'Medium' | 'High'
+      /**
+       * @description Risk towards staff in Custody
+       * @example Medium
+       * @enum {string}
+       */
+      riskStaffCustody?: 'Low' | 'Medium' | 'High'
+      /**
+       * @description Risk towards known adult in Custody
+       * @example Medium
+       * @enum {string}
+       */
+      riskKnownAdultCustody?: 'Low' | 'Medium' | 'High'
+      /**
+       * @description Risk towards public in Custody
+       * @example Medium
+       * @enum {string}
+       */
+      riskPublicCustody?: 'Low' | 'Medium' | 'High'
+      /**
+       * @description Risk towards children in Custody
+       * @example Medium
+       * @enum {string}
+       */
+      riskChildrenCustody?: 'Low' | 'Medium' | 'High'
+      /**
+       * @description Risk towards staff in Community
+       * @example Medium
+       * @enum {string}
+       */
+      riskStaffCommunity?: 'Low' | 'Medium' | 'High'
+      /**
+       * @description Risk towards known adults in Community
+       * @example Medium
+       * @enum {string}
+       */
+      riskKnownAdultCommunity?: 'Low' | 'Medium' | 'High'
+      /**
+       * @description Risk towards the public in Community
+       * @example Medium
+       * @enum {string}
+       */
+      riskPublicCommunity?: 'Low' | 'Medium' | 'High'
+      /**
+       * @description Risk towards children in Community
+       * @example Medium
+       * @enum {string}
+       */
+      riskChildrenCommunity?: 'Low' | 'Medium' | 'High'
+      /**
+       * @description Risk of Serious Harm level
+       * @example Low
+       * @enum {string}
+       */
+      overallRoshLevel?: 'Low' | 'Medium' | 'High'
+    }
+    Sara: {
+      /**
+       * @description The highest of what is being returned based on saraRiskOfViolenceTowardsPartner and saraRiskOfViolenceTowardsOthers
+       * @example LOW
+       * @enum {string}
+       */
+      highestRisk?: 'NOT_APPLICABLE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH'
+      /**
+       * @description Risk of violence towards partner
+       * @example LOW
+       */
+      saraRiskOfViolenceTowardsPartner?: string
+      /**
+       * @description Risk of violence towards others
+       * @example LOW
+       */
+      saraRiskOfViolenceTowardsOthers?: string
+      /**
+       * @description Assessment ID relevant to the SARA version of the assessment
+       * @example 2512235167
+       */
+      assessmentId?: string
+    }
+    Score: {
+      /**
+       * @description One year prediction score
+       * @example 0.75
+       */
+      oneYear?: number
+      /**
+       * @description Two year prediction score
+       * @example 0.85
+       */
+      twoYears?: number
+      /**
+       * @description Risk level classification
+       * @example HIGH
+       * @enum {string}
+       */
+      scoreLevel?: 'LOW' | 'MEDIUM' | 'HIGH'
+    }
+    OffenceAnalysis: {
+      /** Format: date */
+      assessmentCompleted: string
+      /**
+       * @description Brief details of the current offence.
+       * @example Physical assault on cellmate requiring medical attention on 22nd March 2024. Weapon possession discovered during cell search.
+       */
+      briefOffenceDetails?: string
+      victimsAndPartners?: components['schemas']['VictimsAndPartners']
+      /**
+       * @description Whether the individual recognises the impact of their offending behaviour.
+       * @example Yes
+       */
+      recognisesImpact?: string
+      otherOffendersAndInfluences?: components['schemas']['OtherOffendersAndInfluences']
+      /**
+       * @description The motivation and triggers for the offending behaviour.
+       * @example Anger and frustration when challenged by authority
+       */
+      motivationAndTriggers?: string
+      responsibility?: components['schemas']['Responsibility']
+      /**
+       * @description Analysis of patterns in the offending behaviour.
+       * @example Escalating violence in evenings when challenged, targeting vulnerable individuals, causing injuries requiring medical attention.
+       */
+      patternOfOffending?: string
+    }
+    OtherOffendersAndInfluences: {
+      /**
+       * @description Whether other offenders were involved in the offence.
+       * @example Yes
+       */
+      wereOtherOffendersInvolved?: string
+      /**
+       * @description The number of other offenders involved.
+       * @example 2
+       */
+      numberOfOthersInvolved?: string
+      /**
+       * @description Whether the offender was the leader among other offenders.
+       * @example No
+       */
+      wasTheOffenderLeader?: string
+      /**
+       * @description Details about peer group influences on the offending.
+       * @example Gang pressure and peer approval seeking
+       */
+      peerGroupInfluences?: string
+    }
+    Responsibility: {
+      /**
+       * @description Whether the individual accepts responsibility for their offending.
+       * @example false
+       */
+      acceptsResponsibility?: string
+      /**
+       * @description Details about the individual's acceptance of responsibility.
+       * @example Blames victims and circumstances
+       */
+      acceptsResponsibilityDetail?: string
+    }
+    VictimsAndPartners: {
+      /**
+       * @description Whether there was direct contact targeting of victims.
+       * @example Yes
+       */
+      contactTargeting?: string
+      /**
+       * @description Whether the offence was racially motivated or targeted an identifiable group.
+       * @example Yes
+       */
+      raciallyMotivated?: string
+      /**
+       * @description Whether the offence was in response to a specific victim (e.g. revenge, settling grudges).
+       * @example No
+       */
+      revenge?: string
+      /**
+       * @description Whether there was physical violence towards a partner.
+       * @example No
+       */
+      physicalViolenceTowardsPartner?: string
+      /**
+       * @description Whether there was repeat victimisation of the same person.
+       * @example Yes
+       */
+      repeatVictimisation?: string
+      /**
+       * @description Whether the victim(s) were strangers to the offender.
+       * @example No
+       */
+      victimWasStranger?: string
+      /**
+       * @description Whether stalking behaviour was involved.
+       * @example No
+       */
+      stalking?: string
+    }
+    LearningNeeds: {
+      /**
+       * Format: date
+       * @example 1
+       */
+      assessmentCompleted?: string
+      /**
+       * @description Whether the person has a fixed abode or is living at a temporary address
+       * @example true
+       */
+      noFixedAbodeOrTransient?: boolean
+      /** @example 1-Some problems */
+      workRelatedSkills?: string
+      /** @example 0-No problems */
+      problemsReadWriteNum?: string
+      /** @example 2-Significant problems */
+      learningDifficulties?: string
+      /** @example [
+       *       "Difficulty with concentration"
+       *     ] */
+      problemAreas?: string[]
+      /** @example 0 */
+      qualifications?: string
+      /** @example 3 */
+      basicSkillsScore?: string
+      /** @example Ms Puckett spoke of wanting to secure suitable employment although she knows that she will first need to fully address her drug issues. */
+      basicSkillsScoreDescription?: string
+    }
+    Health: {
+      /**
+       * @description Does the person have any health condition. Can be Yes, empty or null
+       * @example false
+       */
+      anyHealthConditions?: boolean
+      /**
+       * @description Description of the health condition
+       * @example Blind in one eye
+       */
+      description?: string
     }
     ReferralDetails: {
       /**
@@ -700,34 +1129,11 @@ export interface components {
     RiskScore: {
       /**
        * @description classification associated with PNI Eg. HIGH_RISK, MEDIUM_RISK, LOW_RISK
-       * @example High Risk
+       * @example HIGH_RISK
        */
       classification: string
       /** @example 2 */
       IndividualRiskScores: components['schemas']['IndividualRiskScores']
-    }
-    Sara: {
-      /**
-       * @description The highest of what is being returned based on saraRiskOfViolenceTowardsPartner and saraRiskOfViolenceTowardsOthers
-       * @example LOW
-       * @enum {string}
-       */
-      highestRisk?: 'NOT_APPLICABLE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH'
-      /**
-       * @description Risk of violence towards partner
-       * @example LOW
-       */
-      saraRiskOfViolenceTowardsPartner?: string
-      /**
-       * @description Risk of violence towards others
-       * @example LOW
-       */
-      saraRiskOfViolenceTowardsOthers?: string
-      /**
-       * @description Assessment ID relevant to the SARA version of the assessment
-       * @example 2512235167
-       */
-      assessmentId?: string
     }
     SelfManagementDomainScore: {
       /** @enum {string} */
@@ -941,6 +1347,301 @@ export interface operations {
       }
       /** @description Unauthorised. The request was unauthorised. */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getRoshAnalysisByCrn: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description CRN */
+        crn: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description ROSH details held by Oasys */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['RoshAnalysis']
+        }
+      }
+      /** @description Invalid code format. Expected format for CRN: X718255. */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access this referral. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The ROSH information does not exist for the CRN provided. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getRisksByCrn: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description CRN */
+        crn: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Risk details held by Oasys */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Risks']
+        }
+      }
+      /** @description Invalid code format. Expected format for CRN: X718255. */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access this referral. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The risks and needs information does not exist for the CRN provided. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getOffenceAnalysisByCrn: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description CRN */
+        crn: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Offence analysis details held by Oasys */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['OffenceAnalysis']
+        }
+      }
+      /** @description Invalid code format. Expected format for CRN: X718255. */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden. The client is not authorised to access this referral. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The Offence analysis does not exist for the CRN provided. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getLearningNeeds: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description CRN */
+        crn: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Learning needs held by Oasys */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['LearningNeeds']
+        }
+      }
+      /** @description Invalid code format. Expected format for CRN: X718255. */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access this referral. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The learning needs information does not exist for the CRN provided. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getHealth: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description CRN */
+        crn: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description successful operation */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Health']
+        }
+      }
+      /** @description Invalid code format. Expected format for CRN: X718255. */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access this referral. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The learning needs information does not exist for the CRN provided. */
+      404: {
         headers: {
           [name: string]: unknown
         }
