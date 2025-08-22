@@ -10,6 +10,7 @@ import {
   LearningNeeds,
   PniScore,
   UpdateAvailability,
+  Health,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -106,6 +107,14 @@ export default class AccreditedProgrammesManageAndDeliverService {
       path: `/risks-and-needs/${crn}/learning-needs`,
       headers: { Accept: 'application/json' },
     })) as LearningNeeds
+  }
+
+  async getHealth(username: Express.User['username'], crn: string): Promise<Health> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/risks-and-needs/${crn}/health`,
+      headers: { Accept: 'application/json' },
+    })) as Health
   }
 
   async addAvailability(
