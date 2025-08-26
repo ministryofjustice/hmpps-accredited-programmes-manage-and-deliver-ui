@@ -36,7 +36,7 @@ export default class PniPresenter extends ReferralLayoutPresenter {
       rows: [
         {
           key: {
-            text: '11.11 - Sexual Pre-occupation',
+            text: '11.11 - Sexual preoccupation',
           },
           value: {
             text: this.scoreValueText(sexDomainScores.individualSexScores.sexualPreOccupation),
@@ -44,7 +44,7 @@ export default class PniPresenter extends ReferralLayoutPresenter {
         },
         {
           key: {
-            text: '11.12 - Offence related Sexual Interests',
+            text: '11.12 - Offence-related sexual interests',
           },
           value: {
             text: this.scoreValueText(sexDomainScores.individualSexScores.offenceRelatedSexualInterests),
@@ -52,7 +52,7 @@ export default class PniPresenter extends ReferralLayoutPresenter {
         },
         {
           key: {
-            text: '6.12 Emotional congruence with children or feeling closer to children than adults',
+            text: '6.12 - Emotional congruence with children or feeling closer to children than adults',
           },
           value: {
             text: this.scoreValueText(sexDomainScores.individualSexScores.emotionalCongruence),
@@ -82,7 +82,7 @@ export default class PniPresenter extends ReferralLayoutPresenter {
       rows: [
         {
           key: {
-            text: '12.1 Pro-criminal attitudes',
+            text: '12.1 - Pro-criminal attitudes',
           },
           value: {
             text: this.scoreValueText(thinkingDomainScores.individualThinkingScores.proCriminalAttitudes),
@@ -90,7 +90,7 @@ export default class PniPresenter extends ReferralLayoutPresenter {
         },
         {
           key: {
-            text: '12.9 Hostile orientation',
+            text: '12.9 - Hostile orientation',
           },
           value: {
             text: this.scoreValueText(thinkingDomainScores.individualThinkingScores.hostileOrientation),
