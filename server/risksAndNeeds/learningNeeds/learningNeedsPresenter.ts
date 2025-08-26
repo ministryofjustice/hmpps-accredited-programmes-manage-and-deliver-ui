@@ -1,6 +1,7 @@
 import { LearningNeeds } from '@manage-and-deliver-api'
 import RisksAndNeedsPresenter from '../risksAndNeedsPresenter'
 import { SummaryListItem } from '../../utils/summaryList'
+import PresenterUtils from '../../utils/presenterUtils'
 
 export default class LearningNeedsPresenter extends RisksAndNeedsPresenter {
   constructor(
@@ -17,7 +18,7 @@ export default class LearningNeedsPresenter extends RisksAndNeedsPresenter {
     return [
       {
         key: '3.3 - Currently of no fixed abode or in transient accommodation',
-        lines: [`${LearningNeedsPresenter.yesOrNo(this.learningNeeds.noFixedAbodeOrTransient)}`],
+        lines: [`${PresenterUtils.yesOrNo(this.learningNeeds.noFixedAbodeOrTransient)}`],
       },
       {
         key: '4.4 - Work related skills',
@@ -37,10 +38,6 @@ export default class LearningNeedsPresenter extends RisksAndNeedsPresenter {
         lines: [`${this.learningNeeds.qualifications}`],
       },
     ]
-  }
-
-  static yesOrNo(value?: boolean): 'No' | 'Yes' {
-    return value ? 'Yes' : 'No'
   }
 
   learningNeedsScoreSummaryList(): SummaryListItem[] {

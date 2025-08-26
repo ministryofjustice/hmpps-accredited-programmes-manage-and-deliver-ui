@@ -74,4 +74,11 @@ export default class PresenterUtils {
 
     return !!error.errors.find(subError => subError.formFields.includes(field))
   }
+
+  static yesOrNo(value?: boolean | null): 'No' | 'Yes' | 'Unknown' {
+    if (value === null || value === undefined) {
+      return 'Unknown'
+    }
+    return value ? 'Yes' : 'No'
+  }
 }

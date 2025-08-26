@@ -50,8 +50,9 @@
             educationTrainingAndEmployment
           </div>
             {% elif presenter.subNavValue == 'relationships' %}
-              <div>
-            relationships
+            <div>
+                {% include "./relationships.njk" %}
+            </div>
           </div>
             {% elif presenter.subNavValue == 'lifestyleAndAssociates' %}
               <div>

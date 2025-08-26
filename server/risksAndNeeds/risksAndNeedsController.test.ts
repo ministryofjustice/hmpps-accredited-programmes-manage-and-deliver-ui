@@ -1,4 +1,4 @@
-import { Health, LearningNeeds, ReferralDetails, RoshAnalysis } from '@manage-and-deliver-api'
+import { Health, LearningNeeds, ReferralDetails, Relationships, RoshAnalysis } from '@manage-and-deliver-api'
 import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import request from 'supertest'
@@ -9,6 +9,7 @@ import referralDetailsFactory from '../testutils/factories/referralDetailsFactor
 import learningNeedsFactory from '../testutils/factories/risksAndNeeds/learningNeedsFactory'
 import roshAnalysisFactory from '../testutils/factories/risksAndNeeds/roshAnalysisFactory'
 import healthFactory from '../testutils/factories/risksAndNeeds/healthFactory'
+import relationshipsFactory from '../testutils/factories/risksAndNeeds/relationshipsFactory'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
@@ -166,6 +167,64 @@ describe('Health section of risks and needs', () => {
 
       const referralId = randomUUID()
       return request(app).get(`/referral/${referralId}/health`).expect(500)
+    })
+  })
+})
+
+describe('Relationships', () => {
+  describe('GET /referral/:id/relationships', () => {
+    it('loads the risks and needs page with relationships sub-nav and displays all relationships data', async () => {
+      const relationships: Relationships = relationshipsFactory.build()
+      accreditedProgrammesManageAndDeliverService.getRelationships.mockResolvedValue(relationships)
+
+      const referralId = randomUUID()
+      return request(app)
+        .get(`/referral/${referralId}/relationships`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Assessment completed 23 August 2025')
+          expect(res.text).toContain(relationships.relIssuesDetails)
+          expect(res.text).toContain('6.7 - Evidence of domestic violence / partner abuse')
+          expect(res.text).toContain('6.7.1.1 - Is the victim a current or former partner?')
+          expect(res.text).toContain('6.7.1.2 - Is the victim a family member?')
+          expect(res.text).toContain('6.7.2.1 - Is the perpetrator a victim of partner or family abuse?')
+          expect(res.text).toContain('6.7.2.2 - Are they the perpetrator of partner or family abuse?')
+        })
+    })
+
+    it('handles relationships with minimal data', async () => {
+      const relationships: Relationships = relationshipsFactory.build({
+        dvEvidence: undefined,
+        victimFormerPartner: undefined,
+        victimFamilyMember: undefined,
+        victimOfPartnerFamily: undefined,
+        perpOfPartnerOrFamily: undefined,
+        relIssuesDetails: undefined,
+      })
+      accreditedProgrammesManageAndDeliverService.getRelationships.mockResolvedValue(relationships)
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/relationships`).expect(200)
+    })
+
+    it('calls the service with correct parameters', async () => {
+      const relationships: Relationships = relationshipsFactory.build()
+      accreditedProgrammesManageAndDeliverService.getRelationships.mockResolvedValue(relationships)
+
+      const referralId = randomUUID()
+      await request(app).get(`/referral/${referralId}/relationships`).expect(200)
+
+      expect(accreditedProgrammesManageAndDeliverService.getRelationships).toHaveBeenCalledWith(
+        'user1',
+        referralDetails.crn,
+      )
+    })
+
+    it('handles service errors gracefully', async () => {
+      accreditedProgrammesManageAndDeliverService.getRelationships.mockRejectedValue(new Error('Service unavailable'))
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/relationships`).expect(500)
     })
   })
 })

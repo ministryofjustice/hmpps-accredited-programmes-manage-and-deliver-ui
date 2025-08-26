@@ -104,6 +104,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/risks-and-needs/{crn}/relationships': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Retrieve a person's relationship details as held in Oasys */
+    get: operations['getRelationships']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/risks-and-needs/{crn}/learning-needs': {
     parameters: {
       query?: never
@@ -622,6 +639,37 @@ export interface components {
        * @enum {string}
        */
       scoreLevel?: 'LOW' | 'MEDIUM' | 'HIGH'
+    }
+    Relationships: {
+      /**
+       * Format: date
+       * @example 1
+       */
+      assessmentCompleted?: string
+      /** @example true */
+      dvEvidence?: boolean
+      /** @example false */
+      victimFormerPartner?: boolean
+      /** @example true */
+      victimFamilyMember?: boolean
+      /** @example false */
+      victimOfPartnerFamily?: boolean
+      /** @example true */
+      perpOfPartnerOrFamily?: boolean
+      /** @example This person has a history of domestic violence */
+      relIssuesDetails?: string
+      /** @example 0-No problems */
+      relCloseFamily?: string
+      /** @example Not in a relationship */
+      relCurrRelationshipStatus?: string
+      /** @example 2-Significant problems */
+      prevCloseRelationships?: string
+      /** @example 0-No problems */
+      emotionalCongruence?: string
+      /** @example 0-No problems */
+      relationshipWithPartner?: string
+      /** @example No */
+      prevOrCurrentDomesticAbuse?: string
     }
     LearningNeeds: {
       /**
@@ -1354,6 +1402,65 @@ export interface operations {
         }
       }
       /** @description The risks and needs information does not exist for the CRN provided. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getRelationships: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description CRN */
+        crn: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Relationship details held by Oasys */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Relationships']
+        }
+      }
+      /** @description Invalid code format. Expected format for CRN: X718255. */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access this referral. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The relationship information does not exist for the CRN provided. */
       404: {
         headers: {
           [name: string]: unknown

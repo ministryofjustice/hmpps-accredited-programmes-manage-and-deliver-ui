@@ -23,12 +23,12 @@ import OffenceAnalysisPresenter from './offenceAnalysis/offenceAnalysisPresenter
 import OffenceAnalysisView from './offenceAnalysis/offenceAnalysisView'
 import RisksAndAlertsPresenter from './risksAndAlerts/risksAndAlertsPresenter'
 import RisksAndAlertsView from './risksAndAlerts/risksAndAlertsView'
-import RisksAndNeedsPresenter from './risksAndNeedsPresenter'
-import RisksAndNeedsView from './risksAndNeedsView'
 import RoshAnalysisPresenter from './roshAnalysis/roshAnalysisPresenter'
 import RoshAnalysisView from './roshAnalysis/roshAnalysisView'
 import ThinkingAndBehavingPresenter from './thinkingAndBehaving/thinkingAndBehavingPresenter'
 import ThinkingAndBehavingView from './thinkingAndBehaving/thinkingAndBehavingView'
+import RelationshipsPresenter from './relationships/relationshipsPresenter'
+import RelationshipsView from './relationships/relationshipsView'
 
 export default class RisksAndNeedsController {
   constructor(
@@ -100,9 +100,13 @@ export default class RisksAndNeedsController {
     const subNavValue = 'relationships'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
+    const relationships = await this.accreditedProgrammesManageAndDeliverService.getRelationships(
+      username,
+      sharedReferralDetailsData.crn,
+    )
 
-    const presenter = new RisksAndNeedsPresenter(subNavValue, referralId)
-    const view = new RisksAndNeedsView(presenter)
+    const presenter = new RelationshipsPresenter(subNavValue, referralId, relationships)
+    const view = new RelationshipsView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
