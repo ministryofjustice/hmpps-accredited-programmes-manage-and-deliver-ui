@@ -14,6 +14,7 @@ type LearningNeeds = components['schemas']['LearningNeeds']
 type RoshAnalysis = components['schemas']['RoshAnalysis']
 type PniScore = components['schemas']['PniScore']
 type Health = components['schemas']['Health']
+type Relationships = components['schemas']['Relationships']
 
 export type {
   Availability,
@@ -30,4 +31,5 @@ export type {
   PniScore,
   LearningNeeds,
   Health,
+  Relationships,
 }
