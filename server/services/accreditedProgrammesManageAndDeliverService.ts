@@ -12,6 +12,7 @@ import {
   UpdateAvailability,
   Health,
   Relationships,
+  DrugDetails,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -124,6 +125,14 @@ export default class AccreditedProgrammesManageAndDeliverService {
       path: `/risks-and-needs/${crn}/health`,
       headers: { Accept: 'application/json' },
     })) as Health
+  }
+
+  async getDrugDetails(username: Express.User['username'], crn: string): Promise<DrugDetails> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/risks-and-needs/${crn}/drug-details`,
+      headers: { Accept: 'application/json' },
+    })) as DrugDetails
   }
 
   async addAvailability(

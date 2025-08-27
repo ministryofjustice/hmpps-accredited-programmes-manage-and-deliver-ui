@@ -1,4 +1,11 @@
-import { Health, LearningNeeds, ReferralDetails, Relationships, RoshAnalysis } from '@manage-and-deliver-api'
+import {
+  DrugDetails,
+  Health,
+  LearningNeeds,
+  ReferralDetails,
+  Relationships,
+  RoshAnalysis,
+} from '@manage-and-deliver-api'
 import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import request from 'supertest'
@@ -9,6 +16,7 @@ import referralDetailsFactory from '../testutils/factories/referralDetailsFactor
 import learningNeedsFactory from '../testutils/factories/risksAndNeeds/learningNeedsFactory'
 import roshAnalysisFactory from '../testutils/factories/risksAndNeeds/roshAnalysisFactory'
 import healthFactory from '../testutils/factories/risksAndNeeds/healthFactory'
+import drugDeatilsFactory from '../testutils/factories/risksAndNeeds/drugDeatilsFactory'
 import relationshipsFactory from '../testutils/factories/risksAndNeeds/relationshipsFactory'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
@@ -225,6 +233,57 @@ describe('Relationships', () => {
 
       const referralId = randomUUID()
       return request(app).get(`/referral/${referralId}/relationships`).expect(500)
+    })
+  })
+})
+
+describe('Drug details section of risks and needs', () => {
+  describe('GET /referral/:id/drug-details', () => {
+    it('loads the risks and needs page with drug details sub-nav and displays all drug details related data', async () => {
+      const drugDetails: DrugDetails = drugDeatilsFactory.build()
+      accreditedProgrammesManageAndDeliverService.getDrugDetails.mockResolvedValue(drugDetails)
+
+      const referralId = randomUUID()
+      return request(app)
+        .get(`/referral/${referralId}/drug-details`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Assessment completed 23 August 2025')
+          expect(res.text).toContain('1 - Some problems')
+          expect(res.text).toContain(drugDetails.drugsMajorActivity)
+        })
+    })
+
+    it('handles drug details info with minimal data', async () => {
+      const drugDetails: DrugDetails = healthFactory.build({
+        anyHealthConditions: undefined,
+        description: undefined,
+      })
+      accreditedProgrammesManageAndDeliverService.getDrugDetails.mockResolvedValue(drugDetails)
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/drug-details`).expect(200)
+    })
+
+    it('calls the service with correct parameters', async () => {
+      const referralId = randomUUID()
+
+      const drugDetails: DrugDetails = drugDeatilsFactory.build()
+      accreditedProgrammesManageAndDeliverService.getDrugDetails.mockResolvedValue(drugDetails)
+
+      await request(app).get(`/referral/${referralId}/drug-details`).expect(200)
+
+      expect(accreditedProgrammesManageAndDeliverService.getDrugDetails).toHaveBeenCalledWith(
+        'user1',
+        referralDetails.crn,
+      )
+    })
+
+    it('handles service errors gracefully', async () => {
+      accreditedProgrammesManageAndDeliverService.getDrugDetails.mockRejectedValue(new Error('Service unavailable'))
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/drug-details`).expect(500)
     })
   })
 })
