@@ -11,8 +11,10 @@ import {
   PniScore,
   UpdateAvailability,
   Health,
+  LifestyleAndAssociates,
   Relationships,
   AlcoholMisuseDetails,
+  DrugDetails,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -111,6 +113,14 @@ export default class AccreditedProgrammesManageAndDeliverService {
     })) as LearningNeeds
   }
 
+  async getLifestyleAndAssociates(username: Express.User['username'], crn: string): Promise<LifestyleAndAssociates> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/risks-and-needs/${crn}/lifestyle-and-associates`,
+      headers: { Accept: 'application/json' },
+    })) as LifestyleAndAssociates
+  }
+
   async getRelationships(username: Express.User['username'], crn: string): Promise<Relationships> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
@@ -133,6 +143,14 @@ export default class AccreditedProgrammesManageAndDeliverService {
       path: `/risks-and-needs/${crn}/health`,
       headers: { Accept: 'application/json' },
     })) as Health
+  }
+
+  async getDrugDetails(username: Express.User['username'], crn: string): Promise<DrugDetails> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/risks-and-needs/${crn}/drug-details`,
+      headers: { Accept: 'application/json' },
+    })) as DrugDetails
   }
 
   async addAvailability(

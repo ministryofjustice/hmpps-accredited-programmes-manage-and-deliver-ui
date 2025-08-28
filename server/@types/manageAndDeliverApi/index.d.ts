@@ -14,8 +14,10 @@ type LearningNeeds = components['schemas']['LearningNeeds']
 type RoshAnalysis = components['schemas']['RoshAnalysis']
 type PniScore = components['schemas']['PniScore']
 type Health = components['schemas']['Health']
+type LifestyleAndAssociates = components['schemas']['LifestyleAndAssociates']
 type Relationships = components['schemas']['Relationships']
 type AlcoholMisuseDetails = components['schemas']['AlcoholMisuseDetails']
+type DrugDetails = components['schemas']['DrugDetails']
 
 export type {
   Availability,
@@ -32,6 +34,8 @@ export type {
   PniScore,
   LearningNeeds,
   Health,
+  LifestyleAndAssociates,
   Relationships,
   AlcoholMisuseDetails,
+  DrugDetails,
 }

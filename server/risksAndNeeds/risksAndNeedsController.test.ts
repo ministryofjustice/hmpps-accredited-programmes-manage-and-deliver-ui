@@ -1,7 +1,9 @@
 import {
   AlcoholMisuseDetails,
+  DrugDetails,
   Health,
   LearningNeeds,
+  LifestyleAndAssociates,
   ReferralDetails,
   Relationships,
   RoshAnalysis,
@@ -17,7 +19,9 @@ import alcoholMisuseFactory from '../testutils/factories/risksAndNeeds/alcoholMi
 import learningNeedsFactory from '../testutils/factories/risksAndNeeds/learningNeedsFactory'
 import roshAnalysisFactory from '../testutils/factories/risksAndNeeds/roshAnalysisFactory'
 import healthFactory from '../testutils/factories/risksAndNeeds/healthFactory'
+import drugDeatilsFactory from '../testutils/factories/risksAndNeeds/drugDeatilsFactory'
 import relationshipsFactory from '../testutils/factories/risksAndNeeds/relationshipsFactory'
+import lifestyleAndAssociatesFactory from '../testutils/factories/risksAndNeeds/lifestyleAndAssociatesFactory'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
@@ -179,6 +183,59 @@ describe('Health section of risks and needs', () => {
   })
 })
 
+describe('Lifestyle and associates section of risks and needs', () => {
+  describe('GET /referral/:id/lifestyle-and-associates', () => {
+    it('loads the risks and needs page with lifestyle and associates sub-nav and displays all related data', async () => {
+      const lifestyleAndAssociates: LifestyleAndAssociates = lifestyleAndAssociatesFactory.build()
+      accreditedProgrammesManageAndDeliverService.getLifestyleAndAssociates.mockResolvedValue(lifestyleAndAssociates)
+
+      const referralId = randomUUID()
+      return request(app)
+        .get(`/referral/${referralId}/lifestyle-and-associates`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Assessment completed 23 August 2025')
+          expect(res.text).toContain(lifestyleAndAssociates.regActivitiesEncourageOffending)
+          expect(res.text).toContain(lifestyleAndAssociates.lifestyleIssuesDetails)
+        })
+    })
+
+    it('handles health info with minimal data', async () => {
+      const lifestyleAndAssociates: LifestyleAndAssociates = lifestyleAndAssociatesFactory.build({
+        regActivitiesEncourageOffending: undefined,
+        lifestyleIssuesDetails: undefined,
+      })
+      accreditedProgrammesManageAndDeliverService.getLifestyleAndAssociates.mockResolvedValue(lifestyleAndAssociates)
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/lifestyle-and-associates`).expect(200)
+    })
+
+    it('calls the service with correct parameters', async () => {
+      const referralId = randomUUID()
+
+      const lifestyleAndAssociates: LifestyleAndAssociates = lifestyleAndAssociatesFactory.build()
+      accreditedProgrammesManageAndDeliverService.getLifestyleAndAssociates.mockResolvedValue(lifestyleAndAssociates)
+
+      await request(app).get(`/referral/${referralId}/lifestyle-and-associates`).expect(200)
+
+      expect(accreditedProgrammesManageAndDeliverService.getLifestyleAndAssociates).toHaveBeenCalledWith(
+        'user1',
+        referralDetails.crn,
+      )
+    })
+
+    it('handles service errors gracefully', async () => {
+      accreditedProgrammesManageAndDeliverService.getLifestyleAndAssociates.mockRejectedValue(
+        new Error('Service unavailable'),
+      )
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/lifestyle-and-associates`).expect(500)
+    })
+  })
+})
+
 describe('Relationships', () => {
   describe('GET /referral/:id/relationships', () => {
     it('loads the risks and needs page with relationships sub-nav and displays all relationships data', async () => {
@@ -276,19 +333,63 @@ describe('Alcohol Misuse', () => {
       const referralId = randomUUID()
       await request(app).get(`/referral/${referralId}/alcohol-misuse`).expect(200)
 
-      expect(accreditedProgrammesManageAndDeliverService.getAlcoholMisuseDetails).toHaveBeenCalledWith(
+      expect(accreditedProgrammesManageAndDeliverService.getAlcoholMisuseDetails).toHaveBeenCalledWith(accreditedProgrammesManageAndDeliverService.getAlcoholMisuseDetails.mockRejectedValue(
+        new Error('Service unavailable'),
+      )
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/alcohol-misuse`).expect(500)
+     })
+ })
+        
+
+describe('Drug details section of risks and needs', () => {
+  describe('GET /referral/:id/drug-details', () => {
+    it('loads the risks and needs page with drug details sub-nav and displays all drug details related data', async () => {
+      const drugDetails: DrugDetails = drugDeatilsFactory.build()
+      accreditedProgrammesManageAndDeliverService.getDrugDetails.mockResolvedValue(drugDetails)
+
+      const referralId = randomUUID()
+      return request(app)
+        .get(`/referral/${referralId}/drug-details`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Assessment completed 23 August 2025')
+          expect(res.text).toContain('1 - Some problems')
+          expect(res.text).toContain(drugDetails.drugsMajorActivity)
+        })
+    })
+
+    it('handles drug details info with minimal data', async () => {
+      const drugDetails: DrugDetails = healthFactory.build({
+        anyHealthConditions: undefined,
+        description: undefined,
+      })
+      accreditedProgrammesManageAndDeliverService.getDrugDetails.mockResolvedValue(drugDetails)
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/drug-details`).expect(200)
+    })
+
+    it('calls the service with correct parameters', async () => {
+      const referralId = randomUUID()
+
+      const drugDetails: DrugDetails = drugDeatilsFactory.build()
+      accreditedProgrammesManageAndDeliverService.getDrugDetails.mockResolvedValue(drugDetails)
+
+      await request(app).get(`/referral/${referralId}/drug-details`).expect(200)
+
+      expect(accreditedProgrammesManageAndDeliverService.getDrugDetails).toHaveBeenCalledWith(
         'user1',
         referralDetails.crn,
       )
     })
 
     it('handles service errors gracefully', async () => {
-      accreditedProgrammesManageAndDeliverService.getAlcoholMisuseDetails.mockRejectedValue(
-        new Error('Service unavailable'),
-      )
+      accreditedProgrammesManageAndDeliverService.getDrugDetails.mockRejectedValue(new Error('Service unavailable'))
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/alcohol-misuse`).expect(500)
+      return request(app).get(`/referral/${referralId}/drug-details`).expect(500)
     })
   })
 })

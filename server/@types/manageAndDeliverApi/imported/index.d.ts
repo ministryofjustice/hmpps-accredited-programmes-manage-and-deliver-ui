@@ -121,6 +121,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/risks-and-needs/{crn}/lifestyle-and-associates': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Lifestyle and Associate details as held by Oasys */
+    get: operations['getLifestyleAndAssociates']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/risks-and-needs/{crn}/learning-needs': {
     parameters: {
       query?: never
@@ -704,6 +721,23 @@ export interface components {
       relationshipWithPartner?: string
       /** @example No */
       prevOrCurrentDomesticAbuse?: string
+    }
+    LifestyleAndAssociates: {
+      /**
+       * Format: date
+       * @example 1
+       */
+      assessmentCompleted?: string
+      /**
+       * @description Does the person have any regular activities that encourage reoffending
+       * @example 0
+       */
+      regActivitiesEncourageOffending?: string
+      /**
+       * @description Description of lifestyle issues affecting risk of offending or harm
+       * @example There are issues around involvement with drugs
+       */
+      lifestyleIssuesDetails?: string
     }
     LearningNeeds: {
       /**
@@ -1521,6 +1555,65 @@ export interface operations {
         }
       }
       /** @description The relationship information does not exist for the CRN provided. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getLifestyleAndAssociates: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description CRN */
+        crn: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description successful operation */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['LifestyleAndAssociates']
+        }
+      }
+      /** @description Invalid code format. Expected format for CRN: X718255. */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access this referral. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The health information does not exist for the CRN provided. */
       404: {
         headers: {
           [name: string]: unknown

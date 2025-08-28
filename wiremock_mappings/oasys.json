@@ -388,6 +388,47 @@
           "Content-Type": "application/json"
         }
       }
+    },
+    {
+      "request": {
+        "urlPattern": "/assessments/.*/section/section7",
+        "method": "GET"
+      },
+
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "assessmentPk": 9635383,
+          "assessmentType": "LAYER3",
+          "dateCompleted": "2024-08-01T14:20:00",
+          "assessorSignedDate": "2024-08-01T14:20:00",
+          "initiationDate": "2022-11-28T15:01:05",
+          "assessmentStatus": "COMPLETE",
+          "superStatus": "COMPLETE",
+          "laterWIPAssessmentExists": false,
+          "latestWIPDate": null,
+          "laterSignLockAssessmentExists": false,
+          "latestSignLockDate": null,
+          "laterPartCompUnsignedAssessmentExists": false,
+          "latestPartCompUnsignedDate": null,
+          "laterPartCompSignedAssessmentExists": false,
+          "latestPartCompSignedDate": null,
+          "laterCompleteAssessmentExists": false,
+          "latestCompleteDate": "2024-08-01T14:20:00",
+          "communityIntegration": "1-Some problems",
+          "lifestyleLinkedToReoffending": "Yes",
+          "lifestyleLinkedToHarm": "No",
+          "lifestyleIssuesDetails": "There are issues in that her involvement in the drug culture. Spending time with others who are drug users will undoubtedly increase the risk she poses of involvement in criminal activity.",
+          "recklessness": "1-Some problems",
+          "manipulativePredatory": "0-No problems",
+          "easilyInfluenced": "1-Some problems",
+          "regActivitiesEncourageOffending": "1-Some problems",
+          "assessor": {
+            "name": "ABC Support"
+          },
+          "crn": "D002399"
+        }
+      }
     }
   ]
 }
