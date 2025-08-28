@@ -143,8 +143,12 @@ export default class RisksAndNeedsController {
     const subNavValue = 'alcoholMisuse'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
+    const alcoholMisuseDetails = await this.accreditedProgrammesManageAndDeliverService.getAlcoholMisuseDetails(
+      username,
+      sharedReferralDetailsData.crn,
+    )
 
-    const presenter = new AlcoholMisusePresenter(subNavValue, referralId)
+    const presenter = new AlcoholMisusePresenter(subNavValue, referralId, alcoholMisuseDetails)
     const view = new AlcoholMisuseView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)

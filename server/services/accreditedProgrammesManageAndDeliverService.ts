@@ -12,6 +12,7 @@ import {
   UpdateAvailability,
   Health,
   Relationships,
+  AlcoholMisuseDetails,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -116,6 +117,14 @@ export default class AccreditedProgrammesManageAndDeliverService {
       path: `/risks-and-needs/${crn}/relationships`,
       headers: { Accept: 'application/json' },
     })) as Relationships
+  }
+
+  async getAlcoholMisuseDetails(username: Express.User['username'], crn: string): Promise<AlcoholMisuseDetails> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/risks-and-needs/${crn}/alcohol-misuse-details`,
+      headers: { Accept: 'application/json' },
+    })) as AlcoholMisuseDetails
   }
 
   async getHealth(username: Express.User['username'], crn: string): Promise<Health> {
