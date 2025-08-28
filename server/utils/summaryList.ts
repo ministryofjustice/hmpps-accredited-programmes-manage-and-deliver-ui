@@ -6,7 +6,7 @@ export enum ListStyle {
 export type SummaryListItemContent = string
 
 export interface SummaryListItem {
-  key: string
+  key?: string
   lines: SummaryListItemContent[]
   listStyle?: ListStyle
   changeLink?: string

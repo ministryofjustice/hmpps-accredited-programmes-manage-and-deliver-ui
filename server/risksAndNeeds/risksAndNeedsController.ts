@@ -117,8 +117,12 @@ export default class RisksAndNeedsController {
     const subNavValue = 'lifestyleAndAssociates'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
+    const lifestyleAndAssociates = await this.accreditedProgrammesManageAndDeliverService.getLifestyleAndAssociates(
+      username,
+      sharedReferralDetailsData.crn,
+    )
 
-    const presenter = new LifestyleAndAssociatesPresenter(subNavValue, referralId)
+    const presenter = new LifestyleAndAssociatesPresenter(subNavValue, referralId, lifestyleAndAssociates)
     const view = new LifestyleAndAssociatesView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)

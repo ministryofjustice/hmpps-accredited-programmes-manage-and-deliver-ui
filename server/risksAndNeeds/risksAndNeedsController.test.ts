@@ -2,6 +2,7 @@ import {
   DrugDetails,
   Health,
   LearningNeeds,
+  LifestyleAndAssociates,
   ReferralDetails,
   Relationships,
   RoshAnalysis,
@@ -18,6 +19,7 @@ import roshAnalysisFactory from '../testutils/factories/risksAndNeeds/roshAnalys
 import healthFactory from '../testutils/factories/risksAndNeeds/healthFactory'
 import drugDeatilsFactory from '../testutils/factories/risksAndNeeds/drugDeatilsFactory'
 import relationshipsFactory from '../testutils/factories/risksAndNeeds/relationshipsFactory'
+import lifestyleAndAssociatesFactory from '../testutils/factories/risksAndNeeds/lifestyleAndAssociatesFactory'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
@@ -175,6 +177,59 @@ describe('Health section of risks and needs', () => {
 
       const referralId = randomUUID()
       return request(app).get(`/referral/${referralId}/health`).expect(500)
+    })
+  })
+})
+
+describe('Lifestyle and associates section of risks and needs', () => {
+  describe('GET /referral/:id/lifestyle-and-associates', () => {
+    it('loads the risks and needs page with lifestyle and associates sub-nav and displays all related data', async () => {
+      const lifestyleAndAssociates: LifestyleAndAssociates = lifestyleAndAssociatesFactory.build()
+      accreditedProgrammesManageAndDeliverService.getLifestyleAndAssociates.mockResolvedValue(lifestyleAndAssociates)
+
+      const referralId = randomUUID()
+      return request(app)
+        .get(`/referral/${referralId}/lifestyle-and-associates`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Assessment completed 23 August 2025')
+          expect(res.text).toContain(lifestyleAndAssociates.regActivitiesEncourageOffending)
+          expect(res.text).toContain(lifestyleAndAssociates.lifestyleIssuesDetails)
+        })
+    })
+
+    it('handles health info with minimal data', async () => {
+      const lifestyleAndAssociates: LifestyleAndAssociates = lifestyleAndAssociatesFactory.build({
+        regActivitiesEncourageOffending: undefined,
+        lifestyleIssuesDetails: undefined,
+      })
+      accreditedProgrammesManageAndDeliverService.getLifestyleAndAssociates.mockResolvedValue(lifestyleAndAssociates)
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/lifestyle-and-associates`).expect(200)
+    })
+
+    it('calls the service with correct parameters', async () => {
+      const referralId = randomUUID()
+
+      const lifestyleAndAssociates: LifestyleAndAssociates = lifestyleAndAssociatesFactory.build()
+      accreditedProgrammesManageAndDeliverService.getLifestyleAndAssociates.mockResolvedValue(lifestyleAndAssociates)
+
+      await request(app).get(`/referral/${referralId}/lifestyle-and-associates`).expect(200)
+
+      expect(accreditedProgrammesManageAndDeliverService.getLifestyleAndAssociates).toHaveBeenCalledWith(
+        'user1',
+        referralDetails.crn,
+      )
+    })
+
+    it('handles service errors gracefully', async () => {
+      accreditedProgrammesManageAndDeliverService.getLifestyleAndAssociates.mockRejectedValue(
+        new Error('Service unavailable'),
+      )
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/lifestyle-and-associates`).expect(500)
     })
   })
 })

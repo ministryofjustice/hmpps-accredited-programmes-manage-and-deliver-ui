@@ -121,6 +121,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/risks-and-needs/{crn}/lifestyle-and-associates': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Lifestyle and Associate details as held by Oasys */
+    get: operations['getLifestyleAndAssociates']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/risks-and-needs/{crn}/learning-needs': {
     parameters: {
       query?: never
@@ -164,6 +181,23 @@ export interface paths {
     }
     /** Get drug details as held by Oasys */
     get: operations['getDrugDetails']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/risks-and-needs/{crn}/alcohol-misuse-details': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Get alcohol misuse details as held by Oasys */
+    get: operations['getAlcoholMisuseDetails']
     put?: never
     post?: never
     delete?: never
@@ -688,6 +722,23 @@ export interface components {
       /** @example No */
       prevOrCurrentDomesticAbuse?: string
     }
+    LifestyleAndAssociates: {
+      /**
+       * Format: date
+       * @example 1
+       */
+      assessmentCompleted?: string
+      /**
+       * @description Does the person have any regular activities that encourage reoffending
+       * @example 0
+       */
+      regActivitiesEncourageOffending?: string
+      /**
+       * @description Description of lifestyle issues affecting risk of offending or harm
+       * @example There are issues around involvement with drugs
+       */
+      lifestyleIssuesDetails?: string
+    }
     LearningNeeds: {
       /**
        * Format: date
@@ -743,6 +794,21 @@ export interface components {
       levelOfUseOfMainDrug?: string
       /** @example 1 */
       drugsMajorActivity?: string
+    }
+    AlcoholMisuseDetails: {
+      /**
+       * Format: date
+       * @example 1
+       */
+      assessmentCompleted?: string
+      /** @example 1-Some problems */
+      currentUse?: string
+      /** @example 1-Some problems */
+      bingeDrinking?: string
+      /** @example 2-Significant problems */
+      frequencyAndLevel?: string
+      /** @example Alcohol dependency affecting employment and relationships */
+      alcoholIssuesDetails?: string
     }
     ReferralDetails: {
       /**
@@ -1499,6 +1565,65 @@ export interface operations {
       }
     }
   }
+  getLifestyleAndAssociates: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description CRN */
+        crn: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description successful operation */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['LifestyleAndAssociates']
+        }
+      }
+      /** @description Invalid code format. Expected format for CRN: X718255. */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access this referral. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The health information does not exist for the CRN provided. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getLearningNeeds: {
     parameters: {
       query?: never
@@ -1666,6 +1791,65 @@ export interface operations {
         }
       }
       /** @description The drug detail information does not exist for the CRN provided. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getAlcoholMisuseDetails: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description CRN */
+        crn: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description successful operation */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AlcoholMisuseDetails']
+        }
+      }
+      /** @description Invalid code format. Expected format for CRN: X718255. */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access alcohol misuse details. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The alcohol misuse detail information does not exist for the CRN provided. */
       404: {
         headers: {
           [name: string]: unknown
