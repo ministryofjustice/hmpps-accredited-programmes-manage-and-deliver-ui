@@ -333,15 +333,22 @@ describe('Alcohol Misuse', () => {
       const referralId = randomUUID()
       await request(app).get(`/referral/${referralId}/alcohol-misuse`).expect(200)
 
-      expect(accreditedProgrammesManageAndDeliverService.getAlcoholMisuseDetails).toHaveBeenCalledWith(accreditedProgrammesManageAndDeliverService.getAlcoholMisuseDetails.mockRejectedValue(
+      expect(accreditedProgrammesManageAndDeliverService.getAlcoholMisuseDetails).toHaveBeenCalledWith(
+        'user1',
+        referralDetails.crn,
+      )
+    })
+
+    it('handles service errors gracefully', async () => {
+      accreditedProgrammesManageAndDeliverService.getAlcoholMisuseDetails.mockRejectedValue(
         new Error('Service unavailable'),
       )
 
       const referralId = randomUUID()
       return request(app).get(`/referral/${referralId}/alcohol-misuse`).expect(500)
-     })
- })
-        
+    })
+  })
+})
 
 describe('Drug details section of risks and needs', () => {
   describe('GET /referral/:id/drug-details', () => {
