@@ -1,4 +1,5 @@
 import {
+  AlcoholMisuseDetails,
   DrugDetails,
   Health,
   LearningNeeds,
@@ -14,6 +15,7 @@ import * as cheerio from 'cheerio'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
+import alcoholMisuseFactory from '../testutils/factories/risksAndNeeds/alcoholMisuseFactory'
 import learningNeedsFactory from '../testutils/factories/risksAndNeeds/learningNeedsFactory'
 import roshAnalysisFactory from '../testutils/factories/risksAndNeeds/roshAnalysisFactory'
 import healthFactory from '../testutils/factories/risksAndNeeds/healthFactory'
@@ -288,6 +290,62 @@ describe('Relationships', () => {
 
       const referralId = randomUUID()
       return request(app).get(`/referral/${referralId}/relationships`).expect(500)
+    })
+  })
+})
+
+describe('Alcohol Misuse', () => {
+  describe('GET /referral/:id/alcohol-misuse', () => {
+    it('loads the risks and needs page with alcohol misuse sub-nav and displays all alcohol misuse data', async () => {
+      const alcoholMisuseDetails: AlcoholMisuseDetails = alcoholMisuseFactory.build()
+      accreditedProgrammesManageAndDeliverService.getAlcoholMisuseDetails.mockResolvedValue(alcoholMisuseDetails)
+
+      const referralId = randomUUID()
+      return request(app)
+        .get(`/referral/${referralId}/alcohol-misuse`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Assessment completed 23 August 2025')
+          expect(res.text).toContain(alcoholMisuseDetails.currentUse)
+          expect(res.text).toContain(alcoholMisuseDetails.bingeDrinking)
+          expect(res.text).toContain(alcoholMisuseDetails.frequencyAndLevel)
+          expect(res.text).toContain(alcoholMisuseDetails.alcoholIssuesDetails)
+        })
+    })
+
+    it('handles alcohol misuse with minimal data', async () => {
+      const alcoholMisuseDetails: AlcoholMisuseDetails = alcoholMisuseFactory.build({
+        currentUse: undefined,
+        bingeDrinking: undefined,
+        frequencyAndLevel: undefined,
+        alcoholIssuesDetails: undefined,
+      })
+      accreditedProgrammesManageAndDeliverService.getAlcoholMisuseDetails.mockResolvedValue(alcoholMisuseDetails)
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/alcohol-misuse`).expect(200)
+    })
+
+    it('calls the service with correct parameters', async () => {
+      const alcoholMisuseDetails: AlcoholMisuseDetails = alcoholMisuseFactory.build()
+      accreditedProgrammesManageAndDeliverService.getAlcoholMisuseDetails.mockResolvedValue(alcoholMisuseDetails)
+
+      const referralId = randomUUID()
+      await request(app).get(`/referral/${referralId}/alcohol-misuse`).expect(200)
+
+      expect(accreditedProgrammesManageAndDeliverService.getAlcoholMisuseDetails).toHaveBeenCalledWith(
+        'user1',
+        referralDetails.crn,
+      )
+    })
+
+    it('handles service errors gracefully', async () => {
+      accreditedProgrammesManageAndDeliverService.getAlcoholMisuseDetails.mockRejectedValue(
+        new Error('Service unavailable'),
+      )
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/alcohol-misuse`).expect(500)
     })
   })
 })

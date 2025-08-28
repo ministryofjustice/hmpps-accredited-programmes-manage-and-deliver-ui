@@ -16,6 +16,7 @@ type PniScore = components['schemas']['PniScore']
 type Health = components['schemas']['Health']
 type LifestyleAndAssociates = components['schemas']['LifestyleAndAssociates']
 type Relationships = components['schemas']['Relationships']
+type AlcoholMisuseDetails = components['schemas']['AlcoholMisuseDetails']
 type DrugDetails = components['schemas']['DrugDetails']
 
 export type {
@@ -35,5 +36,6 @@ export type {
   Health,
   LifestyleAndAssociates,
   Relationships,
+  AlcoholMisuseDetails,
   DrugDetails,
 }
