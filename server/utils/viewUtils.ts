@@ -122,7 +122,11 @@ export default class ViewUtils {
   static summaryListArgsWithSummaryCard(
     summaryListItems: SummaryListItem[],
     heading: string | null | undefined = null,
-    options: { showBorders: boolean; showTitle: boolean } = { showBorders: true, showTitle: true },
+    options: { showBorders: boolean; showTitle: boolean; hideKey: boolean } = {
+      showBorders: true,
+      showTitle: true,
+      hideKey: false,
+    },
     actions: { href: string; text: string; visuallyHiddenText: string | null } | null = null,
   ): SummaryListArgs {
     return {
@@ -143,9 +147,11 @@ export default class ViewUtils {
       rows: summaryListItems.map((item, index) => {
         return {
           key: {
-            text: item.key,
+            text: options.hideKey ? '' : item.key,
+            classes: options.hideKey === true ? 'govuk-visually-hidden' : undefined,
           },
           value: (() => {
+            const fillRowWithValue = options.hideKey ? 'govuk-!-width-full' : undefined
             if (item.listStyle !== undefined) {
               const itemClass = `govuk-list${item.listStyle === ListStyle.bulleted ? ' govuk-list--bullet' : ''}`
               const html = `<ul class="${itemClass}">${item.lines
@@ -156,7 +162,7 @@ export default class ViewUtils {
             const html = item.lines
               .map(line => `<p class="govuk-body">${ViewUtils.nl2br(ViewUtils.summaryListItemLine(line))}</p>`)
               .join('\n')
-            return { html }
+            return { html, classes: fillRowWithValue }
           })(),
           actions: (() => {
             if (item.changeLink) {

@@ -11,6 +11,7 @@ import {
   PniScore,
   UpdateAvailability,
   Health,
+  LifestyleAndAssociates,
   Relationships,
   DrugDetails,
 } from '@manage-and-deliver-api'
@@ -109,6 +110,14 @@ export default class AccreditedProgrammesManageAndDeliverService {
       path: `/risks-and-needs/${crn}/learning-needs`,
       headers: { Accept: 'application/json' },
     })) as LearningNeeds
+  }
+
+  async getLifestyleAndAssociates(username: Express.User['username'], crn: string): Promise<LifestyleAndAssociates> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/risks-and-needs/${crn}/lifestyle-and-associates`,
+      headers: { Accept: 'application/json' },
+    })) as LifestyleAndAssociates
   }
 
   async getRelationships(username: Express.User['username'], crn: string): Promise<Relationships> {
