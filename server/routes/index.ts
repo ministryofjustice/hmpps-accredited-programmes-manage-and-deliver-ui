@@ -102,8 +102,8 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await risksAndNeedsController.showLifestyleAndAssociatesPage(req, res)
   })
 
-  get('/referral/:referralId/drug-misuse', async (req, res, next) => {
-    await risksAndNeedsController.showDrugMisusePage(req, res)
+  get('/referral/:referralId/drug-details', async (req, res, next) => {
+    await risksAndNeedsController.showDrugDetailsPage(req, res)
   })
 
   get('/referral/:referralId/alcohol-misuse', async (req, res, next) => {

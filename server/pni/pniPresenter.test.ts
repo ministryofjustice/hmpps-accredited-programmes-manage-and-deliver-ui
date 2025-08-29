@@ -210,7 +210,7 @@ describe('PniPresenter', () => {
         rows: [
           {
             key: {
-              text: '11.11 - Sexual Pre-occupation',
+              text: '11.11 - Sexual preoccupation',
             },
             value: {
               text: '2',
@@ -218,7 +218,7 @@ describe('PniPresenter', () => {
           },
           {
             key: {
-              text: '11.12 - Offence related Sexual Interests',
+              text: '11.12 - Offence-related sexual interests',
             },
             value: {
               text: '1',
@@ -226,7 +226,7 @@ describe('PniPresenter', () => {
           },
           {
             key: {
-              text: '6.12 Emotional congruence with children or feeling closer to children than adults',
+              text: '6.12 - Emotional congruence with children or feeling closer to children than adults',
             },
             value: {
               text: '0',
@@ -255,7 +255,7 @@ describe('PniPresenter', () => {
         rows: [
           {
             key: {
-              text: '12.1 Pro-criminal attitudes',
+              text: '12.1 - Pro-criminal attitudes',
             },
             value: {
               text: '2',
@@ -263,7 +263,7 @@ describe('PniPresenter', () => {
           },
           {
             key: {
-              text: '12.9 Hostile orientation',
+              text: '12.9 - Hostile orientation',
             },
             value: {
               text: '1',

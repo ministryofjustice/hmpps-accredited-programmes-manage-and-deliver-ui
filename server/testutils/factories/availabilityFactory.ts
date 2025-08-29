@@ -1,4 +1,4 @@
-import { faker } from '@faker-js/faker/locale/en_GB'
+import { fakerEN_GB as faker } from '@faker-js/faker'
 import { Availability, DailyAvailabilityModel } from '@manage-and-deliver-api'
 import { Factory } from 'fishery'
 

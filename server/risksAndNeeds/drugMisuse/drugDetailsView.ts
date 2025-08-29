@@ -1,13 +1,13 @@
-import HealthPresenter from './healthPresenter'
+import drugDetailsPresenter from './drugDetailsPresenter'
 import { InsetTextArgs, SummaryListArgs } from '../../utils/govukFrontendTypes'
 import ViewUtils from '../../utils/viewUtils'
 
-export default class HealthView {
-  constructor(private readonly presenter: HealthPresenter) {}
+export default class DrugDetailsView {
+  constructor(private readonly presenter: drugDetailsPresenter) {}
 
   get assessmentCompletedText(): InsetTextArgs {
     return {
-      text: `Assessment completed ${this.presenter.health.assessmentCompleted}`,
+      text: `Assessment completed ${this.presenter.drugDetails.assessmentCompleted}`,
       classes: 'govuk-!-margin-top-0',
     }
   }
@@ -25,7 +25,7 @@ export default class HealthView {
 
   get infoSummaryList(): SummaryListArgs {
     return {
-      ...ViewUtils.summaryListArgsWithSummaryCard(this.presenter.healthSummaryList(), '13.1 - Health'),
+      ...ViewUtils.summaryListArgsWithSummaryCard(this.presenter.drugDetailsSummaryList(), '8 - Drug misuse'),
     }
   }
 }

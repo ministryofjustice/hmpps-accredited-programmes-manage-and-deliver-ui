@@ -7,28 +7,28 @@ import AlcoholMisusePresenter from './alcoholMisuse/alcoholMisusePresenter'
 import AlcoholMisuseView from './alcoholMisuse/alcoholMisuseView'
 import AttitudesPresenter from './attitudes/attitudesPresenter'
 import AttitudesView from './attitudes/attitudesView'
-import DrugMisusePresenter from './drugMisuse/drugMisusePresenter'
-import DrugMisuseView from './drugMisuse/drugMisuseView'
+import DrugDetailsView from './drugMisuse/drugDetailsView'
 import EducationTrainingAndEmploymentPresenter from './educationTrainingAndEmployment/educationTrainingAndEmploymentPresenter'
 import EducationTrainingAndEmploymentView from './educationTrainingAndEmployment/educationTrainingAndEmploymentView'
 import EmotionalWellbeingPresenter from './emotionalWellbeing/emotionalWellbeingPresenter'
 import EmotionalWellbeingView from './emotionalWellbeing/emotionalWellbeingView'
 import HealthPresenter from './health/healthPresenter'
 import HealthView from './health/healthView'
-import LearningAndNeedsPresenter from './learningAndNeeds/learningAndNeedsPresenter'
-import LearningAndNeedsView from './learningAndNeeds/learningAndNeedsView'
+import LearningNeedsPresenter from './learningNeeds/learningNeedsPresenter'
+import LearningNeedsView from './learningNeeds/learningNeedsView'
 import LifestyleAndAssociatesPresenter from './lifestyleAndAssociates/lifestyleAndAssociatesPresenter'
 import LifestyleAndAssociatesView from './lifestyleAndAssociates/lifestyleAndAssociatesView'
 import OffenceAnalysisPresenter from './offenceAnalysis/offenceAnalysisPresenter'
 import OffenceAnalysisView from './offenceAnalysis/offenceAnalysisView'
 import RisksAndAlertsPresenter from './risksAndAlerts/risksAndAlertsPresenter'
 import RisksAndAlertsView from './risksAndAlerts/risksAndAlertsView'
-import RisksAndNeedsPresenter from './risksAndNeedsPresenter'
-import RisksAndNeedsView from './risksAndNeedsView'
 import RoshAnalysisPresenter from './roshAnalysis/roshAnalysisPresenter'
 import RoshAnalysisView from './roshAnalysis/roshAnalysisView'
 import ThinkingAndBehavingPresenter from './thinkingAndBehaving/thinkingAndBehavingPresenter'
 import ThinkingAndBehavingView from './thinkingAndBehaving/thinkingAndBehavingView'
+import RelationshipsPresenter from './relationships/relationshipsPresenter'
+import RelationshipsView from './relationships/relationshipsView'
+import DrugDetailsPresenter from './drugMisuse/drugDetailsPresenter'
 
 export default class RisksAndNeedsController {
   constructor(
@@ -58,9 +58,12 @@ export default class RisksAndNeedsController {
     const subNavValue = 'learningNeeds'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
-
-    const presenter = new LearningAndNeedsPresenter(subNavValue, referralId)
-    const view = new LearningAndNeedsView(presenter)
+    const learningNeeds = await this.accreditedProgrammesManageAndDeliverService.getLearningNeeds(
+      username,
+      sharedReferralDetailsData.crn,
+    )
+    const presenter = new LearningNeedsPresenter(subNavValue, referralId, learningNeeds)
+    const view = new LearningNeedsView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -101,9 +104,13 @@ export default class RisksAndNeedsController {
     const subNavValue = 'relationships'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
+    const relationships = await this.accreditedProgrammesManageAndDeliverService.getRelationships(
+      username,
+      sharedReferralDetailsData.crn,
+    )
 
-    const presenter = new RisksAndNeedsPresenter(subNavValue, referralId)
-    const view = new RisksAndNeedsView(presenter)
+    const presenter = new RelationshipsPresenter(subNavValue, referralId, relationships)
+    const view = new RelationshipsView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -114,22 +121,13 @@ export default class RisksAndNeedsController {
     const subNavValue = 'lifestyleAndAssociates'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
+    const lifestyleAndAssociates = await this.accreditedProgrammesManageAndDeliverService.getLifestyleAndAssociates(
+      username,
+      sharedReferralDetailsData.crn,
+    )
 
-    const presenter = new LifestyleAndAssociatesPresenter(subNavValue, referralId)
+    const presenter = new LifestyleAndAssociatesPresenter(subNavValue, referralId, lifestyleAndAssociates)
     const view = new LifestyleAndAssociatesView(presenter)
-
-    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
-  }
-
-  async showDrugMisusePage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
-    const { username } = req.user
-    const subNavValue = 'drugMisuse'
-
-    const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
-
-    const presenter = new DrugMisusePresenter(subNavValue, referralId)
-    const view = new DrugMisuseView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -140,8 +138,12 @@ export default class RisksAndNeedsController {
     const subNavValue = 'alcoholMisuse'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
+    const alcoholMisuseDetails = await this.accreditedProgrammesManageAndDeliverService.getAlcoholMisuseDetails(
+      username,
+      sharedReferralDetailsData.crn,
+    )
 
-    const presenter = new AlcoholMisusePresenter(subNavValue, referralId)
+    const presenter = new AlcoholMisusePresenter(subNavValue, referralId, alcoholMisuseDetails)
     const view = new AlcoholMisuseView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
@@ -192,9 +194,30 @@ export default class RisksAndNeedsController {
     const subNavValue = 'health'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
+    const health = await await this.accreditedProgrammesManageAndDeliverService.getHealth(
+      username,
+      sharedReferralDetailsData.crn,
+    )
 
-    const presenter = new HealthPresenter(subNavValue, referralId)
+    const presenter = new HealthPresenter(subNavValue, referralId, health)
     const view = new HealthView(presenter)
+
+    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+  }
+
+  async showDrugDetailsPage(req: Request, res: Response): Promise<void> {
+    const { referralId } = req.params
+    const { username } = req.user
+    const subNavValue = 'health'
+
+    const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
+    const drugDetails = await await this.accreditedProgrammesManageAndDeliverService.getDrugDetails(
+      username,
+      sharedReferralDetailsData.crn,
+    )
+
+    const presenter = new DrugDetailsPresenter(subNavValue, referralId, drugDetails)
+    const view = new DrugDetailsView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }

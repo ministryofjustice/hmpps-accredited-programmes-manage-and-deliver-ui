@@ -29,63 +29,62 @@
           </div>
         </div>
         <div class="govuk-grid-row">
-
           <div class="govuk-grid-column-one-third">
-
             {{ mojSideNavigation(presenter.getVerticalSubNavArgs()) }}
-
           </div>
           <div class="govuk-grid-column-two-thirds">
             {% if presenter.subNavValue == 'learningNeeds' %}
-              <div>
-            learningNeeds
-          </div>
+            <div>
+                  {% include "./learningNeeds.njk" %}
+            </div>
             {% elif presenter.subNavValue == 'offenceAnalysis' %}
               <div>
                 {% include "./offenceAnalysis.njk" %}
               </div>
             {% elif presenter.subNavValue == 'educationTrainingAndEmployment' %}
-              <div>
+            <div>
             educationTrainingAndEmployment
-          </div>
+            </div>
             {% elif presenter.subNavValue == 'relationships' %}
-              <div>
-            relationships
-          </div>
+            <div>
+                {% include "./relationships.njk" %}
+            </div>
             {% elif presenter.subNavValue == 'lifestyleAndAssociates' %}
               <div>
-            lifestyleAndAssociates
-          </div>
+                {% include "./lifestyleAndAssociates.njk" %}
+              </div>
             {% elif presenter.subNavValue == 'drugMisuse' %}
-              <div>
+            <div>
             drugMisuse
-          </div>
+            </div>
             {% elif presenter.subNavValue == 'alcoholMisuse' %}
-              <div>
-            alcoholMisuse
-          </div>
+            <div>
+                {% include "./alcoholMisuse.njk" %}
+            </div>
             {% elif presenter.subNavValue == 'emotionalWellbeing' %}
-              <div>
+            <div>
             emotionalWellbeing
-          </div>
+            </div>
             {% elif presenter.subNavValue == 'thinkingAndBehaviour' %}
-              <div>
+            <div>
             thinkingAndBehaviour
-          </div>
+            </div>
             {% elif presenter.subNavValue == 'attitudes' %}
-              <div>
+            <div>
             attitudes
-          </div>
+            </div>
             {% elif presenter.subNavValue == 'health' %}
               <div>
-            health
-          </div>
+                {% include "./health.njk" %}
+              </div>
             {% elif presenter.subNavValue == 'roshAnalysis' %}
               <div>
                 {% include "./roshAnalysis.njk" %}
               </div>
             {% else %}
+              <div>
               {% include "./risksAndAlerts.njk" %}
+              </div>
             {% endif %}
           </div>
         </div>

@@ -9,7 +9,13 @@ import {
   ReferralDetails,
   RoshAnalysis,
   SentenceInformation,
+  LearningNeeds,
   UpdateAvailability,
+  Health,
+  LifestyleAndAssociates,
+  Relationships,
+  AlcoholMisuseDetails,
+  DrugDetails,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -98,6 +104,54 @@ export default class AccreditedProgrammesManageAndDeliverService {
       path: `/referral-details/${referralId}/sentence-information`,
       headers: { Accept: 'application/json' },
     })) as SentenceInformation
+  }
+
+  async getLearningNeeds(username: Express.User['username'], crn: string): Promise<LearningNeeds> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/risks-and-needs/${crn}/learning-needs`,
+      headers: { Accept: 'application/json' },
+    })) as LearningNeeds
+  }
+
+  async getLifestyleAndAssociates(username: Express.User['username'], crn: string): Promise<LifestyleAndAssociates> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/risks-and-needs/${crn}/lifestyle-and-associates`,
+      headers: { Accept: 'application/json' },
+    })) as LifestyleAndAssociates
+  }
+
+  async getRelationships(username: Express.User['username'], crn: string): Promise<Relationships> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/risks-and-needs/${crn}/relationships`,
+      headers: { Accept: 'application/json' },
+    })) as Relationships
+  }
+
+  async getAlcoholMisuseDetails(username: Express.User['username'], crn: string): Promise<AlcoholMisuseDetails> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/risks-and-needs/${crn}/alcohol-misuse-details`,
+      headers: { Accept: 'application/json' },
+    })) as AlcoholMisuseDetails
+  }
+
+  async getHealth(username: Express.User['username'], crn: string): Promise<Health> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/risks-and-needs/${crn}/health`,
+      headers: { Accept: 'application/json' },
+    })) as Health
+  }
+
+  async getDrugDetails(username: Express.User['username'], crn: string): Promise<DrugDetails> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/risks-and-needs/${crn}/drug-details`,
+      headers: { Accept: 'application/json' },
+    })) as DrugDetails
   }
 
   async addAvailability(
