@@ -11,18 +11,20 @@ export default class RelationshipsView {
     }
   }
 
-  get relationshipIssuesDetails(): string {
-    return this.presenter.relationshipsIssuesDetails()
-  }
-
-  get relationshipIssuesDetailsHeading(): string {
-    return 'Relationship issues affecting risk of offending or harm'
-  }
-
   get assessmentCompletedText(): InsetTextArgs {
     return {
       text: `Assessment completed ${this.presenter.relationships.assessmentCompleted}`,
       classes: 'govuk-!-margin-top-0',
+    }
+  }
+
+  get relationshipIssuesSummaryList(): SummaryListArgs {
+    return {
+      ...ViewUtils.summaryListArgsWithSummaryCard(
+        this.presenter.relationshipsIssuesSummaryList(),
+        'Relationship issues affecting risk of offending or harm',
+        { showBorders: true, showTitle: true, hideKey: true },
+      ),
     }
   }
 
@@ -31,8 +33,7 @@ export default class RelationshipsView {
       'risksAndNeeds/risksAndNeeds',
       {
         presenter: this.presenter,
-        relationshipIssuesDetails: this.relationshipIssuesDetails,
-        relationshipIssuesDetailsHeading: this.relationshipIssuesDetailsHeading,
+        relationshipIssuesSummaryList: this.relationshipIssuesSummaryList,
         domesticViolenceSummaryList: this.domesticViolenceSummaryList,
         assessmentCompletedText: this.assessmentCompletedText,
       },

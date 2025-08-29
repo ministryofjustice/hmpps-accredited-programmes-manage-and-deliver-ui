@@ -37,7 +37,12 @@ export default class RelationshipsPresenter extends RisksAndNeedsPresenter {
     ]
   }
 
-  relationshipsIssuesDetails(): string {
-    return this.relationships.relIssuesDetails
+  relationshipsIssuesSummaryList(): SummaryListItem[] {
+    return [
+      {
+        key: '',
+        lines: [this.relationships.relIssuesDetails],
+      },
+    ]
   }
 }
