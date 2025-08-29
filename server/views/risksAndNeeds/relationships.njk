@@ -1,16 +1,8 @@
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-{% from "../partials/keylessSummaryCard.njk" import keylessSummaryCard %}
 
 <div>
     {{ govukInsetText(assessmentCompletedText) }}
     {{ govukSummaryList(domesticViolenceSummaryList) }}
-    {{ keylessSummaryCard(
-        relationshipIssuesDetailsHeading,
-        actionItems,
-        relationshipIssuesDetails,
-        bodyHtml,
-        testId,
-        headingLevel
-    ) }}
+    {{ govukSummaryList(relationshipIssuesSummaryList) }}
 </div>
