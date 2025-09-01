@@ -152,7 +152,12 @@ export default class RisksAndNeedsController {
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
 
-    const presenter = new EmotionalWellbeingPresenter(subNavValue, referralId)
+    const emotionalWellbeing = await this.accreditedProgrammesManageAndDeliverService.getEmotionalWellbeing(
+      username,
+      sharedReferralDetailsData.crn,
+    )
+
+    const presenter = new EmotionalWellbeingPresenter(subNavValue, referralId, emotionalWellbeing)
     const view = new EmotionalWellbeingView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
@@ -165,7 +170,12 @@ export default class RisksAndNeedsController {
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
 
-    const presenter = new ThinkingAndBehavingPresenter(subNavValue, referralId)
+    const thinkingAndBehaviour = await this.accreditedProgrammesManageAndDeliverService.getThinkingAndBehaviour(
+      username,
+      sharedReferralDetailsData.crn,
+    )
+
+    const presenter = new ThinkingAndBehavingPresenter(subNavValue, referralId, thinkingAndBehaviour)
     const view = new ThinkingAndBehavingView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
@@ -190,7 +200,7 @@ export default class RisksAndNeedsController {
     const subNavValue = 'health'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
-    const health = await await this.accreditedProgrammesManageAndDeliverService.getHealth(
+    const health = await this.accreditedProgrammesManageAndDeliverService.getHealth(
       username,
       sharedReferralDetailsData.crn,
     )
@@ -207,7 +217,7 @@ export default class RisksAndNeedsController {
     const subNavValue = 'health'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
-    const drugDetails = await await this.accreditedProgrammesManageAndDeliverService.getDrugDetails(
+    const drugDetails = await this.accreditedProgrammesManageAndDeliverService.getDrugDetails(
       username,
       sharedReferralDetailsData.crn,
     )
