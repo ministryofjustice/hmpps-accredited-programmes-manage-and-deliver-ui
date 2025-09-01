@@ -1,12 +1,14 @@
 import {
   AlcoholMisuseDetails,
   DrugDetails,
+  EmotionalWellbeing,
   Health,
   LearningNeeds,
   LifestyleAndAssociates,
   ReferralDetails,
   Relationships,
   RoshAnalysis,
+  ThinkingAndBehaviour,
 } from '@manage-and-deliver-api'
 import { randomUUID } from 'crypto'
 import { Express } from 'express'
@@ -19,9 +21,11 @@ import alcoholMisuseFactory from '../testutils/factories/risksAndNeeds/alcoholMi
 import learningNeedsFactory from '../testutils/factories/risksAndNeeds/learningNeedsFactory'
 import roshAnalysisFactory from '../testutils/factories/risksAndNeeds/roshAnalysisFactory'
 import healthFactory from '../testutils/factories/risksAndNeeds/healthFactory'
-import drugDeatilsFactory from '../testutils/factories/risksAndNeeds/drugDeatilsFactory'
+import drugDetailsFactory from '../testutils/factories/risksAndNeeds/drugDetailsFactory'
 import relationshipsFactory from '../testutils/factories/risksAndNeeds/relationshipsFactory'
 import lifestyleAndAssociatesFactory from '../testutils/factories/risksAndNeeds/lifestyleAndAssociatesFactory'
+import emotionalWellbeingFactory from '../testutils/factories/risksAndNeeds/emotionalWellbeingFactory'
+import thinkingAndBehaviourFactory from '../testutils/factories/risksAndNeeds/thinkingAndBehaviourFactory'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
@@ -353,7 +357,7 @@ describe('Alcohol Misuse', () => {
 describe('Drug details section of risks and needs', () => {
   describe('GET /referral/:id/drug-details', () => {
     it('loads the risks and needs page with drug details sub-nav and displays all drug details related data', async () => {
-      const drugDetails: DrugDetails = drugDeatilsFactory.build()
+      const drugDetails: DrugDetails = drugDetailsFactory.build()
       accreditedProgrammesManageAndDeliverService.getDrugDetails.mockResolvedValue(drugDetails)
 
       const referralId = randomUUID()
@@ -368,9 +372,10 @@ describe('Drug details section of risks and needs', () => {
     })
 
     it('handles drug details info with minimal data', async () => {
-      const drugDetails: DrugDetails = healthFactory.build({
-        anyHealthConditions: undefined,
-        description: undefined,
+      const drugDetails: DrugDetails = drugDetailsFactory.build({
+        assessmentCompleted: undefined,
+        levelOfUseOfMainDrug: undefined,
+        drugsMajorActivity: undefined,
       })
       accreditedProgrammesManageAndDeliverService.getDrugDetails.mockResolvedValue(drugDetails)
 
@@ -381,7 +386,7 @@ describe('Drug details section of risks and needs', () => {
     it('calls the service with correct parameters', async () => {
       const referralId = randomUUID()
 
-      const drugDetails: DrugDetails = drugDeatilsFactory.build()
+      const drugDetails: DrugDetails = drugDetailsFactory.build()
       accreditedProgrammesManageAndDeliverService.getDrugDetails.mockResolvedValue(drugDetails)
 
       await request(app).get(`/referral/${referralId}/drug-details`).expect(200)
@@ -397,6 +402,121 @@ describe('Drug details section of risks and needs', () => {
 
       const referralId = randomUUID()
       return request(app).get(`/referral/${referralId}/drug-details`).expect(500)
+    })
+  })
+})
+
+describe('Emotional wellbeing section of risks and needs', () => {
+  describe('GET /referral/:id/emotional-wellbeing', () => {
+    it('loads the risks and needs page with emotional wellbeing sub-nav and displays all emotional wellbeing related data', async () => {
+      const emotionalWellbeing: EmotionalWellbeing = emotionalWellbeingFactory.build()
+      accreditedProgrammesManageAndDeliverService.getEmotionalWellbeing.mockResolvedValue(emotionalWellbeing)
+
+      const referralId = randomUUID()
+      return request(app)
+        .get(`/referral/${referralId}/emotional-wellbeing`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Assessment completed 23 August 2025')
+          expect(res.text).toContain('1 - Some problems')
+          expect(res.text).toContain('0 - No problems')
+        })
+    })
+
+    it('handles emotional-wellbeing info with minimal data', async () => {
+      const emotionalWellbeing: EmotionalWellbeing = emotionalWellbeingFactory.build({
+        assessmentCompleted: undefined,
+        currentPsychologicalProblems: undefined,
+        selfHarmSuicidal: undefined,
+        currentPsychiatricProblems: undefined,
+      })
+      accreditedProgrammesManageAndDeliverService.getEmotionalWellbeing.mockResolvedValue(emotionalWellbeing)
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/emotional-wellbeing`).expect(200)
+    })
+
+    it('calls the service with correct parameters', async () => {
+      const referralId = randomUUID()
+
+      const emotionalWellbeing: EmotionalWellbeing = emotionalWellbeingFactory.build()
+      accreditedProgrammesManageAndDeliverService.getEmotionalWellbeing.mockResolvedValue(emotionalWellbeing)
+
+      await request(app).get(`/referral/${referralId}/emotional-wellbeing`).expect(200)
+
+      expect(accreditedProgrammesManageAndDeliverService.getEmotionalWellbeing).toHaveBeenCalledWith(
+        'user1',
+        referralDetails.crn,
+      )
+    })
+
+    it('handles service errors gracefully', async () => {
+      accreditedProgrammesManageAndDeliverService.getEmotionalWellbeing.mockRejectedValue(
+        new Error('Service unavailable'),
+      )
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/emotional-wellbeing`).expect(500)
+    })
+  })
+})
+
+describe('Thinking and behaviour section of risks and needs', () => {
+  describe('GET /referral/:id/thinking-and-behaviour', () => {
+    it('loads the risks and needs page with thinking and behaviour sub-nav and displays all thinking and behaviour related data', async () => {
+      const thinkingAndBehaviour: ThinkingAndBehaviour = thinkingAndBehaviourFactory.build()
+      accreditedProgrammesManageAndDeliverService.getThinkingAndBehaviour.mockResolvedValue(thinkingAndBehaviour)
+
+      const referralId = randomUUID()
+      return request(app)
+        .get(`/referral/${referralId}/thinking-and-behaviour`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Assessment completed 23 August 2025')
+          expect(res.text).toContain('2 - Serious problems')
+          expect(res.text).toContain('1 - Some problems')
+          expect(res.text).toContain('0 - No problems')
+        })
+    })
+
+    it('handles thinking and behaviour  info with minimal data', async () => {
+      const thinkingAndBehaviour: ThinkingAndBehaviour = thinkingAndBehaviourFactory.build({
+        assessmentCompleted: undefined,
+        temperControl: undefined,
+        problemSolvingSkills: undefined,
+        awarenessOfConsequences: undefined,
+        understandsViewsOfOthers: undefined,
+        achieveGoals: undefined,
+        concreteAbstractThinking: undefined,
+      })
+
+      accreditedProgrammesManageAndDeliverService.getThinkingAndBehaviour.mockResolvedValue(thinkingAndBehaviour)
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/thinking-and-behaviour`).expect(200)
+    })
+
+    it('calls the service with correct parameters', async () => {
+      const referralId = randomUUID()
+
+      const thinkingAndBehaviour: ThinkingAndBehaviour = thinkingAndBehaviourFactory.build()
+      accreditedProgrammesManageAndDeliverService.getThinkingAndBehaviour.mockResolvedValue(thinkingAndBehaviour)
+
+      await request(app).get(`/referral/${referralId}/thinking-and-behaviour`).expect(200)
+
+      expect(accreditedProgrammesManageAndDeliverService.getThinkingAndBehaviour).toHaveBeenCalledWith(
+        'user1',
+        referralDetails.crn,
+      )
+    })
+
+    it('handles service errors gracefully', async () => {
+      accreditedProgrammesManageAndDeliverService.getThinkingAndBehaviour.mockRejectedValue(
+        new Error('Service unavailable'),
+      )
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/thinking-and-behaviour`).expect(500)
     })
   })
 })
