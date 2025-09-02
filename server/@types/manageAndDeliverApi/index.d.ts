@@ -34,7 +34,6 @@ export type {
   RoshAnalysis,
   SentenceInformation,
   UpdateAvailability,
-  PniScore,
   LearningNeeds,
   Health,
   LifestyleAndAssociates,
