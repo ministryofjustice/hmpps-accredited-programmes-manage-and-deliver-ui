@@ -70,83 +70,18 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/risks-and-needs/{crn}/rosh-analysis': {
+  '/risks-and-needs/{crn}/thinking-and-behaviour': {
     parameters: {
       query?: never
       header?: never
       path?: never
       cookie?: never
     }
-    /** ROSH details as held by Oasys */
-    get: operations['getRoshAnalysisByCrn']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/risks-and-needs/{crn}/risks-and-alerts': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** Risks details as held by Oasys */
-    get: operations['getRisksByCrn']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/risks-and-needs/{crn}/offence-analysis': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** Offence Analysis details as held by Oasys */
-    get: operations['getOffenceAnalysisByCrn']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/risks-and-needs/{crn}/learning-needs': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** Retrieve a person's Learning needs as held in Oasys */
-    get: operations['getLearningNeeds']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/risks-and-needs/{crn}/health': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** Health details as held by Oasys */
-    get: operations['getHealth']
+    /**
+     * Get thinking and behaviour details as held by Oasys
+     * @description Fetch thinking and behaviour data
+     */
+    get: operations['getThinkingAndBehaviourDetails']
     put?: never
     post?: never
     delete?: never
@@ -206,6 +141,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/risks-and-needs/{crn}/offence-analysis': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Offence Analysis details as held by Oasys */
+    get: operations['getOffenceAnalysisByCrn']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/risks-and-needs/{crn}/lifestyle-and-associates': {
     parameters: {
       query?: never
@@ -249,6 +201,43 @@ export interface paths {
     }
     /** Health details as held by Oasys */
     get: operations['getHealth']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/risks-and-needs/{crn}/emotional-wellbeing': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get emotional wellbeing details as held by Oasys
+     * @description Fetch emotional needs of the person based on crn
+     */
+    get: operations['getEmotionalWellbeing']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/risks-and-needs/{crn}/education-training-and-employment': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Get education training and employment details as held by Oasys */
+    get: operations['getEducationTrainingAndEmployment']
     put?: never
     post?: never
     delete?: never
@@ -570,6 +559,25 @@ export interface components {
       otherDetails?: string
       availabilities: components['schemas']['DailyAvailabilityModel'][]
     }
+    ThinkingAndBehaviour: {
+      /**
+       * Format: date
+       * @example 1
+       */
+      assessmentCompleted?: string
+      /** @example 1-Some problems */
+      temperControl?: string
+      /** @example 2 */
+      problemSolvingSkills?: string
+      /** @example 0-No problems */
+      awarenessOfConsequences?: string
+      /** @example 0-No problems */
+      understandsViewsOfOthers?: string
+      /** @example 0-No problems */
+      achieveGoals?: string
+      /** @example 0-No problems */
+      concreteAbstractThinking?: string
+    }
     RoshAnalysis: {
       /** Format: date */
       assessmentCompleted: string
@@ -776,6 +784,37 @@ export interface components {
        */
       scoreLevel?: 'LOW' | 'MEDIUM' | 'HIGH'
     }
+    Relationships: {
+      /**
+       * Format: date
+       * @example 1
+       */
+      assessmentCompleted?: string
+      /** @example true */
+      dvEvidence?: boolean
+      /** @example false */
+      victimFormerPartner?: boolean
+      /** @example true */
+      victimFamilyMember?: boolean
+      /** @example false */
+      victimOfPartnerFamily?: boolean
+      /** @example true */
+      perpOfPartnerOrFamily?: boolean
+      /** @example This person has a history of domestic violence */
+      relIssuesDetails?: string
+      /** @example 0-No problems */
+      relCloseFamily?: string
+      /** @example Not in a relationship */
+      relCurrRelationshipStatus?: string
+      /** @example 2-Significant problems */
+      prevCloseRelationships?: string
+      /** @example 0-No problems */
+      emotionalCongruence?: string
+      /** @example 0-No problems */
+      relationshipWithPartner?: string
+      /** @example No */
+      prevOrCurrentDomesticAbuse?: string
+    }
     OffenceAnalysis: {
       /** Format: date */
       assessmentCompleted: string
@@ -874,6 +913,23 @@ export interface components {
        */
       stalking?: string
     }
+    LifestyleAndAssociates: {
+      /**
+       * Format: date
+       * @example 1
+       */
+      assessmentCompleted?: string
+      /**
+       * @description Does the person have any regular activities that encourage reoffending
+       * @example 0
+       */
+      regActivitiesEncourageOffending?: string
+      /**
+       * @description Description of lifestyle issues affecting risk of offending or harm
+       * @example There are issues around involvement with drugs
+       */
+      lifestyleIssuesDetails?: string
+    }
     LearningNeeds: {
       /**
        * Format: date
@@ -904,6 +960,11 @@ export interface components {
     }
     Health: {
       /**
+       * Format: date
+       * @example 1
+       */
+      assessmentCompleted?: string
+      /**
        * @description Does the person have any health condition. Can be Yes, empty or null
        * @example false
        */
@@ -913,6 +974,54 @@ export interface components {
        * @example Blind in one eye
        */
       description?: string
+    }
+    EmotionalWellbeing: {
+      /**
+       * Format: date
+       * @example 1
+       */
+      assessmentCompleted?: string
+      /** @example 1-Some problems */
+      currentPsychologicalProblems?: string
+      /** @example 0 */
+      selfHarmSuicidal?: string
+      /** @example 0-No problems */
+      currentPsychiatricProblems?: string
+    }
+    EducationTrainingAndEmployment: {
+      /**
+       * Format: date
+       * @example 1
+       */
+      assessmentCompleted?: string
+      /** @example 0-No problems */
+      learningDifficulties?: string
+    }
+    DrugDetails: {
+      /**
+       * Format: date
+       * @example 1
+       */
+      assessmentCompleted?: string
+      /** @example 2 */
+      levelOfUseOfMainDrug?: string
+      /** @example 1 */
+      drugsMajorActivity?: string
+    }
+    AlcoholMisuseDetails: {
+      /**
+       * Format: date
+       * @example 1
+       */
+      assessmentCompleted?: string
+      /** @example 1-Some problems */
+      currentUse?: string
+      /** @example 1-Some problems */
+      bingeDrinking?: string
+      /** @example 2-Significant problems */
+      frequencyAndLevel?: string
+      /** @example Alcohol dependency affecting employment and relationships */
+      alcoholIssuesDetails?: string
     }
     ReferralDetails: {
       /**
@@ -1492,6 +1601,65 @@ export interface operations {
       }
     }
   }
+  getThinkingAndBehaviourDetails: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description CRN */
+        crn: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description successful operation */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ThinkingAndBehaviour']
+        }
+      }
+      /** @description Invalid code format. Expected format for CRN: X718255. */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access thinking and behaviour details. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The thinking and behaviour details information does not exist for the CRN provided. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getRoshAnalysisByCrn: {
     parameters: {
       query?: never
@@ -1610,6 +1778,65 @@ export interface operations {
       }
     }
   }
+  getRelationships: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description CRN */
+        crn: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Relationship details held by Oasys */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Relationships']
+        }
+      }
+      /** @description Invalid code format. Expected format for CRN: X718255. */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access this referral. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The relationship information does not exist for the CRN provided. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getOffenceAnalysisByCrn: {
     parameters: {
       query?: never
@@ -1659,6 +1886,65 @@ export interface operations {
         }
       }
       /** @description The Offence analysis does not exist for the CRN provided. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getLifestyleAndAssociates: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description CRN */
+        crn: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description successful operation */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['LifestyleAndAssociates']
+        }
+      }
+      /** @description Invalid code format. Expected format for CRN: X718255. */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access this referral. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The health information does not exist for the CRN provided. */
       404: {
         headers: {
           [name: string]: unknown
@@ -1776,7 +2062,243 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
-      /** @description The learning needs information does not exist for the CRN provided. */
+      /** @description The health information does not exist for the CRN provided. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getEmotionalWellbeing: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description CRN */
+        crn: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description successful operation */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EmotionalWellbeing']
+        }
+      }
+      /** @description Invalid code format. Expected format for CRN: X718255. */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access emotional wellbeing details. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The emotional wellbeing detail information does not exist for the CRN provided. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getEducationTrainingAndEmployment: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description CRN */
+        crn: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description successful operation */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EducationTrainingAndEmployment']
+        }
+      }
+      /** @description Invalid code format. Expected format for CRN: X718255. */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access alcohol misuse details. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The alcohol misuse detail information does not exist for the CRN provided. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getDrugDetails: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description CRN */
+        crn: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description successful operation */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['DrugDetails']
+        }
+      }
+      /** @description Invalid code format. Expected format for CRN: X718255. */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access drug details. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The drug detail information does not exist for the CRN provided. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getAlcoholMisuseDetails: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description CRN */
+        crn: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description successful operation */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AlcoholMisuseDetails']
+        }
+      }
+      /** @description Invalid code format. Expected format for CRN: X718255. */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access alcohol misuse details. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The alcohol misuse detail information does not exist for the CRN provided. */
       404: {
         headers: {
           [name: string]: unknown
