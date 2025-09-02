@@ -55,7 +55,7 @@
               </div>
             {% elif presenter.subNavValue == 'drugMisuse' %}
             <div>
-            drugMisuse
+              {% include "./drugMisuseDetails.njk" %}
             </div>
             {% elif presenter.subNavValue == 'alcoholMisuse' %}
             <div>
@@ -63,11 +63,11 @@
             </div>
             {% elif presenter.subNavValue == 'emotionalWellbeing' %}
             <div>
-            emotionalWellbeing
+              {% include "./emotionalWellbeing.njk" %}
             </div>
             {% elif presenter.subNavValue == 'thinkingAndBehaviour' %}
             <div>
-            thinkingAndBehaviour
+              {% include "./thinkingAndBehaviour.njk" %}
             </div>
             {% elif presenter.subNavValue == 'attitudes' %}
             <div>

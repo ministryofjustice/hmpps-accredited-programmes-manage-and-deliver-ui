@@ -114,7 +114,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await risksAndNeedsController.showEmotionalWellbeingPage(req, res)
   })
 
-  get('/referral/:referralId/thinking-and-behaving', async (req, res, next) => {
+  get('/referral/:referralId/thinking-and-behaviour', async (req, res, next) => {
     await risksAndNeedsController.showThinkingAndBehavingPage(req, res)
   })
 
