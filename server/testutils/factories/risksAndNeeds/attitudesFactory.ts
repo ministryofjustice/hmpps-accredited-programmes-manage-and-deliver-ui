@@ -1,4 +1,4 @@
-import { Attitude, EmotionalWellbeing } from '@manage-and-deliver-api'
+import { Attitude } from '@manage-and-deliver-api'
 import { Factory } from 'fishery'
 
 class AttitudeFactory extends Factory<Attitude> {}
