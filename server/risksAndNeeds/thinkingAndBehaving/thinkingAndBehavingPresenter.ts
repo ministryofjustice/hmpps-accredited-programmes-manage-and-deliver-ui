@@ -11,7 +11,7 @@ export default class ThinkingAndBehavingPresenter extends RisksAndNeedsPresenter
     super(subNavValue, referralId)
   }
 
-  getThinkingAndBehavingSummaryList(): SummaryListItem[] {
+  thinkingAndBehavingSummaryList(): SummaryListItem[] {
     const { temperControl } = this.thinkingAndBehaviour
     const { problemSolvingSkills } = this.thinkingAndBehaviour
     const { awarenessOfConsequences } = this.thinkingAndBehaviour

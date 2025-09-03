@@ -187,8 +187,12 @@ export default class RisksAndNeedsController {
     const subNavValue = 'attitudes'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
+    const attitudes = await this.accreditedProgrammesManageAndDeliverService.getAttitudes(
+      username,
+      sharedReferralDetailsData.crn,
+    )
 
-    const presenter = new AttitudesPresenter(subNavValue, referralId)
+    const presenter = new AttitudesPresenter(subNavValue, referralId, attitudes)
     const view = new AttitudesView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)

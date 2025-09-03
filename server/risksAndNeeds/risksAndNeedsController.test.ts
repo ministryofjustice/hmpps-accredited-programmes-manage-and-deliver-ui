@@ -1,5 +1,6 @@
 import {
   AlcoholMisuseDetails,
+  Attitude,
   DrugDetails,
   EmotionalWellbeing,
   Health,
@@ -26,6 +27,7 @@ import relationshipsFactory from '../testutils/factories/risksAndNeeds/relations
 import lifestyleAndAssociatesFactory from '../testutils/factories/risksAndNeeds/lifestyleAndAssociatesFactory'
 import emotionalWellbeingFactory from '../testutils/factories/risksAndNeeds/emotionalWellbeingFactory'
 import thinkingAndBehaviourFactory from '../testutils/factories/risksAndNeeds/thinkingAndBehaviourFactory'
+import attitudesFactory from '../testutils/factories/risksAndNeeds/attitudesFactory'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
@@ -517,6 +519,59 @@ describe('Thinking and behaviour section of risks and needs', () => {
 
       const referralId = randomUUID()
       return request(app).get(`/referral/${referralId}/thinking-and-behaviour`).expect(500)
+    })
+  })
+})
+
+describe('Attitudes section of risks and needs', () => {
+  describe('GET /referral/:id/attitudes', () => {
+    it('loads the risks and needs page with attitude sub-nav and displays all attitude related data', async () => {
+      const attitudes: Attitude = attitudesFactory.build()
+      accreditedProgrammesManageAndDeliverService.getAttitudes.mockResolvedValue(attitudes)
+
+      const referralId = randomUUID()
+      return request(app)
+        .get(`/referral/${referralId}/attitudes`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Assessment completed 23 August 2025')
+          expect(res.text).toContain('1 - Quite motivated')
+          expect(res.text).toContain('1 - Some problems')
+        })
+    })
+
+    it('attitudes info with minimal data', async () => {
+      const attitude: Attitude = attitudesFactory.build({
+        assessmentCompleted: undefined,
+        proCriminalAttitudes: undefined,
+        motivationToAddressBehaviour: undefined,
+      })
+
+      accreditedProgrammesManageAndDeliverService.getAttitudes.mockResolvedValue(attitude)
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/attitudes`).expect(200)
+    })
+
+    it('calls the service with correct parameters', async () => {
+      const referralId = randomUUID()
+
+      const attitude: Attitude = attitudesFactory.build()
+      accreditedProgrammesManageAndDeliverService.getAttitudes.mockResolvedValue(attitude)
+
+      await request(app).get(`/referral/${referralId}/attitudes`).expect(200)
+
+      expect(accreditedProgrammesManageAndDeliverService.getAttitudes).toHaveBeenCalledWith(
+        'user1',
+        referralDetails.crn,
+      )
+    })
+
+    it('handles service errors gracefully', async () => {
+      accreditedProgrammesManageAndDeliverService.getAttitudes.mockRejectedValue(new Error('Service unavailable'))
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/attitudes`).expect(500)
     })
   })
 })
