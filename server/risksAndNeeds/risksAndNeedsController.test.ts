@@ -5,6 +5,7 @@ import {
   Health,
   LearningNeeds,
   LifestyleAndAssociates,
+  OffenceAnalysis,
   ReferralDetails,
   Relationships,
   RoshAnalysis,
@@ -24,6 +25,7 @@ import healthFactory from '../testutils/factories/risksAndNeeds/healthFactory'
 import drugDetailsFactory from '../testutils/factories/risksAndNeeds/drugDetailsFactory'
 import relationshipsFactory from '../testutils/factories/risksAndNeeds/relationshipsFactory'
 import lifestyleAndAssociatesFactory from '../testutils/factories/risksAndNeeds/lifestyleAndAssociatesFactory'
+import offenceAnalysisFactory from '../testutils/factories/risksAndNeeds/offenceAnalysisFactory'
 import emotionalWellbeingFactory from '../testutils/factories/risksAndNeeds/emotionalWellbeingFactory'
 import thinkingAndBehaviourFactory from '../testutils/factories/risksAndNeeds/thinkingAndBehaviourFactory'
 
@@ -402,6 +404,60 @@ describe('Drug details section of risks and needs', () => {
 
       const referralId = randomUUID()
       return request(app).get(`/referral/${referralId}/drug-details`).expect(500)
+    })
+  })
+})
+
+describe('Offence Analysis', () => {
+  describe('GET /referral/:id/offence-analysis', () => {
+    it('loads the risks and needs page with offence analysis sub-nav and displays all offence analysis data', async () => {
+      const offenceAnalysis: OffenceAnalysis = offenceAnalysisFactory.build()
+      accreditedProgrammesManageAndDeliverService.getOffenceAnalysis.mockResolvedValue(offenceAnalysis)
+
+      const referralId = randomUUID()
+      return request(app)
+        .get(`/referral/${referralId}/offence-analysis`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Assessment completed 23 August 2025')
+          expect(res.text).toContain(offenceAnalysis.briefOffenceDetails)
+          expect(res.text).toContain(offenceAnalysis.motivationAndTriggers)
+          expect(res.text).toContain(offenceAnalysis.patternOfOffending)
+          expect(res.text).toContain(offenceAnalysis.recognisesImpact)
+        })
+    })
+
+    it('handles offence analysis with minimal data', async () => {
+      const offenceAnalysis: OffenceAnalysis = offenceAnalysisFactory.build({
+        briefOffenceDetails: undefined,
+        motivationAndTriggers: undefined,
+        patternOfOffending: undefined,
+        recognisesImpact: undefined,
+      })
+      accreditedProgrammesManageAndDeliverService.getOffenceAnalysis.mockResolvedValue(offenceAnalysis)
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/offence-analysis`).expect(200)
+    })
+
+    it('calls the service with correct parameters', async () => {
+      const offenceAnalysis: OffenceAnalysis = offenceAnalysisFactory.build()
+      accreditedProgrammesManageAndDeliverService.getOffenceAnalysis.mockResolvedValue(offenceAnalysis)
+
+      const referralId = randomUUID()
+      await request(app).get(`/referral/${referralId}/offence-analysis`).expect(200)
+
+      expect(accreditedProgrammesManageAndDeliverService.getOffenceAnalysis).toHaveBeenCalledWith(
+        'user1',
+        referralDetails.crn,
+      )
+    })
+
+    it('handles service errors gracefully', async () => {
+      accreditedProgrammesManageAndDeliverService.getOffenceAnalysis.mockRejectedValue(new Error('Service unavailable'))
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/offence-analysis`).expect(500)
     })
   })
 })

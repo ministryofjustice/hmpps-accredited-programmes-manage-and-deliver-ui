@@ -13,6 +13,7 @@ type OffenceHistory = components['schemas']['OffenceHistory']
 type LearningNeeds = components['schemas']['LearningNeeds']
 type RoshAnalysis = components['schemas']['RoshAnalysis']
 type PniScore = components['schemas']['PniScore']
+type OffenceAnalysis = components['schemas']['OffenceAnalysis']
 type Health = components['schemas']['Health']
 type LifestyleAndAssociates = components['schemas']['LifestyleAndAssociates']
 type Relationships = components['schemas']['Relationships']
@@ -26,14 +27,15 @@ export type {
   CohortEnum,
   CreateAvailability,
   DailyAvailabilityModel,
+  OffenceAnalysis,
   OffenceHistory,
   PersonalDetails,
+  PniScore,
   ReferralCaseListItem,
   ReferralDetails,
   RoshAnalysis,
   SentenceInformation,
   UpdateAvailability,
-  PniScore,
   LearningNeeds,
   Health,
   LifestyleAndAssociates,
