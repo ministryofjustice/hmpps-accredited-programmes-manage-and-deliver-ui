@@ -18,6 +18,7 @@ import {
   DrugDetails,
   EmotionalWellbeing,
   ThinkingAndBehaviour,
+  Attitude,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -138,6 +139,14 @@ export default class AccreditedProgrammesManageAndDeliverService {
       path: `/risks-and-needs/${crn}/alcohol-misuse-details`,
       headers: { Accept: 'application/json' },
     })) as AlcoholMisuseDetails
+  }
+
+  async getAttitudes(username: Express.User['username'], crn: string): Promise<Attitude> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/risks-and-needs/${crn}/attitude`,
+      headers: { Accept: 'application/json' },
+    })) as Attitude
   }
 
   async getHealth(username: Express.User['username'], crn: string): Promise<Health> {

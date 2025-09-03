@@ -11,7 +11,7 @@ export default class EmotionalWellbeingPresenter extends RisksAndNeedsPresenter 
     super(subNavValue, referralId)
   }
 
-  getEmotionalWellbeingSummaryList(): SummaryListItem[] {
+  emotionalWellbeingSummaryList(): SummaryListItem[] {
     const { currentPsychologicalProblems } = this.emotionalWellbeing
     const { selfHarmSuicidal } = this.emotionalWellbeing
     const { currentPsychiatricProblems } = this.emotionalWellbeing

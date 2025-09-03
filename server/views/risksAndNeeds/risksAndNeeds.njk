@@ -69,10 +69,10 @@
             <div>
               {% include "./thinkingAndBehaviour.njk" %}
             </div>
-            {% elif presenter.subNavValue == 'attitudes' %}
-            <div>
-            attitudes
-            </div>
+              {% elif presenter.subNavValue == 'attitudes' %}
+              <div>
+                {% include "./attitudes.njk" %}
+              </div>
             {% elif presenter.subNavValue == 'health' %}
               <div>
                 {% include "./health.njk" %}

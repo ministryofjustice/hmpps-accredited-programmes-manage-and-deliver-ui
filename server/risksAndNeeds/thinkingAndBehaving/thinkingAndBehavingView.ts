@@ -19,7 +19,7 @@ export default class ThinkingAndBehavingView {
   get infoSummaryList(): SummaryListArgs {
     return {
       ...ViewUtils.summaryListArgsWithSummaryCard(
-        this.presenter.getThinkingAndBehavingSummaryList(),
+        this.presenter.thinkingAndBehavingSummaryList(),
         '11 - Thinking and behaving',
       ),
     }
