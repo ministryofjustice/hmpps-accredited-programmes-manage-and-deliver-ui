@@ -520,14 +520,14 @@ describe('Emotional wellbeing section of risks and needs', () => {
 })
 
 describe('Thinking and behaviour section of risks and needs', () => {
-  describe('GET /referral/:id/thinking-and-behaviour', () => {
-    it('loads the risks and needs page with thinking and behaviour sub-nav and displays all thinking and behaviour related data', async () => {
+  describe('GET /referral/:id/thinking-and-behaving', () => {
+    it('loads the risks and needs page with thinking and behaving sub-nav and displays all thinking and behaving related data', async () => {
       const thinkingAndBehaviour: ThinkingAndBehaviour = thinkingAndBehaviourFactory.build()
       accreditedProgrammesManageAndDeliverService.getThinkingAndBehaviour.mockResolvedValue(thinkingAndBehaviour)
 
       const referralId = randomUUID()
       return request(app)
-        .get(`/referral/${referralId}/thinking-and-behaviour`)
+        .get(`/referral/${referralId}/thinking-and-behaving`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Assessment completed 23 August 2025')
@@ -551,7 +551,7 @@ describe('Thinking and behaviour section of risks and needs', () => {
       accreditedProgrammesManageAndDeliverService.getThinkingAndBehaviour.mockResolvedValue(thinkingAndBehaviour)
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/thinking-and-behaviour`).expect(200)
+      return request(app).get(`/referral/${referralId}/thinking-and-behaving`).expect(200)
     })
 
     it('calls the service with correct parameters', async () => {
@@ -560,7 +560,7 @@ describe('Thinking and behaviour section of risks and needs', () => {
       const thinkingAndBehaviour: ThinkingAndBehaviour = thinkingAndBehaviourFactory.build()
       accreditedProgrammesManageAndDeliverService.getThinkingAndBehaviour.mockResolvedValue(thinkingAndBehaviour)
 
-      await request(app).get(`/referral/${referralId}/thinking-and-behaviour`).expect(200)
+      await request(app).get(`/referral/${referralId}/thinking-and-behaving`).expect(200)
 
       expect(accreditedProgrammesManageAndDeliverService.getThinkingAndBehaviour).toHaveBeenCalledWith(
         'user1',
@@ -574,7 +574,7 @@ describe('Thinking and behaviour section of risks and needs', () => {
       )
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/thinking-and-behaviour`).expect(500)
+      return request(app).get(`/referral/${referralId}/thinking-and-behaving`).expect(500)
     })
   })
 })
