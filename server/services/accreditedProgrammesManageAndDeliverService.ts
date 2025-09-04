@@ -173,7 +173,7 @@ export default class AccreditedProgrammesManageAndDeliverService {
     })) as EmotionalWellbeing
   }
 
-  async getThinkingAndBehaviour(username: Express.User['username'], crn: string): Promise<DrugDetails> {
+  async getThinkingAndBehaviour(username: Express.User['username'], crn: string): Promise<ThinkingAndBehaviour> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/risks-and-needs/${crn}/thinking-and-behaviour`,
