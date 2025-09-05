@@ -358,15 +358,15 @@ describe('Alcohol Misuse', () => {
   })
 })
 
-describe('Drug details section of risks and needs', () => {
-  describe('GET /referral/:id/drug-details', () => {
-    it('loads the risks and needs page with drug details sub-nav and displays all drug details related data', async () => {
+describe('Drug misuse section of risks and needs', () => {
+  describe('GET /referral/:id/drug-misuse', () => {
+    it('loads the risks and needs page with drug misuse sub-nav and displays all drug misuse related data', async () => {
       const drugDetails: DrugDetails = drugDetailsFactory.build()
       accreditedProgrammesManageAndDeliverService.getDrugDetails.mockResolvedValue(drugDetails)
 
       const referralId = randomUUID()
       return request(app)
-        .get(`/referral/${referralId}/drug-details`)
+        .get(`/referral/${referralId}/drug-misuse`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Assessment completed 23 August 2025')
@@ -375,7 +375,7 @@ describe('Drug details section of risks and needs', () => {
         })
     })
 
-    it('handles drug details info with minimal data', async () => {
+    it('handles drug misuse info with minimal data', async () => {
       const drugDetails: DrugDetails = drugDetailsFactory.build({
         assessmentCompleted: undefined,
         levelOfUseOfMainDrug: undefined,
@@ -384,7 +384,7 @@ describe('Drug details section of risks and needs', () => {
       accreditedProgrammesManageAndDeliverService.getDrugDetails.mockResolvedValue(drugDetails)
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/drug-details`).expect(200)
+      return request(app).get(`/referral/${referralId}/drug-misuse`).expect(200)
     })
 
     it('calls the service with correct parameters', async () => {
@@ -393,7 +393,7 @@ describe('Drug details section of risks and needs', () => {
       const drugDetails: DrugDetails = drugDetailsFactory.build()
       accreditedProgrammesManageAndDeliverService.getDrugDetails.mockResolvedValue(drugDetails)
 
-      await request(app).get(`/referral/${referralId}/drug-details`).expect(200)
+      await request(app).get(`/referral/${referralId}/drug-misuse`).expect(200)
 
       expect(accreditedProgrammesManageAndDeliverService.getDrugDetails).toHaveBeenCalledWith(
         'user1',
@@ -405,7 +405,7 @@ describe('Drug details section of risks and needs', () => {
       accreditedProgrammesManageAndDeliverService.getDrugDetails.mockRejectedValue(new Error('Service unavailable'))
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/drug-details`).expect(500)
+      return request(app).get(`/referral/${referralId}/drug-misuse`).expect(500)
     })
   })
 })
