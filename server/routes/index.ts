@@ -90,10 +90,6 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await risksAndNeedsController.showOffenceAnalysisPage(req, res)
   })
 
-  get('/referral/:referralId/education-training-and-employment', async (req, res, next) => {
-    await risksAndNeedsController.showEducationTrainingAndEmploymentPage(req, res)
-  })
-
   get('/referral/:referralId/relationships', async (req, res, next) => {
     await risksAndNeedsController.showRelationshipsPage(req, res)
   })
