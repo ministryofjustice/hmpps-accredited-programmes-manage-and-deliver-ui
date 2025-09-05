@@ -358,8 +358,8 @@ describe('Alcohol Misuse', () => {
   })
 })
 
-describe('Drug details section of risks and needs', () => {
-  describe('GET /referral/:id/drug-details', () => {
+describe('Drug misuse section of risks and needs', () => {
+  describe('GET /referral/:id/drug-misuse', () => {
     it('loads the risks and needs page with drug misuse sub-nav and displays all drug misuse related data', async () => {
       const drugDetails: DrugDetails = drugDetailsFactory.build()
       accreditedProgrammesManageAndDeliverService.getDrugDetails.mockResolvedValue(drugDetails)
