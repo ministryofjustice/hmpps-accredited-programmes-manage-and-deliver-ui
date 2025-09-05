@@ -8,8 +8,6 @@ import AlcoholMisuseView from './alcoholMisuse/alcoholMisuseView'
 import AttitudesPresenter from './attitudes/attitudesPresenter'
 import AttitudesView from './attitudes/attitudesView'
 import DrugDetailsView from './drugMisuse/drugDetailsView'
-import EducationTrainingAndEmploymentPresenter from './educationTrainingAndEmployment/educationTrainingAndEmploymentPresenter'
-import EducationTrainingAndEmploymentView from './educationTrainingAndEmployment/educationTrainingAndEmploymentView'
 import EmotionalWellbeingPresenter from './emotionalWellbeing/emotionalWellbeingPresenter'
 import EmotionalWellbeingView from './emotionalWellbeing/emotionalWellbeingView'
 import HealthPresenter from './health/healthPresenter'
@@ -81,19 +79,6 @@ export default class RisksAndNeedsController {
 
     const presenter = new OffenceAnalysisPresenter(subNavValue, referralId, offenceAnalysis)
     const view = new OffenceAnalysisView(presenter)
-
-    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
-  }
-
-  async showEducationTrainingAndEmploymentPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
-    const { username } = req.user
-    const subNavValue = 'educationTrainingAndEmployment'
-
-    const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
-
-    const presenter = new EducationTrainingAndEmploymentPresenter(subNavValue, referralId)
-    const view = new EducationTrainingAndEmploymentView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }

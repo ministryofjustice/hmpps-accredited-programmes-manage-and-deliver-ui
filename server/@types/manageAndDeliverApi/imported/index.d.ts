@@ -229,23 +229,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/risks-and-needs/{crn}/education-training-and-employment': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** Get education training and employment details as held by Oasys */
-    get: operations['getEducationTrainingAndEmployment']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+
   '/risks-and-needs/{crn}/drug-details': {
     parameters: {
       query?: never
@@ -990,15 +974,6 @@ export interface components {
       selfHarmSuicidal?: string
       /** @example 0-No problems */
       currentPsychiatricProblems?: string
-    }
-    EducationTrainingAndEmployment: {
-      /**
-       * Format: date
-       * @example 1
-       */
-      assessmentCompleted?: string
-      /** @example 0-No problems */
-      learningDifficulties?: string
     }
     DrugDetails: {
       /**
@@ -2138,65 +2113,6 @@ export interface operations {
         }
       }
       /** @description The emotional wellbeing detail information does not exist for the CRN provided. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getEducationTrainingAndEmployment: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        /** @description CRN */
-        crn: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description successful operation */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['EducationTrainingAndEmployment']
-        }
-      }
-      /** @description Invalid code format. Expected format for CRN: X718255. */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': string
-        }
-      }
-      /** @description The request was unauthorised */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden.  The client is not authorised to access alcohol misuse details. */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description The alcohol misuse detail information does not exist for the CRN provided. */
       404: {
         headers: {
           [name: string]: unknown

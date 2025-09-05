@@ -4,7 +4,6 @@ export enum RisksAndNeedsPageSection {
   RisksAndAlertsTab = 'risksAndAlerts',
   LearningNeedsTab = 'learningNeeds',
   Section2OffenceAnalysisTab = 'offenceAnalysis',
-  Section4EducationTrainingAndEmploymentTab = 'educationTrainingAndEmployment',
   Section6RelationshipsTab = 'relationships',
   Section7LifestyleAndAssociatesTab = 'lifestyleAndAssociates',
   Section8DrugMisuseTab = 'drugMisuse',
@@ -74,14 +73,6 @@ export default class RisksAndNeedsPresenter extends ReferralLayoutPresenter {
           active: this.subNavValue === RisksAndNeedsPageSection.Section2OffenceAnalysisTab,
           attributes: {
             id: 'section-2-offence-analysis',
-          },
-        },
-        {
-          text: 'Section 4 - Education, training and employment',
-          href: `/referral/${this.referralId}/education-training-and-employment/#section-4-education-training-and-employment`,
-          active: this.subNavValue === RisksAndNeedsPageSection.Section4EducationTrainingAndEmploymentTab,
-          attributes: {
-            id: 'section-4-education-training-and-employment',
           },
         },
         {
