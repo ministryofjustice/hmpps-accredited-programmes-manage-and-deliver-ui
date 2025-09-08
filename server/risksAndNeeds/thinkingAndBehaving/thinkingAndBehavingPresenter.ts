@@ -21,27 +21,27 @@ export default class ThinkingAndBehavingPresenter extends RisksAndNeedsPresenter
     return [
       {
         key: '11.4 - Temper control',
-        lines: [`${temperControl ? `${temperControl}` : ''}`],
+        lines: [`${temperControl ? `${temperControl}` : 'No information available'}`],
       },
       {
         key: '11.6 - Problem solving skills',
-        lines: [`${problemSolvingSkills ? `${problemSolvingSkills}` : ''}`],
+        lines: [`${problemSolvingSkills ? `${problemSolvingSkills}` : 'No information available'}`],
       },
       {
         key: '11.7 - Awareness of consequences',
-        lines: [`${awarenessOfConsequences ? `${awarenessOfConsequences}` : ''}`],
+        lines: [`${awarenessOfConsequences ? `${awarenessOfConsequences}` : 'No information available'}`],
       },
       {
         key: '11.8 - Achieves goals (optional)',
-        lines: [`${achieveGoals ? `${achieveGoals}` : ''}`],
+        lines: [`${achieveGoals ? `${achieveGoals}` : 'No information available'}`],
       },
       {
         key: '11.9 - Understands other people`s views',
-        lines: [`${understandsViewsOfOthers ? `${understandsViewsOfOthers}` : ''}`],
+        lines: [`${understandsViewsOfOthers ? `${understandsViewsOfOthers}` : 'No information available'}`],
       },
       {
         key: '11.10 - Concrete / abstract thinking (optional)',
-        lines: [`${concreteAbstractThinking ? `${concreteAbstractThinking}` : ''}`],
+        lines: [`${concreteAbstractThinking ? `${concreteAbstractThinking}` : 'No information available'}`],
       },
     ]
   }

@@ -15,11 +15,15 @@ export default class AttitudesPresenter extends RisksAndNeedsPresenter {
     return [
       {
         key: '12.1 – Pro-criminal attitudes',
-        lines: [`${this.attitude.proCriminalAttitudes}`, `${this.attitude.proCriminalAttitudes}`],
+        lines: [
+          `${this.attitude.proCriminalAttitudes ? `${this.attitude.proCriminalAttitudes}` : 'No information available'}`,
+        ],
       },
       {
         key: '12.8 – Motivation to address offending behaviour',
-        lines: [`${this.attitude.motivationToAddressBehaviour}`, `${this.attitude.motivationToAddressBehaviour}`],
+        lines: [
+          `${this.attitude.motivationToAddressBehaviour ? `${this.attitude.motivationToAddressBehaviour}` : 'No information available'}`,
+        ],
       },
     ]
   }
