@@ -4,6 +4,23 @@
  */
 
 export interface paths {
+  '/referral/{id}/update-cohort': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /** Update cohort information for a referral */
+    put: operations['updateCohortForReferral']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/queue-admin/retry-dlq/{dlqName}': {
     parameters: {
       query?: never
@@ -229,23 +246,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/risks-and-needs/{crn}/education-training-and-employment': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /** Get education training and employment details as held by Oasys */
-    get: operations['getEducationTrainingAndEmployment']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/risks-and-needs/{crn}/drug-details': {
     parameters: {
       query?: never
@@ -360,6 +360,30 @@ export interface paths {
     }
     /** Retrieve offence history for a referral */
     get: operations['getOffenceHistoryByReferralId']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/referral-details/{id}/manager': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve the manager associated with the Licence Condition or Requirement associated with a referral
+     * @description
+     *           Retrieves the manager (Probation Practitioner) associated with the Case, which is upstream of the
+     *           Referral itself.  We use this to retrieve a list of Delivery Locations (Offices) within the same
+     *           PDU as a Referral itself.
+     *
+     */
+    get: operations['getManagerByReferralId']
     put?: never
     post?: never
     delete?: never
@@ -999,15 +1023,6 @@ export interface components {
       /** @example 0-No problems */
       currentPsychiatricProblems?: string
     }
-    EducationTrainingAndEmployment: {
-      /**
-       * Format: date
-       * @example 1
-       */
-      assessmentCompleted?: string
-      /** @example 0-No problems */
-      learningDifficulties?: string
-    }
     DrugDetails: {
       /**
        * Format: date
@@ -1252,6 +1267,25 @@ export interface components {
        */
       importedDate: string
     }
+    FullName: {
+      forename: string
+      middleNames?: string
+      surname: string
+    }
+    RequirementOrLicenceConditionManager: {
+      staff: components['schemas']['RequirementStaff']
+      team: components['schemas']['CodeDescription']
+      probationDeliveryUnit: components['schemas']['RequirementOrLicenceConditionPdu']
+      officeLocations: components['schemas']['CodeDescription'][]
+    }
+    RequirementOrLicenceConditionPdu: {
+      code: string
+      description: string
+    }
+    RequirementStaff: {
+      code: string
+      name: components['schemas']['FullName']
+    }
     DlqMessage: {
       body: {
         [key: string]: unknown
@@ -1473,6 +1507,67 @@ export interface components {
 }
 export type $defs = Record<string, never>
 export interface operations {
+  updateCohortForReferral: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id (UUID) of a referral allowed values SEXUAL_OFFENCE or GENERAL_OFFENCE */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
+      }
+    }
+    responses: {
+      /** @description No content - cohort updated successfully */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access this referral. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The referral does not exist */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   retryDlq: {
     parameters: {
       query?: never
@@ -2179,65 +2274,6 @@ export interface operations {
       }
     }
   }
-  getEducationTrainingAndEmployment: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        /** @description CRN */
-        crn: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description successful operation */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['EducationTrainingAndEmployment']
-        }
-      }
-      /** @description Invalid code format. Expected format for CRN: X718255. */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': string
-        }
-      }
-      /** @description The request was unauthorised */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden.  The client is not authorised to access alcohol misuse details. */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description The alcohol misuse detail information does not exist for the CRN provided. */
-      404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
   getDrugDetails: {
     parameters: {
       query?: never
@@ -2647,6 +2683,65 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getManagerByReferralId: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id (UUID) of a referral */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Information about the Manager associated with a Referral */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['RequirementOrLicenceConditionManager']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access this referral. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The referral does not exist */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
