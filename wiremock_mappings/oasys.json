@@ -152,8 +152,8 @@
           "experienceOfChildhood": "0-No problems",
           "emotionalCongruence": "0-No problems",
           "SARA": {
-            "imminentRiskOfViolenceTowardsPartner": null,
-            "imminentRiskOfViolenceTowardsOthers": null
+            "imminentRiskOfViolenceTowardsPartner": "Medium",
+            "imminentRiskOfViolenceTowardsOthers": "Medium"
           },
           "assessor": {
             "name": "LevelTwo CentralSupport"
@@ -920,6 +920,158 @@
             "name": "Test Wark"
           },
           "crn": "D006518"
+        }
+      }
+    },
+    {
+      "request": {
+        "urlPattern": "/assessments/.*/section/section1",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "assessmentPk": 9635383,
+          "assessmentType": "LAYER3",
+          "dateCompleted": "2024-08-01T14:20:00",
+          "assessorSignedDate": "2024-08-01T14:20:00",
+          "initiationDate": "2022-11-28T15:01:05",
+          "assessmentStatus": "COMPLETE",
+          "superStatus": "COMPLETE",
+          "laterWIPAssessmentExists": false,
+          "latestWIPDate": null,
+          "laterSignLockAssessmentExists": false,
+          "latestSignLockDate": null,
+          "laterPartCompUnsignedAssessmentExists": false,
+          "latestPartCompUnsignedDate": null,
+          "laterPartCompSignedAssessmentExists": false,
+          "latestPartCompSignedDate": null,
+          "laterCompleteAssessmentExists": false,
+          "latestCompleteDate": "2024-08-01T14:20:00",
+          "dateOfCurrentConviction": "2020-11-01",
+          "courtAppearancesOver18": null,
+          "numSanctionsIndecentImagesChild": null,
+          "dateOfFirstSanctionScore": null,
+          "courtAppearancesUnder18": null,
+          "currOffenceSexualMotivation": null,
+          "ospIICRisk": null,
+          "committedFurtherOffences": "",
+          "numberOfPreviousCautionsEtc": null,
+          "ospDCRisk": null,
+          "numSanctionsIndecentChildImageOrIndirectContact": null,
+          "numSanctionsContactChild": null,
+          "currDirectContactOffenceAgainstStranger": null,
+          "numDirectContactSanctionsChild": null,
+          "currOffenceAgainstStranger": null,
+          "dateSanctionOfSexualOffence": "",
+          "ageAtFirstConviction": null,
+          "courtAppearancesOver18Score": null,
+          "courtAppearancesUnder18Score": null,
+          "numberPrevConvictionsViolentOffences": null,
+          "numSanctionsContactAdult": null,
+          "contactAgainstStrangerVictim": null,
+          "ageAtFirstConvictionScore": null,
+          "auditOfDateIntoCommunity": null,
+          "sexualElementCommitted16orOver": null,
+          "numSanctionsNonContactSexual": null,
+          "dateOfFirstSanction": "2010-01-01",
+          "likelihoodOfSeriousReoffendingNext2Years": "RSR score (DYNAMIC) is   0.55%   Low",
+          "ospCRisk": "Not Applicable",
+          "ospIRisk": "Not Applicable",
+          "ageAtFirstSanction": 34,
+          "numSanctionsViolentOffences": 2,
+          "dateCommSentenceOrEarliestRelease": "2023-09-28",
+          "totOfSanctions": 3,
+          "everCommittedSexualOffence": "No",
+          "assessor": {
+            "name": "LevelOne CentralSupport"
+          },
+          "crn": "D002399"
+        }
+      }
+    },
+    {
+      "request": {
+        "urlPattern": "/assessments/.*/section/sectionroshsumm",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "assessmentPk": 9635383,
+          "assessmentType": "LAYER3",
+          "dateCompleted": "2024-08-01T14:20:00",
+          "assessorSignedDate": "2024-08-01T14:20:00",
+          "initiationDate": "2022-11-28T15:01:05",
+          "assessmentStatus": "COMPLETE",
+          "superStatus": "COMPLETE",
+          "laterWIPAssessmentExists": false,
+          "latestWIPDate": null,
+          "laterSignLockAssessmentExists": false,
+          "latestSignLockDate": null,
+          "laterPartCompUnsignedAssessmentExists": false,
+          "latestPartCompUnsignedDate": null,
+          "laterPartCompSignedAssessmentExists": false,
+          "latestPartCompSignedDate": null,
+          "laterCompleteAssessmentExists": false,
+          "latestCompleteDate": "2024-08-01T14:20:00",
+          "whoAtRisk": "Males whom Ms Puckett believes have wronged him, or strangers with whom she gets into altercations. The wounding offence was committed 17 years ago in 1998.  More recent offence of Affray in 2004. On both occasions were male strangers in pubs.",
+          "factorsSituationsLikelyToOffend": null,
+          "factorsStrengthsAndProtective": null,
+          "factorsAnalysisOfRisk": null,
+          "riskPrisonersCustody": "Low",
+          "riskStaffCustody": "Low",
+          "riskStaffCommunity": "Low",
+          "riskKnownAdultCustody": "Low",
+          "riskKnownAdultCommunity": "Low",
+          "riskPublicCustody": "Low",
+          "riskPublicCommunity": "Medium",
+          "riskChildrenCustody": "Low",
+          "riskChildrenCommunity": "Low",
+          "factorsLikelyToReduceRisk": "Ms Puckett thinking about consequences of her actions and not acting impulsively. Ms Puckett walking away from situations that she assesses as risky.  If she is not drinking to excess, not taking drugs.",
+          "factorsLikelyToIncreaseRisk": "As above ? drug use, need to obtain money for drugs at all costs, feeling she has been wronged in some way, lack of consideration of consequences, impulsive behaviour.  Previously ? a) if in a pub, with mates and feels she or mates threatened; b) may be an increased risk if drinking.",
+          "riskGreatest": "Not imminent--  lengthy gap between convictions for violent offences; no history of aggressive behaviour in custody; level of violence deployed in current offence was significant and could have resulted in more serious injuries. If she is need of drugs or feels wronged, there I no telling how she will behave despite her stated motivation to avoid such behaviour in the future and address his drug use. Says she is currently drug free -- in custody.",
+          "natureOfRisk": "Violence, Threats, Physical harm",
+          "assessor": {
+            "name": "LevelOne CentralSupport"
+          },
+          "crn": "D002399"
+        }
+      }
+    },
+    {
+      "request": {
+        "urlPattern": "/assessments/.*/risk-predictors",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "groupReconvictionScore": {
+            "oneYear": 19,
+            "twoYears": 32,
+            "scoreLevel": "LOW"
+          },
+          "violencePredictorScore": {
+            "oneYear": 47,
+            "twoYears": 63,
+            "scoreLevel": "HIGH"
+          },
+          "generalPredictorScore": {
+            "oneYear": 49,
+            "twoYears": 64,
+            "scoreLevel": "MEDIUM"
+          },
+          "riskOfSeriousRecidivismScore": {
+            "scoreLevel": "HIGH",
+            "percentageScore": 24.89
+          },
+          "sexualPredictorScore": {
+            "ospIndirectImagePercentageScore": 3.33,
+            "ospDirectContactPercentageScore": 7.17,
+            "ospIndirectImagePercentageScoreLevel": "MEDIUM",
+            "ospDirectContactPercentageScoreLevel": "VERY_HIGH"
+          }
         }
       }
     }

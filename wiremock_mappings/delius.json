@@ -218,6 +218,70 @@
           ]
         }
       }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPathPattern": "/case/.*/registrations"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "registrations": [
+            {
+              "type": {
+                "code": "RVHR",
+                "description": "Very High RoSH"
+              },
+              "date": "2025-08-22",
+              "nextReviewDate": "2026-02-22"
+            },
+            {
+              "type": {
+                "code": "RCHD",
+                "description": "Risk to Children"
+              },
+              "date": "2025-08-22",
+              "nextReviewDate": "2025-11-22"
+            },
+            {
+              "type": {
+                "code": "REG15",
+                "description": "Risk to Known Adult"
+              },
+              "date": "2025-08-22",
+              "nextReviewDate": "2026-02-22"
+            },
+            {
+              "type": {
+                "code": "REG16",
+                "description": "Risk to Prisoner"
+              },
+              "date": "2025-08-22",
+              "nextReviewDate": "2026-02-22"
+            },
+            {
+              "type": {
+                "code": "REG17",
+                "description": "Risk to Public"
+              },
+              "date": "2025-08-22",
+              "nextReviewDate": "2026-02-22"
+            },
+            {
+              "type": {
+                "code": "AV2S",
+                "description": "Risk to Staff"
+              },
+              "date": "2025-08-22",
+              "nextReviewDate": "2026-02-22"
+            }
+          ]
+        }
+      }
     }
   ]
 }

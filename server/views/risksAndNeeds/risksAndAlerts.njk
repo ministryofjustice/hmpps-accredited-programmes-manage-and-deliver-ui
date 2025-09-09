@@ -1,3 +1,58 @@
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "components/rosh-widget/macro.njk" import roshWidget %}
+{% from "./_riskBox.njk" import riskBox %}
+{% from "./_ospBox.njk" import ospBox %}
+{% from "components/risk-flag-widget/macro.njk" import riskFlagWidget %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
 <div>
-  <p>Risk stuff</p>
+
+  {{ govukInsetText(assessmentCompletedText) }}
+
+  <h3 class="govuk-heading-s" data-testid="ogrs-heading">Offender group reconviction scale</h3>
+
+  {{ riskBox(ogrsYear1Box) }}
+  {{ riskBox(ogrsYear2Box) }}
+
+  <h3 class="govuk-heading-s" data-testid="ovp-heading">Offender violence predictor</h3>
+
+  {{ riskBox(ovpYear1Box) }}
+  {{ riskBox(ovpYear2Box) }}
+
+  <h3 class="govuk-heading-s" data-testid="sara-heading">Spousal assault risk assessment</h3>
+
+  {{ riskBox(riskTowardsPartnerBox) }}
+  {{ riskBox(riskTowardsOthersBox) }}
+
+  <h3 class="govuk-heading-s" data-testid="rsr-heading">Risk of serious recidivism</h3>
+
+  {% set rsrBody %}
+  <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-top-3">
+  <ul class="govuk-list govuk-!-margin-top-3 govuk-!-margin-bottom-2">
+    {{ ospBox(ospcBox) }}
+    {{ ospBox(ospiBox) }}
+  </ul>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+  {% endset %}
+
+  {{ riskBox(riskOfSeriousRecidivismBox | objectMerge({ bodyHtml: rsrBody })) }}
+
+  <h3 class="govuk-heading-s" data-testid="rosh-heading">Risk of serious harm</h3>
+
+  {% set roshBody %}
+    <p class="govuk-body govuk-!-margin-bottom-1">Risk of serious harm</p>
+    {% if roshLastupdated %}
+      {{ roshLastupdated | safe }}
+    {% endif %}
+    {{ govukTable(roshTable) }}
+  {% endset %}
+
+  {{ riskBox(roshRiskBox | objectMerge({ bodyHtml: roshBody })) }}
+
+  {{ govukInsetText(importedFromNdeliusText) }}
+
+  <h3 class="govuk-heading-s" data-testid="alerts-heading">Risk alerts</h3>
+  {{ riskFlagWidget(activeAlerts) }}
+
 </div>

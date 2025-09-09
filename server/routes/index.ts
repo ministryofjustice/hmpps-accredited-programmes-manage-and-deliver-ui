@@ -73,11 +73,6 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await referralDetailsController.updateAvailability(req, res)
   })
 
-  // Risks And Needs
-  // get('/referral/:referralId/risks-and-needs', async (req, res, next) => {
-  //   await risksAndNeedsController.showRisksAndAlertsPage(req, res)
-  // })
-
   get('/referral/:referralId/risks-and-alerts', async (req, res, next) => {
     await risksAndNeedsController.showRisksAndAlertsPage(req, res)
   })

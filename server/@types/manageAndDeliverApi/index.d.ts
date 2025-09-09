@@ -21,6 +21,7 @@ type AlcoholMisuseDetails = components['schemas']['AlcoholMisuseDetails']
 type DrugDetails = components['schemas']['DrugDetails']
 type EmotionalWellbeing = components['schemas']['EmotionalWellbeing']
 type ThinkingAndBehaviour = components['schemas']['ThinkingAndBehaviour']
+type Risks = components['schemas']['Risks']
 type Attitude = components['schemas']['Attitude']
 
 export type {
@@ -46,4 +47,5 @@ export type {
   EmotionalWellbeing,
   ThinkingAndBehaviour,
   Attitude,
+  Risks,
 }

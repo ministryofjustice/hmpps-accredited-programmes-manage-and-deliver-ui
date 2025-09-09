@@ -1,0 +1,8 @@
+{% macro ospBox(params) %}
+  <li data-testid="{{ params.dataTestId }}">
+    <div class="osp-box {{ params.levelClass }} govuk-!-font-size-14">
+      <span class="govuk-!-font-weight-bold">{{ params.levelText }}</span>
+      {{ params.type }}
+    </div>
+  </li>
+{% endmacro %}

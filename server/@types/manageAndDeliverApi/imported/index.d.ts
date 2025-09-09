@@ -4,6 +4,23 @@
  */
 
 export interface paths {
+  '/referral/{id}/update-cohort': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /** Update cohort information for a referral */
+    put: operations['updateCohortForReferral']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/queue-admin/retry-dlq/{dlqName}': {
     parameters: {
       query?: never
@@ -229,7 +246,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-
   '/risks-and-needs/{crn}/drug-details': {
     parameters: {
       query?: never
@@ -259,6 +275,23 @@ export interface paths {
      * @description Fetch attitude data
      */
     get: operations['getAttitude']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/risks-and-needs/{crn}/alcohol-misuse-details': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Get alcohol misuse details as held by Oasys */
+    get: operations['getAlcoholMisuseDetails']
     put?: never
     post?: never
     delete?: never
@@ -327,6 +360,30 @@ export interface paths {
     }
     /** Retrieve offence history for a referral */
     get: operations['getOffenceHistoryByReferralId']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/referral-details/{id}/manager': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve the manager associated with the Licence Condition or Requirement associated with a referral
+     * @description
+     *           Retrieves the manager (Probation Practitioner) associated with the Case, which is upstream of the
+     *           Referral itself.  We use this to retrieve a list of Delivery Locations (Offices) within the same
+     *           PDU as a Referral itself.
+     *
+     */
+    get: operations['getManagerByReferralId']
     put?: never
     post?: never
     delete?: never
@@ -614,6 +671,20 @@ export interface components {
        */
       analysisBehaviourIncidents?: string
     }
+    OasysSara: {
+      /**
+       * @description Risk of violence towards a partner
+       * @example Low
+       * @enum {string}
+       */
+      imminentRiskOfViolenceTowardsPartner?: 'Low' | 'Medium' | 'High'
+      /**
+       * @description Risk of violence towards others
+       * @example Medium
+       * @enum {string}
+       */
+      imminentRiskOfViolenceTowardsOthers?: 'Low' | 'Medium' | 'High'
+    }
     RiskOfSeriousRecidivism: {
       /**
        * @description Risk of Serious Recidivism score
@@ -645,7 +716,7 @@ export interface components {
       /** @description Offender Violence Predictor */
       offenderViolencePredictor?: components['schemas']['Score']
       /** @description Spousal Assault Risk Assessment */
-      sara?: components['schemas']['Sara']
+      sara?: components['schemas']['OasysSara']
       /** @description Risk of Serious Recidivism */
       riskOfSeriousRecidivism?: components['schemas']['RiskOfSeriousRecidivism']
       /** @description Risk of Serious Harm */
@@ -729,29 +800,6 @@ export interface components {
        * @enum {string}
        */
       overallRoshLevel?: 'Low' | 'Medium' | 'High'
-    }
-    Sara: {
-      /**
-       * @description The highest of what is being returned based on saraRiskOfViolenceTowardsPartner and saraRiskOfViolenceTowardsOthers
-       * @example LOW
-       * @enum {string}
-       */
-      highestRisk?: 'NOT_APPLICABLE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH'
-      /**
-       * @description Risk of violence towards partner
-       * @example LOW
-       */
-      saraRiskOfViolenceTowardsPartner?: string
-      /**
-       * @description Risk of violence towards others
-       * @example LOW
-       */
-      saraRiskOfViolenceTowardsOthers?: string
-      /**
-       * @description Assessment ID relevant to the SARA version of the assessment
-       * @example 2512235167
-       */
-      assessmentId?: string
     }
     Score: {
       /**
@@ -1219,6 +1267,25 @@ export interface components {
        */
       importedDate: string
     }
+    FullName: {
+      forename: string
+      middleNames?: string
+      surname: string
+    }
+    RequirementOrLicenceConditionManager: {
+      staff: components['schemas']['RequirementStaff']
+      team: components['schemas']['CodeDescription']
+      probationDeliveryUnit: components['schemas']['RequirementOrLicenceConditionPdu']
+      officeLocations: components['schemas']['CodeDescription'][]
+    }
+    RequirementOrLicenceConditionPdu: {
+      code: string
+      description: string
+    }
+    RequirementStaff: {
+      code: string
+      name: components['schemas']['FullName']
+    }
     DlqMessage: {
       body: {
         [key: string]: unknown
@@ -1371,6 +1438,29 @@ export interface components {
       /** @example 2 */
       IndividualRiskScores: components['schemas']['IndividualRiskScores']
     }
+    Sara: {
+      /**
+       * @description The highest of what is being returned based on saraRiskOfViolenceTowardsPartner and saraRiskOfViolenceTowardsOthers
+       * @example LOW
+       * @enum {string}
+       */
+      highestRisk?: 'NOT_APPLICABLE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH'
+      /**
+       * @description Risk of violence towards partner
+       * @example LOW
+       */
+      saraRiskOfViolenceTowardsPartner?: string
+      /**
+       * @description Risk of violence towards others
+       * @example LOW
+       */
+      saraRiskOfViolenceTowardsOthers?: string
+      /**
+       * @description Assessment ID relevant to the SARA version of the assessment
+       * @example 2512235167
+       */
+      assessmentId?: string
+    }
     SelfManagementDomainScore: {
       /** @enum {string} */
       overallSelfManagementDomainLevel?: 'HIGH_NEED' | 'MEDIUM_NEED' | 'LOW_NEED'
@@ -1417,6 +1507,67 @@ export interface components {
 }
 export type $defs = Record<string, never>
 export interface operations {
+  updateCohortForReferral: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id (UUID) of a referral allowed values SEXUAL_OFFENCE or GENERAL_OFFENCE */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
+      }
+    }
+    responses: {
+      /** @description No content - cohort updated successfully */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access this referral. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The referral does not exist */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   retryDlq: {
     parameters: {
       query?: never
@@ -2532,6 +2683,65 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getManagerByReferralId: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id (UUID) of a referral */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Information about the Manager associated with a Referral */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['RequirementOrLicenceConditionManager']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access this referral. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The referral does not exist */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
