@@ -229,7 +229,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
-
+  '/risks-and-needs/{crn}/education-training-and-employment': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Get education training and employment details as held by Oasys */
+    get: operations['getEducationTrainingAndEmployment']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/risks-and-needs/{crn}/drug-details': {
     parameters: {
       query?: never
@@ -259,6 +275,23 @@ export interface paths {
      * @description Fetch attitude data
      */
     get: operations['getAttitude']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/risks-and-needs/{crn}/alcohol-misuse-details': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Get alcohol misuse details as held by Oasys */
+    get: operations['getAlcoholMisuseDetails']
     put?: never
     post?: never
     delete?: never
@@ -614,6 +647,20 @@ export interface components {
        */
       analysisBehaviourIncidents?: string
     }
+    OasysSara: {
+      /**
+       * @description Risk of violence towards a partner
+       * @example Low
+       * @enum {string}
+       */
+      imminentRiskOfViolenceTowardsPartner?: 'Low' | 'Medium' | 'High'
+      /**
+       * @description Risk of violence towards others
+       * @example Medium
+       * @enum {string}
+       */
+      imminentRiskOfViolenceTowardsOthers?: 'Low' | 'Medium' | 'High'
+    }
     RiskOfSeriousRecidivism: {
       /**
        * @description Risk of Serious Recidivism score
@@ -645,7 +692,7 @@ export interface components {
       /** @description Offender Violence Predictor */
       offenderViolencePredictor?: components['schemas']['Score']
       /** @description Spousal Assault Risk Assessment */
-      sara?: components['schemas']['Sara']
+      sara?: components['schemas']['OasysSara']
       /** @description Risk of Serious Recidivism */
       riskOfSeriousRecidivism?: components['schemas']['RiskOfSeriousRecidivism']
       /** @description Risk of Serious Harm */
@@ -729,29 +776,6 @@ export interface components {
        * @enum {string}
        */
       overallRoshLevel?: 'Low' | 'Medium' | 'High'
-    }
-    Sara: {
-      /**
-       * @description The highest of what is being returned based on saraRiskOfViolenceTowardsPartner and saraRiskOfViolenceTowardsOthers
-       * @example LOW
-       * @enum {string}
-       */
-      highestRisk?: 'NOT_APPLICABLE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH'
-      /**
-       * @description Risk of violence towards partner
-       * @example LOW
-       */
-      saraRiskOfViolenceTowardsPartner?: string
-      /**
-       * @description Risk of violence towards others
-       * @example LOW
-       */
-      saraRiskOfViolenceTowardsOthers?: string
-      /**
-       * @description Assessment ID relevant to the SARA version of the assessment
-       * @example 2512235167
-       */
-      assessmentId?: string
     }
     Score: {
       /**
@@ -974,6 +998,15 @@ export interface components {
       selfHarmSuicidal?: string
       /** @example 0-No problems */
       currentPsychiatricProblems?: string
+    }
+    EducationTrainingAndEmployment: {
+      /**
+       * Format: date
+       * @example 1
+       */
+      assessmentCompleted?: string
+      /** @example 0-No problems */
+      learningDifficulties?: string
     }
     DrugDetails: {
       /**
@@ -1370,6 +1403,29 @@ export interface components {
       classification: string
       /** @example 2 */
       IndividualRiskScores: components['schemas']['IndividualRiskScores']
+    }
+    Sara: {
+      /**
+       * @description The highest of what is being returned based on saraRiskOfViolenceTowardsPartner and saraRiskOfViolenceTowardsOthers
+       * @example LOW
+       * @enum {string}
+       */
+      highestRisk?: 'NOT_APPLICABLE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH'
+      /**
+       * @description Risk of violence towards partner
+       * @example LOW
+       */
+      saraRiskOfViolenceTowardsPartner?: string
+      /**
+       * @description Risk of violence towards others
+       * @example LOW
+       */
+      saraRiskOfViolenceTowardsOthers?: string
+      /**
+       * @description Assessment ID relevant to the SARA version of the assessment
+       * @example 2512235167
+       */
+      assessmentId?: string
     }
     SelfManagementDomainScore: {
       /** @enum {string} */
@@ -2113,6 +2169,65 @@ export interface operations {
         }
       }
       /** @description The emotional wellbeing detail information does not exist for the CRN provided. */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getEducationTrainingAndEmployment: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description CRN */
+        crn: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description successful operation */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EducationTrainingAndEmployment']
+        }
+      }
+      /** @description Invalid code format. Expected format for CRN: X718255. */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access alcohol misuse details. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The alcohol misuse detail information does not exist for the CRN provided. */
       404: {
         headers: {
           [name: string]: unknown

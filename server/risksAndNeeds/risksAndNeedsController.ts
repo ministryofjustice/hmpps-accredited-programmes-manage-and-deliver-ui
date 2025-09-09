@@ -43,11 +43,14 @@ export default class RisksAndNeedsController {
     const subNavValue = 'risksAndAlerts'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
-
-    const presenter = new RisksAndAlertsPresenter(subNavValue, referralId)
+    const risks = await this.accreditedProgrammesManageAndDeliverService.getRisksAndAlerts(
+      username,
+      sharedReferralDetailsData.crn,
+    )
+    const presenter = new RisksAndAlertsPresenter(subNavValue, referralId, risks)
     const view = new RisksAndAlertsView(presenter)
 
-    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    return ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
 
   async showLearningNeedsPage(req: Request, res: Response): Promise<void> {

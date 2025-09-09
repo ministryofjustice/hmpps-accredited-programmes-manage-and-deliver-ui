@@ -19,6 +19,7 @@ import {
   EmotionalWellbeing,
   ThinkingAndBehaviour,
   Attitude,
+  Risks,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -107,6 +108,14 @@ export default class AccreditedProgrammesManageAndDeliverService {
       path: `/referral-details/${referralId}/sentence-information`,
       headers: { Accept: 'application/json' },
     })) as SentenceInformation
+  }
+
+  async getRisksAndAlerts(username: Express.User['username'], crn: string): Promise<Risks> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/risks-and-needs/${crn}/risks-and-alerts`,
+      headers: { Accept: 'application/json' },
+    })) as Risks
   }
 
   async getLearningNeeds(username: Express.User['username'], crn: string): Promise<LearningNeeds> {

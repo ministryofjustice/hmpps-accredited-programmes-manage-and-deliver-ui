@@ -1,0 +1,117 @@
+$border-colour-very-high: #942514;
+$text-colour-very-high: #711a0d;
+$border-colour-high: govuk-colour('red');
+$text-colour-high: #942514;
+$border-colour-medium: govuk-colour('orange');
+$text-colour-medium: #a34e00;
+$border-colour-low: govuk-colour('light-green');
+$text-colour-low: #485b10;
+
+.osp-box,
+.risk-box {
+  border-style: solid;
+  border-width: 2px;
+
+  &--very-high {
+    border-color: $border-colour-very-high;
+  }
+
+  &--high {
+    border-color: $border-colour-high;
+  }
+
+  &--medium {
+    border-color: $border-colour-medium;
+  }
+
+  &--low {
+    border-color: $border-colour-low;
+  }
+}
+
+.osp-box--very-high,
+.risk-box--very-high h4,
+.rosh-table__cell--very-high {
+  color: $text-colour-very-high;
+}
+
+.osp-box--high,
+.risk-box--high h4,
+.rosh-table__cell--high {
+  color: $text-colour-high;
+}
+
+.osp-box--medium,
+.risk-box--medium h4,
+.rosh-table__cell--medium {
+  color: $text-colour-medium;
+}
+
+.osp-box--low,
+.risk-box--low h4,
+.rosh-table__cell--low {
+  color: $text-colour-low;
+}
+
+.osp-box {
+  display: inline-block;
+  padding: 3px 6px;
+}
+
+.risk-box {
+  margin-bottom: govuk-spacing(4);
+  padding: govuk-spacing(4);
+
+  &__figure {
+    padding: 2px 6px;
+    color: govuk-colour('black');
+  }
+
+  &__body-text {
+    @extend .govuk-body-s;
+    color: govuk-colour('dark-grey');
+  }
+
+  &--very-high {
+    .risk-box__figure {
+      background-color: rgba($text-colour-very-high, 0.25);
+    }
+  }
+
+  &--high {
+    .risk-box__figure {
+      background-color: rgba($text-colour-high, 0.25);
+    }
+  }
+
+  &--medium {
+    .risk-box__figure {
+      background-color: rgba($text-colour-medium, 0.25);
+    }
+  }
+
+  &--low {
+    .risk-box__figure {
+      background-color: rgba($text-colour-low, 0.25);
+    }
+  }
+}
+
+.rosh-table {
+  margin-bottom: 0;
+
+  &__cell {
+    font-weight: bold;
+  }
+}
+
+.alerts-box {
+  margin-bottom: govuk-spacing(4);
+  padding: govuk-spacing(4);
+  border: 2px solid #93afc3;
+  background-color: #ebf7ff;
+
+  & :last-child {
+    margin-bottom: 0;
+  }
+}

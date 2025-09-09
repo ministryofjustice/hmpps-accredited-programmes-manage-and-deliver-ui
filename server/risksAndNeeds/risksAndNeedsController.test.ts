@@ -9,6 +9,7 @@ import {
   OffenceAnalysis,
   ReferralDetails,
   Relationships,
+  Risks,
   RoshAnalysis,
   ThinkingAndBehaviour,
 } from '@manage-and-deliver-api'
@@ -30,6 +31,7 @@ import offenceAnalysisFactory from '../testutils/factories/risksAndNeeds/offence
 import emotionalWellbeingFactory from '../testutils/factories/risksAndNeeds/emotionalWellbeingFactory'
 import thinkingAndBehaviourFactory from '../testutils/factories/risksAndNeeds/thinkingAndBehaviourFactory'
 import attitudesFactory from '../testutils/factories/risksAndNeeds/attitudesFactory'
+import risksFactory from '../testutils/factories/risksAndNeeds/risksFactory'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
@@ -628,6 +630,91 @@ describe('Attitudes section of risks and needs', () => {
 
       const referralId = randomUUID()
       return request(app).get(`/referral/${referralId}/attitudes`).expect(500)
+    })
+  })
+})
+
+describe('Risks and alerts section of risks and needs', () => {
+  describe('GET /referral/:id/risks-and-alerts', () => {
+    it('loads the risks and needs page with risks and alerts sub-nav and displays all related data', async () => {
+      const risks: Risks = risksFactory.build()
+      accreditedProgrammesManageAndDeliverService.getRisksAndAlerts.mockResolvedValue(risks)
+
+      const referralId = randomUUID()
+      return request(app)
+        .get(`/referral/${referralId}/risks-and-alerts`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Assessment completed')
+          expect(res.text).toContain('Offender group reconviction scale')
+        })
+    })
+
+    it('handles risks and alerts with minimal data', async () => {
+      const risks: Risks = risksFactory.build({
+        alerts: [],
+        assessmentCompleted: undefined,
+        offenderGroupReconviction: {
+          oneYear: undefined,
+          twoYears: undefined,
+          scoreLevel: undefined,
+        },
+        offenderViolencePredictor: {
+          oneYear: undefined,
+          twoYears: undefined,
+          scoreLevel: undefined,
+        },
+        sara: {
+          imminentRiskOfViolenceTowardsPartner: undefined,
+          imminentRiskOfViolenceTowardsOthers: undefined,
+        },
+        riskOfSeriousRecidivism: {
+          ospcScore: undefined,
+          ospiScore: undefined,
+          scoreLevel: undefined,
+          percentageScore: undefined,
+        },
+        riskOfSeriousHarm: {
+          overallRoshLevel: undefined,
+          riskChildrenCommunity: undefined,
+          riskChildrenCustody: undefined,
+          riskKnownAdultCommunity: undefined,
+          riskKnownAdultCustody: undefined,
+          riskPrisonersCustody: undefined,
+          riskPublicCommunity: undefined,
+          riskPublicCustody: undefined,
+          riskStaffCommunity: undefined,
+          riskStaffCustody: undefined,
+        },
+        lastUpdated: undefined,
+        dateRetrieved: undefined,
+      })
+
+      accreditedProgrammesManageAndDeliverService.getRisksAndAlerts.mockResolvedValue(risks)
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/risks-and-alerts`).expect(200)
+    })
+
+    it('calls the service with correct parameters', async () => {
+      const referralId = randomUUID()
+
+      const risks: Risks = risksFactory.build()
+      accreditedProgrammesManageAndDeliverService.getRisksAndAlerts.mockResolvedValue(risks)
+
+      await request(app).get(`/referral/${referralId}/risks-and-alerts`).expect(200)
+
+      expect(accreditedProgrammesManageAndDeliverService.getRisksAndAlerts).toHaveBeenCalledWith(
+        'user1',
+        referralDetails.crn,
+      )
+    })
+
+    it('handles service errors gracefully', async () => {
+      accreditedProgrammesManageAndDeliverService.getRisksAndAlerts.mockRejectedValue(new Error('Service unavailable'))
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/risks-and-alerts`).expect(500)
     })
   })
 })
