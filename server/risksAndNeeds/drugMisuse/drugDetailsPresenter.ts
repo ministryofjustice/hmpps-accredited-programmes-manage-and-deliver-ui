@@ -17,11 +17,11 @@ export default class DrugDetailsPresenter extends RisksAndNeedsPresenter {
     return [
       {
         key: '8.5 - Level of use of main drug',
-        lines: [`${levelOfUseOfMainDrug ? `${levelOfUseOfMainDrug}` : ''}`],
+        lines: [`${levelOfUseOfMainDrug ? `${levelOfUseOfMainDrug}` : 'No information available'}`],
       },
       {
         key: '8.9 - Using and obtaining drugs a major activity or occupation',
-        lines: [`${drugsMajorActivity ? `${drugsMajorActivity}` : ''}`],
+        lines: [`${drugsMajorActivity ? `${drugsMajorActivity}` : 'No information available'}`],
       },
     ]
   }
