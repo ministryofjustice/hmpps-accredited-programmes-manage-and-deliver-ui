@@ -1,0 +1,37 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block main %}
+{% block content %}
+<div class="govuk-width-container" id="main-content">
+  {{ govukBackLink(backLinkArgs) }}
+  <div class="govuk-main-wrapper">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">Which locations can {{presenter.details.personName}} attend in Kent, Surrey and Sussex?</h1>
+        <p class="govuk-body">You have already selected:</p>
+        {{ govukInsetText(previousValueArgs) }}
+        <p class="govuk-body">Select any other locations {{presenter.details.personName}} can attend.</p>
+
+        <form method="post" novalidate action="{{presenter.locationButtonFormAction}}">
+          <input type="hidden" name="_csrf" value="{{csrfToken}}">
+          {{ govukCheckboxes(checkboxArgs1) }}
+          {{ govukCheckboxes(checkboxArgs2) }}
+
+          <div class="govuk-button-group">
+            {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+            <a class="govuk-link" href={{ cancelLink }}>Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% endblock %}

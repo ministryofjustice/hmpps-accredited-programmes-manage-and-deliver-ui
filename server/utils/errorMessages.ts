@@ -43,6 +43,9 @@ export default {
     endDateEmpty: `Enter a date in the format 17/5/2024 or select the calendar icon to pick a date.`,
     endDateInPast: 'Enter or select a date in the future',
   },
+  addPreferredLocations: {
+    addAnotherPDU: 'Select whether you want to add locations in another PDU',
+  },
   returnedError,
   userHeaderTypes,
   errorHandlerAccessErrorMessages,
