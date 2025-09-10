@@ -210,7 +210,7 @@ export default class RisksAndNeedsController {
   async showDrugDetailsPage(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params
     const { username } = req.user
-    const subNavValue = 'health'
+    const subNavValue = 'drugMisuse'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
     const drugDetails = await this.accreditedProgrammesManageAndDeliverService.getDrugDetails(
