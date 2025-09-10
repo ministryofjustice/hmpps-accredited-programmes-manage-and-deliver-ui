@@ -10,7 +10,7 @@ export default class AdditionalPdusPresenter {
     readonly currentFormData: SessionData['locationPreferenceFormData'],
   ) {}
 
-  get locationButtonFormAction(): string {
-    return `/referral/${this.id}/add-location-preferences/additional-pdus`
-  }
+  // get locationButtonFormAction(): string {
+  //   return `/referral/${this.id}/add-location-preferences/cannot`
+  // }
 }

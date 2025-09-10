@@ -73,6 +73,14 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await locationPreferencesController.showAdditionalPduLocationPreferencesPage(req, res)
   })
 
+  get('/referral/:referralId/add-location-preferences/cannot-attend-locations', async (req, res, next) => {
+    await locationPreferencesController.showCannotAttendLocationsPage(req, res)
+  })
+
+  post('/referral/:referralId/add-location-preferences/cannot-attend-locations', async (req, res, next) => {
+    await locationPreferencesController.showCannotAttendLocationsPage(req, res)
+  })
+
   get('/referral/:referralId/add-location-preferences', async (req, res, next) => {
     await locationPreferencesController.showLocationPreferencesPage(req, res)
   })

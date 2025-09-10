@@ -1,4 +1,3 @@
-import ViewUtils from '../utils/viewUtils'
 import AdditionalPdusPresenter from './additionalPdusPresenter'
 
 export default class AdditionalPdusView {

@@ -10,6 +10,7 @@ export type LocationFormData = {
   pdus: string[]
   addOtherPduLocations: string
   otherPduLocations?: string[]
+  cannotAttendLocations?: string
 }
 
 export default class AddLocationPreferenceForm {
@@ -57,6 +58,44 @@ export default class AddLocationPreferenceForm {
       paramsForUpdate: {
         referralId: this.referralId,
         otherPduLocations: createPduList(this.request.body),
+      },
+      error: null,
+    }
+  }
+
+  async cannotAttendLocationData(): Promise<FormData<Partial<LocationFormData>>> {
+    const validations = (): ValidationChain[] => {
+      return [
+        body('cannot-attend-locations-radio')
+          .notEmpty()
+          .withMessage(errorMessages.cannotAttendLocations.cannotAttendLocationsRadios.requiredRadioSelection),
+        body('cannot-attend-locations-text-area')
+          .if(body('cannot-attend-locations-radio').equals('Yes'))
+          .notEmpty()
+          .withMessage(errorMessages.cannotAttendLocations.cannotAttendTextArea.inputRequired),
+        body('cannot-attend-locations-text-area')
+          .isLength({ max: 2000 })
+          .withMessage(errorMessages.cannotAttendLocations.cannotAttendTextArea.exceededCharacterLimit),
+      ]
+    }
+
+    const validationResult = await FormUtils.runValidations({
+      request: this.request,
+      validations: validations(),
+    })
+
+    const error = FormUtils.validationErrorFromResult(validationResult)
+    if (error) {
+      return {
+        paramsForUpdate: null,
+        error,
+      }
+    }
+
+    return {
+      paramsForUpdate: {
+        referralId: this.referralId,
+        cannotAttendLocations: this.request.body['cannot-attend-locations-text-area'],
       },
       error: null,
     }

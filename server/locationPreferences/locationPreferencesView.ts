@@ -1,5 +1,6 @@
 import LocationPreferencesPresenter from './locationPreferencesPresenter'
 import ViewUtils from '../utils/viewUtils'
+import { RadiosArgs } from '../utils/govukFrontendTypes'
 
 export default class LocationPreferencesView {
   constructor(private readonly presenter: LocationPreferencesPresenter) {}
@@ -45,7 +46,7 @@ export default class LocationPreferencesView {
     }
   }
 
-  private radioArgs() {
+  private radioArgs(): RadiosArgs {
     return {
       name: 'add-other-pdu-locations',
       fieldset: {

@@ -19,7 +19,7 @@
         {{ govukInsetText(previousValueArgs) }}
         <p class="govuk-body">Select any other locations {{presenter.details.personName}} can attend.</p>
 
-        <form method="post" novalidate action="{{presenter.locationButtonFormAction}}">
+        <form method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{csrfToken}}">
           {{ govukCheckboxes(checkboxArgs1) }}
           {{ govukCheckboxes(checkboxArgs2) }}
