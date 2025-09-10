@@ -23,6 +23,12 @@ import config from './config'
 declare module 'express-session' {
   export interface SessionData {
     originPage: string
+    locationPreferenceFormData?: {
+      referralId?: string
+      pdus?: string[]
+      addOtherPduLocations?: string
+      otherPduLocations?: string[]
+    }
   }
 }
 

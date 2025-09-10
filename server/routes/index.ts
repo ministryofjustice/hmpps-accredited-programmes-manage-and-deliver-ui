@@ -1,11 +1,12 @@
 import { type RequestHandler, Router } from 'express'
 
-import CaselistController from '../caselist/caselistController'
 import asyncMiddleware from '../middleware/asyncMiddleware'
-import PniController from '../pni/pniController'
-import ReferralDetailsController from '../referralDetails/referralDetailsController'
-import RisksAndNeedsController from '../risksAndNeeds/risksAndNeedsController'
 import type { Services } from '../services'
+import ReferralDetailsController from '../referralDetails/referralDetailsController'
+import CaselistController from '../caselist/caselistController'
+import PniController from '../pni/pniController'
+import RisksAndNeedsController from '../risksAndNeeds/risksAndNeedsController'
+import LocationPreferencesController from '../locationPreferences/locationPreferencesController'
 import ChangeCohortController from '../cohort/changeCohortController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
@@ -17,6 +18,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const referralDetailsController = new ReferralDetailsController(accreditedProgrammesManageAndDeliverService)
   const risksAndNeedsController = new RisksAndNeedsController(accreditedProgrammesManageAndDeliverService)
   const programmeNeedsIdenfitierController = new PniController(accreditedProgrammesManageAndDeliverService)
+  const locationPreferencesController = new LocationPreferencesController(accreditedProgrammesManageAndDeliverService)
   const cohortController = new ChangeCohortController(accreditedProgrammesManageAndDeliverService)
 
   get('/', async (req, res, next) => {
@@ -53,6 +55,26 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   get('/referral-details/:id/location', async (req, res, next) => {
     await referralDetailsController.showLocationPage(req, res)
+  })
+
+  get('/referral/:referralId/add-location-preferences', async (req, res, next) => {
+    await locationPreferencesController.showLocationPreferencesPage(req, res)
+  })
+
+  post('/referral/:referralId/add-location-preferences', async (req, res, next) => {
+    await locationPreferencesController.showLocationPreferencesPage(req, res)
+  })
+
+  get('/referral/:referralId/add-location-preferences/additional-pdus', async (req, res, next) => {
+    await locationPreferencesController.showAdditionalPduLocationPreferencesPage(req, res)
+  })
+
+  post('/referral/:referralId/add-location-preferences/additional-pdus', async (req, res, next) => {
+    await locationPreferencesController.showAdditionalPduLocationPreferencesPage(req, res)
+  })
+
+  get('/referral/:referralId/add-location-preferences', async (req, res, next) => {
+    await locationPreferencesController.showLocationPreferencesPage(req, res)
   })
 
   get('/referral-details/:id/additional-information', async (req, res, next) => {
