@@ -1,0 +1,41 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block main %}
+  {% block content %}
+    <div class="govuk-width-container" id="main-content">
+      {{ govukBackLink(backLinkArgs) }}
+      <div class="govuk-main-wrapper">
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            {% if errorSummary !== null %}
+              {{ govukErrorSummary(errorSummary) }}
+            {% endif %}
+
+            {% set textAreaHtml %}
+              {{ govukCharacterCount(cannotAttendLocationsTextAreaArgs) }}
+            {% endset -%}
+
+            {{govukRadios(radioArgs(textAreaHtml))}}
+
+            <form method="post" novalidate>
+              <input type="hidden" name="_csrf" value="{{csrfToken}}">
+
+              <div class="govuk-button-group">
+                {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+                <a class="govuk-link" href={{ cancelLink }}>Cancel</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endblock %}
+{% endblock %}

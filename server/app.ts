@@ -28,6 +28,7 @@ declare module 'express-session' {
       pdus?: string[]
       addOtherPduLocations?: string
       otherPduLocations?: string[]
+      cannotAttendLocations?: string
     }
   }
 }
