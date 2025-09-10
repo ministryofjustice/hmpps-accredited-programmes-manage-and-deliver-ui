@@ -1,0 +1,6 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+<div>
+  <h2 class="govuk-heading-m">Location</h2>
+  {{ govukSummaryList(getPreferredLocationsAsSummaryListArgs) }}
+</div>

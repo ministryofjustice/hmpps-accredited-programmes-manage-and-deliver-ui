@@ -128,6 +128,7 @@ export default class ViewUtils {
       hideKey: false,
     },
     actions: { href: string; text: string; visuallyHiddenText: string | null } | null = null,
+    classes: string | null | undefined = null,
   ): SummaryListArgs {
     return {
       card: (() => {
@@ -143,7 +144,7 @@ export default class ViewUtils {
         }
         return null
       })(),
-      classes: options.showBorders ? undefined : 'govuk-summary-list--no-border',
+      classes: `${classes} ${options.showBorders ? '' : 'govuk-summary-list--no-border'}`,
       rows: summaryListItems.map((item, index) => {
         return {
           key: {

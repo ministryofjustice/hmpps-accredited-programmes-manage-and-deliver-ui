@@ -15,3 +15,9 @@
 .govuk-tag {
   color: #0b0c0c;
 }
+
+.govuk-summary-card__content {
+  .no-first-key .govuk-summary-list__row:first-child .govuk-summary-list__key {
+    display: none;
+  }
+}
