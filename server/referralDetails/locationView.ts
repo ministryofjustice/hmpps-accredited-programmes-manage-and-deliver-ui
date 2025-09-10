@@ -5,13 +5,14 @@ import ViewUtils from '../utils/viewUtils'
 export default class LocationView {
   constructor(private readonly presenter: LocationPresenter) {}
 
-  get preferredLocationsSummary(): SummaryListArgs {
+  get getPreferredLocationsAsSummaryListArgs(): SummaryListArgs {
     const summary = this.presenter.PreferredLocationsSummary()
+    const addLocationPreferenceHref = `/referral/${this.presenter.referralId}/add-location-preferences`
     return ViewUtils.summaryListArgsWithSummaryCard(
       summary.summary,
       summary.title,
       { showBorders: true, showTitle: true, hideKey: false },
-      { href: '', text: 'Add location preferences', visuallyHiddenText: '' },
+      { href: addLocationPreferenceHref, text: 'Add location preferences', visuallyHiddenText: '' },
       summary.classes,
     )
   }
@@ -21,7 +22,7 @@ export default class LocationView {
       'referralDetails/referralDetails',
       {
         presenter: this.presenter,
-        preferredLocationsSummary: this.preferredLocationsSummary,
+        getPreferredLocationsAsSummaryListArgs: this.getPreferredLocationsAsSummaryListArgs,
       },
     ]
   }
