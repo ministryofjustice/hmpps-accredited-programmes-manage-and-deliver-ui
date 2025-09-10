@@ -47,15 +47,12 @@ export default class AddLocationPreferenceForm {
   }
 
   async additionalPdusData(): Promise<FormData<Partial<LocationFormData>>> {
-    console.log('&&&&&&&&&&&&')
-    console.log(this.request.body)
     const createPduList = (data: Record<string, string | string[]>): string[] => {
       return Object.entries(data)
         .filter(([key]) => key !== '_csrf')
         .flatMap(([, value]) => (Array.isArray(value) ? value : [value]))
         .filter(Boolean)
     }
-    console.log(createPduList(this.request.body))
     return {
       paramsForUpdate: {
         referralId: this.referralId,
