@@ -11,22 +11,6 @@ export default class LocationPresenter extends ReferralDetailsPresenter {
     super(details, subNavValue, id)
   }
 
-  ReportingLocationsSummary(): { title: string; summary: SummaryListItem[] } {
-    return {
-      title: 'Reporting locations',
-      summary: [
-        {
-          key: 'Probation delivery unit',
-          lines: [`East Sussex`],
-        },
-        {
-          key: 'Probation office',
-          lines: ['Brighton and Hove: Brighton Probation Office'],
-        },
-      ],
-    }
-  }
-
   PreferredLocationsSummary(): { title: string; classes: string; summary: SummaryListItem[] } {
     return {
       title: 'Reporting locations',

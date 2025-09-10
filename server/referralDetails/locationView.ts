@@ -5,11 +5,6 @@ import ViewUtils from '../utils/viewUtils'
 export default class LocationView {
   constructor(private readonly presenter: LocationPresenter) {}
 
-  get reportingLocationsSummary(): SummaryListArgs {
-    const summary = this.presenter.ReportingLocationsSummary()
-    return ViewUtils.summaryListArgsWithSummaryCard(summary.summary, summary.title)
-  }
-
   get preferredLocationsSummary(): SummaryListArgs {
     const summary = this.presenter.PreferredLocationsSummary()
     return ViewUtils.summaryListArgsWithSummaryCard(
@@ -26,7 +21,6 @@ export default class LocationView {
       'referralDetails/referralDetails',
       {
         presenter: this.presenter,
-        reportingLocationsSummary: this.reportingLocationsSummary,
         preferredLocationsSummary: this.preferredLocationsSummary,
       },
     ]
