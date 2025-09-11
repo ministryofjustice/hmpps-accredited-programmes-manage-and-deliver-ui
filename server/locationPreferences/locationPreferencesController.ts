@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { CreateDeliveryLocationPreferences } from '@manage-and-deliver-api'
+import { CreateDeliveryLocationPreferences, DeliveryLocationPreferencesFormData } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
 import LocationPreferencesPresenter from './locationPreferencesPresenter'
@@ -26,8 +26,20 @@ export default class LocationPreferencesController {
       username,
     )
 
+    const possibleDeliveryLocations =
+      await this.accreditedProgrammesManageAndDeliverService.getPossibleDeliveryLocationsForReferral(
+        username,
+        referralId,
+      )
+
+    req.session.locationPreferenceFormData = {
+      ...req.session.locationPreferenceFormData,
+      referenceData: possibleDeliveryLocations,
+    }
+
     let formError: FormValidationError | null = null
     let userInputData = null
+
     if (req.method === 'POST') {
       const data = await new AddLocationPreferenceForm(req, referralId).data()
 
@@ -44,13 +56,16 @@ export default class LocationPreferencesController {
         return res.redirect(`/referral/${referralId}/add-location-preferences/cannot-attend-locations`)
       }
     }
+
     const presenter = new LocationPreferencesPresenter(
       referralId,
       referralDetails,
+      possibleDeliveryLocations,
       req.originalUrl,
       formError,
       userInputData,
     )
+
     const view = new LocationPreferencesView(presenter)
     return ControllerUtils.renderWithLayout(res, view, referralDetails)
   }
@@ -63,6 +78,15 @@ export default class LocationPreferencesController {
       referralId,
       username,
     )
+
+    const referenceData: DeliveryLocationPreferencesFormData =
+      req.session.locationPreferenceFormData.referenceData ??
+      (await this.accreditedProgrammesManageAndDeliverService.getPossibleDeliveryLocationsForReferral(
+        req.user.username,
+        referralId,
+      ))
+
+    req.session.locationPreferenceFormData = { ...req.session.locationPreferenceFormData, referenceData }
 
     const currentFormData = req.session.locationPreferenceFormData
 
@@ -99,21 +123,26 @@ export default class LocationPreferencesController {
       } else {
         req.session.locationPreferenceFormData.cannotAttendLocations = data.paramsForUpdate.cannotAttendLocations
 
-        const createDeliveryLocationPreferences: CreateDeliveryLocationPreferences = {
+        let createDeliveryLocationPreferences: CreateDeliveryLocationPreferences = {
           preferredDeliveryLocations: [
             {
-              pduCode: 'string',
-              pduDescription: 'string',
-              deliveryLocations: [
-                {
-                  code: 'string',
-                  description: 'string',
-                },
-              ],
+              pduCode: req.session.locationPreferenceFormData.referenceData.primaryPdu.code,
+              pduDescription: req.session.locationPreferenceFormData.referenceData.primaryPdu.name,
+              deliveryLocations: req.session.locationPreferenceFormData.referenceData.primaryPdu.deliveryLocations
+                .filter(it => data.paramsForUpdate.locations.includes(it.label))
+                .map(location => ({ code: location.value, description: location.label })),
             },
           ],
           cannotAttendText: req.session.locationPreferenceFormData.cannotAttendLocations,
         }
+
+
+        const otherPdus = req.session.locationPreferenceFormData.referenceData.otherPdusInSameRegion
+          .flatMap(pdu => pdu.deliveryLocations)
+          .filter(location => data.paramsForUpdate.otherPduLocations.includes(location.label))
+            .map(location => ({ code: location.value, description: location.label }))
+
+          createDeliveryLocationPreferences.preferredDeliveryLocations = createDeliveryLocationPreferences.preferredDeliveryLocations.push(otherPdus)
 
         const locationPreferences =
           await this.accreditedProgrammesManageAndDeliverService.createDeliveryLocationPreferences(

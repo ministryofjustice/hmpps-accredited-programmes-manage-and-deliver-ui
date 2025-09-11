@@ -4,13 +4,21 @@ import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
 
 export default class AdditionalPdusPresenter {
+  public readonly pdus: {
+    name: string
+    code: string
+    offices: { value: string; label: string }[]
+  }[] = []
+
   constructor(
     readonly id: string,
     readonly details: ReferralDetails,
     readonly currentFormData: SessionData['locationPreferenceFormData'],
-  ) {}
-
-  // get locationButtonFormAction(): string {
-  //   return `/referral/${this.id}/add-location-preferences/cannot`
-  // }
+  ) {
+    this.pdus = (currentFormData.referenceData.otherPdusInSameRegion ?? []).map(pdu => ({
+      code: pdu.code,
+      name: pdu.name,
+      offices: pdu.deliveryLocations,
+    }))
+  }
 }

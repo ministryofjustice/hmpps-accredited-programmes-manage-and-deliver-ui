@@ -22,6 +22,7 @@ import {
   SentenceInformation,
   ThinkingAndBehaviour,
   UpdateAvailability,
+  DeliveryLocationPreferencesFormData,
   CreateDeliveryLocationPreferences,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
@@ -29,6 +30,8 @@ import config, { ApiConfig } from '../config'
 import type { HmppsAuthClient, RestClientBuilderWithoutToken } from '../data'
 import RestClient from '../data/restClient'
 import { Page } from '../shared/models/pagination'
+import type { ExpressUsername } from '../shared/ExpressUsername'
+
 
 export interface PaginationParams {
   // Page number to retrieve -- starts from 1
@@ -39,10 +42,16 @@ export interface PaginationParams {
   sort?: string[]
 }
 
-export default class AccreditedProgrammesManageAndDeliverService {
+export interface IAccreditedProgrammesManageAndDeliverService {
+  getPossibleDeliveryLocationsForReferral(
+    username: ExpressUsername,
+    referralId: string,
+  ): Promise<DeliveryLocationPreferencesFormData>
+}
+export default class AccreditedProgrammesManageAndDeliverService implements IAccreditedProgrammesManageAndDeliverService {
   constructor(private readonly hmppsAuthClientBuilder: RestClientBuilderWithoutToken<HmppsAuthClient>) {}
 
-  async createRestClientFromUsername(username: Express.User['username']): Promise<RestClient> {
+  async createRestClientFromUsername(username: ExpressUsername): Promise<RestClient> {
     const hmppsAuthClient = this.hmppsAuthClientBuilder()
     const systemToken = await hmppsAuthClient.getSystemClientToken(username)
 
@@ -54,7 +63,7 @@ export default class AccreditedProgrammesManageAndDeliverService {
   }
 
   async getOpenCaselist(
-    username: Express.User['username'],
+    username: ExpressUsername,
     paginationParams: PaginationParams,
     filter: CaselistFilterParams,
   ): Promise<Page<ReferralCaseListItem>> {
@@ -68,7 +77,7 @@ export default class AccreditedProgrammesManageAndDeliverService {
   }
 
   async getClosedCaselist(
-    username: Express.User['username'],
+    username: ExpressUsername,
     paginationParams: PaginationParams,
     filter: CaselistFilterParams,
   ): Promise<Page<ReferralCaseListItem>> {
@@ -89,7 +98,7 @@ export default class AccreditedProgrammesManageAndDeliverService {
     })) as ReferralDetails
   }
 
-  async getPersonalDetails(referralId: string, username: Express.User['username']): Promise<PersonalDetails> {
+  async getPersonalDetails(referralId: string, username: ExpressUsername): Promise<PersonalDetails> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/referral-details/${referralId}/personal-details`,
@@ -97,7 +106,7 @@ export default class AccreditedProgrammesManageAndDeliverService {
     })) as PersonalDetails
   }
 
-  async getAvailability(username: Express.User['username'], referralId: string): Promise<Availability> {
+  async getAvailability(username: ExpressUsername, referralId: string): Promise<Availability> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/availability/referral/${referralId}`,
@@ -105,7 +114,7 @@ export default class AccreditedProgrammesManageAndDeliverService {
     })) as Availability
   }
 
-  async getSentenceInformation(username: Express.User['username'], referralId: string): Promise<SentenceInformation> {
+  async getSentenceInformation(username: ExpressUsername, referralId: string): Promise<SentenceInformation> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/referral-details/${referralId}/sentence-information`,
@@ -113,7 +122,7 @@ export default class AccreditedProgrammesManageAndDeliverService {
     })) as SentenceInformation
   }
 
-  async getRisksAndAlerts(username: Express.User['username'], crn: string): Promise<Risks> {
+  async getRisksAndAlerts(username: ExpressUsername, crn: string): Promise<Risks> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/risks-and-needs/${crn}/risks-and-alerts`,
@@ -121,7 +130,7 @@ export default class AccreditedProgrammesManageAndDeliverService {
     })) as Risks
   }
 
-  async getLearningNeeds(username: Express.User['username'], crn: string): Promise<LearningNeeds> {
+  async getLearningNeeds(username: ExpressUsername, crn: string): Promise<LearningNeeds> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/risks-and-needs/${crn}/learning-needs`,
@@ -129,7 +138,7 @@ export default class AccreditedProgrammesManageAndDeliverService {
     })) as LearningNeeds
   }
 
-  async getLifestyleAndAssociates(username: Express.User['username'], crn: string): Promise<LifestyleAndAssociates> {
+  async getLifestyleAndAssociates(username: ExpressUsername, crn: string): Promise<LifestyleAndAssociates> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/risks-and-needs/${crn}/lifestyle-and-associates`,
@@ -137,7 +146,7 @@ export default class AccreditedProgrammesManageAndDeliverService {
     })) as LifestyleAndAssociates
   }
 
-  async getRelationships(username: Express.User['username'], crn: string): Promise<Relationships> {
+  async getRelationships(username: ExpressUsername, crn: string): Promise<Relationships> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/risks-and-needs/${crn}/relationships`,
@@ -145,7 +154,7 @@ export default class AccreditedProgrammesManageAndDeliverService {
     })) as Relationships
   }
 
-  async getAlcoholMisuseDetails(username: Express.User['username'], crn: string): Promise<AlcoholMisuseDetails> {
+  async getAlcoholMisuseDetails(username: ExpressUsername, crn: string): Promise<AlcoholMisuseDetails> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/risks-and-needs/${crn}/alcohol-misuse-details`,
@@ -153,7 +162,7 @@ export default class AccreditedProgrammesManageAndDeliverService {
     })) as AlcoholMisuseDetails
   }
 
-  async getAttitudes(username: Express.User['username'], crn: string): Promise<Attitude> {
+  async getAttitudes(username: ExpressUsername, crn: string): Promise<Attitude> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/risks-and-needs/${crn}/attitude`,
@@ -161,7 +170,7 @@ export default class AccreditedProgrammesManageAndDeliverService {
     })) as Attitude
   }
 
-  async getHealth(username: Express.User['username'], crn: string): Promise<Health> {
+  async getHealth(username: ExpressUsername, crn: string): Promise<Health> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/risks-and-needs/${crn}/health`,
@@ -169,7 +178,7 @@ export default class AccreditedProgrammesManageAndDeliverService {
     })) as Health
   }
 
-  async getDrugDetails(username: Express.User['username'], crn: string): Promise<DrugDetails> {
+  async getDrugDetails(username: ExpressUsername, crn: string): Promise<DrugDetails> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/risks-and-needs/${crn}/drug-details`,
@@ -177,7 +186,7 @@ export default class AccreditedProgrammesManageAndDeliverService {
     })) as DrugDetails
   }
 
-  async getEmotionalWellbeing(username: Express.User['username'], crn: string): Promise<DrugDetails> {
+  async getEmotionalWellbeing(username: ExpressUsername, crn: string): Promise<DrugDetails> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/risks-and-needs/${crn}/emotional-wellbeing`,
@@ -185,7 +194,7 @@ export default class AccreditedProgrammesManageAndDeliverService {
     })) as EmotionalWellbeing
   }
 
-  async getThinkingAndBehaviour(username: Express.User['username'], crn: string): Promise<ThinkingAndBehaviour> {
+  async getThinkingAndBehaviour(username: ExpressUsername, crn: string): Promise<ThinkingAndBehaviour> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/risks-and-needs/${crn}/thinking-and-behaviour`,
@@ -194,7 +203,7 @@ export default class AccreditedProgrammesManageAndDeliverService {
   }
 
   async addAvailability(
-    username: Express.User['username'],
+    username: ExpressUsername,
     createAvailabilityParams: CreateAvailability,
   ): Promise<Availability> {
     const restClient = await this.createRestClientFromUsername(username)
@@ -206,7 +215,7 @@ export default class AccreditedProgrammesManageAndDeliverService {
   }
 
   async updateAvailability(
-    username: Express.User['username'],
+    username: ExpressUsername,
     updateAvailabilityParams: UpdateAvailability,
   ): Promise<Availability> {
     const restClient = await this.createRestClientFromUsername(username)
@@ -217,7 +226,7 @@ export default class AccreditedProgrammesManageAndDeliverService {
     })) as Availability
   }
 
-  async getOffenceHistory(username: Express.User['username'], referralId: string): Promise<OffenceHistory> {
+  async getOffenceHistory(username: ExpressUsername, referralId: string): Promise<OffenceHistory> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/referral-details/${referralId}/offence-history`,
@@ -225,7 +234,7 @@ export default class AccreditedProgrammesManageAndDeliverService {
     })) as OffenceHistory
   }
 
-  async getPniScore(username: Express.User['username'], crn: string): Promise<PniScore> {
+  async getPniScore(username: ExpressUsername, crn: string): Promise<PniScore> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/pni-score/${crn}`,
@@ -233,7 +242,7 @@ export default class AccreditedProgrammesManageAndDeliverService {
     })) as PniScore
   }
 
-  async getRoshAnalysis(username: Express.User['username'], crn: string): Promise<RoshAnalysis> {
+  async getRoshAnalysis(username: ExpressUsername, crn: string): Promise<RoshAnalysis> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/risks-and-needs/${crn}/rosh-analysis`,
@@ -241,12 +250,23 @@ export default class AccreditedProgrammesManageAndDeliverService {
     })) as RoshAnalysis
   }
 
-  async getOffenceAnalysis(username: Express.User['username'], crn: string): Promise<OffenceAnalysis> {
+  async getOffenceAnalysis(username: ExpressUsername, crn: string): Promise<OffenceAnalysis> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/risks-and-needs/${crn}/offence-analysis`,
       headers: { Accept: 'application/json' },
     })) as OffenceAnalysis
+  }
+
+  async getPossibleDeliveryLocationsForReferral(
+    username: ExpressUsername,
+    referralId: string,
+  ): Promise<DeliveryLocationPreferencesFormData> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/referral-delivery-location-preferences-form/${referralId}`,
+      headers: { Accept: 'application/json' },
+    })) as DeliveryLocationPreferencesFormData
   }
 
   async createDeliveryLocationPreferences(
