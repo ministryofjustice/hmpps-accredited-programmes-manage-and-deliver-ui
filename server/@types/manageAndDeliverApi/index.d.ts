@@ -23,6 +23,7 @@ type EmotionalWellbeing = components['schemas']['EmotionalWellbeing']
 type ThinkingAndBehaviour = components['schemas']['ThinkingAndBehaviour']
 type Risks = components['schemas']['Risks']
 type Attitude = components['schemas']['Attitude']
+type CreateDeliveryLocationPreferences = components['schemas']['CreateDeliveryLocationPreferences']
 type DeliveryLocationPreferences = components['schemas']['DeliveryLocationPreferences']
 type UpdateCohort = components['schemas']['UpdateCohort']
 export type {
@@ -49,6 +50,7 @@ export type {
   RoshAnalysis,
   SentenceInformation,
   ThinkingAndBehaviour,
+  CreateDeliveryLocationPreferences,
   UpdateAvailability,
   UpdateCohort,
 }

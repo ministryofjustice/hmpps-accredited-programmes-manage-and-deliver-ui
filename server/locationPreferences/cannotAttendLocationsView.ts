@@ -33,6 +33,7 @@ export default class CannotAttendLocationsView {
         {
           value: 'yes',
           text: 'Yes',
+          checked: this.presenter.fields.cannotAttendLocationsRadioButton.value === 'yes',
           conditional: {
             html: textInputAreaHtml,
           },
@@ -40,6 +41,7 @@ export default class CannotAttendLocationsView {
         {
           value: 'no',
           text: 'No',
+          checked: this.presenter.fields.cannotAttendLocationsRadioButton.value === 'no',
         },
       ],
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.cannotAttendLocationsRadioButton.errorMessage),

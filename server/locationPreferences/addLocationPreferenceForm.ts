@@ -7,7 +7,7 @@ import FormUtils from '../utils/formUtils'
 
 export type LocationFormData = {
   referralId: string
-  pdus: string[]
+  locations: string[]
   addOtherPduLocations: string
   otherPduLocations?: string[]
   cannotAttendLocations?: string
@@ -36,7 +36,7 @@ export default class AddLocationPreferenceForm {
     return {
       paramsForUpdate: {
         referralId: this.referralId,
-        pdus: this.request.body['pdu-locations'],
+        locations: this.request.body['pdu-locations'],
         addOtherPduLocations: this.request.body['add-other-pdu-locations'],
       },
       error: null,
