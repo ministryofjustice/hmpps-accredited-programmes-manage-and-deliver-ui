@@ -3,7 +3,18 @@ import ViewUtils from '../utils/viewUtils'
 import { RadiosArgs } from '../utils/govukFrontendTypes'
 
 export default class LocationPreferencesView {
-  constructor(private readonly presenter: LocationPreferencesPresenter) {}
+  private primaryPduName = `No Primary Probation Delivery Unit Found`
+
+  private deliveryLocations: { value: string; text: string }[] = []
+
+  constructor(private readonly presenter: LocationPreferencesPresenter) {
+    const primaryPdu = presenter.deliveryLocationOptions.find(({ pdu }) => pdu.isPrimaryPduForReferral)
+
+    if (primaryPdu) {
+      this.deliveryLocations = primaryPdu.offices.map(({ label, value }) => ({text: label, value}))
+      this.primaryPduName = primaryPdu.pdu.name
+    }
+  }
 
   private backLinkArgs() {
     return {
@@ -17,7 +28,7 @@ export default class LocationPreferencesView {
       name: 'pdu-locations',
       fieldset: {
         legend: {
-          text: 'East Sussex',
+          text: this.primaryPduName,
           isPageHeading: false,
           classes: 'govuk-fieldset__legend--m',
         },
@@ -25,24 +36,7 @@ export default class LocationPreferencesView {
       hint: {
         text: `Select any locations ${this.presenter.details.personName} can attend. You can skip this question if you do not know.`,
       },
-      items: [
-        {
-          value: 'Brighton and Hove: Brighton Probation Office',
-          text: 'Brighton and Hove: Brighton Probation Office ',
-        },
-        {
-          value: 'Hastings: St. Leonards Probation Office',
-          text: 'Hastings: St. Leonards Probation Office',
-        },
-        {
-          value: 'Hollingbury: Sussex House',
-          text: 'Hollingbury: Sussex House',
-        },
-        {
-          value: 'Lewes & Eastbourne: Eastbourne Probation Office',
-          text: 'Lewes & Eastbourne: Eastbourne Probation Office',
-        },
-      ],
+      items: this.deliveryLocations,
     }
   }
 

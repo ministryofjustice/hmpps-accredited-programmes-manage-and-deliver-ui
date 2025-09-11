@@ -6,6 +6,7 @@ import nunjucksSetup from './utils/nunjucksSetup'
 import errorHandler from './errorHandler'
 import { appInsightsMiddleware } from './utils/azureAppInsights'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
+import { DeliveryLocationPreferencesFormData } from '@manage-and-deliver-api'
 
 import setUpAuthentication from './middleware/setUpAuthentication'
 import setUpCsrf from './middleware/setUpCsrf'
@@ -24,6 +25,7 @@ declare module 'express-session' {
   export interface SessionData {
     originPage: string
     locationPreferenceFormData?: {
+      referenceData?: DeliveryLocationPreferencesFormData
       referralId?: string
       locations?: string[]
       addOtherPduLocations?: string
