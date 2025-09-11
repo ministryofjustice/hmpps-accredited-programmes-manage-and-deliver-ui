@@ -1,7 +1,24 @@
 import AdditionalPdusPresenter from './additionalPdusPresenter'
 
+interface CheckboxArgs {
+  name: string,
+  fieldset: {
+    legend: {
+      text: string,
+      isPageHeading: false,
+      classes: 'govuk-fieldset__legend--m',
+    },
+  },
+  items: {text: string, value: string}[]
+}
 export default class AdditionalPdusView {
-  constructor(private readonly presenter: AdditionalPdusPresenter) {}
+  private readonly pduCheckboxArgs: CheckboxArgs[];
+
+  constructor(
+    private readonly presenter: AdditionalPdusPresenter,
+  ) {
+    this.pduCheckboxArgs = this.pduToCheckboxArgs(presenter.pdus)
+  }
 
   private previousValueArgs() {
     if (!this.presenter.currentFormData.pdus || this.presenter.currentFormData.pdus.length === 0) {
@@ -17,62 +34,18 @@ export default class AdditionalPdusView {
     }
   }
 
-  private checkboxArgs1() {
-    return {
-      name: 'pdu-location-2',
+  private pduToCheckboxArgs(pdus: AdditionalPdusPresenter['pdus']): CheckboxArgs[] {
+    return pdus.map(({ offices, code, name }) => ({
+      name: code,
       fieldset: {
         legend: {
-          text: 'East Kent',
+          text: name,
           isPageHeading: false,
           classes: 'govuk-fieldset__legend--m',
         },
       },
-      items: [
-        {
-          value: 'Canterbury: Ralphs Centre',
-          text: 'Canterbury: Ralphs Centre',
-        },
-        {
-          value: 'Kent: Maidstone Probation Office',
-          text: 'Kent: Maidstone Probation Office',
-        },
-        {
-          value: 'Medway: Chatham Probation Office',
-          text: 'Medway: Chatham Probation Office',
-        },
-        {
-          value: 'Shepway: Folkestone Probation Office',
-          text: 'Shepway: Folkestone Probation Office',
-        },
-      ],
-    }
-  }
-
-  private checkboxArgs2() {
-    return {
-      name: 'pdu-locations-1',
-      fieldset: {
-        legend: {
-          text: 'Surrey',
-          isPageHeading: false,
-          classes: 'govuk-fieldset__legend--m',
-        },
-      },
-      items: [
-        {
-          value: 'Croydon: 4 Whitgift Street',
-          text: 'Croydon: 4 Whitgift Street',
-        },
-        {
-          value: 'Guildford: College House',
-          text: 'Guildford: College House',
-        },
-        {
-          value: 'Spelthorne: Swan House',
-          text: 'Spelthorne: Swan House',
-        },
-      ],
-    }
+      items: offices.map(({ label, value}) => ({ text: label, value }))
+    }))
   }
 
   get renderArgs(): [string, Record<string, unknown>] {
@@ -81,8 +54,7 @@ export default class AdditionalPdusView {
       {
         presenter: this.presenter,
         previousValueArgs: this.previousValueArgs(),
-        checkboxArgs2: this.checkboxArgs2(),
-        checkboxArgs1: this.checkboxArgs1(),
+        pduCheckboxArgs: this.pduCheckboxArgs,
         cancelLink: `/referral-details/${this.presenter.id}/location/#location`,
       },
     ]

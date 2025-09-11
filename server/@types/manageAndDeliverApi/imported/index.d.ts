@@ -442,6 +442,32 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/bff/referral-delivery-location-preferences-form/{referral_id}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * A Backend-For-Frontend endpoint for the multi-page Delivery Location Preferences form
+     * @description
+     *           Retrieves all the data needed for the multi-page Delivery Location Preferences form, for a Referral:
+     *           - Person on Probation summary information (from nDelius)
+     *           - Existing delivery location preferences (or `null`)
+     *           - Primary PDU delivery locations for the Manager associated with the Referral (from nDelius)
+     *           - Other PDUs in the same region (from nDelius)
+     *
+     */
+    get: operations['getDeliveryLocationPreferencesFormData']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/availability/referral/{referralId}': {
     parameters: {
       query?: never
@@ -1272,15 +1298,19 @@ export interface components {
       middleNames?: string
       surname: string
     }
+    NDeliusApiOfficeLocation: {
+      code: string
+      description: string
+    }
+    NDeliusApiProbationDeliveryUnit: {
+      code: string
+      description: string
+    }
     RequirementOrLicenceConditionManager: {
       staff: components['schemas']['RequirementStaff']
       team: components['schemas']['CodeDescription']
-      probationDeliveryUnit: components['schemas']['RequirementOrLicenceConditionPdu']
-      officeLocations: components['schemas']['CodeDescription'][]
-    }
-    RequirementOrLicenceConditionPdu: {
-      code: string
-      description: string
+      probationDeliveryUnit: components['schemas']['NDeliusApiProbationDeliveryUnit']
+      officeLocations: components['schemas']['NDeliusApiOfficeLocation'][]
     }
     RequirementStaff: {
       code: string
@@ -1497,6 +1527,79 @@ export interface components {
       /** Format: int32 */
       size?: number
       sort?: string[]
+    }
+    /** @description A delivery location (i.e. Office) with value and label, formatted for the UI */
+    DeliveryLocationOption: {
+      /**
+       * @description Office code
+       * @example OFFICE-CODE-123
+       */
+      value: string
+      /**
+       * @description Human-readable office name
+       * @example Brighton and Hove: Probation Office
+       */
+      label: string
+    }
+    /** @description Form data for the multi-page DeliveryLocationPreferences form in the M&D UI */
+    DeliveryLocationPreferencesFormData: {
+      /** @description Person on Probation details (sourced freshly from nDelius) */
+      personOnProbation: components['schemas']['PersonOnProbationSummary']
+      /** @description Existing Delivery Location Preferences, if any */
+      existingDeliveryLocationPreferences?: components['schemas']['ExistingDeliveryLocationPreferences']
+      /** @description Primary PDU of the Manager of the Requirement or Licence Condition associated with a Referral */
+      primaryPdu: components['schemas']['ProbationDeliveryUnit']
+      /** @description Other PDUs in the same Region as the Manager */
+      otherPdusInSameRegion: components['schemas']['ProbationDeliveryUnit'][]
+    }
+    /** @description Existing Delivery Location Preferences */
+    ExistingDeliveryLocationPreferences: {
+      /** @description Locations (presently Offices) the person can attend */
+      canAttendLocationsValues: components['schemas']['DeliveryLocationOption'][]
+      /**
+       * @description Rich text explaining locations the person cannot attend
+       * @example Locations in BN1
+       */
+      cannotAttendLocations?: string
+    }
+    /** @description Summary information about the Person on Probation */
+    PersonOnProbationSummary: {
+      /**
+       * @description Full name
+       * @example Alex River
+       */
+      name: string
+      /**
+       * @description Case Reference Number
+       * @example ABC123
+       */
+      crn: string
+      /**
+       * @description Risk tier
+       * @example C2
+       */
+      tier?: string
+      /**
+       * Format: date
+       * @description Date of birth
+       * @example 2000-01-01
+       */
+      dateOfBirth: string
+    }
+    /** @description Probation Delivery Unit with available delivery locations */
+    ProbationDeliveryUnit: {
+      /**
+       * @description PDU Code (sourced from nDelius)
+       * @example N54DUR
+       */
+      code: string
+      /**
+       * @description PDU name
+       * @example County Durham and Darlington
+       */
+      name: string
+      /** @description Available delivery locations within this PDU */
+      deliveryLocations: components['schemas']['DeliveryLocationOption'][]
     }
   }
   responses: never
@@ -2873,6 +2976,65 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getDeliveryLocationPreferencesFormData: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id (UUID) of a referral */
+        referral_id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Delivery Location Preferences form data */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['DeliveryLocationPreferencesFormData']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden. The client is not authorised to access this referral. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The referral does not exist or required data could not be found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
