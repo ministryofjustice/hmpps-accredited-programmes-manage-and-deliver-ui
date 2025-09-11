@@ -27,8 +27,8 @@ import config, { ApiConfig } from '../config'
 import type { HmppsAuthClient, RestClientBuilderWithoutToken } from '../data'
 import RestClient from '../data/restClient'
 import { Page } from '../shared/models/pagination'
+import type { ExpressUsername } from '../shared/ExpressUsername'
 
-type ExpressUsername = Express.User['username']
 
 export interface PaginationParams {
   // Page number to retrieve -- starts from 1
@@ -40,14 +40,12 @@ export interface PaginationParams {
 }
 
 export interface IAccreditedProgrammesManageAndDeliverService {
-  getDeliveryLocationPreferencesFormData(
+  getPossibleDeliveryLocationsForReferral(
     username: ExpressUsername,
     referralId: string,
   ): Promise<DeliveryLocationPreferencesFormData>
 }
-export default class AccreditedProgrammesManageAndDeliverService
-  implements IAccreditedProgrammesManageAndDeliverService
-{
+export default class AccreditedProgrammesManageAndDeliverService implements IAccreditedProgrammesManageAndDeliverService {
   constructor(private readonly hmppsAuthClientBuilder: RestClientBuilderWithoutToken<HmppsAuthClient>) {}
 
   async createRestClientFromUsername(username: ExpressUsername): Promise<RestClient> {
@@ -257,7 +255,7 @@ export default class AccreditedProgrammesManageAndDeliverService
     })) as OffenceAnalysis
   }
 
-  async getDeliveryLocationPreferencesFormData(
+  async getPossibleDeliveryLocationsForReferral(
     username: ExpressUsername,
     referralId: string,
   ): Promise<DeliveryLocationPreferencesFormData> {

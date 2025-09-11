@@ -1,15 +1,41 @@
-import { ReferralDetails } from '@manage-and-deliver-api'
+import { DeliveryLocationPreferencesFormData, ReferralDetails } from '@manage-and-deliver-api'
 import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
 
+export interface DeliveryLocationOptions {
+  pdu: {
+    name: string
+    code: string
+    isPrimaryPduForReferral: boolean
+  }
+  offices: {
+    value: string
+    label: string
+  }[]
+}
+
 export default class LocationPreferencesPresenter {
+  public readonly deliveryLocationOptions: DeliveryLocationOptions[] = []
+
   constructor(
     readonly id: string,
     readonly details: ReferralDetails,
+    deliveryLocationsFormData: DeliveryLocationPreferencesFormData,
     readonly backlinkUri: string | null,
     private readonly validationError: FormValidationError | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
-  ) {}
+  ) {
+    this.deliveryLocationOptions = [
+      {
+        pdu: {
+          code: deliveryLocationsFormData.primaryPdu.code,
+          isPrimaryPduForReferral: true,
+          name: deliveryLocationsFormData.primaryPdu.name,
+        },
+        offices: deliveryLocationsFormData.primaryPdu.deliveryLocations,
+      },
+    ]
+  }
 
   get utils() {
     return new PresenterUtils(this.userInputData)
