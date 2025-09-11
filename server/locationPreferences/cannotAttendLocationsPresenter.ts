@@ -29,12 +29,12 @@ export default class CannotAttendLocationsPresenter {
   get fields() {
     return {
       cannotAttendLocationsRadioButton: {
-        value: this.utils.stringValue(null, 'add-other-pdu-locations'),
-        errorMessage: PresenterUtils.errorMessage(this.validationError, 'add-other-pdu-locations'),
+        value: this.utils.stringValue(null, 'cannot-attend-locations-radio'),
+        errorMessage: PresenterUtils.errorMessage(this.validationError, 'cannot-attend-locations-radio'),
       },
       cannotAttendLocationsTextArea: {
-        value: this.utils.stringValue(null, 'add-other-pdu-locations'),
-        errorMessage: PresenterUtils.errorMessage(this.validationError, 'add-other-pdu-locations'),
+        value: this.utils.stringValue(null, 'cannot-attend-locations-text-area'),
+        errorMessage: PresenterUtils.errorMessage(this.validationError, 'cannot-attend-locations-text-area'),
       },
     }
   }
