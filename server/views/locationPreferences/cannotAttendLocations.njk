@@ -18,16 +18,13 @@
             {% if errorSummary !== null %}
               {{ govukErrorSummary(errorSummary) }}
             {% endif %}
-
-            {% set textAreaHtml %}
-              {{ govukCharacterCount(cannotAttendLocationsTextAreaArgs) }}
-            {% endset -%}
-
-            {{govukRadios(radioArgs(textAreaHtml))}}
-
             <form method="post" novalidate>
               <input type="hidden" name="_csrf" value="{{csrfToken}}">
+              {% set textAreaHtml %}
+              {{ govukCharacterCount(cannotAttendLocationsTextAreaArgs) }}
+              {% endset -%}
 
+              {{govukRadios(radioArgs(textAreaHtml))}}
               <div class="govuk-button-group">
                 {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
                 <a class="govuk-link" href={{ cancelLink }}>Cancel</a>

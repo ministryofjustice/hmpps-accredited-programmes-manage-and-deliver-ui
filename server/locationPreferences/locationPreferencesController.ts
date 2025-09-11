@@ -40,7 +40,7 @@ export default class LocationPreferencesController {
           return res.redirect(`/referral/${referralId}/add-location-preferences/additional-pdus`)
         }
         req.session.locationPreferenceFormData.otherPduLocations = []
-        return res.redirect(`/referral/${referralId}/add-location-preferences/additional-pdus`)
+        return res.redirect(`/referral/${referralId}/add-location-preferences/cannot-attend-locations`)
       }
     }
     const presenter = new LocationPreferencesPresenter(
@@ -86,13 +86,26 @@ export default class LocationPreferencesController {
     )
 
     const currentFormData = req.session.locationPreferenceFormData
+    let formError: FormValidationError | null = null
+    let userInputData = null
 
     if (req.method === 'POST') {
       const data = await new AddLocationPreferenceForm(req, referralId).cannotAttendLocationData()
-
-      req.session.locationPreferenceFormData.cannotAttendLocations = data.paramsForUpdate.cannotAttendLocations
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+        userInputData = req.body
+      } else {
+        req.session.locationPreferenceFormData.cannotAttendLocations = data.paramsForUpdate.cannotAttendLocations
+      }
     }
-    const presenter = new CannotAttendLocationsPresenter(referralId, referralDetails, currentFormData)
+    const presenter = new CannotAttendLocationsPresenter(
+      referralId,
+      referralDetails,
+      currentFormData,
+      formError,
+      userInputData,
+    )
     const view = new CannotAttendLocationsView(presenter)
     ControllerUtils.renderWithLayout(res, view, referralDetails)
   }

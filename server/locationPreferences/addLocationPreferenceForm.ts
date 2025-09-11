@@ -70,7 +70,7 @@ export default class AddLocationPreferenceForm {
           .notEmpty()
           .withMessage(errorMessages.cannotAttendLocations.cannotAttendLocationsRadios.requiredRadioSelection),
         body('cannot-attend-locations-text-area')
-          .if(body('cannot-attend-locations-radio').equals('Yes'))
+          .if(body('cannot-attend-locations-radio').equals('yes'))
           .notEmpty()
           .withMessage(errorMessages.cannotAttendLocations.cannotAttendTextArea.inputRequired),
         body('cannot-attend-locations-text-area')
