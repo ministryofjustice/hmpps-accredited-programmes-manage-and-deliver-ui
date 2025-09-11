@@ -23,6 +23,7 @@ type EmotionalWellbeing = components['schemas']['EmotionalWellbeing']
 type ThinkingAndBehaviour = components['schemas']['ThinkingAndBehaviour']
 type Risks = components['schemas']['Risks']
 type Attitude = components['schemas']['Attitude']
+type CreateDeliveryLocationPreferences = components['schemas']['CreateDeliveryLocationPreferences']
 
 export type {
   Availability,
@@ -48,4 +49,5 @@ export type {
   ThinkingAndBehaviour,
   Attitude,
   Risks,
+  CreateDeliveryLocationPreferences,
 }

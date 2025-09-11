@@ -25,7 +25,7 @@ declare module 'express-session' {
     originPage: string
     locationPreferenceFormData?: {
       referralId?: string
-      pdus?: string[]
+      locations?: string[]
       addOtherPduLocations?: string
       otherPduLocations?: string[]
       cannotAttendLocations?: string

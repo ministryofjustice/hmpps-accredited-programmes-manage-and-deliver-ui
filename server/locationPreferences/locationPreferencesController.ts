@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 
+import { CreateDeliveryLocationPreferences } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
 import LocationPreferencesPresenter from './locationPreferencesPresenter'
@@ -97,6 +98,29 @@ export default class LocationPreferencesController {
         userInputData = req.body
       } else {
         req.session.locationPreferenceFormData.cannotAttendLocations = data.paramsForUpdate.cannotAttendLocations
+
+        const createDeliveryLocationPreferences: CreateDeliveryLocationPreferences = {
+          preferredDeliveryLocations: [
+            {
+              pduCode: 'string',
+              pduDescription: 'string',
+              deliveryLocations: [
+                {
+                  code: 'string',
+                  description: 'string',
+                },
+              ],
+            },
+          ],
+          cannotAttendText: req.session.locationPreferenceFormData.cannotAttendLocations,
+        }
+
+        const locationPreferences =
+          await this.accreditedProgrammesManageAndDeliverService.createDeliveryLocationPreferences(
+            username,
+            referralId,
+            createDeliveryLocationPreferences,
+          )
       }
     }
     const presenter = new CannotAttendLocationsPresenter(
@@ -107,6 +131,6 @@ export default class LocationPreferencesController {
       userInputData,
     )
     const view = new CannotAttendLocationsView(presenter)
-    ControllerUtils.renderWithLayout(res, view, referralDetails)
+    return ControllerUtils.renderWithLayout(res, view, referralDetails)
   }
 }
