@@ -21,8 +21,9 @@
 
         <form method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{csrfToken}}">
-          {{ govukCheckboxes(checkboxArgs1) }}
-          {{ govukCheckboxes(checkboxArgs2) }}
+          {% for pdu in pduCheckboxArgs %}
+            {{ govukCheckboxes(pdu) }}
+          {% endfor %}
 
           <div class="govuk-button-group">
             {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}

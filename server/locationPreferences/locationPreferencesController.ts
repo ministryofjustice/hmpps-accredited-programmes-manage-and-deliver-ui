@@ -10,6 +10,7 @@ import AdditionalPdusPresenter from './additionalPdusPresenter'
 import AdditionalPdusView from './additionalPdusView'
 import CannotAttendLocationsPresenter from './cannotAttendLocationsPresenter'
 import CannotAttendLocationsView from './cannotAttendLocationsView'
+import { DeliveryLocationPreferencesFormData } from '@manage-and-deliver-api'
 
 export default class LocationPreferencesController {
   constructor(
@@ -25,8 +26,17 @@ export default class LocationPreferencesController {
       username,
     )
 
+    const possibleDeliveryLocations =
+      await this.accreditedProgrammesManageAndDeliverService.getPossibleDeliveryLocationsForReferral(
+        username,
+        referralId,
+      )
+
+    req.session.locationPreferenceFormData = { ...req.session.locationPreferenceFormData, referenceData: possibleDeliveryLocations } 
+
     let formError: FormValidationError | null = null
     let userInputData = null
+
     if (req.method === 'POST') {
       const data = await new AddLocationPreferenceForm(req, referralId).data()
 
@@ -43,13 +53,16 @@ export default class LocationPreferencesController {
         return res.redirect(`/referral/${referralId}/add-location-preferences/cannot-attend-locations`)
       }
     }
+
     const presenter = new LocationPreferencesPresenter(
       referralId,
       referralDetails,
+      possibleDeliveryLocations,
       req.originalUrl,
       formError,
       userInputData,
     )
+
     const view = new LocationPreferencesView(presenter)
     return ControllerUtils.renderWithLayout(res, view, referralDetails)
   }
@@ -62,6 +75,15 @@ export default class LocationPreferencesController {
       referralId,
       username,
     )
+
+    const referenceData: DeliveryLocationPreferencesFormData =
+      req.session.locationPreferenceFormData.referenceData ??
+      (await this.accreditedProgrammesManageAndDeliverService.getPossibleDeliveryLocationsForReferral(
+        req.user.username,
+        referralId,
+      ))
+
+    req.session.locationPreferenceFormData = { ...req.session.locationPreferenceFormData, referenceData: referenceData } 
 
     const currentFormData = req.session.locationPreferenceFormData
 
