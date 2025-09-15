@@ -17,7 +17,13 @@
 }
 
 .govuk-summary-card__content {
-  .no-first-key .govuk-summary-list__row:first-child .govuk-summary-list__key {
-    display: none;
+  .no-first-key .govuk-summary-list__row:first-child {
+    display: table-caption;
+    border: none;
+    padding-bottom: 20px;
+
+    .govuk-summary-list__key {
+      display: none;
+    }
   }
 }
