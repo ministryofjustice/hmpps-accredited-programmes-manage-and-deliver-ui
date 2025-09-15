@@ -3,6 +3,8 @@ import { Request, Response } from 'express'
 import { ReferralDetails } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
+import { FormValidationError } from '../utils/formValidationError'
+import AddAvailabilityForm from './addAvailability/AddAvailabilityForm'
 import AddAvailabilityPresenter from './addAvailability/addAvailabilityPresenter'
 import AddAvailabilityView from './addAvailability/addAvailabilityView'
 import AdditionalInformationPresenter from './additionalInformationPresenter'
@@ -19,8 +21,6 @@ import ProgrammeHistoryPresenter from './programmeHistoryPresenter'
 import ProgrammeHistoryView from './programmeHistoryView'
 import SentenceInformationPresenter from './sentenceInformationPresenter'
 import SentenceInformationView from './sentenceInformationView'
-import AddAvailabilityForm from './addAvailability/AddAvailabilityForm'
-import { FormValidationError } from '../utils/formValidationError'
 
 export default class ReferralDetailsController {
   constructor(
@@ -128,7 +128,10 @@ export default class ReferralDetailsController {
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
 
-    const presenter = new LocationPresenter(sharedReferralDetailsData, subNavValue, id)
+    const deliveryLocationPreferences =
+      await this.accreditedProgrammesManageAndDeliverService.getDeliveryLocationPreferences(username, id)
+
+    const presenter = new LocationPresenter(sharedReferralDetailsData, subNavValue, id, deliveryLocationPreferences)
     const view = new LocationView(presenter)
 
     req.session.originPage = req.originalUrl

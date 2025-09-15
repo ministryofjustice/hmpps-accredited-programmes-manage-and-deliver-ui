@@ -1,33 +1,43 @@
-import { ReferralDetails } from '@manage-and-deliver-api'
-import ReferralDetailsPresenter from './referralDetailsPresenter'
+import { DeliveryLocationPreferences, ReferralDetails } from '@manage-and-deliver-api'
 import { SummaryListItem } from '../utils/summaryList'
+import ReferralDetailsPresenter from './referralDetailsPresenter'
 
 export default class LocationPresenter extends ReferralDetailsPresenter {
   constructor(
     readonly details: ReferralDetails,
     readonly subNavValue: string,
     readonly id: string,
+    readonly deliveryLocationPreferences: DeliveryLocationPreferences,
   ) {
     super(details, subNavValue, id)
   }
 
-  PreferredLocationsSummary(): { title: string; classes: string; summary: SummaryListItem[] } {
+  preferredLocationsSummary(): { title: string; classes: string; summary: SummaryListItem[] } {
+    const { lastUpdatedAt, lastUpdatedBy, preferredDeliveryLocations, cannotAttendLocations } =
+      this.deliveryLocationPreferences
+
+    const summaryItems: SummaryListItem[] = [
+      {
+        key: 'Preferred programme delivery locations',
+        lines: preferredDeliveryLocations.length !== 0 ? preferredDeliveryLocations : ['No information added'],
+      },
+      {
+        key: 'Locations the personal cannot attend',
+        lines: [cannotAttendLocations || 'No information added'],
+      },
+    ]
+
+    // Adds to the start of the arry if fields are not null
+    if (lastUpdatedAt && lastUpdatedBy) {
+      summaryItems.unshift({
+        lines: [`Last updated ${lastUpdatedAt} by ${lastUpdatedBy}`],
+      })
+    }
+
     return {
-      title: 'Reporting locations',
-      classes: 'no-first-key',
-      summary: [
-        {
-          lines: [`Last updated 3 April 2025 by Tom Saunders`],
-        },
-        {
-          key: 'Preferred programme delivery locations',
-          lines: [`East Sussex`],
-        },
-        {
-          key: 'Locations the person cannot attend',
-          lines: ['Brighton and Hove: Brighton Probation Office'],
-        },
-      ],
+      title: 'Preferred programme delivery locations',
+      classes: lastUpdatedAt && lastUpdatedBy ? 'no-first-key' : '',
+      summary: summaryItems,
     }
   }
 }
