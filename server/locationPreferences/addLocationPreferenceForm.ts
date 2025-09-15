@@ -1,13 +1,13 @@
 import { Request } from 'express'
 import { body, ValidationChain } from 'express-validator'
-import { SessionData } from 'express-session'
+import { PreferredDeliveryLocation } from '@manage-and-deliver-api'
 import errorMessages from '../utils/errorMessages'
 import { FormData } from '../utils/forms/formData'
 import FormUtils from '../utils/formUtils'
 
 export type LocationFormData = {
   referralId: string
-  locations: string[]
+  locations: PreferredDeliveryLocation[]
   addOtherPduLocations: string
   otherPduLocations?: string[]
   cannotAttendLocations?: string
@@ -33,10 +33,24 @@ export default class AddLocationPreferenceForm {
       }
     }
 
+    this.request.body['pdu-locations'] = Array.isArray(this.request.body['pdu-locations'])
+      ? this.request.body['pdu-locations']
+      : [this.request.body['pdu-locations']]
+
+    const preferredDeliveryLocations = [
+      {
+        pduCode: this.request.session.locationPreferenceFormData.referenceData.primaryPdu.code,
+        pduDescription: this.request.session.locationPreferenceFormData.referenceData.primaryPdu.name,
+        deliveryLocations: this.request.session.locationPreferenceFormData.referenceData.primaryPdu.deliveryLocations
+          .filter(it => this.request.body['pdu-locations'].includes(it.value))
+          .map(location => ({ code: location.value, description: location.label })),
+      },
+    ]
+
     return {
       paramsForUpdate: {
         referralId: this.referralId,
-        locations: this.request.body['pdu-locations'],
+        locations: preferredDeliveryLocations,
         addOtherPduLocations: this.request.body['add-other-pdu-locations'],
       },
       error: null,
@@ -54,6 +68,43 @@ export default class AddLocationPreferenceForm {
         .flatMap(([, value]) => (Array.isArray(value) ? value : [value]))
         .filter(Boolean)
     }
+
+    const pduList = createPduList(this.request.body)
+
+    const referenceData = this.request.session.locationPreferenceFormData.referenceData.otherPdusInSameRegion.flatMap(
+      it => ({
+        pduCode: it.code,
+        pduDescription: it.name,
+        location: [it.deliveryLocations.map(office => ({ code: office.value, description: office.label }))],
+      }),
+    )
+
+    const formattedReferenceData =
+      this.request.session.locationPreferenceFormData.referenceData.otherPdusInSameRegion.flatMap(it => ({
+        pduCode: it.code,
+        pduDescription: it.name,
+        location: [
+          it.deliveryLocations
+            .map(office => ({ code: office.value, description: office.label }))
+            .filter(value => pduList.includes!(value.code)),
+        ],
+      }))
+
+    // [LOC003,LOC004,LOC005,LOC006,LOC007]
+
+    //   pduCode: string
+    //   pduDescription: string
+    //   location: [
+    //   {
+    //     code: string
+    //     description: string
+    //   },
+    //   {
+    //     code: string
+    //     description: string
+    //   }
+    // ]
+
     return {
       paramsForUpdate: {
         referralId: this.referralId,

@@ -48,7 +48,10 @@ export default class LocationPreferencesController {
         formError = data.error
         userInputData = req.body
       } else {
-        req.session.locationPreferenceFormData = data.paramsForUpdate
+        req.session.locationPreferenceFormData.updateData = {
+          preferredDeliveryLocations: data.paramsForUpdate.locations,
+          cannotAttendText: null,
+        }
         if (data.paramsForUpdate.addOtherPduLocations.toLowerCase() === 'yes') {
           return res.redirect(`/referral/${referralId}/add-location-preferences/additional-pdus`)
         }
@@ -123,26 +126,27 @@ export default class LocationPreferencesController {
       } else {
         req.session.locationPreferenceFormData.cannotAttendLocations = data.paramsForUpdate.cannotAttendLocations
 
-        let createDeliveryLocationPreferences: CreateDeliveryLocationPreferences = {
+        const createDeliveryLocationPreferences: CreateDeliveryLocationPreferences = {
           preferredDeliveryLocations: [
             {
               pduCode: req.session.locationPreferenceFormData.referenceData.primaryPdu.code,
               pduDescription: req.session.locationPreferenceFormData.referenceData.primaryPdu.name,
               deliveryLocations: req.session.locationPreferenceFormData.referenceData.primaryPdu.deliveryLocations
-                .filter(it => data.paramsForUpdate.locations.includes(it.label))
+                .filter(it => req.session.locationPreferenceFormData.locations.includes(it.value))
                 .map(location => ({ code: location.value, description: location.label })),
             },
           ],
           cannotAttendText: req.session.locationPreferenceFormData.cannotAttendLocations,
         }
 
-
-        const otherPdus = req.session.locationPreferenceFormData.referenceData.otherPdusInSameRegion
-          .flatMap(pdu => pdu.deliveryLocations)
-          .filter(location => data.paramsForUpdate.otherPduLocations.includes(location.label))
-            .map(location => ({ code: location.value, description: location.label }))
-
-          createDeliveryLocationPreferences.preferredDeliveryLocations = createDeliveryLocationPreferences.preferredDeliveryLocations.push(otherPdus)
+        // const otherPdus = req.session.locationPreferenceFormData.referenceData.otherPdusInSameRegion
+        //   .flatMap(pdu => pdu.deliveryLocations)
+        //   .filter(location => data.paramsForUpdate.otherPduLocations.includes(location.value))
+        //
+        //   otherPdus.map(it => it.)
+        //     .map(location => ({ code: location.value, description: location.label }))
+        //
+        //   createDeliveryLocationPreferences.preferredDeliveryLocations = createDeliveryLocationPreferences.preferredDeliveryLocations.push(otherPdus)
 
         const locationPreferences =
           await this.accreditedProgrammesManageAndDeliverService.createDeliveryLocationPreferences(

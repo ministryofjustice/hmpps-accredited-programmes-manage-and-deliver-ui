@@ -2,11 +2,11 @@ import express from 'express'
 
 import createError from 'http-errors'
 
+import { CreateDeliveryLocationPreferences, DeliveryLocationPreferencesFormData } from '@manage-and-deliver-api'
 import nunjucksSetup from './utils/nunjucksSetup'
 import errorHandler from './errorHandler'
 import { appInsightsMiddleware } from './utils/azureAppInsights'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
-import { DeliveryLocationPreferencesFormData } from '@manage-and-deliver-api'
 
 import setUpAuthentication from './middleware/setUpAuthentication'
 import setUpCsrf from './middleware/setUpCsrf'
@@ -25,6 +25,7 @@ declare module 'express-session' {
   export interface SessionData {
     originPage: string
     locationPreferenceFormData?: {
+      updateData?: CreateDeliveryLocationPreferences
       referenceData?: DeliveryLocationPreferencesFormData
       referralId?: string
       locations?: string[]

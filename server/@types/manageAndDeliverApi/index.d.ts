@@ -26,6 +26,7 @@ type ThinkingAndBehaviour = components['schemas']['ThinkingAndBehaviour']
 type UpdateAvailability = components['schemas']['UpdateAvailability']
 type CreateDeliveryLocationPreferences = components['schemas']['CreateDeliveryLocationPreferences']
 type DeliveryLocationPreferences = components['schemas']['DeliveryLocationPreferences']
+type PreferredDeliveryLocation = components['schemas']['PreferredDeliveryLocation']
 type UpdateCohort = components['schemas']['UpdateCohort']
 
 export type {
@@ -55,5 +56,6 @@ export type {
   ThinkingAndBehaviour,
   UpdateAvailability,
   CreateDeliveryLocationPreferences,
+  PreferredDeliveryLocation,
   UpdateCohort,
 }

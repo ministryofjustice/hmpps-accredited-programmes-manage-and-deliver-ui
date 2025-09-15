@@ -1,34 +1,32 @@
 import AdditionalPdusPresenter from './additionalPdusPresenter'
 
 interface CheckboxArgs {
-  name: string,
+  name: string
   fieldset: {
     legend: {
-      text: string,
-      isPageHeading: false,
-      classes: 'govuk-fieldset__legend--m',
-    },
-  },
-  items: {text: string, value: string}[]
+      text: string
+      isPageHeading: false
+      classes: 'govuk-fieldset__legend--m'
+    }
+  }
+  items: { text: string; value: string }[]
 }
 export default class AdditionalPdusView {
-  private readonly pduCheckboxArgs: CheckboxArgs[];
+  private readonly pduCheckboxArgs: CheckboxArgs[]
 
-  constructor(
-    private readonly presenter: AdditionalPdusPresenter,
-  ) {
+  constructor(private readonly presenter: AdditionalPdusPresenter) {
     this.pduCheckboxArgs = this.pduToCheckboxArgs(presenter.pdus)
   }
 
   private previousValueArgs() {
-    if (!this.presenter.currentFormData.pdus || this.presenter.currentFormData.pdus.length === 0) {
+    if (!this.presenter.currentFormData.locations || this.presenter.currentFormData.locations.length === 0) {
       return {
         html: `<p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-0">East Sussex</p><p class="govuk-body">No information added</p>`,
       }
     }
     return {
       html: `<p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-0">East Sussex</p>${[]
-        .concat(this.presenter.currentFormData.pdus)
+        .concat(this.presenter.currentFormData.locations)
         .map(pdu => `<p class="govuk-!-margin-0">${pdu}</p>`)
         .join('')}`,
     }
@@ -44,7 +42,7 @@ export default class AdditionalPdusView {
           classes: 'govuk-fieldset__legend--m',
         },
       },
-      items: offices.map(({ label, value}) => ({ text: label, value }))
+      items: offices.map(({ label, value }) => ({ text: label, value })),
     }))
   }
 

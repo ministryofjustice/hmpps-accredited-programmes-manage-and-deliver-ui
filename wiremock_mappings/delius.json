@@ -280,6 +280,32 @@
                 {
                   "code": "LOC003",
                   "description": "(Wiremocked) Southwark Office"
+                },
+                {
+                  "code": "LOC004",
+                  "description": "(Wiremocked) Office 1"
+                },
+                {
+                  "code": "LOC005",
+                  "description": "(Wiremocked) Office 2"
+                }
+              ]
+            },
+            {
+              "code": "PDU003",
+              "description": "(Wiremocked) Manchester PDU",
+              "officeLocations": [
+                {
+                  "code": "LOC006",
+                  "description": "(Wiremocked) North Office"
+                },
+                {
+                  "code": "LOC007",
+                  "description": "(Wiremocked) South Office"
+                },
+                {
+                  "code": "LOC008",
+                  "description": "(Wiremocked)  East Office"
                 }
               ]
             }
