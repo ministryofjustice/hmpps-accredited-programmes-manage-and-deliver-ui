@@ -9,7 +9,7 @@ export type LocationFormData = {
   referralId: string
   locations: PreferredDeliveryLocation[]
   addOtherPduLocations: string
-  otherPduLocations?: string[]
+  otherPduLocations?: PreferredDeliveryLocation[]
   cannotAttendLocations?: string
 }
 
@@ -39,11 +39,12 @@ export default class AddLocationPreferenceForm {
 
     const preferredDeliveryLocations = [
       {
-        pduCode: this.request.session.locationPreferenceFormData.referenceData.primaryPdu.code,
-        pduDescription: this.request.session.locationPreferenceFormData.referenceData.primaryPdu.name,
-        deliveryLocations: this.request.session.locationPreferenceFormData.referenceData.primaryPdu.deliveryLocations
-          .filter(it => this.request.body['pdu-locations'].includes(it.value))
-          .map(location => ({ code: location.value, description: location.label })),
+        pduCode: this.request.session.locationPreferenceFormData.preferredLocationReferenceData.primaryPdu.code,
+        pduDescription: this.request.session.locationPreferenceFormData.preferredLocationReferenceData.primaryPdu.name,
+        deliveryLocations:
+          this.request.session.locationPreferenceFormData.preferredLocationReferenceData.primaryPdu.deliveryLocations
+            .filter(it => this.request.body['pdu-locations'].includes(it.value))
+            .map(location => ({ code: location.value, description: location.label })),
       },
     ]
 
@@ -69,46 +70,32 @@ export default class AddLocationPreferenceForm {
         .filter(Boolean)
     }
 
-    const pduList = createPduList(this.request.body)
+    const selectedOtherPduList = createPduList(this.request.body)
 
-    const referenceData = this.request.session.locationPreferenceFormData.referenceData.otherPdusInSameRegion.flatMap(
-      it => ({
-        pduCode: it.code,
-        pduDescription: it.name,
-        location: [it.deliveryLocations.map(office => ({ code: office.value, description: office.label }))],
-      }),
-    )
+    const otherPdusFullData =
+      this.request.session.locationPreferenceFormData.preferredLocationReferenceData.otherPdusInSameRegion
+        .map(pdu => {
+          // Filter delivery locations to only include matching office codes
+          const matchingLocations = pdu.deliveryLocations
+            .filter(location => selectedOtherPduList.includes(location.value))
+            .map(location => ({ code: location.value, description: location.label }))
 
-    const formattedReferenceData =
-      this.request.session.locationPreferenceFormData.referenceData.otherPdusInSameRegion.flatMap(it => ({
-        pduCode: it.code,
-        pduDescription: it.name,
-        location: [
-          it.deliveryLocations
-            .map(office => ({ code: office.value, description: office.label }))
-            .filter(value => pduList.includes!(value.code)),
-        ],
-      }))
-
-    // [LOC003,LOC004,LOC005,LOC006,LOC007]
-
-    //   pduCode: string
-    //   pduDescription: string
-    //   location: [
-    //   {
-    //     code: string
-    //     description: string
-    //   },
-    //   {
-    //     code: string
-    //     description: string
-    //   }
-    // ]
+          // Only include PDUs that have at least one matching location
+          if (matchingLocations.length > 0) {
+            return {
+              pduCode: pdu.code,
+              pduDescription: pdu.name,
+              deliveryLocations: matchingLocations,
+            }
+          }
+          return null
+        })
+        .filter(item => item !== null) // Remove PDUs with no matching locations
 
     return {
       paramsForUpdate: {
         referralId: this.referralId,
-        otherPduLocations: createPduList(this.request.body),
+        otherPduLocations: otherPdusFullData,
       },
       error: null,
     }

@@ -25,13 +25,8 @@ declare module 'express-session' {
   export interface SessionData {
     originPage: string
     locationPreferenceFormData?: {
-      updateData?: CreateDeliveryLocationPreferences
-      referenceData?: DeliveryLocationPreferencesFormData
-      referralId?: string
-      locations?: string[]
-      addOtherPduLocations?: string
-      otherPduLocations?: string[]
-      cannotAttendLocations?: string
+      updatePreferredLocationData?: CreateDeliveryLocationPreferences
+      preferredLocationReferenceData?: DeliveryLocationPreferencesFormData
     }
   }
 }

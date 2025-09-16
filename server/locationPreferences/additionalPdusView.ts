@@ -19,15 +19,16 @@ export default class AdditionalPdusView {
   }
 
   private previousValueArgs() {
-    if (!this.presenter.currentFormData.locations || this.presenter.currentFormData.locations.length === 0) {
+    const selectedPrimaryPdus = this.presenter.currentFormData.updatePreferredLocationData.preferredDeliveryLocations
+    if (!selectedPrimaryPdus[0].deliveryLocations || selectedPrimaryPdus[0].deliveryLocations.length === 0) {
       return {
         html: `<p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-0">East Sussex</p><p class="govuk-body">No information added</p>`,
       }
     }
     return {
       html: `<p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-0">East Sussex</p>${[]
-        .concat(this.presenter.currentFormData.locations)
-        .map(pdu => `<p class="govuk-!-margin-0">${pdu}</p>`)
+        .concat(selectedPrimaryPdus[0].deliveryLocations)
+        .map(pdu => `<p class="govuk-!-margin-0">${pdu.description}</p>`)
         .join('')}`,
     }
   }

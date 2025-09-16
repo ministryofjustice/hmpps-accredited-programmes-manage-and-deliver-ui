@@ -34,7 +34,7 @@ export default class LocationPreferencesController {
 
     req.session.locationPreferenceFormData = {
       ...req.session.locationPreferenceFormData,
-      referenceData: possibleDeliveryLocations,
+      preferredLocationReferenceData: possibleDeliveryLocations,
     }
 
     let formError: FormValidationError | null = null
@@ -48,14 +48,13 @@ export default class LocationPreferencesController {
         formError = data.error
         userInputData = req.body
       } else {
-        req.session.locationPreferenceFormData.updateData = {
+        req.session.locationPreferenceFormData.updatePreferredLocationData = {
           preferredDeliveryLocations: data.paramsForUpdate.locations,
           cannotAttendText: null,
         }
         if (data.paramsForUpdate.addOtherPduLocations.toLowerCase() === 'yes') {
           return res.redirect(`/referral/${referralId}/add-location-preferences/additional-pdus`)
         }
-        req.session.locationPreferenceFormData.otherPduLocations = []
         return res.redirect(`/referral/${referralId}/add-location-preferences/cannot-attend-locations`)
       }
     }
@@ -83,20 +82,27 @@ export default class LocationPreferencesController {
     )
 
     const referenceData: DeliveryLocationPreferencesFormData =
-      req.session.locationPreferenceFormData.referenceData ??
+      req.session.locationPreferenceFormData.preferredLocationReferenceData ??
       (await this.accreditedProgrammesManageAndDeliverService.getPossibleDeliveryLocationsForReferral(
         req.user.username,
         referralId,
       ))
 
-    req.session.locationPreferenceFormData = { ...req.session.locationPreferenceFormData, referenceData }
+    req.session.locationPreferenceFormData = {
+      ...req.session.locationPreferenceFormData,
+      preferredLocationReferenceData: referenceData,
+    }
 
     const currentFormData = req.session.locationPreferenceFormData
 
     if (req.method === 'POST') {
       const data = await new AddLocationPreferenceForm(req, referralId).additionalPdusData()
 
-      req.session.locationPreferenceFormData.otherPduLocations = data.paramsForUpdate.otherPduLocations
+      req.session.locationPreferenceFormData.updatePreferredLocationData.preferredDeliveryLocations =
+        req.session.locationPreferenceFormData.updatePreferredLocationData.preferredDeliveryLocations.concat(
+          data.paramsForUpdate.otherPduLocations,
+        )
+
       return res.redirect(`/referral/${referralId}/add-location-preferences/cannot-attend-locations`)
     }
     const presenter = new AdditionalPdusPresenter(referralId, referralDetails, currentFormData)
@@ -124,36 +130,16 @@ export default class LocationPreferencesController {
         formError = data.error
         userInputData = req.body
       } else {
-        req.session.locationPreferenceFormData.cannotAttendLocations = data.paramsForUpdate.cannotAttendLocations
+        req.session.locationPreferenceFormData.updatePreferredLocationData.cannotAttendText =
+          data.paramsForUpdate.cannotAttendLocations
 
-        const createDeliveryLocationPreferences: CreateDeliveryLocationPreferences = {
-          preferredDeliveryLocations: [
-            {
-              pduCode: req.session.locationPreferenceFormData.referenceData.primaryPdu.code,
-              pduDescription: req.session.locationPreferenceFormData.referenceData.primaryPdu.name,
-              deliveryLocations: req.session.locationPreferenceFormData.referenceData.primaryPdu.deliveryLocations
-                .filter(it => req.session.locationPreferenceFormData.locations.includes(it.value))
-                .map(location => ({ code: location.value, description: location.label })),
-            },
-          ],
-          cannotAttendText: req.session.locationPreferenceFormData.cannotAttendLocations,
-        }
-
-        // const otherPdus = req.session.locationPreferenceFormData.referenceData.otherPdusInSameRegion
-        //   .flatMap(pdu => pdu.deliveryLocations)
-        //   .filter(location => data.paramsForUpdate.otherPduLocations.includes(location.value))
-        //
-        //   otherPdus.map(it => it.)
-        //     .map(location => ({ code: location.value, description: location.label }))
-        //
-        //   createDeliveryLocationPreferences.preferredDeliveryLocations = createDeliveryLocationPreferences.preferredDeliveryLocations.push(otherPdus)
-
-        const locationPreferences =
-          await this.accreditedProgrammesManageAndDeliverService.createDeliveryLocationPreferences(
-            username,
-            referralId,
-            createDeliveryLocationPreferences,
-          )
+        await this.accreditedProgrammesManageAndDeliverService.createDeliveryLocationPreferences(
+          username,
+          referralId,
+          req.session.locationPreferenceFormData.updatePreferredLocationData,
+        )
+        req.session.locationPreferenceFormData = null
+        return res.redirect(`/referral-details/${referralId}/location/#location?locationPreferencesUpdated=true`)
       }
     }
     const presenter = new CannotAttendLocationsPresenter(

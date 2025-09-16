@@ -15,7 +15,7 @@ export default class AdditionalPdusPresenter {
     readonly details: ReferralDetails,
     readonly currentFormData: SessionData['locationPreferenceFormData'],
   ) {
-    this.pdus = (currentFormData.referenceData.otherPdusInSameRegion ?? []).map(pdu => ({
+    this.pdus = (currentFormData.preferredLocationReferenceData.otherPdusInSameRegion ?? []).map(pdu => ({
       code: pdu.code,
       name: pdu.name,
       offices: pdu.deliveryLocations,
