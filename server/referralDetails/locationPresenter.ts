@@ -22,7 +22,7 @@ export default class LocationPresenter extends ReferralDetailsPresenter {
         lines: preferredDeliveryLocations.length !== 0 ? preferredDeliveryLocations : ['No information added'],
       },
       {
-        key: 'Locations the persona cannot attend',
+        key: 'Locations the person cannot attend',
         lines: [cannotAttendLocations ?? 'No information added'],
       },
     ]
