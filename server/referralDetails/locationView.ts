@@ -1,12 +1,12 @@
-import LocationPresenter from './locationPresenter'
 import { SummaryListArgs } from '../utils/govukFrontendTypes'
 import ViewUtils from '../utils/viewUtils'
+import LocationPresenter from './locationPresenter'
 
 export default class LocationView {
   constructor(private readonly presenter: LocationPresenter) {}
 
   get getPreferredLocationsAsSummaryListArgs(): SummaryListArgs {
-    const summary = this.presenter.PreferredLocationsSummary()
+    const summary = this.presenter.preferredLocationsSummary()
     const addLocationPreferenceHref = `/referral/${this.presenter.referralId}/add-location-preferences`
     return ViewUtils.summaryListArgsWithSummaryCard(
       summary.summary,

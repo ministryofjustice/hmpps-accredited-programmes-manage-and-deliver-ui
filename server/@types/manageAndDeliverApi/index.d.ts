@@ -23,29 +23,31 @@ type EmotionalWellbeing = components['schemas']['EmotionalWellbeing']
 type ThinkingAndBehaviour = components['schemas']['ThinkingAndBehaviour']
 type Risks = components['schemas']['Risks']
 type Attitude = components['schemas']['Attitude']
+type DeliveryLocationPreferences = components['schemas']['DeliveryLocationPreferences']
 
 export type {
+  AlcoholMisuseDetails,
+  Attitude,
   Availability,
   CohortEnum,
   CreateAvailability,
   DailyAvailabilityModel,
+  DeliveryLocationPreferences,
+  DrugDetails,
+  EmotionalWellbeing,
+  Health,
+  LearningNeeds,
+  LifestyleAndAssociates,
   OffenceAnalysis,
   OffenceHistory,
   PersonalDetails,
   PniScore,
   ReferralCaseListItem,
   ReferralDetails,
+  Relationships,
+  Risks,
   RoshAnalysis,
   SentenceInformation,
-  UpdateAvailability,
-  LearningNeeds,
-  Health,
-  LifestyleAndAssociates,
-  Relationships,
-  AlcoholMisuseDetails,
-  DrugDetails,
-  EmotionalWellbeing,
   ThinkingAndBehaviour,
-  Attitude,
-  Risks,
+  UpdateAvailability,
 }

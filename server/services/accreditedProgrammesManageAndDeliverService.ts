@@ -1,25 +1,26 @@
 import {
+  AlcoholMisuseDetails,
+  Attitude,
   Availability,
   CreateAvailability,
+  DeliveryLocationPreferences,
+  DrugDetails,
+  EmotionalWellbeing,
+  Health,
+  LearningNeeds,
+  LifestyleAndAssociates,
   OffenceAnalysis,
   OffenceHistory,
   PersonalDetails,
   PniScore,
   ReferralCaseListItem,
   ReferralDetails,
+  Relationships,
+  Risks,
   RoshAnalysis,
   SentenceInformation,
-  LearningNeeds,
-  UpdateAvailability,
-  Health,
-  LifestyleAndAssociates,
-  Relationships,
-  AlcoholMisuseDetails,
-  DrugDetails,
-  EmotionalWellbeing,
   ThinkingAndBehaviour,
-  Attitude,
-  Risks,
+  UpdateAvailability,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -244,5 +245,16 @@ export default class AccreditedProgrammesManageAndDeliverService {
       path: `/risks-and-needs/${crn}/offence-analysis`,
       headers: { Accept: 'application/json' },
     })) as OffenceAnalysis
+  }
+
+  async getDeliveryLocationPreferences(
+    username: Express.User['username'],
+    referralId: string,
+  ): Promise<DeliveryLocationPreferences> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/referral-details/${referralId}/delivery-location-preferences`,
+      headers: { Accept: 'application/json' },
+    })) as DeliveryLocationPreferences
   }
 }

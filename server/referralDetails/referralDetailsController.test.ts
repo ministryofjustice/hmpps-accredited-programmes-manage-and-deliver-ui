@@ -1,5 +1,6 @@
 import {
   Availability,
+  DeliveryLocationPreferences,
   OffenceHistory,
   PersonalDetails,
   ReferralDetails,
@@ -10,11 +11,11 @@ import { Express } from 'express'
 import request from 'supertest'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import availabilityFactory from '../testutils/factories/availabilityFactory'
+import offenceHistoryFactory from '../testutils/factories/offenceHistoryFactory'
 import personalDetailsFactory from '../testutils/factories/personalDetailsFactory'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
-import availabilityFactory from '../testutils/factories/availabilityFactory'
 import sentenceInformationFactory from '../testutils/factories/sentenceInformationFactory'
-import offenceHistoryFactory from '../testutils/factories/offenceHistoryFactory'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
@@ -118,8 +119,18 @@ describe('referral-details', () => {
   })
 
   describe(`GET /referral-details/:id/location`, () => {
-    it('loads the referral details page with locations sub-nav', async () => {
+    it('loads the referral details page with locations sub-nav with no existing details', async () => {
       accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
+
+      const deliveryLocationPreferences: DeliveryLocationPreferences = {
+        preferredDeliveryLocations: [],
+        cannotAttendLocations: null,
+        lastUpdatedAt: null,
+        lastUpdatedBy: null,
+      }
+      accreditedProgrammesManageAndDeliverService.getDeliveryLocationPreferences.mockResolvedValue(
+        deliveryLocationPreferences,
+      )
 
       return request(app)
         .get(`/referral-details/${randomUUID()}/location`)
@@ -128,6 +139,32 @@ describe('referral-details', () => {
           expect(res.text).toContain(referralDetails.crn)
           expect(res.text).toContain(referralDetails.personName)
           expect(res.text).toContain('Location')
+        })
+    })
+
+    it('loads the referral details page with locations sub-nav with existing details', async () => {
+      accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
+
+      const deliveryLocationPreferences: DeliveryLocationPreferences = {
+        preferredDeliveryLocations: [],
+        cannotAttendLocations: 'Cannot attend locations in NE1',
+        lastUpdatedAt: '25th September 2025',
+        lastUpdatedBy: 'TEST_USER',
+      }
+      accreditedProgrammesManageAndDeliverService.getDeliveryLocationPreferences.mockResolvedValue(
+        deliveryLocationPreferences,
+      )
+
+      return request(app)
+        .get(`/referral-details/${randomUUID()}/location`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain(referralDetails.crn)
+          expect(res.text).toContain(referralDetails.personName)
+          expect(res.text).toContain('Location')
+          expect(res.text).toContain('Cannot attend locations in NE1')
+          expect(res.text).toContain('25th September 2025')
+          expect(res.text).toContain('TEST_USER')
         })
     })
   })
