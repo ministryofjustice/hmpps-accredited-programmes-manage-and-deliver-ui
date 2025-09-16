@@ -1,11 +1,11 @@
 import { type RequestHandler, Router } from 'express'
 
-import asyncMiddleware from '../middleware/asyncMiddleware'
-import type { Services } from '../services'
-import ReferralDetailsController from '../referralDetails/referralDetailsController'
 import CaselistController from '../caselist/caselistController'
+import asyncMiddleware from '../middleware/asyncMiddleware'
 import PniController from '../pni/pniController'
+import ReferralDetailsController from '../referralDetails/referralDetailsController'
 import RisksAndNeedsController from '../risksAndNeeds/risksAndNeedsController'
+import type { Services } from '../services'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()

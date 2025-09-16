@@ -16,22 +16,20 @@ export default class LocationPresenter extends ReferralDetailsPresenter {
     const { lastUpdatedAt, lastUpdatedBy, preferredDeliveryLocations, cannotAttendLocations } =
       this.deliveryLocationPreferences
 
-    const summaryItems: SummaryListItem[] = [
+    let summaryItems: SummaryListItem[] = [
       {
         key: 'Preferred programme delivery locations',
         lines: preferredDeliveryLocations.length !== 0 ? preferredDeliveryLocations : ['No information added'],
       },
       {
-        key: 'Locations the personal cannot attend',
-        lines: [cannotAttendLocations || 'No information added'],
+        key: 'Locations the persona cannot attend',
+        lines: [cannotAttendLocations ?? 'No information added'],
       },
     ]
 
     // Adds to the start of the arry if fields are not null
     if (lastUpdatedAt && lastUpdatedBy) {
-      summaryItems.unshift({
-        lines: [`Last updated ${lastUpdatedAt} by ${lastUpdatedBy}`],
-      })
+      summaryItems = [{ lines: [`Last updated ${lastUpdatedAt} by ${lastUpdatedBy}`] }, ...summaryItems]
     }
 
     return {

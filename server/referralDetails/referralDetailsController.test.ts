@@ -141,6 +141,32 @@ describe('referral-details', () => {
           expect(res.text).toContain('Location')
         })
     })
+
+    it('loads the referral details page with locations sub-nav with existing details', async () => {
+      accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
+
+      const deliveryLocationPreferences: DeliveryLocationPreferences = {
+        preferredDeliveryLocations: [],
+        cannotAttendLocations: 'Cannot attend locations in NE1',
+        lastUpdatedAt: '25th September 2025',
+        lastUpdatedBy: 'TEST_USER',
+      }
+      accreditedProgrammesManageAndDeliverService.getDeliveryLocationPreferences.mockResolvedValue(
+        deliveryLocationPreferences,
+      )
+
+      return request(app)
+        .get(`/referral-details/${randomUUID()}/location`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain(referralDetails.crn)
+          expect(res.text).toContain(referralDetails.personName)
+          expect(res.text).toContain('Location')
+          expect(res.text).toContain('Cannot attend locations in NE1')
+          expect(res.text).toContain('25th September 2025')
+          expect(res.text).toContain('TEST_USER')
+        })
+    })
   })
 
   describe(`GET /referral-details/:id/additional-information`, () => {
