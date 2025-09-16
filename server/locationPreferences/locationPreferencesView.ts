@@ -5,13 +5,22 @@ import { RadiosArgs } from '../utils/govukFrontendTypes'
 export default class LocationPreferencesView {
   private primaryPduName = `No Primary Probation Delivery Unit Found`
 
-  private deliveryLocations: { value: string; text: string }[] = []
+  private deliveryLocations: { value: string; text: string; checked: boolean }[] = []
 
   constructor(private readonly presenter: LocationPreferencesPresenter) {
     const primaryPdu = presenter.deliveryLocationOptions.find(({ pdu }) => pdu.isPrimaryPduForReferral)
+    const selectedValues = presenter.preferredLocationReferenceData.existingDeliveryLocationPreferences
+      ? presenter.preferredLocationReferenceData.existingDeliveryLocationPreferences.canAttendLocationsValues.map(
+          item => item.value,
+        )
+      : []
 
     if (primaryPdu) {
-      this.deliveryLocations = primaryPdu.offices.map(({ label, value }) => ({text: label, value}))
+      this.deliveryLocations = primaryPdu.offices.map(({ label, value }) => ({ text: label, value, checked: false }))
+      this.deliveryLocations = this.deliveryLocations.map(location => ({
+        ...location,
+        checked: selectedValues.includes(location.value),
+      }))
       this.primaryPduName = primaryPdu.pdu.name
     }
   }

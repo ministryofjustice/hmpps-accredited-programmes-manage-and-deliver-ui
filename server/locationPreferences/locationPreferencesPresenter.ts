@@ -20,7 +20,7 @@ export default class LocationPreferencesPresenter {
   constructor(
     readonly id: string,
     readonly details: ReferralDetails,
-    deliveryLocationsFormData: DeliveryLocationPreferencesFormData,
+    readonly preferredLocationReferenceData: DeliveryLocationPreferencesFormData,
     readonly backlinkUri: string | null,
     private readonly validationError: FormValidationError | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
@@ -28,11 +28,11 @@ export default class LocationPreferencesPresenter {
     this.deliveryLocationOptions = [
       {
         pdu: {
-          code: deliveryLocationsFormData.primaryPdu.code,
+          code: preferredLocationReferenceData.primaryPdu.code,
           isPrimaryPduForReferral: true,
-          name: deliveryLocationsFormData.primaryPdu.name,
+          name: preferredLocationReferenceData.primaryPdu.name,
         },
-        offices: deliveryLocationsFormData.primaryPdu.deliveryLocations,
+        offices: preferredLocationReferenceData.primaryPdu.deliveryLocations,
       },
     ]
   }

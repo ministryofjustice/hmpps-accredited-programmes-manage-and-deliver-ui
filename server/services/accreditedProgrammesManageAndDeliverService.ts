@@ -32,7 +32,6 @@ import RestClient from '../data/restClient'
 import { Page } from '../shared/models/pagination'
 import type { ExpressUsername } from '../shared/ExpressUsername'
 
-
 export interface PaginationParams {
   // Page number to retrieve -- starts from 1
   page?: number
@@ -48,7 +47,9 @@ export interface IAccreditedProgrammesManageAndDeliverService {
     referralId: string,
   ): Promise<DeliveryLocationPreferencesFormData>
 }
-export default class AccreditedProgrammesManageAndDeliverService implements IAccreditedProgrammesManageAndDeliverService {
+export default class AccreditedProgrammesManageAndDeliverService
+  implements IAccreditedProgrammesManageAndDeliverService
+{
   constructor(private readonly hmppsAuthClientBuilder: RestClientBuilderWithoutToken<HmppsAuthClient>) {}
 
   async createRestClientFromUsername(username: ExpressUsername): Promise<RestClient> {
@@ -291,6 +292,19 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
       path: `/referral-details/${referralId}/delivery-location-preferences`,
       headers: { Accept: 'application/json' },
     })) as DeliveryLocationPreferences
+  }
+
+  async updateDeliveryLocationPreferences(
+    username: Express.User['username'],
+    referralId: string,
+    createDeliveryLocationPreferences: CreateDeliveryLocationPreferences,
+  ): Promise<CreateDeliveryLocationPreferences> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.put({
+      path: `/delivery-location-preferences/referral/${referralId}`,
+      headers: { Accept: 'application/json' },
+      data: createDeliveryLocationPreferences,
+    })) as CreateDeliveryLocationPreferences
   }
 
   async updateCohort(username: string, referralId: string, updateCohort: string) {

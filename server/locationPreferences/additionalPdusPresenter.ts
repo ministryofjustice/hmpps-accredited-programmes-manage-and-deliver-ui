@@ -1,7 +1,8 @@
-import { ReferralDetails } from '@manage-and-deliver-api'
-import { SessionData } from 'express-session'
-import { FormValidationError } from '../utils/formValidationError'
-import PresenterUtils from '../utils/presenterUtils'
+import {
+  CreateDeliveryLocationPreferences,
+  DeliveryLocationPreferencesFormData,
+  ReferralDetails,
+} from '@manage-and-deliver-api'
 
 export default class AdditionalPdusPresenter {
   public readonly pdus: {
@@ -13,9 +14,10 @@ export default class AdditionalPdusPresenter {
   constructor(
     readonly id: string,
     readonly details: ReferralDetails,
-    readonly currentFormData: SessionData['locationPreferenceFormData'],
+    readonly preferredLocationReferenceData: DeliveryLocationPreferencesFormData,
+    readonly currentFormData: CreateDeliveryLocationPreferences,
   ) {
-    this.pdus = (currentFormData.preferredLocationReferenceData.otherPdusInSameRegion ?? []).map(pdu => ({
+    this.pdus = (preferredLocationReferenceData.otherPdusInSameRegion ?? []).map(pdu => ({
       code: pdu.code,
       name: pdu.name,
       offices: pdu.deliveryLocations,

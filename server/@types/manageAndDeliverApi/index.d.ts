@@ -27,6 +27,7 @@ type UpdateAvailability = components['schemas']['UpdateAvailability']
 type CreateDeliveryLocationPreferences = components['schemas']['CreateDeliveryLocationPreferences']
 type DeliveryLocationPreferences = components['schemas']['DeliveryLocationPreferences']
 type PreferredDeliveryLocation = components['schemas']['PreferredDeliveryLocation']
+type ExistingDeliveryLocationPreferences = components['schemas']['ExistingDeliveryLocationPreferences']
 type UpdateCohort = components['schemas']['UpdateCohort']
 
 export type {
@@ -57,5 +58,6 @@ export type {
   UpdateAvailability,
   CreateDeliveryLocationPreferences,
   PreferredDeliveryLocation,
+  ExistingDeliveryLocationPreferences,
   UpdateCohort,
 }

@@ -1,5 +1,4 @@
 import { ReferralDetails } from '@manage-and-deliver-api'
-import { SessionData } from 'express-session'
 import PresenterUtils from '../utils/presenterUtils'
 import { FormValidationError } from '../utils/formValidationError'
 
@@ -7,7 +6,6 @@ export default class CannotAttendLocationsPresenter {
   constructor(
     readonly id: string,
     readonly details: ReferralDetails,
-    readonly currentFormData: SessionData['locationPreferenceFormData'],
     private readonly validationError: FormValidationError | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
   ) {}

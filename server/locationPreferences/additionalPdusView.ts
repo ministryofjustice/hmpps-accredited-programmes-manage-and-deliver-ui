@@ -9,7 +9,7 @@ interface CheckboxArgs {
       classes: 'govuk-fieldset__legend--m'
     }
   }
-  items: { text: string; value: string }[]
+  items: { text: string; value: string; checked: boolean }[]
 }
 export default class AdditionalPdusView {
   private readonly pduCheckboxArgs: CheckboxArgs[]
@@ -19,15 +19,15 @@ export default class AdditionalPdusView {
   }
 
   private previousValueArgs() {
-    const selectedPrimaryPdus = this.presenter.currentFormData.updatePreferredLocationData.preferredDeliveryLocations
-    if (!selectedPrimaryPdus[0].deliveryLocations || selectedPrimaryPdus[0].deliveryLocations.length === 0) {
+    const selectedPrimaryPdus = this.presenter.currentFormData.preferredDeliveryLocations[0]
+    if (!selectedPrimaryPdus.deliveryLocations || selectedPrimaryPdus.deliveryLocations.length === 0) {
       return {
-        html: `<p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-0">East Sussex</p><p class="govuk-body">No information added</p>`,
+        html: `<p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-0">${selectedPrimaryPdus.pduDescription}</p><p class="govuk-body">No information added</p>`,
       }
     }
     return {
-      html: `<p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-0">East Sussex</p>${[]
-        .concat(selectedPrimaryPdus[0].deliveryLocations)
+      html: `<p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-0">${selectedPrimaryPdus.pduDescription}</p>${[]
+        .concat(selectedPrimaryPdus.deliveryLocations)
         .map(pdu => `<p class="govuk-!-margin-0">${pdu.description}</p>`)
         .join('')}`,
     }
@@ -43,8 +43,22 @@ export default class AdditionalPdusView {
           classes: 'govuk-fieldset__legend--m',
         },
       },
-      items: offices.map(({ label, value }) => ({ text: label, value })),
+      items: this.generateCheckboxes(offices),
     }))
+  }
+
+  generateCheckboxes(offices: { value: string; label: string }[]) {
+    const selectedValues = this.presenter.preferredLocationReferenceData.existingDeliveryLocationPreferences
+      ? this.presenter.preferredLocationReferenceData.existingDeliveryLocationPreferences.canAttendLocationsValues.map(
+          item => item.value,
+        )
+      : []
+    let deliveryLocations = offices.map(({ label, value }) => ({ text: label, value, checked: false }))
+    deliveryLocations = deliveryLocations.map(location => ({
+      ...location,
+      checked: selectedValues.includes(location.value),
+    }))
+    return deliveryLocations
   }
 
   get renderArgs(): [string, Record<string, unknown>] {

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { CreateDeliveryLocationPreferences, DeliveryLocationPreferencesFormData } from '@manage-and-deliver-api'
+import { DeliveryLocationPreferencesFormData } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
 import LocationPreferencesPresenter from './locationPreferencesPresenter'
@@ -26,7 +26,7 @@ export default class LocationPreferencesController {
       username,
     )
 
-    const possibleDeliveryLocations =
+    const preferredLocationReferenceData =
       await this.accreditedProgrammesManageAndDeliverService.getPossibleDeliveryLocationsForReferral(
         username,
         referralId,
@@ -34,7 +34,7 @@ export default class LocationPreferencesController {
 
     req.session.locationPreferenceFormData = {
       ...req.session.locationPreferenceFormData,
-      preferredLocationReferenceData: possibleDeliveryLocations,
+      preferredLocationReferenceData,
     }
 
     let formError: FormValidationError | null = null
@@ -62,7 +62,7 @@ export default class LocationPreferencesController {
     const presenter = new LocationPreferencesPresenter(
       referralId,
       referralDetails,
-      possibleDeliveryLocations,
+      preferredLocationReferenceData,
       req.originalUrl,
       formError,
       userInputData,
@@ -81,7 +81,7 @@ export default class LocationPreferencesController {
       username,
     )
 
-    const referenceData: DeliveryLocationPreferencesFormData =
+    const preferredLocationReferenceData: DeliveryLocationPreferencesFormData =
       req.session.locationPreferenceFormData.preferredLocationReferenceData ??
       (await this.accreditedProgrammesManageAndDeliverService.getPossibleDeliveryLocationsForReferral(
         req.user.username,
@@ -90,10 +90,8 @@ export default class LocationPreferencesController {
 
     req.session.locationPreferenceFormData = {
       ...req.session.locationPreferenceFormData,
-      preferredLocationReferenceData: referenceData,
+      preferredLocationReferenceData,
     }
-
-    const currentFormData = req.session.locationPreferenceFormData
 
     if (req.method === 'POST') {
       const data = await new AddLocationPreferenceForm(req, referralId).additionalPdusData()
@@ -105,7 +103,13 @@ export default class LocationPreferencesController {
 
       return res.redirect(`/referral/${referralId}/add-location-preferences/cannot-attend-locations`)
     }
-    const presenter = new AdditionalPdusPresenter(referralId, referralDetails, currentFormData)
+
+    const presenter = new AdditionalPdusPresenter(
+      referralId,
+      referralDetails,
+      preferredLocationReferenceData,
+      req.session.locationPreferenceFormData.updatePreferredLocationData,
+    )
     const view = new AdditionalPdusView(presenter)
     return ControllerUtils.renderWithLayout(res, view, referralDetails)
   }
@@ -119,7 +123,6 @@ export default class LocationPreferencesController {
       username,
     )
 
-    const currentFormData = req.session.locationPreferenceFormData
     let formError: FormValidationError | null = null
     let userInputData = null
 
@@ -132,23 +135,25 @@ export default class LocationPreferencesController {
       } else {
         req.session.locationPreferenceFormData.updatePreferredLocationData.cannotAttendText =
           data.paramsForUpdate.cannotAttendLocations
+        if (req.session.locationPreferenceFormData.preferredLocationReferenceData.existingDeliveryLocationPreferences) {
+          await this.accreditedProgrammesManageAndDeliverService.updateDeliveryLocationPreferences(
+            username,
+            referralId,
+            req.session.locationPreferenceFormData.updatePreferredLocationData,
+          )
+        } else {
+          await this.accreditedProgrammesManageAndDeliverService.createDeliveryLocationPreferences(
+            username,
+            referralId,
+            req.session.locationPreferenceFormData.updatePreferredLocationData,
+          )
+        }
 
-        await this.accreditedProgrammesManageAndDeliverService.createDeliveryLocationPreferences(
-          username,
-          referralId,
-          req.session.locationPreferenceFormData.updatePreferredLocationData,
-        )
         req.session.locationPreferenceFormData = null
-        return res.redirect(`/referral-details/${referralId}/location/#location?locationPreferencesUpdated=true`)
+        return res.redirect(`/referral-details/${referralId}/location/#location`)
       }
     }
-    const presenter = new CannotAttendLocationsPresenter(
-      referralId,
-      referralDetails,
-      currentFormData,
-      formError,
-      userInputData,
-    )
+    const presenter = new CannotAttendLocationsPresenter(referralId, referralDetails, formError, userInputData)
     const view = new CannotAttendLocationsView(presenter)
     return ControllerUtils.renderWithLayout(res, view, referralDetails)
   }
