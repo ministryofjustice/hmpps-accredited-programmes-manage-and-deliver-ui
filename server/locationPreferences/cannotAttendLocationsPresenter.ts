@@ -1,4 +1,4 @@
-import { ReferralDetails } from '@manage-and-deliver-api'
+import { DeliveryLocationPreferencesFormData, ReferralDetails } from '@manage-and-deliver-api'
 import PresenterUtils from '../utils/presenterUtils'
 import { FormValidationError } from '../utils/formValidationError'
 
@@ -8,6 +8,7 @@ export default class CannotAttendLocationsPresenter {
     readonly details: ReferralDetails,
     private readonly validationError: FormValidationError | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
+    readonly preferredLocationReferenceData: DeliveryLocationPreferencesFormData,
   ) {}
 
   get utils() {
@@ -27,11 +28,19 @@ export default class CannotAttendLocationsPresenter {
   get fields() {
     return {
       cannotAttendLocationsRadioButton: {
-        value: this.utils.stringValue(null, 'cannot-attend-locations-radio'),
+        value: this.utils.stringValue(
+          this.preferredLocationReferenceData.existingDeliveryLocationPreferences?.cannotAttendLocations ? 'yes' : 'no',
+          'cannot-attend-locations-radio',
+        ),
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'cannot-attend-locations-radio'),
       },
       cannotAttendLocationsTextArea: {
-        value: this.utils.stringValue(null, 'cannot-attend-locations-text-area'),
+        value: this.utils.stringValue(
+          this.preferredLocationReferenceData.existingDeliveryLocationPreferences?.cannotAttendLocations
+            ? this.preferredLocationReferenceData.existingDeliveryLocationPreferences.cannotAttendLocations
+            : null,
+          'cannot-attend-locations-text-area',
+        ),
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'cannot-attend-locations-text-area'),
       },
     }

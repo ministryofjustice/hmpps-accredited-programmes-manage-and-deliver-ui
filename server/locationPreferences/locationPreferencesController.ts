@@ -150,10 +150,16 @@ export default class LocationPreferencesController {
         }
 
         req.session.locationPreferenceFormData = null
-        return res.redirect(`/referral-details/${referralId}/location/#location`)
+        return res.redirect(`/referral-details/${referralId}/location?preferredLocationUpdated=true#location`)
       }
     }
-    const presenter = new CannotAttendLocationsPresenter(referralId, referralDetails, formError, userInputData)
+    const presenter = new CannotAttendLocationsPresenter(
+      referralId,
+      referralDetails,
+      formError,
+      userInputData,
+      req.session.locationPreferenceFormData.preferredLocationReferenceData,
+    )
     const view = new CannotAttendLocationsView(presenter)
     return ControllerUtils.renderWithLayout(res, view, referralDetails)
   }

@@ -63,12 +63,15 @@ export default class LocationPreferencesView {
         {
           value: 'yes',
           text: 'Yes',
+          checked: this.presenter.hasPreviouslySelectedOtherPdus,
         },
         {
           value: 'no',
           text: 'No',
+          checked: !this.presenter.hasPreviouslySelectedOtherPdus,
         },
       ],
+
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.otherPduRequired.errorMessage),
     }
   }

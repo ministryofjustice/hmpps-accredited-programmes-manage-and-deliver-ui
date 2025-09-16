@@ -133,7 +133,10 @@ export default class AddLocationPreferenceForm {
     return {
       paramsForUpdate: {
         referralId: this.referralId,
-        cannotAttendLocations: this.request.body['cannot-attend-locations-text-area'],
+        cannotAttendLocations:
+          this.request.body['cannot-attend-locations-radio'] === 'yes'
+            ? this.request.body['cannot-attend-locations-text-area']
+            : null,
       },
       error: null,
     }

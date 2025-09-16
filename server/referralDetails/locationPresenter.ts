@@ -8,6 +8,7 @@ export default class LocationPresenter extends ReferralDetailsPresenter {
     readonly subNavValue: string,
     readonly id: string,
     readonly deliveryLocationPreferences: DeliveryLocationPreferences,
+    readonly isPreferredLocationUpdated: boolean | null = null,
   ) {
     super(details, subNavValue, id)
   }

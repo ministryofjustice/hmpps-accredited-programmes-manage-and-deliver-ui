@@ -17,12 +17,23 @@ export default class LocationView {
     )
   }
 
+  private successMessageArgs() {
+    return {
+      variant: 'success',
+      title: 'Location details added successfully.',
+      showTitleAsHeading: true,
+      dismissible: true,
+    }
+  }
+
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       'referralDetails/referralDetails',
       {
         presenter: this.presenter,
         getPreferredLocationsAsSummaryListArgs: this.getPreferredLocationsAsSummaryListArgs,
+        isPreferredLocationUpdated: this.presenter.isPreferredLocationUpdated,
+        successMessageArgs: this.successMessageArgs(),
       },
     ]
   }

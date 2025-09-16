@@ -49,6 +49,23 @@ export default class LocationPreferencesPresenter {
     return `/referral/${this.id}/add-location-preferences`
   }
 
+  get hasPreviouslySelectedOtherPdus(): boolean {
+    const primaryOffices = this.preferredLocationReferenceData.primaryPdu.deliveryLocations.map(
+      location => location.value,
+    )
+    let hasPreviouslySelected = false
+    if (this.preferredLocationReferenceData.existingDeliveryLocationPreferences.canAttendLocationsValues.length > 0) {
+      this.preferredLocationReferenceData.existingDeliveryLocationPreferences.canAttendLocationsValues.forEach(
+        location => {
+          if (!primaryOffices.includes(location.value)) {
+            hasPreviouslySelected = true
+          }
+        },
+      )
+    }
+    return hasPreviouslySelected
+  }
+
   get fields() {
     return {
       otherPduRequired: {
