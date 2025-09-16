@@ -61,6 +61,13 @@ export default class AdditionalPdusView {
     return deliveryLocations
   }
 
+  private backLinkArgs() {
+    return {
+      text: 'Back',
+      href: this.presenter.backLinkUri,
+    }
+  }
+
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       'locationPreferences/additionalPdus',
@@ -68,7 +75,8 @@ export default class AdditionalPdusView {
         presenter: this.presenter,
         previousValueArgs: this.previousValueArgs(),
         pduCheckboxArgs: this.pduCheckboxArgs,
-        cancelLink: `/referral-details/${this.presenter.id}/location/#location`,
+        cancelLink: `/referral-details/${this.presenter.referralId}/location/#location`,
+        backLinkArgs: this.backLinkArgs(),
       },
     ]
   }

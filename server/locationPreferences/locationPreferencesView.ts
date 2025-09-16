@@ -5,7 +5,7 @@ import { RadiosArgs } from '../utils/govukFrontendTypes'
 export default class LocationPreferencesView {
   private primaryPduName = `No Primary Probation Delivery Unit Found`
 
-  private deliveryLocations: { value: string; text: string; checked: boolean }[] = []
+  private readonly deliveryLocations: { value: string; text: string; checked: boolean }[] = []
 
   constructor(private readonly presenter: LocationPreferencesPresenter) {
     const primaryPdu = presenter.deliveryLocationOptions.find(({ pdu }) => pdu.isPrimaryPduForReferral)
@@ -28,7 +28,7 @@ export default class LocationPreferencesView {
   private backLinkArgs() {
     return {
       text: 'Back',
-      href: this.presenter.backlinkUri,
+      href: this.presenter.backLinkUri,
     }
   }
 
@@ -63,12 +63,12 @@ export default class LocationPreferencesView {
         {
           value: 'yes',
           text: 'Yes',
-          checked: this.presenter.hasPreviouslySelectedOtherPdus,
+          checked: this.presenter.hasPreviouslySelectedOtherPdus === true,
         },
         {
           value: 'no',
           text: 'No',
-          checked: !this.presenter.hasPreviouslySelectedOtherPdus,
+          checked: this.presenter.hasPreviouslySelectedOtherPdus === false,
         },
       ],
 
@@ -85,7 +85,8 @@ export default class LocationPreferencesView {
         checkboxArgs: this.checkboxArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         locationButtonFormAction: this.presenter.locationButtonFormAction,
-        cancelLink: `/referral-details/${this.presenter.id}/location/#location`,
+        cancelLink: `/referral-details/${this.presenter.referralId}/location/#location`,
+        backLinkArgs: this.backLinkArgs(),
       },
     ]
   }

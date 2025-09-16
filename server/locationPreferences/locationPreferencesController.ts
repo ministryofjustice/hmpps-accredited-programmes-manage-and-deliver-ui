@@ -63,9 +63,9 @@ export default class LocationPreferencesController {
       referralId,
       referralDetails,
       preferredLocationReferenceData,
-      req.originalUrl,
       formError,
       userInputData,
+      req.session.locationPreferenceFormData.updatePreferredLocationData
     )
 
     const view = new LocationPreferencesView(presenter)

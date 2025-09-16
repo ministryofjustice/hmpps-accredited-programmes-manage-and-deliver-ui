@@ -1,4 +1,8 @@
-import { DeliveryLocationPreferencesFormData, ReferralDetails } from '@manage-and-deliver-api'
+import {
+  CreateDeliveryLocationPreferences,
+  DeliveryLocationPreferencesFormData,
+  ReferralDetails,
+} from '@manage-and-deliver-api'
 import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
 
@@ -18,12 +22,12 @@ export default class LocationPreferencesPresenter {
   public readonly deliveryLocationOptions: DeliveryLocationOptions[] = []
 
   constructor(
-    readonly id: string,
+    readonly referralId: string,
     readonly details: ReferralDetails,
     readonly preferredLocationReferenceData: DeliveryLocationPreferencesFormData,
-    readonly backlinkUri: string | null,
     private readonly validationError: FormValidationError | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
+    readonly updateData: CreateDeliveryLocationPreferences,
   ) {
     this.deliveryLocationOptions = [
       {
@@ -41,12 +45,16 @@ export default class LocationPreferencesPresenter {
     return new PresenterUtils(this.userInputData)
   }
 
+  get backLinkUri() {
+    return `/referral-details/${this.referralId}/location#location`
+  }
+
   get errorSummary() {
     return PresenterUtils.errorSummary(this.validationError)
   }
 
   get locationButtonFormAction(): string {
-    return `/referral/${this.id}/add-location-preferences`
+    return `/referral/${this.referralId}/add-location-preferences`
   }
 
   get hasPreviouslySelectedOtherPdus(): boolean {
@@ -54,7 +62,7 @@ export default class LocationPreferencesPresenter {
       location => location.value,
     )
     let hasPreviouslySelected = false
-    if (this.preferredLocationReferenceData.existingDeliveryLocationPreferences.canAttendLocationsValues.length > 0) {
+    if (this.preferredLocationReferenceData.existingDeliveryLocationPreferences?.canAttendLocationsValues.length > 0) {
       this.preferredLocationReferenceData.existingDeliveryLocationPreferences.canAttendLocationsValues.forEach(
         location => {
           if (!primaryOffices.includes(location.value)) {
@@ -62,6 +70,8 @@ export default class LocationPreferencesPresenter {
           }
         },
       )
+    } else {
+      return null
     }
     return hasPreviouslySelected
   }

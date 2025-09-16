@@ -12,7 +12,7 @@ export default class AdditionalPdusPresenter {
   }[] = []
 
   constructor(
-    readonly id: string,
+    readonly referralId: string,
     readonly details: ReferralDetails,
     readonly preferredLocationReferenceData: DeliveryLocationPreferencesFormData,
     readonly currentFormData: CreateDeliveryLocationPreferences,
@@ -22,5 +22,9 @@ export default class AdditionalPdusPresenter {
       name: pdu.name,
       offices: pdu.deliveryLocations,
     }))
+  }
+
+  get backLinkUri() {
+    return `/referral/${this.referralId}/add-location-preferences`
   }
 }
