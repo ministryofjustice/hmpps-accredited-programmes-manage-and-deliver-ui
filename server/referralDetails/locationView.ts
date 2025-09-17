@@ -12,7 +12,7 @@ export default class LocationView {
       summary.summary,
       summary.title,
       { showBorders: true, showTitle: true, hideKey: false },
-      { href: addLocationPreferenceHref, text: 'Add location preferences', visuallyHiddenText: '' },
+      { href: addLocationPreferenceHref, text: this.presenter.linkText, visuallyHiddenText: '' },
       summary.classes,
     )
   }

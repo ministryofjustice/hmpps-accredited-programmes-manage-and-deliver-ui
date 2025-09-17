@@ -13,6 +13,13 @@ export default class LocationPresenter extends ReferralDetailsPresenter {
     super(details, subNavValue, id)
   }
 
+  get linkText() {
+    return this.deliveryLocationPreferences.preferredDeliveryLocations.length > 0 ||
+      this.deliveryLocationPreferences.cannotAttendLocations
+      ? 'Update location preferences'
+      : 'Add location preferences'
+  }
+
   preferredLocationsSummary(): { title: string; classes: string; summary: SummaryListItem[] } {
     const { lastUpdatedAt, lastUpdatedBy, preferredDeliveryLocations, cannotAttendLocations } =
       this.deliveryLocationPreferences
