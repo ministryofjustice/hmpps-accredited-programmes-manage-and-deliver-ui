@@ -51,6 +51,13 @@ export default class CannotAttendLocationsView {
     }
   }
 
+  private backLinkArgs() {
+    return {
+      text: 'Back',
+      href: this.presenter.backLinkUri,
+    }
+  }
+
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       'locationPreferences/cannotAttendLocations',
@@ -60,6 +67,7 @@ export default class CannotAttendLocationsView {
         cannotAttendLocationsTextAreaArgs: this.cannotAttendLocationsTextAreaArgs(),
         radioArgs: this.radioArgs.bind(this),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
+        backLinkArgs: this.backLinkArgs(),
       },
     ]
   }

@@ -55,6 +55,7 @@ export default class LocationPreferencesController {
         if (data.paramsForUpdate.addOtherPduLocations.toLowerCase() === 'yes') {
           return res.redirect(`/referral/${referralId}/add-location-preferences/additional-pdus`)
         }
+        req.session.originPage = req.originalUrl
         return res.redirect(`/referral/${referralId}/add-location-preferences/cannot-attend-locations`)
       }
     }
@@ -65,7 +66,7 @@ export default class LocationPreferencesController {
       preferredLocationReferenceData,
       formError,
       userInputData,
-      req.session.locationPreferenceFormData.updatePreferredLocationData
+      req.session.locationPreferenceFormData.updatePreferredLocationData,
     )
 
     const view = new LocationPreferencesView(presenter)
@@ -100,7 +101,7 @@ export default class LocationPreferencesController {
         req.session.locationPreferenceFormData.updatePreferredLocationData.preferredDeliveryLocations.concat(
           data.paramsForUpdate.otherPduLocations,
         )
-
+      req.session.originPage = req.originalUrl
       return res.redirect(`/referral/${referralId}/add-location-preferences/cannot-attend-locations`)
     }
 
@@ -159,6 +160,7 @@ export default class LocationPreferencesController {
       formError,
       userInputData,
       req.session.locationPreferenceFormData.preferredLocationReferenceData,
+      req.session.originPage,
     )
     const view = new CannotAttendLocationsView(presenter)
     return ControllerUtils.renderWithLayout(res, view, referralDetails)

@@ -9,6 +9,7 @@ export default class CannotAttendLocationsPresenter {
     private readonly validationError: FormValidationError | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
     readonly preferredLocationReferenceData: DeliveryLocationPreferencesFormData,
+    readonly backLinkUri: string,
   ) {}
 
   get utils() {

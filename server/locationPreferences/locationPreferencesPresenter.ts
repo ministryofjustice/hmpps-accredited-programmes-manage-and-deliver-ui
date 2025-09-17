@@ -39,9 +39,6 @@ export default class LocationPreferencesPresenter {
         offices: preferredLocationReferenceData.primaryPdu.deliveryLocations,
       },
     ]
-    // const dataForPrePopulation = this.updateData
-    //   ? this.updateData
-    //   : preferredLocationReferenceData.existingDeliveryLocationPreferences
   }
 
   selectedLocationValues(updatedData: CreateDeliveryLocationPreferences, pduCode: string) {
