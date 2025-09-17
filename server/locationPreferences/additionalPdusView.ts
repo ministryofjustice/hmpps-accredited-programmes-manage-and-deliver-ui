@@ -48,11 +48,10 @@ export default class AdditionalPdusView {
   }
 
   generateCheckboxes(offices: { value: string; label: string }[]) {
-    const selectedValues = this.presenter.preferredLocationReferenceData.existingDeliveryLocationPreferences
-      ? this.presenter.preferredLocationReferenceData.existingDeliveryLocationPreferences.canAttendLocationsValues.map(
-          item => item.value,
-        )
-      : []
+    const selectedValues = this.presenter.selectedLocationValues(
+      this.presenter.currentFormData,
+      this.presenter.preferredLocationReferenceData.primaryPdu.code,
+    )
     let deliveryLocations = offices.map(({ label, value }) => ({ text: label, value, checked: false }))
     deliveryLocations = deliveryLocations.map(location => ({
       ...location,
