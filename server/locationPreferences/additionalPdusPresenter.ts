@@ -16,6 +16,7 @@ export default class AdditionalPdusPresenter {
     readonly details: ReferralDetails,
     readonly preferredLocationReferenceData: DeliveryLocationPreferencesFormData,
     readonly currentFormData: CreateDeliveryLocationPreferences,
+    readonly hasUpdatedAdditionalLocationData: boolean,
   ) {
     this.pdus = (preferredLocationReferenceData.otherPdusInSameRegion ?? []).map(pdu => ({
       code: pdu.code,
@@ -28,13 +29,9 @@ export default class AdditionalPdusPresenter {
     return `/referral/${this.referralId}/add-location-preferences`
   }
 
-  private containsNonPrimaryPduData(updatedData: CreateDeliveryLocationPreferences, primaryPduCode: string) {
-    return updatedData.preferredDeliveryLocations.some(location => location.pduCode !== primaryPduCode)
-  }
-
-  selectedLocationValues(updatedData: CreateDeliveryLocationPreferences, primaryPduCode: string) {
+  selectedLocationValues(updatedData: CreateDeliveryLocationPreferences) {
     const stuff = updatedData.preferredDeliveryLocations.flatMap(location => location.deliveryLocations)
-    if (this.currentFormData && this.containsNonPrimaryPduData(updatedData, primaryPduCode)) {
+    if (this.currentFormData && this.hasUpdatedAdditionalLocationData) {
       return stuff.map(it => it.code)
     }
     return this.preferredLocationReferenceData.existingDeliveryLocationPreferences

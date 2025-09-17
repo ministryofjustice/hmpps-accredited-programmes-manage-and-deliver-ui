@@ -27,6 +27,7 @@ declare module 'express-session' {
     locationPreferenceFormData?: {
       updatePreferredLocationData?: CreateDeliveryLocationPreferences
       preferredLocationReferenceData?: DeliveryLocationPreferencesFormData
+      hasUpdatedAdditionalLocationData?: boolean
     }
   }
 }

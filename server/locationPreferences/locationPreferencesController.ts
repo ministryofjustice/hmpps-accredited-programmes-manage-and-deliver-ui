@@ -98,9 +98,14 @@ export default class LocationPreferencesController {
       const data = await new AddLocationPreferenceForm(req, referralId).additionalPdusData()
 
       req.session.locationPreferenceFormData.updatePreferredLocationData.preferredDeliveryLocations =
-        req.session.locationPreferenceFormData.updatePreferredLocationData.preferredDeliveryLocations.concat(
-          data.paramsForUpdate.otherPduLocations,
-        )
+        req.session.locationPreferenceFormData.updatePreferredLocationData.preferredDeliveryLocations
+          .filter(
+            location =>
+              location.pduCode ===
+              req.session.locationPreferenceFormData.preferredLocationReferenceData.primaryPdu.code,
+          )
+          .concat(data.paramsForUpdate.otherPduLocations)
+      req.session.locationPreferenceFormData.hasUpdatedAdditionalLocationData = true
       req.session.originPage = req.originalUrl
       return res.redirect(`/referral/${referralId}/add-location-preferences/cannot-attend-locations`)
     }
@@ -110,6 +115,7 @@ export default class LocationPreferencesController {
       referralDetails,
       preferredLocationReferenceData,
       req.session.locationPreferenceFormData.updatePreferredLocationData,
+      req.session.locationPreferenceFormData.hasUpdatedAdditionalLocationData,
     )
     const view = new AdditionalPdusView(presenter)
     return ControllerUtils.renderWithLayout(res, view, referralDetails)
