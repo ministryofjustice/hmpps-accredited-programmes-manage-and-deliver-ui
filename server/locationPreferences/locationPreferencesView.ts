@@ -9,11 +9,10 @@ export default class LocationPreferencesView {
 
   constructor(private readonly presenter: LocationPreferencesPresenter) {
     const primaryPdu = presenter.deliveryLocationOptions.find(({ pdu }) => pdu.isPrimaryPduForReferral)
-    const selectedValues = presenter.preferredLocationReferenceData.existingDeliveryLocationPreferences
-      ? presenter.preferredLocationReferenceData.existingDeliveryLocationPreferences.canAttendLocationsValues.map(
-          item => item.value,
-        )
-      : []
+    const selectedValues = this.presenter.selectedLocationValues(
+      this.presenter.updateData,
+      this.presenter.preferredLocationReferenceData.primaryPdu.code,
+    )
 
     if (primaryPdu) {
       this.deliveryLocations = primaryPdu.offices.map(({ label, value }) => ({ text: label, value, checked: false }))

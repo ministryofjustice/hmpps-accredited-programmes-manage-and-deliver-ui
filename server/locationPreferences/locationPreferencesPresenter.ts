@@ -39,6 +39,23 @@ export default class LocationPreferencesPresenter {
         offices: preferredLocationReferenceData.primaryPdu.deliveryLocations,
       },
     ]
+    // const dataForPrePopulation = this.updateData
+    //   ? this.updateData
+    //   : preferredLocationReferenceData.existingDeliveryLocationPreferences
+  }
+
+  selectedLocationValues(updatedData: CreateDeliveryLocationPreferences, pduCode: string) {
+    if (this.updateData) {
+      return updatedData.preferredDeliveryLocations
+        .find(location => location.pduCode === pduCode)
+        .deliveryLocations.map(deliveryLocation => deliveryLocation.code)
+    }
+    if (this.preferredLocationReferenceData.existingDeliveryLocationPreferences) {
+      return this.preferredLocationReferenceData.existingDeliveryLocationPreferences.canAttendLocationsValues.map(
+        item => item.value,
+      )
+    }
+    return []
   }
 
   get utils() {
