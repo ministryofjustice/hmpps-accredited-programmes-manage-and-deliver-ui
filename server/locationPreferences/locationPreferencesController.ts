@@ -41,7 +41,7 @@ export default class LocationPreferencesController {
     let userInputData = null
 
     if (req.method === 'POST') {
-      const data = await new AddLocationPreferenceForm(req, referralId).data()
+      const data = await new AddLocationPreferenceForm(req, referralId).primaryPduData()
 
       if (data.error) {
         res.status(400)

@@ -17,7 +17,7 @@
         <h1 class="govuk-heading-l">Which other locations can {{presenter.details.personName}} attend?</h1>
         <p class="govuk-body">You have already selected:</p>
         {{ govukInsetText(previousValueArgs) }}
-        <p class="govuk-body">Select any other locations {{presenter.details.personName}} can attend.</p>
+        <p class="govuk-body govuk-!-margin-bottom-6">Select any other locations {{presenter.details.personName}} can attend.</p>
 
         <form method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{csrfToken}}">

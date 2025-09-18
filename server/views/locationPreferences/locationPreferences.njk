@@ -19,8 +19,8 @@
         {{ govukErrorSummary(errorSummary) }}
         {% endif %}
         <h1 class="govuk-heading-l">Where can {{presenter.details.personName}} attend a programme?</h1>
-        <p>Programme teams can use this information when allocating people to programmes. There is no guarantee that participants will be offered their preferred location.</p>
-        <p>You can add or change these details until the person starts a programme.</p>
+        <p class="govuk-body">Programme teams can use this information when allocating people to programmes. There is no guarantee that participants will be offered their preferred location.</p>
+        <p class="govuk-body govuk-!-margin-bottom-6">You can add or change these details until the person starts a programme.</p>
 
         <form method="post" novalidate action="{{presenter.locationButtonFormAction}}">
           <input type="hidden" name="_csrf" value="{{csrfToken}}">

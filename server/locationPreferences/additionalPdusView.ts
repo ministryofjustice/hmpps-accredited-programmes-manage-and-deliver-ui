@@ -15,7 +15,7 @@ export default class AdditionalPdusView {
   private readonly pduCheckboxArgs: CheckboxArgs[]
 
   constructor(private readonly presenter: AdditionalPdusPresenter) {
-    this.pduCheckboxArgs = this.pduToCheckboxArgs(presenter.pdus)
+    this.pduCheckboxArgs = this.pduToCheckboxArgs(presenter.pdus).sort((a, b) => a.name.localeCompare(b.name))
   }
 
   private previousValueArgs() {
@@ -43,7 +43,7 @@ export default class AdditionalPdusView {
           classes: 'govuk-fieldset__legend--m',
         },
       },
-      items: this.generateCheckboxes(offices),
+      items: this.generateCheckboxes(offices.sort((a, b) => a.label.localeCompare(b.label))),
     }))
   }
 

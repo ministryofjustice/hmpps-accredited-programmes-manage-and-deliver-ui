@@ -41,7 +41,7 @@ export default class CannotAttendLocationsView {
       maxlength: '2000',
       label: {
         text: this.presenter.text.cannotAttendTextArea.label,
-        classes: 'govuk-label--m',
+        classes: 'govuk-label govuk-label--s',
       },
       hint: {
         html: `Include: <ul class="govuk-list--bullet govuk-!-margin-top-0"><li>which locations they cannot attend</li><li>the reason why</li></ul>`,

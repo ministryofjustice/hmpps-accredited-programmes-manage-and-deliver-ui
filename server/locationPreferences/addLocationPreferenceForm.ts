@@ -19,7 +19,7 @@ export default class AddLocationPreferenceForm {
     private readonly referralId: string,
   ) {}
 
-  async data(): Promise<FormData<Partial<LocationFormData>>> {
+  async primaryPduData(): Promise<FormData<Partial<LocationFormData>>> {
     const validationResult = await FormUtils.runValidations({
       request: this.request,
       validations: AddLocationPreferenceForm.pduValidations,

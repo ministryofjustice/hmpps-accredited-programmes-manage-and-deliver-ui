@@ -16,10 +16,12 @@ export default class LocationPreferencesView {
 
     if (primaryPdu) {
       this.deliveryLocations = primaryPdu.offices.map(({ label, value }) => ({ text: label, value, checked: false }))
-      this.deliveryLocations = this.deliveryLocations.map(location => ({
-        ...location,
-        checked: selectedValues.includes(location.value),
-      }))
+      this.deliveryLocations = this.deliveryLocations
+        .map(location => ({
+          ...location,
+          checked: selectedValues.includes(location.value),
+        }))
+        .sort((a, b) => a.text.localeCompare(b.text))
       this.primaryPduName = primaryPdu.pdu.name
     }
   }

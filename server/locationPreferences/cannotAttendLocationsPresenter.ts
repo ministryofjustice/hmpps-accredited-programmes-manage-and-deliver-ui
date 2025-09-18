@@ -27,12 +27,16 @@ export default class CannotAttendLocationsPresenter {
   }
 
   get fields() {
+    let cannotAttendLocationRadio = null
+    if (this.preferredLocationReferenceData.existingDeliveryLocationPreferences) {
+      cannotAttendLocationRadio = this.preferredLocationReferenceData.existingDeliveryLocationPreferences
+        ?.cannotAttendLocations
+        ? 'yes'
+        : 'no'
+    }
     return {
       cannotAttendLocationsRadioButton: {
-        value: this.utils.stringValue(
-          this.preferredLocationReferenceData.existingDeliveryLocationPreferences?.cannotAttendLocations ? 'yes' : 'no',
-          'cannot-attend-locations-radio',
-        ),
+        value: this.utils.stringValue(cannotAttendLocationRadio, 'cannot-attend-locations-radio'),
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'cannot-attend-locations-radio'),
       },
       cannotAttendLocationsTextArea: {
