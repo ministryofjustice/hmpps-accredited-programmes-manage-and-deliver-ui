@@ -10,6 +10,7 @@ import AccreditedProgrammesManageAndDeliverService from '../../services/accredit
 import AuditService from '../../services/auditService'
 import nunjucksSetup from '../../utils/nunjucksSetup'
 import routes from '../index'
+import { Session, SessionData } from 'express-session'
 
 jest.mock('../../services/auditService')
 
@@ -26,10 +27,18 @@ export const user: HmppsUser = {
 
 export const flashProvider = jest.fn()
 
-function appSetup(services: Services, production: boolean, userSupplier: () => HmppsUser): Express {
+function appSetup(services: Services, production: boolean, userSupplier: () => HmppsUser, sessionData: SessionData,): Express {
   const app = express()
 
   app.set('view engine', 'njk')
+
+  app.use((req, res, next) => {
+    // req.user = userSupplier() as Express.User
+
+    req.session = sessionData as Session & Partial<SessionData>
+
+    next()
+  })
 
   nunjucksSetup(app)
   app.use(setUpWebSession())
@@ -63,10 +72,12 @@ export function appWithAllRoutes({
     ) as jest.Mocked<AccreditedProgrammesManageAndDeliverService>,
   },
   userSupplier = () => user,
+  sessionData = {} as SessionData,
 }: {
   production?: boolean
   services?: Partial<Services>
   userSupplier?: () => HmppsUser
+  sessionData?: SessionData
 }): Express {
-  return appSetup(services as Services, production, userSupplier)
+  return appSetup(services as Services, production, userSupplier, sessionData)
 }

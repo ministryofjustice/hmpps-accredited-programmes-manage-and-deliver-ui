@@ -1,17 +1,14 @@
-import {
-  Availability,
-  CreateDeliveryLocationPreferences,
-  DeliveryLocationPreferencesFormData,
-  PersonalDetails,
-  ReferralDetails,
-} from '@manage-and-deliver-api'
+import { ReferralDetails } from '@manage-and-deliver-api'
 import { randomUUID } from 'crypto'
-import { Express } from 'express'
+import express, { Express } from 'express'
 import request from 'supertest'
+import session, { SessionData } from 'express-session'
+import { type RequestHandler } from 'express'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 import deliveryLocationPreferencesFormDataFactory from '../testutils/factories/deliveryLocationPreferences/deliveryLocationPreferencesFormDataFactory'
+import routes from '../routes'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
@@ -125,15 +122,25 @@ describe('location-preferences', () => {
   describe(`GET /referral/:referralId/add-location-preferences/additional-pdus`, () => {
     it('loads the add additional location preferences page', async () => {
       const deliveryLocationPreferencesFormData = deliveryLocationPreferencesFormDataFactory.build()
+      const createDeliveryLocationPreferences = createDeliveryLocationPreferencesFactory.build()
+
       accreditedProgrammesManageAndDeliverService.getPossibleDeliveryLocationsForReferral.mockResolvedValue(
         deliveryLocationPreferencesFormData,
       )
 
-      // app.request.session.locationPreferenceFormData = {
-      //   updatePreferredLocationData: null,
-      //   preferredLocationReferenceData: deliveryLocationPreferencesFormData,
-      //   hasUpdatedAdditionalLocationData: null,
-      // }
+      app = appWithAllRoutes({
+        services: {
+          accreditedProgrammesManageAndDeliverService,
+        },
+        sessionData: {
+          originPage: '',
+          locationPreferenceFormData: {
+            updatePreferredLocationData: null,
+            preferredLocationReferenceData: deliveryLocationPreferencesFormData,
+            hasUpdatedAdditionalLocationData: null,
+          },
+        } as SessionData,
+      })
 
       return request(app)
         .get(`/referral/${randomUUID()}/add-location-preferences/additional-pdus`)
