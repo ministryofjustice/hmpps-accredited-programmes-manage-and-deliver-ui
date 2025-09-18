@@ -1,14 +1,13 @@
 import { ReferralDetails } from '@manage-and-deliver-api'
 import { randomUUID } from 'crypto'
-import express, { Express } from 'express'
+import { Express } from 'express'
 import request from 'supertest'
-import session, { SessionData } from 'express-session'
-import { type RequestHandler } from 'express'
+import { SessionData } from 'express-session'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 import deliveryLocationPreferencesFormDataFactory from '../testutils/factories/deliveryLocationPreferences/deliveryLocationPreferencesFormDataFactory'
-import routes from '../routes'
+import createDeliveryLocationPreferencesFactory from '../testutils/factories/deliveryLocationPreferences/createDeliveryLocationPreferencesFactory'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
