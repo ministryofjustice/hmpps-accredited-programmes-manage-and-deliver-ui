@@ -559,6 +559,50 @@ export interface components {
        */
       moreInfo?: string
     }
+    /** @description Cohort to update the referral with */
+    UpdateCohort: {
+      /**
+       * @description Cohort of the referral
+       * @example SEXUAL_OFFENCE
+       * @enum {string}
+       */
+      cohort: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
+    }
+    Referral: {
+      /**
+       * Format: uuid
+       * @description The unique id of this referral.
+       * @example c98151f4-4081-4c65-9f98-54e63a328c8d
+       */
+      id: string
+      /**
+       * @description The name of the person associated with this referral.
+       * @example John Doe
+       */
+      personName: string
+      /**
+       * @description The CRN identifier of the person associated with this referral.
+       * @example X12345
+       */
+      crn: string
+      /**
+       * Format: date-time
+       * @description The date and time that this referral was created.
+       * @example 2025-07-09T10:15:30
+       */
+      createdAt: string
+      /**
+       * @description The current referral status.
+       * @example Created
+       */
+      status: string
+      /**
+       * @description The current cohort of a referral
+       * @example Cohort
+       * @enum {string}
+       */
+      cohort: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
+    }
     RetryDlqResult: {
       /** Format: int32 */
       messagesFoundCount: number
@@ -1701,7 +1745,7 @@ export interface operations {
     }
     requestBody: {
       content: {
-        'application/json': 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
+        'application/json': components['schemas']['UpdateCohort']
       }
     }
     responses: {
@@ -1710,7 +1754,9 @@ export interface operations {
         headers: {
           [name: string]: unknown
         }
-        content?: never
+        content: {
+          'application/json': components['schemas']['Referral']
+        }
       }
       /** @description Bad Request */
       400: {

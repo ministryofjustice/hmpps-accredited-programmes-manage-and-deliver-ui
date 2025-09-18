@@ -41,6 +41,12 @@ export default class RisksAndNeedsPresenter extends ReferralLayoutPresenter {
           classes: 'govuk-button--secondary',
           href: '/pdu/open-referrals',
         },
+
+        {
+          text: 'Update cohort',
+          classes: 'govuk-button--secondary',
+          href: `/referral/${this.referralId}/change-cohort`,
+        },
       ],
     }
   }

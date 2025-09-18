@@ -26,6 +26,12 @@ export default class ReferralLayoutPresenter {
           classes: 'govuk-button--secondary',
           href: '/pdu/open-referrals',
         },
+
+        {
+          text: 'Update cohort',
+          classes: 'govuk-button--secondary',
+          href: `/referral/${this.referralId}/change-cohort`,
+        },
       ],
     }
   }

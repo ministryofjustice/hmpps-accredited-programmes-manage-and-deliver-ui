@@ -3,6 +3,7 @@ import { SummaryListArgs } from '../utils/govukFrontendTypes'
 import { SummaryListItem } from '../utils/summaryList'
 import ViewUtils from '../utils/viewUtils'
 import ReferralLayoutPresenter, { HorizontalNavValues } from '../shared/referral/referralLayoutPresenter'
+import { formatCohort } from '../utils/utils'
 
 export enum ReferralDetailsPageSection {
   PersonalDetailsTab = 'personalDetails',
@@ -19,6 +20,7 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
     readonly referralDetails: ReferralDetails,
     readonly subNavValue: string,
     readonly id: string,
+    readonly isCohortUpdated: boolean = false,
   ) {
     super(HorizontalNavValues.referralDetailsTab, id)
   }
@@ -26,6 +28,16 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
   get referralSummary(): SummaryListArgs {
     return {
       ...ViewUtils.summaryListArgs(this.referralSummaryList(), { showBorders: false }, 'govuk-!-margin-bottom-0'),
+    }
+  }
+
+  get cohortUpdatedSuccessMessageArgs() {
+    return {
+      variant: 'success',
+      title: 'Cohort changed',
+      showTitleAsHeading: true,
+      dismissible: true,
+      text: `${this.referralDetails.personName} is in the ${formatCohort(this.referralDetails.cohort)} cohort`,
     }
   }
 
@@ -107,8 +119,8 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
         lines: [`${this.referralDetails.interventionName}`],
       },
       {
-        key: 'Programme strand',
-        lines: ['PLACEHOLDER'],
+        key: 'Cohort',
+        lines: [`${formatCohort(this.referralDetails.cohort)}`],
       },
       {
         key: 'Date referred',

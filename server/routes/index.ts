@@ -6,6 +6,7 @@ import PniController from '../pni/pniController'
 import ReferralDetailsController from '../referralDetails/referralDetailsController'
 import RisksAndNeedsController from '../risksAndNeeds/risksAndNeedsController'
 import type { Services } from '../services'
+import ChangeCohortController from '../cohort/changeCohortController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
@@ -16,6 +17,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const referralDetailsController = new ReferralDetailsController(accreditedProgrammesManageAndDeliverService)
   const risksAndNeedsController = new RisksAndNeedsController(accreditedProgrammesManageAndDeliverService)
   const programmeNeedsIdenfitierController = new PniController(accreditedProgrammesManageAndDeliverService)
+  const cohortController = new ChangeCohortController(accreditedProgrammesManageAndDeliverService)
 
   get('/', async (req, res, next) => {
     await caselistController.showOpenCaselist(req, res)
@@ -123,6 +125,14 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   get('/referral/:referralId/programme-needs-identifier', async (req, res, next) => {
     await programmeNeedsIdenfitierController.showProgrammeNeedsIdentifierPage(req, res)
+  })
+
+  get('/referral/:referralId/change-cohort', async (req, res, next) => {
+    await cohortController.showChangeCohortPage(req, res)
+  })
+
+  post('/referral/:referralId/change-cohort', async (req, res, next) => {
+    await cohortController.showChangeCohortPage(req, res)
   })
 
   return router
