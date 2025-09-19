@@ -12,9 +12,18 @@ export default class LocationView {
       summary.summary,
       summary.title,
       { showBorders: true, showTitle: true, hideKey: false },
-      { href: addLocationPreferenceHref, text: 'Add location preferences', visuallyHiddenText: '' },
+      { href: addLocationPreferenceHref, text: this.presenter.linkText, visuallyHiddenText: '' },
       summary.classes,
     )
+  }
+
+  private successMessageArgs() {
+    return {
+      variant: 'success',
+      title: 'Location details added successfully.',
+      showTitleAsHeading: true,
+      dismissible: true,
+    }
   }
 
   get renderArgs(): [string, Record<string, unknown>] {
@@ -23,6 +32,8 @@ export default class LocationView {
       {
         presenter: this.presenter,
         getPreferredLocationsAsSummaryListArgs: this.getPreferredLocationsAsSummaryListArgs,
+        isPreferredLocationUpdated: this.presenter.isPreferredLocationUpdated,
+        successMessageArgs: this.successMessageArgs(),
       },
     ]
   }

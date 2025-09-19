@@ -1,6 +1,10 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{%- from "moj/components/alert/macro.njk" import mojAlert -%}
 
 <div>
+  {% if isPreferredLocationUpdated %}
+    {{ mojAlert(successMessageArgs) }}
+  {% endif %}
   <h2 class="govuk-heading-m">Location</h2>
   {{ govukSummaryList(getPreferredLocationsAsSummaryListArgs) }}
 </div>

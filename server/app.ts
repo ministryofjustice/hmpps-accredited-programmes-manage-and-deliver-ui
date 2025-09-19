@@ -2,6 +2,7 @@ import express from 'express'
 
 import createError from 'http-errors'
 
+import { CreateDeliveryLocationPreferences, DeliveryLocationPreferencesFormData } from '@manage-and-deliver-api'
 import nunjucksSetup from './utils/nunjucksSetup'
 import errorHandler from './errorHandler'
 import { appInsightsMiddleware } from './utils/azureAppInsights'
@@ -23,6 +24,11 @@ import config from './config'
 declare module 'express-session' {
   export interface SessionData {
     originPage: string
+    locationPreferenceFormData?: {
+      updatePreferredLocationData?: CreateDeliveryLocationPreferences
+      preferredLocationReferenceData?: DeliveryLocationPreferencesFormData
+      hasUpdatedAdditionalLocationData?: boolean
+    }
   }
 }
 

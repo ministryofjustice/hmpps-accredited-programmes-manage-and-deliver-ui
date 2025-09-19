@@ -1,0 +1,38 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block main %}
+{% block content %}
+<div class="govuk-width-container" id="main-content">
+  {{ govukBackLink(backLinkArgs) }}
+  <div class="govuk-main-wrapper">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">Which other locations can {{presenter.details.personName}} attend?</h1>
+        <p class="govuk-body">You have already selected:</p>
+        {{ govukInsetText(previousValueArgs) }}
+        <p class="govuk-body govuk-!-margin-bottom-6">Select any other locations {{presenter.details.personName}} can attend.</p>
+
+        <form method="post" novalidate>
+          <input type="hidden" name="_csrf" value="{{csrfToken}}">
+          {% for pdu in pduCheckboxArgs %}
+            {{ govukCheckboxes(pdu) }}
+          {% endfor %}
+
+          <div class="govuk-button-group">
+            {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+            <a class="govuk-link" href={{ cancelLink }}>Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% endblock %}

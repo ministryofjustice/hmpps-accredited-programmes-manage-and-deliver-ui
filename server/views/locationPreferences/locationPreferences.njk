@@ -1,0 +1,41 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block main %}
+{% block content %}
+<div class="govuk-width-container" id="main-content">
+  {{ govukBackLink(backLinkArgs) }}
+  <div class="govuk-main-wrapper">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        {% if errorSummary !== null %}
+        {{ govukErrorSummary(errorSummary) }}
+        {% endif %}
+        <h1 class="govuk-heading-l">Where can {{presenter.details.personName}} attend a programme?</h1>
+        <p class="govuk-body">Programme teams can use this information when allocating people to programmes. There is no guarantee that participants will be offered their preferred location.</p>
+        <p class="govuk-body govuk-!-margin-bottom-6">You can add or change these details until the person starts a programme.</p>
+
+        <form method="post" novalidate action="{{presenter.locationButtonFormAction}}">
+          <input type="hidden" name="_csrf" value="{{csrfToken}}">
+          {{ govukCheckboxes(checkboxArgs) }}
+
+          {{ govukRadios(radioArgs) }}
+
+          <div class="govuk-button-group">
+            {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+            <a class="govuk-link" href={{ cancelLink }}>Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% endblock %}
