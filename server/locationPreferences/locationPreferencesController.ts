@@ -97,6 +97,9 @@ export default class LocationPreferencesController {
     if (req.method === 'POST') {
       const data = await new AddLocationPreferenceForm(req, referralId).additionalPdusData()
 
+      // We clear all additional offices out of the session apart from those in the primary pdu.
+      // This is required to avoid duplication when adding the offices submitted in the form if you have returned to the
+      // page via the back button.
       req.session.locationPreferenceFormData.updatePreferredLocationData.preferredDeliveryLocations =
         req.session.locationPreferenceFormData.updatePreferredLocationData.preferredDeliveryLocations
           .filter(
@@ -142,6 +145,8 @@ export default class LocationPreferencesController {
       } else {
         req.session.locationPreferenceFormData.updatePreferredLocationData.cannotAttendText =
           data.paramsForUpdate.cannotAttendLocations
+
+        // Post if no existing preference data
         if (req.session.locationPreferenceFormData.preferredLocationReferenceData.existingDeliveryLocationPreferences) {
           await this.accreditedProgrammesManageAndDeliverService.updateDeliveryLocationPreferences(
             username,
@@ -149,13 +154,14 @@ export default class LocationPreferencesController {
             req.session.locationPreferenceFormData.updatePreferredLocationData,
           )
         } else {
+          // Put if existing preference data.
           await this.accreditedProgrammesManageAndDeliverService.createDeliveryLocationPreferences(
             username,
             referralId,
             req.session.locationPreferenceFormData.updatePreferredLocationData,
           )
         }
-
+        // Clear session at end of journey
         req.session.locationPreferenceFormData = null
         return res.redirect(`/referral-details/${referralId}/location?preferredLocationUpdated=true#location`)
       }

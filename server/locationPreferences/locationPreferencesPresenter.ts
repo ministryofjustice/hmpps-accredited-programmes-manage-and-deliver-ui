@@ -41,6 +41,7 @@ export default class LocationPreferencesPresenter {
     ]
   }
 
+  // Returns a list of offices that can be used to pre-populate checkboxes if they were previously selected
   selectedLocationValues(updatedData: CreateDeliveryLocationPreferences, pduCode: string) {
     if (this.updateData) {
       return updatedData.preferredDeliveryLocations
@@ -55,7 +56,7 @@ export default class LocationPreferencesPresenter {
     return []
   }
 
-  get utils() {
+  private get utils() {
     return new PresenterUtils(this.userInputData)
   }
 
@@ -71,6 +72,7 @@ export default class LocationPreferencesPresenter {
     return `/referral/${this.referralId}/add-location-preferences`
   }
 
+  // Returns a boolean to allow radio button to be pre-selected based on if previous additional pdu offices were selected.
   get hasPreviouslySelectedOtherPdus(): boolean {
     const primaryOffices = this.preferredLocationReferenceData.primaryPdu.deliveryLocations.map(
       location => location.value,

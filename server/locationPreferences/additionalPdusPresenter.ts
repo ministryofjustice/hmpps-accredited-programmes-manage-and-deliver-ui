@@ -29,10 +29,13 @@ export default class AdditionalPdusPresenter {
     return `/referral/${this.referralId}/add-location-preferences`
   }
 
+  // Returns a list of offices that can be used to pre-populate checkboxes if they were previously selected
   selectedLocationValues(updatedData: CreateDeliveryLocationPreferences) {
-    const stuff = updatedData.preferredDeliveryLocations.flatMap(location => location.deliveryLocations)
+    const updateDataDeliveryLocations = updatedData.preferredDeliveryLocations.flatMap(
+      location => location.deliveryLocations,
+    )
     if (this.currentFormData && this.hasUpdatedAdditionalLocationData) {
-      return stuff.map(it => it.code)
+      return updateDataDeliveryLocations.map(it => it.code)
     }
     return this.preferredLocationReferenceData.existingDeliveryLocationPreferences
       ? this.preferredLocationReferenceData.existingDeliveryLocationPreferences.canAttendLocationsValues.map(

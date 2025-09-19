@@ -8,6 +8,7 @@ import AccreditedProgrammesManageAndDeliverService from '../services/accreditedP
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 import deliveryLocationPreferencesFormDataFactory from '../testutils/factories/deliveryLocationPreferences/deliveryLocationPreferencesFormDataFactory'
 import createDeliveryLocationPreferencesFactory from '../testutils/factories/deliveryLocationPreferences/createDeliveryLocationPreferencesFactory'
+import TestUtils from '../testutils/testUtils'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
@@ -121,25 +122,23 @@ describe('location-preferences', () => {
   describe(`GET /referral/:referralId/add-location-preferences/additional-pdus`, () => {
     it('loads the add additional location preferences page', async () => {
       const deliveryLocationPreferencesFormData = deliveryLocationPreferencesFormDataFactory.build()
-      const createDeliveryLocationPreferences = createDeliveryLocationPreferencesFactory.build()
+      const createDeliveryLocationPreferences = createDeliveryLocationPreferencesFactory.build({
+        cannotAttendText: null,
+      })
+
+      const sessionData: Partial<SessionData> = {
+        originPage: '',
+        locationPreferenceFormData: {
+          updatePreferredLocationData: createDeliveryLocationPreferences,
+          preferredLocationReferenceData: deliveryLocationPreferencesFormData,
+          hasUpdatedAdditionalLocationData: null,
+        },
+      }
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
       accreditedProgrammesManageAndDeliverService.getPossibleDeliveryLocationsForReferral.mockResolvedValue(
         deliveryLocationPreferencesFormData,
       )
-
-      app = appWithAllRoutes({
-        services: {
-          accreditedProgrammesManageAndDeliverService,
-        },
-        sessionData: {
-          originPage: '',
-          locationPreferenceFormData: {
-            updatePreferredLocationData: null,
-            preferredLocationReferenceData: deliveryLocationPreferencesFormData,
-            hasUpdatedAdditionalLocationData: null,
-          },
-        } as SessionData,
-      })
 
       return request(app)
         .get(`/referral/${randomUUID()}/add-location-preferences/additional-pdus`)
@@ -147,8 +146,164 @@ describe('location-preferences', () => {
         .expect(res => {
           expect(res.text).toContain(referralDetails.crn)
           expect(res.text).toContain(referralDetails.personName)
-          expect(res.text).toContain(`Which locations can ${referralDetails.personName} attend`)
+          expect(res.text).toContain(`Which other locations can ${referralDetails.personName} attend`)
         })
+    })
+  })
+
+  describe(`POST /referral/:referralId/add-location-preferences/additional-pdus`, () => {
+    it('loads the add additional location preferences page', async () => {
+      const referralId = randomUUID()
+      const deliveryLocationPreferencesFormData = deliveryLocationPreferencesFormDataFactory.build()
+      const createDeliveryLocationPreferences = createDeliveryLocationPreferencesFactory.build({
+        cannotAttendText: null,
+      })
+
+      const sessionData: Partial<SessionData> = {
+        originPage: '',
+        locationPreferenceFormData: {
+          updatePreferredLocationData: createDeliveryLocationPreferences,
+          preferredLocationReferenceData: deliveryLocationPreferencesFormData,
+          hasUpdatedAdditionalLocationData: null,
+        },
+      }
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      accreditedProgrammesManageAndDeliverService.getPossibleDeliveryLocationsForReferral.mockResolvedValue(
+        deliveryLocationPreferencesFormData,
+      )
+
+      return request(app)
+        .post(`/referral/${referralId}/add-location-preferences/additional-pdus`)
+        .type('form')
+        .send({
+          PDU002: ['LOC005', 'LOC003'],
+          PDU003: 'LOC006',
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain(
+            `Redirecting to /referral/${referralId}/add-location-preferences/cannot-attend-locations`,
+          )
+        })
+    })
+  })
+
+  describe(`GET /referral/:referralId/add-location-preferences/cannot-attend-locations`, () => {
+    it('loads the add cannot attend location preferences page', async () => {
+      const deliveryLocationPreferencesFormData = deliveryLocationPreferencesFormDataFactory.build()
+      const createDeliveryLocationPreferences = createDeliveryLocationPreferencesFactory.build({
+        cannotAttendText: null,
+      })
+
+      const sessionData: Partial<SessionData> = {
+        originPage: '',
+        locationPreferenceFormData: {
+          updatePreferredLocationData: createDeliveryLocationPreferences,
+          preferredLocationReferenceData: deliveryLocationPreferencesFormData,
+          hasUpdatedAdditionalLocationData: null,
+        },
+      }
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      accreditedProgrammesManageAndDeliverService.getPossibleDeliveryLocationsForReferral.mockResolvedValue(
+        deliveryLocationPreferencesFormData,
+      )
+
+      return request(app)
+        .get(`/referral/${randomUUID()}/add-location-preferences/cannot-attend-locations`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain(referralDetails.crn)
+          expect(res.text).toContain(referralDetails.personName)
+          expect(res.text).toContain(`Are there any locations ${referralDetails.personName} cannot attend?`)
+        })
+    })
+  })
+
+  describe(`POST /referral/:referralId/add-location-preferences/cannot-attend-locations`, () => {
+    const createDeliveryLocationPreferences = createDeliveryLocationPreferencesFactory.build({
+      cannotAttendText: 'A reason',
+    })
+
+    it('sends a put request to the api if there are existing location preferences', async () => {
+      const referralId = randomUUID()
+      const deliveryLocationPreferencesFormData = deliveryLocationPreferencesFormDataFactory
+        .existingDeliveryLocationPreferences()
+        .build()
+
+      const sessionData: Partial<SessionData> = {
+        originPage: '',
+        locationPreferenceFormData: {
+          updatePreferredLocationData: createDeliveryLocationPreferences,
+          preferredLocationReferenceData: deliveryLocationPreferencesFormData,
+          hasUpdatedAdditionalLocationData: null,
+        },
+      }
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      accreditedProgrammesManageAndDeliverService.getPossibleDeliveryLocationsForReferral.mockResolvedValue(
+        deliveryLocationPreferencesFormData,
+      )
+
+      await request(app)
+        .post(`/referral/${referralId}/add-location-preferences/cannot-attend-locations`)
+        .type('form')
+        .send({
+          'cannot-attend-locations-radio': 'yes',
+          'cannot-attend-locations-text-area': 'A reason',
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain(
+            `Redirecting to /referral-details/${referralId}/location?preferredLocationUpdated=true#location`,
+          )
+        })
+
+      expect(accreditedProgrammesManageAndDeliverService.updateDeliveryLocationPreferences).toHaveBeenCalledWith(
+        'user1',
+        referralId,
+        createDeliveryLocationPreferences,
+      )
+    })
+
+    it('sends an post request to the api with correct data if there was no existing location preferences.', async () => {
+      const referralId = randomUUID()
+      const deliveryLocationPreferencesFormData = deliveryLocationPreferencesFormDataFactory.build()
+
+      const sessionData: Partial<SessionData> = {
+        originPage: '',
+        locationPreferenceFormData: {
+          updatePreferredLocationData: createDeliveryLocationPreferences,
+          preferredLocationReferenceData: deliveryLocationPreferencesFormData,
+          hasUpdatedAdditionalLocationData: null,
+        },
+      }
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      accreditedProgrammesManageAndDeliverService.getPossibleDeliveryLocationsForReferral.mockResolvedValue(
+        deliveryLocationPreferencesFormData,
+      )
+
+      await request(app)
+        .post(`/referral/${referralId}/add-location-preferences/cannot-attend-locations`)
+        .type('form')
+        .send({
+          'cannot-attend-locations-radio': 'yes',
+          'cannot-attend-locations-text-area': 'A reason',
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain(
+            `Redirecting to /referral-details/${referralId}/location?preferredLocationUpdated=true#location`,
+          )
+        })
+
+      expect(accreditedProgrammesManageAndDeliverService.createDeliveryLocationPreferences).toHaveBeenCalledWith(
+        'user1',
+        referralId,
+        createDeliveryLocationPreferences,
+      )
     })
   })
 })

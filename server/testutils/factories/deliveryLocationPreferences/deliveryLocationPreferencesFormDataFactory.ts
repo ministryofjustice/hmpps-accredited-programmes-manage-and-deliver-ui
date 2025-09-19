@@ -1,8 +1,17 @@
 import { fakerEN_GB as faker } from '@faker-js/faker'
-import { DeliveryLocationPreferencesFormData } from '@manage-and-deliver-api'
+import { DeliveryLocationPreferencesFormData, ExistingDeliveryLocationPreferences } from '@manage-and-deliver-api'
 import { Factory } from 'fishery'
 
-export class DeliveryLocationPreferencesFormDataFactory extends Factory<DeliveryLocationPreferencesFormData> {}
+export class DeliveryLocationPreferencesFormDataFactory extends Factory<DeliveryLocationPreferencesFormData> {
+  existingDeliveryLocationPreferences() {
+    return this.params({
+      existingDeliveryLocationPreferences: {
+        cannotAttendLocations: faker.string.alpha(5),
+        canAttendLocationsValues: [{ label: 'Office Nearyby', value: 'OFF-999' }],
+      },
+    })
+  }
+}
 
 export default DeliveryLocationPreferencesFormDataFactory.define(() => ({
   personOnProbation: {
@@ -14,15 +23,14 @@ export default DeliveryLocationPreferencesFormDataFactory.define(() => ({
   otherPdusInSameRegion: [
     {
       code: 'PDU-999',
-      deliveryLocations: [{ label: 'OFF-999', value: 'Office Nearyby' }],
+      deliveryLocations: [{ label: 'Office Nearby', value: 'OFF-999' }],
       name: 'Other PDU in same region',
     },
   ],
   primaryPdu: {
     code: faker.string.alpha({ length: 5 }),
     name: faker.location.city(),
-    deliveryLocations: [{ label: 'Primary PDU Office Locaiton', value: 'OFF-001' }],
+    deliveryLocations: [{ label: 'Primary PDU Office Location', value: 'OFF-001' }],
   },
-  // @ts-ignore
-  existingDeliveryLocationPreferences: null,
+  existingDeliveryLocationPreferences: null as ExistingDeliveryLocationPreferences,
 }))

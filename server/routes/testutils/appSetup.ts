@@ -2,6 +2,7 @@ import express, { Express } from 'express'
 import { NotFound } from 'http-errors'
 
 import { randomUUID } from 'crypto'
+import { Session, SessionData } from 'express-session'
 import errorHandler from '../../errorHandler'
 import { HmppsUser } from '../../interfaces/hmppsUser'
 import setUpWebSession from '../../middleware/setUpWebSession'
@@ -10,7 +11,6 @@ import AccreditedProgrammesManageAndDeliverService from '../../services/accredit
 import AuditService from '../../services/auditService'
 import nunjucksSetup from '../../utils/nunjucksSetup'
 import routes from '../index'
-import { Session, SessionData } from 'express-session'
 
 jest.mock('../../services/auditService')
 
@@ -27,7 +27,12 @@ export const user: HmppsUser = {
 
 export const flashProvider = jest.fn()
 
-function appSetup(services: Services, production: boolean, userSupplier: () => HmppsUser, sessionData: SessionData,): Express {
+function appSetup(
+  services: Services,
+  production: boolean,
+  userSupplier: () => HmppsUser,
+  sessionData: SessionData,
+): Express {
   const app = express()
 
   app.set('view engine', 'njk')

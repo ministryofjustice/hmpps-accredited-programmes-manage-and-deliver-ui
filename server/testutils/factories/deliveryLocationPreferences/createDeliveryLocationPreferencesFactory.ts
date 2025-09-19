@@ -1,4 +1,3 @@
-import { fakerEN_GB as faker } from '@faker-js/faker'
 import { CreateDeliveryLocationPreferences } from '@manage-and-deliver-api'
 import { Factory } from 'fishery'
 
