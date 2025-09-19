@@ -24,7 +24,7 @@ type ThinkingAndBehaviour = components['schemas']['ThinkingAndBehaviour']
 type Risks = components['schemas']['Risks']
 type Attitude = components['schemas']['Attitude']
 type DeliveryLocationPreferences = components['schemas']['DeliveryLocationPreferences']
-
+type UpdateCohort = components['schemas']['UpdateCohort']
 export type {
   AlcoholMisuseDetails,
   Attitude,
@@ -50,4 +50,5 @@ export type {
   SentenceInformation,
   ThinkingAndBehaviour,
   UpdateAvailability,
+  UpdateCohort,
 }

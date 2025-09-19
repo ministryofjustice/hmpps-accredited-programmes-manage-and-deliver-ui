@@ -21,3 +21,12 @@ export const initialiseName = (fullName?: string): string | null => {
   const array = fullName.split(' ')
   return `${array[0][0]}. ${array.reverse()[0]}`
 }
+
+export const formatCohort = (cohort?: string): string | null => {
+  const formatted = cohort
+    .toLowerCase() // convert to lowercase
+    .replace('_', ' ') // replace underscore with space
+
+  // Capitalize first letter only
+  return formatted.charAt(0).toUpperCase() + formatted.slice(1)
+}

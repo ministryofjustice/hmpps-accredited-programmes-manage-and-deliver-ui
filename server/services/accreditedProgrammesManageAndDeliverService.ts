@@ -3,6 +3,7 @@ import {
   Attitude,
   Availability,
   CreateAvailability,
+  CohortEnum,
   DeliveryLocationPreferences,
   DrugDetails,
   EmotionalWellbeing,
@@ -256,5 +257,14 @@ export default class AccreditedProgrammesManageAndDeliverService {
       path: `/referral-details/${referralId}/delivery-location-preferences`,
       headers: { Accept: 'application/json' },
     })) as DeliveryLocationPreferences
+  }
+
+  async updateCohort(username: string, referralId: string, updateCohort: string) {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.put({
+      path: `/referral/${referralId}/update-cohort`,
+      headers: { Accept: 'application/json' },
+      data: { cohort: updateCohort as CohortEnum },
+    })) as ReferralDetails
   }
 }

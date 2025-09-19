@@ -3,7 +3,7 @@
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 {%- from "moj/components/side-navigation/macro.njk" import mojSideNavigation -%}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
-
+{%- from "moj/components/alert/macro.njk" import mojAlert -%}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -16,7 +16,11 @@
       <div class="govuk-grid-column-full">
         {{ mojPageHeaderActions(presenter.getSubHeaderArgs()) }}
         {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
+
         <div class="govuk-grid-column-three-quarters">
+          {% if isCohortUpdated %}
+            {{ mojAlert(presenter.cohortUpdatedSuccessMessageArgs) }}
+          {% endif %}
           <h2 class="govuk-heading-m">Referral summary</h2>
           {{ govukSummaryList(presenter.referralSummary) }}
         </div>
