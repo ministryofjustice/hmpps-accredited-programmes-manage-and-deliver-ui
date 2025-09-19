@@ -26,31 +26,6 @@ export default class RisksAndNeedsPresenter extends ReferralLayoutPresenter {
   readonly pageDescription =
     'Relevant sections from OASys to support the referral. The full Layer 3 assessment is available in OASys. Information is accurate at the time of the referral being submitted.'
 
-  getSubHeaderArgs(): {
-    heading: { text: string; classes: string }
-    items: { text: string; classes: string; href?: string }[]
-  } {
-    return {
-      heading: {
-        text: 'Referral to Building Choices: moderate intensity',
-        classes: 'govuk-heading-l',
-      },
-      items: [
-        {
-          text: 'Back to referrals',
-          classes: 'govuk-button--secondary',
-          href: '/pdu/open-referrals',
-        },
-
-        {
-          text: 'Update cohort',
-          classes: 'govuk-button--secondary',
-          href: `/referral/${this.referralId}/change-cohort`,
-        },
-      ],
-    }
-  }
-
   getVerticalSubNavArgs(): {
     items: { text: string; href: string; active: boolean; attributes: object | null }[]
     classes: string
