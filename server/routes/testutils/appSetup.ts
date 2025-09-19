@@ -38,8 +38,6 @@ function appSetup(
   app.set('view engine', 'njk')
 
   app.use((req, res, next) => {
-    // req.user = userSupplier() as Express.User
-
     req.session = sessionData as Session & Partial<SessionData>
 
     next()
