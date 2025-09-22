@@ -11,9 +11,43 @@ export default class ReferralLayoutPresenter {
     readonly referralId: string,
   ) {}
 
+  getButtonMenu(): {
+    button: { text: string; classes: string }
+    items: { text: string; href?: string }[]
+  } {
+    return {
+      button: {
+        text: 'Update referral',
+        classes: 'govuk-button--secondary',
+      },
+      items: [
+        {
+          text: 'Update status',
+          href: '#',
+        },
+        {
+          text: 'Change LDC status',
+          href: '#',
+        },
+        {
+          text: 'Change cohort',
+          href: `/referral/${this.referralId}/change-cohort`,
+        },
+      ],
+    }
+  }
+
   getSubHeaderArgs(): {
     heading: { text: string; classes: string }
-    items: { text: string; classes: string; href?: string }[]
+    items: {
+      text?: string
+      classes?: string
+      href?: string
+      html?: {
+        button: { text: string; classes: string }
+        items: { text: string; href?: string }[]
+      }
+    }[]
   } {
     return {
       heading: {
@@ -26,11 +60,8 @@ export default class ReferralLayoutPresenter {
           classes: 'govuk-button--secondary',
           href: '/pdu/open-referrals',
         },
-
         {
-          text: 'Update cohort',
-          classes: 'govuk-button--secondary',
-          href: `/referral/${this.referralId}/change-cohort`,
+          html: this.getButtonMenu(),
         },
       ],
     }

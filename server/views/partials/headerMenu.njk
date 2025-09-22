@@ -1,0 +1,31 @@
+{%- from "govuk/components/button/macro.njk" import govukButton %}
+{%- from "moj/components/button-menu/macro.njk" import mojButtonMenu -%}
+
+<div class="moj-button-group moj-button-group--inline">
+    {{ govukButton({
+        text: 'Back to referrals',
+        classes: 'govuk-button--secondary'
+  }) }}
+
+    {{ mojButtonMenu({
+        button: {
+        text: "Update referral",
+        classes: "govuk-button--secondary"
+        },
+        alignMenu: "right",
+        items: [
+        {
+            text: "Update status",
+            href: "#"
+        },
+        {
+            text: "Change LDC status",
+            href: "#"
+        },
+        {
+            text: "Change cohort",
+            href: "#"
+        }
+        ]
+    }) }}
+</div>
