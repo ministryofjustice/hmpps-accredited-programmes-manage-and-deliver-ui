@@ -14,73 +14,71 @@
       <div class="govuk-main-wrapper">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-full">
-<!--            {# {% include "../partials/headerMenu.njk" %} #}-->
-<!--            {{ mojPageHeaderActions(presenter.getSubHeaderArgs()) }}-->
-<!--            {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}-->
-            <div class="govuk-grid-column-two-thirds">
-              <h1 class="govuk-heading-xl">Referral to Building Choices: moderate intensity</h1>
-            </div>
-
-            <div class="govuk-grid-column-one-third">
-              {% include "../partials/headerMenu.njk" %}
+            {% include "../partials/headerMenu.njk" %}
+            <div class="govuk-grid-column-full">
+              {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
             </div>
 
             <div class="govuk-grid-column-three-quarters">
               {% if isCohortUpdated %}
                 {{ mojAlert(presenter.cohortUpdatedSuccessMessageArgs) }}
               {% endif %}
+              {% if isLdcUpdated %}
+                {{ mojAlert(presenter.ldcUpdatedSuccessMessageArgs) }}
+              {% endif %}
               <h2 class="govuk-heading-m">Referral summary</h2>
               {{ govukSummaryList(presenter.referralSummary) }}
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="govuk-grid-row">
-          <div class="govuk-grid-column-full">
-            <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-          </div>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+          <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
         </div>
-        <div class="govuk-grid-row">
+      </div>
+      <div class="govuk-grid-row">
 
-          <div class="govuk-grid-column-one-third">
+        <div class="govuk-grid-column-one-third">
 
-            {{ mojSideNavigation(presenter.getVerticalSubNavArgs()) }}
+          {{ mojSideNavigation(presenter.getVerticalSubNavArgs()) }}
 
-          </div>
-          <div class="govuk-grid-column-two-thirds">
-            {% if presenter.subNavValue == 'programmeHistory' %}
-              <div>
+        </div>
+        <div class="govuk-grid-column-two-thirds">
+          {% if presenter.subNavValue == 'programmeHistory' %}
+            <div>
 
             Programme History
           </div>
-            {% elif presenter.subNavValue == 'offenceHistory' %}
-              <div>
-                {% include "./offenceHistory.njk" %}
-              </div>
-            {% elif presenter.subNavValue == 'sentenceInformation' %}
-              <div>
-                {% include "./sentenceInformation.njk" %}
-              </div>
-            {% elif presenter.subNavValue == 'availability' %}
-              <div>
-                {% include "./availability.njk" %}
-              </div>
-            {% elif presenter.subNavValue == 'location' %}
-              <div>
-                {% include "./location.njk" %}
-              </div>
-            {% elif presenter.subNavValue == 'additionalInformation' %}
-              <div>
+          {% elif presenter.subNavValue == 'offenceHistory' %}
+            <div>
+              {% include "./offenceHistory.njk" %}
+            </div>
+          {% elif presenter.subNavValue == 'sentenceInformation' %}
+            <div>
+              {% include "./sentenceInformation.njk" %}
+            </div>
+          {% elif presenter.subNavValue == 'availability' %}
+            <div>
+              {% include "./availability.njk" %}
+            </div>
+          {% elif presenter.subNavValue == 'location' %}
+            <div>
+              {% include "./location.njk" %}
+            </div>
+          {% elif presenter.subNavValue == 'additionalInformation' %}
+            <div>
             Additional Information
           </div>
-            {% else %}
-              {% include "./personalDetails.njk" %}
-            {% endif %}
-          </div>
+          {% else %}
+            {% include "./personalDetails.njk" %}
+          {% endif %}
         </div>
-
       </div>
-    </div>
 
-  {% endblock %}
+    </div>
+  </div>
+
+{% endblock %}
 {% endblock %}

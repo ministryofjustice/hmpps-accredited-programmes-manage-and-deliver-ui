@@ -1,13 +1,14 @@
 import { type RequestHandler, Router } from 'express'
 
-import asyncMiddleware from '../middleware/asyncMiddleware'
-import type { Services } from '../services'
-import ReferralDetailsController from '../referralDetails/referralDetailsController'
 import CaselistController from '../caselist/caselistController'
-import PniController from '../pni/pniController'
-import RisksAndNeedsController from '../risksAndNeeds/risksAndNeedsController'
-import LocationPreferencesController from '../locationPreferences/locationPreferencesController'
 import ChangeCohortController from '../cohort/changeCohortController'
+import LdcController from '../ldc/ldcController'
+import LocationPreferencesController from '../locationPreferences/locationPreferencesController'
+import asyncMiddleware from '../middleware/asyncMiddleware'
+import PniController from '../pni/pniController'
+import ReferralDetailsController from '../referralDetails/referralDetailsController'
+import RisksAndNeedsController from '../risksAndNeeds/risksAndNeedsController'
+import type { Services } from '../services'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
@@ -20,6 +21,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const programmeNeedsIdenfitierController = new PniController(accreditedProgrammesManageAndDeliverService)
   const locationPreferencesController = new LocationPreferencesController(accreditedProgrammesManageAndDeliverService)
   const cohortController = new ChangeCohortController(accreditedProgrammesManageAndDeliverService)
+  const ldcController = new LdcController(accreditedProgrammesManageAndDeliverService)
 
   get('/', async (req, res, next) => {
     await caselistController.showOpenCaselist(req, res)
@@ -163,6 +165,14 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   post('/referral/:referralId/change-cohort', async (req, res, next) => {
     await cohortController.showChangeCohortPage(req, res)
+  })
+
+  get('/referral/:referralId/update-ldc', async (req, res, next) => {
+    await ldcController.showChangeLdcPage(req, res)
+  })
+
+  post('/referral/:referralId/update-ldc', async (req, res, next) => {
+    await ldcController.showChangeLdcPage(req, res)
   })
 
   return router

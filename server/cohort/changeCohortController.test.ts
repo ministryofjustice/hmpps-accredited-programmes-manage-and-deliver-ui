@@ -1,12 +1,12 @@
 import { randomUUID } from 'crypto'
 import request from 'supertest'
 
-import { Express } from 'express'
 import { CohortEnum, PersonalDetails, ReferralDetails } from '@manage-and-deliver-api'
-import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
+import { Express } from 'express'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import personalDetailsFactory from '../testutils/factories/personalDetailsFactory'
+import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')

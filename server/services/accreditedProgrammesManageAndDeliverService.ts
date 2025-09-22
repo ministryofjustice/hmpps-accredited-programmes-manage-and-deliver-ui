@@ -2,8 +2,8 @@ import {
   AlcoholMisuseDetails,
   Attitude,
   Availability,
-  CreateAvailability,
   CohortEnum,
+  CreateAvailability,
   DeliveryLocationPreferences,
   DrugDetails,
   EmotionalWellbeing,
@@ -314,5 +314,14 @@ export default class AccreditedProgrammesManageAndDeliverService
       headers: { Accept: 'application/json' },
       data: { cohort: updateCohort as CohortEnum },
     })) as ReferralDetails
+  }
+
+  async updateLdc(username: string, referralId: string, hasLdc: boolean) {
+    const restClient = await this.createRestClientFromUsername(username)
+    return restClient.post({
+      path: `/referral/${referralId}/update-ldc`,
+      headers: { Accept: 'application/json' },
+      data: { hasLdc },
+    })
   }
 }

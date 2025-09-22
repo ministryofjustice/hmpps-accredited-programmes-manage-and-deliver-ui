@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
-import PniPresenter from './pniPresenter'
 import ControllerUtils from '../utils/controllerUtils'
+import PniPresenter from './pniPresenter'
 import PniView from './pniView'
 
 export default class PniController {
@@ -18,6 +18,8 @@ export default class PniController {
       username,
     )
     const pniScore = await this.accreditedProgrammesManageAndDeliverService.getPniScore(username, referralDetails.crn)
+
+    req.session.originPage = req.originalUrl
 
     const presenter = new PniPresenter(referralId, referralDetails, pniScore)
     const view = new PniView(presenter)

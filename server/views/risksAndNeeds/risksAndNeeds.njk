@@ -34,38 +34,38 @@
           </div>
           <div class="govuk-grid-column-two-thirds">
             {% if presenter.subNavValue == 'learningNeeds' %}
-            <div>
-                  {% include "./learningNeeds.njk" %}
-            </div>
+              <div>
+                {% include "./learningNeeds.njk" %}
+              </div>
             {% elif presenter.subNavValue == 'offenceAnalysis' %}
-            <div>
-              {% include "./offenceAnalysis.njk" %}
-            </div>
+              <div>
+                {% include "./offenceAnalysis.njk" %}
+              </div>
             {% elif presenter.subNavValue == 'relationships' %}
-            <div>
+              <div>
                 {% include "./relationships.njk" %}
-            </div>
+              </div>
             {% elif presenter.subNavValue == 'lifestyleAndAssociates' %}
               <div>
                 {% include "./lifestyleAndAssociates.njk" %}
               </div>
             {% elif presenter.subNavValue == 'drugMisuse' %}
-            <div>
-              {% include "./drugMisuseDetails.njk" %}
-            </div>
+              <div>
+                {% include "./drugMisuseDetails.njk" %}
+              </div>
             {% elif presenter.subNavValue == 'alcoholMisuse' %}
-            <div>
+              <div>
                 {% include "./alcoholMisuse.njk" %}
-            </div>
+              </div>
             {% elif presenter.subNavValue == 'emotionalWellbeing' %}
-            <div>
-              {% include "./emotionalWellbeing.njk" %}
-            </div>
+              <div>
+                {% include "./emotionalWellbeing.njk" %}
+              </div>
             {% elif presenter.subNavValue == 'thinkingAndBehaviour' %}
-            <div>
-              {% include "./thinkingAndBehaviour.njk" %}
-            </div>
-              {% elif presenter.subNavValue == 'attitudes' %}
+              <div>
+                {% include "./thinkingAndBehaviour.njk" %}
+              </div>
+            {% elif presenter.subNavValue == 'attitudes' %}
               <div>
                 {% include "./attitudes.njk" %}
               </div>
@@ -79,7 +79,7 @@
               </div>
             {% else %}
               <div>
-              {% include "./risksAndAlerts.njk" %}
+                {% include "./risksAndAlerts.njk" %}
               </div>
             {% endif %}
           </div>
