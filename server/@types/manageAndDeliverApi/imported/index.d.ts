@@ -111,6 +111,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/delivery-location-preferences/referral/{referralId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Create Delivery Location Preferences for a referral
+     * @description Create Delivery Location Preferences for a referral
+     */
+    post: operations['createDeliveryLocationPreferencesForReferral']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/risks-and-needs/{crn}/thinking-and-behaviour': {
     parameters: {
       query?: never
@@ -715,6 +735,32 @@ export interface components {
        */
       otherDetails?: string
       availabilities: components['schemas']['DailyAvailabilityModel'][]
+    }
+    CodeDescription: {
+      code: string
+      description: string
+    }
+    /** @description The delivery location preferences for a referral */
+    CreateDeliveryLocationPreferences: {
+      preferredDeliveryLocations: components['schemas']['PreferredDeliveryLocation'][]
+      /**
+       * @description Rich text explaining locations the person cannot attend
+       * @example Alex River cannot attend locations in Postcode NE1
+       */
+      cannotAttendText?: string
+    }
+    PreferredDeliveryLocation: {
+      /**
+       * @description The nDelius code for the Probation Delivery Unit
+       * @example PDU001
+       */
+      pduCode: string
+      /**
+       * @description The nDelius description for the Probation Delivery Unit
+       * @example London PDU
+       */
+      pduDescription: string
+      deliveryLocations: components['schemas']['CodeDescription'][]
     }
     CreateAvailability: {
       /**
@@ -2075,6 +2121,67 @@ export interface operations {
       }
       /** @description Unauthorised. The request was unauthorised. */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  createDeliveryLocationPreferencesForReferral: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id (UUID) of a referral */
+        referralId: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateDeliveryLocationPreferences']
+      }
+    }
+    responses: {
+      /** @description Delivery Location Preferences created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad Request. Blank or missing values */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The referral does not exist for the provider referralId */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Conflict. Delivery location preferences already exist for this referral */
+      409: {
         headers: {
           [name: string]: unknown
         }

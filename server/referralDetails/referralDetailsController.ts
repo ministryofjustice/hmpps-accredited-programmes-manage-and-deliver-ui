@@ -131,6 +131,7 @@ export default class ReferralDetailsController {
   async showLocationPage(req: Request, res: Response): Promise<void> {
     const { id } = req.params
     const { username } = req.user
+    const { preferredLocationUpdated } = req.query
     const subNavValue = 'location'
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
@@ -138,7 +139,13 @@ export default class ReferralDetailsController {
     const deliveryLocationPreferences =
       await this.accreditedProgrammesManageAndDeliverService.getDeliveryLocationPreferences(username, id)
 
-    const presenter = new LocationPresenter(sharedReferralDetailsData, subNavValue, id, deliveryLocationPreferences)
+    const presenter = new LocationPresenter(
+      sharedReferralDetailsData,
+      subNavValue,
+      id,
+      deliveryLocationPreferences,
+      preferredLocationUpdated === 'true',
+    )
     const view = new LocationView(presenter)
 
     req.session.originPage = req.originalUrl

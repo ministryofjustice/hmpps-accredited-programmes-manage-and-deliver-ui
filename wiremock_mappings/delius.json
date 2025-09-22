@@ -222,6 +222,154 @@
     {
       "request": {
         "method": "GET",
+        "urlPathPattern": "/case/[^/]+/requirement/[^/]+$"
+      },
+      "priority": 1,
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "manager": {
+            "staff": {
+              "code": "STAFF001",
+              "name": {
+                "forename": "Wiremocked-Sarah",
+                "surname": "Johnson"
+              }
+            },
+            "team": {
+              "code": "TEAM001",
+              "description": "(Wiremocked) Community Offender Management Team"
+            },
+            "probationDeliveryUnit": {
+              "code": "PDU001",
+              "description": "(Wiremocked) London PDU"
+            },
+            "officeLocations": [
+              {
+                "code": "OFF001",
+                "description": "(Wiremocked) Waterloo Office"
+              },
+              {
+                "code": "OFF002",
+                "description": "(Wiremocked) Victoria Office"
+              }
+            ]
+          },
+          "probationDeliveryUnits": [
+            {
+              "code": "PDU001",
+              "description": "(Wiremocked) Non-Primary London North PDU",
+              "officeLocations": [
+                {
+                  "code": "LOC001",
+                  "description": "(Wiremocked) Camden Office"
+                },
+                {
+                  "code": "LOC002",
+                  "description": "(Wiremocked) Islington Office"
+                }
+              ]
+            },
+            {
+              "code": "PDU002",
+              "description": "(Wiremocked) London South PDU",
+              "officeLocations": [
+                {
+                  "code": "LOC003",
+                  "description": "(Wiremocked) Southwark Office"
+                },
+                {
+                  "code": "LOC004",
+                  "description": "(Wiremocked) Office 1"
+                },
+                {
+                  "code": "LOC005",
+                  "description": "(Wiremocked) Office 2"
+                }
+              ]
+            },
+            {
+              "code": "PDU003",
+              "description": "(Wiremocked) Manchester PDU",
+              "officeLocations": [
+                {
+                  "code": "LOC006",
+                  "description": "(Wiremocked) North Office"
+                },
+                {
+                  "code": "LOC007",
+                  "description": "(Wiremocked) South Office"
+                },
+                {
+                  "code": "LOC008",
+                  "description": "(Wiremocked)  East Office"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPathPattern": "/case/[^/]+/licence-conditions/[^/]+$"
+      },
+      "priority": 1,
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "manager": {
+            "staff": {
+              "name": {
+                "forename": "Wiremock Sam",
+                "surname": "Surname"
+              },
+              "code": "N03UATU"
+            },
+            "team": {
+              "code": "N03UAT",
+              "description": "Unallocated Team(N03)"
+            },
+            "probationDeliveryUnit": {
+              "code": "N03UAT",
+              "description": "Unallocated Level 2(N03)"
+            },
+            "officeLocations": [
+              {
+                "code": "N03ANPS",
+                "description": "All Location"
+              }
+            ]
+          },
+          "probationDeliveryUnits": [
+            {
+              "code": "PDU003",
+              "description": "(Wiremocked) Manchester Central PDU",
+              "officeLocations": [
+                {
+                  "code": "LOC004",
+                  "description": "(Wiremocked) City Centre Office"
+                },
+                {
+                  "code": "LOC005",
+                  "description": "(Wiremocked) Old Trafford Office"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
         "urlPathPattern": "/case/.*/registrations"
       },
       "response": {
