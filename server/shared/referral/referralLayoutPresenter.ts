@@ -128,7 +128,7 @@ export default class ReferralLayoutPresenter {
         },
         {
           text: 'Status history',
-          href: '#4',
+          href: `/referral/${this.referralId}/status-history`,
           active: this.horizontalNavValue === HorizontalNavValues.statusHistoryTab,
         },
       ],
