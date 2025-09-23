@@ -24,6 +24,7 @@ import {
   UpdateAvailability,
   DeliveryLocationPreferencesFormData,
   CreateDeliveryLocationPreferences,
+  ReferralStatusHistory,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -233,6 +234,14 @@ export default class AccreditedProgrammesManageAndDeliverService
       path: `/referral-details/${referralId}/offence-history`,
       headers: { Accept: 'application/json' },
     })) as OffenceHistory
+  }
+
+  async getStatusHistory(username: ExpressUsername, referralId: string): Promise<ReferralStatusHistory[]> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/referral/${referralId}/status-history`,
+      headers: { Accept: 'application/json' },
+    })) as ReferralStatusHistory[]
   }
 
   async getPniScore(username: ExpressUsername, crn: string): Promise<PniScore> {
