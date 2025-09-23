@@ -30,6 +30,7 @@ type PreferredDeliveryLocation = components['schemas']['PreferredDeliveryLocatio
 type ExistingDeliveryLocationPreferences = components['schemas']['ExistingDeliveryLocationPreferences']
 type UpdateCohort = components['schemas']['UpdateCohort']
 type UpdateLdc = components['schemas']['UpdateLdc']
+type ReferralStatusHistory = components['schemas']['Stat']
 
 export type {
   AlcoholMisuseDetails,
