@@ -623,8 +623,590 @@ export interface paths {
     patch?: never
     trace?: never
   }
+    "/referral/{id}/update-cohort": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Update cohort information for a referral */
+        put: operations["updateCohortForReferral"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/queue-admin/retry-dlq/{dlqName}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["retryDlq"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/queue-admin/retry-all-dlqs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["retryAllDlqs"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/queue-admin/purge-queue/{queueName}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["purgeQueue"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/delivery-location-preferences/referral/{referralId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Update Delivery Location Preferences for a referral
+         * @description Update Delivery Location Preferences for a referral
+         */
+        put: operations["updateDeliveryLocationPreferencesForReferral"];
+        /**
+         * Create Delivery Location Preferences for a referral
+         * @description Create Delivery Location Preferences for a referral
+         */
+        post: operations["createDeliveryLocationPreferencesForReferral"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/availability": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Update availability */
+        put: operations["updateAvailability"];
+        /** Create a new availability */
+        post: operations["createAvailability"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/referral/{referralId}/update-ldc": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["updateLdcStatusForReferral"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/referral/{id}/status-history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get the Status History for a Referral
+         * @description Fetches an event log history of the Referral Status for a given Referral
+         */
+        get: operations["getStatusHistoryForReferral"];
+        put?: never;
+        /**
+         * Update the Status of a Referral
+         * @description Updates the Status of a Referral, by creating a new entry in the log of Referral Statuses
+         */
+        post: operations["updateStatusForReferral"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/risks-and-needs/{crn}/thinking-and-behaviour": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get thinking and behaviour details as held by Oasys
+         * @description Fetch thinking and behaviour data
+         */
+        get: operations["getThinkingAndBehaviourDetails"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/risks-and-needs/{crn}/rosh-analysis": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** ROSH details as held by Oasys */
+        get: operations["getRoshAnalysisByCrn"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/risks-and-needs/{crn}/risks-and-alerts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Risks details as held by Oasys */
+        get: operations["getRisksByCrn"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/risks-and-needs/{crn}/relationships": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Retrieve a person's relationship details as held in Oasys */
+        get: operations["getRelationships"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/risks-and-needs/{crn}/offence-analysis": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Offence Analysis details as held by Oasys */
+        get: operations["getOffenceAnalysisByCrn"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/risks-and-needs/{crn}/lifestyle-and-associates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lifestyle and Associate details as held by Oasys */
+        get: operations["getLifestyleAndAssociates"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/risks-and-needs/{crn}/learning-needs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Retrieve a person's Learning needs as held in Oasys */
+        get: operations["getLearningNeeds"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/risks-and-needs/{crn}/health": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Health details as held by Oasys */
+        get: operations["getHealth"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/risks-and-needs/{crn}/emotional-wellbeing": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get emotional wellbeing details as held by Oasys
+         * @description Fetch emotional needs of the person based on crn
+         */
+        get: operations["getEmotionalWellbeing"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/risks-and-needs/{crn}/drug-details": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get drug details as held by Oasys */
+        get: operations["getDrugDetails"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/risks-and-needs/{crn}/attitude": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get attitude details as held by Oasys
+         * @description Fetch attitude data
+         */
+        get: operations["getAttitude"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/risks-and-needs/{crn}/alcohol-misuse-details": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get alcohol misuse details as held by Oasys */
+        get: operations["getAlcoholMisuseDetails"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/referral-status/{id}/transitions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Retrieve possible referral status transitions
+         * @description Returns all possible referral status transitions for a given referral status description ID
+         */
+        get: operations["getPossibleTransitions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/referral-details/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Retrieve a referral */
+        get: operations["getReferralDetailsById"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/referral-details/{id}/sentence-information": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Retrieve sentence information for a referral */
+        get: operations["getSentenceInformationByReferralId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/referral-details/{id}/personal-details": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Retrieve personal details for a referral */
+        get: operations["getPersonalDetailsByIdentifier"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/referral-details/{id}/offence-history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Retrieve offence history for a referral */
+        get: operations["getOffenceHistoryByReferralId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/referral-details/{id}/manager": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Retrieve the manager associated with the Licence Condition or Requirement associated with a referral
+         * @description
+         *           Retrieves the manager (Probation Practitioner) associated with the Case, which is upstream of the
+         *           Referral itself.  We use this to retrieve a list of Delivery Locations (Offices) within the same
+         *           PDU as a Referral itself.
+         *
+         */
+        get: operations["getManagerByReferralId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/referral-details/{id}/delivery-location-preferences": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Retrieve preferred delivery locations for a referral */
+        get: operations["getPreferredDeliveryLocationsByReferralId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/queue-admin/get-dlq-messages/{dlqName}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["getDlqMessages"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/pni-score/{crn}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Retrieve PNI Score */
+        get: operations["getPniScoreByCrn"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/pages/caselist/{openOrClosed}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all referrals for the case list view */
+        get: operations["getCaseListReferrals"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/bff/referral-delivery-location-preferences-form/{referralId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * A Backend-For-Frontend endpoint for the multi-page Delivery Location Preferences form
+         * @description
+         *           Retrieves all the data needed for the multi-page Delivery Location Preferences form, for a Referral:
+         *           - Person on Probation summary information (from nDelius)
+         *           - Existing delivery location preferences (or `null`)
+         *           - Primary PDU delivery locations for the Manager associated with the Referral (from nDelius)
+         *           - Other PDUs in the same region (from nDelius)
+         *
+         */
+        get: operations["getDeliveryLocationPreferencesFormData"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/availability/referral/{referralId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all availabilities for a referral */
+        get: operations["getAvailabilityByReferralId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
-export type webhooks = Record<string, never>
+export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
     ErrorResponse: {
@@ -1975,8 +2557,1289 @@ export interface components {
   requestBodies: never
   headers: never
   pathItems: never
+    schemas: {
+        ErrorResponse: {
+            /**
+             * Format: int32
+             * @description The HTTP status code returned by the server
+             * @example 404
+             */
+            status: number;
+            /**
+             * Format: int32
+             * @description An application-specific error code
+             * @example 404
+             */
+            errorCode?: number;
+            /**
+             * @description A human readable message for the error
+             * @example Referral Not found
+             */
+            userMessage?: string;
+            /**
+             * @description A developer friendly message for the error
+             * @example null
+             */
+            developerMessage?: string;
+            /**
+             * @description Additional information about the error
+             * @example null
+             */
+            moreInfo?: string;
+        };
+        /** @description Cohort to update the referral with */
+        UpdateCohort: {
+            /**
+             * @description Cohort of the referral
+             * @example SEXUAL_OFFENCE
+             * @enum {string}
+             */
+            cohort: "SEXUAL_OFFENCE" | "GENERAL_OFFENCE";
+        };
+        Referral: {
+            /**
+             * Format: uuid
+             * @description The unique id of this referral.
+             * @example c98151f4-4081-4c65-9f98-54e63a328c8d
+             */
+            id: string;
+            /**
+             * @description The name of the person associated with this referral.
+             * @example John Doe
+             */
+            personName: string;
+            /**
+             * @description The CRN identifier of the person associated with this referral.
+             * @example X12345
+             */
+            crn: string;
+            /**
+             * Format: date-time
+             * @description The date and time that this referral was created.
+             * @example 2025-07-09T10:15:30
+             */
+            createdAt: string;
+            /**
+             * @description The current referral status.
+             * @example Created
+             */
+            status: string;
+            /**
+             * @description The current cohort of a referral
+             * @example Cohort
+             * @enum {string}
+             */
+            cohort: "SEXUAL_OFFENCE" | "GENERAL_OFFENCE";
+        };
+        RetryDlqResult: {
+            /** Format: int32 */
+            messagesFoundCount: number;
+        };
+        PurgeQueueResult: {
+            /** Format: int32 */
+            messagesFoundCount: number;
+        };
+        CodeDescription: {
+            code: string;
+            description: string;
+        };
+        /** @description The delivery location preferences for a referral */
+        CreateDeliveryLocationPreferences: {
+            preferredDeliveryLocations: components["schemas"]["PreferredDeliveryLocation"][];
+            /**
+             * @description Rich text explaining locations the person cannot attend
+             * @example Alex River cannot attend locations in Postcode NE1
+             */
+            cannotAttendText?: string;
+        };
+        PreferredDeliveryLocation: {
+            /**
+             * @description The nDelius code for the Probation Delivery Unit
+             * @example PDU001
+             */
+            pduCode: string;
+            /**
+             * @description The nDelius description for the Probation Delivery Unit
+             * @example London PDU
+             */
+            pduDescription: string;
+            deliveryLocations: components["schemas"]["CodeDescription"][];
+        };
+        Availability: {
+            /**
+             * Format: uuid
+             * @description Unique ID of the availability
+             * @example null
+             */
+            id?: string;
+            /**
+             * Format: uuid
+             * @description The ID of the referral
+             * @example d3f55f38-7c7b-4b6e-9aa1-e7d7f9e3e785
+             */
+            referralId: string;
+            /**
+             * @description Start date of the availability
+             * @example 2025-07-10
+             */
+            startDate?: string;
+            /**
+             * @description End date of the availability
+             * @example 2025-07-20
+             */
+            endDate?: string;
+            /**
+             * @description Additional details
+             * @example Available for remote sessions
+             */
+            otherDetails?: string;
+            /**
+             * @description User who last modified this record
+             * @example admin_user
+             */
+            lastModifiedBy?: string;
+            /**
+             * @description Timestamp when last modified
+             * @example 2025-07-10T12:00:00
+             */
+            lastModifiedAt?: string;
+            availabilities: components["schemas"]["DailyAvailabilityModel"][];
+        };
+        DailyAvailabilityModel: {
+            /** @enum {string} */
+            label: "Mondays" | "Tuesdays" | "Wednesdays" | "Thursdays" | "Fridays" | "Saturdays" | "Sundays";
+            slots: components["schemas"]["Slot"][];
+        };
+        Slot: {
+            label: string;
+            value: boolean;
+        };
+        UpdateAvailability: {
+            /**
+             * Format: uuid
+             * @description The ID of the availability to update
+             * @example d3f55f38-7c7b-4b6e-9aa1-e7d7f9e3e7893
+             */
+            availabilityId: string;
+            /**
+             * Format: uuid
+             * @description The ID of the referral
+             * @example d3f55f38-7c7b-4b6e-9aa1-e7d7f9e3e785
+             */
+            referralId: string;
+            /**
+             * @description Start date of the availability, Start date of the availability, will default to current date if no value is passed in
+             * @example 2025-07-10
+             */
+            startDate?: string;
+            /**
+             * @description End date of the availability
+             * @example 2025-07-20
+             */
+            endDate?: string;
+            /**
+             * @description Additional details
+             * @example Available for remote sessions
+             */
+            otherDetails?: string;
+            availabilities: components["schemas"]["DailyAvailabilityModel"][];
+        };
+        /** @description Does the person associated with the referral have LDC needs. */
+        UpdateLdc: {
+            /**
+             * @description The updated LDC status of the referral
+             * @example true
+             * @enum {boolean}
+             */
+            hasLdc: "true" | "false";
+        };
+        ReferralStatusHistory: {
+            /**
+             * Format: uuid
+             * @description ID of the ReferralStatusHistory entry
+             * @example 21da0995-5827-4cc9-bbc9-c7c7f2975163
+             */
+            id: string;
+            /**
+             * Format: uuid
+             * @description ID of the Referral Status Description
+             * @example 21da0995-5827-4cc9-bbc9-c7c7f2975163
+             */
+            referralStatusDescriptionId: string;
+            /**
+             * @description Human-readable name of the Referral Status, useful for UIs
+             * @example Awaiting assessment
+             */
+            referralStatusDescriptionName: string;
+        };
+        /** @description Details of the new Referral Status to assign */
+        CreateReferralStatusHistory: {
+            /**
+             * Format: uuid
+             * @description The UUID of the relevant Referral Status Description
+             * @example 76b2f8d8-260c-4766-a716-de9325292609
+             */
+            referralStatusDescriptionId: string;
+            /**
+             * @description A free-text description that allows a user to add context or information to the Status change
+             * @example Updating the status following a one-to-one meeting with Person on Probation
+             */
+            additionalDetails?: string;
+        };
+        CreateAvailability: {
+            /**
+             * Format: uuid
+             * @description The ID of the referral
+             * @example d3f55f38-7c7b-4b6e-9aa1-e7d7f9e3e785
+             */
+            referralId: string;
+            /**
+             * @description Start date of the availability, Start date of the availability, will default to current date if no value is passed in
+             * @example 2025-07-10
+             */
+            startDate?: string;
+            /**
+             * @description End date of the availability
+             * @example 2025-07-20
+             */
+            endDate?: string;
+            /**
+             * @description Additional details
+             * @example Available for remote sessions
+             */
+            otherDetails?: string;
+            availabilities: components["schemas"]["DailyAvailabilityModel"][];
+        };
+        ThinkingAndBehaviour: {
+            /**
+             * Format: date
+             * @example 1
+             */
+            assessmentCompleted?: string;
+            /** @example 1-Some problems */
+            temperControl?: string;
+            /** @example 2 */
+            problemSolvingSkills?: string;
+            /** @example 0-No problems */
+            awarenessOfConsequences?: string;
+            /** @example 0-No problems */
+            understandsViewsOfOthers?: string;
+            /** @example 0-No problems */
+            achieveGoals?: string;
+            /** @example 0-No problems */
+            concreteAbstractThinking?: string;
+        };
+        RoshAnalysis: {
+            /** Format: date */
+            assessmentCompleted: string;
+            /**
+             * @description The details of the current offence.
+             * @example Tax evasion
+             */
+            offenceDetails?: string;
+            /**
+             * @description The where and when of the current offence.
+             * @example At home
+             */
+            whereAndWhen?: string;
+            /**
+             * @description How the offence was committed for the current offence.
+             * @example false
+             */
+            howDone?: string;
+            /**
+             * @description The victims of the current offence.
+             * @example hmrc
+             */
+            whoVictims?: string;
+            /**
+             * @description Text describing if anyone else was present for the current offence.
+             * @example company secretary
+             */
+            anyoneElsePresent?: string;
+            /**
+             * @description The motivation for the current offence.
+             * @example Greed
+             */
+            whyDone?: string;
+            /**
+             * @description The source of this information for the current offence.
+             * @example crown court
+             */
+            sources?: string;
+            /**
+             * @description Identify behaviours / incidents that evidence the individual’s ability to cause serious harm and when they happened
+             * @example Physical assault on cellmate requiring medical attention on 22nd March 2024. Weapon possession (improvised blade) discovered during cell search on 8th February 2024.
+             */
+            identifyBehavioursIncidents?: string;
+            /**
+             * @description Provide an analysis of any patterns related to these behaviours / incidents, for example: victims, triggers, locations, impact.
+             * @example Escalating violence in evenings when challenged, targeting vulnerable individuals, causing injuries requiring medical attention.
+             */
+            analysisBehaviourIncidents?: string;
+        };
+        OasysSara: {
+            /**
+             * @description Risk of violence towards a partner
+             * @example Low
+             * @enum {string}
+             */
+            imminentRiskOfViolenceTowardsPartner?: "Low" | "Medium" | "High";
+            /**
+             * @description Risk of violence towards others
+             * @example Medium
+             * @enum {string}
+             */
+            imminentRiskOfViolenceTowardsOthers?: "Low" | "Medium" | "High";
+        };
+        RiskOfSeriousRecidivism: {
+            /**
+             * @description Risk of Serious Recidivism score
+             * @example 3.45
+             */
+            scoreLevel?: string;
+            /**
+             * @description Risk of Serious Recidivism level
+             * @example Medium
+             * @enum {number}
+             */
+            percentageScore?: "Low" | "Medium" | "High";
+            /**
+             * @description Other person(s) at risk - Children
+             * @example Low
+             */
+            ospcScore?: string;
+            /**
+             * @description Other person(s) at risk - Intimate
+             * @example High
+             */
+            ospiScore?: string;
+        };
+        Risks: {
+            /** Format: date */
+            assessmentCompleted: string;
+            /** @description Offender Group Reconviction scale */
+            offenderGroupReconviction?: components["schemas"]["Score"];
+            /** @description Offender Violence Predictor */
+            offenderViolencePredictor?: components["schemas"]["Score"];
+            /** @description Spousal Assault Risk Assessment */
+            sara?: components["schemas"]["OasysSara"];
+            /** @description Risk of Serious Recidivism */
+            riskOfSeriousRecidivism?: components["schemas"]["RiskOfSeriousRecidivism"];
+            /** @description Risk of Serious Harm */
+            riskOfSeriousHarm?: components["schemas"]["RoshSummary"];
+            /**
+             * @description Active alerts for a person
+             * @example ["Domestic Abuse History","MAPPA","Domestic Abuse Victim",]
+             */
+            alerts?: string[];
+            /**
+             * Format: date
+             * @description The date this data was fetched from nDelius.
+             * @example 1
+             */
+            dateRetrieved: string;
+            /**
+             * Format: date
+             * @description The date this data was fetched from nDelius.
+             * @example 1
+             */
+            lastUpdated: string;
+        };
+        RoshSummary: {
+            /**
+             * @description Risk towards prisoners in Custody
+             * @example Medium
+             * @enum {string}
+             */
+            riskPrisonersCustody?: "Low" | "Medium" | "High";
+            /**
+             * @description Risk towards staff in Custody
+             * @example Medium
+             * @enum {string}
+             */
+            riskStaffCustody?: "Low" | "Medium" | "High";
+            /**
+             * @description Risk towards known adult in Custody
+             * @example Medium
+             * @enum {string}
+             */
+            riskKnownAdultCustody?: "Low" | "Medium" | "High";
+            /**
+             * @description Risk towards public in Custody
+             * @example Medium
+             * @enum {string}
+             */
+            riskPublicCustody?: "Low" | "Medium" | "High";
+            /**
+             * @description Risk towards children in Custody
+             * @example Medium
+             * @enum {string}
+             */
+            riskChildrenCustody?: "Low" | "Medium" | "High";
+            /**
+             * @description Risk towards staff in Community
+             * @example Medium
+             * @enum {string}
+             */
+            riskStaffCommunity?: "Low" | "Medium" | "High";
+            /**
+             * @description Risk towards known adults in Community
+             * @example Medium
+             * @enum {string}
+             */
+            riskKnownAdultCommunity?: "Low" | "Medium" | "High";
+            /**
+             * @description Risk towards the public in Community
+             * @example Medium
+             * @enum {string}
+             */
+            riskPublicCommunity?: "Low" | "Medium" | "High";
+            /**
+             * @description Risk towards children in Community
+             * @example Medium
+             * @enum {string}
+             */
+            riskChildrenCommunity?: "Low" | "Medium" | "High";
+            /**
+             * @description Risk of Serious Harm level
+             * @example Low
+             * @enum {string}
+             */
+            overallRoshLevel?: "Low" | "Medium" | "High";
+        };
+        Score: {
+            /**
+             * @description One year prediction score
+             * @example 0.75
+             */
+            oneYear?: number;
+            /**
+             * @description Two year prediction score
+             * @example 0.85
+             */
+            twoYears?: number;
+            /**
+             * @description Risk level classification
+             * @example HIGH
+             * @enum {string}
+             */
+            scoreLevel?: "LOW" | "MEDIUM" | "HIGH";
+        };
+        Relationships: {
+            /**
+             * Format: date
+             * @example 1
+             */
+            assessmentCompleted?: string;
+            /** @example true */
+            dvEvidence?: boolean;
+            /** @example false */
+            victimFormerPartner?: boolean;
+            /** @example true */
+            victimFamilyMember?: boolean;
+            /** @example false */
+            victimOfPartnerFamily?: boolean;
+            /** @example true */
+            perpOfPartnerOrFamily?: boolean;
+            /** @example This person has a history of domestic violence */
+            relIssuesDetails?: string;
+            /** @example 0-No problems */
+            relCloseFamily?: string;
+            /** @example Not in a relationship */
+            relCurrRelationshipStatus?: string;
+            /** @example 2-Significant problems */
+            prevCloseRelationships?: string;
+            /** @example 0-No problems */
+            emotionalCongruence?: string;
+            /** @example 0-No problems */
+            relationshipWithPartner?: string;
+            /** @example No */
+            prevOrCurrentDomesticAbuse?: string;
+        };
+        OffenceAnalysis: {
+            /** Format: date */
+            assessmentCompleted: string;
+            /**
+             * @description Brief details of the current offence.
+             * @example Physical assault on cellmate requiring medical attention on 22nd March 2024. Weapon possession discovered during cell search.
+             */
+            briefOffenceDetails?: string;
+            victimsAndPartners?: components["schemas"]["VictimsAndPartners"];
+            /**
+             * @description Whether the individual recognises the impact of their offending behaviour.
+             * @example Yes
+             */
+            recognisesImpact?: string;
+            otherOffendersAndInfluences?: components["schemas"]["OtherOffendersAndInfluences"];
+            /**
+             * @description The motivation and triggers for the offending behaviour.
+             * @example Anger and frustration when challenged by authority
+             */
+            motivationAndTriggers?: string;
+            responsibility?: components["schemas"]["Responsibility"];
+            /**
+             * @description Analysis of patterns in the offending behaviour.
+             * @example Escalating violence in evenings when challenged, targeting vulnerable individuals, causing injuries requiring medical attention.
+             */
+            patternOfOffending?: string;
+        };
+        OtherOffendersAndInfluences: {
+            /**
+             * @description Whether other offenders were involved in the offence.
+             * @example Yes
+             */
+            wereOtherOffendersInvolved?: string;
+            /**
+             * @description The number of other offenders involved.
+             * @example 2
+             */
+            numberOfOthersInvolved?: string;
+            /**
+             * @description Whether the offender was the leader among other offenders.
+             * @example No
+             */
+            wasTheOffenderLeader?: string;
+            /**
+             * @description Details about peer group influences on the offending.
+             * @example Gang pressure and peer approval seeking
+             */
+            peerGroupInfluences?: string;
+        };
+        Responsibility: {
+            /**
+             * @description Whether the individual accepts responsibility for their offending.
+             * @example false
+             */
+            acceptsResponsibility?: string;
+            /**
+             * @description Details about the individual's acceptance of responsibility.
+             * @example Blames victims and circumstances
+             */
+            acceptsResponsibilityDetail?: string;
+        };
+        VictimsAndPartners: {
+            /**
+             * @description Whether there was direct contact targeting of victims.
+             * @example Yes
+             */
+            contactTargeting?: string;
+            /**
+             * @description Whether the offence was racially motivated or targeted an identifiable group.
+             * @example Yes
+             */
+            raciallyMotivated?: string;
+            /**
+             * @description Whether the offence was in response to a specific victim (e.g. revenge, settling grudges).
+             * @example No
+             */
+            revenge?: string;
+            /**
+             * @description Whether there was physical violence towards a partner.
+             * @example No
+             */
+            physicalViolenceTowardsPartner?: string;
+            /**
+             * @description Whether there was repeat victimisation of the same person.
+             * @example Yes
+             */
+            repeatVictimisation?: string;
+            /**
+             * @description Whether the victim(s) were strangers to the offender.
+             * @example No
+             */
+            victimWasStranger?: string;
+            /**
+             * @description Whether stalking behaviour was involved.
+             * @example No
+             */
+            stalking?: string;
+        };
+        LifestyleAndAssociates: {
+            /**
+             * Format: date
+             * @example 1
+             */
+            assessmentCompleted?: string;
+            /**
+             * @description Does the person have any regular activities that encourage reoffending
+             * @example 0
+             */
+            regActivitiesEncourageOffending?: string;
+            /**
+             * @description Description of lifestyle issues affecting risk of offending or harm
+             * @example There are issues around involvement with drugs
+             */
+            lifestyleIssuesDetails?: string;
+        };
+        LearningNeeds: {
+            /**
+             * Format: date
+             * @example 1
+             */
+            assessmentCompleted?: string;
+            /**
+             * @description Whether the person has a fixed abode or is living at a temporary address
+             * @example true
+             */
+            noFixedAbodeOrTransient?: boolean;
+            /** @example 1-Some problems */
+            workRelatedSkills?: string;
+            /** @example 0-No problems */
+            problemsReadWriteNum?: string;
+            /** @example 2-Significant problems */
+            learningDifficulties?: string;
+            /** @example [
+             *       "Difficulty with concentration"
+             *     ] */
+            problemAreas?: string[];
+            /** @example 0 */
+            qualifications?: string;
+            /** @example 3 */
+            basicSkillsScore?: string;
+            /** @example Ms Puckett spoke of wanting to secure suitable employment although she knows that she will first need to fully address her drug issues. */
+            basicSkillsScoreDescription?: string;
+        };
+        Health: {
+            /**
+             * Format: date
+             * @example 1
+             */
+            assessmentCompleted?: string;
+            /**
+             * @description Does the person have any health condition. Can be Yes, empty or null
+             * @example false
+             */
+            anyHealthConditions?: boolean;
+            /**
+             * @description Description of the health condition
+             * @example Blind in one eye
+             */
+            description?: string;
+        };
+        EmotionalWellbeing: {
+            /**
+             * Format: date
+             * @example 1
+             */
+            assessmentCompleted?: string;
+            /** @example 1-Some problems */
+            currentPsychologicalProblems?: string;
+            /** @example 0 */
+            selfHarmSuicidal?: string;
+            /** @example 0-No problems */
+            currentPsychiatricProblems?: string;
+        };
+        DrugDetails: {
+            /**
+             * Format: date
+             * @example 1
+             */
+            assessmentCompleted?: string;
+            /** @example 2 */
+            levelOfUseOfMainDrug?: string;
+            /** @example 1 */
+            drugsMajorActivity?: string;
+        };
+        Attitude: {
+            /**
+             * Format: date
+             * @example 1
+             */
+            assessmentCompleted?: string;
+            /** @example 2 */
+            proCriminalAttitudes?: string;
+            /** @example 1 */
+            motivationToAddressBehaviour?: string;
+            /** @example 0 */
+            hostileOrientation?: string;
+        };
+        AlcoholMisuseDetails: {
+            /**
+             * Format: date
+             * @example 1
+             */
+            assessmentCompleted?: string;
+            /** @example 1-Some problems */
+            currentUse?: string;
+            /** @example 1-Some problems */
+            bingeDrinking?: string;
+            /** @example 2-Significant problems */
+            frequencyAndLevel?: string;
+            /** @example Alcohol dependency affecting employment and relationships */
+            alcoholIssuesDetails?: string;
+        };
+        ReferralStatus: {
+            /**
+             * Format: uuid
+             * @description The unique id of this referral status.
+             * @example c98151f4-4081-4c65-9f98-54e63a328c8d
+             */
+            id: string;
+            /**
+             * @description The status description text.
+             * @example Awaiting assessment
+             */
+            status: string;
+            /**
+             * @description The description text for this particular status transition
+             * @example The person has completed the programme. The referral will be closed.
+             */
+            transitionDescription: string;
+            /**
+             * @description Whether this status represents a closed status for the referral.
+             * @example false
+             */
+            isClosed: boolean;
+            /**
+             * @description The color to be used for displaying this status label.
+             * @example orange
+             */
+            labelColour?: string;
+        };
+        ReferralDetails: {
+            /**
+             * Format: uuid
+             * @description The unique id of this referral.
+             * @example c98151f4-4081-4c65-9f98-54e63a328c8d
+             */
+            id: string;
+            /**
+             * @description The crn associated with this referral.
+             * @example X933590
+             */
+            crn: string;
+            /**
+             * @description The name of the person associated with this referral.
+             * @example John Doe
+             */
+            personName: string;
+            /**
+             * @description The name of the Intervention for this referral.
+             * @example Building Choices
+             */
+            interventionName: string;
+            /**
+             * Format: date
+             * @description Timestamp of when this referral was created.
+             * @example 11
+             */
+            createdAt: string;
+            /**
+             * Format: date
+             * @description The date of birth of the person being referred.
+             * @example 15
+             */
+            dateOfBirth: string;
+            /**
+             * @description The name of the probation practitioner associated with this referral.
+             * @example Tom Saunders
+             */
+            probationPractitionerName: string;
+            /**
+             * @description The email of the probation practitioner associated with this referral.
+             * @example tom.saunders@justice.gov.uk
+             */
+            probationPractitionerEmail: string;
+            /**
+             * @description The offence cohort this referral is classified as.
+             * @example SEXUAL_OFFENCE
+             * @enum {string}
+             */
+            cohort: "SEXUAL_OFFENCE" | "GENERAL_OFFENCE";
+            /**
+             * @description Does the person this referral is associated with have LDC needs
+             * @example true
+             */
+            hasLdc: boolean;
+            /**
+             * @description The text to display in the UI for the LDC status of this referral
+             * @example May need an LDC-adapted programme(Building Choices Plus)
+             */
+            hasLdcDisplayText: string;
+        };
+        SentenceInformation: {
+            /**
+             * @description The type of sentence.
+             * @example ORA community order
+             */
+            sentenceType?: string;
+            /**
+             * @description The release type.
+             * @example Released on licence
+             */
+            releaseType?: string;
+            /**
+             * @description A list of the licence conditions.
+             * @example ['Accredited programme: Building Choices']
+             */
+            licenceConditions?: components["schemas"]["CodeDescription"][];
+            /**
+             * Format: date
+             * @description The end date of the licence.
+             * @example 10
+             */
+            licenceEndDate?: string;
+            /**
+             * Format: date
+             * @description The start date of the post supervision.
+             * @example 10
+             */
+            postSentenceSupervisionStartDate?: string;
+            /**
+             * Format: date
+             * @description The end date of the post supervision.
+             * @example 10
+             */
+            postSentenceSupervisionEndDate?: string;
+            /**
+             * Format: date
+             * @description The date two thirds of the way to the end of the sentence.
+             * @example 10
+             */
+            twoThirdsPoint?: string;
+            /**
+             * @description A list of the order requirements.
+             * @example ['Accredited programme: Building Choices']
+             */
+            orderRequirements?: components["schemas"]["CodeDescription"][];
+            /**
+             * Format: date
+             * @description The end date of the order.
+             * @example 10
+             */
+            orderEndDate?: string;
+            /**
+             * Format: date
+             * @description The date this data was fetched from nDelius.
+             * @example 1
+             */
+            dateRetrieved: string;
+        };
+        PersonalDetails: {
+            /**
+             * @description The crn associated with this referral.
+             * @example X933590
+             */
+            crn: string;
+            /**
+             * @description The full name of the person being referred.
+             * @example John Smith
+             */
+            name: string;
+            /**
+             * Format: date
+             * @description The date of birth of the person being referred.
+             * @example 15
+             */
+            dateOfBirth: string;
+            /**
+             * @description The ethnicity of the person being referred.
+             * @example White
+             */
+            ethnicity: string;
+            /**
+             * @description The age of the person being referred.
+             * @example 38
+             */
+            age: string;
+            /**
+             * @description The gender of the person being referred.
+             * @example Male
+             */
+            gender: string;
+            /**
+             * @description The setting where the referral will be delivered.
+             * @example Community
+             * @enum {string}
+             */
+            setting: "COMMUNITY" | "CUSTODY" | "REMAND" | "PRE_RELEASE";
+            /**
+             * @description The probation delivery unit responsible for this referral.
+             * @example North London PDU
+             */
+            probationDeliveryUnit: string;
+            /**
+             * Format: date
+             * @description The date this data was fetched from nDelius.
+             * @example 1
+             */
+            dateRetrieved: string;
+        };
+        /** @description Details of an offence committed by an offender */
+        Offence: {
+            /**
+             * Format: date
+             * @description The date when the offence was committed
+             * @example 11
+             */
+            offenceDate: string;
+            /**
+             * @description The description of the offence
+             * @example Theft
+             */
+            offence: string;
+            /**
+             * @description The code identifying the offence
+             * @example 68
+             */
+            offenceCode: string;
+            /**
+             * @description The category of the offence
+             * @example Theft and burglary offences
+             */
+            category: string;
+            /**
+             * @description The code identifying the offence category
+             * @example 12
+             */
+            categoryCode: string;
+        };
+        /** @description Represents an individual's history of offences, including their main offence and any additional offences */
+        OffenceHistory: {
+            /** @description The primary offence committed */
+            mainOffence: components["schemas"]["Offence"];
+            /** @description List of additional or secondary offences */
+            additionalOffences: components["schemas"]["Offence"][];
+            /**
+             * Format: date
+             * @description The date the offence history was imported from NDelius
+             * @example 11
+             */
+            importedDate: string;
+        };
+        FullName: {
+            forename: string;
+            middleNames?: string;
+            surname: string;
+        };
+        NDeliusApiOfficeLocation: {
+            code: string;
+            description: string;
+        };
+        NDeliusApiProbationDeliveryUnit: {
+            code: string;
+            description: string;
+        };
+        RequirementOrLicenceConditionManager: {
+            staff: components["schemas"]["RequirementStaff"];
+            team: components["schemas"]["CodeDescription"];
+            probationDeliveryUnit: components["schemas"]["NDeliusApiProbationDeliveryUnit"];
+            officeLocations: components["schemas"]["NDeliusApiOfficeLocation"][];
+        };
+        RequirementStaff: {
+            code: string;
+            name: components["schemas"]["FullName"];
+        };
+        DeliveryLocationPreferences: {
+            /** @description List of preferred delivery locations where the person can attend the programme */
+            preferredDeliveryLocations?: string[];
+            /**
+             * @description Text describing locations or circumstances where the person cannot attend
+             * @example Cannot attend evening sessions due to caring responsibilities
+             */
+            cannotAttendLocations?: string;
+            /** @description The user that last created the delivery location preferences */
+            lastUpdatedBy?: string;
+            /**
+             * Format: date
+             * @description The time and date of the last update to the delivery location preferences
+             */
+            lastUpdatedAt?: string;
+        };
+        DlqMessage: {
+            body: {
+                [key: string]: unknown;
+            };
+            messageId: string;
+        };
+        GetDlqResult: {
+            /** Format: int32 */
+            messagesFoundCount: number;
+            /** Format: int32 */
+            messagesReturnedCount: number;
+            messages: components["schemas"]["DlqMessage"][];
+        };
+        /** @description Domain scores from PNI assessment */
+        DomainScores: {
+            /** @description Sex domain assessment scores */
+            SexDomainScore: components["schemas"]["SexDomainScore"];
+            /** @description Thinking domain assessment scores */
+            ThinkingDomainScore: components["schemas"]["ThinkingDomainScore"];
+            /** @description Relationship domain assessment scores */
+            RelationshipDomainScore: components["schemas"]["RelationshipDomainScore"];
+            /** @description Self-management domain assessment scores */
+            SelfManagementDomainScore: components["schemas"]["SelfManagementDomainScore"];
+        };
+        IndividualCognitiveScores: {
+            /**
+             * Format: int32
+             * @example 2
+             */
+            proCriminalAttitudes?: number;
+            /**
+             * Format: int32
+             * @example 2
+             */
+            hostileOrientation?: number;
+        };
+        IndividualRelationshipScores: {
+            /**
+             * Format: int32
+             * @example 1
+             */
+            curRelCloseFamily?: number;
+            /**
+             * Format: int32
+             * @example 1
+             */
+            prevCloseRelationships?: number;
+            /**
+             * Format: int32
+             * @example 1
+             */
+            easilyInfluenced?: number;
+            /**
+             * Format: int32
+             * @example 1
+             */
+            aggressiveControllingBehaviour?: number;
+        };
+        IndividualRiskScores: {
+            /**
+             * @description The Offender Group Reconviction Scale 3 (OGRS3) risk level
+             * @example Medium
+             */
+            ogrs3Risk?: string;
+            /**
+             * @description The OVP(OASys Violence Predictor) Risk level
+             * @example High
+             */
+            ovpRisk?: string;
+            /**
+             * @description ospDc - OASys Sexual Reconviction Predictor Direct Contact
+             * @example 0
+             */
+            ospDc?: string;
+            /**
+             * @description OASys Sexual Reconviction Predictor Indecent Images of Children
+             * @example 1
+             */
+            ospIic?: string;
+            /**
+             * @description rsr - Risk of Serious Recidivism
+             * @example 5
+             */
+            rsr?: string;
+            /** @description SARA (Spousal Assault Risk Assessment) related risk score */
+            sara?: components["schemas"]["Sara"];
+        };
+        IndividualSelfManagementScores: {
+            /**
+             * Format: int32
+             * @example 2
+             */
+            impulsivity?: number;
+            /**
+             * Format: int32
+             * @example 1
+             */
+            temperControl?: number;
+            /**
+             * Format: int32
+             * @example 0
+             */
+            problemSolvingSkills?: number;
+            /** Format: int32 */
+            difficultiesCoping?: number;
+        };
+        IndividualSexScores: {
+            /**
+             * Format: int32
+             * @example 1
+             */
+            sexualPreOccupation?: number;
+            /**
+             * Format: int32
+             * @example 1
+             */
+            offenceRelatedSexualInterests?: number;
+            /**
+             * Format: int32
+             * @example 1
+             */
+            emotionalCongruence?: number;
+        };
+        /** @description Represents an individual's Programme Needs Identifier (PNI) score assessment */
+        PniScore: {
+            /**
+             * @description The overall intensity level derived from the PNI assessment
+             * @example HIGH
+             * @enum {string}
+             */
+            overallIntensity: "HIGH" | "MODERATE" | "ALTERNATIVE_PATHWAY" | "MISSING_INFORMATION";
+            /** @description Detailed scores across different assessment domains */
+            domainScores: components["schemas"]["DomainScores"];
+            /** @example riskScores */
+            RiskScore: components["schemas"]["RiskScore"];
+            /** @example ['impulsivity is missing '] */
+            validationErrors: string[];
+        };
+        RelationshipDomainScore: {
+            /** @enum {string} */
+            overallRelationshipDomainLevel?: "HIGH_NEED" | "MEDIUM_NEED" | "LOW_NEED";
+            individualRelationshipScores: components["schemas"]["IndividualRelationshipScores"];
+        };
+        RiskScore: {
+            /**
+             * @description classification associated with PNI Eg. HIGH_RISK, MEDIUM_RISK, LOW_RISK
+             * @example HIGH_RISK
+             */
+            classification: string;
+            /** @example 2 */
+            IndividualRiskScores: components["schemas"]["IndividualRiskScores"];
+        };
+        Sara: {
+            /**
+             * @description The highest of what is being returned based on saraRiskOfViolenceTowardsPartner and saraRiskOfViolenceTowardsOthers
+             * @example LOW
+             * @enum {string}
+             */
+            highestRisk?: "NOT_APPLICABLE" | "LOW" | "MEDIUM" | "HIGH" | "VERY_HIGH";
+            /**
+             * @description Risk of violence towards partner
+             * @example LOW
+             */
+            saraRiskOfViolenceTowardsPartner?: string;
+            /**
+             * @description Risk of violence towards others
+             * @example LOW
+             */
+            saraRiskOfViolenceTowardsOthers?: string;
+            /**
+             * @description Assessment ID relevant to the SARA version of the assessment
+             * @example 2512235167
+             */
+            assessmentId?: string;
+        };
+        SelfManagementDomainScore: {
+            /** @enum {string} */
+            overallSelfManagementDomainLevel?: "HIGH_NEED" | "MEDIUM_NEED" | "LOW_NEED";
+            individualSelfManagementScores: components["schemas"]["IndividualSelfManagementScores"];
+        };
+        SexDomainScore: {
+            /**
+             * @example 2
+             * @enum {string}
+             */
+            overallSexDomainLevel: "HIGH_NEED" | "MEDIUM_NEED" | "LOW_NEED";
+            individualSexScores: components["schemas"]["IndividualSexScores"];
+        };
+        ThinkingDomainScore: {
+            /** @enum {string} */
+            overallThinkingDomainLevel?: "HIGH_NEED" | "MEDIUM_NEED" | "LOW_NEED";
+            individualThinkingScores: components["schemas"]["IndividualCognitiveScores"];
+        };
+        ReferralCaseListItem: {
+            /** Format: uuid */
+            referralId: string;
+            crn: string;
+            personName: string;
+            referralStatus: string;
+            /**
+             * @description Offence classification based on assessment
+             * @enum {string}
+             */
+            cohort: "SEXUAL_OFFENCE" | "GENERAL_OFFENCE";
+        };
+        Pageable: {
+            /** Format: int32 */
+            page?: number;
+            /** Format: int32 */
+            size?: number;
+            sort?: string[];
+        };
+        /** @description A delivery location (i.e. Office) with value and label, formatted for the UI */
+        DeliveryLocationOption: {
+            /**
+             * @description Office code
+             * @example OFFICE-CODE-123
+             */
+            value: string;
+            /**
+             * @description Human-readable office name
+             * @example Brighton and Hove: Probation Office
+             */
+            label: string;
+        };
+        /** @description Form data for the multi-page DeliveryLocationPreferences form in the M&D UI */
+        DeliveryLocationPreferencesFormData: {
+            /** @description Person on Probation details (sourced freshly from nDelius) */
+            personOnProbation: components["schemas"]["PersonOnProbationSummary"];
+            /** @description Existing Delivery Location Preferences, if any */
+            existingDeliveryLocationPreferences?: components["schemas"]["ExistingDeliveryLocationPreferences"];
+            /** @description Primary PDU of the Manager of the Requirement or Licence Condition associated with a Referral */
+            primaryPdu: components["schemas"]["ProbationDeliveryUnit"];
+            /** @description Other PDUs in the same Region as the Manager */
+            otherPdusInSameRegion: components["schemas"]["ProbationDeliveryUnit"][];
+        };
+        /** @description Existing Delivery Location Preferences */
+        ExistingDeliveryLocationPreferences: {
+            /** @description Locations (presently Offices) the person can attend */
+            canAttendLocationsValues: components["schemas"]["DeliveryLocationOption"][];
+            /**
+             * @description Rich text explaining locations the person cannot attend
+             * @example Locations in BN1
+             */
+            cannotAttendLocations?: string;
+        };
+        /** @description Summary information about the Person on Probation */
+        PersonOnProbationSummary: {
+            /**
+             * @description Full name
+             * @example Alex River
+             */
+            name: string;
+            /**
+             * @description Case Reference Number
+             * @example ABC123
+             */
+            crn: string;
+            /**
+             * @description Risk tier
+             * @example C2
+             */
+            tier?: string;
+            /**
+             * Format: date
+             * @description Date of birth
+             * @example 2000-01-01
+             */
+            dateOfBirth: string;
+        };
+        /** @description Probation Delivery Unit with available delivery locations */
+        ProbationDeliveryUnit: {
+            /**
+             * @description PDU Code (sourced from nDelius)
+             * @example N54DUR
+             */
+            code: string;
+            /**
+             * @description PDU name
+             * @example County Durham and Darlington
+             */
+            name: string;
+            /** @description Available delivery locations within this PDU */
+            deliveryLocations: components["schemas"]["DeliveryLocationOption"][];
+        };
+    };
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
-export type $defs = Record<string, never>
+export type $defs = Record<string, never>;
 export interface operations {
   updateCohortForReferral: {
     parameters: {
@@ -3907,4 +5770,1854 @@ export interface operations {
       }
     }
   }
+    updateCohortForReferral: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The id (UUID) of a referral allowed values SEXUAL_OFFENCE or GENERAL_OFFENCE */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCohort"];
+            };
+        };
+        responses: {
+            /** @description No content - cohort updated successfully */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Referral"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden.  The client is not authorised to access this referral. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The referral does not exist */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    retryDlq: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                dlqName: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["RetryDlqResult"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    retryAllDlqs: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["RetryDlqResult"][];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    purgeQueue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                queueName: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PurgeQueueResult"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    updateDeliveryLocationPreferencesForReferral: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The id (UUID) of a referral */
+                referralId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateDeliveryLocationPreferences"];
+            };
+        };
+        responses: {
+            /** @description Delivery Location Preferences updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Bad Request. Blank or missing values */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The referral does not exist or delivery location preferences do not exist for this referral */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    createDeliveryLocationPreferencesForReferral: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The id (UUID) of a referral */
+                referralId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateDeliveryLocationPreferences"];
+            };
+        };
+        responses: {
+            /** @description Delivery Location Preferences created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Bad Request. Blank or missing values */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The referral does not exist for the provider referralId */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict. Delivery location preferences already exist for this referral */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    updateAvailability: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateAvailability"];
+            };
+        };
+        responses: {
+            /** @description Availability updated */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Availability"];
+                };
+            };
+            /** @description Bad input */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Availability"];
+                };
+            };
+            /** @description Unauthorised. The request was unauthorised. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    createAvailability: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateAvailability"];
+            };
+        };
+        responses: {
+            /** @description Availability created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Availability"];
+                };
+            };
+            /** @description Bad input */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Availability"];
+                };
+            };
+            /** @description Unauthorised. The request was unauthorised. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    updateLdcStatusForReferral: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The referralId (UUID) of a referral */
+                referralId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateLdc"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getStatusHistoryForReferral: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The id (UUID) of a Referral */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The Referral Status History of the Referral */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReferralStatusHistory"][];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden.  The client is not authorised to access this referral. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The Referral does not exist */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    updateStatusForReferral: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The id (UUID) of a Referral */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateReferralStatusHistory"];
+            };
+        };
+        responses: {
+            /** @description Referral Status updated successfully */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReferralStatusHistory"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden.  The client is not authorised to access this referral. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The referral does not exist */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getThinkingAndBehaviourDetails: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description CRN */
+                crn: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description successful operation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ThinkingAndBehaviour"];
+                };
+            };
+            /** @description Invalid code format. Expected format for CRN: X718255. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden.  The client is not authorised to access thinking and behaviour details. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The thinking and behaviour details information does not exist for the CRN provided. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getRoshAnalysisByCrn: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description CRN */
+                crn: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description ROSH details held by Oasys */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoshAnalysis"];
+                };
+            };
+            /** @description Invalid code format. Expected format for CRN: X718255. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden.  The client is not authorised to access this referral. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The ROSH information does not exist for the CRN provided. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getRisksByCrn: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description CRN */
+                crn: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Risk details held by Oasys */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Risks"];
+                };
+            };
+            /** @description Invalid code format. Expected format for CRN: X718255. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden.  The client is not authorised to access this referral. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The risks and needs information does not exist for the CRN provided. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getRelationships: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description CRN */
+                crn: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Relationship details held by Oasys */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Relationships"];
+                };
+            };
+            /** @description Invalid code format. Expected format for CRN: X718255. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden.  The client is not authorised to access this referral. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The relationship information does not exist for the CRN provided. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getOffenceAnalysisByCrn: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description CRN */
+                crn: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Offence analysis details held by Oasys */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OffenceAnalysis"];
+                };
+            };
+            /** @description Invalid code format. Expected format for CRN: X718255. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden. The client is not authorised to access this referral. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The Offence analysis does not exist for the CRN provided. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getLifestyleAndAssociates: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description CRN */
+                crn: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description successful operation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LifestyleAndAssociates"];
+                };
+            };
+            /** @description Invalid code format. Expected format for CRN: X718255. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden.  The client is not authorised to access this referral. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The health information does not exist for the CRN provided. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getLearningNeeds: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description CRN */
+                crn: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Learning needs held by Oasys */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LearningNeeds"];
+                };
+            };
+            /** @description Invalid code format. Expected format for CRN: X718255. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden.  The client is not authorised to access this referral. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The learning needs information does not exist for the CRN provided. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getHealth: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description CRN */
+                crn: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description successful operation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Health"];
+                };
+            };
+            /** @description Invalid code format. Expected format for CRN: X718255. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden.  The client is not authorised to access this referral. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The health information does not exist for the CRN provided. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getEmotionalWellbeing: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description CRN */
+                crn: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description successful operation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmotionalWellbeing"];
+                };
+            };
+            /** @description Invalid code format. Expected format for CRN: X718255. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden.  The client is not authorised to access emotional wellbeing details. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The emotional wellbeing detail information does not exist for the CRN provided. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getDrugDetails: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description CRN */
+                crn: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description successful operation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DrugDetails"];
+                };
+            };
+            /** @description Invalid code format. Expected format for CRN: X718255. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden.  The client is not authorised to access drug details. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The drug detail information does not exist for the CRN provided. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getAttitude: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description CRN */
+                crn: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description successful operation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Attitude"];
+                };
+            };
+            /** @description Invalid code format. Expected format for CRN: X718255. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden.  The client is not authorised to access attitude details. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The attitude detail information does not exist for the CRN provided. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getAlcoholMisuseDetails: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description CRN */
+                crn: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description successful operation */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AlcoholMisuseDetails"];
+                };
+            };
+            /** @description Invalid code format. Expected format for CRN: X718255. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden.  The client is not authorised to access alcohol misuse details. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The alcohol misuse detail information does not exist for the CRN provided. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getPossibleTransitions: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The id (UUID) of a referral status description */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description List of possible referral status transitions */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReferralStatus"][];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden. The client is not authorised to access this resource. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getReferralDetailsById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The id (UUID) of a referral */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Information about the referral */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReferralDetails"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden.  The client is not authorised to access this referral. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The referral does not exist */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getSentenceInformationByReferralId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The id (UUID) of a referral */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Information about the sentence */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SentenceInformation"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden.  The client is not authorised to access this referral. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The referral does not exist */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getPersonalDetailsByIdentifier: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The id (UUID) of a referral */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Information about the referral */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PersonalDetails"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden.  The client is not authorised to access this referral. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The referral does not exist */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getOffenceHistoryByReferralId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The id (UUID) of a referral */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Information about the offence history */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OffenceHistory"];
+                };
+            };
+            /** @description The offence history could not be retrieved due to missing data on the referral */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden.  The client is not authorised to access this referral. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The offence history for the referral does not exist */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getManagerByReferralId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The id (UUID) of a referral */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Information about the Manager associated with a Referral */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["RequirementOrLicenceConditionManager"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden.  The client is not authorised to access this referral. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The referral does not exist */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getPreferredDeliveryLocationsByReferralId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The id (UUID) of a referral */
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Preferred delivery locations and restrictions for the referral */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeliveryLocationPreferences"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden.  The client is not authorised to access this referral. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The referral does not exist */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getDlqMessages: {
+        parameters: {
+            query?: {
+                maxMessages?: number;
+            };
+            header?: never;
+            path: {
+                dlqName: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["GetDlqResult"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getPniScoreByCrn: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The unique crn of an individual */
+                crn: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The PNI Score and associated domain scores for this CRN */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PniScore"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden.  The client is not authorised to access this PNI Score. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The PNI Score does not exist for this CRN */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getCaseListReferrals: {
+        parameters: {
+            query: {
+                pageable: components["schemas"]["Pageable"];
+                /** @description CRN or persons name */
+                crnOrPersonName?: string;
+                /** @description Filter by the cohort of the referral Eg: SEXUAL_OFFENCE or GENERAL_OFFENCE */
+                cohort?: "SEXUAL_OFFENCE" | "GENERAL_OFFENCE";
+                /** @description Filter by the status of the referral */
+                status?: string;
+            };
+            header?: never;
+            path: {
+                openOrClosed: "OPEN" | "CLOSED";
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Paged list of all open/closed referrals for a PDU */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReferralCaseListItem"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getDeliveryLocationPreferencesFormData: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The id (UUID) of a referral */
+                referralId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Delivery Location Preferences form data */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeliveryLocationPreferencesFormData"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The request was unauthorised */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden. The client is not authorised to access this referral. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description The referral does not exist or required data could not be found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    getAvailabilityByReferralId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description The id (UUID) of a referral */
+                referralId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Information about the availability for a given referral */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Availability"];
+                };
+            };
+            /** @description Bad input */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Availability"];
+                };
+            };
+            /** @description Unauthorised. The request was unauthorised. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
 }
