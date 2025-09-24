@@ -15,10 +15,10 @@
             <div class="govuk-main-wrapper">
                 <h2 class="govuk-heading-l" data-testid="cohort-heading">Update learning disabilities and challenges(LDC)</h2>
                 {{ govukInsetText(currentLdcStatusText) }}
-                <form method="post" novalidate action="{{ presenter.updateLdcFormAction }}">
+                <form method="post" novalidate>
                     <input type="hidden" name="_csrf" value="{{csrfToken}}">
 
-                    {{ govukRadios(radioArgs()) }}
+                    {{ govukRadios(radioArgs) }}
 
                     <div class="govuk-button-group">
                         {{ govukButton({ text: "Submit", preventDoubleClick: true }) }}

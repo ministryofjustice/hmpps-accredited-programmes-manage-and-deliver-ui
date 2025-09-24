@@ -51,8 +51,6 @@ describe('Update ldc status', () => {
     it('posts to the update ldc page and redirects successfully', async () => {
       const referralId = randomUUID()
 
-      accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
-
       return request(app)
         .post(`/referral/${referralId}/update-ldc`)
         .type('form')

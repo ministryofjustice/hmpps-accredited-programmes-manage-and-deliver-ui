@@ -7,10 +7,6 @@ export default class UpdateLdcPresenter {
     readonly backlinkUri: string | null,
   ) {}
 
-  get updateLdcFormAction(): string {
-    return `/referral/${this.id}/update-ldc`
-  }
-
   get fields() {
     return {
       hasLdc: {

@@ -1,4 +1,4 @@
-import { InsetTextArgs } from '../utils/govukFrontendTypes'
+import { InsetTextArgs, RadiosArgs } from '../utils/govukFrontendTypes'
 import UpdateLdcPresenter from './updateLdcPresenter'
 
 export default class UpdateLdcView {
@@ -10,7 +10,7 @@ export default class UpdateLdcView {
       {
         presenter: this.presenter,
         currentLdcStatusText: this.currentLdcStatusText,
-        radioArgs: this.radioArgs.bind(this),
+        radioArgs: this.radioArgs(),
         backLinkArgs: this.backLinkArgs(),
         backlinkUri: this.presenter.backlinkUri,
       },
@@ -33,7 +33,7 @@ export default class UpdateLdcView {
     }
   }
 
-  private radioArgs() {
+  private radioArgs(): RadiosArgs {
     return {
       name: 'hasLdc',
       fieldset: {
@@ -47,13 +47,14 @@ export default class UpdateLdcView {
         {
           value: 'true',
           text: 'May need an LDC-adapted programme(Building Choices Plus)',
+          checked: this.presenter.fields.hasLdc.value === true,
         },
         {
           value: 'false',
           text: 'Does not need an LDC-adapted programme',
+          checked: this.presenter.fields.hasLdc.value === false,
         },
       ],
-      value: this.presenter.fields.hasLdc.value.toString(),
     }
   }
 }
