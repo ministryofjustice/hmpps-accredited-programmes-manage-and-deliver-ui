@@ -11,6 +11,7 @@ export default class PersonalDetailsPresenter extends ReferralDetailsPresenter {
     readonly id: string,
     private personalDetails: PersonalDetails,
     readonly isCohortUpdated: boolean | null = null,
+    readonly isLdcUpdated: boolean | null = null,
   ) {
     super(referralDetails, subNavValue, id, isCohortUpdated)
   }

@@ -29,6 +29,7 @@ type DeliveryLocationPreferences = components['schemas']['DeliveryLocationPrefer
 type PreferredDeliveryLocation = components['schemas']['PreferredDeliveryLocation']
 type ExistingDeliveryLocationPreferences = components['schemas']['ExistingDeliveryLocationPreferences']
 type UpdateCohort = components['schemas']['UpdateCohort']
+type UpdateLdc = components['schemas']['UpdateLdc']
 
 export type {
   AlcoholMisuseDetails,
@@ -36,18 +37,21 @@ export type {
   Availability,
   CohortEnum,
   CreateAvailability,
+  CreateDeliveryLocationPreferences,
   DailyAvailabilityModel,
   DeliveryLocationPreferences,
+  DeliveryLocationPreferencesFormData,
   DrugDetails,
   EmotionalWellbeing,
+  ExistingDeliveryLocationPreferences,
   Health,
   LearningNeeds,
   LifestyleAndAssociates,
-  DeliveryLocationPreferencesFormData,
   OffenceAnalysis,
   OffenceHistory,
   PersonalDetails,
   PniScore,
+  PreferredDeliveryLocation,
   ReferralCaseListItem,
   ReferralDetails,
   Relationships,
@@ -56,8 +60,6 @@ export type {
   SentenceInformation,
   ThinkingAndBehaviour,
   UpdateAvailability,
-  CreateDeliveryLocationPreferences,
-  PreferredDeliveryLocation,
-  ExistingDeliveryLocationPreferences,
   UpdateCohort,
+  UpdateLdc,
 }

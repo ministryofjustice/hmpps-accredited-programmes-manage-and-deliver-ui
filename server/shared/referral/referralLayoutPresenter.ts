@@ -9,11 +9,53 @@ export default class ReferralLayoutPresenter {
   protected constructor(
     readonly horizontalNavValue: HorizontalNavValues,
     readonly referralId: string,
+    readonly isLdcUpdated: boolean | null = null,
   ) {}
+
+  getButton(): { text: string; classes: string } {
+    return {
+      text: 'Back to referrals',
+      classes: 'govuk-button--secondary',
+    }
+  }
+
+  getButtonMenu(): {
+    button: { text: string; classes: string }
+    items: { text: string; href?: string }[]
+  } {
+    return {
+      button: {
+        text: 'Update referral',
+        classes: 'govuk-button--secondary',
+      },
+      items: [
+        {
+          text: 'Update status',
+          href: '#',
+        },
+        {
+          text: 'Change LDC status',
+          href: `/referral/${this.referralId}/update-ldc`,
+        },
+        {
+          text: 'Change cohort',
+          href: `/referral/${this.referralId}/change-cohort`,
+        },
+      ],
+    }
+  }
 
   getSubHeaderArgs(): {
     heading: { text: string; classes: string }
-    items: { text: string; classes: string; href?: string }[]
+    items: {
+      text?: string
+      classes?: string
+      href?: string
+      html?: {
+        button: { text: string; classes: string }
+        items: { text: string; href?: string }[]
+      }
+    }[]
   } {
     return {
       heading: {
@@ -25,12 +67,6 @@ export default class ReferralLayoutPresenter {
           text: 'Back to referrals',
           classes: 'govuk-button--secondary',
           href: '/pdu/open-referrals',
-        },
-
-        {
-          text: 'Update cohort',
-          classes: 'govuk-button--secondary',
-          href: `/referral/${this.referralId}/change-cohort`,
         },
       ],
     }

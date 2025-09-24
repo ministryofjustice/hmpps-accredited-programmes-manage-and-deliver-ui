@@ -1,6 +1,6 @@
 import { Risks } from '@manage-and-deliver-api'
-import RisksAndNeedsPresenter from '../risksAndNeedsPresenter'
 import { GovukFrontendTableCell } from '../../@types/govukFrontend'
+import RisksAndNeedsPresenter from '../risksAndNeedsPresenter'
 
 export type RiskBox = {
   category: 'OGRS Year 1' | 'OGRS Year 2' | 'OVP Year 1' | 'OVP Year 2' | 'RoSH' | 'RSR' | 'SARA'

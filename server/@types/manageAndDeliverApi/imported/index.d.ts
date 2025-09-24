@@ -111,7 +111,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/delivery-location-preferences/referral/{referralId}': {
+  '/referral/{referralId}/update-ldc': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['updateLdcStatusForReferral']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/referral/{id}/status-history': {
     parameters: {
       query?: never
       header?: never
@@ -121,10 +137,10 @@ export interface paths {
     get?: never
     put?: never
     /**
-     * Create Delivery Location Preferences for a referral
-     * @description Create Delivery Location Preferences for a referral
+     * Update the Status of a Referral
+     * @description Updates the Status of a Referral, by creating a new entry in the log of Referral Statuses
      */
-    post: operations['createDeliveryLocationPreferencesForReferral']
+    post: operations['updateStatusForReferral']
     delete?: never
     options?: never
     head?: never
@@ -336,6 +352,26 @@ export interface paths {
     }
     /** Get alcohol misuse details as held by Oasys */
     get: operations['getAlcoholMisuseDetails']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/referral-status/{id}/transitions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve possible referral status transitions
+     * @description Returns all possible referral status transitions for a given referral status description ID
+     */
+    get: operations['getPossibleTransitions']
     put?: never
     post?: never
     delete?: never
@@ -736,31 +772,47 @@ export interface components {
       otherDetails?: string
       availabilities: components['schemas']['DailyAvailabilityModel'][]
     }
-    CodeDescription: {
-      code: string
-      description: string
+    /** @description Does the person associated with the referral have LDC needs. */
+    UpdateLdc: {
+      /**
+       * @description The updated LDC status of the referral
+       * @example true
+       * @enum {boolean}
+       */
+      hasLdc: 'true' | 'false'
     }
-    /** @description The delivery location preferences for a referral */
-    CreateDeliveryLocationPreferences: {
-      preferredDeliveryLocations: components['schemas']['PreferredDeliveryLocation'][]
+    ReferralStatusHistory: {
       /**
-       * @description Rich text explaining locations the person cannot attend
-       * @example Alex River cannot attend locations in Postcode NE1
+       * Format: uuid
+       * @description ID of the ReferralStatusHistory entry
+       * @example 21da0995-5827-4cc9-bbc9-c7c7f2975163
        */
-      cannotAttendText?: string
+      id: string
+      /**
+       * Format: uuid
+       * @description ID of the Referral Status Description
+       * @example 21da0995-5827-4cc9-bbc9-c7c7f2975163
+       */
+      referralStatusDescriptionId: string
+      /**
+       * @description Human-readable name of the Referral Status, useful for UIs
+       * @example Awaiting assessment
+       */
+      referralStatusDescriptionName: string
     }
-    PreferredDeliveryLocation: {
+    /** @description Details of the new Referral Status to assign */
+    CreateReferralStatusHistory: {
       /**
-       * @description The nDelius code for the Probation Delivery Unit
-       * @example PDU001
+       * Format: uuid
+       * @description The UUID of the relevant Referral Status Description
+       * @example 76b2f8d8-260c-4766-a716-de9325292609
        */
-      pduCode: string
+      referralStatusDescriptionId: string
       /**
-       * @description The nDelius description for the Probation Delivery Unit
-       * @example London PDU
+       * @description A free-text description that allows a user to add context or information to the Status change
+       * @example Updating the status following a one-to-one meeting with Person on Probation
        */
-      pduDescription: string
-      deliveryLocations: components['schemas']['CodeDescription'][]
+      additionalDetails: string
     }
     CreateAvailability: {
       /**
@@ -1245,6 +1297,34 @@ export interface components {
       /** @example Alcohol dependency affecting employment and relationships */
       alcoholIssuesDetails?: string
     }
+    ReferralStatus: {
+      /**
+       * Format: uuid
+       * @description The unique id of this referral status.
+       * @example c98151f4-4081-4c65-9f98-54e63a328c8d
+       */
+      id: string
+      /**
+       * @description The status description text.
+       * @example Awaiting assessment
+       */
+      status: string
+      /**
+       * @description The description text for this particular status transition
+       * @example The person has completed the programme. The referral will be closed.
+       */
+      transitionDescription: string
+      /**
+       * @description Whether this status represents a closed status for the referral.
+       * @example false
+       */
+      isClosed: boolean
+      /**
+       * @description The color to be used for displaying this status label.
+       * @example orange
+       */
+      labelColour?: string
+    }
     ReferralDetails: {
       /**
        * Format: uuid
@@ -1295,6 +1375,16 @@ export interface components {
        * @enum {string}
        */
       cohort: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
+      /**
+       * @description Does the person this referral is associated with have LDC needs
+       * @example true
+       */
+      hasLdc: boolean
+      /**
+       * @description The text to display in the UI for the LDC status of this referral
+       * @example May need an LDC-adapted programme(Building Choices Plus)
+       */
+      hasLdcDisplayText: string
     }
     SentenceInformation: {
       /**
@@ -1480,7 +1570,7 @@ export interface components {
       /** @description The user that last created the delivery location preferences */
       lastUpdatedBy?: string
       /**
-       * Format: date-time
+       * Format: date
        * @description The time and date of the last update to the delivery location preferences
        */
       lastUpdatedAt?: string
@@ -2130,36 +2220,72 @@ export interface operations {
       }
     }
   }
-  createDeliveryLocationPreferencesForReferral: {
+  updateLdcStatusForReferral: {
     parameters: {
       query?: never
       header?: never
       path: {
-        /** @description The id (UUID) of a referral */
+        /** @description The referralId (UUID) of a referral */
         referralId: string
       }
       cookie?: never
     }
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateDeliveryLocationPreferences']
+        'application/json': components['schemas']['UpdateLdc']
       }
     }
     responses: {
-      /** @description Delivery Location Preferences created */
-      201: {
+      /** @description OK */
+      200: {
         headers: {
           [name: string]: unknown
         }
         content?: never
       }
-      /** @description Bad Request. Blank or missing values */
+      /** @description Bad Request */
       400: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          'application/json': string
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  updateStatusForReferral: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id (UUID) of a Referral */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateReferralStatusHistory']
+      }
+    }
+    responses: {
+      /** @description Referral Status updated successfully */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ReferralStatusHistory']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description The request was unauthorised */
@@ -2171,8 +2297,8 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
-      /** @description The referral does not exist for the provider referralId */
-      404: {
+      /** @description Forbidden.  The client is not authorised to access this referral. */
+      403: {
         headers: {
           [name: string]: unknown
         }
@@ -2180,8 +2306,8 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
-      /** @description Conflict. Delivery location preferences already exist for this referral */
-      409: {
+      /** @description The referral does not exist */
+      404: {
         headers: {
           [name: string]: unknown
         }
@@ -2890,6 +3016,56 @@ export interface operations {
       }
       /** @description The alcohol misuse detail information does not exist for the CRN provided. */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getPossibleTransitions: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id (UUID) of a referral status description */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description List of possible referral status transitions */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ReferralStatus'][]
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden. The client is not authorised to access this resource. */
+      403: {
         headers: {
           [name: string]: unknown
         }

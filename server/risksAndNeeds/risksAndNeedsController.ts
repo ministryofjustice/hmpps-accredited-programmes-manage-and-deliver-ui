@@ -7,6 +7,7 @@ import AlcoholMisusePresenter from './alcoholMisuse/alcoholMisusePresenter'
 import AlcoholMisuseView from './alcoholMisuse/alcoholMisuseView'
 import AttitudesPresenter from './attitudes/attitudesPresenter'
 import AttitudesView from './attitudes/attitudesView'
+import DrugDetailsPresenter from './drugMisuse/drugDetailsPresenter'
 import DrugDetailsView from './drugMisuse/drugDetailsView'
 import EmotionalWellbeingPresenter from './emotionalWellbeing/emotionalWellbeingPresenter'
 import EmotionalWellbeingView from './emotionalWellbeing/emotionalWellbeingView'
@@ -18,15 +19,14 @@ import LifestyleAndAssociatesPresenter from './lifestyleAndAssociates/lifestyleA
 import LifestyleAndAssociatesView from './lifestyleAndAssociates/lifestyleAndAssociatesView'
 import OffenceAnalysisPresenter from './offenceAnalysis/offenceAnalysisPresenter'
 import OffenceAnalysisView from './offenceAnalysis/offenceAnalysisView'
+import RelationshipsPresenter from './relationships/relationshipsPresenter'
+import RelationshipsView from './relationships/relationshipsView'
 import RisksAndAlertsPresenter from './risksAndAlerts/risksAndAlertsPresenter'
 import RisksAndAlertsView from './risksAndAlerts/risksAndAlertsView'
 import RoshAnalysisPresenter from './roshAnalysis/roshAnalysisPresenter'
 import RoshAnalysisView from './roshAnalysis/roshAnalysisView'
 import ThinkingAndBehavingPresenter from './thinkingAndBehaving/thinkingAndBehavingPresenter'
 import ThinkingAndBehavingView from './thinkingAndBehaving/thinkingAndBehavingView'
-import RelationshipsPresenter from './relationships/relationshipsPresenter'
-import RelationshipsView from './relationships/relationshipsView'
-import DrugDetailsPresenter from './drugMisuse/drugDetailsPresenter'
 
 export default class RisksAndNeedsController {
   constructor(
@@ -49,6 +49,8 @@ export default class RisksAndNeedsController {
     )
     const presenter = new RisksAndAlertsPresenter(subNavValue, referralId, risks)
     const view = new RisksAndAlertsView(presenter)
+
+    req.session.originPage = req.originalUrl
 
     return ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }

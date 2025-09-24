@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
+import ChangeCohortForm from './changeCohortForm'
 import ChangeCohortPresenter from './changeCohortPresenter'
 import ChangeCohortView from './changeCohortView'
-import ChangeCohortForm from './changeCohortForm'
 
 export default class ChangeCohortController {
   constructor(

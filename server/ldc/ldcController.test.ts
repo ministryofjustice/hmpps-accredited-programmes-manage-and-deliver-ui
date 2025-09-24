@@ -1,11 +1,10 @@
 import { randomUUID } from 'crypto'
 import request from 'supertest'
 
-import { CohortEnum, PersonalDetails, ReferralDetails } from '@manage-and-deliver-api'
+import { ReferralDetails } from '@manage-and-deliver-api'
 import { Express } from 'express'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
-import personalDetailsFactory from '../testutils/factories/personalDetailsFactory'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
@@ -32,42 +31,35 @@ beforeEach(() => {
   accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
 })
 
-describe('Update cohort', () => {
-  describe(`GET /referral/:referralId/update-cohort`, () => {
+describe('Update ldc status', () => {
+  describe(`GET /referral/:referralId/update-ldc`, () => {
     it('calls the API with the correct params', async () => {
       const referralId = randomUUID()
 
-      accreditedProgrammesManageAndDeliverService.updateCohort.mockResolvedValue(referralDetails)
       return request(app)
-        .get(`/referral/${referralId}/change-cohort`)
+        .get(`/referral/${referralId}/update-ldc`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(referralDetails.crn)
           expect(res.text).toContain(referralDetails.personName)
-          expect(res.text).toContain(referralDetails.cohort)
+          expect(res.text).toContain(referralDetails.hasLdcDisplayText)
         })
     })
   })
 
-  describe(`POST /referral/:referralId/update-cohort`, () => {
-    it('posts to the update cohort page and redirects successfully', async () => {
+  describe(`POST /referral/:referralId/update-ldc`, () => {
+    it('posts to the update ldc page and redirects successfully', async () => {
       const referralId = randomUUID()
 
-      const personalDetails: PersonalDetails = personalDetailsFactory.build()
-
-      accreditedProgrammesManageAndDeliverService.getPersonalDetails.mockResolvedValue(personalDetails)
-
       return request(app)
-        .post(`/referral/${referralId}/change-cohort`)
+        .post(`/referral/${referralId}/update-ldc`)
         .type('form')
         .send({
-          cohort: 'GENERAL_OFFENCE' as CohortEnum,
+          hasLdc: true,
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(
-            `Redirecting to /referral-details/${referralId}/personal-details?isCohortUpdated=true`,
-          )
+          expect(res.text).toContain('?isLdcUpdated=true')
         })
     })
   })

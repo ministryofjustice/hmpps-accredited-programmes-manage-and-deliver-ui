@@ -33,7 +33,7 @@ export default class ReferralDetailsController {
 
   async showPersonalDetailsPage(req: Request, res: Response): Promise<void> {
     const { id } = req.params
-    const { isCohortUpdated } = req.query
+    const { isCohortUpdated, isLdcUpdated } = req.query
     const { username } = req.user
     const subNavValue = 'personalDetails'
 
@@ -46,6 +46,7 @@ export default class ReferralDetailsController {
       id,
       personalDetails,
       isCohortUpdated === 'true',
+      isLdcUpdated === 'true',
     )
     const view = new PersonalDetailsView(presenter)
 
