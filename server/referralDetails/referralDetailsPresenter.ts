@@ -22,7 +22,7 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
     readonly id: string,
     readonly isCohortUpdated: boolean = false,
   ) {
-    super(HorizontalNavValues.referralDetailsTab, id)
+    super(HorizontalNavValues.referralDetailsTab, id, referralDetails.currentStatusDescription)
   }
 
   get referralSummary(): SummaryListArgs {

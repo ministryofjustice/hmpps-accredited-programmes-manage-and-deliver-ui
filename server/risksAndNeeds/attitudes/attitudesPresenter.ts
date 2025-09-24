@@ -7,8 +7,9 @@ export default class AttitudesPresenter extends RisksAndNeedsPresenter {
     readonly subNavValue: string,
     readonly referralId: string,
     readonly attitude: Attitude,
+    readonly referralStatus: string,
   ) {
-    super(subNavValue, referralId)
+    super(subNavValue, referralId, referralStatus)
   }
 
   attitudeSummaryList(): SummaryListItem[] {

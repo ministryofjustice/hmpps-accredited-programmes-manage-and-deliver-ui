@@ -7,8 +7,9 @@ export default class DrugDetailsPresenter extends RisksAndNeedsPresenter {
     readonly subNavValue: string,
     readonly referralId: string,
     readonly drugDetails: DrugDetails,
+    readonly referralStatus: string,
   ) {
-    super(subNavValue, referralId)
+    super(subNavValue, referralId, referralStatus)
   }
 
   drugDetailsSummaryList(): SummaryListItem[] {

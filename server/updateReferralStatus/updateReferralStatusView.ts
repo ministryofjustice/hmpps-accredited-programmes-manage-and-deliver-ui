@@ -45,7 +45,7 @@ export default class UpdateReferralStatusView {
   get currentStatusTagOptions() {
     return {
       text: this.presenter.statusDetails.currentStatus.title,
-      classes: `govuk-tag--${this.presenter.statusDetails.currentStatus.id}`,
+      classes: `govuk-tag--${this.presenter.statusDetails.currentStatus.tagColour}`,
     }
   }
 

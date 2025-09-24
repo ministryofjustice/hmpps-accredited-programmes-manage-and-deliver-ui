@@ -7,7 +7,7 @@ export default class PniPresenter extends ReferralLayoutPresenter {
     readonly details: ReferralDetails,
     readonly pniScore: PniScore,
   ) {
-    super(HorizontalNavValues.programmeNeedsIdentifierTab, id)
+    super(HorizontalNavValues.programmeNeedsIdentifierTab, id, details.currentStatusDescription)
   }
 
   scoreValueText(value?: number | null): string {

@@ -8,6 +8,8 @@
 <div class="govuk-grid-column-one-third">
     <div class="moj-button-group moj-button-group--inline">
         {{ govukButton(presenter.getButton()) }}
-        {{ mojButtonMenu(presenter.getButtonMenu()) }}
+        {% if presenter.showButtonMenu() %}
+          {{ mojButtonMenu(presenter.getButtonMenu()) }}
+        {% endif %}
     </div>
 </div>

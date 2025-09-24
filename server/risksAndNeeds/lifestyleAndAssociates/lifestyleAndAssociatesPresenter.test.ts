@@ -9,6 +9,7 @@ describe(`reoffendingSummaryList.`, () => {
       'lifestyleAndAssociates',
       randomUUID(),
       lifestyleAndAssociates,
+      'Awaiting assessment',
     )
 
     expect(presenter.reoffendingSummaryList()).toEqual([
@@ -27,6 +28,7 @@ describe(`lifestyleIssuesSummaryList.`, () => {
       'lifestyleAndAssociates',
       randomUUID(),
       lifestyleAndAssociates,
+      'Awaiting assessment',
     )
 
     expect(presenter.lifestyleIssuesSummaryList()).toEqual([

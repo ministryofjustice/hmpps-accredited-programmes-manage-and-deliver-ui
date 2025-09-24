@@ -8,8 +8,9 @@ export default class RoshAnalysisPresenter extends RisksAndNeedsPresenter {
     readonly subNavValue: string,
     readonly referralId: string,
     readonly roshAnalysis: RoshAnalysis,
+    readonly referralStatus: string,
   ) {
-    super(subNavValue, referralId)
+    super(subNavValue, referralId, referralStatus)
   }
 
   get assessmentCompletedText(): InsetTextArgs {

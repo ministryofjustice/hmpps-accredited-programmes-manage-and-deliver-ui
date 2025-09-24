@@ -1409,6 +1409,11 @@ export interface components {
        * @example May need an LDC-adapted programme(Building Choices Plus)
        */
       hasLdcDisplayText: string
+      /**
+       * @description The display name of the Referral's current Status
+       * @example Awaiting assessment
+       */
+      currentStatusDescription: string
     }
     SentenceInformation: {
       /**
@@ -1803,6 +1808,7 @@ export interface components {
        * @enum {string}
        */
       cohort: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
+      hasLdc: boolean
     }
     Pageable: {
       /** Format: int32 */
@@ -1821,7 +1827,7 @@ export interface components {
       /** @description Title of the status description */
       title: string
       /** @description The display colour of the status tag */
-      id: string
+      tagColour: string
       /** @description The name of the person that updated the last status */
       updatedByName: string
       /**

@@ -7,8 +7,9 @@ export default class AlcoholMisusePresenter extends RisksAndNeedsPresenter {
     readonly subNavValue: string,
     readonly referralId: string,
     readonly alcoholMisuseDetails: AlcoholMisuseDetails,
+    readonly referralStatus: string,
   ) {
-    super(subNavValue, referralId)
+    super(subNavValue, referralId, referralStatus)
   }
 
   alcoholMisuseSummaryList(): SummaryListItem[] {

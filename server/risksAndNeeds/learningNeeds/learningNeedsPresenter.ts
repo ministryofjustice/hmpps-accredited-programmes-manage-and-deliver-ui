@@ -8,8 +8,9 @@ export default class LearningNeedsPresenter extends RisksAndNeedsPresenter {
     readonly subNavValue: string,
     readonly referralId: string,
     readonly learningNeeds: LearningNeeds,
+    readonly referralStatus: string,
   ) {
-    super(subNavValue, referralId)
+    super(subNavValue, referralId, referralStatus)
   }
 
   learningNeedsSummaryList(): SummaryListItem[] {

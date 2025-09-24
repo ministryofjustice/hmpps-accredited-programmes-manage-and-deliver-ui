@@ -33,8 +33,9 @@ export default class RisksAndAlertsPresenter extends RisksAndNeedsPresenter {
     readonly subNavValue: string,
     readonly referralId: string,
     readonly risks: Risks,
+    readonly referralStatus: string,
   ) {
-    super(subNavValue, referralId)
+    super(subNavValue, referralId, referralStatus)
   }
 
   getLevelClass(scoreLevel: RiskLevel): string {
