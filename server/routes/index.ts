@@ -1,14 +1,15 @@
 import { type RequestHandler, Router } from 'express'
 
 import CaselistController from '../caselist/caselistController'
-import ChangeCohortController from '../cohort/changeCohortController'
-import LdcController from '../ldc/ldcController'
-import LocationPreferencesController from '../locationPreferences/locationPreferencesController'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import PniController from '../pni/pniController'
 import ReferralDetailsController from '../referralDetails/referralDetailsController'
 import RisksAndNeedsController from '../risksAndNeeds/risksAndNeedsController'
 import type { Services } from '../services'
+import LocationPreferencesController from '../locationPreferences/locationPreferencesController'
+import ChangeCohortController from '../cohort/changeCohortController'
+import LdcController from '../ldc/ldcController'
+import UpdateReferralStatusController from '../updateReferralStatus/updateReferralStatusController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
@@ -22,6 +23,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const locationPreferencesController = new LocationPreferencesController(accreditedProgrammesManageAndDeliverService)
   const cohortController = new ChangeCohortController(accreditedProgrammesManageAndDeliverService)
   const ldcController = new LdcController(accreditedProgrammesManageAndDeliverService)
+  const updateReferralController = new UpdateReferralStatusController(accreditedProgrammesManageAndDeliverService)
 
   get('/', async (req, res, next) => {
     await caselistController.showOpenCaselist(req, res)
@@ -173,6 +175,10 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   post('/referral/:referralId/update-ldc', async (req, res, next) => {
     await ldcController.showChangeLdcPage(req, res)
+  })
+
+  get('/referral/:referralId/update-status', async (req, res, next) => {
+    await updateReferralController.updateStatus(req, res)
   })
 
   return router

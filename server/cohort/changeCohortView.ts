@@ -11,7 +11,7 @@ export default class ChangeCohortView {
       {
         presenter: this.presenter,
         currentCohortText: this.currentCohortText,
-        radioArgs: this.radioArgs.bind(this),
+        radioArgs: this.radioArgs(),
         backLinkArgs: this.backLinkArgs(),
         backlinkUri: this.presenter.backlinkUri,
       },
@@ -48,14 +48,14 @@ export default class ChangeCohortView {
         {
           value: 'SEXUAL_OFFENCE',
           text: 'Sexual offence',
+          checked: this.presenter.fields.updatedCohort.value === 'SEXUAL_OFFENCE',
         },
         {
           value: 'GENERAL_OFFENCE',
           text: 'General offence',
+          checked: this.presenter.fields.updatedCohort.value === 'GENERAL_OFFENCE',
         },
       ],
-
-      value: this.presenter.fields.updatedCohort.value,
     }
   }
 }
