@@ -32,6 +32,7 @@ type UpdateCohort = components['schemas']['UpdateCohort']
 type UpdateLdc = components['schemas']['UpdateLdc']
 type ReferralStatusFormData = components['schemas']['ReferralStatusFormData']
 type CreateReferralStatusHistory = components['schemas']['CreateReferralStatusHistory']
+type ReferralStatus = components['schemas']['ReferralStatus']
 
 export type {
   AlcoholMisuseDetails,
@@ -57,6 +58,7 @@ export type {
   PreferredDeliveryLocation,
   ReferralCaseListItem,
   ReferralDetails,
+  ReferralStatus,
   ReferralStatusFormData,
   Relationships,
   Risks,

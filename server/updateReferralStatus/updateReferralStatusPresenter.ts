@@ -1,4 +1,4 @@
-import { ReferralDetails, ReferralStatusFormData } from '@manage-and-deliver-api'
+import { ReferralDetails, ReferralStatus, ReferralStatusFormData } from '@manage-and-deliver-api'
 import { RadiosArgsItem } from '../utils/govukFrontendTypes'
 import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
@@ -21,7 +21,7 @@ export default class UpdateReferralStatusPresenter {
 
   generateStatusUpdateCheckboxes() {
     const statusCheckboxes: RadiosArgsItem[] = []
-    this.statusDetails.availableStatuses.forEach(status => {
+    this.statusDetails.availableStatuses.forEach((status: ReferralStatus) => {
       statusCheckboxes.push({
         value: status.id,
         text: status.status,
