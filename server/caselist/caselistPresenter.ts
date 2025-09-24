@@ -77,7 +77,9 @@ export default class CaselistPresenter {
 
         { text: referral.referralStatus },
 
-        { text: cohortConfigMap[referral.cohort] },
+        {
+          html: `${cohortConfigMap[referral.cohort]}${CaselistUtils.hasLdcTagHtml(referral)}`,
+        },
       ])
     })
     return referralData
