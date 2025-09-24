@@ -12,10 +12,11 @@ export default class ReferralLayoutPresenter {
     readonly isLdcUpdated: boolean | null = null,
   ) {}
 
-  getButton(): { text: string; classes: string } {
+  getButton(): { text: string; classes: string; href: string } {
     return {
       text: 'Back to referrals',
       classes: 'govuk-button--secondary',
+      href: `/pdu/open-referrals`,
     }
   }
 
@@ -31,7 +32,7 @@ export default class ReferralLayoutPresenter {
       items: [
         {
           text: 'Update status',
-          href: '#',
+          href: `/referral/${this.referralId}/update-status`,
         },
         {
           text: 'Change LDC status',

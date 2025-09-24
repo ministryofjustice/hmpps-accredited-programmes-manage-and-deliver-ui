@@ -9,6 +9,7 @@ export default class UpdateReferralStatusPresenter {
     readonly statusDetails: ReferralStatusFormData,
     private readonly validationError: FormValidationError | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
+    readonly backLinkUri: string,
   ) {}
 
   get utils() {

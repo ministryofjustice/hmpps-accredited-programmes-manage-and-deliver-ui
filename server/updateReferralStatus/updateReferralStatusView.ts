@@ -52,7 +52,7 @@ export default class UpdateReferralStatusView {
   get backLinkArgs() {
     return {
       text: 'Back',
-      href: '',
+      href: this.presenter.backLinkUri,
     }
   }
 
@@ -81,6 +81,7 @@ export default class UpdateReferralStatusView {
         currentStatusTagOptions: this.currentStatusTagOptions,
         getCurrentStatusTimelineOptions: this.getCurrentStatusTimelineOptions.bind(this),
         backLinkArgs: this.backLinkArgs,
+        backLinkUri: this.presenter.backLinkUri,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
       },
     ]
