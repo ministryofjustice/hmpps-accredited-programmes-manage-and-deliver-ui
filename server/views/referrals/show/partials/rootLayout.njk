@@ -1,0 +1,54 @@
+{% extends "../../../partials/layout.njk" %}
+{%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
+{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "moj/components/button-menu/macro.njk" import mojButtonMenu %}
+
+{% set pageTitle = applicationName + " - " + pageHeading %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block main %}
+{% block content %}
+<div class="govuk-width-container" id="main-content">
+  <div class="govuk-main-wrapper">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        
+        <div class="header-with-actions">
+          <h1 class="header-with-actions__title govuk-heading-l">{{ pageHeading }}</h1>
+
+          {% if buttons | length %}
+            <div class="govuk-button-group"  data-testid="show-referral-buttons">
+              {% for button in buttons %}
+                {{ govukButton({
+                  attributes: button.attributes,
+                  classes: button.classes,
+                  href: button.href,
+                  text: button.text
+                }) }}
+              {% endfor %}
+              {% if buttonMenu.items | length %}
+                {{ mojButtonMenu(buttonMenu) }}
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+
+        {{ mojSubNavigation({
+          label: 'Sub navigation',
+          items: subNavigationItems
+        }) }}
+
+        <div class="govuk-grid-column-three-quarters">
+          {% block beforeSupportingContent %}{% endblock beforeSupportingContent %}
+
+          <h2 class="govuk-heading-m" data-testid="show-referral-sub-heading">{{ pageSubHeading }}</h2>
+
+          {% block supportingContent %}{% endblock supportingContent %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+{% endblock main %}

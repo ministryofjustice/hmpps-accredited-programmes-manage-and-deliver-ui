@@ -239,7 +239,7 @@ export default class AccreditedProgrammesManageAndDeliverService
   async getStatusHistory(username: ExpressUsername, referralId: string): Promise<ReferralStatusHistory[]> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
-      path: `/referral/${referralId}/status-history`,
+      path: `/referral-details/${referralId}/status-history`,
       headers: { Accept: 'application/json' },
     })) as ReferralStatusHistory[]
   }

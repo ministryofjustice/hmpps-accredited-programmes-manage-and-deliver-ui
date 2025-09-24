@@ -1,0 +1,13 @@
+{% from "moj/components/timeline/macro.njk" import mojTimeline %}
+
+{% extends "../partials/rootLayout.njk" %}
+
+{% block supportingContent %}
+  {{ mojTimeline({
+    headingLevel: 3,
+    items: timelineItems,
+    attributes: {
+      "data-testid": "status-history-timeline"
+    }
+  }) }}
+{% endblock supportingContent %}

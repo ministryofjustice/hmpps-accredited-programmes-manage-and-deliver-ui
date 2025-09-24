@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 
 import { ReferralDetails } from '@manage-and-deliver-api'
-import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import AccreditedProgrammesManageAndDeliverService  from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
 import { FormValidationError } from '../utils/formValidationError'
 import AddAvailabilityForm from './addAvailability/AddAvailabilityForm'
@@ -21,6 +21,8 @@ import ProgrammeHistoryPresenter from './programmeHistoryPresenter'
 import ProgrammeHistoryView from './programmeHistoryView'
 import SentenceInformationPresenter from './sentenceInformationPresenter'
 import SentenceInformationView from './sentenceInformationView'
+import StatusHistoryPresenter from './statusHistoryPresenter'
+import StatusHistoryView from './statusHistoryView'
 
 export default class ReferralDetailsController {
   constructor(
@@ -163,6 +165,21 @@ export default class ReferralDetailsController {
 
     const presenter = new AdditionalInformationPresenter(sharedReferralDetailsData, subNavValue, id)
     const view = new AdditionalInformationView(presenter)
+
+    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+  }
+
+  async showStatusHistoryPage(req: Request, res: Response): Promise<void> {
+    const { referralId } = req.params
+    const { username } = req.user
+
+    const sharedReferralDetailsData = await this.showReferralDetailsPage(referralId, username)
+    const statusHistory = await this.accreditedProgrammesManageAndDeliverService.getStatusHistory(username, referralId)
+
+    const presenter = new StatusHistoryPresenter(referralId, statusHistory)
+    const view = new StatusHistoryView(presenter)
+
+    req.session.originPage = req.originalUrl
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }

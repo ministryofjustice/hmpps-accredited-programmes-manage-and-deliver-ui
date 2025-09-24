@@ -31,6 +31,7 @@ type ExistingDeliveryLocationPreferences = components['schemas']['ExistingDelive
 type UpdateCohort = components['schemas']['UpdateCohort']
 type UpdateLdc = components['schemas']['UpdateLdc']
 type ReferralStatusHistory = components['schemas']['Stat']
+type ReferralStatusHistory = components['schemas']['ReferralStatusHistory']
 
 export type {
   AlcoholMisuseDetails,
@@ -55,6 +56,7 @@ export type {
   PreferredDeliveryLocation,
   ReferralCaseListItem,
   ReferralDetails,
+  ReferralStatusHistory,
   Relationships,
   Risks,
   RoshAnalysis,
