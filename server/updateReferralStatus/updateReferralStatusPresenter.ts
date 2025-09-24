@@ -1,84 +1,49 @@
-import { ReferralDetails } from '@manage-and-deliver-api'
+import { ReferralDetails, ReferralStatusFormData } from '@manage-and-deliver-api'
+import { RadiosArgsItem } from '../utils/govukFrontendTypes'
+import { FormValidationError } from '../utils/formValidationError'
+import PresenterUtils from '../utils/presenterUtils'
 
 export default class UpdateReferralStatusPresenter {
-  constructor(readonly details: ReferralDetails) {}
+  constructor(
+    readonly details: ReferralDetails,
+    readonly statusDetails: ReferralStatusFormData,
+    private readonly validationError: FormValidationError | null = null,
+    private readonly userInputData: Record<string, unknown> | null = null,
+  ) {}
 
-  get statusUpdateRadioButtonsOptions() {
-    return {
-      name: 'signIn',
-      fieldset: {
-        legend: {
-          text: 'Select the new referral status',
-          isPageHeading: true,
-          classes: 'govuk-fieldset__legend--m',
+  get utils() {
+    return new PresenterUtils(this.userInputData)
+  }
+
+  get errorSummary() {
+    return PresenterUtils.errorSummary(this.validationError)
+  }
+
+  generateStatusUpdateCheckboxes() {
+    const statusCheckboxes: RadiosArgsItem[] = []
+    this.statusDetails.availableStatuses.forEach(status => {
+      statusCheckboxes.push({
+        value: status.id,
+        text: status.status,
+        hint: {
+          text: status.transitionDescription,
         },
+        checked: this.fields.updatedStatus.value.toLowerCase() === status.id.toLowerCase(),
+      })
+    })
+    return statusCheckboxes
+  }
+
+  get fields() {
+    return {
+      moreDetailsTextArea: {
+        errorMessage: PresenterUtils.errorMessage(this.validationError, 'more-details'),
+        value: this.utils.stringValue(null, 'more-details'),
       },
-      items: [
-        {
-          value: 'awaiting-allocation',
-          text: 'Awaiting allocation',
-          hint: {
-            text: 'This person has been assessed as suitable and can be allocated to a group',
-          },
-        },
-        {
-          value: 'govuk-one-login',
-          text: 'Suitable but not ready',
-          hint: {
-            text: 'This person meets the suitability criteria but is not ready to start the programme. The referral will be paused until they are ready.',
-          },
-        },
-      ],
-    }
-  }
-
-  get addDetailsTextboxOptions() {
-    return {
-      name: 'moreDetail',
-      id: 'more-detail',
-      label: {
-        text: 'Add details (optional)',
-        classes: 'govuk-label--m',
-        isPageHeading: false,
+      updatedStatus: {
+        errorMessage: PresenterUtils.errorMessage(this.validationError, 'updated-status'),
+        value: this.utils.stringValue(null, 'updated-status'),
       },
-      maxlength: '500',
-      hint: {
-        text: 'You can add more information about this update, such as the reason for an assessment decision or for deprioritising someone.',
-      },
-    }
-  }
-
-  get currentStatusTagOptions() {
-    return {
-      text: 'Awaiting assessment',
-      class: '',
-    }
-  }
-
-  getCurrentStatusTimelineOptions(htmlContent: string) {
-    return {
-      items: [
-        {
-          label: {
-            text: 'Current status',
-          },
-          html: htmlContent,
-          datetime: {
-            timestamp: '2025-07-10T11:15:00.000Z',
-            type: 'datetime',
-          },
-          byline: {
-            text: 'Accredited Programmes automated update',
-          },
-        },
-      ],
-    }
-  }
-
-  get backLinkArgs() {
-    return {
-      text: 'Back',
-      href: '',
     }
   }
 }

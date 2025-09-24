@@ -3,6 +3,8 @@ import AccreditedProgrammesManageAndDeliverService from '../services/accreditedP
 import ControllerUtils from '../utils/controllerUtils'
 import UpdateReferralStatusPresenter from './updateReferralStatusPresenter'
 import UpdateReferralStatusView from './updateReferralStatusView'
+import UpdateReferralStatusForm from './updateReferralStatusForm'
+import { FormValidationError } from '../utils/formValidationError'
 
 export default class UpdateReferralStatusController {
   constructor(
@@ -18,8 +20,24 @@ export default class UpdateReferralStatusController {
       username,
     )
 
-    const presenter = new UpdateReferralStatusPresenter(referralDetails)
+    const statusDetails = await this.accreditedProgrammesManageAndDeliverService.getStatusDetails(referralId, username)
 
+    let formError: FormValidationError | null = null
+    let userInputData = null
+
+    if (req.method === 'POST') {
+      const data = await new UpdateReferralStatusForm(req).data()
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+        userInputData = req.body
+      } else {
+        await this.accreditedProgrammesManageAndDeliverService.updateStatus(username, referralId, data.paramsForUpdate)
+        return res.redirect(`/referral-details/${referralId}/personal-details?statusUpdated=true`)
+      }
+    }
+
+    const presenter = new UpdateReferralStatusPresenter(referralDetails, statusDetails, formError, userInputData)
     const view = new UpdateReferralStatusView(presenter)
     return ControllerUtils.renderWithLayout(res, view, referralDetails)
   }

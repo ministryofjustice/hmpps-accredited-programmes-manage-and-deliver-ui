@@ -181,5 +181,9 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await updateReferralController.updateStatus(req, res)
   })
 
+  post('/referral/:referralId/update-status', async (req, res, next) => {
+    await updateReferralController.updateStatus(req, res)
+  })
+
   return router
 }

@@ -5,6 +5,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -16,6 +17,9 @@
   <div class="govuk-main-wrapper">
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
+        {% if errorSummary !== null %}
+          {{ govukErrorSummary(errorSummary) }}
+        {% endif %}
         <h1 class="govuk-heading-l">Update {{presenter.details.personName}}'s referral status</h1>
         {%- set confirmationHtml %}
         {{ govukTag( currentStatusTagOptions ) }}
