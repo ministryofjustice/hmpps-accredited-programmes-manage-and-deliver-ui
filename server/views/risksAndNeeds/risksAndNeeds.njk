@@ -14,9 +14,18 @@
       <div class="govuk-main-wrapper">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-full">
-            {{ mojPageHeaderActions(presenter.getSubHeaderArgs()) }}
-            {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
+            {% include "../partials/headerMenu.njk" %}
+            <div class="govuk-grid-column-full">
+              {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
+            </div>
+
             <div class="govuk-grid-column-three-quarters">
+              {% if isCohortUpdated %}
+                {{ mojAlert(presenter.cohortUpdatedSuccessMessageArgs) }}
+              {% endif %}
+              {% if isLdcUpdated %}
+                {{ mojAlert(presenter.ldcUpdatedSuccessMessageArgs) }}
+              {% endif %}
               <h2 class="govuk-heading-m">Risks and needs</h2>
               <p class="govuk-body govuk-!-margin-bottom-0">{{ presenter.pageDescription }}</p>
             </div>
