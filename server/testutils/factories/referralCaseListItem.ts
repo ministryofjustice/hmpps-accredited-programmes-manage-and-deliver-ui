@@ -9,4 +9,5 @@ export default ReferralCaseListItemFactory.define(({ sequence }) => ({
   personName: 'feksoipgjes',
   referralStatus: 'fjewioghjewoi',
   cohort: 'GENERAL_OFFENCE' as CohortEnum,
+  hasLdc: false,
 }))

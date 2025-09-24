@@ -16,4 +16,5 @@ export default ReferralDetailsFactory.define(({ sequence }) => ({
   cohort: 'SEXUAL_OFFENCE' as CohortEnum,
   hasLdc: false,
   hasLdcDisplayText: 'Does not need an LDC-adapted programme',
+  currentStatusDescription: 'Awaiting assessment',
 }))
