@@ -20,10 +20,10 @@ export default class UpdateReferralStatusPresenter {
     return PresenterUtils.errorSummary(this.validationError)
   }
 
-  generateStatusUpdateCheckboxes() {
-    const statusCheckboxes: RadiosArgsItem[] = []
+  generateStatusUpdateRadios() {
+    const statusRadios: RadiosArgsItem[] = []
     this.statusDetails.availableStatuses.forEach((status: ReferralStatus) => {
-      statusCheckboxes.push({
+      statusRadios.push({
         value: status.id,
         text: status.status,
         hint: {
@@ -32,7 +32,7 @@ export default class UpdateReferralStatusPresenter {
         checked: this.fields.updatedStatus.value.toLowerCase() === status.id.toLowerCase(),
       })
     })
-    return statusCheckboxes
+    return statusRadios
   }
 
   get fields() {

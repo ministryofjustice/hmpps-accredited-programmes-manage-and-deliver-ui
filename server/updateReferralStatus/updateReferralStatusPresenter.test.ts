@@ -1,3 +1,4 @@
+import { fakerEN_GB as faker } from '@faker-js/faker'
 import UpdateReferralStatusPresenter from './updateReferralStatusPresenter'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 import referralStatusFormDataFactory from '../testutils/factories/referralStatusFormDataFactory'
@@ -6,13 +7,13 @@ afterEach(() => {
   jest.restoreAllMocks()
 })
 
-describe(`generateCheckboxItems.`, () => {
+describe(`generateStatusUpdateRadios.`, () => {
   it('should generate items for the data given', () => {
     const details = referralDetailsFactory.build()
     const statusDetails = referralStatusFormDataFactory.build()
     const presenter = new UpdateReferralStatusPresenter(details, statusDetails, null, null, '')
 
-    expect(presenter.generateStatusUpdateCheckboxes()).toEqual([
+    expect(presenter.generateStatusUpdateRadios()).toEqual([
       {
         checked: false,
         hint: {
@@ -32,22 +33,23 @@ describe(`generateCheckboxItems.`, () => {
     ])
   })
 
-  it('should generate the checkboxes correctly when re-rendering the page after an error', () => {
+  it('should generate the radios correctly when re-rendering the page after an error', () => {
     const details = referralDetailsFactory.build()
     const statusDetails = referralStatusFormDataFactory.build()
+    const moreDetails = faker.string.alphanumeric(501)
 
     const presenter = new UpdateReferralStatusPresenter(details, statusDetails, null, null, '')
 
     const mockFields = jest.spyOn(presenter, 'fields', 'get')
     mockFields.mockReturnValue({
       moreDetailsTextArea: {
-        value: '',
-        errorMessage: null,
+        value: moreDetails,
+        errorMessage: 'Details must be 500 characters or fewer.',
       },
-      updatedStatus: { value: '336b59cd-b467-4305-8547-6a645a8a3f91', errorMessage: 'This is required' },
+      updatedStatus: { value: '336b59cd-b467-4305-8547-6a645a8a3f91', errorMessage: null },
     })
 
-    expect(presenter.generateStatusUpdateCheckboxes()).toEqual([
+    expect(presenter.generateStatusUpdateRadios()).toEqual([
       {
         checked: false,
         hint: {

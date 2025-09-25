@@ -6,7 +6,7 @@ class ReferralStatusFormDataFactory extends Factory<ReferralStatusFormData> {}
 export default ReferralStatusFormDataFactory.define(() => ({
   currentStatus: {
     statusDescriptionId: '76b2f8d8-260c-4766-a716-de9325292609',
-    title: '76b2f8d8-260c-4766-a716-de9325292609',
+    title: 'Awaiting assessment',
     tagColour: 'purple',
     updatedByName: 'USER_ID_12345',
     createdAt: '25 September 2025',

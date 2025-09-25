@@ -66,7 +66,7 @@ export default class UpdateReferralStatusView {
           classes: 'govuk-fieldset__legend--m',
         },
       },
-      items: this.presenter.generateStatusUpdateCheckboxes(),
+      items: this.presenter.generateStatusUpdateRadios(),
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.updatedStatus.errorMessage),
     }
   }
