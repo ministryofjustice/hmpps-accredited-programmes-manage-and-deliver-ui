@@ -54,17 +54,6 @@ export default class ViewUtils {
   // private static isAuthUserDetails(line: SummaryListItemContent): line is AuthUserDetails {
   //   return <AuthUserDetails>line !== null && (<AuthUserDetails>line).username !== undefined
   // }
-
-  handleValue(value: string | number | boolean) {
-    if (typeof value === 'string') {
-      return value.toUpperCase()
-    }
-    if (typeof value === 'number') {
-      return value.toFixed(2)
-    }
-    return value ? 'Yes' : 'No'
-  }
-
   private static summaryListItemLine(line: SummaryListItemContent): string {
     // if (ViewUtils.isAuthUserDetails(line)) {
     //   const name = `${line.firstName} ${line.lastName}`
