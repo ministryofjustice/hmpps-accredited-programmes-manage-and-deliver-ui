@@ -50,7 +50,7 @@ export default class ReferralDetailsController {
     )
     const view = new PersonalDetailsView(presenter)
 
-    req.session.originPage = req.originalUrl
+    req.session.originPage = req.path
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -65,7 +65,7 @@ export default class ReferralDetailsController {
     const presenter = new ProgrammeHistoryPresenter(sharedReferralDetailsData, subNavValue, id)
     const view = new ProgrammeHistoryView(presenter)
 
-    req.session.originPage = req.originalUrl
+    req.session.originPage = req.path
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -81,7 +81,7 @@ export default class ReferralDetailsController {
     const presenter = new OffenceHistoryPresenter(sharedReferralDetailsData, subNavValue, id, offenceHistory)
     const view = new OffenceHistoryView(presenter)
 
-    req.session.originPage = req.originalUrl
+    req.session.originPage = req.path
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -100,7 +100,7 @@ export default class ReferralDetailsController {
     const presenter = new SentenceInformationPresenter(sharedReferralDetailsData, subNavValue, id, sentenceInformation)
     const view = new SentenceInformationView(presenter)
 
-    req.session.originPage = req.originalUrl
+    req.session.originPage = req.path
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -124,7 +124,7 @@ export default class ReferralDetailsController {
     )
     const view = new AvailabilityView(presenter)
 
-    req.session.originPage = req.originalUrl
+    req.session.originPage = req.path
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -149,7 +149,7 @@ export default class ReferralDetailsController {
     )
     const view = new LocationView(presenter)
 
-    req.session.originPage = req.originalUrl
+    req.session.originPage = req.path
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
