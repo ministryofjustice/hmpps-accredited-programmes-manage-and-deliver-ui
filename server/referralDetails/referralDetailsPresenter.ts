@@ -130,7 +130,7 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
       },
       {
         key: 'Cohort',
-        lines: [`${formatCohort(this.referralDetails.cohort)}`],
+        lines: [{ item: `${formatCohort(this.referralDetails.cohort)}`, hasLdc: this.referralDetails.hasLdc }],
       },
       {
         key: 'Date referred',
