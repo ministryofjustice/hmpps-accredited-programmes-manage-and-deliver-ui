@@ -15,6 +15,7 @@ describe(`getAvailabilityTableArgs.`, () => {
       cohort: 'GENERAL_OFFENCE',
       hasLdc: true,
       hasLdcDisplayText: 'May need an LDC-adapted programme',
+      currentStatusDescription: 'Awaiting assessment',
     }
     const availability: Availability = {
       id: '533f391d-a4dd-4a3f-b53d-e8ff2ab5db86',

@@ -543,6 +543,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/bff/referral-status-form/{referralId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve data for updating referral status form
+     * @description Returns all possible data for the update referral status form based on the referral id
+     */
+    get: operations['getReferralStatusForm']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/bff/referral-delivery-location-preferences-form/{referralId}': {
     parameters: {
       query?: never
@@ -1389,6 +1409,11 @@ export interface components {
        * @example May need an LDC-adapted programme(Building Choices Plus)
        */
       hasLdcDisplayText: string
+      /**
+       * @description The display name of the Referral's current Status
+       * @example Awaiting assessment
+       */
+      currentStatusDescription: string
     }
     SentenceInformation: {
       /**
@@ -1783,6 +1808,7 @@ export interface components {
        * @enum {string}
        */
       cohort: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
+      hasLdc: boolean
     }
     Pageable: {
       /** Format: int32 */
@@ -1790,6 +1816,32 @@ export interface components {
       /** Format: int32 */
       size?: number
       sort?: string[]
+    }
+    /** @description Form data for the update status form in the M&D UI */
+    CurrentStatus: {
+      /**
+       * Format: uuid
+       * @description The id of the status description
+       */
+      statusDescriptionId: string
+      /** @description Title of the status description */
+      title: string
+      /** @description The display colour of the status tag */
+      tagColour: string
+      /** @description The name of the person that updated the last status */
+      updatedByName: string
+      /**
+       * Format: date
+       * @description The date that the status was last updated
+       */
+      createdAt: string
+    }
+    /** @description Form data for the update status form in the M&D UI */
+    ReferralStatusFormData: {
+      /** @description The current status information */
+      currentStatus: components['schemas']['CurrentStatus']
+      /** @description List of transition statuses */
+      availableStatuses: components['schemas']['ReferralStatus'][]
     }
     /** @description A delivery location (i.e. Office) with value and label, formatted for the UI */
     DeliveryLocationOption: {
@@ -3619,6 +3671,56 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getReferralStatusForm: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id (UUID) of a referral status description */
+        referralId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Data for update referral status form */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ReferralStatusFormData'][]
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden. The client is not authorised to access this resource. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
