@@ -75,5 +75,18 @@ describe('update-status', () => {
           )
         })
     })
+    it('handles form errors correctly and displays the appropriate error message', async () => {
+      return request(app)
+        .post(`/referral/${referralId}/update-status`)
+        .type('form')
+        .send({
+          'updated-status': undefined,
+          'more-details': 'some details',
+        })
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain(`Select the referral status you want to move the person to.`)
+        })
+    })
   })
 })
