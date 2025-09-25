@@ -1,11 +1,14 @@
 import { Request } from 'express'
 import { SessionData } from 'express-session'
-import { SummaryListItem, SummaryListItemContent } from '../utils/summaryList'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import type { Services } from '../services'
+import { SummaryListItem, SummaryListItemContent, SummaryListItemContentWithLdc } from '../utils/summaryList'
 
 export default class TestUtils {
-  static linesForKey(key: string, list: () => SummaryListItem[]): SummaryListItemContent[] | null {
+  static linesForKey(
+    key: string,
+    list: () => SummaryListItem[],
+  ): SummaryListItemContent[] | SummaryListItemContentWithLdc[] | null {
     const items = list()
     const item = items.find(anItem => anItem.key === key)
     return item?.lines ?? null

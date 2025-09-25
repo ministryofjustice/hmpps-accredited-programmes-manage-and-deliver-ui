@@ -55,6 +55,16 @@ export default class ViewUtils {
   //   return <AuthUserDetails>line !== null && (<AuthUserDetails>line).username !== undefined
   // }
 
+  handleValue(value: string | number | boolean) {
+    if (typeof value === 'string') {
+      return value.toUpperCase()
+    }
+    if (typeof value === 'number') {
+      return value.toFixed(2)
+    }
+    return value ? 'Yes' : 'No'
+  }
+
   private static summaryListItemLine(line: SummaryListItemContent): string {
     // if (ViewUtils.isAuthUserDetails(line)) {
     //   const name = `${line.firstName} ${line.lastName}`
@@ -81,7 +91,12 @@ export default class ViewUtils {
             if (item.listStyle !== undefined) {
               const itemClass = `govuk-list${item.listStyle === ListStyle.bulleted ? ' govuk-list--bullet' : ''}`
               const html = `<ul class="${itemClass}">${item.lines
-                .map(line => `<li>${ViewUtils.summaryListItemLine(line)}</li>`)
+                .map(line => {
+                  if (typeof line === 'string' || typeof line === 'undefined') {
+                    return `<li>${ViewUtils.summaryListItemLine(line)}</li>`
+                  }
+                  return `<li>${ViewUtils.summaryListItemLine(line.item)} ${line.hasLdc ? '<span class="moj-badge moj-badge--bright-purple">LDC</span>' : ''}</li>`
+                })
                 .join('\n')}</ul>`
               return { html }
             }
@@ -90,7 +105,12 @@ export default class ViewUtils {
               return { html }
             }
             const html = item.lines
-              .map(line => `<p class="govuk-body">${ViewUtils.nl2br(ViewUtils.summaryListItemLine(line))}</p>`)
+              .map(line => {
+                if (typeof line === 'string' || typeof line === 'undefined') {
+                  return `<p class="govuk-body">${ViewUtils.nl2br(ViewUtils.summaryListItemLine(line))}</p>`
+                }
+                return `<p class="govuk-body">${ViewUtils.nl2br(ViewUtils.summaryListItemLine(line.item))} ${line.hasLdc ? '<span class="moj-badge moj-badge--bright-purple">LDC</span>' : ''}</p>`
+              })
               .join('\n')
             return { html }
           })(),
@@ -156,12 +176,22 @@ export default class ViewUtils {
             if (item.listStyle !== undefined) {
               const itemClass = `govuk-list${item.listStyle === ListStyle.bulleted ? ' govuk-list--bullet' : ''}`
               const html = `<ul class="${itemClass}">${item.lines
-                .map(line => `<li>${ViewUtils.summaryListItemLine(line)}</li>`)
+                .map(line => {
+                  if (typeof line === 'string' || typeof line === 'undefined') {
+                    return `<li>${ViewUtils.summaryListItemLine(line)}</li>`
+                  }
+                  return `<li>${ViewUtils.summaryListItemLine(line.item)} ${line.hasLdc ? '<span class="moj-badge moj-badge--bright-purple">LDC</span>' : ''}</li>`
+                })
                 .join('\n')}</ul>`
               return { html }
             }
             const html = item.lines
-              .map(line => `<p class="govuk-body">${ViewUtils.nl2br(ViewUtils.summaryListItemLine(line))}</p>`)
+              .map(line => {
+                if (typeof line === 'string' || typeof line === 'undefined') {
+                  return `<p class="govuk-body">${ViewUtils.nl2br(ViewUtils.summaryListItemLine(line))}</p>`
+                }
+                return `<p class="govuk-body">${ViewUtils.nl2br(ViewUtils.summaryListItemLine(line.item))} ${line.hasLdc ? '<span class="moj-badge moj-badge--bright-purple">LDC</span>' : ''}</p>`
+              })
               .join('\n')
             return { html, classes: fillRowWithValue }
           })(),
