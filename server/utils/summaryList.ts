@@ -4,10 +4,15 @@ export enum ListStyle {
 }
 
 export type SummaryListItemContent = string
+export type SummaryListItemContentWithLdc = {
+  item: string
+  hasLdc: boolean
+}
 
 export interface SummaryListItem {
   key?: string
-  lines: SummaryListItemContent[]
+  lines?: SummaryListItemContent[] | SummaryListItemContentWithLdc[]
+  html?: string
   listStyle?: ListStyle
   changeLink?: string
   deleteLink?: string
