@@ -24,6 +24,8 @@ import {
   UpdateAvailability,
   DeliveryLocationPreferencesFormData,
   CreateDeliveryLocationPreferences,
+  ReferralStatusFormData,
+  CreateReferralStatusHistory,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -323,5 +325,22 @@ export default class AccreditedProgrammesManageAndDeliverService
       headers: { Accept: 'application/json' },
       data: { hasLdc },
     })
+  }
+
+  async getStatusDetails(referralId: string, username: Express.User['username']): Promise<ReferralStatusFormData> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/referral-status-form/${referralId}`,
+      headers: { Accept: 'application/json' },
+    })) as ReferralStatusFormData
+  }
+
+  async updateStatus(username: string, referralId: string, updatedStatus: CreateReferralStatusHistory) {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.post({
+      path: `/referral/${referralId}/status-history`,
+      headers: { Accept: 'application/json' },
+      data: updatedStatus,
+    })) as ReferralDetails
   }
 }

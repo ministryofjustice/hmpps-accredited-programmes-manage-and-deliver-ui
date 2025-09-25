@@ -7,8 +7,9 @@ export default class LifestyleAndAssociatesPresenter extends RisksAndNeedsPresen
     readonly subNavValue: string,
     readonly referralId: string,
     readonly lifestyleAndAssociates: LifestyleAndAssociates,
+    readonly referralStatus: string,
   ) {
-    super(subNavValue, referralId)
+    super(subNavValue, referralId, referralStatus)
   }
 
   reoffendingSummaryList(): SummaryListItem[] {

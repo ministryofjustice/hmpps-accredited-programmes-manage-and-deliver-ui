@@ -9,7 +9,7 @@ export default class ReferralDetailsView {
       'referralDetails/referralDetails',
       {
         presenter: this.presenter,
-        successMessageArgs: this.cohortUpdatedSuccessMessageArgs.bind(this),
+        successMessageArgs: this.cohortUpdatedSuccessMessageArgs,
         isCohortUpdated: this.presenter.isCohortUpdated,
       },
     ]

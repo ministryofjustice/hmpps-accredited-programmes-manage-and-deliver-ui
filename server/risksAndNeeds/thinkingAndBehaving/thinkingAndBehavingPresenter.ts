@@ -6,9 +6,10 @@ export default class ThinkingAndBehavingPresenter extends RisksAndNeedsPresenter
   constructor(
     readonly subNavValue: string,
     readonly referralId: string,
+    readonly referralStatus: string,
     readonly thinkingAndBehaviour?: ThinkingAndBehaviour,
   ) {
-    super(subNavValue, referralId)
+    super(subNavValue, referralId, referralStatus)
   }
 
   thinkingAndBehavingSummaryList(): SummaryListItem[] {

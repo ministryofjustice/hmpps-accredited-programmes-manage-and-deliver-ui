@@ -9,14 +9,20 @@ export default class ReferralLayoutPresenter {
   protected constructor(
     readonly horizontalNavValue: HorizontalNavValues,
     readonly referralId: string,
+    readonly currentStatus: string,
     readonly isLdcUpdated: boolean | null = null,
   ) {}
 
-  getButton(): { text: string; classes: string } {
+  getButton(): { text: string; classes: string; href: string } {
     return {
       text: 'Back to referrals',
       classes: 'govuk-button--secondary',
+      href: `/pdu/open-referrals`,
     }
+  }
+
+  showButtonMenu() {
+    return this.currentStatus.toLowerCase() !== 'withdrawn' && this.currentStatus.toLowerCase() !== 'programme complete'
   }
 
   getButtonMenu(): {
@@ -31,7 +37,7 @@ export default class ReferralLayoutPresenter {
       items: [
         {
           text: 'Update status',
-          href: '#',
+          href: `/referral/${this.referralId}/update-status`,
         },
         {
           text: 'Change LDC status',

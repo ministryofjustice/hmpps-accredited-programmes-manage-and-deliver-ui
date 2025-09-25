@@ -19,8 +19,9 @@ export default class RisksAndNeedsPresenter extends ReferralLayoutPresenter {
   constructor(
     readonly subNavValue: string,
     readonly referralId: string,
+    readonly referralStatus: string,
   ) {
-    super(HorizontalNavValues.risksAndNeedsTab, referralId)
+    super(HorizontalNavValues.risksAndNeedsTab, referralId, referralStatus)
   }
 
   readonly pageDescription =

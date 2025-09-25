@@ -47,7 +47,12 @@ export default class RisksAndNeedsController {
       username,
       sharedReferralDetailsData.crn,
     )
-    const presenter = new RisksAndAlertsPresenter(subNavValue, referralId, risks)
+    const presenter = new RisksAndAlertsPresenter(
+      subNavValue,
+      referralId,
+      risks,
+      sharedReferralDetailsData.currentStatusDescription,
+    )
     const view = new RisksAndAlertsView(presenter)
 
     req.session.originPage = req.originalUrl
@@ -65,7 +70,12 @@ export default class RisksAndNeedsController {
       username,
       sharedReferralDetailsData.crn,
     )
-    const presenter = new LearningNeedsPresenter(subNavValue, referralId, learningNeeds)
+    const presenter = new LearningNeedsPresenter(
+      subNavValue,
+      referralId,
+      learningNeeds,
+      sharedReferralDetailsData.currentStatusDescription,
+    )
     const view = new LearningNeedsView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
@@ -82,7 +92,12 @@ export default class RisksAndNeedsController {
       sharedReferralDetailsData.crn,
     )
 
-    const presenter = new OffenceAnalysisPresenter(subNavValue, referralId, offenceAnalysis)
+    const presenter = new OffenceAnalysisPresenter(
+      subNavValue,
+      referralId,
+      offenceAnalysis,
+      sharedReferralDetailsData.currentStatusDescription,
+    )
     const view = new OffenceAnalysisView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
@@ -99,7 +114,12 @@ export default class RisksAndNeedsController {
       sharedReferralDetailsData.crn,
     )
 
-    const presenter = new RelationshipsPresenter(subNavValue, referralId, relationships)
+    const presenter = new RelationshipsPresenter(
+      subNavValue,
+      referralId,
+      relationships,
+      sharedReferralDetailsData.currentStatusDescription,
+    )
     const view = new RelationshipsView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
@@ -116,7 +136,12 @@ export default class RisksAndNeedsController {
       sharedReferralDetailsData.crn,
     )
 
-    const presenter = new LifestyleAndAssociatesPresenter(subNavValue, referralId, lifestyleAndAssociates)
+    const presenter = new LifestyleAndAssociatesPresenter(
+      subNavValue,
+      referralId,
+      lifestyleAndAssociates,
+      sharedReferralDetailsData.currentStatusDescription,
+    )
     const view = new LifestyleAndAssociatesView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
@@ -133,7 +158,12 @@ export default class RisksAndNeedsController {
       sharedReferralDetailsData.crn,
     )
 
-    const presenter = new AlcoholMisusePresenter(subNavValue, referralId, alcoholMisuseDetails)
+    const presenter = new AlcoholMisusePresenter(
+      subNavValue,
+      referralId,
+      alcoholMisuseDetails,
+      sharedReferralDetailsData.currentStatusDescription,
+    )
     const view = new AlcoholMisuseView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
@@ -151,7 +181,12 @@ export default class RisksAndNeedsController {
       sharedReferralDetailsData.crn,
     )
 
-    const presenter = new EmotionalWellbeingPresenter(subNavValue, referralId, emotionalWellbeing)
+    const presenter = new EmotionalWellbeingPresenter(
+      subNavValue,
+      referralId,
+      sharedReferralDetailsData.currentStatusDescription,
+      emotionalWellbeing,
+    )
     const view = new EmotionalWellbeingView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
@@ -169,7 +204,12 @@ export default class RisksAndNeedsController {
       sharedReferralDetailsData.crn,
     )
 
-    const presenter = new ThinkingAndBehavingPresenter(subNavValue, referralId, thinkingAndBehaviour)
+    const presenter = new ThinkingAndBehavingPresenter(
+      subNavValue,
+      referralId,
+      sharedReferralDetailsData.currentStatusDescription,
+      thinkingAndBehaviour,
+    )
     const view = new ThinkingAndBehavingView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
@@ -186,7 +226,12 @@ export default class RisksAndNeedsController {
       sharedReferralDetailsData.crn,
     )
 
-    const presenter = new AttitudesPresenter(subNavValue, referralId, attitudes)
+    const presenter = new AttitudesPresenter(
+      subNavValue,
+      referralId,
+      attitudes,
+      sharedReferralDetailsData.currentStatusDescription,
+    )
     const view = new AttitudesView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
@@ -203,7 +248,12 @@ export default class RisksAndNeedsController {
       sharedReferralDetailsData.crn,
     )
 
-    const presenter = new HealthPresenter(subNavValue, referralId, health)
+    const presenter = new HealthPresenter(
+      subNavValue,
+      referralId,
+      health,
+      sharedReferralDetailsData.currentStatusDescription,
+    )
     const view = new HealthView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
@@ -220,7 +270,12 @@ export default class RisksAndNeedsController {
       sharedReferralDetailsData.crn,
     )
 
-    const presenter = new DrugDetailsPresenter(subNavValue, referralId, drugDetails)
+    const presenter = new DrugDetailsPresenter(
+      subNavValue,
+      referralId,
+      drugDetails,
+      sharedReferralDetailsData.currentStatusDescription,
+    )
     const view = new DrugDetailsView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
@@ -237,7 +292,12 @@ export default class RisksAndNeedsController {
       sharedReferralDetailsData.crn,
     )
 
-    const presenter = new RoshAnalysisPresenter(subNavValue, referralId, roshAnalysis)
+    const presenter = new RoshAnalysisPresenter(
+      subNavValue,
+      referralId,
+      roshAnalysis,
+      sharedReferralDetailsData.currentStatusDescription,
+    )
     const view = new RoshAnalysisView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)

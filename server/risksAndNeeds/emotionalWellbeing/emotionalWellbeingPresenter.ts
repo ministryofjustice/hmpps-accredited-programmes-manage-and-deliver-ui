@@ -6,9 +6,10 @@ export default class EmotionalWellbeingPresenter extends RisksAndNeedsPresenter 
   constructor(
     readonly subNavValue: string,
     readonly referralId: string,
+    readonly referralStatus: string,
     readonly emotionalWellbeing?: EmotionalWellbeing,
   ) {
-    super(subNavValue, referralId)
+    super(subNavValue, referralId, referralStatus)
   }
 
   emotionalWellbeingSummaryList(): SummaryListItem[] {

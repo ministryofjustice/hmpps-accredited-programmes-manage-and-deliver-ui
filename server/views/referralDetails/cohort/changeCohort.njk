@@ -19,7 +19,7 @@
                 <form method="post" novalidate action="{{ presenter.changeCohortFormAction }}">
                     <input type="hidden" name="_csrf" value="{{csrfToken}}">
 
-                    {{ govukRadios(radioArgs()) }}
+                    {{ govukRadios(radioArgs) }}
 
                     <div class="govuk-button-group">
                         {{ govukButton({ text: "Submit", preventDoubleClick: true }) }}

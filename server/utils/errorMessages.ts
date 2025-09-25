@@ -55,6 +55,10 @@ export default {
       inputRequired: 'Give details of the locations the person cannot attend',
     },
   },
+  updateStatus: {
+    updatedStatusEmpty: `Select the referral status you want to move the person to.`,
+    detailsTooLong: 'Details must be 500 characters or fewer.',
+  },
   returnedError,
   userHeaderTypes,
   errorHandlerAccessErrorMessages,

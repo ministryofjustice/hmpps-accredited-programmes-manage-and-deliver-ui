@@ -8,8 +8,9 @@ export default class OffenceAnalysisPresenter extends RisksAndNeedsPresenter {
     readonly subNavValue: string,
     readonly referralId: string,
     readonly offenceAnalysis: OffenceAnalysis,
+    readonly referralStatus: string,
   ) {
-    super(subNavValue, referralId)
+    super(subNavValue, referralId, referralStatus)
   }
 
   get assessmentCompletedText(): InsetTextArgs {
