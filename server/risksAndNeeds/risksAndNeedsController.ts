@@ -40,6 +40,7 @@ export default class RisksAndNeedsController {
   async showRisksAndAlertsPage(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params
     const { username } = req.user
+    const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'risksAndAlerts'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
@@ -47,15 +48,17 @@ export default class RisksAndNeedsController {
       username,
       sharedReferralDetailsData.crn,
     )
+
     const presenter = new RisksAndAlertsPresenter(
       subNavValue,
-      referralId,
+      sharedReferralDetailsData,
       risks,
-      sharedReferralDetailsData.currentStatusDescription,
+      isLdcUpdated === 'true',
+      isCohortUpdated === 'true',
     )
     const view = new RisksAndAlertsView(presenter)
 
-    req.session.originPage = req.originalUrl
+    req.session.originPage = req.path
 
     return ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -63,6 +66,7 @@ export default class RisksAndNeedsController {
   async showLearningNeedsPage(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params
     const { username } = req.user
+    const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'learningNeeds'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
@@ -72,11 +76,14 @@ export default class RisksAndNeedsController {
     )
     const presenter = new LearningNeedsPresenter(
       subNavValue,
-      referralId,
+      sharedReferralDetailsData,
       learningNeeds,
-      sharedReferralDetailsData.currentStatusDescription,
+      isLdcUpdated === 'true',
+      isCohortUpdated === 'true',
     )
     const view = new LearningNeedsView(presenter)
+
+    req.session.originPage = req.path
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -84,6 +91,7 @@ export default class RisksAndNeedsController {
   async showOffenceAnalysisPage(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params
     const { username } = req.user
+    const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'offenceAnalysis'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
@@ -94,11 +102,14 @@ export default class RisksAndNeedsController {
 
     const presenter = new OffenceAnalysisPresenter(
       subNavValue,
-      referralId,
+      sharedReferralDetailsData,
       offenceAnalysis,
-      sharedReferralDetailsData.currentStatusDescription,
+      isLdcUpdated === 'true',
+      isCohortUpdated === 'true',
     )
     const view = new OffenceAnalysisView(presenter)
+
+    req.session.originPage = req.path
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -106,6 +117,7 @@ export default class RisksAndNeedsController {
   async showRelationshipsPage(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params
     const { username } = req.user
+    const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'relationships'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
@@ -116,11 +128,14 @@ export default class RisksAndNeedsController {
 
     const presenter = new RelationshipsPresenter(
       subNavValue,
-      referralId,
+      sharedReferralDetailsData,
       relationships,
-      sharedReferralDetailsData.currentStatusDescription,
+      isLdcUpdated === 'true',
+      isCohortUpdated === 'true',
     )
     const view = new RelationshipsView(presenter)
+
+    req.session.originPage = req.path
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -128,6 +143,7 @@ export default class RisksAndNeedsController {
   async showLifestyleAndAssociatesPage(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params
     const { username } = req.user
+    const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'lifestyleAndAssociates'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
@@ -138,11 +154,14 @@ export default class RisksAndNeedsController {
 
     const presenter = new LifestyleAndAssociatesPresenter(
       subNavValue,
-      referralId,
+      sharedReferralDetailsData,
       lifestyleAndAssociates,
-      sharedReferralDetailsData.currentStatusDescription,
+      isLdcUpdated === 'true',
+      isCohortUpdated === 'true',
     )
     const view = new LifestyleAndAssociatesView(presenter)
+
+    req.session.originPage = req.path
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -150,6 +169,7 @@ export default class RisksAndNeedsController {
   async showAlcoholMisusePage(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params
     const { username } = req.user
+    const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'alcoholMisuse'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
@@ -160,11 +180,14 @@ export default class RisksAndNeedsController {
 
     const presenter = new AlcoholMisusePresenter(
       subNavValue,
-      referralId,
+      sharedReferralDetailsData,
       alcoholMisuseDetails,
-      sharedReferralDetailsData.currentStatusDescription,
+      isLdcUpdated === 'true',
+      isCohortUpdated === 'true',
     )
     const view = new AlcoholMisuseView(presenter)
+
+    req.session.originPage = req.path
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -172,6 +195,7 @@ export default class RisksAndNeedsController {
   async showEmotionalWellbeingPage(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params
     const { username } = req.user
+    const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'emotionalWellbeing'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
@@ -183,11 +207,14 @@ export default class RisksAndNeedsController {
 
     const presenter = new EmotionalWellbeingPresenter(
       subNavValue,
-      referralId,
-      sharedReferralDetailsData.currentStatusDescription,
+      sharedReferralDetailsData,
+      isLdcUpdated === 'true',
+      isCohortUpdated === 'true',
       emotionalWellbeing,
     )
     const view = new EmotionalWellbeingView(presenter)
+
+    req.session.originPage = req.path
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -195,6 +222,7 @@ export default class RisksAndNeedsController {
   async showThinkingAndBehavingPage(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params
     const { username } = req.user
+    const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'thinkingAndBehaviour'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
@@ -206,11 +234,14 @@ export default class RisksAndNeedsController {
 
     const presenter = new ThinkingAndBehavingPresenter(
       subNavValue,
-      referralId,
-      sharedReferralDetailsData.currentStatusDescription,
+      sharedReferralDetailsData,
+      isLdcUpdated === 'true',
+      isCohortUpdated === 'true',
       thinkingAndBehaviour,
     )
     const view = new ThinkingAndBehavingView(presenter)
+
+    req.session.originPage = req.path
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -218,6 +249,7 @@ export default class RisksAndNeedsController {
   async showAttitudesPage(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params
     const { username } = req.user
+    const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'attitudes'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
@@ -228,11 +260,14 @@ export default class RisksAndNeedsController {
 
     const presenter = new AttitudesPresenter(
       subNavValue,
-      referralId,
+      sharedReferralDetailsData,
       attitudes,
-      sharedReferralDetailsData.currentStatusDescription,
+      isLdcUpdated === 'true',
+      isCohortUpdated === 'true',
     )
     const view = new AttitudesView(presenter)
+
+    req.session.originPage = req.path
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -240,6 +275,7 @@ export default class RisksAndNeedsController {
   async showHealthPage(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params
     const { username } = req.user
+    const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'health'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
@@ -250,11 +286,14 @@ export default class RisksAndNeedsController {
 
     const presenter = new HealthPresenter(
       subNavValue,
-      referralId,
+      sharedReferralDetailsData,
       health,
-      sharedReferralDetailsData.currentStatusDescription,
+      isLdcUpdated === 'true',
+      isCohortUpdated === 'true',
     )
     const view = new HealthView(presenter)
+
+    req.session.originPage = req.path
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -262,6 +301,7 @@ export default class RisksAndNeedsController {
   async showDrugDetailsPage(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params
     const { username } = req.user
+    const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'drugMisuse'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
@@ -272,11 +312,14 @@ export default class RisksAndNeedsController {
 
     const presenter = new DrugDetailsPresenter(
       subNavValue,
-      referralId,
+      sharedReferralDetailsData,
       drugDetails,
-      sharedReferralDetailsData.currentStatusDescription,
+      isLdcUpdated === 'true',
+      isCohortUpdated === 'true',
     )
     const view = new DrugDetailsView(presenter)
+
+    req.session.originPage = req.path
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -284,6 +327,7 @@ export default class RisksAndNeedsController {
   async showRoshAnalysisPage(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params
     const { username } = req.user
+    const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'roshAnalysis'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
@@ -294,11 +338,14 @@ export default class RisksAndNeedsController {
 
     const presenter = new RoshAnalysisPresenter(
       subNavValue,
-      referralId,
+      sharedReferralDetailsData,
       roshAnalysis,
-      sharedReferralDetailsData.currentStatusDescription,
+      isLdcUpdated === 'true',
+      isCohortUpdated === 'true',
     )
     const view = new RoshAnalysisView(presenter)
+
+    req.session.originPage = req.path
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }

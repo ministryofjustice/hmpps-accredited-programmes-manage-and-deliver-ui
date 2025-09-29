@@ -1,3 +1,6 @@
+import { ReferralDetails } from '@manage-and-deliver-api'
+import { firstToLowerCase, formatCohort } from '../../utils/utils'
+
 export enum HorizontalNavValues {
   referralDetailsTab = 'referralDetails',
   risksAndNeedsTab = 'risksAndNeeds',
@@ -8,9 +11,9 @@ export enum HorizontalNavValues {
 export default class ReferralLayoutPresenter {
   protected constructor(
     readonly horizontalNavValue: HorizontalNavValues,
-    readonly referralId: string,
-    readonly currentStatus: string,
+    readonly referral: ReferralDetails,
     readonly isLdcUpdated: boolean | null = null,
+    readonly isCohortUpdated: boolean | null = null,
   ) {}
 
   getButton(): { text: string; classes: string; href: string } {
@@ -22,7 +25,10 @@ export default class ReferralLayoutPresenter {
   }
 
   showButtonMenu() {
-    return this.currentStatus.toLowerCase() !== 'withdrawn' && this.currentStatus.toLowerCase() !== 'programme complete'
+    return (
+      this.referral.currentStatusDescription.toLowerCase() !== 'withdrawn' &&
+      this.referral.currentStatusDescription.toLowerCase() !== 'programme complete'
+    )
   }
 
   getButtonMenu(): {
@@ -37,18 +43,42 @@ export default class ReferralLayoutPresenter {
       items: [
         {
           text: 'Update status',
-          href: `/referral/${this.referralId}/update-status`,
+          href: `/referral/${this.referral.id}/update-status`,
         },
         {
           text: 'Change LDC status',
-          href: `/referral/${this.referralId}/update-ldc`,
+          href: `/referral/${this.referral.id}/update-ldc`,
         },
         {
           text: 'Change cohort',
-          href: `/referral/${this.referralId}/change-cohort`,
+          href: `/referral/${this.referral.id}/change-cohort`,
         },
       ],
     }
+  }
+
+  get ldcUpdatedSuccessMessageArgs() {
+    return this.isLdcUpdated
+      ? {
+          variant: 'success',
+          title: 'LDC status changed',
+          showTitleAsHeading: true,
+          dismissible: true,
+          text: `${this.referral.personName} ${firstToLowerCase(this.referral.hasLdcDisplayText)}`,
+        }
+      : {}
+  }
+
+  get cohortUpdatedSuccessMessageArgs() {
+    return this.isCohortUpdated
+      ? {
+          variant: 'success',
+          title: 'Cohort changed',
+          showTitleAsHeading: true,
+          dismissible: true,
+          text: `${this.referral.personName} is in the ${formatCohort(this.referral.cohort)} cohort`,
+        }
+      : {}
   }
 
   getSubHeaderArgs(): {
@@ -83,17 +113,17 @@ export default class ReferralLayoutPresenter {
       items: [
         {
           text: 'Referral details',
-          href: `/referral-details/${this.referralId}/personal-details`,
+          href: `/referral-details/${this.referral.id}/personal-details`,
           active: this.horizontalNavValue === HorizontalNavValues.referralDetailsTab,
         },
         {
           text: 'Risks and needs',
-          href: `/referral/${this.referralId}/risks-and-alerts`,
+          href: `/referral/${this.referral.id}/risks-and-alerts`,
           active: this.horizontalNavValue === HorizontalNavValues.risksAndNeedsTab,
         },
         {
           text: 'Programme needs identifier',
-          href: `/referral/${this.referralId}/programme-needs-identifier`,
+          href: `/referral/${this.referral.id}/programme-needs-identifier`,
           active: this.horizontalNavValue === HorizontalNavValues.programmeNeedsIdentifierTab,
         },
         {

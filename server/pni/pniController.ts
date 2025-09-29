@@ -12,6 +12,7 @@ export default class PniController {
   async showProgrammeNeedsIdentifierPage(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params
     const { username } = req.user
+    const { isCohortUpdated, isLdcUpdated } = req.query
 
     const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
       referralId,
@@ -19,9 +20,15 @@ export default class PniController {
     )
     const pniScore = await this.accreditedProgrammesManageAndDeliverService.getPniScore(username, referralDetails.crn)
 
-    req.session.originPage = req.originalUrl
+    req.session.originPage = req.path
 
-    const presenter = new PniPresenter(referralId, referralDetails, pniScore)
+    const presenter = new PniPresenter(
+      referralId,
+      referralDetails,
+      pniScore,
+      isLdcUpdated === 'true',
+      isCohortUpdated === 'true',
+    )
     const view = new PniView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, referralDetails)

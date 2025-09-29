@@ -1,15 +1,16 @@
-import { ThinkingAndBehaviour } from '@manage-and-deliver-api'
+import { ReferralDetails, ThinkingAndBehaviour } from '@manage-and-deliver-api'
 import RisksAndNeedsPresenter from '../risksAndNeedsPresenter'
 import { SummaryListItem } from '../../utils/summaryList'
 
 export default class ThinkingAndBehavingPresenter extends RisksAndNeedsPresenter {
   constructor(
     readonly subNavValue: string,
-    readonly referralId: string,
-    readonly referralStatus: string,
+    readonly referral: ReferralDetails,
+    readonly isLdcUpdated: boolean | null = null,
+    readonly isCohortUpdated: boolean | null = null,
     readonly thinkingAndBehaviour?: ThinkingAndBehaviour,
   ) {
-    super(subNavValue, referralId, referralStatus)
+    super(subNavValue, referral, isLdcUpdated, isCohortUpdated)
   }
 
   thinkingAndBehavingSummaryList(): SummaryListItem[] {

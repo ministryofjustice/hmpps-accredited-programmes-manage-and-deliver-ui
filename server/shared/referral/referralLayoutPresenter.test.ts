@@ -5,32 +5,26 @@ import sentenceInformationFactory from '../../testutils/factories/sentenceInform
 
 describe(`getHorizontalSubNavArgs.`, () => {
   it('the correct tab will be marked as active for a referral details page', () => {
-    const referralId = randomUUID()
     const referralDetails = referralDetailsFactory.build()
     const sentenceInformation = sentenceInformationFactory.licence().build()
 
     // Used as an example to test the referral details page, as layout presenter is protected.
-    const presenter = new SentenceInformationPresenter(
-      referralDetails,
-      'sentence-information',
-      referralId,
-      sentenceInformation,
-    )
+    const presenter = new SentenceInformationPresenter(referralDetails, 'sentence-information', sentenceInformation)
 
     expect(presenter.getHorizontalSubNavArgs().items).toStrictEqual([
       {
         text: 'Referral details',
-        href: `/referral-details/${referralId}/personal-details`,
+        href: `/referral-details/${referralDetails.id}/personal-details`,
         active: true,
       },
       {
         text: 'Risks and needs',
-        href: `/referral/${referralId}/risks-and-alerts`,
+        href: `/referral/${referralDetails.id}/risks-and-alerts`,
         active: false,
       },
       {
         text: 'Programme needs identifier',
-        href: `/referral/${referralId}/programme-needs-identifier`,
+        href: `/referral/${referralDetails.id}/programme-needs-identifier`,
         active: false,
       },
       {

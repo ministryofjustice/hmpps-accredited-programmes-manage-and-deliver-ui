@@ -1,4 +1,4 @@
-import { RoshAnalysis } from '@manage-and-deliver-api'
+import { ReferralDetails, RoshAnalysis } from '@manage-and-deliver-api'
 import { InsetTextArgs } from '../../utils/govukFrontendTypes'
 import { SummaryListItem } from '../../utils/summaryList'
 import RisksAndNeedsPresenter from '../risksAndNeedsPresenter'
@@ -6,11 +6,12 @@ import RisksAndNeedsPresenter from '../risksAndNeedsPresenter'
 export default class RoshAnalysisPresenter extends RisksAndNeedsPresenter {
   constructor(
     readonly subNavValue: string,
-    readonly referralId: string,
+    readonly referral: ReferralDetails,
     readonly roshAnalysis: RoshAnalysis,
-    readonly referralStatus: string,
+    readonly isLdcUpdated: boolean | null = null,
+    readonly isCohortUpdated: boolean | null = null,
   ) {
-    super(subNavValue, referralId, referralStatus)
+    super(subNavValue, referral, isLdcUpdated, isCohortUpdated)
   }
 
   get assessmentCompletedText(): InsetTextArgs {

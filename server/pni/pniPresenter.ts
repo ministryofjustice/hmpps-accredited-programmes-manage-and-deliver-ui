@@ -4,10 +4,12 @@ import ReferralLayoutPresenter, { HorizontalNavValues } from '../shared/referral
 export default class PniPresenter extends ReferralLayoutPresenter {
   constructor(
     readonly id: string,
-    readonly details: ReferralDetails,
+    readonly referral: ReferralDetails,
     readonly pniScore: PniScore,
+    readonly isLdcUpdated: boolean | null = null,
+    readonly isCohortUpdated: boolean | null = null,
   ) {
-    super(HorizontalNavValues.programmeNeedsIdentifierTab, id, details.currentStatusDescription)
+    super(HorizontalNavValues.programmeNeedsIdentifierTab, referral, isLdcUpdated, isCohortUpdated)
   }
 
   scoreValueText(value?: number | null): string {
@@ -219,7 +221,7 @@ export default class PniPresenter extends ReferralLayoutPresenter {
   }
 
   getPathwayDetails() {
-    const bodyTextPrefix = `Based on the risk and need scores, ${this.details.personName} may`
+    const bodyTextPrefix = `Based on the risk and need scores, ${this.referral.personName} may`
     const programmePathway = this.pniScore.overallIntensity
     switch (programmePathway) {
       case 'HIGH':

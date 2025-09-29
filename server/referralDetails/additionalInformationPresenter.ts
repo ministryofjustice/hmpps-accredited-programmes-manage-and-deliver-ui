@@ -5,8 +5,9 @@ export default class AdditionalInformationPresenter extends ReferralDetailsPrese
   constructor(
     readonly details: ReferralDetails,
     readonly subNavValue: string,
-    readonly id: string,
+    readonly isLdcUpdated: boolean | null = null,
+    readonly isCohortUpdated: boolean | null = null,
   ) {
-    super(details, subNavValue, id)
+    super(details, subNavValue, isLdcUpdated, isCohortUpdated)
   }
 }
