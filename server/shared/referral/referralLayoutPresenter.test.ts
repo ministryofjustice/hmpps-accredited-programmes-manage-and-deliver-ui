@@ -1,4 +1,3 @@
-import { randomUUID } from 'crypto'
 import SentenceInformationPresenter from '../../referralDetails/sentenceInformationPresenter'
 import referralDetailsFactory from '../../testutils/factories/referralDetailsFactory'
 import sentenceInformationFactory from '../../testutils/factories/sentenceInformationFactory'

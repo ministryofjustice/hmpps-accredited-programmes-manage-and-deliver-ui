@@ -1,10 +1,8 @@
-import { randomUUID } from 'crypto'
 import request from 'supertest'
 
 import { CohortEnum, PersonalDetails, ReferralDetails } from '@manage-and-deliver-api'
 import { Express } from 'express'
 import { SessionData } from 'express-session'
-import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import personalDetailsFactory from '../testutils/factories/personalDetailsFactory'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'

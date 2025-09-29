@@ -4,7 +4,6 @@ import { randomUUID } from 'crypto'
 import { ReferralDetails } from '@manage-and-deliver-api'
 import { SessionData } from 'express-session'
 import referralStatusFormDataFactory from '../testutils/factories/referralStatusFormDataFactory'
-import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 import TestUtils from '../testutils/testUtils'
@@ -64,7 +63,6 @@ describe('update-status', () => {
 
   describe(`POST /referral/:referralDetails.id/update-status`, () => {
     it('posts to the update status endpoint and redirects successfully to the correct page', async () => {
-      console.log(JSON.stringify(referralDetails, null, 2))
       return request(app)
         .post(`/referral/${referralDetails.id}/update-status`)
         .type('form')
