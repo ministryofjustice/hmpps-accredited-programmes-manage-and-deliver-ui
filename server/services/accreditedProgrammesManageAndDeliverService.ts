@@ -97,7 +97,7 @@ export default class AccreditedProgrammesManageAndDeliverService
   async getCaseListFilters(username: ExpressUsername): Promise<CaseListFilterValues> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
-      path: `/pages/caselist/filters`,
+      path: `/bff/caselist/filters`,
       headers: { Accept: 'application/json' },
     })) as CaseListFilterValues
   }
