@@ -33,7 +33,7 @@ export default class UpdateReferralStatusController {
         userInputData = req.body
       } else {
         await this.accreditedProgrammesManageAndDeliverService.updateStatus(username, referralId, data.paramsForUpdate)
-        return res.redirect(`/referral-details/${referralId}/personal-details?statusUpdated=true`)
+        return res.redirect(`${req.session.originPage}?statusUpdated=true`)
       }
     }
 
@@ -45,6 +45,7 @@ export default class UpdateReferralStatusController {
       req.session.originPage,
     )
     const view = new UpdateReferralStatusView(presenter)
+    req.session.originPage = req.path
     return ControllerUtils.renderWithLayout(res, view, referralDetails)
   }
 }

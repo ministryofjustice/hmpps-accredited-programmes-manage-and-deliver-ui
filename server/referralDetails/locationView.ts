@@ -7,7 +7,7 @@ export default class LocationView {
 
   get getPreferredLocationsAsSummaryListArgs(): SummaryListArgs {
     const summary = this.presenter.preferredLocationsSummary()
-    const addLocationPreferenceHref = `/referral/${this.presenter.referralId}/add-location-preferences`
+    const addLocationPreferenceHref = `/referral/${this.presenter.referralDetails.id}/add-location-preferences`
     return ViewUtils.summaryListArgsWithSummaryCard(
       summary.summary,
       summary.title,

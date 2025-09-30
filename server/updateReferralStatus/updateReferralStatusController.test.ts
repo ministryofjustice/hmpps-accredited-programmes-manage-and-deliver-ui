@@ -2,10 +2,11 @@ import { Express } from 'express'
 import request from 'supertest'
 import { randomUUID } from 'crypto'
 import { ReferralDetails } from '@manage-and-deliver-api'
+import { SessionData } from 'express-session'
 import referralStatusFormDataFactory from '../testutils/factories/referralStatusFormDataFactory'
-import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
+import TestUtils from '../testutils/testUtils'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
@@ -19,23 +20,21 @@ let app: Express
 
 const referralDetails: ReferralDetails = referralDetailsFactory.build()
 const statusDetails = referralStatusFormDataFactory.build()
-const referralId = randomUUID()
 
 afterEach(() => {
   jest.resetAllMocks()
 })
 beforeEach(() => {
-  app = appWithAllRoutes({
-    services: {
-      accreditedProgrammesManageAndDeliverService,
-    },
-  })
+  const sessionData: Partial<SessionData> = {
+    originPage: '/referral-details/1/personal-details',
+  }
+  app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
   accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
   accreditedProgrammesManageAndDeliverService.getStatusDetails.mockResolvedValue(statusDetails)
 })
 
 describe('update-status', () => {
-  describe(`GET /referral/:referralId/update-status`, () => {
+  describe(`GET /referral/:referralDetails.id/update-status`, () => {
     it('loads the update status page', async () => {
       return request(app)
         .get(`/referral/${randomUUID()}/update-status`)
@@ -49,20 +48,23 @@ describe('update-status', () => {
     })
 
     it('calls the service with correct parameters', async () => {
-      await request(app).get(`/referral/${referralId}/update-status`).expect(200)
-      expect(accreditedProgrammesManageAndDeliverService.getStatusDetails).toHaveBeenCalledWith(referralId, 'user1')
+      await request(app).get(`/referral/${referralDetails.id}/update-status`).expect(200)
+      expect(accreditedProgrammesManageAndDeliverService.getStatusDetails).toHaveBeenCalledWith(
+        referralDetails.id,
+        'user1',
+      )
     })
 
     it('handles service errors gracefully', async () => {
       accreditedProgrammesManageAndDeliverService.getStatusDetails.mockRejectedValue(new Error('Service unavailable'))
-      return request(app).get(`/referral/${referralId}/update-status`).expect(500)
+      return request(app).get(`/referral/${referralDetails.id}/update-status`).expect(500)
     })
   })
 
-  describe(`POST /referral/:referralId/update-status`, () => {
+  describe(`POST /referral/:referralDetails.id/update-status`, () => {
     it('posts to the update status endpoint and redirects successfully to the correct page', async () => {
       return request(app)
-        .post(`/referral/${referralId}/update-status`)
+        .post(`/referral/${referralDetails.id}/update-status`)
         .type('form')
         .send({
           'updated-status': 'afc0b94c-b983-4a68-a109-0be29a7d3b2f',
@@ -71,13 +73,13 @@ describe('update-status', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Redirecting to /referral-details/${referralId}/personal-details?statusUpdated=true`,
+            `Redirecting to /referral-details/${referralDetails.id}/personal-details?statusUpdated=true`,
           )
         })
     })
     it('handles form errors correctly and displays the appropriate error message', async () => {
       return request(app)
-        .post(`/referral/${referralId}/update-status`)
+        .post(`/referral/${referralDetails.id}/update-status`)
         .type('form')
         .send({
           'updated-status': undefined,

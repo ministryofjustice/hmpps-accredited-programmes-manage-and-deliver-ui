@@ -1,15 +1,16 @@
-import { Attitude } from '@manage-and-deliver-api'
+import { Attitude, ReferralDetails } from '@manage-and-deliver-api'
 import RisksAndNeedsPresenter from '../risksAndNeedsPresenter'
 import { SummaryListItem } from '../../utils/summaryList'
 
 export default class AttitudesPresenter extends RisksAndNeedsPresenter {
   constructor(
     readonly subNavValue: string,
-    readonly referralId: string,
+    readonly referral: ReferralDetails,
     readonly attitude: Attitude,
-    readonly referralStatus: string,
+    readonly isLdcUpdated: boolean | null = null,
+    readonly isCohortUpdated: boolean | null = null,
   ) {
-    super(subNavValue, referralId, referralStatus)
+    super(subNavValue, referral, isLdcUpdated, isCohortUpdated)
   }
 
   attitudeSummaryList(): SummaryListItem[] {

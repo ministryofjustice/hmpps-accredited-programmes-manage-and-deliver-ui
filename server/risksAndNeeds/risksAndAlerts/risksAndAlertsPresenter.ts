@@ -1,4 +1,4 @@
-import { Risks } from '@manage-and-deliver-api'
+import { ReferralDetails, Risks } from '@manage-and-deliver-api'
 import { GovukFrontendTableCell } from '../../@types/govukFrontend'
 import RisksAndNeedsPresenter from '../risksAndNeedsPresenter'
 
@@ -31,11 +31,12 @@ export type ActiveAlerts = {
 export default class RisksAndAlertsPresenter extends RisksAndNeedsPresenter {
   constructor(
     readonly subNavValue: string,
-    readonly referralId: string,
+    readonly referral: ReferralDetails,
     readonly risks: Risks,
-    readonly referralStatus: string,
+    readonly isLdcUpdated: boolean | null = null,
+    readonly isCohortUpdated: boolean | null = null,
   ) {
-    super(subNavValue, referralId, referralStatus)
+    super(subNavValue, referral, isLdcUpdated, isCohortUpdated)
   }
 
   getLevelClass(scoreLevel: RiskLevel): string {

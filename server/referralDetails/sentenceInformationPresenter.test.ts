@@ -1,20 +1,13 @@
-import { randomUUID } from 'crypto'
 import SentenceInformationPresenter from './sentenceInformationPresenter'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 import sentenceInformationFactory from '../testutils/factories/sentenceInformationFactory'
 
 describe(`sentenceInformationSummaryList.`, () => {
   it('a licence referral will show the correct rows', () => {
-    const referralId = randomUUID()
     const referralDetails = referralDetailsFactory.build()
     const sentenceInformation = sentenceInformationFactory.licence().build()
 
-    const presenter = new SentenceInformationPresenter(
-      referralDetails,
-      'sentence-information',
-      referralId,
-      sentenceInformation,
-    )
+    const presenter = new SentenceInformationPresenter(referralDetails, 'sentence-information', sentenceInformation)
 
     const expectedResult = [
       {
@@ -51,7 +44,6 @@ describe(`sentenceInformationSummaryList.`, () => {
   })
 
   it(`a licence referral will show 'Data not available' for null rows`, () => {
-    const referralId = randomUUID()
     const referralDetails = referralDetailsFactory.build()
     const sentenceInformation = sentenceInformationFactory.licence().build({
       sentenceType: null,
@@ -63,12 +55,7 @@ describe(`sentenceInformationSummaryList.`, () => {
       twoThirdsPoint: null,
     })
 
-    const presenter = new SentenceInformationPresenter(
-      referralDetails,
-      'sentence-information',
-      referralId,
-      sentenceInformation,
-    )
+    const presenter = new SentenceInformationPresenter(referralDetails, 'sentence-information', sentenceInformation)
 
     const expectedResult = [
       {
@@ -105,16 +92,10 @@ describe(`sentenceInformationSummaryList.`, () => {
   })
 
   it(`an order referral will show 'Data not available' for null rows`, () => {
-    const referralId = randomUUID()
     const referralDetails = referralDetailsFactory.build()
     const sentenceInformation = sentenceInformationFactory.order().build()
 
-    const presenter = new SentenceInformationPresenter(
-      referralDetails,
-      'sentence-information',
-      referralId,
-      sentenceInformation,
-    )
+    const presenter = new SentenceInformationPresenter(referralDetails, 'sentence-information', sentenceInformation)
 
     const expectedResult = [
       {
@@ -135,16 +116,10 @@ describe(`sentenceInformationSummaryList.`, () => {
   })
 
   it('an order referral will show the correct rows', () => {
-    const referralId = randomUUID()
     const referralDetails = referralDetailsFactory.build()
     const sentenceInformation = sentenceInformationFactory.order().build({ sentenceType: null, orderEndDate: null })
 
-    const presenter = new SentenceInformationPresenter(
-      referralDetails,
-      'sentence-information',
-      referralId,
-      sentenceInformation,
-    )
+    const presenter = new SentenceInformationPresenter(referralDetails, 'sentence-information', sentenceInformation)
 
     const expectedResult = [
       {
