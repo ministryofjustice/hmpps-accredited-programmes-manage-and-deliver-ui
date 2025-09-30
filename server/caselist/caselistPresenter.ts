@@ -168,7 +168,6 @@ export default class CaselistPresenter {
       {
         text: 'Select',
         value: '',
-        selected: false,
       },
     ]
     options.map(option =>
@@ -201,14 +200,14 @@ export default class CaselistPresenter {
 
   generateSelectedFilters() {
     const selectedFilters = []
-    const openAndClosedStasus: StatusFilterItems[] = this.caseListFilters.statusFilters.open.concat(
+    const openAndClosedStatus: StatusFilterItems[] = this.caseListFilters.statusFilters.open.concat(
       this.caseListFilters.statusFilters.closed,
     )
 
     if (this.filter.status) {
       const searchParams = new URLSearchParams(this.params)
       searchParams.delete('status')
-      const paramAttributes = openAndClosedStasus.filter(referralStatus => referralStatus.value === this.filter.status)
+      const paramAttributes = openAndClosedStatus.filter(referralStatus => referralStatus.value === this.filter.status)
       selectedFilters.push({
         heading: {
           text: 'Referral Status',

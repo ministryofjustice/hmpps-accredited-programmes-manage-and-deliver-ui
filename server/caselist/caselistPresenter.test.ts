@@ -13,7 +13,7 @@ describe(`filters`, () => {
     it('should return the correct filter pane object for filters supplied', () => {
       const testObject = {
         filter: {
-          status: 'AWAITING_ASSESSMENT',
+          status: 'Awaiting assessment',
           cohort: 'SEXUAL_OFFENCE',
           crnOrPersonName: 'Name',
         } as CaselistFilter,
@@ -127,7 +127,7 @@ describe(`filters`, () => {
     it('should generate correct filters base on input params', () => {
       const testObject = {
         filter: {
-          status: 'NOT_ELIGIBLE',
+          status: 'Withdrawn',
           cohort: 'GENERAL_OFFENCE',
           crnOrPersonName: 'Some Name',
         } as CaselistFilter,
@@ -139,7 +139,7 @@ describe(`filters`, () => {
       const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '', true, caseListFilters)
 
       expect(presenter.generateSelectedFilters()).toEqual([
-        { heading: { text: 'Referral Status' }, items: [{ href: '/pdu/open-referrals', text: 'Not eligible' }] },
+        { heading: { text: 'Referral Status' }, items: [{ href: '/pdu/open-referrals', text: 'Withdrawn' }] },
         { heading: { text: 'Cohort' }, items: [{ href: '/pdu/open-referrals', text: 'General Offence' }] },
         { heading: { text: 'Name Or Crn' }, items: [{ href: '/pdu/open-referrals', text: 'Some Name' }] },
       ])

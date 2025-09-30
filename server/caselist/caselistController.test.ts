@@ -40,8 +40,8 @@ beforeEach(() => {
 describe(`Caselist controller`, () => {
   test.each([
     ['/pdu/open-referrals?cohort=SEXUAL_OFFENCE&status=Awaiting+assessment', 'SEXUAL_OFFENCE', 'Awaiting assessment'],
-    [`/pdu/open-referrals`, undefined, ''],
-    ['/pdu/closed-referrals', undefined, ''],
+    [`/pdu/open-referrals`, undefined, undefined],
+    ['/pdu/closed-referrals', undefined, undefined],
     ['/pdu/open-referrals?cohort=GENERAL_OFFENCE&status=Programme+complete', 'GENERAL_OFFENCE', 'Programme complete'],
   ])(
     `should set the correct filters based on the url provided %s`,
@@ -54,7 +54,7 @@ describe(`Caselist controller`, () => {
           const $ = cheerio.load(res.text)
           const cohortInput = $('#cohort option[selected]').val()
           expect(cohortInput).toBe(cohortValue)
-          const referralStatusInput = $('#status option[selected]').val()
+          const referralStatusInput = $('#status optgroup option[selected]').val()
           expect(referralStatusInput).toBe(referralStatusValue)
         })
     },
