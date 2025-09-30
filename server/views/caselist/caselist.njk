@@ -45,7 +45,12 @@
     </div>
     <div class="govuk-grid-column-three-quarters">
       {{ mojSubNavigation(subNavArgs) }}
-      {{ govukTable(presenter.getCaseloadTableArgs()) }}
+      {% if presenter.referralCaseListItems.content.length > 0 %}
+        {{ govukTable(presenter.getCaseloadTableArgs()) }}
+      {% else %}
+      <p>No results found. Clear or change the filters</p>
+      {% endif %}
+
 
       {% include "../partials/pagination.njk" %}
     </div>
