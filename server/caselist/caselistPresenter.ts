@@ -1,4 +1,4 @@
-import { CaseListFilters, CohortEnum, ReferralCaseListItem } from '@manage-and-deliver-api'
+import { CaseListFilters, CohortEnum, ReferralCaseListItem, StatusFilterItems } from '@manage-and-deliver-api'
 import { Page } from '../shared/models/pagination'
 import { SelectArgs, SelectArgsItem, TableArgs } from '../utils/govukFrontendTypes'
 import Pagination from '../utils/pagination/pagination'
@@ -200,13 +200,14 @@ export default class CaselistPresenter {
 
   generateSelectedFilters() {
     const selectedFilters = []
+    const openAndClosedStasus: StatusFilterItems[] = this.caseListFilters.statusFilters.open.concat(
+      this.caseListFilters.statusFilters.closed,
+    )
 
     if (this.filter.status) {
       const searchParams = new URLSearchParams(this.params)
       searchParams.delete('status')
-      const paramAttributes = CaselistUtils.referralStatus.filter(
-        referralStatus => referralStatus.value === this.filter.status,
-      )
+      const paramAttributes = openAndClosedStasus.filter(referralStatus => referralStatus.value === this.filter.status)
       selectedFilters.push({
         heading: {
           text: 'Referral Status',

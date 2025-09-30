@@ -34,6 +34,7 @@ type ReferralStatusFormData = components['schemas']['ReferralStatusFormData']
 type CreateReferralStatusHistory = components['schemas']['CreateReferralStatusHistory']
 type ReferralStatus = components['schemas']['ReferralStatus']
 type CaseListFilters = components['schemas']['CaseListFilters']
+type StatusFilterItems = components['schemas']['StatusFilterItems']
 
 export type {
   AlcoholMisuseDetails,
@@ -66,6 +67,7 @@ export type {
   Risks,
   RoshAnalysis,
   SentenceInformation,
+  StatusFilterItems,
   ThinkingAndBehaviour,
   UpdateAvailability,
   UpdateCohort,
