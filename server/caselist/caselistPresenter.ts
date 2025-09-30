@@ -1,4 +1,4 @@
-import { CohortEnum, ReferralCaseListItem } from '@manage-and-deliver-api'
+import { CaseListFilters, CohortEnum, ReferralCaseListItem } from '@manage-and-deliver-api'
 import { Page } from '../shared/models/pagination'
 import { SelectArgs, SelectArgsItem, TableArgs } from '../utils/govukFrontendTypes'
 import Pagination from '../utils/pagination/pagination'
@@ -26,6 +26,7 @@ export default class CaselistPresenter {
     readonly filter: CaselistFilter,
     readonly params: string,
     readonly isOpenReferrals: boolean,
+    readonly caseListFilters: CaseListFilters,
   ) {
     this.pagination = new Pagination(referralCaseListItems, params)
     this.referralCaseListItems = referralCaseListItems
@@ -123,16 +124,43 @@ export default class CaselistPresenter {
     }
   }
 
-  searchByStatusArgs(): SelectArgs {
+  searchByStatusArgs(): {
+    id: string
+    name: string
+    prompt: string
+    label: { text: string }
+    items: { label: string; items: SelectArgsItem[] }[]
+    attributes: { 'data-testid': string }
+    classes: string
+  } {
     return {
       id: 'status',
       name: 'status',
+      prompt: 'Select',
       label: {
         text: 'Referral status',
-        classes: 'govuk-label--s',
       },
-      items: this.generateSelectValues(CaselistUtils.referralStatus, this.filter.status),
+      items: [
+        {
+          label: 'Open referrals',
+          items: this.generateStatusSelectOpts(this.caseListFilters.statusFilters.open, this.filter.status),
+        },
+        {
+          label: 'Closed referrals',
+          items: this.generateStatusSelectOpts(this.caseListFilters.statusFilters.closed, this.filter.status),
+        },
+      ],
+      attributes: { 'data-testid': 'referral-status-select' },
+      classes: 'govuk-select--restrict-width',
     }
+  }
+
+  generateStatusSelectOpts(options: { value: string; text: string }[], caseListFilter: string): SelectArgsItem[] {
+    return options.map(option => ({
+      value: option.value,
+      text: option.text,
+      selected: caseListFilter?.includes(`${option.value}`) ?? false,
+    }))
   }
 
   generateSelectValues(options: { value: string; text: string }[], caseListFilter: string): SelectArgsItem[] {

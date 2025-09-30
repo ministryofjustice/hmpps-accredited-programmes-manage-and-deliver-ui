@@ -2,9 +2,13 @@ import {
   AlcoholMisuseDetails,
   Attitude,
   Availability,
+  CaseListFilters,
   CohortEnum,
   CreateAvailability,
+  CreateDeliveryLocationPreferences,
+  CreateReferralStatusHistory,
   DeliveryLocationPreferences,
+  DeliveryLocationPreferencesFormData,
   DrugDetails,
   EmotionalWellbeing,
   Health,
@@ -16,23 +20,20 @@ import {
   PniScore,
   ReferralCaseListItem,
   ReferralDetails,
+  ReferralStatusFormData,
   Relationships,
   Risks,
   RoshAnalysis,
   SentenceInformation,
   ThinkingAndBehaviour,
   UpdateAvailability,
-  DeliveryLocationPreferencesFormData,
-  CreateDeliveryLocationPreferences,
-  ReferralStatusFormData,
-  CreateReferralStatusHistory,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
 import type { HmppsAuthClient, RestClientBuilderWithoutToken } from '../data'
 import RestClient from '../data/restClient'
-import { Page } from '../shared/models/pagination'
 import type { ExpressUsername } from '../shared/ExpressUsername'
+import { Page } from '../shared/models/pagination'
 
 export interface PaginationParams {
   // Page number to retrieve -- starts from 1
@@ -91,6 +92,14 @@ export default class AccreditedProgrammesManageAndDeliverService
       headers: { Accept: 'application/json' },
       query: { ...paginationParams, ...filterQuery },
     })) as Page<ReferralCaseListItem>
+  }
+
+  async getCaseListFilters(username: ExpressUsername): Promise<CaseListFilters> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/pages/caselist/filters`,
+      headers: { Accept: 'application/json' },
+    })) as CaseListFilters
   }
 
   async getReferralDetails(referralId: string, username: Express.User['username']): Promise<ReferralDetails> {
