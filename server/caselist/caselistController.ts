@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { CaseListFilters } from '@manage-and-deliver-api'
+import { CaseListFilterValues } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
 import CaselistFilter from './caselistFilter'
@@ -15,7 +15,7 @@ export default class CaselistController {
   private async getCaselistData(req: Request): Promise<{
     username: string
     filter: CaselistFilter
-    caseListFilters: CaseListFilters
+    caseListFilters: CaseListFilterValues
   }> {
     const { username } = req.user
     const filter = CaselistFilter.fromRequest(req)

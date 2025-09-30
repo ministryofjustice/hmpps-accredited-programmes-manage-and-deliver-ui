@@ -33,14 +33,14 @@ type UpdateLdc = components['schemas']['UpdateLdc']
 type ReferralStatusFormData = components['schemas']['ReferralStatusFormData']
 type CreateReferralStatusHistory = components['schemas']['CreateReferralStatusHistory']
 type ReferralStatus = components['schemas']['ReferralStatus']
-type CaseListFilters = components['schemas']['CaseListFilters']
+type CaseListFilterValues = components['schemas']['CaseListFilterValues']
 type StatusFilterItems = components['schemas']['StatusFilterItems']
 
 export type {
   AlcoholMisuseDetails,
   Attitude,
   Availability,
-  CaseListFilters,
+  CaseListFilterValues,
   CohortEnum,
   CreateAvailability,
   CreateDeliveryLocationPreferences,

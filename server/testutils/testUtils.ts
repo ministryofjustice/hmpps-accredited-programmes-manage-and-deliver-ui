@@ -1,4 +1,4 @@
-import { CaseListFilters } from '@manage-and-deliver-api'
+import { CaseListFilterValues } from '@manage-and-deliver-api'
 import { Request } from 'express'
 import { SessionData } from 'express-session'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
@@ -34,7 +34,7 @@ export default class TestUtils {
     })
   }
 
-  static createCaseListFilters = (): CaseListFilters => ({
+  static createCaseListFilters = (): CaseListFilterValues => ({
     statusFilters: {
       open: [
         {

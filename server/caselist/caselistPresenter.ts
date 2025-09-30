@@ -1,4 +1,4 @@
-import { CaseListFilters, CohortEnum, ReferralCaseListItem, StatusFilterItems } from '@manage-and-deliver-api'
+import { CaseListFilterValues, CohortEnum, ReferralCaseListItem, StatusFilterItems } from '@manage-and-deliver-api'
 import { Page } from '../shared/models/pagination'
 import { SelectArgs, SelectArgsItem, TableArgs } from '../utils/govukFrontendTypes'
 import Pagination from '../utils/pagination/pagination'
@@ -26,7 +26,7 @@ export default class CaselistPresenter {
     readonly filter: CaselistFilter,
     readonly params: string,
     readonly isOpenReferrals: boolean,
-    readonly caseListFilters: CaseListFilters,
+    readonly caseListFilters: CaseListFilterValues,
   ) {
     this.pagination = new Pagination(referralCaseListItems, params)
     this.referralCaseListItems = referralCaseListItems

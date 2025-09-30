@@ -2,7 +2,7 @@ import {
   AlcoholMisuseDetails,
   Attitude,
   Availability,
-  CaseListFilters,
+  CaseListFilterValues,
   CohortEnum,
   CreateAvailability,
   CreateDeliveryLocationPreferences,
@@ -94,12 +94,12 @@ export default class AccreditedProgrammesManageAndDeliverService
     })) as Page<ReferralCaseListItem>
   }
 
-  async getCaseListFilters(username: ExpressUsername): Promise<CaseListFilters> {
+  async getCaseListFilters(username: ExpressUsername): Promise<CaseListFilterValues> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/pages/caselist/filters`,
       headers: { Accept: 'application/json' },
-    })) as CaseListFilters
+    })) as CaseListFilterValues
   }
 
   async getReferralDetails(referralId: string, username: Express.User['username']): Promise<ReferralDetails> {
