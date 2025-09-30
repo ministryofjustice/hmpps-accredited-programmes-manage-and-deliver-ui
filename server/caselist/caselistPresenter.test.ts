@@ -3,10 +3,12 @@ import { ReferralCaseListItem } from '@manage-and-deliver-api'
 import { Page } from '../shared/models/pagination'
 import pageFactory from '../testutils/factories/pageFactory'
 import referralCaseListItemFactory from '../testutils/factories/referralCaseListItem'
+import TestUtils from '../testutils/testUtils'
 import CaselistFilter from './caselistFilter'
 import CaselistPresenter from './caselistPresenter'
 
 describe(`filters`, () => {
+  const caseListFilters = TestUtils.createCaseListFilters()
   describe(`generateFilterPane`, () => {
     it('should return the correct filter pane object for filters supplied', () => {
       const testObject = {
@@ -65,7 +67,7 @@ describe(`filters`, () => {
       const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
         .pageContent([referralCaseListItem])
         .build() as Page<ReferralCaseListItem>
-      const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '', true)
+      const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '', true, caseListFilters)
       expect(presenter.generateFilterPane()).toEqual(testObject.expectedResult)
     })
 
@@ -77,7 +79,7 @@ describe(`filters`, () => {
       const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
         .pageContent([referralCaseListItem])
         .build() as Page<ReferralCaseListItem>
-      const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '', true)
+      const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '', true, caseListFilters)
       expect(presenter.generateFilterPane()).toEqual(null)
     })
   })
@@ -91,7 +93,7 @@ describe(`filters`, () => {
       const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
         .pageContent([referralCaseListItem])
         .build() as Page<ReferralCaseListItem>
-      const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '', true)
+      const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '', true, caseListFilters)
 
       const valuesToAddToSelect = [
         { value: 'GENERAL_OFFENCE', text: 'General Offence' },
@@ -112,7 +114,7 @@ describe(`filters`, () => {
       const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
         .pageContent([referralCaseListItem])
         .build() as Page<ReferralCaseListItem>
-      const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '', true)
+      const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '', true, caseListFilters)
 
       const valuesToAddToSelect: { value: string; text: string }[] = []
       expect(presenter.generateSelectValues(valuesToAddToSelect, testObject.filter.status)).toEqual([
@@ -134,7 +136,7 @@ describe(`filters`, () => {
       const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
         .pageContent([referralCaseListItem])
         .build() as Page<ReferralCaseListItem>
-      const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '', true)
+      const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '', true, caseListFilters)
 
       expect(presenter.generateSelectedFilters()).toEqual([
         { heading: { text: 'Referral Status' }, items: [{ href: '/pdu/open-referrals', text: 'Not eligible' }] },
@@ -151,7 +153,7 @@ describe(`filters`, () => {
       const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
         .pageContent([referralCaseListItem])
         .build() as Page<ReferralCaseListItem>
-      const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '', true)
+      const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '', true, caseListFilters)
 
       expect(presenter.generateSelectedFilters()).toEqual([])
     })

@@ -168,6 +168,7 @@ export default class CaselistPresenter {
       {
         text: 'Select',
         value: '',
+        selected: false,
       },
     ]
     options.map(option =>
