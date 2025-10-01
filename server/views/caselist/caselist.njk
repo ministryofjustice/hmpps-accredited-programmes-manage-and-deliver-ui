@@ -6,6 +6,7 @@
 {%- from "govuk/components/table/macro.njk" import govukTable -%}
 {% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "components/conditional-select/macro.njk" import conditionalSelect %}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -24,6 +25,10 @@
     {{ govukInput(presenter.searchBycrnOrPersonNameArgs) }}
     {{ govukSelect(presenter.searchByCohortArgs()) }}
     {{ govukSelect(presenter.searchByStatusArgs()) }}
+
+    {% include "../partials/conditionalSelect.njk" %}
+    {{ govukCheckboxes(checkboxArgs) }}
+
     {% endset -%}
     <div class="govuk-grid-column-one-quarter">
       <form id="filter-form" method="get">

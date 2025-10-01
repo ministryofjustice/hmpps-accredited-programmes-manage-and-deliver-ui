@@ -1,0 +1,18 @@
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
+
+{{ govukSelect(probationOfficeSelectArgs) }}
+
+<script src="/assets/accessible-autocomplete.min.js" type="text/javascript"></script>
+<script nonce={{ cspNonce }} data-isOpenReferrals="aaa">
+  accessibleAutocomplete.enhanceSelectElement({
+    defaultValue: '',
+    selectElement: document.querySelector('#probation-office'),
+    showAllValues: true,
+    onConfirm: (val) => {
+      // const isOpenReferral = document.currentScript.getAttribute('nonce')
+      console.log(val)
+
+  })
+</script>
+

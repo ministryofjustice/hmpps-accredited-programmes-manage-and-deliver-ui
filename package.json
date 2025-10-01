@@ -80,6 +80,7 @@
     "@ministryofjustice/hmpps-monitoring": "^0.0.2",
     "@ministryofjustice/hmpps-rest-client": "^0.0.3",
     "@types/supertest": "^6.0.3",
+    "accessible-autocomplete": "^3.0.1",
     "agentkeepalive": "^4.6.0",
     "applicationinsights": "^3.10.0",
     "body-parser": "^2.2.0",

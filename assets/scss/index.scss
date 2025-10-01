@@ -13,3 +13,5 @@ $govuk-page-width: $moj-page-width;
 @import './components/header-bar';
 @import './components/service-user-banner';
 @import './overrides/local';
+
+@import "node_modules/accessible-autocomplete/src/autocomplete";
