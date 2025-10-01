@@ -5,125 +5,120 @@ export interface GovukFrontendAccordion {
   /*
     Must be unique across the domain of your service if `rememberExpanded` is `true` (as the expanded state of individual instances of the component persists across page loads using [session storage](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage)). Used as an `id` in the HTML for the accordion as a whole, and also as a prefix for the `id`s of the section contents and the buttons that open them, so that those `id`s can be the target of `aria-control` attributes.
   */
-'id': string
+  id: string
 
-/*
+  /*
     Heading level, from `1` to `6`. Default is `2`.
   */
-'headingLevel'?: number | null// integer
+  headingLevel?: number | null // integer
 
-/*
+  /*
     Classes to add to the accordion.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the accordion.
   */
-'attributes'?: Record<string, unknown> | null
+  attributes?: Record<string, unknown> | null
 
-/*
+  /*
     Whether the expanded/collapsed state of the accordion should be saved when a user leaves the page and restored when they return. Default is `true`.
   */
-'rememberExpanded'?: boolean | null
+  rememberExpanded?: boolean | null
 
-/*
+  /*
     The text content of the 'Hide all sections' button at the top of the accordion when all sections are expanded.
   */
-'hideAllSectionsText'?: string | null
+  hideAllSectionsText?: string | null
 
-/*
+  /*
     The text content of the 'Hide' button within each section of the accordion, which is visible when the section is expanded.
   */
-'hideSectionText'?: string | null
+  hideSectionText?: string | null
 
-/*
+  /*
     Text made available to assistive technologies, like screen-readers, as the final part of the toggle's accessible name when the section is expanded. Defaults to `"Hide this section"`.
   */
-'hideSectionAriaLabelText'?: string | null
+  hideSectionAriaLabelText?: string | null
 
-/*
+  /*
     The text content of the 'Show all sections' button at the top of the accordion when at least one section is collapsed.
   */
-'showAllSectionsText'?: string | null
+  showAllSectionsText?: string | null
 
-/*
+  /*
     The text content of the 'Show' button within each section of the accordion, which is visible when the section is collapsed.
   */
-'showSectionText'?: string | null
+  showSectionText?: string | null
 
-/*
+  /*
     Text made available to assistive technologies, like screen-readers, as the final part of the toggle's accessible name when the section is collapsed. Defaults to `"Show this section"`.
   */
-'showSectionAriaLabelText'?: string | null
+  showSectionAriaLabelText?: string | null
 
-/*
+  /*
     The sections within the accordion.
   */
-'items': GovukFrontendAccordionItem[]
-
+  items: GovukFrontendAccordionItem[]
 }
 
 export interface GovukFrontendAccordionItem {
   /*
     The heading of each accordion section.
   */
-'heading': GovukFrontendAccordionItemHeading
+  heading: GovukFrontendAccordionItemHeading
 
-/*
+  /*
     The summary line of each accordion section.
   */
-'summary'?: GovukFrontendAccordionItemSummary | null
+  summary?: GovukFrontendAccordionItemSummary | null
 
-/*
+  /*
     The content of each accordion section.
   */
-'content': GovukFrontendAccordionItemContent
+  content: GovukFrontendAccordionItemContent
 
-/*
+  /*
     Sets whether the section should be expanded when the page loads for the first time. Defaults to `false`.
   */
-'expanded'?: boolean | null
-
+  expanded?: boolean | null
 }
 
 export interface GovukFrontendAccordionItemHeading {
   /*
     If `html` is set, this is not required. The heading text of each section. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. The heading HTML content of each section. The header is inside the HTML `<button>` element, so you can only add [phrasing content](https://html.spec.whatwg.org/#phrasing-content) to it. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
-
+  html?: string | null
 }
 
 export interface GovukFrontendAccordionItemSummary {
   /*
     The summary line text content of each section. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     The summary line HTML content of each section. The summary line is inside the HTML `<button>` element, so you can only add [phrasing content](https://html.spec.whatwg.org/#phrasing-content) to it. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
-
+  html?: string | null
 }
 
 export interface GovukFrontendAccordionItemContent {
   /*
     If `html` is set, this is not required. The text content of each section, which is hidden when the section is closed. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. The HTML content of each section, which is hidden when the section is closed. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
-
+  html?: string | null
 }
 
 // The back link component is described at https://design-system.service.gov.uk/components/back-link.
@@ -131,28 +126,27 @@ export interface GovukFrontendBackLink {
   /*
     Text to use within the back link component. If `html` is provided, the `text` option will be ignored. Defaults to `"Back"`.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     HTML to use within the back link component. If `html` is provided, the `text` option will be ignored. Defaults to `"Back"`.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     The value of the link's `href` attribute.
   */
-'href': string
+  href: string
 
-/*
+  /*
     Classes to add to the anchor tag.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the anchor tag.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 // The breadcrumbs component is described at https://design-system.service.gov.uk/components/breadcrumbs.
@@ -160,51 +154,49 @@ export interface GovukFrontendBreadcrumbs {
   /*
     The items within breadcrumbs.
   */
-'items': GovukFrontendBreadcrumbsItem[]
+  items: GovukFrontendBreadcrumbsItem[]
 
-/*
+  /*
     Classes to add to the breadcrumbs container.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     When true, the breadcrumbs will collapse to the first and last item only on tablet breakpoint and below.
   */
-'collapseOnMobile'?: boolean | null
+  collapseOnMobile?: boolean | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the breadcrumbs container.
   */
-'attributes'?: Record<string, unknown> | null
+  attributes?: Record<string, unknown> | null
 
-/*
+  /*
     Plain text label identifying the landmark to screen readers. Defaults to "Breadcrumb".
   */
-'labelText'?: string | null
-
+  labelText?: string | null
 }
 
 export interface GovukFrontendBreadcrumbsItem {
   /*
     If `html` is set, this is not required. Text to use within the breadcrumbs item. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. HTML to use within the breadcrumbs item. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     Link for the breadcrumbs item. If not specified, breadcrumbs item is a normal list item.
   */
-'href'?: string | null
+  href?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the individual crumb.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 // The button component is described at https://design-system.service.gov.uk/components/button.
@@ -212,68 +204,67 @@ export interface GovukFrontendButton {
   /*
     HTML element for the button component – `input`, `button` or `a`. In most cases you will not need to set this as it will be configured automatically if `href` is provided.
   */
-'element'?: string | null
+  element?: string | null
 
-/*
+  /*
     If `html` is set, this is not required. Text for the `input`, `button` or `a` element. If `html` is provided, the `text` option will be ignored and `element` will be automatically set to `"button"` unless `href` is also set, or it has already been defined.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. HTML for the `button` or `a` element only. If `html` is provided, the `text` option will be ignored and `element` will be automatically set to `"button"` unless `href` is also set, or it has already been defined. This option has no effect if `element` is set to `"input"`.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     Name for the `input` or `button`. This has no effect on `a` elements.
   */
-'name'?: string | null
+  name?: string | null
 
-/*
+  /*
     Type for the `input` or `button` element – `"button"`, `"submit"` or `"reset"`. Defaults to `"submit"`. This has no effect on `a` elements.
   */
-'type'?: string | null
+  type?: string | null
 
-/*
+  /*
     Value for the `button` element only. This has no effect on `a` or `input` elements.
   */
-'value'?: string | null
+  value?: string | null
 
-/*
+  /*
     Whether the button component should be disabled. For `input` and `button` elements, `disabled` and `aria-disabled` attributes will be set automatically. This has no effect on `a` elements.
   */
-'disabled'?: boolean | null
+  disabled?: boolean | null
 
-/*
+  /*
     The URL that the button component should link to. If this is set, `element` will be automatically set to `"a"` if it has not already been defined.
   */
-'href'?: string | null
+  href?: string | null
 
-/*
+  /*
     Classes to add to the button component.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the button component.
   */
-'attributes'?: Record<string, unknown> | null
+  attributes?: Record<string, unknown> | null
 
-/*
+  /*
     Prevent accidental double clicks on submit buttons from submitting forms multiple times.
   */
-'preventDoubleClick'?: boolean | null
+  preventDoubleClick?: boolean | null
 
-/*
+  /*
     Use for the main call to action on your service's start page.
   */
-'isStartButton'?: boolean | null
+  isStartButton?: boolean | null
 
-/*
+  /*
     The ID of the button.
   */
-'id'?: string | null
-
+  id?: string | null
 }
 
 // The character count component is described at https://design-system.service.gov.uk/components/character-count.
@@ -281,170 +272,165 @@ export interface GovukFrontendCharacterCount {
   /*
     The ID of the textarea. Defaults to the value of `name`.
   */
-'id'?: string | null
+  id?: string | null
 
-/*
+  /*
     The name of the textarea, which is submitted with the form data.
   */
-'name': string
+  name: string
 
-/*
+  /*
     Optional number of textarea rows (default is 5 rows).
   */
-'rows'?: string | null
+  rows?: string | null
 
-/*
+  /*
     Optional initial value of the textarea.
   */
-'value'?: string | null
+  value?: string | null
 
-/*
+  /*
     If `maxwords` is set, this is not required. The maximum number of characters. If `maxwords` is provided, the `maxlength` option will be ignored.
   */
-'maxlength': string
+  maxlength: string
 
-/*
+  /*
     If `maxlength` is set, this is not required. The maximum number of words. If `maxwords` is provided, the `maxlength` option will be ignored.
   */
-'maxwords': string
+  maxwords: string
 
-/*
+  /*
     The percentage value of the limit at which point the count message is displayed. If this attribute is set, the count message will be hidden by default.
   */
-'threshold'?: string | null
+  threshold?: string | null
 
-/*
+  /*
     The label used by the character count component.
   */
-'label': GovukFrontendLabel
+  label: GovukFrontendLabel
 
-/*
+  /*
     Can be used to add a hint to the character count component.
   */
-'hint'?: GovukFrontendHint | null
+  hint?: GovukFrontendHint | null
 
-/*
+  /*
     Can be used to add an error message to the character count component. The error message component will not display if you use a falsy value for `errorMessage`, for example `false` or `null`.
   */
-'errorMessage'?: GovukFrontendErrorMessage | null
+  errorMessage?: GovukFrontendErrorMessage | null
 
-/*
+  /*
     Additional options for the form group containing the character count component.
   */
-'formGroup'?: GovukFrontendCharacterCountFormGroup | null
+  formGroup?: GovukFrontendCharacterCountFormGroup | null
 
-/*
+  /*
     Classes to add to the textarea.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the textarea.
   */
-'attributes'?: Record<string, unknown> | null
+  attributes?: Record<string, unknown> | null
 
-/*
+  /*
     Optional field to enable or disable the `spellcheck` attribute on the character count.
   */
-'spellcheck'?: boolean | null
+  spellcheck?: boolean | null
 
-/*
+  /*
     Additional options for the count message used by the character count component.
   */
-'countMessage'?: GovukFrontendCharacterCountCountMessage | null
+  countMessage?: GovukFrontendCharacterCountCountMessage | null
 
-/*
+  /*
     Message made available to assistive technologies to describe that the component accepts only a limited amount of content. It is visible on the page when JavaScript is unavailable. The component will replace the `%{count}` placeholder with the value of the `maxlength` or `maxwords` parameter.
   */
-'textareaDescriptionText'?: string | null
+  textareaDescriptionText?: string | null
 
-/*
+  /*
     Message displayed when the number of characters is under the configured maximum, `maxlength`. This message is displayed visually and through assistive technologies. The component will replace the `%{count}` placeholder with the number of remaining characters. [Our pluralisation rules apply to this macro option](https://frontend.design-system.service.gov.uk/localise-govuk-frontend/#understanding-pluralisation-rules).
   */
-'charactersUnderLimitText'?: Record<string, unknown> | null
+  charactersUnderLimitText?: Record<string, unknown> | null
 
-/*
+  /*
     Message displayed when the number of characters reaches the configured maximum, `maxlength`. This message is displayed visually and through assistive technologies.
   */
-'charactersAtLimitText'?: string | null
+  charactersAtLimitText?: string | null
 
-/*
+  /*
     Message displayed when the number of characters is over the configured maximum, `maxlength`. This message is displayed visually and through assistive technologies. The component will replace the `%{count}` placeholder with the number of characters above the maximum.[Our pluralisation rules apply to this macro option](https://frontend.design-system.service.gov.uk/localise-govuk-frontend/#understanding-pluralisation-rules).
   */
-'charactersOverLimitText'?: Record<string, unknown> | null
+  charactersOverLimitText?: Record<string, unknown> | null
 
-/*
+  /*
     Message displayed when the number of words is under the configured maximum, `maxwords`. This message is displayed visually and through assistive technologies. The component will replace the `%{count}` placeholder with the number of remaining words. [Our pluralisation rules apply to this macro option](https://frontend.design-system.service.gov.uk/localise-govuk-frontend/#understanding-pluralisation-rules).
   */
-'wordsUnderLimitText'?: Record<string, unknown> | null
+  wordsUnderLimitText?: Record<string, unknown> | null
 
-/*
+  /*
     Message displayed when the number of words reaches the configured maximum, `maxwords`. This message is displayed visually and through assistive technologies.
   */
-'wordsAtLimitText'?: string | null
+  wordsAtLimitText?: string | null
 
-/*
+  /*
     Message displayed when the number of words is over the configured maximum, `maxwords`. This message is displayed visually and through assistive technologies. The component will replace the `%{count}` placeholder with the number of characters above the maximum. [Our pluralisation rules apply to this macro option](https://frontend.design-system.service.gov.uk/localise-govuk-frontend/#understanding-pluralisation-rules).
   */
-'wordsOverLimitText'?: Record<string, unknown> | null
-
+  wordsOverLimitText?: Record<string, unknown> | null
 }
 
 export interface GovukFrontendCharacterCountFormGroup {
   /*
     Classes to add to the form group (for example to show error state for the whole group).
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the form group.
   */
-'attributes'?: Record<string, unknown> | null
+  attributes?: Record<string, unknown> | null
 
-/*
+  /*
     Content to add before the textarea used by the character count component.
   */
-'beforeInput'?: GovukFrontendCharacterCountFormGroupBeforeInput | null
+  beforeInput?: GovukFrontendCharacterCountFormGroupBeforeInput | null
 
-/*
+  /*
     Content to add after the textarea used by the character count component.
   */
-'afterInput'?: GovukFrontendCharacterCountFormGroupAfterInput | null
-
+  afterInput?: GovukFrontendCharacterCountFormGroupAfterInput | null
 }
 
 export interface GovukFrontendCharacterCountFormGroupBeforeInput {
   /*
     Text to add before the textarea. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     HTML to add before the textarea. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
-
+  html?: string | null
 }
 
 export interface GovukFrontendCharacterCountFormGroupAfterInput {
   /*
     Text to add after the textarea. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     HTML to add after the textarea. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
-
+  html?: string | null
 }
 
 export interface GovukFrontendCharacterCountCountMessage {
   /*
     Classes to add to the count message.
   */
-'classes'?: string | null
-
+  classes?: string | null
 }
 
 // The checkboxes component is described at https://design-system.service.gov.uk/components/checkboxes.
@@ -452,170 +438,165 @@ export interface GovukFrontendCheckboxes {
   /*
     One or more element IDs to add to the input `aria-describedby` attribute without a fieldset, used to provide additional descriptive information for screenreader users.
   */
-'describedBy'?: string | null
+  describedBy?: string | null
 
-/*
+  /*
     Can be used to add a fieldset to the checkboxes component.
   */
-'fieldset'?: GovukFrontendFieldset | null
+  fieldset?: GovukFrontendFieldset | null
 
-/*
+  /*
     Can be used to add a hint to the checkboxes component.
   */
-'hint'?: GovukFrontendHint | null
+  hint?: GovukFrontendHint | null
 
-/*
+  /*
     Can be used to add an error message to the checkboxes component. The error message component will not display if you use a falsy value for `errorMessage`, for example `false` or `null`.
   */
-'errorMessage'?: GovukFrontendErrorMessage | null
+  errorMessage?: GovukFrontendErrorMessage | null
 
-/*
+  /*
     Additional options for the form group containing the checkboxes component.
   */
-'formGroup'?: GovukFrontendCheckboxesFormGroup | null
+  formGroup?: GovukFrontendCheckboxesFormGroup | null
 
-/*
+  /*
     Optional prefix. This is used to prefix the `id` attribute for each checkbox item input, hint and error message, separated by `-`. Defaults to the `name` option value.
   */
-'idPrefix'?: string | null
+  idPrefix?: string | null
 
-/*
+  /*
     Name attribute for all checkbox items.
   */
-'name': string
+  name: string
 
-/*
+  /*
     The checkbox items within the checkboxes component.
   */
-'items': GovukFrontendCheckboxesItem[]
+  items: GovukFrontendCheckboxesItem[]
 
-/*
+  /*
     Array of values for checkboxes which should be checked when the page loads. Use this as an alternative to setting the `checked` option on each individual item.
   */
-'values'?: Array<string> | null
+  values?: Array<string> | null
 
-/*
+  /*
     Classes to add to the checkboxes container.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the anchor tag.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 export interface GovukFrontendCheckboxesFormGroup {
   /*
     Classes to add to the form group (for example to show error state for the whole group).
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the form group.
   */
-'attributes'?: Record<string, unknown> | null
+  attributes?: Record<string, unknown> | null
 
-/*
+  /*
     Content to add before all checkbox items within the checkboxes component.
   */
-'beforeInputs'?: GovukFrontendCheckboxesFormGroupBeforeInputs | null
+  beforeInputs?: GovukFrontendCheckboxesFormGroupBeforeInputs | null
 
-/*
+  /*
     Content to add after all checkbox items within the checkboxes component.
   */
-'afterInputs'?: GovukFrontendCheckboxesFormGroupAfterInputs | null
-
+  afterInputs?: GovukFrontendCheckboxesFormGroupAfterInputs | null
 }
 
 export interface GovukFrontendCheckboxesFormGroupBeforeInputs {
   /*
     Text to add before all checkbox items. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     HTML to add before all checkbox items. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
-
+  html?: string | null
 }
 
 export interface GovukFrontendCheckboxesFormGroupAfterInputs {
   /*
     Text to add after all checkbox items. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     HTML to add after all checkbox items. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
-
+  html?: string | null
 }
 
 export interface GovukFrontendCheckboxesItem {
   /*
     If `html` is set, this is not required. Text to use within each checkbox item label. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. HTML to use within each checkbox item label. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     Specific ID attribute for the checkbox item. If omitted, then component global `idPrefix` option will be applied.
   */
-'id'?: string | null
+  id?: string | null
 
-/*
+  /*
     Specific name for the checkbox item. If omitted, then component global `name` string will be applied.
   */
-'name'?: string | null
+  name?: string | null
 
-/*
+  /*
     Value for the checkbox input.
   */
-'value': string
+  value: string
 
-/*
+  /*
     Subset of options for the label used by each checkbox item within the checkboxes component.
   */
-'label'?: GovukFrontendLabel | null
+  label?: GovukFrontendLabel | null
 
-/*
+  /*
     Can be used to add a hint to each checkbox item within the checkboxes component.
   */
-'hint'?: GovukFrontendHint | null
+  hint?: GovukFrontendHint | null
 
-/*
+  /*
     Divider text to separate checkbox items, for example the text `"or"`.
   */
-'divider'?: string | null
+  divider?: string | null
 
-/*
+  /*
     Whether the checkbox should be checked when the page loads. Takes precedence over the top-level `values` option.
   */
-'checked'?: boolean | null
+  checked?: boolean | null
 
-/*
+  /*
     If set to `"exclusive"`, implements a 'None of these' type behaviour via JavaScript when checkboxes are clicked.
   */
-'behaviour'?: string | null
+  behaviour?: string | null
 
-/*
+  /*
     If `true`, checkbox will be disabled.
   */
-'disabled'?: boolean | null
+  disabled?: boolean | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the checkbox input tag.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 // The cookie banner component is described at https://design-system.service.gov.uk/components/cookie-banner.
@@ -623,114 +604,111 @@ export interface GovukFrontendCookieBanner {
   /*
     The text for the `aria-label` which labels the cookie banner region. This region applies to all messages that the cookie banner includes. For example, the cookie message and the confirmation message. Defaults to `"Cookie banner"`.
   */
-'ariaLabel'?: string | null
+  ariaLabel?: string | null
 
-/*
+  /*
     Defaults to `false`. If you set this option to `true`, the whole cookie banner is hidden, including all messages within the banner. You can use `hidden` for client-side implementations where the cookie banner HTML is present, but hidden until the cookie banner is shown using JavaScript.
   */
-'hidden'?: boolean | null
+  hidden?: boolean | null
 
-/*
+  /*
     The additional classes that you want to add to the cookie banner.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     The additional attributes that you want to add to the cookie banner. For example, data attributes.
   */
-'attributes'?: Record<string, unknown> | null
+  attributes?: Record<string, unknown> | null
 
-/*
+  /*
     The different messages you can pass into the cookie banner. For example, the cookie message and the confirmation message.
   */
-'messages': GovukFrontendCookieBannerMessage[]
-
+  messages: GovukFrontendCookieBannerMessage[]
 }
 
 export interface GovukFrontendCookieBannerMessage {
   /*
     The heading text that displays in the message. You can use any string with this option. If you set `headingHtml`, `headingText` is ignored.
   */
-'headingText'?: string | null
+  headingText?: string | null
 
-/*
+  /*
     The heading HTML to use within the message. You can use any string with this option. If you set `headingHtml`, `headingText` is ignored. If you are not passing HTML, use `headingText`.
   */
-'headingHtml'?: string | null
+  headingHtml?: string | null
 
-/*
+  /*
     The text for the main content within the message. You can use any string with this option. If you set `html`, `text` is not required and is ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     The HTML for the main content within the message. You can use any string with this option. If you set `html`, `text` is not required and is ignored. If you are not passing HTML, use `text`.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     The buttons and links that you want to display in the message. `actions` defaults to `"button"` unless you set `href`, which renders the action as a link.
   */
-'actions'?: GovukFrontendCookieBannerMessageAction[] | null
+  actions?: GovukFrontendCookieBannerMessageAction[] | null
 
-/*
+  /*
     Defaults to `false`. If you set it to `true`, the message is hidden. You can use `hidden` for client-side implementations where the confirmation message HTML is present, but hidden on the page.
   */
-'hidden'?: boolean | null
+  hidden?: boolean | null
 
-/*
+  /*
     Set `role` to `"alert"` on confirmation messages to allow assistive tech to automatically read the message. You will also need to move focus to the confirmation message using JavaScript you have written yourself.
   */
-'role'?: string | null
+  role?: string | null
 
-/*
+  /*
     The additional classes that you want to add to the message.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     The additional attributes that you want to add to the message. For example, data attributes.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 export interface GovukFrontendCookieBannerMessageAction {
   /*
     The button or link text.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     The type of button – `"button"` or `"submit"`. If `href` is provided, set `type` to `"button"` render a link styled as a button.
   */
-'type'?: string | null
+  type?: string | null
 
-/*
+  /*
     The `href` for a link. Set `type` to `"button"` and set `href` to render a link styled as a button.
   */
-'href'?: string | null
+  href?: string | null
 
-/*
+  /*
     The name attribute for the button. Does not apply if you set `href`, which makes a link.
   */
-'name'?: string | null
+  name?: string | null
 
-/*
+  /*
     The value attribute for the button. Does not apply if you set `href`, which makes a link.
   */
-'value'?: string | null
+  value?: string | null
 
-/*
+  /*
     The additional classes that you want to add to the button or link.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     The additional attributes that you want to add to the button or link. For example, data attributes.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 // The date input component is described at https://design-system.service.gov.uk/components/date-input.
@@ -738,140 +716,135 @@ export interface GovukFrontendDateInput {
   /*
     This is used for the main component and to compose the ID attribute for each item.
   */
-'id': string
+  id: string
 
-/*
+  /*
     Optional prefix. This is used to prefix each item `name`, separated by `-`.
   */
-'namePrefix'?: string | null
+  namePrefix?: string | null
 
-/*
+  /*
     The inputs within the date input component.
   */
-'items'?: GovukFrontendDateInputItem[] | null
+  items?: GovukFrontendDateInputItem[] | null
 
-/*
+  /*
     Can be used to add a hint to a date input component.
   */
-'hint'?: GovukFrontendHint | null
+  hint?: GovukFrontendHint | null
 
-/*
+  /*
     Can be used to add an error message to the date input component. The error message component will not display if you use a falsy value for `errorMessage`, for example `false` or `null`.
   */
-'errorMessage'?: GovukFrontendErrorMessage | null
+  errorMessage?: GovukFrontendErrorMessage | null
 
-/*
+  /*
     Additional options for the form group containing the date input component.
   */
-'formGroup'?: GovukFrontendDateInputFormGroup | null
+  formGroup?: GovukFrontendDateInputFormGroup | null
 
-/*
+  /*
     Can be used to add a fieldset to the date input component.
   */
-'fieldset'?: GovukFrontendFieldset | null
+  fieldset?: GovukFrontendFieldset | null
 
-/*
+  /*
     Classes to add to the date-input container.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the date-input container.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 export interface GovukFrontendDateInputItem {
   /*
     Item-specific ID. If provided, it will be used instead of the generated ID.
   */
-'id'?: string | null
+  id?: string | null
 
-/*
+  /*
     Item-specific name attribute.
   */
-'name': string
+  name: string
 
-/*
+  /*
     Item-specific label text. If provided, this will be used instead of `name` for item label text.
   */
-'label'?: string | null
+  label?: string | null
 
-/*
+  /*
     If provided, it will be used as the initial value of the input.
   */
-'value'?: string | null
+  value?: string | null
 
-/*
+  /*
     Attribute to meet [WCAG success criterion 1.3.5: Identify input purpose](https://www.w3.org/WAI/WCAG22/Understanding/identify-input-purpose.html), for instance `"bday-day"`. See the [Autofill section in the HTML standard](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill) section in the HTML standard for full list of attributes that can be used.
   */
-'autocomplete'?: string | null
+  autocomplete?: string | null
 
-/*
+  /*
     Attribute to [provide a regular expression pattern](https://html.spec.whatwg.org/multipage/input.html#the-pattern-attribute), used to match allowed character combinations for the input value.
   */
-'pattern'?: string | null
+  pattern?: string | null
 
-/*
+  /*
     Classes to add to date input item.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the date input tag.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 export interface GovukFrontendDateInputFormGroup {
   /*
     Classes to add to the form group (for example to show error state for the whole group).
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the form group.
   */
-'attributes'?: Record<string, unknown> | null
+  attributes?: Record<string, unknown> | null
 
-/*
+  /*
     Content to add before the inputs used by the date input component.
   */
-'beforeInputs'?: GovukFrontendDateInputFormGroupBeforeInputs | null
+  beforeInputs?: GovukFrontendDateInputFormGroupBeforeInputs | null
 
-/*
+  /*
     Content to add after the inputs used by the date input component.
   */
-'afterInputs'?: GovukFrontendDateInputFormGroupAfterInputs | null
-
+  afterInputs?: GovukFrontendDateInputFormGroupAfterInputs | null
 }
 
 export interface GovukFrontendDateInputFormGroupBeforeInputs {
   /*
     Text to add before the inputs. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     HTML to add before the inputs. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
-
+  html?: string | null
 }
 
 export interface GovukFrontendDateInputFormGroupAfterInputs {
   /*
     Text to add after the inputs. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     HTML to add after the inputs. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
-
+  html?: string | null
 }
 
 // The details component is described at https://design-system.service.gov.uk/components/details.
@@ -879,48 +852,47 @@ export interface GovukFrontendDetails {
   /*
     If `summmaryHtml` is set, this is not required. Text to use within the summary element (the visible part of the details element). If `summaryHtml` is provided, the `summaryText` option will be ignored.
   */
-'summaryText'?: string | null
+  summaryText?: string | null
 
-/*
+  /*
     If `summmaryText` is set, this is not required. HTML to use within the summary element (the visible part of the details element). If `summaryHtml` is provided, the `summaryText` option will be ignored.
   */
-'summaryHtml'?: string | null
+  summaryHtml?: string | null
 
-/*
+  /*
     If `html` is set, this is not required. Text to use within the disclosed part of the details element. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. HTML to use within the disclosed part of the details element. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     Not strictly a parameter but [Nunjucks code convention](https://mozilla.github.io/nunjucks/templating.html#call). Using a `call` block enables you to call a macro with all the text inside the tag. This is helpful if you want to pass a lot of content into a macro. To use it, you will need to wrap the entire details component in a `call` block.
   */
-'caller'?: unknown | null// nunjucks-block
+  caller?: unknown | null // nunjucks-block
 
-/*
+  /*
     ID to add to the details element.
   */
-'id'?: string | null
+  id?: string | null
 
-/*
+  /*
     If `true`, details element will be expanded.
   */
-'open'?: boolean | null
+  open?: boolean | null
 
-/*
+  /*
     Classes to add to the `<details>` element.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the `<details>` element.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 // The error message component is described at https://design-system.service.gov.uk/components/error-message.
@@ -928,33 +900,32 @@ export interface GovukFrontendErrorMessage {
   /*
     If `html` is set, this is not required. Text to use within the error message. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. HTML to use within the error message. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     ID attribute to add to the error message `<p>` tag.
   */
-'id'?: string | null
+  id?: string | null
 
-/*
+  /*
     Classes to add to the error message `<p>` tag.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the error message `<p>` tag.
   */
-'attributes'?: Record<string, unknown> | null
+  attributes?: Record<string, unknown> | null
 
-/*
+  /*
     A visually hidden prefix used before the error message. Defaults to `"Error"`.
   */
-'visuallyHiddenText'?: string | null
-
+  visuallyHiddenText?: string | null
 }
 
 // The error summary component is described at https://design-system.service.gov.uk/components/error-summary.
@@ -962,71 +933,69 @@ export interface GovukFrontendErrorSummary {
   /*
     If `titleHtml` is set, this is not required. Text to use for the heading of the error summary block. If `titleHtml` is provided, `titleText` will be ignored.
   */
-'titleText'?: string | null
+  titleText?: string | null
 
-/*
+  /*
     If `titleText` is set, this is not required. HTML to use for the heading of the error summary block. If `titleHtml` is provided, `titleText` will be ignored.
   */
-'titleHtml'?: string | null
+  titleHtml?: string | null
 
-/*
+  /*
     Text to use for the description of the errors. If you set `descriptionHtml`, the component will ignore `descriptionText`.
   */
-'descriptionText'?: string | null
+  descriptionText?: string | null
 
-/*
+  /*
     HTML to use for the description of the errors. If you set this option, the component will ignore `descriptionText`.
   */
-'descriptionHtml'?: string | null
+  descriptionHtml?: string | null
 
-/*
+  /*
     Not strictly a parameter but [Nunjucks code convention](https://mozilla.github.io/nunjucks/templating.html#call). Using a `call` block enables you to call a macro with all the text inside the tag. This is helpful if you want to pass a lot of content into a macro. To use it, you will need to wrap the entire error summary component in a `call` block.
   */
-'caller'?: unknown | null// nunjucks-block
+  caller?: unknown | null // nunjucks-block
 
-/*
+  /*
     A list of errors to include in the error summary.
   */
-'errorList'?: GovukFrontendErrorSummaryErrorListElement[] | null
+  errorList?: GovukFrontendErrorSummaryErrorListElement[] | null
 
-/*
+  /*
     Prevent moving focus to the error summary when the page loads.
   */
-'disableAutoFocus'?: boolean | null
+  disableAutoFocus?: boolean | null
 
-/*
+  /*
     Classes to add to the error-summary container.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the error-summary container.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 export interface GovukFrontendErrorSummaryErrorListElement {
   /*
     Href attribute for the error link item. If provided item will be an anchor.
   */
-'href'?: string | null
+  href?: string | null
 
-/*
+  /*
     If `html` is set, this is not required. Text for the error link item. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. HTML for the error link item. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the error link anchor.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 // The exit this-page component is described at https://design-system.service.gov.uk/components/exit-this-page.
@@ -1034,53 +1003,52 @@ export interface GovukFrontendExitThisPage {
   /*
     Text for the link. If `html` is provided, the `text` option will be ignored. Defaults to `"Emergency Exit this page"` with 'Emergency' visually hidden.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     HTML for the link. If `html` is provided, the `text` option will be ignored. Defaults to `"Emergency Exit this page"` with 'Emergency' visually hidden.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     URL to redirect the current tab to. Defaults to `"https://www.bbc.co.uk/weather"`.
   */
-'redirectUrl'?: string | null
+  redirectUrl?: string | null
 
-/*
+  /*
     ID attribute to add to the exit this page container.
   */
-'id'?: string | null
+  id?: string | null
 
-/*
+  /*
     Classes to add to the exit this page container.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the exit this page container.
   */
-'attributes'?: Record<string, unknown> | null
+  attributes?: Record<string, unknown> | null
 
-/*
+  /*
     Text announced by screen readers when Exit this Page has been activated via the keyboard shortcut. Defaults to `"Loading."`.
   */
-'activatedText'?: string | null
+  activatedText?: string | null
 
-/*
+  /*
     Text announced by screen readers when the keyboard shortcut has timed out without successful activation. Defaults to `"Exit this page expired."`.
   */
-'timedOutText'?: string | null
+  timedOutText?: string | null
 
-/*
+  /*
     Text announced by screen readers when the user must press <kbd>Shift</kbd> two more times to activate the button. Defaults to `"Shift, press 2 more times to exit."`.
   */
-'pressTwoMoreTimesText'?: string | null
+  pressTwoMoreTimesText?: string | null
 
-/*
+  /*
     Text announced by screen readers when the user must press <kbd>Shift</kbd> one more time to activate the button. Defaults to `"Shift, press 1 more time to exit."`.
   */
-'pressOneMoreTimeText'?: string | null
-
+  pressOneMoreTimeText?: string | null
 }
 
 // The fieldset component is described at https://design-system.service.gov.uk/components/fieldset.
@@ -1088,61 +1056,59 @@ export interface GovukFrontendFieldset {
   /*
     One or more element IDs to add to the `aria-describedby` attribute, used to provide additional descriptive information for screenreader users.
   */
-'describedBy'?: string | null
+  describedBy?: string | null
 
-/*
+  /*
     The legend for the fieldset component.
   */
-'legend'?: GovukFrontendFieldsetLegend | null
+  legend?: GovukFrontendFieldsetLegend | null
 
-/*
+  /*
     Classes to add to the fieldset container.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     Optional ARIA role attribute.
   */
-'role'?: string | null
+  role?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the fieldset container.
   */
-'attributes'?: Record<string, unknown> | null
+  attributes?: Record<string, unknown> | null
 
-/*
+  /*
     HTML to use/render within the fieldset element.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     Not strictly a parameter but [Nunjucks code convention](https://mozilla.github.io/nunjucks/templating.html#call). Using a `call` block enables you to call a macro with all the text inside the tag. This is helpful if you want to pass a lot of content into a macro. To use it, you will need to wrap the entire fieldset component in a `call` block.
   */
-'caller'?: unknown | null// nunjucks-block
-
+  caller?: unknown | null // nunjucks-block
 }
 
 export interface GovukFrontendFieldsetLegend {
   /*
     If `html` is set, this is not required. Text to use within the legend. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. HTML to use within the legend. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     Classes to add to the legend.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     Whether the legend also acts as the heading for the page.
   */
-'isPageHeading'?: boolean | null
-
+  isPageHeading?: boolean | null
 }
 
 // The file upload component is described at https://design-system.service.gov.uk/components/file-upload.
@@ -1150,147 +1116,143 @@ export interface GovukFrontendFileUpload {
   /*
     The name of the input, which is submitted with the form data.
   */
-'name': string
+  name: string
 
-/*
+  /*
     The ID of the input. Defaults to the value of `name`.
   */
-'id'?: string | null
+  id?: string | null
 
-/*
+  /*
     Optional initial value of the input.
   */
-'value'?: string | null
+  value?: string | null
 
-/*
+  /*
     If `true`, file input will be disabled.
   */
-'disabled'?: boolean | null
+  disabled?: boolean | null
 
-/*
+  /*
     If `true`, a user may select multiple files at the same time. The exact mechanism to do this differs depending on operating system.
   */
-'multiple'?: boolean | null
+  multiple?: boolean | null
 
-/*
+  /*
     One or more element IDs to add to the `aria-describedby` attribute, used to provide additional descriptive information for screenreader users.
   */
-'describedBy'?: string | null
+  describedBy?: string | null
 
-/*
+  /*
     The label used by the file upload component.
   */
-'label': GovukFrontendLabel
+  label: GovukFrontendLabel
 
-/*
+  /*
     Can be used to add a hint to the file upload component.
   */
-'hint'?: GovukFrontendHint | null
+  hint?: GovukFrontendHint | null
 
-/*
+  /*
     Can be used to add an error message to the file upload component. The error message component will not display if you use a falsy value for `errorMessage`, for example `false` or `null`.
   */
-'errorMessage'?: GovukFrontendErrorMessage | null
+  errorMessage?: GovukFrontendErrorMessage | null
 
-/*
+  /*
     Additional options for the form group containing the file upload component.
   */
-'formGroup'?: GovukFrontendFileUploadFormGroup | null
+  formGroup?: GovukFrontendFileUploadFormGroup | null
 
-/*
+  /*
     Can be used to enable JavaScript enhancements for the component.
   */
-'javascript'?: boolean | null
+  javascript?: boolean | null
 
-/*
+  /*
     The text of the button that opens the file picker. Default is `"Choose file"`. If `javascript` is not provided, this option will be ignored.
   */
-'chooseFilesButtonText'?: string | null
+  chooseFilesButtonText?: string | null
 
-/*
+  /*
     The text informing users they can drop files. Default is `"or drop file"`. If `javascript` is not provided, this option will be ignored.
   */
-'dropInstructionText'?: string | null
+  dropInstructionText?: string | null
 
-/*
+  /*
     The text displayed when multiple files have been chosen by the user. The component will replace the `%{count}` placeholder with the number of files selected. [Our pluralisation rules apply to this macro option](https://frontend.design-system.service.gov.uk/localise-govuk-frontend/#understanding-pluralisation-rules). If `javascript` is not provided, this option will be ignored.
   */
-'multipleFilesChosenText'?: Record<string, unknown> | null
+  multipleFilesChosenText?: Record<string, unknown> | null
 
-/*
+  /*
     The text displayed when no file has been chosen by the user. Default is `"No file chosen"`. If `javascript` is not provided, this option will be ignored.
   */
-'noFileChosenText'?: string | null
+  noFileChosenText?: string | null
 
-/*
+  /*
     The text announced by assistive technology when user drags files and enters the drop zone. Default is `"Entered drop zone"`. If `javascript` is not provided, this option will be ignored.
   */
-'enteredDropZoneText'?: string | null
+  enteredDropZoneText?: string | null
 
-/*
+  /*
     The text announced by assistive technology when user drags files and leaves the drop zone without dropping. Default is `"Left drop zone"`. If `javascript` is not provided, this option will be ignored.
   */
-'leftDropZoneText'?: string | null
+  leftDropZoneText?: string | null
 
-/*
+  /*
     Classes to add to the file upload component.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the file upload component.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 export interface GovukFrontendFileUploadFormGroup {
   /*
     Classes to add to the form group (for example to show error state for the whole group).
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the form group.
   */
-'attributes'?: Record<string, unknown> | null
+  attributes?: Record<string, unknown> | null
 
-/*
+  /*
     Content to add before the input used by the file upload component.
   */
-'beforeInput'?: GovukFrontendFileUploadFormGroupBeforeInput | null
+  beforeInput?: GovukFrontendFileUploadFormGroupBeforeInput | null
 
-/*
+  /*
     Content to add after the input used by the file upload component.
   */
-'afterInput'?: GovukFrontendFileUploadFormGroupAfterInput | null
-
+  afterInput?: GovukFrontendFileUploadFormGroupAfterInput | null
 }
 
 export interface GovukFrontendFileUploadFormGroupBeforeInput {
   /*
     Text to add before the input. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     HTML to add before the input. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
-
+  html?: string | null
 }
 
 export interface GovukFrontendFileUploadFormGroupAfterInput {
   /*
     Text to add after the input. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     HTML to add after the input. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
-
+  html?: string | null
 }
 
 // The footer component is described at https://design-system.service.gov.uk/components/footer.
@@ -1298,151 +1260,144 @@ export interface GovukFrontendFooter {
   /*
     The meta section of the footer after any navigation, before the copyright and license information.
   */
-'meta'?: GovukFrontendFooterMeta | null
+  meta?: GovukFrontendFooterMeta | null
 
-/*
+  /*
     The navigation section of the footer before a section break and the copyright and license information.
   */
-'navigation'?: GovukFrontendFooterNavigationElement[] | null
+  navigation?: GovukFrontendFooterNavigationElement[] | null
 
-/*
+  /*
     The content licence information within the footer component. Defaults to Open Government Licence (OGL) v3 licence.
   */
-'contentLicence'?: GovukFrontendFooterContentLicence | null
+  contentLicence?: GovukFrontendFooterContentLicence | null
 
-/*
+  /*
     The copyright information in the footer component, this defaults to `"© Crown copyright"`.
   */
-'copyright'?: GovukFrontendFooterCopyright | null
+  copyright?: GovukFrontendFooterCopyright | null
 
-/*
+  /*
     Classes that can be added to the inner container, useful if you want to make the footer full width.
   */
-'containerClasses'?: string | null
+  containerClasses?: string | null
 
-/*
+  /*
     Classes to add to the footer component container.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the footer component container.
   */
-'attributes'?: Record<string, unknown> | null
+  attributes?: Record<string, unknown> | null
 
-/*
+  /*
     If `true`, use the redesigned footer with the GOV.UK crown. Default is `false`.
   */
-'rebrand'?: boolean | null
-
+  rebrand?: boolean | null
 }
 
 export interface GovukFrontendFooterMeta {
   /*
     Title for a meta item section. Defaults to `"Support links"`.
   */
-'visuallyHiddenTitle'?: string | null
+  visuallyHiddenTitle?: string | null
 
-/*
+  /*
     HTML to add to the meta section of the footer, which will appear below any links specified using meta `items`.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     Text to add to the meta section of the footer, which will appear below any links specified using meta `items`. If meta `html` is specified, this option is ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     The meta `items` add content within a unordered list to the meta section of the footer component. These appear above any text or custom html in the meta section.
   */
-'items'?: GovukFrontendFooterMetaItem[] | null
-
+  items?: GovukFrontendFooterMetaItem[] | null
 }
 
 export interface GovukFrontendFooterMetaItem {
   /*
     List item text in the meta section of the footer.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     List item link `href` attribute in the meta section of the footer.
   */
-'href': string
+  href: string
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the anchor in the footer meta section.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 export interface GovukFrontendFooterNavigationElement {
   /*
     Title for a section.
   */
-'title': string
+  title: string
 
-/*
+  /*
     Amount of columns to display items in navigation section of the footer.
   */
-'columns'?: number | null// integer
+  columns?: number | null // integer
 
-/*
+  /*
     Width of each navigation section in the footer. You can pass any Design System grid width here – for example, `"one-third"`, `"two-thirds"` or `"one-half"`. Defaults to `"full"`.
   */
-'width'?: string | null
+  width?: string | null
 
-/*
+  /*
     The items within the navigation section of the footer component.
   */
-'items'?: GovukFrontendFooterNavigationElementItem[] | null
-
+  items?: GovukFrontendFooterNavigationElementItem[] | null
 }
 
 export interface GovukFrontendFooterNavigationElementItem {
   /*
     List item text in the navigation section of the footer.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     List item link `href` attribute in the navigation section of the footer. Both `text` and `href` attributes need to be present to create a link.
   */
-'href': string
+  href: string
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the anchor in the footer navigation section.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 export interface GovukFrontendFooterContentLicence {
   /*
     If `html` is set, this is not required. If `html` is provided, the `text` option will be ignored. If neither are provided, the text for the Open Government Licence is used.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. If `html` is provided, the `text` option will be ignored. If neither are provided, the text for the Open Government Licence is used. The content licence is inside a `<span>` element, so you can only add [phrasing content](https://html.spec.whatwg.org/#phrasing-content) to it.
   */
-'html'?: string | null
-
+  html?: string | null
 }
 
 export interface GovukFrontendFooterCopyright {
   /*
     If `html` is set, this is not required. If `html` is provided, the `text` option will be ignored. If neither are provided, `"© Crown copyright"` is used.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. If `html` is provided, the `text` option will be ignored. If neither are provided, `"© Crown copyright"` is used. The copyright notice is inside an `<a>` element, so you can only use text formatting elements within it.
   */
-'html'?: string | null
-
+  html?: string | null
 }
 
 // The header component is described at https://design-system.service.gov.uk/components/header.
@@ -1450,101 +1405,99 @@ export interface GovukFrontendHeader {
   /*
     The URL of the homepage. Defaults to `"/"`.
   */
-'homepageUrl'?: string | null
+  homepageUrl?: string | null
 
-/*
+  /*
     Product name, used when the product name follows on directly from ‘GOV.UK’. For example, GOV.UK Pay or GOV.UK Design System. In most circumstances, you should use `serviceName`.
   */
-'productName'?: string | null
+  productName?: string | null
 
-/*
+  /*
     The name of your service, included in the header.
   */
-'serviceName'?: string | null
+  serviceName?: string | null
 
-/*
+  /*
     URL for the service name anchor.
   */
-'serviceUrl'?: string | null
+  serviceUrl?: string | null
 
-/*
+  /*
     Can be used to add navigation to the header component.
   */
-'navigation'?: GovukFrontendHeaderNavigationElement[] | null
+  navigation?: GovukFrontendHeaderNavigationElement[] | null
 
-/*
+  /*
     Classes for the navigation section of the header.
   */
-'navigationClasses'?: string | null
+  navigationClasses?: string | null
 
-/*
+  /*
     Text for the `aria-label` attribute of the navigation. Defaults to the same value as `menuButtonText`.
   */
-'navigationLabel'?: string | null
+  navigationLabel?: string | null
 
-/*
+  /*
     Text for the `aria-label` attribute of the button that opens the mobile navigation, if there is a mobile navigation menu.
   */
-'menuButtonLabel'?: string | null
+  menuButtonLabel?: string | null
 
-/*
+  /*
     Text of the button that opens the mobile navigation menu, if there is a mobile navigation menu. There is no enforced character limit, but there is a limited display space so keep text as short as possible. By default, this is set to 'Menu'.
   */
-'menuButtonText'?: string | null
+  menuButtonText?: string | null
 
-/*
+  /*
     Classes for the container, useful if you want to make the header fixed width.
   */
-'containerClasses'?: string | null
+  containerClasses?: string | null
 
-/*
+  /*
     Classes to add to the header container.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the header container.
   */
-'attributes'?: Record<string, unknown> | null
+  attributes?: Record<string, unknown> | null
 
-/*
+  /*
     If `true`, uses the Tudor crown from King Charles III's royal cypher. Otherwise, uses the St. Edward's crown. Default is `true`.
   */
-'useTudorCrown'?: boolean | null
+  useTudorCrown?: boolean | null
 
-/*
+  /*
     If `true`, use the redesigned header and new GOV.UK logotype. Default is `false`.
   */
-'rebrand'?: boolean | null
-
+  rebrand?: boolean | null
 }
 
 export interface GovukFrontendHeaderNavigationElement {
   /*
     Text for the navigation item. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     HTML for the navigation item. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     URL of the navigation item anchor.
   */
-'href'?: string | null
+  href?: string | null
 
-/*
+  /*
     Flag to mark the navigation item as active or not.
   */
-'active'?: boolean | null
+  active?: boolean | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the navigation item anchor.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 // The hint component is described at https://design-system.service.gov.uk/components/hint.
@@ -1552,28 +1505,27 @@ export interface GovukFrontendHint {
   /*
     If `html` is set, this is not required. Text to use within the hint. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. HTML to use within the hint. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     Optional ID attribute to add to the hint span tag.
   */
-'id'?: string | null
+  id?: string | null
 
-/*
+  /*
     Classes to add to the hint span tag.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the hint span tag.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 // The input component is described at https://design-system.service.gov.uk/components/input.
@@ -1581,211 +1533,204 @@ export interface GovukFrontendInput {
   /*
     The ID of the input. Defaults to the value of `name`.
   */
-'id'?: string | null
+  id?: string | null
 
-/*
+  /*
     The name of the input, which is submitted with the form data.
   */
-'name': string
+  name: string
 
-/*
+  /*
     Type of input control to render, for example, a password input control. Defaults to `"text"`.
   */
-'type'?: string | null
+  type?: string | null
 
-/*
+  /*
     Optional value for [the inputmode attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/inputmode).
   */
-'inputmode'?: string | null
+  inputmode?: string | null
 
-/*
+  /*
     Optional initial value of the input.
   */
-'value'?: string | null
+  value?: string | null
 
-/*
+  /*
     If `true`, input will be disabled.
   */
-'disabled'?: boolean | null
+  disabled?: boolean | null
 
-/*
+  /*
     One or more element IDs to add to the `aria-describedby` attribute, used to provide additional descriptive information for screenreader users.
   */
-'describedBy'?: string | null
+  describedBy?: string | null
 
-/*
+  /*
     The label used by the text input component.
   */
-'label': GovukFrontendLabel
+  label: GovukFrontendLabel
 
-/*
+  /*
     Can be used to add a hint to a text input component.
   */
-'hint'?: GovukFrontendHint | null
+  hint?: GovukFrontendHint | null
 
-/*
+  /*
     Can be used to add an error message to the text input component. The error message component will not display if you use a falsy value for `errorMessage`, for example `false` or `null`.
   */
-'errorMessage'?: GovukFrontendErrorMessage | null
+  errorMessage?: GovukFrontendErrorMessage | null
 
-/*
+  /*
     Can be used to add a prefix to the text input component.
   */
-'prefix'?: GovukFrontendInputPrefix | null
+  prefix?: GovukFrontendInputPrefix | null
 
-/*
+  /*
     Can be used to add a suffix to the text input component.
   */
-'suffix'?: GovukFrontendInputSuffix | null
+  suffix?: GovukFrontendInputSuffix | null
 
-/*
+  /*
     Additional options for the form group containing the text input component.
   */
-'formGroup'?: GovukFrontendInputFormGroup | null
+  formGroup?: GovukFrontendInputFormGroup | null
 
-/*
+  /*
     Classes to add to the input.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     Attribute to meet [WCAG success criterion 1.3.5: Identify input purpose](https://www.w3.org/WAI/WCAG22/Understanding/identify-input-purpose.html), for instance `"bday-day"`. See the [Autofill section in the HTML standard](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill) section in the HTML standard for full list of attributes that can be used.
   */
-'autocomplete'?: string | null
+  autocomplete?: string | null
 
-/*
+  /*
     Attribute to [provide a regular expression pattern](https://html.spec.whatwg.org/multipage/input.html#the-pattern-attribute), used to match allowed character combinations for the input value.
   */
-'pattern'?: string | null
+  pattern?: string | null
 
-/*
+  /*
     Optional field to enable or disable the `spellcheck` attribute on the input.
   */
-'spellcheck'?: boolean | null
+  spellcheck?: boolean | null
 
-/*
+  /*
     Optional field to enable or disable autocapitalisation of user input. [See the Autocapitalization section in the HTML spec](https://html.spec.whatwg.org/multipage/interaction.html#autocapitalization) for a full list of values that can be used.
   */
-'autocapitalize'?: string | null
+  autocapitalize?: string | null
 
-/*
+  /*
     If any of `prefix`, `suffix`, `formGroup.beforeInput` or `formGroup.afterInput` have a value, a wrapping element is added around the input and inserted content. This object allows you to customise that wrapping element.
   */
-'inputWrapper'?: GovukFrontendInputInputWrapper | null
+  inputWrapper?: GovukFrontendInputInputWrapper | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the input.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 export interface GovukFrontendInputPrefix {
   /*
     Required. If `html` is set, this is not required. Text to use within the prefix. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     Required. If `text` is set, this is not required. HTML to use within the prefix. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     Classes to add to the prefix.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the prefix element.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 export interface GovukFrontendInputSuffix {
   /*
     If `html` is set, this is not required. Text to use within the suffix. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. HTML to use within the suffix. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     Classes to add to the suffix element.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the suffix element.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 export interface GovukFrontendInputFormGroup {
   /*
     Classes to add to the form group (for example to show error state for the whole group).
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the form group.
   */
-'attributes'?: Record<string, unknown> | null
+  attributes?: Record<string, unknown> | null
 
-/*
+  /*
     Content to add before the input used by the text input component.
   */
-'beforeInput'?: GovukFrontendInputFormGroupBeforeInput | null
+  beforeInput?: GovukFrontendInputFormGroupBeforeInput | null
 
-/*
+  /*
     Content to add after the input used by the text input component.
   */
-'afterInput'?: GovukFrontendInputFormGroupAfterInput | null
-
+  afterInput?: GovukFrontendInputFormGroupAfterInput | null
 }
 
 export interface GovukFrontendInputFormGroupBeforeInput {
   /*
     Text to add before the input. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     HTML to add before the input. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
-
+  html?: string | null
 }
 
 export interface GovukFrontendInputFormGroupAfterInput {
   /*
     Text to add after the input. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     HTML to add after the input. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
-
+  html?: string | null
 }
 
 export interface GovukFrontendInputInputWrapper {
   /*
     Classes to add to the wrapping element.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the wrapping element.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 // The inset text component is described at https://design-system.service.gov.uk/components/inset-text.
@@ -1793,33 +1738,32 @@ export interface GovukFrontendInsetText {
   /*
     If `html` is set, this is not required. Text to use within the inset text component. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. HTML to use within the inset text component. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     Not strictly a parameter but [Nunjucks code convention](https://mozilla.github.io/nunjucks/templating.html#call). Using a `call` block enables you to call a macro with all the text inside the tag. This is helpful if you want to pass a lot of content into a macro. To use it, you will need to wrap the entire inset text component in a `call` block.
   */
-'caller'?: unknown | null// nunjucks-block
+  caller?: unknown | null // nunjucks-block
 
-/*
+  /*
     ID attribute to add to the inset text container.
   */
-'id'?: string | null
+  id?: string | null
 
-/*
+  /*
     Classes to add to the inset text container.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the inset text container.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 // The label component is described at https://design-system.service.gov.uk/components/label.
@@ -1827,33 +1771,32 @@ export interface GovukFrontendLabel {
   /*
     If `html` is set, this is not required. Text to use within the label. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. HTML to use within the label. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     The value of the `for` attribute, the ID of the input the label is associated with.
   */
-'for'?: string | null
+  for?: string | null
 
-/*
+  /*
     Whether the label also acts as the heading for the page.
   */
-'isPageHeading'?: boolean | null
+  isPageHeading?: boolean | null
 
-/*
+  /*
     Classes to add to the label tag.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the label tag.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 // The notification banner component is described at https://design-system.service.gov.uk/components/notification-banner.
@@ -1861,67 +1804,66 @@ export interface GovukFrontendNotificationBanner {
   /*
     The text that displays in the notification banner. You can use any string with this option. If you set `html`, this option is not required and is ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     The HTML to use within the notification banner. You can use any string with this option. If you set `html`, `text` is not required and is ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     Not strictly a parameter but [Nunjucks code convention](https://mozilla.github.io/nunjucks/templating.html#call). Using a `call` block enables you to call a macro with all the text inside the tag. This is helpful if you want to pass a lot of content into a macro. To use it, you will need to wrap the entire notification banner component in a `call` block.
   */
-'caller'?: unknown | null// nunjucks-block
+  caller?: unknown | null // nunjucks-block
 
-/*
+  /*
     The title text that displays in the notification banner. You can use any string with this option. Use this option to set text that does not contain HTML. The available default values are 'Important', 'Success', and null:
     - if you do not set `type`, `titleText` defaults to `"Important"`
     - if you set `type` to `success`, `titleText` defaults to `"Success"`
     - if you set `titleHtml`, this option is ignored
     
   */
-'titleText'?: string | null
+  titleText?: string | null
 
-/*
+  /*
     The title HTML to use within the notification banner. You can use any string with this option. Use this option to set text that contains HTML. If you set `titleHtml`, the `titleText` option is ignored.
   */
-'titleHtml'?: string | null
+  titleHtml?: string | null
 
-/*
+  /*
     Sets heading level for the title only. You can only use values between `1` and `6` with this option. The default is `2`.
   */
-'titleHeadingLevel'?: string | null
+  titleHeadingLevel?: string | null
 
-/*
+  /*
     The type of notification to render. You can use only `"success"` or `null` values with this option. If you set `type` to `"success"`, the notification banner sets `role` to `"alert"`. JavaScript then moves the keyboard focus to the notification banner when the page loads. If you do not set `type`, the notification banner sets `role` to `"region"`.
   */
-'type'?: string | null
+  type?: string | null
 
-/*
+  /*
     Overrides the value of the `role` attribute for the notification banner. Defaults to `"region"`. If you set `type` to `"success"`, `role` defaults to `"alert"`.
   */
-'role'?: string | null
+  role?: string | null
 
-/*
+  /*
     The `id` for the banner title, and the `aria-labelledby` attribute in the banner. Defaults to `"govuk-notification-banner-title"`.
   */
-'titleId'?: string | null
+  titleId?: string | null
 
-/*
+  /*
     If you set `type` to `"success"`, or `role` to `"alert"`, JavaScript moves the keyboard focus to the notification banner when the page loads. To disable this behaviour, set `disableAutoFocus` to `true`.
   */
-'disableAutoFocus'?: boolean | null
+  disableAutoFocus?: boolean | null
 
-/*
+  /*
     The classes that you want to add to the notification banner.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     The HTML attributes that you want to add to the notification banner, for example, data attributes.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 // The pagination component is described at https://design-system.service.gov.uk/components/pagination.
@@ -1929,122 +1871,118 @@ export interface GovukFrontendPagination {
   /*
     The items within the pagination component.
   */
-'items'?: GovukFrontendPaginationItem[] | null
+  items?: GovukFrontendPaginationItem[] | null
 
-/*
+  /*
     A link to the previous page, if there is a previous page.
   */
-'previous'?: GovukFrontendPaginationPrevious | null
+  previous?: GovukFrontendPaginationPrevious | null
 
-/*
+  /*
     A link to the next page, if there is a next page.
   */
-'next'?: GovukFrontendPaginationNext | null
+  next?: GovukFrontendPaginationNext | null
 
-/*
+  /*
     The label for the navigation landmark that wraps the pagination. Defaults to `"Pagination"`.
   */
-'landmarkLabel'?: string | null
+  landmarkLabel?: string | null
 
-/*
+  /*
     The classes you want to add to the pagination `nav` parent.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     The HTML attributes (for example, data attributes) you want to add to the pagination `nav` parent.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 export interface GovukFrontendPaginationItem {
   /*
     The pagination item text – usually a page number.  Required unless the item is an ellipsis.
   */
-'number'?: string | null
+  number?: string | null
 
-/*
+  /*
     The visually hidden label for the pagination item, which will be applied to an `aria-label` and announced by screen readers on the pagination item link. Should include page number. Defaults to, for example "Page 1".
   */
-'visuallyHiddenText'?: string | null
+  visuallyHiddenText?: string | null
 
-/*
+  /*
     The link's URL. Required unless the item is an ellipsis.
   */
-'href'?: string | null
+  href?: string | null
 
-/*
+  /*
     Set to `true` to indicate the current page the user is on.
   */
-'current'?: boolean | null
+  current?: boolean | null
 
-/*
+  /*
     Use this option if you want to specify an ellipsis at a given point between numbers. If you set this option as `true`, any other options for the item are ignored.
   */
-'ellipsis'?: boolean | null
+  ellipsis?: boolean | null
 
-/*
+  /*
     The HTML attributes (for example, data attributes) you want to add to the anchor.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 export interface GovukFrontendPaginationPrevious {
   /*
     The text content of the link to the previous page. Defaults to `"Previous page"`, with 'page' being visually hidden. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     The HTML content of the link to the previous page. Defaults to `"Previous page"`, with 'page' being visually hidden. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     The optional label that goes underneath the link to the previous page, providing further context for the user about where the link goes.
   */
-'labelText'?: string | null
+  labelText?: string | null
 
-/*
+  /*
     The previous page's URL.
   */
-'href': string
+  href: string
 
-/*
+  /*
     The HTML attributes (for example, data attributes) you want to add to the anchor.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 export interface GovukFrontendPaginationNext {
   /*
     The text content of the link to the next page. Defaults to `"Next page"`, with 'page' being visually hidden. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     The HTML content of the link to the next page. Defaults to `"Next page"`, with 'page' being visually hidden. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     The optional label that goes underneath the link to the next page, providing further context for the user about where the link goes.
   */
-'labelText'?: string | null
+  labelText?: string | null
 
-/*
+  /*
     The next page's URL.
   */
-'href': string
+  href: string
 
-/*
+  /*
     The HTML attributes (for example, data attributes) you want to add to the anchor.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 // The panel component is described at https://design-system.service.gov.uk/components/panel.
@@ -2052,43 +1990,42 @@ export interface GovukFrontendPanel {
   /*
     If `titleHtml` is set, this is not required. Text to use within the panel. If `titleHtml` is provided, the `titleText` option will be ignored.
   */
-'titleText'?: string | null
+  titleText?: string | null
 
-/*
+  /*
     If `titleText` is set, this is not required. HTML to use within the panel. If `titleHtml` is provided, the `titleText` option will be ignored.
   */
-'titleHtml'?: string | null
+  titleHtml?: string | null
 
-/*
+  /*
     Heading level, from `1` to `6`. Default is `1`.
   */
-'headingLevel'?: number | null// integer
+  headingLevel?: number | null // integer
 
-/*
+  /*
     If `html` is set, this is not required. Text to use within the panel content. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. HTML to use within the panel content. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     Not strictly a parameter but [Nunjucks code convention](https://mozilla.github.io/nunjucks/templating.html#call). Using a `call` block enables you to call a macro with all the text inside the tag. This is helpful if you want to pass a lot of content into a macro. To use it, you will need to wrap the entire panel component in a `call` block.
   */
-'caller'?: unknown | null// nunjucks-block
+  caller?: unknown | null // nunjucks-block
 
-/*
+  /*
     Classes to add to the panel container.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the panel container.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 // The password input component is described at https://design-system.service.gov.uk/components/password-input.
@@ -2096,155 +2033,150 @@ export interface GovukFrontendPasswordInput {
   /*
     The ID of the input. Defaults to the value of `name`.
   */
-'id'?: string | null
+  id?: string | null
 
-/*
+  /*
     The name of the input, which is submitted with the form data.
   */
-'name': string
+  name: string
 
-/*
+  /*
     Optional initial value of the input.
   */
-'value'?: string | null
+  value?: string | null
 
-/*
+  /*
     If `true`, input will be disabled.
   */
-'disabled'?: boolean | null
+  disabled?: boolean | null
 
-/*
+  /*
     One or more element IDs to add to the `aria-describedby` attribute, used to provide additional descriptive information for screenreader users.
   */
-'describedBy'?: string | null
+  describedBy?: string | null
 
-/*
+  /*
     The label used by the text input component.
   */
-'label': GovukFrontendLabel
+  label: GovukFrontendLabel
 
-/*
+  /*
     Can be used to add a hint to a text input component.
   */
-'hint'?: GovukFrontendHint | null
+  hint?: GovukFrontendHint | null
 
-/*
+  /*
     Can be used to add an error message to the text input component. The error message component will not display if you use a falsy value for `errorMessage`, for example `false` or `null`.
   */
-'errorMessage'?: GovukFrontendErrorMessage | null
+  errorMessage?: GovukFrontendErrorMessage | null
 
-/*
+  /*
     Additional options for the form group containing the text input component.
   */
-'formGroup'?: GovukFrontendPasswordInputFormGroup | null
+  formGroup?: GovukFrontendPasswordInputFormGroup | null
 
-/*
+  /*
     Classes to add to the input.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     Attribute to meet [WCAG success criterion 1.3.5: Identify input purpose](https://www.w3.org/WAI/WCAG22/Understanding/identify-input-purpose.html). See the [Autofill section in the HTML standard](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill) for full list of attributes that can be used. Default is `"current-password"`.
   */
-'autocomplete'?: string | null
+  autocomplete?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the input.
   */
-'attributes'?: Record<string, unknown> | null
+  attributes?: Record<string, unknown> | null
 
-/*
+  /*
     Button text when the password is hidden. Defaults to `"Show"`.
   */
-'showPasswordText'?: string | null
+  showPasswordText?: string | null
 
-/*
+  /*
     Button text when the password is visible. Defaults to `"Hide"`.
   */
-'hidePasswordText'?: string | null
+  hidePasswordText?: string | null
 
-/*
+  /*
     Button text exposed to assistive technologies, like screen readers, when the password is hidden. Defaults to `"Show password"`.
   */
-'showPasswordAriaLabelText'?: string | null
+  showPasswordAriaLabelText?: string | null
 
-/*
+  /*
     Button text exposed to assistive technologies, like screen readers, when the password is visible. Defaults to `"Hide password"`.
   */
-'hidePasswordAriaLabelText'?: string | null
+  hidePasswordAriaLabelText?: string | null
 
-/*
+  /*
     Announcement made to screen reader users when their password has become visible in plain text. Defaults to `"Your password is visible"`.
   */
-'passwordShownAnnouncementText'?: string | null
+  passwordShownAnnouncementText?: string | null
 
-/*
+  /*
     Announcement made to screen reader users when their password has been obscured and is not visible. Defaults to `"Your password is hidden"`.
   */
-'passwordHiddenAnnouncementText'?: string | null
+  passwordHiddenAnnouncementText?: string | null
 
-/*
+  /*
     Optional object allowing customisation of the toggle button.
   */
-'button'?: GovukFrontendPasswordInputButton | null
-
+  button?: GovukFrontendPasswordInputButton | null
 }
 
 export interface GovukFrontendPasswordInputFormGroup {
   /*
     Classes to add to the form group (for example to show error state for the whole group).
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the form group.
   */
-'attributes'?: Record<string, unknown> | null
+  attributes?: Record<string, unknown> | null
 
-/*
+  /*
     Content to add before the input used by the text input component.
   */
-'beforeInput'?: GovukFrontendPasswordInputFormGroupBeforeInput | null
+  beforeInput?: GovukFrontendPasswordInputFormGroupBeforeInput | null
 
-/*
+  /*
     Content to add after the input used by the text input component.
   */
-'afterInput'?: GovukFrontendPasswordInputFormGroupAfterInput | null
-
+  afterInput?: GovukFrontendPasswordInputFormGroupAfterInput | null
 }
 
 export interface GovukFrontendPasswordInputFormGroupBeforeInput {
   /*
     Text to add before the input. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     HTML to add before the input. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
-
+  html?: string | null
 }
 
 export interface GovukFrontendPasswordInputFormGroupAfterInput {
   /*
     Text to add after the input. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     HTML to add after the input. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
-
+  html?: string | null
 }
 
 export interface GovukFrontendPasswordInputButton {
   /*
     Classes to add to the button.
   */
-'classes'?: string | null
-
+  classes?: string | null
 }
 
 // The phase banner component is described at https://design-system.service.gov.uk/components/phase-banner.
@@ -2252,28 +2184,27 @@ export interface GovukFrontendPhaseBanner {
   /*
     If `html` is set, this is not required. Text to use within the phase banner. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. HTML to use within the phase banner. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     The tag used by the phase banner component.
   */
-'tag': GovukFrontendTag
+  tag: GovukFrontendTag
 
-/*
+  /*
     Classes to add to the phase banner container.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the phase banner container.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 // The radios component is described at https://design-system.service.gov.uk/components/radios.
@@ -2281,155 +2212,150 @@ export interface GovukFrontendRadios {
   /*
     The fieldset used by the radios component.
   */
-'fieldset'?: GovukFrontendFieldset | null
+  fieldset?: GovukFrontendFieldset | null
 
-/*
+  /*
     Can be used to add a hint to the radios component.
   */
-'hint'?: GovukFrontendHint | null
+  hint?: GovukFrontendHint | null
 
-/*
+  /*
     Can be used to add an error message to the radios component. The error message component will not display if you use a falsy value for `errorMessage`, for example `false` or `null`.
   */
-'errorMessage'?: GovukFrontendErrorMessage | null
+  errorMessage?: GovukFrontendErrorMessage | null
 
-/*
+  /*
     Additional options for the form group containing the radios component.
   */
-'formGroup'?: GovukFrontendRadiosFormGroup | null
+  formGroup?: GovukFrontendRadiosFormGroup | null
 
-/*
+  /*
     Optional prefix. This is used to prefix the `id` attribute for each radio input, hint and error message, separated by `-`. Defaults to the `name` option value.
   */
-'idPrefix'?: string | null
+  idPrefix?: string | null
 
-/*
+  /*
     Name attribute for the radio items.
   */
-'name': string
+  name: string
 
-/*
+  /*
     The radio items within the radios component.
   */
-'items': GovukFrontendRadiosItem[]
+  items: GovukFrontendRadiosItem[]
 
-/*
+  /*
     The value for the radio which should be checked when the page loads. Use this as an alternative to setting the `checked` option on each individual item.
   */
-'value'?: string | null
+  value?: string | null
 
-/*
+  /*
     Classes to add to the radio container.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the radio input tag.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 export interface GovukFrontendRadiosFormGroup {
   /*
     Classes to add to the form group (for example to show error state for the whole group).
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the form group.
   */
-'attributes'?: Record<string, unknown> | null
+  attributes?: Record<string, unknown> | null
 
-/*
+  /*
     Content to add before all radio items within the checkboxes component.
   */
-'beforeInputs'?: GovukFrontendRadiosFormGroupBeforeInputs | null
+  beforeInputs?: GovukFrontendRadiosFormGroupBeforeInputs | null
 
-/*
+  /*
     Content to add after all radio items within the checkboxes component.
   */
-'afterInputs'?: GovukFrontendRadiosFormGroupAfterInputs | null
-
+  afterInputs?: GovukFrontendRadiosFormGroupAfterInputs | null
 }
 
 export interface GovukFrontendRadiosFormGroupBeforeInputs {
   /*
     Text to add before all radio items. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     HTML to add before all radio items. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
-
+  html?: string | null
 }
 
 export interface GovukFrontendRadiosFormGroupAfterInputs {
   /*
     Text to add after all radio items. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     HTML to add after all radio items. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
-
+  html?: string | null
 }
 
 export interface GovukFrontendRadiosItem {
   /*
     If `html` is set, this is not required. Text to use within each radio item label. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. HTML to use within each radio item label. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     Specific ID attribute for the radio item. If omitted, then `idPrefix` string will be applied.
   */
-'id'?: string | null
+  id?: string | null
 
-/*
+  /*
     Value for the radio input.
   */
-'value': string
+  value: string
 
-/*
+  /*
     Subset of options for the label used by each radio item within the radios component.
   */
-'label'?: GovukFrontendLabel | null
+  label?: GovukFrontendLabel | null
 
-/*
+  /*
     Can be used to add a hint to each radio item within the radios component.
   */
-'hint'?: GovukFrontendHint | null
+  hint?: GovukFrontendHint | null
 
-/*
+  /*
     Divider text to separate radio items, for example the text `"or"`.
   */
-'divider'?: string | null
+  divider?: string | null
 
-/*
+  /*
     Whether the radio should be checked when the page loads. Takes precedence over the top-level `value` option.
   */
-'checked'?: boolean | null
+  checked?: boolean | null
 
-/*
+  /*
     If `true`, radio will be disabled.
   */
-'disabled'?: boolean | null
+  disabled?: boolean | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the radio input tag.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 // The select component is described at https://design-system.service.gov.uk/components/select.
@@ -2437,140 +2363,135 @@ export interface GovukFrontendSelect {
   /*
     ID for the select box. Defaults to the value of `name`.
   */
-'id'?: string | null
+  id?: string | null
 
-/*
+  /*
     Name property for the select.
   */
-'name': string
+  name: string
 
-/*
+  /*
     The items within the select component.
   */
-'items': GovukFrontendSelectItem[]
+  items: GovukFrontendSelectItem[]
 
-/*
+  /*
     Value for the option which should be selected. Use this as an alternative to setting the `selected` option on each individual item.
   */
-'value'?: string | null
+  value?: string | null
 
-/*
+  /*
     If `true`, select box will be disabled. Use the `disabled` option on each individual item to only disable certain options.
   */
-'disabled'?: boolean | null
+  disabled?: boolean | null
 
-/*
+  /*
     One or more element IDs to add to the `aria-describedby` attribute, used to provide additional descriptive information for screenreader users.
   */
-'describedBy'?: string | null
+  describedBy?: string | null
 
-/*
+  /*
     The label used by the select component.
   */
-'label': GovukFrontendLabel
+  label: GovukFrontendLabel
 
-/*
+  /*
     Can be used to add a hint to the select component.
   */
-'hint'?: GovukFrontendHint | null
+  hint?: GovukFrontendHint | null
 
-/*
+  /*
     Can be used to add an error message to the select component. The error message component will not display if you use a falsy value for `errorMessage`, for example `false` or `null`.
   */
-'errorMessage'?: GovukFrontendErrorMessage | null
+  errorMessage?: GovukFrontendErrorMessage | null
 
-/*
+  /*
     Additional options for the form group containing the select component.
   */
-'formGroup'?: GovukFrontendSelectFormGroup | null
+  formGroup?: GovukFrontendSelectFormGroup | null
 
-/*
+  /*
     Classes to add to the select.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the select.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 export interface GovukFrontendSelectItem {
   /*
     Value for the option. If this is omitted, the value is taken from the text content of the option element.
   */
-'value'?: string | null
+  value?: string | null
 
-/*
+  /*
     Text for the option item.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     Whether the option should be selected when the page loads. Takes precedence over the top-level `value` option.
   */
-'selected'?: boolean | null
+  selected?: boolean | null
 
-/*
+  /*
     Sets the option item as disabled.
   */
-'disabled'?: boolean | null
+  disabled?: boolean | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the option.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 export interface GovukFrontendSelectFormGroup {
   /*
     Classes to add to the form group (for example to show error state for the whole group).
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the form group.
   */
-'attributes'?: Record<string, unknown> | null
+  attributes?: Record<string, unknown> | null
 
-/*
+  /*
     Content to add before the select used by the select component.
   */
-'beforeInput'?: GovukFrontendSelectFormGroupBeforeInput | null
+  beforeInput?: GovukFrontendSelectFormGroupBeforeInput | null
 
-/*
+  /*
     Content to add after the select used by the select component.
   */
-'afterInput'?: GovukFrontendSelectFormGroupAfterInput | null
-
+  afterInput?: GovukFrontendSelectFormGroupAfterInput | null
 }
 
 export interface GovukFrontendSelectFormGroupBeforeInput {
   /*
     Text to add before the select. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     HTML to add before the select. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
-
+  html?: string | null
 }
 
 export interface GovukFrontendSelectFormGroupAfterInput {
   /*
     Text to add after the select. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     HTML to add after the select. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
-
+  html?: string | null
 }
 
 // The service navigation component is described at https://design-system.service.gov.uk/components/service-navigation.
@@ -2578,124 +2499,121 @@ export interface GovukFrontendServiceNavigation {
   /*
     Classes to add to the service navigation container.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example, data attributes) to add to the service navigation container.
   */
-'attributes'?: Record<string, unknown> | null
+  attributes?: Record<string, unknown> | null
 
-/*
+  /*
     The text for the `aria-label` which labels the service navigation container when a service name is included. Defaults to `"Service information"`.
   */
-'ariaLabel'?: string | null
+  ariaLabel?: string | null
 
-/*
+  /*
     The text of the mobile navigation menu toggle.
   */
-'menuButtonText'?: string | null
+  menuButtonText?: string | null
 
-/*
+  /*
     The screen reader label for the mobile navigation menu toggle. Defaults to the same value as `menuButtonText` if not specified.
   */
-'menuButtonLabel'?: string | null
+  menuButtonLabel?: string | null
 
-/*
+  /*
     The screen reader label for the mobile navigation menu. Defaults to the same value as `menuButtonText` if not specified.
   */
-'navigationLabel'?: string | null
+  navigationLabel?: string | null
 
-/*
+  /*
     The ID used to associate the mobile navigation toggle with the navigation menu. Defaults to `navigation`.
   */
-'navigationId'?: string | null
+  navigationId?: string | null
 
-/*
+  /*
     Classes to add to the navigation menu container.
   */
-'navigationClasses'?: string | null
+  navigationClasses?: string | null
 
-/*
+  /*
     Whether the navigation should be collapsed inside a menu on mobile. Defaults to true if there is more than one navigation item.
   */
-'collapseNavigationOnMobile'?: boolean | null
+  collapseNavigationOnMobile?: boolean | null
 
-/*
+  /*
     The name of your service.
   */
-'serviceName'?: string | null
+  serviceName?: string | null
 
-/*
+  /*
     The homepage of your service.
   */
-'serviceUrl'?: string | null
+  serviceUrl?: string | null
 
-/*
+  /*
     Used to add navigation to the service header.
   */
-'navigation': GovukFrontendServiceNavigationNavigationElement[]
+  navigation: GovukFrontendServiceNavigationNavigationElement[]
 
-/*
+  /*
     Specified points for injecting custom HTML into the service header.
   */
-'slots'?: GovukFrontendServiceNavigationSlots | null
-
+  slots?: GovukFrontendServiceNavigationSlots | null
 }
 
 export interface GovukFrontendServiceNavigationNavigationElement {
   /*
     If `true`, indicates that the user is currently on this page. This takes precedence over `active`.
   */
-'current'?: boolean | null
+  current?: boolean | null
 
-/*
+  /*
     If `true`, indicates that the user is within this group of pages in the navigation hierarchy.
   */
-'active'?: boolean | null
+  active?: boolean | null
 
-/*
+  /*
     HTML for the navigation item. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     Text for the navigation item. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     URL of the navigation item anchor.
   */
-'href'?: string | null
+  href?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the navigation item anchor.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 export interface GovukFrontendServiceNavigationSlots {
   /*
     HTML injected at the start of the service header container.
   */
-'start'?: string | null
+  start?: string | null
 
-/*
+  /*
     HTML injected at the end of the service header container.
   */
-'end'?: string | null
+  end?: string | null
 
-/*
+  /*
     HTML injected before the first list item in the navigation list. Requires `navigation` to be set.
   */
-'navigationStart'?: string | null
+  navigationStart?: string | null
 
-/*
+  /*
     HTML injected after the last list item in the navigation list. Requires `navigation` to be set.
   */
-'navigationEnd'?: string | null
-
+  navigationEnd?: string | null
 }
 
 // The skip link component is described at https://design-system.service.gov.uk/components/skip-link.
@@ -2703,28 +2621,27 @@ export interface GovukFrontendSkipLink {
   /*
     If `html` is set, this is not required. Text to use within the skip link component. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. HTML to use within the skip link component. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     The value of the skip link’s `href` attribute. Defaults to `"#content"` if you do not provide a value.
   */
-'href'?: string | null
+  href?: string | null
 
-/*
+  /*
     Classes to add to the skip link.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the skip link.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 // The summary list component is described at https://design-system.service.gov.uk/components/summary-list.
@@ -2732,220 +2649,210 @@ export interface GovukFrontendSummaryList {
   /*
     The rows within the summary list component.
   */
-'rows': GovukFrontendSummaryListRow[]
+  rows: GovukFrontendSummaryListRow[]
 
-/*
+  /*
     Can be used to wrap a summary card around the summary list component. If any of these options are present, a summary card will wrap around the summary list.
   */
-'card'?: GovukFrontendSummaryListCard | null
+  card?: GovukFrontendSummaryListCard | null
 
-/*
+  /*
     Classes to add to the container.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the container.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 export interface GovukFrontendSummaryListRow {
   /*
     Classes to add to the row `div`.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     The reference content (key) for each row item in the summary list component.
   */
-'key': GovukFrontendSummaryListRowKey
+  key: GovukFrontendSummaryListRowKey
 
-/*
+  /*
     The value for each row item in the summary list component.
   */
-'value': GovukFrontendSummaryListRowValue
+  value: GovukFrontendSummaryListRowValue
 
-/*
+  /*
     The action link content for each row item in the summary list component.
   */
-'actions'?: GovukFrontendSummaryListRowActions | null
-
+  actions?: GovukFrontendSummaryListRowActions | null
 }
 
 export interface GovukFrontendSummaryListRowKey {
   /*
     If `html` is set, this is not required. Text to use within each key. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. HTML to use within each key. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     Classes to add to the key wrapper.
   */
-'classes'?: string | null
-
+  classes?: string | null
 }
 
 export interface GovukFrontendSummaryListRowValue {
   /*
     If `html` is set, this is not required. Text to use within each value. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. HTML to use within each value. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     Classes to add to the value wrapper.
   */
-'classes'?: string | null
-
+  classes?: string | null
 }
 
 export interface GovukFrontendSummaryListRowActions {
   /*
     The action link items within the row item of the summary list component.
   */
-'items'?: GovukFrontendSummaryListRowActionsItem[] | null
+  items?: GovukFrontendSummaryListRowActionsItem[] | null
 
-/*
+  /*
     Classes to add to the actions wrapper.
   */
-'classes'?: string | null
-
+  classes?: string | null
 }
 
 export interface GovukFrontendSummaryListRowActionsItem {
   /*
     The value of the link's `href` attribute for an action item.
   */
-'href': string
+  href: string
 
-/*
+  /*
     If `html` is set, this is not required. Text to use within each action item. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. HTML to use within each action item. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     Actions rely on context from the surrounding content so may require additional accessible text. Text supplied to this option is appended to the end. Use `html` for more complicated scenarios.
   */
-'visuallyHiddenText'?: string | null
+  visuallyHiddenText?: string | null
 
-/*
+  /*
     Classes to add to the action item.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the action item.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 export interface GovukFrontendSummaryListCard {
   /*
     Data for the summary card header.
   */
-'title'?: GovukFrontendSummaryListCardTitle | null
+  title?: GovukFrontendSummaryListCardTitle | null
 
-/*
+  /*
     The action link content shown in the header of each summary card wrapped around the summary list component.
   */
-'actions'?: GovukFrontendSummaryListCardActions | null
+  actions?: GovukFrontendSummaryListCardActions | null
 
-/*
+  /*
     Classes to add to the container.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the container.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 export interface GovukFrontendSummaryListCardTitle {
   /*
     Text to use within each title. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     Text to use within each title. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     Heading level, from `1` to `6`. Default is `2`.
   */
-'headingLevel'?: number | null// integer
+  headingLevel?: number | null // integer
 
-/*
+  /*
     Classes to add to the title wrapper.
   */
-'classes'?: string | null
-
+  classes?: string | null
 }
 
 export interface GovukFrontendSummaryListCardActions {
   /*
     The action link items shown in the header within the summary card wrapped around the summary list component.
   */
-'items'?: GovukFrontendSummaryListCardActionsItem[] | null
+  items?: GovukFrontendSummaryListCardActionsItem[] | null
 
-/*
+  /*
     Classes to add to the actions wrapper.
   */
-'classes'?: string | null
-
+  classes?: string | null
 }
 
 export interface GovukFrontendSummaryListCardActionsItem {
   /*
     The value of the link's `href` attribute for an action item.
   */
-'href': string
+  href: string
 
-/*
+  /*
     If `html` is set, this is not required. Text to use within each action item. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. HTML to use within each action item. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     Actions rely on context from the surrounding content so may require additional accessible text. Text supplied to this option is appended to the end. Use `html` for more complicated scenarios.
   */
-'visuallyHiddenText'?: string | null
+  visuallyHiddenText?: string | null
 
-/*
+  /*
     Classes to add to the action item.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the action item.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 // The table component is described at https://design-system.service.gov.uk/components/table.
@@ -2953,38 +2860,37 @@ export interface GovukFrontendTable {
   /*
     The rows within the table component.
   */
-'rows': GovukFrontendTableRow[]
+  rows: GovukFrontendTableRow[]
 
-/*
+  /*
     Can be used to add a row of table header cells (`<th>`) at the top of the table component.
   */
-'head'?: GovukFrontendTableHeadElement[] | null
+  head?: GovukFrontendTableHeadElement[] | null
 
-/*
+  /*
     Caption text.
   */
-'caption'?: string | null
+  caption?: string | null
 
-/*
+  /*
     Classes for caption text size. Classes should correspond to the available typography heading classes.
   */
-'captionClasses'?: string | null
+  captionClasses?: string | null
 
-/*
+  /*
     If set to `true`, the first cell in each row will be a table header (`<th>`).
   */
-'firstCellIsHeader'?: boolean | null
+  firstCellIsHeader?: boolean | null
 
-/*
+  /*
     Classes to add to the table container.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the table container.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 type GovukFrontendTableRow = GovukFrontendTableCell[]
@@ -2993,76 +2899,74 @@ export interface GovukFrontendTableCell {
   /*
     If `html` is set, this is not required. Text for cells in table rows. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. HTML for cells in table rows. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     Specify format of a cell. Currently we only use "numeric".
   */
-'format'?: string | null
+  format?: string | null
 
-/*
+  /*
     Classes to add to the table row cell.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     Specify how many columns a cell extends.
   */
-'colspan'?: number | null// integer
+  colspan?: number | null // integer
 
-/*
+  /*
     Specify how many rows a cell extends.
   */
-'rowspan'?: number | null// integer
+  rowspan?: number | null // integer
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the table cell.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 export interface GovukFrontendTableHeadElement {
   /*
     If `html` is set, this is not required. Text for table head cells. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. HTML for table head cells. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     Specify format of a cell. Currently we only use "numeric".
   */
-'format'?: string | null
+  format?: string | null
 
-/*
+  /*
     Classes to add to the table head cell.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     Specify how many columns a cell extends.
   */
-'colspan'?: number | null// integer
+  colspan?: number | null // integer
 
-/*
+  /*
     Specify how many rows a cell extends.
   */
-'rowspan'?: number | null// integer
+  rowspan?: number | null // integer
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the table cell.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 // The tabs component is described at https://design-system.service.gov.uk/components/tabs.
@@ -3070,74 +2974,71 @@ export interface GovukFrontendTabs {
   /*
     This is used for the main component and to compose the ID attribute for each item.
   */
-'id'?: string | null
+  id?: string | null
 
-/*
+  /*
     Optional prefix. This is used to prefix the `id` attribute for each tab item and panel, separated by `-`.
   */
-'idPrefix'?: string | null
+  idPrefix?: string | null
 
-/*
+  /*
     Title for the tabs table of contents.
   */
-'title'?: string | null
+  title?: string | null
 
-/*
+  /*
     The individual tabs within the tabs component.
   */
-'items': GovukFrontendTabsItem[]
+  items: GovukFrontendTabsItem[]
 
-/*
+  /*
     Classes to add to the tabs component.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the tabs component.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 export interface GovukFrontendTabsItem {
   /*
     Specific ID attribute for the tab item. If omitted, then `idPrefix` string is required instead.
   */
-'id': string
+  id: string
 
-/*
+  /*
     The text label of a tab item.
   */
-'label': string
+  label: string
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the tab.
   */
-'attributes'?: Record<string, unknown> | null
+  attributes?: Record<string, unknown> | null
 
-/*
+  /*
     The contents of each tab within the tabs component. This is referenced as a panel.
   */
-'panel': GovukFrontendTabsItemPanel
-
+  panel: GovukFrontendTabsItemPanel
 }
 
 export interface GovukFrontendTabsItemPanel {
   /*
     If `html` is set, this is not required. Text to use within each tab panel. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. HTML to use within each tab panel. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the tab panel.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 // The tag component is described at https://design-system.service.gov.uk/components/tag.
@@ -3145,23 +3046,22 @@ export interface GovukFrontendTag {
   /*
     If `html` is set, this is not required. Text to use within the tag component. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. HTML to use within the tag component. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     Classes to add to the tag.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the tag.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 // The task list component is described at https://design-system.service.gov.uk/components/task-list.
@@ -3169,105 +3069,100 @@ export interface GovukFrontendTaskList {
   /*
     The items for each task within the task list component.
   */
-'items': GovukFrontendTaskListItem[]
+  items: GovukFrontendTaskListItem[]
 
-/*
+  /*
     Classes to add to the `ul` container for the task list.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the `ul` container for the task list.
   */
-'attributes'?: Record<string, unknown> | null
+  attributes?: Record<string, unknown> | null
 
-/*
+  /*
     Optional prefix. This is used to prefix the `id` attribute for the task list item tag and hint, separated by `-`. Defaults to `"task-list"`.
   */
-'idPrefix'?: string | null
-
+  idPrefix?: string | null
 }
 
 export interface GovukFrontendTaskListItem {
   /*
     The main title for the task within the task list component.
   */
-'title': GovukFrontendTaskListItemTitle
+  title: GovukFrontendTaskListItemTitle
 
-/*
+  /*
     Can be used to add a hint to each task within the task list component.
   */
-'hint'?: GovukFrontendTaskListItemHint | null
+  hint?: GovukFrontendTaskListItemHint | null
 
-/*
+  /*
     The status for each task within the task list component.
   */
-'status': GovukFrontendTaskListItemStatus
+  status: GovukFrontendTaskListItemStatus
 
-/*
+  /*
     The value of the link’s `href` attribute for the task list item.
   */
-'href'?: string | null
+  href?: string | null
 
-/*
+  /*
     Classes to add to the item `div`.
   */
-'classes'?: string | null
-
+  classes?: string | null
 }
 
 export interface GovukFrontendTaskListItemTitle {
   /*
     Text to use within the title. If `html` is provided, the `text` argument will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     HTML to use within the title. If `html` is provided, the `text` argument will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     Classes to add to the title wrapper.
   */
-'classes'?: string | null
-
+  classes?: string | null
 }
 
 export interface GovukFrontendTaskListItemHint {
   /*
     Text to use within the hint. If `html` is provided, the `text` argument will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     HTML to use within the hint. If `html` is provided, the `text` argument will be ignored.
   */
-'html'?: string | null
-
+  html?: string | null
 }
 
 export interface GovukFrontendTaskListItemStatus {
   /*
     Can be used to add a tag to the status of the task within the task list component.
   */
-'tag'?: GovukFrontendTag | null
+  tag?: GovukFrontendTag | null
 
-/*
+  /*
     Text to use for the status, as an alternative to using a tag. If `html` or `tag` is provided, the `text` argument will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     HTML to use for the status, as an alternative to using a tag. If `html` or `tag` is provided, the `text` argument will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     Classes to add to the status container.
   */
-'classes'?: string | null
-
+  classes?: string | null
 }
 
 // The textarea component is described at https://design-system.service.gov.uk/components/textarea.
@@ -3275,122 +3170,118 @@ export interface GovukFrontendTextarea {
   /*
     The ID of the textarea. Defaults to the value of `name`.
   */
-'id'?: string | null
+  id?: string | null
 
-/*
+  /*
     The name of the textarea, which is submitted with the form data.
   */
-'name': string
+  name: string
 
-/*
+  /*
     Optional field to enable or disable the `spellcheck` attribute on the textarea.
   */
-'spellcheck'?: boolean | null
+  spellcheck?: boolean | null
 
-/*
+  /*
     Optional number of textarea rows (default is 5 rows).
   */
-'rows'?: string | null
+  rows?: string | null
 
-/*
+  /*
     Optional initial value of the textarea.
   */
-'value'?: string | null
+  value?: string | null
 
-/*
+  /*
     If `true`, textarea will be disabled.
   */
-'disabled'?: boolean | null
+  disabled?: boolean | null
 
-/*
+  /*
     One or more element IDs to add to the `aria-describedby` attribute, used to provide additional descriptive information for screenreader users.
   */
-'describedBy'?: string | null
+  describedBy?: string | null
 
-/*
+  /*
     The label used by the textarea component.
   */
-'label': GovukFrontendLabel
+  label: GovukFrontendLabel
 
-/*
+  /*
     Can be used to add a hint to the textarea component.
   */
-'hint'?: GovukFrontendHint | null
+  hint?: GovukFrontendHint | null
 
-/*
+  /*
     Can be used to add an error message to the textarea component. The error message component will not display if you use a falsy value for `errorMessage`, for example `false` or `null`.
   */
-'errorMessage'?: GovukFrontendErrorMessage | null
+  errorMessage?: GovukFrontendErrorMessage | null
 
-/*
+  /*
     Additional options for the form group containing the textarea component.
   */
-'formGroup'?: GovukFrontendTextareaFormGroup | null
+  formGroup?: GovukFrontendTextareaFormGroup | null
 
-/*
+  /*
     Classes to add to the textarea.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     Attribute to meet [WCAG success criterion 1.3.5: Identify input purpose](https://www.w3.org/WAI/WCAG22/Understanding/identify-input-purpose.html), for instance `"bday-day"`. See the [Autofill section in the HTML standard](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill) section in the HTML standard for full list of attributes that can be used.
   */
-'autocomplete'?: string | null
+  autocomplete?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the textarea.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
 
 export interface GovukFrontendTextareaFormGroup {
   /*
     Classes to add to the form group (for example to show error state for the whole group).
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the form group.
   */
-'attributes'?: Record<string, unknown> | null
+  attributes?: Record<string, unknown> | null
 
-/*
+  /*
     Content to add before the textarea used by the textarea component.
   */
-'beforeInput'?: GovukFrontendTextareaFormGroupBeforeInput | null
+  beforeInput?: GovukFrontendTextareaFormGroupBeforeInput | null
 
-/*
+  /*
     Content to add after the textarea used by the textarea component.
   */
-'afterInput'?: GovukFrontendTextareaFormGroupAfterInput | null
-
+  afterInput?: GovukFrontendTextareaFormGroupAfterInput | null
 }
 
 export interface GovukFrontendTextareaFormGroupBeforeInput {
   /*
     Text to add before the textarea. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     HTML to add before the textarea. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
-
+  html?: string | null
 }
 
 export interface GovukFrontendTextareaFormGroupAfterInput {
   /*
     Text to add after the textarea. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     HTML to add after the textarea. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
-
+  html?: string | null
 }
 
 // The warning text component is described at https://design-system.service.gov.uk/components/warning-text.
@@ -3398,27 +3289,25 @@ export interface GovukFrontendWarningText {
   /*
     If `html` is set, this is not required. Text to use within the warning text component. If `html` is provided, the `text` option will be ignored.
   */
-'text'?: string | null
+  text?: string | null
 
-/*
+  /*
     If `text` is set, this is not required. HTML to use within the warning text component. If `html` is provided, the `text` option will be ignored.
   */
-'html'?: string | null
+  html?: string | null
 
-/*
+  /*
     The fallback text for the icon. Defaults to `"Warning"`.
   */
-'iconFallbackText'?: string | null
+  iconFallbackText?: string | null
 
-/*
+  /*
     Classes to add to the warning text.
   */
-'classes'?: string | null
+  classes?: string | null
 
-/*
+  /*
     HTML attributes (for example data attributes) to add to the warning text.
   */
-'attributes'?: Record<string, unknown> | null
-
+  attributes?: Record<string, unknown> | null
 }
-
