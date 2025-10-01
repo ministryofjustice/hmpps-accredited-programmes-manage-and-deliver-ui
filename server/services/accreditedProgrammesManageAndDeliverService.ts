@@ -94,10 +94,10 @@ export default class AccreditedProgrammesManageAndDeliverService
     })) as Page<ReferralCaseListItem>
   }
 
-  async getCaseListFilters(username: ExpressUsername): Promise<CaseListFilterValues> {
+  async getCaseListFilters(username: ExpressUsername, openOrClosed: string): Promise<CaseListFilterValues> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
-      path: `/bff/caselist/filters`,
+      path: `/bff/caselist/filters/${openOrClosed}`,
       headers: { Accept: 'application/json' },
     })) as CaseListFilterValues
   }

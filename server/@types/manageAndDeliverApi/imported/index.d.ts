@@ -589,7 +589,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/bff/caselist/filters': {
+  '/bff/caselist/filters/{openOrClosed}': {
     parameters: {
       query?: never
       header?: never
@@ -1954,6 +1954,11 @@ export interface components {
     CaseListFilterValues: {
       /** @description Contains lists of open and closed referral statuses */
       statusFilters: components['schemas']['StatusFilterValues']
+      /**
+       * Format: int32
+       * @description A count of the referrals for the opposite caselist tab you are in
+       */
+      otherReferralsCount: number
     }
     StatusFilterValues: {
       /**
@@ -3841,7 +3846,9 @@ export interface operations {
     parameters: {
       query?: never
       header?: never
-      path?: never
+      path: {
+        openOrClosed: 'OPEN' | 'CLOSED'
+      }
       cookie?: never
     }
     requestBody?: never
