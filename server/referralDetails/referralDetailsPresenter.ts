@@ -32,16 +32,6 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
     }
   }
 
-  get ldcUpdatedSuccessMessageArgs(): MojAlertComponentArgs {
-    return {
-      variant: 'success',
-      title: 'LDC status changed',
-      showTitleAsHeading: true,
-      dismissible: true,
-      text: `${this.referralDetails.personName} ${firstToLowerCase(this.referralDetails.hasLdcDisplayText)}`,
-    }
-  }
-
   get cohortUpdatedSuccessMessageArgs(): MojAlertComponentArgs {
     return {
       variant: 'success',

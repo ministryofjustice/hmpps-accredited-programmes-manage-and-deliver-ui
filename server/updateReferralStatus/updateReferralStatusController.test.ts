@@ -73,7 +73,7 @@ describe('update-status', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Redirecting to /referral-details/${referralDetails.id}/personal-details?statusUpdated=true`,
+            `Redirecting to /referral-details/${referralDetails.id}/status-history?statusUpdated=true`,
           )
         })
     })

@@ -3,15 +3,11 @@ import StatusHistoryPresenter from './statusHistoryPresenter'
 import DateUtils from '../utils/dateUtils'
 
 export default class StatusHistoryView {
-  constructor(private readonly presenter: StatusHistoryPresenter) { }
+  constructor(private readonly presenter: StatusHistoryPresenter) {}
 
   getStatusHistoryTimelineOptions() {
-    const makeStatusTagHtml = (
-      statusColour: string,
-      statusDescription: string,
-      additionalDetails: string,
-    ): string => {
-      let text= `
+    const makeStatusTagHtml = (statusColour: string, statusDescription: string, additionalDetails: string): string => {
+      let text = `
       <strong class="govuk-tag govuk-tag--${statusColour}">${statusDescription || 'Unknown status'}</strong>
       `
 
@@ -19,7 +15,7 @@ export default class StatusHistoryView {
         text = [text, `<br ><br ><strong>Details:</strong><p>${additionalDetails}</p>`].join('\n')
       }
 
-      return text.trim();
+      return text.trim()
     }
 
     return {
@@ -36,12 +32,8 @@ export default class StatusHistoryView {
           text: status.updatedBy,
         },
         ...(status.additionalDetails && {
-          html: makeStatusTagHtml(
-            status.tagColour,
-            status.referralStatusDescriptionName,
-            status.additionalDetails,
-          )
-        })
+          html: makeStatusTagHtml(status.tagColour, status.referralStatusDescriptionName, status.additionalDetails),
+        }),
       })),
     }
   }
@@ -57,13 +49,10 @@ export default class StatusHistoryView {
     return [
       'statusHistory/statusHistory',
       {
-        backLinkArgs: this.backLinkArgs,
-        buttonMenu: { items: [] },
         buttons: this.presenter.getSubHeaderArgs().items,
         errorSummary: this.presenter.errorMessageSummary,
         successMessageSummary: this.presenter.successMessageSummary,
         pageHeading: this.presenter.pageHeading,
-        pageSubHeading: this.presenter.pageSubHeading,
         presenter: this.presenter,
         statusHistoryTimelineOptions: this.getStatusHistoryTimelineOptions(),
         subNavigationItems: this.presenter.getHorizontalSubNavArgs().items,

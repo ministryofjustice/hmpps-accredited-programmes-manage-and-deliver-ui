@@ -1,16 +1,21 @@
-import { ReferralStatusHistory } from '@manage-and-deliver-api'
+import { ReferralDetails, ReferralStatusHistory } from '@manage-and-deliver-api'
 import ReferralLayoutPresenter, { HorizontalNavValues } from '../shared/referral/referralLayoutPresenter'
 import { MojAlertComponentArgs } from '../interfaces/alertComponentArgs'
 
 export default class StatusHistoryPresenter extends ReferralLayoutPresenter {
+  public readonly personOnProbationName: string
+
+  public readonly currentStatusDescription: string
+
   constructor(
     readonly referralId: string,
     public readonly statusHistory: ReferralStatusHistory[],
-    readonly currentStatusDescription: string,
-    private readonly personOnProbationName: string,
+    private readonly referralDetails: ReferralDetails,
     private readonly isShowStatusUpdateMessageVisible: boolean,
   ) {
-    super(HorizontalNavValues.statusHistoryTab, referralId, '', false)
+    super(HorizontalNavValues.statusHistoryTab, referralDetails, false, false)
+    this.personOnProbationName = referralDetails.personName
+    this.currentStatusDescription = referralDetails.currentStatusDescription
   }
 
   get pageHeading(): string {
@@ -22,11 +27,11 @@ export default class StatusHistoryPresenter extends ReferralLayoutPresenter {
   }
 
   get errorMessageSummary(): MojAlertComponentArgs | null {
-    return null;
+    return null
   }
 
   get successMessageSummary(): MojAlertComponentArgs | null {
-    if (!this.isShowStatusUpdateMessageVisible) return null;
+    if (!this.isShowStatusUpdateMessageVisible) return null
 
     return {
       title: 'Referral status updated',

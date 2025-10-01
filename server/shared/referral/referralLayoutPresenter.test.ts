@@ -28,7 +28,7 @@ describe(`getHorizontalSubNavArgs.`, () => {
       },
       {
         text: 'Status history',
-        href: '#4',
+        href: `/referral/${referralDetails.id}/status-history`,
         active: false,
       },
     ])

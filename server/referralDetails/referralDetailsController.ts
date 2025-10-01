@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 
 import { ReferralDetails } from '@manage-and-deliver-api'
-import AccreditedProgrammesManageAndDeliverService  from '../services/accreditedProgrammesManageAndDeliverService'
+import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
 import { FormValidationError } from '../utils/formValidationError'
 import AddAvailabilityForm from './addAvailability/AddAvailabilityForm'
@@ -207,11 +207,10 @@ export default class ReferralDetailsController {
     const statusHistory = await this.accreditedProgrammesManageAndDeliverService.getStatusHistory(username, referralId)
 
     const presenter = new StatusHistoryPresenter(
-      referralId, 
-      statusHistory, 
-      sharedReferralDetailsData.currentStatusDescription,
-      sharedReferralDetailsData.personName,
-      statusUpdated === 'true'
+      referralId,
+      statusHistory,
+      sharedReferralDetailsData,
+      statusUpdated === 'true',
     )
     const view = new StatusHistoryView(presenter)
 
