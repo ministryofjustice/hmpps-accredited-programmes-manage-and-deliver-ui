@@ -124,45 +124,6 @@ export default class CaselistPresenter {
     }
   }
 
-  searchByStatusArgs(): {
-    id: string
-    name: string
-    prompt: string
-    label: { text: string }
-    items: { label: string; items: SelectArgsItem[] }[]
-    attributes: { 'data-testid': string }
-    classes: string
-  } {
-    return {
-      id: 'status',
-      name: 'status',
-      prompt: 'Select',
-      label: {
-        text: 'Referral status',
-      },
-      items: [
-        {
-          label: 'Open referrals',
-          items: this.generateStatusSelectOpts(this.caseListFilters.statusFilters.open, this.filter.status),
-        },
-        {
-          label: 'Closed referrals',
-          items: this.generateStatusSelectOpts(this.caseListFilters.statusFilters.closed, this.filter.status),
-        },
-      ],
-      attributes: { 'data-testid': 'referral-status-select' },
-      classes: 'govuk-select--restrict-width',
-    }
-  }
-
-  generateStatusSelectOpts(options: { value: string; text: string }[], caseListFilter: string): SelectArgsItem[] {
-    return options.map(option => ({
-      value: option.value,
-      text: option.text,
-      selected: caseListFilter?.includes(`${option.value}`) ?? false,
-    }))
-  }
-
   generateSelectValues(options: { value: string; text: string }[], caseListFilter: string): SelectArgsItem[] {
     const selectOptions: SelectArgsItem[] = [
       {
