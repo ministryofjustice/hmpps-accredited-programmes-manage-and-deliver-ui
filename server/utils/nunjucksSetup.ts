@@ -8,9 +8,6 @@ import config from '../config'
 import logger from '../../logger'
 import NunjucksUtils from './nunjucksUtils'
 
-// eslint-disable-next-line import/extensions
-import mojFrontendFilters from '@ministryofjustice/frontend/moj/filters/all.js'
-
 export default function nunjucksSetup(app: express.Express): void {
   app.set('view engine', 'njk')
 
@@ -52,7 +49,6 @@ export default function nunjucksSetup(app: express.Express): void {
   njkEnv.addFilter('initialiseName', initialiseName)
   njkEnv.addFilter('objectMerge', NunjucksUtils.objectMerge)
   njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)
-  njkEnv.addFilter('mojDate', mojFrontendFilters().mojDate)
   njkEnv.addFilter('json', (value, spaces) => {
     if (value instanceof nunjucks.runtime.SafeString) {
       value = value.toString()
