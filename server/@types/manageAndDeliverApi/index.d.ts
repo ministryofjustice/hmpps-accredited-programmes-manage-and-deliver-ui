@@ -66,7 +66,6 @@ export type {
   Risks,
   RoshAnalysis,
   SentenceInformation,
-  StatusFilterItems,
   ThinkingAndBehaviour,
   UpdateAvailability,
   UpdateCohort,

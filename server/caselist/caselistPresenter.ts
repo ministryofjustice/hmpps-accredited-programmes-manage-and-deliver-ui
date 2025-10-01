@@ -1,4 +1,4 @@
-import { CaseListFilterValues, CohortEnum, ReferralCaseListItem, StatusFilterItems } from '@manage-and-deliver-api'
+import { CaseListFilterValues, CohortEnum, ReferralCaseListItem } from '@manage-and-deliver-api'
 import { Page } from '../shared/models/pagination'
 import { SelectArgs, SelectArgsItem, TableArgs } from '../utils/govukFrontendTypes'
 import Pagination from '../utils/pagination/pagination'
@@ -161,7 +161,7 @@ export default class CaselistPresenter {
 
   generateSelectedFilters() {
     const selectedFilters = []
-    const openAndClosedStatus: StatusFilterItems[] = this.caseListFilters.statusFilters.open.concat(
+    const openAndClosedStatus: string[] = this.caseListFilters.statusFilters.open.concat(
       this.caseListFilters.statusFilters.closed,
     )
 
