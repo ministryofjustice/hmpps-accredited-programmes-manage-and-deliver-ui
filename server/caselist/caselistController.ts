@@ -26,6 +26,10 @@ export default class CaselistController {
   async showOpenCaselist(req: Request, res: Response): Promise<void> {
     const { filter, username } = this.getCaselistData(req)
     const pageNumber = req.query.page
+    const { pdu } = req.query
+    console.log('---------------')
+    console.log(pdu)
+    console.log('---------------')
 
     const openCaseList = await this.accreditedProgrammesManageAndDeliverService.getOpenCaselist(
       username,
@@ -42,6 +46,7 @@ export default class CaselistController {
       filter,
       req.session.filterParams,
       true,
+      pdu as string,
     )
 
     const view = new CaselistView(presenter)

@@ -26,6 +26,7 @@ export default class CaselistPresenter {
     readonly filter: CaselistFilter,
     readonly params: string,
     readonly isOpenReferrals: boolean,
+    readonly pdu: string = null,
   ) {
     this.pagination = new Pagination(referralCaseListItems, params)
     this.referralCaseListItems = referralCaseListItems
@@ -65,6 +66,23 @@ export default class CaselistPresenter {
       ],
       rows: this.generateTableRows(),
     }
+  }
+
+  get locations() {
+    return [
+      {
+        pdu: 'London',
+        locations: ['North', 'South', 'East', 'West'],
+      },
+      {
+        pdu: 'Manchester',
+        locations: ['Area 1', 'Area 2', 'Area 3', 'Area 4'],
+      },
+      {
+        pdu: 'Liverpool',
+        locations: ['Up', 'Down', 'Left', 'Right'],
+      },
+    ]
   }
 
   generateTableRows() {

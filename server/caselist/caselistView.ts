@@ -1,5 +1,5 @@
 import CaselistPresenter from './caselistPresenter'
-import { CheckboxesArgs, SelectArgs, SelectArgsItem } from '../utils/govukFrontendTypes'
+import { CheckboxesArgs, CheckboxesArgsItem, SelectArgs, SelectArgsItem } from '../utils/govukFrontendTypes'
 import CaselistUtils from './caseListUtils'
 
 export default class CaselistView {
@@ -18,6 +18,15 @@ export default class CaselistView {
   }
 
   private checkboxArgs(): CheckboxesArgs {
+    let checkboxItems: CheckboxesArgsItem[] = [{ text: 'No locations', value: 'No locations', checked: false }]
+    if (this.presenter.pdu !== null && this.presenter.pdu !== undefined && this.presenter.pdu !== 'Select a pdu') {
+      const pduLocationData = this.presenter.locations.find(location => location.pdu === this.presenter.pdu)
+      checkboxItems = pduLocationData.locations.map(location => ({
+        text: location,
+        value: location,
+      }))
+    }
+
     return {
       name: 'pdu-locations',
       fieldset: {
@@ -30,47 +39,44 @@ export default class CaselistView {
       // hint: {
       //   text: `Select any locations ${this.presenter.details.personName} can attend. You can skip this question if you do not know.`,
       // },
-      items: [
-        {
-          value: 'a',
-          text: 'Red',
-        },
-        {
-          value: 'b',
-          text: 'Yellow',
-        },
-        {
-          value: 'c',
-          text: 'Blue',
-        },
-      ],
+      // text: string; value: string; checked: boolean
+      items: checkboxItems,
+      //   this.presenter.locations.map(location => {
+      //     if(location.pdu === this.presenter.pdu){
+      //       return {
+      //         text: location.locations,
+      //         value: location.locations
+      //       }
+      //     }
+      // })
     }
   }
 
-  private get probationOfficeSelectArgs(): SelectArgs {
+  private get pduSelectArgs(): SelectArgs {
     return {
-      id: 'probation-office',
-      name: 'probation-office',
-      classes: 'confirm-probation-office',
+      id: 'pdu-select',
+      name: 'pdu-select',
+      classes: 'confirm-pdu-select',
       label: {
-        text: 'Search by colour',
+        text: 'Search by pdu',
         classes: 'govuk-label--s',
       },
       items: [
         {
-          text: 'blue',
-          value: 'blue',
-          selected: false,
+          text: 'Select a pdu',
+          value: 'select',
         },
         {
-          text: 'green',
-          value: 'green',
-          selected: false,
+          text: 'London',
+          value: 'London',
         },
         {
-          text: 'red',
-          value: 'red',
-          selected: false,
+          text: 'Manchester',
+          value: 'Manchester',
+        },
+        {
+          text: 'Liverpool',
+          value: 'Liverpool',
         },
       ],
     }
@@ -86,7 +92,8 @@ export default class CaselistView {
         pagination: this.presenter.pagination.mojPaginationArgs,
         searchByPduArgs: this.searchByPduArgs(),
         checkboxArgs: this.checkboxArgs(),
-        probationOfficeSelectArgs: this.probationOfficeSelectArgs,
+        pduSelectArgs: this.pduSelectArgs,
+        locations: this.presenter.locations,
       },
     ]
   }

@@ -1,18 +1,36 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 
 
-{{ govukSelect(probationOfficeSelectArgs) }}
+{{ govukSelect(pduSelectArgs) }}
+
+
+
+
+
 
 <script src="/assets/accessible-autocomplete.min.js" type="text/javascript"></script>
-<script nonce={{ cspNonce }} data-isOpenReferrals="aaa">
+<script nonce={{ cspNonce }}>
   accessibleAutocomplete.enhanceSelectElement({
-    defaultValue: '',
-    selectElement: document.querySelector('#probation-office'),
+    selectElement: document.querySelector('#pdu-select'),
     showAllValues: true,
     onConfirm: (val) => {
-      // const isOpenReferral = document.currentScript.getAttribute('nonce')
+      defaultValue = ''
       console.log(val)
+      // const isOpenReferral = document.currentScript.getAttribute('nonce')
+      let url = window.location.href;
+      if (url.indexOf('?') > -1){
+        if(url.includes('pdu')){
+          url = url.replace(/pdu=[^&]*/g, (match) => (
+            match.replace(/pdu=[^&]*/g, `pdu=${val}`)
+          ))} else{
+          url += `&pdu=${val}`
+        }
 
+      } else {
+        url += `?pdu=${val}`
+      }
+      location.replace(url);
+    }
   })
 </script>
 
