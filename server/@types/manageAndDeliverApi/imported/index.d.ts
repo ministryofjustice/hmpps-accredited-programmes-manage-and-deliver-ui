@@ -589,6 +589,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/bff/caselist/filters': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Get reference data for displaying the possible filters for the ui */
+    get: operations['getCaseListFilterData']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/availability/referral/{referralId}': {
     parameters: {
       query?: never
@@ -823,6 +840,24 @@ export interface components {
        * @example Awaiting assessment
        */
       referralStatusDescriptionName: string
+      /**
+       * @description Notes from the user, or possibly the system, to explain the change in status
+       * @example I have met with xxx, and the assessment has been completed
+       */
+      additionalDetails: string
+      /**
+       * @description The name of the User who updated the status.  SYSTEM and UNKNOWN_USER are known non-human values.
+       * @example John Doe
+       */
+      updatedBy: string
+      /**
+       * Format: date-time
+       * @description The time when the Status was changed
+       * @example 2025-09-25T06:50:20.149Z
+       */
+      updatedAt: string
+      /** @description The display colour of the status tag */
+      tagColour: string
     }
     /** @description Details of the new Referral Status to assign */
     CreateReferralStatusHistory: {
@@ -1915,6 +1950,24 @@ export interface components {
       name: string
       /** @description Available delivery locations within this PDU */
       deliveryLocations: components['schemas']['DeliveryLocationOption'][]
+    }
+    CaseListFilterValues: {
+      /** @description Contains lists of open and closed referral statuses */
+      statusFilters: components['schemas']['StatusFilterValues']
+    }
+    StatusFilterValues: {
+      /**
+       * @description Open referral statuses
+       * @example Awaiting assessment
+       * @example Awaiting allocation
+       */
+      open: string[]
+      /**
+       * @description Closed referral statuses
+       * @example Programme complete
+       * @example Withdrawn
+       */
+      closed: string[]
     }
   }
   responses: never
@@ -3780,6 +3833,35 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getCaseListFilterData: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The filter reference data to display in the UI */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CaseListFilterValues']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }

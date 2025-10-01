@@ -1,11 +1,12 @@
+import { ReferralCaseListItem } from '@manage-and-deliver-api'
 import type { Express } from 'express'
 import request from 'supertest'
-import { ReferralCaseListItem } from '@manage-and-deliver-api'
-import { appWithAllRoutes } from './testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
-import referralCaseListItemFactory from '../testutils/factories/referralCaseListItem'
 import { Page } from '../shared/models/pagination'
 import pageFactory from '../testutils/factories/pageFactory'
+import referralCaseListItemFactory from '../testutils/factories/referralCaseListItem'
+import TestUtils from '../testutils/testUtils'
+import { appWithAllRoutes } from './testutils/appSetup'
 
 const hmppsAuthClientBuilder = jest.fn()
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
@@ -29,6 +30,7 @@ beforeEach(() => {
     .build() as Page<ReferralCaseListItem>
   accreditedProgrammesManageAndDeliverService.getOpenCaselist.mockResolvedValue(referralCaseListItemPage)
   accreditedProgrammesManageAndDeliverService.getClosedCaselist.mockResolvedValue(referralCaseListItemPage)
+  accreditedProgrammesManageAndDeliverService.getCaseListFilters.mockResolvedValue(TestUtils.createCaseListFilters())
 })
 
 afterEach(() => {

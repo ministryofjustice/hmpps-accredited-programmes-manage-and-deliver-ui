@@ -7,6 +7,7 @@ import AccreditedProgrammesManageAndDeliverService from '../services/accreditedP
 import { Page } from '../shared/models/pagination'
 import pageFactory from '../testutils/factories/pageFactory'
 import referralCaseListItemFactory from '../testutils/factories/referralCaseListItem'
+import TestUtils from '../testutils/testUtils'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
@@ -33,14 +34,15 @@ beforeEach(() => {
     .build() as Page<ReferralCaseListItem>
   accreditedProgrammesManageAndDeliverService.getOpenCaselist.mockResolvedValue(referralCaseListItemPage)
   accreditedProgrammesManageAndDeliverService.getClosedCaselist.mockResolvedValue(referralCaseListItemPage)
+  accreditedProgrammesManageAndDeliverService.getCaseListFilters.mockResolvedValue(TestUtils.createCaseListFilters())
 })
 
 describe(`Caselist controller`, () => {
   test.each([
-    ['/pdu/open-referrals?cohort=SEXUAL_OFFENCE&status=COURT_ORDER', 'SEXUAL_OFFENCE', 'COURT_ORDER'],
+    ['/pdu/open-referrals?cohort=SEXUAL_OFFENCE&status=Awaiting+assessment', 'SEXUAL_OFFENCE', 'Awaiting assessment'],
     [`/pdu/open-referrals`, undefined, undefined],
     ['/pdu/closed-referrals', undefined, undefined],
-    ['/pdu/open-referrals?cohort=GENERAL_OFFENCE&status=PROGRAMME_COMPLETE', 'GENERAL_OFFENCE', 'PROGRAMME_COMPLETE'],
+    ['/pdu/open-referrals?cohort=GENERAL_OFFENCE&status=Programme+complete', 'GENERAL_OFFENCE', 'Programme complete'],
   ])(
     `should set the correct filters based on the url provided %s`,
     async (url: string, cohortValue, referralStatusValue) => {
@@ -52,7 +54,7 @@ describe(`Caselist controller`, () => {
           const $ = cheerio.load(res.text)
           const cohortInput = $('#cohort option[selected]').val()
           expect(cohortInput).toBe(cohortValue)
-          const referralStatusInput = $('#status option[selected]').val()
+          const referralStatusInput = $('#status optgroup option[selected]').val()
           expect(referralStatusInput).toBe(referralStatusValue)
         })
     },
