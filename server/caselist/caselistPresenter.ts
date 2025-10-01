@@ -168,7 +168,7 @@ export default class CaselistPresenter {
     if (this.filter.status) {
       const searchParams = new URLSearchParams(this.params)
       searchParams.delete('status')
-      const paramAttributes = openAndClosedStatus.filter(referralStatus => referralStatus.value === this.filter.status)
+      const paramAttributes = openAndClosedStatus.filter(referralStatus => referralStatus === this.filter.status)
       selectedFilters.push({
         heading: {
           text: 'Referral Status',
@@ -176,7 +176,7 @@ export default class CaselistPresenter {
         items: [
           {
             href: `/pdu/${this.openOrClosedUrl}${searchParams.size === 0 ? '' : `?${searchParams.toString()}`}`,
-            text: paramAttributes[0].text,
+            text: paramAttributes[0],
           },
         ],
       })

@@ -41,11 +41,11 @@ export default class CaselistView {
     }
   }
 
-  generateStatusSelectOpts(options: { value: string; text: string }[], caseListFilter: string): SelectArgsItem[] {
+  generateStatusSelectOpts(options: string[], caseListFilter: string): SelectArgsItem[] {
     return options.map(option => ({
-      value: option.value,
-      text: option.text,
-      selected: caseListFilter?.includes(`${option.value}`) ?? false,
+      value: option,
+      text: option,
+      selected: caseListFilter?.includes(`${option}`) ?? false,
     }))
   }
 

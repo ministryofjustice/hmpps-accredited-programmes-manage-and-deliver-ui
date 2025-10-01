@@ -37,57 +37,18 @@ export default class TestUtils {
   static createCaseListFilters = (): CaseListFilterValues => ({
     statusFilters: {
       open: [
-        {
-          value: 'Awaiting allocation',
-          text: 'Awaiting allocation',
-        },
-        {
-          value: 'Awaiting assessment',
-          text: 'Awaiting assessment',
-        },
-        {
-          value: 'Breach (non-attendance)',
-          text: 'Breach (non-attendance)',
-        },
-        {
-          value: 'Deferred',
-          text: 'Deferred',
-        },
-        {
-          value: 'Deprioritised',
-          text: 'Deprioritised',
-        },
-        {
-          value: 'On programme',
-          text: 'On programme',
-        },
-        {
-          value: 'Recall',
-          text: 'Recall',
-        },
-        {
-          value: 'Return to court',
-          text: 'Return to court',
-        },
-        {
-          value: 'Scheduled',
-          text: 'Scheduled',
-        },
-        {
-          value: 'Suitable but not ready',
-          text: 'Suitable but not ready',
-        },
+        'Awaiting allocation',
+        'Awaiting assessment',
+        'Breach (non-attendance)',
+        'Deferred',
+        'Deprioritised',
+        'On programme',
+        'Recall',
+        'Return to court',
+        'Scheduled',
+        'Suitable but not ready',
       ],
-      closed: [
-        {
-          value: 'Programme complete',
-          text: 'Programme complete',
-        },
-        {
-          value: 'Withdrawn',
-          text: 'Withdrawn',
-        },
-      ],
+      closed: ['Programme complete', 'Withdrawn'],
     },
   })
 }

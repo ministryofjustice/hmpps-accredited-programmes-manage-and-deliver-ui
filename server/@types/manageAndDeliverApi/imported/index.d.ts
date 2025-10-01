@@ -1955,31 +1955,19 @@ export interface components {
       /** @description Contains lists of open and closed referral statuses */
       statusFilters: components['schemas']['StatusFilterValues']
     }
-    StatusFilterItems: {
-      /**
-       * @description Display value for the status filter
-       * @example Programme complete
-       */
-      text: string
-      /**
-       * @description UTF-8 encoded value for the status filter
-       * @example Programme+complete
-       */
-      value: string
-    }
     StatusFilterValues: {
       /**
        * @description Open referral statuses
        * @example Awaiting assessment
        * @example Awaiting allocation
        */
-      open: components['schemas']['StatusFilterItems'][]
+      open: string[]
       /**
        * @description Closed referral statuses
        * @example Programme complete
        * @example Withdrawn
        */
-      closed: components['schemas']['StatusFilterItems'][]
+      closed: string[]
     }
   }
   responses: never
