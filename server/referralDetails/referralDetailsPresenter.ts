@@ -4,7 +4,6 @@ import { SummaryListArgs } from '../utils/govukFrontendTypes'
 import { SummaryListItem } from '../utils/summaryList'
 import { formatCohort } from '../utils/utils'
 import ViewUtils from '../utils/viewUtils'
-import { MojAlertComponentArgs } from '../interfaces/alertComponentArgs'
 
 export enum ReferralDetailsPageSection {
   PersonalDetailsTab = 'personalDetails',
@@ -29,16 +28,6 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
   get referralSummary(): SummaryListArgs {
     return {
       ...ViewUtils.summaryListArgs(this.referralSummaryList(), { showBorders: false }, 'govuk-!-margin-bottom-0'),
-    }
-  }
-
-  get cohortUpdatedSuccessMessageArgs(): MojAlertComponentArgs {
-    return {
-      variant: 'success',
-      title: 'Cohort changed',
-      showTitleAsHeading: true,
-      dismissible: true,
-      text: `${this.referralDetails.personName} is in the ${formatCohort(this.referralDetails.cohort)} cohort`,
     }
   }
 

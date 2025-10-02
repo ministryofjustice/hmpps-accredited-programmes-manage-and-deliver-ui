@@ -22,10 +22,6 @@ export default class StatusHistoryPresenter extends ReferralLayoutPresenter {
     return 'Status history'
   }
 
-  get pageSubHeading(): string {
-    return null
-  }
-
   get errorMessageSummary(): MojAlertComponentArgs | null {
     return null
   }
