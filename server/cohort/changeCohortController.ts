@@ -26,7 +26,7 @@ export default class ChangeCohortController {
         referralId,
         data.paramsForUpdate.updatedCohort,
       )
-      return res.redirect(`/referral-details/${referralId}/personal-details?isCohortUpdated=true`)
+      return res.redirect(`${req.session.originPage}?isCohortUpdated=true`)
     }
 
     const presenter = new ChangeCohortPresenter(referralId, referralDetails, req.session.originPage)

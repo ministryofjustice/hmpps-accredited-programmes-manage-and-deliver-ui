@@ -20,10 +20,10 @@
             </div>
 
             <div class="govuk-grid-column-three-quarters">
-              {% if isCohortUpdated %}
+              {% if presenter.isCohortUpdated %}
                 {{ mojAlert(presenter.cohortUpdatedSuccessMessageArgs) }}
               {% endif %}
-              {% if isLdcUpdated %}
+              {% if presenter.isLdcUpdated %}
                 {{ mojAlert(presenter.ldcUpdatedSuccessMessageArgs) }}
               {% endif %}
               <h2 class="govuk-heading-m">Referral summary</h2>

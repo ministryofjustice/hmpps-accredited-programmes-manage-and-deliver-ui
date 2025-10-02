@@ -7,10 +7,11 @@ export default class OffenceHistoryPresenter extends ReferralDetailsPresenter {
   constructor(
     readonly details: ReferralDetails,
     readonly subNavValue: string,
-    readonly id: string,
     readonly offenceHistory: OffenceHistory,
+    readonly isLdcUpdated: boolean | null = null,
+    readonly isCohortUpdated: boolean | null = null,
   ) {
-    super(details, subNavValue, id)
+    super(details, subNavValue, isLdcUpdated, isCohortUpdated)
   }
 
   offenceHistorySummaryLists(): { title: string; summary: SummaryListItem[] }[] {

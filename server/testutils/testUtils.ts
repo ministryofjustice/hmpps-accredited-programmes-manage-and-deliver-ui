@@ -1,3 +1,4 @@
+import { CaseListFilterValues } from '@manage-and-deliver-api'
 import { Request } from 'express'
 import { SessionData } from 'express-session'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
@@ -32,4 +33,22 @@ export default class TestUtils {
       } as SessionData,
     })
   }
+
+  static createCaseListFilters = (): CaseListFilterValues => ({
+    statusFilters: {
+      open: [
+        'Awaiting allocation',
+        'Awaiting assessment',
+        'Breach (non-attendance)',
+        'Deferred',
+        'Deprioritised',
+        'On programme',
+        'Recall',
+        'Return to court',
+        'Scheduled',
+        'Suitable but not ready',
+      ],
+      closed: ['Programme complete', 'Withdrawn'],
+    },
+  })
 }

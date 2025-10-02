@@ -1,15 +1,16 @@
-import { AlcoholMisuseDetails } from '@manage-and-deliver-api'
+import { AlcoholMisuseDetails, ReferralDetails } from '@manage-and-deliver-api'
 import RisksAndNeedsPresenter from '../risksAndNeedsPresenter'
 import { SummaryListItem } from '../../utils/summaryList'
 
 export default class AlcoholMisusePresenter extends RisksAndNeedsPresenter {
   constructor(
     readonly subNavValue: string,
-    readonly referralId: string,
+    readonly referral: ReferralDetails,
     readonly alcoholMisuseDetails: AlcoholMisuseDetails,
-    readonly referralStatus: string,
+    readonly isLdcUpdated: boolean | null = null,
+    readonly isCohortUpdated: boolean | null = null,
   ) {
-    super(subNavValue, referralId, referralStatus)
+    super(subNavValue, referral, isLdcUpdated, isCohortUpdated)
   }
 
   alcoholMisuseSummaryList(): SummaryListItem[] {

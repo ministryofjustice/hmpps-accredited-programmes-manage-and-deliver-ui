@@ -18,8 +18,6 @@ export default class PersonalDetailsView {
         presenter: this.presenter,
         summary: this.summary,
         importFromDeliusText: this.presenter.importFromDeliusText,
-        isCohortUpdated: this.presenter.isCohortUpdated,
-        isLdcUpdated: this.presenter.isLdcUpdated,
       },
     ]
   }

@@ -1,15 +1,16 @@
-import { LifestyleAndAssociates } from '@manage-and-deliver-api'
+import { LifestyleAndAssociates, ReferralDetails } from '@manage-and-deliver-api'
 import RisksAndNeedsPresenter from '../risksAndNeedsPresenter'
 import { SummaryListItem } from '../../utils/summaryList'
 
 export default class LifestyleAndAssociatesPresenter extends RisksAndNeedsPresenter {
   constructor(
     readonly subNavValue: string,
-    readonly referralId: string,
+    readonly referral: ReferralDetails,
     readonly lifestyleAndAssociates: LifestyleAndAssociates,
-    readonly referralStatus: string,
+    readonly isLdcUpdated: boolean | null = null,
+    readonly isCohortUpdated: boolean | null = null,
   ) {
-    super(subNavValue, referralId, referralStatus)
+    super(subNavValue, referral, isLdcUpdated, isCohortUpdated)
   }
 
   reoffendingSummaryList(): SummaryListItem[] {

@@ -22,8 +22,8 @@ export default class AvailabilityView {
     return {
       text: this.presenter.availability.id ? 'Change availability' : 'Add availability',
       href: this.presenter.availability.id
-        ? `/referral/${this.presenter.id}/update-availability/${this.presenter.availability.id}`
-        : `/referral/${this.presenter.id}/add-availability`,
+        ? `/referral/${this.presenter.referralDetails.id}/update-availability/${this.presenter.availability.id}`
+        : `/referral/${this.presenter.referralDetails.id}/add-availability`,
     }
   }
 

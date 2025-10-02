@@ -1,4 +1,4 @@
-import { CohortEnum, ReferralCaseListItem } from '@manage-and-deliver-api'
+import { CaseListFilterValues, CohortEnum, ReferralCaseListItem } from '@manage-and-deliver-api'
 import { Page } from '../shared/models/pagination'
 import { SelectArgs, SelectArgsItem, TableArgs } from '../utils/govukFrontendTypes'
 import Pagination from '../utils/pagination/pagination'
@@ -26,6 +26,7 @@ export default class CaselistPresenter {
     readonly filter: CaselistFilter,
     readonly params: string,
     readonly isOpenReferrals: boolean,
+    readonly caseListFilters: CaseListFilterValues,
   ) {
     this.pagination = new Pagination(referralCaseListItems, params)
     this.referralCaseListItems = referralCaseListItems
@@ -123,18 +124,6 @@ export default class CaselistPresenter {
     }
   }
 
-  searchByStatusArgs(): SelectArgs {
-    return {
-      id: 'status',
-      name: 'status',
-      label: {
-        text: 'Referral status',
-        classes: 'govuk-label--s',
-      },
-      items: this.generateSelectValues(CaselistUtils.referralStatus, this.filter.status),
-    }
-  }
-
   generateSelectValues(options: { value: string; text: string }[], caseListFilter: string): SelectArgsItem[] {
     const selectOptions: SelectArgsItem[] = [
       {
@@ -172,13 +161,14 @@ export default class CaselistPresenter {
 
   generateSelectedFilters() {
     const selectedFilters = []
+    const openAndClosedStatus: string[] = this.caseListFilters.statusFilters.open.concat(
+      this.caseListFilters.statusFilters.closed,
+    )
 
     if (this.filter.status) {
       const searchParams = new URLSearchParams(this.params)
       searchParams.delete('status')
-      const paramAttributes = CaselistUtils.referralStatus.filter(
-        referralStatus => referralStatus.value === this.filter.status,
-      )
+      const paramAttributes = openAndClosedStatus.filter(referralStatus => referralStatus === this.filter.status)
       selectedFilters.push({
         heading: {
           text: 'Referral Status',
@@ -186,7 +176,7 @@ export default class CaselistPresenter {
         items: [
           {
             href: `/pdu/${this.openOrClosedUrl}${searchParams.size === 0 ? '' : `?${searchParams.toString()}`}`,
-            text: paramAttributes[0].text,
+            text: paramAttributes[0],
           },
         ],
       })

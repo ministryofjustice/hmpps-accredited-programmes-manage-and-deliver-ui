@@ -4,6 +4,7 @@
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "components/rosh-widget/macro.njk" import roshWidget %}
+{%- from "moj/components/alert/macro.njk" import mojAlert -%}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -20,10 +21,10 @@
             </div>
 
             <div class="govuk-grid-column-three-quarters">
-              {% if isCohortUpdated %}
+              {% if presenter.isCohortUpdated %}
                 {{ mojAlert(presenter.cohortUpdatedSuccessMessageArgs) }}
               {% endif %}
-              {% if isLdcUpdated %}
+              {% if presenter.isLdcUpdated %}
                 {{ mojAlert(presenter.ldcUpdatedSuccessMessageArgs) }}
               {% endif %}
               <h2 class="govuk-heading-m">Programme needs identifier</h2>
