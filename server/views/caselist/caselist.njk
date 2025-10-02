@@ -6,6 +6,7 @@
 {%- from "govuk/components/table/macro.njk" import govukTable -%}
 {% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "../components/selectWithOptGroup.njk" import govukSelectWithOptgroup %}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -23,7 +24,7 @@
 
     {{ govukInput(presenter.searchBycrnOrPersonNameArgs) }}
     {{ govukSelect(presenter.searchByCohortArgs()) }}
-    {{ govukSelect(presenter.searchByStatusArgs()) }}
+    {{ govukSelectWithOptgroup(searchByStatusArgs) }}
     {% endset -%}
     <div class="govuk-grid-column-one-quarter">
       <form id="filter-form" method="get">
@@ -48,9 +49,8 @@
       {% if presenter.referralCaseListItems.content.length > 0 %}
         {{ govukTable(presenter.getCaseloadTableArgs()) }}
       {% else %}
-      <p>No results found. Clear or change the filters</p>
+        <p>No results found. Clear or change the filters</p>
       {% endif %}
-
 
       {% include "../partials/pagination.njk" %}
     </div>
