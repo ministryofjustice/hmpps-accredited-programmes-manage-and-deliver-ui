@@ -90,12 +90,12 @@ export default class CaselistPresenter {
     return {
       items: [
         {
-          text: `Open referrals (${this.referralCaseListItems.totalElements})`,
+          text: `Open referrals (${this.section === CaselistPageSection.Open ? this.referralCaseListItems.totalElements : this.caseListFilters.otherReferralsCount})`,
           href: `/pdu/open-referrals`,
           active: this.section === CaselistPageSection.Open,
         },
         {
-          text: `Closed referrals (${this.referralCaseListItems.totalElements})`,
+          text: `Closed referrals (${this.section === CaselistPageSection.Closed ? this.referralCaseListItems.totalElements : this.caseListFilters.otherReferralsCount})`,
           href: `/pdu/closed-referrals`,
           active: this.section === CaselistPageSection.Closed,
         },

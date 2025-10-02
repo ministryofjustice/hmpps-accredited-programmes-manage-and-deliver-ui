@@ -12,7 +12,10 @@ export default class CaselistController {
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
   ) {}
 
-  private async getCaselistData(req: Request): Promise<{
+  private async getCaselistData(
+    req: Request,
+    openOrClosed: string,
+  ): Promise<{
     username: string
     filter: CaselistFilter
     caseListFilters: CaseListFilterValues
@@ -25,13 +28,16 @@ export default class CaselistController {
       req.session.filterParams = req.originalUrl.includes('?') ? req.originalUrl.split('?').pop() : undefined
     }
 
-    const caseListFilters = await this.accreditedProgrammesManageAndDeliverService.getCaseListFilters(username)
+    const caseListFilters = await this.accreditedProgrammesManageAndDeliverService.getCaseListFilters(
+      username,
+      openOrClosed,
+    )
 
     return { filter, username, caseListFilters }
   }
 
   async showOpenCaselist(req: Request, res: Response): Promise<void> {
-    const { filter, username, caseListFilters } = await this.getCaselistData(req)
+    const { filter, username, caseListFilters } = await this.getCaselistData(req, 'OPEN')
     const pageNumber = req.query.page
 
     const openCaseList = await this.accreditedProgrammesManageAndDeliverService.getOpenCaselist(
@@ -58,7 +64,7 @@ export default class CaselistController {
   }
 
   async showClosedCaselist(req: Request, res: Response): Promise<void> {
-    const { filter, username, caseListFilters } = await this.getCaselistData(req)
+    const { filter, username, caseListFilters } = await this.getCaselistData(req, 'CLOSED')
     const pageNumber = req.query.page
 
     const closedCaseList = await this.accreditedProgrammesManageAndDeliverService.getClosedCaselist(
