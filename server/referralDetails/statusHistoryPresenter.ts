@@ -10,7 +10,7 @@ export default class StatusHistoryPresenter extends ReferralLayoutPresenter {
   constructor(
     readonly referralId: string,
     public readonly statusHistory: ReferralStatusHistory[],
-    private readonly referralDetails: ReferralDetails,
+    referralDetails: ReferralDetails,
     private readonly isShowStatusUpdateMessageVisible: boolean,
   ) {
     super(HorizontalNavValues.statusHistoryTab, referralDetails, false, false)

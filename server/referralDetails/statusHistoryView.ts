@@ -1,11 +1,12 @@
 import { ReferralStatusHistory } from '@manage-and-deliver-api'
+import { MojTimelineItem } from '@manage-and-deliver-ui'
 import StatusHistoryPresenter from './statusHistoryPresenter'
 import DateUtils from '../utils/dateUtils'
 
 export default class StatusHistoryView {
   constructor(private readonly presenter: StatusHistoryPresenter) {}
 
-  getStatusHistoryTimelineOptions() {
+  getStatusHistoryTimelineOptions(): { items: MojTimelineItem[] } {
     const makeStatusTagHtml = (statusColour: string, statusDescription: string, additionalDetails: string): string => {
       let text = `
       <strong class="govuk-tag govuk-tag--${statusColour}">${statusDescription || 'Unknown status'}</strong>
