@@ -1844,6 +1844,8 @@ export interface components {
        */
       cohort: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
       hasLdc: boolean
+      pdu: string
+      reportingTeam: string
     }
     Pageable: {
       /** Format: int32 */
