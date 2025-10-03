@@ -102,6 +102,14 @@
           "probationDeliveryUnit": {
             "code": "LON",
             "description": "London"
+          },
+          "team": {
+            "code": "N52UAT",
+            "description": "N52 Team"
+          },
+          "region": {
+            "code": "N52",
+            "description": "West Midlands Region"
           }
         }
       }
