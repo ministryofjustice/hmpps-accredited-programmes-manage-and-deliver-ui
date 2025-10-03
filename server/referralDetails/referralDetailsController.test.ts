@@ -4,6 +4,7 @@ import {
   OffenceHistory,
   PersonalDetails,
   ReferralDetails,
+  ReferralStatusHistory,
   SentenceInformation,
 } from '@manage-and-deliver-api'
 import { randomUUID } from 'crypto'
@@ -16,6 +17,7 @@ import offenceHistoryFactory from '../testutils/factories/offenceHistoryFactory'
 import personalDetailsFactory from '../testutils/factories/personalDetailsFactory'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 import sentenceInformationFactory from '../testutils/factories/sentenceInformationFactory'
+import statusHistoryFactory from '../testutils/factories/statusHistoryFactory'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
@@ -178,6 +180,29 @@ describe('referral-details', () => {
           expect(res.text).toContain(referralDetails.crn)
           expect(res.text).toContain(referralDetails.personName)
           expect(res.text).toContain('Additional Information')
+        })
+    })
+  })
+})
+
+describe(`/referral`, () => {
+  describe(`GET /referral-details/:id/status-history`, () => {
+    it('loads the referral details page with status history sub-nav', async () => {
+      const statusHistory: ReferralStatusHistory[] = [
+        statusHistoryFactory.awaitingAssessment().withAdditionalDetails('This was created automatically').build(),
+        statusHistoryFactory.awaitingAllocation().build(),
+      ]
+
+      accreditedProgrammesManageAndDeliverService.getStatusHistory.mockResolvedValue(statusHistory)
+
+      return request(app)
+        .get(`/referral/${randomUUID()}/status-history`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('This was created automatically')
+          expect(res.text).toContain('Awaiting assessment')
+
+          expect(res.text).toContain('Awaiting allocation')
         })
     })
   })

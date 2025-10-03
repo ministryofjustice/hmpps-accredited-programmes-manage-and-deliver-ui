@@ -106,4 +106,11 @@ export default class DateUtils {
     dateOfBirthMoment.add(years, 'years')
     return moment().diff(dateOfBirthMoment, 'months')
   }
+
+  static removeTimezoneOffset(dateString: string): string {
+    const date = new Date(dateString)
+    const serverTimezoneOffset = date.getTimezoneOffset() * 60000
+
+    return new Date(date.getTime() + serverTimezoneOffset).toISOString()
+  }
 }
