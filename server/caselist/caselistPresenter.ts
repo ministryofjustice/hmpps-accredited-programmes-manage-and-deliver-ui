@@ -53,7 +53,18 @@ export default class CaselistPresenter {
             'aria-sort': 'ascending',
           },
         },
-
+        {
+          text: 'PDU',
+          attributes: {
+            'aria-sort': 'none',
+          },
+        },
+        {
+          text: 'Reporting team',
+          attributes: {
+            'aria-sort': 'none',
+          },
+        },
         {
           text: 'Referral status',
           attributes: {
@@ -96,12 +107,12 @@ export default class CaselistPresenter {
         {
           html: `<a href='/referral-details/${referral.referralId}/personal-details'>${referral.personName}</a><br><span>${referral.crn}</span>`,
         },
-
-        { text: referral.referralStatus },
-
+        { text: referral.pdu },
+        { text: referral.reportingTeam },
         {
           html: `${cohortConfigMap[referral.cohort]}${CaselistUtils.hasLdcTagHtml(referral)}`,
         },
+        { text: referral.referralStatus },
       ])
     })
     return referralData
