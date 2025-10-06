@@ -34,6 +34,7 @@ type ReferralStatusFormData = components['schemas']['ReferralStatusFormData']
 type CreateReferralStatusHistory = components['schemas']['CreateReferralStatusHistory']
 type ReferralStatus = components['schemas']['ReferralStatus']
 type CaseListFilterValues = components['schemas']['CaseListFilterValues']
+type LocationFilterValues = components['schemas']['LocationFilterValues']
 
 export type {
   AlcoholMisuseDetails,
@@ -53,6 +54,7 @@ export type {
   Health,
   LearningNeeds,
   LifestyleAndAssociates,
+  LocationFilterValues,
   OffenceAnalysis,
   OffenceHistory,
   PersonalDetails,

@@ -86,8 +86,10 @@ export default class CaselistView {
   private get reportingTeamCheckboxArgs(): CheckboxesArgs {
     let checkboxItems: CheckboxesArgsItem[] = []
     if (this.presenter.showReportingLocations) {
-      const pduLocationData = this.presenter.locations.find(location => location.pdu === this.presenter.filter.pdu)
-      checkboxItems = pduLocationData.locations.map(location => ({
+      const pduLocationData = this.presenter.caseListFilters.locationFilters.find(
+        location => location.pduName === this.presenter.filter.pdu,
+      )
+      checkboxItems = pduLocationData.reportingTeams.map(location => ({
         text: location,
         value: location,
         checked: this.presenter.filter.reportingTeam?.includes(location),

@@ -1956,11 +1956,26 @@ export interface components {
     CaseListFilterValues: {
       /** @description Contains lists of open and closed referral statuses */
       statusFilters: components['schemas']['StatusFilterValues']
+      /** @description Contains pdu's with a list of their reporting teams */
+      locationFilters: components['schemas']['LocationFilterValues'][]
       /**
        * Format: int32
        * @description A count of the referrals for the opposite caselist tab you are in
        */
       otherReferralsCount: number
+    }
+    LocationFilterValues: {
+      /**
+       * @description The name of a pdu
+       * @example London
+       */
+      pduName: string
+      /**
+       * @description List of the reporting teams for a specific pdu
+       * @example Team 1
+       * @example Team 2
+       */
+      reportingTeams: string[]
     }
     StatusFilterValues: {
       /**
@@ -3706,6 +3721,10 @@ export interface operations {
         cohort?: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
         /** @description Filter by the status of the referral */
         status?: string
+        /** @description Filter by the pdu of the referral */
+        pdu?: string
+        /** @description Filter by the reporting team of the referral */
+        reportingTeam?: string[]
       }
       header?: never
       path: {

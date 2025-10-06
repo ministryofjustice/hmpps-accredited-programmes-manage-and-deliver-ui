@@ -10,7 +10,7 @@ describe(CaselistFilter, () => {
         crnOrPersonName: 'Building',
       }
 
-      const filter = CaselistFilter.fromRequest({ query } as unknown as Request)
+      const filter = CaselistFilter.fromRequest({ query } as unknown as Request, [])
 
       expect(filter.status).toEqual('REFERRAL_SUBMITTED')
       expect(filter.cohort).toEqual('SEXUAL_OFFENCE')

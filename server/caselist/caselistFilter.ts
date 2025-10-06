@@ -1,4 +1,5 @@
 import { Request } from 'express'
+import { LocationFilterValues } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from './CaseListFilterParams'
 
 export default class CaselistFilter {
@@ -12,7 +13,7 @@ export default class CaselistFilter {
 
   reportingTeam: string[] | undefined
 
-  static fromRequest(request: Request, locations: { pdu: string; locations: string[] }[]): CaselistFilter {
+  static fromRequest(request: Request, locations: LocationFilterValues[]): CaselistFilter {
     const filter = new CaselistFilter()
     filter.status = request.query.status as string | undefined
     filter.cohort = request.query.cohort as string | undefined
@@ -25,8 +26,8 @@ export default class CaselistFilter {
 
       // Validate that reporting teams belong to the selected PDU. If not, remove the reporting team filter.
       if (filter.pdu) {
-        const selectedPdu = locations.find(locationPdu => locationPdu.pdu === filter.pdu)
-        const allTeamsValid = filter.reportingTeam.every(team => selectedPdu.locations.includes(team))
+        const selectedPdu = locations.find(locationPdu => locationPdu.pduName === filter.pdu)
+        const allTeamsValid = filter.reportingTeam.every(team => selectedPdu.reportingTeams.includes(team))
 
         if (!allTeamsValid) {
           filter.reportingTeam = undefined

@@ -32,22 +32,7 @@ export default class CaselistController {
       openOrClosed,
     )
 
-    const locations = [
-      {
-        pdu: 'London',
-        locations: ['North', 'South', 'East', 'West'],
-      },
-      {
-        pdu: 'Manchester',
-        locations: ['Area 1', 'Area 2', 'Area 3', 'Area 4'],
-      },
-      {
-        pdu: 'Liverpool',
-        locations: ['Up', 'Down', 'Left', 'Right'],
-      },
-    ]
-
-    const filter = CaselistFilter.fromRequest(req, locations)
+    const filter = CaselistFilter.fromRequest(req, caseListFilters.locationFilters)
 
     return { filter, username, caseListFilters }
   }

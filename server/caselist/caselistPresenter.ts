@@ -83,23 +83,6 @@ export default class CaselistPresenter {
     }
   }
 
-  get locations() {
-    return [
-      {
-        pdu: 'London',
-        locations: ['North', 'South', 'East', 'West'],
-      },
-      {
-        pdu: 'Manchester',
-        locations: ['Area 1', 'Area 2', 'Area 3', 'Area 4'],
-      },
-      {
-        pdu: 'Liverpool',
-        locations: ['Up', 'Down', 'Left', 'Right'],
-      },
-    ]
-  }
-
   generateTableRows() {
     const referralData: ({ html: string; text?: undefined } | { text: string; html?: undefined })[][] = []
     this.referralCaseListItems.content.forEach(referral => {
