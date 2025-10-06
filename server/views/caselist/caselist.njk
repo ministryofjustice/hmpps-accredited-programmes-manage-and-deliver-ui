@@ -22,9 +22,21 @@
 
     {%- set filterOptionsHtml %}
 
-    {{ govukInput(presenter.searchBycrnOrPersonNameArgs) }}
-    {{ govukSelect(presenter.searchByCohortArgs()) }}
+    {{ govukInput(searchByCrnOrPersonNameArgs) }}
+    {{ govukSelect(searchByPduArgs) }}
+
+    {% if not presenter.showReportingLocations %}
+      <h2 class="govuk-heading-s">Reporting team</h2>
+      <p class="govuk-body">Select a PDU first to see reporting teams</p>
+    {% endif %}
+
+    {% if presenter.showReportingLocations %}
+      {{ govukCheckboxes(reportingTeamCheckboxArgs) }}
+    {% endif %}
+
+    {{ govukSelect(searchByCohortArgs) }}
     {{ govukSelectWithOptgroup(searchByStatusArgs) }}
+
     {% endset -%}
     <div class="govuk-grid-column-one-quarter">
       <form id="filter-form" method="get">

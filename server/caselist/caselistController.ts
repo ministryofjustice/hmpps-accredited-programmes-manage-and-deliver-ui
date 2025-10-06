@@ -21,7 +21,6 @@ export default class CaselistController {
     caseListFilters: CaseListFilterValues
   }> {
     const { username } = req.user
-    const filter = CaselistFilter.fromRequest(req)
     const pageNumber = req.query.page
 
     if (pageNumber === undefined) {
@@ -32,6 +31,23 @@ export default class CaselistController {
       username,
       openOrClosed,
     )
+
+    const locations = [
+      {
+        pdu: 'London',
+        locations: ['North', 'South', 'East', 'West'],
+      },
+      {
+        pdu: 'Manchester',
+        locations: ['Area 1', 'Area 2', 'Area 3', 'Area 4'],
+      },
+      {
+        pdu: 'Liverpool',
+        locations: ['Up', 'Down', 'Left', 'Right'],
+      },
+    ]
+
+    const filter = CaselistFilter.fromRequest(req, locations)
 
     return { filter, username, caseListFilters }
   }

@@ -1,5 +1,6 @@
-import { SelectArgsItem } from '../utils/govukFrontendTypes'
+import { CheckboxesArgs, CheckboxesArgsItem, InputArgs, SelectArgs, SelectArgsItem } from '../utils/govukFrontendTypes'
 import CaselistPresenter from './caselistPresenter'
+import CaselistUtils from './caseListUtils'
 
 export default class CaselistView {
   constructor(private readonly presenter: CaselistPresenter) {}
@@ -49,6 +50,88 @@ export default class CaselistView {
     }))
   }
 
+  private get pduSelectArgs(): SelectArgs {
+    return {
+      id: 'pdu',
+      name: 'pdu',
+      classes: 'confirm-pdu-select',
+      label: {
+        text: 'Search by pdu',
+        classes: 'govuk-label--s',
+      },
+      items: [
+        {
+          text: 'Select PDU',
+          value: '',
+        },
+        {
+          text: 'London',
+          value: 'London',
+          selected: this.presenter.filter.pdu === 'London',
+        },
+        {
+          text: 'Manchester',
+          value: 'Manchester',
+          selected: this.presenter.filter.pdu === 'Manchester',
+        },
+        {
+          text: 'Liverpool',
+          value: 'Liverpool',
+          selected: this.presenter.filter.pdu === 'Liverpool',
+        },
+      ],
+    }
+  }
+
+  private get reportingTeamCheckboxArgs(): CheckboxesArgs {
+    let checkboxItems: CheckboxesArgsItem[] = []
+    if (this.presenter.showReportingLocations) {
+      const pduLocationData = this.presenter.locations.find(location => location.pdu === this.presenter.filter.pdu)
+      checkboxItems = pduLocationData.locations.map(location => ({
+        text: location,
+        value: location,
+        checked: this.presenter.filter.reportingTeam?.includes(location),
+      }))
+    }
+
+    return {
+      name: 'reportingTeam',
+      classes: 'govuk-checkboxes--small',
+      fieldset: {
+        legend: {
+          text: 'Reporting team',
+          isPageHeading: false,
+          classes: 'govuk-fieldset__legend--s',
+        },
+      },
+      items: checkboxItems,
+    }
+  }
+
+  private get searchByCrnOrPersonNameArgs(): InputArgs {
+    return {
+      id: 'crnOrPersonName',
+      name: 'crnOrPersonName',
+      label: {
+        text: 'Search by name or CRN',
+        classes: 'govuk-label--s',
+      },
+      value: this.presenter.filter.crnOrPersonName,
+    }
+  }
+
+  private get searchByCohortArgs(): SelectArgs {
+    return {
+      id: 'cohort',
+      name: 'cohort',
+      label: {
+        text: 'Cohort',
+        classes: 'govuk-label--s',
+      },
+      items: this.presenter.generateSelectValues(CaselistUtils.cohorts, this.presenter.filter.cohort),
+    }
+  }
+
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       'caselist/caselist',
@@ -58,6 +141,10 @@ export default class CaselistView {
         selectedFilters: this.presenter.generateFilterPane(),
         searchByStatusArgs: this.searchByStatusArgs(),
         pagination: this.presenter.pagination.mojPaginationArgs,
+        searchByPduArgs: this.pduSelectArgs,
+        reportingTeamCheckboxArgs: this.reportingTeamCheckboxArgs,
+        searchByCrnOrPersonNameArgs: this.searchByCrnOrPersonNameArgs,
+        searchByCohortArgs: this.searchByCohortArgs,
       },
     ]
   }

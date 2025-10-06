@@ -73,6 +73,7 @@ export default class AccreditedProgrammesManageAndDeliverService
   ): Promise<Page<ReferralCaseListItem>> {
     const restClient = await this.createRestClientFromUsername(username)
     const filterQuery: Record<string, unknown> = { ...filter }
+
     return (await restClient.get({
       path: `/pages/caselist/open`,
       headers: { Accept: 'application/json' },

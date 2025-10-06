@@ -37,6 +37,10 @@ export default class CaselistPresenter {
     pageHeading: `Building Choices: moderate intensity`,
   }
 
+  get showReportingLocations(): boolean {
+    return this.filter.pdu !== undefined && this.filter.pdu !== ''
+  }
+
   getCaseloadTableArgs(): TableArgs {
     return {
       attributes: {
@@ -66,6 +70,23 @@ export default class CaselistPresenter {
       ],
       rows: this.generateTableRows(),
     }
+  }
+
+  get locations() {
+    return [
+      {
+        pdu: 'London',
+        locations: ['North', 'South', 'East', 'West'],
+      },
+      {
+        pdu: 'Manchester',
+        locations: ['Area 1', 'Area 2', 'Area 3', 'Area 4'],
+      },
+      {
+        pdu: 'Liverpool',
+        locations: ['Up', 'Down', 'Left', 'Right'],
+      },
+    ]
   }
 
   generateTableRows() {
@@ -100,27 +121,6 @@ export default class CaselistPresenter {
           active: this.section === CaselistPageSection.Closed,
         },
       ],
-    }
-  }
-
-  readonly searchBycrnOrPersonNameArgs = {
-    id: 'crnOrPersonName',
-    name: 'crnOrPersonName',
-    label: {
-      text: 'Search by name or CRN',
-      classes: 'govuk-label--s',
-    },
-  }
-
-  searchByCohortArgs(): SelectArgs {
-    return {
-      id: 'cohort',
-      name: 'cohort',
-      label: {
-        text: 'Cohort',
-        classes: 'govuk-label--s',
-      },
-      items: this.generateSelectValues(CaselistUtils.cohorts, this.filter.cohort),
     }
   }
 
@@ -215,6 +215,39 @@ export default class CaselistPresenter {
       })
     }
 
+    if (this.filter.pdu) {
+      const searchParams = new URLSearchParams(this.params)
+      searchParams.delete('pdu')
+      selectedFilters.push({
+        heading: {
+          text: 'PDU',
+        },
+        items: [
+          {
+            href: `/pdu/${this.openOrClosedUrl}${searchParams.size === 0 ? '' : `?${searchParams.toString()}`}`,
+            text: this.filter.pdu,
+          },
+        ],
+      })
+    }
+
+    if (this.filter.reportingTeam) {
+      const reportingTeams =
+        typeof this.filter.reportingTeam === 'string' ? [this.filter.reportingTeam] : this.filter.reportingTeam
+      selectedFilters.push({
+        heading: {
+          text: 'Reporting Team',
+        },
+        items: reportingTeams.map(reportingTeamFilter => {
+          const searchParams = new URLSearchParams(this.params)
+          searchParams.delete('reportingTeam', reportingTeamFilter)
+          return {
+            href: `/pdu/${this.openOrClosedUrl}${searchParams.size === 0 ? '' : `?${searchParams.toString()}`}`,
+            text: reportingTeamFilter,
+          }
+        }),
+      })
+    }
     return selectedFilters
   }
 }
