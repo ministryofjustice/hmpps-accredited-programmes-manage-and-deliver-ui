@@ -1,5 +1,6 @@
 import { Request } from 'express'
 import CaselistFilter from './caselistFilter'
+import TestUtils from '../testutils/testUtils'
 
 describe(CaselistFilter, () => {
   describe('.fromRequest', () => {
@@ -8,13 +9,20 @@ describe(CaselistFilter, () => {
         status: 'REFERRAL_SUBMITTED',
         cohort: 'SEXUAL_OFFENCE',
         crnOrPersonName: 'Building',
+        pdu: 'PDU3',
+        reportingTeam: ['Team5'],
       }
 
-      const filter = CaselistFilter.fromRequest({ query } as unknown as Request, [])
+      const filter = CaselistFilter.fromRequest(
+        { query } as unknown as Request,
+        TestUtils.createCaseListFilters().locationFilters,
+      )
 
       expect(filter.status).toEqual('REFERRAL_SUBMITTED')
       expect(filter.cohort).toEqual('SEXUAL_OFFENCE')
       expect(filter.crnOrPersonName).toEqual('Building')
+      expect(filter.pdu).toEqual('PDU3')
+      expect(filter.reportingTeam).toEqual(['Team5'])
     })
   })
 
@@ -25,6 +33,8 @@ describe(CaselistFilter, () => {
         expect(filter.status).toBeUndefined()
         expect(filter.cohort).toBeUndefined()
         expect(filter.crnOrPersonName).toBeUndefined()
+        expect(filter.pdu).toBeUndefined()
+        expect(filter.reportingTeam).toBeUndefined()
       })
     })
 
@@ -48,6 +58,24 @@ describe(CaselistFilter, () => {
         filter.crnOrPersonName = 'Hello'
 
         expect(filter.params.crnOrPersonName).toEqual('Hello')
+      })
+    })
+
+    describe('pdu and reporting team', () => {
+      it('correctly sets pdu and reporting team ', () => {
+        const filter = new CaselistFilter()
+        filter.pdu = 'PDU1'
+        filter.reportingTeam = ['Team1', 'Team2']
+
+        expect(filter.params.pdu).toEqual('PDU1')
+        expect(filter.params.reportingTeam).toEqual(['Team1', 'Team2'])
+      })
+      it('correctly sets pdu', () => {
+        const filter = new CaselistFilter()
+        filter.pdu = 'PDU1'
+
+        expect(filter.params.pdu).toEqual('PDU1')
+        expect(filter.params.reportingTeam).toEqual(undefined)
       })
     })
   })
