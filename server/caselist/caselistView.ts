@@ -1,4 +1,4 @@
-import { CheckboxesArgs, CheckboxesArgsItem, InputArgs, SelectArgs, SelectArgsItem } from '../utils/govukFrontendTypes'
+import { CheckboxesArgs, InputArgs, SelectArgs, SelectArgsItem } from '../utils/govukFrontendTypes'
 import CaselistPresenter from './caselistPresenter'
 import CaselistUtils from './caseListUtils'
 
@@ -9,7 +9,7 @@ export default class CaselistView {
     id: string
     name: string
     prompt: string
-    label: { text: string }
+    label: { text: string; classes: string }
     items: { label: string; items: SelectArgsItem[] }[]
     attributes: { 'data-testid': string }
     classes: string
@@ -20,6 +20,7 @@ export default class CaselistView {
       prompt: 'Select',
       label: {
         text: 'Referral status',
+        classes: 'govuk-label--s',
       },
       items: [
         {
@@ -56,7 +57,7 @@ export default class CaselistView {
       name: 'pdu',
       classes: 'confirm-pdu-select',
       label: {
-        text: 'Search by pdu',
+        text: 'PDU',
         classes: 'govuk-label--s',
       },
       items: this.presenter.generatePduSelectArgs(),
@@ -83,7 +84,7 @@ export default class CaselistView {
       id: 'crnOrPersonName',
       name: 'crnOrPersonName',
       label: {
-        text: 'Search by name or CRN',
+        text: 'Name or CRN',
         classes: 'govuk-label--s',
       },
       value: this.presenter.filter.crnOrPersonName,
