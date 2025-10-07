@@ -158,4 +158,67 @@ describe(`filters`, () => {
       expect(presenter.generateSelectedFilters()).toEqual([])
     })
   })
+
+  describe('generatePduSelect', () => {
+    it('should generate correct select items based on API data and select the correct PDU', () => {
+      const testObject = {
+        filter: { pdu: 'PDU3' } as CaselistFilter,
+      }
+      const referralCaseListItem = referralCaseListItemFactory.build()
+      const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+        .pageContent([referralCaseListItem])
+        .build() as Page<ReferralCaseListItem>
+      const presenter = new CaselistPresenter(
+        1,
+        referralCaseListItemPage,
+        testObject.filter,
+        '',
+        true,
+        TestUtils.createCaseListFilters(),
+      )
+
+      expect(presenter.generatePduSelectArgs()).toEqual([
+        {
+          text: 'Select PDU',
+          value: '',
+        },
+        { text: 'PDU1', value: 'PDU1', selected: false },
+        { text: 'PDU2', value: 'PDU2', selected: false },
+        { text: 'PDU3', value: 'PDU3', selected: true },
+      ])
+    })
+  })
+
+  describe('generateReportingTeamCheckboxArgs', () => {
+    it('should generate correct checkboxes based on API data and select the correct reporting team', () => {
+      const testObject = {
+        filter: { pdu: 'PDU1', reportingTeam: ['Team2'] } as CaselistFilter,
+      }
+      const referralCaseListItem = referralCaseListItemFactory.build()
+      const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+        .pageContent([referralCaseListItem])
+        .build() as Page<ReferralCaseListItem>
+      const presenter = new CaselistPresenter(
+        1,
+        referralCaseListItemPage,
+        testObject.filter,
+        '',
+        true,
+        TestUtils.createCaseListFilters(),
+      )
+
+      expect(presenter.generateReportingTeamCheckboxArgs()).toEqual([
+        {
+          text: 'Team1',
+          value: 'Team1',
+          checked: false,
+        },
+        {
+          text: 'Team2',
+          value: 'Team2',
+          checked: true,
+        },
+      ])
+    })
+  })
 })

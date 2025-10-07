@@ -1,6 +1,6 @@
 import { CaseListFilterValues, CohortEnum, ReferralCaseListItem } from '@manage-and-deliver-api'
 import { Page } from '../shared/models/pagination'
-import { SelectArgsItem, TableArgs } from '../utils/govukFrontendTypes'
+import { CheckboxesArgs, CheckboxesArgsItem, SelectArgsItem, TableArgs } from '../utils/govukFrontendTypes'
 import Pagination from '../utils/pagination/pagination'
 import CaselistFilter from './caselistFilter'
 import CaselistUtils from './caseListUtils'
@@ -151,6 +151,51 @@ export default class CaselistPresenter {
       }
     }
     return null
+  }
+
+  generatePduSelectArgs(): SelectArgsItem[] {
+    const checkboxArgs = [
+      {
+        text: 'Select PDU',
+        value: '',
+      },
+    ]
+    const pduCheckboxArgs = this.caseListFilters.locationFilters
+      .map(pdu => ({
+        text: pdu.pduName,
+        value: pdu.pduName,
+        selected: this.filter.pdu === pdu.pduName,
+      }))
+      .sort((a, b) => a.text.localeCompare(b.text))
+    return checkboxArgs.concat(pduCheckboxArgs)
+  }
+
+  generateReportingTeamCheckboxArgs(): CheckboxesArgsItem[] {
+    let checkboxItems: CheckboxesArgsItem[] = []
+    if (this.showReportingLocations) {
+      const pduLocationData = this.caseListFilters.locationFilters.find(
+        location => location.pduName === this.filter.pdu,
+      )
+      checkboxItems = pduLocationData.reportingTeams
+        .map(location => ({
+          text: location,
+          value: location,
+          checked: this.filter.reportingTeam?.includes(location),
+        }))
+        .sort((a, b) => a.text.localeCompare(b.text))
+    }
+    return checkboxItems
+  }
+
+  generateNoResultsString(): string {
+    if (this.section === CaselistPageSection.Open) {
+      return this.caseListFilters.otherReferralsCount === 0
+        ? 'No results found. Check your search details or try other filters.'
+        : `No results in open referrals. ${this.caseListFilters.otherReferralsCount} result in closed referrals.`
+    }
+    return this.caseListFilters.otherReferralsCount === 0
+      ? 'No results found. Check your search details or try other filters.'
+      : `No results in closed referrals. ${this.caseListFilters.otherReferralsCount} result in open referrals.`
   }
 
   generateSelectedFilters() {

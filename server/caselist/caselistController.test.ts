@@ -39,13 +39,26 @@ beforeEach(() => {
 
 describe(`Caselist controller`, () => {
   test.each([
-    ['/pdu/open-referrals?cohort=SEXUAL_OFFENCE&status=Awaiting+assessment', 'SEXUAL_OFFENCE', 'Awaiting assessment'],
-    [`/pdu/open-referrals`, undefined, undefined],
-    ['/pdu/closed-referrals', undefined, undefined],
-    ['/pdu/open-referrals?cohort=GENERAL_OFFENCE&status=Programme+complete', 'GENERAL_OFFENCE', 'Programme complete'],
+    [
+      '/pdu/open-referrals?cohort=SEXUAL_OFFENCE&status=Awaiting+assessment',
+      'SEXUAL_OFFENCE',
+      'Awaiting assessment',
+      undefined,
+      undefined,
+    ],
+    [`/pdu/open-referrals`, undefined, undefined, undefined, undefined],
+    ['/pdu/closed-referrals', undefined, undefined, undefined, undefined],
+    [
+      '/pdu/open-referrals?cohort=GENERAL_OFFENCE&status=Programme+complete',
+      'GENERAL_OFFENCE',
+      'Programme complete',
+      undefined,
+      undefined,
+    ],
+    ['/pdu/open-referrals?pdu=PDU1&reportingTeam=Team1', undefined, undefined, 'PDU1', 'Team1'],
   ])(
     `should set the correct filters based on the url provided %s`,
-    async (url: string, cohortValue, referralStatusValue) => {
+    async (url: string, cohortValue, referralStatusValue, pduValue, reportingTeamValue) => {
       await request(app)
         .get(url)
         .expect(200)
@@ -56,6 +69,10 @@ describe(`Caselist controller`, () => {
           expect(cohortInput).toBe(cohortValue)
           const referralStatusInput = $('#status optgroup option[selected]').val()
           expect(referralStatusInput).toBe(referralStatusValue)
+          const pduInput = $('#pdu option[selected]').val()
+          expect(pduInput).toBe(pduValue)
+          const reportingTeamInput = $('input[type="checkbox"][name="reportingTeam"]:checked').val()
+          expect(reportingTeamInput).toBe(reportingTeamValue)
         })
     },
   )

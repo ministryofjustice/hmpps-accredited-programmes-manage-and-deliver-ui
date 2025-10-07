@@ -61,7 +61,7 @@
       {% if presenter.referralCaseListItems.content.length > 0 %}
         {{ govukTable(presenter.getCaseloadTableArgs()) }}
       {% else %}
-        <p>No results found. Clear or change the filters</p>
+        <p>{{ noResultsString }}</p>
       {% endif %}
 
       {% include "../partials/pagination.njk" %}

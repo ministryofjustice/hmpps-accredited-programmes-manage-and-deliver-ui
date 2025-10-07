@@ -59,43 +59,11 @@ export default class CaselistView {
         text: 'Search by pdu',
         classes: 'govuk-label--s',
       },
-      items: [
-        {
-          text: 'Select PDU',
-          value: '',
-        },
-        {
-          text: 'London',
-          value: 'London',
-          selected: this.presenter.filter.pdu === 'London',
-        },
-        {
-          text: 'Manchester',
-          value: 'Manchester',
-          selected: this.presenter.filter.pdu === 'Manchester',
-        },
-        {
-          text: 'Liverpool',
-          value: 'Liverpool',
-          selected: this.presenter.filter.pdu === 'Liverpool',
-        },
-      ],
+      items: this.presenter.generatePduSelectArgs(),
     }
   }
 
   private get reportingTeamCheckboxArgs(): CheckboxesArgs {
-    let checkboxItems: CheckboxesArgsItem[] = []
-    if (this.presenter.showReportingLocations) {
-      const pduLocationData = this.presenter.caseListFilters.locationFilters.find(
-        location => location.pduName === this.presenter.filter.pdu,
-      )
-      checkboxItems = pduLocationData.reportingTeams.map(location => ({
-        text: location,
-        value: location,
-        checked: this.presenter.filter.reportingTeam?.includes(location),
-      }))
-    }
-
     return {
       name: 'reportingTeam',
       classes: 'govuk-checkboxes--small',
@@ -106,7 +74,7 @@ export default class CaselistView {
           classes: 'govuk-fieldset__legend--s',
         },
       },
-      items: checkboxItems,
+      items: this.presenter.generateReportingTeamCheckboxArgs(),
     }
   }
 
@@ -147,6 +115,7 @@ export default class CaselistView {
         reportingTeamCheckboxArgs: this.reportingTeamCheckboxArgs,
         searchByCrnOrPersonNameArgs: this.searchByCrnOrPersonNameArgs,
         searchByCohortArgs: this.searchByCohortArgs,
+        noResultsString: this.presenter.generateNoResultsString(),
       },
     ]
   }
