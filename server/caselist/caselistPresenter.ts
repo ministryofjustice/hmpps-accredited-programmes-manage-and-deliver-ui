@@ -66,14 +66,13 @@ export default class CaselistPresenter {
           },
         },
         {
-          text: 'Referral status',
+          text: 'Cohort',
           attributes: {
             'aria-sort': 'none',
           },
         },
-
         {
-          text: 'Cohort',
+          text: 'Referral status',
           attributes: {
             'aria-sort': 'none',
           },
