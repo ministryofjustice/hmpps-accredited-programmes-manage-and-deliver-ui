@@ -27,6 +27,7 @@ import {
   SentenceInformation,
   ThinkingAndBehaviour,
   UpdateAvailability,
+  ReferralStatusHistory,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -244,6 +245,23 @@ export default class AccreditedProgrammesManageAndDeliverService
       path: `/referral-details/${referralId}/offence-history`,
       headers: { Accept: 'application/json' },
     })) as OffenceHistory
+  }
+
+  async getStatusHistory(username: ExpressUsername, referralId: string): Promise<ReferralStatusHistory[]> {
+    const restClient = await this.createRestClientFromUsername(username)
+    const data = (await restClient.get({
+      path: `/referral/${referralId}/status-history`,
+      headers: { Accept: 'application/json' },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    })) as Record<string, any>[]
+
+    return data.map((item: Omit<ReferralStatusHistory, 'updatedAt'> & { updatedAt: number[] }) => {
+      const [year, month, day, hours, mins, secs, nanos] = item.updatedAt
+      return {
+        ...item,
+        updatedAt: new Date(year, month - 1, day, hours, mins, secs, Math.floor(nanos / 1000000)).toISOString(),
+      }
+    }) as ReferralStatusHistory[]
   }
 
   async getPniScore(username: ExpressUsername, crn: string): Promise<PniScore> {

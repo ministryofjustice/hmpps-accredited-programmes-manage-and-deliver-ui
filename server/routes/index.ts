@@ -161,6 +161,10 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await programmeNeedsIdenfitierController.showProgrammeNeedsIdentifierPage(req, res)
   })
 
+  get('/referral/:referralId/status-history', async (req, res, next) => {
+    await referralDetailsController.showStatusHistoryPage(req, res)
+  })
+
   get('/referral/:referralId/change-cohort', async (req, res, next) => {
     await cohortController.showChangeCohortPage(req, res)
   })
