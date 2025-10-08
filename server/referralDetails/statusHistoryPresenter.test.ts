@@ -24,6 +24,7 @@ describe('StatusHistoryPresenter', () => {
         title: 'Referral status updated',
         text: "John Doe's referral status is now Assessment complete",
         variant: 'success',
+        dismissible: true,
         showTitleAsHeading: true,
       })
     })

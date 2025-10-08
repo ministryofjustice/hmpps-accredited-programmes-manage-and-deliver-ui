@@ -33,6 +33,7 @@ export default class StatusHistoryPresenter extends ReferralLayoutPresenter {
       title: 'Referral status updated',
       text: `${this.personOnProbationName}'s referral status is now ${this.currentStatusDescription}`,
       variant: 'success',
+      dismissible: true,
       showTitleAsHeading: true,
     }
   }
