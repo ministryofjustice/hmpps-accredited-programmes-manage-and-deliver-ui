@@ -1,6 +1,6 @@
 import { CaseListFilterValues, CohortEnum, ReferralCaseListItem } from '@manage-and-deliver-api'
 import { Page } from '../shared/models/pagination'
-import { CheckboxesArgs, CheckboxesArgsItem, SelectArgsItem, TableArgs } from '../utils/govukFrontendTypes'
+import { CheckboxesArgsItem, SelectArgsItem, TableArgs } from '../utils/govukFrontendTypes'
 import Pagination from '../utils/pagination/pagination'
 import CaselistFilter from './caselistFilter'
 import CaselistUtils from './caseListUtils'
@@ -27,6 +27,7 @@ export default class CaselistPresenter {
     readonly params: string,
     readonly isOpenReferrals: boolean,
     readonly caseListFilters: CaseListFilterValues,
+    readonly otherCaselistCountTotal: number,
   ) {
     this.pagination = new Pagination(referralCaseListItems, params)
     this.referralCaseListItems = referralCaseListItems
@@ -104,13 +105,13 @@ export default class CaselistPresenter {
     return {
       items: [
         {
-          text: `Open referrals (${this.section === CaselistPageSection.Open ? this.referralCaseListItems.totalElements : this.caseListFilters.otherReferralsCount})`,
-          href: `/pdu/open-referrals`,
+          text: `Open referrals (${this.section === CaselistPageSection.Open ? this.referralCaseListItems.totalElements : this.otherCaselistCountTotal})`,
+          href: this.params !== undefined ? `/pdu/open-referrals?${this.params}` : `/pdu/open-referrals`,
           active: this.section === CaselistPageSection.Open,
         },
         {
-          text: `Closed referrals (${this.section === CaselistPageSection.Closed ? this.referralCaseListItems.totalElements : this.caseListFilters.otherReferralsCount})`,
-          href: `/pdu/closed-referrals`,
+          text: `Closed referrals (${this.section === CaselistPageSection.Closed ? this.referralCaseListItems.totalElements : this.otherCaselistCountTotal})`,
+          href: this.params !== undefined ? `/pdu/closed-referrals?${this.params}` : `/pdu/closed-referrals`,
           active: this.section === CaselistPageSection.Closed,
         },
       ],
@@ -170,12 +171,12 @@ export default class CaselistPresenter {
 
   generateNoResultsString(): string {
     if (this.section === CaselistPageSection.Open) {
-      return this.caseListFilters.otherReferralsCount === 0
+      return this.otherCaselistCountTotal === 0
         ? 'No results found. Check your search details or try other filters.'
-        : `No results in open referrals. ${this.caseListFilters.otherReferralsCount} result in closed referrals.`
+        : `No results in open referrals. ${this.otherCaselistCountTotal} result in closed referrals.`
     }
-    return this.caseListFilters.otherReferralsCount === 0
+    return this.otherCaselistCountTotal === 0
       ? 'No results found. Check your search details or try other filters.'
-      : `No results in closed referrals. ${this.caseListFilters.otherReferralsCount} result in open referrals.`
+      : `No results in closed referrals. ${this.otherCaselistCountTotal} result in open referrals.`
   }
 }

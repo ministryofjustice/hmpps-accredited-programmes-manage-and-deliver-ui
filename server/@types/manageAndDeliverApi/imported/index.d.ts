@@ -589,7 +589,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/bff/caselist/filters/{openOrClosed}': {
+  '/bff/caselist/filters': {
     parameters: {
       query?: never
       header?: never
@@ -1832,6 +1832,40 @@ export interface components {
       overallThinkingDomainLevel?: 'HIGH_NEED' | 'MEDIUM_NEED' | 'LOW_NEED'
       individualThinkingScores: components['schemas']['IndividualCognitiveScores']
     }
+    CaseListReferrals: {
+      pagedReferrals: components['schemas']['PageReferralCaseListItem']
+      /** Format: int32 */
+      otherTabTotal: number
+    }
+    PageReferralCaseListItem: {
+      /** Format: int64 */
+      totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
+      /** Format: int32 */
+      size?: number
+      content?: components['schemas']['ReferralCaseListItem'][]
+      /** Format: int32 */
+      number?: number
+      sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
+      empty?: boolean
+    }
+    PageableObject: {
+      /** Format: int64 */
+      offset?: number
+      sort?: components['schemas']['SortObject']
+      paged?: boolean
+      /** Format: int32 */
+      pageNumber?: number
+      /** Format: int32 */
+      pageSize?: number
+      unpaged?: boolean
+    }
     ReferralCaseListItem: {
       /** Format: uuid */
       referralId: string
@@ -1846,6 +1880,11 @@ export interface components {
       hasLdc: boolean
       pdu: string
       reportingTeam: string
+    }
+    SortObject: {
+      empty?: boolean
+      sorted?: boolean
+      unsorted?: boolean
     }
     Pageable: {
       /** Format: int32 */
@@ -1958,11 +1997,6 @@ export interface components {
       statusFilters: components['schemas']['StatusFilterValues']
       /** @description Contains pdu's with a list of their reporting teams */
       locationFilters: components['schemas']['LocationFilterValues'][]
-      /**
-       * Format: int32
-       * @description A count of the referrals for the opposite caselist tab you are in
-       */
-      otherReferralsCount: number
     }
     LocationFilterValues: {
       /**
@@ -3740,7 +3774,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['ReferralCaseListItem']
+          'application/json': components['schemas']['CaseListReferrals']
         }
       }
       /** @description Bad Request */
@@ -3867,9 +3901,7 @@ export interface operations {
     parameters: {
       query?: never
       header?: never
-      path: {
-        openOrClosed: 'OPEN' | 'CLOSED'
-      }
+      path?: never
       cookie?: never
     }
     requestBody?: never

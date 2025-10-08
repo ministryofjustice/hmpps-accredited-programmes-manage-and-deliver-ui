@@ -50,7 +50,6 @@ export default class TestUtils {
       ],
       closed: ['Programme complete', 'Withdrawn'],
     },
-    otherReferralsCount: 1,
     locationFilters: [
       {
         pduName: 'PDU1',

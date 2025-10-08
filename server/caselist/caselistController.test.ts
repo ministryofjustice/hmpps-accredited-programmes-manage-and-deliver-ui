@@ -1,12 +1,10 @@
-import { ReferralCaseListItem } from '@manage-and-deliver-api'
+import { CaseListReferrals } from '@manage-and-deliver-api'
 import * as cheerio from 'cheerio'
 import { Express } from 'express'
 import request from 'supertest'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
-import { Page } from '../shared/models/pagination'
-import pageFactory from '../testutils/factories/pageFactory'
-import referralCaseListItemFactory from '../testutils/factories/referralCaseListItem'
+import caseListReferralsFactory from '../testutils/factories/caseListReferralsFactory'
 import TestUtils from '../testutils/testUtils'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
@@ -28,12 +26,9 @@ beforeEach(() => {
       accreditedProgrammesManageAndDeliverService,
     },
   })
-  const referralCaseListItem = referralCaseListItemFactory.build()
-  const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
-    .pageContent([referralCaseListItem])
-    .build() as Page<ReferralCaseListItem>
-  accreditedProgrammesManageAndDeliverService.getOpenCaselist.mockResolvedValue(referralCaseListItemPage)
-  accreditedProgrammesManageAndDeliverService.getClosedCaselist.mockResolvedValue(referralCaseListItemPage)
+  const caseListReferrals: CaseListReferrals = caseListReferralsFactory.build()
+  accreditedProgrammesManageAndDeliverService.getOpenCaselist.mockResolvedValue(caseListReferrals)
+  accreditedProgrammesManageAndDeliverService.getClosedCaselist.mockResolvedValue(caseListReferrals)
   accreditedProgrammesManageAndDeliverService.getCaseListFilters.mockResolvedValue(TestUtils.createCaseListFilters())
 })
 
