@@ -134,24 +134,6 @@ export default class CaselistPresenter {
     return selectOptions
   }
 
-  generateFilterPane() {
-    const categories = this.generateSelectedFilters()
-    if (categories.length !== 0) {
-      return {
-        heading: {
-          text: 'Selected filters',
-        },
-
-        clearLink: {
-          text: 'Clear filters',
-          href: this.section === 1 ? '/pdu/open-referrals' : '/pdu/closed-referrals',
-        },
-        categories,
-      }
-    }
-    return null
-  }
-
   generatePduSelectArgs(): SelectArgsItem[] {
     const checkboxArgs = [
       {
@@ -195,97 +177,5 @@ export default class CaselistPresenter {
     return this.caseListFilters.otherReferralsCount === 0
       ? 'No results found. Check your search details or try other filters.'
       : `No results in closed referrals. ${this.caseListFilters.otherReferralsCount} result in open referrals.`
-  }
-
-  generateSelectedFilters() {
-    const selectedFilters = []
-    const openAndClosedStatus: string[] = this.caseListFilters.statusFilters.open.concat(
-      this.caseListFilters.statusFilters.closed,
-    )
-
-    if (this.filter.status) {
-      const searchParams = new URLSearchParams(this.params)
-      searchParams.delete('status')
-      const paramAttributes = openAndClosedStatus.filter(referralStatus => referralStatus === this.filter.status)
-      selectedFilters.push({
-        heading: {
-          text: 'Referral Status',
-        },
-        items: [
-          {
-            href: `/pdu/${this.openOrClosedUrl}${searchParams.size === 0 ? '' : `?${searchParams.toString()}`}`,
-            text: paramAttributes[0],
-          },
-        ],
-      })
-    }
-
-    if (this.filter.cohort) {
-      const searchParams = new URLSearchParams(this.params)
-      searchParams.delete('cohort')
-      const paramAttributes = CaselistUtils.cohorts.filter(cohort => cohort.value === this.filter.cohort)
-      selectedFilters.push({
-        heading: {
-          text: 'Cohort',
-        },
-        items: [
-          {
-            href: `/pdu/${this.openOrClosedUrl}${searchParams.size === 0 ? '' : `?${searchParams.toString()}`}`,
-            text: paramAttributes[0].text,
-          },
-        ],
-      })
-    }
-
-    if (this.filter.crnOrPersonName) {
-      const searchParams = new URLSearchParams(this.params)
-      searchParams.delete('crnOrPersonName')
-      selectedFilters.push({
-        heading: {
-          text: 'Name Or Crn',
-        },
-        items: [
-          {
-            href: `/pdu/${this.openOrClosedUrl}${searchParams.size === 0 ? '' : `?${searchParams.toString()}`}`,
-            text: this.filter.crnOrPersonName,
-          },
-        ],
-      })
-    }
-
-    if (this.filter.pdu) {
-      const searchParams = new URLSearchParams(this.params)
-      searchParams.delete('pdu')
-      selectedFilters.push({
-        heading: {
-          text: 'PDU',
-        },
-        items: [
-          {
-            href: `/pdu/${this.openOrClosedUrl}${searchParams.size === 0 ? '' : `?${searchParams.toString()}`}`,
-            text: this.filter.pdu,
-          },
-        ],
-      })
-    }
-
-    if (this.filter.reportingTeam) {
-      const reportingTeams =
-        typeof this.filter.reportingTeam === 'string' ? [this.filter.reportingTeam] : this.filter.reportingTeam
-      selectedFilters.push({
-        heading: {
-          text: 'Reporting Team',
-        },
-        items: reportingTeams.map(reportingTeamFilter => {
-          const searchParams = new URLSearchParams(this.params)
-          searchParams.delete('reportingTeam', reportingTeamFilter)
-          return {
-            href: `/pdu/${this.openOrClosedUrl}${searchParams.size === 0 ? '' : `?${searchParams.toString()}`}`,
-            text: reportingTeamFilter,
-          }
-        }),
-      })
-    }
-    return selectedFilters
   }
 }
