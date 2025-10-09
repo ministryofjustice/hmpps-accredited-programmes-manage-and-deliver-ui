@@ -35,12 +35,14 @@ type CreateReferralStatusHistory = components['schemas']['CreateReferralStatusHi
 type ReferralStatus = components['schemas']['ReferralStatus']
 type CaseListFilterValues = components['schemas']['CaseListFilterValues']
 type LocationFilterValues = components['schemas']['LocationFilterValues']
+type CaseListReferrals = components['schemas']['CaseListReferrals']
 
 export type {
   AlcoholMisuseDetails,
   Attitude,
   Availability,
   CaseListFilterValues,
+  CaseListReferrals,
   CohortEnum,
   CreateAvailability,
   CreateDeliveryLocationPreferences,
