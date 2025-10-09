@@ -1,4 +1,5 @@
 import { Request } from 'express'
+import { LocationFilterValues } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from './CaseListFilterParams'
 
 export default class CaselistFilter {
@@ -8,11 +9,31 @@ export default class CaselistFilter {
 
   crnOrPersonName: string | undefined
 
-  static fromRequest(request: Request): CaselistFilter {
+  pdu: string | undefined
+
+  reportingTeam: string[] | undefined
+
+  static fromRequest(request: Request, locations: LocationFilterValues[]): CaselistFilter {
     const filter = new CaselistFilter()
     filter.status = request.query.status as string | undefined
     filter.cohort = request.query.cohort as string | undefined
     filter.crnOrPersonName = request.query.crnOrPersonName as string | undefined
+    filter.reportingTeam = request.query.reportingTeam as string[] | undefined
+    filter.pdu = request.query.pdu as string | undefined
+
+    if (filter.reportingTeam !== undefined) {
+      filter.reportingTeam = typeof filter.reportingTeam === 'string' ? [filter.reportingTeam] : filter.reportingTeam
+
+      // Validate that reporting teams belong to the selected PDU. If not, remove the reporting team filter.
+      if (filter.pdu) {
+        const selectedPdu = locations.find(locationPdu => locationPdu.pduName === filter.pdu)
+        const allTeamsValid = filter.reportingTeam.every(team => selectedPdu.reportingTeams.includes(team))
+
+        if (!allTeamsValid) {
+          filter.reportingTeam = undefined
+        }
+      }
+    }
     return filter
   }
 
@@ -27,6 +48,14 @@ export default class CaselistFilter {
     }
     if (this.crnOrPersonName?.trim()) {
       params.crnOrPersonName = this.crnOrPersonName.trim()
+    }
+
+    if (this.pdu) {
+      params.pdu = this.pdu
+    }
+
+    if (this.reportingTeam) {
+      params.reportingTeam = this.reportingTeam
     }
 
     return params
