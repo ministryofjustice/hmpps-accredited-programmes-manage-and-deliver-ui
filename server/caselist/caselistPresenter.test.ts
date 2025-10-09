@@ -5,7 +5,7 @@ import pageFactory from '../testutils/factories/pageFactory'
 import referralCaseListItemFactory from '../testutils/factories/referralCaseListItem'
 import TestUtils from '../testutils/testUtils'
 import CaselistFilter from './caselistFilter'
-import CaselistPresenter, { CaselistPageSection } from './caselistPresenter'
+import CaselistPresenter from './caselistPresenter'
 
 describe(`filters`, () => {
   const caseListFilters = TestUtils.createCaseListFilters()

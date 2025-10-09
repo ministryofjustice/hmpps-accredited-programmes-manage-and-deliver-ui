@@ -19,7 +19,6 @@ import {
   OffenceHistory,
   PersonalDetails,
   PniScore,
-  ReferralCaseListItem,
   ReferralDetails,
   ReferralStatusFormData,
   Relationships,
@@ -35,7 +34,6 @@ import config, { ApiConfig } from '../config'
 import type { HmppsAuthClient, RestClientBuilderWithoutToken } from '../data'
 import RestClient from '../data/restClient'
 import type { ExpressUsername } from '../shared/ExpressUsername'
-import { Page } from '../shared/models/pagination'
 
 export interface PaginationParams {
   // Page number to retrieve -- starts from 1
