@@ -21,7 +21,7 @@
   <div class="govuk-grid-row">
 
     {%- set filterOptionsHtml %}
-    <a class="clear-filters__link" href="/">Clear filters</a>
+    <a class="clear-filters__link" href="?">Clear filters</a>
     {{ govukInput(searchByCrnOrPersonNameArgs) }}
     {{ govukSelect(searchByPduArgs) }}
 
@@ -51,7 +51,7 @@
           }
         },
 
- 
+
         optionsHtml: filterOptionsHtml
         }) }}
       </form>
