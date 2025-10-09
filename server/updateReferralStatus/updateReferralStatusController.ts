@@ -33,7 +33,7 @@ export default class UpdateReferralStatusController {
         userInputData = req.body
       } else {
         await this.accreditedProgrammesManageAndDeliverService.updateStatus(username, referralId, data.paramsForUpdate)
-        return res.redirect(`${req.session.originPage}?statusUpdated=true`)
+        return res.redirect(`/referral/${referralId}/status-history?statusUpdated=true`)
       }
     }
 

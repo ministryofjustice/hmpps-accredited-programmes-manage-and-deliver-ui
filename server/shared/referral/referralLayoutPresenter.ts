@@ -1,5 +1,6 @@
 import { ReferralDetails } from '@manage-and-deliver-api'
 import { firstToLowerCase, formatCohort } from '../../utils/utils'
+import { MojAlertComponentArgs } from '../../interfaces/alertComponentArgs'
 
 export enum HorizontalNavValues {
   referralDetailsTab = 'referralDetails',
@@ -57,7 +58,7 @@ export default class ReferralLayoutPresenter {
     }
   }
 
-  get ldcUpdatedSuccessMessageArgs() {
+  get ldcUpdatedSuccessMessageArgs(): MojAlertComponentArgs | null {
     return this.isLdcUpdated
       ? {
           variant: 'success',
@@ -66,10 +67,10 @@ export default class ReferralLayoutPresenter {
           dismissible: true,
           text: `${this.referral.personName} ${firstToLowerCase(this.referral.hasLdcDisplayText)}`,
         }
-      : {}
+      : null
   }
 
-  get cohortUpdatedSuccessMessageArgs() {
+  get cohortUpdatedSuccessMessageArgs(): MojAlertComponentArgs | null {
     return this.isCohortUpdated
       ? {
           variant: 'success',
@@ -78,7 +79,7 @@ export default class ReferralLayoutPresenter {
           dismissible: true,
           text: `${this.referral.personName} is in the ${formatCohort(this.referral.cohort)} cohort`,
         }
-      : {}
+      : null
   }
 
   getSubHeaderArgs(): {
@@ -128,7 +129,7 @@ export default class ReferralLayoutPresenter {
         },
         {
           text: 'Status history',
-          href: '#4',
+          href: `/referral/${this.referral.id}/status-history`,
           active: this.horizontalNavValue === HorizontalNavValues.statusHistoryTab,
         },
       ],

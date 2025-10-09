@@ -72,9 +72,7 @@ describe('update-status', () => {
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(
-            `Redirecting to /referral-details/${referralDetails.id}/personal-details?statusUpdated=true`,
-          )
+          expect(res.text).toContain(`Redirecting to /referral/${referralDetails.id}/status-history?statusUpdated=true`)
         })
     })
     it('handles form errors correctly and displays the appropriate error message', async () => {
