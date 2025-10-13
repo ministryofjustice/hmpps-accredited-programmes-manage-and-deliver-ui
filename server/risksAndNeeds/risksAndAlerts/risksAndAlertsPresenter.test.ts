@@ -1,10 +1,11 @@
-import { randomUUID } from 'crypto'
 import risksFactory from '../../testutils/factories/risksAndNeeds/risksFactory'
 import RisksAndAlertsPresenter, { RiskLevel } from './risksAndAlertsPresenter'
+import referralDetailsFactory from '../../testutils/factories/referralDetailsFactory'
 
 describe(`getLevelClass.`, () => {
   const risks = risksFactory.build()
-  const presenter = new RisksAndAlertsPresenter('risksAndAlerts', randomUUID(), risks)
+  const referral = referralDetailsFactory.build()
+  const presenter = new RisksAndAlertsPresenter('risksAndAlerts', referral, risks)
 
   test.each([
     { input: 'LOW', expectedResult: 'risk-box--low' },
@@ -24,7 +25,8 @@ describe(`getLevelClass.`, () => {
 
 describe(`getLevelText.`, () => {
   const risks = risksFactory.build()
-  const presenter = new RisksAndAlertsPresenter('risksAndAlerts', randomUUID(), risks)
+  const referral = referralDetailsFactory.build()
+  const presenter = new RisksAndAlertsPresenter('risksAndAlerts', referral, risks)
 
   test.each([
     { input: 'LOW', expectedResult: 'LOW' },
@@ -60,14 +62,16 @@ describe(`getLevelText.`, () => {
 describe(`formatFigure.`, () => {
   it('should correctly format the figure with a % symbol', () => {
     const risks = risksFactory.build()
-    const presenter = new RisksAndAlertsPresenter('risksAndAlerts', randomUUID(), risks)
+    const referral = referralDetailsFactory.build()
+    const presenter = new RisksAndAlertsPresenter('risksAndAlerts', referral, risks)
 
     expect(presenter.formatFigure(2)).toEqual('2%')
   })
 
   it('should return undefined if the figure input is not provided', () => {
     const risks = risksFactory.build()
-    const presenter = new RisksAndAlertsPresenter('risksAndAlerts', randomUUID(), risks)
+    const referral = referralDetailsFactory.build()
+    const presenter = new RisksAndAlertsPresenter('risksAndAlerts', referral, risks)
 
     expect(presenter.formatFigure(null)).toEqual(undefined)
   })
@@ -76,7 +80,8 @@ describe(`formatFigure.`, () => {
 describe(`getBodyHtmlStringWithClass.`, () => {
   it('should return the correct string based on the input', () => {
     const risks = risksFactory.build()
-    const presenter = new RisksAndAlertsPresenter('risksAndAlerts', randomUUID(), risks)
+    const referral = referralDetailsFactory.build()
+    const presenter = new RisksAndAlertsPresenter('risksAndAlerts', referral, risks)
 
     expect(presenter.getBodyHtmlStringWithClass('A random string')).toEqual(
       `<p class="govuk-body-m govuk-!-margin-bottom-0">A random string</p>`,
@@ -87,7 +92,8 @@ describe(`getBodyHtmlStringWithClass.`, () => {
 describe(`getLastUpdatedStringWithClass.`, () => {
   it('should return the correct string based on the input', () => {
     const risks = risksFactory.build()
-    const presenter = new RisksAndAlertsPresenter('risksAndAlerts', randomUUID(), risks)
+    const referral = referralDetailsFactory.build()
+    const presenter = new RisksAndAlertsPresenter('risksAndAlerts', referral, risks)
 
     expect(presenter.getLastUpdatedStringWithClass('12th October 2024')).toEqual(
       `<p class="risk-box__body-text govuk-!-margin-bottom-0">Last updated: 12th October 2024</p>`,
@@ -97,7 +103,8 @@ describe(`getLastUpdatedStringWithClass.`, () => {
 
 describe(`roshTableCellForLevel.`, () => {
   const risks = risksFactory.build()
-  const presenter = new RisksAndAlertsPresenter('risksAndAlerts', randomUUID(), risks)
+  const referral = referralDetailsFactory.build()
+  const presenter = new RisksAndAlertsPresenter('risksAndAlerts', referral, risks)
 
   test.each([
     { input: 'LOW', expectedResult: { classes: `rosh-table__cell rosh-table__cell--low`, text: 'Low' } },

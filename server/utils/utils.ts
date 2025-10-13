@@ -1,6 +1,9 @@
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
 
+export const firstToLowerCase = (word: string): string =>
+  word.length >= 1 ? word[0].toLowerCase() + word.toLowerCase().slice(1) : word
+
 const isBlank = (str: string): boolean => !str || /^\s*$/.test(str)
 
 /**
@@ -20,4 +23,13 @@ export const initialiseName = (fullName?: string): string | null => {
 
   const array = fullName.split(' ')
   return `${array[0][0]}. ${array.reverse()[0]}`
+}
+
+export const formatCohort = (cohort?: string): string | null => {
+  const formatted = cohort
+    .toLowerCase() // convert to lowercase
+    .replace('_', ' ') // replace underscore with space
+
+  // Capitalize first letter only
+  return formatted.charAt(0).toUpperCase() + formatted.slice(1)
 }

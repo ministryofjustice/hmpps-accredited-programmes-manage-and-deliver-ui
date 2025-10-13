@@ -43,6 +43,22 @@ export default {
     endDateEmpty: `Enter a date in the format 17/5/2024 or select the calendar icon to pick a date.`,
     endDateInPast: 'Enter or select a date in the future',
   },
+  addPreferredLocations: {
+    addAnotherPDU: 'Select whether you want to add locations in another PDU',
+  },
+  cannotAttendLocations: {
+    cannotAttendLocationsRadios: {
+      requiredRadioSelection: 'Select whether there are any locations the person cannot attend',
+    },
+    cannotAttendTextArea: {
+      exceededCharacterLimit: 'Location details must be 2,000 characters or fewer',
+      inputRequired: 'Give details of the locations the person cannot attend',
+    },
+  },
+  updateStatus: {
+    updatedStatusEmpty: `Select the referral status you want to move the person to.`,
+    detailsTooLong: 'Details must be 500 characters or fewer.',
+  },
   returnedError,
   userHeaderTypes,
   errorHandlerAccessErrorMessages,

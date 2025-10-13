@@ -65,7 +65,6 @@
         "urlPattern": "/assessments/.*/section/section4",
         "method": "GET"
       },
-
       "response": {
         "status": 200,
         "jsonBody": {
@@ -210,7 +209,6 @@
         "urlPattern": "/assessments/.*/section/section13",
         "method": "GET"
       },
-
       "response": {
         "status": 200,
         "jsonBody": {
@@ -328,68 +326,64 @@
       },
       "response": {
         "status": 200,
-        "jsonBody": {
-          "assessmentPk": 10544541,
-          "assessmentType": "LAYER3",
-          "dateCompleted": "2025-08-06T12:41:19",
-          "assessorSignedDate": "2025-08-06T12:41:19",
-          "initiationDate": "2025-08-06T12:28:11",
-          "assessmentStatus": "COMPLETE",
-          "superStatus": "COMPLETE",
-          "laterWIPAssessmentExists": true,
-          "latestWIPDate": "2025-08-07T15:58:20",
-          "laterSignLockAssessmentExists": false,
-          "latestSignLockDate": null,
-          "laterPartCompUnsignedAssessmentExists": false,
-          "latestPartCompUnsignedDate": "2023-01-31T15:50:58",
-          "laterPartCompSignedAssessmentExists": false,
-          "latestPartCompSignedDate": null,
-          "laterCompleteAssessmentExists": false,
-          "latestCompleteDate": "2025-08-06T12:41:19",
-          "offenceAnalysis": "On 28/09/2022, Mr Davies was sentencted at xxx Magistrate's Court for the offence of causing intentional harassment, alarm or distress to 12 weeks Adult Custody inc PSS. The details of the offence are as follows:\r\n    \r\n    On 27/09/22 at 1220 at Old Market Square, xxx, This is a case of Section 5 threatening behaviour in xxx City Centre witnessed by Community Protection Officers. On Thursday 27th September 2022 between 12:20 and 12:40 the defendant has become embroiled in a street altercation with another male that has resulted in a fight. Patrolling Officers are advised by a member of public of the fight and attend and intervene. The defendant has been argumentative and refused to calm down, eventually climbing onto a wall and punching the other male to the side of the head. Although the aggreived party has not wished to pursue a complaint, the threats and act of violence has occurred in front of attending Officers wearing BWV.\r\n    \r\n    Roger SMITH has stated that he was in uniform on foot patrol when he has been informed of a fight on Long Row. Whilst walking up to the incident he has seen a male now known to be defendant punching another male in the head. During the incident defendant has been shouting and was agitated. \r\n    \r\n    Senior CPO 4190 BLACK statement states that whilst on foot patrol she has been approached by a member of the public who has informed her of a fight. When BLACK has approached Debenhams Long Row she has seen a group of people near the flower beds and has activated her BWV E7123. BLACK has approached the defendant who was shouting and gesturing towards other people. The defendant has then approached another male and has punched him in the side of the head.",
-          "whatWasInvolved": null,
-          "whichWeapon": null,
-          "numberOfOthersInvolved": null,
-          "othersInvolved": null,
-          "typeOfWeapon": null,
-          "otherMotivationText": null,
-          "thrillSeeking": "No",
-          "sexual": "No",
-          "racial": "No",
-          "other": "No",
-          "financial": "Yes",
-          "emotional": "Yes",
-          "addictions": "Yes",
-          "offenceLinkedToHarm": "Yes",
-          "offenceLinkedToReoffending": "Mr Davies has poor emotional control and difficulties solving problems in a pro-social manner. His attitudes that condone violence raise significant concerns as he has continued to use this as a technique and response to conflict. This has been the case when sober and under the influence but appears to be significantly exacerbated when under the influence of alcohol and substances. The risk Mr Davies poses is high when under the influence of alcohol. It is my assessment that analysis of offence issues are linked to the risk of serious harm. ",
-          "offenceMotivation": "Mr Davies states he does not remember much about the incident but knows he was under the influence of alcohol and amphetamine. He states the group of men had been making some comments that Mr Davies interpreted as being supportive of domestic abuse. He states he \\\"saw red\\\" at these comments and this is the reason the assault occured. However, Mr Davies does dispute himself whether his recollection of events is correct and at the time of Police interview answered no comment. This raises some concern regarding his thinking skills and problem solving and is likely to have been exacerbated by him being under the influence of alcohol and substances. ",
-          "peerGroupInfluences": "Yes",
-          "otherInvolved": "No",
-          "recognisesImpact": "Yes",
-          "victimImpact": "Physical harm due to violence used towards the victim. Psychological harm as the incident happened in the day in a public place. The wider public may also be experiencing emotional trauma had they been witness to the incident. ",
-          "victimPerpetratorRel": "The victim was an acquaintance of Mr Davies. Mr Davies reports he knew of him but they would not be considered friends. ",
-          "victimInfo": "None known. ",
-          "whatOccurred": ["Were the victim(s) stranger(s) to the offender"],
-          "involveCarryingWeapon": "No",
-          "involveSexualElement": "No",
-          "involvePhysicalDamage": "No",
-          "involveExcessiveViolence": "No",
-          "involveDomesticAbuse": "No",
-          "involveArson": "No",
-          "involveViolenceOrThreat": "Yes",
-          "partOfEstablishedPattern": "Yes",
-          "escalationOfSeriousness": "Yes",
-          "patternOffending": "Mr Davies has accrued 24 previous convictions. He started offending at a very young age and the majority of earlier offences relate to thefts and criminal damage and violence. The violence would seem to becoming more frequent with the violence being used also increasing. I would consider this to be part of a pattern of similar offending behaviour. \r\n    \r\n    There are clear issues relating to managing emotions especially within relationships and managing himself whilst under the influence of alcohol. The pattern of offending indicates that Mr Davies poses a continued risk to people of a similar lifestyle and staff, particularly police officers. ",
-          "acceptsResponsibility": "Mr Davies accepts that his behaviour whilst under the influence of alcohol is of concern and states when he has had a drink he is \\\"like a different person\\\". However, he continued alcohol misuse is of concern given the link to violent offending. Furthermore, he discloses amphetamine use at the time of the offence. \r\n    \r\n    Mr Davies does show motivation and take responsibilty to overcome his alcohol misuse following release from Custody but usually soon after release he begins drinking excessively again. Mr Davies does not seek to victim blame or minimise his behaviours but states his behaviours were due to comments made supportive of domestic abuse. Mr Davies states he was angry at this and is why he reacted in such a way. Following the most recent release, Mr Davies has displayed good motivation to engage and overcome his alcohol misuse. ",
-          "acceptsResponsibilityYesNo": "Yes",
-          "disinhibitors": ["Alcohol", "Drugs", "Emotional state"],
-          "assessor": {
-            "name": "david Atkins"
-          },
-          "crn": "X371199"
-        },
         "headers": {
           "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "pniCalculation": {
+            "sexDomain": {
+              "level": "H",
+              "score": 2
+            },
+            "thinkingDomain": {
+              "level": "H",
+              "score": 2
+            },
+            "relationshipDomain": {
+              "level": "H",
+              "score": 2
+            },
+            "selfManagementDomain": {
+              "level": "H",
+              "score": 2
+            },
+            "riskLevel": "H",
+            "needLevel": "H",
+            "totalDomainScore": 8,
+            "pni": "M",
+            "saraRiskLevel": {
+              "toPartner": 3,
+              "toOther": 3
+            }
+          },
+          "assessment": {
+            "id": 10550534,
+            "ogrs3Risk": "LOW",
+            "ovpRisk": "HIGH",
+            "osp": {
+              "cdc": "HIGH",
+              "iiic": "MEDIUM"
+            },
+            "rsrPercentage": 29.57,
+            "offenderAge": 42,
+            "questions": {
+              "everCommittedSexualOffence": "YES",
+              "openSexualOffendingQuestions": "Unknown",
+              "sexualPreOccupation": "SIGNIFICANT",
+              "offenceRelatedSexualInterests": "SIGNIFICANT",
+              "emotionalCongruence": "SIGNIFICANT",
+              "proCriminalAttitudes": "SIGNIFICANT",
+              "hostileOrientation": "SIGNIFICANT",
+              "relCloseFamily": "SIGNIFICANT",
+              "prevCloseRelationships": "SIGNIFICANT",
+              "easilyInfluenced": "SIGNIFICANT",
+              "aggressiveControllingBehaviour": "SIGNIFICANT",
+              "impulsivity": "SIGNIFICANT",
+              "temperControl": "SIGNIFICANT",
+              "problemSolvingSkills": "SIGNIFICANT",
+              "difficultiesCoping": "SIGNIFICANT"
+            }
+          }
         }
       }
     },
@@ -470,7 +464,6 @@
         "urlPattern": "/assessments/.*/section/section7",
         "method": "GET"
       },
-
       "response": {
         "status": 200,
         "jsonBody": {
@@ -506,13 +499,11 @@
         }
       }
     },
-
     {
       "request": {
         "urlPattern": "/assessments/.*/section/section8",
         "method": "GET"
       },
-
       "response": {
         "status": 200,
         "jsonBody": {
@@ -600,13 +591,11 @@
         }
       }
     },
-
     {
       "request": {
         "urlPattern": "/assessments/.*/section/section9",
         "method": "GET"
       },
-
       "response": {
         "status": 200,
         "jsonBody": {
@@ -644,13 +633,11 @@
         }
       }
     },
-
     {
       "request": {
         "urlPattern": "/assessments/.*/section/section10",
         "method": "GET"
       },
-
       "response": {
         "status": 200,
         "jsonBody": {
@@ -695,13 +682,11 @@
         }
       }
     },
-
     {
       "request": {
         "urlPattern": "/assessments/.*/section/section12",
         "method": "GET"
       },
-
       "response": {
         "status": 200,
         "jsonBody": {
@@ -739,13 +724,11 @@
         }
       }
     },
-
     {
       "request": {
         "urlPattern": "/assessments/.*/section/section11",
         "method": "GET"
       },
-
       "response": {
         "status": 200,
         "jsonBody": {
@@ -793,7 +776,6 @@
         "urlPattern": "/assessments/.*/section/section13",
         "method": "GET"
       },
-
       "response": {
         "status": 200,
         "jsonBody": {

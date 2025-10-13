@@ -28,3 +28,13 @@ describe('initialise name', () => {
     expect(initialiseName(a)).toEqual(expected)
   })
 })
+
+describe('convert first letter to lower case', () => {
+  it.each([
+    [null, null, null],
+    ['Empty string', '', null],
+    ['One word', 'Yes', 'yes'],
+    ['Two words', 'Robert James', 'robert James'],
+    ['Three words', 'Does not need', 'does not need'],
+  ])
+})

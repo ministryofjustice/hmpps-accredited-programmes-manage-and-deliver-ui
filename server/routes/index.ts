@@ -6,6 +6,10 @@ import PniController from '../pni/pniController'
 import ReferralDetailsController from '../referralDetails/referralDetailsController'
 import RisksAndNeedsController from '../risksAndNeeds/risksAndNeedsController'
 import type { Services } from '../services'
+import LocationPreferencesController from '../locationPreferences/locationPreferencesController'
+import ChangeCohortController from '../cohort/changeCohortController'
+import LdcController from '../ldc/ldcController'
+import UpdateReferralStatusController from '../updateReferralStatus/updateReferralStatusController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
@@ -16,6 +20,10 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const referralDetailsController = new ReferralDetailsController(accreditedProgrammesManageAndDeliverService)
   const risksAndNeedsController = new RisksAndNeedsController(accreditedProgrammesManageAndDeliverService)
   const programmeNeedsIdenfitierController = new PniController(accreditedProgrammesManageAndDeliverService)
+  const locationPreferencesController = new LocationPreferencesController(accreditedProgrammesManageAndDeliverService)
+  const cohortController = new ChangeCohortController(accreditedProgrammesManageAndDeliverService)
+  const ldcController = new LdcController(accreditedProgrammesManageAndDeliverService)
+  const updateReferralController = new UpdateReferralStatusController(accreditedProgrammesManageAndDeliverService)
 
   get('/', async (req, res, next) => {
     await caselistController.showOpenCaselist(req, res)
@@ -51,6 +59,34 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   get('/referral-details/:id/location', async (req, res, next) => {
     await referralDetailsController.showLocationPage(req, res)
+  })
+
+  get('/referral/:referralId/add-location-preferences', async (req, res, next) => {
+    await locationPreferencesController.showLocationPreferencesPage(req, res)
+  })
+
+  post('/referral/:referralId/add-location-preferences', async (req, res, next) => {
+    await locationPreferencesController.showLocationPreferencesPage(req, res)
+  })
+
+  get('/referral/:referralId/add-location-preferences/additional-pdus', async (req, res, next) => {
+    await locationPreferencesController.showAdditionalPduLocationPreferencesPage(req, res)
+  })
+
+  post('/referral/:referralId/add-location-preferences/additional-pdus', async (req, res, next) => {
+    await locationPreferencesController.showAdditionalPduLocationPreferencesPage(req, res)
+  })
+
+  get('/referral/:referralId/add-location-preferences/cannot-attend-locations', async (req, res, next) => {
+    await locationPreferencesController.showCannotAttendLocationsPage(req, res)
+  })
+
+  post('/referral/:referralId/add-location-preferences/cannot-attend-locations', async (req, res, next) => {
+    await locationPreferencesController.showCannotAttendLocationsPage(req, res)
+  })
+
+  get('/referral/:referralId/add-location-preferences', async (req, res, next) => {
+    await locationPreferencesController.showLocationPreferencesPage(req, res)
   })
 
   get('/referral-details/:id/additional-information', async (req, res, next) => {
@@ -123,6 +159,34 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   get('/referral/:referralId/programme-needs-identifier', async (req, res, next) => {
     await programmeNeedsIdenfitierController.showProgrammeNeedsIdentifierPage(req, res)
+  })
+
+  get('/referral/:referralId/status-history', async (req, res, next) => {
+    await referralDetailsController.showStatusHistoryPage(req, res)
+  })
+
+  get('/referral/:referralId/change-cohort', async (req, res, next) => {
+    await cohortController.showChangeCohortPage(req, res)
+  })
+
+  post('/referral/:referralId/change-cohort', async (req, res, next) => {
+    await cohortController.showChangeCohortPage(req, res)
+  })
+
+  get('/referral/:referralId/update-ldc', async (req, res, next) => {
+    await ldcController.showChangeLdcPage(req, res)
+  })
+
+  post('/referral/:referralId/update-ldc', async (req, res, next) => {
+    await ldcController.showChangeLdcPage(req, res)
+  })
+
+  get('/referral/:referralId/update-status', async (req, res, next) => {
+    await updateReferralController.updateStatus(req, res)
+  })
+
+  post('/referral/:referralId/update-status', async (req, res, next) => {
+    await updateReferralController.updateStatus(req, res)
   })
 
   return router

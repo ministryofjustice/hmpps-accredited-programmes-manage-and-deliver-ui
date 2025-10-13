@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
-import PniPresenter from './pniPresenter'
 import ControllerUtils from '../utils/controllerUtils'
+import PniPresenter from './pniPresenter'
 import PniView from './pniView'
 
 export default class PniController {
@@ -12,6 +12,7 @@ export default class PniController {
   async showProgrammeNeedsIdentifierPage(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params
     const { username } = req.user
+    const { isCohortUpdated, isLdcUpdated } = req.query
 
     const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
       referralId,
@@ -19,7 +20,15 @@ export default class PniController {
     )
     const pniScore = await this.accreditedProgrammesManageAndDeliverService.getPniScore(username, referralDetails.crn)
 
-    const presenter = new PniPresenter(referralId, referralDetails, pniScore)
+    req.session.originPage = req.path
+
+    const presenter = new PniPresenter(
+      referralId,
+      referralDetails,
+      pniScore,
+      isLdcUpdated === 'true',
+      isCohortUpdated === 'true',
+    )
     const view = new PniView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, referralDetails)

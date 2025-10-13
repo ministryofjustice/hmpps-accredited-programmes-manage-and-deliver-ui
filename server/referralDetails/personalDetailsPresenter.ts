@@ -8,10 +8,11 @@ export default class PersonalDetailsPresenter extends ReferralDetailsPresenter {
   constructor(
     readonly referralDetails: ReferralDetails,
     readonly subNavValue: string,
-    readonly id: string,
     private personalDetails: PersonalDetails,
+    readonly isLdcUpdated: boolean | null = null,
+    readonly isCohortUpdated: boolean | null = null,
   ) {
-    super(referralDetails, subNavValue, id)
+    super(referralDetails, subNavValue, isLdcUpdated, isCohortUpdated)
   }
 
   get importFromDeliusText(): InsetTextArgs {

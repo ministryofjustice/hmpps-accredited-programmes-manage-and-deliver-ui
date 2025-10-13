@@ -4,6 +4,7 @@
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 {%- from "moj/components/side-navigation/macro.njk" import mojSideNavigation -%}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+{%- from "moj/components/alert/macro.njk" import mojAlert -%}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -14,9 +15,18 @@
       <div class="govuk-main-wrapper">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-full">
-            {{ mojPageHeaderActions(presenter.getSubHeaderArgs()) }}
-            {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
+            {% include "../partials/headerMenu.njk" %}
+            <div class="govuk-grid-column-full">
+              {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
+            </div>
+
             <div class="govuk-grid-column-three-quarters">
+              {% if presenter.isCohortUpdated %}
+                {{ mojAlert(presenter.cohortUpdatedSuccessMessageArgs) }}
+              {% endif %}
+              {% if presenter.isLdcUpdated %}
+                {{ mojAlert(presenter.ldcUpdatedSuccessMessageArgs) }}
+              {% endif %}
               <h2 class="govuk-heading-m">Risks and needs</h2>
               <p class="govuk-body govuk-!-margin-bottom-0">{{ presenter.pageDescription }}</p>
             </div>
@@ -34,38 +44,38 @@
           </div>
           <div class="govuk-grid-column-two-thirds">
             {% if presenter.subNavValue == 'learningNeeds' %}
-            <div>
-                  {% include "./learningNeeds.njk" %}
-            </div>
+              <div>
+                {% include "./learningNeeds.njk" %}
+              </div>
             {% elif presenter.subNavValue == 'offenceAnalysis' %}
-            <div>
-              {% include "./offenceAnalysis.njk" %}
-            </div>
+              <div>
+                {% include "./offenceAnalysis.njk" %}
+              </div>
             {% elif presenter.subNavValue == 'relationships' %}
-            <div>
+              <div>
                 {% include "./relationships.njk" %}
-            </div>
+              </div>
             {% elif presenter.subNavValue == 'lifestyleAndAssociates' %}
               <div>
                 {% include "./lifestyleAndAssociates.njk" %}
               </div>
             {% elif presenter.subNavValue == 'drugMisuse' %}
-            <div>
-              {% include "./drugMisuseDetails.njk" %}
-            </div>
+              <div>
+                {% include "./drugMisuseDetails.njk" %}
+              </div>
             {% elif presenter.subNavValue == 'alcoholMisuse' %}
-            <div>
+              <div>
                 {% include "./alcoholMisuse.njk" %}
-            </div>
+              </div>
             {% elif presenter.subNavValue == 'emotionalWellbeing' %}
-            <div>
-              {% include "./emotionalWellbeing.njk" %}
-            </div>
+              <div>
+                {% include "./emotionalWellbeing.njk" %}
+              </div>
             {% elif presenter.subNavValue == 'thinkingAndBehaviour' %}
-            <div>
-              {% include "./thinkingAndBehaviour.njk" %}
-            </div>
-              {% elif presenter.subNavValue == 'attitudes' %}
+              <div>
+                {% include "./thinkingAndBehaviour.njk" %}
+              </div>
+            {% elif presenter.subNavValue == 'attitudes' %}
               <div>
                 {% include "./attitudes.njk" %}
               </div>
@@ -79,7 +89,7 @@
               </div>
             {% else %}
               <div>
-              {% include "./risksAndAlerts.njk" %}
+                {% include "./risksAndAlerts.njk" %}
               </div>
             {% endif %}
           </div>

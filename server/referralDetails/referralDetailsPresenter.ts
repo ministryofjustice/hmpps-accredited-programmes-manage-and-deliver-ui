@@ -1,8 +1,9 @@
 import { ReferralDetails } from '@manage-and-deliver-api'
+import ReferralLayoutPresenter, { HorizontalNavValues } from '../shared/referral/referralLayoutPresenter'
 import { SummaryListArgs } from '../utils/govukFrontendTypes'
 import { SummaryListItem } from '../utils/summaryList'
+import { formatCohort } from '../utils/utils'
 import ViewUtils from '../utils/viewUtils'
-import ReferralLayoutPresenter, { HorizontalNavValues } from '../shared/referral/referralLayoutPresenter'
 
 export enum ReferralDetailsPageSection {
   PersonalDetailsTab = 'personalDetails',
@@ -18,9 +19,10 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
   protected constructor(
     readonly referralDetails: ReferralDetails,
     readonly subNavValue: string,
-    readonly id: string,
+    readonly isLdcUpdated: boolean | null = null,
+    readonly isCohortUpdated: boolean | null = null,
   ) {
-    super(HorizontalNavValues.referralDetailsTab, id)
+    super(HorizontalNavValues.referralDetailsTab, referralDetails, isLdcUpdated, isCohortUpdated)
   }
 
   get referralSummary(): SummaryListArgs {
@@ -37,7 +39,7 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
       items: [
         {
           text: 'Personal Details',
-          href: `/referral-details/${this.id}/personal-details/#personal-details`,
+          href: `/referral-details/${this.referralDetails.id}/personal-details/#personal-details`,
           active: this.subNavValue === ReferralDetailsPageSection.PersonalDetailsTab,
           attributes: {
             id: 'personal-details',
@@ -45,7 +47,7 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
         },
         {
           text: 'Programme History',
-          href: `/referral-details/${this.id}/programme-history/#programme-history`,
+          href: `/referral-details/${this.referralDetails.id}/programme-history/#programme-history`,
           active: this.subNavValue === ReferralDetailsPageSection.ProgrammeHistoryTab,
           attributes: {
             id: 'programme-history',
@@ -53,7 +55,7 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
         },
         {
           text: 'Offence History',
-          href: `/referral-details/${this.id}/offence-history/#offence-history`,
+          href: `/referral-details/${this.referralDetails.id}/offence-history/#offence-history`,
           active: this.subNavValue === ReferralDetailsPageSection.OffenceHistoryTab,
           attributes: {
             id: 'offence-history',
@@ -61,7 +63,7 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
         },
         {
           text: 'Sentence Information',
-          href: `/referral-details/${this.id}/sentence-information/#sentence-information`,
+          href: `/referral-details/${this.referralDetails.id}/sentence-information/#sentence-information`,
           active: this.subNavValue === ReferralDetailsPageSection.SentenceInformationTab,
           attributes: {
             id: 'sentence-information',
@@ -69,7 +71,7 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
         },
         {
           text: 'Availability',
-          href: `/referral-details/${this.id}/availability/#availability`,
+          href: `/referral-details/${this.referralDetails.id}/availability/#availability`,
           active: this.subNavValue === ReferralDetailsPageSection.AvailabilityTab,
           attributes: {
             id: 'availability',
@@ -77,7 +79,7 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
         },
         {
           text: 'Location',
-          href: `/referral-details/${this.id}/location/#location`,
+          href: `/referral-details/${this.referralDetails.id}/location/#location`,
           active: this.subNavValue === ReferralDetailsPageSection.LocationTab,
           attributes: {
             id: 'location',
@@ -85,7 +87,7 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
         },
         {
           text: 'Additional Information',
-          href: `/referral-details/${this.id}/additional-information/#additional-information`,
+          href: `/referral-details/${this.referralDetails.id}/additional-information/#additional-information`,
           active: this.subNavValue === ReferralDetailsPageSection.AdditionalInformationTab,
           attributes: {
             id: 'additional-information',
@@ -107,8 +109,8 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
         lines: [`${this.referralDetails.interventionName}`],
       },
       {
-        key: 'Programme strand',
-        lines: ['PLACEHOLDER'],
+        key: 'Cohort',
+        lines: [{ item: `${formatCohort(this.referralDetails.cohort)}`, hasLdc: this.referralDetails.hasLdc }],
       },
       {
         key: 'Date referred',

@@ -5,11 +5,12 @@ export default class AvailabilityPresenter extends ReferralDetailsPresenter {
   constructor(
     readonly details: ReferralDetails,
     readonly subNavValue: string,
-    readonly id: string,
     readonly availability: Availability,
     readonly isAvailabilityUpdated: boolean | null = null,
+    readonly isLdcUpdated: boolean | null = null,
+    readonly isCohortUpdated: boolean | null = null,
   ) {
-    super(details, subNavValue, id)
+    super(details, subNavValue, isLdcUpdated, isCohortUpdated)
   }
 
   get showAvailability(): boolean {

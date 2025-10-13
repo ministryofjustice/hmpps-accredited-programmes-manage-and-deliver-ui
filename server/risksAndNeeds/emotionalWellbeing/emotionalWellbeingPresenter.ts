@@ -1,14 +1,16 @@
-import { EmotionalWellbeing } from '@manage-and-deliver-api'
+import { EmotionalWellbeing, ReferralDetails } from '@manage-and-deliver-api'
 import RisksAndNeedsPresenter from '../risksAndNeedsPresenter'
 import { SummaryListItem } from '../../utils/summaryList'
 
 export default class EmotionalWellbeingPresenter extends RisksAndNeedsPresenter {
   constructor(
     readonly subNavValue: string,
-    readonly referralId: string,
+    readonly referral: ReferralDetails,
+    readonly isLdcUpdated: boolean | null = null,
+    readonly isCohortUpdated: boolean | null = null,
     readonly emotionalWellbeing?: EmotionalWellbeing,
   ) {
-    super(subNavValue, referralId)
+    super(subNavValue, referral, isLdcUpdated, isCohortUpdated)
   }
 
   emotionalWellbeingSummaryList(): SummaryListItem[] {

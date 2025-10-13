@@ -1,0 +1,34 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% block main %}
+    {% block content %}
+
+        <div class="govuk-width-container" id="main-content">
+            {{ govukBackLink(backLinkArgs) }}
+            <div class="govuk-main-wrapper">
+                <h2 class="govuk-heading-l" data-testid="cohort-heading">Update learning disabilities and challenges(LDC)</h2>
+                {{ govukInsetText(currentLdcStatusText) }}
+                <form method="post" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+
+                    {{ govukRadios(radioArgs) }}
+
+                    <div class="govuk-button-group">
+                        {{ govukButton({ text: "Submit", preventDoubleClick: true }) }}
+                        <a class="govuk-link" href={{ backlinkUri }}>Cancel</a>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+
+    {% endblock %}
+{% endblock %}

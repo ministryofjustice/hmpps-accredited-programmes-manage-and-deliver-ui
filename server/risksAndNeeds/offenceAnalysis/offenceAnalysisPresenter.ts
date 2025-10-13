@@ -1,4 +1,4 @@
-import { OffenceAnalysis } from '@manage-and-deliver-api'
+import { OffenceAnalysis, ReferralDetails } from '@manage-and-deliver-api'
 import { InsetTextArgs } from '../../utils/govukFrontendTypes'
 import { SummaryListItem } from '../../utils/summaryList'
 import RisksAndNeedsPresenter from '../risksAndNeedsPresenter'
@@ -6,10 +6,12 @@ import RisksAndNeedsPresenter from '../risksAndNeedsPresenter'
 export default class OffenceAnalysisPresenter extends RisksAndNeedsPresenter {
   constructor(
     readonly subNavValue: string,
-    readonly referralId: string,
+    readonly referral: ReferralDetails,
     readonly offenceAnalysis: OffenceAnalysis,
+    readonly isLdcUpdated: boolean | null = null,
+    readonly isCohortUpdated: boolean | null = null,
   ) {
-    super(subNavValue, referralId)
+    super(subNavValue, referral, isLdcUpdated, isCohortUpdated)
   }
 
   get assessmentCompletedText(): InsetTextArgs {

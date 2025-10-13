@@ -21,6 +21,8 @@ import ProgrammeHistoryPresenter from './programmeHistoryPresenter'
 import ProgrammeHistoryView from './programmeHistoryView'
 import SentenceInformationPresenter from './sentenceInformationPresenter'
 import SentenceInformationView from './sentenceInformationView'
+import StatusHistoryPresenter from './statusHistoryPresenter'
+import StatusHistoryView from './statusHistoryView'
 
 export default class ReferralDetailsController {
   constructor(
@@ -33,16 +35,23 @@ export default class ReferralDetailsController {
 
   async showPersonalDetailsPage(req: Request, res: Response): Promise<void> {
     const { id } = req.params
+    const { isCohortUpdated, isLdcUpdated } = req.query
     const { username } = req.user
     const subNavValue = 'personalDetails'
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
     const personalDetails = await this.accreditedProgrammesManageAndDeliverService.getPersonalDetails(id, username)
 
-    const presenter = new PersonalDetailsPresenter(sharedReferralDetailsData, subNavValue, id, personalDetails)
+    const presenter = new PersonalDetailsPresenter(
+      sharedReferralDetailsData,
+      subNavValue,
+      personalDetails,
+      isLdcUpdated === 'true',
+      isCohortUpdated === 'true',
+    )
     const view = new PersonalDetailsView(presenter)
 
-    req.session.originPage = req.originalUrl
+    req.session.originPage = req.path
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -50,14 +59,20 @@ export default class ReferralDetailsController {
   async showProgrammeHistoryPage(req: Request, res: Response): Promise<void> {
     const { id } = req.params
     const { username } = req.user
+    const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'programmeHistory'
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
 
-    const presenter = new ProgrammeHistoryPresenter(sharedReferralDetailsData, subNavValue, id)
+    const presenter = new ProgrammeHistoryPresenter(
+      sharedReferralDetailsData,
+      subNavValue,
+      isLdcUpdated === 'true',
+      isCohortUpdated === 'true',
+    )
     const view = new ProgrammeHistoryView(presenter)
 
-    req.session.originPage = req.originalUrl
+    req.session.originPage = req.path
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -65,15 +80,22 @@ export default class ReferralDetailsController {
   async showOffenceHistoryPage(req: Request, res: Response): Promise<void> {
     const { id } = req.params
     const { username } = req.user
+    const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'offenceHistory'
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
     const offenceHistory = await this.accreditedProgrammesManageAndDeliverService.getOffenceHistory(username, id)
 
-    const presenter = new OffenceHistoryPresenter(sharedReferralDetailsData, subNavValue, id, offenceHistory)
+    const presenter = new OffenceHistoryPresenter(
+      sharedReferralDetailsData,
+      subNavValue,
+      offenceHistory,
+      isLdcUpdated === 'true',
+      isCohortUpdated === 'true',
+    )
     const view = new OffenceHistoryView(presenter)
 
-    req.session.originPage = req.originalUrl
+    req.session.originPage = req.path
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -81,6 +103,7 @@ export default class ReferralDetailsController {
   async showSentenceInformationPage(req: Request, res: Response): Promise<void> {
     const { id } = req.params
     const { username } = req.user
+    const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'sentenceInformation'
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
@@ -89,10 +112,16 @@ export default class ReferralDetailsController {
       id,
     )
 
-    const presenter = new SentenceInformationPresenter(sharedReferralDetailsData, subNavValue, id, sentenceInformation)
+    const presenter = new SentenceInformationPresenter(
+      sharedReferralDetailsData,
+      subNavValue,
+      sentenceInformation,
+      isLdcUpdated === 'true',
+      isCohortUpdated === 'true',
+    )
     const view = new SentenceInformationView(presenter)
 
-    req.session.originPage = req.originalUrl
+    req.session.originPage = req.path
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -100,7 +129,7 @@ export default class ReferralDetailsController {
   async showAvailabilityPage(req: Request, res: Response): Promise<void> {
     const { id } = req.params
     const { username } = req.user
-    const { detailsUpdated } = req.query
+    const { isCohortUpdated, isLdcUpdated, detailsUpdated } = req.query
     const subNavValue = 'availability'
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
@@ -110,13 +139,14 @@ export default class ReferralDetailsController {
     const presenter = new AvailabilityPresenter(
       sharedReferralDetailsData,
       subNavValue,
-      id,
       availability,
       detailsUpdated === 'true',
+      isLdcUpdated === 'true',
+      isCohortUpdated === 'true',
     )
     const view = new AvailabilityView(presenter)
 
-    req.session.originPage = req.originalUrl
+    req.session.originPage = req.path
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -124,6 +154,7 @@ export default class ReferralDetailsController {
   async showLocationPage(req: Request, res: Response): Promise<void> {
     const { id } = req.params
     const { username } = req.user
+    const { isCohortUpdated, isLdcUpdated, preferredLocationUpdated } = req.query
     const subNavValue = 'location'
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
@@ -131,10 +162,17 @@ export default class ReferralDetailsController {
     const deliveryLocationPreferences =
       await this.accreditedProgrammesManageAndDeliverService.getDeliveryLocationPreferences(username, id)
 
-    const presenter = new LocationPresenter(sharedReferralDetailsData, subNavValue, id, deliveryLocationPreferences)
+    const presenter = new LocationPresenter(
+      sharedReferralDetailsData,
+      subNavValue,
+      deliveryLocationPreferences,
+      preferredLocationUpdated === 'true',
+      isLdcUpdated === 'true',
+      isCohortUpdated === 'true',
+    )
     const view = new LocationView(presenter)
 
-    req.session.originPage = req.originalUrl
+    req.session.originPage = req.path
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }
@@ -142,12 +180,41 @@ export default class ReferralDetailsController {
   async showAdditionalInformationPage(req: Request, res: Response): Promise<void> {
     const { id } = req.params
     const { username } = req.user
+    const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'additionalInformation'
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
 
-    const presenter = new AdditionalInformationPresenter(sharedReferralDetailsData, subNavValue, id)
+    const presenter = new AdditionalInformationPresenter(
+      sharedReferralDetailsData,
+      subNavValue,
+      isLdcUpdated === 'true',
+      isCohortUpdated === 'true',
+    )
     const view = new AdditionalInformationView(presenter)
+
+    req.session.originPage = req.path
+
+    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+  }
+
+  async showStatusHistoryPage(req: Request, res: Response): Promise<void> {
+    const { referralId } = req.params
+    const { username } = req.user
+    const { statusUpdated = 'false' } = req.query
+
+    const sharedReferralDetailsData = await this.showReferralDetailsPage(referralId, username)
+    const statusHistory = await this.accreditedProgrammesManageAndDeliverService.getStatusHistory(username, referralId)
+
+    const presenter = new StatusHistoryPresenter(
+      referralId,
+      statusHistory,
+      sharedReferralDetailsData,
+      statusUpdated === 'true',
+    )
+    const view = new StatusHistoryView(presenter)
+
+    req.session.originPage = req.originalUrl
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }

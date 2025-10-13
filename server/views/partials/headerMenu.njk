@@ -1,0 +1,15 @@
+{%- from "govuk/components/button/macro.njk" import govukButton %}
+{%- from "moj/components/button-menu/macro.njk" import mojButtonMenu -%}
+
+<div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">Referral to Building Choices: moderate intensity</h1>
+</div>
+
+<div class="govuk-grid-column-one-third">
+    <div class="moj-button-group moj-button-group--inline">
+        {{ govukButton(presenter.getButton()) }}
+        {% if presenter.showButtonMenu() %}
+          {{ mojButtonMenu(presenter.getButtonMenu()) }}
+        {% endif %}
+    </div>
+</div>

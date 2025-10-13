@@ -1,15 +1,12 @@
-import { randomUUID } from 'crypto'
 import lifestyleAndAssociatesFactory from '../../testutils/factories/risksAndNeeds/lifestyleAndAssociatesFactory'
 import LifestyleAndAssociatesPresenter from './lifestyleAndAssociatesPresenter'
+import referralDetailsFactory from '../../testutils/factories/referralDetailsFactory'
 
 describe(`reoffendingSummaryList.`, () => {
   it('should generate the table correctly from the values supplied', () => {
     const lifestyleAndAssociates = lifestyleAndAssociatesFactory.build()
-    const presenter = new LifestyleAndAssociatesPresenter(
-      'lifestyleAndAssociates',
-      randomUUID(),
-      lifestyleAndAssociates,
-    )
+    const referral = referralDetailsFactory.build()
+    const presenter = new LifestyleAndAssociatesPresenter('lifestyleAndAssociates', referral, lifestyleAndAssociates)
 
     expect(presenter.reoffendingSummaryList()).toEqual([
       {
@@ -23,11 +20,8 @@ describe(`reoffendingSummaryList.`, () => {
 describe(`lifestyleIssuesSummaryList.`, () => {
   it('should generate the table correctly from the values supplied', () => {
     const lifestyleAndAssociates = lifestyleAndAssociatesFactory.build()
-    const presenter = new LifestyleAndAssociatesPresenter(
-      'lifestyleAndAssociates',
-      randomUUID(),
-      lifestyleAndAssociates,
-    )
+    const referral = referralDetailsFactory.build()
+    const presenter = new LifestyleAndAssociatesPresenter('lifestyleAndAssociates', referral, lifestyleAndAssociates)
 
     expect(presenter.lifestyleIssuesSummaryList()).toEqual([
       {

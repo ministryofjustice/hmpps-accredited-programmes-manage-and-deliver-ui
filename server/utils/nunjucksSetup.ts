@@ -38,6 +38,14 @@ export default function nunjucksSetup(app: express.Express): void {
     },
   )
 
+  // eslint-disable-next-line global-require,@typescript-eslint/no-require-imports
+  const getMojFilters = require('@ministryofjustice/frontend/moj/filters/all')
+
+  const mojFilters = getMojFilters()
+  Object.keys(mojFilters).forEach(filterName => {
+    njkEnv.addFilter(filterName, mojFilters[filterName])
+  })
+
   njkEnv.addFilter('initialiseName', initialiseName)
   njkEnv.addFilter('objectMerge', NunjucksUtils.objectMerge)
   njkEnv.addFilter('assetMap', (url: string) => assetManifest[url] || url)

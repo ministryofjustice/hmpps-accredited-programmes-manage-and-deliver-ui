@@ -1,4 +1,4 @@
-import { LearningNeeds } from '@manage-and-deliver-api'
+import { LearningNeeds, ReferralDetails } from '@manage-and-deliver-api'
 import RisksAndNeedsPresenter from '../risksAndNeedsPresenter'
 import { SummaryListItem } from '../../utils/summaryList'
 import PresenterUtils from '../../utils/presenterUtils'
@@ -6,10 +6,12 @@ import PresenterUtils from '../../utils/presenterUtils'
 export default class LearningNeedsPresenter extends RisksAndNeedsPresenter {
   constructor(
     readonly subNavValue: string,
-    readonly referralId: string,
+    readonly referral: ReferralDetails,
     readonly learningNeeds: LearningNeeds,
+    readonly isLdcUpdated: boolean | null = null,
+    readonly isCohortUpdated: boolean | null = null,
   ) {
-    super(subNavValue, referralId)
+    super(subNavValue, referral, isLdcUpdated, isCohortUpdated)
   }
 
   learningNeedsSummaryList(): SummaryListItem[] {

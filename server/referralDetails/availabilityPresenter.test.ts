@@ -13,6 +13,9 @@ describe(`getAvailabilityTableArgs.`, () => {
       probationPractitionerName: 'Dave Davies',
       probationPractitionerEmail: 'dave.davies@moj.com',
       cohort: 'GENERAL_OFFENCE',
+      hasLdc: true,
+      hasLdcDisplayText: 'May need an LDC-adapted programme',
+      currentStatusDescription: 'Awaiting assessment',
     }
     const availability: Availability = {
       id: '533f391d-a4dd-4a3f-b53d-e8ff2ab5db86',
@@ -81,7 +84,7 @@ describe(`getAvailabilityTableArgs.`, () => {
         },
       ],
     }
-    const presenter = new AvailabilityPresenter(referralDetails, 'availability', '12345', availability)
+    const presenter = new AvailabilityPresenter(referralDetails, 'availability', availability)
     expect(presenter.getAvailabilityTableArgs()).toEqual({
       firstCellIsHeader: true,
       head: [{ text: 'Day' }, { text: 'Daytime' }, { text: 'Evening' }, { text: 'Nighttime' }],

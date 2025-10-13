@@ -6,10 +6,11 @@ export default class SentenceInformationPresenter extends ReferralDetailsPresent
   constructor(
     readonly details: ReferralDetails,
     readonly subNavValue: string,
-    readonly id: string,
     readonly sentenceInformation: SentenceInformation,
+    readonly isLdcUpdated: boolean | null = null,
+    readonly isCohortUpdated: boolean | null = null,
   ) {
-    super(details, subNavValue, id)
+    super(details, subNavValue, isLdcUpdated, isCohortUpdated)
   }
 
   orderSummaryList(): SummaryListItem[] {

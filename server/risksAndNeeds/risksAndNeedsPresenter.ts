@@ -1,3 +1,4 @@
+import { ReferralDetails } from '@manage-and-deliver-api'
 import ReferralLayoutPresenter, { HorizontalNavValues } from '../shared/referral/referralLayoutPresenter'
 
 export enum RisksAndNeedsPageSection {
@@ -18,32 +19,15 @@ export enum RisksAndNeedsPageSection {
 export default class RisksAndNeedsPresenter extends ReferralLayoutPresenter {
   constructor(
     readonly subNavValue: string,
-    readonly referralId: string,
+    readonly referral: ReferralDetails,
+    readonly isLdcUpdated: boolean | null = null,
+    readonly isCohortUpdated: boolean | null = null,
   ) {
-    super(HorizontalNavValues.risksAndNeedsTab, referralId)
+    super(HorizontalNavValues.risksAndNeedsTab, referral, isLdcUpdated, isCohortUpdated)
   }
 
   readonly pageDescription =
     'Relevant sections from OASys to support the referral. The full Layer 3 assessment is available in OASys. Information is accurate at the time of the referral being submitted.'
-
-  getSubHeaderArgs(): {
-    heading: { text: string; classes: string }
-    items: { text: string; classes: string; href?: string }[]
-  } {
-    return {
-      heading: {
-        text: 'Referral to Building Choices: moderate intensity',
-        classes: 'govuk-heading-l',
-      },
-      items: [
-        {
-          text: 'Back to referrals',
-          classes: 'govuk-button--secondary',
-          href: '/pdu/open-referrals',
-        },
-      ],
-    }
-  }
 
   getVerticalSubNavArgs(): {
     items: { text: string; href: string; active: boolean; attributes: object | null }[]
@@ -53,7 +37,7 @@ export default class RisksAndNeedsPresenter extends ReferralLayoutPresenter {
       items: [
         {
           text: 'Risks and alerts',
-          href: `/referral/${this.referralId}/risks-and-alerts/#risks-and-alerts`,
+          href: `/referral/${this.referral.id}/risks-and-alerts/#risks-and-alerts`,
           active: this.subNavValue === RisksAndNeedsPageSection.RisksAndAlertsTab,
           attributes: {
             id: 'risks-and-alerts',
@@ -61,7 +45,7 @@ export default class RisksAndNeedsPresenter extends ReferralLayoutPresenter {
         },
         {
           text: 'Learning needs',
-          href: `/referral/${this.referralId}/learning-needs/#learning-needs`,
+          href: `/referral/${this.referral.id}/learning-needs/#learning-needs`,
           active: this.subNavValue === RisksAndNeedsPageSection.LearningNeedsTab,
           attributes: {
             id: 'learning-needs',
@@ -69,7 +53,7 @@ export default class RisksAndNeedsPresenter extends ReferralLayoutPresenter {
         },
         {
           text: 'Section 2 - Offence analysis',
-          href: `/referral/${this.referralId}/offence-analysis/#section-2-offence-analysis`,
+          href: `/referral/${this.referral.id}/offence-analysis/#section-2-offence-analysis`,
           active: this.subNavValue === RisksAndNeedsPageSection.Section2OffenceAnalysisTab,
           attributes: {
             id: 'section-2-offence-analysis',
@@ -77,7 +61,7 @@ export default class RisksAndNeedsPresenter extends ReferralLayoutPresenter {
         },
         {
           text: 'Section 6 - Relationships',
-          href: `/referral/${this.referralId}/relationships/#section-6-relationships`,
+          href: `/referral/${this.referral.id}/relationships/#section-6-relationships`,
           active: this.subNavValue === RisksAndNeedsPageSection.Section6RelationshipsTab,
           attributes: {
             id: 'section-6-relationships',
@@ -85,7 +69,7 @@ export default class RisksAndNeedsPresenter extends ReferralLayoutPresenter {
         },
         {
           text: 'Section 7 - Lifestyle and associates',
-          href: `/referral/${this.referralId}/lifestyle-and-associates/#section-7-lifestyle-and-associates`,
+          href: `/referral/${this.referral.id}/lifestyle-and-associates/#section-7-lifestyle-and-associates`,
           active: this.subNavValue === RisksAndNeedsPageSection.Section7LifestyleAndAssociatesTab,
           attributes: {
             id: 'section-7-lifestyle-and-associates',
@@ -93,7 +77,7 @@ export default class RisksAndNeedsPresenter extends ReferralLayoutPresenter {
         },
         {
           text: 'Section 8 - Drug misuse',
-          href: `/referral/${this.referralId}/drug-misuse/#section-8-drug-misuse`,
+          href: `/referral/${this.referral.id}/drug-misuse/#section-8-drug-misuse`,
           active: this.subNavValue === RisksAndNeedsPageSection.Section8DrugMisuseTab,
           attributes: {
             id: 'section-8-drug-misuse',
@@ -101,7 +85,7 @@ export default class RisksAndNeedsPresenter extends ReferralLayoutPresenter {
         },
         {
           text: 'Section 9 - Alcohol misuse',
-          href: `/referral/${this.referralId}/alcohol-misuse/#section-9-alcohol-misuse`,
+          href: `/referral/${this.referral.id}/alcohol-misuse/#section-9-alcohol-misuse`,
           active: this.subNavValue === RisksAndNeedsPageSection.Section9AlcoholMisuseTab,
           attributes: {
             id: 'section-9-alcohol-misuse',
@@ -109,7 +93,7 @@ export default class RisksAndNeedsPresenter extends ReferralLayoutPresenter {
         },
         {
           text: 'Section 10 - Emotional wellbeing',
-          href: `/referral/${this.referralId}/emotional-wellbeing/#section-10-emotional-wellbeing`,
+          href: `/referral/${this.referral.id}/emotional-wellbeing/#section-10-emotional-wellbeing`,
           active: this.subNavValue === RisksAndNeedsPageSection.Section10EmotionalWellbeingTab,
           attributes: {
             id: 'section-10-emotional-wellbeing',
@@ -117,7 +101,7 @@ export default class RisksAndNeedsPresenter extends ReferralLayoutPresenter {
         },
         {
           text: 'Section 11 - Thinking and behaving',
-          href: `/referral/${this.referralId}/thinking-and-behaving/#section-11-thinking-and-behaving`,
+          href: `/referral/${this.referral.id}/thinking-and-behaving/#section-11-thinking-and-behaving`,
           active: this.subNavValue === RisksAndNeedsPageSection.Section11ThinkingAndBehaviourTab,
           attributes: {
             id: 'section-11-thinking-and-behaving',
@@ -125,7 +109,7 @@ export default class RisksAndNeedsPresenter extends ReferralLayoutPresenter {
         },
         {
           text: 'Section 12 - Attitudes',
-          href: `/referral/${this.referralId}/attitudes/#section-12-attitudes`,
+          href: `/referral/${this.referral.id}/attitudes/#section-12-attitudes`,
           active: this.subNavValue === RisksAndNeedsPageSection.Section12AttitudesTab,
           attributes: {
             id: 'section-12-attitudes',
@@ -133,7 +117,7 @@ export default class RisksAndNeedsPresenter extends ReferralLayoutPresenter {
         },
         {
           text: 'Section 13 - Health',
-          href: `/referral/${this.referralId}/health/#section-13-health`,
+          href: `/referral/${this.referral.id}/health/#section-13-health`,
           active: this.subNavValue === RisksAndNeedsPageSection.Section13HealthTab,
           attributes: {
             id: 'section-13-health',
@@ -141,7 +125,7 @@ export default class RisksAndNeedsPresenter extends ReferralLayoutPresenter {
         },
         {
           text: 'Section R6 - ROSH analysis',
-          href: `/referral/${this.referralId}/rosh-analysis/#section-r6-rosh-analysis`,
+          href: `/referral/${this.referral.id}/rosh-analysis/#section-r6-rosh-analysis`,
           active: this.subNavValue === RisksAndNeedsPageSection.SectionR6ROSHAnalysisTab,
           attributes: {
             id: 'section-r6-rosh-analysis',
