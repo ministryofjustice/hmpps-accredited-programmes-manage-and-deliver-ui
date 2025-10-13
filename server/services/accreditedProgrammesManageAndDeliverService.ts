@@ -3,6 +3,7 @@ import {
   Attitude,
   Availability,
   CaseListFilterValues,
+  CaseListReferrals,
   CohortEnum,
   CreateAvailability,
   CreateDeliveryLocationPreferences,
@@ -18,7 +19,6 @@ import {
   OffenceHistory,
   PersonalDetails,
   PniScore,
-  ReferralCaseListItem,
   ReferralDetails,
   ReferralStatusFormData,
   Relationships,
@@ -34,7 +34,6 @@ import config, { ApiConfig } from '../config'
 import type { HmppsAuthClient, RestClientBuilderWithoutToken } from '../data'
 import RestClient from '../data/restClient'
 import type { ExpressUsername } from '../shared/ExpressUsername'
-import { Page } from '../shared/models/pagination'
 
 export interface PaginationParams {
   // Page number to retrieve -- starts from 1
@@ -71,34 +70,35 @@ export default class AccreditedProgrammesManageAndDeliverService
     username: ExpressUsername,
     paginationParams: PaginationParams,
     filter: CaselistFilterParams,
-  ): Promise<Page<ReferralCaseListItem>> {
+  ): Promise<CaseListReferrals> {
     const restClient = await this.createRestClientFromUsername(username)
     const filterQuery: Record<string, unknown> = { ...filter }
+
     return (await restClient.get({
       path: `/pages/caselist/open`,
       headers: { Accept: 'application/json' },
       query: { ...paginationParams, ...filterQuery },
-    })) as Page<ReferralCaseListItem>
+    })) as CaseListReferrals
   }
 
   async getClosedCaselist(
     username: ExpressUsername,
     paginationParams: PaginationParams,
     filter: CaselistFilterParams,
-  ): Promise<Page<ReferralCaseListItem>> {
+  ): Promise<CaseListReferrals> {
     const restClient = await this.createRestClientFromUsername(username)
     const filterQuery: Record<string, unknown> = { ...filter }
     return (await restClient.get({
       path: `/pages/caselist/closed`,
       headers: { Accept: 'application/json' },
       query: { ...paginationParams, ...filterQuery },
-    })) as Page<ReferralCaseListItem>
+    })) as CaseListReferrals
   }
 
-  async getCaseListFilters(username: ExpressUsername, openOrClosed: string): Promise<CaseListFilterValues> {
+  async getCaseListFilters(username: ExpressUsername): Promise<CaseListFilterValues> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
-      path: `/bff/caselist/filters/${openOrClosed}`,
+      path: `/bff/caselist/filters`,
       headers: { Accept: 'application/json' },
     })) as CaseListFilterValues
   }

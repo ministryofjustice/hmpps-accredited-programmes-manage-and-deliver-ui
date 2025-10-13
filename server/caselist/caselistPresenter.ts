@@ -1,6 +1,6 @@
 import { CaseListFilterValues, CohortEnum, ReferralCaseListItem } from '@manage-and-deliver-api'
 import { Page } from '../shared/models/pagination'
-import { SelectArgs, SelectArgsItem, TableArgs } from '../utils/govukFrontendTypes'
+import { CheckboxesArgsItem, SelectArgsItem, TableArgs } from '../utils/govukFrontendTypes'
 import Pagination from '../utils/pagination/pagination'
 import CaselistFilter from './caselistFilter'
 import CaselistUtils from './caseListUtils'
@@ -27,6 +27,7 @@ export default class CaselistPresenter {
     readonly params: string,
     readonly isOpenReferrals: boolean,
     readonly caseListFilters: CaseListFilterValues,
+    readonly otherCaselistCountTotal: number,
   ) {
     this.pagination = new Pagination(referralCaseListItems, params)
     this.referralCaseListItems = referralCaseListItems
@@ -35,6 +36,10 @@ export default class CaselistPresenter {
 
   readonly text = {
     pageHeading: `Building Choices: moderate intensity`,
+  }
+
+  get showReportingLocations(): boolean {
+    return this.filter.pdu !== undefined && this.filter.pdu !== ''
   }
 
   getCaseloadTableArgs(): TableArgs {
@@ -100,37 +105,16 @@ export default class CaselistPresenter {
     return {
       items: [
         {
-          text: `Open referrals (${this.section === CaselistPageSection.Open ? this.referralCaseListItems.totalElements : this.caseListFilters.otherReferralsCount})`,
-          href: `/pdu/open-referrals`,
+          text: `Open referrals (${this.section === CaselistPageSection.Open ? this.referralCaseListItems.totalElements : this.otherCaselistCountTotal})`,
+          href: this.params !== undefined ? `/pdu/open-referrals?${this.params}` : `/pdu/open-referrals`,
           active: this.section === CaselistPageSection.Open,
         },
         {
-          text: `Closed referrals (${this.section === CaselistPageSection.Closed ? this.referralCaseListItems.totalElements : this.caseListFilters.otherReferralsCount})`,
-          href: `/pdu/closed-referrals`,
+          text: `Closed referrals (${this.section === CaselistPageSection.Closed ? this.referralCaseListItems.totalElements : this.otherCaselistCountTotal})`,
+          href: this.params !== undefined ? `/pdu/closed-referrals?${this.params}` : `/pdu/closed-referrals`,
           active: this.section === CaselistPageSection.Closed,
         },
       ],
-    }
-  }
-
-  readonly searchBycrnOrPersonNameArgs = {
-    id: 'crnOrPersonName',
-    name: 'crnOrPersonName',
-    label: {
-      text: 'Search by name or CRN',
-      classes: 'govuk-label--s',
-    },
-  }
-
-  searchByCohortArgs(): SelectArgs {
-    return {
-      id: 'cohort',
-      name: 'cohort',
-      label: {
-        text: 'Cohort',
-        classes: 'govuk-label--s',
-      },
-      items: this.generateSelectValues(CaselistUtils.cohorts, this.filter.cohort),
     }
   }
 
@@ -151,80 +135,48 @@ export default class CaselistPresenter {
     return selectOptions
   }
 
-  generateFilterPane() {
-    const categories = this.generateSelectedFilters()
-    if (categories.length !== 0) {
-      return {
-        heading: {
-          text: 'Selected filters',
-        },
-
-        clearLink: {
-          text: 'Clear filters',
-          href: this.section === 1 ? '/pdu/open-referrals' : '/pdu/closed-referrals',
-        },
-        categories,
-      }
-    }
-    return null
+  generatePduSelectArgs(): SelectArgsItem[] {
+    const checkboxArgs = [
+      {
+        text: 'Select PDU',
+        value: '',
+      },
+    ]
+    const pduCheckboxArgs = this.caseListFilters.locationFilters
+      .map(pdu => ({
+        text: pdu.pduName,
+        value: pdu.pduName,
+        selected: this.filter.pdu === pdu.pduName,
+      }))
+      .sort((a, b) => a.text.localeCompare(b.text))
+    return checkboxArgs.concat(pduCheckboxArgs)
   }
 
-  generateSelectedFilters() {
-    const selectedFilters = []
-    const openAndClosedStatus: string[] = this.caseListFilters.statusFilters.open.concat(
-      this.caseListFilters.statusFilters.closed,
-    )
-
-    if (this.filter.status) {
-      const searchParams = new URLSearchParams(this.params)
-      searchParams.delete('status')
-      const paramAttributes = openAndClosedStatus.filter(referralStatus => referralStatus === this.filter.status)
-      selectedFilters.push({
-        heading: {
-          text: 'Referral Status',
-        },
-        items: [
-          {
-            href: `/pdu/${this.openOrClosedUrl}${searchParams.size === 0 ? '' : `?${searchParams.toString()}`}`,
-            text: paramAttributes[0],
-          },
-        ],
-      })
+  generateReportingTeamCheckboxArgs(): CheckboxesArgsItem[] {
+    let checkboxItems: CheckboxesArgsItem[] = []
+    if (this.showReportingLocations) {
+      const pduLocationData = this.caseListFilters.locationFilters.find(
+        location => location.pduName === this.filter.pdu,
+      )
+      checkboxItems = pduLocationData.reportingTeams
+        .map(location => ({
+          text: location,
+          value: location,
+          checked: this.filter.reportingTeam?.includes(location),
+        }))
+        .sort((a, b) => a.text.localeCompare(b.text))
     }
+    return checkboxItems
+  }
 
-    if (this.filter.cohort) {
-      const searchParams = new URLSearchParams(this.params)
-      searchParams.delete('cohort')
-      const paramAttributes = CaselistUtils.cohorts.filter(cohort => cohort.value === this.filter.cohort)
-      selectedFilters.push({
-        heading: {
-          text: 'Cohort',
-        },
-        items: [
-          {
-            href: `/pdu/${this.openOrClosedUrl}${searchParams.size === 0 ? '' : `?${searchParams.toString()}`}`,
-            text: paramAttributes[0].text,
-          },
-        ],
-      })
+  generateNoResultsString(): string {
+    if (this.section === CaselistPageSection.Open) {
+      return this.otherCaselistCountTotal === 0
+        ? 'No results found. Check your search details or try other filters.'
+        : `No results in open referrals. ${this.otherCaselistCountTotal} result in closed referrals.`
     }
-
-    if (this.filter.crnOrPersonName) {
-      const searchParams = new URLSearchParams(this.params)
-      searchParams.delete('crnOrPersonName')
-      selectedFilters.push({
-        heading: {
-          text: 'Name Or Crn',
-        },
-        items: [
-          {
-            href: `/pdu/${this.openOrClosedUrl}${searchParams.size === 0 ? '' : `?${searchParams.toString()}`}`,
-            text: this.filter.crnOrPersonName,
-          },
-        ],
-      })
-    }
-
-    return selectedFilters
+    return this.otherCaselistCountTotal === 0
+      ? 'No results found. Check your search details or try other filters.'
+      : `No results in closed referrals. ${this.otherCaselistCountTotal} result in open referrals.`
   }
 }

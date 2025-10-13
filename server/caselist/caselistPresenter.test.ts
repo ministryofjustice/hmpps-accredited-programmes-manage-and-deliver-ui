@@ -9,80 +9,6 @@ import CaselistPresenter from './caselistPresenter'
 
 describe(`filters`, () => {
   const caseListFilters = TestUtils.createCaseListFilters()
-  describe(`generateFilterPane`, () => {
-    it('should return the correct filter pane object for filters supplied', () => {
-      const testObject = {
-        filter: {
-          status: 'Awaiting assessment',
-          cohort: 'SEXUAL_OFFENCE',
-          crnOrPersonName: 'Name',
-        } as CaselistFilter,
-        expectedResult: {
-          heading: {
-            text: 'Selected filters',
-          },
-          clearLink: {
-            text: 'Clear filters',
-            href: `/pdu/open-referrals`,
-          },
-          categories: [
-            {
-              heading: {
-                text: 'Referral Status',
-              },
-              items: [
-                {
-                  href: '/pdu/open-referrals',
-                  text: 'Awaiting assessment',
-                },
-              ],
-            },
-            {
-              heading: {
-                text: 'Cohort',
-              },
-              items: [
-                {
-                  href: '/pdu/open-referrals',
-                  text: 'Sexual Offence',
-                },
-              ],
-            },
-            {
-              heading: {
-                text: 'Name Or Crn',
-              },
-              items: [
-                {
-                  href: '/pdu/open-referrals',
-                  text: 'Name',
-                },
-              ],
-            },
-          ],
-        },
-      }
-
-      const referralCaseListItem = referralCaseListItemFactory.build()
-      const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
-        .pageContent([referralCaseListItem])
-        .build() as Page<ReferralCaseListItem>
-      const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '', true, caseListFilters)
-      expect(presenter.generateFilterPane()).toEqual(testObject.expectedResult)
-    })
-
-    it('should return the correct filter pane object when no filters supplied', () => {
-      const testObject = {
-        filter: { status: undefined, cohort: undefined, crnOrPersonName: undefined } as CaselistFilter,
-      }
-      const referralCaseListItem = referralCaseListItemFactory.build()
-      const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
-        .pageContent([referralCaseListItem])
-        .build() as Page<ReferralCaseListItem>
-      const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '', true, caseListFilters)
-      expect(presenter.generateFilterPane()).toEqual(null)
-    })
-  })
 
   describe('generateSelectValues', () => {
     it('should generate the correct select values', () => {
@@ -93,7 +19,15 @@ describe(`filters`, () => {
       const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
         .pageContent([referralCaseListItem])
         .build() as Page<ReferralCaseListItem>
-      const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '', true, caseListFilters)
+      const presenter = new CaselistPresenter(
+        1,
+        referralCaseListItemPage,
+        testObject.filter,
+        '',
+        true,
+        caseListFilters,
+        2,
+      )
 
       const valuesToAddToSelect = [
         { value: 'GENERAL_OFFENCE', text: 'General Offence' },
@@ -114,7 +48,15 @@ describe(`filters`, () => {
       const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
         .pageContent([referralCaseListItem])
         .build() as Page<ReferralCaseListItem>
-      const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '', true, caseListFilters)
+      const presenter = new CaselistPresenter(
+        1,
+        referralCaseListItemPage,
+        testObject.filter,
+        '',
+        true,
+        caseListFilters,
+        2,
+      )
 
       const valuesToAddToSelect: { value: string; text: string }[] = []
       expect(presenter.generateSelectValues(valuesToAddToSelect, testObject.filter.status)).toEqual([
@@ -123,39 +65,137 @@ describe(`filters`, () => {
     })
   })
 
-  describe('generateSelectedFilters', () => {
-    it('should generate correct filters base on input params', () => {
+  describe('generatePduSelect', () => {
+    it('should generate correct select items based on API data and select the correct PDU', () => {
       const testObject = {
-        filter: {
-          status: 'Withdrawn',
-          cohort: 'GENERAL_OFFENCE',
-          crnOrPersonName: 'Some Name',
-        } as CaselistFilter,
+        filter: { pdu: 'PDU3' } as CaselistFilter,
       }
       const referralCaseListItem = referralCaseListItemFactory.build()
       const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
         .pageContent([referralCaseListItem])
         .build() as Page<ReferralCaseListItem>
-      const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '', true, caseListFilters)
+      const presenter = new CaselistPresenter(
+        1,
+        referralCaseListItemPage,
+        testObject.filter,
+        '',
+        true,
+        TestUtils.createCaseListFilters(),
+        2,
+      )
 
-      expect(presenter.generateSelectedFilters()).toEqual([
-        { heading: { text: 'Referral Status' }, items: [{ href: '/pdu/open-referrals', text: 'Withdrawn' }] },
-        { heading: { text: 'Cohort' }, items: [{ href: '/pdu/open-referrals', text: 'General Offence' }] },
-        { heading: { text: 'Name Or Crn' }, items: [{ href: '/pdu/open-referrals', text: 'Some Name' }] },
+      expect(presenter.generatePduSelectArgs()).toEqual([
+        {
+          text: 'Select PDU',
+          value: '',
+        },
+        { text: 'PDU1', value: 'PDU1', selected: false },
+        { text: 'PDU2', value: 'PDU2', selected: false },
+        { text: 'PDU3', value: 'PDU3', selected: true },
       ])
     })
+  })
 
-    it('should not generate selected filters when there are none on the params', () => {
+  describe('generateReportingTeamCheckboxArgs', () => {
+    it('should generate correct checkboxes based on API data and select the correct reporting team', () => {
       const testObject = {
-        filter: { status: undefined, cohort: undefined, crnOrPersonName: undefined } as CaselistFilter,
+        filter: { pdu: 'PDU1', reportingTeam: ['Team2'] } as CaselistFilter,
       }
       const referralCaseListItem = referralCaseListItemFactory.build()
       const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
         .pageContent([referralCaseListItem])
         .build() as Page<ReferralCaseListItem>
-      const presenter = new CaselistPresenter(1, referralCaseListItemPage, testObject.filter, '', true, caseListFilters)
+      const presenter = new CaselistPresenter(
+        1,
+        referralCaseListItemPage,
+        testObject.filter,
+        '',
+        true,
+        TestUtils.createCaseListFilters(),
+        2,
+      )
 
-      expect(presenter.generateSelectedFilters()).toEqual([])
+      expect(presenter.generateReportingTeamCheckboxArgs()).toEqual([
+        {
+          text: 'Team1',
+          value: 'Team1',
+          checked: false,
+        },
+        {
+          text: 'Team2',
+          value: 'Team2',
+          checked: true,
+        },
+      ])
+    })
+  })
+
+  describe('getSubNavArgs', () => {
+    it('should generate correct sub nav arguments when url params are present', () => {
+      const testObject = {
+        filter: { pdu: 'PDU1', reportingTeam: ['Team2'] } as CaselistFilter,
+      }
+      const referralCaseListItem = referralCaseListItemFactory.build()
+      const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+        .pageContent([referralCaseListItem])
+        .build() as Page<ReferralCaseListItem>
+      const presenter = new CaselistPresenter(
+        1,
+        referralCaseListItemPage,
+        testObject.filter,
+        'crnOrPersonName=&pdu=London&cohort=GENERAL_OFFENCE&status=Awaiting+allocation',
+        true,
+        TestUtils.createCaseListFilters(),
+        2,
+      )
+
+      expect(presenter.getSubNavArgs()).toEqual({
+        items: [
+          {
+            text: `Open referrals (100)`,
+            href: `/pdu/open-referrals?crnOrPersonName=&pdu=London&cohort=GENERAL_OFFENCE&status=Awaiting+allocation`,
+            active: true,
+          },
+          {
+            text: `Closed referrals (2)`,
+            href: `/pdu/closed-referrals?crnOrPersonName=&pdu=London&cohort=GENERAL_OFFENCE&status=Awaiting+allocation`,
+            active: false,
+          },
+        ],
+      })
+    })
+    it('should generate correct sub nav arguments when url params undefined', () => {
+      const testObject = {
+        filter: { pdu: 'PDU1', reportingTeam: ['Team2'] } as CaselistFilter,
+      }
+      const referralCaseListItem = referralCaseListItemFactory.build()
+      const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+        .pageContent([referralCaseListItem])
+        .build() as Page<ReferralCaseListItem>
+      const presenter = new CaselistPresenter(
+        2,
+        referralCaseListItemPage,
+        testObject.filter,
+        undefined,
+        true,
+        TestUtils.createCaseListFilters(),
+        2,
+      )
+
+      expect(presenter.getSubNavArgs()).toEqual({
+        items: [
+          {
+            text: `Open referrals (2)`,
+            href: `/pdu/open-referrals`,
+            active: false,
+          },
+          {
+            text: `Closed referrals (100)`,
+            href: `/pdu/closed-referrals`,
+            active: true,
+          },
+        ],
+      })
     })
   })
 })

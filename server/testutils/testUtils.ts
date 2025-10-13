@@ -50,6 +50,19 @@ export default class TestUtils {
       ],
       closed: ['Programme complete', 'Withdrawn'],
     },
-    otherReferralsCount: 1,
+    locationFilters: [
+      {
+        pduName: 'PDU1',
+        reportingTeams: ['Team1', 'Team2'],
+      },
+      {
+        pduName: 'PDU2',
+        reportingTeams: ['Team3', 'Team4'],
+      },
+      {
+        pduName: 'PDU3',
+        reportingTeams: ['Team5'],
+      },
+    ],
   })
 }

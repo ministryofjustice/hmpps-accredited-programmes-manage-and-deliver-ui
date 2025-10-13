@@ -21,16 +21,28 @@
   <div class="govuk-grid-row">
 
     {%- set filterOptionsHtml %}
+    <a class="clear-filters__link" href="?">Clear filters</a>
+    {{ govukInput(searchByCrnOrPersonNameArgs) }}
+    {{ govukSelect(searchByPduArgs) }}
 
-    {{ govukInput(presenter.searchBycrnOrPersonNameArgs) }}
-    {{ govukSelect(presenter.searchByCohortArgs()) }}
+    {% if not presenter.showReportingLocations %}
+      <h2 class="govuk-heading-s">Reporting team</h2>
+      <p class="govuk-body">Select a PDU and apply filters to see reporting teams</p>
+    {% endif %}
+
+    {% if presenter.showReportingLocations %}
+      {{ govukCheckboxes(reportingTeamCheckboxArgs) }}
+    {% endif %}
+
+    {{ govukSelect(searchByCohortArgs) }}
     {{ govukSelectWithOptgroup(searchByStatusArgs) }}
+
     {% endset -%}
     <div class="govuk-grid-column-one-quarter">
       <form id="filter-form" method="get">
         {{ mojFilter({
           heading: {
-            text: "Filters"
+            text: "Filter"
           },
 
         submit: {
@@ -39,7 +51,7 @@
           }
         },
 
-        selectedFilters: selectedFilters,
+
         optionsHtml: filterOptionsHtml
         }) }}
       </form>
@@ -49,7 +61,7 @@
       {% if presenter.referralCaseListItems.content.length > 0 %}
         {{ govukTable(presenter.getCaseloadTableArgs()) }}
       {% else %}
-        <p>No results found. Clear or change the filters</p>
+        <p>{{ noResultsString }}</p>
       {% endif %}
 
       {% include "../partials/pagination.njk" %}
