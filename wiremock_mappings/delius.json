@@ -78,11 +78,12 @@
         "headers": {
           "Content-Type": "application/json"
         },
+        "transformers": ["response-template"],
         "jsonBody": {
           "crn": "X718255",
           "name": {
-            "forename": "David",
-            "surname": "Clarke"
+            "forename": "{{pickRandom 'David' 'John' 'Michael' 'James' 'Robert' 'Sarah' 'Emma' 'Lisa' 'Jennifer' 'Maria'}}",
+            "surname": "{{pickRandom 'Clarke' 'Smith' 'Johnson' 'Williams' 'Brown' 'Jones' 'Garcia' 'Miller' 'Davis' 'Wilson'}}"
           },
           "dateOfBirth": "1981-04-15",
           "age": "48 years 3 months",
