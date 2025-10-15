@@ -10,6 +10,7 @@ import LocationPreferencesController from '../locationPreferences/locationPrefer
 import ChangeCohortController from '../cohort/changeCohortController'
 import LdcController from '../ldc/ldcController'
 import UpdateReferralStatusController from '../updateReferralStatus/updateReferralStatusController'
+import GroupDetailsController from '../groupDetails/groupDetailsController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
@@ -24,6 +25,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const cohortController = new ChangeCohortController(accreditedProgrammesManageAndDeliverService)
   const ldcController = new LdcController(accreditedProgrammesManageAndDeliverService)
   const updateReferralController = new UpdateReferralStatusController(accreditedProgrammesManageAndDeliverService)
+  const groupDetailsController = new GroupDetailsController(accreditedProgrammesManageAndDeliverService)
 
   get('/', async (req, res, next) => {
     await caselistController.showOpenCaselist(req, res)
@@ -187,6 +189,14 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   post('/referral/:referralId/update-status', async (req, res, next) => {
     await updateReferralController.updateStatus(req, res)
+  })
+
+  get('/groupDetails/:groupId/allocated', async (req, res, next) => {
+    await groupDetailsController.showGroupDetailsAllocated(req, res)
+  })
+
+  get('/groupDetails/:groupId/waitlist', async (req, res, next) => {
+    await groupDetailsController.showGroupDetailsWaitlist(req, res)
   })
 
   return router
