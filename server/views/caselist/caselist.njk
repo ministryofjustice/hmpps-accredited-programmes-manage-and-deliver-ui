@@ -26,7 +26,7 @@
     {{ govukSelect(searchByPduArgs) }}
 
     {% if not presenter.showReportingLocations %}
-      <h2 class="govuk-heading-s">Reporting team</h2>
+      <h2 class="govuk-heading-s govuk-!-margin-bottom-1">Reporting team</h2>
       <p class="govuk-body">Select a PDU and apply filters to see reporting teams</p>
     {% endif %}
 
@@ -61,7 +61,7 @@
       {% if presenter.referralCaseListItems.content.length > 0 %}
         {{ govukTable(presenter.getCaseloadTableArgs()) }}
       {% else %}
-        <p>{{ noResultsString }}</p>
+        <p class="govuk-body-l">{{ noResultsString }}</p>
       {% endif %}
 
       {% include "../partials/pagination.njk" %}
