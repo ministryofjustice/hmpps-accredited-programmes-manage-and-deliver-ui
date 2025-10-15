@@ -173,10 +173,10 @@ export default class CaselistPresenter {
     if (this.section === CaselistPageSection.Open) {
       return this.otherCaselistCountTotal === 0
         ? 'No results found. Check your search details or try other filters.'
-        : `No results in open referrals. ${this.otherCaselistCountTotal} result in closed referrals.`
+        : `No results in open referrals. ${this.otherCaselistCountTotal} results in closed referrals.`
     }
     return this.otherCaselistCountTotal === 0
       ? 'No results found. Check your search details or try other filters.'
-      : `No results in closed referrals. ${this.otherCaselistCountTotal} result in open referrals.`
+      : `No results in closed referrals. ${this.otherCaselistCountTotal} results in open referrals.`
   }
 }
