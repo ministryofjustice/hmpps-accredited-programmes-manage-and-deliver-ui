@@ -133,7 +133,7 @@
     "concurrently": "^9.2.1",
     "cypress": "^15.4.0",
     "cypress-multi-reporters": "^2.0.5",
-    "esbuild": "^0.25.10",
+    "esbuild": "^0.25.11",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-copy": "^2.1.1",
     "esbuild-plugin-manifest": "^1.0.5",
