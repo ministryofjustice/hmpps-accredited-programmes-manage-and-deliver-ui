@@ -1,4 +1,4 @@
-import { InputArgs, SelectArgs } from '../utils/govukFrontendTypes'
+import { InputArgs, SelectArgs, TableArgs } from '../utils/govukFrontendTypes'
 import GroupDetailsPresenter, { GroupDetailsPageSection } from './groupDetailsPresenter'
 import CaselistUtils from '../caselist/caseListUtils'
 
@@ -44,6 +44,20 @@ export default class GroupDetailsView {
         ],
         '',
       ),
+    }
+  }
+
+  getGroupDetailsTableArgs(): TableArgs {
+    return {
+      attributes: {
+        'data-module': 'moj-sortable-table',
+      },
+      classes: this.presenter.section === GroupDetailsPageSection.Allocated ? 'allocated' : '',
+      head: this.presenter.generateTableHeadings(),
+      rows:
+        this.presenter.section === GroupDetailsPageSection.Allocated
+          ? this.presenter.generateAllocatedTableArgs()
+          : this.presenter.generateWaitlistTableArgs(),
     }
   }
 

@@ -108,20 +108,6 @@ export default class GroupDetailsPresenter {
     }
   }
 
-  getGroupDetailsTableArgs(): TableArgs {
-    return {
-      attributes: {
-        'data-module': 'moj-sortable-table',
-      },
-      classes: this.section === GroupDetailsPageSection.Allocated ? 'allocated' : '',
-      head: this.generateTableHeadings(),
-      rows:
-        this.section === GroupDetailsPageSection.Allocated
-          ? this.generateAllocatedTableArgs()
-          : this.generateWaitlistTableArgs(),
-    }
-  }
-
   generateTableHeadings(): TableArgsHeadElement[] {
     const baseHeadings: TableArgsHeadElement[] = [
       {
