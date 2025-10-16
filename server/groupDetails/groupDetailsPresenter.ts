@@ -1,5 +1,5 @@
 import { CohortEnum } from '@manage-and-deliver-api'
-import { ButtonArgs, SelectArgsItem, TableArgs, TableArgsHeadElement } from '../utils/govukFrontendTypes'
+import { ButtonArgs, SelectArgsItem, TableArgsHeadElement } from '../utils/govukFrontendTypes'
 import Pagination from '../utils/pagination/pagination'
 import { convertToTitleCase } from '../utils/utils'
 
