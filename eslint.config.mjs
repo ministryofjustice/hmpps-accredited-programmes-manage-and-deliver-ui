@@ -1,4 +1,4 @@
-import hmppsConfig from '@X/eslint-config-hmpps'
+import hmppsConfig from '@ministryofjustice/eslint-config-hmpps'
 
 const base = Array.isArray(hmppsConfig) ? hmppsConfig : [hmppsConfig]
 
