@@ -25,7 +25,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const cohortController = new ChangeCohortController(accreditedProgrammesManageAndDeliverService)
   const ldcController = new LdcController(accreditedProgrammesManageAndDeliverService)
   const updateReferralController = new UpdateReferralStatusController(accreditedProgrammesManageAndDeliverService)
-  const groupDetailsController = new GroupDetailsController(accreditedProgrammesManageAndDeliverService)
+  const groupDetailsController = new GroupDetailsController()
 
   get('/', async (req, res, next) => {
     await caselistController.showOpenCaselist(req, res)

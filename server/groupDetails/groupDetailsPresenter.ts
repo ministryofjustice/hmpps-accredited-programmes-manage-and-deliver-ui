@@ -1,8 +1,6 @@
 import { CohortEnum } from '@manage-and-deliver-api'
-import { Page } from '../shared/models/pagination'
 import { ButtonArgs, SelectArgsItem, TableArgs, TableArgsHeadElement } from '../utils/govukFrontendTypes'
 import Pagination from '../utils/pagination/pagination'
-import CaselistUtils from '../caselist/caseListUtils'
 import { convertToTitleCase } from '../utils/utils'
 
 export enum GroupDetailsPageSection {
@@ -40,7 +38,7 @@ export default class GroupDetailsPresenter {
       reporting_team_name: 'Darlington',
       current_status: {
         text: 'Awaiting Allocation',
-        colour: 'gov-blue',
+        colour: 'blue',
       },
     },
     {
@@ -56,7 +54,7 @@ export default class GroupDetailsPresenter {
       reporting_team_name: 'Darlington',
       current_status: {
         text: 'Awaiting Allocation',
-        colour: 'gov-blue',
+        colour: 'blue',
       },
     },
     {
@@ -72,7 +70,7 @@ export default class GroupDetailsPresenter {
       reporting_team_name: 'Darlington',
       current_status: {
         text: 'Awaiting Allocation',
-        colour: 'gov-blue',
+        colour: 'blue',
       },
     },
     {
@@ -88,7 +86,7 @@ export default class GroupDetailsPresenter {
       reporting_team_name: 'Darlington',
       current_status: {
         text: 'Awaiting Allocation',
-        colour: 'gov-blue',
+        colour: 'blue',
       },
     },
   ]
@@ -222,7 +220,9 @@ export default class GroupDetailsPresenter {
         },
         { html: `<a href="">${member.offender_name}</a><br> ${member.crn}` },
         { text: member.sentence_end_date_text },
-        { html: `<strong class="govuk-tag govuk-tag--blue"> ${member.current_status.text} </strong>` },
+        {
+          html: `<strong class="govuk-tag govuk-tag--${member.current_status.colour}"> ${member.current_status.text} </strong>`,
+        },
       ])
     })
     return allocatedData
