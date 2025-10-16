@@ -1,9 +1,8 @@
-import hmppsConfig from '@ministryofjustice/eslint-config-hmpps'
+import hmppsConfig from '@X/eslint-config-hmpps'
+
+const base = Array.isArray(hmppsConfig) ? hmppsConfig : [hmppsConfig]
 
 export default [
-  hmppsConfig(),
-
-  {
-    ignores: ['node_modules', 'public', 'assets', 'reporter-config.json', 'dist', 'test_results'],
-  },
+  ...base,
+  { ignores: ['node_modules', 'public', 'assets', 'reporter-config.json', 'dist', 'test_results'] },
 ]
