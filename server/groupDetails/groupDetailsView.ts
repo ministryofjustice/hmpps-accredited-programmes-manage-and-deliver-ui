@@ -72,6 +72,7 @@ export default class GroupDetailsView {
         searchByCohortArgs: this.searchByCohortArgs,
         searchBySexArgs: this.searchBySexArgs,
         formButtonArgs: this.presenter.formButtonArgs,
+        getGroupDetailsTableArgs: this.getGroupDetailsTableArgs(),
       },
     ]
   }
