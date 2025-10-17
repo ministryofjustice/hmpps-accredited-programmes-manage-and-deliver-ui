@@ -70,11 +70,11 @@ class AvailabilityFactory extends Factory<Availability> {
 export default AvailabilityFactory.define(({ sequence }) => ({
   id: sequence.toString(),
   referralId: sequence.toString(),
-  startDate: faker.date.recent().toString(),
-  endDate: faker.date.future().toString(),
+  startDate: faker.date.recent().toISOString(),
+  endDate: faker.date.future().toISOString(),
   otherDetails: faker.lorem.sentence(),
   lastModifiedBy: faker.string.alphanumeric(),
-  lastModifiedAt: faker.date.recent().toString(),
+  lastModifiedAt: faker.date.recent().toISOString(),
   availabilities: [
     {
       label: 'Mondays' as DailyAvailabilityModel['label'],

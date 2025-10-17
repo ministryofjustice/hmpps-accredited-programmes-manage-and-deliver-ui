@@ -29,18 +29,35 @@
     "npm": "^10"
   },
   "jest": {
+    "testEnvironment": "node",
     "transform": {
-      "^.+\\.tsx?$": [
-        "ts-jest"
+      "^.+\\.[tj]sx?$": [
+        "ts-jest",
+        {
+          "useESM": true,
+          "tsconfig": "tsconfig.json"
+        }
       ]
     },
+    "extensionsToTreatAsEsm": [
+      ".ts",
+      ".tsx"
+    ],
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(?:@faker-js\\/faker)/)"
+    ],
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest.setup.ts"
+    ],
     "collectCoverageFrom": [
       "server/**/*.{ts,js,jsx,mjs}"
     ],
     "testMatch": [
       "<rootDir>/(server|job)/**/?(*.)(cy|test).{ts,js,jsx,mjs}"
     ],
-    "testEnvironment": "node",
     "reporters": [
       "default",
       [
@@ -74,7 +91,7 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.906.0",
+    "@aws-sdk/client-sqs": "3.911.0",
     "@ministryofjustice/frontend": "^6.0.0",
     "@ministryofjustice/hmpps-auth-clients": "^0.0.3",
     "@ministryofjustice/hmpps-monitoring": "^0.0.2",
@@ -92,6 +109,7 @@
     "express": "^5.1.0",
     "express-session": "^1.18.2",
     "express-validator": "^7.2.1",
+    "@faker-js/faker": "10.1.0",
     "govuk-frontend": "^5.13.0",
     "helmet": "^8.1.0",
     "http-errors": "^2.0.0",
@@ -106,7 +124,6 @@
     "timezone-support": "^3.1.0"
   },
   "devDependencies": {
-    "@faker-js/faker": "^9.9.0",
     "@jgoz/esbuild-plugin-typecheck": "^4.0.3",
     "@ministryofjustice/eslint-config-hmpps": "^0.0.5",
     "@tsconfig/node22": "^22.0.2",
@@ -118,14 +135,14 @@
     "@types/http-errors": "^2.0.5",
     "@types/jest": "^30.0.0",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^22.18.8",
+    "@types/node": "24.8.1",
     "@types/nunjucks": "^3.2.6",
     "@types/passport": "^1.0.17",
     "@types/passport-oauth2": "^1.8.0",
     "@types/superagent": "^8.1.9",
     "@types/supertest": "^6.0.3",
-    "@typescript-eslint/eslint-plugin": "^8.46.0",
-    "@typescript-eslint/parser": "^8.46.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.1",
+    "@typescript-eslint/parser": "^8.46.1",
     "audit-ci": "^7.1.0",
     "aws-sdk-client-mock": "^4.1.0",
     "cheerio": "^1.1.2",
@@ -133,13 +150,12 @@
     "concurrently": "^9.2.1",
     "cypress": "^15.4.0",
     "cypress-multi-reporters": "^2.0.5",
-    "esbuild": "^0.25.10",
+    "esbuild": "^0.25.11",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-copy": "^2.1.1",
     "esbuild-plugin-manifest": "^1.0.5",
     "esbuild-sass-plugin": "^3.3.1",
-    "eslint": "^8.57.1",
-    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint": "9.22.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",

@@ -29,7 +29,8 @@ export default class FactoryHelpers {
   }
 
   static optionalNumber(max?: number): number | undefined {
-    return FactoryHelpers.optionalArrayElement(faker.number.int({ max, min: 0 }))
+    const num = max !== undefined ? faker.number.int({ min: 0, max }) : faker.number.int() // let Faker pick its default range
+    return FactoryHelpers.optionalArrayElement(num)
   }
 
   static optionalRandomFutureDateString(): string | undefined {
