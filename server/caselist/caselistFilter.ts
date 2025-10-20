@@ -25,15 +25,18 @@ export default class CaselistFilter {
       filter.reportingTeam = typeof filter.reportingTeam === 'string' ? [filter.reportingTeam] : filter.reportingTeam
 
       // Validate that reporting teams belong to the selected PDU. If not, remove the reporting team filter.
-      if (filter.pdu) {
-        const selectedPdu = locations.find(locationPdu => locationPdu.pduName === filter.pdu)
+      const selectedPdu = locations.find(locationPdu => locationPdu.pduName === filter.pdu)
+      if (!selectedPdu) {
+        // Unknown PDU (e.g., locations fetch failed) – drop team filter rather than throw
+        filter.reportingTeam = undefined
+      } else {
         const allTeamsValid = filter.reportingTeam.every(team => selectedPdu.reportingTeams.includes(team))
-
         if (!allTeamsValid) {
           filter.reportingTeam = undefined
         }
       }
     }
+
     return filter
   }
 
