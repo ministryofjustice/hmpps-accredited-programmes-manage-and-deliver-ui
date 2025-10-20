@@ -1,5 +1,9 @@
 export default class PresenterUtils {
-  constructor(private readonly userInputData: Record<string, unknown> | null = null) {}
+  private readonly userInputData: Record<string, unknown> | null
+
+  constructor(userInputData?: Record<string, unknown> | null) {
+    this.userInputData = userInputData ?? null
+  }
 
   stringValue(modelValue: string | number | null, userInputKey: string): string {
     if (this.userInputData === null) {

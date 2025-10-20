@@ -4,11 +4,15 @@ import type { RequestHandler } from 'express'
 import logger from '../../logger'
 import asyncMiddleware from './asyncMiddleware'
 
-export default function authorisationMiddleware(authorisedRoles: string[] = []): RequestHandler {
+// NOTE: remove the default from the parameter and default inside the body
+export default function authorisationMiddleware(authorisedRoles?: string[]): RequestHandler {
+  const rolesArg = authorisedRoles ?? []
+
   return asyncMiddleware((req, res, next) => {
     // authorities in the user token will always be prefixed by ROLE_.
     // Convert roles that are passed into this function without the prefix so that we match correctly.
-    const authorisedAuthorities = authorisedRoles.map(role => (role.startsWith('ROLE_') ? role : `ROLE_${role}`))
+    const authorisedAuthorities = rolesArg.map(role => (role.startsWith('ROLE_') ? role : `ROLE_${role}`))
+
     if (res.locals?.user?.token) {
       const { authorities: roles = [] } = jwtDecode(res.locals.user.token) as { authorities?: string[] }
 
