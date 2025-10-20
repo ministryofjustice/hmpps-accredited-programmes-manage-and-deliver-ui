@@ -91,7 +91,7 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "3.911.0",
+    "@aws-sdk/client-sqs": "3.913.0",
     "@ministryofjustice/frontend": "^6.0.0",
     "@ministryofjustice/hmpps-auth-clients": "^0.0.3",
     "@ministryofjustice/hmpps-monitoring": "^0.0.2",
@@ -148,7 +148,7 @@
     "cheerio": "^1.1.2",
     "chokidar": "^3.6.0",
     "concurrently": "^9.2.1",
-    "cypress": "^15.4.0",
+    "cypress": "^15.5.0",
     "cypress-multi-reporters": "^2.0.5",
     "esbuild": "^0.25.11",
     "esbuild-plugin-clean": "^1.0.1",
