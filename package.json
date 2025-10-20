@@ -92,6 +92,8 @@
   },
   "dependencies": {
     "@aws-sdk/client-sqs": "3.913.0",
+    "@azure/monitor-opentelemetry": "^1.14.0",
+    "@faker-js/faker": "10.1.0",
     "@ministryofjustice/frontend": "^6.0.0",
     "@ministryofjustice/hmpps-auth-clients": "^0.0.3",
     "@ministryofjustice/hmpps-monitoring": "^0.0.2",
@@ -109,7 +111,6 @@
     "express": "^5.1.0",
     "express-session": "^1.18.2",
     "express-validator": "^7.2.1",
-    "@faker-js/faker": "10.1.0",
     "govuk-frontend": "^5.13.0",
     "helmet": "^8.1.0",
     "http-errors": "^2.0.0",
