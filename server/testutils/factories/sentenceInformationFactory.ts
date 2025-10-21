@@ -5,60 +5,44 @@ import { fakerEN_GB as faker } from '@faker-js/faker'
 class SentenceInformationFactory extends Factory<SentenceInformation> {
   licence() {
     return this.params({
-      // sentenceType: faker.string.alpha(),
-      sentenceType: faker.string.alphanumeric({ length: 8 }),
-      // releaseType: faker.string.alpha(),
-      releaseType: faker.string.alphanumeric({ length: 8 }),
-      // licenceConditions: [{ code: faker.string.alpha(), description: faker.string.alpha() }],
-      licenceConditions: [
-        { code: faker.string.alphanumeric({ length: 8 }), description: faker.string.alphanumeric({ length: 8 }) },
-      ],
-      licenceEndDate: faker.date.future().toISOString(),
-      postSentenceSupervisionStartDate: faker.date.future().toISOString(),
-      postSentenceSupervisionEndDate: faker.date.future().toISOString(),
-      twoThirdsPoint: faker.date.future().toISOString(),
+      sentenceType: faker.string.alpha(),
+      releaseType: faker.string.alpha(),
+      licenceConditions: [{ code: faker.string.alpha(), description: faker.string.alpha() }],
+      licenceEndDate: faker.date.future().toString(),
+      postSentenceSupervisionStartDate: faker.date.future().toString(),
+      postSentenceSupervisionEndDate: faker.date.future().toString(),
+      twoThirdsPoint: faker.date.future().toString(),
       orderRequirements: [],
       orderEndDate: null,
-      dateRetrieved: faker.date.recent().toISOString(),
+      dateRetrieved: faker.date.recent().toString(),
     })
   }
 
   order() {
     return this.params({
-      // sentenceType: faker.string.alpha(),
-      sentenceType: faker.string.alphanumeric({ length: 8 }),
-      // releaseType: faker.string.alpha(),
-      releaseType: faker.string.alphanumeric({ length: 8 }),
+      sentenceType: faker.string.alpha(),
+      releaseType: faker.string.alpha(),
       licenceConditions: [],
       licenceEndDate: null,
-      postSentenceSupervisionStartDate: faker.date.future().toISOString(),
-      postSentenceSupervisionEndDate: faker.date.future().toISOString(),
-      twoThirdsPoint: faker.date.future().toISOString(),
-      // orderRequirements: [{ code: faker.string.alpha(), description: faker.string.alpha() }],
-      orderRequirements: [
-        { code: faker.string.alphanumeric({ length: 8 }), description: faker.string.alphanumeric({ length: 8 }) },
-      ],
-      orderEndDate: faker.date.future().toISOString(),
-      dateRetrieved: faker.date.recent().toISOString(),
+      postSentenceSupervisionStartDate: faker.date.future().toString(),
+      postSentenceSupervisionEndDate: faker.date.future().toString(),
+      twoThirdsPoint: faker.date.future().toString(),
+      orderRequirements: [{ code: faker.string.alpha(), description: faker.string.alpha() }],
+      orderEndDate: faker.date.future().toString(),
+      dateRetrieved: faker.date.recent().toString(),
     })
   }
 }
 
 export default SentenceInformationFactory.define(() => ({
-  // sentenceType: faker.string.alpha(),
-  sentenceType: faker.string.alphanumeric({ length: 8 }),
-  // releaseType: faker.string.alpha(),
-  releaseType: faker.string.alphanumeric({ length: 8 }),
-  // licenceConditions: [{ code: faker.string.alpha(), description: faker.string.alpha() }],
-  licenceConditions: [
-    { code: faker.string.alphanumeric({ length: 8 }), description: faker.string.alphanumeric({ length: 8 }) },
-  ],
-  licenceEndDate: faker.date.future().toISOString(),
-  postSentenceSupervisionStartDate: faker.date.future().toISOString(),
-  postSentenceSupervisionEndDate: faker.date.future().toISOString(),
-  twoThirdsPoint: faker.date.future().toISOString(),
+  sentenceType: faker.string.alpha(),
+  releaseType: faker.string.alpha(),
+  licenceConditions: [{ code: faker.string.alpha(), description: faker.string.alpha() }],
+  licenceEndDate: faker.date.future().toString(),
+  postSentenceSupervisionStartDate: faker.date.future().toString(),
+  postSentenceSupervisionEndDate: faker.date.future().toString(),
+  twoThirdsPoint: faker.date.future().toString(),
   orderRequirements: [{ code: faker.string.alpha(), description: faker.string.alpha() }],
-  // orderRequirements: [{ code: faker.string.alphanumeric({ length: 8 }), description: faker.string.alphanumeric({ length: 8 }), }],
-  orderEndDate: faker.date.future().toISOString(),
-  dateRetrieved: faker.date.recent().toISOString(),
+  orderEndDate: faker.date.future().toString(),
+  dateRetrieved: faker.date.recent().toString(),
 }))
