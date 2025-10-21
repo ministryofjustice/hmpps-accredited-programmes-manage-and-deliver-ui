@@ -29,7 +29,6 @@
     "npm": "^10"
   },
   "jest": {
-    "testEnvironment": "node",
     "transform": {
       "^.+\\.[tj]sx?$": [
         "ts-jest",
@@ -58,6 +57,7 @@
     "testMatch": [
       "<rootDir>/(server|job)/**/?(*.)(cy|test).{ts,js,jsx,mjs}"
     ],
+    "testEnvironment": "node",
     "reporters": [
       "default",
       [
