@@ -38,16 +38,9 @@
         }
       ]
     },
-    "extensionsToTreatAsEsm": [
-      ".ts",
-      ".tsx"
-    ],
     "transformIgnorePatterns": [
       "/node_modules/(?!(?:@faker-js\\/faker)/)"
     ],
-    "moduleNameMapper": {
-      "^(\\.{1,2}/.*)\\.js$": "$1"
-    },
     "collectCoverageFrom": [
       "server/**/*.{ts,js,jsx,mjs}"
     ],
@@ -69,13 +62,6 @@
           "outputPath": "test_results/unit-test-reports.html"
         }
       ]
-    ],
-    "moduleFileExtensions": [
-      "web.js",
-      "js",
-      "json",
-      "node",
-      "ts"
     ]
   },
   "lint-staged": {
