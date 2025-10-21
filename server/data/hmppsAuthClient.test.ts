@@ -14,14 +14,19 @@ const token = { access_token: 'token-1', expires_in: 300 }
 describe('hmppsAuthClient', () => {
   let fakeHmppsAuthApi: nock.Scope
   let hmppsAuthClient: HmppsAuthClient
+  let basePath: string
 
   beforeEach(() => {
-    fakeHmppsAuthApi = nock(config.apis.hmppsAuth.url)
+    // Allow config.apis.hmppsAuth.url to include an optional path prefix (e.g. .../auth)
+    const { origin, pathname } = new URL(config.apis.hmppsAuth.url)
+    basePath = pathname.replace(/\/$/, '')
+    fakeHmppsAuthApi = nock(origin)
     hmppsAuthClient = new HmppsAuthClient(tokenStore)
   })
 
   afterEach(() => {
     jest.resetAllMocks()
+    nock.abortPendingRequests()
     nock.cleanAll()
   })
 
@@ -41,9 +46,11 @@ describe('hmppsAuthClient', () => {
       tokenStore.getToken.mockResolvedValue(null)
 
       fakeHmppsAuthApi
-        .post('/oauth/token', 'grant_type=client_credentials&username=Bob')
+
+        .post(`${basePath}/oauth/token`, 'grant_type=client_credentials&username=Bob')
         .basicAuth({ user: config.apis.hmppsAuth.systemClientId, pass: config.apis.hmppsAuth.systemClientSecret })
-        .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+
+        .matchHeader('Content-Type', /application\/x-www-form-urlencoded/i)
         .reply(200, token)
 
       const output = await hmppsAuthClient.getSystemClientToken(username)
@@ -56,9 +63,11 @@ describe('hmppsAuthClient', () => {
       tokenStore.getToken.mockResolvedValue(null)
 
       fakeHmppsAuthApi
-        .post('/oauth/token', 'grant_type=client_credentials')
+
+        .post(`${basePath}/oauth/token`, 'grant_type=client_credentials')
         .basicAuth({ user: config.apis.hmppsAuth.systemClientId, pass: config.apis.hmppsAuth.systemClientSecret })
-        .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+
+        .matchHeader('Content-Type', /application\/x-www-form-urlencoded/i)
         .reply(200, token)
 
       const output = await hmppsAuthClient.getSystemClientToken()
