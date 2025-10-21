@@ -25,9 +25,9 @@ export default class LocationPreferencesPresenter {
     readonly referralId: string,
     readonly details: ReferralDetails,
     readonly preferredLocationReferenceData: DeliveryLocationPreferencesFormData,
+    readonly updateData: CreateDeliveryLocationPreferences,
     private readonly validationError: FormValidationError | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
-    readonly updateData: CreateDeliveryLocationPreferences,
   ) {
     this.deliveryLocationOptions = [
       {

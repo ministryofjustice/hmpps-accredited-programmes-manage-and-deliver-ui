@@ -9,7 +9,7 @@ afterEach(() => {
   jest.restoreAllMocks()
 })
 
-describe(`locationsPreferencesPresenter.`, () => {
+describe('locationsPreferencesPresenter.', () => {
   const referralId = randomUUID()
   const referralDetails = referralDetailsFactory.build()
   const updateData = createDeliveryLocationPreferencesFactory.build()
@@ -21,8 +21,6 @@ describe(`locationsPreferencesPresenter.`, () => {
       referralId,
       referralDetails,
       preferredLocationDetails,
-      null,
-      null,
       updateData,
     )
 
@@ -36,15 +34,13 @@ describe(`locationsPreferencesPresenter.`, () => {
       referralId,
       referralDetails,
       preferredLocationDetails,
-      null,
-      null,
       updateData,
     )
 
     expect(presenter.backLinkUri).toEqual(`/referral-details/${referralId}/location#location`)
   })
 
-  describe(`hasPreviouslySelectedOtherPdus.`, () => {
+  describe('hasPreviouslySelectedOtherPdus.', () => {
     it('should return true if there have been offices selected for the non-primary pdu previously', () => {
       const preferredLocationDetails = deliveryLocationPreferencesFormDataFactory
         .existingDeliveryLocationPreferences()
@@ -54,15 +50,13 @@ describe(`locationsPreferencesPresenter.`, () => {
         referralId,
         referralDetails,
         preferredLocationDetails,
-        null,
-        null,
         updateData,
       )
 
       expect(presenter.hasPreviouslySelectedOtherPdus).toEqual(true)
     })
 
-    it('should return false if there are no previously selected offices outside of the primary pdui', () => {
+    it('should return false if there are no previously selected offices outside of the primary pdu', () => {
       const preferredLocationDetails = deliveryLocationPreferencesFormDataFactory.build({
         existingDeliveryLocationPreferences: {
           canAttendLocationsValues: [{ label: 'primary PDU Office Location', value: 'OFF-001' }],
@@ -73,16 +67,14 @@ describe(`locationsPreferencesPresenter.`, () => {
         referralId,
         referralDetails,
         preferredLocationDetails,
-        null,
-        null,
-        updateData,
+        null, // no updateData
       )
 
       expect(presenter.hasPreviouslySelectedOtherPdus).toEqual(false)
     })
   })
 
-  describe(`selectedLocationValues.`, () => {
+  describe('selectedLocationValues.', () => {
     it('should return the offices within the update data for a given pdu if update data exists.', () => {
       const preferredLocationDetails = deliveryLocationPreferencesFormDataFactory.build()
 
@@ -90,8 +82,6 @@ describe(`locationsPreferencesPresenter.`, () => {
         referralId,
         referralDetails,
         preferredLocationDetails,
-        null,
-        null,
         updateData,
       )
 
@@ -107,9 +97,7 @@ describe(`locationsPreferencesPresenter.`, () => {
         referralId,
         referralDetails,
         preferredLocationDetails,
-        null,
-        null,
-        null,
+        null, // no updateData
       )
 
       expect(presenter.selectedLocationValues(updateData, 'LDN')).toEqual(['OFF-999'])
@@ -122,9 +110,7 @@ describe(`locationsPreferencesPresenter.`, () => {
         referralId,
         referralDetails,
         preferredLocationDetails,
-        null,
-        null,
-        null,
+        null, // no updateData
       )
 
       expect(presenter.selectedLocationValues(updateData, 'LDN')).toEqual([])

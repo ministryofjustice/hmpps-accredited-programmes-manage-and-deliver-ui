@@ -260,10 +260,10 @@ export default class ReferralDetailsController {
 
     const presenter = new AddAvailabilityPresenter(
       personalDetails,
-      formError,
-      userInputData,
       req.session.originPage,
       availability,
+      formError,
+      userInputData,
       referralId,
     )
     const view = new AddAvailabilityView(presenter)

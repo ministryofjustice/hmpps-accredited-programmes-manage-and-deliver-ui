@@ -64,9 +64,9 @@ export default class LocationPreferencesController {
       referralId,
       referralDetails,
       preferredLocationReferenceData,
+      req.session.locationPreferenceFormData.updatePreferredLocationData,
       formError,
       userInputData,
-      req.session.locationPreferenceFormData.updatePreferredLocationData,
     )
 
     const view = new LocationPreferencesView(presenter)
@@ -166,14 +166,16 @@ export default class LocationPreferencesController {
         return res.redirect(`/referral-details/${referralId}/location?preferredLocationUpdated=true#location`)
       }
     }
+
     const presenter = new CannotAttendLocationsPresenter(
       referralId,
       referralDetails,
-      formError,
-      userInputData,
       req.session.locationPreferenceFormData.preferredLocationReferenceData,
       req.session.originPage,
+      formError,
+      userInputData,
     )
+
     const view = new CannotAttendLocationsView(presenter)
     return ControllerUtils.renderWithLayout(res, view, referralDetails)
   }

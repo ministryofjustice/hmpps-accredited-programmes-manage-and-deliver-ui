@@ -6,10 +6,10 @@ export default class CannotAttendLocationsPresenter {
   constructor(
     readonly id: string,
     readonly details: ReferralDetails,
-    private readonly validationError: FormValidationError | null = null,
-    private readonly userInputData: Record<string, unknown> | null = null,
     readonly preferredLocationReferenceData: DeliveryLocationPreferencesFormData,
     readonly backLinkUri: string,
+    private readonly validationError: FormValidationError | null = null,
+    private readonly userInputData: Record<string, unknown> | null = null,
   ) {}
 
   get utils() {

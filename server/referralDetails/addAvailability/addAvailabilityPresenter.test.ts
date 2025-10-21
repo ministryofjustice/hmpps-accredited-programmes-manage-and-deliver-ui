@@ -14,7 +14,14 @@ describe(`generateCheckboxItems.`, () => {
     const availability = availabilityFactory.defaultAvailability().build()
     const referralId = randomUUID()
 
-    const presenter = new AddAvailabilityPresenter(personalDetails, null, null, null, availability, referralId)
+    const presenter = new AddAvailabilityPresenter(
+      personalDetails,
+      null, // backlinkUri
+      availability, // availability
+      undefined, // validationError (defaults to null)
+      undefined, // userInputData (defaults to null)
+      referralId, // referralId
+    )
 
     expect(presenter.locationButtonFormAction).toEqual(`/referral/${referralId}/add-availability`)
   })
@@ -24,7 +31,14 @@ describe(`generateCheckboxItems.`, () => {
     const availability = availabilityFactory.build()
     const referralId = randomUUID()
 
-    const presenter = new AddAvailabilityPresenter(personalDetails, null, null, null, availability, referralId)
+    const presenter = new AddAvailabilityPresenter(
+      personalDetails,
+      null, // backlinkUri
+      availability, // availability
+      undefined, // validationError (defaults to null)
+      undefined, // userInputData (defaults to null)
+      referralId, // referralId
+    )
 
     expect(presenter.locationButtonFormAction).toEqual(`/referral/${referralId}/update-availability/${availability.id}`)
   })
@@ -44,7 +58,11 @@ describe(`generateCheckboxItems.`, () => {
     const personalDetails = personalDetailsFactory.build()
     const availability = availabilityFactory.defaultAvailability().build({ availabilities })
 
-    const presenter = new AddAvailabilityPresenter(personalDetails, null, null, null, availability, null)
+    const presenter = new AddAvailabilityPresenter(
+      personalDetails,
+      null, // backlinkUri
+      availability, // availability
+    )
 
     expect(presenter.generateCheckboxItems()).toEqual([
       {
@@ -90,7 +108,11 @@ describe(`generateCheckboxItems.`, () => {
     const personalDetails = personalDetailsFactory.build()
     const availability = availabilityFactory.defaultAvailability().build({ availabilities })
 
-    const presenter = new AddAvailabilityPresenter(personalDetails, null, null, null, availability, null)
+    const presenter = new AddAvailabilityPresenter(
+      personalDetails,
+      null, // backlinkUri
+      availability, // availability
+    )
 
     const mockFields = jest.spyOn(presenter, 'fields', 'get')
     mockFields.mockReturnValue({

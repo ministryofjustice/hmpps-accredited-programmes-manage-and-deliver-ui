@@ -40,10 +40,11 @@ export default class UpdateReferralStatusController {
     const presenter = new UpdateReferralStatusPresenter(
       referralDetails,
       statusDetails,
+      req.session.originPage,
       formError,
       userInputData,
-      req.session.originPage,
     )
+
     const view = new UpdateReferralStatusView(presenter)
     req.session.originPage = req.path
     return ControllerUtils.renderWithLayout(res, view, referralDetails)
