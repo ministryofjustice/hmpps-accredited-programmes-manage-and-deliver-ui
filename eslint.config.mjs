@@ -1,9 +1,18 @@
+// eslint.config.mjs
 import hmppsConfig from '@ministryofjustice/eslint-config-hmpps'
 
 export default [
   ...hmppsConfig(),
 
   {
-    ignores: ['node_modules', 'public', 'assets', 'reporter-config.json', 'dist', 'test_results'],
+    ignores: [
+      'node_modules/**',
+      'dist/**',
+      'coverage/**',
+      'public/**',
+      'assets/**',
+      'test_results/**',
+      'reporter-config.json',
+    ],
   },
 ]
