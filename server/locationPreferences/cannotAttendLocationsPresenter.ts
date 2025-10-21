@@ -6,10 +6,10 @@ export default class CannotAttendLocationsPresenter {
   constructor(
     readonly id: string,
     readonly details: ReferralDetails,
-    private readonly validationError: FormValidationError | null = null,
-    private readonly userInputData: Record<string, unknown> | null = null,
     readonly preferredLocationReferenceData: DeliveryLocationPreferencesFormData,
-    readonly backLinkUri: string,
+    readonly backLinkUri: string, // <- expose back link for the view
+    private readonly validationError: FormValidationError | null = null, // defaults last
+    private readonly userInputData: Record<string, unknown> | null = null, // defaults last
   ) {}
 
   get utils() {
@@ -27,7 +27,7 @@ export default class CannotAttendLocationsPresenter {
   }
 
   get fields() {
-    let cannotAttendLocationRadio = null
+    let cannotAttendLocationRadio: 'yes' | 'no' | null = null
     if (this.preferredLocationReferenceData.existingDeliveryLocationPreferences) {
       cannotAttendLocationRadio = this.preferredLocationReferenceData.existingDeliveryLocationPreferences
         ?.cannotAttendLocations

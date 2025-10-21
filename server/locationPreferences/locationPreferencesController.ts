@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 
 import { DeliveryLocationPreferencesFormData } from '@manage-and-deliver-api'
+import type { CreateDeliveryLocationPreferences } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
 import LocationPreferencesPresenter from './locationPreferencesPresenter'
@@ -66,7 +67,8 @@ export default class LocationPreferencesController {
       preferredLocationReferenceData,
       formError,
       userInputData,
-      req.session.locationPreferenceFormData.updatePreferredLocationData,
+      req.session.locationPreferenceFormData
+        .updatePreferredLocationData as unknown as CreateDeliveryLocationPreferences,
     )
 
     const view = new LocationPreferencesView(presenter)
@@ -169,11 +171,12 @@ export default class LocationPreferencesController {
     const presenter = new CannotAttendLocationsPresenter(
       referralId,
       referralDetails,
-      formError,
-      userInputData,
       req.session.locationPreferenceFormData.preferredLocationReferenceData,
       req.session.originPage,
+      formError,
+      userInputData,
     )
+
     const view = new CannotAttendLocationsView(presenter)
     return ControllerUtils.renderWithLayout(res, view, referralDetails)
   }
