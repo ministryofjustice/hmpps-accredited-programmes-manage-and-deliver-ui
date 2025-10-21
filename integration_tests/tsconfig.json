@@ -1,13 +1,11 @@
 {
   "compilerOptions": {
+    "target": "es5",
     "noEmit": true,
     "lib": ["es5", "dom", "es2015.promise"],
     "types": ["cypress", "express", "express-session"],
     "esModuleInterop": true,
-    "skipLibCheck": true,
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "target": "ES2020"
+    "skipLibCheck": true
   },
   "include": ["**/*.ts"]
 }
