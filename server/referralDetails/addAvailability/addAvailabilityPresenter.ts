@@ -5,10 +5,10 @@ import PresenterUtils from '../../utils/presenterUtils'
 export default class AddAvailabilityPresenter {
   constructor(
     private readonly personalDetails: PersonalDetails,
-    private readonly validationError: FormValidationError | null = null,
-    private readonly userInputData: Record<string, unknown> | null = null,
     readonly backlinkUri: string | null,
     private readonly availability: Availability,
+    private readonly validationError: FormValidationError | null = null,
+    private readonly userInputData: Record<string, unknown> | null = null,
     private readonly referralId: string | null = null,
   ) {}
 

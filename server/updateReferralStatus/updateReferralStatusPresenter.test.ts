@@ -7,11 +7,16 @@ afterEach(() => {
   jest.restoreAllMocks()
 })
 
-describe(`generateStatusUpdateRadios.`, () => {
+describe('generateStatusUpdateRadios.', () => {
   it('should generate items for the data given', () => {
     const details = referralDetailsFactory.build()
     const statusDetails = referralStatusFormDataFactory.build()
-    const presenter = new UpdateReferralStatusPresenter(details, statusDetails, null, null, '')
+
+    const presenter = new UpdateReferralStatusPresenter(
+      details,
+      statusDetails,
+      '', // backLinkUri
+    )
 
     expect(presenter.generateStatusUpdateRadios()).toEqual([
       {
@@ -38,7 +43,11 @@ describe(`generateStatusUpdateRadios.`, () => {
     const statusDetails = referralStatusFormDataFactory.build()
     const moreDetails = faker.string.alphanumeric(501)
 
-    const presenter = new UpdateReferralStatusPresenter(details, statusDetails, null, null, '')
+    const presenter = new UpdateReferralStatusPresenter(
+      details,
+      statusDetails,
+      '', // backLinkUri
+    )
 
     const mockFields = jest.spyOn(presenter, 'fields', 'get')
     mockFields.mockReturnValue({
