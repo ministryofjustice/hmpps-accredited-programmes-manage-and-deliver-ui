@@ -30,10 +30,17 @@
   },
   "jest": {
     "transform": {
-      "^.+\\.tsx?$": [
-        "ts-jest"
+      "^.+\\.[tj]sx?$": [
+        "ts-jest",
+        {
+          "useESM": true,
+          "tsconfig": "tsconfig.json"
+        }
       ]
     },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(?:@faker-js\\/faker)/)"
+    ],
     "collectCoverageFrom": [
       "server/**/*.{ts,js,jsx,mjs}"
     ],
@@ -106,7 +113,6 @@
     "timezone-support": "^3.1.0"
   },
   "devDependencies": {
-    "@faker-js/faker": "^9.9.0",
     "@jgoz/esbuild-plugin-typecheck": "^4.0.3",
     "@ministryofjustice/eslint-config-hmpps": "^0.0.5",
     "@tsconfig/node22": "^22.0.2",
@@ -144,6 +150,7 @@
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-no-only-tests": "^3.3.0",
     "eslint-plugin-prettier": "^5.5.4",
+    "@faker-js/faker": "^10.1.0",
     "fishery": "^2.3.1",
     "glob": "^11.0.3",
     "husky": "^9.1.7",
