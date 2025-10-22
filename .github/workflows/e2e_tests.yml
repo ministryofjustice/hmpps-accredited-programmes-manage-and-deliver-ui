@@ -1,0 +1,31 @@
+name: e2e-tests.yml
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main repo
+        uses: actions/checkout@v5
+
+      - name: Checkout e2e tests repo
+        uses: actions/checkout@v5
+        with:
+          repository: ministryofjustice/hmpps-accredited-programmes-manage-and-deliver-e2e-tests
+          path: e2e-tests
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: main
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ${{ inputs.node_version_file }}
+      - name: Install e2e dependencies
+        run: npm install
+        working-directory: e2e-tests
+
+      - name: Run Playwright tests
+        run: npx playwright test
+        working-directory: e2e-tests
