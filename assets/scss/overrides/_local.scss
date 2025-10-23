@@ -64,8 +64,16 @@
   display: inline;
 }
 
-.govuk-table.allocated {
-  max-width: 70%;
+.govuk-table {
+  &.allocated {
+    max-width: 70%;
+  }
+
+  &__cell {
+    a {
+      display: block;
+    }
+  }
 }
 
 .govuk-radios--small.group-details-table {
