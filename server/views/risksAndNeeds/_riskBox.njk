@@ -1,5 +1,5 @@
 {% macro riskBox(params) %}
-   <div role="region"  class="risk-box {{ params.levelClass }}" aria-label="{{ params.ariaLabelPrefix or params.category }} risk box" data-testid="{{ params.dataTestId }}">
+   <section class="risk-box {{ params.levelClass }}" data-testid="{{ params.dataTestId }}">
     <h4 class="govuk-heading-s govuk-!-margin-bottom-1">{{ params.levelText }}
       <span class="govuk-!-font-weight-regular">{{ params.category }}</span>
       {% if params.figure %}
@@ -12,5 +12,5 @@
     {% if params.lastUpdated %}
       {{ params.lastUpdated | safe }}
     {% endif %}
-  </div>
+  </section>
 {% endmacro %}
