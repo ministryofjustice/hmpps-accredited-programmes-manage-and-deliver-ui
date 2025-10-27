@@ -7,7 +7,7 @@ on:
 jobs:
   e2e-tests:
     timeout-minutes: 60
-    runs-on: moj-cloud-platform
+    runs-on: [self-hosted, Linux, X64, hmpps-github-actions-runner]
     steps:
       - name: Checkout main repo
         uses: actions/checkout@v5
