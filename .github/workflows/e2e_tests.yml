@@ -25,6 +25,18 @@ jobs:
 
       - name: Install Playwright
         run: npm install -g playwright && npx playwright install
+      - name: restore cache
+        id: restore-cache
+        uses: actions/cache/restore@v4
+        env:
+          cache-name: node-modules
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+      - name: download the artifacts
+        uses: actions/download-artifact@v4
+        with:
+            name: npm_build_artifacts
 
       - name: Run Playwright tests
         run: npx playwright test
