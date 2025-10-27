@@ -2,15 +2,12 @@ name: E2E UI Playwright Tests
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 env:
   MANAGE_AND_DELIVER_URL: https://accredited-programmes-manage-and-deliver-dev.hmpps.service.justice.gov.uk/
   HMPPS_COMMUNITY_AUTH_USERNAME: ${{ secrets.HMPPS_COMMUNITY_AUTH_USERNAME }}
   HMPPS_COMMUNITY_AUTH_PASSWORD: ${{ secrets.HMPPS_COMMUNITY_AUTH_PASSWORD }}
   ALERTS_SLACK_CHANNEL: hmpps_accredited_programmes_manage_and_deliver_alerts
-  RELEASES_SLACK_CHANNEL: hmpps_accredited_programmes_manage_and_deliver_alerts
 
 jobs:
   e2e-tests:
@@ -57,7 +54,7 @@ jobs:
           retention-days: 30
       
       - name: Send a failure slack message
-        if: steps.playwright-tests.outcome != 'failure' && env.ALERTS_SLACK_CHANNEL != 'NO_SLACK'
+        if: steps.playwright-tests.outcome == 'failure' && env.ALERTS_SLACK_CHANNEL != 'NO_SLACK'
         uses: slackapi/slack-github-action@v1.27.0
         with:
           channel-id: ${{ env.ALERTS_SLACK_CHANNEL }}
