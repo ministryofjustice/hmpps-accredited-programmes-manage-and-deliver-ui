@@ -28,10 +28,6 @@ jobs:
         working-directory: ./hmpps-accredited-programmes-manage-and-deliver-e2e-tests
         run: npm ci
 
-      - name: Install Playwright browsers
-        working-directory: ./hmpps-accredited-programmes-manage-and-deliver-e2e-tests
-        run: npx playwright install --with-deps
-
       - name: restore cache
         id: restore-cache
         uses: actions/cache/restore@v4
