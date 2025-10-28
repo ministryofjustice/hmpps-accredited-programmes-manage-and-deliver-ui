@@ -16,80 +16,28 @@ const cohortConfigMap: Record<CohortEnum, string> = {
 export default class GroupDetailsPresenter {
   public readonly pagination: Pagination
 
-  constructor(readonly section: GroupDetailsPageSection) {}
+  constructor(
+    readonly section: GroupDetailsPageSection,
+    readonly groupMemberList: Array<{
+      id: string
+      crn: string
+      personName: string
+      sentenceEndDate: string
+      cohort: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
+      hasLdc: boolean
+      age: number
+      sex: string
+      pdu: string
+      reportingTeam: string
+      status: { text: string; colour: string }
+    }>,
+  ) {}
 
   readonly text = {
     pageHeading: `North East`,
     pageSubHeading: `BCCDD1`,
     pageTableHeading: `Allocations and waitlist`,
   }
-
-  readonly groupMemberList = [
-    {
-      id: 'ref-123',
-      crn: 'X1234',
-      offender_name: 'Andrew Anderson',
-      sentence_end_date_text: '1 January 2026 Licence end date',
-      cohort: 'GENERAL_OFFENCE',
-      has_ldc: true,
-      age: 33,
-      sex: 'male',
-      pdu_name: 'Bristol',
-      reporting_team_name: 'Darlington',
-      current_status: {
-        text: 'Awaiting Allocation',
-        colour: 'blue',
-      },
-    },
-    {
-      id: 'ref-123',
-      crn: 'X1234',
-      offender_name: 'Andrew Anderson',
-      sentence_end_date_text: '1 January 2026 Licence end date',
-      cohort: 'GENERAL_OFFENCE',
-      has_ldc: true,
-      age: 33,
-      sex: 'male',
-      pdu_name: 'Bristol',
-      reporting_team_name: 'Darlington',
-      current_status: {
-        text: 'Awaiting Allocation',
-        colour: 'blue',
-      },
-    },
-    {
-      id: 'ref-123',
-      crn: 'X1234',
-      offender_name: 'Andrew Anderson',
-      sentence_end_date_text: '1 January 2026 Licence end date',
-      cohort: 'GENERAL_OFFENCE',
-      has_ldc: true,
-      age: 33,
-      sex: 'male',
-      pdu_name: 'Bristol',
-      reporting_team_name: 'Darlington',
-      current_status: {
-        text: 'Awaiting Allocation',
-        colour: 'blue',
-      },
-    },
-    {
-      id: 'ref-123',
-      crn: 'X1234',
-      offender_name: 'Andrew Anderson',
-      sentence_end_date_text: '1 January 2026 Licence end date',
-      cohort: 'GENERAL_OFFENCE',
-      has_ldc: true,
-      age: 33,
-      sex: 'male',
-      pdu_name: 'Bristol',
-      reporting_team_name: 'Darlington',
-      current_status: {
-        text: 'Awaiting Allocation',
-        colour: 'blue',
-      },
-    },
-  ]
 
   getSubNavArgs(): { items: { text: string; href: string; active: boolean }[] } {
     return {
@@ -171,20 +119,20 @@ export default class GroupDetailsPresenter {
                   <div class="govuk-radios__item">
                     <input id='${member.crn}' value='${member.crn}' type="radio" name="addToGroup" class="govuk-radios__input">
                     <label class="govuk-label govuk-radios__label" for="${member.crn}">
-                    <span class="govuk-!-display-none">Add ${member.offender_name} to the group</span>
+                    <span class="govuk-!-display-none">Add ${member.personName} to the group</span>
                     </label>
                   </div>
                   </div>`,
         },
-        { html: `<a href="">${member.offender_name}</a><br> ${member.crn}` },
-        { text: member.sentence_end_date_text },
+        { html: `<a href="">${member.personName}</a><br> ${member.crn}` },
+        { text: member.sentenceEndDate },
         {
-          html: `${cohortConfigMap[member.cohort as 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE']} ${member.has_ldc ? '</br><span class="moj-badge moj-badge--bright-purple">LDC</span>' : ''}`,
+          html: `${cohortConfigMap[member.cohort as 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE']} ${member.hasLdc ? '</br><span class="moj-badge moj-badge--bright-purple">LDC</span>' : ''}`,
         },
         { text: member.age.toString() },
         { text: convertToTitleCase(member.sex) },
-        { text: member.pdu_name },
-        { text: member.reporting_team_name },
+        { text: member.pdu },
+        { text: member.reportingTeam },
       ])
     })
     return waitlistData
@@ -199,15 +147,15 @@ export default class GroupDetailsPresenter {
                   <div class="govuk-radios__item">
                     <input id='${member.crn}' value='${member.crn}' type="radio" name="addToGroup" class="govuk-radios__input">
                     <label class="govuk-label govuk-radios__label" for="${member.crn}">
-                    <span class="govuk-!-display-none">Add ${member.offender_name} to the group</span>
+                    <span class="govuk-!-display-none">Add ${member.personName} to the group</span>
                     </label>
                   </div>
                   </div>`,
         },
-        { html: `<a href="">${member.offender_name}</a><br> ${member.crn}` },
-        { text: member.sentence_end_date_text },
+        { html: `<a href="">${member.personName}</a><br> ${member.crn}` },
+        { text: member.sentenceEndDate },
         {
-          html: `<strong class="govuk-tag govuk-tag--${member.current_status.colour}"> ${member.current_status.text} </strong>`,
+          html: `<strong class="govuk-tag govuk-tag--${member.status.colour}"> ${member.status.text} </strong>`,
         },
       ])
     })

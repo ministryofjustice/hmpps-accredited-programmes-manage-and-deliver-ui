@@ -12,6 +12,7 @@ import {
   DeliveryLocationPreferencesFormData,
   DrugDetails,
   EmotionalWellbeing,
+  GroupWaitlistItem,
   Health,
   LearningNeeds,
   LifestyleAndAssociates,
@@ -93,6 +94,32 @@ export default class AccreditedProgrammesManageAndDeliverService
       headers: { Accept: 'application/json' },
       query: { ...paginationParams, ...filterQuery },
     })) as CaseListReferrals
+  }
+
+  async getGroupAllocatedMembers(
+    username: ExpressUsername,
+    groupId: string,
+    paginationParams: PaginationParams,
+  ): Promise<GroupWaitlistItem> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/group/${groupId}/allocated`,
+      headers: { Accept: 'application/json' },
+      query: { ...paginationParams },
+    })) as GroupWaitlistItem
+  }
+
+  async getGroupWaitlistMembers(
+    username: ExpressUsername,
+    groupId: string,
+    paginationParams: PaginationParams,
+  ): Promise<GroupWaitlistItem> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/group/${groupId}/waitlist`,
+      headers: { Accept: 'application/json' },
+      query: { ...paginationParams },
+    })) as GroupWaitlistItem
   }
 
   async getCaseListFilters(username: ExpressUsername): Promise<CaseListFilterValues> {

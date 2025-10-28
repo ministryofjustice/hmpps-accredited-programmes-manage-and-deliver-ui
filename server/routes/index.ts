@@ -25,7 +25,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const cohortController = new ChangeCohortController(accreditedProgrammesManageAndDeliverService)
   const ldcController = new LdcController(accreditedProgrammesManageAndDeliverService)
   const updateReferralController = new UpdateReferralStatusController(accreditedProgrammesManageAndDeliverService)
-  const groupDetailsController = new GroupDetailsController()
+  const groupDetailsController = new GroupDetailsController(accreditedProgrammesManageAndDeliverService)
 
   get('/', async (req, res, next) => {
     await caselistController.showOpenCaselist(req, res)
@@ -198,6 +198,5 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   get('/groupDetails/:groupId/waitlist', async (req, res, next) => {
     await groupDetailsController.showGroupDetailsWaitlist(req, res)
   })
-
   return router
 }
