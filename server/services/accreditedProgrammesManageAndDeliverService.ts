@@ -12,7 +12,6 @@ import {
   DeliveryLocationPreferencesFormData,
   DrugDetails,
   EmotionalWellbeing,
-  GroupWaitlistItem,
   Health,
   LearningNeeds,
   LifestyleAndAssociates,
@@ -20,6 +19,7 @@ import {
   OffenceHistory,
   PersonalDetails,
   PniScore,
+  ProgrammeGroupDetails,
   ReferralDetails,
   ReferralStatusFormData,
   Relationships,
@@ -100,26 +100,26 @@ export default class AccreditedProgrammesManageAndDeliverService
     username: ExpressUsername,
     groupId: string,
     paginationParams: PaginationParams,
-  ): Promise<GroupWaitlistItem> {
+  ): Promise<ProgrammeGroupDetails> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
-      path: `/bff/group/${groupId}/allocated`,
+      path: `/bff/group/${groupId}/ALLOCATED`,
       headers: { Accept: 'application/json' },
       query: { ...paginationParams },
-    })) as GroupWaitlistItem
+    })) as ProgrammeGroupDetails
   }
 
   async getGroupWaitlistMembers(
     username: ExpressUsername,
     groupId: string,
     paginationParams: PaginationParams,
-  ): Promise<GroupWaitlistItem> {
+  ): Promise<ProgrammeGroupDetails> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
-      path: `/bff/group/${groupId}/waitlist`,
+      path: `/bff/group/${groupId}/WAITLIST`,
       headers: { Accept: 'application/json' },
       query: { ...paginationParams },
-    })) as GroupWaitlistItem
+    })) as ProgrammeGroupDetails
   }
 
   async getCaseListFilters(username: ExpressUsername): Promise<CaseListFilterValues> {

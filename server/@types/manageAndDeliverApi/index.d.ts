@@ -9,7 +9,7 @@ type DailyAvailabilityModel = components['schemas']['DailyAvailabilityModel']
 type DeliveryLocationPreferencesFormData = components['schemas']['DeliveryLocationPreferencesFormData']
 type DrugDetails = components['schemas']['DrugDetails']
 type EmotionalWellbeing = components['schemas']['EmotionalWellbeing']
-type GroupWaitlistItem = components['schemas'][' GroupWaitlistItem']
+type ProgrammeGroupDetails = components['schemas'][' ProgrammeGroupDetails']
 type Health = components['schemas']['Health']
 type LearningNeeds = components['schemas']['LearningNeeds']
 type LifestyleAndAssociates = components['schemas']['LifestyleAndAssociates']
@@ -55,7 +55,7 @@ export type {
   DrugDetails,
   EmotionalWellbeing,
   ExistingDeliveryLocationPreferences,
-  GroupWaitlistItem,
+  ProgrammeGroupDetails,
   Health,
   LearningNeeds,
   LifestyleAndAssociates,
