@@ -59,6 +59,10 @@ export default {
     updatedStatusEmpty: `Select the referral status you want to move the person to.`,
     detailsTooLong: 'Details must be 500 characters or fewer.',
   },
+  addToGroup: {
+    addToGroupEmpty: `Select whether you want to add the person to the group or not`,
+    exceededCharacterLimit: 'Details must be 500 characters or fewer',
+  },
   returnedError,
   userHeaderTypes,
   errorHandlerAccessErrorMessages,
