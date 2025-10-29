@@ -18,11 +18,9 @@
     <div class="govuk-width-container" id="main-content">
       <div class="govuk-main-wrapper">
         <div class="govuk-grid-row">
+          {% include "../partials/headerMenu.njk" %}
           <div class="govuk-grid-column-full">
-            {% include "../partials/headerMenu.njk" %}
-            <div class="govuk-grid-column-full">
-              {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
-            </div>
+            {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
           </div>
         </div>
 
