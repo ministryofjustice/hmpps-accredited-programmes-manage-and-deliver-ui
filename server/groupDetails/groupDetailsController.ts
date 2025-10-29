@@ -7,7 +7,8 @@ export default class GroupDetailsController {
   constructor() {}
 
   async showGroupDetailsAllocated(req: Request, res: Response): Promise<void> {
-    const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Allocated)
+    const { addedToGroup } = req.query
+    const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Allocated, addedToGroup === 'true')
     const view = new GroupDetailsView(presenter)
     ControllerUtils.renderWithLayout(res, view, null)
   }

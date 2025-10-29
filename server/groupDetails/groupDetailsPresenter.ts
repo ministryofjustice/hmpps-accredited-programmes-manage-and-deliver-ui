@@ -16,7 +16,10 @@ const cohortConfigMap: Record<CohortEnum, string> = {
 export default class GroupDetailsPresenter {
   public readonly pagination: Pagination
 
-  constructor(readonly section: GroupDetailsPageSection) {}
+  constructor(
+    readonly section: GroupDetailsPageSection,
+    readonly isPersonAdded: boolean | null = null,
+  ) {}
 
   readonly text = {
     pageHeading: `North East`,
@@ -234,6 +237,10 @@ export default class GroupDetailsPresenter {
   get formButtonArgs(): ButtonArgs {
     return {
       text: this.section === GroupDetailsPageSection.Allocated ? 'Remove from group' : 'Add to group',
+      href:
+        this.section === GroupDetailsPageSection.Allocated
+          ? `/remove-from-group/groupId/personId`
+          : `/add-to-group/groupId/personId`,
     }
   }
 }
