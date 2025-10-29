@@ -99,6 +99,10 @@ export default class CaselistView {
         text: 'Cohort',
         classes: 'govuk-label--s',
       },
+      // TODO: This should be sourced from the endpoint, not from a utility set,
+      // so that we delegate control to the API, e.g.
+      // GET /bff/group-details/{id}/WAITLIST the `allocationAndWaitlistData.filters.cohort` field
+      // because the values are dynamic, and complexity should be managed in the API.
       items: this.presenter.generateSelectValues(CaselistUtils.cohorts, this.presenter.filter.cohort),
     }
   }
