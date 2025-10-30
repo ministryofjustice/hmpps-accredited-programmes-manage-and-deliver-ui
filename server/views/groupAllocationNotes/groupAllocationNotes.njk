@@ -5,6 +5,7 @@
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -14,8 +15,7 @@
     <div class="govuk-width-container" id="main-content">
       <div class="govuk-main-wrapper">
         <div class="govuk-grid-row">
-          <div class="govuk-grid-column-full">
-            {% include "../partials/headerMenu.njk" %}
+          {% include "../partials/headerMenu.njk" %}
             <div class="govuk-grid-column-full">
               {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
             </div>
@@ -33,11 +33,33 @@
               {% if presenter.referral.currentlyAllocatedGroupId %}
               {{ govukInsetText(groupAllocationTextArgs) }}
               {% endif %}
-              <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
             </div>
+        </div>
 
+
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full">
+            <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+          </div>
+          <div class="govuk-grid-column-one-third">
+            {{ mojSideNavigation(getVerticalSubNavArgs) }}
+          </div>
+          <div class="govuk-grid-column-two-thirds">
+            {% if presenter.subNavValue == 'learningNeeds' %}
+            <div>
+              {% include "./learningNeeds.njk" %}
+            </div>
+            {% else %}
+            <div>
+              <h2 class="govuk-heading-m">Motivation, background and non-associations</h2>
+              <p class="govuk-body govuk-!-margin-bottom-5">{{ presenter.text.noMotivationText }}</p>
+              {{ govukButton(addNotesButtonArgs) }}
+            </div>
+            {% endif %}
           </div>
         </div>
+
+
       </div>
     </div>
 
