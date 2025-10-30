@@ -31,6 +31,11 @@ describe(`getHorizontalSubNavArgs.`, () => {
         href: `/referral/${referralDetails.id}/status-history`,
         active: false,
       },
+      {
+        text: 'Group allocation notes',
+        href: `/referral/${referralDetails.id}/group-allocation-notes`,
+        active: false,
+      },
     ])
   })
 })

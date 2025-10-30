@@ -7,6 +7,7 @@ export enum HorizontalNavValues {
   risksAndNeedsTab = 'risksAndNeeds',
   programmeNeedsIdentifierTab = 'programmeNeedsIdentifier',
   statusHistoryTab = 'statusHistory',
+  groupAllocationNotesTab = 'GroupAllocationNotes',
 }
 
 export default class ReferralLayoutPresenter {
@@ -131,6 +132,11 @@ export default class ReferralLayoutPresenter {
           text: 'Status history',
           href: `/referral/${this.referral.id}/status-history`,
           active: this.horizontalNavValue === HorizontalNavValues.statusHistoryTab,
+        },
+        {
+          text: 'Group allocation notes',
+          href: `/referral/${this.referral.id}/group-allocation-notes`,
+          active: this.horizontalNavValue === HorizontalNavValues.groupAllocationNotesTab,
         },
       ],
     }

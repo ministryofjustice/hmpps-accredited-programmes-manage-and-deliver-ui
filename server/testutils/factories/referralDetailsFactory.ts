@@ -17,4 +17,6 @@ export default ReferralDetailsFactory.define(({ sequence }) => ({
   hasLdc: false,
   hasLdcDisplayText: 'Does not need an LDC-adapted programme',
   currentStatusDescription: 'Awaiting assessment',
+  currentlyAllocatedGroupId: null as string | null,
+  currentlyAllocatedGroupCode: null as string | null,
 }))
