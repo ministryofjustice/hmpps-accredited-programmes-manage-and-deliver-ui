@@ -11,6 +11,7 @@ import ChangeCohortController from '../cohort/changeCohortController'
 import LdcController from '../ldc/ldcController'
 import UpdateReferralStatusController from '../updateReferralStatus/updateReferralStatusController'
 import GroupDetailsController from '../groupDetails/groupDetailsController'
+import GroupAllocationNotesController from '../groupAllocationNotes/groupAllocationNotesController'
 import AddToGroupController from '../groupDetails/addToGroup/addToGroupController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
@@ -28,6 +29,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const updateReferralController = new UpdateReferralStatusController(accreditedProgrammesManageAndDeliverService)
   const groupDetailsController = new GroupDetailsController()
   const addToGroupController = new AddToGroupController()
+  const groupAllocationNotesController = new GroupAllocationNotesController(accreditedProgrammesManageAndDeliverService)
 
   get('/', async (req, res, next) => {
     await caselistController.showOpenCaselist(req, res)
@@ -199,6 +201,10 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   get('/groupDetails/:groupId/waitlist', async (req, res, next) => {
     await groupDetailsController.showGroupDetailsWaitlist(req, res)
+  })
+
+  get('/referral/:referralId/group-allocation-notes', async (req, res, next) => {
+    await groupAllocationNotesController.showGroupAllocationNotesPage(req, res)
   })
 
   get('/addToGroup/:groupId/:personId', async (req, res, next) => {

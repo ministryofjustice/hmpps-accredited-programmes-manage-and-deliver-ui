@@ -151,6 +151,50 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/group/{groupId}/allocate/{referralId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Allocate a referral to a programme group
+     * @description Allocate a referral to a specific programme group
+     */
+    post: operations['allocateToProgrammeGroup']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/admin/populate-personal-details': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Populate personal details for referrals
+     * @description For the specified Referrals ('*' represents a wildcard of all Referrals), re-fetch the
+     *           |Personal Details from nDelius.
+     *           |
+     *           |This is useful if new fields have been added, or new data is available from nDelius, and we wish to (re)fetch data
+     *           |from nDelius as a way to update our data automatically.
+     */
+    post: operations['populatePersonalDetails']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/risks-and-needs/{crn}/thinking-and-behaviour': {
     parameters: {
       query?: never
@@ -589,6 +633,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/bff/group/{groupId}/{selectedTab}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get group details with allocation and waitlist data
+     * @description Retrieve group details including allocation and waitlist data with filtering and pagination support
+     */
+    get: operations['getGroupDetails']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/bff/caselist/filters': {
     parameters: {
       query?: never
@@ -896,6 +960,21 @@ export interface components {
        */
       otherDetails?: string
       availabilities: components['schemas']['DailyAvailabilityModel'][]
+    }
+    /** @description IDs of the Referrals to process.  Use "*" in the list to process all referrals. */
+    PopulatePersonalDetailsRequest: {
+      /**
+       * @description List of referral IDs to populate personal details for.  The presence of
+       *           wildcard character "*" will trigger re-fetching for all referrals in the database (use responsibly!)
+       * @example [
+       *       "981421e1-0242-4cde-92a2-44c737077f86",
+       *       "af2e88f7-8a89-4a01-b52a-5d7e6805f605"
+       *     ]
+       */
+      referralIds: string[]
+    }
+    PopulatePersonalDetailsResponse: {
+      ids: string[]
     }
     ThinkingAndBehaviour: {
       /**
@@ -1449,6 +1528,17 @@ export interface components {
        * @example Awaiting assessment
        */
       currentStatusDescription: string
+      /**
+       * @description The code of the currently allocated group
+       * @example ABC111
+       */
+      currentlyAllocatedGroupCode?: string
+      /**
+       * Format: uuid
+       * @description The unique code of the currently allocated group
+       * @example c98151f4-4081-4c65-9f98-54e63a328c8d
+       */
+      currentlyAllocatedGroupId?: string
     }
     SentenceInformation: {
       /**
@@ -1991,6 +2081,117 @@ export interface components {
       name: string
       /** @description Available delivery locations within this PDU */
       deliveryLocations: components['schemas']['DeliveryLocationOption'][]
+    }
+    AllocationAndWaitlistData: {
+      counts: components['schemas']['Counts']
+      pagination: components['schemas']['Pagination']
+      filters: components['schemas']['Filters']
+      paginatedAllocationData: components['schemas']['GroupAllocatedItem'][]
+      paginatedWaitlistData: components['schemas']['GroupWaitlistItem'][]
+    }
+    Counts: {
+      /** Format: int32 */
+      waitlist: number
+      /** Format: int32 */
+      allocated: number
+    }
+    Filters: {
+      sex: string[]
+      cohort: string[]
+      pduNames: string[]
+      reportingTeams: string[]
+    }
+    Group: {
+      code: string
+      regionName: string
+    }
+    GroupAllocatedItem: {
+      /**
+       * @description The crn associated with this referral.
+       * @example X933590
+       */
+      crn: string
+      /**
+       * @description The name of the person associated with this referral.
+       * @example John Doe
+       */
+      personName: string
+      /**
+       * Format: date
+       * @description The end date of the person's sentence
+       * @example 15
+       */
+      sentenceEndDate: string
+      /**
+       * @description The status of the referral
+       * @example Awaiting allocation
+       */
+      status: string
+    }
+    GroupWaitlistItem: {
+      /**
+       * @description The crn associated with this referral.
+       * @example X933590
+       */
+      crn: string
+      /**
+       * @description The name of the person associated with this referral.
+       * @example John Doe
+       */
+      personName: string
+      /**
+       * Format: date
+       * @description The end date of the person's sentence.
+       * @example 15
+       */
+      sentenceEndDate: string
+      /**
+       * @description The offence cohort this referral is classified as.
+       * @example SEXUAL_OFFENCE
+       * @enum {string}
+       */
+      cohort: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
+      /**
+       * @description Does the person this referral is associated with have LDC needs.
+       * @example true
+       */
+      hasLdc: boolean
+      /**
+       * Format: int32
+       * @description The age of the person.
+       * @example 43
+       */
+      age: number
+      /**
+       * @description The sex of the person.
+       * @example Male
+       */
+      sex: string
+      /**
+       * @description The PDU this referral is associated with.
+       * @example Durham
+       */
+      pdu: string
+      /**
+       * @description The reporting team this referral is associated with.
+       * @example Durham Team 1
+       */
+      reportingTeam: string
+      /**
+       * @description The display name of the Referral's current Status
+       * @example Awaiting assessment
+       */
+      status: string
+    }
+    Pagination: {
+      /** Format: int32 */
+      size: number
+      /** Format: int32 */
+      page: number
+    }
+    ProgrammeGroupDetails: {
+      group: components['schemas']['Group']
+      allocationAndWaitlistData: components['schemas']['AllocationAndWaitlistData']
     }
     CaseListFilterValues: {
       /** @description Contains lists of open and closed referral statuses */
@@ -2537,6 +2738,107 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  allocateToProgrammeGroup: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The group_id (UUID) of the group to allocate to */
+        groupId: string
+        /** @description The referralId (UUID) of a referral */
+        referralId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Referral successfully allocated to the programme group */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Invalid request format or invalid UUID format */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden. The client is not authorised to allocate to this group. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The group or referral does not exist */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  populatePersonalDetails: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['PopulatePersonalDetailsRequest']
+      }
+    }
+    responses: {
+      /** @description Update started (not completed, process is async) */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['PopulatePersonalDetailsResponse']
+        }
+      }
+      /** @description Invalid request format or invalid UUID format */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -3887,6 +4189,77 @@ export interface operations {
         }
       }
       /** @description The referral does not exist or required data could not be found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getGroupDetails: {
+    parameters: {
+      query: {
+        pageable: components['schemas']['Pageable']
+        /** @description Filter by the sex of the person in the referral */
+        sex?: string
+        /** @description Filter by the cohort of the referral Eg: 'Sexual Offence' or 'General Offence - LDC */
+        cohort?: string
+        /** @description Search by the name or the CRN of the offender in the referral */
+        nameOrCRN?: string
+        /** @description Filter by the human readable pdu of the referral, i.e. 'All London' */
+        pdu?: string
+      }
+      header?: never
+      path: {
+        /** @description The id (UUID) of a group */
+        groupId: string
+        /** @description Return table data for either the allocated tab or the waitlist tab */
+        selectedTab: 'ALLOCATED' | 'WAITLIST'
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Group details retrieved successfully */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ProgrammeGroupDetails']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden. The client is not authorised to access this group. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The group does not exist */
       404: {
         headers: {
           [name: string]: unknown
