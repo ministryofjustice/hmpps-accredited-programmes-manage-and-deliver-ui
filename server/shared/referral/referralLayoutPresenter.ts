@@ -135,7 +135,7 @@ export default class ReferralLayoutPresenter {
         },
         {
           text: 'Group allocation notes',
-          href: `/referral/${this.referral.id}/group-allocation-notes`,
+          href: `/referral/${this.referral.id}/group-allocation-notes/motivation-background-and-non-associations`,
           active: this.horizontalNavValue === HorizontalNavValues.groupAllocationNotesTab,
         },
       ],

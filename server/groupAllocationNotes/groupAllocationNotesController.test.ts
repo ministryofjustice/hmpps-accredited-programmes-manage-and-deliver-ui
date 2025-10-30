@@ -31,10 +31,10 @@ beforeEach(() => {
 })
 
 describe('Group allocation notes', () => {
-  describe('GET /referral/:referralId/group-allocation-notes', () => {
-    it('loads the group allocation notes page', async () => {
+  describe('GET /referral/:referralId/group-allocation-notes/motivation-background-and-non-associations', () => {
+    it('loads the motivation background and non associations page', async () => {
       return request(app)
-        .get(`/referral/${randomUUID()}/group-allocation-notes`)
+        .get(`/referral/${randomUUID()}/group-allocation-notes/motivation-background-and-non-associations`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(`Group allocation notes`)

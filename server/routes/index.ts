@@ -242,6 +242,12 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   get('/referral/:referralId/group-allocation-notes', async (req, res, next) => {
     await groupAllocationNotesController.showGroupAllocationNotesPage(req, res)
   })
+  get(
+    '/referral/:referralId/group-allocation-notes/motivation-background-and-non-associations',
+    async (req, res, next) => {
+      await groupAllocationNotesController.showMotivationBackgroundAndNonAssociationsPage(req, res)
+    },
+  )
 
   get('/addToGroup/:groupId/:referralId', async (req, res, next) => {
     await addToGroupController.addToGroup(req, res)
