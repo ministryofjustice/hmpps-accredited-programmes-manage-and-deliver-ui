@@ -1,15 +1,15 @@
 import { Request, Response } from 'express'
 import ControllerUtils from '../utils/controllerUtils'
-import GroupAllocationNotesPresenter from './groupAllocationNotesPresenter'
-import GroupAllocationNotesView from './groupAllocationNotesView'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import MotivationBackgroundAndNonAssociationsView from './motivationBackgroundAndNonAssociations/motivationBackgroundAndNonAssociationsView'
+import MotivationBackgroundAndNonAssociationsPresenter from './motivationBackgroundAndNonAssociations/motivationBackgroundAndNonAssociationsPresenter'
 
 export default class GroupAllocationNotesController {
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
   ) {}
 
-  async showGroupAllocationNotesPage(req: Request, res: Response): Promise<void> {
+  async showMotivationBackgroundAndNonAssociationsPage(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated } = req.query
@@ -19,12 +19,13 @@ export default class GroupAllocationNotesController {
       username,
     )
 
-    const presenter = new GroupAllocationNotesPresenter(
+    const presenter = new MotivationBackgroundAndNonAssociationsPresenter(
       referralDetails,
+      'motivationBackgroundAndNonAssociations',
       isCohortUpdated === 'true',
       isLdcUpdated === 'true',
     )
-    const view = new GroupAllocationNotesView(presenter)
+    const view = new MotivationBackgroundAndNonAssociationsView(presenter)
     ControllerUtils.renderWithLayout(res, view, referralDetails)
   }
 }
