@@ -1,0 +1,37 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block main %}
+    {% block content %}
+        <div class="govuk-width-container" id="main-content">
+            <div class="govuk-grid-column-two-thirds">
+                {{ govukBackLink(backLinkArgs) }}
+            </div>
+            <div class="govuk-grid-column-one-third">
+                <a class="return_to_homepage__link" href={{ homePageLink.href }}>{{ homePageLink.text }}</a>
+            </div>
+            <div class="govuk-main-wrapper">
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+                        <h1 class="govuk-heading-l">Create a group</h1>
+                        <p class="govuk-body">You will be asked for some basic information about this group.</p>
+                        <p class="govuk-body govuk-!-margin-bottom-6">You can edit the details at any point until the group starts.</p>
+                        <form method="post" novalidate>
+                            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                            <div class="govuk-button-group">
+                                {{ govukButton({ text: "Start", preventDoubleClick: true, isStartButton: true }) }}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+{% endblock %}

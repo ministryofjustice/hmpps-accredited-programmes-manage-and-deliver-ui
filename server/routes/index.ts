@@ -1,18 +1,19 @@
 import { type RequestHandler, Router } from 'express'
 
 import CaselistController from '../caselist/caselistController'
+import ChangeCohortController from '../cohort/changeCohortController'
+import CreateGroupController from '../createGroup/createGroupController'
+import GroupAllocationNotesController from '../groupAllocationNotes/groupAllocationNotesController'
+import AddToGroupController from '../groupDetails/addToGroup/addToGroupController'
+import GroupDetailsController from '../groupDetails/groupDetailsController'
+import LdcController from '../ldc/ldcController'
+import LocationPreferencesController from '../locationPreferences/locationPreferencesController'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import PniController from '../pni/pniController'
 import ReferralDetailsController from '../referralDetails/referralDetailsController'
 import RisksAndNeedsController from '../risksAndNeeds/risksAndNeedsController'
 import type { Services } from '../services'
-import LocationPreferencesController from '../locationPreferences/locationPreferencesController'
-import ChangeCohortController from '../cohort/changeCohortController'
-import LdcController from '../ldc/ldcController'
 import UpdateReferralStatusController from '../updateReferralStatus/updateReferralStatusController'
-import GroupDetailsController from '../groupDetails/groupDetailsController'
-import GroupAllocationNotesController from '../groupAllocationNotes/groupAllocationNotesController'
-import AddToGroupController from '../groupDetails/addToGroup/addToGroupController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
@@ -30,6 +31,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const groupDetailsController = new GroupDetailsController(accreditedProgrammesManageAndDeliverService)
   const addToGroupController = new AddToGroupController(accreditedProgrammesManageAndDeliverService)
   const groupAllocationNotesController = new GroupAllocationNotesController(accreditedProgrammesManageAndDeliverService)
+  const createGroupController = new CreateGroupController()
 
   get('/', async (req, res, next) => {
     await caselistController.showOpenCaselist(req, res)
@@ -193,6 +195,22 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   post('/referral/:referralId/update-status', async (req, res, next) => {
     await updateReferralController.updateStatus(req, res)
+  })
+
+  get('/group/create-a-group/start', async (req, res, next) => {
+    await createGroupController.showCreateGroupStart(req, res)
+  })
+
+  post('/group/create-a-group/start', async (req, res, next) => {
+    await createGroupController.showCreateGroupStart(req, res)
+  })
+
+  get('/group/create-a-group/code', async (req, res, next) => {
+    await createGroupController.showCreateGroupCode(req, res)
+  })
+
+  post('/group/create-a-group/code', async (req, res, next) => {
+    await createGroupController.showCreateGroupCode(req, res)
   })
 
   get('/groupDetails/:groupId/allocated', async (req, res, next) => {
