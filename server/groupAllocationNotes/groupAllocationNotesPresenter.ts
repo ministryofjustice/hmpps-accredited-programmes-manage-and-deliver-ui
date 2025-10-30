@@ -12,10 +12,4 @@ export default class GroupAllocationNotesPresenter extends ReferralLayoutPresent
   ) {
     super(HorizontalNavValues.groupAllocationNotesTab, referral, isLdcUpdated, isCohortUpdated)
   }
-
-  readonly text = {
-    pageHeading: `North East`,
-    pageSubHeading: `BCCDD1`,
-    pageTableHeading: `Allocations and waitlist`,
-  }
 }
