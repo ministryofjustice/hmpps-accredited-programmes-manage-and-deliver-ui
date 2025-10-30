@@ -19,3 +19,4 @@ export default class GroupDetailsController {
     ControllerUtils.renderWithLayout(res, view, null)
   }
 }
+// test
