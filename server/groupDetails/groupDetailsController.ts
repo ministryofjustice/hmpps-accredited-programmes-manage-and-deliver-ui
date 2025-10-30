@@ -26,8 +26,6 @@ export default class GroupDetailsController {
 
     const rows = groupDetails?.allocationAndWaitlistData?.paginatedAllocationData ?? []
 
-    console.log('ALLOCATED rows length:', rows.length)
-
     const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Allocated, groupDetails, groupId)
     presenter.setRows(rows)
 
@@ -49,10 +47,8 @@ export default class GroupDetailsController {
         size: 10,
       },
     )
-    console.log('GROUP DETAILS:', groupDetails)
-    console.log(JSON.stringify(groupDetails))
+
     const rows = groupDetails?.allocationAndWaitlistData?.paginatedWaitlistData ?? []
-    console.log('WAITLIST rows length:', rows.length)
 
     const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, groupId)
     presenter.setRows(rows)
