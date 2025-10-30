@@ -61,15 +61,6 @@ export default class GroupDetailsView {
     }
   }
 
-  private successMessageArgs() {
-    return {
-      variant: 'success',
-      title: 'Alex River was added to this group. Their referral status is now Scheduled.',
-      showTitleAsHeading: true,
-      dismissible: true,
-    }
-  }
-
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       'groupDetails/groupDetails',
@@ -82,8 +73,6 @@ export default class GroupDetailsView {
         searchBySexArgs: this.searchBySexArgs,
         formButtonArgs: this.presenter.formButtonArgs,
         getGroupDetailsTableArgs: this.getGroupDetailsTableArgs(),
-        isPersonAdded: this.presenter.isPersonAdded,
-        successMessageArgs: this.successMessageArgs(),
       },
     ]
   }

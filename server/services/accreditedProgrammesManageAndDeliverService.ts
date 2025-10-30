@@ -19,6 +19,7 @@ import {
   OffenceHistory,
   PersonalDetails,
   PniScore,
+  ProgrammeGroupDetails,
   ReferralDetails,
   ReferralStatusFormData,
   Relationships,
@@ -93,6 +94,32 @@ export default class AccreditedProgrammesManageAndDeliverService
       headers: { Accept: 'application/json' },
       query: { ...paginationParams, ...filterQuery },
     })) as CaseListReferrals
+  }
+
+  async getGroupAllocatedMembers(
+    username: ExpressUsername,
+    groupId: string,
+    paginationParams: PaginationParams,
+  ): Promise<ProgrammeGroupDetails> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/group/${groupId}/ALLOCATED`,
+      headers: { Accept: 'application/json' },
+      query: { ...paginationParams },
+    })) as ProgrammeGroupDetails
+  }
+
+  async getGroupWaitlistMembers(
+    username: ExpressUsername,
+    groupId: string,
+    paginationParams: PaginationParams,
+  ): Promise<ProgrammeGroupDetails> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/group/${groupId}/WAITLIST`,
+      headers: { Accept: 'application/json' },
+      query: { ...paginationParams },
+    })) as ProgrammeGroupDetails
   }
 
   async getCaseListFilters(username: ExpressUsername): Promise<CaseListFilterValues> {
