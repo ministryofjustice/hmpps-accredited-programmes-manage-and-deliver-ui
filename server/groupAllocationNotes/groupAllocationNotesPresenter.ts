@@ -1,7 +1,4 @@
-import { CohortEnum, ReferralDetails } from '@manage-and-deliver-api'
-import { ButtonArgs, SelectArgsItem, TableArgsHeadElement } from '../utils/govukFrontendTypes'
-import Pagination from '../utils/pagination/pagination'
-import { convertToTitleCase } from '../utils/utils'
+import { ReferralDetails } from '@manage-and-deliver-api'
 import ReferralLayoutPresenter, { HorizontalNavValues } from '../shared/referral/referralLayoutPresenter'
 
 export default class GroupAllocationNotesPresenter extends ReferralLayoutPresenter {
