@@ -2093,28 +2093,81 @@ export interface components {
       regionName: string
     }
     GroupAllocatedItem: {
+      /**
+       * @description The crn associated with this referral.
+       * @example X933590
+       */
       crn: string
+      /**
+       * @description The name of the person associated with this referral.
+       * @example John Doe
+       */
       personName: string
-      /** Format: date */
+      /**
+       * Format: date
+       * @description The end date of the person's sentence
+       * @example 15
+       */
       sentenceEndDate: string
+      /**
+       * @description The status of the referral
+       * @example Awaiting allocation
+       */
       status: string
     }
     GroupWaitlistItem: {
+      /**
+       * @description The crn associated with this referral.
+       * @example X933590
+       */
       crn: string
+      /**
+       * @description The name of the person associated with this referral.
+       * @example John Doe
+       */
       personName: string
-      /** Format: date */
+      /**
+       * Format: date
+       * @description The end date of the person's sentence.
+       * @example 15
+       */
       sentenceEndDate: string
       /**
-       * @description Offence classification based on assessment
+       * @description The offence cohort this referral is classified as.
+       * @example SEXUAL_OFFENCE
        * @enum {string}
        */
       cohort: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
+      /**
+       * @description Does the person this referral is associated with have LDC needs.
+       * @example true
+       */
       hasLdc: boolean
-      /** Format: int32 */
+      /**
+       * Format: int32
+       * @description The age of the person.
+       * @example 43
+       */
       age: number
+      /**
+       * @description The sex of the person.
+       * @example Male
+       */
       sex: string
+      /**
+       * @description The PDU this referral is associated with.
+       * @example Durham
+       */
       pdu: string
+      /**
+       * @description The reporting team this referral is associated with.
+       * @example Durham Team 1
+       */
       reportingTeam: string
+      /**
+       * @description The display name of the Referral's current Status
+       * @example Awaiting assessment
+       */
       status: string
     }
     Pagination: {

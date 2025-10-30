@@ -1,4 +1,4 @@
-import { CohortEnum } from '@manage-and-deliver-api'
+import { CohortEnum, ProgrammeGroupDetails } from '@manage-and-deliver-api'
 import { ButtonArgs, SelectArgsItem, TableArgsHeadElement } from '../utils/govukFrontendTypes'
 import { convertToTitleCase } from '../utils/utils'
 
@@ -33,7 +33,11 @@ export type WaitlistRow = {
 }
 
 export default class GroupDetailsPresenter {
-  constructor(readonly section: GroupDetailsPageSection) {}
+  constructor(
+    readonly section: GroupDetailsPageSection,
+    readonly group: ProgrammeGroupDetails,
+    readonly groupId: string,
+  ) {}
 
   private groupMemberList: (AllocatedRow | WaitlistRow)[] = []
 
@@ -52,12 +56,12 @@ export default class GroupDetailsPresenter {
       items: [
         {
           text: `Allocated`,
-          href: `/groupDetails/1234/allocated`,
+          href: `/groupDetails/${this.groupId}/allocated`,
           active: this.section === GroupDetailsPageSection.Allocated,
         },
         {
           text: `Waitlist`,
-          href: `/groupDetails/1234/waitlist`,
+          href: `/groupDetails/${this.groupId}/waitlist`,
           active: this.section === GroupDetailsPageSection.Waitlist,
         },
       ],

@@ -13,18 +13,22 @@ export default class GroupDetailsController {
     const { username } = req.user
     const { groupId } = req.params
     const pageParam = req.query.page
-    const page = pageParam ? Number(pageParam) : 1
+    const page = pageParam ? Number(pageParam) : 0
 
-    const list = await this.accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers(username, groupId, {
-      page,
-      size: 10,
-    })
+    const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers(
+      username,
+      groupId,
+      {
+        page,
+        size: 10,
+      },
+    )
 
-    const rows = list?.allocationAndWaitlistData?.paginatedAllocationData ?? []
+    const rows = groupDetails?.allocationAndWaitlistData?.paginatedAllocationData ?? []
 
     console.log('ALLOCATED rows length:', rows.length)
 
-    const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Allocated)
+    const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Allocated, groupDetails, groupId)
     presenter.setRows(rows)
 
     const view = new GroupDetailsView(presenter)
@@ -35,17 +39,22 @@ export default class GroupDetailsController {
     const { username } = req.user
     const { groupId } = req.params
     const pageParam = req.query.page
-    const page = pageParam ? Number(pageParam) : 1
+    const page = pageParam ? Number(pageParam) : 0
 
-    const list = await this.accreditedProgrammesManageAndDeliverService.getGroupWaitlistMembers(username, groupId, {
-      page,
-      size: 10,
-    })
-
-    const rows = list?.allocationAndWaitlistData?.paginatedWaitlistData ?? []
+    const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupWaitlistMembers(
+      username,
+      groupId,
+      {
+        page,
+        size: 10,
+      },
+    )
+    console.log('GROUP DETAILS:', groupDetails)
+    console.log(JSON.stringify(groupDetails))
+    const rows = groupDetails?.allocationAndWaitlistData?.paginatedWaitlistData ?? []
     console.log('WAITLIST rows length:', rows.length)
 
-    const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist)
+    const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, groupId)
     presenter.setRows(rows)
 
     const view = new GroupDetailsView(presenter)
