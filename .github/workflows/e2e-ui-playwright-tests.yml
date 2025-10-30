@@ -55,7 +55,7 @@ jobs:
       
       - name: Send a failure slack message
         if: steps.playwright-tests.outcome == 'failure' && env.ALERTS_SLACK_CHANNEL != 'NO_SLACK'
-        uses: slackapi/slack-github-action@v1.27.1
+        uses: slackapi/slack-github-action@v2.1.1
         with:
           channel-id: ${{ env.ALERTS_SLACK_CHANNEL }}
           payload: |
