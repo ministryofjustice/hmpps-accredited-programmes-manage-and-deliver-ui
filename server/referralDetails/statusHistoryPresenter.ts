@@ -12,8 +12,10 @@ export default class StatusHistoryPresenter extends ReferralLayoutPresenter {
     public readonly statusHistory: ReferralStatusHistory[],
     referralDetails: ReferralDetails,
     private readonly isShowStatusUpdateMessageVisible: boolean,
+    readonly isLdcUpdated: boolean | null = null,
+    readonly isCohortUpdated: boolean | null = null,
   ) {
-    super(HorizontalNavValues.statusHistoryTab, referralDetails, false, false)
+    super(HorizontalNavValues.statusHistoryTab, referralDetails, isLdcUpdated, isCohortUpdated)
     this.personOnProbationName = referralDetails.personName
     this.currentStatusDescription = referralDetails.currentStatusDescription
   }
