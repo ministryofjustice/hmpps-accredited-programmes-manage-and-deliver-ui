@@ -24,7 +24,7 @@ jobs:
           path: hmpps-accredited-programmes-manage-and-deliver-e2e-tests
           ref: main
       
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: lts/*
 
@@ -46,7 +46,7 @@ jobs:
         working-directory: ./hmpps-accredited-programmes-manage-and-deliver-e2e-tests
         run: npx playwright test
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: ${{ !cancelled() }}
         with:
           name: playwright-report-${{ github.run_id }}
@@ -55,7 +55,7 @@ jobs:
       
       - name: Send a failure slack message
         if: steps.playwright-tests.outcome == 'failure' && env.ALERTS_SLACK_CHANNEL != 'NO_SLACK'
-        uses: slackapi/slack-github-action@v1.27.0
+        uses: slackapi/slack-github-action@v2.1.1
         with:
           channel-id: ${{ env.ALERTS_SLACK_CHANNEL }}
           payload: |

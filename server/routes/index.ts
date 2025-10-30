@@ -11,6 +11,7 @@ import ChangeCohortController from '../cohort/changeCohortController'
 import LdcController from '../ldc/ldcController'
 import UpdateReferralStatusController from '../updateReferralStatus/updateReferralStatusController'
 import GroupDetailsController from '../groupDetails/groupDetailsController'
+import AddToGroupController from '../groupDetails/addToGroup/addToGroupController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
@@ -26,6 +27,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const ldcController = new LdcController(accreditedProgrammesManageAndDeliverService)
   const updateReferralController = new UpdateReferralStatusController(accreditedProgrammesManageAndDeliverService)
   const groupDetailsController = new GroupDetailsController(accreditedProgrammesManageAndDeliverService)
+  const addToGroupController = new AddToGroupController()
 
   get('/', async (req, res, next) => {
     await caselistController.showOpenCaselist(req, res)

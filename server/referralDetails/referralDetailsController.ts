@@ -201,7 +201,7 @@ export default class ReferralDetailsController {
   async showStatusHistoryPage(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params
     const { username } = req.user
-    const { statusUpdated = 'false' } = req.query
+    const { statusUpdated = 'false', isCohortUpdated, isLdcUpdated } = req.query
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(referralId, username)
     const statusHistory = await this.accreditedProgrammesManageAndDeliverService.getStatusHistory(username, referralId)
@@ -211,10 +211,12 @@ export default class ReferralDetailsController {
       statusHistory,
       sharedReferralDetailsData,
       statusUpdated === 'true',
+      isLdcUpdated === 'true',
+      isCohortUpdated === 'true',
     )
     const view = new StatusHistoryView(presenter)
 
-    req.session.originPage = req.originalUrl
+    req.session.originPage = req.path
 
     ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
   }

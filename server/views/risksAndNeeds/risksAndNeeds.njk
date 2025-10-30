@@ -14,22 +14,19 @@
     <div class="govuk-width-container" id="main-content">
       <div class="govuk-main-wrapper">
         <div class="govuk-grid-row">
+          {% include "../partials/headerMenu.njk" %}
           <div class="govuk-grid-column-full">
-            {% include "../partials/headerMenu.njk" %}
-            <div class="govuk-grid-column-full">
-              {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
-            </div>
-
-            <div class="govuk-grid-column-three-quarters">
-              {% if presenter.isCohortUpdated %}
-                {{ mojAlert(presenter.cohortUpdatedSuccessMessageArgs) }}
-              {% endif %}
-              {% if presenter.isLdcUpdated %}
-                {{ mojAlert(presenter.ldcUpdatedSuccessMessageArgs) }}
-              {% endif %}
-              <h2 class="govuk-heading-m">Risks and needs</h2>
-              <p class="govuk-body govuk-!-margin-bottom-0">{{ presenter.pageDescription }}</p>
-            </div>
+            {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
+          </div>
+          <div class="govuk-grid-column-three-quarters">
+            {% if presenter.isCohortUpdated %}
+            {{ mojAlert(presenter.cohortUpdatedSuccessMessageArgs) }}
+            {% endif %}
+            {% if presenter.isLdcUpdated %}
+            {{ mojAlert(presenter.ldcUpdatedSuccessMessageArgs) }}
+            {% endif %}
+            <h2 class="govuk-heading-m">Risks and needs</h2>
+            <p class="govuk-body govuk-!-margin-bottom-0">{{ presenter.pageDescription }}</p>
           </div>
         </div>
 
