@@ -32,6 +32,12 @@
           {% if successMessageSummary %}
             {{ mojAlert(successMessageSummary) }}
           {% endif %}
+          {% if presenter.isCohortUpdated %}
+            {{ mojAlert(presenter.cohortUpdatedSuccessMessageArgs) }}
+          {% endif %}
+          {% if presenter.isLdcUpdated %}
+            {{ mojAlert(presenter.ldcUpdatedSuccessMessageArgs) }}
+          {% endif %}
           <h1 class="govuk-heading-m">{{presenter.pageHeading}}</h1>
 
           <p class="govuk-body">{{presenter.pageSubHeading}}</p>
