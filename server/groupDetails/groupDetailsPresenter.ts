@@ -37,6 +37,7 @@ export default class GroupDetailsPresenter {
     readonly section: GroupDetailsPageSection,
     readonly group: ProgrammeGroupDetails,
     readonly groupId: string,
+    readonly isPersonAdded: boolean = false,
   ) {}
 
   private groupMemberList: (AllocatedRow | WaitlistRow)[] = []
@@ -162,6 +163,10 @@ export default class GroupDetailsPresenter {
   get formButtonArgs(): ButtonArgs {
     return {
       text: this.section === GroupDetailsPageSection.Allocated ? 'Remove from group' : 'Add to group',
+      href:
+        this.section === GroupDetailsPageSection.Allocated
+          ? `/remove-from-group/groupId/personId`
+          : `/add-to-group/groupId/personId`,
     }
   }
 }
