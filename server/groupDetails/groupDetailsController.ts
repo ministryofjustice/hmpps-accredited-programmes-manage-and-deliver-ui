@@ -10,6 +10,7 @@ export default class GroupDetailsController {
   ) {}
 
   async showGroupDetailsAllocated(req: Request, res: Response): Promise<void> {
+    const { addedToGroup } = req.query
     const { username } = req.user
     const { groupId } = req.params
     const pageParam = req.query.page
@@ -26,7 +27,12 @@ export default class GroupDetailsController {
 
     const rows = groupDetails?.allocationAndWaitlistData?.paginatedAllocationData ?? []
 
-    const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Allocated, groupDetails, groupId)
+    const presenter = new GroupDetailsPresenter(
+      GroupDetailsPageSection.Allocated,
+      groupDetails,
+      groupId,
+      addedToGroup === 'true',
+    )
     presenter.setRows(rows)
 
     const view = new GroupDetailsView(presenter)
@@ -50,7 +56,7 @@ export default class GroupDetailsController {
 
     const rows = groupDetails?.allocationAndWaitlistData?.paginatedWaitlistData ?? []
 
-    const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, groupId)
+    const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, groupId, null)
     presenter.setRows(rows)
 
     const view = new GroupDetailsView(presenter)
