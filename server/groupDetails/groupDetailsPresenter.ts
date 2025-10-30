@@ -1,6 +1,5 @@
-import { CohortEnum } from '@manage-and-deliver-api'
+import { CohortEnum, ProgrammeGroupDetails } from '@manage-and-deliver-api'
 import { ButtonArgs, SelectArgsItem, TableArgsHeadElement } from '../utils/govukFrontendTypes'
-import Pagination from '../utils/pagination/pagination'
 import { convertToTitleCase } from '../utils/utils'
 
 export enum GroupDetailsPageSection {
@@ -13,13 +12,39 @@ const cohortConfigMap: Record<CohortEnum, string> = {
   GENERAL_OFFENCE: 'General Offence',
 }
 
-export default class GroupDetailsPresenter {
-  public readonly pagination: Pagination
+export type AllocatedRow = {
+  crn: string
+  personName: string
+  sentenceEndDate: string
+  status: string
+}
 
+export type WaitlistRow = {
+  crn: string
+  personName: string
+  sentenceEndDate: string
+  cohort: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
+  hasLdc: boolean
+  age: number
+  sex: string
+  pdu: string
+  reportingTeam: string
+  status: string
+}
+
+export default class GroupDetailsPresenter {
   constructor(
     readonly section: GroupDetailsPageSection,
+    readonly group: ProgrammeGroupDetails,
+    readonly groupId: string,
     readonly isPersonAdded: boolean | null = null,
   ) {}
+
+  private groupMemberList: (AllocatedRow | WaitlistRow)[] = []
+
+  setRows(rows: AllocatedRow[] | WaitlistRow[]) {
+    this.groupMemberList = rows ?? []
+  }
 
   readonly text = {
     pageHeading: `North East`,
@@ -27,84 +52,17 @@ export default class GroupDetailsPresenter {
     pageTableHeading: `Allocations and waitlist`,
   }
 
-  readonly groupMemberList = [
-    {
-      id: 'ref-123',
-      crn: 'X1234',
-      offender_name: 'Andrew Anderson',
-      sentence_end_date_text: '1 January 2026 Licence end date',
-      cohort: 'GENERAL_OFFENCE',
-      has_ldc: true,
-      age: 33,
-      sex: 'male',
-      pdu_name: 'Bristol',
-      reporting_team_name: 'Darlington',
-      current_status: {
-        text: 'Awaiting Allocation',
-        colour: 'blue',
-      },
-    },
-    {
-      id: 'ref-123',
-      crn: 'X1234',
-      offender_name: 'Andrew Anderson',
-      sentence_end_date_text: '1 January 2026 Licence end date',
-      cohort: 'GENERAL_OFFENCE',
-      has_ldc: true,
-      age: 33,
-      sex: 'male',
-      pdu_name: 'Bristol',
-      reporting_team_name: 'Darlington',
-      current_status: {
-        text: 'Awaiting Allocation',
-        colour: 'blue',
-      },
-    },
-    {
-      id: 'ref-123',
-      crn: 'X1234',
-      offender_name: 'Andrew Anderson',
-      sentence_end_date_text: '1 January 2026 Licence end date',
-      cohort: 'GENERAL_OFFENCE',
-      has_ldc: true,
-      age: 33,
-      sex: 'male',
-      pdu_name: 'Bristol',
-      reporting_team_name: 'Darlington',
-      current_status: {
-        text: 'Awaiting Allocation',
-        colour: 'blue',
-      },
-    },
-    {
-      id: 'ref-123',
-      crn: 'X1234',
-      offender_name: 'Andrew Anderson',
-      sentence_end_date_text: '1 January 2026 Licence end date',
-      cohort: 'GENERAL_OFFENCE',
-      has_ldc: true,
-      age: 33,
-      sex: 'male',
-      pdu_name: 'Bristol',
-      reporting_team_name: 'Darlington',
-      current_status: {
-        text: 'Awaiting Allocation',
-        colour: 'blue',
-      },
-    },
-  ]
-
   getSubNavArgs(): { items: { text: string; href: string; active: boolean }[] } {
     return {
       items: [
         {
-          text: `Allocated ()`,
-          href: `/groupDetails/1234/allocated`,
+          text: `Allocated`,
+          href: `/groupDetails/${this.groupId}/allocated`,
           active: this.section === GroupDetailsPageSection.Allocated,
         },
         {
-          text: `Waitlist ()`,
-          href: `/groupDetails/1234/waitlist`,
+          text: `Waitlist`,
+          href: `/groupDetails/${this.groupId}/waitlist`,
           active: this.section === GroupDetailsPageSection.Waitlist,
         },
       ],
@@ -113,122 +71,90 @@ export default class GroupDetailsPresenter {
 
   generateTableHeadings(): TableArgsHeadElement[] {
     const baseHeadings: TableArgsHeadElement[] = [
-      {
-        text: '',
-      },
-      {
-        text: 'Name and CRN',
-        attributes: {
-          'aria-sort': 'ascending',
-        },
-      },
-      {
-        text: 'Sentence end date',
-        attributes: {
-          'aria-sort': 'none',
-        },
-      },
+      { text: '' },
+      { text: 'Name and CRN', attributes: { 'aria-sort': 'ascending' } },
+      { text: 'Sentence end date', attributes: { 'aria-sort': 'none' } },
     ]
-    let additionalHeadings: TableArgsHeadElement[] = []
-    if (this.section === GroupDetailsPageSection.Allocated) {
-      additionalHeadings = [
-        {
-          text: 'Referral status',
-          attributes: { 'aria-sort': 'none' },
-        },
-      ]
-    }
-    if (this.section === GroupDetailsPageSection.Waitlist) {
-      additionalHeadings = [
-        {
-          text: 'Cohort',
-          attributes: { 'aria-sort': 'none' },
-        },
-        {
-          text: 'Age',
-          attributes: { 'aria-sort': 'none' },
-        },
-        {
-          text: 'Sex',
-          attributes: { 'aria-sort': 'none' },
-        },
-        {
-          text: 'PDU',
-          attributes: { 'aria-sort': 'none' },
-        },
-        {
-          text: 'Reporting team',
-          attributes: { 'aria-sort': 'none' },
-        },
-      ]
-    }
-    return baseHeadings.concat(additionalHeadings)
+
+    const extra =
+      this.section === GroupDetailsPageSection.Allocated
+        ? [{ text: 'Referral status', attributes: { 'aria-sort': 'none' } }]
+        : [
+            { text: 'Cohort', attributes: { 'aria-sort': 'none' } },
+            { text: 'Age', attributes: { 'aria-sort': 'none' } },
+            { text: 'Sex', attributes: { 'aria-sort': 'none' } },
+            { text: 'PDU', attributes: { 'aria-sort': 'none' } },
+            { text: 'Reporting team', attributes: { 'aria-sort': 'none' } },
+          ]
+
+    return baseHeadings.concat(extra)
   }
 
   generateWaitlistTableArgs() {
-    const waitlistData: ({ html: string; text?: undefined } | { text: string; html?: undefined })[][] = []
-    this.groupMemberList.forEach(member => {
-      waitlistData.push([
+    const rows = this.groupMemberList as WaitlistRow[]
+    const out: ({ html: string } | { text: string })[][] = []
+
+    rows.forEach(member => {
+      out.push([
         {
           html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
                     <input id='${member.crn}' value='${member.crn}' type="radio" name="addToGroup" class="govuk-radios__input">
                     <label class="govuk-label govuk-radios__label" for="${member.crn}">
-                    <span class="govuk-!-display-none">Add ${member.offender_name} to the group</span>
+                      <span class="govuk-!-display-none">Add ${member.personName} to the group</span>
                     </label>
                   </div>
-                  </div>`,
+                 </div>`,
         },
-        { html: `<a href="">${member.offender_name}</a><br> ${member.crn}` },
-        { text: member.sentence_end_date_text },
+        { html: `<a href="">${member.personName}</a><br> ${member.crn}` },
+        { text: member.sentenceEndDate },
         {
-          html: `${cohortConfigMap[member.cohort as 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE']} ${member.has_ldc ? '</br><span class="moj-badge moj-badge--bright-purple">LDC</span>' : ''}`,
+          html: `${cohortConfigMap[member.cohort as CohortEnum]}${
+            member.hasLdc ? '</br><span class="moj-badge moj-badge--bright-purple">LDC</span>' : ''
+          }`,
         },
-        { text: member.age.toString() },
+        { text: String(member.age) },
         { text: convertToTitleCase(member.sex) },
-        { text: member.pdu_name },
-        { text: member.reporting_team_name },
+        { text: member.pdu },
+        { text: member.reportingTeam },
       ])
     })
-    return waitlistData
+
+    return out
   }
 
   generateAllocatedTableArgs() {
-    const allocatedData: ({ html: string; text?: undefined } | { text: string; html?: undefined })[][] = []
-    this.groupMemberList.forEach(member => {
-      allocatedData.push([
+    const rows = this.groupMemberList as AllocatedRow[]
+    const out: ({ html: string } | { text: string })[][] = []
+
+    rows.forEach(member => {
+      out.push([
         {
           html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
-                    <input id='${member.crn}' value='${member.crn}' type="radio" name="addToGroup" class="govuk-radios__input">
+                    <input id='${member.crn}' value='${member.crn}' type="radio" name="removeFromGroup" class="govuk-radios__input">
                     <label class="govuk-label govuk-radios__label" for="${member.crn}">
-                    <span class="govuk-!-display-none">Add ${member.offender_name} to the group</span>
+                      <span class="govuk-!-display-none">Remove ${member.personName} from the group</span>
                     </label>
                   </div>
-                  </div>`,
+                 </div>`,
         },
-        { html: `<a href="">${member.offender_name}</a><br> ${member.crn}` },
-        { text: member.sentence_end_date_text },
-        {
-          html: `<strong class="govuk-tag govuk-tag--${member.current_status.colour}"> ${member.current_status.text} </strong>`,
-        },
+        { html: `<a href="">${member.personName}</a><br> ${member.crn}` },
+        { text: member.sentenceEndDate },
+        { html: `<strong class="govuk-tag govuk-tag--blue">${member.status}</strong>` },
       ])
     })
-    return allocatedData
+
+    return out
   }
 
   generateSelectValues(options: { value: string; text: string }[], caseListFilter: string): SelectArgsItem[] {
-    const selectOptions: SelectArgsItem[] = [
-      {
-        text: 'Select',
-        value: '',
-      },
-    ]
-    options.map(option =>
+    const selectOptions: SelectArgsItem[] = [{ text: 'Select', value: '' }]
+    options.forEach(option =>
       selectOptions.push({
         value: option.value,
         text: option.text,
-        selected: caseListFilter?.includes(`${option.value}`) ?? false,
+        selected: caseListFilter?.includes(String(option.value)) ?? false,
       }),
     )
     return selectOptions

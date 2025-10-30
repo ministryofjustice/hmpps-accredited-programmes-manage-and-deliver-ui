@@ -27,7 +27,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const cohortController = new ChangeCohortController(accreditedProgrammesManageAndDeliverService)
   const ldcController = new LdcController(accreditedProgrammesManageAndDeliverService)
   const updateReferralController = new UpdateReferralStatusController(accreditedProgrammesManageAndDeliverService)
-  const groupDetailsController = new GroupDetailsController()
+  const groupDetailsController = new GroupDetailsController(accreditedProgrammesManageAndDeliverService)
   const addToGroupController = new AddToGroupController()
   const groupAllocationNotesController = new GroupAllocationNotesController(accreditedProgrammesManageAndDeliverService)
 
