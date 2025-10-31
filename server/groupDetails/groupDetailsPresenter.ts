@@ -38,6 +38,7 @@ export default class GroupDetailsPresenter {
     readonly group: ProgrammeGroupDetails,
     readonly groupId: string,
     readonly isPersonAdded: boolean | null = null,
+    public readonly addedPersonName?: string,
   ) {}
 
   private groupMemberList: (AllocatedRow | WaitlistRow)[] = []
@@ -46,10 +47,12 @@ export default class GroupDetailsPresenter {
     this.groupMemberList = rows ?? []
   }
 
-  readonly text = {
-    pageHeading: `North East`,
-    pageSubHeading: `BCCDD1`,
-    pageTableHeading: `Allocations and waitlist`,
+  get text() {
+    return {
+      pageHeading: this.group.group.regionName,
+      pageSubHeading: this.group.group.code,
+      pageTableHeading: 'Allocations and waitlist',
+    }
   }
 
   getSubNavArgs(): { items: { text: string; href: string; active: boolean }[] } {
@@ -107,6 +110,7 @@ export default class GroupDetailsPresenter {
                  </div>`,
         },
         { html: `<a href="">${member.personName}</a><br> ${member.crn}` },
+        // html: `<a href='/referral-details/${member.referralId}/personal-details'>${member.personName}</a><br> ${member.crn}`,
         { text: member.sentenceEndDate },
         {
           html: `${cohortConfigMap[member.cohort as CohortEnum]}${

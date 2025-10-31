@@ -62,9 +62,13 @@ export default class GroupDetailsView {
   }
 
   private successMessageArgs() {
+    if (!this.presenter.isPersonAdded || !this.presenter.addedPersonName) {
+      return null
+    }
+
     return {
       variant: 'success',
-      title: 'Alex River was added to this group. Their referral status is now Scheduled.',
+      title: `${this.presenter.addedPersonName} was added to this group. Their referral status is now Scheduled.`,
       showTitleAsHeading: true,
       dismissible: true,
     }
