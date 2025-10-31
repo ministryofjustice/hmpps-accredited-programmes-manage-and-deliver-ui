@@ -48,9 +48,6 @@ export default class GroupDetailsPresenter {
   }
 
   get text() {
-    console.log('XXXXXXXX', {
-      group: this.group?.group,
-    })
     return {
       pageHeading: this.group.group.regionName,
       pageSubHeading: this.group.group.code,
@@ -113,6 +110,7 @@ export default class GroupDetailsPresenter {
                  </div>`,
         },
         { html: `<a href="">${member.personName}</a><br> ${member.crn}` },
+        // html: `<a href='/referral-details/${member.referralId}/personal-details'>${member.personName}</a><br> ${member.crn}`,
         { text: member.sentenceEndDate },
         {
           html: `${cohortConfigMap[member.cohort as CohortEnum]}${
