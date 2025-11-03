@@ -17,6 +17,7 @@ export type AllocatedRow = {
   personName: string
   referral_id: string
   sentenceEndDate: string
+  sourced_from: string
   status: string
 }
 
@@ -25,6 +26,7 @@ export type WaitlistRow = {
   personName: string
   referral_id: string
   sentenceEndDate: string
+  sourced_from: string
   cohort: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
   hasLdc: boolean
   age: number
@@ -114,7 +116,9 @@ export default class GroupDetailsPresenter {
         {
           html: `<a href='/referral-details/${member.referral_id}/personal-details'>${member.personName}</a> ${member.crn}`,
         },
-        { text: member.sentenceEndDate },
+        {
+          html: `${member.sentenceEndDate}${member.sourced_from ? `</br> ${member.sourced_from}` : ''}`,
+        },
         {
           html: `${cohortConfigMap[member.cohort as CohortEnum]}${
             member.hasLdc ? '</br><span class="moj-badge moj-badge--bright-purple">LDC</span>' : ''
@@ -149,7 +153,9 @@ export default class GroupDetailsPresenter {
         {
           html: `<a href="/referral-details/${member.referral_id}/personal-details">${member.personName}</a>${member.crn}`,
         },
-        { text: member.sentenceEndDate },
+        {
+          html: `${member.sentenceEndDate}${member.sourced_from ? `</br> ${member.sourced_from}` : ''}`,
+        },
         { html: `<strong class="govuk-tag govuk-tag--blue">${member.status}</strong>` },
       ])
     })

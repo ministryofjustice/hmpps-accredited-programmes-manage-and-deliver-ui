@@ -143,6 +143,7 @@
           "description": "ORA Community Order (6 Months)",
           "startDate": "2024-09-24",
           "expectedEndDate": "2025-03-23",
+          "licenceExpiryDate": "2025-03-23",
           "custodial": false,
           "licenceConditions": [],
           "requirements": [

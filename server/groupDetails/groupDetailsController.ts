@@ -11,6 +11,8 @@ type ApiBaseRow = {
   status: string
   referral_id?: string
   referralId?: string
+  sourced_from?: string
+  sourcedFrom?: string
 }
 
 type ApiAllocatedRow = ApiBaseRow
@@ -27,7 +29,9 @@ type ApiWaitlistRow = ApiBaseRow & {
 function normaliseReferralId(r: { referral_id?: string; referralId?: string }): string {
   return r.referral_id ?? r.referralId ?? ''
 }
-
+function normaliseSourcedFrom(r: { sourced_from?: string; sourcedFrom?: string }): string {
+  return r.sourced_from ?? r.sourcedFrom ?? ''
+}
 export default class GroupDetailsController {
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
@@ -56,6 +60,7 @@ export default class GroupDetailsController {
       personName: r.personName,
       referral_id: normaliseReferralId(r),
       sentenceEndDate: r.sentenceEndDate,
+      sourced_from: normaliseSourcedFrom(r),
       status: r.status,
     }))
 
@@ -93,6 +98,7 @@ export default class GroupDetailsController {
       personName: r.personName,
       referral_id: normaliseReferralId(r),
       sentenceEndDate: r.sentenceEndDate,
+      sourced_from: normaliseSourcedFrom(r),
       cohort: r.cohort,
       hasLdc: r.hasLdc,
       age: r.age,
