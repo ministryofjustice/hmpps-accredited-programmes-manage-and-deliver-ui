@@ -15,6 +15,7 @@ const cohortConfigMap: Record<CohortEnum, string> = {
 export type AllocatedRow = {
   crn: string
   personName: string
+  referral_id: string
   sentenceEndDate: string
   status: string
 }
@@ -22,6 +23,7 @@ export type AllocatedRow = {
 export type WaitlistRow = {
   crn: string
   personName: string
+  referral_id: string
   sentenceEndDate: string
   cohort: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
   hasLdc: boolean
@@ -109,8 +111,9 @@ export default class GroupDetailsPresenter {
                   </div>
                  </div>`,
         },
-        { html: `<a href="">${member.personName}</a><br> ${member.crn}` },
-        // html: `<a href='/referral-details/${member.referralId}/personal-details'>${member.personName}</a><br> ${member.crn}`,
+        {
+          html: `<a href='/referral-details/${member.referral_id}/personal-details'>${member.personName}</a> ${member.crn}`,
+        },
         { text: member.sentenceEndDate },
         {
           html: `${cohortConfigMap[member.cohort as CohortEnum]}${
@@ -143,7 +146,9 @@ export default class GroupDetailsPresenter {
                   </div>
                  </div>`,
         },
-        { html: `<a href="">${member.personName}</a><br> ${member.crn}` },
+        {
+          html: `<a href="/referral-details/${member.referral_id}/personal-details">${member.personName}</a>${member.crn}`,
+        },
         { text: member.sentenceEndDate },
         { html: `<strong class="govuk-tag govuk-tag--blue">${member.status}</strong>` },
       ])

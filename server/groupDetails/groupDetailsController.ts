@@ -1,8 +1,32 @@
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
-import GroupDetailsPresenter, { GroupDetailsPageSection } from './groupDetailsPresenter'
+import GroupDetailsPresenter, { GroupDetailsPageSection, AllocatedRow, WaitlistRow } from './groupDetailsPresenter'
 import GroupDetailsView from './groupDetailsView'
+
+type ApiBaseRow = {
+  crn: string
+  personName: string
+  sentenceEndDate: string
+  status: string
+  referral_id?: string
+  referralId?: string
+}
+
+type ApiAllocatedRow = ApiBaseRow
+
+type ApiWaitlistRow = ApiBaseRow & {
+  cohort: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
+  hasLdc: boolean
+  age: number
+  sex: string
+  pdu: string
+  reportingTeam: string
+}
+
+function normaliseReferralId(r: { referral_id?: string; referralId?: string }): string {
+  return r.referral_id ?? r.referralId ?? ''
+}
 
 export default class GroupDetailsController {
   constructor(
@@ -25,7 +49,15 @@ export default class GroupDetailsController {
       },
     )
 
-    const rows = groupDetails?.allocationAndWaitlistData?.paginatedAllocationData ?? []
+    const rawRows = (groupDetails?.allocationAndWaitlistData?.paginatedAllocationData ?? []) as ApiAllocatedRow[]
+
+    const rows: AllocatedRow[] = rawRows.map(r => ({
+      crn: r.crn,
+      personName: r.personName,
+      referral_id: normaliseReferralId(r),
+      sentenceEndDate: r.sentenceEndDate,
+      status: r.status,
+    }))
 
     const presenter = new GroupDetailsPresenter(
       GroupDetailsPageSection.Allocated,
@@ -54,7 +86,21 @@ export default class GroupDetailsController {
       },
     )
 
-    const rows = groupDetails?.allocationAndWaitlistData?.paginatedWaitlistData ?? []
+    const rawRows = (groupDetails?.allocationAndWaitlistData?.paginatedWaitlistData ?? []) as ApiWaitlistRow[]
+
+    const rows: WaitlistRow[] = rawRows.map(r => ({
+      crn: r.crn,
+      personName: r.personName,
+      referral_id: normaliseReferralId(r),
+      sentenceEndDate: r.sentenceEndDate,
+      cohort: r.cohort,
+      hasLdc: r.hasLdc,
+      age: r.age,
+      sex: r.sex,
+      pdu: r.pdu,
+      reportingTeam: r.reportingTeam,
+      status: r.status,
+    }))
 
     const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, groupId, null)
     presenter.setRows(rows)
