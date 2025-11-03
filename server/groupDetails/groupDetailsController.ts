@@ -3,6 +3,8 @@ import AccreditedProgrammesManageAndDeliverService from '../services/accreditedP
 import ControllerUtils from '../utils/controllerUtils'
 import GroupDetailsPresenter, { GroupDetailsPageSection } from './groupDetailsPresenter'
 import GroupDetailsView from './groupDetailsView'
+import { FormValidationError } from '../utils/formValidationError'
+import GroupForm from './groupForm'
 
 export default class GroupDetailsController {
   constructor(
@@ -13,6 +15,9 @@ export default class GroupDetailsController {
     const { addedToGroup } = req.query
     const { username } = req.user
     const { groupId } = req.params
+
+    const formError: FormValidationError | null = null
+
     const pageParam = req.query.page
     const page = pageParam ? Number(pageParam) : 0
 
@@ -25,16 +30,13 @@ export default class GroupDetailsController {
       },
     )
 
-    const rows = groupDetails?.allocationAndWaitlistData?.paginatedAllocationData ?? []
-
     const presenter = new GroupDetailsPresenter(
       GroupDetailsPageSection.Allocated,
       groupDetails,
       groupId,
+      formError,
       addedToGroup === 'true',
     )
-    presenter.setRows(rows)
-
     const view = new GroupDetailsView(presenter)
     ControllerUtils.renderWithLayout(res, view, null)
   }
@@ -42,6 +44,20 @@ export default class GroupDetailsController {
   async showGroupDetailsWaitlist(req: Request, res: Response): Promise<void> {
     const { username } = req.user
     const { groupId } = req.params
+
+    let formError: FormValidationError | null = null
+
+    if (req.method === 'POST') {
+      const data = await new GroupForm(req).addToGroupData()
+
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+      } else {
+        return res.redirect(`/addToGroup/${groupId}/${data.paramsForUpdate.addToGroup}`)
+      }
+    }
+
     const pageParam = req.query.page
     const page = pageParam ? Number(pageParam) : 0
 
@@ -54,12 +70,14 @@ export default class GroupDetailsController {
       },
     )
 
-    const rows = groupDetails?.allocationAndWaitlistData?.paginatedWaitlistData ?? []
-
-    const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, groupId, null)
-    presenter.setRows(rows)
-
+    const presenter = new GroupDetailsPresenter(
+      GroupDetailsPageSection.Waitlist,
+      groupDetails,
+      groupId,
+      formError,
+      null,
+    )
     const view = new GroupDetailsView(presenter)
-    ControllerUtils.renderWithLayout(res, view, null)
+    return ControllerUtils.renderWithLayout(res, view, null)
   }
 }

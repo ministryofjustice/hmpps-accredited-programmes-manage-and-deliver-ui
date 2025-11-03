@@ -7,6 +7,7 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -15,8 +16,8 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <span class="govuk-caption-xl">{{ presenter.text.pageHeading }}</span>
-    <h1 class="govuk-heading-xl">{{ presenter.text.pageSubHeading }}</h1>
+    <span class="govuk-caption-xl">{{ presenter.getText().pageHeading }}</span>
+    <h1 class="govuk-heading-xl">{{ presenter.getText().pageSubHeading }}</h1>
   </div>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
@@ -24,7 +25,7 @@
     </div>
   </div>
   <div class="govuk-grid-column-two-thirds">
-    <h2 class="govuk-heading-l">{{ presenter.text.pageTableHeading }}</h2>
+    <h2 class="govuk-heading-l">{{ presenter.getText().pageTableHeading }}</h2>
   </div>
 </div>
 <div class="govuk-grid-row">
@@ -59,10 +60,13 @@
     {% if isPersonAdded %}
       {{ mojAlert(successMessageArgs) }}
     {% endif %}
+    {% if errorSummary !== null %}
+      {{ govukErrorSummary(errorSummary) }}
+    {% endif %}
     {{ mojSubNavigation(subNavArgs) }}
     <form method="post">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-
+      <div id="add-to-group"></div>
       {{ govukTable(getGroupDetailsTableArgs) }}
       {{ govukButton(formButtonArgs) }}
 

@@ -203,6 +203,10 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await groupDetailsController.showGroupDetailsWaitlist(req, res)
   })
 
+  post('/groupDetails/:groupId/waitlist', async (req, res, next) => {
+    await groupDetailsController.showGroupDetailsWaitlist(req, res)
+  })
+
   get('/referral/:referralId/group-allocation-notes', async (req, res, next) => {
     await groupAllocationNotesController.showGroupAllocationNotesPage(req, res)
   })
