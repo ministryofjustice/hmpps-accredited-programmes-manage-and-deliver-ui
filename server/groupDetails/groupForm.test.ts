@@ -25,7 +25,7 @@ describe(`GroupForm `, () => {
             {
               errorSummaryLinkedField: 'add-to-group',
               formFields: ['add-to-group'],
-              message: 'Select whether you want to add the person to the group or not',
+              message: "Select the button next to a person's name to add them to the group",
             },
           ],
         })

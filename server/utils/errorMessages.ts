@@ -60,6 +60,7 @@ export default {
     detailsTooLong: 'Details must be 500 characters or fewer.',
   },
   addToGroup: {
+    selectAPerson: "Select the button next to a person's name to add them to the group",
     addToGroupEmpty: `Select whether you want to add the person to the group or not`,
     exceededCharacterLimit: 'Details must be 500 characters or fewer',
   },

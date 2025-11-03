@@ -34,6 +34,6 @@ export default class GroupForm {
   }
 
   static get addToGroupValidations(): ValidationChain[] {
-    return [body('add-to-group').notEmpty().withMessage(errorMessages.addToGroup.addToGroupEmpty)]
+    return [body('add-to-group').notEmpty().withMessage(errorMessages.addToGroup.selectAPerson)]
   }
 }
