@@ -117,8 +117,11 @@ export default class GroupDetailsPresenter {
           html: `<a href='/referral-details/${member.referral_id}/personal-details'>${member.personName}</a> ${member.crn}`,
         },
         {
-          html: `${member.sentenceEndDate}${member.sourced_from ? `</br> ${member.sourced_from}` : ''}`,
+          html: `${member.sentenceEndDate && member.sentenceEndDate !== 'null' ? member.sentenceEndDate : 'N/A'}${
+            member.sourced_from ? `<br> ${member.sourced_from}` : ''
+          }`,
         },
+
         {
           html: `${cohortConfigMap[member.cohort as CohortEnum]}${
             member.hasLdc ? '</br><span class="moj-badge moj-badge--bright-purple">LDC</span>' : ''
@@ -154,8 +157,11 @@ export default class GroupDetailsPresenter {
           html: `<a href="/referral-details/${member.referral_id}/personal-details">${member.personName}</a>${member.crn}`,
         },
         {
-          html: `${member.sentenceEndDate}${member.sourced_from ? `</br> ${member.sourced_from}` : ''}`,
+          html: `${member.sentenceEndDate && member.sentenceEndDate !== 'null' ? member.sentenceEndDate : 'N/A'}${
+            member.sourced_from ? `<br> ${member.sourced_from}` : ''
+          }`,
         },
+
         { html: `<strong class="govuk-tag govuk-tag--blue">${member.status}</strong>` },
       ])
     })
