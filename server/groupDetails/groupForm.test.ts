@@ -6,11 +6,12 @@ describe(`GroupForm `, () => {
     describe('when all mandatory fields are passed', () => {
       it('returns params for update', async () => {
         const request = TestUtils.createRequest({
-          'add-to-group': '123',
+          'add-to-group': 'Alex River*123',
         })
         const data = await new GroupForm(request).addToGroupData()
 
         expect(data.paramsForUpdate).toStrictEqual({
+          personName: 'Alex River',
           addToGroup: '123',
         })
       })

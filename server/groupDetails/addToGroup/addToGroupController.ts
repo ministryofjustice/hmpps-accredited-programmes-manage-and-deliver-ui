@@ -6,13 +6,16 @@ import AddToGroupMoreDetailsPresenter from './addToGroupMoreDetailsPresenter'
 import AddToGroupMoreDetailsView from './addToGroupMoreDetailsView'
 import { FormValidationError } from '../../utils/formValidationError'
 import AddToGroupForm from './addToGroupForm'
+import AccreditedProgrammesManageAndDeliverService from '../../services/accreditedProgrammesManageAndDeliverService'
 
 export default class AddToGroupController {
-  constructor() {}
+  constructor(
+    private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
+  ) {}
 
   async addToGroup(req: Request, res: Response): Promise<void> {
     let formError: FormValidationError | null = null
-    const { groupId, personId } = req.params
+    const { groupId, referralId } = req.params
 
     if (req.method === 'POST') {
       const data = await new AddToGroupForm(req).addToGroupData()
@@ -21,13 +24,13 @@ export default class AddToGroupController {
         res.status(400)
         formError = data.error
       } else if (data.paramsForUpdate.addToGroup.toLowerCase() === 'yes') {
-        return res.redirect(`/addToGroup/${groupId}/${personId}/moreDetails`)
+        return res.redirect(`/addToGroup/${groupId}/${referralId}/moreDetails`)
       } else {
         return res.redirect(`/groupDetails/${groupId}/waitlist`)
       }
     }
 
-    const presenter = new AddToGroupPresenter(groupId, formError)
+    const presenter = new AddToGroupPresenter(groupId, req.session.groupManagementData, formError)
     const view = new AddToGroupView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
@@ -35,7 +38,8 @@ export default class AddToGroupController {
   async addToGroupMoreDetails(req: Request, res: Response): Promise<void> {
     let formError: FormValidationError | null = null
     let userInputData = null
-    const { groupId } = req.params
+    const { groupId, referralId } = req.params
+    const { username } = req.user
 
     if (req.method === 'POST') {
       const data = await new AddToGroupForm(req).addToGroupMoreDetailsData()
@@ -45,11 +49,17 @@ export default class AddToGroupController {
         formError = data.error
         userInputData = req.body
       } else {
+        await this.accreditedProgrammesManageAndDeliverService.addToGroup(username, referralId, groupId)
         return res.redirect(`/groupDetails/${groupId}/allocated?addedToGroup=true`)
       }
     }
 
-    const presenter = new AddToGroupMoreDetailsPresenter(formError, userInputData)
+    const presenter = new AddToGroupMoreDetailsPresenter(
+      groupId,
+      req.session.groupManagementData,
+      formError,
+      userInputData,
+    )
     const view = new AddToGroupMoreDetailsView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }

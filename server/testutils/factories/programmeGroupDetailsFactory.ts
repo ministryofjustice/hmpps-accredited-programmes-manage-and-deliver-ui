@@ -38,6 +38,7 @@ export default ProgrammeGroupDetailsFactory.define(() => ({
     ],
     paginatedWaitlistData: [
       {
+        referralId: '123456',
         crn: 'D002399',
         personName: 'Karen Puckett',
         sentenceEndDate: '28 April 2027',
@@ -50,6 +51,7 @@ export default ProgrammeGroupDetailsFactory.define(() => ({
         status: 'Awaiting allocation',
       },
       {
+        referralId: '987654',
         crn: 'D007523',
         personName: 'Mr Joye Hatto',
         sentenceEndDate: '28 April 2027',

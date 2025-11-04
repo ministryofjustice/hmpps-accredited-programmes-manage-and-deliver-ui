@@ -65,7 +65,7 @@ export default class GroupDetailsView {
   private successMessageArgs() {
     return {
       variant: 'success',
-      title: 'Alex River was added to this group. Their referral status is now Scheduled.',
+      title: `${this.presenter.personName} was added to this group. Their referral status is now Scheduled.`,
       showTitleAsHeading: true,
       dismissible: true,
     }
@@ -86,6 +86,7 @@ export default class GroupDetailsView {
         isPersonAdded: this.presenter.isPersonAdded,
         successMessageArgs: this.successMessageArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
+        text: this.presenter.text,
       },
     ]
   }

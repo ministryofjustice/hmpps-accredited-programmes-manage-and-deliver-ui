@@ -35,14 +35,14 @@ describe('groupDetailsPresenter.', () => {
   describe('generateWaitlistTableArgs', () => {
     it('should return the correct table args for waitlist', () => {
       const groupDetails = ProgrammeGroupDetailsFactory.build()
-      const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, '1234')
+      const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, '1234', '')
       expect(presenter.generateWaitlistTableArgs()).toEqual([
         [
           {
             html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
-                    <input id='D002399' value='D002399' type="radio" name="add-to-group" class="govuk-radios__input">
-                    <label class="govuk-label govuk-radios__label" for="D002399">
+                    <input id='123456' value='Karen Puckett*123456' type="radio" name="add-to-group" class="govuk-radios__input">
+                    <label class="govuk-label govuk-radios__label" for="123456">
                       <span class="govuk-!-display-none">Add Karen Puckett to the group</span>
                     </label>
                   </div>
@@ -62,8 +62,8 @@ describe('groupDetailsPresenter.', () => {
           {
             html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
-                    <input id='D007523' value='D007523' type="radio" name="add-to-group" class="govuk-radios__input">
-                    <label class="govuk-label govuk-radios__label" for="D007523">
+                    <input id='987654' value='Mr Joye Hatto*987654' type="radio" name="add-to-group" class="govuk-radios__input">
+                    <label class="govuk-label govuk-radios__label" for="987654">
                       <span class="govuk-!-display-none">Add Mr Joye Hatto to the group</span>
                     </label>
                   </div>

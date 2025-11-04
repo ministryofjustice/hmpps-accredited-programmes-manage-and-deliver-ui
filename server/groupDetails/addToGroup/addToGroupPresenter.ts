@@ -4,11 +4,18 @@ import PresenterUtils from '../../utils/presenterUtils'
 export default class AddToGroupPresenter {
   constructor(
     readonly groupId: string,
+    private readonly groupManagementData: {
+      groupRegion?: string
+      personName?: string
+    },
     private readonly validationError: FormValidationError | null = null,
   ) {}
 
-  readonly text = {
-    pageHeading: `BCCDD1`,
+  get text() {
+    return {
+      pageHeading: this.groupManagementData.groupRegion,
+      questionText: `Add ${this.groupManagementData.personName} to this group?`,
+    }
   }
 
   get backLinkHref() {

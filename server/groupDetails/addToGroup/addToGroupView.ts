@@ -17,7 +17,7 @@ export default class AddToGroupView {
       name: 'add-to-group',
       fieldset: {
         legend: {
-          text: 'Add Alex River to this group?',
+          text: this.presenter.text.questionText,
           isPageHeading: true,
           classes: 'govuk-fieldset__legend--l',
         },
@@ -48,6 +48,7 @@ export default class AddToGroupView {
         radioArgs: this.radioArgs(),
         cancelLink: this.presenter.backLinkHref,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
+        text: this.presenter.text,
       },
     ]
   }
