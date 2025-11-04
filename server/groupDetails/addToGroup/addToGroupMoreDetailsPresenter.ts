@@ -1,18 +1,20 @@
-import { Session, SessionData } from 'express-session'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
 
 export default class AddToGroupMoreDetailsPresenter {
   constructor(
     private readonly groupId: string,
-    private readonly session: Session & Partial<SessionData>,
+    private readonly groupManagementData: {
+      groupRegion?: string
+      personName?: string
+    },
     private readonly validationError: FormValidationError | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
   ) {}
 
   get text() {
     return {
-      pageHeading: `${this.session.groupManagementData.personName}'s referral status will change to Scheduled`,
+      pageHeading: `${this.groupManagementData.personName}'s referral status will change to Scheduled`,
     }
   }
 

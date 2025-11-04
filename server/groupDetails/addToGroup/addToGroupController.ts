@@ -30,7 +30,7 @@ export default class AddToGroupController {
       }
     }
 
-    const presenter = new AddToGroupPresenter(groupId, req.session, formError)
+    const presenter = new AddToGroupPresenter(groupId, req.session.groupManagementData, formError)
     const view = new AddToGroupView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
@@ -54,7 +54,12 @@ export default class AddToGroupController {
       }
     }
 
-    const presenter = new AddToGroupMoreDetailsPresenter(groupId, req.session, formError, userInputData)
+    const presenter = new AddToGroupMoreDetailsPresenter(
+      groupId,
+      req.session.groupManagementData,
+      formError,
+      userInputData,
+    )
     const view = new AddToGroupMoreDetailsView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
