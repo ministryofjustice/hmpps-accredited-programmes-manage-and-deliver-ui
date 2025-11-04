@@ -28,7 +28,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const ldcController = new LdcController(accreditedProgrammesManageAndDeliverService)
   const updateReferralController = new UpdateReferralStatusController(accreditedProgrammesManageAndDeliverService)
   const groupDetailsController = new GroupDetailsController(accreditedProgrammesManageAndDeliverService)
-  const addToGroupController = new AddToGroupController()
+  const addToGroupController = new AddToGroupController(accreditedProgrammesManageAndDeliverService)
   const groupAllocationNotesController = new GroupAllocationNotesController(accreditedProgrammesManageAndDeliverService)
 
   get('/', async (req, res, next) => {
@@ -211,19 +211,19 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await groupAllocationNotesController.showGroupAllocationNotesPage(req, res)
   })
 
-  get('/addToGroup/:groupId/:personId', async (req, res, next) => {
+  get('/addToGroup/:groupId/:referralId', async (req, res, next) => {
     await addToGroupController.addToGroup(req, res)
   })
 
-  post('/addToGroup/:groupId/:personId', async (req, res, next) => {
+  post('/addToGroup/:groupId/:referralId', async (req, res, next) => {
     await addToGroupController.addToGroup(req, res)
   })
 
-  get('/addToGroup/:groupId/:personId/moreDetails', async (req, res, next) => {
+  get('/addToGroup/:groupId/:referralId/moreDetails', async (req, res, next) => {
     await addToGroupController.addToGroupMoreDetails(req, res)
   })
 
-  post('/addToGroup/:groupId/:personId/moreDetails', async (req, res, next) => {
+  post('/addToGroup/:groupId/:referralId/moreDetails', async (req, res, next) => {
     await addToGroupController.addToGroupMoreDetails(req, res)
   })
 

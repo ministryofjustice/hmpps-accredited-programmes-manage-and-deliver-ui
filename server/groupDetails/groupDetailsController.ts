@@ -34,10 +34,12 @@ export default class GroupDetailsController {
       GroupDetailsPageSection.Allocated,
       groupDetails,
       groupId,
+      req.session.groupManagementData?.personName ?? '',
       formError,
       addedToGroup === 'true',
     )
     const view = new GroupDetailsView(presenter)
+    req.session.groupManagementData = null
     ControllerUtils.renderWithLayout(res, view, null)
   }
 
@@ -46,17 +48,7 @@ export default class GroupDetailsController {
     const { groupId } = req.params
 
     let formError: FormValidationError | null = null
-
-    if (req.method === 'POST') {
-      const data = await new GroupForm(req).addToGroupData()
-
-      if (data.error) {
-        res.status(400)
-        formError = data.error
-      } else {
-        return res.redirect(`/addToGroup/${groupId}/${data.paramsForUpdate.addToGroup}`)
-      }
-    }
+    req.session.groupManagementData = null
 
     const pageParam = req.query.page
     const page = pageParam ? Number(pageParam) : 0
@@ -69,11 +61,26 @@ export default class GroupDetailsController {
         size: 10,
       },
     )
+    if (req.method === 'POST') {
+      const data = await new GroupForm(req).addToGroupData()
+
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+      } else {
+        req.session.groupManagementData = {
+          groupRegion: groupDetails.group.regionName,
+          personName: data.paramsForUpdate.personName,
+        }
+        return res.redirect(`/addToGroup/${groupId}/${data.paramsForUpdate.addToGroup}`)
+      }
+    }
 
     const presenter = new GroupDetailsPresenter(
       GroupDetailsPageSection.Waitlist,
       groupDetails,
       groupId,
+      '',
       formError,
       null,
     )

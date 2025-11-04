@@ -1,14 +1,19 @@
+import { Session, SessionData } from 'express-session'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
 
 export default class AddToGroupPresenter {
   constructor(
     readonly groupId: string,
+    private readonly session: Session & Partial<SessionData>,
     private readonly validationError: FormValidationError | null = null,
   ) {}
 
-  readonly text = {
-    pageHeading: `BCCDD1`,
+  get text() {
+    return {
+      pageHeading: this.session.groupManagementData.groupRegion,
+      questionText: `Add ${this.session.groupManagementData.personName} to this group?`,
+    }
   }
 
   get backLinkHref() {

@@ -29,6 +29,10 @@ declare module 'express-session' {
       preferredLocationReferenceData?: DeliveryLocationPreferencesFormData
       hasUpdatedAdditionalLocationData?: boolean
     }
+    groupManagementData?: {
+      groupRegion?: string
+      personName?: string
+    }
   }
 }
 

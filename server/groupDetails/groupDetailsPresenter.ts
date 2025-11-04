@@ -39,11 +39,12 @@ export default class GroupDetailsPresenter {
     readonly section: GroupDetailsPageSection,
     readonly group: ProgrammeGroupDetails,
     readonly groupId: string,
+    readonly personName: string = '',
     readonly validationError: FormValidationError | null = null,
     readonly isPersonAdded: boolean | null = null,
   ) {}
 
-  getText() {
+  get text() {
     return {
       pageHeading: this.group.group.regionName,
       pageSubHeading: this.group.group.code,
@@ -98,8 +99,8 @@ export default class GroupDetailsPresenter {
         {
           html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
-                    <input id='${member.crn}' value='${member.crn}' type="radio" name="add-to-group" class="govuk-radios__input">
-                    <label class="govuk-label govuk-radios__label" for="${member.crn}">
+                    <input id='${member.referralId}' value='${member.personName}*${member.referralId}' type="radio" name="add-to-group" class="govuk-radios__input">
+                    <label class="govuk-label govuk-radios__label" for="${member.referralId}">
                       <span class="govuk-!-display-none">Add ${member.personName} to the group</span>
                     </label>
                   </div>

@@ -6,6 +6,7 @@ import { FormData } from '../utils/forms/formData'
 
 export type AddToGroupFormData = {
   addToGroup: string
+  personName: string
 }
 
 export default class GroupForm {
@@ -24,10 +25,11 @@ export default class GroupForm {
         error,
       }
     }
-
+    const [name = '', id = ''] = this.request.body['add-to-group'].split('*')
     return {
       paramsForUpdate: {
-        addToGroup: this.request.body['add-to-group'],
+        addToGroup: id,
+        personName: name,
       },
       error: null,
     }

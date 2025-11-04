@@ -388,4 +388,12 @@ export default class AccreditedProgrammesManageAndDeliverService
       data: updatedStatus,
     })) as ReferralDetails
   }
+
+  async addToGroup(username: string, referralId: string, groupId: string) {
+    const restClient = await this.createRestClientFromUsername(username)
+    return restClient.post({
+      path: `/group/${groupId}/allocate/${referralId}`,
+      headers: { Accept: 'application/json' },
+    })
+  }
 }

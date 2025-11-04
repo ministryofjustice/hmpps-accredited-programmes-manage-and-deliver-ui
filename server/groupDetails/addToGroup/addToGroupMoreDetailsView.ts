@@ -43,6 +43,7 @@ export default class AddToGroupMoreDetailsView {
         addDetailsCharacterCountArgs: this.addDetailsCharacterCountArgs(),
         submitButtonArgs: this.submitButtonArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
+        text: this.presenter.text,
       },
     ]
   }

@@ -2105,6 +2105,17 @@ export interface components {
     }
     GroupAllocatedItem: {
       /**
+       * Format: uuid
+       * @description The UUID of the referral.
+       * @example 1ff57cea-352c-4a99-8f66-3e626aac3265
+       */
+      referralId: string
+      /**
+       * @description The entity (Licence Condition or Requirement) that caused the Referral to be created in our system
+       * @example Requirement
+       */
+      sourcedFrom: string
+      /**
        * @description The crn associated with this referral.
        * @example X933590
        */
@@ -2117,7 +2128,7 @@ export interface components {
       /**
        * Format: date
        * @description The end date of the person's sentence
-       * @example 15
+       * @example 1
        */
       sentenceEndDate: string
       /**
@@ -2127,6 +2138,17 @@ export interface components {
       status: string
     }
     GroupWaitlistItem: {
+      /**
+       * Format: uuid
+       * @description The UUID of the referral.
+       * @example 1ff57cea-352c-4a99-8f66-3e626aac3265
+       */
+      referralId: string
+      /**
+       * @description The entity (Licence Condition or Requirement) that caused the Referral to be created in our system
+       * @example REQUIREMENT
+       */
+      sourcedFrom: string
       /**
        * @description The crn associated with this referral.
        * @example X933590
@@ -2140,7 +2162,7 @@ export interface components {
       /**
        * Format: date
        * @description The end date of the person's sentence.
-       * @example 15
+       * @example 1
        */
       sentenceEndDate: string
       /**

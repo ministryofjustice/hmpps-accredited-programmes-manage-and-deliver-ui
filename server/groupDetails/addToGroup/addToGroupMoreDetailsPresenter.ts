@@ -1,17 +1,24 @@
+import { Session, SessionData } from 'express-session'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
 
 export default class AddToGroupMoreDetailsPresenter {
   constructor(
+    private readonly groupId: string,
+    private readonly session: Session & Partial<SessionData>,
     private readonly validationError: FormValidationError | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
   ) {}
 
-  readonly text = {
-    pageHeading: `Alex River's referral status will change to Scheduled`,
+  get text() {
+    return {
+      pageHeading: `${this.session.groupManagementData.personName}'s referral status will change to Scheduled`,
+    }
   }
 
-  readonly backLinkHref = '/groupDetails/1234/waitlist'
+  get backLinkHref() {
+    return `/groupDetails/${this.groupId}/waitlist`
+  }
 
   get errorSummary() {
     return PresenterUtils.errorSummary(this.validationError)
