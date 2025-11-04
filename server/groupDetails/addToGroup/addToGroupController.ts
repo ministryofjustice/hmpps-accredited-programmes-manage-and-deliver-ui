@@ -12,6 +12,7 @@ export default class AddToGroupController {
 
   async addToGroup(req: Request, res: Response): Promise<void> {
     let formError: FormValidationError | null = null
+    const { groupId, personId } = req.params
 
     if (req.method === 'POST') {
       const data = await new AddToGroupForm(req).addToGroupData()
@@ -20,13 +21,13 @@ export default class AddToGroupController {
         res.status(400)
         formError = data.error
       } else if (data.paramsForUpdate.addToGroup.toLowerCase() === 'yes') {
-        return res.redirect(`/addToGroup/123/123/moreDetails`)
+        return res.redirect(`/addToGroup/${groupId}/${personId}/moreDetails`)
       } else {
-        return res.redirect(`/groupDetails/1234/waitlist`)
+        return res.redirect(`/groupDetails/${groupId}/waitlist`)
       }
     }
 
-    const presenter = new AddToGroupPresenter(formError)
+    const presenter = new AddToGroupPresenter(groupId, formError)
     const view = new AddToGroupView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
@@ -34,6 +35,7 @@ export default class AddToGroupController {
   async addToGroupMoreDetails(req: Request, res: Response): Promise<void> {
     let formError: FormValidationError | null = null
     let userInputData = null
+    const { groupId } = req.params
 
     if (req.method === 'POST') {
       const data = await new AddToGroupForm(req).addToGroupMoreDetailsData()
@@ -43,7 +45,7 @@ export default class AddToGroupController {
         formError = data.error
         userInputData = req.body
       } else {
-        return res.redirect(`/groupDetails/1234/allocated?addedToGroup=true`)
+        return res.redirect(`/groupDetails/${groupId}/allocated?addedToGroup=true`)
       }
     }
 

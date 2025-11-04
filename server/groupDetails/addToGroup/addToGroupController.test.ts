@@ -66,7 +66,7 @@ describe('add to group', () => {
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(`Redirecting to /groupDetails/1234/waitlist`)
+          expect(res.text).toContain(`Redirecting to /groupDetails/${groupId}/waitlist`)
         })
     })
 
@@ -109,7 +109,7 @@ describe('add to group', () => {
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(`Redirecting to /groupDetails/1234/allocated?addedToGroup=true`)
+          expect(res.text).toContain(`Redirecting to /groupDetails/${groupId}/allocated?addedToGroup=true`)
         })
     })
     it('returns with errors if validation fails', async () => {
