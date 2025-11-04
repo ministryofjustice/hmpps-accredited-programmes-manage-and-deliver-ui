@@ -3,7 +3,6 @@ import AccreditedProgrammesManageAndDeliverService from '../services/accreditedP
 import ControllerUtils from '../utils/controllerUtils'
 import GroupDetailsPresenter, { GroupDetailsPageSection, AllocatedRow, WaitlistRow } from './groupDetailsPresenter'
 import GroupDetailsView from './groupDetailsView'
-import { Page } from '../shared/models/pagination'
 
 type ApiBaseRow = {
   crn: string
@@ -42,15 +41,16 @@ export default class GroupDetailsController {
     const { addedToGroup } = req.query
     const { username } = req.user
     const { groupId } = req.params
-
-    const size = 10
-    const pageParam = req.query.page as string | undefined
-    const page = pageParam ? Math.max(0, Number(pageParam) - 1) : 0
+    const pageParam = req.query.page
+    const page = pageParam ? Number(pageParam) : 0
 
     const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers(
       username,
       groupId,
-      { page, size },
+      {
+        page,
+        size: 10,
+      },
     )
 
     const rawRows = (groupDetails?.allocationAndWaitlistData?.paginatedAllocationData ?? []) as ApiAllocatedRow[]
@@ -64,20 +64,9 @@ export default class GroupDetailsController {
       status: r.status,
     }))
 
-    const paged: Page<AllocatedRow> = {
-      content: rows,
-      totalElements: rows.length,
-      totalPages: 1,
-      numberOfElements: rows.length,
-      number: page,
-      size,
-    }
-
     const presenter = new GroupDetailsPresenter(
       GroupDetailsPageSection.Allocated,
-      paged,
       groupDetails,
-      undefined,
       groupId,
       addedToGroup === 'true',
     )
@@ -90,15 +79,16 @@ export default class GroupDetailsController {
   async showGroupDetailsWaitlist(req: Request, res: Response): Promise<void> {
     const { username } = req.user
     const { groupId } = req.params
-
-    const size = 10
-    const pageParam = req.query.page as string | undefined
-    const page = pageParam ? Math.max(0, Number(pageParam) - 1) : 0
+    const pageParam = req.query.page
+    const page = pageParam ? Number(pageParam) : 0
 
     const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupWaitlistMembers(
       username,
       groupId,
-      { page, size },
+      {
+        page,
+        size: 10,
+      },
     )
 
     const rawRows = (groupDetails?.allocationAndWaitlistData?.paginatedWaitlistData ?? []) as ApiWaitlistRow[]
@@ -118,23 +108,7 @@ export default class GroupDetailsController {
       status: r.status,
     }))
 
-    const paged: Page<WaitlistRow> = {
-      content: rows,
-      totalElements: rows.length,
-      totalPages: 1,
-      numberOfElements: rows.length,
-      number: page,
-      size,
-    }
-
-    const presenter = new GroupDetailsPresenter(
-      GroupDetailsPageSection.Waitlist,
-      paged,
-      groupDetails,
-      undefined,
-      groupId,
-      null,
-    )
+    const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, groupId, null)
     presenter.setRows(rows)
 
     const view = new GroupDetailsView(presenter)

@@ -1,8 +1,6 @@
 import { CohortEnum, ProgrammeGroupDetails } from '@manage-and-deliver-api'
-import { Page } from '../shared/models/pagination'
 import { ButtonArgs, SelectArgsItem, TableArgsHeadElement } from '../utils/govukFrontendTypes'
 import { convertToTitleCase } from '../utils/utils'
-import Pagination from '../utils/pagination/pagination'
 
 export enum GroupDetailsPageSection {
   Allocated = 1,
@@ -39,19 +37,13 @@ export type WaitlistRow = {
 }
 
 export default class GroupDetailsPresenter {
-  public readonly pagination: Pagination
-
   constructor(
     readonly section: GroupDetailsPageSection,
-    readonly page: Page<AllocatedRow> | Page<WaitlistRow>,
-    readonly groupDetails: ProgrammeGroupDetails,
-    readonly params: string | undefined,
+    readonly group: ProgrammeGroupDetails,
     readonly groupId: string,
     readonly isPersonAdded: boolean | null = null,
     public readonly addedPersonName?: string,
-  ) {
-    this.pagination = new Pagination(page, params)
-  }
+  ) {}
 
   private groupMemberList: (AllocatedRow | WaitlistRow)[] = []
 
@@ -61,24 +53,23 @@ export default class GroupDetailsPresenter {
 
   get text() {
     return {
-      pageHeading: this.groupDetails.group.regionName,
-      pageSubHeading: this.groupDetails.group.code,
+      pageHeading: this.group.group.regionName,
+      pageSubHeading: this.group.group.code,
       pageTableHeading: 'Allocations and waitlist',
     }
   }
 
   getSubNavArgs(): { items: { text: string; href: string; active: boolean }[] } {
-    const qs = this.params ? `?${this.params}` : ''
     return {
       items: [
         {
-          text: 'Allocated',
-          href: `/groupDetails/${this.groupId}/allocated${qs}`,
+          text: `Allocated`,
+          href: `/groupDetails/${this.groupId}/allocated`,
           active: this.section === GroupDetailsPageSection.Allocated,
         },
         {
-          text: 'Waitlist',
-          href: `/groupDetails/${this.groupId}/waitlist${qs}`,
+          text: `Waitlist`,
+          href: `/groupDetails/${this.groupId}/waitlist`,
           active: this.section === GroupDetailsPageSection.Waitlist,
         },
       ],
