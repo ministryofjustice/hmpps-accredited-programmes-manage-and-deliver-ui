@@ -38,6 +38,7 @@ type CaseListFilterValues = components['schemas']['CaseListFilterValues']
 type ReferralStatusHistory = components['schemas']['ReferralStatusHistory']
 type LocationFilterValues = components['schemas']['LocationFilterValues']
 type CaseListReferrals = components['schemas']['CaseListReferrals']
+type CreateGroup = components['schemas']['CreateGroup']
 
 export type {
   AlcoholMisuseDetails,
@@ -48,6 +49,7 @@ export type {
   CohortEnum,
   CreateAvailability,
   CreateDeliveryLocationPreferences,
+  CreateGroup,
   CreateReferralStatusHistory,
   DailyAvailabilityModel,
   DeliveryLocationPreferences,

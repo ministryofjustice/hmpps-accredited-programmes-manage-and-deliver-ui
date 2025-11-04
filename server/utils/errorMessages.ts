@@ -64,6 +64,11 @@ export default {
     addToGroupEmpty: `Select whether you want to add the person to the group or not`,
     exceededCharacterLimit: 'Details must be 500 characters or fewer',
   },
+  createGroup: {
+    createGroupCodeEmpty: 'Code: Please change this error message in errorMessages.ts',
+    createGroupCohortSelect: 'Cohort: Please change this error message in errorMessages.ts',
+    createGroupSexSelect: 'Sex: Please change this error message in errorMessages.ts',
+  },
   returnedError,
   userHeaderTypes,
   errorHandlerAccessErrorMessages,

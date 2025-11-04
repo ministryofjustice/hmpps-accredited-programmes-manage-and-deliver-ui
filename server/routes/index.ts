@@ -19,6 +19,8 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler): Router => router.post(path, asyncMiddleware(handler))
+  const getOrPost = (path: string, handler: RequestHandler) =>
+    router.route(path).get(asyncMiddleware(handler)).post(asyncMiddleware(handler))
 
   const caselistController = new CaselistController(accreditedProgrammesManageAndDeliverService)
   const referralDetailsController = new ReferralDetailsController(accreditedProgrammesManageAndDeliverService)
@@ -197,23 +199,23 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await updateReferralController.updateStatus(req, res)
   })
 
-  get('/group/create-a-group/start', async (req, res, next) => {
+  getOrPost('/group/create-a-group/start', async (req, res) => {
     await createGroupController.showCreateGroupStart(req, res)
   })
 
-  post('/group/create-a-group/start', async (req, res, next) => {
-    await createGroupController.showCreateGroupStart(req, res)
-  })
-
-  get('/group/create-a-group/code', async (req, res, next) => {
+  getOrPost('/group/create-a-group/code', async (req, res) => {
     await createGroupController.showCreateGroupCode(req, res)
   })
 
-  post('/group/create-a-group/code', async (req, res, next) => {
-    await createGroupController.showCreateGroupCode(req, res)
+  getOrPost('/group/create-a-group/cohort', async (req, res) => {
+    await createGroupController.showCreateGroupCohort(req, res)
   })
 
-  get('/groupDetails/:groupId/allocated', async (req, res, next) => {
+  getOrPost('/group/create-a-group/sex', async (req, res) => {
+    await createGroupController.showCreateGroupSex(req, res)
+  })
+
+  get('/groupDetails/:groupId/allocated', async (req, res) => {
     await groupDetailsController.showGroupDetailsAllocated(req, res)
   })
 

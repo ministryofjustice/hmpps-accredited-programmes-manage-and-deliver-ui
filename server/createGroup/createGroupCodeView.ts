@@ -21,8 +21,8 @@ export default class CreateGroupCodeView {
 
   private get createGroupCodeArgs(): InputArgs {
     return {
-      id: 'createGroupCode',
-      name: 'createGroupCode',
+      id: 'create-group-code',
+      name: 'create-group-code',
       hint: {
         text: 'For example, BCCDD1. This will be used to identify your group.',
       },
@@ -32,7 +32,7 @@ export default class CreateGroupCodeView {
         isPageHeading: true,
       },
       value: '',
-      errorMessage: ViewUtils.govukErrorMessage(this.presenter.errorMessage),
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createGroupCode.errorMessage),
     }
   }
 

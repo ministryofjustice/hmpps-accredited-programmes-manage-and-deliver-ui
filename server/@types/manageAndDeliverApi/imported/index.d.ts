@@ -151,6 +151,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/group': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Create a new programme group
+     * @description Create a new programme group with the specified group code
+     */
+    post: operations['createProgrammeGroup']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/group/{groupId}/allocate/{referralId}': {
     parameters: {
       query?: never
@@ -932,6 +952,46 @@ export interface components {
        * @example Updating the status following a one-to-one meeting with Person on Probation
        */
       additionalDetails?: string
+    }
+    CreateGroup: {
+      groupCode: string
+      /** @description Cohort for the Programme Group. */
+      cohort: components['schemas']['ProgrammeGroupCohort']
+      /** @description Sex that the group is being run for */
+      sex: components['schemas']['ProgrammeGroupSex']
+    }
+    /**
+     * @description Cohort for the Programme Group.
+     * @enum {string}
+     */
+    ProgrammeGroupCohort: 'GENERAL' | 'GENERAL_LDC' | 'SEXUAL' | 'SEXUAL_LDC'
+    /**
+     * @description Sex that the group is being run for
+     * @enum {string}
+     */
+    ProgrammeGroupSex: 'MALE' | 'FEMALE' | 'MIXED'
+    ProgrammeGroupEntity: {
+      /** Format: uuid */
+      id?: string
+      code: string
+      /**
+       * @description Offence classification based on assessment
+       * @enum {string}
+       */
+      cohort: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
+      /** @enum {string} */
+      sex: 'MALE' | 'FEMALE' | 'MIXED'
+      isLdc: boolean
+      /** Format: date-time */
+      createdAt: string
+      createdByUsername: string
+      /** Format: date-time */
+      updatedAt?: string
+      updatedByUsername?: string
+      /** Format: date-time */
+      deletedAt?: string
+      deletedByUsername?: string
+      ldc?: boolean
     }
     CreateAvailability: {
       /**
@@ -1947,11 +2007,11 @@ export interface components {
       /** Format: int64 */
       offset?: number
       sort?: components['schemas']['SortObject']
-      /** Format: int32 */
-      pageSize?: number
       paged?: boolean
       /** Format: int32 */
       pageNumber?: number
+      /** Format: int32 */
+      pageSize?: number
       unpaged?: boolean
     }
     ReferralCaseListItem: {
@@ -2753,6 +2813,57 @@ export interface operations {
       }
       /** @description The referral does not exist */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  createProgrammeGroup: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateGroup']
+      }
+    }
+    responses: {
+      /** @description Programme group successfully created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ProgrammeGroupEntity']
+        }
+      }
+      /** @description Invalid request format or group code */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden. The client is not authorised to create groups. */
+      403: {
         headers: {
           [name: string]: unknown
         }
@@ -4281,6 +4392,15 @@ export interface operations {
       }
       /** @description The group does not exist */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The group already exists */
+      409: {
         headers: {
           [name: string]: unknown
         }

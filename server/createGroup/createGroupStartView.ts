@@ -1,7 +1,7 @@
-import CreateGroupCodePresenter from './createGroupCodePresenter'
+import CreateGroupStartPresenter from './createGroupStartPresenter'
 
 export default class CreateGroupStartView {
-  constructor(private readonly presenter: CreateGroupCodePresenter) {}
+  constructor(private readonly presenter: CreateGroupStartPresenter) {}
 
   private backLinkArgs() {
     return {
