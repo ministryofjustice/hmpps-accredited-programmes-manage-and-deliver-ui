@@ -19,6 +19,7 @@ export type AllocatedRow = {
   personName: string
   sentenceEndDate: string
   status: string
+  referralId: string
 }
 
 export type WaitlistRow = {
@@ -32,6 +33,7 @@ export type WaitlistRow = {
   pdu: string
   reportingTeam: string
   status: string
+  referralId: string
 }
 
 export default class GroupDetailsPresenter {
@@ -90,6 +92,8 @@ export default class GroupDetailsPresenter {
     return baseHeadings.concat(extra)
   }
 
+  private referralHref = (id: string) => `/referral-details/${encodeURIComponent(id)}/personal-details`
+
   generateWaitlistTableArgs() {
     const rows = this.group.allocationAndWaitlistData.paginatedWaitlistData
     const out: ({ html: string } | { text: string })[][] = []
@@ -106,13 +110,22 @@ export default class GroupDetailsPresenter {
                   </div>
                  </div>`,
         },
-        { html: `<a href="">${member.personName}</a><p class="govuk-!-margin-bottom-0"> ${member.crn}</p>` },
-        { text: member.sentenceEndDate },
+
+        {
+          html: `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0"> ${member.crn}</p>`,
+        },
+
+        {
+          html: `${member.sentenceEndDate && member.sentenceEndDate !== 'null' ? member.sentenceEndDate : 'N/A'}${
+            member.sourcedFrom ? `<br> ${member.sourcedFrom}` : ''
+          }`,
+        },
         {
           html: `${cohortConfigMap[member.cohort as CohortEnum]}${
             member.hasLdc ? '</br><span class="moj-badge moj-badge--bright-purple">LDC</span>' : ''
           }`,
         },
+
         { text: String(member.age) },
         { text: convertToTitleCase(member.sex) },
         { text: member.pdu },
@@ -139,8 +152,15 @@ export default class GroupDetailsPresenter {
                   </div>
                  </div>`,
         },
-        { html: `<a href="">${member.personName}</a><p class="govuk-!-margin-bottom-0">${member.crn}</p>` },
-        { text: member.sentenceEndDate },
+        {
+          html: `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0">${member.crn}</p>`,
+        },
+
+        {
+          html: `${member.sentenceEndDate && member.sentenceEndDate !== 'null' ? member.sentenceEndDate : 'N/A'}${
+            member.sourcedFrom ? `<br> ${member.sourcedFrom}` : ''
+          }`,
+        },
         { html: `<strong class="govuk-tag govuk-tag--blue">${member.status}</strong>` },
       ])
     })
