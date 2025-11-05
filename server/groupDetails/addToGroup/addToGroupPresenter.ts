@@ -8,6 +8,7 @@ export default class AddToGroupPresenter {
       groupRegion?: string
       personName?: string
     },
+    private readonly backLink: string,
     private readonly validationError: FormValidationError | null = null,
   ) {}
 
@@ -19,7 +20,7 @@ export default class AddToGroupPresenter {
   }
 
   get backLinkHref() {
-    return `/groupDetails/${this.groupId}/waitlist`
+    return this.backLink
   }
 
   get errorSummary() {

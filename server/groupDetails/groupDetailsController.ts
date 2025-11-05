@@ -89,6 +89,10 @@ export default class GroupDetailsController {
       null,
     )
     const view = new GroupDetailsView(presenter)
+
+    // Set to maintain filters when accessing add to group journey
+    req.session.originPage = req.originalUrl
+
     return ControllerUtils.renderWithLayout(res, view, null)
   }
 }
