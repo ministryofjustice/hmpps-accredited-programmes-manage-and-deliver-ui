@@ -115,6 +115,8 @@ export default class GroupDetailsView {
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         reportingTeamCheckboxArgs: this.reportingTeamCheckboxArgs,
         text: this.presenter.text,
+        hasResults: this.presenter.hasResults(),
+        noResultsString: this.presenter.generateNoResultsString(),
       },
     ]
   }

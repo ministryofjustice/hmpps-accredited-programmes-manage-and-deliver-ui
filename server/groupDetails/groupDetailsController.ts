@@ -79,6 +79,9 @@ export default class GroupDetailsController {
       }
     }
 
+    groupDetails.allocationAndWaitlistData.paginatedWaitlistData = []
+    groupDetails.allocationAndWaitlistData.counts.waitlist = 0
+
     const presenter = new GroupDetailsPresenter(
       GroupDetailsPageSection.Waitlist,
       groupDetails,

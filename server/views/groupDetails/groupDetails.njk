@@ -78,8 +78,13 @@
     <form method="post">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}">
       <div id="add-to-group"></div>
-      {{ govukTable(getGroupDetailsTableArgs) }}
-      {{ govukButton(formButtonArgs) }}
+      {% if hasResults %}
+        {{ govukTable(getGroupDetailsTableArgs) }}
+        {{ govukButton(formButtonArgs) }}
+      {% else %}
+        <p class="govuk-body-l">{{ noResultsString }}</p>
+      {% endif %}
+
 
     </form>
   </div>

@@ -15,26 +15,6 @@ const cohortConfigMap: Record<CohortEnum, string> = {
   GENERAL_OFFENCE: 'General Offence',
 }
 
-export type AllocatedRow = {
-  crn: string
-  personName: string
-  sentenceEndDate: string
-  status: string
-}
-
-export type WaitlistRow = {
-  crn: string
-  personName: string
-  sentenceEndDate: string
-  cohort: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
-  hasLdc: boolean
-  age: number
-  sex: string
-  pdu: string
-  reportingTeam: string
-  status: string
-}
-
 export default class GroupDetailsPresenter {
   constructor(
     readonly section: GroupDetailsPageSection,
@@ -44,7 +24,9 @@ export default class GroupDetailsPresenter {
     readonly personName: string = '',
     readonly validationError: FormValidationError | null = null,
     readonly isPersonAdded: boolean | null = null,
-  ) {}
+  ) {
+    console.log(JSON.stringify(this.filter, null, 2))
+  }
 
   get text() {
     return {
@@ -205,5 +187,35 @@ export default class GroupDetailsPresenter {
         .sort((a, b) => a.text.localeCompare(b.text))
     }
     return checkboxItems
+  }
+
+  hasResults(): boolean {
+    const { waitlist, allocated } = this.group.allocationAndWaitlistData.counts
+
+    if (this.section === GroupDetailsPageSection.Waitlist) {
+      return waitlist > 0
+    }
+
+    if (this.section === GroupDetailsPageSection.Allocated) {
+      return allocated > 0
+    }
+
+    return true
+  }
+
+  generateNoResultsString(): string {
+    const { waitlist, allocated } = this.group.allocationAndWaitlistData.counts
+    const hasFilters = Object.values(this.filter).some(value => value !== undefined)
+
+    if (waitlist === 0) {
+      return hasFilters
+        ? 'No results found. Clear or change the filters'
+        : `There are no people awaiting allocation in ${this.group.group.regionName}`
+    }
+
+    if (allocated === 0) {
+      return 'There are currently no people allocated to this group'
+    }
+    return ''
   }
 }
