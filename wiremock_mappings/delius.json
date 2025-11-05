@@ -2,74 +2,6 @@
   "mappings": [
     {
       "request": {
-        "urlPattern": "/delius/user/REFER_MONITOR_PP",
-        "method": "GET"
-      },
-      "response": {
-        "status": 200,
-        "jsonBody": {
-          "userId": 2500099998,
-          "username": "REFER_MONITOR_PP",
-          "firstName": "Bernard",
-          "surname": "Beaks",
-          "email": "bernard.beaks@digital.justice.gov.uk",
-          "enabled": true,
-          "roles": ["ROLE_PROBATION"],
-          "auth_source": "delius"
-        },
-        "headers": {
-          "Content-Type": "application/json"
-        }
-      }
-    },
-    {
-      "request": {
-        "urlPattern": "/delius/authenticate",
-        "method": "POST",
-        "bodyPatterns": [
-          {
-            "equalToJson": "{\"username\":\"REFER_MONITOR_PP\",\"password\":\"R8Mpassword\"}"
-          }
-        ]
-      },
-      "response": {
-        "status": 200
-      }
-    },
-    {
-      "request": {
-        "urlPattern": "/delius/user?email=.*",
-        "method": "GET"
-      },
-      "response": {
-        "status": 200,
-        "jsonBody": [
-          {
-            "userId": 1234567890,
-            "username": "deliususer",
-            "firstName": "Delius",
-            "surname": "User",
-            "email": "delius.user@example.com",
-            "enabled": true,
-            "roles": []
-          }
-        ],
-        "headers": {
-          "Content-Type": "application/json"
-        }
-      }
-    },
-    {
-      "request": {
-        "urlPattern": "/delius/health.*",
-        "method": "GET"
-      },
-      "response": {
-        "status": 200
-      }
-    },
-    {
-      "request": {
         "method": "GET",
         "urlPathPattern": "/case/.*/personal-details"
       },
@@ -78,15 +10,18 @@
         "headers": {
           "Content-Type": "application/json"
         },
-        "transformers": ["response-template"],
         "jsonBody": {
           "crn": "X718255",
           "name": {
-            "forename": "{{pickRandom 'David' 'John' 'Michael' 'James' 'Robert' 'Sarah' 'Emma' 'Lisa' 'Jennifer' 'Maria'}}",
-            "surname": "{{pickRandom 'Clarke' 'Smith' 'Johnson' 'Williams' 'Brown' 'Jones' 'Garcia' 'Miller' 'Davis' 'Wilson'}}"
+            "forename": "David",
+            "surname": "Clarke"
           },
           "dateOfBirth": "1981-04-15",
-          "age": "48 years 3 months",
+          "age": 48,
+          "ethnicity": {
+            "code": "W1",
+            "description": "White"
+          },
           "sex": {
             "code": "M",
             "description": "Male"
@@ -105,12 +40,12 @@
             "description": "London"
           },
           "team": {
-            "code": "N52UAT",
-            "description": "N52 Team"
+            "code": "TEAM01",
+            "description": "Wiremocked Team"
           },
           "region": {
-            "code": "N52",
-            "description": "West Midlands Region"
+            "code": "wiremocked_region_code",
+            "description": "Wiremocked Region Name"
           }
         }
       }
@@ -132,8 +67,9 @@
     {
       "request": {
         "method": "GET",
-        "urlPathPattern": "/case/.*/sentence/.*"
+        "urlPathPattern": "/case/[^/]+/sentence/[^/]+$"
       },
+      "priority": 2,
       "response": {
         "status": 200,
         "headers": {
@@ -162,70 +98,6 @@
           "postSentenceSupervisionRequirements": []
         },
         "transformers": ["response-template"]
-      }
-    },
-
-    {
-      "request": {
-        "method": "GET",
-        "urlPathPattern": "/case/X718250/sentence/.*"
-      },
-      "response": {
-        "status": 200,
-        "headers": {
-          "Content-Type": "application/json"
-        },
-        "jsonBody": {
-          "description": "Adult Custody < 12m (11 Months)",
-          "startDate": "2025-06-19",
-          "expectedEndDate": "2026-05-18",
-          "custodial": true,
-          "releaseType": "Adult Licence",
-          "licenceConditions": [
-            {
-              "code": "LC77",
-              "description": "Building Better Relationships (BBR)"
-            }
-          ],
-          "requirements": [],
-          "postSentenceSupervisionRequirements": [
-            {
-              "code": "TMP13",
-              "description": "Women"
-            }
-          ]
-        },
-        "transformers": ["response-template"]
-      }
-    },
-    {
-      "request": {
-        "method": "GET",
-        "urlPathPattern": "/case/.*/sentence/.*/offences"
-      },
-      "response": {
-        "status": 200,
-        "headers": {
-          "Content-Type": "application/json"
-        },
-        "jsonBody": {
-          "mainOffence": {
-            "date": "2021-05-01",
-            "mainCategoryCode": "056",
-            "mainCategoryDescription": "Arson",
-            "subCategoryCode": "00",
-            "subCategoryDescription": "Arson"
-          },
-          "additionalOffences": [
-            {
-              "date": "2021-07-01",
-              "mainCategoryCode": "012",
-              "mainCategoryDescription": "Abandoning children under two years",
-              "subCategoryCode": "00",
-              "subCategoryDescription": "Abandoning children under two years - contrary to section 27 of the Offences against the person Act 1861"
-            }
-          ]
-        }
       }
     },
     {
@@ -289,32 +161,6 @@
                 {
                   "code": "LOC003",
                   "description": "(Wiremocked) Southwark Office"
-                },
-                {
-                  "code": "LOC004",
-                  "description": "(Wiremocked) Office 1"
-                },
-                {
-                  "code": "LOC005",
-                  "description": "(Wiremocked) Office 2"
-                }
-              ]
-            },
-            {
-              "code": "PDU003",
-              "description": "(Wiremocked) Manchester PDU",
-              "officeLocations": [
-                {
-                  "code": "LOC006",
-                  "description": "(Wiremocked) North Office"
-                },
-                {
-                  "code": "LOC007",
-                  "description": "(Wiremocked) South Office"
-                },
-                {
-                  "code": "LOC008",
-                  "description": "(Wiremocked)  East Office"
                 }
               ]
             }
@@ -379,7 +225,38 @@
     {
       "request": {
         "method": "GET",
-        "urlPathPattern": "/case/.*/registrations"
+        "urlPathPattern": "/case/[^/]+/sentence/[^/]+/offences$"
+      },
+      "priority": 1,
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "mainOffence": {
+            "date": "2021-05-01",
+            "mainCategoryCode": "056",
+            "mainCategoryDescription": "Arson",
+            "subCategoryCode": "23",
+            "subCategoryDescription": "Arson"
+          },
+          "additionalOffences": [
+            {
+              "date": "2021-07-01",
+              "mainCategoryCode": "012",
+              "mainCategoryDescription": "Abandoning children under two years",
+              "subCategoryCode": "00",
+              "subCategoryDescription": "Abandoning children under two years - contrary to section 27 of the Offences against the person Act 1861"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPathPattern": "/user/.*/teams"
       },
       "response": {
         "status": 200,
@@ -387,54 +264,18 @@
           "Content-Type": "application/json"
         },
         "jsonBody": {
-          "registrations": [
+          "teams": [
             {
-              "type": {
-                "code": "RVHR",
-                "description": "Very High RoSH"
+              "code": "TEAM01",
+              "description": "Wiremocked Team",
+              "pdu": {
+                "code": "PDU01",
+                "description": "Wiremocked PDU"
               },
-              "date": "2025-08-22",
-              "nextReviewDate": "2026-02-22"
-            },
-            {
-              "type": {
-                "code": "RCHD",
-                "description": "Risk to Children"
-              },
-              "date": "2025-08-22",
-              "nextReviewDate": "2025-11-22"
-            },
-            {
-              "type": {
-                "code": "REG15",
-                "description": "Risk to Known Adult"
-              },
-              "date": "2025-08-22",
-              "nextReviewDate": "2026-02-22"
-            },
-            {
-              "type": {
-                "code": "REG16",
-                "description": "Risk to Prisoner"
-              },
-              "date": "2025-08-22",
-              "nextReviewDate": "2026-02-22"
-            },
-            {
-              "type": {
-                "code": "REG17",
-                "description": "Risk to Public"
-              },
-              "date": "2025-08-22",
-              "nextReviewDate": "2026-02-22"
-            },
-            {
-              "type": {
-                "code": "AV2S",
-                "description": "Risk to Staff"
-              },
-              "date": "2025-08-22",
-              "nextReviewDate": "2026-02-22"
+              "region": {
+                "code": "wiremocked_region_code",
+                "description": "Wiremocked Region Name"
+              }
             }
           ]
         }
