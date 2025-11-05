@@ -35,6 +35,7 @@ import config, { ApiConfig } from '../config'
 import type { HmppsAuthClient, RestClientBuilderWithoutToken } from '../data'
 import RestClient from '../data/restClient'
 import type { ExpressUsername } from '../shared/ExpressUsername'
+import { GroupListFilterParams } from '../groupDetails/groupListFilterParams'
 
 export interface PaginationParams {
   // Page number to retrieve -- starts from 1
@@ -100,12 +101,14 @@ export default class AccreditedProgrammesManageAndDeliverService
     username: ExpressUsername,
     groupId: string,
     paginationParams: PaginationParams,
+    filter: GroupListFilterParams,
   ): Promise<ProgrammeGroupDetails> {
     const restClient = await this.createRestClientFromUsername(username)
+    const filterQuery: Record<string, unknown> = { ...filter }
     return (await restClient.get({
       path: `/bff/group/${groupId}/ALLOCATED`,
       headers: { Accept: 'application/json' },
-      query: { ...paginationParams },
+      query: { ...paginationParams, ...filterQuery },
     })) as ProgrammeGroupDetails
   }
 
@@ -113,12 +116,14 @@ export default class AccreditedProgrammesManageAndDeliverService
     username: ExpressUsername,
     groupId: string,
     paginationParams: PaginationParams,
+    filter: GroupListFilterParams,
   ): Promise<ProgrammeGroupDetails> {
     const restClient = await this.createRestClientFromUsername(username)
+    const filterQuery: Record<string, unknown> = { ...filter }
     return (await restClient.get({
       path: `/bff/group/${groupId}/WAITLIST`,
       headers: { Accept: 'application/json' },
-      query: { ...paginationParams },
+      query: { ...paginationParams, ...filterQuery },
     })) as ProgrammeGroupDetails
   }
 

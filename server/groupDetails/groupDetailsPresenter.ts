@@ -1,8 +1,9 @@
 import { CohortEnum, ProgrammeGroupDetails } from '@manage-and-deliver-api'
-import { ButtonArgs, SelectArgsItem, TableArgsHeadElement } from '../utils/govukFrontendTypes'
+import { ButtonArgs, CheckboxesArgsItem, SelectArgsItem, TableArgsHeadElement } from '../utils/govukFrontendTypes'
 import { convertToTitleCase } from '../utils/utils'
 import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
+import GroupListFilter from './groupListFilter'
 
 export enum GroupDetailsPageSection {
   Allocated = 1,
@@ -39,6 +40,7 @@ export default class GroupDetailsPresenter {
     readonly section: GroupDetailsPageSection,
     readonly group: ProgrammeGroupDetails,
     readonly groupId: string,
+    readonly filter: GroupListFilter,
     readonly personName: string = '',
     readonly validationError: FormValidationError | null = null,
     readonly isPersonAdded: boolean | null = null,
@@ -50,6 +52,10 @@ export default class GroupDetailsPresenter {
       pageSubHeading: this.group.group.code,
       pageTableHeading: `Allocations and waitlist`,
     }
+  }
+
+  get showReportingLocations(): boolean {
+    return this.filter.pdu !== undefined && this.filter.pdu !== ''
   }
 
   getSubNavArgs(): { items: { text: string; href: string; active: boolean }[] } {
@@ -148,13 +154,13 @@ export default class GroupDetailsPresenter {
     return out
   }
 
-  generateSelectValues(options: { value: string; text: string }[], caseListFilter: string): SelectArgsItem[] {
+  generateSelectValues(options: string[], groupListFilter: string): SelectArgsItem[] {
     const selectOptions: SelectArgsItem[] = [{ text: 'Select', value: '' }]
     options.forEach(option =>
       selectOptions.push({
-        value: option.value,
-        text: option.text,
-        selected: caseListFilter?.includes(String(option.value)) ?? false,
+        value: option,
+        text: option,
+        selected: groupListFilter?.includes(String(option)) ?? false,
       }),
     )
     return selectOptions
@@ -168,5 +174,36 @@ export default class GroupDetailsPresenter {
     return {
       text: this.section === GroupDetailsPageSection.Allocated ? 'Remove from group' : 'Add to group',
     }
+  }
+
+  generatePduSelectArgs(): SelectArgsItem[] {
+    const checkboxArgs = [
+      {
+        text: 'Select PDU',
+        value: '',
+      },
+    ]
+    const pduCheckboxArgs = this.group.allocationAndWaitlistData.filters.pduNames
+      .map(pdu => ({
+        text: pdu,
+        value: pdu,
+        selected: this.filter.pdu === pdu,
+      }))
+      .sort((a, b) => a.text.localeCompare(b.text))
+    return checkboxArgs.concat(pduCheckboxArgs)
+  }
+
+  generateReportingTeamCheckboxArgs(): CheckboxesArgsItem[] {
+    let checkboxItems: CheckboxesArgsItem[] = []
+    if (this.showReportingLocations) {
+      checkboxItems = this.group.allocationAndWaitlistData.filters.reportingTeams
+        .map(location => ({
+          text: location,
+          value: location,
+          checked: this.filter.reportingTeam?.includes(location),
+        }))
+        .sort((a, b) => a.text.localeCompare(b.text))
+    }
+    return checkboxItems
   }
 }
