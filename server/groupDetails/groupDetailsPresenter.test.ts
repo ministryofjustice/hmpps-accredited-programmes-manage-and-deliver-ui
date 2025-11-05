@@ -1,6 +1,15 @@
-import GroupDetailsPresenter, { GroupDetailsPageSection } from './groupDetailsPresenter'
+import GroupDetailsPresenter, { GroupDetailsPageSection, AllocatedRow } from './groupDetailsPresenter'
 import ProgrammeGroupDetailsFactory from '../testutils/factories/programmeGroupDetailsFactory'
+import { Page } from '../shared/models/pagination'
 
+const dummyPage: Page<AllocatedRow> = {
+  content: [],
+  totalElements: 0,
+  number: 1,
+  totalPages: 1,
+  numberOfElements: 0,
+  size: 0,
+}
 afterEach(() => {
   jest.restoreAllMocks()
 })
@@ -9,7 +18,13 @@ describe('groupDetailsPresenter.', () => {
   describe('generateTableHeadings', () => {
     it('should return the correct table headings for allocated list', () => {
       const groupDetails = ProgrammeGroupDetailsFactory.build()
-      const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Allocated, groupDetails, '1234')
+      const presenter = new GroupDetailsPresenter(
+        GroupDetailsPageSection.Allocated,
+        dummyPage,
+        groupDetails,
+        undefined,
+        '1234',
+      )
       expect(presenter.generateTableHeadings()).toEqual([
         { text: '' },
         { text: 'Name and CRN', attributes: { 'aria-sort': 'ascending' } },
@@ -19,7 +34,13 @@ describe('groupDetailsPresenter.', () => {
     })
     it('should return the correct table headings for waitlist', () => {
       const groupDetails = ProgrammeGroupDetailsFactory.build()
-      const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, '1234')
+      const presenter = new GroupDetailsPresenter(
+        GroupDetailsPageSection.Waitlist,
+        dummyPage,
+        groupDetails,
+        undefined,
+        '1234',
+      )
       expect(presenter.generateTableHeadings()).toEqual([
         { text: '' },
         { text: 'Name and CRN', attributes: { 'aria-sort': 'ascending' } },
@@ -35,7 +56,14 @@ describe('groupDetailsPresenter.', () => {
   describe('generateWaitlistTableArgs', () => {
     it('should return the correct table args for waitlist', () => {
       const groupDetails = ProgrammeGroupDetailsFactory.build()
-      const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, '1234', '')
+      const presenter = new GroupDetailsPresenter(
+        GroupDetailsPageSection.Waitlist,
+        dummyPage,
+        groupDetails,
+        undefined,
+        '1234',
+        '',
+      )
       expect(presenter.generateWaitlistTableArgs()).toEqual([
         [
           {
@@ -85,7 +113,13 @@ describe('groupDetailsPresenter.', () => {
   describe('generateAllocateTableArgs', () => {
     it('should return the correct table args for allocted list', () => {
       const groupDetails = ProgrammeGroupDetailsFactory.build()
-      const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, '1234')
+      const presenter = new GroupDetailsPresenter(
+        GroupDetailsPageSection.Waitlist,
+        dummyPage,
+        groupDetails,
+        undefined,
+        '1234',
+      )
       expect(presenter.generateAllocatedTableArgs()).toEqual([
         [
           {
