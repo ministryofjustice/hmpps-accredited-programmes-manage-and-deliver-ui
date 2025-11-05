@@ -37,7 +37,7 @@ declare module 'express-session' {
       groupRegion?: string
       personName?: string
     }
-    createGroupFormData?: CreateGroup
+    createGroupFormData?: Partial<CreateGroup>
   }
 }
 

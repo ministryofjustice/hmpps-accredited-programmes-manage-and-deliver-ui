@@ -39,6 +39,9 @@ type ReferralStatusHistory = components['schemas']['ReferralStatusHistory']
 type LocationFilterValues = components['schemas']['LocationFilterValues']
 type CaseListReferrals = components['schemas']['CaseListReferrals']
 type CreateGroup = components['schemas']['CreateGroup']
+type ProgrammeGroupCohortEnum = components['schemas']['CreateGroup']['cohort']
+type ProgrammeGroupSexEnum = components['schemas']['CreateGroup']['sex']
+type ProgrammeGroupEntity = components['schemas']['ProgrammeGroupEntity']
 
 export type {
   AlcoholMisuseDetails,
@@ -66,7 +69,10 @@ export type {
   PersonalDetails,
   PniScore,
   PreferredDeliveryLocation,
+  ProgrammeGroupCohortEnum,
   ProgrammeGroupDetails,
+  ProgrammeGroupEntity,
+  ProgrammeGroupSexEnum,
   ReferralCaseListItem,
   ReferralDetails,
   ReferralStatus,

@@ -33,7 +33,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const groupDetailsController = new GroupDetailsController(accreditedProgrammesManageAndDeliverService)
   const addToGroupController = new AddToGroupController(accreditedProgrammesManageAndDeliverService)
   const groupAllocationNotesController = new GroupAllocationNotesController(accreditedProgrammesManageAndDeliverService)
-  const createGroupController = new CreateGroupController()
+  const createGroupController = new CreateGroupController(accreditedProgrammesManageAndDeliverService)
 
   get('/', async (req, res, next) => {
     await caselistController.showOpenCaselist(req, res)
@@ -213,6 +213,10 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   getOrPost('/group/create-a-group/sex', async (req, res) => {
     await createGroupController.showCreateGroupSex(req, res)
+  })
+
+  getOrPost('/group/create-a-group/check-your-answers', async (req, res) => {
+    await createGroupController.showCreateGroupCya(req, res)
   })
 
   get('/groupDetails/:groupId/allocated', async (req, res) => {

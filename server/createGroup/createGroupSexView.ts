@@ -1,6 +1,7 @@
 import { RadiosArgs } from '../utils/govukFrontendTypes'
 import ViewUtils from '../utils/viewUtils'
 import CreateGroupSexPresenter from './createGroupSexPresenter'
+import CreateGroupUtils from './createGroupUtils'
 
 export default class CreateGroupSexView {
   constructor(private readonly presenter: CreateGroupSexPresenter) {}
@@ -32,20 +33,11 @@ export default class CreateGroupSexView {
       hint: {
         text: 'For Building Choices, general offence cohorts include domestic abuse cohorts.',
       },
-      items: [
-        {
-          value: 'MALE',
-          text: 'Male',
-        },
-        {
-          value: 'FEMALE',
-          text: 'Female',
-        },
-        {
-          value: 'MIXED',
-          text: 'Mixed',
-        },
-      ],
+      items: new CreateGroupUtils().programmeGroupSexEnum.map(option => ({
+        value: option.value,
+        text: option.text,
+        checked: this.presenter.fields.createGroupSex.value === option.value,
+      })),
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createGroupSex.errorMessage),
     }
   }
@@ -54,11 +46,11 @@ export default class CreateGroupSexView {
     return [
       'createGroup/createGroupSex',
       {
-        presenter: this.presenter,
         backLinkArgs: this.backLinkArgs(),
         homePageLink: this.homePageLink(),
         radioArgs: this.radioArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
+        text: this.presenter.text,
       },
     ]
   }

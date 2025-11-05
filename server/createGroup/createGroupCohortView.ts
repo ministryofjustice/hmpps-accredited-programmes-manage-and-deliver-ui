@@ -1,6 +1,7 @@
 import { RadiosArgs } from '../utils/govukFrontendTypes'
 import ViewUtils from '../utils/viewUtils'
 import CreateGroupCohortPresenter from './createGroupCohortPresenter'
+import CreateGroupUtils from './createGroupUtils'
 
 export default class CreateGroupCohortView {
   constructor(private readonly presenter: CreateGroupCohortPresenter) {}
@@ -32,24 +33,11 @@ export default class CreateGroupCohortView {
       hint: {
         text: 'For Building Choices, general offence cohorts include domestic abuse cohorts.',
       },
-      items: [
-        {
-          value: 'GENERAL_OFFENCE',
-          text: 'General offence',
-        },
-        {
-          value: 'GENERAL_OFFENCE_LDC',
-          text: 'General offence, learning disabilities and challenges (LDC)',
-        },
-        {
-          value: 'SEXUAL_OFFENCE_LDC',
-          text: 'Sexual offence',
-        },
-        {
-          value: 'SEXUAL_OFFENCE_LDC',
-          text: 'Sexual offence, learning disabilities and challenges (LDC)',
-        },
-      ],
+      items: new CreateGroupUtils().programmeGroupCohortEnum.map(option => ({
+        value: option.value,
+        text: option.text,
+        checked: this.presenter.fields.createGroupCohort.value === option.value,
+      })),
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createGroupCohort.errorMessage),
     }
   }
@@ -58,11 +46,11 @@ export default class CreateGroupCohortView {
     return [
       'createGroup/createGroupCohort',
       {
-        presenter: this.presenter,
         backLinkArgs: this.backLinkArgs(),
         homePageLink: this.homePageLink(),
         radioArgs: this.radioArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
+        text: this.presenter.text,
       },
     ]
   }

@@ -19,7 +19,7 @@ export default class CreateGroupCodeView {
     }
   }
 
-  private get createGroupCodeArgs(): InputArgs {
+  private createGroupCodeArgs(): InputArgs {
     return {
       id: 'create-group-code',
       name: 'create-group-code',
@@ -31,8 +31,8 @@ export default class CreateGroupCodeView {
         classes: 'govuk-label--l',
         isPageHeading: true,
       },
-      value: '',
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createGroupCode.errorMessage),
+      value: this.presenter.fields.createGroupCode.value,
     }
   }
 
@@ -40,10 +40,9 @@ export default class CreateGroupCodeView {
     return [
       'createGroup/createGroupCode',
       {
-        presenter: this.presenter,
         backLinkArgs: this.backLinkArgs(),
         homePageLink: this.homePageLink(),
-        createGroupCodeArgs: this.createGroupCodeArgs,
+        createGroupCodeArgs: this.createGroupCodeArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
       },
     ]

@@ -953,23 +953,6 @@ export interface components {
        */
       additionalDetails?: string
     }
-    CreateGroup: {
-      groupCode: string
-      /** @description Cohort for the Programme Group. */
-      cohort: components['schemas']['ProgrammeGroupCohort']
-      /** @description Sex that the group is being run for */
-      sex: components['schemas']['ProgrammeGroupSex']
-    }
-    /**
-     * @description Cohort for the Programme Group.
-     * @enum {string}
-     */
-    ProgrammeGroupCohort: 'GENERAL' | 'GENERAL_LDC' | 'SEXUAL' | 'SEXUAL_LDC'
-    /**
-     * @description Sex that the group is being run for
-     * @enum {string}
-     */
-    ProgrammeGroupSex: 'MALE' | 'FEMALE' | 'MIXED'
     ProgrammeGroupEntity: {
       /** Format: uuid */
       id?: string
@@ -993,6 +976,23 @@ export interface components {
       deletedByUsername?: string
       ldc?: boolean
     }
+    CreateGroup: {
+      groupCode: string
+      /** @description Cohort for the Programme Group. */
+      cohort: components['schemas']['ProgrammeGroupCohort']
+      /** @description Sex that the group is being run for */
+      sex: components['schemas']['ProgrammeGroupSex']
+    }
+    /**
+     * @description Cohort for the Programme Group.
+     * @enum {string}
+     */
+    ProgrammeGroupCohort: 'GENERAL' | 'GENERAL_LDC' | 'SEXUAL' | 'SEXUAL_LDC'
+    /**
+     * @description Sex that the group is being run for
+     * @enum {string}
+     */
+    ProgrammeGroupSex: 'MALE' | 'FEMALE' | 'MIXED'
     CreateAvailability: {
       /**
        * Format: uuid
@@ -2007,12 +2007,12 @@ export interface components {
       /** Format: int64 */
       offset?: number
       sort?: components['schemas']['SortObject']
+      unpaged?: boolean
       paged?: boolean
       /** Format: int32 */
       pageNumber?: number
       /** Format: int32 */
       pageSize?: number
-      unpaged?: boolean
     }
     ReferralCaseListItem: {
       /** Format: uuid */
@@ -2031,8 +2031,8 @@ export interface components {
     }
     SortObject: {
       empty?: boolean
-      sorted?: boolean
       unsorted?: boolean
+      sorted?: boolean
     }
     Pageable: {
       /** Format: int32 */
