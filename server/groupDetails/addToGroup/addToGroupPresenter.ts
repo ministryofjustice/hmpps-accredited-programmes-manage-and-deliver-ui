@@ -2,13 +2,25 @@ import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
 
 export default class AddToGroupPresenter {
-  constructor(private readonly validationError: FormValidationError | null = null) {}
+  constructor(
+    readonly groupId: string,
+    private readonly groupManagementData: {
+      groupRegion?: string
+      personName?: string
+    },
+    private readonly validationError: FormValidationError | null = null,
+  ) {}
 
-  readonly text = {
-    pageHeading: `BCCDD1`,
+  get text() {
+    return {
+      pageHeading: this.groupManagementData.groupRegion,
+      questionText: `Add ${this.groupManagementData.personName} to this group?`,
+    }
   }
 
-  readonly backLinkHref = '/groupDetails/1234/waitlist'
+  get backLinkHref() {
+    return `/groupDetails/${this.groupId}/waitlist`
+  }
 
   get errorSummary() {
     return PresenterUtils.errorSummary(this.validationError)

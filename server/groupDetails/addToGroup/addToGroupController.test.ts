@@ -2,8 +2,9 @@ import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import request from 'supertest'
 import { fakerEN_GB as faker } from '@faker-js/faker'
+import { SessionData } from 'express-session'
 import AccreditedProgrammesManageAndDeliverService from '../../services/accreditedProgrammesManageAndDeliverService'
-import { appWithAllRoutes } from '../../routes/testutils/appSetup'
+import TestUtils from '../../testutils/testUtils'
 
 jest.mock('../../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../../data/hmppsAuthClient')
@@ -19,15 +20,18 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 beforeEach(() => {
-  app = appWithAllRoutes({
-    services: {
-      accreditedProgrammesManageAndDeliverService,
+  const sessionData: Partial<SessionData> = {
+    groupManagementData: {
+      groupRegion: 'London',
+      personName: 'Alex River',
     },
-  })
+  }
+  app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+  accreditedProgrammesManageAndDeliverService.addToGroup.mockResolvedValue(null)
 })
 
 describe('add to group', () => {
-  describe(`GET /addToGroup/:groupId/:personId`, () => {
+  describe(`GET /addToGroup/:groupId/:referralId`, () => {
     it('loads the initial page to add someone to a group', async () => {
       return request(app)
         .get(`/addToGroup/${randomUUID()}/${randomUUID()}`)
@@ -38,44 +42,44 @@ describe('add to group', () => {
     })
   })
 
-  describe(`POST /addToGroup/:groupId/:personId`, () => {
+  describe(`POST /addToGroup/:groupId/:referralId`, () => {
     it('posts to the add to group page and redirects successfully to the more details page if Yes is selected', async () => {
       const groupId = '123'
-      const personId = '123'
+      const referralId = '123'
       return request(app)
-        .post(`/addToGroup/${groupId}/${personId}`)
+        .post(`/addToGroup/${groupId}/${referralId}`)
         .type('form')
         .send({
           'add-to-group': 'Yes',
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(`Redirecting to /addToGroup/${groupId}/${personId}/moreDetails`)
+          expect(res.text).toContain(`Redirecting to /addToGroup/${groupId}/${referralId}/moreDetails`)
         })
     })
 
     it('posts to the add to group page and redirects successfully to the waitlist page if No is selected', async () => {
       const groupId = '123'
-      const personId = '123'
+      const referralId = '123'
 
       return request(app)
-        .post(`/addToGroup/${groupId}/${personId}`)
+        .post(`/addToGroup/${groupId}/${referralId}`)
         .type('form')
         .send({
           'add-to-group': 'No',
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(`Redirecting to /groupDetails/1234/waitlist`)
+          expect(res.text).toContain(`Redirecting to /groupDetails/${groupId}/waitlist`)
         })
     })
 
     it('returns with errors if validation fails', async () => {
       const groupId = '123'
-      const personId = '123'
+      const referralId = '123'
 
       return request(app)
-        .post(`/addToGroup/${groupId}/${personId}`)
+        .post(`/addToGroup/${groupId}/${referralId}`)
         .type('form')
         .send({})
         .expect(400)
@@ -85,7 +89,7 @@ describe('add to group', () => {
     })
   })
 
-  describe(`GET /addToGroup/:groupId/:personId/moreDetails`, () => {
+  describe(`GET /addToGroup/:groupId/:referralId/moreDetails`, () => {
     it('loads the initial page to add someone to a group', async () => {
       return request(app)
         .get(`/addToGroup/${randomUUID()}/${randomUUID()}/moreDetails`)
@@ -96,28 +100,28 @@ describe('add to group', () => {
     })
   })
 
-  describe(`POST /addToGroup/:groupId/:personId/moreDetails`, () => {
+  describe(`POST /addToGroup/:groupId/:referralId/moreDetails`, () => {
     it('redirects to the allocated page on successful submit', async () => {
       const groupId = '123'
-      const personId = '123'
+      const referralId = '123'
 
       return request(app)
-        .post(`/addToGroup/${groupId}/${personId}/moreDetails`)
+        .post(`/addToGroup/${groupId}/${referralId}/moreDetails`)
         .type('form')
         .send({
           'add-details': 'Some details',
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(`Redirecting to /groupDetails/1234/allocated?addedToGroup=true`)
+          expect(res.text).toContain(`Redirecting to /groupDetails/${groupId}/allocated?addedToGroup=true`)
         })
     })
     it('returns with errors if validation fails', async () => {
       const groupId = '123'
-      const personId = '123'
+      const referralId = '123'
 
       return request(app)
-        .post(`/addToGroup/${groupId}/${personId}/moreDetails`)
+        .post(`/addToGroup/${groupId}/${referralId}/moreDetails`)
         .type('form')
         .send({
           'add-details': faker.string.alpha({ length: 501 }),

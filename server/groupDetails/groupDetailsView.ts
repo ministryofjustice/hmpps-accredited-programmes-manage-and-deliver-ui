@@ -1,6 +1,7 @@
 import { InputArgs, SelectArgs, TableArgs } from '../utils/govukFrontendTypes'
 import GroupDetailsPresenter, { GroupDetailsPageSection } from './groupDetailsPresenter'
 import CaselistUtils from '../caselist/caseListUtils'
+import ViewUtils from '../utils/viewUtils'
 
 export default class GroupDetailsView {
   constructor(private readonly presenter: GroupDetailsPresenter) {}
@@ -88,6 +89,8 @@ export default class GroupDetailsView {
         getGroupDetailsTableArgs: this.getGroupDetailsTableArgs(),
         isPersonAdded: this.presenter.isPersonAdded,
         successMessageArgs: this.successMessageArgs(),
+        errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
+        text: this.presenter.text,
       },
     ]
   }
