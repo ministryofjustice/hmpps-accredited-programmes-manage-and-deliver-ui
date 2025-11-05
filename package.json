@@ -83,7 +83,7 @@
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.921.0",
     "@ministryofjustice/frontend": "^7.1.0",
-    "@ministryofjustice/hmpps-auth-clients": "^0.0.3",
+    "@ministryofjustice/hmpps-auth-clients": "^1.0.0",
     "@ministryofjustice/hmpps-monitoring": "^0.0.2",
     "@ministryofjustice/hmpps-rest-client": "^0.0.3",
     "@types/supertest": "^6.0.3",
