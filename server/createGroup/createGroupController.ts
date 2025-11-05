@@ -104,6 +104,8 @@ export default class CreateGroupController {
     const { username } = req.user
     if (req.method === 'POST') {
       await this.accreditedProgrammesManageAndDeliverService.createGroup(username, createGroupFormData as CreateGroup)
+      // Clear session data on submission
+      req.session.createGroupFormData = {}
       return res.redirect(`/?updated`)
     }
 

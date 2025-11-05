@@ -5,7 +5,7 @@ import PresenterUtils from '../utils/presenterUtils'
 export default class CreateGroupCodePresenter {
   constructor(
     private readonly validationError: FormValidationError | null = null,
-    private readonly createGroupFormData: Partial<CreateGroup>,
+    private readonly createGroupFormData: Partial<CreateGroup> | null = null,
   ) {}
 
   get backLinkUri() {
