@@ -9,7 +9,19 @@ describe('groupDetailsPresenter.', () => {
   describe('generateTableHeadings', () => {
     it('should return the correct table headings for allocated list', () => {
       const groupDetails = ProgrammeGroupDetailsFactory.build()
-      const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Allocated, groupDetails, '1234')
+      // const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Allocated, groupDetails, '1234')
+
+      const presenter = new GroupDetailsPresenter(
+        GroupDetailsPageSection.Allocated,
+        { content: [], totalElements: 0, totalPages: 0, numberOfElements: 0, number: 0, size: 10 },
+        groupDetails,
+        undefined,
+        '1234',
+        '',
+        null,
+        null,
+      )
+
       expect(presenter.generateTableHeadings()).toEqual([
         { text: '' },
         { text: 'Name and CRN', attributes: { 'aria-sort': 'ascending' } },
@@ -19,7 +31,19 @@ describe('groupDetailsPresenter.', () => {
     })
     it('should return the correct table headings for waitlist', () => {
       const groupDetails = ProgrammeGroupDetailsFactory.build()
-      const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, '1234')
+      // const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, '1234')
+
+      const presenter = new GroupDetailsPresenter(
+        GroupDetailsPageSection.Waitlist,
+        { content: [], totalElements: 0, totalPages: 0, numberOfElements: 0, number: 0, size: 10 },
+        groupDetails,
+        undefined,
+        '1234',
+        '',
+        null,
+        null,
+      )
+
       expect(presenter.generateTableHeadings()).toEqual([
         { text: '' },
         { text: 'Name and CRN', attributes: { 'aria-sort': 'ascending' } },
@@ -35,7 +59,19 @@ describe('groupDetailsPresenter.', () => {
   describe('generateWaitlistTableArgs', () => {
     it('should return the correct table args for waitlist', () => {
       const groupDetails = ProgrammeGroupDetailsFactory.build()
-      const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, '1234', '')
+      // const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, '1234', '')
+
+      const presenter = new GroupDetailsPresenter(
+        GroupDetailsPageSection.Waitlist,
+        { content: [], totalElements: 0, totalPages: 0, numberOfElements: 0, number: 0, size: 10 },
+        groupDetails,
+        undefined,
+        '1234',
+        '',
+        null,
+        null,
+      )
+
       expect(presenter.generateWaitlistTableArgs()).toEqual([
         [
           {
@@ -85,7 +121,18 @@ describe('groupDetailsPresenter.', () => {
   describe('generateAllocateTableArgs', () => {
     it('should return the correct table args for allocted list', () => {
       const groupDetails = ProgrammeGroupDetailsFactory.build()
-      const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, '1234')
+      // const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, '1234')
+
+      const presenter = new GroupDetailsPresenter(
+        GroupDetailsPageSection.Waitlist,
+        { content: [], totalElements: 0, totalPages: 0, numberOfElements: 0, number: 0, size: 10 },
+        groupDetails,
+        undefined,
+        '1234',
+        '',
+        null,
+        null,
+      )
       expect(presenter.generateAllocatedTableArgs()).toEqual([
         [
           {

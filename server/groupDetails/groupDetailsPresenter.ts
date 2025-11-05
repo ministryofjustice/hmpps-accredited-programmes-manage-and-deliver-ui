@@ -1,8 +1,10 @@
 import { CohortEnum, ProgrammeGroupDetails } from '@manage-and-deliver-api'
+import { Page } from '../shared/models/pagination'
 import { ButtonArgs, SelectArgsItem, TableArgsHeadElement } from '../utils/govukFrontendTypes'
 import { convertToTitleCase } from '../utils/utils'
 import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
+import Pagination from '../utils/pagination/pagination'
 
 export enum GroupDetailsPageSection {
   Allocated = 1,
@@ -35,19 +37,31 @@ export type WaitlistRow = {
 }
 
 export default class GroupDetailsPresenter {
+  public readonly pagination: Pagination
+
   constructor(
     readonly section: GroupDetailsPageSection,
-    readonly group: ProgrammeGroupDetails,
+    readonly page: Page<AllocatedRow> | Page<WaitlistRow>,
+    readonly groupDetails: ProgrammeGroupDetails,
+    readonly params: string | undefined,
     readonly groupId: string,
     readonly personName: string = '',
     readonly validationError: FormValidationError | null = null,
     readonly isPersonAdded: boolean | null = null,
-  ) {}
+  ) {
+    this.pagination = new Pagination(page, params)
+  }
+
+  private groupMemberList: (AllocatedRow | WaitlistRow)[] = []
+
+  setRows(rows: AllocatedRow[] | WaitlistRow[]) {
+    this.groupMemberList = rows ?? []
+  }
 
   get text() {
     return {
-      pageHeading: this.group.group.regionName,
-      pageSubHeading: this.group.group.code,
+      pageHeading: this.groupDetails.group.regionName,
+      pageSubHeading: this.groupDetails.group.code,
       pageTableHeading: `Allocations and waitlist`,
     }
   }
@@ -56,12 +70,12 @@ export default class GroupDetailsPresenter {
     return {
       items: [
         {
-          text: `Allocated (${this.group.allocationAndWaitlistData.counts.allocated})`,
+          text: `Allocated (${this.groupDetails.allocationAndWaitlistData.counts.allocated})`,
           href: `/groupDetails/${this.groupId}/allocated`,
           active: this.section === GroupDetailsPageSection.Allocated,
         },
         {
-          text: `Waitlist (${this.group.allocationAndWaitlistData.counts.waitlist})`,
+          text: `Waitlist (${this.groupDetails.allocationAndWaitlistData.counts.waitlist})`,
           href: `/groupDetails/${this.groupId}/waitlist`,
           active: this.section === GroupDetailsPageSection.Waitlist,
         },
@@ -91,7 +105,7 @@ export default class GroupDetailsPresenter {
   }
 
   generateWaitlistTableArgs() {
-    const rows = this.group.allocationAndWaitlistData.paginatedWaitlistData
+    const rows = this.groupDetails.allocationAndWaitlistData.paginatedWaitlistData
     const out: ({ html: string } | { text: string })[][] = []
 
     rows.forEach(member => {
@@ -124,7 +138,7 @@ export default class GroupDetailsPresenter {
   }
 
   generateAllocatedTableArgs() {
-    const rows = this.group.allocationAndWaitlistData.paginatedAllocationData
+    const rows = this.groupDetails.allocationAndWaitlistData.paginatedAllocationData
     const out: ({ html: string } | { text: string })[][] = []
 
     rows.forEach(member => {
