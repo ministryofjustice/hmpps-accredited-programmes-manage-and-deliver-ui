@@ -21,7 +21,6 @@ export default class CreateGroupStartView {
     return [
       'createGroup/createGroupStart',
       {
-        presenter: this.presenter,
         backLinkArgs: this.backLinkArgs(),
         homePageLink: this.homePageLink(),
       },
