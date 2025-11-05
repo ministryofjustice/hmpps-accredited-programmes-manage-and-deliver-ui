@@ -162,7 +162,7 @@ export interface paths {
     put?: never
     /**
      * Create a new programme group
-     * @description Create a new programme group with the specified group code
+     * @description Create a new programme group
      */
     post: operations['createProgrammeGroup']
     delete?: never
@@ -953,46 +953,17 @@ export interface components {
        */
       additionalDetails?: string
     }
-    ProgrammeGroupEntity: {
-      /** Format: uuid */
-      id?: string
-      code: string
-      /**
-       * @description Offence classification based on assessment
-       * @enum {string}
-       */
-      cohort: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
-      /** @enum {string} */
-      sex: 'MALE' | 'FEMALE' | 'MIXED'
-      isLdc: boolean
-      /** Format: date-time */
-      createdAt: string
-      createdByUsername: string
-      /** Format: date-time */
-      updatedAt?: string
-      updatedByUsername?: string
-      /** Format: date-time */
-      deletedAt?: string
-      deletedByUsername?: string
-      ldc?: boolean
-    }
     CreateGroup: {
       groupCode: string
       /** @description Cohort for the Programme Group. */
       cohort: components['schemas']['ProgrammeGroupCohort']
       /** @description Sex that the group is being run for */
-      sex: components['schemas']['ProgrammeGroupSex']
+      sex: components['schemas']['ProgrammeGroupSexEnum']
     }
-    /**
-     * @description Cohort for the Programme Group.
-     * @enum {string}
-     */
+    /** @enum {string} */
     ProgrammeGroupCohort: 'GENERAL' | 'GENERAL_LDC' | 'SEXUAL' | 'SEXUAL_LDC'
-    /**
-     * @description Sex that the group is being run for
-     * @enum {string}
-     */
-    ProgrammeGroupSex: 'MALE' | 'FEMALE' | 'MIXED'
+    /** @enum {string} */
+    ProgrammeGroupSexEnum: 'MALE' | 'FEMALE' | 'MIXED'
     CreateAvailability: {
       /**
        * Format: uuid
@@ -2007,12 +1978,12 @@ export interface components {
       /** Format: int64 */
       offset?: number
       sort?: components['schemas']['SortObject']
-      unpaged?: boolean
+      /** Format: int32 */
+      pageSize?: number
       paged?: boolean
       /** Format: int32 */
       pageNumber?: number
-      /** Format: int32 */
-      pageSize?: number
+      unpaged?: boolean
     }
     ReferralCaseListItem: {
       /** Format: uuid */
@@ -2031,8 +2002,8 @@ export interface components {
     }
     SortObject: {
       empty?: boolean
-      unsorted?: boolean
       sorted?: boolean
+      unsorted?: boolean
     }
     Pageable: {
       /** Format: int32 */
@@ -2205,8 +2176,8 @@ export interface components {
        */
       referralId: string
       /**
-       * @description The entity (Licence Condition or Requirement) that caused the Referral to be created in our system
-       * @example REQUIREMENT
+       * @description A human-readable string describing the entity (Licence Condition or Requirement) that caused the Referral to be created in our system
+       * @example Order end date
        */
       sourcedFrom: string
       /**
@@ -2840,11 +2811,9 @@ export interface operations {
         headers: {
           [name: string]: unknown
         }
-        content: {
-          'application/json': components['schemas']['ProgrammeGroupEntity']
-        }
+        content?: never
       }
-      /** @description Invalid request format or group code */
+      /** @description Invalid request body */
       400: {
         headers: {
           [name: string]: unknown
