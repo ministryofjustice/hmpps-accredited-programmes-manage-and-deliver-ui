@@ -106,7 +106,7 @@ export default class CreateGroupController {
       await this.accreditedProgrammesManageAndDeliverService.createGroup(username, createGroupFormData as CreateGroup)
       // Clear session data on submission
       req.session.createGroupFormData = {}
-      return res.redirect(`/?updated`)
+      return res.redirect(`/?groupCreated`)
     }
 
     const presenter = new CreateGroupCyaPresenter(createGroupFormData)

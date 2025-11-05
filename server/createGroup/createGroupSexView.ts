@@ -25,13 +25,10 @@ export default class CreateGroupSexView {
       name: 'create-group-sex',
       fieldset: {
         legend: {
-          text: 'Select the group sex',
+          text: 'Select the gender of the group',
           isPageHeading: true,
           classes: 'govuk-fieldset__legend--l',
         },
-      },
-      hint: {
-        text: 'For Building Choices, general offence cohorts include domestic abuse cohorts.',
       },
       items: new CreateGroupUtils().programmeGroupSexEnum.map(option => ({
         value: option.value,
