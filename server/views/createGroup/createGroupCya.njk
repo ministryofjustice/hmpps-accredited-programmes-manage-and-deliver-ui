@@ -1,0 +1,38 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block main %}
+    {% block content %}
+        <div class="govuk-width-container" id="main-content">
+            <div class="govuk-grid-column-two-thirds">
+                {{ govukBackLink(backLinkArgs) }}
+            </div>
+            <div class="govuk-grid-column-one-third">
+                <a class="return_to_homepage__link" href={{ homePageLink.href }}>{{ homePageLink.text }}</a>
+            </div>
+            <div class="govuk-main-wrapper">
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+                        <span class="govuk-caption-xl">{{ text.headingHintText }}</span>
+                        <h1 class="govuk-heading-l">Review your group details</h1>
+                        <p class="govuk-body">This information will be used to create a draft group and schedule. You can edit the details later.</p>
+                        <form method="post" novalidate>
+                            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                            {{ govukSummaryList(createGroupSummary) }}
+                            <div class="govuk-button-group">
+                                {{ govukButton({ text: "Create this group", preventDoubleClick: true }) }}
+                                <a class="govuk-link" href={{ cancelLink }}>Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+{% endblock %}

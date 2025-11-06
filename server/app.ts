@@ -2,24 +2,28 @@ import express from 'express'
 
 import createError from 'http-errors'
 
-import { CreateDeliveryLocationPreferences, DeliveryLocationPreferencesFormData } from '@manage-and-deliver-api'
-import nunjucksSetup from './utils/nunjucksSetup'
+import {
+  CreateDeliveryLocationPreferences,
+  CreateGroup,
+  DeliveryLocationPreferencesFormData,
+} from '@manage-and-deliver-api'
 import errorHandler from './errorHandler'
-import { appInsightsMiddleware } from './utils/azureAppInsights'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
+import { appInsightsMiddleware } from './utils/azureAppInsights'
+import nunjucksSetup from './utils/nunjucksSetup'
 
 import setUpAuthentication from './middleware/setUpAuthentication'
 import setUpCsrf from './middleware/setUpCsrf'
 import setUpCurrentUser from './middleware/setUpCurrentUser'
 import setUpHealthChecks from './middleware/setUpHealthChecks'
-import setUpStaticResources from './middleware/setUpStaticResources'
 import setUpWebRequestParsing from './middleware/setupRequestParsing'
+import setUpStaticResources from './middleware/setUpStaticResources'
 import setUpWebSecurity from './middleware/setUpWebSecurity'
 import setUpWebSession from './middleware/setUpWebSession'
 
+import config from './config'
 import routes from './routes'
 import type { Services } from './services'
-import config from './config'
 
 declare module 'express-session' {
   export interface SessionData {
@@ -33,6 +37,7 @@ declare module 'express-session' {
       groupRegion?: string
       personName?: string
     }
+    createGroupFormData?: Partial<CreateGroup>
   }
 }
 

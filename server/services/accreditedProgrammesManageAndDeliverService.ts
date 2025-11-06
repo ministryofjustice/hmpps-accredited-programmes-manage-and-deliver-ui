@@ -7,6 +7,7 @@ import {
   CohortEnum,
   CreateAvailability,
   CreateDeliveryLocationPreferences,
+  CreateGroup,
   CreateReferralStatusHistory,
   DeliveryLocationPreferences,
   DeliveryLocationPreferencesFormData,
@@ -20,15 +21,16 @@ import {
   PersonalDetails,
   PniScore,
   ProgrammeGroupDetails,
+  ProgrammeGroupEntity,
   ReferralDetails,
   ReferralStatusFormData,
+  ReferralStatusHistory,
   Relationships,
   Risks,
   RoshAnalysis,
   SentenceInformation,
   ThinkingAndBehaviour,
   UpdateAvailability,
-  ReferralStatusHistory,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -395,5 +397,14 @@ export default class AccreditedProgrammesManageAndDeliverService
       path: `/group/${groupId}/allocate/${referralId}`,
       headers: { Accept: 'application/json' },
     })
+  }
+
+  async createGroup(username: Express.User['username'], createGroup: CreateGroup): Promise<ProgrammeGroupEntity> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.post({
+      path: `/group`,
+      headers: { Accept: 'application/json' },
+      data: createGroup,
+    })) as ProgrammeGroupEntity
   }
 }

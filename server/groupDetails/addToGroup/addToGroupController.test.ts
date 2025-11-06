@@ -1,8 +1,8 @@
+import { fakerEN_GB as faker } from '@faker-js/faker'
 import { randomUUID } from 'crypto'
 import { Express } from 'express'
-import request from 'supertest'
-import { fakerEN_GB as faker } from '@faker-js/faker'
 import { SessionData } from 'express-session'
+import request from 'supertest'
 import AccreditedProgrammesManageAndDeliverService from '../../services/accreditedProgrammesManageAndDeliverService'
 import TestUtils from '../../testutils/testUtils'
 

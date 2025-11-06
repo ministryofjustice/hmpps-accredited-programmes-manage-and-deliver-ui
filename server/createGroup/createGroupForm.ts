@@ -1,0 +1,85 @@
+import { CreateGroup } from '@manage-and-deliver-api'
+import { Request } from 'express'
+import { ValidationChain, body } from 'express-validator'
+import errorMessages from '../utils/errorMessages'
+import { FormData } from '../utils/forms/formData'
+import FormUtils from '../utils/formUtils'
+
+export default class CreateGroupForm {
+  constructor(private readonly request: Request) {}
+
+  async createGroupCodeData(): Promise<FormData<Partial<CreateGroup>>> {
+    const validationResult = await FormUtils.runValidations({
+      request: this.request,
+      validations: CreateGroupForm.createGroupCodeValidations,
+    })
+
+    const error = FormUtils.validationErrorFromResult(validationResult)
+    if (error) {
+      return {
+        paramsForUpdate: null,
+        error,
+      }
+    }
+    return {
+      paramsForUpdate: {
+        groupCode: this.request.body['create-group-code'],
+      },
+      error: null,
+    }
+  }
+
+  async createGroupCohortData(): Promise<FormData<Partial<CreateGroup>>> {
+    const validationResult = await FormUtils.runValidations({
+      request: this.request,
+      validations: CreateGroupForm.createGroupCohortValidations,
+    })
+
+    const error = FormUtils.validationErrorFromResult(validationResult)
+    if (error) {
+      return {
+        paramsForUpdate: null,
+        error,
+      }
+    }
+    return {
+      paramsForUpdate: {
+        cohort: this.request.body['create-group-cohort'],
+      },
+      error: null,
+    }
+  }
+
+  async createGroupSexData(): Promise<FormData<Partial<CreateGroup>>> {
+    const validationResult = await FormUtils.runValidations({
+      request: this.request,
+      validations: CreateGroupForm.createGroupSexValidations,
+    })
+
+    const error = FormUtils.validationErrorFromResult(validationResult)
+    if (error) {
+      return {
+        paramsForUpdate: null,
+        error,
+      }
+    }
+    return {
+      paramsForUpdate: {
+        sex: this.request.body['create-group-sex'],
+      },
+      error: null,
+    }
+  }
+
+  static get createGroupCodeValidations(): ValidationChain[] {
+    return [body('create-group-code').notEmpty().withMessage(errorMessages.createGroup.createGroupCodeEmpty)]
+  }
+
+  static get createGroupCohortValidations(): ValidationChain[] {
+    return [body('create-group-cohort').notEmpty().withMessage(errorMessages.createGroup.createGroupCohortSelect)]
+  }
+
+  static get createGroupSexValidations(): ValidationChain[] {
+    return [body('create-group-sex').notEmpty().withMessage(errorMessages.createGroup.createGroupSexSelect)]
+  }
+}
