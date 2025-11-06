@@ -216,7 +216,7 @@ export default class GroupDetailsPresenter {
       return allocated > 0
     }
 
-    return true
+    return false
   }
 
   generateNoResultsString(): string {
