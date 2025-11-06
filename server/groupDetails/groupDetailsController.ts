@@ -27,12 +27,12 @@ type ApiWaitlistRow = ApiBaseRow & {
   reportingTeam: string
 }
 
-function normaliseReferralId(r: { referral_id?: string }): string {
-  return r.referral_id ?? ''
-}
-function normaliseSourcedFrom(r: { sourced_from?: string }): string {
-  return r.sourced_from ?? ''
-}
+// function normaliseReferralId(r: { referral_id?: string }): string {
+//   return r.referral_id ?? ''
+// }
+// function normaliseSourcedFrom(r: { sourced_from?: string }): string {
+//   return r.sourced_from ?? ''
+// }
 
 export default class GroupDetailsController {
   constructor(
@@ -60,9 +60,9 @@ export default class GroupDetailsController {
     const rows: AllocatedRow[] = rawRows.map(r => ({
       crn: r.crn,
       personName: r.personName,
-      referral_id: normaliseReferralId(r),
+      referral_id: r.referral_id,
       sentenceEndDate: r.sentenceEndDate,
-      sourced_from: normaliseSourcedFrom(r),
+      sourced_from: r.sourced_from,
       status: r.status,
     }))
 
@@ -129,9 +129,9 @@ export default class GroupDetailsController {
     const rows: WaitlistRow[] = rawRows.map(r => ({
       crn: r.crn,
       personName: r.personName,
-      referral_id: normaliseReferralId(r),
+      referral_id: r.referral_id,
       sentenceEndDate: r.sentenceEndDate,
-      sourced_from: normaliseSourcedFrom(r),
+      sourced_from: r.sourced_from,
       cohort: r.cohort,
       hasLdc: r.hasLdc,
       age: r.age,
