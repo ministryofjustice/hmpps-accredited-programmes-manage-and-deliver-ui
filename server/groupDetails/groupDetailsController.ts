@@ -7,26 +7,6 @@ import { FormValidationError } from '../utils/formValidationError'
 import GroupForm from './groupForm'
 import { Page } from '../shared/models/pagination'
 
-type ApiBaseRow = {
-  crn: string
-  personName: string
-  sentenceEndDate: string
-  status: string
-  referral_id: string
-  sourced_from: string
-}
-
-type ApiAllocatedRow = ApiBaseRow
-
-type ApiWaitlistRow = ApiBaseRow & {
-  cohort: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
-  hasLdc: boolean
-  age: number
-  sex: string
-  pdu: string
-  reportingTeam: string
-}
-
 export default class GroupDetailsController {
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
