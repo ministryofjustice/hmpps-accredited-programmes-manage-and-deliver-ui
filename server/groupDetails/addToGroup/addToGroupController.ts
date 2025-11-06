@@ -26,11 +26,16 @@ export default class AddToGroupController {
       } else if (data.paramsForUpdate.addToGroup.toLowerCase() === 'yes') {
         return res.redirect(`/addToGroup/${groupId}/${referralId}/moreDetails`)
       } else {
-        return res.redirect(`/groupDetails/${groupId}/waitlist`)
+        return res.redirect(req.session.originPage)
       }
     }
 
-    const presenter = new AddToGroupPresenter(groupId, req.session.groupManagementData, formError)
+    const presenter = new AddToGroupPresenter(
+      groupId,
+      req.session.groupManagementData,
+      req.session.originPage,
+      formError,
+    )
     const view = new AddToGroupView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
@@ -57,6 +62,7 @@ export default class AddToGroupController {
     const presenter = new AddToGroupMoreDetailsPresenter(
       groupId,
       req.session.groupManagementData,
+      req.session.originPage,
       formError,
       userInputData,
     )

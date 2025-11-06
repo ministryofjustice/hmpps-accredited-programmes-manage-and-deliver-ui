@@ -1,6 +1,5 @@
-import { InputArgs, SelectArgs, TableArgs } from '../utils/govukFrontendTypes'
+import { CheckboxesArgs, InputArgs, SelectArgs, TableArgs } from '../utils/govukFrontendTypes'
 import GroupDetailsPresenter, { GroupDetailsPageSection } from './groupDetailsPresenter'
-import CaselistUtils from '../caselist/caseListUtils'
 import ViewUtils from '../utils/viewUtils'
 
 export default class GroupDetailsView {
@@ -8,13 +7,13 @@ export default class GroupDetailsView {
 
   private get searchByCrnOrPersonNameArgs(): InputArgs {
     return {
-      id: 'crnOrPersonName',
-      name: 'crnOrPersonName',
+      id: 'nameOrCRN',
+      name: 'nameOrCRN',
       label: {
         text: 'Name or CRN',
         classes: 'govuk-label--s',
       },
-      value: '',
+      value: this.presenter.filter.nameOrCRN,
     }
   }
 
@@ -26,7 +25,10 @@ export default class GroupDetailsView {
         text: 'Cohort',
         classes: 'govuk-label--s',
       },
-      items: this.presenter.generateSelectValues(CaselistUtils.cohorts, ''),
+      items: this.presenter.generateSelectValues(
+        this.presenter.group.allocationAndWaitlistData.filters.cohort,
+        this.presenter.filter.cohort,
+      ),
     }
   }
 
@@ -39,12 +41,21 @@ export default class GroupDetailsView {
         classes: 'govuk-label--s',
       },
       items: this.presenter.generateSelectValues(
-        [
-          { value: 'MALE', text: 'Male' },
-          { value: 'FEMALE', text: 'Female' },
-        ],
-        '',
+        this.presenter.group.allocationAndWaitlistData.filters.sex,
+        this.presenter.filter.sex,
       ),
+    }
+  }
+
+  private get searchByPduArgs(): SelectArgs {
+    return {
+      id: 'pdu',
+      name: 'pdu',
+      label: {
+        text: 'PDU',
+        classes: 'govuk-label--s',
+      },
+      items: this.presenter.generatePduSelectArgs(),
     }
   }
 
@@ -71,6 +82,21 @@ export default class GroupDetailsView {
     }
   }
 
+  private get reportingTeamCheckboxArgs(): CheckboxesArgs {
+    return {
+      name: 'reportingTeam',
+      classes: 'govuk-checkboxes--small',
+      fieldset: {
+        legend: {
+          text: 'Reporting team',
+          isPageHeading: false,
+          classes: 'govuk-fieldset__legend--s',
+        },
+      },
+      items: this.presenter.generateReportingTeamCheckboxArgs(),
+    }
+  }
+
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       'groupDetails/groupDetails',
@@ -81,12 +107,16 @@ export default class GroupDetailsView {
         isWaitlist: this.presenter.section === GroupDetailsPageSection.Waitlist,
         searchByCohortArgs: this.searchByCohortArgs,
         searchBySexArgs: this.searchBySexArgs,
+        searchByPduArgs: this.searchByPduArgs,
         formButtonArgs: this.presenter.formButtonArgs,
         getGroupDetailsTableArgs: this.getGroupDetailsTableArgs(),
         isPersonAdded: this.presenter.isPersonAdded,
         successMessageArgs: this.successMessageArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
+        reportingTeamCheckboxArgs: this.reportingTeamCheckboxArgs,
         text: this.presenter.text,
+        hasResults: this.presenter.hasResults(),
+        noResultsString: this.presenter.generateNoResultsString(),
       },
     ]
   }

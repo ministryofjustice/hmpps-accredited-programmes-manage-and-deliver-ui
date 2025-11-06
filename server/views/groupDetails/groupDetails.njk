@@ -8,6 +8,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{%- from "govuk/components/checkboxes/macro.njk" import govukCheckboxes -%}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -36,6 +37,16 @@
   {% if isWaitlist %}
     {{ govukSelect(searchByCohortArgs) }}
     {{ govukSelect(searchBySexArgs) }}
+    {{ govukSelect(searchByPduArgs) }}
+
+    {% if not presenter.showReportingLocations %}
+      <h2 class="govuk-heading-s govuk-!-margin-bottom-1 govuk-!-margin-top-6">Reporting team</h2>
+      <p class="govuk-body">Select a PDU and apply filters to see reporting teams</p>
+    {% endif %}
+
+    {% if presenter.showReportingLocations %}
+      {{ govukCheckboxes(reportingTeamCheckboxArgs) }}
+    {% endif %}
   {% endif %}
   {% endset -%}
   <div class="govuk-grid-column-one-quarter">
@@ -67,8 +78,13 @@
     <form method="post">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}">
       <div id="add-to-group"></div>
-      {{ govukTable(getGroupDetailsTableArgs) }}
-      {{ govukButton(formButtonArgs) }}
+      {% if hasResults %}
+        {{ govukTable(getGroupDetailsTableArgs) }}
+        {{ govukButton(formButtonArgs) }}
+      {% else %}
+        <p class="govuk-body-l">{{ noResultsString }}</p>
+      {% endif %}
+
 
     </form>
   </div>

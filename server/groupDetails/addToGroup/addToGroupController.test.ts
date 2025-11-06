@@ -25,6 +25,7 @@ beforeEach(() => {
       groupRegion: 'London',
       personName: 'Alex River',
     },
+    originPage: '/groupDetails/123/waitlist?nameOrCRN=&cohort=General+Offence&sex=&pdu=Liverpool',
   }
   app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
   accreditedProgrammesManageAndDeliverService.addToGroup.mockResolvedValue(null)
@@ -58,7 +59,7 @@ describe('add to group', () => {
         })
     })
 
-    it('posts to the add to group page and redirects successfully to the waitlist page if No is selected', async () => {
+    it('posts to the add to group page and redirects successfully to the waitlist page with previous filters if No is selected', async () => {
       const groupId = '123'
       const referralId = '123'
 
@@ -70,7 +71,9 @@ describe('add to group', () => {
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(`Redirecting to /groupDetails/${groupId}/waitlist`)
+          expect(res.text).toContain(
+            `Redirecting to /groupDetails/${groupId}/waitlist?nameOrCRN=&cohort=General+Offence&sex=&pdu=Liverpool`,
+          )
         })
     })
 
