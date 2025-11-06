@@ -30,6 +30,7 @@ export default ProgrammeGroupDetailsFactory.define(() => ({
     },
     paginatedAllocationData: [
       {
+        referralId: '99999',
         crn: 'X718250',
         personName: 'Edgar Schiller',
         sentenceEndDate: '28 April 2027',

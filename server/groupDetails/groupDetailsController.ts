@@ -59,7 +59,7 @@ export default class GroupDetailsController {
       groupId,
       {
         page,
-        size: 10,
+        size: 1,
       },
       filter.params,
     )
