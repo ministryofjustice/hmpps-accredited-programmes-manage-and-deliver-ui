@@ -12,8 +12,8 @@ type ApiBaseRow = {
   personName: string
   sentenceEndDate: string
   status: string
-  referral_id?: string
-  sourced_from?: string
+  referral_id: string
+  sourced_from: string
 }
 
 type ApiAllocatedRow = ApiBaseRow
@@ -26,13 +26,6 @@ type ApiWaitlistRow = ApiBaseRow & {
   pdu: string
   reportingTeam: string
 }
-
-// function normaliseReferralId(r: { referral_id?: string }): string {
-//   return r.referral_id ?? ''
-// }
-// function normaliseSourcedFrom(r: { sourced_from?: string }): string {
-//   return r.sourced_from ?? ''
-// }
 
 export default class GroupDetailsController {
   constructor(
@@ -55,16 +48,9 @@ export default class GroupDetailsController {
       groupId,
       { page, size },
     )
-    const rawRows = (groupDetails?.allocationAndWaitlistData?.paginatedAllocationData ?? []) as ApiAllocatedRow[]
 
-    const rows: AllocatedRow[] = rawRows.map(r => ({
-      crn: r.crn,
-      personName: r.personName,
-      referral_id: r.referral_id,
-      sentenceEndDate: r.sentenceEndDate,
-      sourced_from: r.sourced_from,
-      status: r.status,
-    }))
+    const rows: AllocatedRow[] = (groupDetails?.allocationAndWaitlistData?.paginatedAllocationData ??
+      []) as AllocatedRow[]
 
     const paged: Page<AllocatedRow> = {
       content: rows,
@@ -125,21 +111,8 @@ export default class GroupDetailsController {
         return res.redirect(`/addToGroup/${groupId}/${data.paramsForUpdate.addToGroup}`)
       }
     }
-    const rawRows = (groupDetails?.allocationAndWaitlistData?.paginatedWaitlistData ?? []) as ApiWaitlistRow[]
-    const rows: WaitlistRow[] = rawRows.map(r => ({
-      crn: r.crn,
-      personName: r.personName,
-      referral_id: r.referral_id,
-      sentenceEndDate: r.sentenceEndDate,
-      sourced_from: r.sourced_from,
-      cohort: r.cohort,
-      hasLdc: r.hasLdc,
-      age: r.age,
-      sex: r.sex,
-      pdu: r.pdu,
-      reportingTeam: r.reportingTeam,
-      status: r.status,
-    }))
+
+    const rows: WaitlistRow[] = (groupDetails?.allocationAndWaitlistData?.paginatedWaitlistData ?? []) as WaitlistRow[]
 
     const paged: Page<WaitlistRow> = {
       content: rows,
