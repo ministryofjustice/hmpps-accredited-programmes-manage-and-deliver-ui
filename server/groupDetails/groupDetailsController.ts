@@ -13,9 +13,7 @@ type ApiBaseRow = {
   sentenceEndDate: string
   status: string
   referral_id?: string
-  referralId?: string
   sourced_from?: string
-  sourcedFrom?: string
 }
 
 type ApiAllocatedRow = ApiBaseRow
@@ -29,11 +27,11 @@ type ApiWaitlistRow = ApiBaseRow & {
   reportingTeam: string
 }
 
-function normaliseReferralId(r: { referral_id?: string; referralId?: string }): string {
-  return r.referral_id ?? r.referralId ?? ''
+function normaliseReferralId(r: { referral_id?: string }): string {
+  return r.referral_id ?? ''
 }
-function normaliseSourcedFrom(r: { sourced_from?: string; sourcedFrom?: string }): string {
-  return r.sourced_from ?? r.sourcedFrom ?? ''
+function normaliseSourcedFrom(r: { sourced_from?: string }): string {
+  return r.sourced_from ?? ''
 }
 
 export default class GroupDetailsController {
