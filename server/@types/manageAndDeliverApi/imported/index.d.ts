@@ -151,6 +151,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/group': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Create a new programme group
+     * @description Create a new programme group
+     */
+    post: operations['createProgrammeGroup']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/group/{groupId}/allocate/{referralId}': {
     parameters: {
       query?: never
@@ -933,6 +953,17 @@ export interface components {
        */
       additionalDetails?: string
     }
+    CreateGroup: {
+      groupCode: string
+      /** @description Cohort for the Programme Group. */
+      cohort: components['schemas']['ProgrammeGroupCohort']
+      /** @description Sex that the group is being run for */
+      sex: components['schemas']['ProgrammeGroupSexEnum']
+    }
+    /** @enum {string} */
+    ProgrammeGroupCohort: 'GENERAL' | 'GENERAL_LDC' | 'SEXUAL' | 'SEXUAL_LDC'
+    /** @enum {string} */
+    ProgrammeGroupSexEnum: 'MALE' | 'FEMALE' | 'MIXED'
     CreateAvailability: {
       /**
        * Format: uuid
@@ -2145,8 +2176,8 @@ export interface components {
        */
       referralId: string
       /**
-       * @description The entity (Licence Condition or Requirement) that caused the Referral to be created in our system
-       * @example REQUIREMENT
+       * @description A human-readable string describing the entity (Licence Condition or Requirement) that caused the Referral to be created in our system
+       * @example Order end date
        */
       sourcedFrom: string
       /**
@@ -2753,6 +2784,55 @@ export interface operations {
       }
       /** @description The referral does not exist */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  createProgrammeGroup: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateGroup']
+      }
+    }
+    responses: {
+      /** @description Programme group successfully created */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Invalid request body */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden. The client is not authorised to create groups. */
+      403: {
         headers: {
           [name: string]: unknown
         }
@@ -4281,6 +4361,15 @@ export interface operations {
       }
       /** @description The group does not exist */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The group already exists */
+      409: {
         headers: {
           [name: string]: unknown
         }

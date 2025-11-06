@@ -80,8 +80,12 @@ describe('groupDetailsPresenter.', () => {
                   </div>
                  </div>`,
           },
-          { html: `<a href="">Karen Puckett</a><p class="govuk-!-margin-bottom-0"> D002399</p>` },
-          { text: '28 April 2027' },
+          {
+            html: `<a href="/referral-details/123456/personal-details">Karen Puckett</a><p class="govuk-!-margin-bottom-0"> D002399</p>`,
+          },
+
+          { html: '28 April 2027' },
+
           {
             html: `General Offence`,
           },
@@ -101,8 +105,12 @@ describe('groupDetailsPresenter.', () => {
                   </div>
                  </div>`,
           },
-          { html: `<a href="">Mr Joye Hatto</a><p class="govuk-!-margin-bottom-0"> D007523</p>` },
-          { text: '28 April 2027' },
+          {
+            html: `<a href="/referral-details/987654/personal-details">Mr Joye Hatto</a><p class="govuk-!-margin-bottom-0"> D007523</p>`,
+          },
+
+          { html: '28 April 2027' },
+
           {
             html: 'Sexual Offence</br><span class="moj-badge moj-badge--bright-purple">LDC</span>',
           },
@@ -127,6 +135,10 @@ describe('groupDetailsPresenter.', () => {
         null,
         null,
       )
+
+      const allocated = groupDetails.allocationAndWaitlistData.paginatedAllocationData[0]
+      const allocatedHref = `/referral-details/${allocated.referralId}/personal-details`
+
       expect(presenter.generateAllocatedTableArgs()).toEqual([
         [
           {
@@ -139,8 +151,10 @@ describe('groupDetailsPresenter.', () => {
                   </div>
                  </div>`,
           },
-          { html: `<a href="">Edgar Schiller</a><p class="govuk-!-margin-bottom-0">X718250</p>` },
-          { text: '28 April 2027' },
+          { html: `<a href="${allocatedHref}">Edgar Schiller</a><p class="govuk-!-margin-bottom-0">X718250</p>` },
+
+          { html: '28 April 2027' },
+
           { html: `<strong class="govuk-tag govuk-tag--blue">Awaiting assessment</strong>` },
         ],
       ])
