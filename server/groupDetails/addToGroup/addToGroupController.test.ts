@@ -59,7 +59,7 @@ describe('add to group', () => {
         })
     })
 
-    it('posts to the add to group page and redirects successfully to the waitlist pagewith previous filters if No is selected', async () => {
+    it('posts to the add to group page and redirects successfully to the waitlist page with previous filters if No is selected', async () => {
       const groupId = '123'
       const referralId = '123'
 
