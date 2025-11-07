@@ -21,6 +21,27 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/referral/{id}/motivation-background-non-associations': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Retrieve motivations background and non-associations of a referral */
+    get: operations['getReferralMotivationBackgroundAndNonAssociationsByReferralId']
+    /**
+     * Create or update the motivation background and non-associations of a referral
+     * @description Create or update the motivation background and non-associations of a referral
+     */
+    put: operations['createOrUpdateReferralMotivationBackgroundAndNonAssociations']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/queue-admin/retry-dlq/{dlqName}': {
     parameters: {
       query?: never
@@ -780,6 +801,79 @@ export interface components {
        */
       cohort: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
     }
+    ReferralMotivationBackgroundAndNonAssociations: {
+      /**
+       * Format: uuid
+       * @description The unique id of the ReferralMotivationBackgroundAndNonAssociations information.
+       * @example c98151f4-4081-4c65-9f98-54e63a328c8d
+       */
+      id: string
+      /**
+       * Format: uuid
+       * @description The unique id of this referral.
+       * @example c98151f4-4081-4c65-9f98-54e63a328c8d
+       */
+      referralId: string
+      /**
+       * @description Boolean value indicating whether the referral maintains innocence.
+       * @example true
+       */
+      maintainsInnocence: boolean
+      /**
+       * @description Information on the motivation to participate in an accredited programme.
+       * @example Motivated to change and improve life circumstances.
+       */
+      motivations: string
+      /**
+       * @description Any other relevant information that should be considered.
+       * @example Other information relevant to the referral.
+       */
+      otherConsiderations: string
+      /**
+       * @description Information on any non-associations relevant to the referral.
+       * @example Should not be in a group with a person who has a history of reoffending on a previous accredited programme.
+       */
+      nonAssociations: string
+      /**
+       * Format: date
+       * @description Timestamp of when this referral was created.
+       * @example 11
+       */
+      createdAt: string
+      /** @description The user that last created the delivery location preferences */
+      createdBy?: string
+      /**
+       * Format: date-time
+       * @description Timestamp of when this referral was created.
+       * @example 11
+       */
+      lastUpdatedAt: string
+      /** @description The user that last created the delivery location preferences */
+      lastUpdatedBy?: string
+    }
+    /** @description Details of the background and non-associations for a referral */
+    CreateOrUpdateReferralMotivationBackgroundAndNonAssociations: {
+      /**
+       * @description Boolean value indicating whether the referral maintains innocence.
+       * @example true
+       */
+      maintainsInnocence: boolean
+      /**
+       * @description Information on the motivation to participate in an accredited programme.
+       * @example Motivated to change and improve life circumstances.
+       */
+      motivations: string
+      /**
+       * @description Any other relevant information that should be considered.
+       * @example Other information relevant to the referral.
+       */
+      otherConsiderations: string
+      /**
+       * @description Information on any non-associations relevant to the referral.
+       * @example Should not be in a group with a person who has a history of reoffending on a previous accredited programme.
+       */
+      nonAssociations: string
+    }
     RetryDlqResult: {
       /** Format: int32 */
       messagesFoundCount: number
@@ -953,7 +1047,7 @@ export interface components {
        */
       additionalDetails?: string
     }
-    CreateGroup: {
+    CreateGroupRequest: {
       groupCode: string
       /** @description Cohort for the Programme Group. */
       cohort: components['schemas']['ProgrammeGroupCohort']
@@ -1957,10 +2051,10 @@ export interface components {
       otherTabTotal: number
     }
     PageReferralCaseListItem: {
-      /** Format: int64 */
-      totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      /** Format: int64 */
+      totalElements?: number
       first?: boolean
       last?: boolean
       /** Format: int32 */
@@ -2167,6 +2261,12 @@ export interface components {
        * @example Awaiting allocation
        */
       status: string
+      /**
+       * Format: uuid
+       * @description The unique Id of the group that the referral is assigned to.
+       * @example 56470228-3893-450f-b4bc-97b21e18b887
+       */
+      activeProgrammeGroupId: string
     }
     GroupWaitlistItem: {
       /**
@@ -2233,6 +2333,12 @@ export interface components {
        * @example Awaiting assessment
        */
       status: string
+      /**
+       * Format: uuid
+       * @description The unique Id of the group that the referral is assigned to.
+       * @example 56470228-3893-450f-b4bc-97b21e18b887
+       */
+      activeProgrammeGroupId: string
     }
     Pagination: {
       /** Format: int32 */
@@ -2309,6 +2415,128 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['Referral']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access this referral. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The referral does not exist */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getReferralMotivationBackgroundAndNonAssociationsByReferralId: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id (UUID) of a referral */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Information about the motivations background and non-associations of the referral */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ReferralMotivationBackgroundAndNonAssociations']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden. The client is not authorised to access this referral. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The referral does not exist */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  createOrUpdateReferralMotivationBackgroundAndNonAssociations: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id (UUID) of a Referral */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateOrUpdateReferralMotivationBackgroundAndNonAssociations']
+      }
+    }
+    responses: {
+      /** @description Referral Status updated successfully */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ReferralMotivationBackgroundAndNonAssociations']
         }
       }
       /** @description Bad Request */
@@ -2802,7 +3030,7 @@ export interface operations {
     }
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateGroup']
+        'application/json': components['schemas']['CreateGroupRequest']
       }
     }
     responses: {
@@ -4311,6 +4539,8 @@ export interface operations {
         nameOrCRN?: string
         /** @description Filter by the human readable pdu of the referral, i.e. 'All London' */
         pdu?: string
+        /** @description Filter by one or more reporting teams. Repeat the parameter to include multiple teams. */
+        reportingTeam?: string[]
       }
       header?: never
       path: {

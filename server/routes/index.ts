@@ -19,6 +19,8 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
   const post = (path: string, handler: RequestHandler): Router => router.post(path, asyncMiddleware(handler))
+  // Since most of our methods we want to be able to GET and POST from the same URL this helper function enables both.
+  // This should be the standard going forward
   const getOrPost = (path: string, handler: RequestHandler) =>
     router.route(path).get(asyncMiddleware(handler)).post(asyncMiddleware(handler))
 

@@ -22,7 +22,7 @@
                         {% if errorSummary !== null %}
                             {{ govukErrorSummary(errorSummary) }}
                         {% endif %}
-                        <span class="govuk-caption-xl">Create a group</span>
+                        <span class="govuk-caption-l">Create a group</span>
                         <form method="post" novalidate>
                             <input type="hidden" name="_csrf" value="{{csrfToken}}">
                             {{ govukInput(createGroupCodeArgs) }}
