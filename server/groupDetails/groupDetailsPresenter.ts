@@ -145,7 +145,7 @@ export default class GroupDetailsPresenter {
             member.sourcedFrom ? `<br> ${member.sourcedFrom}` : ''
           }`,
         },
-        { html: `<strong class="govuk-tag govuk-tag--blue">${member.status}</strong>` },
+        { html: `<strong class="govuk-tag govuk-tag--${member.statusColour}">${member.status}</strong>` },
       ])
     })
 

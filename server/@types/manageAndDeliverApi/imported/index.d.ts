@@ -2262,6 +2262,11 @@ export interface components {
        */
       status: string
       /**
+       * @description The colour label for the current Status
+       * @example purple
+       */
+      statusColour: string
+      /**
        * Format: uuid
        * @description The unique Id of the group that the referral is assigned to.
        * @example 56470228-3893-450f-b4bc-97b21e18b887
@@ -2333,6 +2338,11 @@ export interface components {
        * @example Awaiting assessment
        */
       status: string
+      /**
+       * @description The colour label for the current Status
+       * @example purple
+       */
+      statusColour: string
       /**
        * Format: uuid
        * @description The unique Id of the group that the referral is assigned to.
