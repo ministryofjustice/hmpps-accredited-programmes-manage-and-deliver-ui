@@ -118,7 +118,7 @@ describe('groupDetailsPresenter.', () => {
 
           { html: '28 April 2027' },
 
-          { html: `<strong class="govuk-tag govuk-tag--blue">Awaiting assessment</strong>` },
+          { html: `<strong class="govuk-tag govuk-tag--purple">Awaiting assessment</strong>` },
         ],
       ])
     })

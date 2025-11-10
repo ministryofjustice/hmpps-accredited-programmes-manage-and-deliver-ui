@@ -35,6 +35,7 @@ export default ProgrammeGroupDetailsFactory.define(() => ({
         personName: 'Edgar Schiller',
         sentenceEndDate: '28 April 2027',
         status: 'Awaiting assessment',
+        statusColour: 'purple',
       },
     ],
     paginatedWaitlistData: [
