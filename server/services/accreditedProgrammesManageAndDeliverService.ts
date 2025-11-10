@@ -7,7 +7,7 @@ import {
   CohortEnum,
   CreateAvailability,
   CreateDeliveryLocationPreferences,
-  CreateGroup,
+  CreateGroupRequest,
   CreateReferralStatusHistory,
   DeliveryLocationPreferences,
   DeliveryLocationPreferencesFormData,
@@ -36,8 +36,8 @@ import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
 import type { HmppsAuthClient, RestClientBuilderWithoutToken } from '../data'
 import RestClient from '../data/restClient'
-import type { ExpressUsername } from '../shared/ExpressUsername'
 import { GroupListFilterParams } from '../groupDetails/groupListFilterParams'
+import type { ExpressUsername } from '../shared/ExpressUsername'
 
 export interface PaginationParams {
   // Page number to retrieve -- starts from 1
@@ -404,12 +404,12 @@ export default class AccreditedProgrammesManageAndDeliverService
     })
   }
 
-  async createGroup(username: Express.User['username'], createGroup: CreateGroup): Promise<ProgrammeGroupEntity> {
+  async createGroup(username: Express.User['username'], data: CreateGroupRequest): Promise<ProgrammeGroupEntity> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.post({
       path: `/group`,
       headers: { Accept: 'application/json' },
-      data: createGroup,
+      data,
     })) as ProgrammeGroupEntity
   }
 }

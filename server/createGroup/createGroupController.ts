@@ -1,4 +1,4 @@
-import { CreateGroup } from '@manage-and-deliver-api'
+import { CreateGroupRequest } from '@manage-and-deliver-api'
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
@@ -103,7 +103,10 @@ export default class CreateGroupController {
     const { createGroupFormData } = req.session
     const { username } = req.user
     if (req.method === 'POST') {
-      await this.accreditedProgrammesManageAndDeliverService.createGroup(username, createGroupFormData as CreateGroup)
+      await this.accreditedProgrammesManageAndDeliverService.createGroup(
+        username,
+        createGroupFormData as CreateGroupRequest,
+      )
       // Clear session data on submission
       req.session.createGroupFormData = {}
       return res.redirect(`/?groupCreated`)

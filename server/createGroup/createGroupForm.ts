@@ -1,4 +1,4 @@
-import { CreateGroup } from '@manage-and-deliver-api'
+import { CreateGroupRequest } from '@manage-and-deliver-api'
 import { Request } from 'express'
 import { ValidationChain, body } from 'express-validator'
 import errorMessages from '../utils/errorMessages'
@@ -8,7 +8,7 @@ import FormUtils from '../utils/formUtils'
 export default class CreateGroupForm {
   constructor(private readonly request: Request) {}
 
-  async createGroupCodeData(): Promise<FormData<Partial<CreateGroup>>> {
+  async createGroupCodeData(): Promise<FormData<Partial<CreateGroupRequest>>> {
     const validationResult = await FormUtils.runValidations({
       request: this.request,
       validations: CreateGroupForm.createGroupCodeValidations,
@@ -29,7 +29,7 @@ export default class CreateGroupForm {
     }
   }
 
-  async createGroupCohortData(): Promise<FormData<Partial<CreateGroup>>> {
+  async createGroupCohortData(): Promise<FormData<Partial<CreateGroupRequest>>> {
     const validationResult = await FormUtils.runValidations({
       request: this.request,
       validations: CreateGroupForm.createGroupCohortValidations,
@@ -50,7 +50,7 @@ export default class CreateGroupForm {
     }
   }
 
-  async createGroupSexData(): Promise<FormData<Partial<CreateGroup>>> {
+  async createGroupSexData(): Promise<FormData<Partial<CreateGroupRequest>>> {
     const validationResult = await FormUtils.runValidations({
       request: this.request,
       validations: CreateGroupForm.createGroupSexValidations,

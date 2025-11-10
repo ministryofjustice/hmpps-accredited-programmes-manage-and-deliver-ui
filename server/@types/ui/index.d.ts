@@ -8,3 +8,8 @@ export type MojTimelineItem = HtmlOrText & {
   }
   label: HtmlOrText
 }
+
+export type ValueTextTuple = {
+  value: T
+  text: string
+}
