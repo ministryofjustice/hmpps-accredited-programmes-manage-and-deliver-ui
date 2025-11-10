@@ -4,7 +4,7 @@ import createError from 'http-errors'
 
 import {
   CreateDeliveryLocationPreferences,
-  CreateGroup,
+  CreateGroupRequest,
   DeliveryLocationPreferencesFormData,
 } from '@manage-and-deliver-api'
 import errorHandler from './errorHandler'
@@ -37,7 +37,7 @@ declare module 'express-session' {
       groupRegion?: string
       personName?: string
     }
-    createGroupFormData?: Partial<CreateGroup>
+    createGroupFormData?: Partial<CreateGroupRequest>
   }
 }
 

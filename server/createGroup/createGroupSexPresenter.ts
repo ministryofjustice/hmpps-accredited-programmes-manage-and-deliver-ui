@@ -1,11 +1,11 @@
-import { CreateGroup } from '@manage-and-deliver-api'
+import { CreateGroupRequest } from '@manage-and-deliver-api'
 import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
 
 export default class CreateGroupSexPresenter {
   constructor(
     private readonly validationError: FormValidationError | null = null,
-    private readonly createGroupFormData: Partial<CreateGroup> | null = null,
+    private readonly createGroupFormData: Partial<CreateGroupRequest> | null = null,
   ) {}
 
   get text() {
