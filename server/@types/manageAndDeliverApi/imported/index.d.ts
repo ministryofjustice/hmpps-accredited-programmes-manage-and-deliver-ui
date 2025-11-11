@@ -2063,20 +2063,20 @@ export interface components {
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageableObject: {
       /** Format: int64 */
       offset?: number
       sort?: components['schemas']['SortObject']
-      /** Format: int32 */
-      pageSize?: number
       paged?: boolean
       /** Format: int32 */
       pageNumber?: number
+      /** Format: int32 */
+      pageSize?: number
       unpaged?: boolean
     }
     ReferralCaseListItem: {
@@ -2205,75 +2205,57 @@ export interface components {
       /** @description Available delivery locations within this PDU */
       deliveryLocations: components['schemas']['DeliveryLocationOption'][]
     }
-    AllocationAndWaitlistData: {
-      counts: components['schemas']['Counts']
-      pagination: components['schemas']['Pagination']
-      filters: components['schemas']['Filters']
-      paginatedAllocationData: components['schemas']['GroupAllocatedItem'][]
-      paginatedWaitlistData: components['schemas']['GroupWaitlistItem'][]
-    }
-    Counts: {
-      /** Format: int32 */
-      waitlist: number
-      /** Format: int32 */
-      allocated: number
-    }
+    /** @description Available filter options for viewing programme group data. */
     Filters: {
+      /**
+       * @description The available sex options that can be used to filter the data.
+       * @example [
+       *       "Male",
+       *       "Female"
+       *     ]
+       */
       sex: string[]
+      /**
+       * @description The available cohorts (offence types or programme categories) that can be used for filtering.
+       * @example [
+       *       "General",
+       *       "Sexual",
+       *       "Domestic Violence"
+       *     ]
+       */
       cohort: string[]
+      /**
+       * @description The list of PDU (Probation Delivery Unit) names that can be used for filtering.
+       * @example [
+       *       "Durham",
+       *       "Leeds",
+       *       "Manchester"
+       *     ]
+       */
       pduNames: string[]
+      /**
+       * @description The list of reporting teams that can be used for filtering.
+       * @example [
+       *       "Durham Team 1",
+       *       "Durham Team 2"
+       *     ]
+       */
       reportingTeams: string[]
     }
+    /** @description Information identifying the group. */
     Group: {
+      /**
+       * @description A unique code identifying the programme group.
+       * @example AP_BIRMINGHAM_NORTH
+       */
       code: string
+      /**
+       * @description The region name the group belongs to.
+       * @example West Midlands
+       */
       regionName: string
     }
-    GroupAllocatedItem: {
-      /**
-       * Format: uuid
-       * @description The UUID of the referral.
-       * @example 1ff57cea-352c-4a99-8f66-3e626aac3265
-       */
-      referralId: string
-      /**
-       * @description The entity (Licence Condition or Requirement) that caused the Referral to be created in our system
-       * @example Requirement
-       */
-      sourcedFrom: string
-      /**
-       * @description The crn associated with this referral.
-       * @example X933590
-       */
-      crn: string
-      /**
-       * @description The name of the person associated with this referral.
-       * @example John Doe
-       */
-      personName: string
-      /**
-       * Format: date
-       * @description The end date of the person's sentence
-       * @example 1
-       */
-      sentenceEndDate: string
-      /**
-       * @description The status of the referral
-       * @example Awaiting allocation
-       */
-      status: string
-      /**
-       * @description The colour label for the current Status
-       * @example purple
-       */
-      statusColour: string
-      /**
-       * Format: uuid
-       * @description The unique Id of the group that the referral is assigned to.
-       * @example 56470228-3893-450f-b4bc-97b21e18b887
-       */
-      activeProgrammeGroupId: string
-    }
-    GroupWaitlistItem: {
+    GroupItem: {
       /**
        * Format: uuid
        * @description The UUID of the referral.
@@ -2350,15 +2332,38 @@ export interface components {
        */
       activeProgrammeGroupId: string
     }
-    Pagination: {
+    PageGroupItem: {
       /** Format: int32 */
-      size: number
+      totalPages?: number
+      /** Format: int64 */
+      totalElements?: number
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
-      page: number
+      size?: number
+      content?: components['schemas']['GroupItem'][]
+      /** Format: int32 */
+      number?: number
+      sort?: components['schemas']['SortObject']
+      pageable?: components['schemas']['PageableObject']
+      /** Format: int32 */
+      numberOfElements?: number
+      empty?: boolean
     }
+    /** @description Details of a Programme Group including filters and paginated group data. */
     ProgrammeGroupDetails: {
+      /** @description Details of the group such as its code and regional name. */
       group: components['schemas']['Group']
-      allocationAndWaitlistData: components['schemas']['AllocationAndWaitlistData']
+      /** @description Filter options available for the group data. */
+      filters: components['schemas']['Filters']
+      /** @description Paged data containing the list of group items (referrals or people) for this group. */
+      pagedGroupData: components['schemas']['PageGroupItem']
+      /**
+       * Format: int32
+       * @description The total number of records in the 'Other' tab.
+       * @example 12
+       */
+      otherTabTotal: number
     }
     CaseListFilterValues: {
       /** @description Contains lists of open and closed referral statuses */

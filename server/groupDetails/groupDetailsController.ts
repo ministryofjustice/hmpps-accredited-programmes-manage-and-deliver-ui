@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
+import { FormValidationError } from '../utils/formValidationError'
 import GroupDetailsPresenter, { GroupDetailsPageSection } from './groupDetailsPresenter'
 import GroupDetailsView from './groupDetailsView'
-import { FormValidationError } from '../utils/formValidationError'
 import GroupForm from './groupForm'
 import GroupListFilter from './groupListFilter'
 
@@ -78,9 +78,6 @@ export default class GroupDetailsController {
         return res.redirect(`/addToGroup/${groupId}/${data.paramsForUpdate.addToGroup}`)
       }
     }
-
-    groupDetails.allocationAndWaitlistData.paginatedWaitlistData = []
-    groupDetails.allocationAndWaitlistData.counts.waitlist = 0
 
     const presenter = new GroupDetailsPresenter(
       GroupDetailsPageSection.Waitlist,
