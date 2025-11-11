@@ -1,6 +1,6 @@
 import { CheckboxesArgs, InputArgs, SelectArgs, TableArgs } from '../utils/govukFrontendTypes'
-import GroupDetailsPresenter, { GroupDetailsPageSection } from './groupDetailsPresenter'
 import ViewUtils from '../utils/viewUtils'
+import GroupDetailsPresenter, { GroupDetailsPageSection } from './groupDetailsPresenter'
 
 export default class GroupDetailsView {
   constructor(private readonly presenter: GroupDetailsPresenter) {}
@@ -25,10 +25,7 @@ export default class GroupDetailsView {
         text: 'Cohort',
         classes: 'govuk-label--s',
       },
-      items: this.presenter.generateSelectValues(
-        this.presenter.group.allocationAndWaitlistData.filters.cohort,
-        this.presenter.filter.cohort,
-      ),
+      items: this.presenter.generateSelectValues(this.presenter.group.filters.cohort, this.presenter.filter.cohort),
     }
   }
 
@@ -40,10 +37,7 @@ export default class GroupDetailsView {
         text: 'Sex',
         classes: 'govuk-label--s',
       },
-      items: this.presenter.generateSelectValues(
-        this.presenter.group.allocationAndWaitlistData.filters.sex,
-        this.presenter.filter.sex,
-      ),
+      items: this.presenter.generateSelectValues(this.presenter.group.filters.sex, this.presenter.filter.sex),
     }
   }
 

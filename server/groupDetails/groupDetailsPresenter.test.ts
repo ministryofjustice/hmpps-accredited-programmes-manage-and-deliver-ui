@@ -1,5 +1,5 @@
-import GroupDetailsPresenter, { GroupDetailsPageSection } from './groupDetailsPresenter'
 import ProgrammeGroupDetailsFactory from '../testutils/factories/programmeGroupDetailsFactory'
+import GroupDetailsPresenter, { GroupDetailsPageSection } from './groupDetailsPresenter'
 import GroupListFilter from './groupListFilter'
 
 afterEach(() => {
@@ -38,58 +38,58 @@ describe('groupDetailsPresenter.', () => {
   describe('generateWaitlistTableArgs', () => {
     it('should return the correct table args for waitlist', () => {
       const filterObject = { status: undefined, cohort: undefined, nameOrCRN: undefined } as GroupListFilter
-      const groupDetails = ProgrammeGroupDetailsFactory.build()
+      const groupDetails = ProgrammeGroupDetailsFactory.waitlist().build()
       const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, '1234', filterObject)
       expect(presenter.generateWaitlistTableArgs()).toEqual([
         [
           {
             html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
-                    <input id='123456' value='Karen Puckett*123456' type="radio" name="add-to-group" class="govuk-radios__input">
-                    <label class="govuk-label govuk-radios__label" for="123456">
-                      <span class="govuk-!-display-none">Add Karen Puckett to the group</span>
+                    <input id='39fde7e8-d2e3-472b-8364-5848bf673aa6' value='Edgar Schiller*39fde7e8-d2e3-472b-8364-5848bf673aa6' type="radio" name="add-to-group" class="govuk-radios__input">
+                    <label class="govuk-label govuk-radios__label" for="39fde7e8-d2e3-472b-8364-5848bf673aa6">
+                      <span class="govuk-!-display-none">Add Edgar Schiller to the group</span>
                     </label>
                   </div>
                  </div>`,
           },
           {
-            html: `<a href="/referral-details/123456/personal-details">Karen Puckett</a><p class="govuk-!-margin-bottom-0"> D002399</p>`,
+            html: `<a href="/referral-details/39fde7e8-d2e3-472b-8364-5848bf673aa6/personal-details">Edgar Schiller</a><p class="govuk-!-margin-bottom-0"> X718250</p>`,
           },
 
-          { html: '28 April 2027' },
+          { html: '28 April 2027<br> Licence end date' },
 
           {
-            html: `General Offence`,
+            html: `Sexual Offence`,
           },
           { text: '36' },
-          { text: 'Female' },
+          { text: 'Male' },
           { text: 'London' },
-          { text: 'London Office 2' },
+          { text: 'London Office 1' },
         ],
         [
           {
             html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
-                    <input id='987654' value='Mr Joye Hatto*987654' type="radio" name="add-to-group" class="govuk-radios__input">
-                    <label class="govuk-label govuk-radios__label" for="987654">
-                      <span class="govuk-!-display-none">Add Mr Joye Hatto to the group</span>
+                    <input id='ae43bc75-b96e-496b-b9da-20ea327d7909' value='Roy Kloss*ae43bc75-b96e-496b-b9da-20ea327d7909' type="radio" name="add-to-group" class="govuk-radios__input">
+                    <label class="govuk-label govuk-radios__label" for="ae43bc75-b96e-496b-b9da-20ea327d7909">
+                      <span class="govuk-!-display-none">Add Roy Kloss to the group</span>
                     </label>
                   </div>
                  </div>`,
           },
           {
-            html: `<a href="/referral-details/987654/personal-details">Mr Joye Hatto</a><p class="govuk-!-margin-bottom-0"> D007523</p>`,
+            html: `<a href="/referral-details/ae43bc75-b96e-496b-b9da-20ea327d7909/personal-details">Roy Kloss</a><p class="govuk-!-margin-bottom-0"> X718255</p>`,
           },
 
-          { html: '28 April 2027' },
+          { html: '14 April 2028<br> Order end date' },
 
           {
-            html: 'Sexual Offence</br><span class="moj-badge moj-badge--bright-purple">LDC</span>',
+            html: 'General Offence</br><span class="moj-badge moj-badge--bright-purple">LDC</span>',
           },
-          { text: '36' },
+          { text: '29' },
           { text: 'Male' },
-          { text: 'Liverpool' },
-          { text: 'Liverpool Office 1' },
+          { text: 'London' },
+          { text: 'London Office 2' },
         ],
       ])
     })
@@ -97,7 +97,7 @@ describe('groupDetailsPresenter.', () => {
   describe('generateAllocateTableArgs', () => {
     it('should return the correct table args for allocted list', () => {
       const filterObject = { status: undefined, cohort: undefined, nameOrCRN: undefined } as GroupListFilter
-      const groupDetails = ProgrammeGroupDetailsFactory.build()
+      const groupDetails = ProgrammeGroupDetailsFactory.allocatedList().build()
       const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, '1234', filterObject)
 
       expect(presenter.generateAllocatedTableArgs()).toEqual([
@@ -113,12 +113,31 @@ describe('groupDetailsPresenter.', () => {
                  </div>`,
           },
           {
-            html: `<a href="/referral-details/99999/personal-details">Edgar Schiller</a><p class="govuk-!-margin-bottom-0">X718250</p>`,
+            html: `<a href="/referral-details/39fde7e8-d2e3-472b-8364-5848bf673aa6/personal-details">Edgar Schiller</a><p class="govuk-!-margin-bottom-0">X718250</p>`,
           },
 
-          { html: '28 April 2027' },
+          { html: '28 April 2027<br> Licence end date' },
 
-          { html: `<strong class="govuk-tag govuk-tag--purple">Awaiting assessment</strong>` },
+          { html: `<strong class="govuk-tag govuk-tag--purple">Scheduled</strong>` },
+        ],
+        [
+          {
+            html: `<div class="govuk-radios govuk-radios--small group-details-table">
+                  <div class="govuk-radios__item">
+                    <input id='X718255' value='X718255' type="radio" name="removeFromGroup" class="govuk-radios__input">
+                    <label class="govuk-label govuk-radios__label" for="X718255">
+                      <span class="govuk-!-display-none">Remove Roy Kloss from the group</span>
+                    </label>
+                  </div>
+                 </div>`,
+          },
+          {
+            html: `<a href="/referral-details/ae43bc75-b96e-496b-b9da-20ea327d7909/personal-details">Roy Kloss</a><p class="govuk-!-margin-bottom-0">X718255</p>`,
+          },
+
+          { html: '14 April 2028<br> Order end date' },
+
+          { html: '<strong class="govuk-tag govuk-tag--purple">Scheduled</strong>' },
         ],
       ])
     })

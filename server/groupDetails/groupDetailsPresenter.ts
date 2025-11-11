@@ -1,8 +1,8 @@
 import { CohortEnum, ProgrammeGroupDetails } from '@manage-and-deliver-api'
-import { ButtonArgs, CheckboxesArgsItem, SelectArgsItem, TableArgsHeadElement } from '../utils/govukFrontendTypes'
-import { convertToTitleCase } from '../utils/utils'
 import { FormValidationError } from '../utils/formValidationError'
+import { ButtonArgs, CheckboxesArgsItem, SelectArgsItem, TableArgsHeadElement } from '../utils/govukFrontendTypes'
 import PresenterUtils from '../utils/presenterUtils'
+import { convertToTitleCase } from '../utils/utils'
 import GroupListFilter from './groupListFilter'
 
 export enum GroupDetailsPageSection {
@@ -42,12 +42,18 @@ export default class GroupDetailsPresenter {
     return {
       items: [
         {
-          text: `Allocated (${this.group.allocationAndWaitlistData.counts.allocated})`,
+          text:
+            this.section === GroupDetailsPageSection.Allocated
+              ? `Allocated (${this.group.pagedGroupData.totalElements})`
+              : `Allocated (${this.group.otherTabTotal})`,
           href: `/groupDetails/${this.groupId}/allocated`,
           active: this.section === GroupDetailsPageSection.Allocated,
         },
         {
-          text: `Waitlist (${this.group.allocationAndWaitlistData.counts.waitlist})`,
+          text:
+            this.section === GroupDetailsPageSection.Waitlist
+              ? `Waitlist (${this.group.pagedGroupData.totalElements})`
+              : `Waitlist (${this.group.otherTabTotal})`,
           href: `/groupDetails/${this.groupId}/waitlist`,
           active: this.section === GroupDetailsPageSection.Waitlist,
         },
@@ -79,7 +85,7 @@ export default class GroupDetailsPresenter {
   private referralHref = (id: string) => `/referral-details/${encodeURIComponent(id)}/personal-details`
 
   generateWaitlistTableArgs() {
-    const rows = this.group.allocationAndWaitlistData.paginatedWaitlistData
+    const rows = this.group.pagedGroupData.content
     const out: ({ html: string } | { text: string })[][] = []
 
     rows.forEach(member => {
@@ -121,7 +127,7 @@ export default class GroupDetailsPresenter {
   }
 
   generateAllocatedTableArgs() {
-    const rows = this.group.allocationAndWaitlistData.paginatedAllocationData
+    const rows = this.group.pagedGroupData.content
     const out: ({ html: string } | { text: string })[][] = []
 
     rows.forEach(member => {
@@ -181,7 +187,7 @@ export default class GroupDetailsPresenter {
         value: '',
       },
     ]
-    const pduCheckboxArgs = this.group.allocationAndWaitlistData.filters.pduNames
+    const pduCheckboxArgs = this.group.filters.pduNames
       .map(pdu => ({
         text: pdu,
         value: pdu,
@@ -194,7 +200,7 @@ export default class GroupDetailsPresenter {
   generateReportingTeamCheckboxArgs(): CheckboxesArgsItem[] {
     let checkboxItems: CheckboxesArgsItem[] = []
     if (this.showReportingLocations) {
-      checkboxItems = this.group.allocationAndWaitlistData.filters.reportingTeams
+      checkboxItems = this.group.filters.reportingTeams
         .map(location => ({
           text: location,
           value: location,
@@ -206,32 +212,21 @@ export default class GroupDetailsPresenter {
   }
 
   hasResults(): boolean {
-    const { waitlist, allocated } = this.group.allocationAndWaitlistData.counts
-
-    if (this.section === GroupDetailsPageSection.Waitlist) {
-      return waitlist > 0
-    }
-
-    if (this.section === GroupDetailsPageSection.Allocated) {
-      return allocated > 0
-    }
-
-    return false
+    return !this.group.pagedGroupData.empty
   }
 
   generateNoResultsString(): string {
-    const { waitlist, allocated } = this.group.allocationAndWaitlistData.counts
     const hasFilters = Object.values(this.filter).some(value => value !== undefined)
 
-    if (waitlist === 0) {
+    if (this.hasResults) {
+      return ''
+    }
+    if (this.section === GroupDetailsPageSection.Waitlist) {
       return hasFilters
         ? 'No results found. Clear or change the filters'
         : `There are no people awaiting allocation in ${this.group.group.regionName}`
     }
 
-    if (allocated === 0) {
-      return 'There are currently no people allocated to this group'
-    }
-    return ''
+    return 'There are currently no people allocated to this group'
   }
 }
