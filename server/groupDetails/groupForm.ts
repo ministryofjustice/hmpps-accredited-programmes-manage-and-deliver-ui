@@ -9,6 +9,11 @@ export type AddToGroupFormData = {
   personName: string
 }
 
+export type RemoveFromGroupFormData = {
+  removeFromGroup: string
+  personName: string
+}
+
 export default class GroupForm {
   constructor(private readonly request: Request) {}
 
@@ -37,5 +42,32 @@ export default class GroupForm {
 
   static get addToGroupValidations(): ValidationChain[] {
     return [body('add-to-group').notEmpty().withMessage(errorMessages.addToGroup.selectAPerson)]
+  }
+
+  async removeFromGroupData(): Promise<FormData<RemoveFromGroupFormData>> {
+    const validationResult = await FormUtils.runValidations({
+      request: this.request,
+      validations: GroupForm.removeFromGroupValidations,
+    })
+
+    const error = FormUtils.validationErrorFromResult(validationResult)
+    if (error) {
+      return {
+        paramsForUpdate: null,
+        error,
+      }
+    }
+    const [name = '', id = ''] = this.request.body['remove-from-group'].split('*')
+    return {
+      paramsForUpdate: {
+        removeFromGroup: id,
+        personName: name,
+      },
+      error: null,
+    }
+  }
+
+  static get removeFromGroupValidations(): ValidationChain[] {
+    return [body('remove-from-group').notEmpty().withMessage(errorMessages.removeFromGroup.selectAPerson)]
   }
 }

@@ -64,6 +64,10 @@ export default {
     addToGroupEmpty: `Select whether you want to add the person to the group or not`,
     exceededCharacterLimit: 'Details must be 500 characters or fewer',
   },
+  removeFromGroup: {
+    selectAPerson: "Select the button next to a person's name to remove them from the group",
+    removeFromGroupEmpty: `Select whether you want to remove the person from the group or not`,
+  },
   createGroup: {
     createGroupCodeEmpty: 'Code: Please change this error message in errorMessages.ts',
     createGroupCohortSelect: 'Cohort: Please change this error message in errorMessages.ts',

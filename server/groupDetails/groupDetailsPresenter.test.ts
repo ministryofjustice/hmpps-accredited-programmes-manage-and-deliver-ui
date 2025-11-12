@@ -105,7 +105,7 @@ describe('groupDetailsPresenter.', () => {
           {
             html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
-                    <input id='X718250' value='X718250' type="radio" name="removeFromGroup" class="govuk-radios__input">
+                    <input id='X718250' value='Edgar Schiller*39fde7e8-d2e3-472b-8364-5848bf673aa6' type="radio" name="remove-from-group" class="govuk-radios__input">
                     <label class="govuk-label govuk-radios__label" for="X718250">
                       <span class="govuk-!-display-none">Remove Edgar Schiller from the group</span>
                     </label>
@@ -124,7 +124,7 @@ describe('groupDetailsPresenter.', () => {
           {
             html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
-                    <input id='X718255' value='X718255' type="radio" name="removeFromGroup" class="govuk-radios__input">
+                    <input id='X718255' value='Roy Kloss*ae43bc75-b96e-496b-b9da-20ea327d7909' type="radio" name="remove-from-group" class="govuk-radios__input">
                     <label class="govuk-label govuk-radios__label" for="X718255">
                       <span class="govuk-!-display-none">Remove Roy Kloss from the group</span>
                     </label>
