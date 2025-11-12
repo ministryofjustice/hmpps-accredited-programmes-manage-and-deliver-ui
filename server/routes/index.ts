@@ -14,6 +14,7 @@ import ReferralDetailsController from '../referralDetails/referralDetailsControl
 import RisksAndNeedsController from '../risksAndNeeds/risksAndNeedsController'
 import type { Services } from '../services'
 import UpdateReferralStatusController from '../updateReferralStatus/updateReferralStatusController'
+import RemoveFromGroupController from '../groupDetails/removeFromGroup/removeFromGroupController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
@@ -34,6 +35,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const updateReferralController = new UpdateReferralStatusController(accreditedProgrammesManageAndDeliverService)
   const groupDetailsController = new GroupDetailsController(accreditedProgrammesManageAndDeliverService)
   const addToGroupController = new AddToGroupController(accreditedProgrammesManageAndDeliverService)
+  const removeFromGroupController = new RemoveFromGroupController(accreditedProgrammesManageAndDeliverService)
   const groupAllocationNotesController = new GroupAllocationNotesController(accreditedProgrammesManageAndDeliverService)
   const createGroupController = new CreateGroupController(accreditedProgrammesManageAndDeliverService)
 
@@ -225,6 +227,10 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await groupDetailsController.showGroupDetailsAllocated(req, res)
   })
 
+  post('/groupDetails/:groupId/allocated', async (req, res) => {
+    await groupDetailsController.showGroupDetailsAllocated(req, res)
+  })
+
   get('/groupDetails/:groupId/waitlist', async (req, res, next) => {
     await groupDetailsController.showGroupDetailsWaitlist(req, res)
   })
@@ -251,6 +257,14 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   post('/addToGroup/:groupId/:referralId/moreDetails', async (req, res, next) => {
     await addToGroupController.addToGroupMoreDetails(req, res)
+  })
+
+  get('/removeFromGroup/:groupId/:referralId', async (req, res, next) => {
+    await removeFromGroupController.removeFromGroup(req, res)
+  })
+
+  post('/removeFromGroup/:groupId/:referralId', async (req, res, next) => {
+    await removeFromGroupController.removeFromGroup(req, res)
   })
 
   return router
