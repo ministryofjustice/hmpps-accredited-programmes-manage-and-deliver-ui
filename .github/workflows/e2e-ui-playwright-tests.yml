@@ -57,11 +57,13 @@ jobs:
           retention-days: 30
 
       - name: Send a failure slack message
-        if: steps.playwright-tests.outcome == 'failure' && env.ALERTS_SLACK_CHANNEL != 'NO_SLACK'
+        if: steps.playwright-tests.outcome != 'failure' && env.ALERTS_SLACK_CHANNEL != 'NO_SLACK'
         uses: slackapi/slack-github-action@v2.1.1
         with:
+          method: chat.postMessage
+          token: ${{ secrets.HMPPS_SRE_SLACK_BOT_TOKEN }}
           payload: |
-            channel: ${{ env.ALERTS_SLACK_CHANNEL }}
+            channel: hmpps_accredited_programmes_manage_and_deliver_alerts
             text: "E2E Tests Failed"
             blocks:
               - type: "section"
