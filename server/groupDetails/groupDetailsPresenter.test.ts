@@ -175,36 +175,21 @@ describe('groupDetailsPresenter.', () => {
   describe('generateReportingTeamCheckboxArgs', () => {
     it('should return the correct checkbox args for reporting Team', () => {
       const filterObject = {
-        pdu: 'London',
-        reportingTeam: ['London Office 1', 'Manchester Office 2'],
+        pdu: 'Manchester',
+        reportingTeam: ['Manchester Office 1'],
       } as GroupListFilter
       const groupDetails = ProgrammeGroupDetailsFactory.build()
       const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, '1234', filterObject)
       expect(presenter.generateReportingTeamCheckboxArgs()).toEqual([
         {
-          text: 'Liverpool Office 1',
-          value: 'Liverpool Office 1',
-          checked: false,
-        },
-        {
-          text: 'London Office 1',
-          value: 'London Office 1',
-          checked: true,
-        },
-        {
-          text: 'London Office 2',
-          value: 'London Office 2',
-          checked: false,
-        },
-        {
           text: 'Manchester Office 1',
           value: 'Manchester Office 1',
-          checked: false,
+          checked: true,
         },
         {
           text: 'Manchester Office 2',
           value: 'Manchester Office 2',
-          checked: true,
+          checked: false,
         },
       ])
     })
