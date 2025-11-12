@@ -1,7 +1,7 @@
 name: E2E UI Playwright Tests
 on:
   push:
-    branches: [ main ]
+#    branches: [ main ]
 
 env:
   MANAGE_AND_DELIVER_URL: https://accredited-programmes-manage-and-deliver-dev.hmpps.service.justice.gov.uk/
@@ -12,7 +12,7 @@ env:
 jobs:
   e2e-tests:
     timeout-minutes: 60
-    runs-on: [self-hosted, Linux, X64, hmpps-github-actions-runner]
+    runs-on: [ self-hosted, Linux, X64, hmpps-github-actions-runner ]
     steps:
       - name: Checkout main repo
         uses: actions/checkout@v5
@@ -23,7 +23,7 @@ jobs:
           repository: ministryofjustice/hmpps-accredited-programmes-manage-and-deliver-e2e-tests
           path: hmpps-accredited-programmes-manage-and-deliver-e2e-tests
           ref: main
-      
+
       - uses: actions/setup-node@v6
         with:
           node-version: lts/*
@@ -52,40 +52,26 @@ jobs:
           name: playwright-report-${{ github.run_id }}
           path: hmpps-accredited-programmes-manage-and-deliver-e2e-tests/playwright-report/
           retention-days: 30
-      
+
       - name: Send a failure slack message
         if: steps.playwright-tests.outcome == 'failure' && env.ALERTS_SLACK_CHANNEL != 'NO_SLACK'
         uses: slackapi/slack-github-action@v2.1.1
         with:
-          channel-id: ${{ env.ALERTS_SLACK_CHANNEL }}
           payload: |
-            {
-              "text": "E2E Tests Failed",
-              "blocks": [
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": ":x: *E2E Tests Failed*\n\n*Repository:* ${{ github.repository }}\n*Workflow:* ${{ github.workflow }}\n\n:page_facing_up: Playwright report available in workflow artifacts"
-                  }
-                },
-                {
-                  "type": "divider"
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "View Workflow"
-                      },
-                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-                    }
-                  ]
-                }
-              ]
-            }
+            channel: ${{ env.ALERTS_SLACK_CHANNEL }}
+            text: "E2E Tests Failed"
+            blocks:
+              - type: "section"
+                text:
+                  type: "mrkdwn"
+                  text: ":x: *E2E Tests Failed*\n\n*Repository:* ${{ github.repository }}\n*Workflow:* ${{ github.workflow }}\n\n:page_facing_up: Playwright report available in workflow artifacts"
+              - type: "divider"
+              - type: "actions"
+                elements:
+                  - type: "button"
+                    text:
+                      type: "plain_text"
+                      text: "View Workflow"
+                    url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         env:
           SLACK_BOT_TOKEN: ${{ secrets.HMPPS_SRE_SLACK_BOT_TOKEN }}
