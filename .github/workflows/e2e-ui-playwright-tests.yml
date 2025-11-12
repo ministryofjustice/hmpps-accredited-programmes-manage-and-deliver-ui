@@ -41,6 +41,9 @@ jobs:
           path: ./hmpps-accredited-programmes-manage-and-deliver-e2e-tests/node_modules
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
 
+      - name: Install Playwright Browsers
+        run: npx playwright install
+
       - name: Run Playwright tests
         id: playwright-tests
         working-directory: ./hmpps-accredited-programmes-manage-and-deliver-e2e-tests
