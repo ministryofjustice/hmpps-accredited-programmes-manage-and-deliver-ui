@@ -59,7 +59,7 @@ describe('groupDetailsPresenter.', () => {
           { html: '28 April 2027<br> Licence end date' },
 
           {
-            html: `Sexual Offence`,
+            html: `Sexual offence`,
           },
           { text: '36' },
           { text: 'Male' },
