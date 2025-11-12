@@ -13,7 +13,7 @@ export default class RemoveFromGroupController {
 
   async removeFromGroup(req: Request, res: Response): Promise<void> {
     let formError: FormValidationError | null = null
-    const { groupId, referralId } = req.params
+    const { groupId } = req.params
 
     if (req.method === 'POST') {
       const data = await new RemoveFromGroupForm(req).removeFromGroupData()
