@@ -2,8 +2,8 @@ import { ReferralCaseListItem } from '@manage-and-deliver-api'
 
 export default class CaselistUtils {
   static cohorts = [
-    { value: 'GENERAL_OFFENCE', text: 'General Offence' },
-    { value: 'SEXUAL_OFFENCE', text: 'Sexual Offence' },
+    { value: 'GENERAL_OFFENCE', text: 'General offence' },
+    { value: 'SEXUAL_OFFENCE', text: 'Sexual offence' },
   ]
 
   static hasLdcTagHtml(referral: ReferralCaseListItem): string {

@@ -142,7 +142,7 @@ export default ProgrammeGroupDetailsFactory.define(() => ({
   },
   filters: {
     sex: ['Male', 'Female'],
-    cohort: ['General Offence', 'General Offence - LDC', 'Sexual Offence', 'Sexual Offence - LDC'],
+    cohort: ['General offence', 'General offence - LDC', 'Sexual offence', 'Sexual offence - LDC'],
     pduNames: ['Manchester', 'London', 'Liverpool'],
     reportingTeams: [
       'Manchester Office 1',

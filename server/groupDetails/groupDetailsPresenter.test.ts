@@ -84,7 +84,7 @@ describe('groupDetailsPresenter.', () => {
           { html: '14 April 2028<br> Order end date' },
 
           {
-            html: 'General Offence</br><span class="moj-badge moj-badge--bright-purple">LDC</span>',
+            html: 'General offence</br><span class="moj-badge moj-badge--bright-purple">LDC</span>',
           },
           { text: '29' },
           { text: 'Male' },

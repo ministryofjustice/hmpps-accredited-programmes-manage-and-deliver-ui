@@ -11,8 +11,8 @@ export enum GroupDetailsPageSection {
 }
 
 const cohortConfigMap: Record<CohortEnum, string> = {
-  SEXUAL_OFFENCE: 'Sexual Offence',
-  GENERAL_OFFENCE: 'General Offence',
+  SEXUAL_OFFENCE: 'Sexual offence',
+  GENERAL_OFFENCE: 'General offence',
 }
 
 export default class GroupDetailsPresenter {

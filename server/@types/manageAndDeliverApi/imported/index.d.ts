@@ -4548,7 +4548,7 @@ export interface operations {
         pageable: components['schemas']['Pageable']
         /** @description Filter by the sex of the person in the referral */
         sex?: string
-        /** @description Filter by the cohort of the referral Eg: 'Sexual Offence' or 'General Offence - LDC */
+        /** @description Filter by the cohort of the referral Eg: 'Sexual offence' or 'General offence - LDC */
         cohort?: string
         /** @description Search by the name or the CRN of the offender in the referral */
         nameOrCRN?: string
