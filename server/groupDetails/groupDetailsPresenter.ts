@@ -107,7 +107,7 @@ export default class GroupDetailsPresenter {
         },
 
         {
-          html: `${member.sentenceEndDate && member.sentenceEndDate !== 'null' ? member.sentenceEndDate : 'No information'}${
+          html: `${member.sentenceEndDate ?? 'No information'}${
             member.sourcedFrom ? `<br> ${member.sourcedFrom}` : ''
           }`,
         },
@@ -148,7 +148,7 @@ export default class GroupDetailsPresenter {
         },
 
         {
-          html: `${member.sentenceEndDate && member.sentenceEndDate !== 'null' ? member.sentenceEndDate : 'No information'}${
+          html: `${member.sentenceEndDate ?? 'No information'}${
             member.sourcedFrom ? `<br> ${member.sourcedFrom}` : ''
           }`,
         },
