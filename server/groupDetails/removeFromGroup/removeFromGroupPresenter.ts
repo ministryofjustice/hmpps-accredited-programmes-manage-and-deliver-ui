@@ -10,6 +10,7 @@ export default class RemoveFromGroupPresenter {
     },
     private readonly backLink: string,
     private readonly validationError: FormValidationError | null = null,
+    private readonly userInputData: Record<string, unknown> | null = null,
   ) {}
 
   get text() {
@@ -23,6 +24,10 @@ export default class RemoveFromGroupPresenter {
     return this.backLink
   }
 
+  get utils() {
+    return new PresenterUtils(this.userInputData)
+  }
+
   get errorSummary() {
     return PresenterUtils.errorSummary(this.validationError)
   }
@@ -31,6 +36,7 @@ export default class RemoveFromGroupPresenter {
     return {
       removeFromGroup: {
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'remove-from-group'),
+        value: this.utils.stringValue(null, 'remove-from-group'),
       },
     }
   }

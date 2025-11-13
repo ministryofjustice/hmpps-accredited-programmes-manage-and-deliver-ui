@@ -267,5 +267,13 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await removeFromGroupController.removeFromGroup(req, res)
   })
 
+  get('/removeFromGroup/:groupId/:referralId/updateStatus', async (req, res, next) => {
+    await removeFromGroupController.removeFromGroupUpdateStatus(req, res)
+  })
+
+  post('/removeFromGroup/:groupId/:referralId/updateStatus', async (req, res, next) => {
+    await removeFromGroupController.removeFromGroupUpdateStatus(req, res)
+  })
+
   return router
 }

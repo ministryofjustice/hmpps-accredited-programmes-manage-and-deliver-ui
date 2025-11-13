@@ -67,6 +67,8 @@ export default {
   removeFromGroup: {
     selectAPerson: "Select the button next to a person's name to remove them from the group",
     removeFromGroupEmpty: `Select whether you want to remove the person from the group or not`,
+    updatedStatusEmpty: `Select a new referral status`,
+    detailsTooLong: 'Details must be 500 characters or fewer.',
   },
   createGroup: {
     createGroupCodeEmpty: 'Code: Please change this error message in errorMessages.ts',
