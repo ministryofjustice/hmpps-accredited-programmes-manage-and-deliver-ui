@@ -68,16 +68,12 @@
     </form>
   </div>
   <div class="govuk-grid-column-three-quarters">
-    {% if isPersonAdded %}
-      {{ mojAlert(successMessageArgs) }}
-    {% endif %}
-    
     {% if errorSummary !== null %}
       {{ govukErrorSummary(errorSummary) }}
     {% endif %}
     
-    {% if apiSuccessMessageArgs !== null %}
-      {{ mojAlert(apiSuccessMessageArgs) }}
+    {% if successMessageArgs !== null %}
+      {{ mojAlert(successMessageArgs) }}
     {% endif %}
     
     {{ mojSubNavigation(subNavArgs) }}

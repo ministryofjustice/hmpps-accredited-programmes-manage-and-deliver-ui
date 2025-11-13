@@ -68,18 +68,10 @@ export default class GroupDetailsView {
   }
 
   private successMessageArgs() {
-    return {
-      variant: 'success',
-      title: `${this.presenter.personName} was added to this group. Their referral status is now Scheduled.`,
-      showTitleAsHeading: true,
-      dismissible: true,
-    }
-  }
-
-  private apiSuccessMessageArgs() {
     if (!this.presenter.successMessage) {
       return null
     }
+
     return {
       variant: 'success',
       title: this.presenter.successMessage,
@@ -116,9 +108,7 @@ export default class GroupDetailsView {
         searchByPduArgs: this.searchByPduArgs,
         formButtonArgs: this.presenter.formButtonArgs,
         getGroupDetailsTableArgs: this.getGroupDetailsTableArgs(),
-        isPersonAdded: this.presenter.isPersonAdded,
         successMessageArgs: this.successMessageArgs(),
-        apiSuccessMessageArgs: this.apiSuccessMessageArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         reportingTeamCheckboxArgs: this.reportingTeamCheckboxArgs,
         text: this.presenter.text,

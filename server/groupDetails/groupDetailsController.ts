@@ -13,7 +13,7 @@ export default class GroupDetailsController {
   ) {}
 
   async showGroupDetailsAllocated(req: Request, res: Response): Promise<void> {
-    const { addedToGroup, message } = req.query
+    const { message } = req.query
     const { username } = req.user
     const { groupId } = req.params
     let formError: FormValidationError | null = null
@@ -45,7 +45,7 @@ export default class GroupDetailsController {
         return res.redirect(`/removeFromGroup/${groupId}/${data.paramsForUpdate.removeFromGroup}`)
       }
     }
-    
+
     const successMessage = message ? String(message) : null
 
     const presenter = new GroupDetailsPresenter(
@@ -55,7 +55,6 @@ export default class GroupDetailsController {
       filter,
       req.session.groupManagementData?.personName ?? '',
       formError,
-      addedToGroup === 'true',
       successMessage,
     )
     const view = new GroupDetailsView(presenter)
@@ -107,7 +106,6 @@ export default class GroupDetailsController {
       filter,
       '',
       formError,
-      null,
     )
     const view = new GroupDetailsView(presenter)
 
