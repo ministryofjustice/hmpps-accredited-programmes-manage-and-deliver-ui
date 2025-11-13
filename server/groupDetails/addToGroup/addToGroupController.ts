@@ -60,7 +60,7 @@ export default class AddToGroupController {
           groupId,
           data.paramsForUpdate.additionalDetails,
         )
-        const message = (response as { message?: string })?.message || 'Successfully added to group'
+        const { message } = response
         return res.redirect(`/groupDetails/${groupId}/allocated?message=${encodeURIComponent(message)}`)
       }
     }

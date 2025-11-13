@@ -7,6 +7,7 @@ export default class AddToGroupMoreDetailsPresenter {
     private readonly groupManagementData: {
       groupRegion?: string
       personName?: string
+      groupCode?: string
     },
     private readonly backLink: string,
     private readonly validationError: FormValidationError | null = null,
