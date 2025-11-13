@@ -142,14 +142,20 @@ export default ProgrammeGroupDetailsFactory.define(() => ({
   },
   filters: {
     sex: ['Male', 'Female'],
-    cohort: ['General offence', 'General offence - LDC', 'Sexual offence', 'Sexual offence - LDC'],
-    pduNames: ['Manchester', 'London', 'Liverpool'],
-    reportingTeams: [
-      'Manchester Office 1',
-      'London Office 1',
-      'London Office 2',
-      'Manchester Office 2',
-      'Liverpool Office 1',
+    cohort: ['General Offence', 'General Offence - LDC', 'Sexual Offence', 'Sexual Offence - LDC'],
+    locationFilters: [
+      {
+        pduName: 'Manchester',
+        reportingTeams: ['Manchester Office 1', 'Manchester Office 2'],
+      },
+      {
+        pduName: 'London',
+        reportingTeams: ['London Office 1', 'London Office 2'],
+      },
+      {
+        pduName: 'Liverpool',
+        reportingTeams: ['Liverpool Office 1'],
+      },
     ],
   },
   pagedGroupData: {

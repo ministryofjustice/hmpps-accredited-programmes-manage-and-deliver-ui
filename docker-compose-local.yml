@@ -1,0 +1,97 @@
+services:
+  hmpps-auth:
+    image: quay.io/hmpps/hmpps-auth:latest
+    networks:
+      - hmpps
+    container_name: hmpps-auth
+    ports:
+      - '8090:8090'
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:8080/auth/health']
+    environment:
+      - SERVER_PORT=8090
+      - SPRING_PROFILES_ACTIVE=dev
+      - DELIUS_ENABLED=true
+      - DELIUS_ENDPOINT_URL=http://wiremock:8080/delius
+      - DELIUS_ENDPOINT_TIMEOUT=1s
+      - DELIUS_CLIENT_CLIENT-ID=delius-auth-api-client
+      - DELIUS_CLIENT_CLIENT-SECRET=delius-auth-api-client
+
+  postgresql:
+    image: postgres:18
+    container_name: postgresql
+    networks:
+      - hmpps
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test: ['CMD', 'pg_isready', '--username=admin', '--dbname=postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin_password
+
+  hmpps-accredited-programmes-manage-and-deliver-api:
+    profiles:
+      - api
+    image: ghcr.io/ministryofjustice/hmpps-accredited-programmes-manage-and-deliver-api:latest
+    container_name: hmpps-accredited-programmes-manage-and-deliver-api
+    build:
+      context: ../hmpps-accredited-programmes-manage-and-deliver-api
+      dockerfile: Dockerfile
+    networks:
+      - hmpps
+    ports:
+      - '8080:8080'
+      - '5005:5005' # Debug port
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:8080/health/ping']
+    environment:
+      - SERVER_PORT=8080
+      - HMPPS_AUTH_URL=http://hmpps-auth:8090/auth
+      - SPRING_PROFILES_ACTIVE=dev,local
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin_password
+      - HMPPS_SQS_PROVIDER=localstack
+      - HMPPS_SQS_LOCALSTACKURL=http://localstack:4566
+      - SERVICES_NDELIUS_INTEGRATION_API_BASE_URL=http://wiremock:8080
+      - SERVICES_OASYS_API_BASE_URL=http://wiremock:8080
+      - API_CLIENT_SECRET=${API_CLIENT_SECRET}
+      # JVM debug options
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+    depends_on:
+      - localstack
+      - postgresql
+
+  wiremock:
+    image: wiremock/wiremock
+    networks:
+      - hmpps
+    restart: always
+    ports:
+      - '9095:8080'
+    volumes:
+      - ./wiremock_mappings:/home/wiremock/mappings
+    command: '--verbose'
+
+  localstack:
+    image: localstack/localstack:4
+    networks:
+      - hmpps
+    container_name: hmpps-mandd-localstack
+    ports:
+      - '4566:4566'
+      - '8999:8080'
+    environment:
+      - SERVICES=sns,sqs
+      - DEBUG=${DEBUG- }
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - '${TMPDIR:-/tmp/localstack}:/var/lib/localstack'
+      - '/var/run/docker.sock:/var/run/docker.sock'
+
+networks:
+  hmpps:

@@ -16,7 +16,8 @@ export default class GroupDetailsController {
     const { addedToGroup } = req.query
     const { username } = req.user
     const { groupId } = req.params
-    const formError: FormValidationError | null = null
+    let formError: FormValidationError | null = null
+    req.session.groupManagementData = null
     const pageParam = req.query.page
     const page = pageParam ? Number(pageParam) : 0
     const filter = GroupListFilter.fromRequest(req)
@@ -31,6 +32,20 @@ export default class GroupDetailsController {
       filter.params,
     )
 
+    if (req.method === 'POST') {
+      const data = await new GroupForm(req).removeFromGroupData()
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+      } else {
+        req.session.groupManagementData = {
+          groupRegion: groupDetails.group.regionName,
+          personName: data.paramsForUpdate.personName,
+        }
+        return res.redirect(`/removeFromGroup/${groupId}/${data.paramsForUpdate.removeFromGroup}`)
+      }
+    }
+
     const presenter = new GroupDetailsPresenter(
       GroupDetailsPageSection.Allocated,
       groupDetails,
@@ -42,7 +57,9 @@ export default class GroupDetailsController {
     )
     const view = new GroupDetailsView(presenter)
     req.session.groupManagementData = null
-    ControllerUtils.renderWithLayout(res, view, null)
+    // Set to maintain filters when accessing remove from group journey
+    req.session.originPage = req.originalUrl
+    return ControllerUtils.renderWithLayout(res, view, null)
   }
 
   async showGroupDetailsWaitlist(req: Request, res: Response): Promise<void> {

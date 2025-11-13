@@ -105,7 +105,7 @@ describe('groupDetailsPresenter.', () => {
           {
             html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
-                    <input id='X718250' value='X718250' type="radio" name="removeFromGroup" class="govuk-radios__input">
+                    <input id='X718250' value='Edgar Schiller*39fde7e8-d2e3-472b-8364-5848bf673aa6' type="radio" name="remove-from-group" class="govuk-radios__input">
                     <label class="govuk-label govuk-radios__label" for="X718250">
                       <span class="govuk-!-display-none">Remove Edgar Schiller from the group</span>
                     </label>
@@ -124,7 +124,7 @@ describe('groupDetailsPresenter.', () => {
           {
             html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
-                    <input id='X718255' value='X718255' type="radio" name="removeFromGroup" class="govuk-radios__input">
+                    <input id='X718255' value='Roy Kloss*ae43bc75-b96e-496b-b9da-20ea327d7909' type="radio" name="remove-from-group" class="govuk-radios__input">
                     <label class="govuk-label govuk-radios__label" for="X718255">
                       <span class="govuk-!-display-none">Remove Roy Kloss from the group</span>
                     </label>
@@ -175,36 +175,21 @@ describe('groupDetailsPresenter.', () => {
   describe('generateReportingTeamCheckboxArgs', () => {
     it('should return the correct checkbox args for reporting Team', () => {
       const filterObject = {
-        pdu: 'London',
-        reportingTeam: ['London Office 1', 'Manchester Office 2'],
+        pdu: 'Manchester',
+        reportingTeam: ['Manchester Office 1'],
       } as GroupListFilter
       const groupDetails = ProgrammeGroupDetailsFactory.build()
       const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, '1234', filterObject)
       expect(presenter.generateReportingTeamCheckboxArgs()).toEqual([
         {
-          text: 'Liverpool Office 1',
-          value: 'Liverpool Office 1',
-          checked: false,
-        },
-        {
-          text: 'London Office 1',
-          value: 'London Office 1',
-          checked: true,
-        },
-        {
-          text: 'London Office 2',
-          value: 'London Office 2',
-          checked: false,
-        },
-        {
           text: 'Manchester Office 1',
           value: 'Manchester Office 1',
-          checked: false,
+          checked: true,
         },
         {
           text: 'Manchester Office 2',
           value: 'Manchester Office 2',
-          checked: true,
+          checked: false,
         },
       ])
     })

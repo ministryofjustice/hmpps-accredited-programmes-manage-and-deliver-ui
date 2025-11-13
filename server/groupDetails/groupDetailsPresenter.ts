@@ -39,6 +39,7 @@ export default class GroupDetailsPresenter {
   }
 
   getSubNavArgs(): { items: { text: string; href: string; active: boolean }[] } {
+    const nameCrnFilter = this.filter.nameOrCRN === undefined ? `` : `?nameOrCRN=${this.filter.nameOrCRN}`
     return {
       items: [
         {
@@ -46,7 +47,7 @@ export default class GroupDetailsPresenter {
             this.section === GroupDetailsPageSection.Allocated
               ? `Allocated (${this.group.pagedGroupData.totalElements})`
               : `Allocated (${this.group.otherTabTotal})`,
-          href: `/groupDetails/${this.groupId}/allocated`,
+          href: `/groupDetails/${this.groupId}/allocated${nameCrnFilter}`,
           active: this.section === GroupDetailsPageSection.Allocated,
         },
         {
@@ -54,7 +55,7 @@ export default class GroupDetailsPresenter {
             this.section === GroupDetailsPageSection.Waitlist
               ? `Waitlist (${this.group.pagedGroupData.totalElements})`
               : `Waitlist (${this.group.otherTabTotal})`,
-          href: `/groupDetails/${this.groupId}/waitlist`,
+          href: `/groupDetails/${this.groupId}/waitlist${nameCrnFilter}`,
           active: this.section === GroupDetailsPageSection.Waitlist,
         },
       ],
@@ -135,7 +136,7 @@ export default class GroupDetailsPresenter {
         {
           html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
-                    <input id='${member.crn}' value='${member.crn}' type="radio" name="removeFromGroup" class="govuk-radios__input">
+                    <input id='${member.crn}' value='${member.personName}*${member.referralId}' type="radio" name="remove-from-group" class="govuk-radios__input">
                     <label class="govuk-label govuk-radios__label" for="${member.crn}">
                       <span class="govuk-!-display-none">Remove ${member.personName} from the group</span>
                     </label>
@@ -187,11 +188,11 @@ export default class GroupDetailsPresenter {
         value: '',
       },
     ]
-    const pduCheckboxArgs = this.group.filters.pduNames
+    const pduCheckboxArgs = this.group.filters.locationFilters
       .map(pdu => ({
-        text: pdu,
-        value: pdu,
-        selected: this.filter.pdu === pdu,
+        text: pdu.pduName,
+        value: pdu.pduName,
+        selected: this.filter.pdu === pdu.pduName,
       }))
       .sort((a, b) => a.text.localeCompare(b.text))
     return checkboxArgs.concat(pduCheckboxArgs)
@@ -200,7 +201,8 @@ export default class GroupDetailsPresenter {
   generateReportingTeamCheckboxArgs(): CheckboxesArgsItem[] {
     let checkboxItems: CheckboxesArgsItem[] = []
     if (this.showReportingLocations) {
-      checkboxItems = this.group.filters.reportingTeams
+      const pduLocationData = this.group.filters.locationFilters.find(location => location.pduName === this.filter.pdu)
+      checkboxItems = pduLocationData.reportingTeams
         .map(location => ({
           text: location,
           value: location,
