@@ -11,8 +11,8 @@ export enum GroupDetailsPageSection {
 }
 
 const cohortConfigMap: Record<CohortEnum, string> = {
-  SEXUAL_OFFENCE: 'Sexual Offence',
-  GENERAL_OFFENCE: 'General Offence',
+  SEXUAL_OFFENCE: 'Sexual offence',
+  GENERAL_OFFENCE: 'General offence',
 }
 
 export default class GroupDetailsPresenter {
@@ -107,7 +107,7 @@ export default class GroupDetailsPresenter {
         },
 
         {
-          html: `${member.sentenceEndDate && member.sentenceEndDate !== 'null' ? member.sentenceEndDate : 'N/A'}${
+          html: `${member.sentenceEndDate ?? 'No information'}${
             member.sourcedFrom ? `<br> ${member.sourcedFrom}` : ''
           }`,
         },
@@ -148,7 +148,7 @@ export default class GroupDetailsPresenter {
         },
 
         {
-          html: `${member.sentenceEndDate && member.sentenceEndDate !== 'null' ? member.sentenceEndDate : 'N/A'}${
+          html: `${member.sentenceEndDate ?? 'No information'}${
             member.sourcedFrom ? `<br> ${member.sourcedFrom}` : ''
           }`,
         },
