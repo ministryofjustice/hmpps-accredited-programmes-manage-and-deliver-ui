@@ -1058,6 +1058,20 @@ export interface components {
     ProgrammeGroupCohort: 'GENERAL' | 'GENERAL_LDC' | 'SEXUAL' | 'SEXUAL_LDC'
     /** @enum {string} */
     ProgrammeGroupSexEnum: 'MALE' | 'FEMALE' | 'MIXED'
+    AllocateToGroupRequest: {
+      /**
+       * @description Arbitrary text that will be added to the Status History of the Referral
+       * @example Alex has been added to the group after a conversation with John Doe
+       */
+      additionalDetails: string
+    }
+    AllocateToGroupResponse: {
+      /**
+       * @description The text to show to the user, confirming the allocation has taken place
+       * @example Alex River was added to this group. Their referral status is now Scheduled.
+       */
+      message: string
+    }
     CreateAvailability: {
       /**
        * Format: uuid
@@ -2058,26 +2072,26 @@ export interface components {
       first?: boolean
       last?: boolean
       /** Format: int32 */
-      numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
-      /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageableObject: {
+      /** Format: int64 */
+      offset?: number
+      sort?: components['schemas']['SortObject']
+      unpaged?: boolean
       paged?: boolean
       /** Format: int32 */
       pageNumber?: number
       /** Format: int32 */
       pageSize?: number
-      unpaged?: boolean
-      /** Format: int64 */
-      offset?: number
-      sort?: components['schemas']['SortObject']
     }
     ReferralCaseListItem: {
       /** Format: uuid */
@@ -2095,9 +2109,9 @@ export interface components {
       reportingTeam: string
     }
     SortObject: {
+      empty?: boolean
       sorted?: boolean
       unsorted?: boolean
-      empty?: boolean
     }
     Pageable: {
       /** Format: int32 */
@@ -2338,14 +2352,14 @@ export interface components {
       first?: boolean
       last?: boolean
       /** Format: int32 */
-      numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
-      /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
@@ -3082,14 +3096,20 @@ export interface operations {
       }
       cookie?: never
     }
-    requestBody?: never
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AllocateToGroupRequest']
+      }
+    }
     responses: {
       /** @description Referral successfully allocated to the programme group */
       200: {
         headers: {
           [name: string]: unknown
         }
-        content?: never
+        content: {
+          '*/*': components['schemas']['AllocateToGroupResponse']
+        }
       }
       /** @description Invalid request format or invalid UUID format */
       400: {

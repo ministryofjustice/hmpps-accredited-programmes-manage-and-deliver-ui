@@ -13,7 +13,7 @@ export default class GroupDetailsController {
   ) {}
 
   async showGroupDetailsAllocated(req: Request, res: Response): Promise<void> {
-    const { addedToGroup } = req.query
+    const { message } = req.query
     const { username } = req.user
     const { groupId } = req.params
     let formError: FormValidationError | null = null
@@ -46,6 +46,8 @@ export default class GroupDetailsController {
       }
     }
 
+    const successMessage = message ? String(message) : null
+
     const presenter = new GroupDetailsPresenter(
       GroupDetailsPageSection.Allocated,
       groupDetails,
@@ -53,7 +55,7 @@ export default class GroupDetailsController {
       filter,
       req.session.groupManagementData?.personName ?? '',
       formError,
-      addedToGroup === 'true',
+      successMessage,
     )
     const view = new GroupDetailsView(presenter)
     req.session.groupManagementData = null
@@ -91,6 +93,7 @@ export default class GroupDetailsController {
         req.session.groupManagementData = {
           groupRegion: groupDetails.group.regionName,
           personName: data.paramsForUpdate.personName,
+          groupCode: groupDetails.group.code,
         }
         return res.redirect(`/addToGroup/${groupId}/${data.paramsForUpdate.addToGroup}`)
       }
@@ -103,7 +106,6 @@ export default class GroupDetailsController {
       filter,
       '',
       formError,
-      null,
     )
     const view = new GroupDetailsView(presenter)
 
