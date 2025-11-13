@@ -29,14 +29,8 @@ export default class GroupDetailsPresenter {
     readonly paramsArg?: string,
     readonly personName: string = '',
     readonly validationError: FormValidationError | null = null,
-    readonly isPersonAdded: boolean | null = null,
-  ) {
-    this.params = this.paramsArg
-    this.pagination = new Pagination(
-      this.group.pagedGroupData as Required<typeof this.group.pagedGroupData>,
-      this.params,
-    )
-  }
+    readonly successMessage: string | null = null,
+  ) {}
 
   get text() {
     return {
@@ -203,11 +197,11 @@ export default class GroupDetailsPresenter {
         value: '',
       },
     ]
-    const pduCheckboxArgs = this.group.filters.pduNames
+    const pduCheckboxArgs = this.group.filters.locationFilters
       .map(pdu => ({
-        text: pdu,
-        value: pdu,
-        selected: this.filter.pdu === pdu,
+        text: pdu.pduName,
+        value: pdu.pduName,
+        selected: this.filter.pdu === pdu.pduName,
       }))
       .sort((a, b) => a.text.localeCompare(b.text))
     return checkboxArgs.concat(pduCheckboxArgs)
@@ -216,7 +210,8 @@ export default class GroupDetailsPresenter {
   generateReportingTeamCheckboxArgs(): CheckboxesArgsItem[] {
     let checkboxItems: CheckboxesArgsItem[] = []
     if (this.showReportingLocations) {
-      checkboxItems = this.group.filters.reportingTeams
+      const pduLocationData = this.group.filters.locationFilters.find(location => location.pduName === this.filter.pdu)
+      checkboxItems = pduLocationData.reportingTeams
         .map(location => ({
           text: location,
           value: location,

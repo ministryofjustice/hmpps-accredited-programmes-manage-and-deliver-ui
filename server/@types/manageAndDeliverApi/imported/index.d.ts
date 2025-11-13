@@ -1058,6 +1058,20 @@ export interface components {
     ProgrammeGroupCohort: 'GENERAL' | 'GENERAL_LDC' | 'SEXUAL' | 'SEXUAL_LDC'
     /** @enum {string} */
     ProgrammeGroupSexEnum: 'MALE' | 'FEMALE' | 'MIXED'
+    AllocateToGroupRequest: {
+      /**
+       * @description Arbitrary text that will be added to the Status History of the Referral
+       * @example Alex has been added to the group after a conversation with John Doe
+       */
+      additionalDetails: string
+    }
+    AllocateToGroupResponse: {
+      /**
+       * @description The text to show to the user, confirming the allocation has taken place
+       * @example Alex River was added to this group. Their referral status is now Scheduled.
+       */
+      message: string
+    }
     CreateAvailability: {
       /**
        * Format: uuid
@@ -2051,10 +2065,10 @@ export interface components {
       otherTabTotal: number
     }
     PageReferralCaseListItem: {
-      /** Format: int32 */
-      totalPages?: number
       /** Format: int64 */
       totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
       first?: boolean
       last?: boolean
       /** Format: int32 */
@@ -2063,21 +2077,21 @@ export interface components {
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
-      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageableObject: {
       /** Format: int64 */
       offset?: number
       sort?: components['schemas']['SortObject']
+      unpaged?: boolean
       paged?: boolean
       /** Format: int32 */
       pageNumber?: number
       /** Format: int32 */
       pageSize?: number
-      unpaged?: boolean
     }
     ReferralCaseListItem: {
       /** Format: uuid */
@@ -2224,23 +2238,8 @@ export interface components {
        *     ]
        */
       cohort: string[]
-      /**
-       * @description The list of PDU (Probation Delivery Unit) names that can be used for filtering.
-       * @example [
-       *       "Durham",
-       *       "Leeds",
-       *       "Manchester"
-       *     ]
-       */
-      pduNames: string[]
-      /**
-       * @description The list of reporting teams that can be used for filtering.
-       * @example [
-       *       "Durham Team 1",
-       *       "Durham Team 2"
-       *     ]
-       */
-      reportingTeams: string[]
+      /** @description Contains pdu's with a list of their reporting teams */
+      locationFilters: components['schemas']['LocationFilterValues'][]
     }
     /** @description Information identifying the group. */
     Group: {
@@ -2332,11 +2331,24 @@ export interface components {
        */
       activeProgrammeGroupId: string
     }
+    LocationFilterValues: {
+      /**
+       * @description The name of a pdu
+       * @example London
+       */
+      pduName: string
+      /**
+       * @description List of the reporting teams for a specific pdu
+       * @example Team 1
+       * @example Team 2
+       */
+      reportingTeams: string[]
+    }
     PageGroupItem: {
-      /** Format: int32 */
-      totalPages?: number
       /** Format: int64 */
       totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
       first?: boolean
       last?: boolean
       /** Format: int32 */
@@ -2345,9 +2357,9 @@ export interface components {
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
-      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
@@ -2370,19 +2382,6 @@ export interface components {
       statusFilters: components['schemas']['StatusFilterValues']
       /** @description Contains pdu's with a list of their reporting teams */
       locationFilters: components['schemas']['LocationFilterValues'][]
-    }
-    LocationFilterValues: {
-      /**
-       * @description The name of a pdu
-       * @example London
-       */
-      pduName: string
-      /**
-       * @description List of the reporting teams for a specific pdu
-       * @example Team 1
-       * @example Team 2
-       */
-      reportingTeams: string[]
     }
     StatusFilterValues: {
       /**
@@ -3097,14 +3096,20 @@ export interface operations {
       }
       cookie?: never
     }
-    requestBody?: never
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['AllocateToGroupRequest']
+      }
+    }
     responses: {
       /** @description Referral successfully allocated to the programme group */
       200: {
         headers: {
           [name: string]: unknown
         }
-        content?: never
+        content: {
+          '*/*': components['schemas']['AllocateToGroupResponse']
+        }
       }
       /** @description Invalid request format or invalid UUID format */
       400: {

@@ -1,4 +1,5 @@
 import {
+  AllocateToGroupResponse,
   AlcoholMisuseDetails,
   Attitude,
   Availability,
@@ -31,6 +32,7 @@ import {
   SentenceInformation,
   ThinkingAndBehaviour,
   UpdateAvailability,
+  AllocateToGroupRequest,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -396,15 +398,22 @@ export default class AccreditedProgrammesManageAndDeliverService
     })) as ReferralDetails
   }
 
-  async addToGroup(username: string, referralId: string, groupId: string) {
+  async addToGroup(
+    username: string,
+    referralId: string,
+    groupId: string,
+    additionalDetails?: string,
+  ): Promise<AllocateToGroupResponse> {
     const restClient = await this.createRestClientFromUsername(username)
+    const data: AllocateToGroupRequest = { additionalDetails }
     return restClient.post({
       path: `/group/${groupId}/allocate/${referralId}`,
       headers: { Accept: 'application/json' },
+      data,
     })
   }
 
-  async createGroup(username: Express.User['username'], data: CreateGroupRequest): Promise<ProgrammeGroupEntity> {
+  async createGroup(username: Express.User['username'], data: CreateGroupRequest): Promise<AllocateToGroupResponse> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.post({
       path: `/group`,

@@ -9,7 +9,7 @@ export type AddToGroupFormData = {
 }
 
 export type AddToGroupMoreDetailsFormData = {
-  moreDetails: string
+  additionalDetails: string
 }
 
 export default class AddToGroupForm {
@@ -55,13 +55,15 @@ export default class AddToGroupForm {
     }
     return {
       paramsForUpdate: {
-        moreDetails: this.request.body['add-details'],
+        additionalDetails: this.request.body['additional-details'],
       },
       error: null,
     }
   }
 
   static get addToGroupMoreDetailsValidations(): ValidationChain[] {
-    return [body('add-details').isLength({ max: 500 }).withMessage(errorMessages.addToGroup.exceededCharacterLimit)]
+    return [
+      body('additional-details').isLength({ max: 500 }).withMessage(errorMessages.addToGroup.exceededCharacterLimit),
+    ]
   }
 }
