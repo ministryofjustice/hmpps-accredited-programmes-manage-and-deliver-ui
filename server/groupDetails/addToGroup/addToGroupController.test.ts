@@ -28,7 +28,7 @@ beforeEach(() => {
     originPage: '/groupDetails/123/waitlist?nameOrCRN=&cohort=General+Offence&sex=&pdu=Liverpool',
   }
   app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
-  accreditedProgrammesManageAndDeliverService.addToGroup.mockResolvedValue(null)
+  accreditedProgrammesManageAndDeliverService.addToGroup.mockResolvedValue({ message: 'Successfully added to group' })
 })
 
 describe('add to group', () => {
@@ -104,7 +104,7 @@ describe('add to group', () => {
   })
 
   describe(`POST /addToGroup/:groupId/:referralId/moreDetails`, () => {
-    it('redirects to the allocated page on successful submit', async () => {
+    it('redirects to the allocated page on successful submit with the API message', async () => {
       const groupId = '123'
       const referralId = '123'
 
@@ -112,11 +112,13 @@ describe('add to group', () => {
         .post(`/addToGroup/${groupId}/${referralId}/moreDetails`)
         .type('form')
         .send({
-          'add-details': 'Some details',
+          'additional-details': 'Some details',
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(`Redirecting to /groupDetails/${groupId}/allocated?addedToGroup=true`)
+          expect(res.text).toContain(
+            `Redirecting to /groupDetails/${groupId}/allocated?message=Successfully%20added%20to%20group`,
+          )
         })
     })
     it('returns with errors if validation fails', async () => {
@@ -127,7 +129,7 @@ describe('add to group', () => {
         .post(`/addToGroup/${groupId}/${referralId}/moreDetails`)
         .type('form')
         .send({
-          'add-details': faker.string.alpha({ length: 501 }),
+          'additional-details': faker.string.alpha({ length: 501 }),
         })
         .expect(400)
         .expect(res => {

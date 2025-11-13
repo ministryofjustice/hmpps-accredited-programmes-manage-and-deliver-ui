@@ -71,10 +71,17 @@
     {% if isPersonAdded %}
       {{ mojAlert(successMessageArgs) }}
     {% endif %}
+    
     {% if errorSummary !== null %}
       {{ govukErrorSummary(errorSummary) }}
     {% endif %}
+    
+    {% if apiSuccessMessageArgs !== null %}
+      {{ mojAlert(apiSuccessMessageArgs) }}
+    {% endif %}
+    
     {{ mojSubNavigation(subNavArgs) }}
+    
     <form method="post">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}">
       <div id="add-to-group"></div>

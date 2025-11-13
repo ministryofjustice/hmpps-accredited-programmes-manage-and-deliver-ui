@@ -24,6 +24,7 @@ export default class GroupDetailsPresenter {
     readonly personName: string = '',
     readonly validationError: FormValidationError | null = null,
     readonly isPersonAdded: boolean | null = null,
+    readonly successMessage: string | null = null,
   ) {}
 
   get text() {

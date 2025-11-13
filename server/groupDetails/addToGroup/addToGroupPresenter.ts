@@ -5,6 +5,7 @@ export default class AddToGroupPresenter {
   constructor(
     readonly groupId: string,
     private readonly groupManagementData: {
+      groupCode?: string
       groupRegion?: string
       personName?: string
     },
@@ -14,7 +15,7 @@ export default class AddToGroupPresenter {
 
   get text() {
     return {
-      pageHeading: this.groupManagementData.groupRegion,
+      pageHeading: this.groupManagementData.groupCode,
       questionText: `Add ${this.groupManagementData.personName} to this group?`,
     }
   }
