@@ -18,8 +18,13 @@ export default class GroupDetailsController {
     const { groupId } = req.params
     let formError: FormValidationError | null = null
     req.session.groupManagementData = null
-    const pageParam = req.query.page
-    const page = pageParam ? Number(pageParam) : 0
+
+    const pageNumber = req.query.page
+    const page = pageNumber ? Number(pageNumber) - 1 : 0
+    if (pageNumber === undefined) {
+      req.session.filterParams = req.originalUrl.includes('?') ? req.originalUrl.split('?').pop() : undefined
+    }
+
     const filter = GroupListFilter.fromRequest(req)
 
     const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers(
@@ -51,13 +56,14 @@ export default class GroupDetailsController {
       groupDetails,
       groupId,
       filter,
+      req.session.filterParams,
       req.session.groupManagementData?.personName ?? '',
       formError,
       addedToGroup === 'true',
     )
     const view = new GroupDetailsView(presenter)
     req.session.groupManagementData = null
-    // Set to maintain filters when accessing remove from group journey
+
     req.session.originPage = req.originalUrl
     return ControllerUtils.renderWithLayout(res, view, null)
   }
@@ -67,8 +73,13 @@ export default class GroupDetailsController {
     const { groupId } = req.params
     let formError: FormValidationError | null = null
     req.session.groupManagementData = null
-    const pageParam = req.query.page
-    const page = pageParam ? Number(pageParam) : 0
+
+    const pageNumber = req.query.page
+    const page = pageNumber ? Number(pageNumber) - 1 : 0
+    if (pageNumber === undefined) {
+      req.session.filterParams = req.originalUrl.includes('?') ? req.originalUrl.split('?').pop() : undefined
+    }
+
     const filter = GroupListFilter.fromRequest(req)
 
     const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupWaitlistMembers(
@@ -101,13 +112,13 @@ export default class GroupDetailsController {
       groupDetails,
       groupId,
       filter,
+      req.session.filterParams,
       '',
       formError,
       null,
     )
     const view = new GroupDetailsView(presenter)
 
-    // Set to maintain filters when accessing add to group journey
     req.session.originPage = req.originalUrl
 
     return ControllerUtils.renderWithLayout(res, view, null)

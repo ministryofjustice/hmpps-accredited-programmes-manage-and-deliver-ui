@@ -4,6 +4,7 @@ import { ButtonArgs, CheckboxesArgsItem, SelectArgsItem, TableArgsHeadElement } 
 import PresenterUtils from '../utils/presenterUtils'
 import { convertToTitleCase } from '../utils/utils'
 import GroupListFilter from './groupListFilter'
+import Pagination from '../utils/pagination/pagination'
 
 export enum GroupDetailsPageSection {
   Allocated = 1,
@@ -16,15 +17,26 @@ const cohortConfigMap: Record<CohortEnum, string> = {
 }
 
 export default class GroupDetailsPresenter {
+  public readonly pagination: Pagination
+
+  public readonly params?: string
+
   constructor(
     readonly section: GroupDetailsPageSection,
     readonly group: ProgrammeGroupDetails,
     readonly groupId: string,
     readonly filter: GroupListFilter,
+    readonly paramsArg?: string,
     readonly personName: string = '',
     readonly validationError: FormValidationError | null = null,
     readonly isPersonAdded: boolean | null = null,
-  ) {}
+  ) {
+    this.params = this.paramsArg
+    this.pagination = new Pagination(
+      this.group.pagedGroupData as Required<typeof this.group.pagedGroupData>,
+      this.params,
+    )
+  }
 
   get text() {
     return {
@@ -39,7 +51,10 @@ export default class GroupDetailsPresenter {
   }
 
   getSubNavArgs(): { items: { text: string; href: string; active: boolean }[] } {
-    const nameCrnFilter = this.filter.nameOrCRN === undefined ? `` : `?nameOrCRN=${this.filter.nameOrCRN}`
+    let theParams = ''
+    if (this.params) theParams = `?${this.params}`
+    else if (this.filter.nameOrCRN !== undefined) theParams = `?nameOrCRN=${this.filter.nameOrCRN}`
+
     return {
       items: [
         {
@@ -47,7 +62,7 @@ export default class GroupDetailsPresenter {
             this.section === GroupDetailsPageSection.Allocated
               ? `Allocated (${this.group.pagedGroupData.totalElements})`
               : `Allocated (${this.group.otherTabTotal})`,
-          href: `/groupDetails/${this.groupId}/allocated${nameCrnFilter}`,
+          href: `/groupDetails/${this.groupId}/allocated${theParams}`,
           active: this.section === GroupDetailsPageSection.Allocated,
         },
         {
@@ -55,7 +70,7 @@ export default class GroupDetailsPresenter {
             this.section === GroupDetailsPageSection.Waitlist
               ? `Waitlist (${this.group.pagedGroupData.totalElements})`
               : `Waitlist (${this.group.otherTabTotal})`,
-          href: `/groupDetails/${this.groupId}/waitlist${nameCrnFilter}`,
+          href: `/groupDetails/${this.groupId}/waitlist${theParams}`,
           active: this.section === GroupDetailsPageSection.Waitlist,
         },
       ],
@@ -219,7 +234,7 @@ export default class GroupDetailsPresenter {
   generateNoResultsString(): string {
     const hasFilters = Object.values(this.filter).some(value => value !== undefined)
 
-    if (this.hasResults) {
+    if (this.hasResults()) {
       return ''
     }
     if (this.section === GroupDetailsPageSection.Waitlist) {
