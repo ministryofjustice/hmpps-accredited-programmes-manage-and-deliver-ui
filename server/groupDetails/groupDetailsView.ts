@@ -96,6 +96,7 @@ export default class GroupDetailsView {
   }
 
   get renderArgs(): [string, Record<string, unknown>] {
+    const paginationArgs = this.presenter.pagination?.mojPaginationArgs
     return [
       'groupDetails/groupDetails',
       {
@@ -104,6 +105,7 @@ export default class GroupDetailsView {
         searchByCrnOrPersonNameArgs: this.searchByCrnOrPersonNameArgs,
         isWaitlist: this.presenter.section === GroupDetailsPageSection.Waitlist,
         // pagination: this.presenter.pagination.mojPaginationArgs,
+        ...(paginationArgs && { pagination: paginationArgs }),
         searchByCohortArgs: this.searchByCohortArgs,
         searchBySexArgs: this.searchBySexArgs,
         searchByPduArgs: this.searchByPduArgs,
