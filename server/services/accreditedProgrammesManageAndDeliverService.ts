@@ -1,6 +1,7 @@
 import {
-  AllocateToGroupResponse,
   AlcoholMisuseDetails,
+  AllocateToGroupRequest,
+  AllocateToGroupResponse,
   Attitude,
   Availability,
   CaseListFilterValues,
@@ -24,15 +25,14 @@ import {
   ProgrammeGroupDetails,
   ProgrammeGroupEntity,
   ReferralDetails,
-  ReferralStatusFormData,
   ReferralStatusHistory,
+  ReferralStatusTransitions,
   Relationships,
   Risks,
   RoshAnalysis,
   SentenceInformation,
   ThinkingAndBehaviour,
   UpdateAvailability,
-  AllocateToGroupRequest,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -381,12 +381,12 @@ export default class AccreditedProgrammesManageAndDeliverService
     })
   }
 
-  async getStatusDetails(referralId: string, username: Express.User['username']): Promise<ReferralStatusFormData> {
+  async getStatusDetails(referralId: string, username: Express.User['username']): Promise<ReferralStatusTransitions> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
-      path: `/bff/referral-status-form/${referralId}`,
+      path: `/bff/status-transitions/referral/${referralId}`,
       headers: { Accept: 'application/json' },
-    })) as ReferralStatusFormData
+    })) as ReferralStatusTransitions
   }
 
   async updateStatus(username: string, referralId: string, updatedStatus: CreateReferralStatusHistory) {

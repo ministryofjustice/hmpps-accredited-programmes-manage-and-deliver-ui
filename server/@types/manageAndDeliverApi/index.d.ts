@@ -31,7 +31,7 @@ type PreferredDeliveryLocation = components['schemas']['PreferredDeliveryLocatio
 type ExistingDeliveryLocationPreferences = components['schemas']['ExistingDeliveryLocationPreferences']
 type UpdateCohort = components['schemas']['UpdateCohort']
 type UpdateLdc = components['schemas']['UpdateLdc']
-type ReferralStatusFormData = components['schemas']['ReferralStatusFormData']
+type ReferralStatusTransitions = components['schemas']['ReferralStatusTransitions']
 type CreateReferralStatusHistory = components['schemas']['CreateReferralStatusHistory']
 type ReferralStatus = components['schemas']['ReferralStatus']
 type CaseListFilterValues = components['schemas']['CaseListFilterValues']
@@ -80,8 +80,8 @@ export type {
   ReferralCaseListItem,
   ReferralDetails,
   ReferralStatus,
-  ReferralStatusFormData,
   ReferralStatusHistory,
+  ReferralStatusTransitions,
   Relationships,
   Risks,
   RoshAnalysis,
