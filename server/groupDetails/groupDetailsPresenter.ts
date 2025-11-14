@@ -4,6 +4,8 @@ import { ButtonArgs, CheckboxesArgsItem, SelectArgsItem, TableArgsHeadElement } 
 import PresenterUtils from '../utils/presenterUtils'
 import { convertToTitleCase } from '../utils/utils'
 import GroupListFilter from './groupListFilter'
+import { Page } from '../shared/models/pagination'
+import Pagination from '../utils/pagination/pagination'
 
 export enum GroupDetailsPageSection {
   Allocated = 1,
@@ -15,7 +17,13 @@ const cohortConfigMap: Record<CohortEnum, string> = {
   GENERAL_OFFENCE: 'General offence',
 }
 
+type GroupMember = ProgrammeGroupDetails['pagedGroupData']['content'][number]
+
 export default class GroupDetailsPresenter {
+  public readonly pagination: Pagination
+
+  readonly referralCaseListItems: Page<GroupMember>
+
   constructor(
     readonly section: GroupDetailsPageSection,
     readonly group: ProgrammeGroupDetails,
@@ -24,7 +32,11 @@ export default class GroupDetailsPresenter {
     readonly personName: string = '',
     readonly validationError: FormValidationError | null = null,
     readonly successMessage: string | null = null,
-  ) {}
+    readonly params?: string,
+  ) {
+    this.referralCaseListItems = this.group.pagedGroupData as Page<GroupMember>
+    this.pagination = new Pagination(this.referralCaseListItems, params)
+  }
 
   get text() {
     return {
@@ -101,11 +113,9 @@ export default class GroupDetailsPresenter {
                   </div>
                  </div>`,
         },
-
         {
           html: `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0"> ${member.crn}</p>`,
         },
-
         {
           html: `${member.sentenceEndDate ?? 'No information'}${
             member.sourcedFrom ? `<br> ${member.sourcedFrom}` : ''
@@ -116,7 +126,6 @@ export default class GroupDetailsPresenter {
             member.hasLdc ? '</br><span class="moj-badge moj-badge--bright-purple">LDC</span>' : ''
           }`,
         },
-
         { text: String(member.age) },
         { text: convertToTitleCase(member.sex) },
         { text: member.pdu },
@@ -146,7 +155,6 @@ export default class GroupDetailsPresenter {
         {
           html: `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0">${member.crn}</p>`,
         },
-
         {
           html: `${member.sentenceEndDate ?? 'No information'}${
             member.sourcedFrom ? `<br> ${member.sourcedFrom}` : ''
