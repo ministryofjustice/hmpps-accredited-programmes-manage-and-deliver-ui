@@ -7,7 +7,7 @@ export default class MotivationBackgroundAndNonAssociationsView {
 
   get addNotesButtonArgs(): ButtonArgs {
     return {
-      text: 'Add notes',
+      text: this.presenter.motivationBackgroundAndNonAssociations.id ? 'Update notes' : 'Add notes',
       href: `/referral/${this.presenter.referral.id}/add-motivation-background-and-non-associations`,
     }
   }

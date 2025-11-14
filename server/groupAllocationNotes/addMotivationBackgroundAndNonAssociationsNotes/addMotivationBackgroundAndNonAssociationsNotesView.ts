@@ -5,6 +5,13 @@ import ViewUtils from '../../utils/viewUtils'
 export default class AddMotivationBackgroundAndNonAssociationsNotesView {
   constructor(private readonly presenter: AddMotivationBackgroundAndNonAssociationsNotesPresenter) {}
 
+  private get backLinkArgs() {
+    return {
+      text: 'Back',
+      href: this.presenter.cancelAndBacklinkUri,
+    }
+  }
+
   private get maintainsInnocenceRadioArgs() {
     return {
       name: 'maintains-innocence',
@@ -92,7 +99,8 @@ export default class AddMotivationBackgroundAndNonAssociationsNotesView {
         nonAssociationsCharacterCountArgs: this.nonAssociationsCharacterCountArgs,
         otherConsiderationsCountArgs: this.otherConsiderationsCountArgs,
         formActionLink: this.presenter.formActionLink,
-        cancelLink: '/',
+        cancelLink: this.presenter.cancelAndBacklinkUri,
+        backLinkArgs: this.backLinkArgs,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
       },
     ]
