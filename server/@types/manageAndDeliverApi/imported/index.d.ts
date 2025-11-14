@@ -449,6 +449,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/referral-status/{id}/transitions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve possible referral status transitions
+     * @description Returns all possible referral status transitions for a given referral status description ID
+     */
+    get: operations['getPossibleTransitions']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/referral-details/{id}': {
     parameters: {
       query?: never
@@ -526,9 +546,11 @@ export interface paths {
     }
     /**
      * Retrieve the manager associated with the Licence Condition or Requirement associated with a referral
-     * @description Retrieves the manager (Probation Practitioner) associated with the Case, which is upstream of the
+     * @description
+     *           Retrieves the manager (Probation Practitioner) associated with the Case, which is upstream of the
      *           Referral itself.  We use this to retrieve a list of Delivery Locations (Offices) within the same
      *           PDU as a Referral itself.
+     *
      */
     get: operations['getManagerByReferralId']
     put?: never
@@ -606,7 +628,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/bff/status-transitions/referral/{referralId}': {
+  '/bff/referral-status-form/{referralId}': {
     parameters: {
       query?: never
       header?: never
@@ -614,10 +636,10 @@ export interface paths {
       cookie?: never
     }
     /**
-     * Retrieve status transition data for a referral.
+     * Retrieve data for updating referral status form
      * @description Returns all possible data for the update referral status form based on the referral id
      */
-    get: operations['getStatusTransitionsForReferral']
+    get: operations['getReferralStatusForm']
     put?: never
     post?: never
     delete?: never
@@ -635,11 +657,13 @@ export interface paths {
     }
     /**
      * A Backend-For-Frontend endpoint for the multi-page Delivery Location Preferences form
-     * @description Retrieves all the data needed for the multi-page Delivery Location Preferences form, for a Referral:
+     * @description
+     *           Retrieves all the data needed for the multi-page Delivery Location Preferences form, for a Referral:
      *           - Person on Probation summary information (from nDelius)
      *           - Existing delivery location preferences (or `null`)
      *           - Primary PDU delivery locations for the Manager associated with the Referral (from nDelius)
      *           - Other PDUs in the same region (from nDelius)
+     *
      */
     get: operations['getDeliveryLocationPreferencesFormData']
     put?: never
@@ -787,23 +811,23 @@ export interface components {
        * @description The unique id of the ReferralMotivationBackgroundAndNonAssociations information.
        * @example c98151f4-4081-4c65-9f98-54e63a328c8d
        */
-      id?: string
+      id: string
       /**
        * Format: uuid
        * @description The unique id of this referral.
        * @example c98151f4-4081-4c65-9f98-54e63a328c8d
        */
-      referralId?: string
+      referralId: string
       /**
        * @description Boolean value indicating whether the referral maintains innocence.
        * @example true
        */
-      maintainsInnocence?: boolean
+      maintainsInnocence: boolean
       /**
        * @description Information on the motivation to participate in an accredited programme.
        * @example Motivated to change and improve life circumstances.
        */
-      motivations?: string
+      motivations: string
       /**
        * @description Any other relevant information that should be considered.
        * @example Other information relevant to the referral.
@@ -813,13 +837,13 @@ export interface components {
        * @description Information on any non-associations relevant to the referral.
        * @example Should not be in a group with a person who has a history of reoffending on a previous accredited programme.
        */
-      nonAssociations?: string
+      nonAssociations: string
       /**
        * Format: date
        * @description Timestamp of when this referral was created.
        * @example 11
        */
-      createdAt?: string
+      createdAt: string
       /** @description The user that last created the delivery location preferences */
       createdBy?: string
       /**
@@ -827,7 +851,7 @@ export interface components {
        * @description Timestamp of when this referral was created.
        * @example 11
        */
-      lastUpdatedAt?: string
+      lastUpdatedAt: string
       /** @description The user that last created the delivery location preferences */
       lastUpdatedBy?: string
     }
@@ -1470,11 +1494,9 @@ export interface components {
       problemsReadWriteNum?: string
       /** @example 2-Significant problems */
       learningDifficulties?: string
-      /**
-       * @example [
+      /** @example [
        *       "Difficulty with concentration"
-       *     ]
-       */
+       *     ] */
       problemAreas?: string[]
       /** @example 0 */
       qualifications?: string
@@ -1551,6 +1573,34 @@ export interface components {
       frequencyAndLevel?: string
       /** @example Alcohol dependency affecting employment and relationships */
       alcoholIssuesDetails?: string
+    }
+    ReferralStatus: {
+      /**
+       * Format: uuid
+       * @description The unique id of this referral status.
+       * @example c98151f4-4081-4c65-9f98-54e63a328c8d
+       */
+      id: string
+      /**
+       * @description The status description text.
+       * @example Awaiting assessment
+       */
+      status: string
+      /**
+       * @description The description text for this particular status transition
+       * @example The person has completed the programme. The referral will be closed.
+       */
+      transitionDescription: string
+      /**
+       * @description Whether this status represents a closed status for the referral.
+       * @example false
+       */
+      isClosed: boolean
+      /**
+       * @description The color to be used for displaying this status label.
+       * @example orange
+       */
+      labelColour?: string
     }
     ReferralDetails: {
       /**
@@ -2021,29 +2071,29 @@ export interface components {
       totalPages?: number
       /** Format: int64 */
       totalElements?: number
-      pageable?: components['schemas']['PageableObject']
       first?: boolean
       last?: boolean
-      /** Format: int32 */
-      numberOfElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageableObject: {
-      paged?: boolean
-      /** Format: int32 */
-      pageNumber?: number
-      /** Format: int32 */
-      pageSize?: number
-      unpaged?: boolean
       /** Format: int64 */
       offset?: number
       sort?: components['schemas']['SortObject']
+      /** Format: int32 */
+      pageSize?: number
+      paged?: boolean
+      /** Format: int32 */
+      pageNumber?: number
+      unpaged?: boolean
     }
     ReferralCaseListItem: {
       /** Format: uuid */
@@ -2061,9 +2111,9 @@ export interface components {
       reportingTeam: string
     }
     SortObject: {
+      empty?: boolean
       sorted?: boolean
       unsorted?: boolean
-      empty?: boolean
     }
     Pageable: {
       /** Format: int32 */
@@ -2091,36 +2141,8 @@ export interface components {
        */
       createdAt: string
     }
-    ReferralStatus: {
-      /**
-       * Format: uuid
-       * @description The unique id of this referral status.
-       * @example c98151f4-4081-4c65-9f98-54e63a328c8d
-       */
-      id: string
-      /**
-       * @description The status description text.
-       * @example Awaiting assessment
-       */
-      status: string
-      /**
-       * @description The description text for this particular status transition
-       * @example The person has completed the programme. The referral will be closed.
-       */
-      transitionDescription: string
-      /**
-       * @description Whether this status represents a closed status for the referral.
-       * @example false
-       */
-      isClosed: boolean
-      /**
-       * @description The color to be used for displaying this status label.
-       * @example orange
-       */
-      labelColour?: string
-    }
-    /** @description Status transition information for the update status form in the M&D UI */
-    ReferralStatusTransitions: {
+    /** @description Form data for the update status form in the M&D UI */
+    ReferralStatusFormData: {
       /** @description The current status information */
       currentStatus: components['schemas']['CurrentStatus']
       /** @description List of transition statuses */
@@ -2329,17 +2351,17 @@ export interface components {
       totalPages?: number
       /** Format: int64 */
       totalElements?: number
-      pageable?: components['schemas']['PageableObject']
       first?: boolean
       last?: boolean
-      /** Format: int32 */
-      numberOfElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
@@ -3879,6 +3901,56 @@ export interface operations {
       }
     }
   }
+  getPossibleTransitions: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id (UUID) of a referral status description */
+        id: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description List of possible referral status transitions */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ReferralStatus'][]
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden. The client is not authorised to access this resource. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getReferralDetailsById: {
     parameters: {
       query?: never
@@ -4368,7 +4440,7 @@ export interface operations {
       }
     }
   }
-  getStatusTransitionsForReferral: {
+  getReferralStatusForm: {
     parameters: {
       query?: never
       header?: never
@@ -4386,7 +4458,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['ReferralStatusTransitions'][]
+          'application/json': components['schemas']['ReferralStatusFormData'][]
         }
       }
       /** @description Bad Request */

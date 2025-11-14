@@ -1,0 +1,19 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+<div>
+  {% if isNotesUpdated %}
+    {{ mojAlert(successMessageArgs) }}
+  {% endif %}
+
+  <h2 class="govuk-heading-m">Motivation, background and non-associations</h2>
+
+  {% if hasNotesSaved === true %}
+    {{ govukInsetText(lastUpdatedInsetText) }}
+    {{ govukSummaryList(motivationBackgroundAndNonAssociationsSummaryListArgs) }}
+  {% else %}
+    <p class="govuk-body govuk-!-margin-bottom-5">{{ presenter.text.noMotivationText }}</p>
+  {% endif %}
+  {{ govukButton(addNotesButtonArgs) }}
+</div>

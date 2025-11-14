@@ -73,6 +73,10 @@ export default {
     createGroupCohortSelect: 'Cohort: Please change this error message in errorMessages.ts',
     createGroupSexSelect: 'Sex: Please change this error message in errorMessages.ts',
   },
+  motivationBackgroundAndNonAssociations: {
+    addToGroupEmpty: `Select whether you want to add the person to the group or not`,
+    exceededCharacterLimit: 'Details must be 2,000 characters or fewer',
+  },
   returnedError,
   userHeaderTypes,
   errorHandlerAccessErrorMessages,

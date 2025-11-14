@@ -5,7 +5,6 @@
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -45,16 +44,16 @@
             {{ mojSideNavigation(getVerticalSubNavArgs) }}
           </div>
           <div class="govuk-grid-column-two-thirds">
-            {% if presenter.subNavValue == 'learningNeeds' %}
+            {% if presenter.subNavValue == 'availability' %}
             <div>
-              {% include "./learningNeeds.njk" %}
+              {% include "./availability.njk" %}
+            </div>
+            {% elif presenter.subNavValue == 'locations' %}
+            <div>
+              {% include "./locations.njk" %}
             </div>
             {% else %}
-            <div>
-              <h2 class="govuk-heading-m">Motivation, background and non-associations</h2>
-              <p class="govuk-body govuk-!-margin-bottom-5">{{ presenter.text.noMotivationText }}</p>
-              {{ govukButton(addNotesButtonArgs) }}
-            </div>
+              {% include "./motivationBackgroundAndNonAssociations.njk" %}
             {% endif %}
           </div>
         </div>
