@@ -30,8 +30,9 @@ describe('groupDetails', () => {
     it('loads the initial page to view the waitlist', async () => {
       const programmeGroupDetails = ProgrammeGroupDetailsFactory.build()
       accreditedProgrammesManageAndDeliverService.getGroupWaitlistMembers.mockResolvedValue(programmeGroupDetails)
+
       return request(app)
-        .get(`/groupDetails/:groupId/waitlist`)
+        .get('/groupDetails/1234/waitlist')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(`Allocations and waitlist`)
@@ -43,8 +44,9 @@ describe('groupDetails', () => {
     it('loads the initial page to view the allocated list', async () => {
       const programmeGroupDetails = ProgrammeGroupDetailsFactory.build()
       accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers.mockResolvedValue(programmeGroupDetails)
+
       return request(app)
-        .get(`/groupDetails/:groupId/allocated`)
+        .get('/groupDetails/1234/allocated')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(`Allocations and waitlist`)

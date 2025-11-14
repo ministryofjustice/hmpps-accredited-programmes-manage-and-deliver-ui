@@ -18,8 +18,13 @@ export default class GroupDetailsController {
     const { groupId } = req.params
     let formError: FormValidationError | null = null
     req.session.groupManagementData = null
-    const pageParam = req.query.page
-    const page = pageParam ? Number(pageParam) : 0
+    const pageNumber = req.query.page
+    const page = pageNumber ? Number(pageNumber) - 1 : 0
+
+    if (pageNumber === undefined) {
+      req.session.filterParams = req.originalUrl.includes('?') ? req.originalUrl.split('?').pop() : ''
+    }
+
     const filter = GroupListFilter.fromRequest(req)
 
     const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers(
@@ -53,6 +58,7 @@ export default class GroupDetailsController {
       groupDetails,
       groupId,
       filter,
+      req.session.filterParams || '',
       req.session.groupManagementData?.personName ?? '',
       formError,
       successMessage,
@@ -69,8 +75,11 @@ export default class GroupDetailsController {
     const { groupId } = req.params
     let formError: FormValidationError | null = null
     req.session.groupManagementData = null
-    const pageParam = req.query.page
-    const page = pageParam ? Number(pageParam) : 0
+    const pageNumber = req.query.page
+    const page = pageNumber ? Number(pageNumber) - 1 : 0
+    const queryString = req.originalUrl.split('?')[1] || ''
+    req.session.filterParams = queryString
+
     const filter = GroupListFilter.fromRequest(req)
 
     const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupWaitlistMembers(
@@ -104,12 +113,12 @@ export default class GroupDetailsController {
       groupDetails,
       groupId,
       filter,
+      req.session.filterParams || '',
       '',
       formError,
     )
     const view = new GroupDetailsView(presenter)
 
-    // Set to maintain filters when accessing add to group journey
     req.session.originPage = req.originalUrl
 
     return ControllerUtils.renderWithLayout(res, view, null)
