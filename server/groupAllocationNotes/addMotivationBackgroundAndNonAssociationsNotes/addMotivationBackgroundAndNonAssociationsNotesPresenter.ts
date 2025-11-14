@@ -10,6 +10,10 @@ export default class AddMotivationBackgroundAndNonAssociationsNotesPresenter {
     private readonly userInputData: Record<string, unknown> | null = null,
   ) {}
 
+  get cancelAndBacklinkUri() {
+    return `/referral/${this.referral.id}/group-allocation-notes/motivation-background-and-non-associations`
+  }
+
   get text() {
     return {
       pageHeading: `Provide information about motivation, background and non-associations`,

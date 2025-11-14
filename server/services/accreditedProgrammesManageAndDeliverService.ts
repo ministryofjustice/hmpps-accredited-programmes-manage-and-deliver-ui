@@ -33,7 +33,6 @@ import {
   SentenceInformation,
   ThinkingAndBehaviour,
   UpdateAvailability,
-  ReferralStatusHistory,
   CreateOrUpdateReferralMotivationBackgroundAndNonAssociations,
   ReferralMotivationBackgroundAndNonAssociations,
 } from '@manage-and-deliver-api'
