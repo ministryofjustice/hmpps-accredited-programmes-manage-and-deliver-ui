@@ -1,3 +1,4 @@
+@use 'node_modules/govuk-frontend/dist/govuk' as govuk;
 $border-colour-very-high: #942514;
 $text-colour-very-high: #711a0d;
 $border-colour-high: govuk-colour('red');
@@ -68,7 +69,7 @@ $text-colour-low: #485b10;
   }
 
   &__body-text {
-    @extend .govuk-body-s;
+    @include govuk.govuk-font($size: 16);
     color: govuk-colour('dark-grey');
   }
 

@@ -1,3 +1,4 @@
+@use 'node_modules/govuk-frontend/dist/govuk' as *;
 .hmpps-header {
   @include govuk-responsive-padding(3, 'top');
   @include govuk-responsive-padding(3, 'bottom');
