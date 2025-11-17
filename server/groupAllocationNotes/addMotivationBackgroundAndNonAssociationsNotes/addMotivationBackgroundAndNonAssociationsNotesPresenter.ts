@@ -51,7 +51,7 @@ export default class AddMotivationBackgroundAndNonAssociationsNotesPresenter {
           this.motivationBackgroundAndNonAssociations.maintainsInnocence,
           'maintains-innocence',
         ),
-        errorMessage: PresenterUtils.errorMessage(this.validationError, ' maintains-innocence'),
+        errorMessage: PresenterUtils.errorMessage(this.validationError, 'maintains-innocence'),
       },
       motivated: {
         value: this.utils.stringValue(

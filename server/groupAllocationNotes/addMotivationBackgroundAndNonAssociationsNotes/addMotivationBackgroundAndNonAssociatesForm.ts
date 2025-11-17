@@ -45,6 +45,9 @@ export default class AddMotivationBackgroundAndNonAssociatesForm {
       body('non-associations-character-count')
         .isLength({ max: 2000 })
         .withMessage(errorMessages.motivationBackgroundAndNonAssociations.exceededCharacterLimit),
+      body('maintains-innocence')
+        .isIn(['yes', 'no'])
+        .withMessage(errorMessages.motivationBackgroundAndNonAssociations.maintainsInnocenceRequired),
     ]
   }
 }
