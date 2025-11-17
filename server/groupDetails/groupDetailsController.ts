@@ -20,10 +20,6 @@ export default class GroupDetailsController {
     req.session.groupManagementData = null
     const pageNumber = req.query.page
 
-    if (pageNumber === undefined) {
-      req.session.filterParams = req.originalUrl.includes('?') ? req.originalUrl.split('?').pop() : undefined
-    }
-
     const filter = GroupListFilter.fromRequest(req)
 
     const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers(
