@@ -1,7 +1,7 @@
-import { ReferralStatusFormData } from '@manage-and-deliver-api'
+import { ReferralStatusTransitions } from '@manage-and-deliver-api'
 import { Factory } from 'fishery'
 
-class ReferralStatusFormDataFactory extends Factory<ReferralStatusFormData> {}
+class ReferralStatusFormDataFactory extends Factory<ReferralStatusTransitions> {}
 
 export default ReferralStatusFormDataFactory.define(() => ({
   currentStatus: {
