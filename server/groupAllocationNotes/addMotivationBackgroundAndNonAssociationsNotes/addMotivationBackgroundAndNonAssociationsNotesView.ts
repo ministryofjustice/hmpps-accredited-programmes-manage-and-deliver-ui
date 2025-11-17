@@ -1,4 +1,3 @@
-import { ButtonArgs } from '../../utils/govukFrontendTypes'
 import AddMotivationBackgroundAndNonAssociationsNotesPresenter from './addMotivationBackgroundAndNonAssociationsNotesPresenter'
 import ViewUtils from '../../utils/viewUtils'
 

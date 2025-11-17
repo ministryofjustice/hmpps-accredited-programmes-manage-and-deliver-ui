@@ -6,7 +6,6 @@ import MotivationBackgroundAndNonAssociationsPresenter from './motivationBackgro
 import AddMotivationBackgroundAndNonAssociationsNotesView from './addMotivationBackgroundAndNonAssociationsNotes/addMotivationBackgroundAndNonAssociationsNotesView'
 import AddMotivationBackgroundAndNonAssociationsNotesPresenter from './addMotivationBackgroundAndNonAssociationsNotes/addMotivationBackgroundAndNonAssociationsNotesPresenter'
 import { FormValidationError } from '../utils/formValidationError'
-import AddToGroupForm from '../groupDetails/addToGroup/addToGroupForm'
 import AddMotivationBackgroundAndNonAssociatesForm from './addMotivationBackgroundAndNonAssociationsNotes/addMotivationBackgroundAndNonAssociatesForm'
 
 export default class GroupAllocationNotesController {
