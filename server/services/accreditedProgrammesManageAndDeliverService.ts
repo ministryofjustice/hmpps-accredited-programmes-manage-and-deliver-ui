@@ -15,6 +15,7 @@ import {
   DeliveryLocationPreferencesFormData,
   DrugDetails,
   EmotionalWellbeing,
+  Group,
   Health,
   LearningNeeds,
   LifestyleAndAssociates,
@@ -420,5 +421,13 @@ export default class AccreditedProgrammesManageAndDeliverService
       headers: { Accept: 'application/json' },
       data,
     })) as ProgrammeGroupEntity
+  }
+
+  async getGroupByCodeInRegion(username: Express.User['username'], groupCode: string): Promise<Group | null> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/group/${groupCode}/details`,
+      headers: { Accept: 'application/json' },
+    })) as Group | null
   }
 }

@@ -69,9 +69,11 @@ export default {
     removeFromGroupEmpty: `Select whether you want to remove the person from the group or not`,
   },
   createGroup: {
-    createGroupCodeEmpty: 'Code: Please change this error message in errorMessages.ts',
-    createGroupCohortSelect: 'Cohort: Please change this error message in errorMessages.ts',
-    createGroupSexSelect: 'Sex: Please change this error message in errorMessages.ts',
+    createGroupCodeEmpty: 'Enter a code for your group',
+    createGroupCodeExists: (code: string) =>
+      `Group code ${code} already exists for a group in this region. Enter a different code.`,
+    createGroupCohortSelect: 'Select a cohort',
+    createGroupSexSelect: 'Select a gender',
   },
   returnedError,
   userHeaderTypes,
