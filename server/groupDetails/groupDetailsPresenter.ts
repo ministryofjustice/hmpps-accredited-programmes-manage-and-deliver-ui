@@ -1,4 +1,4 @@
-import { CohortEnum, ProgrammeGroupDetails } from '@manage-and-deliver-api'
+import { CohortEnum, ProgrammeGroupDetails, GroupMember } from '@manage-and-deliver-api'
 import { FormValidationError } from '../utils/formValidationError'
 import { ButtonArgs, CheckboxesArgsItem, SelectArgsItem, TableArgsHeadElement } from '../utils/govukFrontendTypes'
 import PresenterUtils from '../utils/presenterUtils'
@@ -16,8 +16,6 @@ const cohortConfigMap: Record<CohortEnum, string> = {
   SEXUAL_OFFENCE: 'Sexual offence',
   GENERAL_OFFENCE: 'General offence',
 }
-
-type GroupMember = ProgrammeGroupDetails['pagedGroupData']['content'][number]
 
 export default class GroupDetailsPresenter {
   public readonly pagination: Pagination
