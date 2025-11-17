@@ -48,17 +48,6 @@ export default class GroupAllocationNotesController {
     let formError: FormValidationError | null = null
     let userInputData = null
 
-    const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
-      referralId,
-      username,
-    )
-
-    const motivationBackgroundAndNonAssociations =
-      await this.accreditedProgrammesManageAndDeliverService.getMotivationBackgroundAndNonAssociations(
-        referralId,
-        username,
-      )
-
     if (req.method === 'POST') {
       const data = await new AddMotivationBackgroundAndNonAssociatesForm(
         req,
@@ -79,6 +68,17 @@ export default class GroupAllocationNotesController {
         )
       }
     }
+
+    const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
+      referralId,
+      username,
+    )
+
+    const motivationBackgroundAndNonAssociations =
+      await this.accreditedProgrammesManageAndDeliverService.getMotivationBackgroundAndNonAssociations(
+        referralId,
+        username,
+      )
 
     const presenter = new AddMotivationBackgroundAndNonAssociationsNotesPresenter(
       referralDetails,
