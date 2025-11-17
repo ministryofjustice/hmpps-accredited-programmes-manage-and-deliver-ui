@@ -1,11 +1,11 @@
-import { CohortEnum, ProgrammeGroupDetails, GroupMember } from '@manage-and-deliver-api'
+import { CohortEnum, GroupItem, ProgrammeGroupDetails } from '@manage-and-deliver-api'
+import { Page } from '../shared/models/pagination'
 import { FormValidationError } from '../utils/formValidationError'
 import { ButtonArgs, CheckboxesArgsItem, SelectArgsItem, TableArgsHeadElement } from '../utils/govukFrontendTypes'
+import Pagination from '../utils/pagination/pagination'
 import PresenterUtils from '../utils/presenterUtils'
 import { convertToTitleCase } from '../utils/utils'
 import GroupListFilter from './groupListFilter'
-import { Page } from '../shared/models/pagination'
-import Pagination from '../utils/pagination/pagination'
 
 export enum GroupDetailsPageSection {
   Allocated = 1,
@@ -20,7 +20,7 @@ const cohortConfigMap: Record<CohortEnum, string> = {
 export default class GroupDetailsPresenter {
   public readonly pagination: Pagination
 
-  readonly referralCaseListItems: Page<GroupMember>
+  readonly groupListItems: Page<GroupItem>
 
   constructor(
     readonly section: GroupDetailsPageSection,
@@ -32,8 +32,8 @@ export default class GroupDetailsPresenter {
     readonly successMessage: string | null = null,
     readonly params?: string,
   ) {
-    this.referralCaseListItems = this.group.pagedGroupData as Page<GroupMember>
-    this.pagination = new Pagination(this.referralCaseListItems, params)
+    this.groupListItems = this.group.pagedGroupData as Page<GroupItem>
+    this.pagination = new Pagination(this.groupListItems, params)
   }
 
   get text() {
@@ -98,7 +98,6 @@ export default class GroupDetailsPresenter {
   generateWaitlistTableArgs() {
     const rows = this.group.pagedGroupData.content
     const out: ({ html: string } | { text: string })[][] = []
-
     rows.forEach(member => {
       out.push([
         {
@@ -116,7 +115,7 @@ export default class GroupDetailsPresenter {
         },
         {
           html: `${member.sentenceEndDate ?? 'No information'}${
-            member.sourcedFrom ? `<br> ${member.sourcedFrom}` : ''
+            member.sourcedFrom && member.sentenceEndDate ? `<br> ${member.sourcedFrom}` : ''
           }`,
         },
         {
@@ -124,8 +123,8 @@ export default class GroupDetailsPresenter {
             member.hasLdc ? '</br><span class="moj-badge moj-badge--bright-purple">LDC</span>' : ''
           }`,
         },
-        { text: String(member.age) },
-        { text: convertToTitleCase(member.sex) },
+        { text: member.age ? String(member.age) : 'No information' },
+        { text: member.sex ? convertToTitleCase(member.sex) : 'No information' },
         { text: member.pdu },
         { text: member.reportingTeam },
       ])
@@ -155,7 +154,7 @@ export default class GroupDetailsPresenter {
         },
         {
           html: `${member.sentenceEndDate ?? 'No information'}${
-            member.sourcedFrom ? `<br> ${member.sourcedFrom}` : ''
+            member.sourcedFrom && member.sentenceEndDate ? `<br> ${member.sourcedFrom}` : ''
           }`,
         },
         { html: `<strong class="govuk-tag govuk-tag--${member.statusColour}">${member.status}</strong>` },
