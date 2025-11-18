@@ -19,6 +19,7 @@ type PniScore = components['schemas']['PniScore']
 type ProgrammeGroupDetails = components['schemas']['ProgrammeGroupDetails']
 type ReferralCaseListItem = components['schemas']['ReferralCaseListItem']
 type ReferralDetails = components['schemas']['ReferralDetails']
+type GroupItem = components['schemas']['PageGroupItem']
 type Relationships = components['schemas']['Relationships']
 type Risks = components['schemas']['Risks']
 type RoshAnalysis = components['schemas']['RoshAnalysis']
@@ -64,6 +65,8 @@ export type {
   DrugDetails,
   EmotionalWellbeing,
   ExistingDeliveryLocationPreferences,
+  Group,
+  GroupItem,
   Health,
   LearningNeeds,
   LifestyleAndAssociates,
