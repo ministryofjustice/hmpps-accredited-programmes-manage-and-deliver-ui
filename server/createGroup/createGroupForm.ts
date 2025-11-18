@@ -53,6 +53,27 @@ export default class CreateGroupForm {
     }
   }
 
+  async createGroupDateData(): Promise<FormData<Partial<CreateGroupRequest>>> {
+    const validationResult = await FormUtils.runValidations({
+      request: this.request,
+      validations: this.createGroupDateValidations(),
+    })
+
+    const error = FormUtils.validationErrorFromResult(validationResult)
+    if (error) {
+      return {
+        paramsForUpdate: null,
+        error,
+      }
+    }
+    return {
+      paramsForUpdate: {
+        startedAtDate: this.request.body['create-group-date'],
+      },
+      error: null,
+    }
+  }
+
   async createGroupSexData(): Promise<FormData<Partial<CreateGroupRequest>>> {
     const validationResult = await FormUtils.runValidations({
       request: this.request,
@@ -93,6 +114,10 @@ export default class CreateGroupForm {
 
   private createGroupCohortValidations(): ValidationChain[] {
     return [body('create-group-cohort').notEmpty().withMessage(errorMessages.createGroup.createGroupCohortSelect)]
+  }
+
+  private createGroupDateValidations(): ValidationChain[] {
+    return [body('create-group-date').notEmpty().withMessage(errorMessages.createGroup.createGroupDateSelect)]
   }
 
   private createGroupSexValidations(): ValidationChain[] {

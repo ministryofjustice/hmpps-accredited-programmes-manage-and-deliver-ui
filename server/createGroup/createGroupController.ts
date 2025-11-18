@@ -5,6 +5,8 @@ import ControllerUtils from '../utils/controllerUtils'
 import { FormValidationError } from '../utils/formValidationError'
 import CreateGroupCodePresenter from './createGroupCodePresenter'
 import CreateGroupCodeView from './createGroupCodeView'
+import CreateGroupDatePresenter from './createGroupDatePresenter'
+import CreateGroupDateView from './createGroupDateView'
 import CreateGroupCohortPresenter from './createGroupCohortPresenter'
 import CreateGroupCohortView from './createGroupCohortView'
 import CreateGroupCyaPresenter from './createGroupCyaPresenter'
@@ -79,6 +81,28 @@ export default class CreateGroupController {
 
     const presenter = new CreateGroupCohortPresenter(formError, createGroupFormData)
     const view = new CreateGroupCohortView(presenter)
+    return ControllerUtils.renderWithLayout(res, view, null)
+  }
+
+  async showCreateGroupDate(req: Request, res: Response): Promise<void> {
+    const { createGroupFormData } = req.session
+    let formError: FormValidationError | null = null
+    if (req.method === 'POST') {
+      const data = await new CreateGroupForm(req).createGroupDateData()
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+      } else {
+        req.session.createGroupFormData = {
+          ...createGroupFormData,
+          startedAtDate: data.paramsForUpdate.startedAtDate,
+        }
+        return res.redirect(`/group/create-a-group/code`)
+      }
+    }
+
+    const presenter = new CreateGroupDatePresenter(formError, createGroupFormData)
+    const view = new CreateGroupDateView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
 

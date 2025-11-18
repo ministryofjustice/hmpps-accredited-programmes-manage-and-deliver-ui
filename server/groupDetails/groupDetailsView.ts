@@ -28,6 +28,20 @@ export default class GroupDetailsView {
       items: this.presenter.generateSelectValues(this.presenter.group.filters.cohort, this.presenter.filter.cohort),
     }
   }
+  // private get searchByDateArgs(): SelectArgs {
+  //   return {
+  //     id: 'startedAtDate',
+  //     name: 'startedAtDate',
+  //     label: {
+  //       text: 'Date',
+  //       classes: 'govuk-label--s',
+  //     },
+  //     items: this.presenter.generateSelectValues(
+  //       this.presenter.group.filters.startedAtDate,
+  //       this.presenter.filter.startedAtDate,
+  //     ),
+  //   }
+  // }
 
   private get searchBySexArgs(): SelectArgs {
     return {
@@ -105,6 +119,7 @@ export default class GroupDetailsView {
         isWaitlist: this.presenter.section === GroupDetailsPageSection.Waitlist,
         pagination: this.presenter.pagination.mojPaginationArgs,
         searchByCohortArgs: this.searchByCohortArgs,
+        // searchByDateArgs: this.searchByDateArgs,
         searchBySexArgs: this.searchBySexArgs,
         searchByPduArgs: this.searchByPduArgs,
         formButtonArgs: this.presenter.formButtonArgs,
