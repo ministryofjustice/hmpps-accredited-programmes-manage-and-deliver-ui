@@ -33,7 +33,7 @@ describe(`getHorizontalSubNavArgs.`, () => {
       },
       {
         text: 'Group allocation notes',
-        href: `/referral/${referralDetails.id}/group-allocation-notes`,
+        href: `/referral/${referralDetails.id}/group-allocation-notes/motivation-background-and-non-associations`,
         active: false,
       },
     ])

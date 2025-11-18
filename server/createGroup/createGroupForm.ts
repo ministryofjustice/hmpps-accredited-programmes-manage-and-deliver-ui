@@ -6,12 +6,15 @@ import { FormData } from '../utils/forms/formData'
 import FormUtils from '../utils/formUtils'
 
 export default class CreateGroupForm {
-  constructor(private readonly request: Request) {}
+  constructor(
+    private readonly request: Request,
+    private readonly existingGroupCode?: string,
+  ) {}
 
   async createGroupCodeData(): Promise<FormData<Partial<CreateGroupRequest>>> {
     const validationResult = await FormUtils.runValidations({
       request: this.request,
-      validations: CreateGroupForm.createGroupCodeValidations,
+      validations: this.createGroupCodeValidations(),
     })
 
     const error = FormUtils.validationErrorFromResult(validationResult)
@@ -32,7 +35,7 @@ export default class CreateGroupForm {
   async createGroupCohortData(): Promise<FormData<Partial<CreateGroupRequest>>> {
     const validationResult = await FormUtils.runValidations({
       request: this.request,
-      validations: CreateGroupForm.createGroupCohortValidations,
+      validations: this.createGroupCohortValidations(),
     })
 
     const error = FormUtils.validationErrorFromResult(validationResult)
@@ -53,7 +56,7 @@ export default class CreateGroupForm {
   async createGroupSexData(): Promise<FormData<Partial<CreateGroupRequest>>> {
     const validationResult = await FormUtils.runValidations({
       request: this.request,
-      validations: CreateGroupForm.createGroupSexValidations,
+      validations: this.createGroupSexValidations(),
     })
 
     const error = FormUtils.validationErrorFromResult(validationResult)
@@ -71,15 +74,28 @@ export default class CreateGroupForm {
     }
   }
 
-  static get createGroupCodeValidations(): ValidationChain[] {
-    return [body('create-group-code').notEmpty().withMessage(errorMessages.createGroup.createGroupCodeEmpty)]
+  private createGroupCodeValidations(): ValidationChain[] {
+    const validations = [
+      body('create-group-code').notEmpty().withMessage(errorMessages.createGroup.createGroupCodeEmpty),
+    ]
+
+    if (this.existingGroupCode) {
+      validations.push(
+        body('create-group-code')
+          .not()
+          .equals(this.existingGroupCode)
+          .withMessage(errorMessages.createGroup.createGroupCodeExists(this.existingGroupCode)),
+      )
+    }
+
+    return validations
   }
 
-  static get createGroupCohortValidations(): ValidationChain[] {
+  private createGroupCohortValidations(): ValidationChain[] {
     return [body('create-group-cohort').notEmpty().withMessage(errorMessages.createGroup.createGroupCohortSelect)]
   }
 
-  static get createGroupSexValidations(): ValidationChain[] {
+  private createGroupSexValidations(): ValidationChain[] {
     return [body('create-group-sex').notEmpty().withMessage(errorMessages.createGroup.createGroupSexSelect)]
   }
 }

@@ -239,8 +239,15 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await groupDetailsController.showGroupDetailsWaitlist(req, res)
   })
 
-  get('/referral/:referralId/group-allocation-notes', async (req, res, next) => {
-    await groupAllocationNotesController.showGroupAllocationNotesPage(req, res)
+  get(
+    '/referral/:referralId/group-allocation-notes/motivation-background-and-non-associations',
+    async (req, res, next) => {
+      await groupAllocationNotesController.showMotivationBackgroundAndNonAssociationsPage(req, res)
+    },
+  )
+
+  getOrPost('/referral/:referralId/add-motivation-background-and-non-associations', async (req, res, next) => {
+    await groupAllocationNotesController.showAddMotivationBackgroundAndNonAssociationsNotesPage(req, res)
   })
 
   get('/addToGroup/:groupId/:referralId', async (req, res, next) => {

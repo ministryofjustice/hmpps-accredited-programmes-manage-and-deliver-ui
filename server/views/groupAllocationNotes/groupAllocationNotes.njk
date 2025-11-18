@@ -14,8 +14,7 @@
     <div class="govuk-width-container" id="main-content">
       <div class="govuk-main-wrapper">
         <div class="govuk-grid-row">
-          <div class="govuk-grid-column-full">
-            {% include "../partials/headerMenu.njk" %}
+          {% include "../partials/headerMenu.njk" %}
             <div class="govuk-grid-column-full">
               {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
             </div>
@@ -33,11 +32,33 @@
               {% if presenter.referral.currentlyAllocatedGroupId %}
               {{ govukInsetText(groupAllocationTextArgs) }}
               {% endif %}
-              <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
             </div>
+        </div>
 
+
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full">
+            <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+          </div>
+          <div class="govuk-grid-column-one-third">
+            {{ mojSideNavigation(getVerticalSubNavArgs) }}
+          </div>
+          <div class="govuk-grid-column-two-thirds">
+            {% if presenter.subNavValue == 'availability' %}
+            <div>
+              {% include "./availability.njk" %}
+            </div>
+            {% elif presenter.subNavValue == 'locations' %}
+            <div>
+              {% include "./locations.njk" %}
+            </div>
+            {% else %}
+              {% include "./motivationBackgroundAndNonAssociations.njk" %}
+            {% endif %}
           </div>
         </div>
+
+
       </div>
     </div>
 
