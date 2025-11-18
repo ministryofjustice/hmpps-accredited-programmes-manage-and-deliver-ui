@@ -34,6 +34,8 @@ import {
   SentenceInformation,
   ThinkingAndBehaviour,
   UpdateAvailability,
+  CreateOrUpdateReferralMotivationBackgroundAndNonAssociations,
+  ReferralMotivationBackgroundAndNonAssociations,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -362,6 +364,30 @@ export default class AccreditedProgrammesManageAndDeliverService
       headers: { Accept: 'application/json' },
       data: createDeliveryLocationPreferences,
     })) as CreateDeliveryLocationPreferences
+  }
+
+  async createOrUpdateReferralMotivationBackgroundAndNonAssociations(
+    username: Express.User['username'],
+    referralId: string,
+    createOrUpdate: CreateOrUpdateReferralMotivationBackgroundAndNonAssociations,
+  ): Promise<ReferralMotivationBackgroundAndNonAssociations> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.put({
+      path: `/referral/${referralId}/motivation-background-non-associations`,
+      headers: { Accept: 'application/json' },
+      data: createOrUpdate,
+    })) as ReferralMotivationBackgroundAndNonAssociations
+  }
+
+  async getMotivationBackgroundAndNonAssociations(
+    username: Express.User['username'],
+    referralId: string,
+  ): Promise<ReferralMotivationBackgroundAndNonAssociations> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/referral/${referralId}/motivation-background-non-associations`,
+      headers: { Accept: 'application/json' },
+    })) as ReferralMotivationBackgroundAndNonAssociations
   }
 
   async updateCohort(username: string, referralId: string, updateCohort: string) {

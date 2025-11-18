@@ -75,6 +75,11 @@ export default {
     createGroupCohortSelect: 'Select a cohort',
     createGroupSexSelect: 'Select a gender',
   },
+  motivationBackgroundAndNonAssociations: {
+    addToGroupEmpty: `Select whether you want to add the person to the group or not`,
+    exceededCharacterLimit: 'Details must be 2,000 characters or fewer',
+    maintainsInnocenceRequired: 'Select whether the person maintains their innocence',
+  },
   returnedError,
   userHeaderTypes,
   errorHandlerAccessErrorMessages,

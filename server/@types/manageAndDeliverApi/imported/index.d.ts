@@ -526,9 +526,11 @@ export interface paths {
     }
     /**
      * Retrieve the manager associated with the Licence Condition or Requirement associated with a referral
-     * @description Retrieves the manager (Probation Practitioner) associated with the Case, which is upstream of the
+     * @description
+     *           Retrieves the manager (Probation Practitioner) associated with the Case, which is upstream of the
      *           Referral itself.  We use this to retrieve a list of Delivery Locations (Offices) within the same
      *           PDU as a Referral itself.
+     *
      */
     get: operations['getManagerByReferralId']
     put?: never
@@ -646,6 +648,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/bff/remove-from-group/{referralId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve status transition data for a referral, in the context of removing it from a Group
+     * @description Returns all possible data for the update referral status form based on the referral id
+     */
+    get: operations['getRemoveFromGroupStatusTransitions']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/bff/referral-delivery-location-preferences-form/{referralId}': {
     parameters: {
       query?: never
@@ -655,11 +677,13 @@ export interface paths {
     }
     /**
      * A Backend-For-Frontend endpoint for the multi-page Delivery Location Preferences form
-     * @description Retrieves all the data needed for the multi-page Delivery Location Preferences form, for a Referral:
+     * @description
+     *           Retrieves all the data needed for the multi-page Delivery Location Preferences form, for a Referral:
      *           - Person on Probation summary information (from nDelius)
      *           - Existing delivery location preferences (or `null`)
      *           - Primary PDU delivery locations for the Manager associated with the Referral (from nDelius)
      *           - Other PDUs in the same region (from nDelius)
+     *
      */
     get: operations['getDeliveryLocationPreferencesFormData']
     put?: never
@@ -1490,11 +1514,9 @@ export interface components {
       problemsReadWriteNum?: string
       /** @example 2-Significant problems */
       learningDifficulties?: string
-      /**
-       * @example [
+      /** @example [
        *       "Difficulty with concentration"
-       *     ]
-       */
+       *     ] */
       problemAreas?: string[]
       /** @example 0 */
       qualifications?: string
@@ -2041,29 +2063,29 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      pageable?: components['schemas']['PageableObject']
-      first?: boolean
-      last?: boolean
-      /** Format: int32 */
-      numberOfElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageableObject: {
-      unpaged?: boolean
-      paged?: boolean
-      /** Format: int32 */
-      pageNumber?: number
-      /** Format: int32 */
-      pageSize?: number
       /** Format: int64 */
       offset?: number
       sort?: components['schemas']['SortObject']
+      /** Format: int32 */
+      pageSize?: number
+      /** Format: int32 */
+      pageNumber?: number
+      paged?: boolean
+      unpaged?: boolean
     }
     ReferralCaseListItem: {
       /** Format: uuid */
@@ -2081,9 +2103,9 @@ export interface components {
       reportingTeam: string
     }
     SortObject: {
-      unsorted?: boolean
-      sorted?: boolean
       empty?: boolean
+      sorted?: boolean
+      unsorted?: boolean
     }
     Pageable: {
       /** Format: int32 */
@@ -2349,17 +2371,17 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      pageable?: components['schemas']['PageableObject']
-      first?: boolean
-      last?: boolean
-      /** Format: int32 */
-      numberOfElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
@@ -4450,6 +4472,56 @@ export interface operations {
     requestBody?: never
     responses: {
       /** @description Data for update referral status form */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ReferralStatusTransitions'][]
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden. The client is not authorised to access this resource. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getRemoveFromGroupStatusTransitions: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id (UUID) of a referral status description */
+        referralId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Data for Remove Referral from Groupform */
       200: {
         headers: {
           [name: string]: unknown
