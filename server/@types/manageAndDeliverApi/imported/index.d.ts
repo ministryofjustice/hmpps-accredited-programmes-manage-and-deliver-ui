@@ -606,6 +606,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/group/{groupCode}/details': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get group by GroupCode
+     * @description Get group by GroupCode and in User region
+     */
+    get: operations['getGroupInRegion']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/bff/status-transitions/referral/{referralId}': {
     parameters: {
       query?: never
@@ -2017,10 +2037,10 @@ export interface components {
       otherTabTotal: number
     }
     PageReferralCaseListItem: {
-      /** Format: int32 */
-      totalPages?: number
       /** Format: int64 */
       totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
       pageable?: components['schemas']['PageableObject']
       first?: boolean
       last?: boolean
@@ -2035,12 +2055,12 @@ export interface components {
       empty?: boolean
     }
     PageableObject: {
+      unpaged?: boolean
       paged?: boolean
       /** Format: int32 */
       pageNumber?: number
       /** Format: int32 */
       pageSize?: number
-      unpaged?: boolean
       /** Format: int64 */
       offset?: number
       sort?: components['schemas']['SortObject']
@@ -2061,8 +2081,8 @@ export interface components {
       reportingTeam: string
     }
     SortObject: {
-      sorted?: boolean
       unsorted?: boolean
+      sorted?: boolean
       empty?: boolean
     }
     Pageable: {
@@ -2071,6 +2091,19 @@ export interface components {
       /** Format: int32 */
       size?: number
       sort?: string[]
+    }
+    /** @description Information identifying the group. */
+    Group: {
+      /**
+       * @description A unique code identifying the programme group.
+       * @example AP_BIRMINGHAM_NORTH
+       */
+      code: string
+      /**
+       * @description The region name the group belongs to.
+       * @example West Midlands
+       */
+      regionName: string
     }
     /** @description Form data for the update status form in the M&D UI */
     CurrentStatus: {
@@ -2221,19 +2254,6 @@ export interface components {
       /** @description Contains pdu's with a list of their reporting teams */
       locationFilters: components['schemas']['LocationFilterValues'][]
     }
-    /** @description Information identifying the group. */
-    Group: {
-      /**
-       * @description A unique code identifying the programme group.
-       * @example AP_BIRMINGHAM_NORTH
-       */
-      code: string
-      /**
-       * @description The region name the group belongs to.
-       * @example West Midlands
-       */
-      regionName: string
-    }
     GroupItem: {
       /**
        * Format: uuid
@@ -2325,10 +2345,10 @@ export interface components {
       reportingTeams: string[]
     }
     PageGroupItem: {
-      /** Format: int32 */
-      totalPages?: number
       /** Format: int64 */
       totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
       pageable?: components['schemas']['PageableObject']
       first?: boolean
       last?: boolean
@@ -4359,6 +4379,55 @@ export interface operations {
       }
       /** @description Bad Request */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getGroupInRegion: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        groupCode: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Returns programme group if exists */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['Group']
+        }
+      }
+      /** @description Invalid request body */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden. The client is not authorised to retrieve group details. */
+      403: {
         headers: {
           [name: string]: unknown
         }
