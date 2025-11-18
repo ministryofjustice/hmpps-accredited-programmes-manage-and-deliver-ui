@@ -9,7 +9,6 @@ type DailyAvailabilityModel = components['schemas']['DailyAvailabilityModel']
 type DeliveryLocationPreferencesFormData = components['schemas']['DeliveryLocationPreferencesFormData']
 type DrugDetails = components['schemas']['DrugDetails']
 type EmotionalWellbeing = components['schemas']['EmotionalWellbeing']
-type GroupMember = components['schemas']['GroupMember']
 type Health = components['schemas']['Health']
 type LearningNeeds = components['schemas']['LearningNeeds']
 type LifestyleAndAssociates = components['schemas']['LifestyleAndAssociates']
@@ -20,6 +19,7 @@ type PniScore = components['schemas']['PniScore']
 type ProgrammeGroupDetails = components['schemas']['ProgrammeGroupDetails']
 type ReferralCaseListItem = components['schemas']['ReferralCaseListItem']
 type ReferralDetails = components['schemas']['ReferralDetails']
+type GroupItem = components['schemas']['PageGroupItem']
 type Relationships = components['schemas']['Relationships']
 type Risks = components['schemas']['Risks']
 type RoshAnalysis = components['schemas']['RoshAnalysis']
@@ -65,7 +65,8 @@ export type {
   DrugDetails,
   EmotionalWellbeing,
   ExistingDeliveryLocationPreferences,
-  GroupMember,
+  Group,
+  GroupItem,
   Health,
   LearningNeeds,
   LifestyleAndAssociates,
