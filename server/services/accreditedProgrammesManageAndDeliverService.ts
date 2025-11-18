@@ -380,8 +380,8 @@ export default class AccreditedProgrammesManageAndDeliverService
   }
 
   async getMotivationBackgroundAndNonAssociations(
-    referralId: string,
     username: Express.User['username'],
+    referralId: string,
   ): Promise<ReferralMotivationBackgroundAndNonAssociations> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({

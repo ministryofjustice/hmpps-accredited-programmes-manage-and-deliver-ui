@@ -25,8 +25,8 @@ export default class GroupAllocationNotesController {
 
     const motivationBackgroundAndNonAssociations =
       await this.accreditedProgrammesManageAndDeliverService.getMotivationBackgroundAndNonAssociations(
-        referralId,
         username,
+        referralId,
       )
 
     const presenter = new MotivationBackgroundAndNonAssociationsPresenter(
@@ -75,8 +75,8 @@ export default class GroupAllocationNotesController {
 
     const motivationBackgroundAndNonAssociations =
       await this.accreditedProgrammesManageAndDeliverService.getMotivationBackgroundAndNonAssociations(
-        referralId,
         username,
+        referralId,
       )
 
     const presenter = new AddMotivationBackgroundAndNonAssociationsNotesPresenter(

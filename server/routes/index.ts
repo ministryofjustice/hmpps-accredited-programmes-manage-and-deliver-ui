@@ -250,7 +250,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await groupAllocationNotesController.showAddMotivationBackgroundAndNonAssociationsNotesPage(req, res)
   })
 
-  get('/addToGroup/:groupId/:personId', async (req, res, next) => {
+  get('/addToGroup/:groupId/:referralId', async (req, res, next) => {
     await addToGroupController.addToGroup(req, res)
   })
 
