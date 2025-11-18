@@ -65,6 +65,7 @@ export default class RemoveFromGroupUpdateStatusView {
         backLinkArgs: this.backLinkArgs,
         backLinkUri: this.presenter.backLinkUri,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
+        text: this.presenter.text,
       },
     ]
   }

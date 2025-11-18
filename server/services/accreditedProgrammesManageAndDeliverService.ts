@@ -25,6 +25,7 @@ import {
   ReferralDetails,
   ReferralStatusFormData,
   ReferralStatusHistory,
+  ReferralStatusTransitions,
   Relationships,
   Risks,
   RoshAnalysis,
@@ -411,5 +412,24 @@ export default class AccreditedProgrammesManageAndDeliverService
       headers: { Accept: 'application/json' },
       data,
     })) as ProgrammeGroupEntity
+  }
+
+  async removeFromGroupStatusTransitions(
+    referralId: string,
+    username: Express.User['username'],
+  ): Promise<ReferralStatusTransitions> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/remove-from-group/${referralId}`,
+      headers: { Accept: 'application/json' },
+    })) as ReferralStatusTransitions
+  }
+
+  async removeFromGroup(username: string, referralId: string, groupId: string) {
+    const restClient = await this.createRestClientFromUsername(username)
+    return restClient.post({
+      path: `/group/${groupId}/allocate/${referralId}`,
+      headers: { Accept: 'application/json' },
+    })
   }
 }

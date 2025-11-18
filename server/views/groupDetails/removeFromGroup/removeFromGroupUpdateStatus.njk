@@ -20,7 +20,7 @@
         {% if errorSummary !== null %}
           {{ govukErrorSummary(errorSummary) }}
         {% endif %}
-        <h1 class="govuk-heading-l">Update {{presenter.details.personName}}'s referral status</h1>
+        <h1 class="govuk-heading-l">{{text.pageHeading}}</h1>
         {%- set confirmationHtml %}
         {{ govukTag( currentStatusTagOptions ) }}
         {% endset -%}

@@ -1,4 +1,4 @@
-import { ReferralDetails, ReferralStatus, ReferralStatusFormData } from '@manage-and-deliver-api'
+import { ReferralStatus, ReferralStatusTransitions } from '@manage-and-deliver-api'
 import PresenterUtils from '../../utils/presenterUtils'
 import { RadiosArgsItem } from '../../utils/govukFrontendTypes'
 import { FormValidationError } from '../../utils/formValidationError'
@@ -6,12 +6,21 @@ import ViewUtils from '../../utils/viewUtils'
 
 export default class RemoveFromGroupUpdateStatusPresenter {
   constructor(
-    readonly details: ReferralDetails,
-    readonly statusDetails: ReferralStatusFormData,
+    readonly statusDetails: ReferralStatusTransitions,
     readonly backLinkUri: string,
+    private readonly groupManagementData: {
+      groupRegion?: string
+      personName?: string
+    },
     private readonly validationError: FormValidationError | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
   ) {}
+
+  get text() {
+    return {
+      pageHeading: `Update ${this.groupManagementData.personName}'s referral status`,
+    }
+  }
 
   get utils() {
     return new PresenterUtils(this.userInputData)
@@ -48,7 +57,7 @@ export default class RemoveFromGroupUpdateStatusPresenter {
       maxlength: '500',
       hint: {
         text:
-          this.details.currentStatusDescription === 'Scheduled'
+          this.statusDetails.currentStatus.title === 'Scheduled'
             ? 'You can add more information about this update, such as the reason for an assessment decision or for deprioritising someone.'
             : 'You can add more information about this update, such as the reason why the person cannot continue on the group',
       },
