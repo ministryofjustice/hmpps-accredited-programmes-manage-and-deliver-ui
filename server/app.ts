@@ -34,6 +34,7 @@ declare module 'express-session' {
       hasUpdatedAdditionalLocationData?: boolean
     }
     groupManagementData?: {
+      groupCode?: string
       groupRegion?: string
       personName?: string
       removeFromGroup?: boolean

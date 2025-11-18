@@ -1,5 +1,7 @@
 import {
   AlcoholMisuseDetails,
+  AllocateToGroupRequest,
+  AllocateToGroupResponse,
   Attitude,
   Availability,
   CaseListFilterValues,
@@ -13,6 +15,7 @@ import {
   DeliveryLocationPreferencesFormData,
   DrugDetails,
   EmotionalWellbeing,
+  Group,
   Health,
   LearningNeeds,
   LifestyleAndAssociates,
@@ -23,7 +26,6 @@ import {
   ProgrammeGroupDetails,
   ProgrammeGroupEntity,
   ReferralDetails,
-  ReferralStatusFormData,
   ReferralStatusHistory,
   ReferralStatusTransitions,
   Relationships,
@@ -32,6 +34,8 @@ import {
   SentenceInformation,
   ThinkingAndBehaviour,
   UpdateAvailability,
+  CreateOrUpdateReferralMotivationBackgroundAndNonAssociations,
+  ReferralMotivationBackgroundAndNonAssociations,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -362,6 +366,30 @@ export default class AccreditedProgrammesManageAndDeliverService
     })) as CreateDeliveryLocationPreferences
   }
 
+  async createOrUpdateReferralMotivationBackgroundAndNonAssociations(
+    username: Express.User['username'],
+    referralId: string,
+    createOrUpdate: CreateOrUpdateReferralMotivationBackgroundAndNonAssociations,
+  ): Promise<ReferralMotivationBackgroundAndNonAssociations> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.put({
+      path: `/referral/${referralId}/motivation-background-non-associations`,
+      headers: { Accept: 'application/json' },
+      data: createOrUpdate,
+    })) as ReferralMotivationBackgroundAndNonAssociations
+  }
+
+  async getMotivationBackgroundAndNonAssociations(
+    username: Express.User['username'],
+    referralId: string,
+  ): Promise<ReferralMotivationBackgroundAndNonAssociations> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/referral/${referralId}/motivation-background-non-associations`,
+      headers: { Accept: 'application/json' },
+    })) as ReferralMotivationBackgroundAndNonAssociations
+  }
+
   async updateCohort(username: string, referralId: string, updateCohort: string) {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.put({
@@ -380,12 +408,12 @@ export default class AccreditedProgrammesManageAndDeliverService
     })
   }
 
-  async getStatusDetails(referralId: string, username: Express.User['username']): Promise<ReferralStatusFormData> {
+  async getStatusDetails(referralId: string, username: Express.User['username']): Promise<ReferralStatusTransitions> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
-      path: `/bff/referral-status-form/${referralId}`,
+      path: `/bff/status-transitions/referral/${referralId}`,
       headers: { Accept: 'application/json' },
-    })) as ReferralStatusFormData
+    })) as ReferralStatusTransitions
   }
 
   async updateStatus(username: string, referralId: string, updatedStatus: CreateReferralStatusHistory) {
@@ -397,21 +425,36 @@ export default class AccreditedProgrammesManageAndDeliverService
     })) as ReferralDetails
   }
 
-  async addToGroup(username: string, referralId: string, groupId: string) {
+  async addToGroup(
+    username: string,
+    referralId: string,
+    groupId: string,
+    additionalDetails?: string,
+  ): Promise<AllocateToGroupResponse> {
     const restClient = await this.createRestClientFromUsername(username)
+    const data: AllocateToGroupRequest = { additionalDetails }
     return restClient.post({
       path: `/group/${groupId}/allocate/${referralId}`,
       headers: { Accept: 'application/json' },
+      data,
     })
   }
 
-  async createGroup(username: Express.User['username'], data: CreateGroupRequest): Promise<ProgrammeGroupEntity> {
+  async createGroup(username: Express.User['username'], data: CreateGroupRequest): Promise<AllocateToGroupResponse> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.post({
       path: `/group`,
       headers: { Accept: 'application/json' },
       data,
     })) as ProgrammeGroupEntity
+  }
+
+  async getGroupByCodeInRegion(username: Express.User['username'], groupCode: string): Promise<Group | null> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/group/${groupCode}/details`,
+      headers: { Accept: 'application/json' },
+    })) as Group | null
   }
 
   async removeFromGroupStatusTransitions(

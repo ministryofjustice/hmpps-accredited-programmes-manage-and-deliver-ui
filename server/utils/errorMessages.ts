@@ -71,9 +71,16 @@ export default {
     detailsTooLong: 'Details must be 500 characters or fewer.',
   },
   createGroup: {
-    createGroupCodeEmpty: 'Code: Please change this error message in errorMessages.ts',
-    createGroupCohortSelect: 'Cohort: Please change this error message in errorMessages.ts',
-    createGroupSexSelect: 'Sex: Please change this error message in errorMessages.ts',
+    createGroupCodeEmpty: 'Enter a code for your group',
+    createGroupCodeExists: (code: string) =>
+      `Group code ${code} already exists for a group in this region. Enter a different code.`,
+    createGroupCohortSelect: 'Select a cohort',
+    createGroupSexSelect: 'Select a gender',
+  },
+  motivationBackgroundAndNonAssociations: {
+    addToGroupEmpty: `Select whether you want to add the person to the group or not`,
+    exceededCharacterLimit: 'Details must be 2,000 characters or fewer',
+    maintainsInnocenceRequired: 'Select whether the person maintains their innocence',
   },
   returnedError,
   userHeaderTypes,

@@ -14,23 +14,23 @@ export default class AddToGroupMoreDetailsView {
 
   private addDetailsCharacterCountArgs() {
     return {
-      name: 'add-details',
-      id: 'add-details',
+      name: 'additional-details',
+      id: 'additional-details',
       maxlength: '500',
       label: {
-        text: 'Add details(optional)',
+        text: 'Add details (optional)',
         classes: 'govuk-label govuk-label--s',
       },
       hint: {
         text: `You can add more information about this update if you need to`,
       },
-      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.addDetails.errorMessage),
-      value: this.presenter.fields.addDetails.value,
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.additionalDetails.errorMessage),
+      value: this.presenter.fields.additionalDetails.value,
     }
   }
 
   private submitButtonArgs(): ButtonArgs {
-    return { text: 'Submit', preventDoubleClick: true }
+    return { text: 'Save', preventDoubleClick: true }
   }
 
   get renderArgs(): [string, Record<string, unknown>] {

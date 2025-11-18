@@ -19,10 +19,14 @@ type PniScore = components['schemas']['PniScore']
 type ProgrammeGroupDetails = components['schemas']['ProgrammeGroupDetails']
 type ReferralCaseListItem = components['schemas']['ReferralCaseListItem']
 type ReferralDetails = components['schemas']['ReferralDetails']
-type ReferralStatusTransitions = components['schemas']['ReferralStatusTransitions']
+type GroupItem = components['schemas']['PageGroupItem']
 type Relationships = components['schemas']['Relationships']
 type Risks = components['schemas']['Risks']
 type RoshAnalysis = components['schemas']['RoshAnalysis']
+type ReferralMotivationBackgroundAndNonAssociations =
+  components['schemas']['ReferralMotivationBackgroundAndNonAssociations']
+type CreateOrUpdateReferralMotivationBackgroundAndNonAssociations =
+  components['schemas']['CreateOrUpdateReferralMotivationBackgroundAndNonAssociations']
 type SentenceInformation = components['schemas']['SentenceInformation']
 type ThinkingAndBehaviour = components['schemas']['ThinkingAndBehaviour']
 type UpdateAvailability = components['schemas']['UpdateAvailability']
@@ -32,7 +36,7 @@ type PreferredDeliveryLocation = components['schemas']['PreferredDeliveryLocatio
 type ExistingDeliveryLocationPreferences = components['schemas']['ExistingDeliveryLocationPreferences']
 type UpdateCohort = components['schemas']['UpdateCohort']
 type UpdateLdc = components['schemas']['UpdateLdc']
-type ReferralStatusFormData = components['schemas']['ReferralStatusFormData']
+type ReferralStatusTransitions = components['schemas']['ReferralStatusTransitions']
 type CreateReferralStatusHistory = components['schemas']['CreateReferralStatusHistory']
 type ReferralStatus = components['schemas']['ReferralStatus']
 type CaseListFilterValues = components['schemas']['CaseListFilterValues']
@@ -40,12 +44,17 @@ type ReferralStatusHistory = components['schemas']['ReferralStatusHistory']
 type LocationFilterValues = components['schemas']['LocationFilterValues']
 type CaseListReferrals = components['schemas']['CaseListReferrals']
 type CreateGroupRequest = components['schemas']['CreateGroupRequest']
+type Group = components['schemas']['Group']
 type ProgrammeGroupCohortEnum = components['schemas']['CreateGroup']['cohort']
 type ProgrammeGroupSexEnum = components['schemas']['CreateGroup']['sex']
 type ProgrammeGroupEntity = components['schemas']['ProgrammeGroupEntity']
+type AllocateToGroupRequest = components['schemas']['AllocateToGroupRequest']
+type AllocateToGroupResponse = components['schemas']['AllocateToGroupResponse']
 
 export type {
   AlcoholMisuseDetails,
+  AllocateToGroupRequest,
+  AllocateToGroupResponse,
   Attitude,
   Availability,
   CaseListFilterValues,
@@ -54,6 +63,7 @@ export type {
   CreateAvailability,
   CreateDeliveryLocationPreferences,
   CreateGroupRequest,
+  CreateOrUpdateReferralMotivationBackgroundAndNonAssociations,
   CreateReferralStatusHistory,
   DailyAvailabilityModel,
   DeliveryLocationPreferences,
@@ -61,6 +71,8 @@ export type {
   DrugDetails,
   EmotionalWellbeing,
   ExistingDeliveryLocationPreferences,
+  Group,
+  GroupItem,
   Health,
   LearningNeeds,
   LifestyleAndAssociates,
@@ -76,6 +88,7 @@ export type {
   ProgrammeGroupSexEnum,
   ReferralCaseListItem,
   ReferralDetails,
+  ReferralMotivationBackgroundAndNonAssociations,
   ReferralStatus,
   ReferralStatusFormData,
   ReferralStatusHistory,

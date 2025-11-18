@@ -439,6 +439,34 @@
           ]
         }
       }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPathPattern": "/user/.*/teams"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "teams": [
+            {
+              "code": "TEAM01",
+              "description": "Wiremocked Team",
+              "pdu": {
+                "code": "PDU01",
+                "description": "Wiremocked PDU"
+              },
+              "region": {
+                "code": "wiremocked_region_code",
+                "description": "Wiremocked Region Name"
+              }
+            }
+          ]
+        }
+      }
     }
   ]
 }

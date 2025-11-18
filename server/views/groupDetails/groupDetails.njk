@@ -68,13 +68,16 @@
     </form>
   </div>
   <div class="govuk-grid-column-three-quarters">
-    {% if isPersonAdded %}
-      {{ mojAlert(successMessageArgs) }}
-    {% endif %}
     {% if errorSummary !== null %}
       {{ govukErrorSummary(errorSummary) }}
     {% endif %}
+    
+    {% if successMessageArgs !== null %}
+      {{ mojAlert(successMessageArgs) }}
+    {% endif %}
+    
     {{ mojSubNavigation(subNavArgs) }}
+    
     <form method="post">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}">
       <div id="add-to-group"></div>
@@ -84,9 +87,8 @@
       {% else %}
         <p class="govuk-body-l">{{ noResultsString }}</p>
       {% endif %}
-
-
     </form>
+     {% include "../partials/pagination.njk" %}
   </div>
 </div>
 

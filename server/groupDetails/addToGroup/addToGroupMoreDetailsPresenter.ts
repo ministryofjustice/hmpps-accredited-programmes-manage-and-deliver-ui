@@ -7,6 +7,7 @@ export default class AddToGroupMoreDetailsPresenter {
     private readonly groupManagementData: {
       groupRegion?: string
       personName?: string
+      groupCode?: string
     },
     private readonly backLink: string,
     private readonly validationError: FormValidationError | null = null,
@@ -33,9 +34,9 @@ export default class AddToGroupMoreDetailsPresenter {
 
   get fields() {
     return {
-      addDetails: {
-        value: this.utils.stringValue(null, 'add-details'),
-        errorMessage: PresenterUtils.errorMessage(this.validationError, 'add-details'),
+      additionalDetails: {
+        value: this.utils.stringValue(null, 'additional-details'),
+        errorMessage: PresenterUtils.errorMessage(this.validationError, 'additional-details'),
       },
     }
   }

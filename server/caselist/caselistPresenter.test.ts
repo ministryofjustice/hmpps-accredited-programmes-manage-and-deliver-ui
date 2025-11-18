@@ -30,13 +30,13 @@ describe(`filters`, () => {
       )
 
       const valuesToAddToSelect = [
-        { value: 'GENERAL_OFFENCE', text: 'General Offence' },
-        { value: 'SEXUAL_OFFENCE', text: 'Sexual Offence' },
+        { value: 'GENERAL_OFFENCE', text: 'General offence' },
+        { value: 'SEXUAL_OFFENCE', text: 'Sexual offence' },
       ]
       expect(presenter.generateSelectValues(valuesToAddToSelect, testObject.filter.status)).toEqual([
         { text: 'Select', value: '' },
-        { selected: false, text: 'General Offence', value: 'GENERAL_OFFENCE' },
-        { selected: false, text: 'Sexual Offence', value: 'SEXUAL_OFFENCE' },
+        { selected: false, text: 'General offence', value: 'GENERAL_OFFENCE' },
+        { selected: false, text: 'Sexual offence', value: 'SEXUAL_OFFENCE' },
       ])
     })
 

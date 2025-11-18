@@ -54,8 +54,14 @@ export default class AddToGroupController {
         formError = data.error
         userInputData = req.body
       } else {
-        await this.accreditedProgrammesManageAndDeliverService.addToGroup(username, referralId, groupId)
-        return res.redirect(`/groupDetails/${groupId}/allocated?addedToGroup=true`)
+        const response = await this.accreditedProgrammesManageAndDeliverService.addToGroup(
+          username,
+          referralId,
+          groupId,
+          data.paramsForUpdate.additionalDetails,
+        )
+        const { message } = response
+        return res.redirect(`/groupDetails/${groupId}/allocated?message=${encodeURIComponent(message)}`)
       }
     }
 

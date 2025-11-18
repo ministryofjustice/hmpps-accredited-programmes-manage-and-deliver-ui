@@ -39,31 +39,31 @@ describe(`AddToGroupForm `, () => {
         const request = TestUtils.createRequest({})
         const data = await new AddToGroupForm(request).addToGroupMoreDetailsData()
 
-        expect(data.paramsForUpdate).toStrictEqual({ moreDetails: undefined })
+        expect(data.paramsForUpdate).toStrictEqual({ additionalDetails: undefined })
       })
     })
     describe('when additional details are given', () => {
       it('returns params for update', async () => {
         const request = TestUtils.createRequest({
-          'add-details': 'Some details to add',
+          'additional-details': 'Some details to add',
         })
         const data = await new AddToGroupForm(request).addToGroupMoreDetailsData()
 
         expect(data.paramsForUpdate).toStrictEqual({
-          moreDetails: 'Some details to add',
+          additionalDetails: 'Some details to add',
         })
       })
       it('validates correctly and returns an appropriate error message', async () => {
         const request = TestUtils.createRequest({
-          'add-details': faker.string.alpha({ length: 501 }),
+          'additional-details': faker.string.alpha({ length: 501 }),
         })
         const data = await new AddToGroupForm(request).addToGroupMoreDetailsData()
 
         expect(data.error).toStrictEqual({
           errors: [
             {
-              errorSummaryLinkedField: 'add-details',
-              formFields: ['add-details'],
+              errorSummaryLinkedField: 'additional-details',
+              formFields: ['additional-details'],
               message: 'Details must be 500 characters or fewer',
             },
           ],

@@ -95,6 +95,10 @@ describe('Create Group Controller', () => {
 
   describe('POST /group/create-a-group/code', () => {
     it('redirects to cohort page on successful submission', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue({
+        code: 'Test Code',
+        regionName: 'Test Region',
+      })
       return request(app)
         .post('/group/create-a-group/code')
         .type('form')
@@ -107,13 +111,36 @@ describe('Create Group Controller', () => {
     })
 
     it('returns with errors if group code is missing', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue({
+        code: 'Test Code',
+        regionName: 'Test Region',
+      })
       return request(app)
         .post('/group/create-a-group/code')
         .type('form')
         .send({})
         .expect(400)
         .expect(res => {
-          expect(res.text).toContain('Code: Please change this error message in errorMessages.ts')
+          expect(res.text).toContain('Enter a code for your group')
+        })
+    })
+
+    it('returns with errors if group code already exists', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue({
+        code: 'Test Code',
+        regionName: 'Test Region',
+      })
+      return request(app)
+        .post('/group/create-a-group/code')
+        .type('form')
+        .send({
+          'create-group-code': 'Test Code',
+        })
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain(
+            'Group code Test Code already exists for a group in this region. Enter a different code.',
+          )
         })
     })
   })
@@ -166,7 +193,7 @@ describe('Create Group Controller', () => {
         .send({})
         .expect(400)
         .expect(res => {
-          expect(res.text).toContain('Cohort: Please change this error message in errorMessages.ts')
+          expect(res.text).toContain('Select a cohort')
         })
     })
   })
@@ -219,7 +246,7 @@ describe('Create Group Controller', () => {
         .send({})
         .expect(400)
         .expect(res => {
-          expect(res.text).toContain('Sex: Please change this error message in errorMessages.ts')
+          expect(res.text).toContain('Select a gender')
         })
     })
   })
