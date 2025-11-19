@@ -55,7 +55,6 @@ describe('CreateGroupForm', () => {
       })
     })
   })
-
   describe('createGroupDateData', () => {
     describe('when date is provided', () => {
       it('returns params for update', async () => {
@@ -126,21 +125,14 @@ describe('CreateGroupForm', () => {
   describe('createGroupCohortData', () => {
     describe('when cohort is provided', () => {
       it('returns params for update', async () => {
-        const today = new Date()
-        today.setDate(today.getDate() + 1)
-        const day = today.getDate()
-        const month = today.getMonth() + 1
-        const year = today.getFullYear()
-        const formatted = `${day}/${month}/${year}`
-
         const request = TestUtils.createRequest({
-          'create-group-date': formatted,
+          'create-group-cohort': 'SEXUAL',
         })
 
-        const data = await new CreateGroupForm(request).createGroupDateData()
+        const data = await new CreateGroupForm(request).createGroupCohortData()
 
         expect(data.paramsForUpdate).toStrictEqual({
-          startedAtDate: formatted,
+          cohort: 'SEXUAL',
         })
         expect(data.error).toBeNull()
       })
