@@ -39,8 +39,8 @@ export default class GroupDetailsController {
         formError = data.error
       } else {
         req.session.groupManagementData = {
-          groupRegion: groupDetails.group.regionName,
           personName: data.paramsForUpdate.personName,
+          groupCode: groupDetails.group.code,
         }
         return res.redirect(`/removeFromGroup/${groupId}/${data.paramsForUpdate.removeFromGroup}`)
       }
@@ -95,7 +95,6 @@ export default class GroupDetailsController {
         formError = data.error
       } else {
         req.session.groupManagementData = {
-          groupRegion: groupDetails.group.regionName,
           personName: data.paramsForUpdate.personName,
           groupCode: groupDetails.group.code,
         }

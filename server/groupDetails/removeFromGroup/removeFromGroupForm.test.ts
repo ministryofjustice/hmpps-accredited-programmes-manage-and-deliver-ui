@@ -1,3 +1,4 @@
+import { fakerEN_GB as faker } from '@faker-js/faker'
 import TestUtils from '../../testutils/testUtils'
 import RemoveFromGroupForm from './removeFromGroupForm'
 
@@ -29,6 +30,57 @@ describe(`RemoveFromGroupForm `, () => {
             },
           ],
         })
+      })
+    })
+  })
+  describe('removeFromGroupUpdateStatusData', () => {
+    describe('when all mandatory fields are passed', () => {
+      it('returns params for update', async () => {
+        const request = TestUtils.createRequest({
+          'updated-status': 'afc0b94c-b983-4a68-a109-0be29a7d3b2f',
+          'additional-details': 'Person breached their conditions',
+        })
+        const data = await new RemoveFromGroupForm(request).removeFromGroupUpdateStatusData()
+
+        expect(data.paramsForUpdate).toStrictEqual({
+          referralStatusDescriptionId: 'afc0b94c-b983-4a68-a109-0be29a7d3b2f',
+          additionalDetails: 'Person breached their conditions',
+        })
+      })
+      it('returns params for update when additional details has not been filled', async () => {
+        const request = TestUtils.createRequest({
+          'updated-status': 'afc0b94c-b983-4a68-a109-0be29a7d3b2f',
+          'additional-details': '',
+        })
+        const data = await new RemoveFromGroupForm(request).removeFromGroupUpdateStatusData()
+
+        expect(data.paramsForUpdate).toStrictEqual({
+          referralStatusDescriptionId: 'afc0b94c-b983-4a68-a109-0be29a7d3b2f',
+          additionalDetails: '',
+        })
+      })
+    })
+    describe('when both updated status and additional details fail validation rules', () => {
+      it('returns an error including both fields', async () => {
+        const moreDetails = faker.string.alphanumeric(501)
+
+        const request = TestUtils.createRequest({
+          'updated-status': undefined,
+          'additional-details': moreDetails,
+        })
+        const data = await new RemoveFromGroupForm(request).removeFromGroupUpdateStatusData()
+        expect(data.error?.errors).toStrictEqual([
+          {
+            errorSummaryLinkedField: 'additional-details',
+            formFields: ['additional-details'],
+            message: 'Details must be 500 characters or fewer.',
+          },
+          {
+            errorSummaryLinkedField: 'updated-status',
+            formFields: ['updated-status'],
+            message: `Select a new referral status`,
+          },
+        ])
       })
     })
   })

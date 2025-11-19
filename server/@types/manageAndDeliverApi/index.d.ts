@@ -19,6 +19,8 @@ type PniScore = components['schemas']['PniScore']
 type ProgrammeGroupDetails = components['schemas']['ProgrammeGroupDetails']
 type ReferralCaseListItem = components['schemas']['ReferralCaseListItem']
 type ReferralDetails = components['schemas']['ReferralDetails']
+type RemoveFromGroupRequest = components['schemas']['RemoveFromGroupRequest']
+type RemoveFromGroupResponse = components['schemas']['RemoveFromGroupResponse']
 type GroupItem = components['schemas']['PageGroupItem']
 type Relationships = components['schemas']['Relationships']
 type Risks = components['schemas']['Risks']
@@ -90,9 +92,12 @@ export type {
   ReferralDetails,
   ReferralMotivationBackgroundAndNonAssociations,
   ReferralStatus,
+  ReferralStatusFormData,
   ReferralStatusHistory,
   ReferralStatusTransitions,
   Relationships,
+  RemoveFromGroupRequest,
+  RemoveFromGroupResponse,
   Risks,
   RoshAnalysis,
   SentenceInformation,
