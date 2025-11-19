@@ -71,7 +71,26 @@ describe('CreateGroupForm', () => {
         expect(data.error).toBeNull()
       })
     })
+    describe('when date is invalid format', () => {
+      it('returns an appropriate error', async () => {
+        const request = TestUtils.createRequest({
+          'create-group-date': '2025-07-10',
+        })
 
+        const data = await new CreateGroupForm(request).createGroupDateData()
+
+        expect(data.paramsForUpdate).toBeNull()
+        expect(data.error).toStrictEqual({
+          errors: [
+            {
+              errorSummaryLinkedField: 'create-group-date',
+              formFields: ['create-group-date'],
+              message: 'Enter a date in the format 10/7/2025',
+            },
+          ],
+        })
+      })
+    })
     describe('when date is missing', () => {
       it('returns an appropriate error', async () => {
         const request = TestUtils.createRequest({})

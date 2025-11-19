@@ -74,6 +74,7 @@ export default {
       `Group code ${code} already exists for a group in this region. Enter a different code.`,
     createGroupCohortSelect: 'Select a cohort',
     createGroupDateSelect: 'Select a date',
+    createGroupDateInvalid: 'Enter a date in the format 10/7/2025',
     createGroupSexSelect: 'Select a gender',
   },
   motivationBackgroundAndNonAssociations: {

@@ -117,7 +117,14 @@ export default class CreateGroupForm {
   }
 
   private createGroupDateValidations(): ValidationChain[] {
-    return [body('create-group-date').notEmpty().withMessage(errorMessages.createGroup.createGroupDateSelect)]
+    return [
+      body('create-group-date')
+        .notEmpty()
+        .withMessage(errorMessages.createGroup.createGroupDateSelect)
+        .bail()
+        .matches(/^([1-9]|[12]\d|3[01])\/([1-9]|1[0-2])\/\d{4}$/)
+        .withMessage(errorMessages.createGroup.createGroupDateInvalid),
+    ]
   }
 
   private createGroupSexValidations(): ValidationChain[] {
