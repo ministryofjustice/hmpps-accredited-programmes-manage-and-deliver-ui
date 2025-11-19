@@ -25,7 +25,11 @@ export default class GroupDetailsView {
         text: 'Cohort',
         classes: 'govuk-label--s',
       },
-      items: this.presenter.generateSelectValues(this.presenter.group.filters.cohort, this.presenter.filter.cohort),
+      items: this.presenter.generateSelectValues(
+        this.presenter.group.filters.cohort,
+        this.presenter.filter.cohort,
+        'Select cohort',
+      ),
     }
   }
 
@@ -37,7 +41,11 @@ export default class GroupDetailsView {
         text: 'Sex',
         classes: 'govuk-label--s',
       },
-      items: this.presenter.generateSelectValues(this.presenter.group.filters.sex, this.presenter.filter.sex),
+      items: this.presenter.generateSelectValues(
+        this.presenter.group.filters.sex,
+        this.presenter.filter.sex,
+        'Select sex',
+      ),
     }
   }
 

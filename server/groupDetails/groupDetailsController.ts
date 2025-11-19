@@ -101,7 +101,6 @@ export default class GroupDetailsController {
         return res.redirect(`/addToGroup/${groupId}/${data.paramsForUpdate.addToGroup}`)
       }
     }
-
     const presenter = new GroupDetailsPresenter(
       GroupDetailsPageSection.Waitlist,
       groupDetails,
