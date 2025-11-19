@@ -56,6 +56,42 @@ describe('CreateGroupForm', () => {
     })
   })
 
+  describe('createGroupDateData', () => {
+    describe('when date is provided', () => {
+      it('returns params for update', async () => {
+        const request = TestUtils.createRequest({
+          'create-group-date': '10/7/2025',
+        })
+
+        const data = await new CreateGroupForm(request).createGroupDateData()
+
+        expect(data.paramsForUpdate).toStrictEqual({
+          startedAtDate: '10/7/2025',
+        })
+        expect(data.error).toBeNull()
+      })
+    })
+
+    describe('when date is missing', () => {
+      it('returns an appropriate error', async () => {
+        const request = TestUtils.createRequest({})
+
+        const data = await new CreateGroupForm(request).createGroupDateData()
+
+        expect(data.paramsForUpdate).toBeNull()
+        expect(data.error).toStrictEqual({
+          errors: [
+            {
+              errorSummaryLinkedField: 'create-group-date',
+              formFields: ['create-group-date'],
+              message: 'Select a date',
+            },
+          ],
+        })
+      })
+    })
+  })
+
   describe('createGroupCohortData', () => {
     describe('when cohort is provided', () => {
       it('returns params for update', async () => {

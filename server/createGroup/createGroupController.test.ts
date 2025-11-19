@@ -1,6 +1,7 @@
 import { Express } from 'express'
 import { SessionData } from 'express-session'
 import request from 'supertest'
+import { start } from 'repl'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import TestUtils from '../testutils/testUtils'
 
@@ -41,6 +42,7 @@ describe('Create Group Controller', () => {
       const sessionData: Partial<SessionData> = {
         createGroupFormData: {
           groupCode: 'EXISTING_CODE',
+          startedAtDate: '10/7/2025',
           cohort: 'GENERAL',
         },
       }
@@ -106,7 +108,7 @@ describe('Create Group Controller', () => {
           'create-group-code': 'ABC123',
         })
         .expect(res => {
-          expect(res.text).toContain('Redirecting to /group/create-a-group/cohort')
+          expect(res.text).toContain('Redirecting to /group/create-a-group/date')
         })
     })
 
@@ -145,6 +147,33 @@ describe('Create Group Controller', () => {
     })
   })
 
+  describe('GET /group/create-a-group/date', () => {
+    it('loads the date selection page', async () => {
+      return request(app)
+        .get('/group/create-a-group/date')
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Create a group date')
+        })
+    })
+
+    it('displays previously selected date from session', async () => {
+      const sessionData: Partial<SessionData> = {
+        createGroupFormData: {
+          startedAtDate: '10/7/2025',
+        },
+      }
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      return request(app)
+        .get('/group/create-a-group/date')
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('10/7/2025')
+        })
+    })
+  })
+
   describe('GET /group/create-a-group/cohort', () => {
     it('loads the cohort selection page', async () => {
       return request(app)
@@ -168,6 +197,29 @@ describe('Create Group Controller', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('General offence')
+        })
+    })
+  })
+  describe('POST /group/create-a-group/date', () => {
+    it('redirects to cohort page on successful submission', async () => {
+      return request(app)
+        .post('/group/create-a-group/date')
+        .type('form')
+        .send({ 'create-group-date': '10/7/2025' })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain('Redirecting to /group/create-a-group/cohort')
+        })
+    })
+
+    it('returns with errors if date is missing', async () => {
+      return request(app)
+        .post('/group/create-a-group/date')
+        .type('form')
+        .send({})
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain('Select a date')
         })
     })
   })
@@ -256,6 +308,7 @@ describe('Create Group Controller', () => {
       const sessionData: Partial<SessionData> = {
         createGroupFormData: {
           groupCode: 'ABC123',
+          startedAtDate: '10/7/2025',
           cohort: 'GENERAL',
           sex: 'MALE',
         },
@@ -268,6 +321,7 @@ describe('Create Group Controller', () => {
         .expect(res => {
           expect(res.text).toContain('Review your group details')
           expect(res.text).toContain('ABC123')
+          expect(res.text).toContain('10/7/2025')
           expect(res.text).toContain('General offence')
           expect(res.text).toContain('Male')
         })
@@ -279,6 +333,7 @@ describe('Create Group Controller', () => {
       const sessionData: Partial<SessionData> = {
         createGroupFormData: {
           groupCode: 'ABC123',
+          startedAtDate: '10/7/2025',
           cohort: 'GENERAL',
           sex: 'MALE',
         },
@@ -292,6 +347,7 @@ describe('Create Group Controller', () => {
           expect(res.text).toContain('Redirecting to /?groupCreated')
           expect(accreditedProgrammesManageAndDeliverService.createGroup).toHaveBeenCalledWith(expect.any(String), {
             groupCode: 'ABC123',
+            startedAtDate: '10/7/2025',
             cohort: 'GENERAL',
             sex: 'MALE',
           })
@@ -302,6 +358,7 @@ describe('Create Group Controller', () => {
       const sessionData: Partial<SessionData> = {
         createGroupFormData: {
           groupCode: 'ABC123',
+          startedAtDate: '10/7/2025',
           cohort: 'GENERAL',
           sex: 'MALE',
         },

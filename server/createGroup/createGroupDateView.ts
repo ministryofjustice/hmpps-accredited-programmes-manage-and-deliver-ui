@@ -19,10 +19,11 @@ export default class CreateGroupDateView {
     }
   }
 
-  private createGroupDateArgs(): InputArgs {
+  private get createGroupDateArgs() {
     return {
       id: 'create-group-date',
       name: 'create-group-date',
+
       hint: {
         text: 'This is when the pre-group one-to-ones are expected to start. Enter a date, for example, 10/7/2025, or select one from the calendar.',
       },
@@ -42,8 +43,9 @@ export default class CreateGroupDateView {
       {
         backLinkArgs: this.backLinkArgs(),
         homePageLink: this.homePageLink(),
-        createGroupDateArgs: this.createGroupDateArgs(),
+        createGroupDateArgs: this.createGroupDateArgs,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
+        text: this.presenter.text,
       },
     ]
   }

@@ -53,12 +53,34 @@ export default class CreateGroupController {
           ...createGroupFormData,
           groupCode: data.paramsForUpdate.groupCode,
         }
-        return res.redirect(`/group/create-a-group/cohort`)
+        return res.redirect(`/group/create-a-group/date`)
       }
     }
 
     const presenter = new CreateGroupCodePresenter(formError, createGroupFormData)
     const view = new CreateGroupCodeView(presenter)
+    return ControllerUtils.renderWithLayout(res, view, null)
+  }
+
+  async showCreateGroupDate(req: Request, res: Response): Promise<void> {
+    const { createGroupFormData } = req.session
+    let formError: FormValidationError | null = null
+    if (req.method === 'POST') {
+      const data = await new CreateGroupForm(req).createGroupDateData()
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+      } else {
+        req.session.createGroupFormData = {
+          ...createGroupFormData,
+          startedAtDate: data.paramsForUpdate.startedAtDate,
+        }
+        return res.redirect(`/group/create-a-group/cohort`)
+      }
+    }
+
+    const presenter = new CreateGroupDatePresenter(formError, createGroupFormData)
+    const view = new CreateGroupDateView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
 
@@ -81,28 +103,6 @@ export default class CreateGroupController {
 
     const presenter = new CreateGroupCohortPresenter(formError, createGroupFormData)
     const view = new CreateGroupCohortView(presenter)
-    return ControllerUtils.renderWithLayout(res, view, null)
-  }
-
-  async showCreateGroupDate(req: Request, res: Response): Promise<void> {
-    const { createGroupFormData } = req.session
-    let formError: FormValidationError | null = null
-    if (req.method === 'POST') {
-      const data = await new CreateGroupForm(req).createGroupDateData()
-      if (data.error) {
-        res.status(400)
-        formError = data.error
-      } else {
-        req.session.createGroupFormData = {
-          ...createGroupFormData,
-          startedAtDate: data.paramsForUpdate.startedAtDate,
-        }
-        return res.redirect(`/group/create-a-group/code`)
-      }
-    }
-
-    const presenter = new CreateGroupDatePresenter(formError, createGroupFormData)
-    const view = new CreateGroupDateView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
 

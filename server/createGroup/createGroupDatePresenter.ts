@@ -8,6 +8,10 @@ export default class CreateGroupDatePresenter {
     private readonly createGroupFormData: Partial<CreateGroupRequest> | null = null,
   ) {}
 
+  get text() {
+    return { headingHintText: `Create group ${this.createGroupFormData.groupCode}` }
+  }
+
   get backLinkUri() {
     return `/group/create-a-group/code`
   }
