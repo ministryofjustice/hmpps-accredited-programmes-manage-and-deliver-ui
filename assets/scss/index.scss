@@ -1,15 +1,20 @@
-$govuk-global-styles: true;
-$path: "/assets/images/";
-
 $moj-page-width: 1170px;
-$govuk-page-width: $moj-page-width;
 
-@import "govuk-frontend/dist/govuk/index";
-@import "@ministryofjustice/frontend/moj/all";
-@import "risk/rosh-widget";
-@import "risk/risks-and-alerts";
-@import "risk/risk-flag-widget";
+// GOV.UK 5.x with config overrides
+@use 'node_modules/govuk-frontend/dist/govuk' with (
+  $govuk-global-styles: true,
+  $govuk-page-width: $moj-page-width,
+  $govuk-assets-path: '/assets/images/'
+);
 
-@import './components/header-bar';
-@import './components/service-user-banner';
-@import './overrides/local';
+// MoJ 7.x
+@use 'node_modules/@ministryofjustice/frontend/moj/all';
+
+// Our custom styles
+@use 'risk/rosh-widget';
+@use 'risk/risks-and-alerts';
+@use 'risk/risk-flag-widget';
+
+@use './components/header-bar';
+@use './components/service-user-banner';
+@use './overrides/local';
