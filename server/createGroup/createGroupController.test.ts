@@ -1,7 +1,6 @@
 import { Express } from 'express'
 import { SessionData } from 'express-session'
 import request from 'supertest'
-import { start } from 'repl'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import TestUtils from '../testutils/testUtils'
 

@@ -1,4 +1,3 @@
-import { InputArgs } from '../utils/govukFrontendTypes'
 import ViewUtils from '../utils/viewUtils'
 import CreateGroupDatePresenter from './createGroupDatePresenter'
 
