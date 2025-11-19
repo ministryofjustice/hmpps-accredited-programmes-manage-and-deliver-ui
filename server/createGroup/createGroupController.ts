@@ -40,10 +40,13 @@ export default class CreateGroupController {
     const { username } = req.user
     let formError: FormValidationError | null = null
     if (req.method === 'POST') {
-      const existingGroup = await this.accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion(
-        username,
-        req.body['create-group-code'],
-      )
+      let existingGroup = { code: '' }
+      if (req.body['create-group-code']) {
+        existingGroup = await this.accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion(
+          username,
+          req.body['create-group-code'],
+        )
+      }
       const data = await new CreateGroupForm(req, existingGroup.code).createGroupCodeData()
       if (data.error) {
         res.status(400)
