@@ -277,5 +277,9 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await removeFromGroupController.removeFromGroup(req, res)
   })
 
+  getOrPost('/removeFromGroup/:groupId/:referralId/updateStatus', async (req, res, next) => {
+    await removeFromGroupController.removeFromGroupUpdateStatus(req, res)
+  })
+
   return router
 }

@@ -36,6 +36,8 @@ import {
   UpdateAvailability,
   CreateOrUpdateReferralMotivationBackgroundAndNonAssociations,
   ReferralMotivationBackgroundAndNonAssociations,
+  RemoveFromGroupRequest,
+  RemoveFromGroupResponse,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -455,5 +457,30 @@ export default class AccreditedProgrammesManageAndDeliverService
       path: `/group/${groupCode}/details`,
       headers: { Accept: 'application/json' },
     })) as Group | null
+  }
+
+  async removeFromGroupStatusTransitions(
+    referralId: string,
+    username: Express.User['username'],
+  ): Promise<ReferralStatusTransitions> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/remove-from-group/${referralId}`,
+      headers: { Accept: 'application/json' },
+    })) as ReferralStatusTransitions
+  }
+
+  async removeFromGroup(
+    username: string,
+    referralId: string,
+    groupId: string,
+    data: RemoveFromGroupRequest,
+  ): Promise<RemoveFromGroupResponse> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return restClient.post({
+      path: `/group/${groupId}/remove/${referralId}`,
+      headers: { Accept: 'application/json' },
+      data,
+    })
   }
 }

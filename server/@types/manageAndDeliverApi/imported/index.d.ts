@@ -192,6 +192,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/group/{groupId}/remove/{referralId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Remove a referral from a programme group
+     * @description Remove a referral from a specific programme group and update its status
+     */
+    post: operations['removeFromProgrammeGroup']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/group/{groupId}/allocate/{referralId}': {
     parameters: {
       query?: never
@@ -1084,6 +1104,26 @@ export interface components {
     ProgrammeGroupCohort: 'GENERAL' | 'GENERAL_LDC' | 'SEXUAL' | 'SEXUAL_LDC'
     /** @enum {string} */
     ProgrammeGroupSexEnum: 'MALE' | 'FEMALE' | 'MIXED'
+    RemoveFromGroupRequest: {
+      /**
+       * Format: uuid
+       * @description The UUID of the referral status description to transition the referral to after removal from the group
+       * @example 3fa85f64-5717-4562-b3fc-2c963f66afa6
+       */
+      referralStatusDescriptionId: string
+      /**
+       * @description Arbitrary text that will be added to the Status History of the Referral
+       * @example Alex has been removed from the group due to conflicting commitments
+       */
+      additionalDetails?: string
+    }
+    RemoveFromGroupResponse: {
+      /**
+       * @description The text to show to the user, confirming the removal has taken place
+       * @example Alex River was removed from this group. Their referral status is now Awaiting allocation.
+       */
+      message: string
+    }
     AllocateToGroupRequest: {
       /**
        * @description Arbitrary text that will be added to the Status History of the Referral
@@ -3106,6 +3146,71 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  removeFromProgrammeGroup: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The group_id (UUID) of the group to remove from */
+        groupId: string
+        /** @description The referralId (UUID) of a referral */
+        referralId: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RemoveFromGroupRequest']
+      }
+    }
+    responses: {
+      /** @description Referral successfully removed from the programme group */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['RemoveFromGroupResponse']
+        }
+      }
+      /** @description Invalid request format or invalid UUID format */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden. The client is not authorised to remove from this group. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The group, referral, or status description does not exist */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }

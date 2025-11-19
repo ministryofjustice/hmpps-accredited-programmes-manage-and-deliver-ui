@@ -5,7 +5,6 @@ export default class AddToGroupMoreDetailsPresenter {
   constructor(
     private readonly groupId: string,
     private readonly groupManagementData: {
-      groupRegion?: string
       personName?: string
       groupCode?: string
     },
