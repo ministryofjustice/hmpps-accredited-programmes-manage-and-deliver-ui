@@ -5,7 +5,7 @@ export default class RemoveFromGroupPresenter {
   constructor(
     readonly groupId: string,
     private readonly groupManagementData: {
-      groupRegion?: string
+      groupCode?: string
       personName?: string
     },
     private readonly backLink: string,
@@ -15,7 +15,7 @@ export default class RemoveFromGroupPresenter {
 
   get text() {
     return {
-      pageHeading: this.groupManagementData.groupRegion,
+      pageHeading: this.groupManagementData.groupCode,
       questionText: `Remove ${this.groupManagementData.personName} from this group?`,
     }
   }

@@ -9,7 +9,6 @@ export default class RemoveFromGroupUpdateStatusPresenter {
     readonly statusDetails: ReferralStatusTransitions,
     readonly backLinkUri: string,
     private readonly groupManagementData: {
-      groupRegion?: string
       personName?: string
     },
     private readonly validationError: FormValidationError | null = null,

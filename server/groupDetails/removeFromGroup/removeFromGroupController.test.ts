@@ -26,7 +26,7 @@ afterEach(() => {
 beforeEach(() => {
   const sessionData: Partial<SessionData> = {
     groupManagementData: {
-      groupRegion: 'London',
+      groupCode: '`ABC123`',
       personName: 'Alex River',
     },
     originPage: '/groupDetails/123/allocated?nameOrCRN=dave',
