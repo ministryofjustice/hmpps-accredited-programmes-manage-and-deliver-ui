@@ -192,6 +192,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/group/{groupId}/remove/{referralId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Remove a referral from a programme group
+     * @description Remove a referral from a specific programme group and update its status
+     */
+    post: operations['removeFromProgrammeGroup']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/group/{groupId}/allocate/{referralId}': {
     parameters: {
       query?: never
@@ -606,26 +626,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/group/{groupCode}/details': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Get group by GroupCode
-     * @description Get group by GroupCode and in User region
-     */
-    get: operations['getGroupInRegion']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/bff/status-transitions/referral/{referralId}': {
     parameters: {
       query?: never
@@ -638,26 +638,6 @@ export interface paths {
      * @description Returns all possible data for the update referral status form based on the referral id
      */
     get: operations['getStatusTransitionsForReferral']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/bff/remove-from-group/{referralId}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    /**
-     * Retrieve status transition data for a referral, in the context of removing it from a Group
-     * @description Returns all possible data for the update referral status form based on the referral id
-     */
-    get: operations['getRemoveFromGroupStatusTransitions']
     put?: never
     post?: never
     delete?: never
@@ -1078,6 +1058,26 @@ export interface components {
     ProgrammeGroupCohort: 'GENERAL' | 'GENERAL_LDC' | 'SEXUAL' | 'SEXUAL_LDC'
     /** @enum {string} */
     ProgrammeGroupSexEnum: 'MALE' | 'FEMALE' | 'MIXED'
+    RemoveFromGroupRequest: {
+      /**
+       * Format: uuid
+       * @description The UUID of the referral status description to transition the referral to after removal from the group
+       * @example 3fa85f64-5717-4562-b3fc-2c963f66afa6
+       */
+      referralStatusDescriptionId: string
+      /**
+       * @description Arbitrary text that will be added to the Status History of the Referral
+       * @example Alex has been removed from the group due to conflicting commitments
+       */
+      additionalDetails: string
+    }
+    RemoveFromGroupResponse: {
+      /**
+       * @description The text to show to the user, confirming the removal has taken place
+       * @example Alex River was removed from this group. Their referral status is now Awaiting allocation.
+       */
+      message: string
+    }
     AllocateToGroupRequest: {
       /**
        * @description Arbitrary text that will be added to the Status History of the Referral
@@ -2057,21 +2057,21 @@ export interface components {
       otherTabTotal: number
     }
     PageReferralCaseListItem: {
-      /** Format: int64 */
-      totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      first?: boolean
-      last?: boolean
+      /** Format: int64 */
+      totalElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
-      pageable?: components['schemas']['PageableObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageableObject: {
@@ -2111,19 +2111,6 @@ export interface components {
       /** Format: int32 */
       size?: number
       sort?: string[]
-    }
-    /** @description Information identifying the group. */
-    Group: {
-      /**
-       * @description A unique code identifying the programme group.
-       * @example AP_BIRMINGHAM_NORTH
-       */
-      code: string
-      /**
-       * @description The region name the group belongs to.
-       * @example West Midlands
-       */
-      regionName: string
     }
     /** @description Form data for the update status form in the M&D UI */
     CurrentStatus: {
@@ -2274,6 +2261,19 @@ export interface components {
       /** @description Contains pdu's with a list of their reporting teams */
       locationFilters: components['schemas']['LocationFilterValues'][]
     }
+    /** @description Information identifying the group. */
+    Group: {
+      /**
+       * @description A unique code identifying the programme group.
+       * @example AP_BIRMINGHAM_NORTH
+       */
+      code: string
+      /**
+       * @description The region name the group belongs to.
+       * @example West Midlands
+       */
+      regionName: string
+    }
     GroupItem: {
       /**
        * Format: uuid
@@ -2365,21 +2365,21 @@ export interface components {
       reportingTeams: string[]
     }
     PageGroupItem: {
-      /** Format: int64 */
-      totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      first?: boolean
-      last?: boolean
+      /** Format: int64 */
+      totalElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
-      pageable?: components['schemas']['PageableObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
@@ -3100,6 +3100,71 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  removeFromProgrammeGroup: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The group_id (UUID) of the group to remove from */
+        groupId: string
+        /** @description The referralId (UUID) of a referral */
+        referralId: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RemoveFromGroupRequest']
+      }
+    }
+    responses: {
+      /** @description Referral successfully removed from the programme group */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['RemoveFromGroupResponse']
+        }
+      }
+      /** @description Invalid request format or invalid UUID format */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden. The client is not authorised to remove from this group. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The group, referral, or status description does not exist */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -4408,55 +4473,6 @@ export interface operations {
       }
     }
   }
-  getGroupInRegion: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        groupCode: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Returns programme group if exists */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['Group']
-        }
-      }
-      /** @description Invalid request body */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description The request was unauthorised */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden. The client is not authorised to retrieve group details. */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
   getStatusTransitionsForReferral: {
     parameters: {
       query?: never
@@ -4470,56 +4486,6 @@ export interface operations {
     requestBody?: never
     responses: {
       /** @description Data for update referral status form */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ReferralStatusTransitions'][]
-        }
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description The request was unauthorised */
-      401: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-      /** @description Forbidden. The client is not authorised to access this resource. */
-      403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  getRemoveFromGroupStatusTransitions: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        /** @description The id (UUID) of a referral status description */
-        referralId: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description Data for Remove Referral from Groupform */
       200: {
         headers: {
           [name: string]: unknown

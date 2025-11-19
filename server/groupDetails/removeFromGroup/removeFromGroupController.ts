@@ -61,7 +61,14 @@ export default class RemoveFromGroupController {
         formError = data.error
         userInputData = req.body
       } else {
-        return res.redirect(req.session.originPage)
+        const response = await this.accreditedProgrammesManageAndDeliverService.removeFromGroup(
+          username,
+          referralId,
+          groupId,
+          data.paramsForUpdate,
+        )
+        const { message } = response
+        return res.redirect(`/groupDetails/${groupId}/allocated?message=${encodeURIComponent(message)}`)
       }
     }
 

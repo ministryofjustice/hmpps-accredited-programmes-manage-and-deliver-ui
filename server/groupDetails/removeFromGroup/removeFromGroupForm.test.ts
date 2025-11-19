@@ -38,7 +38,7 @@ describe(`RemoveFromGroupForm `, () => {
       it('returns params for update', async () => {
         const request = TestUtils.createRequest({
           'updated-status': 'afc0b94c-b983-4a68-a109-0be29a7d3b2f',
-          'more-details': 'Person breached their conditions',
+          'additional-details': 'Person breached their conditions',
         })
         const data = await new RemoveFromGroupForm(request).removeFromGroupUpdateStatusData()
 
@@ -50,7 +50,7 @@ describe(`RemoveFromGroupForm `, () => {
       it('returns params for update when more details has not been filled', async () => {
         const request = TestUtils.createRequest({
           'updated-status': 'afc0b94c-b983-4a68-a109-0be29a7d3b2f',
-          'more-details': '',
+          'additional-details': '',
         })
         const data = await new RemoveFromGroupForm(request).removeFromGroupUpdateStatusData()
 
@@ -66,13 +66,13 @@ describe(`RemoveFromGroupForm `, () => {
 
         const request = TestUtils.createRequest({
           'updated-status': undefined,
-          'more-details': moreDetails,
+          'additional-details': moreDetails,
         })
         const data = await new RemoveFromGroupForm(request).removeFromGroupUpdateStatusData()
         expect(data.error?.errors).toStrictEqual([
           {
-            errorSummaryLinkedField: 'more-details',
-            formFields: ['more-details'],
+            errorSummaryLinkedField: 'additional-details',
+            formFields: ['additional-details'],
             message: 'Details must be 500 characters or fewer.',
           },
           {

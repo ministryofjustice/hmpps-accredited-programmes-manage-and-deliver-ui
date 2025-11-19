@@ -47,8 +47,8 @@ export default class RemoveFromGroupUpdateStatusPresenter {
 
   generateMoreDetailsTextBox() {
     return {
-      name: 'more-details',
-      id: 'more-details',
+      name: 'additional-details',
+      id: 'additional-details',
       label: {
         text: 'Add details (optional)',
         classes: 'govuk-label--m',
@@ -69,8 +69,8 @@ export default class RemoveFromGroupUpdateStatusPresenter {
   get fields() {
     return {
       moreDetailsTextArea: {
-        errorMessage: PresenterUtils.errorMessage(this.validationError, 'more-details'),
-        value: this.utils.stringValue(null, 'more-details'),
+        errorMessage: PresenterUtils.errorMessage(this.validationError, 'additional-details'),
+        value: this.utils.stringValue(null, 'additional-details'),
       },
       updatedStatus: {
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'updated-status'),

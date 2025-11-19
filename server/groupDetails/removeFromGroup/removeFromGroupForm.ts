@@ -1,6 +1,6 @@
 import { Request } from 'express'
 import { body, ValidationChain } from 'express-validator'
-import { CreateReferralStatusHistory } from '@manage-and-deliver-api'
+import { RemoveFromGroupRequest } from '@manage-and-deliver-api'
 import { FormData } from '../../utils/forms/formData'
 import errorMessages from '../../utils/errorMessages'
 import FormUtils from '../../utils/formUtils'
@@ -37,7 +37,7 @@ export default class RemoveFromGroupForm {
     return [body('remove-from-group').notEmpty().withMessage(errorMessages.removeFromGroup.removeFromGroupEmpty)]
   }
 
-  async removeFromGroupUpdateStatusData(): Promise<FormData<CreateReferralStatusHistory>> {
+  async removeFromGroupUpdateStatusData(): Promise<FormData<RemoveFromGroupRequest>> {
     const validationResult = await FormUtils.runValidations({
       request: this.request,
       validations: RemoveFromGroupForm.removeFromGroupUpdateStatusValidations,
@@ -54,7 +54,7 @@ export default class RemoveFromGroupForm {
     return {
       paramsForUpdate: {
         referralStatusDescriptionId: this.request.body['updated-status'],
-        additionalDetails: this.request.body['more-details'],
+        additionalDetails: this.request.body['additional-details'],
       },
       error: null,
     }
@@ -62,7 +62,7 @@ export default class RemoveFromGroupForm {
 
   static get removeFromGroupUpdateStatusValidations(): ValidationChain[] {
     return [
-      body('more-details').isLength({ max: 500 }).withMessage(errorMessages.removeFromGroup.detailsTooLong),
+      body('additional-details').isLength({ max: 500 }).withMessage(errorMessages.removeFromGroup.detailsTooLong),
       body('updated-status').notEmpty().withMessage(errorMessages.removeFromGroup.updatedStatusEmpty),
     ]
   }
