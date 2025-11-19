@@ -22,7 +22,7 @@ export default class AddToGroupMoreDetailsView {
         classes: 'govuk-label govuk-label--s',
       },
       hint: {
-        text: `You can add more information about this update if you need to`,
+        text: `You can add more information about this update if you need to.`,
       },
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.additionalDetails.errorMessage),
       value: this.presenter.fields.additionalDetails.value,
