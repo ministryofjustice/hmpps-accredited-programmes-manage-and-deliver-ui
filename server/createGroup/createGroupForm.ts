@@ -123,7 +123,19 @@ export default class CreateGroupForm {
         .withMessage(errorMessages.createGroup.createGroupDateSelect)
         .bail()
         .matches(/^([1-9]|[12]\d|3[01])\/([1-9]|1[0-2])\/\d{4}$/)
-        .withMessage(errorMessages.createGroup.createGroupDateInvalid),
+        .withMessage(errorMessages.createGroup.createGroupDateInvalid)
+        .bail()
+        .custom((value: string) => {
+          const [day, month, year] = value.split('/').map(Number)
+          const inputDate = new Date(year, month - 1, day)
+          const today = new Date()
+          today.setHours(0, 0, 0, 0)
+          if (inputDate < today) {
+            throw new Error(errorMessages.createGroup.createGroupDateInPast)
+          }
+
+          return true
+        }),
     ]
   }
 

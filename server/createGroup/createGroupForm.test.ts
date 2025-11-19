@@ -60,13 +60,13 @@ describe('CreateGroupForm', () => {
     describe('when date is provided', () => {
       it('returns params for update', async () => {
         const request = TestUtils.createRequest({
-          'create-group-date': '10/7/2025',
+          'create-group-date': '10/7/2050',
         })
 
         const data = await new CreateGroupForm(request).createGroupDateData()
 
         expect(data.paramsForUpdate).toStrictEqual({
-          startedAtDate: '10/7/2025',
+          startedAtDate: '10/7/2050',
         })
         expect(data.error).toBeNull()
       })
@@ -103,10 +103,22 @@ describe('CreateGroupForm', () => {
             {
               errorSummaryLinkedField: 'create-group-date',
               formFields: ['create-group-date'],
-              message: 'Select a date',
+              message: 'Enter or select a date',
             },
           ],
         })
+      })
+    })
+    describe('when date is in the past', () => {
+      it('returns appropriate error', async () => {
+        const request = TestUtils.createRequest({
+          'create-group-date': '1/1/2000',
+        })
+
+        const data = await new CreateGroupForm(request).createGroupDateData()
+
+        expect(data.paramsForUpdate).toBeNull()
+        expect(data.error.errors[0].message).toBe('Enter or select a date in the future')
       })
     })
   })
@@ -114,14 +126,21 @@ describe('CreateGroupForm', () => {
   describe('createGroupCohortData', () => {
     describe('when cohort is provided', () => {
       it('returns params for update', async () => {
+        const today = new Date()
+        today.setDate(today.getDate() + 1)
+        const day = today.getDate()
+        const month = today.getMonth() + 1
+        const year = today.getFullYear()
+        const formatted = `${day}/${month}/${year}`
+
         const request = TestUtils.createRequest({
-          'create-group-cohort': 'SEXUAL',
+          'create-group-date': formatted,
         })
 
-        const data = await new CreateGroupForm(request).createGroupCohortData()
+        const data = await new CreateGroupForm(request).createGroupDateData()
 
         expect(data.paramsForUpdate).toStrictEqual({
-          cohort: 'SEXUAL',
+          startedAtDate: formatted,
         })
         expect(data.error).toBeNull()
       })

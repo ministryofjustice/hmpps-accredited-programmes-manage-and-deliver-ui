@@ -13,7 +13,7 @@ export default class CreateGroupCohortPresenter {
   }
 
   get backLinkUri() {
-    return `/group/create-a-group/code`
+    return `/group/create-a-group/date`
   }
 
   get errorSummary() {
