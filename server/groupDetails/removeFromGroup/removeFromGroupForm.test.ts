@@ -47,7 +47,7 @@ describe(`RemoveFromGroupForm `, () => {
           additionalDetails: 'Person breached their conditions',
         })
       })
-      it('returns params for update when more details has not been filled', async () => {
+      it('returns params for update when additional details has not been filled', async () => {
         const request = TestUtils.createRequest({
           'updated-status': 'afc0b94c-b983-4a68-a109-0be29a7d3b2f',
           'additional-details': '',
@@ -60,7 +60,7 @@ describe(`RemoveFromGroupForm `, () => {
         })
       })
     })
-    describe('when both updated status and more details fail validation rules', () => {
+    describe('when both updated status and additional details fail validation rules', () => {
       it('returns an error including both fields', async () => {
         const moreDetails = faker.string.alphanumeric(501)
 

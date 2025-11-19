@@ -47,11 +47,6 @@ export default class RemoveFromGroupController {
     const { groupId, referralId } = req.params
     const { username } = req.user
 
-    const statusDetails = await this.accreditedProgrammesManageAndDeliverService.removeFromGroupStatusTransitions(
-      referralId,
-      username,
-    )
-
     let formError: FormValidationError | null = null
     let userInputData = null
     if (req.method === 'POST') {
@@ -71,6 +66,11 @@ export default class RemoveFromGroupController {
         return res.redirect(`/groupDetails/${groupId}/allocated?message=${encodeURIComponent(message)}`)
       }
     }
+
+    const statusDetails = await this.accreditedProgrammesManageAndDeliverService.removeFromGroupStatusTransitions(
+      referralId,
+      username,
+    )
 
     const presenter = new RemoveFromGroupUpdateStatusPresenter(
       statusDetails,
