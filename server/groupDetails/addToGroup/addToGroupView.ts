@@ -23,7 +23,7 @@ export default class AddToGroupView {
         },
       },
       hint: {
-        text: 'Once you add someone to a group, their referral status will change to Scheduled in the case list and in NDelius',
+        text: 'Once you add someone to a group, their referral status will change to Scheduled in the case list and in NDelius.',
       },
       items: [
         {

@@ -80,3 +80,17 @@
 .govuk-radios--small.group-details-table {
   margin-top: 15px;
 }
+
+.govuk-table__header {
+  button {
+    align-items: flex-start;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    svg {
+      margin-top: 2px;
+      flex-shrink: 0;
+      min-width: 12px;
+      min-height: 12px;
+    }
+  }
+}
