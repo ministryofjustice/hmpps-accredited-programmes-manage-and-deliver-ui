@@ -35,8 +35,8 @@ declare module 'express-session' {
     }
     groupManagementData?: {
       groupCode?: string
-      groupRegion?: string
       personName?: string
+      removeFromGroup?: boolean
     }
     createGroupFormData?: Partial<CreateGroupRequest>
   }

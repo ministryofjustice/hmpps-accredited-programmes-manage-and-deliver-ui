@@ -30,7 +30,25 @@ describe('CreateGroupForm', () => {
             {
               errorSummaryLinkedField: 'create-group-code',
               formFields: ['create-group-code'],
-              message: 'Code: Please change this error message in errorMessages.ts',
+              message: 'Enter a code for your group',
+            },
+          ],
+        })
+      })
+    })
+    describe('when group code already exists in region', () => {
+      it('returns an appropriate error', async () => {
+        const request = TestUtils.createRequest({ 'create-group-code': 'GROUP123' })
+
+        const data = await new CreateGroupForm(request, 'GROUP123').createGroupCodeData()
+
+        expect(data.paramsForUpdate).toBeNull()
+        expect(data.error).toStrictEqual({
+          errors: [
+            {
+              errorSummaryLinkedField: 'create-group-code',
+              formFields: ['create-group-code'],
+              message: 'Group code GROUP123 already exists for a group in this region. Enter a different code.',
             },
           ],
         })
@@ -66,7 +84,7 @@ describe('CreateGroupForm', () => {
             {
               errorSummaryLinkedField: 'create-group-cohort',
               formFields: ['create-group-cohort'],
-              message: 'Cohort: Please change this error message in errorMessages.ts',
+              message: 'Select a cohort',
             },
           ],
         })
@@ -102,7 +120,7 @@ describe('CreateGroupForm', () => {
             {
               errorSummaryLinkedField: 'create-group-sex',
               formFields: ['create-group-sex'],
-              message: 'Sex: Please change this error message in errorMessages.ts',
+              message: 'Select a gender',
             },
           ],
         })

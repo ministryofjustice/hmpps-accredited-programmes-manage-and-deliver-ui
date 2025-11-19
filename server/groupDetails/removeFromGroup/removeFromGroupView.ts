@@ -26,6 +26,7 @@ export default class RemoveFromGroupView {
         {
           value: 'yes',
           text: 'Yes',
+          checked: this.presenter.fields.removeFromGroup.value === 'yes',
         },
         {
           value: 'no',

@@ -6,7 +6,6 @@ export default class AddToGroupPresenter {
     readonly groupId: string,
     private readonly groupManagementData: {
       groupCode?: string
-      groupRegion?: string
       personName?: string
     },
     private readonly backLink: string,
