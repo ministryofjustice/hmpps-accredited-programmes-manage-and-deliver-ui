@@ -452,7 +452,6 @@ export default class AccreditedProgrammesManageAndDeliverService
   }
 
   async getGroupByCodeInRegion(username: Express.User['username'], groupCode: string): Promise<Group | null> {
-    console.log('getGroupByCodeInRegion', username, groupCode)
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/group/${groupCode}/details`,
