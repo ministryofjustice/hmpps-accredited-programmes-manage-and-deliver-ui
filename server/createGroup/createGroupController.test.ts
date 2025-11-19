@@ -111,10 +111,6 @@ describe('Create Group Controller', () => {
     })
 
     it('returns with errors if group code is missing', async () => {
-      accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue({
-        code: 'Test Code',
-        regionName: 'Test Region',
-      })
       return request(app)
         .post('/group/create-a-group/code')
         .type('form')
