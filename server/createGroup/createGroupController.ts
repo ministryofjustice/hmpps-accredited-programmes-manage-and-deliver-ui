@@ -65,11 +65,20 @@ export default class CreateGroupController {
   async showCreateGroupDate(req: Request, res: Response): Promise<void> {
     const { createGroupFormData } = req.session
     let formError: FormValidationError | null = null
+
+    let formDataForPresenter: Partial<CreateGroupRequest> | null = createGroupFormData
+
     if (req.method === 'POST') {
       const data = await new CreateGroupForm(req).createGroupDateData()
+
       if (data.error) {
         res.status(400)
         formError = data.error
+
+        formDataForPresenter = {
+          ...createGroupFormData,
+          startedAtDate: req.body['create-group-date'],
+        }
       } else {
         req.session.createGroupFormData = {
           ...createGroupFormData,
@@ -79,7 +88,7 @@ export default class CreateGroupController {
       }
     }
 
-    const presenter = new CreateGroupDatePresenter(formError, createGroupFormData)
+    const presenter = new CreateGroupDatePresenter(formError, formDataForPresenter)
     const view = new CreateGroupDateView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
