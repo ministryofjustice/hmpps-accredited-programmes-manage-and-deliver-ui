@@ -186,7 +186,7 @@ describe('CreateGroupForm', () => {
             {
               errorSummaryLinkedField: 'create-group-sex',
               formFields: ['create-group-sex'],
-              message: 'Select a gender',
+              message: 'Select a sex',
             },
           ],
         })

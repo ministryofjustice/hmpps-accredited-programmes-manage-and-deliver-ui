@@ -78,7 +78,7 @@ export default {
     createGroupDateSelect: 'Enter or select a date',
     createGroupDateInvalid: 'Enter a date in the format 10/7/2025',
     createGroupDateInPast: 'Enter or select a date in the future',
-    createGroupSexSelect: 'Select a gender',
+    createGroupSexSelect: 'Select a sex',
   },
   motivationBackgroundAndNonAssociations: {
     addToGroupEmpty: `Select whether you want to add the person to the group or not`,

@@ -25,7 +25,7 @@ export default class CreateGroupSexView {
       name: 'create-group-sex',
       fieldset: {
         legend: {
-          text: 'Select the gender of the group',
+          text: 'Select the sex of the group',
           isPageHeading: true,
           classes: 'govuk-fieldset__legend--l',
         },

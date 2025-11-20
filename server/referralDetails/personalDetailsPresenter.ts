@@ -41,8 +41,8 @@ export default class PersonalDetailsPresenter extends ReferralDetailsPresenter {
         lines: [this.personalDetails.ethnicity],
       },
       {
-        key: 'Gender',
-        lines: [this.personalDetails.gender],
+        key: 'Sex',
+        lines: [this.personalDetails.sex],
       },
       {
         key: 'Setting',

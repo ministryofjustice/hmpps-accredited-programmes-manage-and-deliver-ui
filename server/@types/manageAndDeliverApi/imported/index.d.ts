@@ -1801,10 +1801,10 @@ export interface components {
        */
       age: string
       /**
-       * @description The gender of the person being referred.
+       * @description The sex of the person being referred.
        * @example Male
        */
-      gender: string
+      sex: string
       /**
        * @description The setting where the referral will be delivered.
        * @example Community
