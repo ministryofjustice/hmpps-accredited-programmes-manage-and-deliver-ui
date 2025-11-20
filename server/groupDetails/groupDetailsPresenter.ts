@@ -164,8 +164,8 @@ export default class GroupDetailsPresenter {
     return out
   }
 
-  generateSelectValues(options: string[], groupListFilter: string): SelectArgsItem[] {
-    const selectOptions: SelectArgsItem[] = [{ text: 'Select', value: '' }]
+  generateSelectValues(options: string[], groupListFilter: string, defaultValue: string): SelectArgsItem[] {
+    const selectOptions: SelectArgsItem[] = [{ text: defaultValue, value: '' }]
     options.forEach(option =>
       selectOptions.push({
         value: option,
@@ -224,16 +224,15 @@ export default class GroupDetailsPresenter {
 
   generateNoResultsString(): string {
     const hasFilters = Object.values(this.filter).some(value => value !== undefined)
-
-    if (this.hasResults) {
+    if (this.hasResults()) {
       return ''
     }
-    if (this.section === GroupDetailsPageSection.Waitlist) {
-      return hasFilters
-        ? 'No results found. Clear or change the filters'
-        : `There are no people awaiting allocation in ${this.group.group.regionName}`
+    if (hasFilters) {
+      return 'No results found. Clear or change the filters'
     }
 
-    return 'There are currently no people allocated to this group'
+    return this.section === GroupDetailsPageSection.Allocated
+      ? 'There are currently no people allocated to this group'
+      : `There are no people awaiting allocation in ${this.group.group.regionName}`
   }
 }

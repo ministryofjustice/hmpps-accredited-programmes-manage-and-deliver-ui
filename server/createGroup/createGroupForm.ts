@@ -53,6 +53,27 @@ export default class CreateGroupForm {
     }
   }
 
+  async createGroupDateData(): Promise<FormData<Partial<CreateGroupRequest>>> {
+    const validationResult = await FormUtils.runValidations({
+      request: this.request,
+      validations: this.createGroupDateValidations(),
+    })
+
+    const error = FormUtils.validationErrorFromResult(validationResult)
+    if (error) {
+      return {
+        paramsForUpdate: null,
+        error,
+      }
+    }
+    return {
+      paramsForUpdate: {
+        startedAtDate: this.request.body['create-group-date'],
+      },
+      error: null,
+    }
+  }
+
   async createGroupSexData(): Promise<FormData<Partial<CreateGroupRequest>>> {
     const validationResult = await FormUtils.runValidations({
       request: this.request,
@@ -93,6 +114,29 @@ export default class CreateGroupForm {
 
   private createGroupCohortValidations(): ValidationChain[] {
     return [body('create-group-cohort').notEmpty().withMessage(errorMessages.createGroup.createGroupCohortSelect)]
+  }
+
+  private createGroupDateValidations(): ValidationChain[] {
+    return [
+      body('create-group-date')
+        .notEmpty()
+        .withMessage(errorMessages.createGroup.createGroupDateSelect)
+        .bail()
+        .matches(/^([1-9]|[12]\d|3[01])\/([1-9]|1[0-2])\/\d{4}$/)
+        .withMessage(errorMessages.createGroup.createGroupDateInvalid)
+        .bail()
+        .custom((value: string) => {
+          const [day, month, year] = value.split('/').map(Number)
+          const inputDate = new Date(year, month - 1, day)
+          const today = new Date()
+          today.setHours(0, 0, 0, 0)
+          if (inputDate < today) {
+            throw new Error(errorMessages.createGroup.createGroupDateInPast)
+          }
+
+          return true
+        }),
+    ]
   }
 
   private createGroupSexValidations(): ValidationChain[] {

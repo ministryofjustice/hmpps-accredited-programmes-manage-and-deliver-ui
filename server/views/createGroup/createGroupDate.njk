@@ -1,0 +1,38 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{%- from "moj/components/date-picker/macro.njk" import mojDatePicker -%}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block main %}
+    {% block content %}
+        <div class="govuk-width-container" id="main-content">
+            <div class="govuk-main-wrapper">
+                <div class="govuk-grid-row govuk-!-margin-bottom-6">
+                  <div class="govuk-grid-column-two-thirds">
+                    {{ govukBackLink(backLinkArgs) }}
+                  </div>
+                  <div class="govuk-grid-column-one-third">
+                    <a class="return_to_homepage__link" href={{ homePageLink.href }}>{{ homePageLink.text }}</a>
+                  </div>
+                </div>
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+                        {% if errorSummary !== null %}
+                            {{ govukErrorSummary(errorSummary) }}
+                        {% endif %}
+                        <span class="govuk-caption-l">{{ text.headingHintText }}</span>
+                        <form method="post" novalidate>
+                            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                         {{ mojDatePicker(createGroupDateArgs)}}
+                            {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+                        </form>
+                    </div>
+                </div>
+                </div>
+        </div>
+    {% endblock %}
+{% endblock %}

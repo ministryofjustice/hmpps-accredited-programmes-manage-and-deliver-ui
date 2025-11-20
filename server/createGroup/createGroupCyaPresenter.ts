@@ -23,6 +23,12 @@ export default class CreateGroupCyaPresenter {
         changeLink: '/group/create-a-group/code',
       },
       {
+        key: 'Date',
+        lines: [`${this.createGroupFormData.startedAtDate}`],
+        changeLink: '/group/create-a-group/date',
+      },
+
+      {
         key: 'Cohort',
         lines: [`${this.createGroupUtils.getCohortTextFromEnum(this.createGroupFormData.cohort)}`],
         changeLink: '/group/create-a-group/cohort',
