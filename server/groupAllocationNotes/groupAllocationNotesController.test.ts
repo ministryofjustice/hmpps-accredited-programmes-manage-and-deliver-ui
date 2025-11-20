@@ -2,6 +2,7 @@ import { ReferralDetails } from '@manage-and-deliver-api'
 import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import request from 'supertest'
+import { fakerEN_GB as faker } from '@faker-js/faker'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
@@ -100,10 +101,10 @@ describe('Group allocation notes', () => {
       return request(app)
         .post(`/referral/${referralId}/add-motivation-background-and-non-associations`)
         .type('form')
-        .send({})
+        .send({ 'motivated-character-count': faker.string.alpha({ length: 2001 }) })
         .expect(400)
         .expect(res => {
-          expect(res.text).toContain(`Select whether the person maintains their innocence`)
+          expect(res.text).toContain(`Details must be 2,000 characters or fewer`)
         })
     })
   })
