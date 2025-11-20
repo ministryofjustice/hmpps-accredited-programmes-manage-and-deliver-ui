@@ -251,7 +251,7 @@ describe('Create Group Controller', () => {
         .get('/group/create-a-group/sex')
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain('Select the gender of the group')
+          expect(res.text).toContain('Select the sex of the group')
         })
     })
 
@@ -293,7 +293,7 @@ describe('Create Group Controller', () => {
         .send({})
         .expect(400)
         .expect(res => {
-          expect(res.text).toContain('Select a gender')
+          expect(res.text).toContain('Select a sex')
         })
     })
   })

@@ -90,7 +90,7 @@ describe('ViewUtils', () => {
           { key: 'Risks', lines: ['No risk'], changeLink: '/risks' },
           { key: 'Needs', lines: ['Accommodation', 'Social inclusion'], listStyle: ListStyle.noMarkers },
           { key: 'Needs', lines: ['Accommodation', 'Social inclusion'], listStyle: ListStyle.bulleted },
-          { key: 'Gender', lines: ['Male'] },
+          { key: 'Sex', lines: ['Male'] },
           { key: 'Address', lines: ['Flat 2', '27 Test Walk', 'SY16 1AQ'] },
         ]),
       ).toEqual({
@@ -133,7 +133,7 @@ describe('ViewUtils', () => {
           },
           {
             key: {
-              text: 'Gender',
+              text: 'Sex',
             },
             value: {
               html: '<p class="govuk-body">Male</p>',
