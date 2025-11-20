@@ -1,11 +1,11 @@
 @use 'node_modules/govuk-frontend/dist/govuk' as govuk;
 $border-colour-very-high: #942514;
 $text-colour-very-high: #711a0d;
-$border-colour-high: govuk-colour('red');
+$border-colour-high: govuk.govuk-colour('red');
 $text-colour-high: #942514;
-$border-colour-medium: govuk-colour('orange');
+$border-colour-medium: govuk.govuk-colour('orange');
 $text-colour-medium: #a34e00;
-$border-colour-low: govuk-colour('light-green');
+$border-colour-low: govuk.govuk-colour('light-green');
 $text-colour-low: #485b10;
 
 .osp-box,
@@ -60,17 +60,17 @@ $text-colour-low: #485b10;
 }
 
 .risk-box {
-  margin-bottom: govuk-spacing(4);
-  padding: govuk-spacing(4);
+  margin-bottom: govuk.govuk-spacing(4);
+  padding: govuk.govuk-spacing(4);
 
   &__figure {
     padding: 2px 6px;
-    color: govuk-colour('black');
+    color: govuk.govuk-colour('black');
   }
 
   &__body-text {
     @extend .govuk-body-s;
-    color: govuk-colour('dark-grey');
+    color: govuk.govuk-colour('dark-grey');
   }
 
   &--very-high {
@@ -107,8 +107,8 @@ $text-colour-low: #485b10;
 }
 
 .alerts-box {
-  margin-bottom: govuk-spacing(4);
-  padding: govuk-spacing(4);
+  margin-bottom: govuk.govuk-spacing(4);
+  padding: govuk.govuk-spacing(4);
   border: 2px solid #93afc3;
   background-color: #ebf7ff;
 
