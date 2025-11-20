@@ -8,7 +8,7 @@ export default PersonalDetailsFactory.define(() => ({
   name: 'Alex River',
   dateOfBirth: '15 March 1985',
   ethnicity: 'White',
-  gender: 'Male',
+  sex: 'Male',
   setting: 'Community',
   probationDeliveryUnit: 'East Sussex',
 }))
