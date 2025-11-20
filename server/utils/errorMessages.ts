@@ -75,6 +75,9 @@ export default {
     createGroupCodeExists: (code: string) =>
       `Group code ${code} already exists for a group in this region. Enter a different code.`,
     createGroupCohortSelect: 'Select a cohort',
+    createGroupDateSelect: 'Enter or select a date',
+    createGroupDateInvalid: 'Enter a date in the format 10/7/2025',
+    createGroupDateInPast: 'Enter or select a date in the future',
     createGroupSexSelect: 'Select a gender',
   },
   motivationBackgroundAndNonAssociations: {

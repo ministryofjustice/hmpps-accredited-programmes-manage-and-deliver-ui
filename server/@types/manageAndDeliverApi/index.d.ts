@@ -48,6 +48,7 @@ type CaseListReferrals = components['schemas']['CaseListReferrals']
 type CreateGroupRequest = components['schemas']['CreateGroupRequest']
 type Group = components['schemas']['Group']
 type ProgrammeGroupCohortEnum = components['schemas']['CreateGroup']['cohort']
+type ProgrammeGroupDate = components['schemas']['CreateGroup']['startedAtDate']
 type ProgrammeGroupSexEnum = components['schemas']['CreateGroup']['sex']
 type ProgrammeGroupEntity = components['schemas']['ProgrammeGroupEntity']
 type AllocateToGroupRequest = components['schemas']['AllocateToGroupRequest']
@@ -85,6 +86,7 @@ export type {
   PniScore,
   PreferredDeliveryLocation,
   ProgrammeGroupCohortEnum,
+  ProgrammeGroupDate,
   ProgrammeGroupDetails,
   ProgrammeGroupEntity,
   ProgrammeGroupSexEnum,

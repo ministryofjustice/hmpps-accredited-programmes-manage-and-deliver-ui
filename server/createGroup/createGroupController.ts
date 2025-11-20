@@ -5,6 +5,8 @@ import ControllerUtils from '../utils/controllerUtils'
 import { FormValidationError } from '../utils/formValidationError'
 import CreateGroupCodePresenter from './createGroupCodePresenter'
 import CreateGroupCodeView from './createGroupCodeView'
+import CreateGroupDatePresenter from './createGroupDatePresenter'
+import CreateGroupDateView from './createGroupDateView'
 import CreateGroupCohortPresenter from './createGroupCohortPresenter'
 import CreateGroupCohortView from './createGroupCohortView'
 import CreateGroupCyaPresenter from './createGroupCyaPresenter'
@@ -54,12 +56,43 @@ export default class CreateGroupController {
           ...createGroupFormData,
           groupCode: data.paramsForUpdate.groupCode,
         }
-        return res.redirect(`/group/create-a-group/cohort`)
+        return res.redirect(`/group/create-a-group/date`)
       }
     }
 
     const presenter = new CreateGroupCodePresenter(formError, createGroupFormData)
     const view = new CreateGroupCodeView(presenter)
+    return ControllerUtils.renderWithLayout(res, view, null)
+  }
+
+  async showCreateGroupDate(req: Request, res: Response): Promise<void> {
+    const { createGroupFormData } = req.session
+    let formError: FormValidationError | null = null
+
+    let formDataForPresenter: Partial<CreateGroupRequest> | null = createGroupFormData
+
+    if (req.method === 'POST') {
+      const data = await new CreateGroupForm(req).createGroupDateData()
+
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+
+        formDataForPresenter = {
+          ...createGroupFormData,
+          startedAtDate: req.body['create-group-date'],
+        }
+      } else {
+        req.session.createGroupFormData = {
+          ...createGroupFormData,
+          startedAtDate: data.paramsForUpdate.startedAtDate,
+        }
+        return res.redirect(`/group/create-a-group/cohort`)
+      }
+    }
+
+    const presenter = new CreateGroupDatePresenter(formError, formDataForPresenter)
+    const view = new CreateGroupDateView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
 
