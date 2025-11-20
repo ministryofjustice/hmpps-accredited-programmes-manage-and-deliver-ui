@@ -53,6 +53,7 @@ type ProgrammeGroupSexEnum = components['schemas']['CreateGroup']['sex']
 type ProgrammeGroupEntity = components['schemas']['ProgrammeGroupEntity']
 type AllocateToGroupRequest = components['schemas']['AllocateToGroupRequest']
 type AllocateToGroupResponse = components['schemas']['AllocateToGroupResponse']
+type CodeDescription = components['schemas']['CodeDescription']
 
 export type {
   AlcoholMisuseDetails,
@@ -62,6 +63,7 @@ export type {
   Availability,
   CaseListFilterValues,
   CaseListReferrals,
+  CodeDescription,
   CohortEnum,
   CreateAvailability,
   CreateDeliveryLocationPreferences,

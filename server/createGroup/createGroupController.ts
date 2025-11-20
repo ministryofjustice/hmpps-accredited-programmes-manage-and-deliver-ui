@@ -16,6 +16,8 @@ import CreateGroupSexPresenter from './createGroupSexPresenter'
 import CreateGroupSexView from './createGroupSexView'
 import CreateGroupStartPresenter from './createGroupStartPresenter'
 import CreateGroupStartView from './createGroupStartView'
+import CreateGroupPduPresenter from './createGroupPduPresenter'
+import CreateGroupPduView from './createGroupPduView'
 
 export default class CreateGroupController {
   constructor(
@@ -131,7 +133,7 @@ export default class CreateGroupController {
           ...createGroupFormData,
           sex: data.paramsForUpdate.sex,
         }
-        return res.redirect(`/group/create-a-group/check-your-answers`)
+        return res.redirect(`/group/create-a-group/pdu`)
       }
     }
 
@@ -155,6 +157,31 @@ export default class CreateGroupController {
 
     const presenter = new CreateGroupCyaPresenter(createGroupFormData)
     const view = new CreateGroupCyaView(presenter)
+    return ControllerUtils.renderWithLayout(res, view, null)
+  }
+
+  async showCreateGroupPdu(req: Request, res: Response): Promise<void> {
+    const { createGroupFormData } = req.session
+    const { username } = req.user
+    let formError: FormValidationError | null = null
+    if (req.method === 'POST') {
+      const data = await new CreateGroupForm(req).createGroupPduData()
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+      } else {
+        req.session.createGroupFormData = {
+          ...createGroupFormData,
+          pdu: data.paramsForUpdate.pdu,
+        }
+        return res.redirect(`/group/create-a-group/check-your-answers`)
+      }
+    }
+
+    const locations = await this.accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion(username)
+
+    const presenter = new CreateGroupPduPresenter(locations, formError, createGroupFormData)
+    const view = new CreateGroupPduView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
 }
