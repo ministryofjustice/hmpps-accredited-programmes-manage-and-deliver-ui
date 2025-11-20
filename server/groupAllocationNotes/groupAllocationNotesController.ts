@@ -57,6 +57,15 @@ export default class GroupAllocationNotesController {
         formError = data.error
         userInputData = req.body
       } else {
+        if (
+          data.paramsForUpdate === null ||
+          Object.values(data.paramsForUpdate).every(value => value === null || value === '')
+        ) {
+          return res.redirect(
+            `/referral/${referralId}/group-allocation-notes/motivation-background-and-non-associations`,
+          )
+        }
+
         await this.accreditedProgrammesManageAndDeliverService.createOrUpdateReferralMotivationBackgroundAndNonAssociations(
           username,
           referralId,

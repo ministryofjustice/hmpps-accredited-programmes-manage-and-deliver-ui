@@ -23,15 +23,26 @@ export default class AddMotivationBackgroundAndNonAssociatesForm {
         error,
       }
     }
+
     return {
       paramsForUpdate: {
-        maintainsInnocence: this.request.body['maintains-innocence'] === 'yes',
+        maintainsInnocence: this.getMaintainsInnocenceValueToSend(),
         motivations: this.request.body['motivated-character-count'],
         otherConsiderations: this.request.body['other-considerations-character-count'],
         nonAssociations: this.request.body['non-associations-character-count'],
       },
       error: null,
     }
+  }
+
+  private getMaintainsInnocenceValueToSend(): boolean | null {
+    if (this.request.body['maintains-innocence'] === 'yes') {
+      return true
+    }
+    if (this.request.body['maintains-innocence'] === 'no') {
+      return false
+    }
+    return null
   }
 
   get addMotivationBackgroundAndNonAssociatesValidations(): ValidationChain[] {
@@ -45,9 +56,6 @@ export default class AddMotivationBackgroundAndNonAssociatesForm {
       body('non-associations-character-count')
         .isLength({ max: 2000 })
         .withMessage(errorMessages.motivationBackgroundAndNonAssociations.exceededCharacterLimit),
-      body('maintains-innocence')
-        .isIn(['yes', 'no'])
-        .withMessage(errorMessages.motivationBackgroundAndNonAssociations.maintainsInnocenceRequired),
     ]
   }
 }

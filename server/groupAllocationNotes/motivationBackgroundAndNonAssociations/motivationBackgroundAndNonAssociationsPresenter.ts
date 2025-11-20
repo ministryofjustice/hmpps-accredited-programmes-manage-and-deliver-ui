@@ -31,7 +31,7 @@ export default class MotivationBackgroundAndNonAssociationsPresenter extends Gro
     return [
       {
         key: 'Maintains innocence',
-        lines: [`${this.motivationBackgroundAndNonAssociations.maintainsInnocence === true ? 'Yes' : 'No'}`],
+        lines: [this.maintainsInnocenceDisplay],
       },
       {
         key: 'Motivation to participate in an Accredited Programme',
@@ -48,9 +48,19 @@ export default class MotivationBackgroundAndNonAssociationsPresenter extends Gro
     ]
   }
 
+  get maintainsInnocenceDisplay(): string {
+    if (this.motivationBackgroundAndNonAssociations.maintainsInnocence === true) {
+      return 'Yes'
+    }
+    if (this.motivationBackgroundAndNonAssociations.maintainsInnocence === false) {
+      return 'No'
+    }
+    return ''
+  }
+
   get text() {
     return {
-      noMotivationText: `No motivation, background and non-associations added for ${this.referral.personName}`,
+      noMotivationText: `No motivation, background and non-associations added for ${this.referral.personName}.`,
     }
   }
 }

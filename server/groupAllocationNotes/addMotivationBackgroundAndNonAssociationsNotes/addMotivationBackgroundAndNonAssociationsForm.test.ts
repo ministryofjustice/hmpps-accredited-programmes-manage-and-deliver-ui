@@ -25,25 +25,6 @@ describe(`AddMotivationBackgroundAndNonAssociatesForm `, () => {
       })
     })
 
-    describe('when mandatory fields are missing', () => {
-      it('returns an appropriate error', async () => {
-        const request = TestUtils.createRequest({})
-        const data = await new AddMotivationBackgroundAndNonAssociatesForm(
-          request,
-        ).addMotivationBackgroundAndNonAssociatesData()
-
-        expect(data.error).toStrictEqual({
-          errors: [
-            {
-              errorSummaryLinkedField: 'maintains-innocence',
-              formFields: ['maintains-innocence'],
-              message: 'Select whether the person maintains their innocence',
-            },
-          ],
-        })
-      })
-    })
-
     describe('when character counts exceed the defined limit', () => {
       it('returns an appropriate error', async () => {
         const request = TestUtils.createRequest({
