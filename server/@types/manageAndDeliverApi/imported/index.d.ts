@@ -637,7 +637,7 @@ export interface paths {
      * Get group by GroupCode
      * @description Get group by GroupCode and in User region
      */
-    get: operations['getGroupInRegion']
+    get: operations['getGroupInUserRegion']
     put?: never
     post?: never
     delete?: never
@@ -702,6 +702,66 @@ export interface paths {
      *           - Other PDUs in the same region (from nDelius)
      */
     get: operations['getDeliveryLocationPreferencesFormData']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/bff/pdus-for-user-region': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * BFF endpoint to get a list of PDUs for the user region.
+     * @description BFF endpoint to retrieve a list of PDUs for the region the logged in user is in.
+     */
+    get: operations['getPdusInRegion']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/bff/office-locations-for-pdu/{pduCode}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * BFF endpoint to get a list of office locations for the selected PDU.
+     * @description BFF endpoint to retrieve a list of office locations for the selected PDU.
+     */
+    get: operations['getOfficeLocationsInPdu']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/bff/groups/region/{selectedTab}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get programme groups by region
+     * @description Retrieve a paged list of programme groups for a specified region
+     */
+    get: operations['getProgrammeGroupsByRegion']
     put?: never
     post?: never
     delete?: never
@@ -1099,6 +1159,18 @@ export interface components {
        * @description The date the group started
        */
       startedAtDate: string
+      /** @description A list of session slots for the group */
+      createGroupSessionSlot: components['schemas']['CreateGroupSessionSlot'][]
+    }
+    CreateGroupSessionSlot: {
+      /** @enum {string} */
+      dayOfWeek: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
+      /** Format: int32 */
+      hour: number
+      /** Format: int32 */
+      minutes: number
+      /** @enum {string} */
+      amOrPm: 'AM' | 'PM'
     }
     /** @enum {string} */
     ProgrammeGroupCohort: 'GENERAL' | 'GENERAL_LDC' | 'SEXUAL' | 'SEXUAL_LDC'
@@ -1801,10 +1873,10 @@ export interface components {
        */
       age: string
       /**
-       * @description The sex of the person being referred.
+       * @description The gender of the person being referred.
        * @example Male
        */
-      sex: string
+      gender: string
       /**
        * @description The setting where the referral will be delivered.
        * @example Community
@@ -1870,10 +1942,6 @@ export interface components {
       middleNames?: string
       surname: string
     }
-    NDeliusApiOfficeLocation: {
-      code: string
-      description: string
-    }
     NDeliusApiProbationDeliveryUnit: {
       code: string
       description: string
@@ -1882,7 +1950,7 @@ export interface components {
       staff: components['schemas']['RequirementStaff']
       team: components['schemas']['CodeDescription']
       probationDeliveryUnit: components['schemas']['NDeliusApiProbationDeliveryUnit']
-      officeLocations: components['schemas']['NDeliusApiOfficeLocation'][]
+      officeLocations: components['schemas']['CodeDescription'][]
     }
     RequirementStaff: {
       code: string
@@ -2170,6 +2238,32 @@ export interface components {
        * @example West Midlands
        */
       regionName: string
+      /**
+       * Format: date
+       * @description The earliest possible start date
+       * @example 02-12-2025
+       */
+      earliestStartDate?: string
+      /**
+       * Format: date
+       * @description The actual start date initiated by the facilitator
+       * @example 23-10-2025
+       */
+      startDate?: string
+      /**
+       * @description The Probation Delivery Unit (PDU) name.
+       * @example County Durham and Darlington
+       */
+      pduName?: string
+      /**
+       * @description The location description where the group programme will be delivered.
+       * @example County Durham Probation Office
+       */
+      deliveryLocation?: string
+      /** @description Cohort for the Programme Group. */
+      cohort?: components['schemas']['ProgrammeGroupCohort']
+      /** @description Sex that the group is being run for. */
+      sex?: components['schemas']['ProgrammeGroupSexEnum']
     }
     /** @description Form data for the update status form in the M&D UI */
     CurrentStatus: {
@@ -2297,6 +2391,34 @@ export interface components {
       name: string
       /** @description Available delivery locations within this PDU */
       deliveryLocations: components['schemas']['DeliveryLocationOption'][]
+    }
+    GroupsByRegion: {
+      /** @description Paged data containing the list of groups */
+      pagedGroupData: components['schemas']['PageGroup']
+      /**
+       * Format: int32
+       * @description The total number of records in the other tab, such as the Not started tab.
+       * @example 12
+       */
+      otherTabTotal: number
+    }
+    PageGroup: {
+      /** Format: int64 */
+      totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      size?: number
+      content?: components['schemas']['Group'][]
+      /** Format: int32 */
+      number?: number
+      sort?: components['schemas']['SortObject']
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
+      empty?: boolean
     }
     /** @description Available filter options for viewing programme group data. */
     Filters: {
@@ -4519,7 +4641,7 @@ export interface operations {
       }
     }
   }
-  getGroupInRegion: {
+  getGroupInUserRegion: {
     parameters: {
       query?: never
       header?: never
@@ -4717,6 +4839,173 @@ export interface operations {
         }
       }
       /** @description The referral does not exist or required data could not be found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getPdusInRegion: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Returns a list of PDUs */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['CodeDescription'][]
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden. The client is not authorised to retrieve pdus. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getOfficeLocationsInPdu: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        pduCode: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Returns a list of office locations */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['CodeDescription'][]
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden. The client is not authorised to retrieve office locations. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getProgrammeGroupsByRegion: {
+    parameters: {
+      query: {
+        pageable: components['schemas']['Pageable']
+        /** @description Filter by the unique group code */
+        groupCode?: string
+        /** @description Filter by the human readable pdu of the group, i.e. 'All London' */
+        pdu?: string
+        /** @description Filter by the delivery location name */
+        deliveryLocation?: string
+        /** @description Filter by the cohort of the group Eg: 'Sexual Offence' or 'General Offence - LDC */
+        cohort?: string
+        /** @description Filter by the sex that the group is being run for: 'Male', 'Female' or 'Mixed' */
+        sex?: string
+      }
+      header?: never
+      path: {
+        /** @description Return table data for either the Not started tab or the In progress/Completed tab */
+        selectedTab: 'NOT_STARTED' | 'IN_PROGRESS_OR_COMPLETE'
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Programme groups retrieved successfully */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['GroupsByRegion']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden. The client is not authorised to access this resource. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description No groups found for the specified region */
       404: {
         headers: {
           [name: string]: unknown
