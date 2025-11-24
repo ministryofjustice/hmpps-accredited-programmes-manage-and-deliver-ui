@@ -41,5 +41,26 @@
     </div>
   </div>
 </div>
+<script nonce="{{ cspNonce }}">
+  document.addEventListener('DOMContentLoaded', function () {
+    function clearAccessibleAutocompleteSelectionWhenInputEmpty(inputId) {
+      const autocompleteInput = document.getElementById(inputId);
+      const selectElement = document.getElementById(inputId + '-select');
+      if (autocompleteInput && selectElement) {
+        function clearSelection() {
+          if (this.value.trim() === '') {
+            selectElement.value = '';
+            selectElement.selectedIndex = 0;
+          }
+        }
+        autocompleteInput.addEventListener('input', clearSelection);
+        autocompleteInput.addEventListener('keyup', clearSelection);
+        return true;
+      }
+      return false;
+    }
+    clearAccessibleAutocompleteSelectionWhenInputEmpty('create-group-pdu');
+  });
+</script>
 {% endblock %}
 {% endblock %}

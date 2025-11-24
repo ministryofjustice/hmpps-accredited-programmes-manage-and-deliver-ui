@@ -686,6 +686,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/bff/region/{regionCode}/pdu/{pduCode}/members': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * BFF endpoint to get a list of members for a PDU.
+     * @description BFF endpoint to retrieve a list of team members for a Probation Delivery Unit
+     */
+    get: operations['getMembersInPdu']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/bff/referral-delivery-location-preferences-form/{referralId}': {
     parameters: {
       query?: never
@@ -1161,6 +1181,14 @@ export interface components {
       startedAtDate: string
       /** @description A list of session slots for the group */
       createGroupSessionSlot: components['schemas']['CreateGroupSessionSlot'][]
+      /** @description The name of the PDU that the group will take place in */
+      pduName: string
+      /** @description The code of the PDU that the group will take place in */
+      pduCode: string
+      /** @description The name of the location that the group will be delivered at */
+      deliveryLocationName: string
+      /** @description The code of the location that the group will be delivered at */
+      deliveryLocationCode: string
     }
     CreateGroupSessionSlot: {
       /** @enum {string} */
@@ -2171,10 +2199,10 @@ export interface components {
       otherTabTotal: number
     }
     PageReferralCaseListItem: {
-      /** Format: int32 */
-      totalPages?: number
       /** Format: int64 */
       totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
       first?: boolean
       last?: boolean
       /** Format: int32 */
@@ -2403,10 +2431,10 @@ export interface components {
       otherTabTotal: number
     }
     PageGroup: {
-      /** Format: int32 */
-      totalPages?: number
       /** Format: int64 */
       totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
       first?: boolean
       last?: boolean
       /** Format: int32 */
@@ -2533,10 +2561,10 @@ export interface components {
       reportingTeams: string[]
     }
     PageGroupItem: {
-      /** Format: int32 */
-      totalPages?: number
       /** Format: int64 */
       totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
       first?: boolean
       last?: boolean
       /** Format: int32 */
@@ -4786,6 +4814,56 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getMembersInPdu: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        regionCode: string
+        pduCode: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Returns a list of members */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['CodeDescription'][]
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden. The client is not authorised to retrieve pdus. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }

@@ -164,15 +164,19 @@ export default class CreateGroupController {
     const { createGroupFormData } = req.session
     const { username } = req.user
     let formError: FormValidationError | null = null
+    let userInputData = null
+
     if (req.method === 'POST') {
       const data = await new CreateGroupForm(req).createGroupPduData()
       if (data.error) {
         res.status(400)
         formError = data.error
+        userInputData = req.body
       } else {
         req.session.createGroupFormData = {
           ...createGroupFormData,
-          pdu: data.paramsForUpdate.pdu,
+          pduName: data.paramsForUpdate.pduName,
+          pduCode: data.paramsForUpdate.pduCode,
         }
         return res.redirect(`/group/create-a-group/check-your-answers`)
       }
@@ -180,7 +184,7 @@ export default class CreateGroupController {
 
     const locations = await this.accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion(username)
 
-    const presenter = new CreateGroupPduPresenter(locations, formError, createGroupFormData)
+    const presenter = new CreateGroupPduPresenter(locations, formError, createGroupFormData, userInputData)
     const view = new CreateGroupPduView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }

@@ -298,6 +298,32 @@ describe('Create Group Controller', () => {
     })
   })
 
+  describe('POST /group/create-a-group/pdu', () => {
+    it('redirects to check your answers page on successful submission', async () => {
+      return request(app)
+        .post('/group/create-a-group/pdu')
+        .type('form')
+        .send({
+          'create-group-gender': 'MALE',
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain('Redirecting to /group/create-a-group/check-your-answers')
+        })
+    })
+
+    it('returns with errors if sex is not selected', async () => {
+      return request(app)
+        .post('/group/create-a-group/sex')
+        .type('form')
+        .send({})
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain('Select a sex')
+        })
+    })
+  })
+
   describe('GET /group/create-a-group/check-your-answers', () => {
     it('loads the check your answers page with all session data', async () => {
       const sessionData: Partial<SessionData> = {

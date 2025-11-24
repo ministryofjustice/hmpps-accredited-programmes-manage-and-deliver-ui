@@ -6,7 +6,8 @@ export default class CreateGroupPduPresenter {
   constructor(
     readonly locations: CodeDescription[],
     private readonly validationError: FormValidationError | null = null,
-    private readonly createGroupFormData: (Partial<CreateGroupRequest> & { pdu?: string }) | null = null,
+    private readonly createGroupFormData: Partial<CreateGroupRequest> | null = null,
+    private readonly userInputData: Record<string, unknown> | null = null,
   ) {}
 
   get backLinkUri() {
@@ -22,13 +23,13 @@ export default class CreateGroupPduPresenter {
   }
 
   get utils() {
-    return new PresenterUtils(this.createGroupFormData)
+    return new PresenterUtils(this.userInputData)
   }
 
   get fields() {
     return {
       createGroupPdu: {
-        value: this.createGroupFormData.pdu,
+        value: this.utils.stringValue(this.createGroupFormData.pduCode, 'pduCode'),
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'create-group-pdu'),
       },
     }

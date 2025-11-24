@@ -95,7 +95,7 @@ export default class CreateGroupForm {
     }
   }
 
-  async createGroupPduData(): Promise<FormData<{ pdu: string }>> {
+  async createGroupPduData(): Promise<FormData<Partial<CreateGroupRequest>>> {
     const validationResult = await FormUtils.runValidations({
       request: this.request,
       validations: this.createGroupPduValidations(),
@@ -108,9 +108,11 @@ export default class CreateGroupForm {
         error,
       }
     }
+    const pduInfo = JSON.parse(this.request.body['create-group-pdu'])
     return {
       paramsForUpdate: {
-        pdu: this.request.body['create-group-pdu'],
+        pduName: pduInfo.name,
+        pduCode: pduInfo.code,
       },
       error: null,
     }
@@ -165,6 +167,8 @@ export default class CreateGroupForm {
   }
 
   private createGroupPduValidations(): ValidationChain[] {
+    console.log(this.request.body['create-group-pdu'])
+
     return [body('create-group-pdu').notEmpty().withMessage(errorMessages.createGroup.createGroupPduEmpty)]
   }
 }

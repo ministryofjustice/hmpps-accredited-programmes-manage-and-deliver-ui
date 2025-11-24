@@ -22,7 +22,8 @@ export default class CreateGroupPduView {
   private createGroupPduArgs(): SelectArgs {
     const pduItems: SelectArgsItem[] = this.presenter.locations.map(location => ({
       text: location.description,
-      value: location.code,
+      value: `{"code":"${location.code}", "name":"${location.description}"}`,
+      selected: this.presenter.fields.createGroupPdu.value === location.code,
     }))
 
     const items: SelectArgsItem[] = [
