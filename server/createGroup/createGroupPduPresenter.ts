@@ -1,6 +1,7 @@
 import { CodeDescription, CreateGroupRequest } from '@manage-and-deliver-api'
 import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
+import { SelectArgsItem } from '../utils/govukFrontendTypes'
 
 export default class CreateGroupPduPresenter {
   constructor(
@@ -24,6 +25,23 @@ export default class CreateGroupPduPresenter {
 
   get utils() {
     return new PresenterUtils(this.userInputData)
+  }
+
+  generateSelectOptions(): SelectArgsItem[] {
+    const pduItems: SelectArgsItem[] = this.locations.map(location => ({
+      text: location.description,
+      value: `{"code":"${location.code}", "name":"${location.description}"}`,
+      selected: this.fields.createGroupPdu.value === location.code,
+    }))
+
+    const items: SelectArgsItem[] = [
+      {
+        text: '',
+      },
+    ]
+
+    items.push(...pduItems)
+    return items
   }
 
   get fields() {

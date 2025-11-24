@@ -20,20 +20,6 @@ export default class CreateGroupPduView {
   }
 
   private createGroupPduArgs(): SelectArgs {
-    const pduItems: SelectArgsItem[] = this.presenter.locations.map(location => ({
-      text: location.description,
-      value: `{"code":"${location.code}", "name":"${location.description}"}`,
-      selected: this.presenter.fields.createGroupPdu.value === location.code,
-    }))
-
-    const items: SelectArgsItem[] = [
-      {
-        text: '',
-      },
-    ]
-
-    items.push(...pduItems)
-
     return {
       id: 'create-group-pdu',
       name: 'create-group-pdu',
@@ -47,7 +33,7 @@ export default class CreateGroupPduView {
         classes: 'govuk-label--m govuk-label govuk-!-margin-top-6',
       },
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createGroupPdu.errorMessage),
-      items,
+      items: this.presenter.generateSelectOptions(),
     }
   }
 
