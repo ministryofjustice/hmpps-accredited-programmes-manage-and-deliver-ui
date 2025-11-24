@@ -492,4 +492,12 @@ export default class AccreditedProgrammesManageAndDeliverService
       headers: { Accept: 'application/json' },
     })) as CodeDescription[]
   }
+
+  async getOfficeLocationsForPdu(username: Express.User['username'], pduCode: string): Promise<CodeDescription[]> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/office-locations-for-pdu/${pduCode}`,
+      headers: { Accept: 'application/json' },
+    })) as CodeDescription[]
+  }
 }

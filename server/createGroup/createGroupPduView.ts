@@ -1,4 +1,4 @@
-import { InputArgs, SelectArgs, SelectArgsItem } from '../utils/govukFrontendTypes'
+import { SelectArgs } from '../utils/govukFrontendTypes'
 import ViewUtils from '../utils/viewUtils'
 import CreateGroupPduPresenter from './createGroupPduPresenter'
 

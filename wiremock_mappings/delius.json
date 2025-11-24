@@ -1986,6 +1986,82 @@
           ]
         }
       }
+    },
+    {
+      "request": {
+        "urlPattern": "/regions/pdu/.*/office-locations",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "code": "N50ALL",
+          "description": "All Greater Manchester",
+          "officeLocations": [
+            {
+              "code": "N50CR01",
+              "description": "Stockport: Stockport Probation Office"
+            },
+            {
+              "code": "N50CR02",
+              "description": "Tameside: Ashton Probation Office"
+            },
+            {
+              "code": "N50CR03",
+              "description": "Stockport: Cirtek House"
+            },
+            {
+              "code": "N50TP01",
+              "description": "Treatment Provider Location"
+            },
+            {
+              "code": "N50ANPS",
+              "description": "All PS Location"
+            },
+            {
+              "code": "N50NXHO",
+              "description": "Nexus House"
+            },
+            {
+              "code": "N50HDOF",
+              "description": "Head Office"
+            },
+            {
+              "code": "N501CCO",
+              "description": "Oldham Interventions Office"
+            },
+            {
+              "code": "N50PPDP",
+              "description": "Probation Programmes Development Unit"
+            }
+          ]
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "urlPattern": "/regions/pdu/N50SATR/office-locations",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "code": "N50ALL",
+          "description": "Salford",
+          "officeLocations": [
+            {
+              "code": "N50SALO",
+              "description": "Salford Probation Office"
+            }
+          ]
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
     }
   ]
 }

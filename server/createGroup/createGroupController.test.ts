@@ -332,7 +332,7 @@ describe('Create Group Controller', () => {
   })
 
   describe('POST /group/create-a-group/pdu', () => {
-    it('redirects to check your answers page on successful submission', async () => {
+    it('redirects to select location page on successful submission', async () => {
       accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion.mockResolvedValue([
         { code: 'LDN', description: 'London' },
       ])
@@ -340,15 +340,15 @@ describe('Create Group Controller', () => {
         .post('/group/create-a-group/pdu')
         .type('form')
         .send({
-          'create-group-pdu': '{"code":"LDN", "name":"$London"}',
+          'create-group-pdu': '{"code":"LDN", "name":"London"}',
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain('Redirecting to /group/create-a-group/check-your-answers')
+          expect(res.text).toContain('Redirecting to /group/create-a-group/location')
         })
     })
 
-    it('returns with errors if sex is not selected', async () => {
+    it('returns with errors if pdu is not selected', async () => {
       accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion.mockResolvedValue([
         { code: 'LDN', description: 'London' },
       ])
@@ -359,6 +359,74 @@ describe('Create Group Controller', () => {
         .expect(400)
         .expect(res => {
           expect(res.text).toContain('Select a probation delivery unit. Start typing to search.')
+        })
+    })
+  })
+
+  describe('GET /group/create-a-group/location', () => {
+    it('loads the location selection page', async () => {
+      accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu.mockResolvedValue([
+        { code: 'WMO', description: 'Westminster Office' },
+        { code: 'WHO', description: 'Whitehall Office' },
+      ])
+      return request(app)
+        .get('/group/create-a-group/location')
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Where will the group take place?')
+        })
+    })
+
+    it('displays previously selected location from session', async () => {
+      const sessionData: Partial<SessionData> = {
+        createGroupFormData: {
+          deliveryLocationName: 'Whitehall Office',
+          deliveryLocationCode: 'WHO',
+          pduName: 'London',
+        },
+      }
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+      accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu.mockResolvedValue([
+        { code: 'WMO', description: 'Westminster Office' },
+        { code: 'WHO', description: 'Whitehall Office' },
+      ])
+      return request(app)
+        .get('/group/create-a-group/location')
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Whitehall Office')
+        })
+    })
+  })
+
+  describe('POST /group/create-a-group/location', () => {
+    it('redirects to check your answers page on successful submission', async () => {
+      accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu.mockResolvedValue([
+        { code: 'LDN', description: 'London' },
+      ])
+      return request(app)
+        .post('/group/create-a-group/location')
+        .type('form')
+        .send({
+          'create-group-location': '{ "code": "WMO", "description": "Westminster Office" }',
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain('Redirecting to /group/create-a-group/check-your-answers')
+        })
+    })
+
+    it('returns with errors if location is not selected', async () => {
+      accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu.mockResolvedValue([
+        { code: 'LDN', description: 'London' },
+      ])
+      return request(app)
+        .post('/group/create-a-group/location')
+        .type('form')
+        .send({})
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain('Select a delivery location.')
         })
     })
   })

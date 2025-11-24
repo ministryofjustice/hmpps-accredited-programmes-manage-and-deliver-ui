@@ -118,6 +118,29 @@ export default class CreateGroupForm {
     }
   }
 
+  async createGroupLocationData(): Promise<FormData<Partial<CreateGroupRequest>>> {
+    const validationResult = await FormUtils.runValidations({
+      request: this.request,
+      validations: this.createGroupLocationValidations(),
+    })
+
+    const error = FormUtils.validationErrorFromResult(validationResult)
+    if (error) {
+      return {
+        paramsForUpdate: null,
+        error,
+      }
+    }
+    const deliveryLocationInfo = JSON.parse(this.request.body['create-group-location'])
+    return {
+      paramsForUpdate: {
+        deliveryLocationName: deliveryLocationInfo.description,
+        deliveryLocationCode: deliveryLocationInfo.code,
+      },
+      error: null,
+    }
+  }
+
   private createGroupCodeValidations(): ValidationChain[] {
     const validations = [
       body('create-group-code').notEmpty().withMessage(errorMessages.createGroup.createGroupCodeEmpty),
@@ -168,5 +191,9 @@ export default class CreateGroupForm {
 
   private createGroupPduValidations(): ValidationChain[] {
     return [body('create-group-pdu').notEmpty().withMessage(errorMessages.createGroup.createGroupPduEmpty)]
+  }
+
+  private createGroupLocationValidations(): ValidationChain[] {
+    return [body('create-group-location').notEmpty().withMessage(errorMessages.createGroup.createGroupLocationEmpty)]
   }
 }

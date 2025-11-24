@@ -18,6 +18,8 @@ import CreateGroupStartPresenter from './createGroupStartPresenter'
 import CreateGroupStartView from './createGroupStartView'
 import CreateGroupPduPresenter from './createGroupPduPresenter'
 import CreateGroupPduView from './createGroupPduView'
+import CreateGroupLocationPresenter from './createGroupLocationPresenter'
+import CreateGroupLocationView from './createGroupLocationView'
 
 export default class CreateGroupController {
   constructor(
@@ -142,24 +144,6 @@ export default class CreateGroupController {
     return ControllerUtils.renderWithLayout(res, view, null)
   }
 
-  async showCreateGroupCya(req: Request, res: Response): Promise<void> {
-    const { createGroupFormData } = req.session
-    const { username } = req.user
-    if (req.method === 'POST') {
-      await this.accreditedProgrammesManageAndDeliverService.createGroup(
-        username,
-        createGroupFormData as CreateGroupRequest,
-      )
-      // Clear session data on submission
-      req.session.createGroupFormData = {}
-      return res.redirect(`/?groupCreated`)
-    }
-
-    const presenter = new CreateGroupCyaPresenter(createGroupFormData)
-    const view = new CreateGroupCyaView(presenter)
-    return ControllerUtils.renderWithLayout(res, view, null)
-  }
-
   async showCreateGroupPdu(req: Request, res: Response): Promise<void> {
     const { createGroupFormData } = req.session
     const { username } = req.user
@@ -178,14 +162,64 @@ export default class CreateGroupController {
           pduName: data.paramsForUpdate.pduName,
           pduCode: data.paramsForUpdate.pduCode,
         }
+        return res.redirect(`/group/create-a-group/location`)
+      }
+    }
+
+    const pduLocations = await this.accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion(username)
+
+    const presenter = new CreateGroupPduPresenter(pduLocations, formError, createGroupFormData, userInputData)
+    const view = new CreateGroupPduView(presenter)
+    return ControllerUtils.renderWithLayout(res, view, null)
+  }
+
+  async showCreateGroupLocation(req: Request, res: Response): Promise<void> {
+    const { createGroupFormData } = req.session
+    const { username } = req.user
+    let formError: FormValidationError | null = null
+    let userInputData = null
+
+    if (req.method === 'POST') {
+      const data = await new CreateGroupForm(req).createGroupLocationData()
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+        userInputData = req.body
+      } else {
+        req.session.createGroupFormData = {
+          ...createGroupFormData,
+          deliveryLocationName: data.paramsForUpdate.deliveryLocationName,
+          deliveryLocationCode: data.paramsForUpdate.deliveryLocationCode,
+        }
         return res.redirect(`/group/create-a-group/check-your-answers`)
       }
     }
 
-    const locations = await this.accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion(username)
+    const officeLocations = await this.accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu(
+      username,
+      req.session.createGroupFormData.pduCode,
+    )
 
-    const presenter = new CreateGroupPduPresenter(locations, formError, createGroupFormData, userInputData)
-    const view = new CreateGroupPduView(presenter)
+    const presenter = new CreateGroupLocationPresenter(officeLocations, formError, createGroupFormData, userInputData)
+    const view = new CreateGroupLocationView(presenter)
+    return ControllerUtils.renderWithLayout(res, view, null)
+  }
+
+  async showCreateGroupCya(req: Request, res: Response): Promise<void> {
+    const { createGroupFormData } = req.session
+    const { username } = req.user
+    if (req.method === 'POST') {
+      await this.accreditedProgrammesManageAndDeliverService.createGroup(
+        username,
+        createGroupFormData as CreateGroupRequest,
+      )
+      // Clear session data on submission
+      req.session.createGroupFormData = {}
+      return res.redirect(`/?groupCreated`)
+    }
+
+    const presenter = new CreateGroupCyaPresenter(createGroupFormData)
+    const view = new CreateGroupCyaView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
 }

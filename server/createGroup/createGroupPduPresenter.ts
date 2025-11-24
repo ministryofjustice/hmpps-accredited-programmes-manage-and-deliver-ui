@@ -16,7 +16,7 @@ export default class CreateGroupPduPresenter {
   }
 
   get text() {
-    return { headingHintText: `Create group 123` }
+    return { headingHintText: `Create group ${this.createGroupFormData?.groupCode}` }
   }
 
   get errorSummary() {

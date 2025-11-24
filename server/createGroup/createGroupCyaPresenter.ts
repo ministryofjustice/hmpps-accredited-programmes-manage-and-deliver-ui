@@ -27,7 +27,6 @@ export default class CreateGroupCyaPresenter {
         lines: [`${this.createGroupFormData.startedAtDate}`],
         changeLink: '/group/create-a-group/date',
       },
-
       {
         key: 'Cohort',
         lines: [`${this.createGroupUtils.getCohortTextFromEnum(this.createGroupFormData.cohort)}`],
@@ -37,6 +36,16 @@ export default class CreateGroupCyaPresenter {
         key: 'Sex',
         lines: [`${this.createGroupUtils.getSexTextFromEnum(this.createGroupFormData.sex)}`],
         changeLink: '/group/create-a-group/sex',
+      },
+      {
+        key: 'PDU',
+        lines: [`${this.createGroupFormData.pduName}`],
+        changeLink: '/group/create-a-group/pdu',
+      },
+      {
+        key: 'Delivery Location',
+        lines: [`${this.createGroupFormData.deliveryLocationName}`],
+        changeLink: '/group/create-a-group/location',
       },
     ]
   }
