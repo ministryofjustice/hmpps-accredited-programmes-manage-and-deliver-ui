@@ -117,16 +117,57 @@ export default class CreateGroupController {
         res.status(400)
         formError = data.error
 
+        const raw = req.body['days-of-week']
+        const days: string[] = []
+        if (Array.isArray(raw)) {
+          days.push(...raw)
+        } else if (raw) {
+          days.push(raw)
+        }
+
+        const slots =
+          days.length === 0
+            ? []
+            : days.map(dayOfWeek => {
+                const dayKey = dayOfWeek.toLowerCase()
+
+                const hourRaw = req.body[`${dayKey}-hour`]
+                const minuteRaw = req.body[`${dayKey}-minute`]
+                const ampmRaw = req.body[`${dayKey}-ampm`]
+
+                const hour = hourRaw ? Number(hourRaw) : undefined
+
+                let minutes: number | undefined
+                if (minuteRaw !== '' && minuteRaw !== undefined) {
+                  minutes = Number(minuteRaw)
+                }
+
+                let amOrPm: 'AM' | 'PM' | undefined
+                if (ampmRaw) {
+                  const upper = (ampmRaw as string).toUpperCase()
+                  if (upper === 'AM' || upper === 'PM') {
+                    amOrPm = upper as 'AM' | 'PM'
+                  }
+                }
+
+                return {
+                  dayOfWeek: dayOfWeek as
+                    | 'MONDAY'
+                    | 'TUESDAY'
+                    | 'WEDNESDAY'
+                    | 'THURSDAY'
+                    | 'FRIDAY'
+                    | 'SATURDAY'
+                    | 'SUNDAY',
+                  hour,
+                  minutes,
+                  amOrPm,
+                }
+              })
+
         formDataForPresenter = {
           ...createGroupFormData,
-          createGroupSessionSlot: [
-            {
-              dayOfWeek: req.body['create-group-when'],
-              hour: Number(req.body['create-group-when-hour'] ?? 9),
-              minutes: Number(req.body['create-group-when-minutes'] ?? 0),
-              amOrPm: (req.body['create-group-when-amOrPm'] as 'AM' | 'PM') || 'AM',
-            },
-          ],
+          createGroupSessionSlot: slots,
         }
       } else {
         req.session.createGroupFormData = {

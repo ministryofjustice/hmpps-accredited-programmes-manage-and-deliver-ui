@@ -10,6 +10,10 @@
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
 
+{% set selectedDays = selectedDays or [] %}
+{% set dayTimes = dayTimes or {} %}
+
+
 {% block main %}
     {% block content %}
         <div class="govuk-width-container" id="main-content">
@@ -47,6 +51,9 @@
     <p class="govuk-caption-m">
       Sessions that fall on bank holidays will automatically be moved to the next scheduled date.
     </p>
+     {% if errorSummary !== null %}
+                            {{ govukErrorSummary(errorSummary) }}
+                        {% endif %}
     <div class="govuk-checkboxes" data-module="govuk-checkboxes">
      <div class="govuk-checkboxes__item">
     <input class="govuk-checkboxes__input"
@@ -54,7 +61,9 @@
            name="days-of-week"
            type="checkbox"
            value="MONDAY"
-           data-aria-controls="monday-conditional">
+           data-aria-controls="monday-conditional"
+           {% if 'MONDAY' in selectedDays %}checked{% endif %}>
+
     <label class="govuk-label govuk-checkboxes__label" for="monday">
       Mondays
     </label>
@@ -79,7 +88,9 @@
                    type="text"
                    inputmode="numeric"
                    pattern="[0-9]*"
-                   maxlength="2">
+                   maxlength="2"
+                   value="{{ dayTimes['MONDAY'].hour | default('') }}">
+
           </div>
         </div>
         <div class="govuk-date-input__item">
@@ -122,7 +133,8 @@
            name="days-of-week"
            type="checkbox"
            value="TUESDAY"
-           data-aria-controls="tuesday-conditional">
+           data-aria-controls="tuesday-conditional"
+            {% if '`TUESDAY' in selectedDays %}checked{% endif %}>
     <label class="govuk-label govuk-checkboxes__label" for="tuesday">
       Tuesdays
     </label>
@@ -147,7 +159,9 @@
                    type="text"
                    inputmode="numeric"
                    pattern="[0-9]*"
-                   maxlength="2">
+                   maxlength="2"
+                  value="{{ dayTimes['TUESDAY'].hour | default('') }}">
+
           </div>
         </div>
         <div class="govuk-date-input__item">
@@ -190,7 +204,8 @@
            name="days-of-week"
            type="checkbox"
            value="WEDNESDAY"
-           data-aria-controls="wednesday-conditional">
+           data-aria-controls="wednesday-conditional"
+           {% if '`WEDNESDAY' in selectedDays %}checked{% endif %}>
     <label class="govuk-label govuk-checkboxes__label" for="wednesday">
       Wednesdays
     </label>
@@ -215,7 +230,9 @@
                    type="text"
                    inputmode="numeric"
                    pattern="[0-9]*"
-                   maxlength="2">
+                   maxlength="2"
+                   value="{{ dayTimes['WEDNESDAY'].hour | default('') }}">
+                   
           </div>
         </div>
         <div class="govuk-date-input__item">
@@ -258,7 +275,8 @@
            name="days-of-week"
            type="checkbox"
            value="THURSDAY"
-           data-aria-controls="thursday-conditional">
+           data-aria-controls="thursday-conditional"
+           {% if '`THURSDAY' in selectedDays %}checked{% endif %}>
     <label class="govuk-label govuk-checkboxes__label" for="thursday">
       Thursday
     </label>
@@ -283,7 +301,9 @@
                    type="text"
                    inputmode="numeric"
                    pattern="[0-9]*"
-                   maxlength="2">
+                   maxlength="2"
+                   value="{{ dayTimes['THURSDAY'].hour | default('') }}">
+                   
           </div>
         </div>
         <div class="govuk-date-input__item">
@@ -326,7 +346,8 @@
            name="days-of-week"
            type="checkbox"
            value="FRIDAY"
-           data-aria-controls="friday-conditional">
+           data-aria-controls="friday-conditional"
+           {% if '`FRIDAY' in selectedDays %}checked{% endif %}>
     <label class="govuk-label govuk-checkboxes__label" for="friday">
       Fridays
     </label>
@@ -351,7 +372,9 @@
                    type="text"
                    inputmode="numeric"
                    pattern="[0-9]*"
-                   maxlength="2">
+                   maxlength="2"
+                   value="{{ dayTimes['FRIDAY'].hour | default('') }}">
+                  
           </div>
         </div>
         <div class="govuk-date-input__item">
@@ -394,7 +417,8 @@
            name="days-of-week"
            type="checkbox"
            value="SATURDAY"
-           data-aria-controls="saturday-conditional">
+           data-aria-controls="saturday-conditional"
+           {% if '`SATURDAY' in selectedDays %}checked{% endif %}>
     <label class="govuk-label govuk-checkboxes__label" for="saturday">
       Saturdays
     </label>
@@ -419,7 +443,9 @@
                    type="text"
                    inputmode="numeric"
                    pattern="[0-9]*"
-                   maxlength="2">
+                   maxlength="2"
+                   value="{{ dayTimes['SATURDAY'].hour | default('') }}">
+                 
           </div>
         </div>
         <div class="govuk-date-input__item">
@@ -462,7 +488,8 @@
            name="days-of-week"
            type="checkbox"
            value="SUNDAY"
-           data-aria-controls="sunday-conditional">
+           data-aria-controls="sunday-conditional"
+           {% if '`SUNDAY' in selectedDays %}checked{% endif %}>
     <label class="govuk-label govuk-checkboxes__label" for="sunday">
       Sundays
     </label>
@@ -487,7 +514,9 @@
                    type="text"
                    inputmode="numeric"
                    pattern="[0-9]*"
-                   maxlength="2">
+                   maxlength="2"
+                   value="{{ dayTimes['SUNDAY'].hour | default('') }}">
+                    
           </div>
         </div>
         <div class="govuk-date-input__item">

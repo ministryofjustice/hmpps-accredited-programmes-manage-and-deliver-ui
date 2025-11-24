@@ -87,16 +87,32 @@ export default class CreateGroupForm {
         error,
       }
     }
+
+    const selected = this.request.body['days-of-week']
+    const days: string[] = Array.isArray(selected) ? selected : [selected]
+
+    const slots = days.map(dayOfWeek => {
+      const dayKey = dayOfWeek.toLowerCase()
+
+      const hourRaw = this.request.body[`${dayKey}-hour`]
+      const minuteRaw = this.request.body[`${dayKey}-minute`]
+      const ampmRaw = this.request.body[`${dayKey}-ampm`]
+
+      const hour = Number(hourRaw)
+      const minutes = minuteRaw === '' || minuteRaw === undefined ? 0 : Number(minuteRaw)
+      const amOrPm = (ampmRaw || '').toUpperCase() as 'AM' | 'PM'
+
+      return {
+        dayOfWeek: dayOfWeek as 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY',
+        hour,
+        minutes,
+        amOrPm,
+      }
+    })
+
     return {
       paramsForUpdate: {
-        createGroupSessionSlot: [
-          {
-            dayOfWeek: this.request.body['create-group-when'],
-            hour: Number(this.request.body['create-group-when-hour'] ?? 9),
-            minutes: Number(this.request.body['create-group-when-minutes'] ?? 0),
-            amOrPm: (this.request.body['create-group-when-amOrPm'] as 'AM' | 'PM') || 'AM',
-          },
-        ],
+        createGroupSessionSlot: slots,
       },
       error: null,
     }
@@ -244,7 +260,48 @@ export default class CreateGroupForm {
   }
 
   private createGroupWhenValidations(): ValidationChain[] {
-    return [body('create-group-when').notEmpty().withMessage(errorMessages.createGroup.createGroupWhenSelect)]
+    return [
+      body('create-group-when').custom((_, { req }) => {
+        const raw = req.body['days-of-week']
+
+        const selected: string[] = []
+        if (Array.isArray(raw)) {
+          selected.push(...raw)
+        } else if (raw) {
+          selected.push(raw)
+        }
+
+        if (selected.length === 0) {
+          throw new Error(errorMessages.createGroup.createGroupWhenSelect)
+        }
+
+        selected.forEach(dayOfWeek => {
+          const dayKey = dayOfWeek.toLowerCase()
+
+          const hour = (req.body[`${dayKey}-hour`] || '').trim()
+          const minute = (req.body[`${dayKey}-minute`] || '').trim()
+          const ampm = (req.body[`${dayKey}-ampm`] || '').trim()
+
+          if (!hour) {
+            throw new Error(`Enter an hour for ${dayOfWeek.toLowerCase()}`)
+          }
+
+          if (!ampm) {
+            throw new Error(`Select am or pm for ${dayOfWeek.toLowerCase()}`)
+          }
+
+          if (minute) {
+            const minuteNumber = Number(minute)
+
+            if (Number.isNaN(minuteNumber) || minuteNumber < 0 || minuteNumber > 59) {
+              throw new Error(`Enter minutes between 00 and 59 for ${dayOfWeek.toLowerCase()}`)
+            }
+          }
+        })
+
+        return true
+      }),
+    ]
   }
 
   private createGroupPduValidations(): ValidationChain[] {

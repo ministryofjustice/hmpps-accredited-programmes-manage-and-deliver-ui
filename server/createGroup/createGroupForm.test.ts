@@ -132,7 +132,7 @@ describe('CreateGroupForm', () => {
     describe('when at least one day is selected', () => {
       it('returns params for update', async () => {
         const request = TestUtils.createRequest({
-          'create-group-when': ['MONDAY', 'WEDNESDAY'],
+          'days-of-week': ['MONDAY'],
           'monday-hour': '9',
           'monday-minute': '0',
           'monday-ampm': 'AM',
@@ -143,13 +143,16 @@ describe('CreateGroupForm', () => {
         expect(data.error).toBeNull()
         expect(data.paramsForUpdate).not.toBeNull()
 
-        const slot = (data.paramsForUpdate as { createGroupSessionSlot: TestSessionSlot[] }).createGroupSessionSlot[0]
+        const slots = (data.paramsForUpdate as { createGroupSessionSlot: TestSessionSlot[] }).createGroupSessionSlot
 
-        expect(slot.dayOfWeek).toEqual(['MONDAY', 'WEDNESDAY'])
-
-        expect(slot.hour).toBe(9)
-        expect(slot.minutes).toBe(0)
-        expect(slot.amOrPm).toBe('AM')
+        expect(slots).toEqual([
+          {
+            dayOfWeek: 'MONDAY',
+            hour: 9,
+            minutes: 0,
+            amOrPm: 'AM',
+          },
+        ])
       })
     })
 

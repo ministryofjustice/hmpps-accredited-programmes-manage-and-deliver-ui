@@ -32,4 +32,23 @@ export default class CreateGroupWhenPresenter {
       },
     }
   }
+
+  get selectedDays(): string[] {
+    return this.createGroupFormData?.createGroupSessionSlot?.map(slot => slot.dayOfWeek) ?? []
+  }
+
+  get dayTimes() {
+    const slots = this.createGroupFormData?.createGroupSessionSlot ?? []
+    const map: Record<string, { hour?: number; minutes?: number; amOrPm?: string }> = {}
+
+    slots.forEach(slot => {
+      map[slot.dayOfWeek] = {
+        hour: slot.hour,
+        minutes: slot.minutes,
+        amOrPm: slot.amOrPm,
+      }
+    })
+
+    return map
+  }
 }
