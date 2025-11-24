@@ -7,6 +7,8 @@ import CreateGroupCodePresenter from './createGroupCodePresenter'
 import CreateGroupCodeView from './createGroupCodeView'
 import CreateGroupDatePresenter from './createGroupDatePresenter'
 import CreateGroupDateView from './createGroupDateView'
+import CreateGroupWhenPresenter from './createGroupWhenPresenter'
+import CreateGroupWhenView from './createGroupWhenView'
 import CreateGroupCohortPresenter from './createGroupCohortPresenter'
 import CreateGroupCohortView from './createGroupCohortView'
 import CreateGroupCyaPresenter from './createGroupCyaPresenter'
@@ -93,12 +95,50 @@ export default class CreateGroupController {
           ...createGroupFormData,
           startedAtDate: data.paramsForUpdate.startedAtDate,
         }
-        return res.redirect(`/group/create-a-group/group-cohort`)
+        return res.redirect(`/group/create-a-group/group-days-and-times`)
       }
     }
 
     const presenter = new CreateGroupDatePresenter(formError, formDataForPresenter)
     const view = new CreateGroupDateView(presenter)
+    return ControllerUtils.renderWithLayout(res, view, null)
+  }
+
+  async showCreateGroupWhen(req: Request, res: Response): Promise<void> {
+    const { createGroupFormData } = req.session
+    let formError: FormValidationError | null = null
+
+    let formDataForPresenter: Partial<CreateGroupRequest> | null = createGroupFormData
+
+    if (req.method === 'POST') {
+      const data = await new CreateGroupForm(req).createGroupWhenData()
+
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+
+        formDataForPresenter = {
+          ...createGroupFormData,
+          createGroupSessionSlot: [
+            {
+              dayOfWeek: req.body['create-group-when'],
+              hour: Number(req.body['create-group-when-hour'] ?? 9),
+              minutes: Number(req.body['create-group-when-minutes'] ?? 0),
+              amOrPm: (req.body['create-group-when-amOrPm'] as 'AM' | 'PM') || 'AM',
+            },
+          ],
+        }
+      } else {
+        req.session.createGroupFormData = {
+          ...createGroupFormData,
+          createGroupSessionSlot: data.paramsForUpdate.createGroupSessionSlot,
+        }
+        return res.redirect(`/group/create-a-group/group-days-and-times`)
+      }
+    }
+
+    const presenter = new CreateGroupWhenPresenter(formError, formDataForPresenter)
+    const view = new CreateGroupWhenView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
 

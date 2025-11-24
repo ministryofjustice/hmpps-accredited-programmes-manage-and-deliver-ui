@@ -74,6 +74,34 @@ export default class CreateGroupForm {
     }
   }
 
+  async createGroupWhenData(): Promise<FormData<Partial<CreateGroupRequest>>> {
+    const validationResult = await FormUtils.runValidations({
+      request: this.request,
+      validations: this.createGroupWhenValidations(),
+    })
+
+    const error = FormUtils.validationErrorFromResult(validationResult)
+    if (error) {
+      return {
+        paramsForUpdate: null,
+        error,
+      }
+    }
+    return {
+      paramsForUpdate: {
+        createGroupSessionSlot: [
+          {
+            dayOfWeek: this.request.body['create-group-when'],
+            hour: Number(this.request.body['create-group-when-hour'] ?? 9),
+            minutes: Number(this.request.body['create-group-when-minutes'] ?? 0),
+            amOrPm: (this.request.body['create-group-when-amOrPm'] as 'AM' | 'PM') || 'AM',
+          },
+        ],
+      },
+      error: null,
+    }
+  }
+
   async createGroupSexData(): Promise<FormData<Partial<CreateGroupRequest>>> {
     const validationResult = await FormUtils.runValidations({
       request: this.request,
@@ -213,6 +241,10 @@ export default class CreateGroupForm {
 
   private createGroupSexValidations(): ValidationChain[] {
     return [body('create-group-sex').notEmpty().withMessage(errorMessages.createGroup.createGroupSexSelect)]
+  }
+
+  private createGroupWhenValidations(): ValidationChain[] {
+    return [body('create-group-when').notEmpty().withMessage(errorMessages.createGroup.createGroupWhenSelect)]
   }
 
   private createGroupPduValidations(): ValidationChain[] {

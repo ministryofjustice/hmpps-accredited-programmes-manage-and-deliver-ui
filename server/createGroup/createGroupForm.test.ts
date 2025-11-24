@@ -122,6 +122,57 @@ describe('CreateGroupForm', () => {
     })
   })
 
+  describe('createGroupWhenData', () => {
+    type TestSessionSlot = {
+      dayOfWeek: string
+      hour?: number
+      minutes?: number
+      amOrPm?: string
+    }
+    describe('when at least one day is selected', () => {
+      it('returns params for update', async () => {
+        const request = TestUtils.createRequest({
+          'create-group-when': ['MONDAY', 'WEDNESDAY'],
+          'monday-hour': '9',
+          'monday-minute': '0',
+          'monday-ampm': 'AM',
+        })
+
+        const data = await new CreateGroupForm(request).createGroupWhenData()
+
+        expect(data.error).toBeNull()
+        expect(data.paramsForUpdate).not.toBeNull()
+
+        const slot = (data.paramsForUpdate as { createGroupSessionSlot: TestSessionSlot[] }).createGroupSessionSlot[0]
+
+        expect(slot.dayOfWeek).toEqual(['MONDAY', 'WEDNESDAY'])
+
+        expect(slot.hour).toBe(9)
+        expect(slot.minutes).toBe(0)
+        expect(slot.amOrPm).toBe('AM')
+      })
+    })
+
+    describe('when no days are selected', () => {
+      it('returns an appropriate error', async () => {
+        const request = TestUtils.createRequest({})
+
+        const data = await new CreateGroupForm(request).createGroupWhenData()
+
+        expect(data.paramsForUpdate).toBeNull()
+        expect(data.error).toStrictEqual({
+          errors: [
+            {
+              errorSummaryLinkedField: 'create-group-when',
+              formFields: ['create-group-when'],
+              message: 'Select at least one day.',
+            },
+          ],
+        })
+      })
+    })
+  })
+
   describe('createGroupCohortData', () => {
     describe('when cohort is provided', () => {
       it('returns params for update', async () => {
