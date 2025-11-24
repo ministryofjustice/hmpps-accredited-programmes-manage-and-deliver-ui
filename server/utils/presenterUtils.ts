@@ -2,9 +2,6 @@ export default class PresenterUtils {
   constructor(private readonly userInputData: Record<string, unknown> | null = null) {}
 
   stringValue(modelValue: string | number | null, userInputKey: string): string {
-    console.log(modelValue)
-    console.log(userInputKey)
-    console.log(this.userInputData)
     if (this.userInputData === null) {
       return String(modelValue ?? '')
     }

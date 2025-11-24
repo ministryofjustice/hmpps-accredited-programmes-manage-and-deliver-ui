@@ -167,8 +167,6 @@ export default class CreateGroupForm {
   }
 
   private createGroupPduValidations(): ValidationChain[] {
-    console.log(this.request.body['create-group-pdu'])
-
     return [body('create-group-pdu').notEmpty().withMessage(errorMessages.createGroup.createGroupPduEmpty)]
   }
 }
