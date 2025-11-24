@@ -48,6 +48,8 @@ export default class CreateGroupWhenView {
         createGroupWhenArgs: this.createGroupWhenArgs,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         text: this.presenter.text,
+        selectedDays: this.presenter.selectedDays,
+        dayTimes: this.presenter.dayTimes,
       },
     ]
   }
