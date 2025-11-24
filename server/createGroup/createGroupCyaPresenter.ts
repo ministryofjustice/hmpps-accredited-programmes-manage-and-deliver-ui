@@ -62,6 +62,14 @@ export default class CreateGroupCyaPresenter {
           ) || [],
         changeLink: '/group/create-a-group/group-days-and-times',
       },
+      {
+        key: 'Day and time',
+        lines:
+          this.createGroupFormData.createGroupSessionSlot?.map(
+            slot => `${slot.dayOfWeek} ${slot.hour}:${String(slot.minutes).padStart(2, '0')} ${slot.amOrPm}`,
+          ) || [],
+        changeLink: '/group/create-a-group/group-days-and-times',
+      },
 
       {
         key: 'Cohort',
