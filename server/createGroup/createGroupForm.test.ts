@@ -193,4 +193,78 @@ describe('CreateGroupForm', () => {
       })
     })
   })
+
+  describe('createGroupPduData', () => {
+    describe('when pdu is provided', () => {
+      it('returns params for update', async () => {
+        const request = TestUtils.createRequest({
+          'create-group-pdu': '{"code":"LDN", "name":"London"}',
+        })
+
+        const data = await new CreateGroupForm(request).createGroupPduData()
+
+        expect(data.paramsForUpdate).toStrictEqual({
+          pduName: 'London',
+          pduCode: 'LDN',
+        })
+        expect(data.error).toBeNull()
+      })
+    })
+
+    describe('when pdu is missing', () => {
+      it('returns an appropriate error', async () => {
+        const request = TestUtils.createRequest({})
+
+        const data = await new CreateGroupForm(request).createGroupPduData()
+
+        expect(data.paramsForUpdate).toBeNull()
+        expect(data.error).toStrictEqual({
+          errors: [
+            {
+              errorSummaryLinkedField: 'create-group-pdu',
+              formFields: ['create-group-pdu'],
+              message: 'Select a probation delivery unit. Start typing to search.',
+            },
+          ],
+        })
+      })
+    })
+  })
+
+  describe('createGroupLocationData', () => {
+    describe('when location is provided', () => {
+      it('returns params for update', async () => {
+        const request = TestUtils.createRequest({
+          'create-group-location': '{"code":"CDF", "description":"Cardiff Office"}',
+        })
+
+        const data = await new CreateGroupForm(request).createGroupLocationData()
+
+        expect(data.paramsForUpdate).toStrictEqual({
+          deliveryLocationName: 'Cardiff Office',
+          deliveryLocationCode: 'CDF',
+        })
+        expect(data.error).toBeNull()
+      })
+    })
+
+    describe('when location is missing', () => {
+      it('returns an appropriate error', async () => {
+        const request = TestUtils.createRequest({})
+
+        const data = await new CreateGroupForm(request).createGroupLocationData()
+
+        expect(data.paramsForUpdate).toBeNull()
+        expect(data.error).toStrictEqual({
+          errors: [
+            {
+              errorSummaryLinkedField: 'create-group-location',
+              formFields: ['create-group-location'],
+              message: 'Select a delivery location.',
+            },
+          ],
+        })
+      })
+    })
+  })
 })
