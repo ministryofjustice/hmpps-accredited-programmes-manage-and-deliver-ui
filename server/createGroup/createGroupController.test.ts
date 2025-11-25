@@ -408,7 +408,7 @@ describe('Create Group Controller', () => {
         .post('/group/create-a-group/location')
         .type('form')
         .send({
-          'create-group-location': '{ "code": "WMO", "description": "Westminster Office" }',
+          'create-group-location': '{ "code": "WMO", "name": "Westminster Office" }',
         })
         .expect(302)
         .expect(res => {

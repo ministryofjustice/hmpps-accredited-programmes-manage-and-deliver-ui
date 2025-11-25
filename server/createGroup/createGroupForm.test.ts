@@ -235,7 +235,7 @@ describe('CreateGroupForm', () => {
     describe('when location is provided', () => {
       it('returns params for update', async () => {
         const request = TestUtils.createRequest({
-          'create-group-location': '{"code":"CDF", "description":"Cardiff Office"}',
+          'create-group-location': '{"code":"CDF", "name":"Cardiff Office"}',
         })
 
         const data = await new CreateGroupForm(request).createGroupLocationData()

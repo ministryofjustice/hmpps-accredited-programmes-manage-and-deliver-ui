@@ -134,7 +134,7 @@ export default class CreateGroupForm {
     const deliveryLocationInfo = JSON.parse(this.request.body['create-group-location'])
     return {
       paramsForUpdate: {
-        deliveryLocationName: deliveryLocationInfo.description,
+        deliveryLocationName: deliveryLocationInfo.name,
         deliveryLocationCode: deliveryLocationInfo.code,
       },
       error: null,
