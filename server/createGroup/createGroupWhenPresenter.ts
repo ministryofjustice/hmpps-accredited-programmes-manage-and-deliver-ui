@@ -2,6 +2,8 @@ import { CreateGroupRequest } from '@manage-and-deliver-api'
 import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
 
+type DayKey = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
+
 export default class CreateGroupWhenPresenter {
   constructor(
     private readonly validationError: FormValidationError | null = null,
@@ -31,6 +33,21 @@ export default class CreateGroupWhenPresenter {
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'create-group-when'),
       },
     }
+  }
+
+  get dayFieldErrors(): Partial<Record<DayKey, string>> {
+    const days: DayKey[] = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
+    const errors: Partial<Record<DayKey, string>> = {}
+
+    days.forEach(day => {
+      const fieldId = `create-group-when-${day.toLowerCase()}`
+      const message = PresenterUtils.errorMessage(this.validationError, fieldId)
+      if (message) {
+        errors[day] = message
+      }
+    })
+
+    return errors
   }
 
   get selectedDays(): string[] {
