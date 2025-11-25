@@ -87,6 +87,7 @@
     "@ministryofjustice/hmpps-monitoring": "^1.0.0",
     "@ministryofjustice/hmpps-rest-client": "^1.0.0",
     "@types/supertest": "^6.0.3",
+    "accessible-autocomplete": "^3.0.1",
     "agentkeepalive": "^4.6.0",
     "applicationinsights": "^3.12.0",
     "body-parser": "^2.2.0",
@@ -113,6 +114,7 @@
     "timezone-support": "^3.1.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^10.1.0",
     "@jgoz/esbuild-plugin-typecheck": "^4.0.4",
     "@ministryofjustice/eslint-config-hmpps": "^1.0.1",
     "@tsconfig/node22": "^22.0.3",
@@ -150,7 +152,6 @@
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-no-only-tests": "^3.3.0",
     "eslint-plugin-prettier": "^5.5.4",
-    "@faker-js/faker": "^10.1.0",
     "fishery": "^2.3.1",
     "glob": "^11.0.3",
     "husky": "^9.1.7",

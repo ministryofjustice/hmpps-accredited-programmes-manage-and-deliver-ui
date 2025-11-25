@@ -79,6 +79,8 @@ export default {
     createGroupDateInvalid: 'Enter a date in the format 10/7/2025',
     createGroupDateInPast: 'Enter or select a date in the future',
     createGroupSexSelect: 'Select a sex',
+    createGroupPduEmpty: 'Select a probation delivery unit. Start typing to search.',
+    createGroupLocationEmpty: 'Select a delivery location.',
   },
   motivationBackgroundAndNonAssociations: {
     addToGroupEmpty: `Select whether you want to add the person to the group or not`,

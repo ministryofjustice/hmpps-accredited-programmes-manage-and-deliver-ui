@@ -1,6 +1,6 @@
 import { CreateGroupRequest } from '@manage-and-deliver-api'
 import { Request } from 'express'
-import { ValidationChain, body } from 'express-validator'
+import { body, ValidationChain } from 'express-validator'
 import errorMessages from '../utils/errorMessages'
 import { FormData } from '../utils/forms/formData'
 import FormUtils from '../utils/formUtils'
@@ -95,6 +95,52 @@ export default class CreateGroupForm {
     }
   }
 
+  async createGroupPduData(): Promise<FormData<Partial<CreateGroupRequest>>> {
+    const validationResult = await FormUtils.runValidations({
+      request: this.request,
+      validations: this.createGroupPduValidations(),
+    })
+
+    const error = FormUtils.validationErrorFromResult(validationResult)
+    if (error) {
+      return {
+        paramsForUpdate: null,
+        error,
+      }
+    }
+    const pduInfo = JSON.parse(this.request.body['create-group-pdu'])
+    return {
+      paramsForUpdate: {
+        pduName: pduInfo.name,
+        pduCode: pduInfo.code,
+      },
+      error: null,
+    }
+  }
+
+  async createGroupLocationData(): Promise<FormData<Partial<CreateGroupRequest>>> {
+    const validationResult = await FormUtils.runValidations({
+      request: this.request,
+      validations: this.createGroupLocationValidations(),
+    })
+
+    const error = FormUtils.validationErrorFromResult(validationResult)
+    if (error) {
+      return {
+        paramsForUpdate: null,
+        error,
+      }
+    }
+    const deliveryLocationInfo = JSON.parse(this.request.body['create-group-location'])
+    return {
+      paramsForUpdate: {
+        deliveryLocationName: deliveryLocationInfo.name,
+        deliveryLocationCode: deliveryLocationInfo.code,
+      },
+      error: null,
+    }
+  }
+
   private createGroupCodeValidations(): ValidationChain[] {
     const validations = [
       body('create-group-code').notEmpty().withMessage(errorMessages.createGroup.createGroupCodeEmpty),
@@ -141,5 +187,13 @@ export default class CreateGroupForm {
 
   private createGroupSexValidations(): ValidationChain[] {
     return [body('create-group-sex').notEmpty().withMessage(errorMessages.createGroup.createGroupSexSelect)]
+  }
+
+  private createGroupPduValidations(): ValidationChain[] {
+    return [body('create-group-pdu').notEmpty().withMessage(errorMessages.createGroup.createGroupPduEmpty)]
+  }
+
+  private createGroupLocationValidations(): ValidationChain[] {
+    return [body('create-group-location').notEmpty().withMessage(errorMessages.createGroup.createGroupLocationEmpty)]
   }
 }

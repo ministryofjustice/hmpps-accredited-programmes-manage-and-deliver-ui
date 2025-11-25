@@ -10,11 +10,14 @@ $moj-page-width: 1170px;
 // MoJ 7.x
 @use 'node_modules/@ministryofjustice/frontend/moj/all';
 
+@use 'node_modules/accessible-autocomplete/src/autocomplete';
+
 // Our custom styles
 @use 'risk/rosh-widget';
 @use 'risk/risks-and-alerts';
 @use 'risk/risk-flag-widget';
 
+@use './components/accessible_autocomplete';
 @use './components/header-bar';
 @use './components/service-user-banner';
 @use './overrides/local';

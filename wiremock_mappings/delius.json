@@ -467,6 +467,1601 @@
           ]
         }
       }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPathPattern": "/regions/wiremocked_region_code/members"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "code": "N50",
+          "description": "Greater Manchester",
+          "pdus": [
+            {
+              "code": "N50ALL",
+              "description": "All Greater Manchester",
+              "team": [
+                {
+                  "code": "N50UAT",
+                  "description": "Unallocated Team(N50)",
+                  "members": [
+                    {
+                      "code": "N02P054",
+                      "name": {
+                        "forename": "R&MP",
+                        "surname": "Practitioner"
+                      }
+                    },
+                    {
+                      "code": "N50UATU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50UTS",
+                  "description": "Tiering Service",
+                  "members": [
+                    {
+                      "code": "N02P054",
+                      "name": {
+                        "forename": "R&MP",
+                        "surname": "Practitioner"
+                      }
+                    },
+                    {
+                      "code": "N50UTSO",
+                      "name": {
+                        "forename": "Tiering",
+                        "surname": "Service"
+                      }
+                    },
+                    {
+                      "code": "N50UTSU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50PDP",
+                  "description": "Insight - PD Project",
+                  "members": [
+                    {
+                      "code": "N50A015",
+                      "name": {
+                        "forename": "TestStaffNine",
+                        "surname": "ForScript"
+                      }
+                    },
+                    {
+                      "code": "N50PDPU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50ZAR",
+                  "description": "ZZ_Awaiting Reassignment",
+                  "members": [
+                    {
+                      "code": "N50ZARU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50SP1",
+                  "description": "Sex Offender Programmes Team 1",
+                  "members": [
+                    {
+                      "code": "N50SP1U",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50SP2",
+                  "description": "Sex Offender Programmes Team 2",
+                  "members": [
+                    {
+                      "code": "N50SP2U",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50SP3",
+                  "description": "Sex Offender Programmes Team 3",
+                  "members": [
+                    {
+                      "code": "N50SP3U",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50SP4",
+                  "description": "Sex Offender Programmes Team 4",
+                  "members": [
+                    {
+                      "code": "N50SP4U",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50BRR",
+                  "description": "CRC Breach Report Requests",
+                  "members": [
+                    {
+                      "code": "N50BRRU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50CCW",
+                  "description": "CRC Court Work Requests",
+                  "members": [
+                    {
+                      "code": "N50CCWU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N509PR",
+                  "description": "CRC Created NSIs",
+                  "members": [
+                    {
+                      "code": "N509PRU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50RRE",
+                  "description": "CRC Risk Reviews",
+                  "members": [
+                    {
+                      "code": "N50RREU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50700",
+                  "description": "Div HUB NW",
+                  "members": [
+                    {
+                      "code": "N50700U",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50RMS",
+                  "description": "Insight IIRMS",
+                  "members": [
+                    {
+                      "code": "N50RMSU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    },
+                    {
+                      "code": "N50A012",
+                      "name": {
+                        "forename": "TestStaffSix",
+                        "surname": "ForScript"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50SFO",
+                  "description": "NW SFO Team",
+                  "members": [
+                    {
+                      "code": "N50SFOU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50OC1",
+                  "description": "OMIC POM Responsibility",
+                  "members": [
+                    {
+                      "code": "N50OC1U",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50ERR",
+                  "description": "Out of Area Report Requests",
+                  "members": [
+                    {
+                      "code": "N50ERRU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50OPD",
+                  "description": "PICS - OPD Projects",
+                  "members": [
+                    {
+                      "code": "N50OPDU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50PT3",
+                  "description": "PTA Team",
+                  "members": [
+                    {
+                      "code": "N50PT3U",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    },
+                    {
+                      "code": "N50A009",
+                      "name": {
+                        "forename": "TestStaffThree",
+                        "surname": "ForScript"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50EPP",
+                  "description": "Practice Development Courts",
+                  "members": [
+                    {
+                      "code": "N50EPPU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50PDF",
+                  "description": "Practice Development FNO",
+                  "members": [
+                    {
+                      "code": "N50PDFU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50PPP",
+                  "description": "Practice Development Public Protection",
+                  "members": [
+                    {
+                      "code": "N50PPPU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50SOW",
+                  "description": "Serious Organised Crime Unit (SOCU) NW",
+                  "members": [
+                    {
+                      "code": "N50SOWU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50UET",
+                  "description": "UPW Enforcement",
+                  "members": [
+                    {
+                      "code": "N50UETU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50IAP",
+                  "description": "IAPS Team(N50)",
+                  "members": [
+                    {
+                      "code": "N50IAPU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50IAV",
+                  "description": "Inactive Team(N50)",
+                  "members": [
+                    {
+                      "code": "N50IAVU",
+                      "name": {
+                        "forename": "Inactive",
+                        "surname": "Inactive"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N503EM",
+                  "description": "Other Third Party EM Supervision",
+                  "members": [
+                    {
+                      "code": "N503EMU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50AAT",
+                  "description": "Automated Allocation Team",
+                  "members": [
+                    {
+                      "code": "N50AATU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Unallocated"
+                      }
+                    },
+                    {
+                      "code": "N50AATH",
+                      "name": {
+                        "forename": "Calculation",
+                        "surname": "Handover"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50HPT",
+                  "description": "Homelessness Prevention Team,",
+                  "members": [
+                    {
+                      "code": "N50HPTU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "N50DSGM",
+              "description": "Divisional Support Greater Man",
+              "team": [
+                {
+                  "code": "N50TRG",
+                  "description": "Training Team",
+                  "members": [
+                    {
+                      "code": "N02P054",
+                      "name": {
+                        "forename": "R&MP",
+                        "surname": "Practitioner"
+                      }
+                    },
+                    {
+                      "code": "N50TRGU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50PQU",
+                  "description": "Performance & Quality Unit",
+                  "members": [
+                    {
+                      "code": "N50PQUU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50RAT",
+                  "description": "Risk and Audit Team",
+                  "members": [
+                    {
+                      "code": "N50RATU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "N50MANC",
+              "description": "Manchester North",
+              "team": [
+                {
+                  "code": "N50NMI",
+                  "description": "North Manchester IOM",
+                  "members": [
+                    {
+                      "code": "N02P054",
+                      "name": {
+                        "forename": "R&MP",
+                        "surname": "Practitioner"
+                      }
+                    },
+                    {
+                      "code": "N50NMIU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50SMI",
+                  "description": "South Manchester IOM",
+                  "members": [
+                    {
+                      "code": "N02P054",
+                      "name": {
+                        "forename": "R&MP",
+                        "surname": "Practitioner"
+                      }
+                    },
+                    {
+                      "code": "N50SMIU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50MOS",
+                  "description": "Moss Side NPS OMU 1",
+                  "members": [
+                    {
+                      "code": "N50B016",
+                      "name": {
+                        "forename": "Delius",
+                        "surname": "MikeTest"
+                      }
+                    },
+                    {
+                      "code": "N50MOSU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50CHE",
+                  "description": "Cheetham NPS OMU 1",
+                  "members": [
+                    {
+                      "code": "N50CHEU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50WYT",
+                  "description": "Wythenshawe NPS OMU 1",
+                  "members": [
+                    {
+                      "code": "N50WYTU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50MCC",
+                  "description": "Manchester Crown Square Crown Court",
+                  "members": [
+                    {
+                      "code": "N50MCCU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50MMC",
+                  "description": "Manchester Magistrates Court",
+                  "members": [
+                    {
+                      "code": "N50MMCU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50MSC",
+                  "description": "Manchester Minshull Street Crown Court",
+                  "members": [
+                    {
+                      "code": "N50MSCU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50CAC",
+                  "description": "GM Manchester N1",
+                  "members": [
+                    {
+                      "code": "N07B656",
+                      "name": {
+                        "forename": "Natalie",
+                        "surname": "Wood"
+                      }
+                    },
+                    {
+                      "code": "N50CACU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "N50PPGM",
+              "description": "Public Protection Residential",
+              "team": [
+                {
+                  "code": "N50CAU",
+                  "description": "A P Central Admissions Unit",
+                  "members": [
+                    {
+                      "code": "N02P054",
+                      "name": {
+                        "forename": "R&MP",
+                        "surname": "Practitioner"
+                      }
+                    },
+                    {
+                      "code": "N50CAUU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50SJA",
+                  "description": "St Josephs Approved Premises",
+                  "members": [
+                    {
+                      "code": "N02P054",
+                      "name": {
+                        "forename": "R&MP",
+                        "surname": "Practitioner"
+                      }
+                    },
+                    {
+                      "code": "N50SJAU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50AHA",
+                  "description": "Ascot House Approved Premises",
+                  "members": [
+                    {
+                      "code": "N50AHAU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    },
+                    {
+                      "code": "N54A022",
+                      "name": {
+                        "forename": "AutomatedTestUser",
+                        "surname": "AutomatedTestUser"
+                      }
+                    },
+                    {
+                      "code": "N01A025",
+                      "name": {
+                        "forename": "MPOP",
+                        "surname": "TestUser"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50BHA",
+                  "description": "Bradshaw House Approved Premises",
+                  "members": [
+                    {
+                      "code": "N50BHAU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50WPA",
+                  "description": "Wilton Place Approved Premises",
+                  "members": [
+                    {
+                      "code": "N50WPAU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50WRA",
+                  "description": "Withington Road Approved Premises",
+                  "members": [
+                    {
+                      "code": "N50WRAU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50CAP",
+                  "description": "Chorlton Approved Premises ",
+                  "members": [
+                    {
+                      "code": "N50CAPU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50MAC",
+                  "description": "*MULTI-AGENCY CO-ORD GUNS&GANGS",
+                  "members": [
+                    {
+                      "code": "N50MACU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50SGO",
+                  "description": "Gtr. Manchester Serious Group Offending Unit",
+                  "members": [
+                    {
+                      "code": "N50SGOU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50MTR",
+                  "description": "MAPPA and TACT Resource Unit",
+                  "members": [
+                    {
+                      "code": "N50MTRU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50MGA",
+                  "description": "Mcr Multi Agency Gang Strategy",
+                  "members": [
+                    {
+                      "code": "N50MGAU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "N50SATR",
+              "description": "Salford",
+              "team": [
+                {
+                  "code": "N50TRA",
+                  "description": "Trafford NPS OMU 1",
+                  "members": [
+                    {
+                      "code": "N02P054",
+                      "name": {
+                        "forename": "R&MP",
+                        "surname": "Practitioner"
+                      }
+                    },
+                    {
+                      "code": "N50TRAU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50SA1",
+                  "description": "Salford NPS OMU 1",
+                  "members": [
+                    {
+                      "code": "N50SA1U",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    },
+                    {
+                      "code": "N50A849",
+                      "name": {
+                        "forename": "ForGreatManWithInactive",
+                        "surname": "SurGreatManWithInactive"
+                      }
+                    },
+                    {
+                      "code": "N50A850",
+                      "name": {
+                        "forename": "ForGreatManWithTwoRegion",
+                        "surname": "SurGreatManWithTwoRegion"
+                      }
+                    },
+                    {
+                      "code": "N50MF6U",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50SA2",
+                  "description": "Salford NPS OMU 2",
+                  "members": [
+                    {
+                      "code": "N50SA2U",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    },
+                    {
+                      "code": "N50MF7U",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "N50TAST",
+              "description": "Tameside",
+              "team": [
+                {
+                  "code": "N50ST3",
+                  "description": "Stockport NPS OMU 3",
+                  "members": [
+                    {
+                      "code": "N02P054",
+                      "name": {
+                        "forename": "R&MP",
+                        "surname": "Practitioner"
+                      }
+                    },
+                    {
+                      "code": "N50ST3U",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50ST4",
+                  "description": "Stockport NPS OMU 4",
+                  "members": [
+                    {
+                      "code": "N02P054",
+                      "name": {
+                        "forename": "R&MP",
+                        "surname": "Practitioner"
+                      }
+                    },
+                    {
+                      "code": "N50ST4U",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50TCP",
+                  "description": "Tameside Community Punishment",
+                  "members": [
+                    {
+                      "code": "N02P054",
+                      "name": {
+                        "forename": "R&MP",
+                        "surname": "Practitioner"
+                      }
+                    },
+                    {
+                      "code": "N50TCPU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50TA1",
+                  "description": "Tameside NPS OMU 2",
+                  "members": [
+                    {
+                      "code": "N02P054",
+                      "name": {
+                        "forename": "R&MP",
+                        "surname": "Practitioner"
+                      }
+                    },
+                    {
+                      "code": "N50TA1U",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50TA2",
+                  "description": "Tameside NPS OMU1",
+                  "members": [
+                    {
+                      "code": "N02P054",
+                      "name": {
+                        "forename": "R&MP",
+                        "surname": "Practitioner"
+                      }
+                    },
+                    {
+                      "code": "N50TA2U",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50SMC",
+                  "description": "Stockport Magistates Court",
+                  "members": [
+                    {
+                      "code": "N02P054",
+                      "name": {
+                        "forename": "R&MP",
+                        "surname": "Practitioner"
+                      }
+                    },
+                    {
+                      "code": "N50SMCU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50TMC",
+                  "description": "Tameside Magistrates Court",
+                  "members": [
+                    {
+                      "code": "N02P054",
+                      "name": {
+                        "forename": "R&MP",
+                        "surname": "Practitioner"
+                      }
+                    },
+                    {
+                      "code": "N50TMCU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50OMC",
+                  "description": "Oldham Magistrates Court",
+                  "members": [
+                    {
+                      "code": "N50OMCU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "N50WIBO",
+              "description": "Wigan",
+              "team": [
+                {
+                  "code": "N50WIA",
+                  "description": "Wigan NPS Admin",
+                  "members": [
+                    {
+                      "code": "N02P054",
+                      "name": {
+                        "forename": "R&MP",
+                        "surname": "Practitioner"
+                      }
+                    },
+                    {
+                      "code": "N50WIAU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50WI1",
+                  "description": "Wigan NPS OMU 1",
+                  "members": [
+                    {
+                      "code": "N02P054",
+                      "name": {
+                        "forename": "R&MP",
+                        "surname": "Practitioner"
+                      }
+                    },
+                    {
+                      "code": "N50WI1U",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50WI2",
+                  "description": "Wigan NPS OMU 2",
+                  "members": [
+                    {
+                      "code": "N02P054",
+                      "name": {
+                        "forename": "R&MP",
+                        "surname": "Practitioner"
+                      }
+                    },
+                    {
+                      "code": "N50WI2U",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50WI3",
+                  "description": "Wigan NPS OMU 3",
+                  "members": [
+                    {
+                      "code": "N02P054",
+                      "name": {
+                        "forename": "R&MP",
+                        "surname": "Practitioner"
+                      }
+                    },
+                    {
+                      "code": "N50WI3U",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50WI4",
+                  "description": "Wigan NPS OMU 4",
+                  "members": [
+                    {
+                      "code": "N02P054",
+                      "name": {
+                        "forename": "R&MP",
+                        "surname": "Practitioner"
+                      }
+                    },
+                    {
+                      "code": "N50WI4U",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50WMC",
+                  "description": "Wigan Magistrates Court",
+                  "members": [
+                    {
+                      "code": "N02P054",
+                      "name": {
+                        "forename": "R&MP",
+                        "surname": "Practitioner"
+                      }
+                    },
+                    {
+                      "code": "N50WMCU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50BCC",
+                  "description": "Bolton Crown Court",
+                  "members": [
+                    {
+                      "code": "N50BCCU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50BCI",
+                  "description": "Bolton Community Integration",
+                  "members": [
+                    {
+                      "code": "N50BCIU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50BIS",
+                  "description": "Bolton Intensive Supervision",
+                  "members": [
+                    {
+                      "code": "N50BISU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50BOA",
+                  "description": "Bolton NPS Admin",
+                  "members": [
+                    {
+                      "code": "N50BOAU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50BO1",
+                  "description": "Bolton NPS OMU 1",
+                  "members": [
+                    {
+                      "code": "N50BO1U",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50BO2",
+                  "description": "Bolton NPS OMU 2",
+                  "members": [
+                    {
+                      "code": "N50BO2U",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50BO3",
+                  "description": "Bolton NPS OMU 3",
+                  "members": [
+                    {
+                      "code": "N50BO3U",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50BPP",
+                  "description": "Bolton Public Protection&Risk",
+                  "members": [
+                    {
+                      "code": "N50BPPU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50BYA",
+                  "description": "Bolton Youth to Adult",
+                  "members": [
+                    {
+                      "code": "N50BYAU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50ACT",
+                  "description": "Atherton Court",
+                  "members": [
+                    {
+                      "code": "N50ACTU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50BMC",
+                  "description": "Bolton Magistrates Court",
+                  "members": [
+                    {
+                      "code": "N50BMCU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "N50STK",
+              "description": "Enforcement",
+              "team": [
+                {
+                  "code": "N50HHI",
+                  "description": "HMP Hindley",
+                  "members": [
+                    {
+                      "code": "N50HHIU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50HBH",
+                  "description": "HMP Buckley Hall",
+                  "members": [
+                    {
+                      "code": "N50HBHU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50HFB",
+                  "description": "HMP Forest Bank",
+                  "members": [
+                    {
+                      "code": "N50HFBU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50HMA",
+                  "description": "HMP Manchester",
+                  "members": [
+                    {
+                      "code": "N50HMAU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50BYT",
+                  "description": "Bolton Crown Court Youth Team",
+                  "members": [
+                    {
+                      "code": "N50BYTU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "N50ROBO",
+              "description": "Bury and Rochdale",
+              "team": [
+                {
+                  "code": "N50RBZ",
+                  "description": "All Rochdale Bury Oldham (Team Unknown)",
+                  "members": [
+                    {
+                      "code": "N50RBZU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50BUA",
+                  "description": "Bury NPS Admin",
+                  "members": [
+                    {
+                      "code": "N50BUAU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50BUR",
+                  "description": "Bury NPS OMU 2",
+                  "members": [
+                    {
+                      "code": "N50BURU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50OLA",
+                  "description": "Oldham NPS Admin",
+                  "members": [
+                    {
+                      "code": "N50OLAU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50OLD",
+                  "description": "Oldham NPS OMU 2",
+                  "members": [
+                    {
+                      "code": "N50OLDU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50ROA",
+                  "description": "Rochdale NPS Admin",
+                  "members": [
+                    {
+                      "code": "N50ROAU",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50RO1",
+                  "description": "Rochdale NPS OMU 1",
+                  "members": [
+                    {
+                      "code": "N50RO1U",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "code": "N50RO2",
+                  "description": "Rochdale NPS OMU 2",
+                  "members": [
+                    {
+                      "code": "N50RO2U",
+                      "name": {
+                        "forename": "Unallocated",
+                        "surname": "Staff"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "request": {
+        "urlPattern": "/regions/pdu/.*/office-locations",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "code": "N50ALL",
+          "description": "All Greater Manchester",
+          "officeLocations": [
+            {
+              "code": "N50CR01",
+              "description": "Stockport: Stockport Probation Office"
+            },
+            {
+              "code": "N50CR02",
+              "description": "Tameside: Ashton Probation Office"
+            },
+            {
+              "code": "N50CR03",
+              "description": "Stockport: Cirtek House"
+            },
+            {
+              "code": "N50TP01",
+              "description": "Treatment Provider Location"
+            },
+            {
+              "code": "N50ANPS",
+              "description": "All PS Location"
+            },
+            {
+              "code": "N50NXHO",
+              "description": "Nexus House"
+            },
+            {
+              "code": "N50HDOF",
+              "description": "Head Office"
+            },
+            {
+              "code": "N501CCO",
+              "description": "Oldham Interventions Office"
+            },
+            {
+              "code": "N50PPDP",
+              "description": "Probation Programmes Development Unit"
+            }
+          ]
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
+        "urlPattern": "/regions/pdu/N50SATR/office-locations",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "code": "N50ALL",
+          "description": "Salford",
+          "officeLocations": [
+            {
+              "code": "N50SALO",
+              "description": "Salford Probation Office"
+            }
+          ]
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
     }
   ]
 }

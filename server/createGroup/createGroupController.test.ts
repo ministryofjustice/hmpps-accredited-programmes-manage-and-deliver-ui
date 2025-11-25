@@ -282,7 +282,7 @@ describe('Create Group Controller', () => {
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain('Redirecting to /group/create-a-group/check-your-answers')
+          expect(res.text).toContain('Redirecting to /group/create-a-group/pdu')
         })
     })
 
@@ -294,6 +294,139 @@ describe('Create Group Controller', () => {
         .expect(400)
         .expect(res => {
           expect(res.text).toContain('Select a sex')
+        })
+    })
+  })
+
+  describe('GET /group/create-a-group/pdu', () => {
+    it('loads the pdu selection page', async () => {
+      accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion.mockResolvedValue([
+        { code: 'LDN', description: 'London' },
+      ])
+      return request(app)
+        .get('/group/create-a-group/pdu')
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('In which probation delivery unit (PDU) will the group take place?')
+        })
+    })
+
+    it('displays previously selected pdu from session', async () => {
+      const sessionData: Partial<SessionData> = {
+        createGroupFormData: {
+          pduName: 'London',
+          pduCode: 'LDN',
+        },
+      }
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+      accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion.mockResolvedValue([
+        { code: 'LDN', description: 'London' },
+      ])
+      return request(app)
+        .get('/group/create-a-group/pdu')
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('London')
+        })
+    })
+  })
+
+  describe('POST /group/create-a-group/pdu', () => {
+    it('redirects to select location page on successful submission', async () => {
+      accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion.mockResolvedValue([
+        { code: 'LDN', description: 'London' },
+      ])
+      return request(app)
+        .post('/group/create-a-group/pdu')
+        .type('form')
+        .send({
+          'create-group-pdu': '{"code":"LDN", "name":"London"}',
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain('Redirecting to /group/create-a-group/location')
+        })
+    })
+
+    it('returns with errors if pdu is not selected', async () => {
+      accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion.mockResolvedValue([
+        { code: 'LDN', description: 'London' },
+      ])
+      return request(app)
+        .post('/group/create-a-group/pdu')
+        .type('form')
+        .send({})
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain('Select a probation delivery unit. Start typing to search.')
+        })
+    })
+  })
+
+  describe('GET /group/create-a-group/location', () => {
+    it('loads the location selection page', async () => {
+      accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu.mockResolvedValue([
+        { code: 'WMO', description: 'Westminster Office' },
+        { code: 'WHO', description: 'Whitehall Office' },
+      ])
+      return request(app)
+        .get('/group/create-a-group/location')
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Where will the group take place?')
+        })
+    })
+
+    it('displays previously selected location from session', async () => {
+      const sessionData: Partial<SessionData> = {
+        createGroupFormData: {
+          deliveryLocationName: 'Whitehall Office',
+          deliveryLocationCode: 'WHO',
+          pduName: 'London',
+        },
+      }
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+      accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu.mockResolvedValue([
+        { code: 'WMO', description: 'Westminster Office' },
+        { code: 'WHO', description: 'Whitehall Office' },
+      ])
+      return request(app)
+        .get('/group/create-a-group/location')
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Whitehall Office')
+        })
+    })
+  })
+
+  describe('POST /group/create-a-group/location', () => {
+    it('redirects to check your answers page on successful submission', async () => {
+      accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu.mockResolvedValue([
+        { code: 'LDN', description: 'London' },
+      ])
+      return request(app)
+        .post('/group/create-a-group/location')
+        .type('form')
+        .send({
+          'create-group-location': '{ "code": "WMO", "name": "Westminster Office" }',
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain('Redirecting to /group/create-a-group/check-your-answers')
+        })
+    })
+
+    it('returns with errors if location is not selected', async () => {
+      accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu.mockResolvedValue([
+        { code: 'LDN', description: 'London' },
+      ])
+      return request(app)
+        .post('/group/create-a-group/location')
+        .type('form')
+        .send({})
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain('Select a delivery location.')
         })
     })
   })

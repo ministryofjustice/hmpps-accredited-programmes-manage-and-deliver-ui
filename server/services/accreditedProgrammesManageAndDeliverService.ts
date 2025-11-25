@@ -38,6 +38,7 @@ import {
   ReferralMotivationBackgroundAndNonAssociations,
   RemoveFromGroupRequest,
   RemoveFromGroupResponse,
+  CodeDescription,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -482,5 +483,21 @@ export default class AccreditedProgrammesManageAndDeliverService
       headers: { Accept: 'application/json' },
       data,
     })
+  }
+
+  async getLocationsForUserRegion(username: Express.User['username']): Promise<CodeDescription[]> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/pdus-for-user-region`,
+      headers: { Accept: 'application/json' },
+    })) as CodeDescription[]
+  }
+
+  async getOfficeLocationsForPdu(username: Express.User['username'], pduCode: string): Promise<CodeDescription[]> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/office-locations-for-pdu/${pduCode}`,
+      headers: { Accept: 'application/json' },
+    })) as CodeDescription[]
   }
 }
