@@ -277,24 +277,25 @@ export default class CreateGroupForm {
 
         selected.forEach(dayOfWeek => {
           const dayKey = dayOfWeek.toLowerCase()
+          const prettyDay = dayOfWeek.charAt(0) + dayOfWeek.slice(1).toLowerCase()
 
           const hour = (req.body[`${dayKey}-hour`] || '').trim()
           const minute = (req.body[`${dayKey}-minute`] || '').trim()
           const ampm = (req.body[`${dayKey}-ampm`] || '').trim()
 
           if (!hour) {
-            throw new Error(`Enter an hour for ${dayOfWeek.toLowerCase()}`)
+            throw new Error(`Enter an hour for ${prettyDay}`)
           }
 
           if (!ampm) {
-            throw new Error(`Select am or pm for ${dayOfWeek.toLowerCase()}`)
+            throw new Error(`Select am or pm for ${prettyDay}`)
           }
 
           if (minute) {
             const minuteNumber = Number(minute)
 
             if (Number.isNaN(minuteNumber) || minuteNumber < 0 || minuteNumber > 59) {
-              throw new Error(`Enter minutes between 00 and 59 for ${dayOfWeek.toLowerCase()}`)
+              throw new Error(`Enter minutes between 00 and 59 for ${prettyDay}`)
             }
           }
         })
