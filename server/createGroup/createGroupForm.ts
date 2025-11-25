@@ -277,7 +277,6 @@ export default class CreateGroupForm {
         } else if (raw) {
           selected.push(raw as DayKey)
         }
-
         if (selected.length === 0) {
           throw new Error(errorMessages.createGroup.createGroupWhenSelect)
         }
