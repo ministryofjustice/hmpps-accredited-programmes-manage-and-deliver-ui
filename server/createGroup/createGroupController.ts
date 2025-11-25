@@ -174,7 +174,7 @@ export default class CreateGroupController {
           ...createGroupFormData,
           createGroupSessionSlot: data.paramsForUpdate.createGroupSessionSlot,
         }
-        return res.redirect(`/group/create-a-group/group-days-and-times`)
+        return res.redirect(`/group/create-a-group/cohort`)
       }
     }
 

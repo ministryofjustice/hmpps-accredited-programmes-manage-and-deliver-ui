@@ -41,6 +41,11 @@ export default class CreateGroupCyaPresenter {
     }
   }
 
+  private sentenceCase(value: string | undefined): string {
+    if (!value) return ''
+    return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()
+  }
+
   getCreateGroupSummary(): SummaryListItem[] {
     const members = this.generateSelectedUsers()
     const summaryList = [
@@ -66,7 +71,11 @@ export default class CreateGroupCyaPresenter {
         key: 'Day and time',
         lines:
           this.createGroupFormData.createGroupSessionSlot?.map(
-            slot => `${slot.dayOfWeek} ${slot.hour}:${String(slot.minutes).padStart(2, '0')} ${slot.amOrPm}`,
+            slot =>
+              `${this.sentenceCase(slot.dayOfWeek)} ${slot.hour}:${String(slot.minutes).padStart(
+                2,
+                '0',
+              )} ${slot.amOrPm.toLowerCase()}`,
           ) || [],
         changeLink: '/group/create-a-group/group-days-and-times',
       },

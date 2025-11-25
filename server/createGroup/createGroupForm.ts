@@ -270,7 +270,6 @@ export default class CreateGroupForm {
         } else if (raw) {
           selected.push(raw)
         }
-
         if (selected.length === 0) {
           throw new Error(errorMessages.createGroup.createGroupWhenSelect)
         }
@@ -279,23 +278,24 @@ export default class CreateGroupForm {
           const dayKey = dayOfWeek.toLowerCase()
           const prettyDay = dayOfWeek.charAt(0) + dayOfWeek.slice(1).toLowerCase()
 
-          const hour = (req.body[`${dayKey}-hour`] || '').trim()
-          const minute = (req.body[`${dayKey}-minute`] || '').trim()
-          const ampm = (req.body[`${dayKey}-ampm`] || '').trim()
-
+          const hour = (req.body[`${dayKey}-hour`] ?? '').toString().trim()
+          const minute = (req.body[`${dayKey}-minute`] ?? '').toString().trim()
+          const ampm = (req.body[`${dayKey}-ampm`] ?? '').toString().trim()
           if (!hour) {
-            throw new Error(`Enter an hour for ${prettyDay}`)
+            throw new Error(`${errorMessages.createGroup.createGroupWhenHourRequired} for ${prettyDay}`)
           }
-
+          const hourNumber = Number(hour)
+          if (Number.isNaN(hourNumber) || hourNumber < 1 || hourNumber > 12) {
+            throw new Error(`${errorMessages.createGroup.createGroupWhenHourInvalid} for ${prettyDay}`)
+          }
           if (!ampm) {
-            throw new Error(`Select am or pm for ${prettyDay}`)
+            throw new Error(`${errorMessages.createGroup.createGroupWhenAmOrPmRequired} for ${prettyDay}`)
           }
-
           if (minute) {
             const minuteNumber = Number(minute)
 
             if (Number.isNaN(minuteNumber) || minuteNumber < 0 || minuteNumber > 59) {
-              throw new Error(`Enter minutes between 00 and 59 for ${prettyDay}`)
+              throw new Error(`${errorMessages.createGroup.createGroupWhenMinutesInvalid} for ${prettyDay}`)
             }
           }
         })
