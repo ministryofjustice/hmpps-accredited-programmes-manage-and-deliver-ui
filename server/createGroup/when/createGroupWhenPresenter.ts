@@ -96,7 +96,6 @@ export default class CreateGroupWhenPresenter {
 
       if (!dayFieldErrors[day]) return
 
-      const hourMissing = slot.hour == null
       const amOrPmMissing = !slot.amOrPm
 
       const minutesInvalidRange = slot.minutes != null && (slot.minutes < 0 || slot.minutes > 59)
