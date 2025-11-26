@@ -1,6 +1,6 @@
 import { CreateGroupRequest, CreateGroupTeamMember } from '@manage-and-deliver-api'
-import { SummaryListItem } from '../utils/summaryList'
-import CreateGroupUtils from './createGroupUtils'
+import { SummaryListItem } from '../../utils/summaryList'
+import CreateGroupUtils from '../createGroupUtils'
 
 export default class CreateGroupCyaPresenter {
   constructor(private readonly createGroupFormData: Partial<CreateGroupRequest>) {}

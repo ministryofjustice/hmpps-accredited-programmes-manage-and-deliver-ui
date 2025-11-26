@@ -1,7 +1,7 @@
-import { RadiosArgs } from '../utils/govukFrontendTypes'
-import ViewUtils from '../utils/viewUtils'
+import { RadiosArgs } from '../../utils/govukFrontendTypes'
+import ViewUtils from '../../utils/viewUtils'
 import CreateGroupCohortPresenter from './createGroupCohortPresenter'
-import CreateGroupUtils from './createGroupUtils'
+import CreateGroupUtils from '../createGroupUtils'
 
 export default class CreateGroupCohortView {
   constructor(private readonly presenter: CreateGroupCohortPresenter) {}

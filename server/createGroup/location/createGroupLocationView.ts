@@ -1,6 +1,6 @@
-import ViewUtils from '../utils/viewUtils'
+import ViewUtils from '../../utils/viewUtils'
 import CreateGroupLocationPresenter from './createGroupLocationPresenter'
-import { RadiosArgs, SummaryListArgs } from '../utils/govukFrontendTypes'
+import { RadiosArgs, SummaryListArgs } from '../../utils/govukFrontendTypes'
 
 export default class CreateGroupLocationView {
   constructor(private readonly presenter: CreateGroupLocationPresenter) {}

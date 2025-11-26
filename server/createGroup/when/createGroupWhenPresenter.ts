@@ -1,8 +1,18 @@
 import { CreateGroupRequest } from '@manage-and-deliver-api'
-import { FormValidationError } from '../utils/formValidationError'
-import PresenterUtils from '../utils/presenterUtils'
+import { FormValidationError } from '../../utils/formValidationError'
+import PresenterUtils from '../../utils/presenterUtils'
 
 type DayKey = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
+
+const DAY_LABELS: Record<DayKey, string> = {
+  MONDAY: 'Monday',
+  TUESDAY: 'Tuesday',
+  WEDNESDAY: 'Wednesday',
+  THURSDAY: 'Thursday',
+  FRIDAY: 'Friday',
+  SATURDAY: 'Saturday',
+  SUNDAY: 'Sunday',
+}
 
 export default class CreateGroupWhenPresenter {
   constructor(
@@ -16,10 +26,6 @@ export default class CreateGroupWhenPresenter {
 
   get backLinkUri() {
     return `/group/create-a-group/date`
-  }
-
-  get errorSummary() {
-    return PresenterUtils.errorSummary(this.validationError)
   }
 
   get utils() {
@@ -67,5 +73,45 @@ export default class CreateGroupWhenPresenter {
     })
 
     return map
+  }
+
+  get errorSummary() {
+    const baseSummary = PresenterUtils.errorSummary(this.validationError)
+
+    if (!this.validationError) {
+      return baseSummary
+    }
+
+    const extraErrors: Array<{ field: string; message: string }> = []
+    const slots = this.createGroupFormData?.createGroupSessionSlot ?? []
+
+    const { dayFieldErrors } = this
+
+    slots.forEach(slot => {
+      const day = slot.dayOfWeek as DayKey
+      if (!day) return
+      if (!dayFieldErrors[day]) return
+
+      const label = DAY_LABELS[day]
+      const dayLower = day.toLowerCase()
+
+      const hourMissing = slot.hour == null
+      const amOrPmMissing = !slot.amOrPm
+
+      if (amOrPmMissing) {
+        extraErrors.push({
+          field: `create-group-when-${dayLower}-ampm`,
+          message: `Select am or pm for ${label}`,
+        })
+      }
+    })
+
+    if (!extraErrors.length) {
+      return baseSummary
+    }
+
+    const combined = [...(baseSummary ?? []), ...extraErrors]
+
+    return combined.length ? combined : null
   }
 }

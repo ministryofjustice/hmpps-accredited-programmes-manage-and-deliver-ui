@@ -1,5 +1,5 @@
-import { SummaryListArgs } from '../utils/govukFrontendTypes'
-import ViewUtils from '../utils/viewUtils'
+import { SummaryListArgs } from '../../utils/govukFrontendTypes'
+import ViewUtils from '../../utils/viewUtils'
 import CreateGroupCyaPresenter from './createGroupCyaPresenter'
 
 export default class CreateGroupCyaView {

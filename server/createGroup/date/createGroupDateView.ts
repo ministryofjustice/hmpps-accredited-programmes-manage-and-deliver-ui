@@ -1,4 +1,4 @@
-import ViewUtils from '../utils/viewUtils'
+import ViewUtils from '../../utils/viewUtils'
 import CreateGroupDatePresenter from './createGroupDatePresenter'
 
 export default class CreateGroupDateView {

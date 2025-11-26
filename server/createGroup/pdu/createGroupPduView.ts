@@ -1,5 +1,5 @@
-import { SelectArgs } from '../utils/govukFrontendTypes'
-import ViewUtils from '../utils/viewUtils'
+import { SelectArgs } from '../../utils/govukFrontendTypes'
+import ViewUtils from '../../utils/viewUtils'
 import CreateGroupPduPresenter from './createGroupPduPresenter'
 
 export default class CreateGroupPduView {

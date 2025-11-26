@@ -1,4 +1,4 @@
-import ViewUtils from '../utils/viewUtils'
+import ViewUtils from '../../utils/viewUtils'
 import CreateGroupWhenPresenter from './createGroupWhenPresenter'
 
 type DayKey = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
@@ -67,14 +67,33 @@ export default class CreateGroupWhenView {
         // 🔴 per-day error from presenter (e.g. only for TUESDAY)
         const dayErrorMessage = fieldsByDay[day.key]
 
-        const errorHtml = dayErrorMessage
-          ? `
-<p class="govuk-error-message">
-  <span class="govuk-visually-hidden">Error:</span> ${dayErrorMessage}
-</p>`
-          : ''
+        const hourMissing = hour === '' || hour === undefined || hour === null
+        const amOrPmMissing = amOrPm === '' || amOrPm === undefined || amOrPm === null
 
-        const formGroupClass = dayErrorMessage ? 'govuk-form-group govuk-form-group--error' : 'govuk-form-group'
+        const minutesInvalidRange =
+          minutes !== '' &&
+          minutes != null &&
+          (Number.isNaN(Number(minutes)) || Number(minutes) < 0 || Number(minutes) > 59)
+
+        const hourHasError = !!dayErrorMessage && hourMissing
+        const minutesHasError = !!dayErrorMessage && minutesInvalidRange
+        const amOrPmHasError = !!dayErrorMessage && amOrPmMissing
+
+        const anyError = !!dayErrorMessage && (hourMissing || amOrPmMissing)
+
+        const hourFormGroupClass = hourHasError ? 'govuk-form-group' : ''
+        const minutesFormGroupClass = minutesHasError ? 'govuk-form-group' : ''
+        const amOrPmFormGroupClass = amOrPmHasError ? 'govuk-form-group' : ''
+
+        const hourInputErrorClass = hourHasError ? ' govuk-input--error' : ''
+        const minutesInputErrorClass = minutesHasError ? ' govuk-input--error' : ''
+        const amOrPmSelectErrorClass = amOrPmHasError ? ' govuk-select--error' : ''
+
+        const inlineErrorParts: string[] = []
+        if (hourMissing) inlineErrorParts.push('Enter an hour')
+        if (amOrPmMissing) inlineErrorParts.push('Select am or pm')
+
+        const inlineErrorMessage = inlineErrorParts.length > 0 ? inlineErrorParts.join(' and ') : dayErrorMessage
 
         const conditionalHtml = `
 <div class="govuk-!-margin-left-3">
@@ -83,16 +102,24 @@ export default class CreateGroupWhenView {
     Use the 12-hour clock, for example 9:30am or 3:00pm. Enter 12:00pm for midday.
   </p>
 
-  ${errorHtml}
+  ${
+    anyError && inlineErrorMessage
+      ? `
+    <p class="govuk-error-message">
+      <span class="govuk-visually-hidden">Error:</span> ${inlineErrorMessage}
+    </p>
+  `
+      : ''
+  }
 
   <div class="govuk-date-input" id="${idBase}-time">
     <div class="govuk-date-input__item">
-      <div class="${formGroupClass}">
+      <div class="${hourFormGroupClass}">
         <label class="govuk-label govuk-date-input__label" for="${idBase}-hour">
           Hour
         </label>
         <input
-          class="govuk-input govuk-date-input__input govuk-input--width-2"
+          class="govuk-input govuk-date-input__input govuk-input--width-2${hourInputErrorClass}"
           id="${idBase}-hour"
           name="${idBase}-hour"
           type="text"
@@ -105,12 +132,12 @@ export default class CreateGroupWhenView {
     </div>
 
     <div class="govuk-date-input__item">
-      <div class="${formGroupClass}">
+      <div class="${minutesFormGroupClass}">
         <label class="govuk-label govuk-date-input__label" for="${idBase}-minute">
           Minute
         </label>
         <input
-          class="govuk-input govuk-date-input__input govuk-input--width-2"
+          class="govuk-input govuk-date-input__input govuk-input--width-2${minutesInputErrorClass}"
           id="${idBase}-minute"
           name="${idBase}-minute"
           type="text"
@@ -123,12 +150,12 @@ export default class CreateGroupWhenView {
     </div>
 
     <div class="govuk-date-input__item">
-      <div class="${formGroupClass}">
+      <div class="${amOrPmFormGroupClass}">
         <label class="govuk-label govuk-date-input__label" for="${idBase}-ampm">
           am or pm
         </label>
         <select
-          class="govuk-select govuk-date-select__select"
+          class="govuk-select govuk-date-select__select${amOrPmSelectErrorClass}"
           id="${idBase}-ampm"
           name="${idBase}-ampm"
         >
@@ -147,18 +174,14 @@ export default class CreateGroupWhenView {
           value: day.key,
           text: day.label,
           checked: selectedDays.includes(day.key),
-
           attributes: {
             'data-aria-controls': `${idBase}-conditional`,
           },
-
           conditional: {
             html: conditionalHtml,
           },
         }
       }),
-
-      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createGroupWhen?.errorMessage),
     }
   }
 
