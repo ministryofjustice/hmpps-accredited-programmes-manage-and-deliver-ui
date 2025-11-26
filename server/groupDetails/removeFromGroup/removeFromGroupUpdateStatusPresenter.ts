@@ -57,7 +57,7 @@ export default class RemoveFromGroupUpdateStatusPresenter {
       hint: {
         text:
           this.statusDetails.currentStatus.title === 'Scheduled'
-            ? 'You can add more information about this update, such as the reason for an assessment decision or for deprioritising someone.'
+            ? 'You can add more information about this update, such as the reason for deprioritising someone.'
             : 'You can add more information about this update, such as the reason why the person cannot continue on the group',
       },
       errorMessage: ViewUtils.govukErrorMessage(this.fields.moreDetailsTextArea.errorMessage),
