@@ -90,17 +90,37 @@ export default class CreateGroupWhenPresenter {
     slots.forEach(slot => {
       const day = slot.dayOfWeek as DayKey
       if (!day) return
-      if (!dayFieldErrors[day]) return
 
       const label = DAY_LABELS[day]
       const dayLower = day.toLowerCase()
+
+      if (!dayFieldErrors[day]) return
+
+      const hourMissing = slot.hour == null
       const amOrPmMissing = !slot.amOrPm
 
+      const minutesInvalidRange = slot.minutes != null && (slot.minutes < 0 || slot.minutes > 59)
+
       if (amOrPmMissing) {
-        extraErrors.push({
-          field: `create-group-when-${dayLower}-ampm`,
-          message: `Select am or pm for ${label}`,
-        })
+        const field = `create-group-when-${dayLower}-ampm`
+        const alreadyHasAmPmError = baseSummary?.some(e => e.field === field)
+        if (!alreadyHasAmPmError) {
+          extraErrors.push({
+            field,
+            message: `Select am or pm for ${label}`,
+          })
+        }
+      }
+
+      if (minutesInvalidRange) {
+        const field = `create-group-when-${dayLower}-minute`
+        const alreadyHasMinuteError = baseSummary?.some(e => e.field === field)
+        if (!alreadyHasMinuteError) {
+          extraErrors.push({
+            field,
+            message: `Enter minutes between 0 and 59 for ${label}`,
+          })
+        }
       }
     })
 

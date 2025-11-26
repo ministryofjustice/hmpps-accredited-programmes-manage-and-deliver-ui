@@ -76,10 +76,11 @@ export default class CreateGroupWhenView {
           (Number.isNaN(Number(minutes)) || Number(minutes) < 0 || Number(minutes) > 59)
 
         const hourHasError = !!dayErrorMessage && hourMissing
-        const minutesHasError = !!dayErrorMessage && minutesInvalidRange
         const amOrPmHasError = !!dayErrorMessage && amOrPmMissing
 
-        const anyError = !!dayErrorMessage && (hourMissing || amOrPmMissing)
+        const minutesHasError = minutesInvalidRange
+
+        const anyError = hourHasError || amOrPmHasError || minutesHasError
 
         const hourFormGroupClass = hourHasError ? 'govuk-form-group' : ''
         const minutesFormGroupClass = minutesHasError ? 'govuk-form-group' : ''
@@ -90,8 +91,9 @@ export default class CreateGroupWhenView {
         const amOrPmSelectErrorClass = amOrPmHasError ? ' govuk-select--error' : ''
 
         const inlineErrorParts: string[] = []
-        if (hourMissing) inlineErrorParts.push('Enter an hour')
-        if (amOrPmMissing) inlineErrorParts.push('Select am or pm')
+        if (hourMissing && dayErrorMessage) inlineErrorParts.push('Enter an hour')
+        if (amOrPmMissing && dayErrorMessage) inlineErrorParts.push('Select am or pm')
+        if (minutesInvalidRange) inlineErrorParts.push('Enter minutes between 0 and 59')
 
         const inlineErrorMessage = inlineErrorParts.length > 0 ? inlineErrorParts.join(' and ') : dayErrorMessage
 
