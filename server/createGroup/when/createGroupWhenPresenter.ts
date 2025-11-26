@@ -94,8 +94,6 @@ export default class CreateGroupWhenPresenter {
 
       const label = DAY_LABELS[day]
       const dayLower = day.toLowerCase()
-
-      const hourMissing = slot.hour == null
       const amOrPmMissing = !slot.amOrPm
 
       if (amOrPmMissing) {
