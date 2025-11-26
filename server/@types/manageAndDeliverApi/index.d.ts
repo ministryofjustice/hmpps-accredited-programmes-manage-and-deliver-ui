@@ -54,6 +54,7 @@ type ProgrammeGroupEntity = components['schemas']['ProgrammeGroupEntity']
 type AllocateToGroupRequest = components['schemas']['AllocateToGroupRequest']
 type AllocateToGroupResponse = components['schemas']['AllocateToGroupResponse']
 type CodeDescription = components['schemas']['CodeDescription']
+type UserTeamMember = components['schemas']['UserTeamMember']
 
 export type {
   AlcoholMisuseDetails,
@@ -109,4 +110,5 @@ export type {
   UpdateAvailability,
   UpdateCohort,
   UpdateLdc,
+  UserTeamMember,
 }

@@ -1,0 +1,138 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{%- from "govuk/components/fieldset/macro.njk" import govukFieldset -%}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block main %}
+{% block content %}
+<div class="govuk-width-container" id="main-content">
+  <div class="govuk-main-wrapper">
+    <div class="govuk-grid-row govuk-!-margin-bottom-6">
+      <div class="govuk-grid-column-two-thirds">
+        {{ govukBackLink(backLinkArgs) }}
+      </div>
+      <div class="govuk-grid-column-one-third">
+        <a class="return_to_homepage__link" href={{ homePageLink.href }}>{{ homePageLink.text }}</a>
+      </div>
+    </div>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        {% if errorSummary !== null %}
+        {{ govukErrorSummary(errorSummary) }}
+        {% endif %}
+        <span class="govuk-caption-l">{{ text.headingHintText }}</span>
+        <h1 class="govuk-heading-l">{{ text.headingText }}</h1>
+        <form method="post" novalidate>
+          <input type="hidden" name="_csrf" value="{{csrfToken}}">
+          {{ govukSelect(createGroupTreatmentManagerArgs) }}
+          <script src="/assets/accessible-autocomplete.min.js"></script>
+          <script nonce="{{ cspNonce }}">
+            accessibleAutocomplete.enhanceSelectElement({
+              defaultValue: '',
+              selectElement: document.querySelector('#create-group-treatment-manager')
+            })
+          </script>
+<!--          <div data-module="moj-add-another">-->
+<!--            {% call govukFieldset({-->
+<!--            classes: "moj-add-another__item",-->
+<!--            legend: {-->
+<!--            text: "Facilitator",-->
+<!--            classes: "moj-add-another__title govuk-fieldset__legend&#45;&#45;m",-->
+<!--            isPageHeading: false-->
+<!--            }-->
+<!--            }) %}-->
+<!--            {{ govukSelect({-->
+<!--            id: "create-group-facilitator[0]",-->
+<!--            name: "create-group-facilitator[0]",-->
+<!--            label: {-->
+<!--            text: "Sort by"-->
+<!--            },-->
+<!--            attributes: {-->
+<!--            "data-name": "create-group-facilitator[%index%]",-->
+<!--            "data-id": "create-group-facilitator[%index%]"-->
+<!--            },-->
+<!--            items: [-->
+<!--            {-->
+<!--            value: "published",-->
+<!--            text: "Recently published"-->
+<!--            },-->
+<!--            {-->
+<!--            value: "updated",-->
+<!--            text: "Recently updated",-->
+<!--            selected: true-->
+<!--            },-->
+<!--            {-->
+<!--            value: "views",-->
+<!--            text: "Most views"-->
+<!--            },-->
+<!--            {-->
+<!--            value: "comments",-->
+<!--            text: "Most comments"-->
+<!--            }-->
+<!--            ]-->
+<!--            }) }}-->
+<!--            <script src="/assets/accessible-autocomplete.min.js"></script>-->
+<!--            <script nonce="{{ cspNonce }}">-->
+<!--              console.log('In here')-->
+<!--              const allSelects = document.querySelectorAll('select');-->
+<!--              const lastSelect = allSelects[allSelects.length - 1];-->
+
+<!--              console.log('Most recent select:', lastSelect);-->
+<!--              accessibleAutocomplete.enhanceSelectElement({-->
+<!--                defaultValue: '',-->
+<!--                selectElement: lastSelect-->
+<!--              })-->
+<!--            </script>-->
+<!--            {% endcall %}-->
+
+<!--            <div class="moj-button-action">-->
+<!--              {{ govukButton({-->
+<!--              id: "add-another-facilitator",-->
+<!--              text: "Add another facilitator",-->
+<!--              classes: "govuk-button&#45;&#45;secondary moj-add-another__add-button govuk-!-margin-bottom-4"-->
+<!--              }) }}-->
+<!--            </div>-->
+          </div>
+          {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script nonce="{{ cspNonce }}">
+  // document.addEventListener('change', function(e) {
+  //   // Check if the changed element is a select
+  //   console.log('A select changed:', e.target);
+  //   if (e.target.tagName === 'SELECT') {
+  //     console.log('A select changed:', e.target);
+  //     console.log('Selected value:', e.target.value);
+  //     // Your code here
+  //   }
+  // });
+  document.addEventListener('DOMContentLoaded', function () {
+    function clearAccessibleAutocompleteSelectionWhenInputEmpty(inputId) {
+      const autocompleteInput = document.getElementById(inputId);
+      const selectElement = document.getElementById(inputId + '-select');
+      if (autocompleteInput && selectElement) {
+        function clearSelection() {
+          if (this.value.trim() === '') {
+            selectElement.value = '';
+            selectElement.selectedIndex = 0;
+          }
+        }
+        autocompleteInput.addEventListener('input', clearSelection);
+        autocompleteInput.addEventListener('keyup', clearSelection);
+        return true;
+      }
+      return false;
+    }
+    clearAccessibleAutocompleteSelectionWhenInputEmpty('create-group-treatment-manager');
+  });
+</script>
+{% endblock %}
+{% endblock %}

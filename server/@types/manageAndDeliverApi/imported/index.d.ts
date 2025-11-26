@@ -686,7 +686,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/bff/region/{regionCode}/pdu/{pduCode}/members': {
+  '/bff/region/{regionCode}/members': {
     parameters: {
       query?: never
       header?: never
@@ -694,10 +694,10 @@ export interface paths {
       cookie?: never
     }
     /**
-     * BFF endpoint to get a list of members for a PDU.
-     * @description BFF endpoint to retrieve a list of team members for a Probation Delivery Unit
+     * BFF endpoint to get a list of members for a Region.
+     * @description BFF endpoint to retrieve a list of team members for a Region.
      */
-    get: operations['getMembersInPdu']
+    get: operations['getMembersInRegion']
     put?: never
     post?: never
     delete?: never
@@ -2346,6 +2346,16 @@ export interface components {
       currentStatus: components['schemas']['CurrentStatus']
       /** @description List of transition statuses */
       availableStatuses: components['schemas']['ReferralStatus'][]
+    }
+    UserTeamMember: {
+      /** @description The code for the team member */
+      personCode: string
+      /** @description The full name of the team member */
+      personName: string
+      /** @description The name of the team that the member belongs to */
+      teamName: string
+      /** @description The code of the team that the member belongs to */
+      teamCode: string
     }
     /** @description A delivery location (i.e. Office) with value and label, formatted for the UI */
     DeliveryLocationOption: {
@@ -4818,13 +4828,12 @@ export interface operations {
       }
     }
   }
-  getMembersInPdu: {
+  getMembersInRegion: {
     parameters: {
       query?: never
       header?: never
       path: {
         regionCode: string
-        pduCode: string
       }
       cookie?: never
     }
@@ -4836,7 +4845,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          '*/*': components['schemas']['CodeDescription'][]
+          '*/*': components['schemas']['UserTeamMember'][]
         }
       }
       /** @description Bad Request */
@@ -4857,7 +4866,7 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
-      /** @description Forbidden. The client is not authorised to retrieve pdus. */
+      /** @description Forbidden. The client is not authorised to retrieve members for region. */
       403: {
         headers: {
           [name: string]: unknown

@@ -20,6 +20,8 @@ import CreateGroupPduPresenter from './createGroupPduPresenter'
 import CreateGroupPduView from './createGroupPduView'
 import CreateGroupLocationPresenter from './createGroupLocationPresenter'
 import CreateGroupLocationView from './createGroupLocationView'
+import CreateGroupTreatmentManagerPresenter from './createGroupTreatmentManagerPresenter'
+import CreateGroupTreatmentManagerView from './createGroupTreatmentManagerView'
 
 export default class CreateGroupController {
   constructor(
@@ -191,7 +193,7 @@ export default class CreateGroupController {
           deliveryLocationName: data.paramsForUpdate.deliveryLocationName,
           deliveryLocationCode: data.paramsForUpdate.deliveryLocationCode,
         }
-        return res.redirect(`/group/create-a-group/check-your-answers`)
+        return res.redirect(`/group/create-a-group/treatment-manager`)
       }
     }
 
@@ -202,6 +204,38 @@ export default class CreateGroupController {
 
     const presenter = new CreateGroupLocationPresenter(officeLocations, formError, createGroupFormData, userInputData)
     const view = new CreateGroupLocationView(presenter)
+    return ControllerUtils.renderWithLayout(res, view, null)
+  }
+
+  async showCreateGroupTreatmentManager(req: Request, res: Response): Promise<void> {
+    const { createGroupFormData } = req.session
+    const { username } = req.user
+    let formError: FormValidationError | null = null
+    let userInputData = null
+
+    if (req.method === 'POST') {
+      const data = await new CreateGroupForm(req).createGroupTreatmentManagerData()
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+        userInputData = req.body
+      } else {
+        req.session.createGroupFormData = {
+          ...createGroupFormData,
+        }
+        return res.redirect(`/group/create-a-group/check-your-answers`)
+      }
+    }
+
+    const pduMembers = await this.accreditedProgrammesManageAndDeliverService.getPduMembers(username, 'N50ALL')
+    console.log(pduMembers)
+    const presenter = new CreateGroupTreatmentManagerPresenter(
+      pduMembers,
+      formError,
+      createGroupFormData,
+      userInputData,
+    )
+    const view = new CreateGroupTreatmentManagerView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
 

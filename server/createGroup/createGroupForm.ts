@@ -141,6 +141,29 @@ export default class CreateGroupForm {
     }
   }
 
+  async createGroupTreatmentManagerData(): Promise<FormData<Partial<CreateGroupRequest>>> {
+    const validationResult = await FormUtils.runValidations({
+      request: this.request,
+      validations: this.createGroupTreatmentManagerValidations(),
+    })
+
+    const error = FormUtils.validationErrorFromResult(validationResult)
+    if (error) {
+      return {
+        paramsForUpdate: null,
+        error,
+      }
+    }
+    const pduInfo = JSON.parse(this.request.body['create-group-pdu'])
+    return {
+      paramsForUpdate: {
+        pduName: pduInfo.name,
+        pduCode: pduInfo.code,
+      },
+      error: null,
+    }
+  }
+
   private createGroupCodeValidations(): ValidationChain[] {
     const validations = [
       body('create-group-code').notEmpty().withMessage(errorMessages.createGroup.createGroupCodeEmpty),
@@ -195,5 +218,13 @@ export default class CreateGroupForm {
 
   private createGroupLocationValidations(): ValidationChain[] {
     return [body('create-group-location').notEmpty().withMessage(errorMessages.createGroup.createGroupLocationEmpty)]
+  }
+
+  private createGroupTreatmentManagerValidations(): ValidationChain[] {
+    return [
+      body('create-group-treatment-manager')
+        .notEmpty()
+        .withMessage(errorMessages.createGroup.createGroupTreatmentManagerEmpty),
+    ]
   }
 }

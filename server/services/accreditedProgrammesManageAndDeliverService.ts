@@ -39,6 +39,7 @@ import {
   RemoveFromGroupRequest,
   RemoveFromGroupResponse,
   CodeDescription,
+  UserTeamMember,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -499,5 +500,13 @@ export default class AccreditedProgrammesManageAndDeliverService
       path: `/bff/office-locations-for-pdu/${pduCode}`,
       headers: { Accept: 'application/json' },
     })) as CodeDescription[]
+  }
+
+  async getPduMembers(username: Express.User['username'], pduCode: string): Promise<UserTeamMember[]> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/region/${pduCode}/members`,
+      headers: { Accept: 'application/json' },
+    })) as UserTeamMember[]
   }
 }
