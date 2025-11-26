@@ -53,7 +53,7 @@ export default class CreateGroupCyaPresenter {
       return 'midnight'
     }
 
-    return `${hour}:${mins} ${period}`
+    return `${hour}:${mins}${period}`
   }
 
   private addTwoAndHalfHours(hour: number, minutes: number, amOrPm: string) {

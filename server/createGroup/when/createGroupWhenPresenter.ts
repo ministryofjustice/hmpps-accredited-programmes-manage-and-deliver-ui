@@ -76,15 +76,34 @@ export default class CreateGroupWhenPresenter {
   }
 
   get errorSummary() {
-    const baseSummary = PresenterUtils.errorSummary(this.validationError)
+    const rawSummary = PresenterUtils.errorSummary(this.validationError)
 
     if (!this.validationError) {
-      return baseSummary
+      return rawSummary
     }
+
+    const baseSummary =
+      rawSummary?.map(item => {
+        if (!item.field) return item
+
+        if (item.field.startsWith('create-group-when-')) {
+          const rest = item.field.substring('create-group-when-'.length)
+          const parts = rest.split('-')
+
+          if (parts.length === 1) {
+            return { ...item, field: parts[0] }
+          }
+
+          if (parts.length === 2 && ['hour', 'minute', 'ampm'].includes(parts[1])) {
+            return { ...item, field: `${parts[0]}-${parts[1]}` }
+          }
+        }
+
+        return item
+      }) ?? []
 
     const extraErrors: Array<{ field: string; message: string }> = []
     const slots = this.createGroupFormData?.createGroupSessionSlot ?? []
-
     const { dayFieldErrors } = this
 
     slots.forEach(slot => {
@@ -96,14 +115,14 @@ export default class CreateGroupWhenPresenter {
 
       if (!dayFieldErrors[day]) return
 
+      const hourMissing = slot.hour == null
       const amOrPmMissing = !slot.amOrPm
-
       const minutesInvalidRange = slot.minutes != null && (slot.minutes < 0 || slot.minutes > 59)
 
       if (amOrPmMissing) {
-        const field = `create-group-when-${dayLower}-ampm`
-        const alreadyHasAmPmError = baseSummary?.some(e => e.field === field)
-        if (!alreadyHasAmPmError) {
+        const field = `${dayLower}-ampm`
+        const already = baseSummary.some(e => e.field === field)
+        if (!already) {
           extraErrors.push({
             field,
             message: `Select am or pm for ${label}`,
@@ -112,9 +131,9 @@ export default class CreateGroupWhenPresenter {
       }
 
       if (minutesInvalidRange) {
-        const field = `create-group-when-${dayLower}-minute`
-        const alreadyHasMinuteError = baseSummary?.some(e => e.field === field)
-        if (!alreadyHasMinuteError) {
+        const field = `${dayLower}-minute`
+        const already = baseSummary.some(e => e.field === field)
+        if (!already) {
           extraErrors.push({
             field,
             message: `Enter minutes between 0 and 59 for ${label}`,
@@ -123,11 +142,7 @@ export default class CreateGroupWhenPresenter {
       }
     })
 
-    if (!extraErrors.length) {
-      return baseSummary
-    }
-
-    const combined = [...(baseSummary ?? []), ...extraErrors]
+    const combined = [...baseSummary, ...extraErrors]
 
     return combined.length ? combined : null
   }
