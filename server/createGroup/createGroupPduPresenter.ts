@@ -12,7 +12,7 @@ export default class CreateGroupPduPresenter {
   ) {}
 
   get backLinkUri() {
-    return `/group/create-a-group/sex`
+    return `/group/create-a-group/group-sex`
   }
 
   get text() {

@@ -202,35 +202,33 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   post('/referral/:referralId/update-status', async (req, res, next) => {
     await updateReferralController.updateStatus(req, res)
   })
-
-  getOrPost('/group/create-a-group/start', async (req, res) => {
+  getOrPost('/group/create-a-group/create-group', async (req, res) => {
     await createGroupController.showCreateGroupStart(req, res)
   })
 
-  getOrPost('/group/create-a-group/code', async (req, res) => {
+  getOrPost('/group/create-a-group/create-group-code', async (req, res) => {
     await createGroupController.showCreateGroupCode(req, res)
   })
-
-  getOrPost('/group/create-a-group/cohort', async (req, res) => {
+  getOrPost('/group/create-a-group/group-cohort', async (req, res) => {
     await createGroupController.showCreateGroupCohort(req, res)
   })
-  getOrPost('/group/create-a-group/date', async (req, res) => {
+  getOrPost('/group/create-a-group/group-start-date', async (req, res) => {
     await createGroupController.showCreateGroupDate(req, res)
   })
 
-  getOrPost('/group/create-a-group/sex', async (req, res) => {
+  getOrPost('/group/create-a-group/group-sex', async (req, res) => {
     await createGroupController.showCreateGroupSex(req, res)
   })
 
-  getOrPost('/group/create-a-group/pdu', async (req, res) => {
+  getOrPost('/group/create-a-group/group-probation-delivery-unit', async (req, res) => {
     await createGroupController.showCreateGroupPdu(req, res)
   })
 
-  getOrPost('/group/create-a-group/location', async (req, res) => {
+  getOrPost('/group/create-a-group/group-delivery-location', async (req, res) => {
     await createGroupController.showCreateGroupLocation(req, res)
   })
 
-  getOrPost('/group/create-a-group/check-your-answers', async (req, res) => {
+  getOrPost('/group/create-a-group/group-review-details', async (req, res) => {
     await createGroupController.showCreateGroupCya(req, res)
   })
 

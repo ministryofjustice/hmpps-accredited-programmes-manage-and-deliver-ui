@@ -256,6 +256,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/admin/clear-missing-data-referrals': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Clear down referrals with missing data
+     * @description Clear down referrals that are missing Oasys and Delius data.
+     */
+    post: operations['clearMissingDataReferrals']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/risks-and-needs/{crn}/thinking-and-behaviour': {
     parameters: {
       query?: never
@@ -686,7 +706,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/bff/region/{regionCode}/pdu/{pduCode}/members': {
+  '/bff/region/{regionCode}/members': {
     parameters: {
       query?: never
       header?: never
@@ -694,10 +714,10 @@ export interface paths {
       cookie?: never
     }
     /**
-     * BFF endpoint to get a list of members for a PDU.
-     * @description BFF endpoint to retrieve a list of team members for a Probation Delivery Unit
+     * BFF endpoint to get a list of members for a Region.
+     * @description BFF endpoint to retrieve a list of team members for a Region.
      */
-    get: operations['getMembersInPdu']
+    get: operations['getMembersInRegion']
     put?: never
     post?: never
     delete?: never
@@ -1167,6 +1187,11 @@ export interface components {
        */
       additionalDetails?: string
     }
+    /**
+     * @description AM/PM time indicator
+     * @enum {string}
+     */
+    AmOrPm: 'AM' | 'PM'
     CreateGroupRequest: {
       /** @description The code for the group */
       groupCode: string
@@ -1189,16 +1214,49 @@ export interface components {
       deliveryLocationName: string
       /** @description The code of the location that the group will be delivered at */
       deliveryLocationCode: string
+      /** @description The person code and name and type of the teamMembers of the group */
+      teamMembers: components['schemas']['CreateGroupTeamMember'][]
     }
+    /** @description Session slot details for a programme group */
     CreateGroupSessionSlot: {
-      /** @enum {string} */
+      /**
+       * @description The day of the week for the session
+       * @example MONDAY
+       * @enum {string}
+       */
       dayOfWeek: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
-      /** Format: int32 */
+      /**
+       * Format: int32
+       * @description The hour of the session in 12-hour format
+       * @example 9
+       */
       hour: number
-      /** Format: int32 */
+      /**
+       * Format: int32
+       * @description The minutes of the session
+       * @example 0
+       */
       minutes: number
-      /** @enum {string} */
-      amOrPm: 'AM' | 'PM'
+      /**
+       * @description AM or PM indicator
+       * @example AM
+       */
+      amOrPm: components['schemas']['AmOrPm']
+    }
+    CreateGroupTeamMember: {
+      /** @description The full name of the facilitator for the group */
+      facilitator: string
+      /** @description The code of the facilitator for the group */
+      facilitatorCode: string
+      /** @description The name of the team that the member belongs to */
+      teamName: string
+      /** @description The code of the team that the member belongs to */
+      teamCode: string
+      /**
+       * @description The type of the facilitator for the group
+       * @enum {string}
+       */
+      teamMemberType: 'TREATMENT_MANAGER' | 'LEAD_FACILITATOR' | 'REGULAR_FACILITATOR' | 'COVER_FACILITATOR'
     }
     /** @enum {string} */
     ProgrammeGroupCohort: 'GENERAL' | 'GENERAL_LDC' | 'SEXUAL' | 'SEXUAL_LDC'
@@ -2257,6 +2315,12 @@ export interface components {
     /** @description Information identifying the group. */
     Group: {
       /**
+       * Format: uuid
+       * @description A unique id identifying the programme group.
+       * @example 1ff57cea-352c-4a99-8f66-3e626aac3265
+       */
+      id: string
+      /**
        * @description A unique code identifying the programme group.
        * @example AP_BIRMINGHAM_NORTH
        */
@@ -2347,6 +2411,16 @@ export interface components {
       /** @description List of transition statuses */
       availableStatuses: components['schemas']['ReferralStatus'][]
     }
+    UserTeamMember: {
+      /** @description The code for the team member */
+      personCode: string
+      /** @description The full name of the team member */
+      personName: string
+      /** @description The name of the team that the member belongs to */
+      teamName: string
+      /** @description The code of the team that the member belongs to */
+      teamCode: string
+    }
     /** @description A delivery location (i.e. Office) with value and label, formatted for the UI */
     DeliveryLocationOption: {
       /**
@@ -2429,6 +2503,11 @@ export interface components {
        * @example 12
        */
       otherTabTotal: number
+      /**
+       * @description The region name the groups belongs to.
+       * @example West Midlands
+       */
+      regionName: string
     }
     PageGroup: {
       /** Format: int64 */
@@ -3453,6 +3532,42 @@ export interface operations {
         }
       }
       /** @description Invalid request format or invalid UUID format */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  clearMissingDataReferrals: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Update started (not completed, process is async) */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad Request */
       400: {
         headers: {
           [name: string]: unknown
@@ -4818,13 +4933,12 @@ export interface operations {
       }
     }
   }
-  getMembersInPdu: {
+  getMembersInRegion: {
     parameters: {
       query?: never
       header?: never
       path: {
         regionCode: string
-        pduCode: string
       }
       cookie?: never
     }
@@ -4836,7 +4950,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          '*/*': components['schemas']['CodeDescription'][]
+          '*/*': components['schemas']['UserTeamMember'][]
         }
       }
       /** @description Bad Request */
@@ -4857,7 +4971,7 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
-      /** @description Forbidden. The client is not authorised to retrieve pdus. */
+      /** @description Forbidden. The client is not authorised to retrieve members for region. */
       403: {
         headers: {
           [name: string]: unknown

@@ -13,7 +13,7 @@ export default class CreateGroupSexPresenter {
   }
 
   get backLinkUri() {
-    return `/group/create-a-group/cohort`
+    return `/group/create-a-group/group-cohort`
   }
 
   get errorSummary() {

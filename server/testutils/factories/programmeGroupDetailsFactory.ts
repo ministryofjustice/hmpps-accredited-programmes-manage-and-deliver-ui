@@ -137,6 +137,7 @@ class ProgrammeGroupDetailsFactory extends Factory<ProgrammeGroupDetails> {
 
 export default ProgrammeGroupDetailsFactory.define(() => ({
   group: {
+    id: '',
     code: 'BCCDD1',
     regionName: 'North East',
   },
