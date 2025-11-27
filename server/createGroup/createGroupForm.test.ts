@@ -174,6 +174,124 @@ describe('CreateGroupForm', () => {
         })
       })
     })
+    describe('if a day is selected, the hour must also be', () => {
+      it('returns an appropriate error', async () => {
+        const request = TestUtils.createRequest({
+          'days-of-week': ['MONDAY'],
+          'monday-minute': '0',
+          'monday-ampm': 'AM',
+        })
+
+        const data = await new CreateGroupForm(request).createGroupWhenData()
+        console.log(JSON.stringify(data.error, null, 2))
+
+        expect(data.paramsForUpdate).toBeNull()
+        expect(data.error).toStrictEqual({
+          errors: [
+            {
+              errorSummaryLinkedField: 'create-group-when-monday',
+              formFields: ['create-group-when-monday'],
+              message: 'Enter the hour for Monday',
+            },
+          ],
+        })
+      })
+    })
+
+    describe('If a day is selected, the am/pm must also be selected', () => {
+      it('returns an appropriate error', async () => {
+        const request = TestUtils.createRequest({
+          'days-of-week': ['MONDAY'],
+          'monday-hour': '12',
+          'monday-minute': '0',
+        })
+
+        const data = await new CreateGroupForm(request).createGroupWhenData()
+
+        expect(data.paramsForUpdate).toBeNull()
+        expect(data.error).toStrictEqual({
+          errors: [
+            {
+              errorSummaryLinkedField: 'create-group-when-monday',
+              formFields: ['create-group-when-monday'],
+              message: 'Select whether the start time is am or pm for Monday',
+            },
+          ],
+        })
+      })
+    })
+    describe('Check the hour is between 1 and 12', () => {
+      it('returns an appropriate error', async () => {
+        const request = TestUtils.createRequest({
+          'days-of-week': ['MONDAY'],
+          'monday-hour': '0',
+          'monday-minute': '0',
+          'monday-ampm': 'AM',
+        })
+
+        const data = await new CreateGroupForm(request).createGroupWhenData()
+
+        expect(data.paramsForUpdate).toBeNull()
+        expect(data.error).toStrictEqual({
+          errors: [
+            {
+              errorSummaryLinkedField: 'create-group-when-monday',
+              formFields: ['create-group-when-monday'],
+              message: 'Enter an hour between 1 and 12 for Monday',
+            },
+          ],
+        })
+      })
+    })
+
+    describe('Minutes must be between 0 - 59', () => {
+      it('returns an appropriate error', async () => {
+        const request = TestUtils.createRequest({
+          'days-of-week': ['MONDAY'],
+          'monday-hour': '1',
+          'monday-minute': '60',
+          'monday-ampm': 'AM',
+        })
+
+        const data = await new CreateGroupForm(request).createGroupWhenData()
+        console.log(JSON.stringify(data.error, null, 2))
+
+        expect(data.paramsForUpdate).toBeNull()
+        expect(data.error).toStrictEqual({
+          errors: [
+            {
+              errorSummaryLinkedField: 'create-group-when-monday',
+              formFields: ['create-group-when-monday'],
+              message: 'Enter a minute between 00 and 59 for Monday',
+            },
+          ],
+        })
+      })
+    })
+    describe('Minutes must be between 0 - 59', () => {
+      it('returns an appropriate error', async () => {
+        const request = TestUtils.createRequest({
+          'days-of-week': ['MONDAY'],
+          'monday-hour': '1',
+          'monday-minute': '60',
+          'monday-ampm': 'AM',
+        })
+
+        const data = await new CreateGroupForm(request).createGroupWhenData()
+        console.log(JSON.stringify(data.error, null, 2))
+
+        expect(data.paramsForUpdate).toBeNull()
+        expect(data.error).toStrictEqual({
+          errors: [
+            {
+              errorSummaryLinkedField: 'create-group-when-monday',
+              formFields: ['create-group-when-monday'],
+              message: 'Enter a minute between 00 and 59 for Monday',
+            },
+          ],
+        })
+      })
+    })
   })
 
   describe('createGroupCohortData', () => {
