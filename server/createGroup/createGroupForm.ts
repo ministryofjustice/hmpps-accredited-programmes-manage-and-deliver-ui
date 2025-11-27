@@ -1,4 +1,4 @@
-import { CreateGroupRequest } from '@manage-and-deliver-api'
+import { CreateGroupRequest, CreateGroupTeamMember, UserTeamMember } from '@manage-and-deliver-api'
 import { Request } from 'express'
 import { body, ValidationChain } from 'express-validator'
 import errorMessages from '../utils/errorMessages'
@@ -154,11 +154,12 @@ export default class CreateGroupForm {
         error,
       }
     }
-    const pduInfo = JSON.parse(this.request.body['create-group-pdu'])
+    const { _csrf, ...formValues } = this.request.body
+    const teamMembers = Object.values(formValues).filter(value => value !== '')
+
     return {
       paramsForUpdate: {
-        pduName: pduInfo.name,
-        pduCode: pduInfo.code,
+        teamMembers: teamMembers as CreateGroupTeamMember[],
       },
       error: null,
     }
@@ -221,10 +222,19 @@ export default class CreateGroupForm {
   }
 
   private createGroupTreatmentManagerValidations(): ValidationChain[] {
+    const hasFacilitator = Object.entries(this.request.body).some(
+      ([key, value]) => key.startsWith('create-group-facilitator') && value !== '',
+    )
+    console.log(this.request.body)
     return [
       body('create-group-treatment-manager')
         .notEmpty()
         .withMessage(errorMessages.createGroup.createGroupTreatmentManagerEmpty),
+      body('create-group-facilitator')
+        .custom(() => {
+          return hasFacilitator
+        })
+        .withMessage(errorMessages.createGroup.createGroupFacilitatorEmpty),
     ]
   }
 }

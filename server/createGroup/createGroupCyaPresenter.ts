@@ -47,6 +47,11 @@ export default class CreateGroupCyaPresenter {
         lines: [`${this.createGroupFormData.deliveryLocationName}`],
         changeLink: '/group/create-a-group/location',
       },
+      {
+        key: 'Team members:',
+        lines: [`${this.createGroupFormData.teamMembers}`],
+        changeLink: '/group/create-a-group/treatment-manager',
+      },
     ]
   }
 }

@@ -55,6 +55,7 @@ type AllocateToGroupRequest = components['schemas']['AllocateToGroupRequest']
 type AllocateToGroupResponse = components['schemas']['AllocateToGroupResponse']
 type CodeDescription = components['schemas']['CodeDescription']
 type UserTeamMember = components['schemas']['UserTeamMember']
+type CreateGroupTeamMember = components['schemas']['CreateGroupTeamMember']
 
 export type {
   AlcoholMisuseDetails,
@@ -64,6 +65,7 @@ export type {
   Availability,
   CaseListFilterValues,
   CaseListReferrals,
+  CreateGroupTeamMember,
   CodeDescription,
   CohortEnum,
   CreateAvailability,

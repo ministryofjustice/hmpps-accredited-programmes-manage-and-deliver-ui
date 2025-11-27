@@ -82,6 +82,7 @@ export default {
     createGroupPduEmpty: 'Select a probation delivery unit. Start typing to search.',
     createGroupLocationEmpty: 'Select a delivery location.',
     createGroupTreatmentManagerEmpty: 'Select a Treatment Manager. Start typing to search.',
+    createGroupFacilitatorEmpty: 'Select a Facilitator. Start typing to search.',
   },
   motivationBackgroundAndNonAssociations: {
     addToGroupEmpty: `Select whether you want to add the person to the group or not`,

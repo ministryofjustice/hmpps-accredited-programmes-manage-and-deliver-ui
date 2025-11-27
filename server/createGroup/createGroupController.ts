@@ -215,6 +215,8 @@ export default class CreateGroupController {
 
     if (req.method === 'POST') {
       const data = await new CreateGroupForm(req).createGroupTreatmentManagerData()
+      console.log('data is:', data)
+      console.log('userInputData is:', req.body)
       if (data.error) {
         res.status(400)
         formError = data.error
@@ -222,13 +224,13 @@ export default class CreateGroupController {
       } else {
         req.session.createGroupFormData = {
           ...createGroupFormData,
+          teamMembers: data.paramsForUpdate.teamMembers,
         }
         return res.redirect(`/group/create-a-group/check-your-answers`)
       }
     }
 
     const pduMembers = await this.accreditedProgrammesManageAndDeliverService.getPduMembers(username, 'N50ALL')
-    console.log(pduMembers)
     const presenter = new CreateGroupTreatmentManagerPresenter(
       pduMembers,
       formError,

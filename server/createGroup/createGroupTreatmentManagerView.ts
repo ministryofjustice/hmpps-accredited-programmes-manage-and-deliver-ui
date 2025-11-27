@@ -1,6 +1,6 @@
-import { SelectArgs } from '../utils/govukFrontendTypes'
+import { CreateGroupTeamMember } from '@manage-and-deliver-api'
+import { FieldsetArgs, SelectArgs } from '../utils/govukFrontendTypes'
 import ViewUtils from '../utils/viewUtils'
-import CreateGroupPduPresenter from './createGroupPduPresenter'
 import CreateGroupTreatmentManagerPresenter from './createGroupTreatmentManagerPresenter'
 
 export default class CreateGroupTreatmentManagerView {
@@ -26,11 +26,51 @@ export default class CreateGroupTreatmentManagerView {
       name: 'create-group-treatment-manager',
       label: {
         text: 'Treatment Manager',
-        classes: 'govuk-label--l',
+        classes: 'govuk-label--m',
         isPageHeading: true,
       },
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createGroupTreatmentManager.errorMessage),
-      items: this.presenter.generateSelectOptions(),
+      items: this.presenter.generateSelectOptions(
+        'TREATMENT_MANAGER',
+        this.presenter.fields.createGroupTreatmentManager.value,
+      ),
+    }
+  }
+
+  private createGroupFacilitatorArgs(): SelectArgs {
+    return {
+      id: 'create-group-facilitator',
+      name: 'create-group-facilitator',
+      label: {
+        text: 'Facilitator',
+        classes: 'govuk-label--m',
+      },
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createGroupFacilitator.errorMessage),
+      items: this.presenter.generateSelectOptions('REGULAR_FACILITATOR'),
+    }
+  }
+
+  private createExistingGroupFacilitatorArgs(facilitator: CreateGroupTeamMember, index: number): SelectArgs {
+    return {
+      id: `create-group-facilitator-existing-${index}`,
+      name: `create-group-facilitator-existing-${index}`,
+      label: {
+        text: 'Facilitator',
+        classes: 'govuk-label--m',
+      },
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createGroupFacilitator.errorMessage),
+      items: this.presenter.generateSelectOptions('REGULAR_FACILITATOR', facilitator.facilitatorCode),
+    }
+  }
+
+  private createGroupFacilitatorsFieldSetArgs(): FieldsetArgs {
+    return {
+      classes: 'moj-add-another__item moj-add-another__item__facilitator',
+      legend: {
+        text: 'Facilitator',
+        classes: 'govuk-!-display-none',
+        isPageHeading: false,
+      },
     }
   }
 
@@ -41,8 +81,12 @@ export default class CreateGroupTreatmentManagerView {
         backLinkArgs: this.backLinkArgs(),
         homePageLink: this.homePageLink(),
         createGroupTreatmentManagerArgs: this.createGroupTreatmentManagerArgs(),
+        createGroupFacilitatorArgs: this.createGroupFacilitatorArgs(),
+        createGroupFacilitatorsFieldSetArgs: this.createGroupFacilitatorsFieldSetArgs(),
+        createExistingGroupFacilitatorArgs: this.createExistingGroupFacilitatorArgs.bind(this),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         text: this.presenter.text,
+        facilitators: this.presenter.generateSelectedUsers().facilitators,
       },
     ]
   }

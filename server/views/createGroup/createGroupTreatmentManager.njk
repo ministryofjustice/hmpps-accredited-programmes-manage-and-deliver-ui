@@ -10,6 +10,98 @@
 
 {% block main %}
 {% block content %}
+<script src="/assets/accessible-autocomplete.min.js"></script>
+<script nonce="{{ cspNonce }}">
+  let selectElementCounter = 1
+  let existingIndex = 1
+
+  function clearAccessibleAutocompleteSelectionWhenInputEmpty(inputId) {
+    const autocompleteInput = document.getElementById(inputId);
+    const selectElement = document.getElementById(inputId + '-select');
+
+    if (autocompleteInput && selectElement) {
+      const clearSelection = () => {
+        if (autocompleteInput.value.trim() === '') {
+          selectElement.value = '';
+          selectElement.selectedIndex = 0;
+        }
+      }
+      autocompleteInput.addEventListener('input', clearSelection);
+      autocompleteInput.addEventListener('keyup', clearSelection);
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * @arg mutationRecord {MutationRecord}
+   */
+  function possiblySetUpAutocompleteForMutation(mutationRecord) {
+    const shouldProceed = mutationRecord.type === 'childList' && mutationRecord.addedNodes.length > 0
+
+    if (!shouldProceed) {
+      return;
+    }
+
+    mutationRecord.addedNodes.forEach(node => {
+      const isElementNode = node.nodeType === Node.ELEMENT_NODE
+
+      if (!isElementNode) {
+        return;
+      }
+
+      const select = node.querySelector('select')
+
+      if (!select) {
+        return
+      }
+      const input = node.querySelector('input')
+      const label = node.querySelector('label')
+      input.remove()
+      select.id = select.id + selectElementCounter
+      select.name = select.name + selectElementCounter
+      select.value = ''
+      label.htmlFor = label.htmlFor + selectElementCounter
+      accessibleAutocomplete.enhanceSelectElement({
+        defaultValue: '',
+        selectElement: document.querySelector(`#${select.id}`)
+      })
+      clearAccessibleAutocompleteSelectionWhenInputEmpty('create-group-facilitator-select' + selectElementCounter);
+      selectElementCounter++
+    })
+
+    //When copying the initial dropdown, if the dropdown is hidden (existing users present), unhide the clone
+    const items = document.querySelectorAll('.moj-add-another__item__facilitator');
+    items[items.length - 1].classList.remove('govuk-!-display-none');
+
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    accessibleAutocomplete.enhanceSelectElement({
+      defaultValue: '',
+      selectElement: document.getElementById('create-group-facilitator')
+    })
+    clearAccessibleAutocompleteSelectionWhenInputEmpty('create-group-facilitator');
+
+    accessibleAutocomplete.enhanceSelectElement({
+      defaultValue: '',
+      selectElement: document.getElementById('create-group-treatment-manager')
+    })
+    clearAccessibleAutocompleteSelectionWhenInputEmpty('create-group-treatment-manager');
+
+
+    const anotherForm = document.querySelector('.add-another-form')
+    console.error(`Cannot find the .add-another-form element.  This is going to cause problems.`)
+    if (!anotherForm) return
+
+    new MutationObserver((incomingMutations) => {
+      incomingMutations.forEach(possiblySetUpAutocompleteForMutation)
+    }).observe(anotherForm, {
+      childList: true,
+      subtree: true
+    })
+  });
+</script>
 <div class="govuk-width-container" id="main-content">
   <div class="govuk-main-wrapper">
     <div class="govuk-grid-row govuk-!-margin-bottom-6">
@@ -27,76 +119,49 @@
         {% endif %}
         <span class="govuk-caption-l">{{ text.headingHintText }}</span>
         <h1 class="govuk-heading-l">{{ text.headingText }}</h1>
-        <form method="post" novalidate>
+        <form method="post" novalidate class="add-another-form">
           <input type="hidden" name="_csrf" value="{{csrfToken}}">
           {{ govukSelect(createGroupTreatmentManagerArgs) }}
-          <script src="/assets/accessible-autocomplete.min.js"></script>
-          <script nonce="{{ cspNonce }}">
-            accessibleAutocomplete.enhanceSelectElement({
-              defaultValue: '',
-              selectElement: document.querySelector('#create-group-treatment-manager')
-            })
-          </script>
-<!--          <div data-module="moj-add-another">-->
-<!--            {% call govukFieldset({-->
-<!--            classes: "moj-add-another__item",-->
-<!--            legend: {-->
-<!--            text: "Facilitator",-->
-<!--            classes: "moj-add-another__title govuk-fieldset__legend&#45;&#45;m",-->
-<!--            isPageHeading: false-->
-<!--            }-->
-<!--            }) %}-->
-<!--            {{ govukSelect({-->
-<!--            id: "create-group-facilitator[0]",-->
-<!--            name: "create-group-facilitator[0]",-->
-<!--            label: {-->
-<!--            text: "Sort by"-->
-<!--            },-->
-<!--            attributes: {-->
-<!--            "data-name": "create-group-facilitator[%index%]",-->
-<!--            "data-id": "create-group-facilitator[%index%]"-->
-<!--            },-->
-<!--            items: [-->
-<!--            {-->
-<!--            value: "published",-->
-<!--            text: "Recently published"-->
-<!--            },-->
-<!--            {-->
-<!--            value: "updated",-->
-<!--            text: "Recently updated",-->
-<!--            selected: true-->
-<!--            },-->
-<!--            {-->
-<!--            value: "views",-->
-<!--            text: "Most views"-->
-<!--            },-->
-<!--            {-->
-<!--            value: "comments",-->
-<!--            text: "Most comments"-->
-<!--            }-->
-<!--            ]-->
-<!--            }) }}-->
-<!--            <script src="/assets/accessible-autocomplete.min.js"></script>-->
-<!--            <script nonce="{{ cspNonce }}">-->
-<!--              console.log('In here')-->
-<!--              const allSelects = document.querySelectorAll('select');-->
-<!--              const lastSelect = allSelects[allSelects.length - 1];-->
 
-<!--              console.log('Most recent select:', lastSelect);-->
-<!--              accessibleAutocomplete.enhanceSelectElement({-->
-<!--                defaultValue: '',-->
-<!--                selectElement: lastSelect-->
-<!--              })-->
-<!--            </script>-->
-<!--            {% endcall %}-->
+          <div data-module="moj-add-another">
+            {% call govukFieldset(createGroupFacilitatorsFieldSetArgs) %}
+            {{ govukSelect(createGroupFacilitatorArgs) }}
+            {% endcall %}
+            {% for facilitator in facilitators %}
+            <fieldset class="govuk-fieldset moj-add-another__item">
+              <div class="govuk-form-group">
+                {{ govukSelect(createExistingGroupFacilitatorArgs(facilitator, loop.index)) }}
+                <!-- Hacky store the current loop index so we can bind the select to an accessible autocomplete -->
+                <span class="existingLoopCountFacilitator" data-index="{{ loop.index }}"></span>
+                <script nonce="{{ cspNonce }}">
+                  document.querySelectorAll('.existingLoopCountFacilitator').forEach(element => {
+                    existingIndex = element.dataset.index
+                  })
+                  accessibleAutocomplete.enhanceSelectElement({
+                    defaultValue: '',
+                    selectElement: document.getElementById(`create-group-facilitator-existing-${existingIndex}`)
+                  })
+                  clearAccessibleAutocompleteSelectionWhenInputEmpty(`create-group-facilitator-existing-${existingIndex}`);
+                </script>
+              </div>
+              {% if facilitators.length > 1 %}
+                {{ govukButton({
+                  name: "remove",
+                  value: loop.index0,
+                  text: "Remove",
+                  classes: "govuk-button--secondary moj-add-another__remove-button existing-facilitator"
+                }) }}
+              {% endif %}
+            </fieldset>
+            {% endfor %}
 
-<!--            <div class="moj-button-action">-->
-<!--              {{ govukButton({-->
-<!--              id: "add-another-facilitator",-->
-<!--              text: "Add another facilitator",-->
-<!--              classes: "govuk-button&#45;&#45;secondary moj-add-another__add-button govuk-!-margin-bottom-4"-->
-<!--              }) }}-->
-<!--            </div>-->
+            <div class="moj-button-action">
+              {{ govukButton({
+              id: "add-another-facilitator",
+              text: "Add another facilitator",
+              classes: "govuk-button--secondary moj-add-another__add-button govuk-!-margin-bottom-4"
+              }) }}
+            </div>
           </div>
           {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
         </form>
@@ -105,34 +170,29 @@
   </div>
 </div>
 <script nonce="{{ cspNonce }}">
-  // document.addEventListener('change', function(e) {
-  //   // Check if the changed element is a select
-  //   console.log('A select changed:', e.target);
-  //   if (e.target.tagName === 'SELECT') {
-  //     console.log('A select changed:', e.target);
-  //     console.log('Selected value:', e.target.value);
-  //     // Your code here
-  //   }
-  // });
-  document.addEventListener('DOMContentLoaded', function () {
-    function clearAccessibleAutocompleteSelectionWhenInputEmpty(inputId) {
-      const autocompleteInput = document.getElementById(inputId);
-      const selectElement = document.getElementById(inputId + '-select');
-      if (autocompleteInput && selectElement) {
-        function clearSelection() {
-          if (this.value.trim() === '') {
-            selectElement.value = '';
-            selectElement.selectedIndex = 0;
-          }
-        }
-        autocompleteInput.addEventListener('input', clearSelection);
-        autocompleteInput.addEventListener('keyup', clearSelection);
-        return true;
+    //Only show the original add facilitator input if there are no existing facilitators
+     function toggleOriginalAddFacilitatorVisibility() {
+      const item = document.querySelector('.moj-add-another__item__facilitator');
+
+      if (!item) return; // Safety check
+
+      if (document.querySelector('.existing-facilitator')) {
+        item.classList.add('govuk-!-display-none');
+      } else {
+        item.classList.remove('govuk-!-display-none');
       }
-      return false;
     }
-    clearAccessibleAutocompleteSelectionWhenInputEmpty('create-group-treatment-manager');
-  });
+    //Check for existing facilitators on page load
+     document.addEventListener('DOMContentLoaded', () => {
+       toggleOriginalAddFacilitatorVisibility();
+     });
+
+     //Check if any are left when removing an existing facilitator
+    document.addEventListener('click', function (e) {
+      if (e.target.classList.contains('existing-facilitator')) {
+        toggleOriginalAddFacilitatorVisibility();
+      }
+    });
 </script>
 {% endblock %}
 {% endblock %}

@@ -1,4 +1,4 @@
-import { CreateGroupRequest, UserTeamMember } from '@manage-and-deliver-api'
+import { CreateGroupRequest, CreateGroupTeamMember, UserTeamMember } from '@manage-and-deliver-api'
 import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
 import { SelectArgsItem } from '../utils/govukFrontendTypes'
@@ -31,16 +31,20 @@ export default class CreateGroupTreatmentManagerPresenter {
     return new PresenterUtils(this.userInputData)
   }
 
-  generateSelectOptions(): SelectArgsItem[] {
+  generateSelectOptions(
+    memberType: CreateGroupTeamMember['teamMemberType'],
+    selectedValue: string = '',
+  ): SelectArgsItem[] {
     const pduItems: SelectArgsItem[] = this.members.map(member => ({
       text: member.personName,
-      value: `{"personCode":"${member.personCode}", "teamCode":"${member.teamCode}"}`,
-      // selected: this.fields.createGroupPdu.value === location.code,
+      value: `{"facilitator":"${member.personName}", "facilitatorCode":"${member.personCode}", "teamName":"${member.teamName}", "teamCode":"${member.teamCode}", "teamMemberType":"${memberType}"}`,
+      selected: selectedValue === member.personCode,
     }))
 
     const items: SelectArgsItem[] = [
       {
         text: '',
+        value: '',
       },
     ]
 
@@ -48,11 +52,48 @@ export default class CreateGroupTreatmentManagerPresenter {
     return items
   }
 
+  generateSelectedUsers(): { treatmentManager: CreateGroupTeamMember; facilitators: CreateGroupTeamMember[] } {
+    if (this.userInputData) {
+      const { _csrf, ...formValues } = this.userInputData
+
+      return {
+        treatmentManager: this.userInputData['create-group-treatment-manager']
+          ? JSON.parse(this.userInputData['create-group-treatment-manager'] as string)
+          : null,
+        facilitators: Object.values(formValues)
+          .filter(userAsJsonString => userAsJsonString !== '')
+          .map(userAsJsonString => JSON.parse(userAsJsonString as string))
+          .filter(user => user.teamMemberType === 'REGULAR_FACILITATOR'),
+      }
+    }
+    if (this.createGroupFormData && this.createGroupFormData.teamMembers) {
+      const parsedMembers = Object.values(this.createGroupFormData.teamMembers as unknown as string)
+        .filter(userAsJsonString => userAsJsonString !== '')
+        .map(userAsJsonString => JSON.parse(userAsJsonString as string))
+      console.log('parsedMembers', parsedMembers)
+      return {
+        treatmentManager: parsedMembers.find(
+          member => member.teamMemberType === 'TREATMENT_MANAGER',
+        ),
+        facilitators: parsedMembers.filter(
+          member => member.teamMemberType === 'REGULAR_FACILITATOR',
+        ),
+      }
+    }
+    return { treatmentManager: null, facilitators: [] }
+  }
+
   get fields() {
+    const members = this.generateSelectedUsers()
+    console.log('members', members)
     return {
       createGroupTreatmentManager: {
-        // value: this.utils.stringValue(this.createGroupFormData.pduCode, 'pduCode'),
+        value: members.treatmentManager ? members.treatmentManager.facilitatorCode : '',
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'create-group-treatment-manager'),
+      },
+      createGroupFacilitator: {
+        // value: this.utils.stringValue(this.createGroupFormData.pduCode, 'pduCode'),
+        errorMessage: PresenterUtils.errorMessage(this.validationError, 'create-group-facilitator'),
       },
     }
   }
