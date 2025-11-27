@@ -1,6 +1,5 @@
 import GroupPresenter from './groupPresenter'
-import { CheckboxesArgs, InputArgs, SelectArgs, SelectArgsItem } from '../utils/govukFrontendTypes'
-import CaselistUtils from '../caselist/caseListUtils'
+import { CheckboxesArgs, InputArgs, SelectArgs } from '../utils/govukFrontendTypes'
 
 export default class GroupView {
   constructor(private readonly presenter: GroupPresenter) {}
@@ -71,12 +70,10 @@ export default class GroupView {
     }
   }
 
-
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       'group/group',
       {
-        // presenter: this.presenter,
         groupTableArgs: this.presenter.groupTableArgs,
         subNavArgs: this.presenter.getSubNavArgs(),
         text: this.presenter.text,

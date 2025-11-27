@@ -26,10 +26,6 @@ export default class GroupController {
       // filter.params,
     )
 
-    console.log('---------------------------')
-    console.log(notStartedGroupList.regionName)
-    console.log('---------------------------')
-
     const presenter = new GroupPresenter(
       notStartedGroupList.pagedGroupData as Page<Group>,
       GroupListPageSection.NOT_STARTED,
