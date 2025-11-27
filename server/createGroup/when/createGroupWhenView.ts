@@ -40,6 +40,7 @@ export default class CreateGroupWhenView {
     const selectedDays: DayKey[] = (this.presenter.selectedDays || []) as DayKey[]
     const dayTimes = this.presenter.dayTimes || {}
     const fieldsByDay = this.presenter.dayFieldErrors || {}
+    const groupErrorMessage = this.presenter.fields.createGroupWhen.errorMessage
 
     return {
       name: 'days-of-week',
@@ -56,7 +57,7 @@ export default class CreateGroupWhenView {
         <p>Sessions that fall on bank holidays will automatically be moved to the next scheduled date.</p>
       `,
       },
-
+      errorMessage: groupErrorMessage ? { text: groupErrorMessage } : undefined,
       items: DAY_CONFIG.map(day => {
         const timesForDay = dayTimes[day.key] || {}
         const hour = timesForDay.hour ?? ''
@@ -70,14 +71,16 @@ export default class CreateGroupWhenView {
         const hourMissing = hour === '' || hour === undefined || hour === null
         const amOrPmMissing = amOrPm === '' || amOrPm === undefined || amOrPm === null
 
+        const hourInvalidRange =
+          hour !== '' && hour != null && (Number.isNaN(Number(hour)) || Number(hour) < 1 || Number(hour) > 12)
+
         const minutesInvalidRange =
           minutes !== '' &&
           minutes != null &&
           (Number.isNaN(Number(minutes)) || Number(minutes) < 0 || Number(minutes) > 59)
 
-        const hourHasError = !!dayErrorMessage && hourMissing
+        const hourHasError = !!dayErrorMessage && (hourMissing || hourInvalidRange)
         const amOrPmHasError = !!dayErrorMessage && amOrPmMissing
-
         const minutesHasError = minutesInvalidRange
 
         const anyError = hourHasError || amOrPmHasError || minutesHasError
@@ -94,8 +97,24 @@ export default class CreateGroupWhenView {
         if (hourMissing && dayErrorMessage) inlineErrorParts.push('Enter an hour')
         if (amOrPmMissing && dayErrorMessage) inlineErrorParts.push('Select am or pm')
         if (minutesInvalidRange) inlineErrorParts.push('Enter minutes between 0 and 59')
+        if (hourInvalidRange) inlineErrorParts.push('Enter an hour between 1 and 12')
 
-        const inlineErrorMessage = inlineErrorParts.length > 0 ? inlineErrorParts.join(' and ') : dayErrorMessage
+        function formatList(items: string[]): string {
+          if (items.length === 0) return ''
+
+          const normalised = items.map((item, index) =>
+            index === 0 ? item : item.charAt(0).toLowerCase() + item.slice(1),
+          )
+
+          if (normalised.length === 1) return `${normalised[0]}.`
+          if (normalised.length === 2) return `${normalised[0]} and ${normalised[1]}.`
+
+          const allButLast = normalised.slice(0, -1).join(', ')
+          const last = normalised[normalised.length - 1]
+          return `${allButLast} and ${last}.`
+        }
+
+        const inlineErrorMessage = inlineErrorParts.length > 0 ? formatList(inlineErrorParts) : dayErrorMessage
 
         const conditionalHtml = `
 <div class="govuk-!-margin-left-3">
