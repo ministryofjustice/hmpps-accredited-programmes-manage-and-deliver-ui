@@ -183,7 +183,6 @@ describe('CreateGroupForm', () => {
         })
 
         const data = await new CreateGroupForm(request).createGroupWhenData()
-        console.log(JSON.stringify(data.error, null, 2))
 
         expect(data.paramsForUpdate).toBeNull()
         expect(data.error).toStrictEqual({
@@ -254,7 +253,6 @@ describe('CreateGroupForm', () => {
         })
 
         const data = await new CreateGroupForm(request).createGroupWhenData()
-        console.log(JSON.stringify(data.error, null, 2))
 
         expect(data.paramsForUpdate).toBeNull()
         expect(data.error).toStrictEqual({
@@ -278,8 +276,6 @@ describe('CreateGroupForm', () => {
         })
 
         const data = await new CreateGroupForm(request).createGroupWhenData()
-        console.log(JSON.stringify(data.error, null, 2))
-
         expect(data.paramsForUpdate).toBeNull()
         expect(data.error).toStrictEqual({
           errors: [
