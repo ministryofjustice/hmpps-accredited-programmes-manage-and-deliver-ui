@@ -1,4 +1,4 @@
-import {Group, ProgrammeGroupCohortEnum } from '@manage-and-deliver-api'
+import { Group, ProgrammeGroupCohortEnum } from '@manage-and-deliver-api'
 import { Page } from '../shared/models/pagination'
 import Pagination from '../utils/pagination/pagination'
 import { TableArgs } from '../utils/govukFrontendTypes'

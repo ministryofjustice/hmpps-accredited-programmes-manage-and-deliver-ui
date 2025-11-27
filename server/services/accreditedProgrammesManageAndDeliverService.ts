@@ -39,6 +39,7 @@ import {
   RemoveFromGroupRequest,
   RemoveFromGroupResponse,
   GroupsByRegion,
+  CodeDescription,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
