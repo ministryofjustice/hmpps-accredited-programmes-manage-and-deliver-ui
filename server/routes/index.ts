@@ -15,6 +15,7 @@ import RisksAndNeedsController from '../risksAndNeeds/risksAndNeedsController'
 import type { Services } from '../services'
 import UpdateReferralStatusController from '../updateReferralStatus/updateReferralStatusController'
 import RemoveFromGroupController from '../groupDetails/removeFromGroup/removeFromGroupController'
+import GroupController from '../group/groupController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
@@ -38,6 +39,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const removeFromGroupController = new RemoveFromGroupController(accreditedProgrammesManageAndDeliverService)
   const groupAllocationNotesController = new GroupAllocationNotesController(accreditedProgrammesManageAndDeliverService)
   const createGroupController = new CreateGroupController(accreditedProgrammesManageAndDeliverService)
+  const groupController = new GroupController(accreditedProgrammesManageAndDeliverService)
 
   get('/', async (req, res, next) => {
     await caselistController.showOpenCaselist(req, res)
@@ -287,6 +289,14 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   getOrPost('/removeFromGroup/:groupId/:referralId/updateStatus', async (req, res, next) => {
     await removeFromGroupController.removeFromGroupUpdateStatus(req, res)
+  })
+
+  get('/groups/not-started', async (req, res, next) => {
+    await groupController.showNotStartedGroupListPage(req, res)
+  })
+
+  get('/groups/started', async (req, res, next) => {
+    await groupController.showStartedGroupListPage(req, res)
   })
 
   return router

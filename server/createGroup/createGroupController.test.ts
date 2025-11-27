@@ -1,6 +1,7 @@
 import { Express } from 'express'
 import { SessionData } from 'express-session'
 import request from 'supertest'
+import { randomUUID } from 'crypto'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import TestUtils from '../testutils/testUtils'
 
@@ -97,6 +98,7 @@ describe('Create Group Controller', () => {
   describe('POST /group/create-a-group/code', () => {
     it('redirects to cohort page on successful submission', async () => {
       accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue({
+        id: randomUUID(),
         code: 'Test Code',
         regionName: 'Test Region',
       })
@@ -124,6 +126,7 @@ describe('Create Group Controller', () => {
 
     it('returns with errors if group code already exists', async () => {
       accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue({
+        id: randomUUID(),
         code: 'Test Code',
         regionName: 'Test Region',
       })
