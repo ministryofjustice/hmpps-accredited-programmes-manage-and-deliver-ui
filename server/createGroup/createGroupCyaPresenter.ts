@@ -12,7 +12,7 @@ export default class CreateGroupCyaPresenter {
   }
 
   get backLinkUri() {
-    return `/group/create-a-group/group-sex`
+    return `/group/create-a-group/group-delivery-location`
   }
 
   getCreateGroupSummary(): SummaryListItem[] {
