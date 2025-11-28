@@ -95,53 +95,53 @@ describe('Create Group Controller', () => {
     })
   })
 
-  // describe('POST /group/create-a-group/create-group-code', () => {
-  //   it('redirects to start date page on successful submission', async () => {
-  //     // No existing group found (service returns undefined by default)
-  //     return request(app)
-  //       .post('/group/create-a-group/create-group-code')
-  //       .type('form')
-  //       .send({
-  //         'create-group-code': 'ABC123',
-  //       })
-  //       .expect(302)
-  //       .expect(res => {
-  //         expect(res.text).toContain('Redirecting to /group/create-a-group/group-start-date')
-  //       })
-  //   })
+  describe('POST /group/create-a-group/create-group-code', () => {
+    // it('redirects to start date page on successful submission', async () => {
+    //   // No existing group found (service returns undefined by default)
+    //   return request(app)
+    //     .post('/group/create-a-group/create-group-code')
+    //     .type('form')
+    //     .send({
+    //       'create-group-code': 'ABC123',
+    //     })
+    //     .expect(302)
+    //     .expect(res => {
+    //       expect(res.text).toContain('Redirecting to /group/create-a-group/group-start-date')
+    //     })
+    // })
 
-  //   it('returns with errors if group code is missing', async () => {
-  //     return request(app)
-  //       .post('/group/create-a-group/create-group-code')
-  //       .type('form')
-  //       .send({})
-  //       .expect(400)
-  //       .expect(res => {
-  //         expect(res.text).toContain('Enter a code for your group')
-  //       })
-  //   })
+    it('returns with errors if group code is missing', async () => {
+      return request(app)
+        .post('/group/create-a-group/create-group-code')
+        .type('form')
+        .send({})
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain('Enter a code for your group')
+        })
+    })
 
-  //   it('returns with errors if group code already exists', async () => {
-  //     accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue({
-  //       id: randomUUID(),
-  //       code: 'Test Code',
-  //       regionName: 'Test Region',
-  //     })
+    it('returns with errors if group code already exists', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue({
+        id: randomUUID(),
+        code: 'Test Code',
+        regionName: 'Test Region',
+      })
 
-  //     return request(app)
-  //       .post('/group/create-a-group/create-group-code')
-  //       .type('form')
-  //       .send({
-  //         'create-group-code': 'Test Code',
-  //       })
-  //       .expect(400)
-  //       .expect(res => {
-  //         expect(res.text).toContain(
-  //           'Group code Test Code already exists for a group in this region. Enter a different code.',
-  //         )
-  //       })
-  //   })
-  // })
+      return request(app)
+        .post('/group/create-a-group/create-group-code')
+        .type('form')
+        .send({
+          'create-group-code': 'Test Code',
+        })
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain(
+            'Group code Test Code already exists for a group in this region. Enter a different code.',
+          )
+        })
+    })
+  })
 
   describe('GET /group/create-a-group/group-start-date', () => {
     it('loads the date selection page', async () => {
