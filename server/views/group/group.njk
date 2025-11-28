@@ -1,0 +1,78 @@
+{% extends "../partials/layout.njk" %}
+
+{%- from "moj/components/filter/macro.njk" import mojFilter -%}
+{%- from "govuk/components/checkboxes/macro.njk" import govukCheckboxes -%}
+{%- from "govuk/components/input/macro.njk" import govukInput -%}
+{%- from "govuk/components/table/macro.njk" import govukTable -%}
+{% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "../components/selectWithOptGroup.njk" import govukSelectWithOptgroup %}
+{%- from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-xl">{{ text.regionName }}</span>
+    </div>
+  </div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">{{ text.pageHeading }}</h1>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    {{ govukButton({text: "Create a group", href: "/group/create-a-group/start", classes: "create_group_button"}) }}
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+    {%- set filterOptionsHtml %}
+    <a class="clear-filters__link" href="?">Clear filters</a>
+    {{ govukInput(searchByGroupCodeArgs) }}
+    {{ govukSelect(searchByPduSelectArgs) }}
+
+    {% if not presenter.deliveryTeamLocations %}
+      <h2 class="govuk-heading-s govuk-!-margin-bottom-1">Delivery location</h2>
+      <p class="govuk-body">Select a PDU and apply filters to see delivery locations</p>
+    {% endif %}
+
+    {% if presenter.deliveryTeamLocations %}
+      {{ govukCheckboxes(deliveryTeamCheckboxArgs) }}
+    {% endif %}
+
+    {{ govukSelect(searchByCohortArgs) }}
+    {{ govukSelectWithOptgroup(searchBySexArgs) }}
+
+    {% endset -%}
+    <div class="govuk-grid-column-one-quarter">
+      <form id="filter-form" method="get">
+        {{ mojFilter({
+          heading: {
+            text: "Filter"
+          },
+
+        submit: {
+          attributes: {
+            "data-test-id": "submit-button"
+          }
+        },
+        optionsHtml: filterOptionsHtml
+        }) }}
+      </form>
+    </div>
+    <div class="govuk-grid-column-three-quarters">
+      {{ mojSubNavigation(subNavArgs) }}
+        {{ govukTable(groupTableArgs) }}
+
+        <p class="govuk-body-l">{{ noResultsString }}</p>
+
+
+      {% include "../partials/pagination.njk" %}
+    </div>
+
+  </div>
+
+{% endblock %}

@@ -1,6 +1,7 @@
 import { Express } from 'express'
 import { SessionData } from 'express-session'
 import request from 'supertest'
+import { randomUUID } from 'crypto'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import TestUtils from '../testutils/testUtils'
 
@@ -119,6 +120,12 @@ describe('Create Group Controller', () => {
       .expect(400)
       .expect(res => {
         expect(res.text).toContain('Enter a code for your group')
+  describe('POST /group/create-a-group/code', () => {
+    it('redirects to cohort page on successful submission', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue({
+        id: randomUUID(),
+        code: 'Test Code',
+        regionName: 'Test Region',
       })
   })
 
@@ -150,6 +157,11 @@ describe('GET /group/create-a-group/group-start-date', () => {
       .expect(200)
       .expect(res => {
         expect(res.text).toContain('Create a group date')
+    it('returns with errors if group code already exists', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue({
+        id: randomUUID(),
+        code: 'Test Code',
+        regionName: 'Test Region',
       })
   })
 

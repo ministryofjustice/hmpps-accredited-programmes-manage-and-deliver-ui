@@ -47,12 +47,14 @@ type LocationFilterValues = components['schemas']['LocationFilterValues']
 type CaseListReferrals = components['schemas']['CaseListReferrals']
 type CreateGroupRequest = components['schemas']['CreateGroupRequest']
 type Group = components['schemas']['Group']
-type ProgrammeGroupCohortEnum = components['schemas']['CreateGroup']['cohort']
+type ProgrammeGroupCohortEnum = components['schemas']['CreateGroup']['ProgrammeGroupCohort']
 type ProgrammeGroupDate = components['schemas']['CreateGroup']['startedAtDate']
 type ProgrammeGroupSexEnum = components['schemas']['CreateGroup']['sex']
 type ProgrammeGroupEntity = components['schemas']['ProgrammeGroupEntity']
 type AllocateToGroupRequest = components['schemas']['AllocateToGroupRequest']
 type AllocateToGroupResponse = components['schemas']['AllocateToGroupResponse']
+type GroupsByRegion = components['schemas']['GroupsByRegion']
+type PageGroup = components['schemas']['PageGroup']
 type CodeDescription = components['schemas']['CodeDescription']
 
 export type {
@@ -77,6 +79,7 @@ export type {
   EmotionalWellbeing,
   ExistingDeliveryLocationPreferences,
   Group,
+  GroupsByRegion,
   GroupItem,
   Health,
   LearningNeeds,
@@ -84,6 +87,7 @@ export type {
   LocationFilterValues,
   OffenceAnalysis,
   OffenceHistory,
+  PageGroup,
   PersonalDetails,
   PniScore,
   PreferredDeliveryLocation,
