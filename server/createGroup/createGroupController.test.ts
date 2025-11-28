@@ -96,19 +96,22 @@ describe('Create Group Controller', () => {
   })
 
   describe('POST /group/create-a-group/create-group-code', () => {
-    // it('redirects to start date page on successful submission', async () => {
-    //   // No existing group found (service returns undefined by default)
-    //   return request(app)
-    //     .post('/group/create-a-group/create-group-code')
-    //     .type('form')
-    //     .send({
-    //       'create-group-code': 'ABC123',
-    //     })
-    //     .expect(302)
-    //     .expect(res => {
-    //       expect(res.text).toContain('Redirecting to /group/create-a-group/group-start-date')
-    //     })
-    // })
+    it('redirects to start date page on successful submission', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue({
+        id: 'dummy-id',
+        code: '',
+        regionName: 'dummy-region',
+      })
+
+      return request(app)
+        .post('/group/create-a-group/create-group-code')
+        .type('form')
+        .send({ 'create-group-code': 'ABC123' })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain('Redirecting to /group/create-a-group/group-start-date')
+        })
+    })
 
     it('returns with errors if group code is missing', async () => {
       return request(app)
