@@ -98,7 +98,7 @@ describe('Create Group Controller', () => {
   describe('POST /group/create-a-group/create-group-code', () => {
     it('redirects to start date page on successful submission', async () => {
       accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue({
-        id: 'dummy-id',
+        id: randomUUID(),
         code: '',
         regionName: 'dummy-region',
       })
