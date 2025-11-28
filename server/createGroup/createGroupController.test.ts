@@ -99,8 +99,8 @@ describe('Create Group Controller', () => {
     it('redirects to start date page on successful submission', async () => {
       accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue({
         id: randomUUID(),
-        code: '',
-        regionName: 'dummy-region',
+        code: 'Test Code',
+        regionName: 'Test Region',
       })
 
       return request(app)
