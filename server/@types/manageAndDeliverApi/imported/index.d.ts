@@ -566,9 +566,11 @@ export interface paths {
     }
     /**
      * Retrieve the manager associated with the Licence Condition or Requirement associated with a referral
-     * @description Retrieves the manager (Probation Practitioner) associated with the Case, which is upstream of the
+     * @description
+     *           Retrieves the manager (Probation Practitioner) associated with the Case, which is upstream of the
      *           Referral itself.  We use this to retrieve a list of Delivery Locations (Offices) within the same
      *           PDU as a Referral itself.
+     *
      */
     get: operations['getManagerByReferralId']
     put?: never
@@ -735,11 +737,13 @@ export interface paths {
     }
     /**
      * A Backend-For-Frontend endpoint for the multi-page Delivery Location Preferences form
-     * @description Retrieves all the data needed for the multi-page Delivery Location Preferences form, for a Referral:
+     * @description
+     *           Retrieves all the data needed for the multi-page Delivery Location Preferences form, for a Referral:
      *           - Person on Probation summary information (from nDelius)
      *           - Existing delivery location preferences (or `null`)
      *           - Primary PDU delivery locations for the Manager associated with the Referral (from nDelius)
      *           - Other PDUs in the same region (from nDelius)
+     *
      */
     get: operations['getDeliveryLocationPreferencesFormData']
     put?: never
@@ -1714,11 +1718,9 @@ export interface components {
       problemsReadWriteNum?: string
       /** @example 2-Significant problems */
       learningDifficulties?: string
-      /**
-       * @example [
+      /** @example [
        *       "Difficulty with concentration"
-       *     ]
-       */
+       *     ] */
       problemAreas?: string[]
       /** @example 0 */
       qualifications?: string
