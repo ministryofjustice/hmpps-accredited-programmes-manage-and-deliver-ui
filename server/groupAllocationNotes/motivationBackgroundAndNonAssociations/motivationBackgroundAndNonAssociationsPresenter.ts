@@ -31,11 +31,11 @@ export default class MotivationBackgroundAndNonAssociationsPresenter extends Gro
     return [
       {
         key: 'Maintains innocence',
-        lines: [this.maintainsInnocenceDisplay],
+        lines: [this.maintainsInnocenceDisplay ?? 'No information added'],
       },
       {
         key: 'Motivation to participate in an Accredited Programme',
-        lines: [`${this.motivationBackgroundAndNonAssociations.motivations}`],
+        lines: [`${this.motivationBackgroundAndNonAssociations.motivations}` === '' ? 'No information added' : 'hello'],
       },
       {
         key: 'Other people on probation who the person should not attend a group with',
