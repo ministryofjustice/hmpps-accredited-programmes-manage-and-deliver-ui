@@ -14,6 +14,11 @@
     <div class="govuk-width-container" id="main-content">
       <div class="govuk-main-wrapper">
         <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full">
+            <a class="return_to_homepage__link homepage-link" href={{ homePageLink.href }}>{{ homePageLink.text }}</a>
+          </div>
+        </div>
+        <div class="govuk-grid-row">
           {% include "../partials/headerMenu.njk" %}
             <div class="govuk-grid-column-full">
               {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
@@ -40,10 +45,10 @@
           <div class="govuk-grid-column-full">
             <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
           </div>
-          <div class="govuk-grid-column-one-third">
+          <div class="govuk-grid-column-one-quarter">
             {{ mojSideNavigation(getVerticalSubNavArgs) }}
           </div>
-          <div class="govuk-grid-column-two-thirds">
+          <div class="govuk-grid-column-three-quarters">
             {% if presenter.subNavValue == 'availability' %}
             <div>
               {% include "./availability.njk" %}

@@ -1,5 +1,4 @@
-@use 'node_modules/govuk-frontend/dist/govuk' as govuk;
-
+@use '../../../node_modules/govuk-frontend/dist/govuk' as *;
 $low-score-colour: #485b10;
 $low-score-border-colour: #85994b;
 $medium-score-colour: #a34e00;
@@ -15,12 +14,12 @@ $missing-score-colour: #1d70b8;
 $missing-score-border-colour: #1d70b8;
 
 .rosh-widget {
-  border: 2px solid govuk.govuk-colour('black');
-  padding: govuk.govuk-spacing(4);
-  margin-bottom: govuk.govuk-spacing(4);
+  border: 2px solid govuk-colour('black');
+  padding: govuk-spacing(4);
+  margin-bottom: govuk-spacing(4);
 
   & h3 {
-    margin-bottom: govuk.govuk-spacing(1);
+    margin-bottom: govuk-spacing(1);
     font-weight: 400;
   }
 }

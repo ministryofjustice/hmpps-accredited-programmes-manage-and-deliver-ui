@@ -9,7 +9,7 @@ export default class CreateGroupCodePresenter {
   ) {}
 
   get backLinkUri() {
-    return `/group/create-a-group/start`
+    return `/group/create-a-group/create-group`
   }
 
   get errorSummary() {
