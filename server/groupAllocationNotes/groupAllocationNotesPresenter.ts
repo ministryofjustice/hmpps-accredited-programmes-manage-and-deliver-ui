@@ -21,8 +21,15 @@ export default class GroupAllocationNotesPresenter extends ReferralLayoutPresent
   get groupAllocationTextArgs(): InsetTextArgs {
     return {
       html: `<p> ${this.referral.personName} is allocated to <a href="/groupDetails/${this.referral.currentlyAllocatedGroupId}/waitlist">
-            ${this.referral.currentlyAllocatedGroupCode}</a></p>`,
+            ${this.referral.currentlyAllocatedGroupCode}</a>.</p>`,
       classes: 'govuk-!-margin-top-0 govuk-!-margin-bottom-0',
+    }
+  }
+
+  get homePageLink() {
+    return {
+      text: 'Go to Accredited Programmes homepage',
+      href: `/`,
     }
   }
 
