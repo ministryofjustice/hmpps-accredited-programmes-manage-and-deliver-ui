@@ -85,7 +85,6 @@ export default class CreateGroupTreatmentManagerView {
         classes: 'govuk-label--m',
       },
       classes: 'add-cover-facilitator-select',
-      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createGroupFacilitator.errorMessage),
       items: this.presenter.generateSelectOptions('COVER_FACILITATOR'),
     }
   }
@@ -99,7 +98,6 @@ export default class CreateGroupTreatmentManagerView {
         classes: 'govuk-label--m',
       },
       classes: 'add-cover-facilitator-select',
-      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createGroupFacilitator.errorMessage),
       items: this.presenter.generateSelectOptions('COVER_FACILITATOR', facilitator.facilitatorCode),
     }
   }
@@ -131,6 +129,7 @@ export default class CreateGroupTreatmentManagerView {
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         text: this.presenter.text,
         facilitators: this.presenter.generateSelectedUsers().facilitators,
+        coverFacilitators: this.presenter.generateSelectedUsers().coverFacilitators,
       },
     ]
   }

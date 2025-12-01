@@ -52,18 +52,20 @@ export default class CreateGroupTreatmentManagerPresenter {
     return items
   }
 
-  generateSelectedUsers(): { treatmentManager: CreateGroupTeamMember; facilitators: CreateGroupTeamMember[] } {
+  generateSelectedUsers(): {
+    treatmentManager: CreateGroupTeamMember
+    facilitators: CreateGroupTeamMember[]
+    coverFacilitators: CreateGroupTeamMember[]
+  } {
     if (this.userInputData) {
       const { _csrf, ...formValues } = this.userInputData
-
+      const parsedMembers = Object.values(formValues)
+        .filter(userAsJsonString => userAsJsonString !== '')
+        .map(userAsJsonString => JSON.parse(userAsJsonString as string))
       return {
-        treatmentManager: this.userInputData['create-group-treatment-manager']
-          ? JSON.parse(this.userInputData['create-group-treatment-manager'] as string)
-          : null,
-        facilitators: Object.values(formValues)
-          .filter(userAsJsonString => userAsJsonString !== '')
-          .map(userAsJsonString => JSON.parse(userAsJsonString as string))
-          .filter(user => user.teamMemberType === 'REGULAR_FACILITATOR'),
+        treatmentManager: parsedMembers.find(member => member.teamMemberType === 'TREATMENT_MANAGER'),
+        facilitators: parsedMembers.filter(member => member.teamMemberType === 'REGULAR_FACILITATOR'),
+        coverFacilitators: parsedMembers.filter(member => member.teamMemberType === 'COVER_FACILITATOR'),
       }
     }
     if (this.createGroupFormData && this.createGroupFormData.teamMembers) {
@@ -73,9 +75,10 @@ export default class CreateGroupTreatmentManagerPresenter {
       return {
         treatmentManager: parsedMembers.find(member => member.teamMemberType === 'TREATMENT_MANAGER'),
         facilitators: parsedMembers.filter(member => member.teamMemberType === 'REGULAR_FACILITATOR'),
+        coverFacilitators: parsedMembers.filter(member => member.teamMemberType === 'COVER_FACILITATOR'),
       }
     }
-    return { treatmentManager: null, facilitators: [] }
+    return { treatmentManager: null, facilitators: [], coverFacilitators: [] }
   }
 
   get fields() {
