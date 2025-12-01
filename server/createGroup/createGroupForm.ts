@@ -4,6 +4,7 @@ import { body, ValidationChain } from 'express-validator'
 import errorMessages from '../utils/errorMessages'
 import { FormData } from '../utils/forms/formData'
 import FormUtils from '../utils/formUtils'
+import { DAY_CONFIG, DayKey } from './when/daysOfWeek'
 
 export default class CreateGroupForm {
   constructor(
@@ -92,18 +93,19 @@ export default class CreateGroupForm {
     const days: string[] = Array.isArray(selected) ? selected : [selected]
 
     const slots = days.map(dayOfWeek => {
-      const dayKey = dayOfWeek.toLowerCase()
+      const cfg = DAY_CONFIG.find(d => d.key === dayOfWeek)
+      const idBase = cfg?.idBase ?? dayOfWeek.toLowerCase()
 
-      const hourRaw = this.request.body[`${dayKey}-hour`]
-      const minuteRaw = this.request.body[`${dayKey}-minute`]
-      const ampmRaw = this.request.body[`${dayKey}-ampm`]
+      const hourRaw = this.request.body[`${idBase}-hour`]
+      const minuteRaw = this.request.body[`${idBase}-minute`]
+      const ampmRaw = this.request.body[`${idBase}-ampm`]
 
       const hour = Number(hourRaw)
       const minutes = minuteRaw === '' || minuteRaw === undefined ? 0 : Number(minuteRaw)
       const amOrPm = (ampmRaw || '').toUpperCase() as 'AM' | 'PM'
 
       return {
-        dayOfWeek: dayOfWeek as 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY',
+        dayOfWeek: dayOfWeek as DayKey,
         hour,
         minutes,
         amOrPm,
@@ -260,8 +262,28 @@ export default class CreateGroupForm {
   }
 
   private createGroupWhenValidations(): ValidationChain[] {
-    return [
-      body('create-group-when').custom((_, { req }) => {
+    const atLeastOneDaySelected = body('create-group-when').custom((_, { req }) => {
+      const raw = req.body['days-of-week']
+
+      const selected: string[] = []
+      if (Array.isArray(raw)) {
+        selected.push(...raw)
+      } else if (raw) {
+        selected.push(raw)
+      }
+
+      if (selected.length === 0) {
+        throw new Error(errorMessages.createGroup.createGroupWhenSelect)
+      }
+
+      return true
+    })
+
+    const perDayValidators: ValidationChain[] = DAY_CONFIG.map(dayCfg => {
+      const { key, idBase, label } = dayCfg
+      const prettyDay = label.endsWith('s') ? label.slice(0, -1) : label
+
+      return body(`create-group-when-${idBase}`).custom((_, { req }) => {
         const raw = req.body['days-of-week']
 
         const selected: string[] = []
@@ -270,39 +292,40 @@ export default class CreateGroupForm {
         } else if (raw) {
           selected.push(raw)
         }
-        if (selected.length === 0) {
-          throw new Error(errorMessages.createGroup.createGroupWhenSelect)
+
+        if (!selected.includes(key)) {
+          return true
         }
 
-        selected.forEach(dayOfWeek => {
-          const dayKey = dayOfWeek.toLowerCase()
-          const prettyDay = dayOfWeek.charAt(0) + dayOfWeek.slice(1).toLowerCase()
+        const hour = (req.body[`${idBase}-hour`] ?? '').toString().trim()
+        const minute = (req.body[`${idBase}-minute`] ?? '').toString().trim()
+        const ampm = (req.body[`${idBase}-ampm`] ?? '').toString().trim()
 
-          const hour = (req.body[`${dayKey}-hour`] ?? '').toString().trim()
-          const minute = (req.body[`${dayKey}-minute`] ?? '').toString().trim()
-          const ampm = (req.body[`${dayKey}-ampm`] ?? '').toString().trim()
-          if (!hour) {
-            throw new Error(`${errorMessages.createGroup.createGroupWhenHourRequired} for ${prettyDay}`)
-          }
-          const hourNumber = Number(hour)
-          if (Number.isNaN(hourNumber) || hourNumber < 1 || hourNumber > 12) {
-            throw new Error(`${errorMessages.createGroup.createGroupWhenHourInvalid} for ${prettyDay}`)
-          }
-          if (!ampm) {
-            throw new Error(`${errorMessages.createGroup.createGroupWhenAmOrPmRequired} for ${prettyDay}`)
-          }
-          if (minute) {
-            const minuteNumber = Number(minute)
+        if (!hour) {
+          throw new Error(`${errorMessages.createGroup.createGroupWhenHourRequired} for ${prettyDay}`)
+        }
 
-            if (Number.isNaN(minuteNumber) || minuteNumber < 0 || minuteNumber > 59) {
-              throw new Error(`${errorMessages.createGroup.createGroupWhenMinutesInvalid} for ${prettyDay}`)
-            }
+        const hourNumber = Number(hour)
+        if (Number.isNaN(hourNumber) || hourNumber < 1 || hourNumber > 12) {
+          throw new Error(`${errorMessages.createGroup.createGroupWhenHourInvalid} for ${prettyDay}`)
+        }
+
+        if (!ampm) {
+          throw new Error(`${errorMessages.createGroup.createGroupWhenAmOrPmRequired} for ${prettyDay}`)
+        }
+
+        if (minute) {
+          const minuteNumber = Number(minute)
+          if (Number.isNaN(minuteNumber) || minuteNumber < 0 || minuteNumber > 59) {
+            throw new Error(`${errorMessages.createGroup.createGroupWhenMinutesInvalid} for ${prettyDay}`)
           }
-        })
+        }
 
         return true
-      }),
-    ]
+      })
+    })
+
+    return [atLeastOneDaySelected, ...perDayValidators]
   }
 
   private createGroupPduValidations(): ValidationChain[] {

@@ -1,18 +1,7 @@
 import { CreateGroupRequest } from '@manage-and-deliver-api'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
-
-type DayKey = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
-
-const DAY_LABELS: Record<DayKey, string> = {
-  MONDAY: 'Monday',
-  TUESDAY: 'Tuesday',
-  WEDNESDAY: 'Wednesday',
-  THURSDAY: 'Thursday',
-  FRIDAY: 'Friday',
-  SATURDAY: 'Saturday',
-  SUNDAY: 'Sunday',
-}
+import { DAY_CONFIG, DayKey } from './daysOfWeek'
 
 export default class CreateGroupWhenPresenter {
   constructor(
@@ -42,14 +31,13 @@ export default class CreateGroupWhenPresenter {
   }
 
   get dayFieldErrors(): Partial<Record<DayKey, string>> {
-    const days: DayKey[] = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY']
     const errors: Partial<Record<DayKey, string>> = {}
 
-    days.forEach(day => {
-      const fieldId = `create-group-when-${day.toLowerCase()}`
+    DAY_CONFIG.forEach(day => {
+      const fieldId = `create-group-when-${day.idBase}`
       const message = PresenterUtils.errorMessage(this.validationError, fieldId)
       if (message) {
-        errors[day] = message
+        errors[day.key] = message
       }
     })
 
@@ -110,8 +98,8 @@ export default class CreateGroupWhenPresenter {
       const day = slot.dayOfWeek as DayKey
       if (!day) return
 
-      const label = DAY_LABELS[day]
-      const dayLower = day.toLowerCase()
+      const { label } = DAY_CONFIG.find(d => d.key === day)!
+      const dayLower = DAY_CONFIG.find(d => d.key === day)!.idBase
 
       if (!dayFieldErrors[day]) return
 

@@ -22,6 +22,7 @@ import CreateGroupPduPresenter from './pdu/createGroupPduPresenter'
 import CreateGroupPduView from './pdu/createGroupPduView'
 import CreateGroupLocationPresenter from './location/createGroupLocationPresenter'
 import CreateGroupLocationView from './location/createGroupLocationView'
+import { DayKey } from './when/daysOfWeek'
 import CreateGroupTreatmentManagerPresenter from './createGroupTreatmentManagerPresenter'
 import CreateGroupTreatmentManagerView from './createGroupTreatmentManagerView'
 
@@ -151,14 +152,7 @@ export default class CreateGroupController {
                 }
 
                 return {
-                  dayOfWeek: dayOfWeek as
-                    | 'MONDAY'
-                    | 'TUESDAY'
-                    | 'WEDNESDAY'
-                    | 'THURSDAY'
-                    | 'FRIDAY'
-                    | 'SATURDAY'
-                    | 'SUNDAY',
+                  dayOfWeek: dayOfWeek as DayKey,
                   hour,
                   minutes,
                   amOrPm,

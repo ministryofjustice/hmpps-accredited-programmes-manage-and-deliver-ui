@@ -1,23 +1,6 @@
 import ViewUtils from '../../utils/viewUtils'
 import CreateGroupWhenPresenter from './createGroupWhenPresenter'
-
-type DayKey = 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
-
-type DayConfig = {
-  key: DayKey
-  idBase: string
-  label: string
-}
-
-const DAY_CONFIG: DayConfig[] = [
-  { key: 'MONDAY', idBase: 'monday', label: 'Mondays' },
-  { key: 'TUESDAY', idBase: 'tuesday', label: 'Tuesdays' },
-  { key: 'WEDNESDAY', idBase: 'wednesday', label: 'Wednesdays' },
-  { key: 'THURSDAY', idBase: 'thursday', label: 'Thursdays' },
-  { key: 'FRIDAY', idBase: 'friday', label: 'Fridays' },
-  { key: 'SATURDAY', idBase: 'saturday', label: 'Saturdays' },
-  { key: 'SUNDAY', idBase: 'sunday', label: 'Sundays' },
-]
+import { DAY_CONFIG, DayKey } from './daysOfWeek'
 
 export default class CreateGroupWhenView {
   constructor(private readonly presenter: CreateGroupWhenPresenter) {}
