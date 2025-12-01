@@ -1,11 +1,10 @@
-@use 'node_modules/govuk-frontend/dist/govuk' as govuk;
-
+@use '../../../node_modules/govuk-frontend/dist/govuk' as *;
 $risk-flag-colour: #ebf7ff;
 $risk-flag-border-colour: #93afc3;
 
 .risk-flag-widget {
   border: 2px solid $risk-flag-border-colour;
   background-color: $risk-flag-colour;
-  padding: govuk.govuk-spacing(4);
-  margin-bottom: govuk.govuk-spacing(4);
+  padding: govuk-spacing(4);
+  margin-bottom: govuk-spacing(4);
 }

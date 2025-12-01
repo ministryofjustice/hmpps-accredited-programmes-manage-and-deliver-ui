@@ -256,6 +256,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/admin/clear-missing-data-referrals': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Clear down referrals with missing data
+     * @description Clear down referrals that are missing Oasys and Delius data.
+     */
+    post: operations['clearMissingDataReferrals']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/risks-and-needs/{crn}/thinking-and-behaviour': {
     parameters: {
       query?: never
@@ -3514,6 +3534,42 @@ export interface operations {
         }
       }
       /** @description Invalid request format or invalid UUID format */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  clearMissingDataReferrals: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Update started (not completed, process is async) */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad Request */
       400: {
         headers: {
           [name: string]: unknown

@@ -13,7 +13,7 @@ export default class CreateGroupDatePresenter {
   }
 
   get backLinkUri() {
-    return `/group/create-a-group/code`
+    return `/group/create-a-group/create-group-code`
   }
 
   get errorSummary() {

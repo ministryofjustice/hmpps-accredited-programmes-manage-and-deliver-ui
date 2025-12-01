@@ -1,4 +1,4 @@
-@use 'node_modules/govuk-frontend/dist/govuk' as *;
+@use '../../../node_modules/govuk-frontend/dist/govuk' as *;
 .govuk-main-wrapper {
   min-height: 600px;
 }
@@ -84,10 +84,7 @@
 .govuk-table__header {
   button {
     align-items: flex-start;
-    padding-top: 10px;
-    padding-bottom: 10px;
     svg {
-      margin-top: 2px;
       flex-shrink: 0;
       min-width: 12px;
       min-height: 12px;
@@ -100,6 +97,14 @@
   position: relative;
   margin-top: 15px;
   margin-bottom: 15px;
+}
+//create a group when - am pm select adjustments
+.govuk-select.govuk-date-select__select {
+  min-width: 3.5em;
+}
+
+.govuk-checkboxes__conditional:has(.govuk-input--error, .govuk-select--error) {
+  border-left-color: #d4351c;
 }
 
 .create_group_button {
