@@ -21,6 +21,7 @@ export default class AddMotivationBackgroundAndNonAssociationsNotesView {
           classes: 'govuk-fieldset__legend--m',
         },
       },
+      classes: 'govuk-radios--inline',
       items: [
         {
           value: 'yes',
