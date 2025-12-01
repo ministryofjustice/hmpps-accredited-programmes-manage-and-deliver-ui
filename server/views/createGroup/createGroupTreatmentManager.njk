@@ -12,117 +12,183 @@
 {% block content %}
 <script src="/assets/accessible-autocomplete.min.js"></script>
 <script nonce="{{ cspNonce }}">
-  let selectElementCounter = 1
-  let selectCoverFacilitatorElementCounter = 1
-  let existingIndex = 1
-  let existingCoverFacilitatorIndex = 1
+  // Counters for dynamically added elements
+  let selectElementCounter = 1;
+  let selectCoverFacilitatorElementCounter = 1;
+  let existingIndex = 1;
+  let existingCoverFacilitatorIndex = 1;
 
+  /**
+   * Clears the select element when the autocomplete input is empty
+   * @param {string} inputId - The ID of the autocomplete input element
+   * @returns {boolean} - True if successful, false otherwise
+   */
   function clearAccessibleAutocompleteSelectionWhenInputEmpty(inputId) {
     const autocompleteInput = document.getElementById(inputId);
     const selectElement = document.getElementById(inputId + '-select');
 
-    if (autocompleteInput && selectElement) {
-      const clearSelection = () => {
-        if (autocompleteInput.value.trim() === '') {
-          selectElement.value = '';
-          selectElement.selectedIndex = 0;
-        }
-      }
-      autocompleteInput.addEventListener('input', clearSelection);
-      autocompleteInput.addEventListener('keyup', clearSelection);
-      return true;
+    if (!autocompleteInput || !selectElement) {
+      return false;
     }
-    return false;
+
+    const clearSelection = () => {
+      if (autocompleteInput.value.trim() === '') {
+        selectElement.value = '';
+        selectElement.selectedIndex = 0;
+      }
+    };
+
+    autocompleteInput.addEventListener('input', clearSelection);
+    autocompleteInput.addEventListener('keyup', clearSelection);
+    return true;
   }
 
   /**
-   * @arg mutationRecord {MutationRecord}
+   * Sets up autocomplete for newly added facilitator/cover facilitator elements
+   * @param {MutationRecord} mutationRecord - The mutation record from MutationObserver
    */
   function possiblySetUpAutocompleteForMutation(mutationRecord) {
-    const shouldProceed = mutationRecord.type === 'childList' && mutationRecord.addedNodes.length > 0
-
-    if (!shouldProceed) {
+    if (mutationRecord.type !== 'childList' || mutationRecord.addedNodes.length === 0) {
       return;
     }
 
     mutationRecord.addedNodes.forEach(node => {
-      const isElementNode = node.nodeType === Node.ELEMENT_NODE
-
-      if (!isElementNode) {
+      if (node.nodeType !== Node.ELEMENT_NODE) {
         return;
       }
 
-      const select = node.querySelector('select')
-
+      const select = node.querySelector('select');
       if (!select) {
-        return
+        return;
       }
-      const input = node.querySelector('input')
-      const label = node.querySelector('label')
-      input.remove()
+
+      const input = node.querySelector('input');
+      const label = node.querySelector('label');
+      input.remove();
+
       if (select.classList.contains('add-facilitator-select')) {
-        select.id = select.id + selectElementCounter
-        select.name = select.name + selectElementCounter
-        select.value = ''
-        label.htmlFor = label.htmlFor + selectElementCounter
+        select.id = select.id + selectElementCounter;
+        select.name = select.name + selectElementCounter;
+        select.value = '';
+        label.htmlFor = label.htmlFor + selectElementCounter;
+
         accessibleAutocomplete.enhanceSelectElement({
           defaultValue: '',
-          selectElement: document.querySelector(`#${select.id}`),
-        })
+          selectElement: document.querySelector(`#${select.id}`)
+        });
+
         clearAccessibleAutocompleteSelectionWhenInputEmpty('create-group-facilitator-select' + selectElementCounter);
-        selectElementCounter++
+        selectElementCounter++;
       }
+
       if (select.classList.contains('add-cover-facilitator-select')) {
-        select.id = select.id + selectCoverFacilitatorElementCounter
-        select.name = select.name + selectCoverFacilitatorElementCounter
-        select.value = ''
-        label.htmlFor = label.htmlFor + selectCoverFacilitatorElementCounter
+        select.id = select.id + selectCoverFacilitatorElementCounter;
+        select.name = select.name + selectCoverFacilitatorElementCounter;
+        select.value = '';
+        label.htmlFor = label.htmlFor + selectCoverFacilitatorElementCounter;
+
         accessibleAutocomplete.enhanceSelectElement({
           defaultValue: '',
-          selectElement: document.querySelector(`#${select.id}`),
-        })
+          selectElement: document.querySelector(`#${select.id}`)
+        });
+
         clearAccessibleAutocompleteSelectionWhenInputEmpty('create-group-cover-facilitator-select' + selectCoverFacilitatorElementCounter);
-        selectCoverFacilitatorElementCounter++
+        selectCoverFacilitatorElementCounter++;
       }
-    })
-    //When copying the initial dropdown, if the dropdown is hidden (existing users present), unhide the clone
-    const items = document.querySelectorAll('.moj-add-another__item__facilitator');
-    items[items.length - 1].classList.remove('govuk-!-display-none');
+    });
+
+    // Unhide cloned items (they start hidden if existing items are present)
+    const facilitatorItems = document.querySelectorAll('.moj-add-another__item__facilitator');
+    facilitatorItems[facilitatorItems.length - 1]?.classList.remove('govuk-!-display-none');
+
     const coverItems = document.querySelectorAll('.moj-add-another__item__cover-facilitator');
-    coverItems[coverItems.length - 1].classList.remove('govuk-!-display-none');
+    coverItems[coverItems.length - 1]?.classList.remove('govuk-!-display-none');
+  }
+
+  /**
+   * Toggles visibility of the original add facilitator input based on existing facilitators
+   */
+  function toggleOriginalAddFacilitatorVisibility() {
+    const item = document.querySelector('.moj-add-another__item__facilitator');
+    if (!item) return;
+
+    const hasRemoveButton = document.querySelector('.remove-existing-facilitator');
+    const hasOnlyOneExistingInput = !hasRemoveButton &&
+      document.querySelectorAll('.existing-facilitator-input').length === 1;
+
+    if (hasRemoveButton || hasOnlyOneExistingInput) {
+      item.classList.add('govuk-!-display-none');
+    } else {
+      item.classList.remove('govuk-!-display-none');
+    }
+  }
+
+  /**
+   * Toggles visibility of the original add cover facilitator input based on existing cover facilitators
+   */
+  function toggleOriginalAddCoverFacilitatorVisibility() {
+    const item = document.querySelector('.moj-add-another__item__cover-facilitator');
+    if (!item) return;
+
+    const hasRemoveButton = document.querySelector('.remove-existing-cover-facilitator');
+    const hasOnlyOneExistingInput = !hasRemoveButton &&
+      document.querySelectorAll('.existing-cover-facilitator-input').length === 1;
+
+    if (hasRemoveButton || hasOnlyOneExistingInput) {
+      item.classList.add('govuk-!-display-none');
+    } else {
+      item.classList.remove('govuk-!-display-none');
+    }
   }
 
   document.addEventListener('DOMContentLoaded', function () {
+    // Initialize autocomplete for main select elements
     accessibleAutocomplete.enhanceSelectElement({
       defaultValue: '',
       selectElement: document.getElementById('create-group-facilitator')
-    })
+    });
     clearAccessibleAutocompleteSelectionWhenInputEmpty('create-group-facilitator');
 
     accessibleAutocomplete.enhanceSelectElement({
       defaultValue: '',
       selectElement: document.getElementById('create-group-cover-facilitator')
-    })
+    });
     clearAccessibleAutocompleteSelectionWhenInputEmpty('create-group-cover-facilitator');
 
     accessibleAutocomplete.enhanceSelectElement({
       defaultValue: '',
       selectElement: document.getElementById('create-group-treatment-manager')
-    })
+    });
     clearAccessibleAutocompleteSelectionWhenInputEmpty('create-group-treatment-manager');
 
+    // Set up mutation observer for dynamically added elements
+    const addAnotherForm = document.querySelector('.add-another-form');
+    if (!addAnotherForm) {
+      console.error('Cannot find the .add-another-form element. This is going to cause problems.');
+      return;
+    }
 
-    const anotherForm = document.querySelector('.add-another-form')
-    console.error(`Cannot find the .add-another-form element.  This is going to cause problems.`)
-
-    new MutationObserver((incomingMutations) => {
-      incomingMutations.forEach(possiblySetUpAutocompleteForMutation)
-    }).observe(anotherForm, {
+    new MutationObserver((mutations) => {
+      mutations.forEach(possiblySetUpAutocompleteForMutation);
+    }).observe(addAnotherForm, {
       childList: true,
       subtree: true
-    })
+    });
+
+    // Toggle visibility on page load
+    toggleOriginalAddFacilitatorVisibility();
+    toggleOriginalAddCoverFacilitatorVisibility();
   });
 
+  // Handle remove button clicks
+  document.addEventListener('click', function (e) {
+    if (e.target.classList.contains('remove-existing-facilitator')) {
+      toggleOriginalAddFacilitatorVisibility();
+    }
+    if (e.target.classList.contains('remove-existing-cover-facilitator')) {
+      toggleOriginalAddCoverFacilitatorVisibility();
+    }
+  });
 </script>
 <div class="govuk-width-container" id="main-content">
   <div class="govuk-main-wrapper">
@@ -233,45 +299,5 @@
     </div>
   </div>
 </div>
-<script nonce="{{ cspNonce }}">
-    //Only show the original add facilitator input if there are no existing facilitators
-     function toggleOriginalAddFacilitatorVisibility() {
-      const item = document.querySelector('.moj-add-another__item__facilitator');
-
-      if (!item) return; // Safety check
-
-      if (document.querySelector('.remove-existing-facilitator') || (!document.querySelector('.remove-existing-facilitator') && document.querySelectorAll('.existing-facilitator-input').length === 1)) {
-        item.classList.add('govuk-!-display-none');
-      } else {
-        item.classList.remove('govuk-!-display-none');
-      }
-    }
-    function toggleOriginalAddCoverFacilitatorVisibility() {
-      const item = document.querySelector('.moj-add-another__item__cover-facilitator');
-
-      if (!item) return; // Safety check
-
-      if (document.querySelector('.remove-existing-cover-facilitator') || (!document.querySelector('.remove-existing-cover-facilitator') && document.querySelectorAll('.existing-cover-facilitator-input').length === 1)) {
-        item.classList.add('govuk-!-display-none');
-      } else {
-        item.classList.remove('govuk-!-display-none');
-      }
-    }
-    //Check for existing facilitators on page load
-     document.addEventListener('DOMContentLoaded', () => {
-       toggleOriginalAddFacilitatorVisibility();
-       toggleOriginalAddCoverFacilitatorVisibility();
-     });
-
-     //Check if any are left when removing an existing facilitator
-    document.addEventListener('click', function (e) {
-      if (e.target.classList.contains('remove-existing-facilitator')) {
-        toggleOriginalAddFacilitatorVisibility();
-      }
-      if (e.target.classList.contains('remove-existing-cover-facilitator')) {
-        toggleOriginalAddCoverFacilitatorVisibility();
-      }
-    });
-</script>
 {% endblock %}
 {% endblock %}
