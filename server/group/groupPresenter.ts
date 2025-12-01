@@ -18,14 +18,19 @@ export enum GroupListPageSection {
 export default class GroupPresenter {
   public readonly pagination: Pagination
 
+  public readonly params?: string
+
   constructor(
     readonly groupListItems: Page<Group>,
     readonly section: GroupListPageSection,
     readonly otherGroupListCountTotal: number,
     readonly regionName: string,
   ) {
-    this.pagination = new Pagination(groupListItems, null)
+    // this.pagination = new Pagination(groupListItems, null)
+    // this.groupListItems = groupListItems
+
     this.groupListItems = groupListItems
+    this.pagination = new Pagination(this.groupListItems as Required<typeof this.groupListItems>)
   }
 
   get text() {

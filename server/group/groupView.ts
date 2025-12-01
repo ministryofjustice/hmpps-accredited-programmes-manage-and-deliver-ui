@@ -76,6 +76,7 @@ export default class GroupView {
       {
         groupTableArgs: this.presenter.groupTableArgs,
         subNavArgs: this.presenter.getSubNavArgs(),
+        pagination: this.presenter.pagination.mojPaginationArgs,
         text: this.presenter.text,
         searchByGroupCodeArgs: this.searchByGroupCodeArgs,
         searchByPduSelectArgs: this.searchByPduSelectArgs,
