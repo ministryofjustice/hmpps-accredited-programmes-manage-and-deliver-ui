@@ -225,7 +225,6 @@ export default class CreateGroupForm {
     const hasFacilitator = Object.entries(this.request.body).some(
       ([key, value]) => key.startsWith('create-group-facilitator') && value !== '',
     )
-    console.log(this.request.body)
     return [
       body('create-group-treatment-manager')
         .notEmpty()

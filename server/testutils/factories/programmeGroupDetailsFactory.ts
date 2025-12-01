@@ -139,6 +139,7 @@ export default ProgrammeGroupDetailsFactory.define(() => ({
   group: {
     code: 'BCCDD1',
     regionName: 'North East',
+    id: '123',
   },
   filters: {
     sex: ['Male', 'Female'],

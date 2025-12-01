@@ -27,10 +27,6 @@ export default class CreateGroupTreatmentManagerPresenter {
     return PresenterUtils.errorSummary(this.validationError)
   }
 
-  get utils() {
-    return new PresenterUtils(this.userInputData)
-  }
-
   generateSelectOptions(
     memberType: CreateGroupTeamMember['teamMemberType'],
     selectedValue: string = '',
@@ -57,40 +53,46 @@ export default class CreateGroupTreatmentManagerPresenter {
     facilitators: CreateGroupTeamMember[]
     coverFacilitators: CreateGroupTeamMember[]
   } {
+    const parsedMembers = this.getParsedMembers()
+
+    return {
+      treatmentManager: parsedMembers.find(member => member.teamMemberType === 'TREATMENT_MANAGER'),
+      facilitators: parsedMembers.filter(member => member.teamMemberType === 'REGULAR_FACILITATOR'),
+      coverFacilitators: parsedMembers.filter(member => member.teamMemberType === 'COVER_FACILITATOR'),
+    }
+  }
+
+  private getParsedMembers(): CreateGroupTeamMember[] {
+    const rawMembers = this.getRawMemberStrings()
+
+    return rawMembers
+      .filter(userAsJsonString => userAsJsonString !== '')
+      .map(userAsJsonString => JSON.parse(userAsJsonString))
+  }
+
+  private getRawMemberStrings(): string[] {
     if (this.userInputData) {
       const { _csrf, ...formValues } = this.userInputData
-      const parsedMembers = Object.values(formValues)
-        .filter(userAsJsonString => userAsJsonString !== '')
-        .map(userAsJsonString => JSON.parse(userAsJsonString as string))
-      return {
-        treatmentManager: parsedMembers.find(member => member.teamMemberType === 'TREATMENT_MANAGER'),
-        facilitators: parsedMembers.filter(member => member.teamMemberType === 'REGULAR_FACILITATOR'),
-        coverFacilitators: parsedMembers.filter(member => member.teamMemberType === 'COVER_FACILITATOR'),
-      }
+      return Object.values(formValues) as string[]
     }
-    if (this.createGroupFormData && this.createGroupFormData.teamMembers) {
-      const parsedMembers = Object.values(this.createGroupFormData.teamMembers as unknown as string)
-        .filter(userAsJsonString => userAsJsonString !== '')
-        .map(userAsJsonString => JSON.parse(userAsJsonString as string))
-      return {
-        treatmentManager: parsedMembers.find(member => member.teamMemberType === 'TREATMENT_MANAGER'),
-        facilitators: parsedMembers.filter(member => member.teamMemberType === 'REGULAR_FACILITATOR'),
-        coverFacilitators: parsedMembers.filter(member => member.teamMemberType === 'COVER_FACILITATOR'),
-      }
+
+    if (this.createGroupFormData?.teamMembers) {
+      // Note: The API type defines teamMembers as CreateGroupTeamMember[], but at runtime
+      // it's actually Record<string, string> when populated from form data
+      return Object.values(this.createGroupFormData.teamMembers as unknown as Record<string, string>)
     }
-    return { treatmentManager: null, facilitators: [], coverFacilitators: [] }
+
+    return []
   }
 
   get fields() {
     const members = this.generateSelectedUsers()
-    console.log('members', members)
     return {
       createGroupTreatmentManager: {
         value: members.treatmentManager ? members.treatmentManager.facilitatorCode : '',
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'create-group-treatment-manager'),
       },
       createGroupFacilitator: {
-        // value: this.utils.stringValue(this.createGroupFormData.pduCode, 'pduCode'),
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'create-group-facilitator'),
       },
     }

@@ -215,8 +215,6 @@ export default class CreateGroupController {
 
     if (req.method === 'POST') {
       const data = await new CreateGroupForm(req).createGroupTreatmentManagerData()
-      console.log('data is:', data)
-      console.log('userInputData is:', req.body)
       if (data.error) {
         res.status(400)
         formError = data.error
