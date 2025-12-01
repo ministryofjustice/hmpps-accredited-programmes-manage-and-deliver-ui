@@ -64,7 +64,7 @@
       label.htmlFor = label.htmlFor + selectElementCounter
       accessibleAutocomplete.enhanceSelectElement({
         defaultValue: '',
-        selectElement: document.querySelector(`#${select.id}`)
+        selectElement: document.querySelector(`#${select.id}`),
       })
       clearAccessibleAutocompleteSelectionWhenInputEmpty('create-group-facilitator-select' + selectElementCounter);
       selectElementCounter++
@@ -124,45 +124,46 @@
           {{ govukSelect(createGroupTreatmentManagerArgs) }}
 
           <div data-module="moj-add-another">
-            {% call govukFieldset(createGroupFacilitatorsFieldSetArgs) %}
-            {{ govukSelect(createGroupFacilitatorArgs) }}
-            {% endcall %}
-            {% for facilitator in facilitators %}
-            <fieldset class="govuk-fieldset moj-add-another__item">
-              <div class="govuk-form-group">
-                {{ govukSelect(createExistingGroupFacilitatorArgs(facilitator, loop.index)) }}
-                <!-- Hacky store the current loop index so we can bind the select to an accessible autocomplete -->
-                <span class="existingLoopCountFacilitator" data-index="{{ loop.index }}"></span>
-                <script nonce="{{ cspNonce }}">
-                  document.querySelectorAll('.existingLoopCountFacilitator').forEach(element => {
-                    existingIndex = element.dataset.index
-                  })
-                  accessibleAutocomplete.enhanceSelectElement({
-                    defaultValue: '',
-                    selectElement: document.getElementById(`create-group-facilitator-existing-${existingIndex}`)
-                  })
-                  clearAccessibleAutocompleteSelectionWhenInputEmpty(`create-group-facilitator-existing-${existingIndex}`);
-                </script>
-              </div>
-              {% if facilitators.length > 1 %}
-                {{ govukButton({
-                  name: "remove",
-                  value: loop.index0,
-                  text: "Remove",
-                  classes: "govuk-button--secondary moj-add-another__remove-button existing-facilitator"
-                }) }}
-              {% endif %}
-            </fieldset>
-            {% endfor %}
-
-            <div class="moj-button-action">
-              {{ govukButton({
-              id: "add-another-facilitator",
-              text: "Add another facilitator",
-              classes: "govuk-button--secondary moj-add-another__add-button govuk-!-margin-bottom-4"
-              }) }}
+          {% call govukFieldset(createGroupFacilitatorsFieldSetArgs) %}
+          {{ govukSelect(createGroupFacilitatorArgs) }}
+          {% endcall %}
+          {% for facilitator in facilitators %}
+          <fieldset class="govuk-fieldset moj-add-another__item moj-add-another__item__facilitator">
+            <div class="govuk-form-group">
+              {{ govukSelect(createExistingGroupFacilitatorArgs(facilitator, loop.index)) }}
+              <!-- Hacky store the current loop index so we can bind the select to an accessible autocomplete -->
+              <span class="existingLoopCountFacilitator" data-index="{{ loop.index }}"></span>
+              <script nonce="{{ cspNonce }}">
+                document.querySelectorAll('.existingLoopCountFacilitator').forEach(element => {
+                  existingIndex = element.dataset.index
+                })
+                accessibleAutocomplete.enhanceSelectElement({
+                  defaultValue: '',
+                  selectElement: document.getElementById(`create-group-facilitator-existing-${existingIndex}`),
+                  inputClasses: 'existing-facilitator-input',
+                })
+                clearAccessibleAutocompleteSelectionWhenInputEmpty(`create-group-facilitator-existing-${existingIndex}`);
+              </script>
             </div>
+            {% if facilitators.length > 1 %}
+            {{ govukButton({
+            name: "remove",
+            value: loop.index0,
+            text: "Remove",
+            classes: "govuk-button--secondary moj-add-another__remove-button remove-existing-facilitator"
+            }) }}
+            {% endif %}
+          </fieldset>
+          {% endfor %}
+
+          <div class="moj-button-action">
+            {{ govukButton({
+            id: "add-another-facilitator",
+            text: "Add another facilitator",
+            classes: "govuk-button--secondary moj-add-another__add-button govuk-!-margin-bottom-4"
+            }) }}
           </div>
+        </div>
           {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
         </form>
       </div>
@@ -172,11 +173,12 @@
 <script nonce="{{ cspNonce }}">
     //Only show the original add facilitator input if there are no existing facilitators
      function toggleOriginalAddFacilitatorVisibility() {
+       console.log('toggleOriginalAddFacilitatorVisibility');
       const item = document.querySelector('.moj-add-another__item__facilitator');
 
       if (!item) return; // Safety check
 
-      if (document.querySelector('.existing-facilitator')) {
+      if (document.querySelector('.remove-existing-facilitator') || (!document.querySelector('.remove-existing-facilitator') && document.querySelectorAll('.existing-facilitator-input').length === 1)) {
         item.classList.add('govuk-!-display-none');
       } else {
         item.classList.remove('govuk-!-display-none');
@@ -189,7 +191,7 @@
 
      //Check if any are left when removing an existing facilitator
     document.addEventListener('click', function (e) {
-      if (e.target.classList.contains('existing-facilitator')) {
+      if (e.target.classList.contains('remove-existing-facilitator')) {
         toggleOriginalAddFacilitatorVisibility();
       }
     });

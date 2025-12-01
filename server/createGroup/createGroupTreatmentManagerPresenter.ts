@@ -70,14 +70,9 @@ export default class CreateGroupTreatmentManagerPresenter {
       const parsedMembers = Object.values(this.createGroupFormData.teamMembers as unknown as string)
         .filter(userAsJsonString => userAsJsonString !== '')
         .map(userAsJsonString => JSON.parse(userAsJsonString as string))
-      console.log('parsedMembers', parsedMembers)
       return {
-        treatmentManager: parsedMembers.find(
-          member => member.teamMemberType === 'TREATMENT_MANAGER',
-        ),
-        facilitators: parsedMembers.filter(
-          member => member.teamMemberType === 'REGULAR_FACILITATOR',
-        ),
+        treatmentManager: parsedMembers.find(member => member.teamMemberType === 'TREATMENT_MANAGER'),
+        facilitators: parsedMembers.filter(member => member.teamMemberType === 'REGULAR_FACILITATOR'),
       }
     }
     return { treatmentManager: null, facilitators: [] }

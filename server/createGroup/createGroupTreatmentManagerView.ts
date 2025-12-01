@@ -45,6 +45,7 @@ export default class CreateGroupTreatmentManagerView {
         text: 'Facilitator',
         classes: 'govuk-label--m',
       },
+      classes: 'add-facilitator-select',
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createGroupFacilitator.errorMessage),
       items: this.presenter.generateSelectOptions('REGULAR_FACILITATOR'),
     }
@@ -58,6 +59,7 @@ export default class CreateGroupTreatmentManagerView {
         text: 'Facilitator',
         classes: 'govuk-label--m',
       },
+      classes: 'add-facilitator-select',
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createGroupFacilitator.errorMessage),
       items: this.presenter.generateSelectOptions('REGULAR_FACILITATOR', facilitator.facilitatorCode),
     }
@@ -66,6 +68,45 @@ export default class CreateGroupTreatmentManagerView {
   private createGroupFacilitatorsFieldSetArgs(): FieldsetArgs {
     return {
       classes: 'moj-add-another__item moj-add-another__item__facilitator',
+      legend: {
+        text: 'Facilitator',
+        classes: 'govuk-!-display-none',
+        isPageHeading: false,
+      },
+    }
+  }
+
+  private createGroupCoverFacilitatorArgs(): SelectArgs {
+    return {
+      id: 'create-group-cover-facilitator',
+      name: 'create-group-cover-facilitator',
+      label: {
+        text: 'Cover Facilitator',
+        classes: 'govuk-label--m',
+      },
+      classes: 'add-cover-facilitator-select',
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createGroupFacilitator.errorMessage),
+      items: this.presenter.generateSelectOptions('COVER_FACILITATOR'),
+    }
+  }
+
+  private createExistingGroupCoverFacilitatorArgs(facilitator: CreateGroupTeamMember, index: number): SelectArgs {
+    return {
+      id: `create-group-cover-facilitator-existing-${index}`,
+      name: `create-group-cover-facilitator-existing-${index}`,
+      label: {
+        text: 'Cover Facilitator',
+        classes: 'govuk-label--m',
+      },
+      classes: 'add-cover-facilitator-select',
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createGroupFacilitator.errorMessage),
+      items: this.presenter.generateSelectOptions('COVER_FACILITATOR', facilitator.facilitatorCode),
+    }
+  }
+
+  private createGroupCoverFacilitatorsFieldSetArgs(): FieldsetArgs {
+    return {
+      classes: 'moj-add-another__item moj-add-another__item__cover-facilitator',
       legend: {
         text: 'Facilitator',
         classes: 'govuk-!-display-none',
@@ -84,6 +125,9 @@ export default class CreateGroupTreatmentManagerView {
         createGroupFacilitatorArgs: this.createGroupFacilitatorArgs(),
         createGroupFacilitatorsFieldSetArgs: this.createGroupFacilitatorsFieldSetArgs(),
         createExistingGroupFacilitatorArgs: this.createExistingGroupFacilitatorArgs.bind(this),
+        createGroupCoverFacilitatorArgs: this.createGroupCoverFacilitatorArgs(),
+        createGroupCoverFacilitatorsFieldSetArgs: this.createGroupCoverFacilitatorsFieldSetArgs(),
+        createExistingGroupCoverFacilitatorArgs: this.createExistingGroupCoverFacilitatorArgs.bind(this),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         text: this.presenter.text,
         facilitators: this.presenter.generateSelectedUsers().facilitators,
