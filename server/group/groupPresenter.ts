@@ -26,9 +26,6 @@ export default class GroupPresenter {
     readonly otherGroupListCountTotal: number,
     readonly regionName: string,
   ) {
-    // this.pagination = new Pagination(groupListItems, null)
-    // this.groupListItems = groupListItems
-
     this.groupListItems = groupListItems
     this.pagination = new Pagination(this.groupListItems as Required<typeof this.groupListItems>)
   }
