@@ -22,9 +22,10 @@ import CreateGroupPduPresenter from './pdu/createGroupPduPresenter'
 import CreateGroupPduView from './pdu/createGroupPduView'
 import CreateGroupLocationPresenter from './location/createGroupLocationPresenter'
 import CreateGroupLocationView from './location/createGroupLocationView'
-import { DayKey } from './when/daysOfWeek'
+import { DAY_CONFIG, DayKey } from './when/daysOfWeek'
 import CreateGroupTreatmentManagerPresenter from './createGroupTreatmentManagerPresenter'
 import CreateGroupTreatmentManagerView from './createGroupTreatmentManagerView'
+
 
 export default class CreateGroupController {
   constructor(
@@ -119,22 +120,24 @@ export default class CreateGroupController {
         formError = data.error
 
         const raw = req.body['days-of-week']
-        const days: string[] = []
+
+        const selectedDays: DayKey[] = []
         if (Array.isArray(raw)) {
-          days.push(...raw)
+          selectedDays.push(...(raw as DayKey[]))
         } else if (raw) {
-          days.push(raw)
+          selectedDays.push(raw as DayKey)
         }
 
         const slots =
-          days.length === 0
+          selectedDays.length === 0
             ? []
-            : days.map(dayOfWeek => {
-                const dayKey = dayOfWeek.toLowerCase()
+            : selectedDays.map(dayOfWeek => {
+                const dayConfig = DAY_CONFIG.find(d => d.key === dayOfWeek)
+                const idBase = dayConfig?.idBase ?? dayOfWeek.toLowerCase()
 
-                const hourRaw = req.body[`${dayKey}-hour`]
-                const minuteRaw = req.body[`${dayKey}-minute`]
-                const ampmRaw = req.body[`${dayKey}-ampm`]
+                const hourRaw = req.body[`${idBase}-hour`]
+                const minuteRaw = req.body[`${idBase}-minute`]
+                const ampmRaw = req.body[`${idBase}-ampm`]
 
                 const hour = hourRaw ? Number(hourRaw) : undefined
 
@@ -152,7 +155,7 @@ export default class CreateGroupController {
                 }
 
                 return {
-                  dayOfWeek: dayOfWeek as DayKey,
+                  dayOfWeek,
                   hour,
                   minutes,
                   amOrPm,

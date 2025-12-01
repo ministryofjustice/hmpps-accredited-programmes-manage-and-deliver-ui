@@ -10,7 +10,7 @@ export default class CreateGroupWhenPresenter {
   ) {}
 
   get text() {
-    return { headingHintText: `Create group ${this.createGroupFormData.groupCode}` }
+    return { headingHintText: `Create group ${this.createGroupFormData?.groupCode}` }
   }
 
   get backLinkUri() {
@@ -44,16 +44,22 @@ export default class CreateGroupWhenPresenter {
     return errors
   }
 
-  get selectedDays(): string[] {
-    return this.createGroupFormData?.createGroupSessionSlot?.map(slot => slot.dayOfWeek) ?? []
+  get selectedDays(): DayKey[] {
+    return (this.createGroupFormData?.createGroupSessionSlot?.map(slot => slot.dayOfWeek) ?? []) as DayKey[]
   }
 
   get dayTimes() {
     const slots = this.createGroupFormData?.createGroupSessionSlot ?? []
-    const map: Record<string, { hour?: number; minutes?: number; amOrPm?: string }> = {}
+    const map: Record<DayKey, { hour?: number; minutes?: number; amOrPm?: string }> = {} as Record<
+      DayKey,
+      { hour?: number; minutes?: number; amOrPm?: string }
+    >
 
     slots.forEach(slot => {
-      map[slot.dayOfWeek] = {
+      const day = slot.dayOfWeek as DayKey
+      if (!day) return
+
+      map[day] = {
         hour: slot.hour,
         minutes: slot.minutes,
         amOrPm: slot.amOrPm,
@@ -98,8 +104,11 @@ export default class CreateGroupWhenPresenter {
       const day = slot.dayOfWeek as DayKey
       if (!day) return
 
-      const { label } = DAY_CONFIG.find(d => d.key === day)!
-      const dayLower = DAY_CONFIG.find(d => d.key === day)!.idBase
+      const dayConfig = DAY_CONFIG.find(d => d.key === day)
+      if (!dayConfig) return
+
+      const { label, idBase } = dayConfig
+      const prettyDay = label.endsWith('s') ? label.slice(0, -1) : label
 
       if (!dayFieldErrors[day]) return
 
@@ -107,23 +116,23 @@ export default class CreateGroupWhenPresenter {
       const minutesInvalidRange = slot.minutes != null && (slot.minutes < 0 || slot.minutes > 59)
 
       if (amOrPmMissing) {
-        const field = `${dayLower}-ampm`
+        const field = `${idBase}-ampm`
         const already = baseSummary.some(e => e.field === field)
         if (!already) {
           extraErrors.push({
             field,
-            message: `Select am or pm for ${label}`,
+            message: `Select am or pm for ${prettyDay}`,
           })
         }
       }
 
       if (minutesInvalidRange) {
-        const field = `${dayLower}-minute`
+        const field = `${idBase}-minute`
         const already = baseSummary.some(e => e.field === field)
         if (!already) {
           extraErrors.push({
             field,
-            message: `Enter minutes between 0 and 59 for ${label}`,
+            message: `Enter minutes between 0 and 59 for ${prettyDay}`,
           })
         }
       }

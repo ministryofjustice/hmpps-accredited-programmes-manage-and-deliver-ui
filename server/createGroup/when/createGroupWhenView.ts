@@ -19,10 +19,23 @@ export default class CreateGroupWhenView {
     }
   }
 
+  private formatList(items: string[]): string {
+    if (items.length === 0) return ''
+
+    const normalised = items.map((item, index) => (index === 0 ? item : item.charAt(0).toLowerCase() + item.slice(1)))
+
+    if (normalised.length === 1) return `${normalised[0]}.`
+    if (normalised.length === 2) return `${normalised[0]} and ${normalised[1]}.`
+
+    const allButLast = normalised.slice(0, -1).join(', ')
+    const last = normalised[normalised.length - 1]
+    return `${allButLast} and ${last}.`
+  }
+
   private checkboxArgs() {
     const selectedDays: DayKey[] = (this.presenter.selectedDays || []) as DayKey[]
-    const dayTimes = this.presenter.dayTimes || {}
-    const fieldsByDay = this.presenter.dayFieldErrors || {}
+    const { dayTimes } = this.presenter
+    const fieldsByDay = this.presenter.dayFieldErrors
     const groupErrorMessage = this.presenter.fields.createGroupWhen.errorMessage
 
     return {
@@ -82,23 +95,9 @@ export default class CreateGroupWhenView {
         if (minutesInvalidRange) inlineErrorParts.push('Enter minutes between 0 and 59')
         if (hourInvalidRange) inlineErrorParts.push('Enter an hour between 1 and 12')
 
-        function formatList(items: string[]): string {
-          if (items.length === 0) return ''
+        const inlineErrorMessage = inlineErrorParts.length > 0 ? this.formatList(inlineErrorParts) : dayErrorMessage
 
-          const normalised = items.map((item, index) =>
-            index === 0 ? item : item.charAt(0).toLowerCase() + item.slice(1),
-          )
-
-          if (normalised.length === 1) return `${normalised[0]}.`
-          if (normalised.length === 2) return `${normalised[0]} and ${normalised[1]}.`
-
-          const allButLast = normalised.slice(0, -1).join(', ')
-          const last = normalised[normalised.length - 1]
-          return `${allButLast} and ${last}.`
-        }
-
-        const inlineErrorMessage = inlineErrorParts.length > 0 ? formatList(inlineErrorParts) : dayErrorMessage
-
+        // FULL CONDITIONAL HTML — including hour/minute/am-pm fields
         const conditionalHtml = `
 <div class="govuk-!-margin-left-3">
   <p class="govuk-caption-l">Start time</p>

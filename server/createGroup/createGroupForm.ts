@@ -89,10 +89,15 @@ export default class CreateGroupForm {
       }
     }
 
-    const selected = this.request.body['days-of-week']
-    const days: string[] = Array.isArray(selected) ? selected : [selected]
+    const raw = this.request.body['days-of-week']
+    const selectedDays: DayKey[] = []
+    if (Array.isArray(raw)) {
+      selectedDays.push(...(raw as DayKey[]))
+    } else if (raw) {
+      selectedDays.push(raw as DayKey)
+    }
 
-    const slots = days.map(dayOfWeek => {
+    const slots = selectedDays.map(dayOfWeek => {
       const cfg = DAY_CONFIG.find(d => d.key === dayOfWeek)
       const idBase = cfg?.idBase ?? dayOfWeek.toLowerCase()
 
@@ -105,7 +110,7 @@ export default class CreateGroupForm {
       const amOrPm = (ampmRaw || '').toUpperCase() as 'AM' | 'PM'
 
       return {
-        dayOfWeek: dayOfWeek as DayKey,
+        dayOfWeek,
         hour,
         minutes,
         amOrPm,
@@ -262,70 +267,69 @@ export default class CreateGroupForm {
   }
 
   private createGroupWhenValidations(): ValidationChain[] {
-    const atLeastOneDaySelected = body('create-group-when').custom((_, { req }) => {
-      const raw = req.body['days-of-week']
-
-      const selected: string[] = []
-      if (Array.isArray(raw)) {
-        selected.push(...raw)
-      } else if (raw) {
-        selected.push(raw)
-      }
-
-      if (selected.length === 0) {
-        throw new Error(errorMessages.createGroup.createGroupWhenSelect)
-      }
-
-      return true
-    })
-
-    const perDayValidators: ValidationChain[] = DAY_CONFIG.map(dayCfg => {
-      const { key, idBase, label } = dayCfg
-      const prettyDay = label.endsWith('s') ? label.slice(0, -1) : label
-
-      return body(`create-group-when-${idBase}`).custom((_, { req }) => {
+    return [
+      body('create-group-when').custom((_, { req }) => {
         const raw = req.body['days-of-week']
 
-        const selected: string[] = []
+        const selected: DayKey[] = []
         if (Array.isArray(raw)) {
-          selected.push(...raw)
+          selected.push(...(raw as DayKey[]))
         } else if (raw) {
-          selected.push(raw)
+          selected.push(raw as DayKey)
         }
 
-        if (!selected.includes(key)) {
-          return true
-        }
-
-        const hour = (req.body[`${idBase}-hour`] ?? '').toString().trim()
-        const minute = (req.body[`${idBase}-minute`] ?? '').toString().trim()
-        const ampm = (req.body[`${idBase}-ampm`] ?? '').toString().trim()
-
-        if (!hour) {
-          throw new Error(`${errorMessages.createGroup.createGroupWhenHourRequired} for ${prettyDay}`)
-        }
-
-        const hourNumber = Number(hour)
-        if (Number.isNaN(hourNumber) || hourNumber < 1 || hourNumber > 12) {
-          throw new Error(`${errorMessages.createGroup.createGroupWhenHourInvalid} for ${prettyDay}`)
-        }
-
-        if (!ampm) {
-          throw new Error(`${errorMessages.createGroup.createGroupWhenAmOrPmRequired} for ${prettyDay}`)
-        }
-
-        if (minute) {
-          const minuteNumber = Number(minute)
-          if (Number.isNaN(minuteNumber) || minuteNumber < 0 || minuteNumber > 59) {
-            throw new Error(`${errorMessages.createGroup.createGroupWhenMinutesInvalid} for ${prettyDay}`)
-          }
+        if (selected.length === 0) {
+          throw new Error(errorMessages.createGroup.createGroupWhenSelect)
         }
 
         return true
-      })
-    })
+      }),
 
-    return [atLeastOneDaySelected, ...perDayValidators]
+      ...DAY_CONFIG.map(({ key, idBase, label }) => {
+        const prettyDay = label.endsWith('s') ? label.slice(0, -1) : label
+
+        return body(`create-group-when-${idBase}`).custom((_, { req }) => {
+          const raw = req.body['days-of-week']
+
+          const selected: DayKey[] = []
+          if (Array.isArray(raw)) {
+            selected.push(...(raw as DayKey[]))
+          } else if (raw) {
+            selected.push(raw as DayKey)
+          }
+
+          if (!selected.includes(key)) {
+            return true
+          }
+
+          const hour = (req.body[`${idBase}-hour`] ?? '').toString().trim()
+          const minute = (req.body[`${idBase}-minute`] ?? '').toString().trim()
+          const ampm = (req.body[`${idBase}-ampm`] ?? '').toString().trim()
+
+          if (!hour) {
+            throw new Error(`${errorMessages.createGroup.createGroupWhenHourRequired} for ${prettyDay}`)
+          }
+
+          const hourNumber = Number(hour)
+          if (Number.isNaN(hourNumber) || hourNumber < 1 || hourNumber > 12) {
+            throw new Error(`${errorMessages.createGroup.createGroupWhenHourInvalid} for ${prettyDay}`)
+          }
+
+          if (!ampm) {
+            throw new Error(`${errorMessages.createGroup.createGroupWhenAmOrPmRequired} for ${prettyDay}`)
+          }
+
+          if (minute) {
+            const minuteNumber = Number(minute)
+            if (Number.isNaN(minuteNumber) || minuteNumber < 0 || minuteNumber > 59) {
+              throw new Error(`${errorMessages.createGroup.createGroupWhenMinutesInvalid} for ${prettyDay}`)
+            }
+          }
+
+          return true
+        })
+      }),
+    ]
   }
 
   private createGroupPduValidations(): ValidationChain[] {
