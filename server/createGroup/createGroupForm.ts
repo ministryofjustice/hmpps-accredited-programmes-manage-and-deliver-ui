@@ -1,4 +1,4 @@
-import { CreateGroupRequest } from '@manage-and-deliver-api'
+import { CreateGroupRequest, CreateGroupTeamMember } from '@manage-and-deliver-api'
 import { Request } from 'express'
 import { body, ValidationChain } from 'express-validator'
 import errorMessages from '../utils/errorMessages'
@@ -141,6 +141,32 @@ export default class CreateGroupForm {
     }
   }
 
+  async createGroupTreatmentManagerData(): Promise<FormData<Partial<CreateGroupRequest>>> {
+    const validationResult = await FormUtils.runValidations({
+      request: this.request,
+      validations: this.createGroupTreatmentManagerValidations(),
+    })
+
+    const error = FormUtils.validationErrorFromResult(validationResult)
+    if (error) {
+      return {
+        paramsForUpdate: null,
+        error,
+      }
+    }
+    const { _csrf, ...formValues } = this.request.body
+    const teamMembers = Object.values(formValues)
+      .filter(value => value !== '')
+      .map(value => JSON.parse(value as string))
+
+    return {
+      paramsForUpdate: {
+        teamMembers: teamMembers as CreateGroupTeamMember[],
+      },
+      error: null,
+    }
+  }
+
   private createGroupCodeValidations(): ValidationChain[] {
     const validations = [
       body('create-group-code').notEmpty().withMessage(errorMessages.createGroup.createGroupCodeEmpty),
@@ -195,5 +221,21 @@ export default class CreateGroupForm {
 
   private createGroupLocationValidations(): ValidationChain[] {
     return [body('create-group-location').notEmpty().withMessage(errorMessages.createGroup.createGroupLocationEmpty)]
+  }
+
+  private createGroupTreatmentManagerValidations(): ValidationChain[] {
+    const hasFacilitator = Object.entries(this.request.body).some(
+      ([key, value]) => key.startsWith('create-group-facilitator') && value !== '',
+    )
+    return [
+      body('create-group-treatment-manager')
+        .notEmpty()
+        .withMessage(errorMessages.createGroup.createGroupTreatmentManagerEmpty),
+      body('create-group-facilitator')
+        .custom(() => {
+          return hasFacilitator
+        })
+        .withMessage(errorMessages.createGroup.createGroupFacilitatorEmpty),
+    ]
   }
 }

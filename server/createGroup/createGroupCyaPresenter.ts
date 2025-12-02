@@ -1,4 +1,4 @@
-import { CreateGroupRequest } from '@manage-and-deliver-api'
+import { CreateGroupRequest, CreateGroupTeamMember } from '@manage-and-deliver-api'
 import { SummaryListItem } from '../utils/summaryList'
 import CreateGroupUtils from './createGroupUtils'
 
@@ -15,8 +15,35 @@ export default class CreateGroupCyaPresenter {
     return `/group/create-a-group/group-delivery-location`
   }
 
+  generateSelectedUsers(): {
+    treatmentManager: CreateGroupTeamMember | undefined
+    facilitators: CreateGroupTeamMember[] | []
+    coverFacilitators: CreateGroupTeamMember[] | []
+  } {
+    if (!this.createGroupFormData.teamMembers || this.createGroupFormData.teamMembers.length === 0) {
+      return {
+        treatmentManager: undefined,
+        facilitators: [],
+        coverFacilitators: [],
+      }
+    }
+
+    return {
+      treatmentManager: this.createGroupFormData.teamMembers.find(
+        member => member.teamMemberType === 'TREATMENT_MANAGER',
+      ),
+      facilitators: this.createGroupFormData.teamMembers.filter(
+        member => member.teamMemberType === 'REGULAR_FACILITATOR',
+      ),
+      coverFacilitators: this.createGroupFormData.teamMembers.filter(
+        member => member.teamMemberType === 'COVER_FACILITATOR',
+      ),
+    }
+  }
+
   getCreateGroupSummary(): SummaryListItem[] {
-    return [
+    const members = this.generateSelectedUsers()
+    const summaryList = [
       {
         key: 'Group Code',
         lines: [`${this.createGroupFormData.groupCode}`],
@@ -47,6 +74,28 @@ export default class CreateGroupCyaPresenter {
         lines: [`${this.createGroupFormData.deliveryLocationName}`],
         changeLink: '/group/create-a-group/group-delivery-location',
       },
+      {
+        key: 'Treatment Manager:',
+        lines: [members.treatmentManager?.facilitator ?? 'Not assigned'],
+        changeLink: '/group/create-a-group/treatment-manager',
+      },
+      {
+        key: 'Facilitators:',
+        lines:
+          members.facilitators.length > 0 ? members.facilitators.map(member => member.facilitator) : ['None assigned'],
+        changeLink: '/group/create-a-group/treatment-manager',
+      },
     ]
+    if (members.coverFacilitators.length > 0) {
+      summaryList.push({
+        key: 'Cover facilitators:',
+        lines:
+          members.coverFacilitators.length > 0
+            ? members.coverFacilitators.map(member => member.facilitator)
+            : ['None assigned'],
+        changeLink: '/group/create-a-group/treatment-manager',
+      })
+    }
+    return summaryList
   }
 }

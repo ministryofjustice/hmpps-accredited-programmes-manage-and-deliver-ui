@@ -266,5 +266,149 @@ describe('CreateGroupForm', () => {
         })
       })
     })
+
+    describe('createGroupTreatmentManagerData', () => {
+      describe('when treatment manager and facilitators are provided', () => {
+        it('returns params for update', async () => {
+          const request = TestUtils.createRequest({
+            'create-group-treatment-manager':
+              '{"facilitator":"John Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
+            'create-group-facilitator-1':
+              '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
+            'create-group-facilitator-2':
+              '{"facilitator":"Bob Jones","facilitatorCode":"BJ789","teamName":"Team C","teamCode":"TC003","teamMemberType":"COVER_FACILITATOR"}',
+          })
+
+          const data = await new CreateGroupForm(request).createGroupTreatmentManagerData()
+
+          expect(data.paramsForUpdate).toStrictEqual({
+            teamMembers: [
+              {
+                facilitator: 'John Smith',
+                facilitatorCode: 'JS123',
+                teamName: 'Team A',
+                teamCode: 'TA001',
+                teamMemberType: 'TREATMENT_MANAGER',
+              },
+              {
+                facilitator: 'Jane Doe',
+                facilitatorCode: 'JD456',
+                teamName: 'Team B',
+                teamCode: 'TB002',
+                teamMemberType: 'REGULAR_FACILITATOR',
+              },
+              {
+                facilitator: 'Bob Jones',
+                facilitatorCode: 'BJ789',
+                teamName: 'Team C',
+                teamCode: 'TC003',
+                teamMemberType: 'COVER_FACILITATOR',
+              },
+            ],
+          })
+          expect(data.error).toBeNull()
+        })
+      })
+
+      describe('when treatment manager is missing', () => {
+        it('returns an appropriate error', async () => {
+          const request = TestUtils.createRequest({
+            'create-group-facilitator-1':
+              '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
+          })
+
+          const data = await new CreateGroupForm(request).createGroupTreatmentManagerData()
+
+          expect(data.paramsForUpdate).toBeNull()
+          expect(data.error).toStrictEqual({
+            errors: [
+              {
+                errorSummaryLinkedField: 'create-group-treatment-manager',
+                formFields: ['create-group-treatment-manager'],
+                message: 'Select a Treatment Manager. Start typing to search.',
+              },
+            ],
+          })
+        })
+      })
+
+      describe('when facilitator is missing', () => {
+        it('returns an appropriate error', async () => {
+          const request = TestUtils.createRequest({
+            'create-group-treatment-manager':
+              '{"facilitator":"John Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
+          })
+
+          const data = await new CreateGroupForm(request).createGroupTreatmentManagerData()
+
+          expect(data.paramsForUpdate).toBeNull()
+          expect(data.error).toStrictEqual({
+            errors: [
+              {
+                errorSummaryLinkedField: 'create-group-facilitator',
+                formFields: ['create-group-facilitator'],
+                message: 'Select a Facilitator. Start typing to search.',
+              },
+            ],
+          })
+        })
+      })
+
+      describe('when both treatment manager and facilitator are missing', () => {
+        it('returns errors for both fields', async () => {
+          const request = TestUtils.createRequest({})
+
+          const data = await new CreateGroupForm(request).createGroupTreatmentManagerData()
+
+          expect(data.paramsForUpdate).toBeNull()
+          expect(data.error.errors).toHaveLength(2)
+          expect(data.error.errors).toContainEqual({
+            errorSummaryLinkedField: 'create-group-treatment-manager',
+            formFields: ['create-group-treatment-manager'],
+            message: 'Select a Treatment Manager. Start typing to search.',
+          })
+          expect(data.error.errors).toContainEqual({
+            errorSummaryLinkedField: 'create-group-facilitator',
+            formFields: ['create-group-facilitator'],
+            message: 'Select a Facilitator. Start typing to search.',
+          })
+        })
+      })
+
+      describe('when empty facilitator fields are included', () => {
+        it('filters out empty values and returns params for update', async () => {
+          const request = TestUtils.createRequest({
+            'create-group-treatment-manager':
+              '{"facilitator":"John Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
+            'create-group-facilitator-1':
+              '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
+            'create-group-facilitator-2': '',
+            'create-group-facilitator-3': '',
+          })
+
+          const data = await new CreateGroupForm(request).createGroupTreatmentManagerData()
+
+          expect(data.paramsForUpdate).toStrictEqual({
+            teamMembers: [
+              {
+                facilitator: 'John Smith',
+                facilitatorCode: 'JS123',
+                teamName: 'Team A',
+                teamCode: 'TA001',
+                teamMemberType: 'TREATMENT_MANAGER',
+              },
+              {
+                facilitator: 'Jane Doe',
+                facilitatorCode: 'JD456',
+                teamName: 'Team B',
+                teamCode: 'TB002',
+                teamMemberType: 'REGULAR_FACILITATOR',
+              },
+            ],
+          })
+          expect(data.error).toBeNull()
+        })
+      })
+    })
   })
 })

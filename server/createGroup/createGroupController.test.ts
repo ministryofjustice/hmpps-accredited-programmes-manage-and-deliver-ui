@@ -1,6 +1,7 @@
 import { Express } from 'express'
 import { SessionData } from 'express-session'
 import request from 'supertest'
+import { CreateGroupRequest } from '@manage-and-deliver-api'
 import { randomUUID } from 'crypto'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import TestUtils from '../testutils/testUtils'
@@ -417,7 +418,7 @@ describe('Create Group Controller', () => {
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain('Redirecting to /group/create-a-group/group-review-details')
+          expect(res.text).toContain('Redirecting to /group/create-a-group/treatment-manager')
         })
     })
 
@@ -436,6 +437,139 @@ describe('Create Group Controller', () => {
     })
   })
 
+  describe('GET /group/create-a-group/treatment-manager', () => {
+    it('loads the treatment manager selection page', async () => {
+      accreditedProgrammesManageAndDeliverService.getPduMembers.mockResolvedValue([
+        {
+          personName: 'John Smith',
+          personCode: 'JS123',
+          teamName: 'Team A',
+          teamCode: 'TA001',
+        },
+      ])
+      return request(app)
+        .get('/group/create-a-group/treatment-manager')
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Who is responsible for the group')
+        })
+    })
+
+    it('displays previously selected team members from session', async () => {
+      const sessionData: Partial<SessionData> = {
+        createGroupFormData: {
+          teamMembers: [
+            '{"facilitator":"John Smith", "facilitatorCode":"JS123", "teamName":"Team A", "teamCode":"TA001", "teamMemberType":"TREATMENT_MANAGER"}',
+            '{"facilitator":"Jane Doe", "facilitatorCode":"JD456", "teamName":"Team B", "teamCode":"TB002", "teamMemberType":"REGULAR_FACILITATOR"}',
+          ],
+        } as unknown as Partial<CreateGroupRequest>,
+      }
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+      accreditedProgrammesManageAndDeliverService.getPduMembers.mockResolvedValue([
+        {
+          personName: 'John Smith',
+          personCode: 'JS123',
+          teamName: 'Team A',
+          teamCode: 'TA001',
+        },
+        {
+          personName: 'Jane Doe',
+          personCode: 'JD456',
+          teamName: 'Team B',
+          teamCode: 'TB002',
+        },
+      ])
+      return request(app)
+        .get('/group/create-a-group/treatment-manager')
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('John Smith')
+          expect(res.text).toContain('Jane Doe')
+        })
+    })
+  })
+
+  describe('POST /group/create-a-group/treatment-manager', () => {
+    it('redirects to check your answers page on successful submission', async () => {
+      accreditedProgrammesManageAndDeliverService.getPduMembers.mockResolvedValue([
+        {
+          personName: 'John Smith',
+          personCode: 'JS123',
+          teamName: 'Team A',
+          teamCode: 'TA001',
+        },
+      ])
+      return request(app)
+        .post('/group/create-a-group/treatment-manager')
+        .type('form')
+        .send({
+          'create-group-treatment-manager':
+            '{"facilitator":"John Smith", "facilitatorCode":"JS123", "teamName":"Team A", "teamCode":"TA001", "teamMemberType":"TREATMENT_MANAGER"}',
+          'create-group-facilitator-1':
+            '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain('Redirecting to /group/create-a-group/group-review-details')
+        })
+    })
+
+    it('returns with errors if treatment manager and facilitator is not selected', async () => {
+      accreditedProgrammesManageAndDeliverService.getPduMembers.mockResolvedValue([
+        {
+          personName: 'John Smith',
+          personCode: 'JS123',
+          teamName: 'Team A',
+          teamCode: 'TA001',
+        },
+      ])
+      return request(app)
+        .post('/group/create-a-group/treatment-manager')
+        .type('form')
+        .send({})
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain('Select a Treatment Manager. Start typing to search.')
+          expect(res.text).toContain('Select a Facilitator. Start typing to search.')
+        })
+    })
+
+    it('saves team members to session on successful submission', async () => {
+      accreditedProgrammesManageAndDeliverService.getPduMembers.mockResolvedValue([
+        {
+          personName: 'John Smith',
+          personCode: 'JS123',
+          teamName: 'Team A',
+          teamCode: 'TA001',
+        },
+      ])
+      const sessionData: Partial<SessionData> = {
+        createGroupFormData: {
+          groupCode: 'TEST123',
+        },
+      }
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      await request(app)
+        .post('/group/create-a-group/treatment-manager')
+        .type('form')
+        .send({
+          'create-group-treatment-manager':
+            '{"facilitator":"John Smith", "facilitatorCode":"JS123", "teamName":"Team A", "teamCode":"TA001", "teamMemberType":"TREATMENT_MANAGER"}',
+          'create-group-facilitator-1':
+            '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
+        })
+        .expect(302)
+
+      return request(app)
+        .get('/group/create-a-group/treatment-manager')
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('John Smith')
+        })
+    })
+  })
+
   describe('GET /group/create-a-group/group-review-details', () => {
     it('loads the check your answers page with all session data', async () => {
       const sessionData: Partial<SessionData> = {
@@ -444,6 +578,15 @@ describe('Create Group Controller', () => {
           startedAtDate: '10/7/2050',
           cohort: 'GENERAL',
           sex: 'MALE',
+          teamMembers: [
+            {
+              facilitator: 'John Smith',
+              facilitatorCode: 'JS123',
+              teamName: 'Team A',
+              teamCode: 'TA001',
+              teamMemberType: 'TREATMENT_MANAGER',
+            },
+          ],
         },
       }
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })

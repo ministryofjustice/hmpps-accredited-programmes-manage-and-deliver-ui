@@ -56,6 +56,8 @@ type AllocateToGroupResponse = components['schemas']['AllocateToGroupResponse']
 type GroupsByRegion = components['schemas']['GroupsByRegion']
 type PageGroup = components['schemas']['PageGroup']
 type CodeDescription = components['schemas']['CodeDescription']
+type UserTeamMember = components['schemas']['UserTeamMember']
+type CreateGroupTeamMember = components['schemas']['CreateGroupTeamMember']
 
 export type {
   AlcoholMisuseDetails,
@@ -65,6 +67,7 @@ export type {
   Availability,
   CaseListFilterValues,
   CaseListReferrals,
+  CreateGroupTeamMember,
   CodeDescription,
   CohortEnum,
   CreateAvailability,
@@ -113,4 +116,5 @@ export type {
   UpdateAvailability,
   UpdateCohort,
   UpdateLdc,
+  UserTeamMember,
 }
