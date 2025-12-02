@@ -20,7 +20,7 @@ export default class GroupController {
       username,
       {
         page: pageNumber ? Number(pageNumber) - 1 : 0,
-        size: 10,
+        size: 50,
       },
       selectedTab,
       // filter.params,
@@ -46,7 +46,7 @@ export default class GroupController {
       username,
       {
         page: pageNumber ? Number(pageNumber) - 1 : 0,
-        size: 10,
+        size: 50,
       },
       selectedTab,
       // filter.params,
