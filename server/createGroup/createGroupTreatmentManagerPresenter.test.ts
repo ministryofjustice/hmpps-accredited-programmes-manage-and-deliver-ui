@@ -1,6 +1,5 @@
 import { CreateGroupRequest, UserTeamMember } from '@manage-and-deliver-api'
 import CreateGroupTreatmentManagerPresenter from './createGroupTreatmentManagerPresenter'
-import CreateGroupForm from './createGroupForm'
 
 describe('CreateGroupTreatmentManagerPresenter', () => {
   const mockMembers: UserTeamMember[] = [
@@ -102,8 +101,20 @@ describe('CreateGroupTreatmentManagerPresenter', () => {
     it('parses members from createGroupFormData when userInputData is not provided', () => {
       const createGroupFormData = {
         teamMembers: [
-          '{"facilitator":"John Smith", "facilitatorCode":"JS123", "teamName":"Team A", "teamCode":"TA001", "teamMemberType":"TREATMENT_MANAGER"}',
-          '{"facilitator":"Jane Doe", "facilitatorCode":"JD456", "teamName":"Team B", "teamCode":"TB002", "teamMemberType":"REGULAR_FACILITATOR"}',
+          {
+            facilitator: 'John Smith',
+            facilitatorCode: 'JS123',
+            teamName: 'Team A',
+            teamCode: 'TA001',
+            teamMemberType: 'TREATMENT_MANAGER',
+          },
+          {
+            facilitator: 'Jane Doe',
+            facilitatorCode: 'JD456',
+            teamName: 'Team B',
+            teamCode: 'TB002',
+            teamMemberType: 'REGULAR_FACILITATOR',
+          },
         ],
       } as unknown as Partial<CreateGroupRequest>
       const presenter = new CreateGroupTreatmentManagerPresenter(mockMembers, null, createGroupFormData, null)

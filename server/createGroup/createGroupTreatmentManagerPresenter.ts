@@ -49,12 +49,23 @@ export default class CreateGroupTreatmentManagerPresenter {
   }
 
   generateSelectedUsers(): {
-    treatmentManager: CreateGroupTeamMember
-    facilitators: CreateGroupTeamMember[]
-    coverFacilitators: CreateGroupTeamMember[]
+    treatmentManager: CreateGroupTeamMember | undefined
+    facilitators: CreateGroupTeamMember[] | []
+    coverFacilitators: CreateGroupTeamMember[] | []
   } {
-    const parsedMembers = this.getParsedMembers()
-
+    let parsedMembers: CreateGroupTeamMember[]
+    if (this.userInputData) {
+      parsedMembers = this.getParsedMembers()
+    } else {
+      parsedMembers = this.createGroupFormData?.teamMembers
+    }
+    if (!parsedMembers) {
+      return {
+        treatmentManager: undefined,
+        facilitators: [],
+        coverFacilitators: [],
+      }
+    }
     return {
       treatmentManager: parsedMembers.find(member => member.teamMemberType === 'TREATMENT_MANAGER'),
       facilitators: parsedMembers.filter(member => member.teamMemberType === 'REGULAR_FACILITATOR'),
@@ -63,26 +74,12 @@ export default class CreateGroupTreatmentManagerPresenter {
   }
 
   private getParsedMembers(): CreateGroupTeamMember[] {
-    const rawMembers = this.getRawMemberStrings()
+    const { _csrf, ...formValues } = this.userInputData
+    const membersToParse = Object.values(formValues) as string[]
 
-    return rawMembers
+    return membersToParse
       .filter(userAsJsonString => userAsJsonString !== '')
       .map(userAsJsonString => JSON.parse(userAsJsonString))
-  }
-
-  private getRawMemberStrings(): string[] {
-    if (this.userInputData) {
-      const { _csrf, ...formValues } = this.userInputData
-      return Object.values(formValues) as string[]
-    }
-
-    if (this.createGroupFormData?.teamMembers) {
-      // Note: The API type defines teamMembers as CreateGroupTeamMember[], but at runtime
-      // it's actually Record<string, string> when populated from form data
-      return Object.values(this.createGroupFormData.teamMembers as unknown as Record<string, string>)
-    }
-
-    return []
   }
 
   get fields() {

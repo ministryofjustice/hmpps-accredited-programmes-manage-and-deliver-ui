@@ -283,9 +283,27 @@ describe('CreateGroupForm', () => {
 
           expect(data.paramsForUpdate).toStrictEqual({
             teamMembers: [
-              '{"facilitator":"John Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
-              '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
-              '{"facilitator":"Bob Jones","facilitatorCode":"BJ789","teamName":"Team C","teamCode":"TC003","teamMemberType":"COVER_FACILITATOR"}',
+              {
+                facilitator: 'John Smith',
+                facilitatorCode: 'JS123',
+                teamName: 'Team A',
+                teamCode: 'TA001',
+                teamMemberType: 'TREATMENT_MANAGER',
+              },
+              {
+                facilitator: 'Jane Doe',
+                facilitatorCode: 'JD456',
+                teamName: 'Team B',
+                teamCode: 'TB002',
+                teamMemberType: 'REGULAR_FACILITATOR',
+              },
+              {
+                facilitator: 'Bob Jones',
+                facilitatorCode: 'BJ789',
+                teamName: 'Team C',
+                teamCode: 'TC003',
+                teamMemberType: 'COVER_FACILITATOR',
+              },
             ],
           })
           expect(data.error).toBeNull()
@@ -372,8 +390,20 @@ describe('CreateGroupForm', () => {
 
           expect(data.paramsForUpdate).toStrictEqual({
             teamMembers: [
-              '{"facilitator":"John Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
-              '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
+              {
+                facilitator: 'John Smith',
+                facilitatorCode: 'JS123',
+                teamName: 'Team A',
+                teamCode: 'TA001',
+                teamMemberType: 'TREATMENT_MANAGER',
+              },
+              {
+                facilitator: 'Jane Doe',
+                facilitatorCode: 'JD456',
+                teamName: 'Team B',
+                teamCode: 'TB002',
+                teamMemberType: 'REGULAR_FACILITATOR',
+              },
             ],
           })
           expect(data.error).toBeNull()

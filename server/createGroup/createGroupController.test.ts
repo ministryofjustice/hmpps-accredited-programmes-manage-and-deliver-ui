@@ -575,6 +575,15 @@ describe('Create Group Controller', () => {
           startedAtDate: '10/7/2050',
           cohort: 'GENERAL',
           sex: 'MALE',
+          teamMembers: [
+            {
+              facilitator: 'John Smith',
+              facilitatorCode: 'JS123',
+              teamName: 'Team A',
+              teamCode: 'TA001',
+              teamMemberType: 'TREATMENT_MANAGER',
+            },
+          ],
         },
       }
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })

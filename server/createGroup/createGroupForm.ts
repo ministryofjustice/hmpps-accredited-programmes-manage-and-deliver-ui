@@ -155,7 +155,9 @@ export default class CreateGroupForm {
       }
     }
     const { _csrf, ...formValues } = this.request.body
-    const teamMembers = Object.values(formValues).filter(value => value !== '')
+    const teamMembers = Object.values(formValues)
+      .filter(value => value !== '')
+      .map(value => JSON.parse(value as string))
 
     return {
       paramsForUpdate: {
