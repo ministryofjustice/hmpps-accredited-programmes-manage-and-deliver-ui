@@ -12,7 +12,7 @@ export default class CreateGroupTreatmentManagerPresenter {
   ) {}
 
   get backLinkUri() {
-    return `/group/create-a-group/location`
+    return `/group/create-a-group/group-delivery-location`
   }
 
   get text() {
