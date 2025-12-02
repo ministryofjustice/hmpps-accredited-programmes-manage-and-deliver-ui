@@ -109,8 +109,7 @@ export default class CreateGroupController {
   async showCreateGroupWhen(req: Request, res: Response): Promise<void> {
     const { createGroupFormData } = req.session
     let formError: FormValidationError | null = null
-
-    let formDataForPresenter: Partial<CreateGroupRequest> | null = createGroupFormData
+    let userInputData = null
 
     if (req.method === 'POST') {
       const data = await new CreateGroupForm(req).createGroupWhenData()
@@ -118,54 +117,7 @@ export default class CreateGroupController {
       if (data.error) {
         res.status(400)
         formError = data.error
-
-        const raw = req.body['days-of-week']
-
-        const selectedDays: DayKey[] = []
-        if (Array.isArray(raw)) {
-          selectedDays.push(...(raw as DayKey[]))
-        } else if (raw) {
-          selectedDays.push(raw as DayKey)
-        }
-
-        const slots =
-          selectedDays.length === 0
-            ? []
-            : selectedDays.map(dayOfWeek => {
-                const dayConfig = DAY_CONFIG.find(d => d.key === dayOfWeek)
-                const idBase = dayConfig?.idBase ?? dayOfWeek.toLowerCase()
-
-                const hourRaw = req.body[`${idBase}-hour`]
-                const minuteRaw = req.body[`${idBase}-minute`]
-                const ampmRaw = req.body[`${idBase}-ampm`]
-
-                const hour = hourRaw ? Number(hourRaw) : undefined
-
-                let minutes: number | undefined
-                if (minuteRaw !== '' && minuteRaw !== undefined) {
-                  minutes = Number(minuteRaw)
-                }
-
-                let amOrPm: 'AM' | 'PM' | undefined
-                if (ampmRaw) {
-                  const upper = (ampmRaw as string).toUpperCase()
-                  if (upper === 'AM' || upper === 'PM') {
-                    amOrPm = upper as 'AM' | 'PM'
-                  }
-                }
-
-                return {
-                  dayOfWeek,
-                  hour,
-                  minutes,
-                  amOrPm,
-                }
-              })
-
-        formDataForPresenter = {
-          ...createGroupFormData,
-          createGroupSessionSlot: slots,
-        }
+        userInputData = req.body
       } else {
         req.session.createGroupFormData = {
           ...createGroupFormData,
@@ -175,7 +127,7 @@ export default class CreateGroupController {
       }
     }
 
-    const presenter = new CreateGroupWhenPresenter(formError, formDataForPresenter)
+    const presenter = new CreateGroupWhenPresenter(formError, userInputData, createGroupFormData.groupCode)
     const view = new CreateGroupWhenView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }

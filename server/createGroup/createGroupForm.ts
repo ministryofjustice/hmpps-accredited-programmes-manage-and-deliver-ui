@@ -284,49 +284,50 @@ export default class CreateGroupForm {
         return true
       }),
 
-      ...DAY_CONFIG.map(({ key, idBase, label }) => {
+      ...DAY_CONFIG.flatMap(({ key, idBase, label }) => {
         const prettyDay = label.endsWith('s') ? label.slice(0, -1) : label
 
-        return body(`create-group-when-${idBase}`).custom((_, { req }) => {
-          const raw = req.body['days-of-week']
+        return [
+          // Hour field validation
+          body(`${idBase}-hour`)
+            .if(
+              body('days-of-week').custom((_, { req }) => {
+                const dayOfWeek = req.body['days-of-week']
+                const selected: DayKey[] = Array.isArray(dayOfWeek) ? dayOfWeek : dayOfWeek ? [dayOfWeek] : []
+                return selected.includes(key)
+              }),
+            )
+            .notEmpty()
+            .withMessage(`${errorMessages.createGroup.createGroupWhenHourRequired} for ${prettyDay}`)
+            .bail()
+            .isInt({ min: 1, max: 12 })
+            .withMessage(`${errorMessages.createGroup.createGroupWhenHourInvalid} for ${prettyDay}`),
 
-          const selected: DayKey[] = []
-          if (Array.isArray(raw)) {
-            selected.push(...(raw as DayKey[]))
-          } else if (raw) {
-            selected.push(raw as DayKey)
-          }
+          // Minute field validation
+          body(`${idBase}-minute`)
+            .if(
+              body('days-of-week').custom((_, { req }) => {
+                const dayOfWeek = req.body['days-of-week']
+                const selected: DayKey[] = Array.isArray(dayOfWeek) ? dayOfWeek : dayOfWeek ? [dayOfWeek] : []
+                return selected.includes(key)
+              }),
+            )
+            .optional({ checkFalsy: true })
+            .isInt({ min: 0, max: 59 })
+            .withMessage(`${errorMessages.createGroup.createGroupWhenMinutesInvalid} for ${prettyDay}`),
 
-          if (!selected.includes(key)) {
-            return true
-          }
-
-          const hour = (req.body[`${idBase}-hour`] ?? '').toString().trim()
-          const minute = (req.body[`${idBase}-minute`] ?? '').toString().trim()
-          const ampm = (req.body[`${idBase}-ampm`] ?? '').toString().trim()
-
-          if (!hour) {
-            throw new Error(`${errorMessages.createGroup.createGroupWhenHourRequired} for ${prettyDay}`)
-          }
-
-          const hourNumber = Number(hour)
-          if (Number.isNaN(hourNumber) || hourNumber < 1 || hourNumber > 12) {
-            throw new Error(`${errorMessages.createGroup.createGroupWhenHourInvalid} for ${prettyDay}`)
-          }
-
-          if (!ampm) {
-            throw new Error(`${errorMessages.createGroup.createGroupWhenAmOrPmRequired} for ${prettyDay}`)
-          }
-
-          if (minute) {
-            const minuteNumber = Number(minute)
-            if (Number.isNaN(minuteNumber) || minuteNumber < 0 || minuteNumber > 59) {
-              throw new Error(`${errorMessages.createGroup.createGroupWhenMinutesInvalid} for ${prettyDay}`)
-            }
-          }
-
-          return true
-        })
+          // AM/PM field validation
+          body(`${idBase}-ampm`)
+            .if(
+              body('days-of-week').custom((_, { req }) => {
+                const dayOfWeek = req.body['days-of-week']
+                const selected: DayKey[] = Array.isArray(dayOfWeek) ? dayOfWeek : dayOfWeek ? [dayOfWeek] : []
+                return selected.includes(key)
+              }),
+            )
+            .notEmpty()
+            .withMessage(`${errorMessages.createGroup.createGroupWhenAmOrPmRequired} for ${prettyDay}`),
+        ]
       }),
     ]
   }
