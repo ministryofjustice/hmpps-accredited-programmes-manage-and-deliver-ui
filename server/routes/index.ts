@@ -15,6 +15,7 @@ import RisksAndNeedsController from '../risksAndNeeds/risksAndNeedsController'
 import type { Services } from '../services'
 import UpdateReferralStatusController from '../updateReferralStatus/updateReferralStatusController'
 import RemoveFromGroupController from '../groupDetails/removeFromGroup/removeFromGroupController'
+import GroupController from '../group/groupController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
@@ -38,6 +39,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const removeFromGroupController = new RemoveFromGroupController(accreditedProgrammesManageAndDeliverService)
   const groupAllocationNotesController = new GroupAllocationNotesController(accreditedProgrammesManageAndDeliverService)
   const createGroupController = new CreateGroupController(accreditedProgrammesManageAndDeliverService)
+  const groupController = new GroupController(accreditedProgrammesManageAndDeliverService)
 
   get('/', async (req, res, next) => {
     await caselistController.showOpenCaselist(req, res)
@@ -202,31 +204,29 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   post('/referral/:referralId/update-status', async (req, res, next) => {
     await updateReferralController.updateStatus(req, res)
   })
-
-  getOrPost('/group/create-a-group/start', async (req, res) => {
+  getOrPost('/group/create-a-group/create-group', async (req, res) => {
     await createGroupController.showCreateGroupStart(req, res)
   })
 
-  getOrPost('/group/create-a-group/code', async (req, res) => {
+  getOrPost('/group/create-a-group/create-group-code', async (req, res) => {
     await createGroupController.showCreateGroupCode(req, res)
   })
-
-  getOrPost('/group/create-a-group/cohort', async (req, res) => {
+  getOrPost('/group/create-a-group/group-cohort', async (req, res) => {
     await createGroupController.showCreateGroupCohort(req, res)
   })
-  getOrPost('/group/create-a-group/date', async (req, res) => {
+  getOrPost('/group/create-a-group/group-start-date', async (req, res) => {
     await createGroupController.showCreateGroupDate(req, res)
   })
 
-  getOrPost('/group/create-a-group/sex', async (req, res) => {
+  getOrPost('/group/create-a-group/group-sex', async (req, res) => {
     await createGroupController.showCreateGroupSex(req, res)
   })
 
-  getOrPost('/group/create-a-group/pdu', async (req, res) => {
+  getOrPost('/group/create-a-group/group-probation-delivery-unit', async (req, res) => {
     await createGroupController.showCreateGroupPdu(req, res)
   })
 
-  getOrPost('/group/create-a-group/location', async (req, res) => {
+  getOrPost('/group/create-a-group/group-delivery-location', async (req, res) => {
     await createGroupController.showCreateGroupLocation(req, res)
   })
 
@@ -234,7 +234,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await createGroupController.showCreateGroupTreatmentManager(req, res)
   })
 
-  getOrPost('/group/create-a-group/check-your-answers', async (req, res) => {
+  getOrPost('/group/create-a-group/group-review-details', async (req, res) => {
     await createGroupController.showCreateGroupCya(req, res)
   })
 
@@ -291,6 +291,14 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   getOrPost('/removeFromGroup/:groupId/:referralId/updateStatus', async (req, res, next) => {
     await removeFromGroupController.removeFromGroupUpdateStatus(req, res)
+  })
+
+  get('/groups/not-started', async (req, res, next) => {
+    await groupController.showNotStartedGroupListPage(req, res)
+  })
+
+  get('/groups/started', async (req, res, next) => {
+    await groupController.showStartedGroupListPage(req, res)
   })
 
   return router

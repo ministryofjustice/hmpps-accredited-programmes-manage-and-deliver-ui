@@ -38,6 +38,7 @@ import {
   ReferralMotivationBackgroundAndNonAssociations,
   RemoveFromGroupRequest,
   RemoveFromGroupResponse,
+  GroupsByRegion,
   CodeDescription,
   UserTeamMember,
 } from '@manage-and-deliver-api'
@@ -92,6 +93,22 @@ export default class AccreditedProgrammesManageAndDeliverService
       headers: { Accept: 'application/json' },
       query: { ...paginationParams, ...filterQuery },
     })) as CaseListReferrals
+  }
+
+  async getGroupList(
+    username: ExpressUsername,
+    paginationParams: PaginationParams,
+    // filter: CaselistFilterParams,
+    selectedTab: string,
+  ): Promise<GroupsByRegion> {
+    const restClient = await this.createRestClientFromUsername(username)
+    // const filterQuery: Record<string, unknown> = { ...filter }
+
+    return (await restClient.get({
+      path: `/bff/groups/region/${selectedTab}`,
+      headers: { Accept: 'application/json' },
+      query: { ...paginationParams }, // , ...filterQuery },
+    })) as GroupsByRegion
   }
 
   async getClosedCaselist(

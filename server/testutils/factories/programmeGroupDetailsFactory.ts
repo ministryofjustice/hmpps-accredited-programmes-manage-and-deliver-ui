@@ -1,5 +1,6 @@
 import { CohortEnum, ProgrammeGroupDetails } from '@manage-and-deliver-api'
 import { Factory } from 'fishery'
+import { randomUUID } from 'crypto'
 
 class ProgrammeGroupDetailsFactory extends Factory<ProgrammeGroupDetails> {
   allocatedList() {
@@ -137,9 +138,9 @@ class ProgrammeGroupDetailsFactory extends Factory<ProgrammeGroupDetails> {
 
 export default ProgrammeGroupDetailsFactory.define(() => ({
   group: {
+    id: randomUUID(),
     code: 'BCCDD1',
     regionName: 'North East',
-    id: '123',
   },
   filters: {
     sex: ['Male', 'Female'],

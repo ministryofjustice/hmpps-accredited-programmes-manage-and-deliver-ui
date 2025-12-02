@@ -12,7 +12,7 @@ export default class CreateGroupCyaPresenter {
   }
 
   get backLinkUri() {
-    return `/group/create-a-group/sex`
+    return `/group/create-a-group/group-delivery-location`
   }
 
   generateSelectedUsers(): {
@@ -47,32 +47,32 @@ export default class CreateGroupCyaPresenter {
       {
         key: 'Group Code',
         lines: [`${this.createGroupFormData.groupCode}`],
-        changeLink: '/group/create-a-group/code',
+        changeLink: '/group/create-a-group/create-group-code',
       },
       {
         key: 'Date',
         lines: [`${this.createGroupFormData.startedAtDate}`],
-        changeLink: '/group/create-a-group/date',
+        changeLink: '/group/create-a-group/group-start-date',
       },
       {
         key: 'Cohort',
         lines: [`${this.createGroupUtils.getCohortTextFromEnum(this.createGroupFormData.cohort)}`],
-        changeLink: '/group/create-a-group/cohort',
+        changeLink: '/group/create-a-group/group-cohort',
       },
       {
         key: 'Sex',
         lines: [`${this.createGroupUtils.getSexTextFromEnum(this.createGroupFormData.sex)}`],
-        changeLink: '/group/create-a-group/sex',
+        changeLink: '/group/create-a-group/group-sex',
       },
       {
         key: 'PDU',
         lines: [`${this.createGroupFormData.pduName}`],
-        changeLink: '/group/create-a-group/pdu',
+        changeLink: '/group/create-a-group/group-probation-delivery-unit',
       },
       {
         key: 'Delivery Location',
         lines: [`${this.createGroupFormData.deliveryLocationName}`],
-        changeLink: '/group/create-a-group/location',
+        changeLink: '/group/create-a-group/group-delivery-location',
       },
       {
         key: 'Treatment Manager:',

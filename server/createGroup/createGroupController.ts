@@ -30,7 +30,7 @@ export default class CreateGroupController {
 
   async showCreateGroupStart(req: Request, res: Response): Promise<void> {
     if (req.method === 'POST') {
-      return res.redirect('/group/create-a-group/code')
+      return res.redirect('/group/create-a-group/create-group-code')
     }
 
     // Clear session data at start of journey
@@ -62,7 +62,7 @@ export default class CreateGroupController {
           ...createGroupFormData,
           groupCode: data.paramsForUpdate.groupCode,
         }
-        return res.redirect(`/group/create-a-group/date`)
+        return res.redirect(`/group/create-a-group/group-start-date`)
       }
     }
 
@@ -93,7 +93,7 @@ export default class CreateGroupController {
           ...createGroupFormData,
           startedAtDate: data.paramsForUpdate.startedAtDate,
         }
-        return res.redirect(`/group/create-a-group/cohort`)
+        return res.redirect(`/group/create-a-group/group-cohort`)
       }
     }
 
@@ -115,7 +115,7 @@ export default class CreateGroupController {
           ...createGroupFormData,
           cohort: data.paramsForUpdate.cohort,
         }
-        return res.redirect(`/group/create-a-group/sex`)
+        return res.redirect(`/group/create-a-group/group-sex`)
       }
     }
 
@@ -137,7 +137,7 @@ export default class CreateGroupController {
           ...createGroupFormData,
           sex: data.paramsForUpdate.sex,
         }
-        return res.redirect(`/group/create-a-group/pdu`)
+        return res.redirect(`/group/create-a-group/group-probation-delivery-unit`)
       }
     }
 
@@ -164,7 +164,7 @@ export default class CreateGroupController {
           pduName: data.paramsForUpdate.pduName,
           pduCode: data.paramsForUpdate.pduCode,
         }
-        return res.redirect(`/group/create-a-group/location`)
+        return res.redirect(`/group/create-a-group/group-delivery-location`)
       }
     }
 
@@ -224,7 +224,7 @@ export default class CreateGroupController {
           ...createGroupFormData,
           teamMembers: data.paramsForUpdate.teamMembers,
         }
-        return res.redirect(`/group/create-a-group/check-your-answers`)
+        return res.redirect(`/group/create-a-group/group-review-details`)
       }
     }
 

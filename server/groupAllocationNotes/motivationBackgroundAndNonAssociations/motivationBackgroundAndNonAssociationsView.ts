@@ -15,7 +15,7 @@ export default class MotivationBackgroundAndNonAssociationsView {
   get lastUpdatedInsetText(): InsetTextArgs {
     return this.presenter.motivationBackgroundAndNonAssociations.id
       ? {
-          text: `Last updated by ${this.presenter.lastUpdatedBy} on ${this.presenter.lastUpdatedAt}`,
+          text: `Last updated by ${this.presenter.lastUpdatedBy} on ${this.presenter.lastUpdatedAt}.`,
           classes: 'govuk-!-margin-top-0',
         }
       : null
@@ -52,6 +52,7 @@ export default class MotivationBackgroundAndNonAssociationsView {
         hasNotesSaved: this.presenter.motivationBackgroundAndNonAssociations.id !== null,
         successMessageArgs: this.successMessageArgs,
         isNotesUpdated: this.presenter.isMotivationsUpdated,
+        homePageLink: this.presenter.homePageLink,
       },
     ]
   }

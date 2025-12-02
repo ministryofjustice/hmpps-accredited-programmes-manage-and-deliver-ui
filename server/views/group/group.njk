@@ -15,34 +15,36 @@
 {% block content %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <span class="govuk-caption-xl">Referrals in Brighton and Hove</span>
-      <h1 class="govuk-heading-l">{{ presenter.text.pageHeading }}</h1>
-    </div>
-    {# TODO REMOVE THIS WHEN WE HAVE A PROPER ENTRY POINT INTO CREATE A GROUP #}
-    {# Once the following ticket has been completed this will need to be removed #}
-    {# https://dsdmoj.atlassian.net/browse/APG-1410 #}
-    <div class="govuk-grid-column-one-third">
-      {{ govukButton({text: "Create a group", href: "/group/create-a-group/create-group"}) }}
+      <span class="govuk-caption-xl">{{ text.regionName }}</span>
     </div>
   </div>
-  <div class="govuk-grid-row">
 
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">{{ text.pageHeading }}</h1>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    {{ govukButton({text: "Create a group", href: "/group/create-a-group/start", classes: "create_group_button"}) }}
+  </div>
+</div>
+
+<div class="govuk-grid-row">
     {%- set filterOptionsHtml %}
     <a class="clear-filters__link" href="?">Clear filters</a>
-    {{ govukInput(searchByCrnOrPersonNameArgs) }}
-    {{ govukSelect(searchByPduArgs) }}
+    {{ govukInput(searchByGroupCodeArgs) }}
+    {{ govukSelect(searchByPduSelectArgs) }}
 
-    {% if not presenter.showReportingLocations %}
-      <h2 class="govuk-heading-s govuk-!-margin-bottom-1">Reporting team</h2>
-      <p class="govuk-body">Select a PDU and apply filters to see reporting teams</p>
+    {% if not presenter.deliveryTeamLocations %}
+      <h2 class="govuk-heading-s govuk-!-margin-bottom-1">Delivery location</h2>
+      <p class="govuk-body">Select a PDU and apply filters to see delivery locations</p>
     {% endif %}
 
-    {% if presenter.showReportingLocations %}
-      {{ govukCheckboxes(reportingTeamCheckboxArgs) }}
+    {% if presenter.deliveryTeamLocations %}
+      {{ govukCheckboxes(deliveryTeamCheckboxArgs) }}
     {% endif %}
 
     {{ govukSelect(searchByCohortArgs) }}
-    {{ govukSelectWithOptgroup(searchByStatusArgs) }}
+    {{ govukSelectWithOptgroup(searchBySexArgs) }}
 
     {% endset -%}
     <div class="govuk-grid-column-one-quarter">
@@ -57,19 +59,16 @@
             "data-test-id": "submit-button"
           }
         },
-
-
         optionsHtml: filterOptionsHtml
         }) }}
       </form>
     </div>
     <div class="govuk-grid-column-three-quarters">
       {{ mojSubNavigation(subNavArgs) }}
-      {% if presenter.referralCaseListItems.content.length > 0 %}
-        {{ govukTable(presenter.getCaseloadTableArgs()) }}
-      {% else %}
+        {{ govukTable(groupTableArgs) }}
+
         <p class="govuk-body-l">{{ noResultsString }}</p>
-      {% endif %}
+
 
       {% include "../partials/pagination.njk" %}
     </div>

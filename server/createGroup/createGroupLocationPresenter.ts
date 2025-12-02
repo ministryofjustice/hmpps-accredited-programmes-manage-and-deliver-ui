@@ -12,7 +12,7 @@ export default class CreateGroupLocationPresenter {
   ) {}
 
   get backLinkUri() {
-    return `/group/create-a-group/pdu`
+    return `/group/create-a-group/group-probation-delivery-unit`
   }
 
   get text() {
