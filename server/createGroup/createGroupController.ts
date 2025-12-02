@@ -228,7 +228,10 @@ export default class CreateGroupController {
       }
     }
 
-    const pduMembers = await this.accreditedProgrammesManageAndDeliverService.getPduMembers(username, 'N50ALL')
+    const pduMembers = await this.accreditedProgrammesManageAndDeliverService.getPduMembers(
+      username,
+      createGroupFormData.pduCode,
+    )
     const presenter = new CreateGroupTreatmentManagerPresenter(
       pduMembers,
       formError,
