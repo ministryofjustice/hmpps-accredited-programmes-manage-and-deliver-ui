@@ -17,8 +17,7 @@ export default class CreateGroupTreatmentManagerPresenter {
 
   get text() {
     return {
-      // headingHintText: `Create group ${this.createGroupFormData?.groupCode}`,
-      headingHintText: `Create group 123`,
+      headingHintText: `Create group ${this.createGroupFormData.groupCode}`,
       headingText: `Who is responsible for the group ?`,
     }
   }

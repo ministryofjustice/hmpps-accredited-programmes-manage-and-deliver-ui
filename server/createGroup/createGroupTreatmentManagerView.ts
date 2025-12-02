@@ -81,7 +81,7 @@ export default class CreateGroupTreatmentManagerView {
       id: 'create-group-cover-facilitator',
       name: 'create-group-cover-facilitator',
       label: {
-        text: 'Cover Facilitator',
+        text: 'Cover facilitator (optional)',
         classes: 'govuk-label--m',
       },
       classes: 'add-cover-facilitator-select',
@@ -94,7 +94,7 @@ export default class CreateGroupTreatmentManagerView {
       id: `create-group-cover-facilitator-existing-${index}`,
       name: `create-group-cover-facilitator-existing-${index}`,
       label: {
-        text: 'Cover Facilitator',
+        text: 'Cover facilitator (optional)',
         classes: 'govuk-label--m',
       },
       classes: 'add-cover-facilitator-select',
