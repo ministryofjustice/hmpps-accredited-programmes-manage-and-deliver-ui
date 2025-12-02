@@ -43,7 +43,7 @@ export default class CreateGroupCyaPresenter {
 
   getCreateGroupSummary(): SummaryListItem[] {
     const members = this.generateSelectedUsers()
-    return [
+    const summaryList = [
       {
         key: 'Group Code',
         lines: [`${this.createGroupFormData.groupCode}`],
@@ -85,14 +85,17 @@ export default class CreateGroupCyaPresenter {
           members.facilitators.length > 0 ? members.facilitators.map(member => member.facilitator) : ['None assigned'],
         changeLink: '/group/create-a-group/treatment-manager',
       },
-      {
+    ]
+    if (members.coverFacilitators.length > 0) {
+      summaryList.push({
         key: 'Cover facilitators:',
         lines:
           members.coverFacilitators.length > 0
             ? members.coverFacilitators.map(member => member.facilitator)
             : ['None assigned'],
         changeLink: '/group/create-a-group/treatment-manager',
-      },
-    ]
+      })
+    }
+    return summaryList
   }
 }
