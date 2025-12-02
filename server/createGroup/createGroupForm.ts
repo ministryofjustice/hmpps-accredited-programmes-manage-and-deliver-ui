@@ -1,4 +1,4 @@
-import { CreateGroupRequest, CreateGroupTeamMember, UserTeamMember } from '@manage-and-deliver-api'
+import { CreateGroupRequest, CreateGroupTeamMember } from '@manage-and-deliver-api'
 import { Request } from 'express'
 import { body, ValidationChain } from 'express-validator'
 import errorMessages from '../utils/errorMessages'
