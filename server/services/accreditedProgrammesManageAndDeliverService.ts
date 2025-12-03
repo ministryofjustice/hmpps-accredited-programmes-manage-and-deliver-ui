@@ -519,10 +519,10 @@ export default class AccreditedProgrammesManageAndDeliverService
     })) as CodeDescription[]
   }
 
-  async getPduMembers(username: Express.User['username'], pduCode: string): Promise<UserTeamMember[]> {
+  async getPduMembers(username: Express.User['username']): Promise<UserTeamMember[]> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
-      path: `/bff/region/${pduCode}/members`,
+      path: `/bff/region/members`,
       headers: { Accept: 'application/json' },
     })) as UserTeamMember[]
   }
