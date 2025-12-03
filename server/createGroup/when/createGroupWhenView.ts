@@ -47,8 +47,6 @@ export default class CreateGroupWhenView {
         homePageLink: this.homePageLink(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         text: this.presenter.text,
-        // selectedDays: this.presenter.selectedDays,
-        dayTimes: this.presenter.dayTimes,
         checkboxArgs: this.checkboxArgs(),
       },
     ]

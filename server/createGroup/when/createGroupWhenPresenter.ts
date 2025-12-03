@@ -32,7 +32,7 @@ export default class CreateGroupWhenPresenter {
   }
 
   get backLinkUri() {
-    return `/group/create-a-group/date`
+    return `/group/create-a-group/group-start-date`
   }
 
   get utils() {
@@ -88,7 +88,7 @@ export default class CreateGroupWhenPresenter {
   }
 
   get whenWillGroupRunCheckBoxArgs(): CheckboxesArgsItem[] {
-    const { selectedDays, dayTimes } = this
+    const { selectedDays } = this
 
     return DAY_CONFIG.map(({ key, idBase, label }) => ({
       id: idBase,
@@ -98,16 +98,12 @@ export default class CreateGroupWhenPresenter {
       checked: selectedDays.includes(key),
       attributes: { 'data-aria-controls': `${idBase}-conditional` },
       conditional: {
-        html: this.getConditionalHtml(idBase, idBase as keyof typeof this.fields.slots, dayTimes[key] || {}),
+        html: this.getConditionalHtml(idBase, idBase as keyof typeof this.fields.slots),
       },
     }))
   }
 
-  private getConditionalHtml(
-    idBase: string,
-    key: keyof typeof this.fields.slots,
-    timesForDay: { amOrPm?: string },
-  ): string {
+  private getConditionalHtml(idBase: string, key: keyof typeof this.fields.slots): string {
     const slot = this.fields.slots[key]
     const errorMessages = [slot.hour.errorMessage, slot.minute.errorMessage, slot.ampm.errorMessage]
     const formattedErrorMessage = this.formatErrorMessages(errorMessages)
@@ -161,7 +157,7 @@ export default class CreateGroupWhenPresenter {
     if (filtered.length === 0) return ''
     if (filtered.length === 1) return filtered[0]
 
-    const formatted = [filtered[0], ...filtered.slice(1).map(msg => msg.toLowerCase())]
+    const formatted = [filtered[0], ...filtered.slice(1).map(msg => msg.charAt(0).toLowerCase() + msg.slice(1))]
 
     const lastMessage = formatted.pop()
     return `${formatted.join(', ')} and ${lastMessage}`

@@ -22,10 +22,8 @@ import CreateGroupPduPresenter from './pdu/createGroupPduPresenter'
 import CreateGroupPduView from './pdu/createGroupPduView'
 import CreateGroupLocationPresenter from './location/createGroupLocationPresenter'
 import CreateGroupLocationView from './location/createGroupLocationView'
-import { DAY_CONFIG, DayKey } from './when/daysOfWeek'
 import CreateGroupTreatmentManagerPresenter from './createGroupTreatmentManagerPresenter'
 import CreateGroupTreatmentManagerView from './createGroupTreatmentManagerView'
-
 
 export default class CreateGroupController {
   constructor(

@@ -213,7 +213,7 @@ describe('CreateGroupForm', () => {
             {
               errorSummaryLinkedField: 'monday-ampm',
               formFields: ['monday-ampm'],
-              message: 'Select whether the start time is am or pm for Monday',
+              message: 'Select am or pm for Monday',
             },
           ],
         })
@@ -260,7 +260,7 @@ describe('CreateGroupForm', () => {
             {
               errorSummaryLinkedField: 'monday-minute',
               formFields: ['monday-minute'],
-              message: 'Enter a minute between 00 and 59 for Monday',
+              message: 'Enter minutes between 00 and 59 for Monday',
             },
           ],
         })
@@ -282,7 +282,7 @@ describe('CreateGroupForm', () => {
             {
               errorSummaryLinkedField: 'monday-minute',
               formFields: ['monday-minute'],
-              message: 'Enter a minute between 00 and 59 for Monday',
+              message: 'Enter minutes between 00 and 59 for Monday',
             },
           ],
         })
@@ -354,7 +354,7 @@ describe('CreateGroupForm', () => {
             {
               errorSummaryLinkedField: 'create-group-sex',
               formFields: ['create-group-sex'],
-              message: 'Select a sex.',
+              message: 'Select a sex',
             },
           ],
         })
