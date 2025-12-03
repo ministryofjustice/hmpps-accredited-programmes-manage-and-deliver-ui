@@ -21,10 +21,10 @@ interface SlotFields {
 
 export default class CreateGroupWhenPresenter {
   constructor(
-    private readonly validationError: FormValidationError | null = null,
-    private readonly userInputData: Record<string, unknown> | null = null,
     private readonly groupCode: string,
     private readonly createGroupFormData: CreateGroupSessionSlot[],
+    private readonly validationError: FormValidationError | null = null,
+    private readonly userInputData: Record<string, unknown> | null = null,
   ) {}
 
   get text() {

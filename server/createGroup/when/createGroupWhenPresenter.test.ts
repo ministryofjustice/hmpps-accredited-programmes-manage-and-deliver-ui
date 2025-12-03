@@ -9,7 +9,7 @@ describe('groupDetailsPresenter.', () => {
   describe('whenWillGroupRunCheckBoxArgs', () => {
     it('should return the correct checkbox args', () => {
       const createGroupFormData = createGroupSessionSlotFactory.build()
-      const presenter = new CreateGroupWhenPresenter(null, null, 'ABC123', [createGroupFormData])
+      const presenter = new CreateGroupWhenPresenter('ABC123', [createGroupFormData])
 
       const result = presenter.whenWillGroupRunCheckBoxArgs
       expect(result[0]).toMatchObject({
