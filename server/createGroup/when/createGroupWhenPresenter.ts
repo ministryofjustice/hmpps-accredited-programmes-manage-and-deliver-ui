@@ -119,7 +119,6 @@ export default class CreateGroupWhenPresenter {
       `
           : ''
       }
-
       <div class="govuk-date-input__item">
         <div>
           <label class="govuk-label govuk-date-input__label" for="${idBase}-hour">Hour</label>
@@ -163,34 +162,13 @@ export default class CreateGroupWhenPresenter {
     return `${formatted.join(', ')} and ${lastMessage}`
   }
 
-  get selectedDays(): DayKey[] {
+  private get selectedDays(): DayKey[] {
     if (this.createGroupFormData) {
       return this.createGroupFormData.map(slot => slot.dayOfWeek as DayKey)
     }
     const daysOfWeek = this.userInputData?.['days-of-week'] as DayKey[] | DayKey
     if (!daysOfWeek) return []
     return Array.isArray(daysOfWeek) ? daysOfWeek : [daysOfWeek]
-  }
-
-  get dayTimes(): Record<DayKey, { hour?: number; minutes?: number; amOrPm?: string }> {
-    const map = {} as Record<DayKey, { hour?: number; minutes?: number; amOrPm?: string }>
-
-    DAY_CONFIG.forEach(day => {
-      const { idBase, key } = day
-      const hour = this.userInputData?.[`${idBase}-hour`]
-      const minute = this.userInputData?.[`${idBase}-minute`]
-      const ampm = this.userInputData?.[`${idBase}-ampm`]
-
-      if (hour || minute || ampm) {
-        map[key] = {
-          hour: hour ? Number(hour) : undefined,
-          minutes: minute ? Number(minute) : undefined,
-          amOrPm: ampm as string | undefined,
-        }
-      }
-    })
-
-    return map
   }
 
   get errorSummary() {
