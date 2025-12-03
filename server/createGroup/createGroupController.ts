@@ -127,7 +127,12 @@ export default class CreateGroupController {
       }
     }
 
-    const presenter = new CreateGroupWhenPresenter(formError, userInputData, createGroupFormData.groupCode)
+    const presenter = new CreateGroupWhenPresenter(
+      formError,
+      userInputData,
+      createGroupFormData.groupCode,
+      createGroupFormData.createGroupSessionSlot,
+    )
     const view = new CreateGroupWhenView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }

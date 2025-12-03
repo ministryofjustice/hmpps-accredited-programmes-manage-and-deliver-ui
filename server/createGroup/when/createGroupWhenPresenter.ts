@@ -1,3 +1,4 @@
+import { CreateGroupSessionSlot } from '@manage-and-deliver-api'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
 import { DAY_CONFIG, DayKey } from './daysOfWeek'
@@ -23,6 +24,7 @@ export default class CreateGroupWhenPresenter {
     private readonly validationError: FormValidationError | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
     private readonly groupCode: string,
+    private readonly createGroupFormData: CreateGroupSessionSlot[],
   ) {}
 
   get text() {
@@ -43,15 +45,27 @@ export default class CreateGroupWhenPresenter {
     DAY_CONFIG.forEach(({ idBase, key }) => {
       slots[idBase] = {
         hour: {
-          value: this.getSlotValue(key, 'hour'),
+          value: this.getSlotValue(
+            key,
+            'hour',
+            this.createGroupFormData?.find(it => it.dayOfWeek === key.toString())?.hour.toString(),
+          ),
           errorMessage: PresenterUtils.errorMessage(this.validationError, `${idBase}-hour`),
         },
         minute: {
-          value: this.getSlotValue(key, 'minute'),
+          value: this.getSlotValue(
+            key,
+            'minute',
+            this.createGroupFormData?.find(it => it.dayOfWeek === key.toString())?.minutes.toString(),
+          ),
           errorMessage: PresenterUtils.errorMessage(this.validationError, `${idBase}-minute`),
         },
         ampm: {
-          value: this.getSlotValue(key, 'amOrPm'),
+          value: this.getSlotValue(
+            key,
+            'ampm',
+            this.createGroupFormData?.find(it => it.dayOfWeek === key.toString())?.amOrPm.toLowerCase(),
+          ),
           errorMessage: PresenterUtils.errorMessage(this.validationError, `${idBase}-ampm`),
         },
       }
@@ -65,8 +79,12 @@ export default class CreateGroupWhenPresenter {
     }
   }
 
-  private getSlotValue(dayOfWeek: DayKey, field: 'hour' | 'minute' | 'amOrPm'): string | number {
-    return this.utils.stringValue(null, `${dayOfWeek.toLowerCase()}-${field}`)
+  private getSlotValue(
+    dayOfWeek: DayKey,
+    field: 'hour' | 'minute' | 'ampm',
+    modelValue: string | null,
+  ): string | number {
+    return this.utils.stringValue(modelValue, `${dayOfWeek.toLowerCase()}-${field}`)
   }
 
   get whenWillGroupRunCheckBoxArgs(): CheckboxesArgsItem[] {
@@ -92,6 +110,7 @@ export default class CreateGroupWhenPresenter {
   ): string {
     const slot = this.fields.slots[key]
     const errorMessages = [slot.hour.errorMessage, slot.minute.errorMessage, slot.ampm.errorMessage]
+    const formattedErrorMessage = this.formatErrorMessages(errorMessages)
 
     return `
     <div class="govuk-date-input" id="${idBase}-time">
@@ -99,7 +118,7 @@ export default class CreateGroupWhenPresenter {
         errorMessages.length > 0
           ? `
         <p id="${idBase}-error" class="govuk-error-message">
-          <span class="govuk-visually-hidden">Error:</span> ${errorMessages.filter(Boolean).join(', ')}
+          <span class="govuk-visually-hidden">Error:</span> ${formattedErrorMessage}
         </p>
       `
           : ''
@@ -128,8 +147,8 @@ export default class CreateGroupWhenPresenter {
           <label class="govuk-label govuk-date-input__label" for="${idBase}-ampm">am or pm</label>
           <select class="govuk-select govuk-date-select__select ${slot.ampm.errorMessage ? 'govuk-select--error' : ''}" id="${idBase}-ampm" name="${idBase}-ampm">
             <option value=""></option>
-            <option value="am" ${timesForDay.amOrPm === 'AM' ? 'selected' : ''}>am</option>
-            <option value="pm" ${timesForDay.amOrPm === 'PM' ? 'selected' : ''}>pm</option>
+            <option value="am" ${slot.ampm.value === 'am' ? 'selected' : ''}>am</option>
+            <option value="pm" ${slot.ampm.value === 'pm' ? 'selected' : ''}>pm</option>
           </select>
         </div>
       </div>
@@ -137,7 +156,21 @@ export default class CreateGroupWhenPresenter {
   `
   }
 
+  private formatErrorMessages(errors: (string | null)[]): string {
+    const filtered = errors.filter(Boolean) as string[]
+    if (filtered.length === 0) return ''
+    if (filtered.length === 1) return filtered[0]
+
+    const formatted = [filtered[0], ...filtered.slice(1).map(msg => msg.toLowerCase())]
+
+    const lastMessage = formatted.pop()
+    return `${formatted.join(', ')} and ${lastMessage}`
+  }
+
   get selectedDays(): DayKey[] {
+    if (this.createGroupFormData) {
+      return this.createGroupFormData.map(slot => slot.dayOfWeek as DayKey)
+    }
     const daysOfWeek = this.userInputData?.['days-of-week'] as DayKey[] | DayKey
     if (!daysOfWeek) return []
     return Array.isArray(daysOfWeek) ? daysOfWeek : [daysOfWeek]

@@ -46,6 +46,7 @@ type ReferralStatusHistory = components['schemas']['ReferralStatusHistory']
 type LocationFilterValues = components['schemas']['LocationFilterValues']
 type CaseListReferrals = components['schemas']['CaseListReferrals']
 type CreateGroupRequest = components['schemas']['CreateGroupRequest']
+type CreateGroupSessionSlot = components['schemas']['CreateGroupSessionSlot']
 type Group = components['schemas']['Group']
 type ProgrammeGroupCohortEnum = components['schemas']['CreateGroup']['ProgrammeGroupCohort']
 type ProgrammeGroupDate = components['schemas']['CreateGroup']['startedAtDate']
@@ -74,6 +75,7 @@ export type {
   CreateAvailability,
   CreateDeliveryLocationPreferences,
   CreateGroupRequest,
+  CreateGroupSessionSlot,
   CreateOrUpdateReferralMotivationBackgroundAndNonAssociations,
   CreateReferralStatusHistory,
   DailyAvailabilityModel,

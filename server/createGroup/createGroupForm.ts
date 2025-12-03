@@ -292,9 +292,7 @@ export default class CreateGroupForm {
           body(`${idBase}-hour`)
             .if(
               body('days-of-week').custom((_, { req }) => {
-                const dayOfWeek = req.body['days-of-week']
-                const selected: DayKey[] = Array.isArray(dayOfWeek) ? dayOfWeek : dayOfWeek ? [dayOfWeek] : []
-                return selected.includes(key)
+                return this.doesSelectedIncludeKey(req.body['days-of-week'], key)
               }),
             )
             .notEmpty()
@@ -302,14 +300,11 @@ export default class CreateGroupForm {
             .bail()
             .isInt({ min: 1, max: 12 })
             .withMessage(`${errorMessages.createGroup.createGroupWhenHourInvalid} for ${prettyDay}`),
-
           // Minute field validation
           body(`${idBase}-minute`)
             .if(
               body('days-of-week').custom((_, { req }) => {
-                const dayOfWeek = req.body['days-of-week']
-                const selected: DayKey[] = Array.isArray(dayOfWeek) ? dayOfWeek : dayOfWeek ? [dayOfWeek] : []
-                return selected.includes(key)
+                return this.doesSelectedIncludeKey(req.body['days-of-week'], key)
               }),
             )
             .optional({ checkFalsy: true })
@@ -320,9 +315,7 @@ export default class CreateGroupForm {
           body(`${idBase}-ampm`)
             .if(
               body('days-of-week').custom((_, { req }) => {
-                const dayOfWeek = req.body['days-of-week']
-                const selected: DayKey[] = Array.isArray(dayOfWeek) ? dayOfWeek : dayOfWeek ? [dayOfWeek] : []
-                return selected.includes(key)
+                return this.doesSelectedIncludeKey(req.body['days-of-week'], key)
               }),
             )
             .notEmpty()
@@ -330,6 +323,16 @@ export default class CreateGroupForm {
         ]
       }),
     ]
+  }
+
+  private doesSelectedIncludeKey(dayOfWeek: DayKey | DayKey[], key: DayKey): boolean {
+    let selected: DayKey[] = []
+    if (Array.isArray(dayOfWeek)) {
+      selected = dayOfWeek
+    } else if (dayOfWeek) {
+      selected = [dayOfWeek]
+    }
+    return selected.includes(key)
   }
 
   private createGroupPduValidations(): ValidationChain[] {
