@@ -256,6 +256,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/admin/clear-missing-data-referrals': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Clear down referrals with missing data
+     * @description Clear down referrals that are missing Oasys and Delius data.
+     */
+    post: operations['clearMissingDataReferrals']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/risks-and-needs/{crn}/thinking-and-behaviour': {
     parameters: {
       query?: never
@@ -546,9 +566,11 @@ export interface paths {
     }
     /**
      * Retrieve the manager associated with the Licence Condition or Requirement associated with a referral
-     * @description Retrieves the manager (Probation Practitioner) associated with the Case, which is upstream of the
+     * @description
+     *           Retrieves the manager (Probation Practitioner) associated with the Case, which is upstream of the
      *           Referral itself.  We use this to retrieve a list of Delivery Locations (Offices) within the same
      *           PDU as a Referral itself.
+     *
      */
     get: operations['getManagerByReferralId']
     put?: never
@@ -686,7 +708,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/bff/region/{regionCode}/members': {
+  '/bff/region/members': {
     parameters: {
       query?: never
       header?: never
@@ -694,8 +716,8 @@ export interface paths {
       cookie?: never
     }
     /**
-     * BFF endpoint to get a list of members for a Region.
-     * @description BFF endpoint to retrieve a list of team members for a Region.
+     * BFF endpoint to get a list of members for the logged user's region Region.
+     * @description BFF endpoint to retrieve a list of team members for the logged in user's Region.
      */
     get: operations['getMembersInRegion']
     put?: never
@@ -715,11 +737,13 @@ export interface paths {
     }
     /**
      * A Backend-For-Frontend endpoint for the multi-page Delivery Location Preferences form
-     * @description Retrieves all the data needed for the multi-page Delivery Location Preferences form, for a Referral:
+     * @description
+     *           Retrieves all the data needed for the multi-page Delivery Location Preferences form, for a Referral:
      *           - Person on Probation summary information (from nDelius)
      *           - Existing delivery location preferences (or `null`)
      *           - Primary PDU delivery locations for the Manager associated with the Referral (from nDelius)
      *           - Other PDUs in the same region (from nDelius)
+     *
      */
     get: operations['getDeliveryLocationPreferencesFormData']
     put?: never
@@ -1167,6 +1191,11 @@ export interface components {
        */
       additionalDetails?: string
     }
+    /**
+     * @description AM/PM time indicator
+     * @enum {string}
+     */
+    AmOrPm: 'AM' | 'PM'
     CreateGroupRequest: {
       /** @description The code for the group */
       groupCode: string
@@ -1189,16 +1218,49 @@ export interface components {
       deliveryLocationName: string
       /** @description The code of the location that the group will be delivered at */
       deliveryLocationCode: string
+      /** @description The person code and name and type of the teamMembers of the group */
+      teamMembers: components['schemas']['CreateGroupTeamMember'][]
     }
+    /** @description Session slot details for a programme group */
     CreateGroupSessionSlot: {
-      /** @enum {string} */
+      /**
+       * @description The day of the week for the session
+       * @example MONDAY
+       * @enum {string}
+       */
       dayOfWeek: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
-      /** Format: int32 */
+      /**
+       * Format: int32
+       * @description The hour of the session in 12-hour format
+       * @example 9
+       */
       hour: number
-      /** Format: int32 */
+      /**
+       * Format: int32
+       * @description The minutes of the session
+       * @example 0
+       */
       minutes: number
-      /** @enum {string} */
-      amOrPm: 'AM' | 'PM'
+      /**
+       * @description AM or PM indicator
+       * @example AM
+       */
+      amOrPm: components['schemas']['AmOrPm']
+    }
+    CreateGroupTeamMember: {
+      /** @description The full name of the facilitator for the group */
+      facilitator: string
+      /** @description The code of the facilitator for the group */
+      facilitatorCode: string
+      /** @description The name of the team that the member belongs to */
+      teamName: string
+      /** @description The code of the team that the member belongs to */
+      teamCode: string
+      /**
+       * @description The type of the facilitator for the group
+       * @enum {string}
+       */
+      teamMemberType: 'TREATMENT_MANAGER' | 'LEAD_FACILITATOR' | 'REGULAR_FACILITATOR' | 'COVER_FACILITATOR'
     }
     /** @enum {string} */
     ProgrammeGroupCohort: 'GENERAL' | 'GENERAL_LDC' | 'SEXUAL' | 'SEXUAL_LDC'
@@ -1656,11 +1718,9 @@ export interface components {
       problemsReadWriteNum?: string
       /** @example 2-Significant problems */
       learningDifficulties?: string
-      /**
-       * @example [
+      /** @example [
        *       "Difficulty with concentration"
-       *     ]
-       */
+       *     ] */
       problemAreas?: string[]
       /** @example 0 */
       qualifications?: string
@@ -2257,6 +2317,12 @@ export interface components {
     /** @description Information identifying the group. */
     Group: {
       /**
+       * Format: uuid
+       * @description A unique id identifying the programme group.
+       * @example 1ff57cea-352c-4a99-8f66-3e626aac3265
+       */
+      id: string
+      /**
        * @description A unique code identifying the programme group.
        * @example AP_BIRMINGHAM_NORTH
        */
@@ -2439,6 +2505,11 @@ export interface components {
        * @example 12
        */
       otherTabTotal: number
+      /**
+       * @description The region name the groups belongs to.
+       * @example West Midlands
+       */
+      regionName: string
     }
     PageGroup: {
       /** Format: int64 */
@@ -3463,6 +3534,42 @@ export interface operations {
         }
       }
       /** @description Invalid request format or invalid UUID format */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  clearMissingDataReferrals: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Update started (not completed, process is async) */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad Request */
       400: {
         headers: {
           [name: string]: unknown
@@ -4642,8 +4749,8 @@ export interface operations {
         pageable: components['schemas']['Pageable']
         /** @description CRN or persons name */
         crnOrPersonName?: string
-        /** @description Filter by the cohort of the referral Eg: SEXUAL_OFFENCE or GENERAL_OFFENCE */
-        cohort?: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
+        /** @description Filter by the cohort of the referral using the human-readable label, e.g. 'General Offence', 'General Offence - LDC', 'Sexual Offence', 'Sexual Offence - LDC' */
+        cohort?: string
         /** @description Filter by the status of the referral */
         status?: string
         /** @description Filter by the pdu of the referral */
@@ -4832,9 +4939,7 @@ export interface operations {
     parameters: {
       query?: never
       header?: never
-      path: {
-        regionCode: string
-      }
+      path?: never
       cookie?: never
     }
     requestBody?: never
