@@ -153,7 +153,7 @@ describe('Create Group Controller', () => {
         .get('/group/create-a-group/group-start-date')
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain('Create a group date')
+          expect(res.text).toContain(' Add a start date for the group')
         })
     })
 
@@ -182,7 +182,7 @@ describe('Create Group Controller', () => {
         .send({ 'create-group-date': '10/7/2050' })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain('Redirecting to /group/create-a-group/group-cohort')
+          expect(res.text).toContain('Redirecting to /group/create-a-group/group-days-and-times')
         })
     })
 

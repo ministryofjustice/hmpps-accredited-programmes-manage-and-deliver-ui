@@ -1,8 +1,8 @@
 import { CreateGroupRequest } from '@manage-and-deliver-api'
-import { FormValidationError } from '../utils/formValidationError'
-import PresenterUtils from '../utils/presenterUtils'
+import { FormValidationError } from '../../utils/formValidationError'
+import PresenterUtils from '../../utils/presenterUtils'
 
-export default class CreateGroupCohortPresenter {
+export default class CreateGroupDatePresenter {
   constructor(
     private readonly validationError: FormValidationError | null = null,
     private readonly createGroupFormData: Partial<CreateGroupRequest> | null = null,
@@ -13,18 +13,22 @@ export default class CreateGroupCohortPresenter {
   }
 
   get backLinkUri() {
-    return `/group/create-a-group/group-start-date`
+    return `/group/create-a-group/create-group-code`
   }
 
   get errorSummary() {
     return PresenterUtils.errorSummary(this.validationError)
   }
 
+  get utils() {
+    return new PresenterUtils(this.createGroupFormData)
+  }
+
   get fields() {
     return {
-      createGroupCohort: {
-        value: this.createGroupFormData.cohort,
-        errorMessage: PresenterUtils.errorMessage(this.validationError, 'create-group-cohort'),
+      createGroupDate: {
+        value: this.createGroupFormData?.startedAtDate,
+        errorMessage: PresenterUtils.errorMessage(this.validationError, 'create-group-date'),
       },
     }
   }

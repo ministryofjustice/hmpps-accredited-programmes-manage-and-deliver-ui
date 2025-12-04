@@ -1,7 +1,7 @@
 import { CodeDescription, CreateGroupRequest } from '@manage-and-deliver-api'
-import { FormValidationError } from '../utils/formValidationError'
-import PresenterUtils from '../utils/presenterUtils'
-import { RadiosArgsItem } from '../utils/govukFrontendTypes'
+import { FormValidationError } from '../../utils/formValidationError'
+import PresenterUtils from '../../utils/presenterUtils'
+import { RadiosArgsItem } from '../../utils/govukFrontendTypes'
 
 export default class CreateGroupLocationPresenter {
   constructor(

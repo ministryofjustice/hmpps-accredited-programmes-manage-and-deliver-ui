@@ -46,10 +46,12 @@ type ReferralStatusHistory = components['schemas']['ReferralStatusHistory']
 type LocationFilterValues = components['schemas']['LocationFilterValues']
 type CaseListReferrals = components['schemas']['CaseListReferrals']
 type CreateGroupRequest = components['schemas']['CreateGroupRequest']
+type CreateGroupSessionSlot = components['schemas']['CreateGroupSessionSlot']
 type Group = components['schemas']['Group']
 type ProgrammeGroupCohortEnum = components['schemas']['CreateGroup']['ProgrammeGroupCohort']
 type ProgrammeGroupDate = components['schemas']['CreateGroup']['startedAtDate']
 type ProgrammeGroupSexEnum = components['schemas']['CreateGroup']['sex']
+type ProgrammeGroupWhen = components['schemas']['CreateGroup']['createGroupSessionSlot']
 type ProgrammeGroupEntity = components['schemas']['ProgrammeGroupEntity']
 type AllocateToGroupRequest = components['schemas']['AllocateToGroupRequest']
 type AllocateToGroupResponse = components['schemas']['AllocateToGroupResponse']
@@ -73,6 +75,7 @@ export type {
   CreateAvailability,
   CreateDeliveryLocationPreferences,
   CreateGroupRequest,
+  CreateGroupSessionSlot,
   CreateOrUpdateReferralMotivationBackgroundAndNonAssociations,
   CreateReferralStatusHistory,
   DailyAvailabilityModel,
@@ -99,6 +102,7 @@ export type {
   ProgrammeGroupDetails,
   ProgrammeGroupEntity,
   ProgrammeGroupSexEnum,
+  ProgrammeGroupWhen,
   ReferralCaseListItem,
   ReferralDetails,
   ReferralMotivationBackgroundAndNonAssociations,

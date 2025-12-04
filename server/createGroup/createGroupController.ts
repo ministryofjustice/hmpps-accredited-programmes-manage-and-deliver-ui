@@ -3,23 +3,25 @@ import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
 import { FormValidationError } from '../utils/formValidationError'
-import CreateGroupCodePresenter from './createGroupCodePresenter'
-import CreateGroupCodeView from './createGroupCodeView'
-import CreateGroupDatePresenter from './createGroupDatePresenter'
-import CreateGroupDateView from './createGroupDateView'
-import CreateGroupCohortPresenter from './createGroupCohortPresenter'
-import CreateGroupCohortView from './createGroupCohortView'
-import CreateGroupCyaPresenter from './createGroupCyaPresenter'
-import CreateGroupCyaView from './createGroupCyaView'
+import CreateGroupCodePresenter from './code/createGroupCodePresenter'
+import CreateGroupCodeView from './code/createGroupCodeView'
+import CreateGroupDatePresenter from './date/createGroupDatePresenter'
+import CreateGroupDateView from './date/createGroupDateView'
+import CreateGroupWhenPresenter from './when/createGroupWhenPresenter'
+import CreateGroupWhenView from './when/createGroupWhenView'
+import CreateGroupCohortPresenter from './cohort/createGroupCohortPresenter'
+import CreateGroupCohortView from './cohort/createGroupCohortView'
+import CreateGroupCyaPresenter from './check-your-answers/createGroupCyaPresenter'
+import CreateGroupCyaView from './check-your-answers/createGroupCyaView'
 import CreateGroupForm from './createGroupForm'
-import CreateGroupSexPresenter from './createGroupSexPresenter'
-import CreateGroupSexView from './createGroupSexView'
-import CreateGroupStartPresenter from './createGroupStartPresenter'
-import CreateGroupStartView from './createGroupStartView'
-import CreateGroupPduPresenter from './createGroupPduPresenter'
-import CreateGroupPduView from './createGroupPduView'
-import CreateGroupLocationPresenter from './createGroupLocationPresenter'
-import CreateGroupLocationView from './createGroupLocationView'
+import CreateGroupSexPresenter from './sex/createGroupSexPresenter'
+import CreateGroupSexView from './sex/createGroupSexView'
+import CreateGroupStartPresenter from './start/createGroupStartPresenter'
+import CreateGroupStartView from './start/createGroupStartView'
+import CreateGroupPduPresenter from './pdu/createGroupPduPresenter'
+import CreateGroupPduView from './pdu/createGroupPduView'
+import CreateGroupLocationPresenter from './location/createGroupLocationPresenter'
+import CreateGroupLocationView from './location/createGroupLocationView'
 import CreateGroupTreatmentManagerPresenter from './createGroupTreatmentManagerPresenter'
 import CreateGroupTreatmentManagerView from './createGroupTreatmentManagerView'
 
@@ -93,12 +95,43 @@ export default class CreateGroupController {
           ...createGroupFormData,
           startedAtDate: data.paramsForUpdate.startedAtDate,
         }
-        return res.redirect(`/group/create-a-group/group-cohort`)
+        return res.redirect(`/group/create-a-group/group-days-and-times`)
       }
     }
 
     const presenter = new CreateGroupDatePresenter(formError, formDataForPresenter)
     const view = new CreateGroupDateView(presenter)
+    return ControllerUtils.renderWithLayout(res, view, null)
+  }
+
+  async showCreateGroupWhen(req: Request, res: Response): Promise<void> {
+    const { createGroupFormData } = req.session
+    let formError: FormValidationError | null = null
+    let userInputData = null
+
+    if (req.method === 'POST') {
+      const data = await new CreateGroupForm(req).createGroupWhenData()
+
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+        userInputData = req.body
+      } else {
+        req.session.createGroupFormData = {
+          ...createGroupFormData,
+          createGroupSessionSlot: data.paramsForUpdate.createGroupSessionSlot,
+        }
+        return res.redirect(`/group/create-a-group/group-cohort`)
+      }
+    }
+
+    const presenter = new CreateGroupWhenPresenter(
+      createGroupFormData.groupCode,
+      createGroupFormData.createGroupSessionSlot,
+      formError,
+      userInputData,
+    )
+    const view = new CreateGroupWhenView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
 

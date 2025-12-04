@@ -4,6 +4,7 @@ import { body, ValidationChain } from 'express-validator'
 import errorMessages from '../utils/errorMessages'
 import { FormData } from '../utils/forms/formData'
 import FormUtils from '../utils/formUtils'
+import { DAY_CONFIG, DayKey } from './when/daysOfWeek'
 
 export default class CreateGroupForm {
   constructor(
@@ -69,6 +70,56 @@ export default class CreateGroupForm {
     return {
       paramsForUpdate: {
         startedAtDate: this.request.body['create-group-date'],
+      },
+      error: null,
+    }
+  }
+
+  async createGroupWhenData(): Promise<FormData<Partial<CreateGroupRequest>>> {
+    const validationResult = await FormUtils.runValidations({
+      request: this.request,
+      validations: this.createGroupWhenValidations(),
+    })
+
+    const error = FormUtils.validationErrorFromResult(validationResult)
+    if (error) {
+      return {
+        paramsForUpdate: null,
+        error,
+      }
+    }
+
+    const raw = this.request.body['days-of-week']
+    const selectedDays: DayKey[] = []
+    if (Array.isArray(raw)) {
+      selectedDays.push(...(raw as DayKey[]))
+    } else if (raw) {
+      selectedDays.push(raw as DayKey)
+    }
+
+    const slots = selectedDays.map(dayOfWeek => {
+      const cfg = DAY_CONFIG.find(d => d.key === dayOfWeek)
+      const idBase = cfg?.idBase ?? dayOfWeek.toLowerCase()
+
+      const hourRaw = this.request.body[`${idBase}-hour`]
+      const minuteRaw = this.request.body[`${idBase}-minute`]
+      const ampmRaw = this.request.body[`${idBase}-ampm`]
+
+      const hour = Number(hourRaw)
+      const minutes = minuteRaw === '' || minuteRaw === undefined ? 0 : Number(minuteRaw)
+      const amOrPm = (ampmRaw || '').toUpperCase() as 'AM' | 'PM'
+
+      return {
+        dayOfWeek,
+        hour,
+        minutes,
+        amOrPm,
+      }
+    })
+
+    return {
+      paramsForUpdate: {
+        createGroupSessionSlot: slots,
       },
       error: null,
     }
@@ -213,6 +264,75 @@ export default class CreateGroupForm {
 
   private createGroupSexValidations(): ValidationChain[] {
     return [body('create-group-sex').notEmpty().withMessage(errorMessages.createGroup.createGroupSexSelect)]
+  }
+
+  private createGroupWhenValidations(): ValidationChain[] {
+    return [
+      body('create-group-when').custom((_, { req }) => {
+        const raw = req.body['days-of-week']
+
+        const selected: DayKey[] = []
+        if (Array.isArray(raw)) {
+          selected.push(...(raw as DayKey[]))
+        } else if (raw) {
+          selected.push(raw as DayKey)
+        }
+        if (selected.length === 0) {
+          throw new Error(errorMessages.createGroup.createGroupWhenSelect)
+        }
+
+        return true
+      }),
+
+      ...DAY_CONFIG.flatMap(({ key, idBase, label }) => {
+        const prettyDay = label.endsWith('s') ? label.slice(0, -1) : label
+
+        return [
+          // Hour field validation
+          body(`${idBase}-hour`)
+            .if(
+              body('days-of-week').custom((_, { req }) => {
+                return this.doesSelectedIncludeKey(req.body['days-of-week'], key)
+              }),
+            )
+            .notEmpty()
+            .withMessage(`${errorMessages.createGroup.createGroupWhenHourRequired} for ${prettyDay}`)
+            .bail()
+            .isInt({ min: 1, max: 12 })
+            .withMessage(`${errorMessages.createGroup.createGroupWhenHourInvalid} for ${prettyDay}`),
+          // Minute field validation
+          body(`${idBase}-minute`)
+            .if(
+              body('days-of-week').custom((_, { req }) => {
+                return this.doesSelectedIncludeKey(req.body['days-of-week'], key)
+              }),
+            )
+            .optional({ checkFalsy: true })
+            .isInt({ min: 0, max: 59 })
+            .withMessage(`${errorMessages.createGroup.createGroupWhenMinutesInvalid} for ${prettyDay}`),
+
+          // AM/PM field validation
+          body(`${idBase}-ampm`)
+            .if(
+              body('days-of-week').custom((_, { req }) => {
+                return this.doesSelectedIncludeKey(req.body['days-of-week'], key)
+              }),
+            )
+            .notEmpty()
+            .withMessage(`${errorMessages.createGroup.createGroupWhenAmOrPmRequired} for ${prettyDay}`),
+        ]
+      }),
+    ]
+  }
+
+  private doesSelectedIncludeKey(dayOfWeek: DayKey | DayKey[], key: DayKey): boolean {
+    let selected: DayKey[] = []
+    if (Array.isArray(dayOfWeek)) {
+      selected = dayOfWeek
+    } else if (dayOfWeek) {
+      selected = [dayOfWeek]
+    }
+    return selected.includes(key)
   }
 
   private createGroupPduValidations(): ValidationChain[] {

@@ -1,5 +1,5 @@
-import { InputArgs } from '../utils/govukFrontendTypes'
-import ViewUtils from '../utils/viewUtils'
+import { InputArgs } from '../../utils/govukFrontendTypes'
+import ViewUtils from '../../utils/viewUtils'
 import CreateGroupCodePresenter from './createGroupCodePresenter'
 
 export default class CreateGroupCodeView {

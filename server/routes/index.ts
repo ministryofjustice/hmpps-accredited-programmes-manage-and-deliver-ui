@@ -217,6 +217,9 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   getOrPost('/group/create-a-group/group-start-date', async (req, res) => {
     await createGroupController.showCreateGroupDate(req, res)
   })
+  getOrPost('/group/create-a-group/group-days-and-times', async (req, res) => {
+    await createGroupController.showCreateGroupWhen(req, res)
+  })
 
   getOrPost('/group/create-a-group/group-sex', async (req, res) => {
     await createGroupController.showCreateGroupSex(req, res)

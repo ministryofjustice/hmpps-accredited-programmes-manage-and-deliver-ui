@@ -708,7 +708,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/bff/region/{regionCode}/members': {
+  '/bff/region/members': {
     parameters: {
       query?: never
       header?: never
@@ -716,8 +716,8 @@ export interface paths {
       cookie?: never
     }
     /**
-     * BFF endpoint to get a list of members for a Region.
-     * @description BFF endpoint to retrieve a list of team members for a Region.
+     * BFF endpoint to get a list of members for the logged user's region Region.
+     * @description BFF endpoint to retrieve a list of team members for the logged in user's Region.
      */
     get: operations['getMembersInRegion']
     put?: never
@@ -4749,8 +4749,8 @@ export interface operations {
         pageable: components['schemas']['Pageable']
         /** @description CRN or persons name */
         crnOrPersonName?: string
-        /** @description Filter by the cohort of the referral Eg: SEXUAL_OFFENCE or GENERAL_OFFENCE */
-        cohort?: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
+        /** @description Filter by the cohort of the referral using the human-readable label, e.g. 'General Offence', 'General Offence - LDC', 'Sexual Offence', 'Sexual Offence - LDC' */
+        cohort?: string
         /** @description Filter by the status of the referral */
         status?: string
         /** @description Filter by the pdu of the referral */
@@ -4939,9 +4939,7 @@ export interface operations {
     parameters: {
       query?: never
       header?: never
-      path: {
-        regionCode: string
-      }
+      path?: never
       cookie?: never
     }
     requestBody?: never

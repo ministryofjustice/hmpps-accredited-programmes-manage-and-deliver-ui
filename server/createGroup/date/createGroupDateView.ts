@@ -1,4 +1,4 @@
-import ViewUtils from '../utils/viewUtils'
+import ViewUtils from '../../utils/viewUtils'
 import CreateGroupDatePresenter from './createGroupDatePresenter'
 
 export default class CreateGroupDateView {
@@ -27,7 +27,7 @@ export default class CreateGroupDateView {
         text: 'This is when the pre-group one-to-ones are expected to start. Enter a date, for example, 10/7/2025, or select one from the calendar.',
       },
       label: {
-        text: 'Create a group date',
+        text: 'Add a start date for the group',
         classes: 'govuk-label--l',
         isPageHeading: true,
       },

@@ -1,6 +1,6 @@
 import { CreateGroupRequest } from '@manage-and-deliver-api'
-import { FormValidationError } from '../utils/formValidationError'
-import PresenterUtils from '../utils/presenterUtils'
+import { FormValidationError } from '../../utils/formValidationError'
+import PresenterUtils from '../../utils/presenterUtils'
 
 export default class CreateGroupCodePresenter {
   constructor(
