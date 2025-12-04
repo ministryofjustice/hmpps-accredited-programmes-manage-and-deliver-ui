@@ -30,7 +30,7 @@ describe('CreateGroupForm', () => {
             {
               errorSummaryLinkedField: 'create-group-code',
               formFields: ['create-group-code'],
-              message: 'Enter a code for your group.',
+              message: 'Enter a code for your group',
             },
           ],
         })
@@ -102,7 +102,7 @@ describe('CreateGroupForm', () => {
             {
               errorSummaryLinkedField: 'create-group-date',
               formFields: ['create-group-date'],
-              message: 'Enter or select a date.',
+              message: 'Enter or select a date',
             },
           ],
         })
@@ -117,7 +117,7 @@ describe('CreateGroupForm', () => {
         const data = await new CreateGroupForm(request).createGroupDateData()
 
         expect(data.paramsForUpdate).toBeNull()
-        expect(data.error.errors[0].message).toBe('Enter or select a date in the future.')
+        expect(data.error.errors[0].message).toBe('Enter or select a date in the future')
       })
     })
   })
@@ -168,7 +168,7 @@ describe('CreateGroupForm', () => {
             {
               errorSummaryLinkedField: 'create-group-when',
               formFields: ['create-group-when'],
-              message: 'Select at least one day.',
+              message: 'Select at least one day',
             },
           ],
         })
@@ -296,7 +296,7 @@ describe('CreateGroupForm', () => {
             {
               errorSummaryLinkedField: 'create-group-cohort',
               formFields: ['create-group-cohort'],
-              message: 'Select a cohort.',
+              message: 'Select a cohort',
             },
           ],
         })
@@ -332,7 +332,7 @@ describe('CreateGroupForm', () => {
             {
               errorSummaryLinkedField: 'create-group-sex',
               formFields: ['create-group-sex'],
-              message: 'Select a sex.',
+              message: 'Select a sex',
             },
           ],
         })

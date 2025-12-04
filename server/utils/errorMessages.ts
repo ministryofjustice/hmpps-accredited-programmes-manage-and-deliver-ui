@@ -41,7 +41,7 @@ export default {
   addAvailabilityDates: {
     requireEndDateEmpty: `Select whether the availability details will change on a specific date.`,
     endDateEmpty: `Enter a date in the format 17/5/2024 or select the calendar icon to pick a date.`,
-    endDateInPast: 'Enter or select a date in the future.',
+    endDateInPast: 'Enter or select a date in the future',
   },
   addPreferredLocations: {
     addAnotherPDU: 'Select whether you want to add locations in another PDU',
@@ -71,15 +71,15 @@ export default {
     detailsTooLong: 'Details must be 500 characters or fewer.',
   },
   createGroup: {
-    createGroupCodeEmpty: 'Enter a code for your group.',
+    createGroupCodeEmpty: 'Enter a code for your group',
     createGroupCodeExists: (code: string) =>
       `Group code ${code} already exists for a group in this region. Enter a different code.`,
-    createGroupCohortSelect: 'Select a cohort.',
-    createGroupDateSelect: 'Enter or select a date.',
+    createGroupCohortSelect: 'Select a cohort',
+    createGroupDateSelect: 'Enter or select a date',
     createGroupDateInvalid: 'Enter a date in the format 10/7/2025',
-    createGroupDateInPast: 'Enter or select a date in the future.',
-    createGroupSexSelect: 'Select a sex.',
-    createGroupWhenSelect: 'Select at least one day.',
+    createGroupDateInPast: 'Enter or select a date in the future',
+    createGroupSexSelect: 'Select a sex',
+    createGroupWhenSelect: 'Select at least one day',
     createGroupWhenHourRequired: 'Enter the hour',
     createGroupWhenHourInvalid: 'Enter an hour between 1 and 12',
     createGroupWhenAmOrPmRequired: 'Select am or pm',
