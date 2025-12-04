@@ -708,7 +708,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/bff/region/{regionCode}/members': {
+  '/bff/region/members': {
     parameters: {
       query?: never
       header?: never
@@ -716,8 +716,8 @@ export interface paths {
       cookie?: never
     }
     /**
-     * BFF endpoint to get a list of members for a Region.
-     * @description BFF endpoint to retrieve a list of team members for a Region.
+     * BFF endpoint to get a list of members for the logged user's region Region.
+     * @description BFF endpoint to retrieve a list of team members for the logged in user's Region.
      */
     get: operations['getMembersInRegion']
     put?: never
@@ -841,7 +841,11 @@ export interface paths {
       path?: never
       cookie?: never
     }
-    /** Get reference data for displaying the possible filters for the ui */
+    /**
+     * Get reference data for displaying the possible filters for the ui
+     * @deprecated
+     * @description The filter reference data to display in the UI - now deprecated as filters are returned from the case list endpoint
+     */
     get: operations['getCaseListFilterData']
     put?: never
     post?: never
@@ -2253,24 +2257,53 @@ export interface components {
       overallThinkingDomainLevel?: 'HIGH_NEED' | 'MEDIUM_NEED' | 'LOW_NEED'
       individualThinkingScores: components['schemas']['IndividualCognitiveScores']
     }
+    CaseListFilterValues: {
+      /** @description Contains lists of open and closed referral statuses */
+      statusFilters: components['schemas']['StatusFilterValues']
+      /** @description Contains pdu's with a list of their reporting teams */
+      locationFilters: components['schemas']['LocationFilterValues'][]
+      /**
+       * @description The available cohorts (offence types or programme categories) that can be used for filtering.
+       * @example [
+       *       "General Offence",
+       *       "General Offence - LDC",
+       *       "Domestic Violence"
+       *     ]
+       */
+      cohort: string[]
+    }
     CaseListReferrals: {
       pagedReferrals: components['schemas']['PageReferralCaseListItem']
       /** Format: int32 */
       otherTabTotal: number
+      filters: components['schemas']['CaseListFilterValues']
+    }
+    LocationFilterValues: {
+      /**
+       * @description The name of a pdu
+       * @example London
+       */
+      pduName: string
+      /**
+       * @description List of the reporting teams for a specific pdu
+       * @example Team 1
+       * @example Team 2
+       */
+      reportingTeams: string[]
     }
     PageReferralCaseListItem: {
       /** Format: int64 */
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -2306,6 +2339,20 @@ export interface components {
       empty?: boolean
       sorted?: boolean
       unsorted?: boolean
+    }
+    StatusFilterValues: {
+      /**
+       * @description Open referral statuses
+       * @example Awaiting assessment
+       * @example Awaiting allocation
+       */
+      open: string[]
+      /**
+       * @description Closed referral statuses
+       * @example Programme complete
+       * @example Withdrawn
+       */
+      closed: string[]
     }
     Pageable: {
       /** Format: int32 */
@@ -2516,14 +2563,14 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -2628,32 +2675,19 @@ export interface components {
        */
       activeProgrammeGroupId: string
     }
-    LocationFilterValues: {
-      /**
-       * @description The name of a pdu
-       * @example London
-       */
-      pduName: string
-      /**
-       * @description List of the reporting teams for a specific pdu
-       * @example Team 1
-       * @example Team 2
-       */
-      reportingTeams: string[]
-    }
     PageGroupItem: {
       /** Format: int64 */
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -2673,26 +2707,6 @@ export interface components {
        * @example 12
        */
       otherTabTotal: number
-    }
-    CaseListFilterValues: {
-      /** @description Contains lists of open and closed referral statuses */
-      statusFilters: components['schemas']['StatusFilterValues']
-      /** @description Contains pdu's with a list of their reporting teams */
-      locationFilters: components['schemas']['LocationFilterValues'][]
-    }
-    StatusFilterValues: {
-      /**
-       * @description Open referral statuses
-       * @example Awaiting assessment
-       * @example Awaiting allocation
-       */
-      open: string[]
-      /**
-       * @description Closed referral statuses
-       * @example Programme complete
-       * @example Withdrawn
-       */
-      closed: string[]
     }
   }
   responses: never
@@ -4749,8 +4763,8 @@ export interface operations {
         pageable: components['schemas']['Pageable']
         /** @description CRN or persons name */
         crnOrPersonName?: string
-        /** @description Filter by the cohort of the referral Eg: SEXUAL_OFFENCE or GENERAL_OFFENCE */
-        cohort?: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
+        /** @description Filter by the cohort of the referral using the human-readable label, e.g. 'General Offence', 'General Offence - LDC', 'Sexual Offence', 'Sexual Offence - LDC' */
+        cohort?: string
         /** @description Filter by the status of the referral */
         status?: string
         /** @description Filter by the pdu of the referral */
@@ -4939,9 +4953,7 @@ export interface operations {
     parameters: {
       query?: never
       header?: never
-      path: {
-        regionCode: string
-      }
+      path?: never
       cookie?: never
     }
     requestBody?: never

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { CaseListFilterValues, ReferralCaseListItem } from '@manage-and-deliver-api'
+import { ReferralCaseListItem } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
 import CaselistFilter from './caselistFilter'
@@ -13,28 +13,19 @@ export default class CaselistController {
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
   ) {}
 
-  private async getCaselistData(req: Request): Promise<{
-    username: string
-    filter: CaselistFilter
-    caseListFilters: CaseListFilterValues
-  }> {
-    const { username } = req.user
+  private prepareSessionFilterParams(req: Request) {
     const pageNumber = req.query.page
-
     if (pageNumber === undefined) {
       req.session.filterParams = req.originalUrl.includes('?') ? req.originalUrl.split('?').pop() : undefined
     }
-
-    const caseListFilters = await this.accreditedProgrammesManageAndDeliverService.getCaseListFilters(username)
-
-    const filter = CaselistFilter.fromRequest(req, caseListFilters.locationFilters)
-
-    return { filter, username, caseListFilters }
   }
 
   async showOpenCaselist(req: Request, res: Response): Promise<void> {
-    const { filter, username, caseListFilters } = await this.getCaselistData(req)
+    this.prepareSessionFilterParams(req)
+    const { username } = req.user
     const pageNumber = req.query.page
+
+    const initialFilter = CaselistFilter.fromRequest(req)
 
     const openCaseList = await this.accreditedProgrammesManageAndDeliverService.getOpenCaselist(
       username,
@@ -42,8 +33,10 @@ export default class CaselistController {
         page: pageNumber ? Number(pageNumber) - 1 : 0,
         size: 10,
       },
-      filter.params,
+      initialFilter.params,
     )
+
+    const filter = CaselistFilter.fromRequest(req, openCaseList.filters.locationFilters)
 
     const presenter = new CaselistPresenter(
       CaselistPageSection.Open,
@@ -51,7 +44,7 @@ export default class CaselistController {
       filter,
       req.session.filterParams,
       true,
-      caseListFilters,
+      openCaseList.filters,
       openCaseList.otherTabTotal,
     )
 
@@ -61,8 +54,10 @@ export default class CaselistController {
   }
 
   async showClosedCaselist(req: Request, res: Response): Promise<void> {
-    const { filter, username, caseListFilters } = await this.getCaselistData(req)
+    this.prepareSessionFilterParams(req)
+    const { username } = req.user
     const pageNumber = req.query.page
+    const initialFilter = CaselistFilter.fromRequest(req)
 
     const closedCaseList = await this.accreditedProgrammesManageAndDeliverService.getClosedCaselist(
       username,
@@ -70,8 +65,10 @@ export default class CaselistController {
         page: pageNumber ? Number(pageNumber) - 1 : 0,
         size: 10,
       },
-      filter.params,
+      initialFilter.params,
     )
+
+    const filter = CaselistFilter.fromRequest(req, closedCaseList.filters.locationFilters)
 
     const presenter = new CaselistPresenter(
       CaselistPageSection.Closed,
@@ -79,7 +76,7 @@ export default class CaselistController {
       filter,
       req.session.filterParams,
       false,
-      caseListFilters,
+      closedCaseList.filters,
       closedCaseList.otherTabTotal,
     )
 
