@@ -166,7 +166,6 @@ export default class CreateGroupWhenPresenter {
     return Array.isArray(daysOfWeek) ? daysOfWeek : [daysOfWeek]
   }
 
-  // Top-level day errors used for deriving extra errors
   private get dayFieldErrors(): Partial<Record<DayKey, string>> {
     const errors: Partial<Record<DayKey, string>> = {}
 
@@ -295,7 +294,6 @@ export default class CreateGroupWhenPresenter {
 
       const group = dayGroups[dayConfig.idBase]
 
-      // Avoid duplicate messages for the same day (e.g. two "Select am or pm for Monday")
       if (hasMessage(group, message)) {
         return
       }
