@@ -1,6 +1,5 @@
 import { CheckboxesArgs, InputArgs, SelectArgs, SelectArgsItem } from '../utils/govukFrontendTypes'
 import CaselistPresenter from './caselistPresenter'
-import CaselistUtils from './caseListUtils'
 
 export default class CaselistView {
   constructor(private readonly presenter: CaselistPresenter) {}
