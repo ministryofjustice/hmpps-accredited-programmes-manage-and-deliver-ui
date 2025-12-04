@@ -138,13 +138,13 @@ export default class CreateGroupCyaPresenter {
       {
         key: 'Treatment Manager:',
         lines: [members.treatmentManager?.facilitator ?? 'Not assigned'],
-        changeLink: '/group/create-a-group/treatment-manager',
+        changeLink: '/group/create-a-group/group-facilitators',
       },
       {
         key: 'Facilitators:',
         lines:
           members.facilitators.length > 0 ? members.facilitators.map(member => member.facilitator) : ['None assigned'],
-        changeLink: '/group/create-a-group/treatment-manager',
+        changeLink: '/group/create-a-group/group-facilitators',
       },
     ]
     if (members.coverFacilitators.length > 0) {
@@ -154,7 +154,7 @@ export default class CreateGroupCyaPresenter {
           members.coverFacilitators.length > 0
             ? members.coverFacilitators.map(member => member.facilitator)
             : ['None assigned'],
-        changeLink: '/group/create-a-group/treatment-manager',
+        changeLink: '/group/create-a-group/group-facilitators',
       })
     }
     return summaryList

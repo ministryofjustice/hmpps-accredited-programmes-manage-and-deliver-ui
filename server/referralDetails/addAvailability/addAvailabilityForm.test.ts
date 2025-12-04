@@ -168,7 +168,7 @@ describe(`AddAvailabilityForm`, () => {
             {
               errorSummaryLinkedField: 'date',
               formFields: ['date'],
-              message: `Enter or select a date in the future`,
+              message: `Enter or select a date in the future.`,
             },
           ])
         },
