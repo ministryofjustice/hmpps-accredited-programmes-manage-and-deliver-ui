@@ -46,6 +46,7 @@ export default class CreateGroupController {
   async showCreateGroupCode(req: Request, res: Response): Promise<void> {
     const { createGroupFormData } = req.session
     const { username } = req.user
+    let userInputData = null
     let formError: FormValidationError | null = null
     if (req.method === 'POST') {
       let existingGroup = { code: '' }
@@ -59,6 +60,7 @@ export default class CreateGroupController {
       if (data.error) {
         res.status(400)
         formError = data.error
+        userInputData = req.body
       } else {
         req.session.createGroupFormData = {
           ...createGroupFormData,
@@ -68,7 +70,7 @@ export default class CreateGroupController {
       }
     }
 
-    const presenter = new CreateGroupCodePresenter(formError, createGroupFormData)
+    const presenter = new CreateGroupCodePresenter(formError, createGroupFormData, userInputData)
     const view = new CreateGroupCodeView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }

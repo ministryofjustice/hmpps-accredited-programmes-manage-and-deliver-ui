@@ -6,6 +6,7 @@ export default class CreateGroupCodePresenter {
   constructor(
     private readonly validationError: FormValidationError | null = null,
     private readonly createGroupFormData: Partial<CreateGroupRequest> | null = null,
+    private readonly userInputData: Record<string, unknown> | null = null,
   ) {}
 
   get backLinkUri() {
@@ -17,13 +18,13 @@ export default class CreateGroupCodePresenter {
   }
 
   get utils() {
-    return new PresenterUtils(this.createGroupFormData)
+    return new PresenterUtils(this.userInputData)
   }
 
   get fields() {
     return {
       createGroupCode: {
-        value: this.createGroupFormData.groupCode,
+        value: this.utils.stringValue(this.createGroupFormData.groupCode, 'create-group-code'),
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'create-group-code'),
       },
     }
