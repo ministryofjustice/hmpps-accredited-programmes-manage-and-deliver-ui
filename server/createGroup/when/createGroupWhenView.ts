@@ -24,7 +24,7 @@ export default class CreateGroupWhenView {
       fieldset: {
         legend: {
           text: 'When will the group run?',
-          isPageHeading: false,
+          isPageHeading: true,
           classes: 'govuk-fieldset__legend--l',
         },
       },

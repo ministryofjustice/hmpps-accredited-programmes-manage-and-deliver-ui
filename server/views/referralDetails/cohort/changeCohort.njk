@@ -11,9 +11,9 @@
 {% block main %}
     {% block content %}
 
-        <div class="govuk-width-container" id="main-content">
+        <div class="govuk-width-container">
             {{ govukBackLink(backLinkArgs) }}
-            <div class="govuk-main-wrapper">
+            <main class="govuk-main-wrapper" id="main-content">
                 <h2 class="govuk-heading-l" data-testid="cohort-heading">Which cohort should {{presenter.details.personName}} be in?</h2>
                 {{ govukInsetText(currentCohortText) }}
                 <form method="post" novalidate action="{{ presenter.changeCohortFormAction }}">
@@ -27,7 +27,7 @@
                     </div>
 
                 </form>
-            </div>
+            </main>
 
         </div>
 
