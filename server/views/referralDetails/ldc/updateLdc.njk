@@ -10,9 +10,9 @@
 {% block main %}
     {% block content %}
 
-        <div class="govuk-width-container" id="main-content">
+        <div class="govuk-width-container">
             {{ govukBackLink(backLinkArgs) }}
-            <div class="govuk-main-wrapper">
+            <main class="govuk-main-wrapper" id="main-content">
                 <h2 class="govuk-heading-l" data-testid="cohort-heading">Update learning disabilities and challenges(LDC)</h2>
                 {{ govukInsetText(currentLdcStatusText) }}
                 <form method="post" novalidate>
@@ -26,7 +26,7 @@
                     </div>
 
                 </form>
-            </div>
+            </main>
 
         </div>
 
