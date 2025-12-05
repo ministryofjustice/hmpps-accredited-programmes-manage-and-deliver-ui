@@ -154,12 +154,18 @@ export default class CreateGroupWhenPresenter {
   private formatErrorMessages(errors: (string | null)[]): string {
     const filtered = errors.filter(Boolean) as string[]
     if (filtered.length === 0) return ''
-    if (filtered.length === 1) return filtered[0]
+
+    if (filtered.length === 1) {
+      const msg = filtered[0].trimEnd()
+      return msg.endsWith('.') ? msg : `${msg}.`
+    }
 
     const formatted = [filtered[0], ...filtered.slice(1).map(msg => msg.charAt(0).toLowerCase() + msg.slice(1))]
 
     const lastMessage = formatted.pop()
-    return `${formatted.join(', ')} and ${lastMessage}`
+    const combined = `${formatted.join(', ')} and ${lastMessage}`
+    const trimmed = combined.trimEnd()
+    return trimmed.endsWith('.') ? trimmed : `${trimmed}.`
   }
 
   private get selectedDays(): DayKey[] {
@@ -172,6 +178,17 @@ export default class CreateGroupWhenPresenter {
   }
 
   get errorSummary() {
-    return PresenterUtils.errorSummary(this.validationError)
+    const summary = PresenterUtils.errorSummary(this.validationError)
+
+    if (!summary) return summary
+
+    return summary.map(item => {
+      if (!item.message) return item
+      const trimmed = item.message.trimEnd()
+      return {
+        ...item,
+        message: trimmed.endsWith('.') ? trimmed : `${trimmed}.`,
+      }
+    })
   }
 }

@@ -226,7 +226,7 @@ export default class CreateGroupController {
           deliveryLocationName: data.paramsForUpdate.deliveryLocationName,
           deliveryLocationCode: data.paramsForUpdate.deliveryLocationCode,
         }
-        return res.redirect(`/group/create-a-group/treatment-manager`)
+        return res.redirect(`/group/create-a-group/group-facilitators`)
       }
     }
 

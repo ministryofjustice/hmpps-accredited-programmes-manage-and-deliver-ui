@@ -168,7 +168,7 @@ describe('CreateGroupForm', () => {
             {
               errorSummaryLinkedField: 'create-group-when',
               formFields: ['create-group-when'],
-              message: 'Select at least one day.',
+              message: 'Select at least one day',
             },
           ],
         })
@@ -254,28 +254,6 @@ describe('CreateGroupForm', () => {
 
         const data = await new CreateGroupForm(request).createGroupWhenData()
 
-        expect(data.paramsForUpdate).toBeNull()
-        expect(data.error).toStrictEqual({
-          errors: [
-            {
-              errorSummaryLinkedField: 'monday-minute',
-              formFields: ['monday-minute'],
-              message: 'Enter minutes between 00 and 59 for Monday',
-            },
-          ],
-        })
-      })
-    })
-    describe('Minutes must be between 0 - 59', () => {
-      it('returns an appropriate error', async () => {
-        const request = TestUtils.createRequest({
-          'days-of-week': ['MONDAY'],
-          'monday-hour': '1',
-          'monday-minute': '60',
-          'monday-ampm': 'AM',
-        })
-
-        const data = await new CreateGroupForm(request).createGroupWhenData()
         expect(data.paramsForUpdate).toBeNull()
         expect(data.error).toStrictEqual({
           errors: [

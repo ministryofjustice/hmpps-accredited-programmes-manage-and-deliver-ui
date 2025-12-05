@@ -418,7 +418,7 @@ describe('Create Group Controller', () => {
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain('Redirecting to /group/create-a-group/treatment-manager')
+          expect(res.text).toContain('Redirecting to /group/create-a-group/group-facilitators')
         })
     })
 
@@ -437,7 +437,7 @@ describe('Create Group Controller', () => {
     })
   })
 
-  describe('GET /group/create-a-group/treatment-manager', () => {
+  describe('GET /group/create-a-group/group-facilitators', () => {
     it('loads the treatment manager selection page', async () => {
       accreditedProgrammesManageAndDeliverService.getPduMembers.mockResolvedValue([
         {
@@ -448,7 +448,7 @@ describe('Create Group Controller', () => {
         },
       ])
       return request(app)
-        .get('/group/create-a-group/treatment-manager')
+        .get('/group/create-a-group/group-facilitators')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Who is responsible for the group')
@@ -480,7 +480,7 @@ describe('Create Group Controller', () => {
         },
       ])
       return request(app)
-        .get('/group/create-a-group/treatment-manager')
+        .get('/group/create-a-group/group-facilitators')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('John Smith')
@@ -489,7 +489,7 @@ describe('Create Group Controller', () => {
     })
   })
 
-  describe('POST /group/create-a-group/treatment-manager', () => {
+  describe('POST /group/create-a-group/group-facilitators', () => {
     it('redirects to check your answers page on successful submission', async () => {
       accreditedProgrammesManageAndDeliverService.getPduMembers.mockResolvedValue([
         {
@@ -500,7 +500,7 @@ describe('Create Group Controller', () => {
         },
       ])
       return request(app)
-        .post('/group/create-a-group/treatment-manager')
+        .post('/group/create-a-group/group-facilitators')
         .type('form')
         .send({
           'create-group-treatment-manager':
@@ -524,7 +524,7 @@ describe('Create Group Controller', () => {
         },
       ])
       return request(app)
-        .post('/group/create-a-group/treatment-manager')
+        .post('/group/create-a-group/group-facilitators')
         .type('form')
         .send({})
         .expect(400)
@@ -551,7 +551,7 @@ describe('Create Group Controller', () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
       await request(app)
-        .post('/group/create-a-group/treatment-manager')
+        .post('/group/create-a-group/group-facilitators')
         .type('form')
         .send({
           'create-group-treatment-manager':
@@ -562,7 +562,7 @@ describe('Create Group Controller', () => {
         .expect(302)
 
       return request(app)
-        .get('/group/create-a-group/treatment-manager')
+        .get('/group/create-a-group/group-facilitators')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('John Smith')

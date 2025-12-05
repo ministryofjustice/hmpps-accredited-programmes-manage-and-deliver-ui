@@ -79,7 +79,7 @@ export default {
     createGroupDateInvalid: 'Enter a date in the format 10/7/2025',
     createGroupDateInPast: 'Enter or select a date in the future',
     createGroupSexSelect: 'Select a sex',
-    createGroupWhenSelect: 'Select at least one day.',
+    createGroupWhenSelect: 'Select at least one day',
     createGroupWhenHourRequired: 'Enter the hour',
     createGroupWhenHourInvalid: 'Enter an hour between 1 and 12',
     createGroupWhenAmOrPmRequired: 'Select am or pm',
