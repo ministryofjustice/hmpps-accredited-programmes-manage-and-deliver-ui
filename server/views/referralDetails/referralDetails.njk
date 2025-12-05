@@ -29,14 +29,14 @@
             {{ govukSummaryList(presenter.referralSummary) }}
           </div>
         </div>
-      </div>
+      
 
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
           <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
         </div>
       </div>
-      <main class="govuk-grid-row">
+      <div class="govuk-grid-row">
 
         <div class="govuk-grid-column-one-third">
 
@@ -73,7 +73,8 @@
             {% include "./personalDetails.njk" %}
           {% endif %}
         </div>
-      </main>
+      </div>
+    </main>
     </div>
   {% endblock %}
 {% endblock %}
