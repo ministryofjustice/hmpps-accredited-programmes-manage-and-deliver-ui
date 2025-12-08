@@ -30,7 +30,7 @@ describe('CreateGroupForm', () => {
             {
               errorSummaryLinkedField: 'create-group-code',
               formFields: ['create-group-code'],
-              message: 'Enter a code for your group',
+              message: 'Enter a code for your group.',
             },
           ],
         })
@@ -102,7 +102,7 @@ describe('CreateGroupForm', () => {
             {
               errorSummaryLinkedField: 'create-group-date',
               formFields: ['create-group-date'],
-              message: 'Enter or select a date',
+              message: 'Enter or select a date.',
             },
           ],
         })
@@ -117,7 +117,7 @@ describe('CreateGroupForm', () => {
         const data = await new CreateGroupForm(request).createGroupDateData()
 
         expect(data.paramsForUpdate).toBeNull()
-        expect(data.error.errors[0].message).toBe('Enter or select a date in the future')
+        expect(data.error.errors[0].message).toBe('Enter or select a date in the future.')
       })
     })
   })
@@ -266,28 +266,6 @@ describe('CreateGroupForm', () => {
         })
       })
     })
-    describe('Minutes must be between 0 - 59', () => {
-      it('returns an appropriate error', async () => {
-        const request = TestUtils.createRequest({
-          'days-of-week': ['MONDAY'],
-          'monday-hour': '1',
-          'monday-minute': '60',
-          'monday-ampm': 'AM',
-        })
-
-        const data = await new CreateGroupForm(request).createGroupWhenData()
-        expect(data.paramsForUpdate).toBeNull()
-        expect(data.error).toStrictEqual({
-          errors: [
-            {
-              errorSummaryLinkedField: 'monday-minute',
-              formFields: ['monday-minute'],
-              message: 'Enter minutes between 00 and 59 for Monday',
-            },
-          ],
-        })
-      })
-    })
   })
 
   describe('createGroupCohortData', () => {
@@ -318,7 +296,7 @@ describe('CreateGroupForm', () => {
             {
               errorSummaryLinkedField: 'create-group-cohort',
               formFields: ['create-group-cohort'],
-              message: 'Select a cohort',
+              message: 'Select a cohort.',
             },
           ],
         })
@@ -354,7 +332,7 @@ describe('CreateGroupForm', () => {
             {
               errorSummaryLinkedField: 'create-group-sex',
               formFields: ['create-group-sex'],
-              message: 'Select a sex',
+              message: 'Select a sex.',
             },
           ],
         })

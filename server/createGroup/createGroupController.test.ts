@@ -121,7 +121,7 @@ describe('Create Group Controller', () => {
         .send({})
         .expect(400)
         .expect(res => {
-          expect(res.text).toContain('Enter a code for your group')
+          expect(res.text).toContain('Enter a code for your group.')
         })
     })
 
@@ -193,7 +193,7 @@ describe('Create Group Controller', () => {
         .send({})
         .expect(400)
         .expect(res => {
-          expect(res.text).toContain('Enter or select a date')
+          expect(res.text).toContain('Enter or select a date.')
         })
     })
   })
@@ -246,7 +246,7 @@ describe('Create Group Controller', () => {
         .send({})
         .expect(400)
         .expect(res => {
-          expect(res.text).toContain('Select a cohort')
+          expect(res.text).toContain('Select a cohort.')
         })
     })
   })
