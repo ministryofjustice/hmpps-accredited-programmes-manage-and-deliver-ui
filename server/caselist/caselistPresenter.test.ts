@@ -96,6 +96,62 @@ describe(`filters`, () => {
     })
   })
 
+  describe('generateCohortSelectArgs', () => {
+    it('should generate correct select items for cohorts based on API data', () => {
+      const testObject = {
+        filter: { cohort: undefined } as unknown as CaselistFilter,
+      }
+      const referralCaseListItem = referralCaseListItemFactory.build()
+      const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+        .pageContent([referralCaseListItem])
+        .build() as Page<ReferralCaseListItem>
+      const presenter = new CaselistPresenter(
+        1,
+        referralCaseListItemPage,
+        testObject.filter,
+        '',
+        true,
+        caseListFilters,
+        2,
+      )
+
+      expect(presenter.generateCohortSelectArgs()).toEqual([
+        { text: 'Select', value: '' },
+        { value: 'General Offence', text: 'General Offence', selected: false },
+        { value: 'General Offence - LDC', text: 'General Offence - LDC', selected: false },
+        { value: 'Sexual Offence', text: 'Sexual Offence', selected: false },
+        { value: 'Sexual Offence - LDC', text: 'Sexual Offence - LDC', selected: false },
+      ])
+    })
+
+    it('should mark the selected cohort based on filter.cohort', () => {
+      const testObject = {
+        filter: { cohort: 'General Offence' } as unknown as CaselistFilter,
+      }
+      const referralCaseListItem = referralCaseListItemFactory.build()
+      const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+        .pageContent([referralCaseListItem])
+        .build() as Page<ReferralCaseListItem>
+      const presenter = new CaselistPresenter(
+        1,
+        referralCaseListItemPage,
+        testObject.filter,
+        '',
+        true,
+        caseListFilters,
+        2,
+      )
+
+      expect(presenter.generateCohortSelectArgs()).toEqual([
+        { text: 'Select', value: '' },
+        { value: 'General Offence', text: 'General Offence', selected: true },
+        { value: 'General Offence - LDC', text: 'General Offence - LDC', selected: false },
+        { value: 'Sexual Offence', text: 'Sexual Offence', selected: false },
+        { value: 'Sexual Offence - LDC', text: 'Sexual Offence - LDC', selected: false },
+      ])
+    })
+  })
+
   describe('generateReportingTeamCheckboxArgs', () => {
     it('should generate correct checkboxes based on API data and select the correct reporting team', () => {
       const testObject = {
