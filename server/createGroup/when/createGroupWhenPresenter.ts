@@ -105,24 +105,44 @@ export default class CreateGroupWhenPresenter {
 
   private getConditionalHtml(idBase: string, key: keyof typeof this.fields.slots): string {
     const slot = this.fields.slots[key]
-    const errorMessages = [slot.hour.errorMessage, slot.minute.errorMessage, slot.ampm.errorMessage]
-    const formattedErrorMessage = this.formatErrorMessages(errorMessages)
+
+    const errorItems = [
+      { id: `${idBase}-hour-error`, message: slot.hour.errorMessage },
+      { id: `${idBase}-minute-error`, message: slot.minute.errorMessage },
+      { id: `${idBase}-ampm-error`, message: slot.ampm.errorMessage },
+    ]
+
+    const errorListHtml = errorItems
+      .filter(item => item.message)
+      .map(
+        item => `
+        <li id="${item.id}" class="govuk-error-message govuk-error-message--item">
+          <span class="govuk-visually-hidden">Error:</span> ${item.message}
+        </li>
+      `,
+      )
+      .join('')
+
+    const hasErrors = errorListHtml.length > 0
 
     return `
     <div class="govuk-date-input" id="${idBase}-time">
       ${
-        errorMessages.length > 0
+        hasErrors
           ? `
-        <p id="${idBase}-error" class="govuk-error-message">
-          <span class="govuk-visually-hidden">Error:</span> ${formattedErrorMessage}
-        </p>
+        <ul id="${idBase}-error" class="govuk-error-message govuk-error-message--list">
+          ${errorListHtml}
+        </ul>
       `
           : ''
       }
+
       <div class="govuk-date-input__item">
         <div>
           <label class="govuk-label govuk-date-input__label" for="${idBase}-hour">Hour</label>
-          <input class="govuk-input govuk-date-input__input govuk-input--width-2 ${slot.hour.errorMessage ? 'govuk-input--error' : ''}"
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2 ${
+            slot.hour.errorMessage ? 'govuk-input--error' : ''
+          }"
             id="${idBase}-hour" name="${idBase}-hour" type="text" inputmode="numeric"
             pattern="[0-9]{1,2}" maxlength="2" value="${slot.hour.value}">
         </div>
@@ -131,7 +151,9 @@ export default class CreateGroupWhenPresenter {
       <div class="govuk-date-input__item">
         <div>
           <label class="govuk-label govuk-date-input__label" for="${idBase}-minute">Minute</label>
-          <input class="govuk-input govuk-date-input__input govuk-input--width-2 ${slot.minute.errorMessage ? 'govuk-input--error' : ''}"
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2 ${
+            slot.minute.errorMessage ? 'govuk-input--error' : ''
+          }"
             id="${idBase}-minute" name="${idBase}-minute" type="text" inputmode="numeric"
             pattern="[0-9]{1,2}" maxlength="2" value="${slot.minute.value}">
         </div>
@@ -140,7 +162,9 @@ export default class CreateGroupWhenPresenter {
       <div class="govuk-date-input__item">
         <div>
           <label class="govuk-label govuk-date-input__label" for="${idBase}-ampm">am or pm</label>
-          <select class="govuk-select govuk-date-select__select ${slot.ampm.errorMessage ? 'govuk-select--error' : ''}" id="${idBase}-ampm" name="${idBase}-ampm">
+          <select class="govuk-select govuk-date-select__select ${
+            slot.ampm.errorMessage ? 'govuk-select--error' : ''
+          }" id="${idBase}-ampm" name="${idBase}-ampm">
             <option value=""></option>
             <option value="am" ${slot.ampm.value === 'am' ? 'selected' : ''}>am</option>
             <option value="pm" ${slot.ampm.value === 'pm' ? 'selected' : ''}>pm</option>
