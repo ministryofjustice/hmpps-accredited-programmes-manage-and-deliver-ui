@@ -175,23 +175,6 @@ export default class CreateGroupWhenPresenter {
   `
   }
 
-  private formatErrorMessages(errors: (string | null)[]): string {
-    const filtered = errors.filter(Boolean) as string[]
-    if (filtered.length === 0) return ''
-
-    if (filtered.length === 1) {
-      const msg = filtered[0].trimEnd()
-      return msg.endsWith('.') ? msg : `${msg}.`
-    }
-
-    const formatted = [filtered[0], ...filtered.slice(1).map(msg => msg.charAt(0).toLowerCase() + msg.slice(1))]
-
-    const lastMessage = formatted.pop()
-    const combined = `${formatted.join(', ')} and ${lastMessage}`
-    const trimmed = combined.trimEnd()
-    return trimmed.endsWith('.') ? trimmed : `${trimmed}.`
-  }
-
   private get selectedDays(): DayKey[] {
     if (this.createGroupFormData) {
       return this.createGroupFormData.map(slot => slot.dayOfWeek as DayKey)
@@ -203,12 +186,48 @@ export default class CreateGroupWhenPresenter {
 
   get errorSummary() {
     const summary = PresenterUtils.errorSummary(this.validationError)
-
     if (!summary) return summary
 
-    return summary.map(item => {
+    const dayOrder = DAY_CONFIG.map(d => d.idBase)
+
+    const fieldPartOrder: Record<string, number> = {
+      hour: 0,
+      minute: 1,
+      ampm: 2,
+    }
+
+    const sorted = [...summary].sort((a, b) => {
+      const fieldNameA = a.field ?? ''
+      const fieldNameB = b.field ?? ''
+
+      const isTopLevelFormErrorA = !fieldNameA || fieldNameA === 'create-group-when'
+      const isTopLevelFormErrorB = !fieldNameB || fieldNameB === 'create-group-when'
+
+      if (isTopLevelFormErrorA && !isTopLevelFormErrorB) return -1
+      if (!isTopLevelFormErrorA && isTopLevelFormErrorB) return 1
+      if (isTopLevelFormErrorA && isTopLevelFormErrorB) return 0
+
+      const [dayA, fieldPartA] = fieldNameA.split('-')
+      const [dayB, fieldPartB] = fieldNameB.split('-')
+
+      const dayIndexA = dayOrder.indexOf(dayA)
+      const dayIndexB = dayOrder.indexOf(dayB)
+
+      if (dayIndexA !== dayIndexB) {
+        return dayIndexA - dayIndexB
+      }
+
+      const fieldPriorityA = fieldPartOrder[fieldPartA] ?? 99
+      const fieldPriorityB = fieldPartOrder[fieldPartB] ?? 99
+
+      return fieldPriorityA - fieldPriorityB
+    })
+
+    return sorted.map(item => {
       if (!item.message) return item
+
       const trimmed = item.message.trimEnd()
+
       return {
         ...item,
         message: trimmed.replace(/[.,]/g, '').trimEnd(),
