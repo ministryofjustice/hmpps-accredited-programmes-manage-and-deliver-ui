@@ -18,11 +18,11 @@
 }
 
 .header-menu-button {
-  float:right
+  float: right;
 }
 
 .homepage-link {
-  float:right;
+  float: right;
   padding-bottom: 20px;
 }
 
@@ -119,4 +119,10 @@
 .create_group_button {
   display: inline-block;
   float: right;
+}
+
+.govuk-error-message.govuk-error-message--list {
+  margin-left: 0;
+  padding-left: 0;
+  list-style: none;
 }
