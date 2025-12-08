@@ -105,24 +105,44 @@ export default class CreateGroupWhenPresenter {
 
   private getConditionalHtml(idBase: string, key: keyof typeof this.fields.slots): string {
     const slot = this.fields.slots[key]
-    const errorMessages = [slot.hour.errorMessage, slot.minute.errorMessage, slot.ampm.errorMessage]
-    const formattedErrorMessage = this.formatErrorMessages(errorMessages)
+
+    const errorItems = [
+      { id: `${idBase}-hour-error`, message: slot.hour.errorMessage },
+      { id: `${idBase}-minute-error`, message: slot.minute.errorMessage },
+      { id: `${idBase}-ampm-error`, message: slot.ampm.errorMessage },
+    ]
+
+    const errorListHtml = errorItems
+      .filter(item => item.message)
+      .map(
+        item => `
+        <li id="${item.id}" class="govuk-error-message govuk-error-message--item">
+          <span class="govuk-visually-hidden">Error:</span> ${item.message}
+        </li>
+      `,
+      )
+      .join('')
+
+    const hasErrors = errorListHtml.length > 0
 
     return `
     <div class="govuk-date-input" id="${idBase}-time">
       ${
-        errorMessages.length > 0
+        hasErrors
           ? `
-        <p id="${idBase}-error" class="govuk-error-message">
-          <span class="govuk-visually-hidden">Error:</span> ${formattedErrorMessage}
-        </p>
+        <ul id="${idBase}-error" class="govuk-error-message govuk-error-message--list">
+          ${errorListHtml}
+        </ul>
       `
           : ''
       }
+
       <div class="govuk-date-input__item">
         <div>
           <label class="govuk-label govuk-date-input__label" for="${idBase}-hour">Hour</label>
-          <input class="govuk-input govuk-date-input__input govuk-input--width-2 ${slot.hour.errorMessage ? 'govuk-input--error' : ''}"
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2 ${
+            slot.hour.errorMessage ? 'govuk-input--error' : ''
+          }"
             id="${idBase}-hour" name="${idBase}-hour" type="text" inputmode="numeric"
             pattern="[0-9]{1,2}" maxlength="2" value="${slot.hour.value}">
         </div>
@@ -131,7 +151,9 @@ export default class CreateGroupWhenPresenter {
       <div class="govuk-date-input__item">
         <div>
           <label class="govuk-label govuk-date-input__label" for="${idBase}-minute">Minute</label>
-          <input class="govuk-input govuk-date-input__input govuk-input--width-2 ${slot.minute.errorMessage ? 'govuk-input--error' : ''}"
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2 ${
+            slot.minute.errorMessage ? 'govuk-input--error' : ''
+          }"
             id="${idBase}-minute" name="${idBase}-minute" type="text" inputmode="numeric"
             pattern="[0-9]{1,2}" maxlength="2" value="${slot.minute.value}">
         </div>
@@ -140,7 +162,9 @@ export default class CreateGroupWhenPresenter {
       <div class="govuk-date-input__item">
         <div>
           <label class="govuk-label govuk-date-input__label" for="${idBase}-ampm">am or pm</label>
-          <select class="govuk-select govuk-date-select__select ${slot.ampm.errorMessage ? 'govuk-select--error' : ''}" id="${idBase}-ampm" name="${idBase}-ampm">
+          <select class="govuk-select govuk-date-select__select ${
+            slot.ampm.errorMessage ? 'govuk-select--error' : ''
+          }" id="${idBase}-ampm" name="${idBase}-ampm">
             <option value=""></option>
             <option value="am" ${slot.ampm.value === 'am' ? 'selected' : ''}>am</option>
             <option value="pm" ${slot.ampm.value === 'pm' ? 'selected' : ''}>pm</option>
@@ -149,17 +173,6 @@ export default class CreateGroupWhenPresenter {
       </div>
     </div>
   `
-  }
-
-  private formatErrorMessages(errors: (string | null)[]): string {
-    const filtered = errors.filter(Boolean) as string[]
-    if (filtered.length === 0) return ''
-    if (filtered.length === 1) return filtered[0]
-
-    const formatted = [filtered[0], ...filtered.slice(1).map(msg => msg.charAt(0).toLowerCase() + msg.slice(1))]
-
-    const lastMessage = formatted.pop()
-    return `${formatted.join(', ')} and ${lastMessage}`
   }
 
   private get selectedDays(): DayKey[] {
@@ -172,6 +185,30 @@ export default class CreateGroupWhenPresenter {
   }
 
   get errorSummary() {
-    return PresenterUtils.errorSummary(this.validationError)
+    const summary = PresenterUtils.errorSummary(this.validationError)
+    if (!summary) return summary
+    if (summary.find(item => item.field === 'create-group-when')) return summary
+
+    const summaryResponse: { field: string; message: string }[] = []
+
+    DAY_CONFIG.forEach(({ idBase }) => {
+      this.checkForErrorAndAddToResponse(`${idBase}-hour`, summary, summaryResponse)
+      this.checkForErrorAndAddToResponse(`${idBase}-minute`, summary, summaryResponse)
+      this.checkForErrorAndAddToResponse(`${idBase}-ampm`, summary, summaryResponse)
+    })
+    return summaryResponse
+  }
+
+  private checkForErrorAndAddToResponse(
+    errorKey: string,
+    summary: { field: string; message: string }[],
+    summaryResponse: { field: string; message: string }[],
+  ) {
+    if (summary.find(item => item.field === errorKey)) {
+      summaryResponse.push({
+        field: errorKey,
+        message: summary.find(item => item.field === errorKey)?.message ?? '',
+      })
+    }
   }
 }

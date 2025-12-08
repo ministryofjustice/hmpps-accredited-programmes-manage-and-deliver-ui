@@ -233,7 +233,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await createGroupController.showCreateGroupLocation(req, res)
   })
 
-  getOrPost('/group/create-a-group/treatment-manager', async (req, res) => {
+  getOrPost('/group/create-a-group/group-facilitators', async (req, res) => {
     await createGroupController.showCreateGroupTreatmentManager(req, res)
   })
 
