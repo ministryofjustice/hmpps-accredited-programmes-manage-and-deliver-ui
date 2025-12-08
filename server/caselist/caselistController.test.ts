@@ -5,7 +5,6 @@ import request from 'supertest'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import caseListReferralsFactory from '../testutils/factories/caseListReferralsFactory'
-import TestUtils from '../testutils/testUtils'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
@@ -29,14 +28,13 @@ beforeEach(() => {
   const caseListReferrals: CaseListReferrals = caseListReferralsFactory.build()
   accreditedProgrammesManageAndDeliverService.getOpenCaselist.mockResolvedValue(caseListReferrals)
   accreditedProgrammesManageAndDeliverService.getClosedCaselist.mockResolvedValue(caseListReferrals)
-  accreditedProgrammesManageAndDeliverService.getCaseListFilters.mockResolvedValue(TestUtils.createCaseListFilters())
 })
 
 describe(`Caselist controller`, () => {
   test.each([
     [
-      '/pdu/open-referrals?cohort=SEXUAL_OFFENCE&status=Awaiting+assessment',
-      'SEXUAL_OFFENCE',
+      '/pdu/open-referrals?cohort=Sexual Offence&status=Awaiting+assessment',
+      'Sexual Offence',
       'Awaiting assessment',
       undefined,
       undefined,
@@ -44,8 +42,8 @@ describe(`Caselist controller`, () => {
     [`/pdu/open-referrals`, undefined, undefined, undefined, undefined],
     ['/pdu/closed-referrals', undefined, undefined, undefined, undefined],
     [
-      '/pdu/open-referrals?cohort=GENERAL_OFFENCE&status=Programme+complete',
-      'GENERAL_OFFENCE',
+      '/pdu/open-referrals?cohort=General Offence - LDC&status=Programme+complete',
+      'General Offence - LDC',
       'Programme complete',
       undefined,
       undefined,

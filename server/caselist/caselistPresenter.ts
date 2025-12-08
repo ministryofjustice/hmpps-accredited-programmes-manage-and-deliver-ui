@@ -135,6 +135,23 @@ export default class CaselistPresenter {
     return selectOptions
   }
 
+  generateCohortSelectArgs(): SelectArgsItem[] {
+    const selectOptions: SelectArgsItem[] = [
+      {
+        text: 'Select',
+        value: '',
+      },
+    ]
+    this.caseListFilters.cohort.map(cohort =>
+      selectOptions.push({
+        value: cohort,
+        text: cohort,
+        selected: this.filter.cohort === cohort,
+      }),
+    )
+    return selectOptions
+  }
+
   generatePduSelectArgs(): SelectArgsItem[] {
     const checkboxArgs = [
       {
