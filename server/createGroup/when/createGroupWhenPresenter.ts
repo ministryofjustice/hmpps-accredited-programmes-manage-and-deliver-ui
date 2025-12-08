@@ -187,7 +187,7 @@ export default class CreateGroupWhenPresenter {
       const trimmed = item.message.trimEnd()
       return {
         ...item,
-        message: trimmed.endsWith('.') ? trimmed : `${trimmed}.`,
+        message: trimmed.replace(/[.,]/g, '').trimEnd(),
       }
     })
   }
