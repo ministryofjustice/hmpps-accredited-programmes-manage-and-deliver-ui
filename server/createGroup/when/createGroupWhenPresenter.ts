@@ -187,51 +187,28 @@ export default class CreateGroupWhenPresenter {
   get errorSummary() {
     const summary = PresenterUtils.errorSummary(this.validationError)
     if (!summary) return summary
+    if (summary.find(item => item.field === 'create-group-when')) return summary
 
-    const dayOrder = DAY_CONFIG.map(d => d.idBase)
+    const summaryResponse: { field: string; message: string }[] = []
 
-    const fieldPartOrder: Record<string, number> = {
-      hour: 0,
-      minute: 1,
-      ampm: 2,
+    DAY_CONFIG.forEach(({ idBase }) => {
+      this.checkForErrorAndAddToResponse(`${idBase}-hour`, summary, summaryResponse)
+      this.checkForErrorAndAddToResponse(`${idBase}-minute`, summary, summaryResponse)
+      this.checkForErrorAndAddToResponse(`${idBase}-ampm`, summary, summaryResponse)
+    })
+    return summaryResponse
+  }
+
+  private checkForErrorAndAddToResponse(
+    errorKey: string,
+    summary: { field: string; message: string }[],
+    summaryResponse: { field: string; message: string }[],
+  ) {
+    if (summary.find(item => item.field === errorKey)) {
+      summaryResponse.push({
+        field: errorKey,
+        message: summary.find(item => item.field === errorKey)?.message ?? '',
+      })
     }
-
-    const sorted = [...summary].sort((a, b) => {
-      const fieldNameA = a.field ?? ''
-      const fieldNameB = b.field ?? ''
-
-      const isTopLevelFormErrorA = !fieldNameA || fieldNameA === 'create-group-when'
-      const isTopLevelFormErrorB = !fieldNameB || fieldNameB === 'create-group-when'
-
-      if (isTopLevelFormErrorA && !isTopLevelFormErrorB) return -1
-      if (!isTopLevelFormErrorA && isTopLevelFormErrorB) return 1
-      if (isTopLevelFormErrorA && isTopLevelFormErrorB) return 0
-
-      const [dayA, fieldPartA] = fieldNameA.split('-')
-      const [dayB, fieldPartB] = fieldNameB.split('-')
-
-      const dayIndexA = dayOrder.indexOf(dayA)
-      const dayIndexB = dayOrder.indexOf(dayB)
-
-      if (dayIndexA !== dayIndexB) {
-        return dayIndexA - dayIndexB
-      }
-
-      const fieldPriorityA = fieldPartOrder[fieldPartA] ?? 99
-      const fieldPriorityB = fieldPartOrder[fieldPartB] ?? 99
-
-      return fieldPriorityA - fieldPriorityB
-    })
-
-    return sorted.map(item => {
-      if (!item.message) return item
-
-      const trimmed = item.message.trimEnd()
-
-      return {
-        ...item,
-        message: trimmed.replace(/[.,]/g, '').trimEnd(),
-      }
-    })
   }
 }
