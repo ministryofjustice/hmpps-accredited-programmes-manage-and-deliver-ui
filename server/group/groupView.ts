@@ -8,12 +8,11 @@ export default class GroupView {
     return {
       id: 'group-code',
       name: 'group-code',
-      // prompt: 'Select',
       label: {
         text: 'Group code',
         classes: 'govuk-label--s',
       },
-      value: '',
+      value: this.presenter.filter?.groupCode || '',
       classes: 'govuk-select--restrict-width',
     }
   }
@@ -27,13 +26,13 @@ export default class GroupView {
         text: 'PDU',
         classes: 'govuk-label--s',
       },
-      items: [],
+      items: this.presenter.generatePduSelectArgs(),
     }
   }
 
   private get deliveryTeamCheckboxArgs(): CheckboxesArgs {
     return {
-      name: 'reportingTeam',
+      name: 'deliveryLocations',
       classes: 'govuk-checkboxes--small',
       fieldset: {
         legend: {
@@ -42,19 +41,19 @@ export default class GroupView {
           classes: 'govuk-fieldset__legend--s',
         },
       },
-      items: [],
+      items: this.presenter.generateDeliveryLocationCheckboxArgs(),
     }
   }
 
   private get searchBySexArgs(): SelectArgs {
     return {
-      id: 'sexSelect',
-      name: 'sexSelect',
+      id: 'sex',
+      name: 'sex',
       label: {
         text: 'Sex',
         classes: 'govuk-label--s',
       },
-      items: [],
+      items: this.presenter.generateSexSelectArgs(),
     }
   }
 
@@ -66,7 +65,7 @@ export default class GroupView {
         text: 'Cohort',
         classes: 'govuk-label--s',
       },
-      items: [],
+      items: this.presenter.generateCohortSelectArgs(),
     }
   }
 
@@ -74,6 +73,7 @@ export default class GroupView {
     return [
       'group/group',
       {
+        presenter: this.presenter,
         groupTableArgs: this.presenter.groupTableArgs,
         subNavArgs: this.presenter.getSubNavArgs(),
         pagination: this.presenter.pagination.mojPaginationArgs,

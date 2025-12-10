@@ -2,6 +2,7 @@ import { Group } from '@manage-and-deliver-api'
 import { Page } from '../shared/models/pagination'
 import groupsByRegionFactory from '../testutils/factories/groupsByRegionFactory'
 import GroupPresenter, { GroupListPageSection } from './groupPresenter'
+import GroupListFilter from '../groupDetails/groupListFilter'
 
 describe('getSubNavArgs', () => {
   it('should generate correct sub nav arguments when url params are present', () => {
@@ -12,6 +13,8 @@ describe('getSubNavArgs', () => {
       GroupListPageSection.NOT_STARTED,
       groupList.otherTabTotal,
       groupList.regionName,
+      GroupListFilter.empty(),
+      [],
     )
 
     expect(presenter.getSubNavArgs()).toEqual({
@@ -40,6 +43,9 @@ describe('groupTableArgs', () => {
       GroupListPageSection.NOT_STARTED,
       groupList.otherTabTotal,
       groupList.regionName,
+      GroupListFilter.empty(),
+      [],
+      [],
     )
 
     expect(presenter.groupTableArgs).toEqual({

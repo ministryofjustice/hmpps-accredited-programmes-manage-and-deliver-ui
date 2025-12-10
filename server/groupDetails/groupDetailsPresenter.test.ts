@@ -1,6 +1,6 @@
 import ProgrammeGroupDetailsFactory from '../testutils/factories/programmeGroupDetailsFactory'
 import GroupDetailsPresenter, { GroupDetailsPageSection } from './groupDetailsPresenter'
-import GroupListFilter from './groupListFilter'
+import GroupDetailFilter from './groupDetailFilter'
 
 afterEach(() => {
   jest.restoreAllMocks()
@@ -9,7 +9,7 @@ afterEach(() => {
 describe('groupDetailsPresenter.', () => {
   describe('generateTableHeadings', () => {
     it('should return the correct table headings for allocated list', () => {
-      const filterObject = { status: undefined, cohort: undefined, nameOrCRN: undefined } as GroupListFilter
+      const filterObject = GroupDetailFilter.empty()
       const groupDetails = ProgrammeGroupDetailsFactory.build()
       const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Allocated, groupDetails, '1234', filterObject)
       expect(presenter.generateTableHeadings()).toEqual([
@@ -20,7 +20,7 @@ describe('groupDetailsPresenter.', () => {
       ])
     })
     it('should return the correct table headings for waitlist', () => {
-      const filterObject = { status: undefined, cohort: undefined, nameOrCRN: undefined } as GroupListFilter
+      const filterObject = GroupDetailFilter.empty()
       const groupDetails = ProgrammeGroupDetailsFactory.build()
       const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, '1234', filterObject)
       expect(presenter.generateTableHeadings()).toEqual([
@@ -37,7 +37,7 @@ describe('groupDetailsPresenter.', () => {
   })
   describe('generateWaitlistTableArgs', () => {
     it('should return the correct table args for waitlist', () => {
-      const filterObject = { status: undefined, cohort: undefined, nameOrCRN: undefined } as GroupListFilter
+      const filterObject = GroupDetailFilter.empty()
       const groupDetails = ProgrammeGroupDetailsFactory.waitlist().build()
       const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, '1234', filterObject)
       expect(presenter.generateWaitlistTableArgs()).toEqual([
@@ -96,7 +96,7 @@ describe('groupDetailsPresenter.', () => {
   })
   describe('generateAllocateTableArgs', () => {
     it('should return the correct table args for allocted list', () => {
-      const filterObject = { status: undefined, cohort: undefined, nameOrCRN: undefined } as GroupListFilter
+      const filterObject = GroupDetailFilter.empty()
       const groupDetails = ProgrammeGroupDetailsFactory.allocatedList().build()
       const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, '1234', filterObject)
 
@@ -145,7 +145,7 @@ describe('groupDetailsPresenter.', () => {
 
   describe('generatePduSelectArgs', () => {
     it('should return the correct select args for PDU', () => {
-      const filterObject = { pdu: 'Liverpool' } as GroupListFilter
+      const filterObject = { pdu: 'Liverpool' } as GroupDetailFilter
       const groupDetails = ProgrammeGroupDetailsFactory.build()
       const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, '1234', filterObject)
       expect(presenter.generatePduSelectArgs()).toEqual([
@@ -177,7 +177,7 @@ describe('groupDetailsPresenter.', () => {
       const filterObject = {
         pdu: 'Manchester',
         reportingTeam: ['Manchester Office 1'],
-      } as GroupListFilter
+      } as GroupDetailFilter
       const groupDetails = ProgrammeGroupDetailsFactory.build()
       const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, '1234', filterObject)
       expect(presenter.generateReportingTeamCheckboxArgs()).toEqual([

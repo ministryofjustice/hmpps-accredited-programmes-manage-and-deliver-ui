@@ -98,16 +98,15 @@ export default class AccreditedProgrammesManageAndDeliverService
   async getGroupList(
     username: ExpressUsername,
     paginationParams: PaginationParams,
-    // filter: CaselistFilterParams,
+    filter: GroupListFilterParams,
     selectedTab: string,
   ): Promise<GroupsByRegion> {
     const restClient = await this.createRestClientFromUsername(username)
-    // const filterQuery: Record<string, unknown> = { ...filter }
 
     return (await restClient.get({
       path: `/bff/groups/${selectedTab}`,
       headers: { Accept: 'application/json' },
-      query: { ...paginationParams }, // , ...filterQuery },
+      query: { ...paginationParams, ...filter },
     })) as GroupsByRegion
   }
 

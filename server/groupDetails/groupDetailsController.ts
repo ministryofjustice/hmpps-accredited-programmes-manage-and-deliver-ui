@@ -5,7 +5,7 @@ import { FormValidationError } from '../utils/formValidationError'
 import GroupDetailsPresenter, { GroupDetailsPageSection } from './groupDetailsPresenter'
 import GroupDetailsView from './groupDetailsView'
 import GroupForm from './groupForm'
-import GroupListFilter from './groupListFilter'
+import GroupDetailFilter from './groupDetailFilter'
 
 export default class GroupDetailsController {
   constructor(
@@ -20,7 +20,7 @@ export default class GroupDetailsController {
     req.session.groupManagementData = null
     const pageNumber = req.query.page
 
-    const filter = GroupListFilter.fromRequest(req)
+    const filter = GroupDetailFilter.fromRequest(req)
 
     const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers(
       username,
@@ -75,7 +75,7 @@ export default class GroupDetailsController {
       req.session.filterParams = req.originalUrl.includes('?') ? req.originalUrl.split('?').pop() : undefined
     }
 
-    const filter = GroupListFilter.fromRequest(req)
+    const filter = GroupDetailFilter.fromRequest(req)
 
     const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupWaitlistMembers(
       username,
