@@ -53,6 +53,10 @@ export default class CreateGroupCyaPresenter {
       return 'midnight'
     }
 
+    if (minutes === 0 || mins === '00') {
+      return `${hour}${period}`
+    }
+
     return `${hour}:${mins}${period}`
   }
 
@@ -110,7 +114,7 @@ export default class CreateGroupCyaPresenter {
 
             const formattedEnd = this.formatTime(endHour12, endMinutes, endAmOrPm)
 
-            return `${day}, ${formattedStart} to ${formattedEnd}`
+            return `${day}s, ${formattedStart} to ${formattedEnd}`
           }) || [],
         changeLink: '/group/create-a-group/group-days-and-times',
       },
