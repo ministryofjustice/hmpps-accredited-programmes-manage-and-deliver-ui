@@ -524,18 +524,18 @@
     },
     {
       "request": {
-        "urlPattern": "/regions/pdu/N50SATR/office-locations",
+        "urlPattern": "/regions/pdu/N50MANC/office-locations",
         "method": "GET"
       },
       "response": {
         "status": 200,
         "jsonBody": {
           "code": "N50ALL",
-          "description": "Salford",
+          "description": "Cleveland",
           "officeLocations": [
             {
               "code": "N50SALO",
-              "description": "Salford Probation Office"
+              "description": "Middlesbrough (Borough Rd)"
             }
           ]
         },
@@ -557,7 +557,7 @@
           "pdus": [
             {
               "code": "N50MANC",
-              "description": "Manchester North",
+              "description": "Cleveland",
               "team": [
                 {
                   "code": "N50NMI",
@@ -579,8 +579,8 @@
                     {
                       "code": "N50B016",
                       "name": {
-                        "forename": "Delius",
-                        "surname": "MikeTest"
+                        "forename": "ApprovedPremises",
+                        "surname": "NccManagerAssessor2"
                       }
                     }
                   ]
@@ -592,8 +592,8 @@
                     {
                       "code": "N07B656",
                       "name": {
-                        "forename": "Natalie",
-                        "surname": "Wood"
+                        "forename": "Archibald",
+                        "surname": "Queeny"
                       }
                     }
                   ]
