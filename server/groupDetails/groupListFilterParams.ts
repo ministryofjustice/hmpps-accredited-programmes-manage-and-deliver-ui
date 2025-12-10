@@ -1,8 +1,7 @@
 export interface GroupListFilterParams {
-  nameOrCRN?: string
-  status?: string
+  groupCode?: string
+  pdu?: string
+  deliveryLocations?: string[]
   cohort?: string
   sex?: string
-  pdu?: string
-  reportingTeam?: string[]
 }
