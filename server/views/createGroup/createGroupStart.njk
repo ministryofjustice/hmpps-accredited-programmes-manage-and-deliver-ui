@@ -7,8 +7,8 @@
 
 {% block main %}
     {% block content %}
-        <div class="govuk-width-container" id="main-content">
-            <div class="govuk-main-wrapper">
+        <div class="govuk-width-container">
+    <main class="govuk-main-wrapper" id="main-content">
               <div class="govuk-grid-row govuk-!-margin-bottom-3">
                 <div class="govuk-grid-column-two-thirds">
                   {{ govukBackLink(backLinkArgs) }}
@@ -30,7 +30,7 @@
                       </form>
                   </div>
               </div>
-            </div>
+            </main>
         </div>
     {% endblock %}
 {% endblock %}
