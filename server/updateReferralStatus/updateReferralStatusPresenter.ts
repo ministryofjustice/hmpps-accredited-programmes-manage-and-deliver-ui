@@ -35,6 +35,15 @@ export default class UpdateReferralStatusPresenter {
     return statusRadios
   }
 
+  generateAddDetailsHintText() {
+    switch (this.statusDetails.currentStatus.title) {
+      case 'Awaiting allocation':
+        return 'You can add more information about this update, such as the reason for deprioritising someone.'
+      default:
+        return 'You can add more information about this update, such as the reason for an assessment decision or for deprioritising someone.'
+    }
+  }
+
   get fields() {
     return {
       moreDetailsTextArea: {
