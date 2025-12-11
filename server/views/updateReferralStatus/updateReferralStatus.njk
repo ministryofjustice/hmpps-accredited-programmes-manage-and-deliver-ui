@@ -6,6 +6,7 @@
 {% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -37,6 +38,9 @@
       <div class="govuk-grid-column-two-thirds">
         <form method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{csrfToken}}">
+          {% if currentStatus == 'Awaiting allocation' %}
+            {{ govukInsetText(awaitingAllocationAdditionalInfoText) }}
+          {% endif %}
           {{ govukRadios(statusUpdateRadioButtons) }}
 
           {{ govukCharacterCount(addDetailsTextboxOptions) }}

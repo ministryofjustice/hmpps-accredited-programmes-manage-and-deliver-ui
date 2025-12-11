@@ -35,10 +35,19 @@ export default class UpdateReferralStatusView {
       },
       maxlength: '500',
       hint: {
-        text: 'You can add more information about this update, such as the reason for an assessment decision or for deprioritising someone.',
+        text: this.generateAddDetailsHintText,
       },
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.moreDetailsTextArea.errorMessage),
       value: this.presenter.fields.moreDetailsTextArea.value,
+    }
+  }
+
+  get generateAddDetailsHintText() {
+    switch (this.presenter.statusDetails.currentStatus.title) {
+      case 'Awaiting allocation':
+        return 'You can add more information about this update, such as the reason for deprioritising someone.'
+      default:
+        return 'You can add more information about this update, such as the reason for an assessment decision or for deprioritising someone.'
     }
   }
 
@@ -71,6 +80,12 @@ export default class UpdateReferralStatusView {
     }
   }
 
+  get awaitingAllocationAdditionalInfoText() {
+    return {
+      html: `If you want to change this person's status to Scheduled, you must <a href="/groups/started">allocate them to a group.</a>`,
+    }
+  }
+
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       'updateReferralStatus/updateReferralStatus',
@@ -83,6 +98,8 @@ export default class UpdateReferralStatusView {
         backLinkArgs: this.backLinkArgs,
         backLinkUri: this.presenter.backLinkUri,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
+        currentStatus: this.presenter.statusDetails.currentStatus.title,
+        awaitingAllocationAdditionalInfoText: this.awaitingAllocationAdditionalInfoText,
       },
     ]
   }
