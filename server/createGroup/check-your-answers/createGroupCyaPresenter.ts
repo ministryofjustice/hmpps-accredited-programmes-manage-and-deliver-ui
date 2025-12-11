@@ -53,7 +53,7 @@ export default class CreateGroupCyaPresenter {
       return 'midnight'
     }
 
-    if (minutes === 0 || mins === '00') {
+    if (minutes === 0) {
       return `${hour}${period}`
     }
 
