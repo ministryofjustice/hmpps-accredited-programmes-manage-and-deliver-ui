@@ -187,23 +187,21 @@ export default class GroupPresenter {
   }
 
   generateSexSelectArgs(): SelectArgsItem[] {
-    const sexOptions = [
-      { value: 'MALE', text: 'Male' },
-      { value: 'FEMALE', text: 'Female' },
-    ]
-    const selectOptions: SelectArgsItem[] = [
+    return [
       {
         text: 'Select',
         value: '',
       },
+      {
+        value: 'MALE',
+        text: 'Male',
+        selected: this.filter.sex === 'MALE',
+      },
+      {
+        value: 'FEMALE',
+        text: 'Female',
+        selected: this.filter.sex === 'FEMALE',
+      },
     ]
-    sexOptions.forEach(sex => {
-      selectOptions.push({
-        value: sex.value,
-        text: sex.text,
-        selected: this.filter.sex === sex.value,
-      })
-    })
-    return selectOptions
   }
 }
