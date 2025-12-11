@@ -117,7 +117,7 @@ describe('CreateGroupForm', () => {
         const data = await new CreateGroupForm(request).createGroupDateData()
 
         expect(data.paramsForUpdate).toBeNull()
-        expect(data.error.errors[0].message).toBe('Enter or select a date in the future')
+        expect(data.error.errors[0].message).toBe('Start date must be in the future')
       })
     })
   })
@@ -190,7 +190,7 @@ describe('CreateGroupForm', () => {
             {
               errorSummaryLinkedField: 'monday-hour',
               formFields: ['monday-hour'],
-              message: 'Enter the hour for Monday',
+              message: 'Enter a complete start time for Monday',
             },
           ],
         })
@@ -213,7 +213,7 @@ describe('CreateGroupForm', () => {
             {
               errorSummaryLinkedField: 'monday-ampm',
               formFields: ['monday-ampm'],
-              message: 'Select am or pm for Monday',
+              message: 'Select whether the start time is am or pm for Monday',
             },
           ],
         })
@@ -260,7 +260,7 @@ describe('CreateGroupForm', () => {
             {
               errorSummaryLinkedField: 'monday-minute',
               formFields: ['monday-minute'],
-              message: 'Enter minutes between 00 and 59 for Monday',
+              message: 'Enter a minute between 00 and 59 for Monday',
             },
           ],
         })

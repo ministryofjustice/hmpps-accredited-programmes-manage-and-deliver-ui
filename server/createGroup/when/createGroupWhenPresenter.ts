@@ -126,6 +126,9 @@ export default class CreateGroupWhenPresenter {
     const hasErrors = errorListHtml.length > 0
 
     return `
+    <span class="govuk-caption-m">Start time</span>
+    <span class="govuk-hint">Use the 12-hour clock, for example 9:30am or 3:00pm. Enter 12:00pm for midday.</span>
+    
     <div class="govuk-date-input" id="${idBase}-time">
       ${
         hasErrors
