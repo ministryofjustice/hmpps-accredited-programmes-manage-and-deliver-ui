@@ -5,7 +5,7 @@ import { ButtonArgs, CheckboxesArgsItem, SelectArgsItem, TableArgsHeadElement } 
 import Pagination from '../utils/pagination/pagination'
 import PresenterUtils from '../utils/presenterUtils'
 import { convertToTitleCase } from '../utils/utils'
-import GroupListFilter from './groupListFilter'
+import GroupDetailFilter from './groupDetailFilter'
 
 export enum GroupDetailsPageSection {
   Allocated = 1,
@@ -26,7 +26,7 @@ export default class GroupDetailsPresenter {
     readonly section: GroupDetailsPageSection,
     readonly group: ProgrammeGroupDetails,
     readonly groupId: string,
-    readonly filter: GroupListFilter,
+    readonly filter: GroupDetailFilter,
     readonly personName: string = '',
     readonly validationError: FormValidationError | null = null,
     readonly successMessage: string | null = null,
@@ -44,8 +44,8 @@ export default class GroupDetailsPresenter {
     }
   }
 
-  get showReportingLocations(): boolean {
-    return this.filter.pdu !== undefined && this.filter.pdu !== ''
+  get showReportingTeams(): boolean {
+    return !!this.filter?.pdu
   }
 
   getSubNavArgs(): { items: { text: string; href: string; active: boolean }[] } {
@@ -205,7 +205,8 @@ export default class GroupDetailsPresenter {
 
   generateReportingTeamCheckboxArgs(): CheckboxesArgsItem[] {
     let checkboxItems: CheckboxesArgsItem[] = []
-    if (this.showReportingLocations) {
+
+    if (this.showReportingTeams) {
       const pduLocationData = this.group.filters.locationFilters.find(location => location.pduName === this.filter.pdu)
       checkboxItems = pduLocationData.reportingTeams
         .map(location => ({
@@ -215,6 +216,7 @@ export default class GroupDetailsPresenter {
         }))
         .sort((a, b) => a.text.localeCompare(b.text))
     }
+
     return checkboxItems
   }
 

@@ -790,7 +790,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/bff/groups/region/{selectedTab}': {
+  '/bff/groups/{selectedTab}': {
     parameters: {
       query?: never
       header?: never
@@ -2311,12 +2311,12 @@ export interface components {
       /** Format: int64 */
       offset?: number
       sort?: components['schemas']['SortObject']
+      unpaged?: boolean
       paged?: boolean
       /** Format: int32 */
       pageNumber?: number
       /** Format: int32 */
       pageSize?: number
-      unpaged?: boolean
     }
     ReferralCaseListItem: {
       /** Format: uuid */
@@ -2335,8 +2335,8 @@ export interface components {
     }
     SortObject: {
       empty?: boolean
-      sorted?: boolean
       unsorted?: boolean
+      sorted?: boolean
     }
     StatusFilterValues: {
       /**
@@ -2550,6 +2550,10 @@ export interface components {
        * @example 12
        */
       otherTabTotal: number
+      /** @description A list of (unique) Probation Delivery Units names across all of the Groups */
+      probationDeliveryUnitNames: string[]
+      /** @description A list of (unique) Delivery Locations for Referrals within the current PDU.  Only present if a probationDeliveryUnit is specified */
+      deliveryLocationNames?: string[]
       /**
        * @description The region name the groups belongs to.
        * @example West Midlands
@@ -5158,7 +5162,7 @@ export interface operations {
         /** @description Filter by the human readable pdu of the group, i.e. 'All London' */
         pdu?: string
         /** @description Filter by the delivery location name */
-        deliveryLocation?: string
+        deliveryLocations?: string[]
         /** @description Filter by the cohort of the group Eg: 'Sexual Offence' or 'General Offence - LDC */
         cohort?: string
         /** @description Filter by the sex that the group is being run for: 'Male', 'Female' or 'Mixed' */
