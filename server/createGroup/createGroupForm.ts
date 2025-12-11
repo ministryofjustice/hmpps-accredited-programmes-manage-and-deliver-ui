@@ -69,7 +69,7 @@ export default class CreateGroupForm {
     }
     return {
       paramsForUpdate: {
-        startedAtDate: this.request.body['create-group-date'],
+        earliestStartDate: this.request.body['create-group-date'],
       },
       error: null,
     }

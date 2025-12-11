@@ -27,7 +27,7 @@ export default class CreateGroupDatePresenter {
   get fields() {
     return {
       createGroupDate: {
-        value: this.createGroupFormData?.startedAtDate,
+        value: this.createGroupFormData?.earliestStartDate,
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'create-group-date'),
       },
     }

@@ -566,11 +566,9 @@ export interface paths {
     }
     /**
      * Retrieve the manager associated with the Licence Condition or Requirement associated with a referral
-     * @description
-     *           Retrieves the manager (Probation Practitioner) associated with the Case, which is upstream of the
+     * @description Retrieves the manager (Probation Practitioner) associated with the Case, which is upstream of the
      *           Referral itself.  We use this to retrieve a list of Delivery Locations (Offices) within the same
      *           PDU as a Referral itself.
-     *
      */
     get: operations['getManagerByReferralId']
     put?: never
@@ -737,13 +735,11 @@ export interface paths {
     }
     /**
      * A Backend-For-Frontend endpoint for the multi-page Delivery Location Preferences form
-     * @description
-     *           Retrieves all the data needed for the multi-page Delivery Location Preferences form, for a Referral:
+     * @description Retrieves all the data needed for the multi-page Delivery Location Preferences form, for a Referral:
      *           - Person on Probation summary information (from nDelius)
      *           - Existing delivery location preferences (or `null`)
      *           - Primary PDU delivery locations for the Manager associated with the Referral (from nDelius)
      *           - Other PDUs in the same region (from nDelius)
-     *
      */
     get: operations['getDeliveryLocationPreferencesFormData']
     put?: never
@@ -1209,9 +1205,9 @@ export interface components {
       sex: components['schemas']['ProgrammeGroupSexEnum']
       /**
        * Format: date
-       * @description The date the group started
+       * @description The earliest date the group can start
        */
-      startedAtDate: string
+      earliestStartDate: string
       /** @description A list of session slots for the group */
       createGroupSessionSlot: components['schemas']['CreateGroupSessionSlot'][]
       /** @description The name of the PDU that the group will take place in */
@@ -1722,9 +1718,11 @@ export interface components {
       problemsReadWriteNum?: string
       /** @example 2-Significant problems */
       learningDifficulties?: string
-      /** @example [
+      /**
+       * @example [
        *       "Difficulty with concentration"
-       *     ] */
+       *     ]
+       */
       problemAreas?: string[]
       /** @example 0 */
       qualifications?: string
@@ -2302,22 +2300,22 @@ export interface components {
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      pageable?: components['schemas']['PageableObject']
       first?: boolean
       last?: boolean
       /** Format: int32 */
       numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageableObject: {
       /** Format: int64 */
       offset?: number
       sort?: components['schemas']['SortObject']
-      /** Format: int32 */
-      pageSize?: number
       paged?: boolean
       /** Format: int32 */
       pageNumber?: number
+      /** Format: int32 */
+      pageSize?: number
       unpaged?: boolean
     }
     ReferralCaseListItem: {
@@ -2569,11 +2567,11 @@ export interface components {
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      pageable?: components['schemas']['PageableObject']
       first?: boolean
       last?: boolean
       /** Format: int32 */
       numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Available filter options for viewing programme group data. */
@@ -2686,11 +2684,11 @@ export interface components {
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      pageable?: components['schemas']['PageableObject']
       first?: boolean
       last?: boolean
       /** Format: int32 */
       numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
