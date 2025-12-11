@@ -6,8 +6,8 @@ export default class GroupView {
 
   private get searchByGroupCodeArgs(): InputArgs {
     return {
-      id: 'group-code',
-      name: 'group-code',
+      id: 'groupCode',
+      name: 'groupCode',
       label: {
         text: 'Group code',
         classes: 'govuk-label--s',
@@ -30,13 +30,13 @@ export default class GroupView {
     }
   }
 
-  private get deliveryTeamCheckboxArgs(): CheckboxesArgs {
+  private get deliveryLocationCheckboxArgs(): CheckboxesArgs {
     return {
       name: 'deliveryLocations',
       classes: 'govuk-checkboxes--small',
       fieldset: {
         legend: {
-          text: 'Reporting team',
+          text: 'Delivery Location',
           isPageHeading: false,
           classes: 'govuk-fieldset__legend--s',
         },
@@ -82,7 +82,7 @@ export default class GroupView {
         searchByPduSelectArgs: this.searchByPduSelectArgs,
         searchBySexArgs: this.searchBySexArgs,
         searchByCohortArgs: this.searchByCohortArgs,
-        deliveryTeamCheckboxArgs: this.deliveryTeamCheckboxArgs,
+        deliveryLocationCheckboxArgs: this.deliveryLocationCheckboxArgs,
       },
     ]
   }

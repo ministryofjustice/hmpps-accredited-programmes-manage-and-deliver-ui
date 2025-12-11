@@ -45,7 +45,7 @@ export default class GroupDetailsPresenter {
   }
 
   get showReportingTeams(): boolean {
-    return this.filter?.pdu !== ''
+    return !!this.filter?.pdu
   }
 
   getSubNavArgs(): { items: { text: string; href: string; active: boolean }[] } {

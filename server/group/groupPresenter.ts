@@ -34,6 +34,7 @@ export default class GroupPresenter {
     readonly pduNames: string[],
     deliveryLocations?: string[],
   ) {
+    this.params = filter.paramsAsQueryParams
     this.groupListItems = groupListItems
     this.pagination = new Pagination(this.groupListItems as Required<typeof this.groupListItems>)
     this.selectedPdu = this.filter.pdu ?? undefined
@@ -142,10 +143,6 @@ export default class GroupPresenter {
     return !!this.selectedPdu
   }
 
-  get deliveryTeamLocations(): string[] | undefined {
-    return this.showDeliveryLocations ? this.deliveryLocations : undefined
-  }
-
   generatePduSelectArgs(): SelectArgsItem[] {
     const selectOptions: SelectArgsItem[] = [
       {
@@ -167,7 +164,7 @@ export default class GroupPresenter {
     return this.deliveryLocations.map(deliveryLocation => ({
       text: deliveryLocation,
       value: deliveryLocation,
-      checked: this.filter.reportingTeams?.includes(deliveryLocation) ?? false,
+      checked: this.filter.deliveryLocations?.includes(deliveryLocation) ?? false,
     }))
   }
 

@@ -10,7 +10,7 @@ export default class GroupListFilter {
 
   sex: string | undefined = undefined
 
-  reportingTeams: string[] | undefined = undefined
+  deliveryLocations: string[] | undefined = undefined
 
   static empty(): GroupListFilter {
     return new GroupListFilter()
@@ -19,16 +19,16 @@ export default class GroupListFilter {
   static fromRequest(request: Request): GroupListFilter {
     const filter = new GroupListFilter()
     filter.cohort = request.query.cohort as string | undefined
-    filter.groupCode = request.query['group-code'] as string | undefined
+    filter.groupCode = request.query.groupCode as string | undefined
 
     filter.pdu = request.query.pdu as string | undefined
     filter.sex = request.query.sex as string | undefined
 
     if (!filter?.pdu) {
-      delete filter.reportingTeams
+      delete filter.deliveryLocations
     } else if (filter?.pdu.length) {
       const reportingTeams = request.query.deliveryLocations as string[] | undefined
-      filter.reportingTeams = typeof reportingTeams === 'string' ? [reportingTeams] : reportingTeams
+      filter.deliveryLocations = typeof reportingTeams === 'string' ? [reportingTeams] : reportingTeams
     }
 
     return filter
@@ -49,8 +49,8 @@ export default class GroupListFilter {
       params.pdu = this.pdu
     }
 
-    if (this.reportingTeams) {
-      params.deliveryLocations = this.reportingTeams
+    if (this.deliveryLocations) {
+      params.deliveryLocations = this.deliveryLocations
     }
 
     if (this.sex) {
@@ -58,5 +58,11 @@ export default class GroupListFilter {
     }
 
     return params
+  }
+
+  get paramsAsQueryParams(): string {
+    const searchParams = new URLSearchParams()
+    Object.entries(this.params).forEach(([key, value]) => searchParams.append(key, value))
+    return searchParams.toString()
   }
 }
