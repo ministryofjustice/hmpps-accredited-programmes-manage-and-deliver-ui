@@ -76,19 +76,6 @@ export default class CreateGroupForm {
   }
 
   async createGroupWhenData(): Promise<FormData<Partial<CreateGroupRequest>>> {
-    const validationResult = await FormUtils.runValidations({
-      request: this.request,
-      validations: this.createGroupWhenValidations(),
-    })
-
-    const error = FormUtils.validationErrorFromResult(validationResult)
-    if (error) {
-      return {
-        paramsForUpdate: null,
-        error,
-      }
-    }
-
     const raw = this.request.body['days-of-week']
     const selectedDays: DayKey[] = []
     if (Array.isArray(raw)) {
@@ -116,6 +103,28 @@ export default class CreateGroupForm {
         amOrPm,
       }
     })
+
+    const validationResult = await FormUtils.runValidations({
+      request: this.request,
+      validations: this.createGroupWhenValidations(),
+    })
+
+    const error = FormUtils.validationErrorFromResult(validationResult)
+
+    if (error) {
+      return {
+        paramsForUpdate: null,
+        error,
+        temporarySlots: slots,
+      } as FormData<Partial<CreateGroupRequest>> & {
+        temporarySlots: Array<{
+          dayOfWeek: DayKey
+          hour: number
+          minutes: number
+          amOrPm: 'AM' | 'PM'
+        }>
+      }
+    }
 
     return {
       paramsForUpdate: {

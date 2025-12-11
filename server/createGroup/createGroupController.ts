@@ -107,29 +107,35 @@ export default class CreateGroupController {
   }
 
   async showCreateGroupWhen(req: Request, res: Response): Promise<void> {
-    const { createGroupFormData } = req.session
+    let { createGroupFormData } = req.session
     let formError: FormValidationError | null = null
     let userInputData = null
 
     if (req.method === 'POST') {
       const data = await new CreateGroupForm(req).createGroupWhenData()
 
+      const slots =
+        data.paramsForUpdate?.createGroupSessionSlot ||
+        ('temporarySlots' in data ? (data.temporarySlots as CreateGroupRequest['createGroupSessionSlot']) : [])
+
+      req.session.createGroupFormData = {
+        ...(createGroupFormData || {}),
+        createGroupSessionSlot: slots,
+      }
+      createGroupFormData = req.session.createGroupFormData
+
       if (data.error) {
         res.status(400)
         formError = data.error
         userInputData = req.body
       } else {
-        req.session.createGroupFormData = {
-          ...createGroupFormData,
-          createGroupSessionSlot: data.paramsForUpdate.createGroupSessionSlot,
-        }
         return res.redirect(`/group/create-a-group/group-cohort`)
       }
     }
 
     const presenter = new CreateGroupWhenPresenter(
-      createGroupFormData.groupCode,
-      createGroupFormData.createGroupSessionSlot,
+      createGroupFormData?.groupCode,
+      createGroupFormData?.createGroupSessionSlot,
       formError,
       userInputData,
     )
