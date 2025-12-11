@@ -8,7 +8,7 @@ describe(GroupListFilter, () => {
         cohort: 'SEXUAL_OFFENCE',
         groupCode: 'CODE',
         pdu: 'PDU3',
-        reportingTeams: ['Team5'],
+        deliveryLocations: ['delivery-location-1'],
         sex: 'Male',
       }
 
@@ -17,7 +17,7 @@ describe(GroupListFilter, () => {
       expect(filter.cohort).toEqual('SEXUAL_OFFENCE')
       expect(filter.groupCode).toEqual('CODE')
       expect(filter.pdu).toEqual('PDU3')
-      expect(filter.reportingTeams).toEqual(['Team5'])
+      expect(filter.deliveryLocations).toEqual(['delivery-location-1'])
       expect(filter.sex).toEqual('Male')
     })
   })
@@ -29,7 +29,7 @@ describe(GroupListFilter, () => {
         expect(filter.cohort).toBeUndefined()
         expect(filter.groupCode).toBeUndefined()
         expect(filter.pdu).toBeUndefined()
-        expect(filter.reportingTeams).toBeUndefined()
+        expect(filter.deliveryLocations).toBeUndefined()
         expect(filter.sex).toBeUndefined()
       })
     })
@@ -52,10 +52,10 @@ describe(GroupListFilter, () => {
       it('correctly sets pdu and reporting team ', () => {
         const filter = new GroupListFilter()
         filter.pdu = 'PDU1'
-        filter.reportingTeams = ['Team1', 'Team2']
+        filter.deliveryLocations = ['location-1', 'location-2']
 
         expect(filter.params.pdu).toEqual('PDU1')
-        expect(filter.params.deliveryLocations).toEqual(['Team1', 'Team2'])
+        expect(filter.params.deliveryLocations).toEqual(['location-1', 'location-2'])
       })
       it('correctly sets pdu', () => {
         const filter = new GroupListFilter()
