@@ -65,7 +65,7 @@ describe('CreateGroupForm', () => {
         const data = await new CreateGroupForm(request).createGroupDateData()
 
         expect(data.paramsForUpdate).toStrictEqual({
-          startedAtDate: '10/7/2050',
+          earliestStartDate: '10/7/2050',
         })
         expect(data.error).toBeNull()
       })

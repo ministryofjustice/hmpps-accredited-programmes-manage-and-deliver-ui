@@ -97,7 +97,7 @@ export default class CreateGroupCyaPresenter {
       },
       {
         key: 'Date',
-        lines: [`${this.createGroupFormData.startedAtDate}`],
+        lines: [`${this.createGroupFormData.earliestStartDate}`],
         changeLink: '/group/create-a-group/group-start-date',
       },
 

@@ -3,27 +3,27 @@ import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
 import { FormValidationError } from '../utils/formValidationError'
-import CreateGroupCodePresenter from './code/createGroupCodePresenter'
-import CreateGroupCodeView from './code/createGroupCodeView'
-import CreateGroupDatePresenter from './date/createGroupDatePresenter'
-import CreateGroupDateView from './date/createGroupDateView'
-import CreateGroupWhenPresenter from './when/createGroupWhenPresenter'
-import CreateGroupWhenView from './when/createGroupWhenView'
-import CreateGroupCohortPresenter from './cohort/createGroupCohortPresenter'
-import CreateGroupCohortView from './cohort/createGroupCohortView'
 import CreateGroupCyaPresenter from './check-your-answers/createGroupCyaPresenter'
 import CreateGroupCyaView from './check-your-answers/createGroupCyaView'
+import CreateGroupCodePresenter from './code/createGroupCodePresenter'
+import CreateGroupCodeView from './code/createGroupCodeView'
+import CreateGroupCohortPresenter from './cohort/createGroupCohortPresenter'
+import CreateGroupCohortView from './cohort/createGroupCohortView'
 import CreateGroupForm from './createGroupForm'
+import CreateGroupTreatmentManagerPresenter from './createGroupTreatmentManagerPresenter'
+import CreateGroupTreatmentManagerView from './createGroupTreatmentManagerView'
+import CreateGroupDatePresenter from './date/createGroupDatePresenter'
+import CreateGroupDateView from './date/createGroupDateView'
+import CreateGroupLocationPresenter from './location/createGroupLocationPresenter'
+import CreateGroupLocationView from './location/createGroupLocationView'
+import CreateGroupPduPresenter from './pdu/createGroupPduPresenter'
+import CreateGroupPduView from './pdu/createGroupPduView'
 import CreateGroupSexPresenter from './sex/createGroupSexPresenter'
 import CreateGroupSexView from './sex/createGroupSexView'
 import CreateGroupStartPresenter from './start/createGroupStartPresenter'
 import CreateGroupStartView from './start/createGroupStartView'
-import CreateGroupPduPresenter from './pdu/createGroupPduPresenter'
-import CreateGroupPduView from './pdu/createGroupPduView'
-import CreateGroupLocationPresenter from './location/createGroupLocationPresenter'
-import CreateGroupLocationView from './location/createGroupLocationView'
-import CreateGroupTreatmentManagerPresenter from './createGroupTreatmentManagerPresenter'
-import CreateGroupTreatmentManagerView from './createGroupTreatmentManagerView'
+import CreateGroupWhenPresenter from './when/createGroupWhenPresenter'
+import CreateGroupWhenView from './when/createGroupWhenView'
 
 export default class CreateGroupController {
   constructor(
@@ -90,12 +90,12 @@ export default class CreateGroupController {
 
         formDataForPresenter = {
           ...createGroupFormData,
-          startedAtDate: req.body['create-group-date'],
+          earliestStartDate: req.body['create-group-date'],
         }
       } else {
         req.session.createGroupFormData = {
           ...createGroupFormData,
-          startedAtDate: data.paramsForUpdate.startedAtDate,
+          earliestStartDate: data.paramsForUpdate.earliestStartDate,
         }
         return res.redirect(`/group/create-a-group/group-days-and-times`)
       }
