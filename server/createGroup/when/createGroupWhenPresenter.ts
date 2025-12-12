@@ -98,13 +98,14 @@ export default class CreateGroupWhenPresenter {
       checked: selectedDays.includes(key),
       attributes: { 'data-aria-controls': `${idBase}-conditional` },
       conditional: {
-        html: this.getConditionalHtml(idBase, idBase as keyof typeof this.fields.slots),
+        html: this.getConditionalHtml(idBase, idBase as keyof typeof this.fields.slots, label),
       },
     }))
   }
 
-  private getConditionalHtml(idBase: string, key: keyof typeof this.fields.slots): string {
+  private getConditionalHtml(idBase: string, key: keyof typeof this.fields.slots, dayLabel: string): string {
     const slot = this.fields.slots[key]
+    const dayName = dayLabel.endsWith('s') ? dayLabel.slice(0, -1) : dayLabel
 
     const errorItems = [
       { id: `${idBase}-hour-error`, message: slot.hour.errorMessage },
@@ -126,9 +127,9 @@ export default class CreateGroupWhenPresenter {
     const hasErrors = errorListHtml.length > 0
 
     return `
-    <span class="govuk-caption-m">Start time</span>
-    <span class="govuk-hint">Use the 12-hour clock, for example 9:30am or 3:00pm. Enter 12:00pm for midday.</span>
-    
+    <div class="govuk-!-padding-top-2 govuk-!-padding-bottom-4">
+    <span class="govuk-label govuk-!-padding-bottom-2">Start time</span>
+    <span class="govuk-hint">Use the 12-hour clock, for example 9:30am or 3:00pm. Enter 12:00pm for midday.</span></div>
     <div class="govuk-date-input" id="${idBase}-time">
       ${
         hasErrors
@@ -147,7 +148,7 @@ export default class CreateGroupWhenPresenter {
             slot.hour.errorMessage ? 'govuk-input--error' : ''
           }"
             id="${idBase}-hour" name="${idBase}-hour" type="text" inputmode="numeric"
-            pattern="[0-9]{1,2}" maxlength="2" value="${slot.hour.value}">
+            pattern="[0-9]{1,2}" maxlength="2" value="${slot.hour.value}" aria-label="${dayName} hour">
         </div>
       </div>
 
@@ -158,7 +159,7 @@ export default class CreateGroupWhenPresenter {
             slot.minute.errorMessage ? 'govuk-input--error' : ''
           }"
             id="${idBase}-minute" name="${idBase}-minute" type="text" inputmode="numeric"
-            pattern="[0-9]{1,2}" maxlength="2" value="${slot.minute.value}">
+            pattern="[0-9]{1,2}" maxlength="2" value="${slot.minute.value}" aria-label="${dayName} minute">
         </div>
       </div>
 
@@ -167,7 +168,7 @@ export default class CreateGroupWhenPresenter {
           <label class="govuk-label govuk-date-input__label" for="${idBase}-ampm">am or pm</label>
           <select class="govuk-select govuk-date-select__select ${
             slot.ampm.errorMessage ? 'govuk-select--error' : ''
-          }" id="${idBase}-ampm" name="${idBase}-ampm">
+          }" id="${idBase}-ampm" name="${idBase}-ampm" aria-label="${dayName} am or pm">
             <option value=""></option>
             <option value="am" ${slot.ampm.value === 'am' ? 'selected' : ''}>am</option>
             <option value="pm" ${slot.ampm.value === 'pm' ? 'selected' : ''}>pm</option>
