@@ -38,7 +38,7 @@
       <div class="govuk-grid-column-two-thirds">
         <form method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{csrfToken}}">
-          {% if currentStatus == 'Awaiting allocation' %}
+          {% if showInsetText %}
             {{ govukInsetText(awaitingAllocationAdditionalInfoText) }}
           {% endif %}
           {{ govukRadios(statusUpdateRadioButtons) }}

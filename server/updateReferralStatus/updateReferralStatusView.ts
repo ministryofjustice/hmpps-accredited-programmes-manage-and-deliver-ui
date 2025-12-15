@@ -35,7 +35,7 @@ export default class UpdateReferralStatusView {
       },
       maxlength: '500',
       hint: {
-        text: this.presenter.generateAddDetailsHintText,
+        text: this.presenter.generateAddDetailsHintText(),
       },
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.moreDetailsTextArea.errorMessage),
       value: this.presenter.fields.moreDetailsTextArea.value,
@@ -73,7 +73,7 @@ export default class UpdateReferralStatusView {
 
   get awaitingAllocationAdditionalInfoText() {
     return {
-      html: `If you want to change this person's status to Scheduled, you must <a href="/groups/started">allocate them to a group.</a>`,
+      html: this.presenter.generateInsetText(),
     }
   }
 
@@ -91,6 +91,7 @@ export default class UpdateReferralStatusView {
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         currentStatus: this.presenter.statusDetails.currentStatus.title,
         awaitingAllocationAdditionalInfoText: this.awaitingAllocationAdditionalInfoText,
+        showInsetText: this.presenter.showInsetText,
       },
     ]
   }

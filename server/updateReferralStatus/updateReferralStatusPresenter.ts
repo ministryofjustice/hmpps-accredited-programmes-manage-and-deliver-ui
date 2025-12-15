@@ -44,6 +44,19 @@ export default class UpdateReferralStatusPresenter {
     }
   }
 
+  generateInsetText() {
+    switch (this.statusDetails.currentStatus.title) {
+      case 'Awaiting allocation':
+        return `If you want to change this person's status to Scheduled, you must <a href="/groups/started">allocate them to a group.</a>`
+      default:
+        return ''
+    }
+  }
+
+  showInsetText() {
+    return ['Awaiting allocation'].includes(this.statusDetails.currentStatus.title)
+  }
+
   get fields() {
     return {
       moreDetailsTextArea: {
