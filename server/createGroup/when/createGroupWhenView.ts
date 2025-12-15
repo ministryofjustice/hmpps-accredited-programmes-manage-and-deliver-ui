@@ -30,6 +30,7 @@ export default class CreateGroupWhenView {
       },
       hint: {
         html: `
+        
           <p class="govuk-hint">Select when group sessions will run. You can add extra information later, for example about times of individual sessions.</p>
           <p class="govuk-hint">Sessions that fall on bank holidays will automatically be moved to the next scheduled date.</p>
         `,
