@@ -77,4 +77,23 @@ describe('generateStatusUpdateRadios.', () => {
       },
     ])
   })
+  describe('generateAddDetailsHintText', () => {
+    it('returns the correct hint for Awaiting allocation', () => {
+      const details = referralDetailsFactory.build()
+      const statusDetails = referralStatusFormDataFactory.build({ currentStatus: { title: 'Awaiting allocation' } })
+      const presenter = new UpdateReferralStatusPresenter(details, statusDetails, '')
+      expect(presenter.generateAddDetailsHintText()).toBe(
+        'You can add more information about this update, such as the reason for deprioritising someone.',
+      )
+    })
+
+    it('returns the default hint for other statuses', () => {
+      const details = referralDetailsFactory.build()
+      const statusDetails = referralStatusFormDataFactory.build()
+      const presenter = new UpdateReferralStatusPresenter(details, statusDetails, '')
+      expect(presenter.generateAddDetailsHintText()).toBe(
+        'You can add more information about this update, such as the reason for an assessment decision or for deprioritising someone.',
+      )
+    })
+  })
 })

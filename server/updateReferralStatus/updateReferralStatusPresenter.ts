@@ -35,6 +35,28 @@ export default class UpdateReferralStatusPresenter {
     return statusRadios
   }
 
+  generateAddDetailsHintText() {
+    switch (this.statusDetails.currentStatus.title) {
+      case 'Awaiting allocation':
+        return 'You can add more information about this update, such as the reason for deprioritising someone.'
+      default:
+        return 'You can add more information about this update, such as the reason for an assessment decision or for deprioritising someone.'
+    }
+  }
+
+  generateInsetText() {
+    switch (this.statusDetails.currentStatus.title) {
+      case 'Awaiting allocation':
+        return `If you want to change this person's status to Scheduled, you must <a href="/groups/started">allocate them to a group.</a>`
+      default:
+        return ''
+    }
+  }
+
+  showInsetText() {
+    return ['Awaiting allocation'].includes(this.statusDetails.currentStatus.title)
+  }
+
   get fields() {
     return {
       moreDetailsTextArea: {
