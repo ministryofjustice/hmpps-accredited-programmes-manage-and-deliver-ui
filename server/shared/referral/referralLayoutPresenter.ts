@@ -37,6 +37,13 @@ export default class ReferralLayoutPresenter {
     button: { text: string; classes: string }
     items: { text: string; href?: string }[]
   } {
+    let updateStatusHref = `/referral/${this.referral.id}/update-status`
+    if (this.referral.currentStatusDescription === 'Scheduled') {
+      updateStatusHref = `/referral/${this.referral.id}/update-status-scheduled`
+    }
+    if (this.referral.currentStatusDescription === 'On programme') {
+      updateStatusHref = `/referral/${this.referral.id}/update-status-on-programme`
+    }
     return {
       button: {
         text: 'Update referral',
@@ -45,7 +52,7 @@ export default class ReferralLayoutPresenter {
       items: [
         {
           text: 'Update status',
-          href: `/referral/${this.referral.id}/update-status`,
+          href: updateStatusHref,
         },
         {
           text: 'Change LDC status',

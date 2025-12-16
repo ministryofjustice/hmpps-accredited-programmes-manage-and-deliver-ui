@@ -49,13 +49,6 @@ export default class UpdateReferralStatusView {
     }
   }
 
-  get backLinkArgs() {
-    return {
-      text: 'Back',
-      href: this.presenter.backLinkUri,
-    }
-  }
-
   get statusUpdateRadioButtonsOptions() {
     return {
       name: 'updated-status',
@@ -71,9 +64,15 @@ export default class UpdateReferralStatusView {
     }
   }
 
-  get awaitingAllocationAdditionalInfoText() {
+  get topInsetText() {
     return {
-      html: this.presenter.generateInsetText(),
+      html: `If you want to change this person's status to Scheduled, you must <a href="/groups/started">allocate them to a group.</a>`,
+    }
+  }
+
+  get bottomInsetText() {
+    return {
+      html: `Submitting this change will remove the person from the group.`,
     }
   }
 
@@ -86,12 +85,14 @@ export default class UpdateReferralStatusView {
         addDetailsTextboxOptions: this.addDetailsTextboxOptions,
         currentStatusTagOptions: this.currentStatusTagOptions,
         getCurrentStatusTimelineOptions: this.getCurrentStatusTimelineOptions.bind(this),
-        backLinkArgs: this.backLinkArgs,
-        backLinkUri: this.presenter.backLinkUri,
+        backLinkArgs: this.presenter.backLinkArgs,
+        cancelLinkUri: this.presenter.backLinkUri,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         currentStatus: this.presenter.statusDetails.currentStatus.title,
-        awaitingAllocationAdditionalInfoText: this.awaitingAllocationAdditionalInfoText,
-        showInsetText: this.presenter.showInsetText,
+        topInsetText: this.topInsetText,
+        showInsetText: this.presenter.showTopInsetText(),
+        bottomInsetText: this.bottomInsetText,
+        showBottomInsetText: this.presenter.showBottomInsetText(),
       },
     ]
   }

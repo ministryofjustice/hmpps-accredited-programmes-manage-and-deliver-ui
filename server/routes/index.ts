@@ -204,6 +204,19 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   post('/referral/:referralId/update-status', async (req, res, next) => {
     await updateReferralController.updateStatus(req, res)
   })
+
+  getOrPost('/referral/:referralId/update-status-scheduled', async (req, res, next) => {
+    await updateReferralController.updateStatusInterim(req, res)
+  })
+
+  getOrPost('/referral/:referralId/update-status-on-programme', async (req, res, next) => {
+    await updateReferralController.updateStatusInterim(req, res)
+  })
+
+  getOrPost('/referral/:referralId/update-status-details', async (req, res, next) => {
+    await updateReferralController.updateStatusFixed(req, res)
+  })
+
   getOrPost('/group/create-a-group/create-group', async (req, res) => {
     await createGroupController.showCreateGroupStart(req, res)
   })
