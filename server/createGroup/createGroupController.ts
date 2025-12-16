@@ -1,6 +1,7 @@
 import { CreateGroupRequest } from '@manage-and-deliver-api'
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import BankHolidaysService from '../services/bankHolidaysService'
 import ControllerUtils from '../utils/controllerUtils'
 import { FormValidationError } from '../utils/formValidationError'
 import CreateGroupCyaPresenter from './check-your-answers/createGroupCyaPresenter'
@@ -26,9 +27,13 @@ import CreateGroupWhenPresenter from './when/createGroupWhenPresenter'
 import CreateGroupWhenView from './when/createGroupWhenView'
 
 export default class CreateGroupController {
+  private bankHolidaysService: BankHolidaysService
+
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
-  ) {}
+  ) {
+    this.bankHolidaysService = new BankHolidaysService()
+  }
 
   async showCreateGroupStart(req: Request, res: Response): Promise<void> {
     if (req.method === 'POST') {
@@ -81,8 +86,11 @@ export default class CreateGroupController {
 
     let formDataForPresenter: Partial<CreateGroupRequest> | null = createGroupFormData
 
+    // Fetch bank holidays
+    const bankHolidays = await this.bankHolidaysService.getEnglandAndWalesBankHolidays()
+
     if (req.method === 'POST') {
-      const data = await new CreateGroupForm(req).createGroupDateData()
+      const data = await new CreateGroupForm(req, undefined, bankHolidays).createGroupDateData()
 
       if (data.error) {
         res.status(400)
@@ -101,7 +109,7 @@ export default class CreateGroupController {
       }
     }
 
-    const presenter = new CreateGroupDatePresenter(formError, formDataForPresenter)
+    const presenter = new CreateGroupDatePresenter(formError, formDataForPresenter, bankHolidays)
     const view = new CreateGroupDateView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }

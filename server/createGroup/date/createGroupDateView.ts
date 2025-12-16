@@ -33,6 +33,7 @@ export default class CreateGroupDateView {
       },
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createGroupDate.errorMessage),
       value: this.presenter.fields.createGroupDate.value,
+      excludedDates: this.presenter.excludedDates,
     }
   }
 

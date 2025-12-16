@@ -78,6 +78,7 @@ export default {
     createGroupDateSelect: 'Enter or select a date',
     createGroupDateInvalid: 'Enter a date in the format 10/7/2025',
     createGroupDateInPast: 'Start date must be in the future',
+    createGroupDateIsBankHoliday: 'Start date cannot be a bank holiday',
     createGroupSexSelect: 'Select a sex',
     createGroupWhenSelect: 'Select at least one day',
     createGroupWhenHourRequired: 'Enter a complete start time',

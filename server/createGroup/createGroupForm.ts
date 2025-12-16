@@ -5,12 +5,18 @@ import errorMessages from '../utils/errorMessages'
 import { FormData } from '../utils/forms/formData'
 import FormUtils from '../utils/formUtils'
 import { DAY_CONFIG, DayKey } from './when/daysOfWeek'
+import BankHolidaysService from '../services/bankHolidaysService'
 
 export default class CreateGroupForm {
+  private bankHolidaysService: BankHolidaysService
+
   constructor(
     private readonly request: Request,
     private readonly existingGroupCode?: string,
-  ) {}
+    private readonly bankHolidays: string[] = [],
+  ) {
+    this.bankHolidaysService = new BankHolidaysService()
+  }
 
   async createGroupCodeData(): Promise<FormData<Partial<CreateGroupRequest>>> {
     const validationResult = await FormUtils.runValidations({
@@ -266,6 +272,13 @@ export default class CreateGroupForm {
             throw new Error(errorMessages.createGroup.createGroupDateInPast)
           }
 
+          return true
+        })
+        .bail()
+        .custom((value: string) => {
+          if (this.bankHolidaysService.isBankHoliday(value, this.bankHolidays)) {
+            throw new Error(errorMessages.createGroup.createGroupDateIsBankHoliday)
+          }
           return true
         }),
     ]

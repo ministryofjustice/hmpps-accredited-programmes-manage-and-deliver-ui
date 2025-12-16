@@ -6,6 +6,7 @@ export default class CreateGroupDatePresenter {
   constructor(
     private readonly validationError: FormValidationError | null = null,
     private readonly createGroupFormData: Partial<CreateGroupRequest> | null = null,
+    private readonly bankHolidays: string[] = [],
   ) {}
 
   get text() {
@@ -31,5 +32,14 @@ export default class CreateGroupDatePresenter {
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'create-group-date'),
       },
     }
+  }
+
+  get excludedDates(): string {
+    return this.bankHolidays
+      .map(date => {
+        const [year, month, day] = date.split('-')
+        return `${parseInt(day, 10)}/${parseInt(month, 10)}/${year}`
+      })
+      .join(' ')
   }
 }
