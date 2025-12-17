@@ -23,10 +23,10 @@ export default class UpdateReferralStatusPresenter {
   get backLinkArgs() {
     let backUri = this.backLinkUri
     if (this.details.currentStatusDescription === 'Scheduled') {
-      backUri = `/referral/${this.details.id}/update-status-scheduled`
+      backUri = `/referral/${this.details.id}/update-status-scheduled?startedOrCompleted=false`
     }
     if (this.details.currentStatusDescription === 'On programme') {
-      backUri = `/referral/${this.details.id}/update-status-on-programme`
+      backUri = `/referral/${this.details.id}/update-status-on-programme?startedOrCompleted=false`
     }
     return {
       text: 'Back',

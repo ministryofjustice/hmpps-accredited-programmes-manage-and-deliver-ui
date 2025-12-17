@@ -74,22 +74,21 @@ export default class UpdateReferralStatusController {
         userInputData = req.body
       } else {
         if (data.paramsForUpdate.hasStartedOrCompleted.toLowerCase() === 'true') {
-          req.session.startedOrCompleted = true
           return res.redirect(`/referral/${referralId}/update-status-details`)
         }
-        req.session.startedOrCompleted = false
         return res.redirect(`/referral/${referralId}/update-status`)
       }
     }
+
+    const startedOrCompleted = String(req.query.startedOrCompleted || '')
 
     const presenter = new UpdateReferralStatusInterimPresenter(
       referralDetails,
       req.session.originPage,
       formError,
       userInputData,
-      req.session.startedOrCompleted,
+      startedOrCompleted,
     )
-    req.session.startedOrCompleted = null
     const view = new UpdateReferralStatusInterimView(presenter)
     return ControllerUtils.renderWithLayout(res, view, referralDetails)
   }
@@ -127,14 +126,13 @@ export default class UpdateReferralStatusController {
           }
           await this.accreditedProgrammesManageAndDeliverService.updateStatus(username, referralId, updateObject)
         }
-        req.session.startedOrCompleted = null
         return res.redirect(`/referral/${referralId}/status-history?statusUpdated=true`)
       }
     }
 
-    let backUri = `/referral/${referralId}/update-status-scheduled`
+    let backUri = `/referral/${referralId}/update-status-scheduled?startedOrCompleted=true`
     if (referralDetails.currentStatusDescription === 'On programme') {
-      backUri = `/referral/${referralId}/update-status-on-programme`
+      backUri = `/referral/${referralId}/update-status-on-programme?startedOrCompleted=true`
     }
 
     const presenter = new UpdateReferralStatusFixedPresenter(

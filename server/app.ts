@@ -39,7 +39,6 @@ declare module 'express-session' {
       removeFromGroup?: boolean
     }
     createGroupFormData?: Partial<CreateGroupRequest>
-    startedOrCompleted?: boolean
   }
 }
 

@@ -8,7 +8,7 @@ export default class UpdateReferralStatusInterimPresenter {
     readonly backLinkUri: string,
     private readonly validationError: FormValidationError | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
-    private readonly startedOrCompleted: boolean | null = null,
+    private readonly startedOrCompleted: string | null = null,
   ) {}
 
   get utils() {
@@ -29,11 +29,10 @@ export default class UpdateReferralStatusInterimPresenter {
   }
 
   get fields() {
-    const startedOrCompletedString = this.startedOrCompleted === null ? null : String(this.startedOrCompleted)
     return {
       currentStatus: {
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'started-or-completed'),
-        value: this.utils.stringValue(startedOrCompletedString, 'startedOrCompleted'),
+        value: this.utils.stringValue(this.startedOrCompleted, 'startedOrCompleted'),
       },
     }
   }
