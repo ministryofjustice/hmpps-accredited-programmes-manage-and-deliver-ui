@@ -90,7 +90,7 @@ export default class UpdateReferralStatusView {
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         currentStatus: this.presenter.statusDetails.currentStatus.title,
         topInsetText: this.topInsetText,
-        showInsetText: this.presenter.showTopInsetText(),
+        showTopInsetText: this.presenter.showTopInsetText(),
         bottomInsetText: this.bottomInsetText,
         showBottomInsetText: this.presenter.showBottomInsetText(),
       },
