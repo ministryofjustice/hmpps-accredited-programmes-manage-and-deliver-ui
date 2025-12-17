@@ -105,7 +105,7 @@ export default class AccreditedProgrammesManageAndDeliverService
     // const filterQuery: Record<string, unknown> = { ...filter }
 
     return (await restClient.get({
-      path: `/bff/groups/region/${selectedTab}`,
+      path: `/bff/groups/${selectedTab}`,
       headers: { Accept: 'application/json' },
       query: { ...paginationParams }, // , ...filterQuery },
     })) as GroupsByRegion

@@ -10,4 +10,5 @@ export default GroupsByRegionFactory.define(() => ({
   pagedGroupData: pageFactory.pageContent([GroupFactory.build()]).build() as Page<Group>,
   otherTabTotal: 10,
   regionName: 'test region name',
+  probationDeliveryUnitNames: [] as string[],
 }))

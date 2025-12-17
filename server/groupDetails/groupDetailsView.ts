@@ -111,7 +111,7 @@ export default class GroupDetailsView {
         subNavArgs: this.presenter.getSubNavArgs(),
         searchByCrnOrPersonNameArgs: this.searchByCrnOrPersonNameArgs,
         isWaitlist: this.presenter.section === GroupDetailsPageSection.Waitlist,
-        pagination: this.presenter.pagination.mojPaginationArgs,
+        pagination: this.presenter.pagination.govukPaginationArgs,
         searchByCohortArgs: this.searchByCohortArgs,
         searchBySexArgs: this.searchBySexArgs,
         searchByPduArgs: this.searchByPduArgs,

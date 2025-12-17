@@ -790,7 +790,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/bff/groups/region/{selectedTab}': {
+  '/bff/groups/{selectedTab}': {
     parameters: {
       query?: never
       header?: never
@@ -2294,28 +2294,28 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
-      pageable?: components['schemas']['PageableObject']
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageableObject: {
       /** Format: int64 */
       offset?: number
       sort?: components['schemas']['SortObject']
+      /** Format: int32 */
+      pageSize?: number
       paged?: boolean
       /** Format: int32 */
       pageNumber?: number
-      /** Format: int32 */
-      pageSize?: number
       unpaged?: boolean
     }
     ReferralCaseListItem: {
@@ -2550,6 +2550,10 @@ export interface components {
        * @example 12
        */
       otherTabTotal: number
+      /** @description A list of (unique) Probation Delivery Units names across all of the Groups */
+      probationDeliveryUnitNames: string[]
+      /** @description A list of (unique) Delivery Locations for Referrals within the current PDU.  Only present if a probationDeliveryUnit is specified */
+      deliveryLocationNames?: string[]
       /**
        * @description The region name the groups belongs to.
        * @example West Midlands
@@ -2561,17 +2565,17 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
-      pageable?: components['schemas']['PageableObject']
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Available filter options for viewing programme group data. */
@@ -2678,17 +2682,17 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
-      pageable?: components['schemas']['PageableObject']
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
@@ -5158,7 +5162,7 @@ export interface operations {
         /** @description Filter by the human readable pdu of the group, i.e. 'All London' */
         pdu?: string
         /** @description Filter by the delivery location name */
-        deliveryLocation?: string
+        deliveryLocations?: string[]
         /** @description Filter by the cohort of the group Eg: 'Sexual Offence' or 'General Offence - LDC */
         cohort?: string
         /** @description Filter by the sex that the group is being run for: 'Male', 'Female' or 'Mixed' */

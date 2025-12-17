@@ -14,10 +14,10 @@ describe(Pagination, () => {
               number: 0, // page=1
               size: 10,
             })
-            const { previous } = new Pagination(page).mojPaginationArgs
-            const { next } = new Pagination(page).mojPaginationArgs
+            const { previous } = new Pagination(page).govukPaginationArgs
+            const { next } = new Pagination(page).govukPaginationArgs
             expect(previous).toBeUndefined()
-            expect(next).toEqual({ text: 'Next', href: '?page=2' })
+            expect(next).toEqual({ href: '?page=2' })
           })
         })
         describe('when it is the last page', () => {
@@ -29,9 +29,9 @@ describe(Pagination, () => {
               number: 1, // page=2
               size: 10,
             })
-            const { previous } = new Pagination(page).mojPaginationArgs
-            const { next } = new Pagination(page).mojPaginationArgs
-            expect(previous).toEqual({ text: 'Previous', href: '?page=1' })
+            const { previous } = new Pagination(page).govukPaginationArgs
+            const { next } = new Pagination(page).govukPaginationArgs
+            expect(previous).toEqual({ href: '?page=1' })
             expect(next).toBeUndefined()
           })
         })
@@ -44,10 +44,10 @@ describe(Pagination, () => {
               number: 1, // page=2
               size: 10,
             })
-            const { previous } = new Pagination(page).mojPaginationArgs
-            const { next } = new Pagination(page).mojPaginationArgs
-            expect(previous).toEqual({ text: 'Previous', href: '?page=1' })
-            expect(next).toEqual({ text: 'Next', href: '?page=3' })
+            const { previous } = new Pagination(page).govukPaginationArgs
+            const { next } = new Pagination(page).govukPaginationArgs
+            expect(previous).toEqual({ href: '?page=1' })
+            expect(next).toEqual({ href: '?page=3' })
           })
         })
       })
@@ -62,7 +62,7 @@ describe(Pagination, () => {
             number: 0, // page=1
             size: 10,
           })
-          const { items } = new Pagination(page).mojPaginationArgs
+          const { items } = new Pagination(page).govukPaginationArgs
           expect(items).toEqual([])
         })
       })
@@ -75,13 +75,13 @@ describe(Pagination, () => {
             number: 4, // page=5
             size: 10,
           })
-          const { items } = new Pagination(page).mojPaginationArgs
+          const { items } = new Pagination(page).govukPaginationArgs
           expect(items).toEqual([
-            { type: 'pageNumber', selected: false, text: 1, href: '?page=1' },
-            { type: 'pageNumber', selected: false, text: 2, href: '?page=2' },
-            { type: 'pageNumber', selected: false, text: 3, href: '?page=3' },
-            { type: 'pageNumber', selected: false, text: 4, href: '?page=4' },
-            { type: 'pageNumber', selected: true, text: 5, href: '?page=5' },
+            { number: 1, current: false, href: '?page=1' },
+            { number: 2, current: false, href: '?page=2' },
+            { number: 3, current: false, href: '?page=3' },
+            { number: 4, current: false, href: '?page=4' },
+            { number: 5, current: true, href: '?page=5' },
           ])
         })
       })
@@ -95,14 +95,14 @@ describe(Pagination, () => {
               number: 2, // page=3
               size: 10,
             })
-            const { items } = new Pagination(page).mojPaginationArgs
+            const { items } = new Pagination(page).govukPaginationArgs
             expect(items).toEqual([
-              { type: 'pageNumber', selected: false, text: 1, href: '?page=1' },
-              { type: 'pageNumber', selected: false, text: 2, href: '?page=2' },
-              { type: 'pageNumber', selected: true, text: 3, href: '?page=3' },
-              { type: 'pageNumber', selected: false, text: 4, href: '?page=4' },
-              { type: 'dots' },
-              { type: 'pageNumber', selected: false, text: 6, href: '?page=6' },
+              { number: 1, current: false, href: '?page=1' },
+              { number: 2, current: false, href: '?page=2' },
+              { number: 3, current: true, href: '?page=3' },
+              { number: 4, current: false, href: '?page=4' },
+              { ellipsis: true, href: '' },
+              { number: 6, current: false, href: '?page=6' },
             ])
           })
         })
@@ -115,14 +115,14 @@ describe(Pagination, () => {
               number: 3, // page=4
               size: 10,
             })
-            const { items } = new Pagination(page).mojPaginationArgs
+            const { items } = new Pagination(page).govukPaginationArgs
             expect(items).toEqual([
-              { type: 'pageNumber', selected: false, text: 1, href: '?page=1' },
-              { type: 'dots' },
-              { type: 'pageNumber', selected: false, text: 3, href: '?page=3' },
-              { type: 'pageNumber', selected: true, text: 4, href: '?page=4' },
-              { type: 'pageNumber', selected: false, text: 5, href: '?page=5' },
-              { type: 'pageNumber', selected: false, text: 6, href: '?page=6' },
+              { number: 1, current: false, href: '?page=1' },
+              { ellipsis: true, href: '' },
+              { number: 3, current: false, href: '?page=3' },
+              { number: 4, current: true, href: '?page=4' },
+              { number: 5, current: false, href: '?page=5' },
+              { number: 6, current: false, href: '?page=6' },
             ])
           })
         })
@@ -135,34 +135,17 @@ describe(Pagination, () => {
               number: 3, // page=4
               size: 10,
             })
-            const { items } = new Pagination(page).mojPaginationArgs
+            const { items } = new Pagination(page).govukPaginationArgs
             expect(items).toEqual([
-              { type: 'pageNumber', selected: false, text: 1, href: '?page=1' },
-              { type: 'dots' },
-              { type: 'pageNumber', selected: false, text: 3, href: '?page=3' },
-              { type: 'pageNumber', selected: true, text: 4, href: '?page=4' },
-              { type: 'pageNumber', selected: false, text: 5, href: '?page=5' },
-              { type: 'dots' },
-              { type: 'pageNumber', selected: false, text: 7, href: '?page=7' },
+              { number: 1, current: false, href: '?page=1' },
+              { ellipsis: true, href: '' },
+              { number: 3, current: false, href: '?page=3' },
+              { number: 4, current: true, href: '?page=4' },
+              { number: 5, current: false, href: '?page=5' },
+              { ellipsis: true, href: '' },
+              { number: 7, current: false, href: '?page=7' },
             ])
           })
-        })
-      })
-    })
-    describe('the arguments for page summary results', () => {
-      it('should show the correct range or values', () => {
-        const page = pageFactory.pageContent([]).build({
-          totalElements: 50,
-          totalPages: 5,
-          numberOfElements: 10,
-          number: 2, // page=3
-          size: 10,
-        })
-        const { results } = new Pagination(page).mojPaginationArgs
-        expect(results).toEqual({
-          from: 21,
-          to: 30,
-          count: 50,
         })
       })
     })

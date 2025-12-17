@@ -1,30 +1,23 @@
 import { Page } from '../../shared/models/pagination'
 
-interface MojPaginationArgs {
+interface GovukPaginationArgs {
   classes?: string
-  items: (
-    | {
-        type: 'dots'
-      }
-    | {
-        type: 'pageNumber'
-        selected: boolean
-        text: number
-        href: string
-      }
-  )[]
+  items?: {
+    number?: number
+    visuallyHiddenText?: string
+    href: string
+    current?: boolean
+    ellipsis?: boolean
+  }[]
   previous?: {
-    text: string
+    text?: string
+    labelText?: string
     href: string
   }
   next?: {
-    text: string
+    text?: string
+    labelText?: string
     href: string
-  }
-  results?: {
-    from: number
-    to: number
-    count: number
   }
 }
 
@@ -34,35 +27,27 @@ export default class Pagination {
     private readonly params: string | null = null,
   ) {}
 
-  private constructPageItems(pageNumberRange: number[], chosenPageNumber: number): MojPaginationArgs['items'] {
+  private constructPageItems(pageNumberRange: number[], chosenPageNumber: number): GovukPaginationArgs['items'] {
     return pageNumberRange.map(pageNumber => {
       return {
-        type: 'pageNumber',
-        selected: chosenPageNumber === pageNumber,
-        text: pageNumber,
+        number: pageNumber,
+        current: chosenPageNumber === pageNumber,
         href: this.params ? `?${this.params}&page=${pageNumber}` : `?page=${pageNumber}`,
       }
     })
   }
 
-  get mojPaginationArgs(): MojPaginationArgs {
+  get govukPaginationArgs(): GovukPaginationArgs {
     const { totalPages } = this.page
     if (totalPages <= 1) {
       return {
         items: [],
       }
     }
-    const count = this.page.totalElements
-    // page.number is zero indexed
     const zeroIndexPageNumber = this.page.number
     const chosenPageNumber = zeroIndexPageNumber + 1
-    const pageSize = this.page.size
-    const from = zeroIndexPageNumber * pageSize + 1
-    let to = from + pageSize - 1
-    if (to > count) {
-      to = count
-    }
-    const items: MojPaginationArgs['items'] = []
+    const items: GovukPaginationArgs['items'] = []
+
     if (totalPages <= 5) {
       items.push(
         ...this.constructPageItems(
@@ -72,38 +57,36 @@ export default class Pagination {
       )
     } else if (chosenPageNumber < 4) {
       items.push(...this.constructPageItems([1, 2, 3, 4], chosenPageNumber))
-      items.push({ type: 'dots' })
+      items.push({ ellipsis: true, href: '' })
       items.push(...this.constructPageItems([totalPages], chosenPageNumber))
     } else if (chosenPageNumber > totalPages - 3) {
       const lastPages = [totalPages - 3, totalPages - 2, totalPages - 1, totalPages]
       items.push(...this.constructPageItems([1], chosenPageNumber))
-      items.push({ type: 'dots' })
+      items.push({ ellipsis: true, href: '' })
       items.push(...this.constructPageItems(lastPages, chosenPageNumber))
     } else {
       const middlePages = [chosenPageNumber - 1, chosenPageNumber, chosenPageNumber + 1]
       items.push(...this.constructPageItems([1], chosenPageNumber))
-      items.push({ type: 'dots' })
+      items.push({ ellipsis: true, href: '' })
       items.push(...this.constructPageItems(middlePages, chosenPageNumber))
-      items.push({ type: 'dots' })
+      items.push({ ellipsis: true, href: '' })
       items.push(...this.constructPageItems([totalPages], chosenPageNumber))
     }
+
     return {
       items,
       previous:
         chosenPageNumber === 1
           ? undefined
           : {
-              text: 'Previous',
               href: this.params ? `?${this.params}&page=${chosenPageNumber - 1}` : `?page=${chosenPageNumber - 1}`,
             },
       next:
         chosenPageNumber === totalPages
           ? undefined
           : {
-              text: 'Next',
               href: this.params ? `?${this.params}&page=${chosenPageNumber + 1}` : `?page=${chosenPageNumber + 1}`,
             },
-      results: { from, to, count },
     }
   }
 }
