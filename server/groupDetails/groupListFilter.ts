@@ -2,58 +2,67 @@ import { Request } from 'express'
 import { GroupListFilterParams } from './groupListFilterParams'
 
 export default class GroupListFilter {
-  status: string | undefined
+  groupCode: string | undefined = undefined
 
-  cohort: string | undefined
+  cohort: string | undefined = undefined
 
-  nameOrCRN: string | undefined
+  pdu: string | undefined = undefined
 
-  pdu: string | undefined
+  sex: string | undefined = undefined
 
-  sex: string | undefined
+  deliveryLocations: string[] | undefined = undefined
 
-  reportingTeam: string[] | undefined
+  static empty(): GroupListFilter {
+    return new GroupListFilter()
+  }
 
   static fromRequest(request: Request): GroupListFilter {
     const filter = new GroupListFilter()
-    filter.status = request.query.status as string | undefined
     filter.cohort = request.query.cohort as string | undefined
-    filter.nameOrCRN = request.query.nameOrCRN as string | undefined
-    filter.reportingTeam = request.query.reportingTeam as string[] | undefined
+    filter.groupCode = request.query.groupCode as string | undefined
+
     filter.pdu = request.query.pdu as string | undefined
     filter.sex = request.query.sex as string | undefined
 
-    if (filter.reportingTeam !== undefined) {
-      filter.reportingTeam = typeof filter.reportingTeam === 'string' ? [filter.reportingTeam] : filter.reportingTeam
+    if (!filter?.pdu) {
+      delete filter.deliveryLocations
+    } else if (filter?.pdu.length) {
+      const reportingTeams = request.query.deliveryLocations as string[] | undefined
+      filter.deliveryLocations = typeof reportingTeams === 'string' ? [reportingTeams] : reportingTeams
     }
+
     return filter
   }
 
   get params(): GroupListFilterParams {
     const params: GroupListFilterParams = {}
 
-    if (this.status) {
-      params.status = this.status
-    }
     if (this.cohort) {
       params.cohort = this.cohort
     }
-    if (this.nameOrCRN?.trim()) {
-      params.nameOrCRN = this.nameOrCRN.trim()
+
+    if (this.groupCode?.trim()) {
+      params.groupCode = this.groupCode.trim()
     }
 
     if (this.pdu) {
       params.pdu = this.pdu
     }
 
+    if (this.deliveryLocations) {
+      params.deliveryLocations = this.deliveryLocations
+    }
+
     if (this.sex) {
       params.sex = this.sex
     }
 
-    if (this.reportingTeam) {
-      params.reportingTeam = this.reportingTeam
-    }
-
     return params
+  }
+
+  get paramsAsQueryParams(): string {
+    const searchParams = new URLSearchParams()
+    Object.entries(this.params).forEach(([key, value]) => searchParams.append(key, value))
+    return searchParams.toString()
   }
 }
