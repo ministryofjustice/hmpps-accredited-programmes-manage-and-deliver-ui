@@ -35,6 +35,7 @@ export default class UpdateReferralStatusFixedView {
 
   get insetText() {
     return {
+      classes: 'govuk-!-margin-top-0',
       html: `Submitting this will terminate the programme requirement in NDelius.`,
     }
   }
