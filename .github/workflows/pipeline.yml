@@ -32,6 +32,8 @@ jobs:
     name: node build
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_build.yml@v2 # WORKFLOW_VERSION
     secrets: inherit
+    with:
+      install_command: 'npm run setup'
   # generic node unit tests - feel free to override with local tests if required
   node_unit_tests:
     name: node unit tests
@@ -169,16 +171,16 @@ jobs:
           # See https://docs.github.com/en/webhooks/webhook-events-and-payloads#workflow_run
           COMMIT_SHA="${{ github.sha }}"
 
-          # Get the first line of the most recent commit message 
+          # Get the first line of the most recent commit message
           COMMIT_MESSAGE=$(git log -1 --pretty=%B "$COMMIT_SHA" | head -n 1)
           echo "commit_message=$COMMIT_MESSAGE" >> $GITHUB_OUTPUT
 
-          # Use the GitHub CLI to get the PR associated with this commit, its number, title, and author 
+          # Use the GitHub CLI to get the PR associated with this commit, its number, title, and author
           PR_INFO=$(gh pr list --search "$COMMIT_SHA" --json number,title,author --jq '.[0]')
           PR_NUMBER=$(echo "$PR_INFO" | jq -r '.number')
           PR_TITLE=$(echo "$PR_INFO" | jq -r '.title')
 
-          # The author is the author of the commit 
+          # The author is the author of the commit
           PR_AUTHOR="${{ github.actor}}"
 
           echo "pr_author=$PR_AUTHOR" >> $GITHUB_OUTPUT
@@ -204,7 +206,7 @@ jobs:
       - name: Generate the Approval link
         id: approval-link
         run: |
-          # Create link to the workflow that needs approval 
+          # Create link to the workflow that needs approval
           APPROVAL_LINK="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
           echo "Approval Link: $APPROVAL_LINK"
@@ -237,7 +239,7 @@ jobs:
             --fail \
             --show-error \
             --silent
-            
+
           if [[ $? -eq 0 ]]; then
             echo "✅ Slack notification sent successfully"
           else
