@@ -37,8 +37,12 @@ export default class UpdateReferralStatusController {
         formError = data.error
         userInputData = req.body
       } else {
-        await this.accreditedProgrammesManageAndDeliverService.updateStatus(username, referralId, data.paramsForUpdate)
-        return res.redirect(`/referral/${referralId}/status-history?statusUpdated=true`)
+        const response = await this.accreditedProgrammesManageAndDeliverService.updateStatus(
+          username,
+          referralId,
+          data.paramsForUpdate,
+        )
+        return res.redirect(`/referral/${referralId}/status-history?message=${response.message}`)
       }
     }
 
@@ -116,22 +120,30 @@ export default class UpdateReferralStatusController {
       } else {
         const PROGRAMME_COMPLETE_STATUS_ID = 'c7afd853-b776-4bbd-8f8d-f868b755279a'
         const ON_PROGRAMME_STATUS_ID = '70b1ae27-2322-4775-81e0-86fa5cc7d477'
-
+        let response = { message: '' }
         if (referralDetails.currentStatusDescription === 'On programme') {
           const updateObject: CreateReferralStatusHistory = {
             referralStatusDescriptionId: PROGRAMME_COMPLETE_STATUS_ID,
             additionalDetails: data.paramsForUpdate.additionalDetails,
           }
-          await this.accreditedProgrammesManageAndDeliverService.updateStatus(username, referralId, updateObject)
+          response = await this.accreditedProgrammesManageAndDeliverService.updateStatus(
+            username,
+            referralId,
+            updateObject,
+          )
         }
         if (referralDetails.currentStatusDescription === 'Scheduled') {
           const updateObject: CreateReferralStatusHistory = {
             referralStatusDescriptionId: ON_PROGRAMME_STATUS_ID,
             additionalDetails: data.paramsForUpdate.additionalDetails,
           }
-          await this.accreditedProgrammesManageAndDeliverService.updateStatus(username, referralId, updateObject)
+          response = await this.accreditedProgrammesManageAndDeliverService.updateStatus(
+            username,
+            referralId,
+            updateObject,
+          )
         }
-        return res.redirect(`/referral/${referralId}/status-history?statusUpdated=true`)
+        return res.redirect(`/referral/${referralId}/status-history?message=${response.message}`)
       }
     }
 

@@ -201,16 +201,18 @@ export default class ReferralDetailsController {
   async showStatusHistoryPage(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params
     const { username } = req.user
-    const { statusUpdated = 'false', isCohortUpdated, isLdcUpdated } = req.query
+    const { message, isCohortUpdated, isLdcUpdated } = req.query
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(referralId, username)
     const statusHistory = await this.accreditedProgrammesManageAndDeliverService.getStatusHistory(username, referralId)
+
+    const successMessage = message ? String(message) : null
 
     const presenter = new StatusHistoryPresenter(
       referralId,
       statusHistory,
       sharedReferralDetailsData,
-      statusUpdated === 'true',
+      successMessage,
       isLdcUpdated === 'true',
       isCohortUpdated === 'true',
     )

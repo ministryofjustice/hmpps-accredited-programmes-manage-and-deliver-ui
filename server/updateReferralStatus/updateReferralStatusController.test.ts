@@ -7,6 +7,7 @@ import { fakerEN_GB as faker } from '@faker-js/faker'
 import referralStatusFormDataFactory from '../testutils/factories/referralStatusFormDataFactory'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
+import statusHistoryFactory from '../testutils/factories/statusHistoryFactory'
 import TestUtils from '../testutils/testUtils'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
@@ -21,6 +22,7 @@ let app: Express
 
 const referralDetails: ReferralDetails = referralDetailsFactory.build()
 const statusDetails = referralStatusFormDataFactory.build()
+const statusHistory = statusHistoryFactory.build()
 
 afterEach(() => {
   jest.resetAllMocks()
@@ -32,6 +34,10 @@ beforeEach(() => {
   app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
   accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
   accreditedProgrammesManageAndDeliverService.getStatusDetails.mockResolvedValue(statusDetails)
+  accreditedProgrammesManageAndDeliverService.updateStatus.mockResolvedValue({
+    referralStatusHistory: statusHistory,
+    message: "Jennifer Wilson's referral status is now Awaiting allocation. They have been removed from group BCCDD1",
+  })
 })
 describe('Update Referral Status Controller', () => {
   describe('update-status', () => {
@@ -74,7 +80,7 @@ describe('Update Referral Status Controller', () => {
           .expect(302)
           .expect(res => {
             expect(res.text).toContain(
-              `Redirecting to /referral/${referralDetails.id}/status-history?statusUpdated=true`,
+              `Redirecting to /referral/1/status-history?message=Jennifer%20Wilson's%20referral%20status%20is%20now%20Awaiting%20allocation.%20They%20have%20been%20removed%20from%20group%20BCCDD1`,
             )
           })
       })
@@ -183,7 +189,9 @@ describe('Update Referral Status Controller', () => {
           .send({ 'more-details': 'Some details' })
           .expect(302)
           .expect(res => {
-            expect(res.text).toContain(`/referral/${referralDetails.id}/status-history?statusUpdated=true`)
+            expect(res.text).toContain(
+              `/referral/${referralDetails.id}/status-history?message=Jennifer%20Wilson's%20referral%20status%20is%20now%20Awaiting%20allocation.%20They%20have%20been%20removed%20from%20group%20BCCDD1`,
+            )
           })
       })
 
