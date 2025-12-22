@@ -442,7 +442,7 @@ export default class AccreditedProgrammesManageAndDeliverService
       path: `/referral/${referralId}/status-history`,
       headers: { Accept: 'application/json' },
       data: updatedStatus,
-    })) as ReferralDetails
+    })) as { referralStatusHistory: ReferralStatusHistory; message: string }
   }
 
   async addToGroup(
