@@ -6,10 +6,10 @@ import UpdateReferralStatusPresenter from './updateReferralStatusPresenter'
 import UpdateReferralStatusView from './updateReferralStatusView'
 import UpdateReferralStatusForm from './updateReferralStatusForm'
 import { FormValidationError } from '../utils/formValidationError'
-import UpdateReferralStatusInterimPresenter from './updateReferralStatusInterimPresenter'
-import UpdateReferralStatusInterimView from './updateReferralStatusInterimView'
-import UpdateReferralStatusFixedPresenter from './updateReferralFixedStatusPresenter'
-import UpdateReferralStatusFixedView from './updateReferralFixedStatusView'
+import UpdateReferralStatusStartedOrCompletedPresenter from './updateReferralStatusStartedOrCompletedPresenter'
+import UpdateReferralStatusStartedOrCompletedView from './updateReferralStatusStartedOrCompletedView'
+import UpdateReferralStatusFixedPresenter from './updateReferralStatusToOnProgrammeOrCompletedPresenter'
+import UpdateReferralStatusFixedView from './updateReferralStatusToOnProgrammeOrCompletedView'
 
 export default class UpdateReferralStatusController {
   constructor(
@@ -54,7 +54,7 @@ export default class UpdateReferralStatusController {
     return ControllerUtils.renderWithLayout(res, view, referralDetails)
   }
 
-  async updateStatusInterim(req: Request, res: Response): Promise<void> {
+  async updateStatusStartedOrCompleted(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params
     const { username } = req.user
 
@@ -67,7 +67,9 @@ export default class UpdateReferralStatusController {
     let userInputData = null
 
     if (req.method === 'POST') {
-      const data = await new UpdateReferralStatusForm(req).interimData(referralDetails.currentStatusDescription)
+      const data = await new UpdateReferralStatusForm(req).startedOrCompletedData(
+        referralDetails.currentStatusDescription,
+      )
       if (data.error) {
         res.status(400)
         formError = data.error
@@ -82,18 +84,18 @@ export default class UpdateReferralStatusController {
 
     const startedOrCompleted = String(req.query.startedOrCompleted || '')
 
-    const presenter = new UpdateReferralStatusInterimPresenter(
+    const presenter = new UpdateReferralStatusStartedOrCompletedPresenter(
       referralDetails,
       req.session.originPage,
       formError,
       userInputData,
       startedOrCompleted,
     )
-    const view = new UpdateReferralStatusInterimView(presenter)
+    const view = new UpdateReferralStatusStartedOrCompletedView(presenter)
     return ControllerUtils.renderWithLayout(res, view, referralDetails)
   }
 
-  async updateStatusFixed(req: Request, res: Response): Promise<void> {
+  async updateStatusToOnProgrammeOrCompleted(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params
     const { username } = req.user
 

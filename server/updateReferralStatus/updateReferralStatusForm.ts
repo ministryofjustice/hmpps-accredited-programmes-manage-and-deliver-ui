@@ -44,10 +44,10 @@ export default class UpdateReferralStatusForm {
     ]
   }
 
-  async interimData(currentStatus: string): Promise<FormData<{ hasStartedOrCompleted: string }>> {
+  async startedOrCompletedData(currentStatus: string): Promise<FormData<{ hasStartedOrCompleted: string }>> {
     const validationResult = await FormUtils.runValidations({
       request: this.request,
-      validations: UpdateReferralStatusForm.interimValidations(currentStatus),
+      validations: UpdateReferralStatusForm.startedOrCompletedValidations(currentStatus),
     })
 
     const error = FormUtils.validationErrorFromResult(validationResult)
@@ -66,7 +66,7 @@ export default class UpdateReferralStatusForm {
     }
   }
 
-  static interimValidations(currentStatus: string): ValidationChain[] {
+  static startedOrCompletedValidations(currentStatus: string): ValidationChain[] {
     return [
       body('started-or-completed')
         .notEmpty()

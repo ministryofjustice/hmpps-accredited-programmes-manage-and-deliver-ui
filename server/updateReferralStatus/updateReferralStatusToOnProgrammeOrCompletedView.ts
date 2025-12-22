@@ -1,5 +1,5 @@
 import ViewUtils from '../utils/viewUtils'
-import UpdateReferralStatusFixedPresenter from './updateReferralFixedStatusPresenter'
+import UpdateReferralStatusFixedPresenter from './updateReferralStatusToOnProgrammeOrCompletedPresenter'
 
 export default class UpdateReferralStatusFixedView {
   constructor(private readonly presenter: UpdateReferralStatusFixedPresenter) {}
@@ -42,7 +42,7 @@ export default class UpdateReferralStatusFixedView {
 
   get renderArgs(): [string, Record<string, unknown>] {
     return [
-      'updateReferralStatus/updateReferralStatusFixed',
+      'updateReferralStatus/updateReferralStatusToOnProgrammeOrCompleted',
       {
         presenter: this.presenter,
         addDetailsTextboxOptions: this.addDetailsTextboxOptions,

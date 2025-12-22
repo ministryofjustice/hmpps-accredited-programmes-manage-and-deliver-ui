@@ -2,7 +2,7 @@ import { ReferralDetails } from '@manage-and-deliver-api'
 import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
 
-export default class UpdateReferralStatusInterimPresenter {
+export default class UpdateReferralStatusStartedOrCompletedPresenter {
   constructor(
     readonly details: ReferralDetails,
     readonly backLinkUri: string,

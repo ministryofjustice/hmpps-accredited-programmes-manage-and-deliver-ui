@@ -73,7 +73,7 @@ describe(`UpdateReferralStatusForm`, () => {
         const request = TestUtils.createRequest({
           'started-or-completed': 'yes',
         })
-        const data = await new UpdateReferralStatusForm(request).interimData('Scheduled')
+        const data = await new UpdateReferralStatusForm(request).startedOrCompletedData('Scheduled')
 
         expect(data.paramsForUpdate).toStrictEqual({
           hasStartedOrCompleted: 'yes',
@@ -84,7 +84,7 @@ describe(`UpdateReferralStatusForm`, () => {
     describe('when started-or-completed is missing', () => {
       it('returns an error for missing started-or-completed (Scheduled)', async () => {
         const request = TestUtils.createRequest({})
-        const data = await new UpdateReferralStatusForm(request).interimData('Scheduled')
+        const data = await new UpdateReferralStatusForm(request).startedOrCompletedData('Scheduled')
 
         expect(data.error?.errors).toContainEqual({
           errorSummaryLinkedField: 'started-or-completed',
@@ -95,7 +95,7 @@ describe(`UpdateReferralStatusForm`, () => {
 
       it('returns an error for missing started-or-completed (Completed)', async () => {
         const request = TestUtils.createRequest({})
-        const data = await new UpdateReferralStatusForm(request).interimData('Completed')
+        const data = await new UpdateReferralStatusForm(request).startedOrCompletedData('Completed')
 
         expect(data.error?.errors).toContainEqual({
           errorSummaryLinkedField: 'started-or-completed',

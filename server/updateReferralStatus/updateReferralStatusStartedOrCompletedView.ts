@@ -1,8 +1,8 @@
 import ViewUtils from '../utils/viewUtils'
-import UpdateReferralStatusInterimPresenter from './updateReferralStatusInterimPresenter'
+import UpdateReferralStatusStartedOrCompletedPresenter from './updateReferralStatusStartedOrCompletedPresenter'
 
-export default class UpdateReferralStatusInterimView {
-  constructor(private readonly presenter: UpdateReferralStatusInterimPresenter) {}
+export default class UpdateReferralStatusStartedOrCompletedView {
+  constructor(private readonly presenter: UpdateReferralStatusStartedOrCompletedPresenter) {}
 
   get backLinkArgs() {
     return {
@@ -55,7 +55,7 @@ export default class UpdateReferralStatusInterimView {
 
   get renderArgs(): [string, Record<string, unknown>] {
     return [
-      'updateReferralStatus/updateReferralStatusInterim',
+      'updateReferralStatus/updateReferralStatusStartedOrCompleted',
       {
         presenter: this.presenter,
         statusUpdateRadioButtons: this.statusUpdateRadioButtonsOptions,
