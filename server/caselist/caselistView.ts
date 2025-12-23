@@ -109,7 +109,7 @@ export default class CaselistView {
         presenter: this.presenter,
         subNavArgs: this.presenter.getSubNavArgs(),
         searchByStatusArgs: this.searchByStatusArgs(),
-        pagination: this.presenter.pagination.mojPaginationArgs,
+        pagination: this.presenter.pagination.govukPaginationArgs,
         searchByPduArgs: this.pduSelectArgs,
         reportingTeamCheckboxArgs: this.reportingTeamCheckboxArgs,
         searchByCrnOrPersonNameArgs: this.searchByCrnOrPersonNameArgs,
