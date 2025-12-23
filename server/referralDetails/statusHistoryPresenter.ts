@@ -11,7 +11,7 @@ export default class StatusHistoryPresenter extends ReferralLayoutPresenter {
     readonly referralId: string,
     public readonly statusHistory: ReferralStatusHistory[],
     referralDetails: ReferralDetails,
-    private readonly isShowStatusUpdateMessageVisible: boolean,
+    readonly successMessage: string | null = null,
     readonly isLdcUpdated: boolean | null = null,
     readonly isCohortUpdated: boolean | null = null,
   ) {
@@ -29,11 +29,11 @@ export default class StatusHistoryPresenter extends ReferralLayoutPresenter {
   }
 
   get successMessageSummary(): MojAlertComponentArgs | null {
-    if (!this.isShowStatusUpdateMessageVisible) return null
+    if (!this.successMessage) return null
 
     return {
       title: 'Referral status updated',
-      text: `${this.personOnProbationName}'s referral status is now ${this.currentStatusDescription}`,
+      text: this.successMessage,
       variant: 'success',
       dismissible: true,
       showTitleAsHeading: true,

@@ -20,6 +20,20 @@ export default class UpdateReferralStatusPresenter {
     return PresenterUtils.errorSummary(this.validationError)
   }
 
+  get backLinkArgs() {
+    let backUri = this.backLinkUri
+    if (this.details.currentStatusDescription === 'Scheduled') {
+      backUri = `/referral/${this.details.id}/update-status-scheduled?startedOrCompleted=false`
+    }
+    if (this.details.currentStatusDescription === 'On programme') {
+      backUri = `/referral/${this.details.id}/update-status-on-programme?startedOrCompleted=false`
+    }
+    return {
+      text: 'Back',
+      href: backUri,
+    }
+  }
+
   generateStatusUpdateRadios() {
     const statusRadios: RadiosArgsItem[] = []
     this.statusDetails.availableStatuses.forEach((status: ReferralStatus) => {
@@ -39,22 +53,21 @@ export default class UpdateReferralStatusPresenter {
     switch (this.statusDetails.currentStatus.title) {
       case 'Awaiting allocation':
         return 'You can add more information about this update, such as the reason for deprioritising someone.'
+      case 'Scheduled':
+        return 'You can add more information about this update, such as the reason for deprioritising someone.'
+      case 'On programme':
+        return 'You can add more information about this update, such as the reason why this person cannot continue on the group.'
       default:
         return 'You can add more information about this update, such as the reason for an assessment decision or for deprioritising someone.'
     }
   }
 
-  generateInsetText() {
-    switch (this.statusDetails.currentStatus.title) {
-      case 'Awaiting allocation':
-        return `If you want to change this person's status to Scheduled, you must <a href="/groups/started">allocate them to a group.</a>`
-      default:
-        return ''
-    }
+  showTopInsetText() {
+    return ['Awaiting allocation'].includes(this.statusDetails.currentStatus.title)
   }
 
-  showInsetText() {
-    return ['Awaiting allocation'].includes(this.statusDetails.currentStatus.title)
+  showBottomInsetText() {
+    return ['Scheduled', 'On programme'].includes(this.statusDetails.currentStatus.title)
   }
 
   get fields() {

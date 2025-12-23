@@ -4,7 +4,7 @@ import statusHistoryFactory from '../testutils/factories/statusHistoryFactory'
 
 describe('StatusHistoryPresenter', () => {
   describe('successMessageSummary', () => {
-    it('returns success message when isShowStatusUpdateMessageVisible is true', () => {
+    it('returns success message when a success message is returned from the API', () => {
       const referralDetails = referralDetailsFactory.build({
         personName: 'John Doe',
         currentStatusDescription: 'Assessment complete',
@@ -15,21 +15,21 @@ describe('StatusHistoryPresenter', () => {
         'referral-id',
         statusHistory,
         referralDetails,
-        true, // isShowStatusUpdateMessageVisible is true
+        "Jennifer Wilson's referral status is now Awaiting allocation. They have been removed from group BCCDD1",
       )
 
       const successMessage = presenter.successMessageSummary
 
       expect(successMessage).toEqual({
         title: 'Referral status updated',
-        text: "John Doe's referral status is now Assessment complete",
+        text: "Jennifer Wilson's referral status is now Awaiting allocation. They have been removed from group BCCDD1",
         variant: 'success',
         dismissible: true,
         showTitleAsHeading: true,
       })
     })
 
-    it('returns null when isShowStatusUpdateMessageVisible is false', () => {
+    it('returns null when no success message is returned', () => {
       const referralDetails = referralDetailsFactory.build({
         personName: 'John Doe',
         currentStatusDescription: 'Assessment complete',
@@ -40,7 +40,7 @@ describe('StatusHistoryPresenter', () => {
         'referral-id',
         statusHistory,
         referralDetails,
-        false, // isShowStatusUpdateMessageVisible is false
+        null, // no success message is returned
       )
 
       const successMessage = presenter.successMessageSummary

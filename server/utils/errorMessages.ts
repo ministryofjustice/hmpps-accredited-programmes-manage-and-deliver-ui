@@ -56,8 +56,11 @@ export default {
     },
   },
   updateStatus: {
-    updatedStatusEmpty: `Select the referral status you want to move the person to.`,
-    detailsTooLong: 'Details must be 500 characters or fewer.',
+    updatedStatusEmpty: `Select the referral status you want to move the person to`,
+    updatedStatusEmptyScheduledOnProgramme: `Select a new referral status`,
+    detailsTooLong: 'Details must be 500 characters or fewer',
+    startedProgrammeEmpty: `Select whether the person has started the programme or not`,
+    completedProgrammeEmpty: `Select whether the person has completed the programme or not`,
   },
   addToGroup: {
     selectAPerson: "Select the button next to a person's name to add them to the group",
