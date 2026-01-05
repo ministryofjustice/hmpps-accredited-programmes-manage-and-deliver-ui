@@ -89,6 +89,11 @@ export default {
     createGroupTreatmentManagerEmpty: 'Select a Treatment Manager. Start typing to search.',
     createGroupFacilitatorEmpty: 'Select a Facilitator. Start typing to search.',
   },
+
+  sessionSchedule: {
+    sessionScheduleWhich: 'Select the session type',
+  },
+
   motivationBackgroundAndNonAssociations: {
     addToGroupEmpty: `Select whether you want to add the person to the group or not`,
     exceededCharacterLimit: 'Details must be 2,000 characters or fewer',
