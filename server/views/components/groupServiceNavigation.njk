@@ -1,0 +1,31 @@
+{% macro groupServiceNavigation(groupId, activePage) %}
+  {% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
+  
+  {{ govukServiceNavigation({
+    classes: "group-details__service-navigation",
+    navigation: [
+      {
+        href: "/groupDetails/" ~ groupId ~ "/allocated", 
+        text: "Allocations",
+        active: activePage == "allocations"
+      },
+      {
+        href: "/" ~ groupId ~ "/" ~ moduleId ~ "/schedule-session-type", 
+        text: "Schedule",
+        active: activePage == "schedule"
+      }, 
+      {
+        href: "/groupDetails/" ~ groupId ~ "/sessions",
+        text: "Sessions and attendance",
+        active: activePage == "sessions"
+      },
+      {
+        href: "/groupDetails/" ~ groupId ~ "/details",
+        text: "Group details",
+        active: activePage == "details"
+      }
+    ]
+  }) }}
+{% endmacro %}
+
+{# ***TODO - update ALL links when pages added/implemented*** #}
