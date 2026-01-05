@@ -47,6 +47,7 @@ export default class SessionScheduleWhichView {
         backLinkArgs: this.backLinkArgs(),
         homePageLink: this.homePageLink(),
         radioArgs: this.radioArgs(),
+        text: this.presenter.text,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
       },
     ]

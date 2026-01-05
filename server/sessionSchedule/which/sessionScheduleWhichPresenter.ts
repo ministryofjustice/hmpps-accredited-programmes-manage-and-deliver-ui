@@ -6,10 +6,15 @@ export default class SessionScheduleWhichPresenter {
   constructor(
     private readonly groupId: string,
     private readonly moduleId: string,
-    private readonly sessionTemplatesData: ModuleSessionTemplate[],
+    private readonly sessionName: string,
+    private readonly availableSessionTemplates: ModuleSessionTemplate[],
     private readonly validationError: FormValidationError | null = null,
-    private readonly selectedTemplateId: string | undefined = undefined,
+    private readonly selectedSessionTemplateId: string | undefined = undefined,
   ) {}
+
+  get text() {
+    return { headingHintText: `Schedule a ${this.sessionName}` } // TODO: Look at fixing this
+  }
 
   get backLinkUri() {
     return `/group/${this.groupId}/module/${this.moduleId}/sessions`
@@ -22,13 +27,13 @@ export default class SessionScheduleWhichPresenter {
   get fields() {
     return {
       sessionTemplate: {
-        value: this.selectedTemplateId,
+        value: this.selectedSessionTemplateId,
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'session-template'),
       },
     }
   }
 
   get sessionTemplates() {
-    return this.sessionTemplatesData
+    return this.availableSessionTemplates
   }
 }

@@ -60,6 +60,7 @@ export default class SessionScheduleController {
     const presenter = new SessionScheduleWhichPresenter(
       groupId,
       moduleId,
+      sessionTemplates.length > 0 ? sessionTemplates[0].name : 'the session',
       sessionTemplates,
       formError,
       req.session.sessionScheduleData?.selectedTemplateId,
