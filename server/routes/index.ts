@@ -16,6 +16,7 @@ import type { Services } from '../services'
 import UpdateReferralStatusController from '../updateReferralStatus/updateReferralStatusController'
 import RemoveFromGroupController from '../groupDetails/removeFromGroup/removeFromGroupController'
 import GroupController from '../group/groupController'
+import SessionScheduleController from '../sessionSchedule/sessionScheduleController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
@@ -40,6 +41,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const groupAllocationNotesController = new GroupAllocationNotesController(accreditedProgrammesManageAndDeliverService)
   const createGroupController = new CreateGroupController(accreditedProgrammesManageAndDeliverService)
   const groupController = new GroupController(accreditedProgrammesManageAndDeliverService)
+  const sessionScheduleController = new SessionScheduleController(accreditedProgrammesManageAndDeliverService)
 
   get('/', async (req, res, next) => {
     await caselistController.showOpenCaselist(req, res)
@@ -315,6 +317,10 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   get('/groups/started', async (req, res, next) => {
     await groupController.showStartedGroupListPage(req, res)
+  })
+
+  getOrPost('/group/:groupId/module/:moduleId/schedule-session-type', async (req, res) => {
+    await sessionScheduleController.showSessionSchedule(req, res)
   })
 
   return router
