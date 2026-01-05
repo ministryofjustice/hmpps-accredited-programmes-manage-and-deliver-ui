@@ -117,16 +117,16 @@ describe(`filters`, () => {
 
       expect(presenter.generateCohortSelectArgs()).toEqual([
         { text: 'Select', value: '' },
-        { value: 'General Offence', text: 'General Offence', selected: false },
-        { value: 'General Offence - LDC', text: 'General Offence - LDC', selected: false },
-        { value: 'Sexual Offence', text: 'Sexual Offence', selected: false },
-        { value: 'Sexual Offence - LDC', text: 'Sexual Offence - LDC', selected: false },
+        { value: 'General offence', text: 'General offence', selected: false },
+        { value: 'General offence - LDC', text: 'General offence - LDC', selected: false },
+        { value: 'Sexual offence', text: 'Sexual offence', selected: false },
+        { value: 'Sexual offence - LDC', text: 'Sexual offence - LDC', selected: false },
       ])
     })
 
     it('should mark the selected cohort based on filter.cohort', () => {
       const testObject = {
-        filter: { cohort: 'General Offence' } as unknown as CaselistFilter,
+        filter: { cohort: 'General offence' } as unknown as CaselistFilter,
       }
       const referralCaseListItem = referralCaseListItemFactory.build()
       const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
@@ -144,10 +144,10 @@ describe(`filters`, () => {
 
       expect(presenter.generateCohortSelectArgs()).toEqual([
         { text: 'Select', value: '' },
-        { value: 'General Offence', text: 'General Offence', selected: true },
-        { value: 'General Offence - LDC', text: 'General Offence - LDC', selected: false },
-        { value: 'Sexual Offence', text: 'Sexual Offence', selected: false },
-        { value: 'Sexual Offence - LDC', text: 'Sexual Offence - LDC', selected: false },
+        { value: 'General offence', text: 'General offence', selected: true },
+        { value: 'General offence - LDC', text: 'General offence - LDC', selected: false },
+        { value: 'Sexual offence', text: 'Sexual offence', selected: false },
+        { value: 'Sexual offence - LDC', text: 'Sexual offence - LDC', selected: false },
       ])
     })
   })
