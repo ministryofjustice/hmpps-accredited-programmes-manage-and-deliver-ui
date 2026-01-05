@@ -4,13 +4,15 @@ import PresenterUtils from '../../utils/presenterUtils'
 
 export default class SessionScheduleWhichPresenter {
   constructor(
+    private readonly groupId: string,
+    private readonly moduleId: string,
     private readonly sessionTemplatesData: ModuleSessionTemplate[],
     private readonly validationError: FormValidationError | null = null,
     private readonly selectedTemplateId: string | undefined = undefined,
   ) {}
 
   get backLinkUri() {
-    return `/group/sessions`
+    return `/group/${this.groupId}/module/${this.moduleId}/sessions`
   }
 
   get errorSummary() {
