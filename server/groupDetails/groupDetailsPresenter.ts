@@ -6,6 +6,7 @@ import Pagination from '../utils/pagination/pagination'
 import PresenterUtils from '../utils/presenterUtils'
 import { convertToTitleCase } from '../utils/utils'
 import GroupDetailFilter from './groupDetailFilter'
+import GroupServiceNavigationPresenter from '../shared/groupServiceNavigationPresenter'
 
 export enum GroupDetailsPageSection {
   Allocated = 1,
@@ -22,6 +23,8 @@ export default class GroupDetailsPresenter {
 
   readonly groupListItems: Page<GroupItem>
 
+  public readonly navigationPresenter: GroupServiceNavigationPresenter
+
   constructor(
     readonly section: GroupDetailsPageSection,
     readonly group: ProgrammeGroupDetails,
@@ -34,6 +37,7 @@ export default class GroupDetailsPresenter {
   ) {
     this.groupListItems = this.group.pagedGroupData as Page<GroupItem>
     this.pagination = new Pagination(this.groupListItems, params)
+    this.navigationPresenter = new GroupServiceNavigationPresenter(groupId, undefined, 'allocations')
   }
 
   get text() {
