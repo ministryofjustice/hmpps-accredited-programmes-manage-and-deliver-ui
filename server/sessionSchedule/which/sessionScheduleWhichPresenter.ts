@@ -13,7 +13,7 @@ export default class SessionScheduleWhichPresenter {
   ) {}
 
   get text() {
-    return { headingHintText: `Schedule a ${this.sessionName}` } // TODO: Look at fixing this
+    return { headingHintText: `Schedule a ${this.sessionName}` } // {# TODO Look at updatingthis #}
   }
 
   get backLinkUri() {
