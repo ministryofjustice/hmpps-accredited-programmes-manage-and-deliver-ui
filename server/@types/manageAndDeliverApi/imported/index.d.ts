@@ -1335,7 +1335,7 @@ export interface components {
        * Format: uuid
        * @description The UUID of the ModuleSessionTemplate that defines the session blueprint
        */
-      sessionTemplateId: string
+      sessionScheduleTemplateId: string
       /** @description An array of Referral IDs representing the group members to schedule */
       referralIds: string[]
       /** @description The facilitator(s) who will conduct the session */

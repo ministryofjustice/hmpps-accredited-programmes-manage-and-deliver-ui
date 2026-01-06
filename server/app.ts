@@ -6,6 +6,7 @@ import {
   CreateDeliveryLocationPreferences,
   CreateGroupRequest,
   DeliveryLocationPreferencesFormData,
+  SessionScheduleRequest,
 } from '@manage-and-deliver-api'
 import errorHandler from './errorHandler'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
@@ -39,6 +40,7 @@ declare module 'express-session' {
       removeFromGroup?: boolean
     }
     createGroupFormData?: Partial<CreateGroupRequest>
+    sessionScheduleWhichData?: Partial<SessionScheduleRequest>
   }
 }
 
