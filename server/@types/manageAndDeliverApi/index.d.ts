@@ -62,8 +62,6 @@ type UserTeamMember = components['schemas']['UserTeamMember']
 type CreateGroupTeamMember = components['schemas']['CreateGroupTeamMember']
 type SessionScheduleRequest = components['schemas']['ScheduleSessionRequest']
 type SessionScheduleResponse = components['schemas']['ScheduleSessionTypeResponse']
-type SessionScheduleOnetoOne = components['schemas']['SessionScheduleOnetoOne']
-type SessionScheduleGettingStarted = components['schemas']['SessionScheduleGettingStarted']
 type ModuleSessionTemplate = components['schemas']['ModuleSessionTemplate']
 type ScheduleSessionTypeResponse = components['schemas']['ScheduleSessionTypeResponse']
 
@@ -131,7 +129,4 @@ export type {
   UserTeamMember,
   SessionScheduleRequest,
   SessionScheduleResponse,
-  SessionScheduleOnetoOne,
-  SessionScheduleGettingStarted,
-  SessionScheduleEnum,
 }

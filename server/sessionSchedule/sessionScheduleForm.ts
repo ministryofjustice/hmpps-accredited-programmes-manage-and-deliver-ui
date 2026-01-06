@@ -6,10 +6,7 @@ import { FormData } from '../utils/forms/formData'
 import FormUtils from '../utils/formUtils'
 
 export default class SessionScheduleForm {
-  constructor(
-    private readonly request: Request,
-    // private readonly existingGroupCode?: string,
-  ) {}
+  constructor(private readonly request: Request) {}
 
   async sessionScheduleWhichData(): Promise<FormData<Partial<SessionScheduleRequest & { which: string }>>> {
     const validationResult = await FormUtils.runValidations({
