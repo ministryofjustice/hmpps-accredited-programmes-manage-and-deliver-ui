@@ -192,6 +192,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/group/{groupId}/session/schedule': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Schedule a session (one-to-one, or catch ups) for group members
+     * @description Schedule a session for members of a programme group. This endpoint allows facilitators to schedule individual sessions that must be coordinated across multiple group members.
+     */
+    post: operations['scheduleSession']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/group/{groupId}/remove/{referralId}': {
     parameters: {
       query?: never
@@ -830,6 +850,46 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/bff/group/{groupId}/module/{moduleId}/schedule-session-type': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get session templates for a group module
+     * @description Retrieve available session templates for a specific module within a programme group. This endpoint is used to populate the session type selection screen when scheduling sessions.
+     */
+    get: operations['getSessionTemplatesForGroupModule']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/bff/group/{groupId}/module/{moduleId}/schedule-individual-session-details': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get details for scheduling an individual session
+     * @description Retrieve facilitators and group members for scheduling a one-to-one session
+     */
+    get: operations['getScheduleIndividualSessionDetails']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/bff/caselist/filters': {
     parameters: {
       query?: never
@@ -1266,6 +1326,47 @@ export interface components {
     ProgrammeGroupCohort: 'GENERAL' | 'GENERAL_LDC' | 'SEXUAL' | 'SEXUAL_LDC'
     /** @enum {string} */
     ProgrammeGroupSexEnum: 'MALE' | 'FEMALE' | 'MIXED'
+    ScheduleSessionResponse: {
+      /** @description Success message indicating the session was scheduled */
+      message: string
+    }
+    ScheduleSessionRequest: {
+      /**
+       * Format: uuid
+       * @description The UUID of the ModuleSessionTemplate that defines the session blueprint
+       */
+      sessionScheduleTemplateId: string
+      /** @description An array of Referral IDs representing the group members to schedule */
+      referralIds: string[]
+      /** @description The facilitator(s) who will conduct the session */
+      facilitators: components['schemas']['CreateGroupTeamMember'][]
+      /**
+       * Format: date
+       * @description The start date of the session in YYYY-MM-DD format
+       * @example 2025-12-17
+       */
+      startDate: string
+      /** @description The start time of the one-to-one session */
+      startTime: components['schemas']['SessionTime']
+      /** @description The end time of the one-to-one session */
+      endTime: components['schemas']['SessionTime']
+    }
+    SessionTime: {
+      /**
+       * Format: int32
+       * @description Hour in 12-hour format (1-12)
+       * @example 10
+       */
+      hour: number
+      /**
+       * Format: int32
+       * @description Minutes (0-59)
+       * @example 30
+       */
+      minutes: number
+      /** @description AM or PM designation */
+      amOrPm: components['schemas']['AmOrPm']
+    }
     RemoveFromGroupRequest: {
       /**
        * Format: uuid
@@ -1407,6 +1508,24 @@ export interface components {
        */
       analysisBehaviourIncidents?: string
     }
+    OGRS4Risks: {
+      allReoffendingScoreType?: string
+      allReoffendingScore?: number
+      allReoffendingBand?: string
+      violentReoffendingScoreType?: string
+      violentReoffendingScore?: number
+      violentReoffendingBand?: string
+      seriousViolentReoffendingScoreType?: string
+      seriousViolentReoffendingScore?: number
+      seriousViolentReoffendingBand?: string
+      directContactSexualReoffendingScore?: number
+      directContactSexualReoffendingBand?: string
+      indirectImageContactSexualReoffendingScore?: number
+      indirectImageContactSexualReoffendingBand?: string
+      combinedSeriousReoffendingScoreType?: string
+      combinedSeriousReoffendingScore?: number
+      combinedSeriousReoffendingBand?: string
+    }
     OasysSara: {
       /**
        * @description Risk of violence towards a partner
@@ -1474,6 +1593,14 @@ export interface components {
        * @example 1
        */
       lastUpdated: string
+      /**
+       * @description Whether the data represents an OGRS3 legacy assessment.
+       * @example true
+       */
+      isLegacy: boolean
+      /** @description The OGRS4 Risk predictors for this person. */
+      ogrS4Risks?: components['schemas']['OGRS4Risks']
+      legacy?: boolean
     }
     RoshSummary: {
       /**
@@ -2710,6 +2837,51 @@ export interface components {
        */
       otherTabTotal: number
     }
+    /** @description A session template item with basic information */
+    ModuleSessionTemplate: {
+      /**
+       * Format: uuid
+       * @description The unique identifier of the session template
+       * @example 123e4567-e89b-12d3-a456-426614174000
+       */
+      id: string
+      /**
+       * Format: int32
+       * @description The sequential number of the session within its module
+       * @example 1
+       */
+      number: number
+      /**
+       * @description The display name of the session
+       * @example Getting started one-to-one
+       */
+      name: string
+    }
+    /** @description Response containing session templates for scheduling */
+    ScheduleSessionTypeResponse: {
+      /** @description List of available session templates */
+      sessionTemplates: components['schemas']['ModuleSessionTemplate'][]
+    }
+    GroupMember: {
+      /**
+       * @description The full name of the group member as 'firstname lastname'
+       * @example John Doe
+       */
+      name: string
+      /** @description The Case Reference Number of the group member */
+      crn: string
+      /**
+       * Format: uuid
+       * @description The UUID of the referral for this group member
+       */
+      referralId: string
+    }
+    ScheduleIndividualSessionDetailsResponse: {
+      /** @description List of facilitators available for the one-to-one appointment (sourced from the Region of the logged-in user) */
+      facilitators: components['schemas']['UserTeamMember'][]
+      /** @description Details of the Group's members via their Referrals */
+      groupMembers: components['schemas']['GroupMember'][]
+    }
   }
   responses: never
   parameters: never
@@ -3393,6 +3565,60 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  scheduleSession: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The UUID of the programme group */
+        groupId: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ScheduleSessionRequest']
+      }
+    }
+    responses: {
+      /** @description Session successfully scheduled */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ScheduleSessionResponse']
+        }
+      }
+      /** @description Invalid request parameters */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Group or session template not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -5297,6 +5523,119 @@ export interface operations {
       }
       /** @description The group already exists */
       409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getSessionTemplatesForGroupModule: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The UUID of the programme group */
+        groupId: string
+        /** @description The UUID of the module */
+        moduleId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Session templates retrieved successfully */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ScheduleSessionTypeResponse']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Group, template, or module not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getScheduleIndividualSessionDetails: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The UUID of the Programme Group */
+        groupId: string
+        /** @description The UUID of the Module */
+        moduleId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully retrieved schedule session details */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ScheduleIndividualSessionDetailsResponse']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Group or module not found */
+      404: {
         headers: {
           [name: string]: unknown
         }

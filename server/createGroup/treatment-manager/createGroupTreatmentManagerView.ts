@@ -1,6 +1,6 @@
 import { CreateGroupTeamMember } from '@manage-and-deliver-api'
-import { FieldsetArgs, SelectArgs } from '../utils/govukFrontendTypes'
-import ViewUtils from '../utils/viewUtils'
+import { FieldsetArgs, SelectArgs } from '../../utils/govukFrontendTypes'
+import ViewUtils from '../../utils/viewUtils'
 import CreateGroupTreatmentManagerPresenter from './createGroupTreatmentManagerPresenter'
 
 export default class CreateGroupTreatmentManagerView {
