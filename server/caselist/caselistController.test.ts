@@ -33,8 +33,8 @@ beforeEach(() => {
 describe(`Caselist controller`, () => {
   test.each([
     [
-      '/pdu/open-referrals?cohort=Sexual Offence&status=Awaiting+assessment',
-      'Sexual Offence',
+      '/pdu/open-referrals?cohort=Sexual offence&status=Awaiting+assessment',
+      'Sexual offence',
       'Awaiting assessment',
       undefined,
       undefined,
@@ -42,8 +42,8 @@ describe(`Caselist controller`, () => {
     [`/pdu/open-referrals`, undefined, undefined, undefined, undefined],
     ['/pdu/closed-referrals', undefined, undefined, undefined, undefined],
     [
-      '/pdu/open-referrals?cohort=General Offence - LDC&status=Programme+complete',
-      'General Offence - LDC',
+      '/pdu/open-referrals?cohort=General offence - LDC&status=Programme+complete',
+      'General offence - LDC',
       'Programme complete',
       undefined,
       undefined,
