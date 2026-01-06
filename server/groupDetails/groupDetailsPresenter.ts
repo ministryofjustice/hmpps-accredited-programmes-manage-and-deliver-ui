@@ -34,10 +34,11 @@ export default class GroupDetailsPresenter {
     readonly validationError: FormValidationError | null = null,
     readonly successMessage: string | null = null,
     readonly params?: string,
+    readonly activePage: import('../shared/groupServiceNavigationPresenter').GroupServiceNavigationPage = 'allocations',
   ) {
     this.groupListItems = this.group.pagedGroupData as Page<GroupItem>
     this.pagination = new Pagination(this.groupListItems, params)
-    this.navigationPresenter = new GroupServiceNavigationPresenter(groupId, undefined, 'allocations')
+    this.navigationPresenter = new GroupServiceNavigationPresenter(groupId, undefined, activePage)
   }
 
   get text() {
