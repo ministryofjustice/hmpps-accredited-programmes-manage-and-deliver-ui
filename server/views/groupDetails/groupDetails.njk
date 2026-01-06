@@ -30,7 +30,7 @@
     <h2 class="govuk-heading-l">{{ text.pageTableHeading }}</h2>
   </div>
 </div>
-{{ groupServiceNavigation(presenter.navigationPresenter) }}
+{{ groupServiceNavigation(presenter.navigationPresenter.getServiceNavigationArgs()) }}
 <div class="govuk-grid-row">
 
   {%- set filterOptionsHtml %}

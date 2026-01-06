@@ -9,128 +9,133 @@ describe('GroupServiceNavigationPresenter', () => {
     jest.restoreAllMocks()
   })
 
-  describe('navigationItems', () => {
-    it('should return navigation items with allocations active', () => {
+  describe('getServiceNavigationArgs', () => {
+    it('should return navigation args with allocations active', () => {
       const presenter = new GroupServiceNavigationPresenter(groupId, moduleId, 'allocations')
 
-      expect(presenter.navigationItems).toEqual([
-        {
-          href: `/groupDetails/${groupId}/allocated`,
-          text: 'Allocations',
-          active: true,
-        },
-        {
-          href: `/${groupId}/${moduleId}/schedule-session-type`,
-          text: 'Schedule',
-          active: false,
-        },
-        {
-          href: `/groupDetails/${groupId}/sessions`,
-          text: 'Sessions and attendance',
-          active: false,
-        },
-        {
-          href: `/groupDetails/${groupId}/details`,
-          text: 'Group details',
-          active: false,
-        },
-      ])
+      expect(presenter.getServiceNavigationArgs()).toEqual({
+        classes: 'group-details__service-navigation',
+        navigation: [
+          {
+            href: `/groupDetails/${groupId}/allocated`,
+            text: 'Allocations',
+            active: true,
+          },
+          {
+            href: `/${groupId}/${moduleId}/schedule-session-type`,
+            text: 'Schedule',
+            active: false,
+          },
+          {
+            href: `/groupDetails/${groupId}/sessions`,
+            text: 'Sessions and attendance',
+            active: false,
+          },
+          {
+            href: `/groupDetails/${groupId}/details`,
+            text: 'Group details',
+            active: false,
+          },
+        ],
+      })
     })
 
-    it('should return navigation items with schedule active', () => {
+    it('should return navigation args with schedule active', () => {
       const presenter = new GroupServiceNavigationPresenter(groupId, moduleId, 'schedule')
 
-      expect(presenter.navigationItems).toEqual([
-        {
-          href: `/groupDetails/${groupId}/allocated`,
-          text: 'Allocations',
-          active: false,
-        },
-        {
-          href: `/${groupId}/${moduleId}/schedule-session-type`,
-          text: 'Schedule',
-          active: true,
-        },
-        {
-          href: `/groupDetails/${groupId}/sessions`,
-          text: 'Sessions and attendance',
-          active: false,
-        },
-        {
-          href: `/groupDetails/${groupId}/details`,
-          text: 'Group details',
-          active: false,
-        },
-      ])
+      expect(presenter.getServiceNavigationArgs()).toEqual({
+        classes: 'group-details__service-navigation',
+        navigation: [
+          {
+            href: `/groupDetails/${groupId}/allocated`,
+            text: 'Allocations',
+            active: false,
+          },
+          {
+            href: `/${groupId}/${moduleId}/schedule-session-type`,
+            text: 'Schedule',
+            active: true,
+          },
+          {
+            href: `/groupDetails/${groupId}/sessions`,
+            text: 'Sessions and attendance',
+            active: false,
+          },
+          {
+            href: `/groupDetails/${groupId}/details`,
+            text: 'Group details',
+            active: false,
+          },
+        ],
+      })
     })
 
-    it('should return navigation items with sessions active', () => {
+    it('should return navigation args with sessions active', () => {
       const presenter = new GroupServiceNavigationPresenter(groupId, moduleId, 'sessions')
 
-      expect(presenter.navigationItems).toEqual([
-        {
-          href: `/groupDetails/${groupId}/allocated`,
-          text: 'Allocations',
-          active: false,
-        },
-        {
-          href: `/${groupId}/${moduleId}/schedule-session-type`,
-          text: 'Schedule',
-          active: false,
-        },
-        {
-          href: `/groupDetails/${groupId}/sessions`,
-          text: 'Sessions and attendance',
-          active: true,
-        },
-        {
-          href: `/groupDetails/${groupId}/details`,
-          text: 'Group details',
-          active: false,
-        },
-      ])
+      expect(presenter.getServiceNavigationArgs()).toEqual({
+        classes: 'group-details__service-navigation',
+        navigation: [
+          {
+            href: `/groupDetails/${groupId}/allocated`,
+            text: 'Allocations',
+            active: false,
+          },
+          {
+            href: `/${groupId}/${moduleId}/schedule-session-type`,
+            text: 'Schedule',
+            active: false,
+          },
+          {
+            href: `/groupDetails/${groupId}/sessions`,
+            text: 'Sessions and attendance',
+            active: true,
+          },
+          {
+            href: `/groupDetails/${groupId}/details`,
+            text: 'Group details',
+            active: false,
+          },
+        ],
+      })
     })
 
-    it('should return navigation items with details active', () => {
+    it('should return navigation args with details active', () => {
       const presenter = new GroupServiceNavigationPresenter(groupId, moduleId, 'details')
 
-      expect(presenter.navigationItems).toEqual([
-        {
-          href: `/groupDetails/${groupId}/allocated`,
-          text: 'Allocations',
-          active: false,
-        },
-        {
-          href: `/${groupId}/${moduleId}/schedule-session-type`,
-          text: 'Schedule',
-          active: false,
-        },
-        {
-          href: `/groupDetails/${groupId}/sessions`,
-          text: 'Sessions and attendance',
-          active: false,
-        },
-        {
-          href: `/groupDetails/${groupId}/details`,
-          text: 'Group details',
-          active: true,
-        },
-      ])
+      expect(presenter.getServiceNavigationArgs()).toEqual({
+        classes: 'group-details__service-navigation',
+        navigation: [
+          {
+            href: `/groupDetails/${groupId}/allocated`,
+            text: 'Allocations',
+            active: false,
+          },
+          {
+            href: `/${groupId}/${moduleId}/schedule-session-type`,
+            text: 'Schedule',
+            active: false,
+          },
+          {
+            href: `/groupDetails/${groupId}/sessions`,
+            text: 'Sessions and attendance',
+            active: false,
+          },
+          {
+            href: `/groupDetails/${groupId}/details`,
+            text: 'Group details',
+            active: true,
+          },
+        ],
+      })
     })
 
     it('should use placeholder href for schedule when moduleId is undefined', () => {
       const presenter = new GroupServiceNavigationPresenter(groupId, undefined, 'allocations')
 
-      const scheduleItem = presenter.navigationItems.find(item => item.text === 'Schedule')
+      const result = presenter.getServiceNavigationArgs()
+      const scheduleItem = result.navigation.find(item => item.text === 'Schedule')
       expect(scheduleItem?.href).toBe('#')
-    })
-  })
-
-  describe('classes', () => {
-    it('should return the correct CSS classes', () => {
-      const presenter = new GroupServiceNavigationPresenter(groupId, moduleId, 'allocations')
-
-      expect(presenter.classes).toBe('group-details__service-navigation')
     })
   })
 })

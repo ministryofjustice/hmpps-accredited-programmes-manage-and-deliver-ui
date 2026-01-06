@@ -1,10 +1,7 @@
-{% macro groupServiceNavigation(navigationPresenter) %}
+{% macro groupServiceNavigation(serviceNavigationArgs) %}
   {% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
   
-  {{ govukServiceNavigation({
-    classes: navigationPresenter.classes,
-    navigation: navigationPresenter.navigationItems
-  }) }}
+  {{ govukServiceNavigation(serviceNavigationArgs) }}
 {% endmacro %}
 
 
