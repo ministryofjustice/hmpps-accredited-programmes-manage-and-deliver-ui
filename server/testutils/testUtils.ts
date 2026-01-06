@@ -64,6 +64,6 @@ export default class TestUtils {
         reportingTeams: ['Team5'],
       },
     ],
-    cohort: ['General Offence', 'General Offence - LDC', 'Sexual Offence', 'Sexual Offence - LDC'],
+    cohort: ['General offence', 'General offence - LDC', 'Sexual offence', 'Sexual offence - LDC'],
   })
 }
