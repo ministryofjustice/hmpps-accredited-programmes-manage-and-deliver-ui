@@ -118,7 +118,7 @@ describe('Session Schedule Controller', () => {
         .send({})
         .expect(400)
         .expect(res => {
-          expect(res.text).toContain('Which session are you scheduling?')
+          expect(res.text).toContain('Select a session')
           expect(res.text).toContain('There is a problem')
         })
     })
