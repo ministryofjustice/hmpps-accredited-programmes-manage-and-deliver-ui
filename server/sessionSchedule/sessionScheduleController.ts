@@ -6,16 +6,6 @@ import { FormValidationError } from '../utils/formValidationError'
 import SessionScheduleWhichPresenter from './which/sessionScheduleWhichPresenter'
 import SessionScheduleWhichView from './which/sessionScheduleWhichView'
 
-declare module 'express-session' {
-  interface SessionData {
-    sessionScheduleData?: {
-      groupId: string
-      moduleId: string
-      selectedTemplateId?: string
-    }
-  }
-}
-
 export default class SessionScheduleController {
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
@@ -26,7 +16,6 @@ export default class SessionScheduleController {
     const { username } = req.user
     let formError: FormValidationError | null = null
 
-    // Fetch session templates from the API
     const sessionTemplates = await this.accreditedProgrammesManageAndDeliverService.getSessionTemplates(
       username,
       groupId,
@@ -48,10 +37,8 @@ export default class SessionScheduleController {
           ],
         }
       } else {
-        req.session.sessionScheduleData = {
-          groupId,
-          moduleId,
-          selectedTemplateId,
+        req.session.sessionScheduleWhichData = {
+          sessionScheduleTemplateId: selectedTemplateId,
         }
         return res.redirect(`/${groupId}/${moduleId}/schedule-group-session-details`)
       }
@@ -63,7 +50,7 @@ export default class SessionScheduleController {
       sessionTemplates.length > 0 ? sessionTemplates[0].name : 'the session',
       sessionTemplates,
       formError,
-      req.session.sessionScheduleData?.selectedTemplateId,
+      req.session.sessionScheduleWhichData?.sessionScheduleTemplateId,
     )
     const view = new SessionScheduleWhichView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
