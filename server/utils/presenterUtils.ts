@@ -1,3 +1,22 @@
+import { FormValidationError } from './formValidationError'
+
+interface DateTimeComponentInputPresenter {
+  value: string
+  hasError: boolean
+}
+
+interface PartOfDayInputPresenter {
+  value: 'AM' | 'PM' | null
+  hasError: boolean
+}
+
+interface TwelveHourTimeInputPresenter {
+  errorMessage: string | null
+  hour: DateTimeComponentInputPresenter
+  minute: DateTimeComponentInputPresenter
+  partOfDay: PartOfDayInputPresenter
+}
+
 export default class PresenterUtils {
   constructor(private readonly userInputData: Record<string, unknown> | null = null) {}
 
@@ -80,5 +99,64 @@ export default class PresenterUtils {
       return 'Unknown'
     }
     return value ? 'Yes' : 'No'
+  }
+
+  twelveHourTimeValue(
+    modelValue: {
+      hour?: number
+      minutes?: number
+      amOrPm?: 'AM' | 'PM'
+    },
+    userInputKey: string,
+    error: FormValidationError | null,
+  ): TwelveHourTimeInputPresenter {
+    const [hourKey, minuteKey, partOfDayKey] = ['hour', 'minute', 'part-of-day'].map(
+      suffix => `${userInputKey}-${suffix}`,
+    )
+
+    const errorMessage =
+      PresenterUtils.errorMessage(error, hourKey) ??
+      PresenterUtils.errorMessage(error, minuteKey) ??
+      PresenterUtils.errorMessage(error, partOfDayKey)
+
+    let hourValue = ''
+    let minuteValue = ''
+    let partOfDayValue: 'AM' | 'PM' | null = null
+
+    if (this.userInputData === null) {
+      if (
+        modelValue !== null &&
+        (modelValue.hour !== undefined || modelValue.minutes !== undefined || modelValue.amOrPm !== undefined)
+      ) {
+        hourValue = modelValue.hour !== undefined ? modelValue.hour.toString().padStart(2, '0') : ''
+        minuteValue = modelValue.minutes !== undefined ? modelValue.minutes.toString().padStart(2, '0') : ''
+        partOfDayValue = modelValue.amOrPm ?? null
+      }
+    } else {
+      hourValue = String(this.userInputData[hourKey] || '')
+      minuteValue = String(this.userInputData[minuteKey] || '')
+
+      if (this.userInputData[partOfDayKey] === 'AM' || this.userInputData[partOfDayKey] === 'PM') {
+        partOfDayValue = this.userInputData[partOfDayKey] as 'AM' | 'PM'
+      } else {
+        partOfDayValue = null
+      }
+    }
+
+    return {
+      errorMessage,
+      partOfDay: {
+        value: partOfDayValue,
+        hasError: PresenterUtils.hasError(error, partOfDayKey),
+      },
+      hour: {
+        value: hourValue,
+        hasError: PresenterUtils.hasError(error, hourKey),
+      },
+      minute: {
+        value: minuteValue,
+        hasError: PresenterUtils.hasError(error, minuteKey),
+      },
+    }
   }
 }
