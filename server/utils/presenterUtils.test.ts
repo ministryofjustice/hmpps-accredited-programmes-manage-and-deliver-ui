@@ -1,5 +1,4 @@
 import PresenterUtils from './presenterUtils'
-import ClockTime from './clockTime'
 
 describe(PresenterUtils, () => {
   describe('stringValue', () => {
