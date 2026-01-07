@@ -33,9 +33,9 @@ export default class SessionAttendanceView {
           html: `
              <!-- <p class="govuk-body">${templateAttendance.id}</p> -->
             <a href="/group/${groupId}/module/${moduleId}/schedule-session-type?sessionAttendanceTemplateId=${templateAttendance.id}" 
-               class="govuk-button" 
+               class="govuk-button govuk-button--secondary" 
                data-module="govuk-button">
-              Select
+              Schedule a ${templateAttendance.name} session
             </a>
           `,
         },
