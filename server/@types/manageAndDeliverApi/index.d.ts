@@ -62,8 +62,8 @@ type UserTeamMember = components['schemas']['UserTeamMember']
 type CreateGroupTeamMember = components['schemas']['CreateGroupTeamMember']
 type SessionScheduleRequest = components['schemas']['ScheduleSessionRequest']
 type SessionScheduleResponse = components['schemas']['ScheduleSessionTypeResponse']
-type ModuleSessionTemplate = components['schemas']['ModuleSessionTemplate']
-type ScheduleSessionTypeResponse = components['schemas']['ScheduleSessionTypeResponse']
+type SessionSchedule = components['schemas']['SessionSchedule']
+type SessionAttendance = components['schemas']['SessionAttendance']
 
 export type {
   AlcoholMisuseDetails,
@@ -95,7 +95,8 @@ export type {
   LearningNeeds,
   LifestyleAndAssociates,
   LocationFilterValues,
-  ModuleSessionTemplate,
+  SessionSchedule,
+  SessionAttendance,
   OffenceAnalysis,
   OffenceHistory,
   PageGroup,
@@ -120,7 +121,6 @@ export type {
   RemoveFromGroupResponse,
   Risks,
   RoshAnalysis,
-  ScheduleSessionTypeResponse,
   SentenceInformation,
   ThinkingAndBehaviour,
   UpdateAvailability,

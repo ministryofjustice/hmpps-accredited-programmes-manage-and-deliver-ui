@@ -1,4 +1,4 @@
-import { ModuleSessionTemplate } from '@manage-and-deliver-api'
+import { SessionSchedule } from '@manage-and-deliver-api'
 import { randomUUID } from 'crypto'
 import { FormValidationError } from '../../utils/formValidationError'
 import SessionScheduleWhichPresenter from './sessionScheduleWhichPresenter'
@@ -6,7 +6,7 @@ import SessionScheduleWhichPresenter from './sessionScheduleWhichPresenter'
 describe('SessionScheduleWhichPresenter', () => {
   const groupId = randomUUID()
   const moduleId = randomUUID()
-  const mockSessionTemplates: ModuleSessionTemplate[] = [
+  const mockSessionTemplates: SessionSchedule[] = [
     {
       id: randomUUID(),
       number: 1,
@@ -34,7 +34,7 @@ describe('SessionScheduleWhichPresenter', () => {
       )
 
       expect(presenter.text).toEqual({
-        headingHintText: 'Schedule a Getting started one-to-one',
+        headingHintText: 'Getting started one-to-one',
       })
     })
 
@@ -42,7 +42,7 @@ describe('SessionScheduleWhichPresenter', () => {
       const presenter = new SessionScheduleWhichPresenter(groupId, moduleId, 'the session', [], null)
 
       expect(presenter.text).toEqual({
-        headingHintText: 'Schedule a the session',
+        headingHintText: 'the session',
       })
     })
   })
