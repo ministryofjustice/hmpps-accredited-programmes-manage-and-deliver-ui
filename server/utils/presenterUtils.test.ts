@@ -493,7 +493,7 @@ describe(PresenterUtils, () => {
           const utils = new PresenterUtils(null)
           const value = utils.twelveHourTimeValue(null, 'start-time', null)
 
-          expect(value.errorMessage).toBeNull()
+          expect(value.errorMessages).toEqual([])
           expect(value.hour.hasError).toEqual(false)
           expect(value.minute.hasError).toEqual(false)
           expect(value.partOfDay.hasError).toEqual(false)
@@ -507,13 +507,41 @@ describe(PresenterUtils, () => {
             errors: [
               {
                 errorSummaryLinkedField: 'start-time-hour',
-                formFields: ['start-time-hour', 'start-time-part-of-day'],
+                formFields: ['start-time-hour'],
                 message: 'Please enter an hour and select whether the time is in the AM or the PM',
               },
             ],
           })
 
-          expect(value.errorMessage).toBe('Please enter an hour and select whether the time is in the AM or the PM')
+          expect(value.errorMessages).toEqual([
+            'Please enter an hour and select whether the time is in the AM or the PM',
+          ])
+          expect(value.hour.hasError).toEqual(true)
+          expect(value.minute.hasError).toEqual(false)
+          expect(value.partOfDay.hasError).toEqual(false)
+        })
+
+        it('returns multiple error information', () => {
+          const utils = new PresenterUtils(null)
+          const value = utils.twelveHourTimeValue(null, 'start-time', {
+            errors: [
+              {
+                errorSummaryLinkedField: 'start-time-hour',
+                formFields: ['start-time-hour', 'start-time-part-of-day'],
+                message: 'Please enter an hour and select whether the time is in the AM or the PM',
+              },
+              {
+                errorSummaryLinkedField: 'start-time-part-of-day',
+                formFields: ['start-time-hour', 'start-time-part-of-day'],
+                message: 'Please select whether the time is in the AM or the PM',
+              },
+            ],
+          })
+
+          expect(value.errorMessages).toEqual([
+            'Please enter an hour and select whether the time is in the AM or the PM',
+            'Please enter an hour and select whether the time is in the AM or the PM',
+          ])
           expect(value.hour.hasError).toEqual(true)
           expect(value.minute.hasError).toEqual(false)
           expect(value.partOfDay.hasError).toEqual(true)

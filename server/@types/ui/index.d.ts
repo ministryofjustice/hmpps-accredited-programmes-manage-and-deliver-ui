@@ -39,7 +39,7 @@ export interface TimeInputArgs {
   /*
     Options for the error message component. The error message component will not display if you use a falsy value for `errorMessage`, for example `false` or `null`.
   */
-  errorMessage?: ErrorMessageArgs | null
+  errorMessages?: ErrorMessageArgs[] | null
 
   /*
     Options for the form-group wrapper

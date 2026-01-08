@@ -58,6 +58,40 @@ describe('ViewUtils', () => {
     })
   })
 
+  describe('govukErrorMessages', () => {
+    describe('with a non-empty string', () => {
+      it('returns a list error message object, suitable to pass as the errorMessages property for components that can show multiple errors - single value', () => {
+        expect(ViewUtils.govukErrorMessages(['foo must be in the future'])).toEqual([
+          { text: 'foo must be in the future' },
+        ])
+      })
+      it('returns a list error message object, suitable to pass as the errorMessages property for components that can show multiple errors - multiple values', () => {
+        expect(ViewUtils.govukErrorMessages(['foo must be in the future', 'bar must be in the past'])).toEqual([
+          { text: 'foo must be in the future' },
+          { text: 'bar must be in the past' },
+        ])
+      })
+    })
+
+    describe('with an empty string', () => {
+      it('returns an error message object', () => {
+        expect(ViewUtils.govukErrorMessages([''])).toEqual([{ text: '' }])
+      })
+    })
+
+    describe('with null', () => {
+      it('returns null', () => {
+        expect(ViewUtils.govukErrorMessages(null)).toBeNull()
+      })
+    })
+
+    describe('with undefined', () => {
+      it('returns null', () => {
+        expect(ViewUtils.govukErrorMessages(undefined)).toBeNull()
+      })
+    })
+  })
+
   describe('govukErrorSummaryArgs', () => {
     describe('with null', () => {
       it('returns null', () => {

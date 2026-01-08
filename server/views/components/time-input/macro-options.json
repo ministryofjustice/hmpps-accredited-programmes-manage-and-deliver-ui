@@ -75,7 +75,7 @@
     "isComponent": true
   },
   {
-    "name": "errorMessage",
+    "name": "errorMessages",
     "type": "object",
     "required": false,
     "description": "Options for the error message component. The error message component will not display if you use a falsy value for `errorMessage`, for example `false` or `null`.",

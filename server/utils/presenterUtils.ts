@@ -11,7 +11,7 @@ interface PartOfDayInputPresenter {
 }
 
 interface TwelveHourTimeInputPresenter {
-  errorMessage: string | null
+  errorMessages: string[] | null
   hour: DateTimeComponentInputPresenter
   minute: DateTimeComponentInputPresenter
   partOfDay: PartOfDayInputPresenter
@@ -114,37 +114,34 @@ export default class PresenterUtils {
       suffix => `${userInputKey}-${suffix}`,
     )
 
-    const errorMessage =
-      PresenterUtils.errorMessage(error, hourKey) ??
-      PresenterUtils.errorMessage(error, minuteKey) ??
-      PresenterUtils.errorMessage(error, partOfDayKey)
+    const errorMessages = [
+      PresenterUtils.errorMessage(error, hourKey),
+      PresenterUtils.errorMessage(error, minuteKey),
+      PresenterUtils.errorMessage(error, partOfDayKey),
+    ].filter((msg): msg is string => msg !== null)
 
     let hourValue = ''
     let minuteValue = ''
     let partOfDayValue: 'AM' | 'PM' | null = null
 
-    if (this.userInputData === null) {
-      if (
-        modelValue !== null &&
-        (modelValue.hour !== undefined || modelValue.minutes !== undefined || modelValue.amOrPm !== undefined)
-      ) {
-        hourValue = modelValue.hour !== undefined ? modelValue.hour.toString().padStart(2, '0') : ''
-        minuteValue = modelValue.minutes !== undefined ? modelValue.minutes.toString().padStart(2, '0') : ''
-        partOfDayValue = modelValue.amOrPm ?? null
-      }
-    } else {
+    if (this.userInputData !== null) {
       hourValue = String(this.userInputData[hourKey] || '')
       minuteValue = String(this.userInputData[minuteKey] || '')
 
       if (this.userInputData[partOfDayKey] === 'AM' || this.userInputData[partOfDayKey] === 'PM') {
         partOfDayValue = this.userInputData[partOfDayKey] as 'AM' | 'PM'
-      } else {
-        partOfDayValue = null
       }
+    } else if (
+      modelValue !== null &&
+      (modelValue.hour !== undefined || modelValue.minutes !== undefined || modelValue.amOrPm !== undefined)
+    ) {
+      hourValue = modelValue.hour !== undefined ? modelValue.hour.toString().padStart(2, '0') : ''
+      minuteValue = modelValue.minutes !== undefined ? modelValue.minutes.toString().padStart(2, '0') : ''
+      partOfDayValue = modelValue.amOrPm ?? null
     }
 
     return {
-      errorMessage,
+      errorMessages,
       partOfDay: {
         value: partOfDayValue,
         hasError: PresenterUtils.hasError(error, partOfDayKey),
