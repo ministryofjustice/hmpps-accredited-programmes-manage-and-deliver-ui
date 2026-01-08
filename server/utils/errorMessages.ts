@@ -95,6 +95,18 @@ export default {
 
   sessionSchedule: {
     sessionScheduleWhich: 'Select the session type',
+    sessionDetailsDate: 'Enter or select a date',
+    sessionDetailsDateInvalid: 'Enter a date in the format 10/7/2025',
+    sessionDetailsDateInPast: 'Start date must be in the future',
+    sessionDetailsStartTime: 'Enter a complete start time',
+    sessionDetailsEndTime: 'Enter a complete end time',
+    sessionDetailsTimeHour: 'Enter an hour between 1 and 12',
+    sessionDetailsTimeMinute: 'Enter a minute between 00 and 59',
+    sessionDetailsStartTimeAmPm: 'Select whether the start time is am or pm',
+    sessionDetailsEndTimeAmPm: 'Select whether the end time is am or pm',
+    sessionDetailsWho: 'Select who should attend the session',
+    sessionDetailsFacilitator: 'Select a facilitator. Start typing to search',
+    sessionDetailsEndTimeBeforeStart: 'End time must be later than start time',
   },
 
   motivationBackgroundAndNonAssociations: {

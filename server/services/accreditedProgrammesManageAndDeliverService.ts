@@ -38,6 +38,7 @@ import {
   RemoveFromGroupResponse,
   Risks,
   RoshAnalysis,
+  ScheduleIndividualSessionDetailsResponse,
   ScheduleSessionTypeResponse,
   SentenceInformation,
   SessionScheduleRequest,
@@ -569,5 +570,17 @@ export default class AccreditedProgrammesManageAndDeliverService
       headers: { Accept: 'application/json' },
     })) as ScheduleSessionTypeResponse
     return response.sessionTemplates
+  }
+
+  async getIndividualSessionDetails(
+    username: ExpressUsername,
+    groupId: string,
+    moduleId: string,
+  ): Promise<ScheduleIndividualSessionDetailsResponse> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/group/${groupId}/module/${moduleId}/schedule-individual-session-details`,
+      headers: { Accept: 'application/json' },
+    })) as ScheduleIndividualSessionDetailsResponse
   }
 }
