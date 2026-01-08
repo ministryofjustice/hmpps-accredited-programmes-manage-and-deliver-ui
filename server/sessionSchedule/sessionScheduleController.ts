@@ -5,6 +5,9 @@ import { FormValidationError } from '../utils/formValidationError'
 
 import SessionScheduleWhichPresenter from './which/sessionScheduleWhichPresenter'
 import SessionScheduleWhichView from './which/sessionScheduleWhichView'
+import AddSessionDetailsPresenter from './sessionDetails/addSessionDetailsPresenter'
+import AddSessionDetailsView from './sessionDetails/addSessionDetailsView'
+import CreateSessionScheduleForm from './sessionScheduleForm'
 
 export default class SessionScheduleController {
   constructor(
@@ -37,7 +40,7 @@ export default class SessionScheduleController {
           ],
         }
       } else {
-        req.session.sessionScheduleWhichData = {
+        req.session.sessionScheduleData = {
           sessionScheduleTemplateId: selectedTemplateId,
         }
         return res.redirect(`/${groupId}/${moduleId}/schedule-group-session-details`)
@@ -50,9 +53,52 @@ export default class SessionScheduleController {
       sessionTemplates.length > 0 ? sessionTemplates[0].name : 'the session',
       sessionTemplates,
       formError,
-      req.session.sessionScheduleWhichData?.sessionScheduleTemplateId,
+      req.session.sessionScheduleData?.sessionScheduleTemplateId,
     )
     const view = new SessionScheduleWhichView(presenter)
+    return ControllerUtils.renderWithLayout(res, view, null)
+  }
+
+  async scheduleGroupSessionDetails(req: Request, res: Response): Promise<void> {
+    const { username } = req.user
+    const { groupId, moduleId } = req.params
+    const { sessionScheduleData } = req.session
+    let formError: FormValidationError | null = null
+    let userInputData = null
+
+    if (req.method === 'POST') {
+      const data = await new CreateSessionScheduleForm(req).sessionDetailsData()
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+        userInputData = req.body
+      } else {
+        req.session.sessionScheduleData = {
+          ...sessionScheduleData,
+          referralIds: data.paramsForUpdate.referralIds,
+          facilitators: data.paramsForUpdate.facilitators,
+          startDate: data.paramsForUpdate.startDate,
+          startTime: data.paramsForUpdate.startTime,
+          endTime: data.paramsForUpdate.endTime,
+        }
+        return res.redirect(`/${groupId}/${moduleId}/session-review-details`)
+      }
+    }
+
+    const sessionDetails = await this.accreditedProgrammesManageAndDeliverService.getIndividualSessionDetails(
+      username,
+      groupId,
+      moduleId,
+    )
+
+    const presenter = new AddSessionDetailsPresenter(
+      `/${groupId}/${moduleId}/schedule-session-type`,
+      sessionDetails,
+      formError,
+      sessionScheduleData,
+      userInputData,
+    )
+    const view = new AddSessionDetailsView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
 }
