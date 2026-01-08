@@ -41,6 +41,9 @@ declare module 'express-session' {
     }
     createGroupFormData?: Partial<CreateGroupRequest>
     sessionScheduleWhichData?: Partial<SessionScheduleRequest>
+    sessionAttendanceData?: {
+      sessionAttendanceTemplateId?: string
+    }
   }
 }
 

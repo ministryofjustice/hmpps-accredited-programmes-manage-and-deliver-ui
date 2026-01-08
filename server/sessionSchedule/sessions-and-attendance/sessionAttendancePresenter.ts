@@ -1,23 +1,23 @@
-import { SessionSchedule } from '@manage-and-deliver-api'
+import { SessionAttendance } from '@manage-and-deliver-api'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
 
-export default class SessionAttendancePresenter {
+export default class SessionScheduleWhichPresenter {
   constructor(
-    private readonly groupId: string,
-    private readonly moduleId: string,
+    readonly groupId: string,
+    readonly moduleId: string,
     private readonly groupCode: string,
-    private readonly availableSessionAttendanceTemplates: SessionSchedule[],
+    private readonly availableSessionAttendanceTemplates: SessionAttendance[],
     private readonly validationError: FormValidationError | null = null,
     private readonly selectedSessionAttendanceTemplateId: string | undefined = undefined,
   ) {}
 
   get text() {
-    return { headingHintText: this.groupCode }
+    return { headingHintText: `${this.groupCode}` }
   }
 
   get backLinkUri() {
-    return `/group/${this.groupId}/module/${this.moduleId}/sessions`
+    return `/group/${this.groupId}/module/${this.moduleId}/schedule`
   }
 
   get errorSummary() {
@@ -26,14 +26,14 @@ export default class SessionAttendancePresenter {
 
   get fields() {
     return {
-      sessionTemplate: {
+      sessionAttendanceTemplate: {
         value: this.selectedSessionAttendanceTemplateId,
-        errorMessage: PresenterUtils.errorMessage(this.validationError, 'session-template'),
+        errorMessage: PresenterUtils.errorMessage(this.validationError, 'session-attendance-template'),
       },
     }
   }
 
-  get sessionTemplates() {
+  get sessionAttendanceTemplates() {
     return this.availableSessionAttendanceTemplates
   }
 }

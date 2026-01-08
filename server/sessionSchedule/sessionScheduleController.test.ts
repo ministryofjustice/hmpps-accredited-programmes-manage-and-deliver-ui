@@ -1,4 +1,4 @@
-import { ModuleSessionTemplate } from '@manage-and-deliver-api'
+import { SessionSchedule } from '@manage-and-deliver-api'
 import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import { SessionData } from 'express-session'
@@ -18,7 +18,7 @@ let app: Express
 const groupId = randomUUID()
 const moduleId = randomUUID()
 
-const mockSessionTemplates: ModuleSessionTemplate[] = [
+const mockSessionTemplates: SessionSchedule[] = [
   {
     id: randomUUID(),
     number: 1,
@@ -41,6 +41,16 @@ beforeEach(() => {
   }
   app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
   accreditedProgrammesManageAndDeliverService.getSessionTemplates.mockResolvedValue(mockSessionTemplates)
+  accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers.mockResolvedValue({
+    group: {
+      id: groupId,
+      code: 'TEST-GROUP-01',
+      regionName: 'Test Region',
+    },
+    filters: { sex: [], cohort: [], locationFilters: [] },
+    pagedGroupData: { content: [], totalElements: 0, totalPages: 0, number: 0, size: 10 },
+    otherTabTotal: 0,
+  })
 })
 
 describe('Session Schedule Controller', () => {
@@ -50,11 +60,17 @@ describe('Session Schedule Controller', () => {
         .get(`/group/${groupId}/module/${moduleId}/schedule-session-type`)
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain('Schedule a Getting started one-to-one')
+          expect(res.text).toContain('TEST-GROUP-01') // Changed from 'Schedule a Getting started one-to-one'
           expect(accreditedProgrammesManageAndDeliverService.getSessionTemplates).toHaveBeenCalledWith(
             'user1',
             groupId,
             moduleId,
+          )
+          expect(accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers).toHaveBeenCalledWith(
+            'user1',
+            groupId,
+            { page: 0, size: 1 },
+            {},
           )
         })
     })
@@ -94,7 +110,7 @@ describe('Session Schedule Controller', () => {
         .get(`/group/${groupId}/module/${moduleId}/schedule-session-type`)
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain('Schedule a the session')
+          expect(res.text).toContain('TEST-GROUP-01')
         })
     })
   })

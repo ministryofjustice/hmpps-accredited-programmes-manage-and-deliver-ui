@@ -5,6 +5,8 @@ import { FormValidationError } from '../utils/formValidationError'
 
 import SessionScheduleWhichPresenter from './which/sessionScheduleWhichPresenter'
 import SessionScheduleWhichView from './which/sessionScheduleWhichView'
+import SessionAttendancePresenter from './sessions-and-attendance/sessionAttendancePresenter'
+import SessionAttendanceView from './sessions-and-attendance/sessionAttendanceView'
 
 export default class SessionScheduleController {
   constructor(
@@ -16,11 +18,15 @@ export default class SessionScheduleController {
     const { username } = req.user
     let formError: FormValidationError | null = null
 
-    const sessionTemplates = await this.accreditedProgrammesManageAndDeliverService.getSessionTemplates(
-      username,
-      groupId,
-      moduleId,
-    )
+    const [sessionTemplates, groupDetails] = await Promise.all([
+      this.accreditedProgrammesManageAndDeliverService.getSessionTemplates(username, groupId, moduleId),
+      this.accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers(
+        username,
+        groupId,
+        { page: 0, size: 1 },
+        {},
+      ),
+    ])
 
     if (req.method === 'POST') {
       const selectedTemplateId = req.body['session-template']
@@ -47,12 +53,39 @@ export default class SessionScheduleController {
     const presenter = new SessionScheduleWhichPresenter(
       groupId,
       moduleId,
-      sessionTemplates.length > 0 ? sessionTemplates[0].name : 'the session',
+      groupDetails.group.code,
       sessionTemplates,
       formError,
       req.session.sessionScheduleWhichData?.sessionScheduleTemplateId,
     )
     const view = new SessionScheduleWhichView(presenter)
+    return ControllerUtils.renderWithLayout(res, view, null)
+  }
+
+  async showSessionAttendance(req: Request, res: Response): Promise<void> {
+    const { groupId, moduleId } = req.params
+    const { username } = req.user
+
+    const [sessionAttendanceTemplates, groupDetails] = await Promise.all([
+      this.accreditedProgrammesManageAndDeliverService.getSessionAttendanceTemplates(username, groupId, moduleId),
+      this.accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers(
+        username,
+        groupId,
+        { page: 0, size: 1 },
+        {},
+      ),
+    ])
+
+    const presenter = new SessionAttendancePresenter(
+      groupId,
+      moduleId,
+      groupDetails.group.code,
+      sessionAttendanceTemplates,
+      null,
+      undefined,
+    )
+
+    const view = new SessionAttendanceView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
 }
