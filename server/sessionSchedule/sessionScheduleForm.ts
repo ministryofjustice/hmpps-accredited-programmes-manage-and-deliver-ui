@@ -165,7 +165,7 @@ export default class CreateSessionScheduleForm {
       key.startsWith('session-details-facilitator'),
     )
 
-    return facilitatorEntries.map(([key, value]) => {
+    return facilitatorEntries.map(([_key, value]) => {
       const parsedValue = JSON.parse(value as string)
       return {
         ...parsedValue,
