@@ -17,22 +17,22 @@ describe('GroupServiceNavigationPresenter', () => {
         classes: 'group-details__service-navigation',
         navigation: [
           {
-            href: `/groupDetails/${groupId}/allocated`,
+            href: `/group/${groupId}/allocations`,
             text: 'Allocations',
             active: true,
           },
           {
-            href: `/${groupId}/${moduleId}/schedule-session-type`,
+            href: `/group/${groupId}/schedule`,
             text: 'Schedule',
             active: false,
           },
           {
-            href: `/groupDetails/${groupId}/sessions`,
+            href: `/group/${groupId}/sessions-and-attendance`,
             text: 'Sessions and attendance',
             active: false,
           },
           {
-            href: `/groupDetails/${groupId}/details`,
+            href: `/group/${groupId}/group-details`,
             text: 'Group details',
             active: false,
           },
@@ -47,22 +47,22 @@ describe('GroupServiceNavigationPresenter', () => {
         classes: 'group-details__service-navigation',
         navigation: [
           {
-            href: `/groupDetails/${groupId}/allocated`,
+            href: `/group/${groupId}/allocations`,
             text: 'Allocations',
             active: false,
           },
           {
-            href: `/${groupId}/${moduleId}/schedule-session-type`,
+            href: `/group/${groupId}/schedule`,
             text: 'Schedule',
             active: true,
           },
           {
-            href: `/groupDetails/${groupId}/sessions`,
+            href: `/group/${groupId}/sessions-and-attendance`,
             text: 'Sessions and attendance',
             active: false,
           },
           {
-            href: `/groupDetails/${groupId}/details`,
+            href: `/group/${groupId}/group-details`,
             text: 'Group details',
             active: false,
           },
@@ -77,22 +77,22 @@ describe('GroupServiceNavigationPresenter', () => {
         classes: 'group-details__service-navigation',
         navigation: [
           {
-            href: `/groupDetails/${groupId}/allocated`,
+            href: `/group/${groupId}/allocations`,
             text: 'Allocations',
             active: false,
           },
           {
-            href: `/${groupId}/${moduleId}/schedule-session-type`,
+            href: `/group/${groupId}/schedule`,
             text: 'Schedule',
             active: false,
           },
           {
-            href: `/groupDetails/${groupId}/sessions`,
+            href: `/group/${groupId}/sessions-and-attendance`,
             text: 'Sessions and attendance',
             active: true,
           },
           {
-            href: `/groupDetails/${groupId}/details`,
+            href: `/group/${groupId}/group-details`,
             text: 'Group details',
             active: false,
           },
@@ -107,22 +107,22 @@ describe('GroupServiceNavigationPresenter', () => {
         classes: 'group-details__service-navigation',
         navigation: [
           {
-            href: `/groupDetails/${groupId}/allocated`,
+            href: `/group/${groupId}/allocations`,
             text: 'Allocations',
             active: false,
           },
           {
-            href: `/${groupId}/${moduleId}/schedule-session-type`,
+            href: `/group/${groupId}/schedule`,
             text: 'Schedule',
             active: false,
           },
           {
-            href: `/groupDetails/${groupId}/sessions`,
+            href: `/group/${groupId}/sessions-and-attendance`,
             text: 'Sessions and attendance',
             active: false,
           },
           {
-            href: `/groupDetails/${groupId}/details`,
+            href: `/group/${groupId}/group-details`,
             text: 'Group details',
             active: true,
           },
@@ -135,7 +135,7 @@ describe('GroupServiceNavigationPresenter', () => {
 
       const result = presenter.getServiceNavigationArgs()
       const scheduleItem = result.navigation.find(item => item.text === 'Schedule')
-      expect(scheduleItem?.href).toBe('#')
+      expect(scheduleItem?.href).toBe(`/group/${groupId}/schedule`)
     })
   })
 })

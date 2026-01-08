@@ -15,22 +15,22 @@ export default class GroupServiceNavigationPresenter {
       classes: 'group-details__service-navigation',
       navigation: [
         {
-          href: `/groupDetails/${this.groupId}/allocated`,
+          href: `/group/${this.groupId}/allocations`,
           text: 'Allocations',
           active: this.activePage === 'allocations',
         },
         {
-          href: this.moduleId ? `/${this.groupId}/${this.moduleId}/schedule-session-type` : '#',
+          href: `/group/${this.groupId}/schedule`,
           text: 'Schedule',
           active: this.activePage === 'schedule',
         },
         {
-          href: `/groupDetails/${this.groupId}/sessions`,
+          href: `/group/${this.groupId}/sessions-and-attendance`,
           text: 'Sessions and attendance',
           active: this.activePage === 'sessions',
         },
         {
-          href: `/groupDetails/${this.groupId}/details`,
+          href: `/group/${this.groupId}/group-details`,
           text: 'Group details',
           active: this.activePage === 'details',
         },
