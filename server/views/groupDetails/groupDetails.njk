@@ -9,6 +9,7 @@
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {%- from "govuk/components/checkboxes/macro.njk" import govukCheckboxes -%}
+{% from "../components/groupServiceNavigation.njk" import groupServiceNavigation %}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -29,6 +30,7 @@
     <h2 class="govuk-heading-l">{{ text.pageTableHeading }}</h2>
   </div>
 </div>
+{{ groupServiceNavigation(presenter.navigationPresenter.getServiceNavigationArgs()) }}
 <div class="govuk-grid-row">
 
   {%- set filterOptionsHtml %}
@@ -93,3 +95,4 @@
 </div>
 
   {% endblock %}
+

@@ -6,6 +6,7 @@ import Pagination from '../utils/pagination/pagination'
 import PresenterUtils from '../utils/presenterUtils'
 import { convertToTitleCase } from '../utils/utils'
 import GroupDetailFilter from './groupDetailFilter'
+import GroupServiceLayoutPresenter from '../shared/groups/groupServiceLayoutPresenter'
 
 export enum GroupDetailsPageSection {
   Allocated = 1,
@@ -17,7 +18,7 @@ const cohortConfigMap: Record<CohortEnum, string> = {
   GENERAL_OFFENCE: 'General offence',
 }
 
-export default class GroupDetailsPresenter {
+export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
   public readonly pagination: Pagination
 
   readonly groupListItems: Page<GroupItem>
@@ -32,6 +33,7 @@ export default class GroupDetailsPresenter {
     readonly successMessage: string | null = null,
     readonly params?: string,
   ) {
+    super('allocations', groupId, undefined, group)
     this.groupListItems = this.group.pagedGroupData as Page<GroupItem>
     this.pagination = new Pagination(this.groupListItems, params)
   }
