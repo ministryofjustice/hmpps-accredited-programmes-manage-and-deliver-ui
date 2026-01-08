@@ -69,6 +69,19 @@ describe('CreateGroupForm', () => {
         })
         expect(data.error).toBeNull()
       })
+
+      it('and date has leading zeros it returns params for update', async () => {
+        const request = TestUtils.createRequest({
+          'create-group-date': '10/07/2050',
+        })
+
+        const data = await new CreateGroupForm(request).createGroupDateData()
+
+        expect(data.paramsForUpdate).toStrictEqual({
+          earliestStartDate: '10/07/2050',
+        })
+        expect(data.error).toBeNull()
+      })
     })
     describe('when date is invalid format', () => {
       it('returns an appropriate error', async () => {
