@@ -40,8 +40,8 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
 
   get text() {
     return {
-      pageHeading: this.group.group.code,
-      pageSubHeading: `Allocations and waitlist`,
+      pageSubHeading: this.group.group.code,
+      pageHeading: `Allocations and waitlist`,
     }
   }
 
