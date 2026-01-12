@@ -31,7 +31,7 @@ export default class UpdateReferralStatusStartedOrCompletedView {
           hint: {
             text:
               this.presenter.details.currentStatusDescription === 'On programme'
-                ? 'The person has finished the programme and a post-programme review has taken place.'
+                ? 'The person has finished the programme and a three-way meeting has taken place.'
                 : '',
           },
           checked: this.presenter.fields.currentStatus.value.toLowerCase() === 'true',
