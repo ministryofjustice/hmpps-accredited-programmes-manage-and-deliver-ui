@@ -44,6 +44,7 @@ declare module 'express-session' {
     sessionAttendanceData?: {
       sessionAttendanceTemplateId?: string
     }
+    sessionScheduleData?: Partial<SessionScheduleRequest>
   }
 }
 

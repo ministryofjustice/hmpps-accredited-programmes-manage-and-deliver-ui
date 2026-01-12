@@ -13,7 +13,11 @@ export default class SessionAttendancePresenter {
   ) {}
 
   get text() {
-    return { headingHintText: this.groupCode }
+    const firstSessionName = this.availableSessionAttendanceTemplates[0]?.name || 'the session'
+    return {
+      headingHintText: this.groupCode,
+      headingCaptionText: `Schedule a ${firstSessionName}`,
+    }
   }
 
   get backLinkUri() {

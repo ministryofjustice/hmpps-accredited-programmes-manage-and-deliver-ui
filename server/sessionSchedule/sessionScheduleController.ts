@@ -5,8 +5,9 @@ import { FormValidationError } from '../utils/formValidationError'
 
 import SessionScheduleWhichPresenter from './which/sessionScheduleWhichPresenter'
 import SessionScheduleWhichView from './which/sessionScheduleWhichView'
-import SessionAttendancePresenter from './sessions-and-attendance/sessionAttendancePresenter'
-import SessionAttendanceView from './sessions-and-attendance/sessionAttendanceView'
+import AddSessionDetailsPresenter from './sessionDetails/addSessionDetailsPresenter'
+import AddSessionDetailsView from './sessionDetails/addSessionDetailsView'
+import CreateSessionScheduleForm from './sessionScheduleForm'
 
 export default class SessionScheduleController {
   constructor(
@@ -18,15 +19,11 @@ export default class SessionScheduleController {
     const { username } = req.user
     let formError: FormValidationError | null = null
 
-    const [sessionTemplates, groupDetails] = await Promise.all([
-      this.accreditedProgrammesManageAndDeliverService.getSessionTemplates(username, groupId, moduleId),
-      this.accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers(
-        username,
-        groupId,
-        { page: 0, size: 1 },
-        {},
-      ),
-    ])
+    const sessionTemplates = await this.accreditedProgrammesManageAndDeliverService.getSessionTemplates(
+      username,
+      groupId,
+      moduleId,
+    )
 
     if (req.method === 'POST') {
       const selectedTemplateId = req.body['session-template']
@@ -43,7 +40,7 @@ export default class SessionScheduleController {
           ],
         }
       } else {
-        req.session.sessionScheduleWhichData = {
+        req.session.sessionScheduleData = {
           sessionScheduleTemplateId: selectedTemplateId,
         }
         return res.redirect(`/${groupId}/${moduleId}/schedule-group-session-details`)
@@ -53,39 +50,55 @@ export default class SessionScheduleController {
     const presenter = new SessionScheduleWhichPresenter(
       groupId,
       moduleId,
-      groupDetails.group.code,
+      sessionTemplates.length > 0 ? sessionTemplates[0].name : 'the session',
       sessionTemplates,
       formError,
-      req.session.sessionScheduleWhichData?.sessionScheduleTemplateId,
+      req.session.sessionScheduleData?.sessionScheduleTemplateId,
     )
     const view = new SessionScheduleWhichView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
 
-  async showSessionAttendance(req: Request, res: Response): Promise<void> {
-    const { groupId, moduleId } = req.params
+  async scheduleGroupSessionDetails(req: Request, res: Response): Promise<void> {
     const { username } = req.user
+    const { groupId, moduleId } = req.params
+    const { sessionScheduleData } = req.session
+    let formError: FormValidationError | null = null
+    let userInputData = null
 
-    const [sessionAttendanceTemplates, groupDetails] = await Promise.all([
-      this.accreditedProgrammesManageAndDeliverService.getSessionAttendanceTemplates(username, groupId, moduleId),
-      this.accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers(
-        username,
-        groupId,
-        { page: 0, size: 1 },
-        {},
-      ),
-    ])
+    if (req.method === 'POST') {
+      const data = await new CreateSessionScheduleForm(req).sessionDetailsData()
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+        userInputData = req.body
+      } else {
+        req.session.sessionScheduleData = {
+          ...sessionScheduleData,
+          referralIds: data.paramsForUpdate.referralIds,
+          facilitators: data.paramsForUpdate.facilitators,
+          startDate: data.paramsForUpdate.startDate,
+          startTime: data.paramsForUpdate.startTime,
+          endTime: data.paramsForUpdate.endTime,
+        }
+        return res.redirect(`/${groupId}/${moduleId}/session-review-details`)
+      }
+    }
 
-    const presenter = new SessionAttendancePresenter(
+    const sessionDetails = await this.accreditedProgrammesManageAndDeliverService.getIndividualSessionDetails(
+      username,
       groupId,
       moduleId,
-      groupDetails.group.code,
-      sessionAttendanceTemplates,
-      null,
-      undefined,
     )
 
-    const view = new SessionAttendanceView(presenter)
+    const presenter = new AddSessionDetailsPresenter(
+      `/${groupId}/${moduleId}/schedule-session-type`,
+      sessionDetails,
+      formError,
+      sessionScheduleData,
+      userInputData,
+    )
+    const view = new AddSessionDetailsView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
 }

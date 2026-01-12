@@ -254,7 +254,7 @@ export default class CreateGroupForm {
         .notEmpty()
         .withMessage(errorMessages.createGroup.createGroupDateSelect)
         .bail()
-        .matches(/^([1-9]|[12]\d|3[01])\/([1-9]|1[0-2])\/\d{4}$/)
+        .matches(/^(0?[1-9]|[12]\d|3[01])\/(0?[1-9]|1[0-2])\/\d{4}$/)
         .withMessage(errorMessages.createGroup.createGroupDateInvalid)
         .bail()
         .custom((value: string) => {
