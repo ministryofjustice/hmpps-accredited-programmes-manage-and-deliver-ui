@@ -19,7 +19,7 @@ export default class AddToGroupMoreDetailsView {
       maxlength: '500',
       label: {
         text: 'Add details (optional)',
-        classes: 'govuk-label govuk-label--s',
+        classes: 'govuk-label govuk-label--m',
       },
       hint: {
         text: `You can add more information about this update if you need to.`,
@@ -30,7 +30,7 @@ export default class AddToGroupMoreDetailsView {
   }
 
   private submitButtonArgs(): ButtonArgs {
-    return { text: 'Save', preventDoubleClick: true }
+    return { text: 'Submit', preventDoubleClick: true }
   }
 
   get renderArgs(): [string, Record<string, unknown>] {

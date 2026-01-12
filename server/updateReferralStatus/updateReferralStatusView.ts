@@ -72,7 +72,7 @@ export default class UpdateReferralStatusView {
 
   get bottomInsetText() {
     return {
-      html: `Submitting this change will remove the person from the group.`,
+      html: `Submitting this status change will remove the person from the group.`,
     }
   }
 
