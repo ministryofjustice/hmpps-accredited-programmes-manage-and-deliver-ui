@@ -42,6 +42,16 @@ export default class CaselistPresenter {
     return this.filter.pdu !== undefined && this.filter.pdu !== ''
   }
 
+  get resultsText(): string {
+    const { totalElements, number, size, numberOfElements } = this.referralCaseListItems
+    if (totalElements === 0) {
+      return ''
+    }
+    const start = number * size + 1
+    const end = number * size + numberOfElements
+    return `Showing <strong>${start}</strong> to <strong>${end}</strong> of <strong>${totalElements}</strong> results`
+  }
+
   getCaseloadTableArgs(): TableArgs {
     return {
       attributes: {
