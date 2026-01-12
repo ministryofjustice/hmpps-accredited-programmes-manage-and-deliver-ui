@@ -79,7 +79,9 @@
     {% endif %}
     
     {{ mojSubNavigation(subNavArgs) }}
-    
+     {% if presenter.resultsText %}
+        <p class="govuk-body showing-results">{{ presenter.resultsText | safe }}</p>
+      {% endif %}
     <form method="post">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}">
       <div id="add-to-group"></div>
