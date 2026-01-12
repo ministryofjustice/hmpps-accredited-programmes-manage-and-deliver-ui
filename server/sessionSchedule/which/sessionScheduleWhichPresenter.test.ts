@@ -35,6 +35,7 @@ describe('SessionScheduleWhichPresenter', () => {
 
       expect(presenter.text).toEqual({
         headingHintText: 'Getting started one-to-one',
+        headingCaptionText: 'Schedule a Getting started one-to-one',
       })
     })
 
@@ -43,6 +44,7 @@ describe('SessionScheduleWhichPresenter', () => {
 
       expect(presenter.text).toEqual({
         headingHintText: 'the session',
+        headingCaptionText: 'Schedule a the session',
       })
     })
   })
