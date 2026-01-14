@@ -8,12 +8,14 @@ export default class GroupServiceNavigationPresenter {
   ) {}
 
   getServiceNavigationArgs(): {
+    label: string
     classes: string
-    navigation: { href: string; text: string; active: boolean }[]
+    items: { href: string; text: string; active: boolean }[]
   } {
     return {
+      label: 'Group service navigation',
       classes: 'group-details__service-navigation',
-      navigation: [
+      items: [
         {
           href: `/group/${this.groupId}/allocations`,
           text: 'Allocations',
