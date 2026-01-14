@@ -850,6 +850,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/bff/group/{groupId}/sessions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * bff endpoint to retrieve module sessions for a programme group
+     * @description Retrieve group module sessions for scheduling purposes
+     */
+    get: operations['getGroupSessions']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/bff/group/{groupId}/module/{moduleId}/schedule-session-type': {
     parameters: {
       query?: never
@@ -1335,7 +1355,7 @@ export interface components {
        * Format: uuid
        * @description The UUID of the ModuleSessionTemplate that defines the session blueprint
        */
-      sessionScheduleTemplateId: string
+      sessionTemplateId: string
       /** @description An array of Referral IDs representing the group members to schedule */
       referralIds: string[]
       /** @description The facilitator(s) who will conduct the session */
@@ -2837,6 +2857,112 @@ export interface components {
        */
       otherTabTotal: number
     }
+    ProgrammeGroupModuleSessionsResponse: {
+      /** @description group details */
+      group: components['schemas']['ProgrammeGroupModuleSessionsResponseGroup']
+      /** @description Details of the Group's modules */
+      modules: components['schemas']['ProgrammeGroupModuleSessionsResponseGroupModule'][]
+    }
+    ProgrammeGroupModuleSessionsResponseGroup: {
+      /**
+       * @description A unique code identifying the programme group.
+       * @example AP_BIRMINGHAM_NORTH
+       */
+      code: string
+      /**
+       * @description The region name the group belongs to.
+       * @example West Midlands
+       */
+      regionName: string
+    }
+    ProgrammeGroupModuleSessionsResponseGroupModule: {
+      /**
+       * Format: uuid
+       * @description The unique identifier of the module
+       * @example 123e4567-e89b-12d3-a456-426614174000
+       */
+      id: string
+      /**
+       * Format: int32
+       * @description The module number
+       * @example 1
+       */
+      number: number
+      /**
+       * @description The name of the module
+       * @example Getting started
+       */
+      name: string
+      /**
+       * @description Object containing the start date text
+       * @example Estimated date of Getting started one-to-ones: Thursday 21 May 2026
+       */
+      startDateText: components['schemas']['StartDateText']
+      /**
+       * @description The text to display on the schedule button
+       * @example Schedule a Getting started session
+       */
+      scheduleButtonText: string
+      /** @description The sessions within the module */
+      sessions: components['schemas']['ProgrammeGroupModuleSessionsResponseGroupSession'][]
+    }
+    ProgrammeGroupModuleSessionsResponseGroupSession: {
+      /**
+       * Format: uuid
+       * @description The unique identifier of the session template
+       * @example 123e4567-e89b-12d3-a456-426614174000
+       */
+      id: string
+      /**
+       * Format: int32
+       * @description The sequential number of the session within its module
+       * @example 1
+       */
+      number: number
+      /**
+       * @description The display name of the session
+       * @example Getting started one-to-one
+       */
+      name: string
+      /**
+       * @description The type of session
+       * @example one-to-one
+       * @enum {string}
+       */
+      type: 'GROUP' | 'ONE_TO_ONE'
+      /**
+       * @description The date of the session
+       * @example Thursday 12 January 2023
+       */
+      dateOfSession: string
+      /**
+       * @description The time of the session
+       * @example 11am
+       */
+      timeOfSession: string
+      /**
+       * @description The names of the participants in the session
+       * @example [John Doe, Jane Smith]
+       */
+      participants: string[]
+      /**
+       * @description The names of the facilitators in the session
+       * @example [John Doe, Jane Smith]
+       */
+      facilitators: string[]
+    }
+    StartDateText: {
+      /**
+       * @description The bold estimated date text on the ui
+       * @example Estimated start date of pre-group one-to-ones
+       */
+      estimatedStartDateText: string
+      /**
+       * @description The date of the earliest session
+       * @example Thursday 12 January 2023
+       */
+      sessionStartDate: string
+    }
     /** @description A session template item with basic information */
     ModuleSessionTemplate: {
       /**
@@ -3586,7 +3712,7 @@ export interface operations {
     }
     responses: {
       /** @description Session successfully scheduled */
-      200: {
+      201: {
         headers: {
           [name: string]: unknown
         }
@@ -5523,6 +5649,65 @@ export interface operations {
       }
       /** @description The group already exists */
       409: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getGroupSessions: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The UUID of the Programme Group */
+        groupId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully retrieved group module session details */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ProgrammeGroupModuleSessionsResponse']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Group or module not found */
+      404: {
         headers: {
           [name: string]: unknown
         }

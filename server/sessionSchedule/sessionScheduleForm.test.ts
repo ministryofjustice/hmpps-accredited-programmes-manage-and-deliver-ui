@@ -8,7 +8,7 @@ describe('CreateSessionScheduleForm', () => {
     describe('when validation passes', () => {
       beforeEach(() => {
         request.body = {
-          'session-details-who': ['X970559', 'X123456'],
+          'session-details-who': 'X970559 + John Doe',
           'session-details-date': '15/12/3055',
           'session-details-start-time-hour': '10',
           'session-details-start-time-minute': '30',
@@ -25,7 +25,7 @@ describe('CreateSessionScheduleForm', () => {
         const data = await new CreateSessionScheduleForm(request).sessionDetailsData()
 
         expect(data.paramsForUpdate).toEqual({
-          referralIds: ['X970559', 'X123456'],
+          referralIds: ['X970559'],
           facilitators: [
             {
               facilitator: 'John Doe',
@@ -132,7 +132,7 @@ describe('CreateSessionScheduleForm', () => {
       })
 
       it('accepts when multiple facilitators are provided and parses them correctly', async () => {
-        request.body['session-details-who'] = ['X123456']
+        request.body['session-details-who'] = 'X123456 + John Doe'
         request.body['session-details-date'] = '10/07/3055'
         request.body['session-details-facilitator'] =
           '{"facilitator":"John Doe", "facilitatorCode":"N07B656", "teamName":"GM Manchester N1", "teamCode":"N50CAC"}'

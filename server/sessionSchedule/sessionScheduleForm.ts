@@ -41,7 +41,7 @@ export default class CreateSessionScheduleForm {
 
     return {
       paramsForUpdate: {
-        referralIds: this.request.body['session-details-who'],
+        referralIds: [this.request.body['session-details-who'].split('+')[0].trim()],
         facilitators: this.getFacilitators(),
         startDate: this.request.body['session-details-date'],
         startTime: {
@@ -64,9 +64,11 @@ export default class CreateSessionScheduleForm {
       ([key, value]) => key.startsWith('session-details-facilitator') && value !== '',
     )
     function convertTo24Hour(hour: number, minute: number, period: 'AM' | 'PM'): { hour: number; minute: number } {
-      let hour24 = hour === 12 ? 0 : hour
-      if (period === 'PM' && hour !== 12) {
-        hour24 += 12
+      let hour24 = hour
+      if (period === 'AM') {
+        hour24 = hour === 12 ? 0 : hour // 12 AM is midnight (0), other AM hours stay the same
+      } else {
+        hour24 = hour === 12 ? 12 : hour + 12 // 12 PM stays 12, other PM hours add 12
       }
       return { hour: hour24, minute }
     }
@@ -164,13 +166,14 @@ export default class CreateSessionScheduleForm {
     const facilitatorEntries = Object.entries(this.request.body).filter(([key]) =>
       key.startsWith('session-details-facilitator'),
     )
-
-    return facilitatorEntries.map(([_key, value]) => {
-      const parsedValue = JSON.parse(value as string)
-      return {
-        ...parsedValue,
-        teamMemberType: 'REGULAR_FACILITATOR',
-      } as CreateGroupTeamMember
-    })
+    return facilitatorEntries
+      .filter(([_key, value]) => value !== '')
+      .map(([_key, value]) => {
+        const parsedValue = JSON.parse(value as string)
+        return {
+          ...parsedValue,
+          teamMemberType: 'REGULAR_FACILITATOR',
+        } as CreateGroupTeamMember
+      })
   }
 }

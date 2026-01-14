@@ -17,11 +17,16 @@ export default class DateUtils {
   // example output: 1:00pm on 12 April 2021
   static formattedDateTime(
     dateTime: Date | string,
-    options: { month?: 'short' | 'long'; timeCasing?: casing } = { month: 'long', timeCasing: 'lowercase' },
+    options: { month?: 'short' | 'long'; timeCasing?: casing; includeZeroMinutes?: boolean } = {
+      month: 'long',
+      timeCasing: 'lowercase',
+      includeZeroMinutes: true,
+    },
   ): string {
     const nonNullableOptions = {
       month: options.month ? options.month : 'long',
       casing: options.timeCasing ? options.timeCasing : 'lowercase',
+      includeZeroMinutes: options.includeZeroMinutes ? options.includeZeroMinutes : true,
     }
     return `${this.formattedTime(dateTime, nonNullableOptions)} on ${this.formattedDate(dateTime, nonNullableOptions)}`
   }
@@ -61,7 +66,7 @@ export default class DateUtils {
   // example output: 1:00pm
   static formattedTime(
     time: CalendarDay | ClockTime | Date | string,
-    options: { casing: casing } = { casing: 'lowercase' },
+    options: { casing: casing; includeZeroMinutes?: boolean } = { casing: 'lowercase', includeZeroMinutes: true },
   ): string {
     let clockTime: ClockTime
     if (time instanceof ClockTime) {
@@ -82,16 +87,20 @@ export default class DateUtils {
       }
       return `12:${clockTime.minute.toString().padStart(2, '0')}am`
     }
-    return `${clockTime.twelveHourClockHour}:${clockTime.minute.toString().padStart(2, '0')}${clockTime.partOfDay}`
+    const hour = clockTime.twelveHourClockHour === 0 ? 12 : clockTime.twelveHourClockHour
+    const minuteString =
+      options.includeZeroMinutes || clockTime.minute !== 0 ? `:${clockTime.minute.toString().padStart(2, '0')}` : ''
+
+    return `${hour}${minuteString}${clockTime.partOfDay}`
   }
 
   // example output: 11:00am to 1:00pm
   static formattedTimeRange(
     startsAt: ClockTime | Date | string,
     endsAt: ClockTime | Date | string,
-    options: { casing: casing } = { casing: 'lowercase' },
+    options: { casing: casing; includeZeroMinutes?: boolean } = { casing: 'lowercase', includeZeroMinutes: true },
   ): string {
-    return `${this.formattedTime(startsAt, options)} to ${this.formattedTime(endsAt)}`
+    return `${this.formattedTime(startsAt, options)} to ${this.formattedTime(endsAt, { casing: 'lowercase', includeZeroMinutes: options.includeZeroMinutes })}`
   }
 
   static age(dateOfBirth: string): number {
