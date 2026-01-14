@@ -1,8 +1,5 @@
 {% macro groupServiceNavigation(serviceNavigationArgs) %}
-  {% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
-  
-  {{ govukServiceNavigation(serviceNavigationArgs) }}
+  {% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
+
+  {{ mojSubNavigation(serviceNavigationArgs) }}
 {% endmacro %}
-
-
- 
