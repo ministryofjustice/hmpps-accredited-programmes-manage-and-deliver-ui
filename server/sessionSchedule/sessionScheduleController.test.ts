@@ -184,17 +184,6 @@ describe('Session Schedule Controller', () => {
   })
 
   describe('POST /:groupId/:moduleId/schedule-group-session-details', () => {
-    const mockSessionDetails = {
-      sessionTemplateName: 'Getting started one-to-one',
-      referrals: [
-        { id: randomUUID(), name: 'John Doe', prisonNumber: 'A1234BC' },
-        { id: randomUUID(), name: 'Jane Smith', prisonNumber: 'B5678DE' },
-      ],
-      facilitators: [
-        { facilitator: 'John Doe', facilitatorCode: 'N07B001', teamName: 'GM Manchester N1', teamCode: 'N50CAC' },
-      ],
-    }
-
     beforeEach(() => {
       accreditedProgrammesManageAndDeliverService.getIndividualSessionDetails.mockResolvedValue({
         facilitators: [
@@ -214,7 +203,7 @@ describe('Session Schedule Controller', () => {
       return request(app)
         .post(`/${groupId}/${moduleId}/schedule-group-session-details`)
         .send({
-          'session-details-who': `mockSessionDetails.referrals[0].id + Jane Doe`,
+          'session-details-who': `a9971fd6-a185-43ee-bb23-a0ab23a14f50 + Jane Doe`,
           'session-details-facilitator': JSON.stringify({
             facilitator: 'John Doe',
             facilitatorCode: 'N07B001',
