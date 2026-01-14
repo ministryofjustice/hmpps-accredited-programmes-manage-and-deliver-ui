@@ -83,6 +83,7 @@ export default class GroupView {
         searchBySexArgs: this.searchBySexArgs,
         searchByCohortArgs: this.searchByCohortArgs,
         deliveryLocationCheckboxArgs: this.deliveryLocationCheckboxArgs,
+        resultsText: this.presenter.resultsText,
       },
     ]
   }
