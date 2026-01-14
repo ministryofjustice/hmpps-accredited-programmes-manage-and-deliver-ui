@@ -65,8 +65,8 @@
     </div>
     <div class="govuk-grid-column-three-quarters">
       {{ mojSubNavigation(subNavArgs) }}
-      {% if presenter.resultsText %}
-        <p class="govuk-body showing-results">{{ presenter.resultsText | safe }}</p>
+      {% if resultsText %}
+        <p class="govuk-body showing-results">{{ resultsText | safe }}</p>
       {% endif %}
         {{ govukTable(groupTableArgs) }}
 

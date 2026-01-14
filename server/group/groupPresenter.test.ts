@@ -1,6 +1,8 @@
 import { Group } from '@manage-and-deliver-api'
 import { Page } from '../shared/models/pagination'
 import groupsByRegionFactory from '../testutils/factories/groupsByRegionFactory'
+import pageFactory from '../testutils/factories/pageFactory'
+import GroupFactory from '../testutils/factories/groupFactory'
 import GroupPresenter, { GroupListPageSection } from './groupPresenter'
 import GroupListFilter from '../groupDetails/groupListFilter'
 
@@ -199,5 +201,30 @@ describe('groupTableArgs', () => {
         ],
       ],
     })
+  })
+})
+
+describe('resultsText', () => {
+  it('should return blank when there are no results', () => {
+    const filter = GroupListFilter.empty()
+    const pagedGroups: Page<Group> = pageFactory
+      .pageContent([])
+      .build({ totalElements: 0, number: 0, size: 10, numberOfElements: 0 }) as Page<Group>
+    const presenter = new GroupPresenter(pagedGroups, GroupListPageSection.NOT_STARTED, 0, 'Region', filter, [], [])
+
+    expect(presenter.resultsText).toBe('')
+  })
+
+  it('should show the current page range when results exist', () => {
+    const filter = GroupListFilter.empty()
+    const groups = [GroupFactory.build(), GroupFactory.build(), GroupFactory.build()]
+    const pagedGroups: Page<Group> = pageFactory
+      .pageContent(groups)
+      .build({ totalElements: 23, number: 2, size: 10, numberOfElements: groups.length }) as Page<Group>
+    const presenter = new GroupPresenter(pagedGroups, GroupListPageSection.NOT_STARTED, 0, 'Region', filter, [], [])
+
+    expect(presenter.resultsText).toBe(
+      'Showing <strong>21</strong> to <strong>23</strong> of <strong>23</strong> results',
+    )
   })
 })
