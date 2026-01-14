@@ -25,7 +25,7 @@ export default class SessionScheduleAttendanceView {
         backLinkArgs: this.backLinkArgs(),
         homePageLink: this.homePageLink(),
         presenter: this.presenter,
-        accordionArgs: {
+        sessionAttendanceaccordionArgs: {
           id: 'sessions-accordion',
           headingLevel: 2,
           items: this.presenter.getAccordionItems(),

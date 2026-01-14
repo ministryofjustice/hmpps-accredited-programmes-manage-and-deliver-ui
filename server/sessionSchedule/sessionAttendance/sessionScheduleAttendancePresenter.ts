@@ -1,10 +1,13 @@
 import { SessionScheduleRequest, GroupSessionsResponse } from '@manage-and-deliver-api'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
+import GroupServiceNavigationPresenter from '../../shared/groups/groupServiceNavigationPresenter'
 
 type SessionType = 'getting-started' | 'one-to-one'
 
 export default class SessionScheduleAttendancePresenter {
+  public readonly navigationPresenter: GroupServiceNavigationPresenter
+
   constructor(
     private readonly groupId: string,
     private readonly sessionTypeValue: SessionType,
@@ -13,10 +16,12 @@ export default class SessionScheduleAttendancePresenter {
       SessionScheduleRequest & { sessionScheduleGettingStarted?: string; sessionScheduleOnetoOne?: string }
     > | null = null,
     private readonly groupSessionsData: GroupSessionsResponse | null = null,
-  ) {}
+  ) {
+    this.navigationPresenter = new GroupServiceNavigationPresenter(groupId, undefined, 'sessions')
+  }
 
   get backLinkUri() {
-    return `/group/sessions`
+    return `/group/${this.groupId}/sessions`
   }
 
   get errorSummary() {
@@ -66,7 +71,7 @@ export default class SessionScheduleAttendancePresenter {
     if (!sessions.length) {
       return `
         <p class="govuk-body">No sessions scheduled</p>
-        ${this.getEstimatedDateHtml(module)}
+          ${this.getEstimatedDateHtml(module)}
         ${this.getScheduleSessionButtonHtml(module)}
       `
     }
@@ -122,9 +127,27 @@ export default class SessionScheduleAttendancePresenter {
   }
 
   private getEstimatedDateHtml(module: (typeof this.modules)[0]) {
+    const estimatedStartDateText = module.startDateText?.estimatedStartDateText
+    const sessionStartDate = module.startDateText?.sessionStartDate
+    const { estimatedStartDateTextlead, estimatedStartDateTexttail } = (() => {
+      if (estimatedStartDateText && sessionStartDate) {
+        return {
+          estimatedStartDateTextlead: estimatedStartDateText,
+          estimatedStartDateTexttail: `: ${sessionStartDate}`,
+        }
+      }
+      if (estimatedStartDateText) {
+        return { estimatedStartDateTextlead: estimatedStartDateText, estimatedStartDateTexttail: '' }
+      }
+      if (sessionStartDate) {
+        return { estimatedStartDateTextlead: 'Session start date', estimatedStartDateTexttail: `: ${sessionStartDate}` }
+      }
+      return { estimatedStartDateTextlead: 'Estimated start date to be confirmed', estimatedStartDateTexttail: '' }
+    })()
+
     return `
       <div class="govuk-!-margin-top-4">
-        <p class="govuk-body">${module.startDateText?.estimatedStartDateText || 'Estimated start date to be confirmed'}</p>
+        <p class="govuk-body govuk-!-margin-bottom-0"><strong>${estimatedStartDateTextlead}</strong>${estimatedStartDateTexttail}</p>
       </div>
     `
   }
