@@ -35,6 +35,10 @@ export default class ViewUtils {
     return message === null || message === undefined ? null : { text: message }
   }
 
+  static govukErrorMessages(messages: string[] | null | undefined): { text: string }[] | null {
+    return messages?.filter((message): message is string => message != null).map(message => ({ text: message })) ?? null
+  }
+
   static govukErrorSummaryArgs(errorSummary: { field: string; message: string }[] | null): ErrorSummaryArgs | null {
     if (errorSummary === null) {
       return null
