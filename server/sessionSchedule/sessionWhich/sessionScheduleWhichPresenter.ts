@@ -21,7 +21,7 @@ export default class SessionAttendancePresenter {
   }
 
   get backLinkUri() {
-    return `/group/${this.groupId}/module/${this.moduleId}/sessions`
+    return `/group/${this.groupId}/sessions-and-attendance`
   }
 
   get errorSummary() {

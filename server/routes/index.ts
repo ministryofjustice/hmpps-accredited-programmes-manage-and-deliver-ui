@@ -327,5 +327,9 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await sessionScheduleController.scheduleGroupSessionDetails(req, res)
   })
 
+  get('/group/:groupId/sessions-and-attendance', async (req, res, next) => {
+    await sessionScheduleController.showSessionAttendance(req, res)
+  })
+
   return router
 }

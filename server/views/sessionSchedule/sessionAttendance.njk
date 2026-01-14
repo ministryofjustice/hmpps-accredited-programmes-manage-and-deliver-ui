@@ -1,6 +1,7 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/accordion/macro.njk" import govukAccordion %}
+ {%- from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -18,10 +19,21 @@
                   </div>
                 </div>
                 <div class="govuk-grid-row">
-                    <div class="govuk-grid-column-two-thirds">
-                        <span class="govuk-caption-l">{{ text.headingHintText }}</span>
+                    <div class="govuk-grid-column-full">
+                        {% if presenter.groupInfo.code %}
+                            <span class="govuk-caption-l">{{ presenter.groupInfo.code }} - {{ presenter.groupInfo.regionName }}</span>
+                        {% endif %}
                         <h1 class="govuk-heading-l">Sessions and attendance</h1>
-                        {{ govukAccordion(accordionArgs) }}
+                        
+                        {% if accordionArgs.items and accordionArgs.items.length %}
+                            {{ govukAccordion(accordionArgs) }}
+                        {% else %}
+                            <p class="govuk-body">No modules or sessions available.</p>
+                        {% endif %}
+                       
+                        
+                        
+                       
                     </div>
                 </div>
             </main>

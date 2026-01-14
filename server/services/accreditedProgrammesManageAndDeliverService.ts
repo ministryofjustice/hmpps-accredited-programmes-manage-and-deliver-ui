@@ -19,6 +19,8 @@ import {
   EmotionalWellbeing,
   Group,
   GroupsByRegion,
+  GroupSessionsResponse,
+  ModuleSessionTemplatesResponse,
   Health,
   LearningNeeds,
   LifestyleAndAssociates,
@@ -37,7 +39,6 @@ import {
   RemoveFromGroupResponse,
   Risks,
   RoshAnalysis,
-  ScheduleSessionTypeResponse,
   SentenceInformation,
   SessionScheduleRequest,
   SessionScheduleResponse,
@@ -569,6 +570,18 @@ export default class AccreditedProgrammesManageAndDeliverService
     return response.sessionTemplates
   }
 
+  async getModuleSessionTemplates(
+    username: ExpressUsername,
+    groupId: string,
+    moduleId: string,
+  ): Promise<ModuleSessionTemplatesResponse> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/group/${groupId}/module/${moduleId}/schedule-session-type`,
+      headers: { Accept: 'application/json' },
+    })) as ModuleSessionTemplatesResponse
+  }
+
   async getSessionAttendanceTemplates(
     username: ExpressUsername,
     groupId: string,
@@ -592,5 +605,13 @@ export default class AccreditedProgrammesManageAndDeliverService
       path: `/bff/group/${groupId}/module/${moduleId}/schedule-individual-session-details`,
       headers: { Accept: 'application/json' },
     })) as ScheduleIndividualSessionDetailsResponse
+  }
+
+  async getGroupSessions(username: ExpressUsername, groupId: string): Promise<GroupSessionsResponse> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/group/${groupId}/sessions`,
+      headers: { Accept: 'application/json' },
+    })) as GroupSessionsResponse
   }
 }

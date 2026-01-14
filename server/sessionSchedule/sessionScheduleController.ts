@@ -3,10 +3,12 @@ import AccreditedProgrammesManageAndDeliverService from '../services/accreditedP
 import ControllerUtils from '../utils/controllerUtils'
 import { FormValidationError } from '../utils/formValidationError'
 
-import SessionScheduleWhichPresenter from './which/sessionScheduleWhichPresenter'
-import SessionScheduleWhichView from './which/sessionScheduleWhichView'
+import SessionScheduleWhichPresenter from './sessionWhich/sessionScheduleWhichPresenter'
+import SessionScheduleWhichView from './sessionWhich/sessionScheduleWhichView'
 import AddSessionDetailsPresenter from './sessionDetails/addSessionDetailsPresenter'
 import AddSessionDetailsView from './sessionDetails/addSessionDetailsView'
+import SessionScheduleAttendancePresenter from './sessionAttendance/sessionScheduleAttendancePresenter'
+import SessionScheduleAttendanceView from './sessionAttendance/sessionScheduleAttendanceView'
 import CreateSessionScheduleForm from './sessionScheduleForm'
 
 export default class SessionScheduleController {
@@ -99,6 +101,37 @@ export default class SessionScheduleController {
       userInputData,
     )
     const view = new AddSessionDetailsView(presenter)
+    return ControllerUtils.renderWithLayout(res, view, null)
+  }
+
+  async showSessionAttendance(req: Request, res: Response): Promise<void> {
+    const { groupId } = req.params
+    const { username } = req.user
+    const sessionType = (req.query.sessionType as 'getting-started' | 'one-to-one') || 'getting-started'
+
+    const groupSessionsData = await this.accreditedProgrammesManageAndDeliverService.getGroupSessions(username, groupId)
+
+    const modulesWithTemplates = await Promise.all(
+      (groupSessionsData.modules || []).map(async module => {
+        const { sessionTemplates } = await this.accreditedProgrammesManageAndDeliverService.getModuleSessionTemplates(
+          username,
+          groupId,
+          module.id,
+        )
+
+        return {
+          ...module,
+          sessionTemplates,
+          sessions: module.sessions?.length ? module.sessions : sessionTemplates,
+        }
+      }),
+    )
+
+    const presenter = new SessionScheduleAttendancePresenter(groupId, sessionType, null, null, {
+      ...groupSessionsData,
+      modules: modulesWithTemplates,
+    })
+    const view = new SessionScheduleAttendanceView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
 }
