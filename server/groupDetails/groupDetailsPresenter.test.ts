@@ -195,3 +195,55 @@ describe('groupDetailsPresenter.', () => {
     })
   })
 })
+
+describe('resultsText', () => {
+  it('should return blank when there are no results', () => {
+    const baseGroupDetails = ProgrammeGroupDetailsFactory.build()
+    const groupDetails = {
+      ...baseGroupDetails,
+      pagedGroupData: {
+        ...baseGroupDetails.pagedGroupData,
+        content: [] as typeof baseGroupDetails.pagedGroupData.content,
+        totalElements: 0,
+        numberOfElements: 0,
+        number: 0,
+        size: 10,
+      },
+    }
+
+    const presenter = new GroupDetailsPresenter(
+      GroupDetailsPageSection.Allocated,
+      groupDetails,
+      '1234',
+      GroupDetailFilter.empty(),
+    )
+
+    expect(presenter.resultsText).toBe('')
+  })
+
+  it('should show the current page range when results exist', () => {
+    const baseGroupDetails = ProgrammeGroupDetailsFactory.build()
+    const groupDetails = {
+      ...baseGroupDetails,
+      pagedGroupData: {
+        ...baseGroupDetails.pagedGroupData,
+        content: baseGroupDetails.pagedGroupData.content,
+        totalElements: 22,
+        numberOfElements: baseGroupDetails.pagedGroupData.content.length,
+        number: 2,
+        size: 10,
+      },
+    }
+
+    const presenter = new GroupDetailsPresenter(
+      GroupDetailsPageSection.Allocated,
+      groupDetails,
+      '1234',
+      GroupDetailFilter.empty(),
+    )
+
+    expect(presenter.resultsText).toBe(
+      'Showing <strong>21</strong> to <strong>22</strong> of <strong>22</strong> results',
+    )
+  })
+})

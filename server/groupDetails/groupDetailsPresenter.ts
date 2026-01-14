@@ -49,6 +49,16 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
     return !!this.filter?.pdu
   }
 
+  get resultsText(): string {
+    const { totalElements, number, size, numberOfElements } = this.groupListItems
+    if (totalElements === 0) {
+      return ''
+    }
+    const start = number * size + 1
+    const end = number * size + numberOfElements
+    return `Showing <strong>${start}</strong> to <strong>${end}</strong> of <strong>${totalElements}</strong> results`
+  }
+
   getSubNavArgs(): { items: { text: string; href: string; active: boolean }[] } {
     const nameCrnFilter = this.filter.nameOrCRN === undefined ? `` : `?nameOrCRN=${this.filter.nameOrCRN}`
     return {

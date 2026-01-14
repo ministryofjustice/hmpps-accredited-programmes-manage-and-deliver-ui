@@ -115,6 +115,7 @@ export default class CaselistView {
         searchByCrnOrPersonNameArgs: this.searchByCrnOrPersonNameArgs,
         searchByCohortArgs: this.searchByCohortArgs,
         noResultsString: this.presenter.generateNoResultsString(),
+        resultsText: this.presenter.resultsText,
       },
     ]
   }
