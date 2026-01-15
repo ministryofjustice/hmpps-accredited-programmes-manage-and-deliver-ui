@@ -14,8 +14,9 @@ describe('GroupServiceNavigationPresenter', () => {
       const presenter = new GroupServiceNavigationPresenter(groupId, moduleId, 'allocations')
 
       expect(presenter.getServiceNavigationArgs()).toEqual({
+        label: 'Group service navigation',
         classes: 'group-details__service-navigation',
-        navigation: [
+        items: [
           {
             href: `/group/${groupId}/allocations`,
             text: 'Allocations',
@@ -44,8 +45,9 @@ describe('GroupServiceNavigationPresenter', () => {
       const presenter = new GroupServiceNavigationPresenter(groupId, moduleId, 'schedule')
 
       expect(presenter.getServiceNavigationArgs()).toEqual({
+        label: 'Group service navigation',
         classes: 'group-details__service-navigation',
-        navigation: [
+        items: [
           {
             href: `/group/${groupId}/allocations`,
             text: 'Allocations',
@@ -74,8 +76,9 @@ describe('GroupServiceNavigationPresenter', () => {
       const presenter = new GroupServiceNavigationPresenter(groupId, moduleId, 'sessions')
 
       expect(presenter.getServiceNavigationArgs()).toEqual({
+        label: 'Group service navigation',
         classes: 'group-details__service-navigation',
-        navigation: [
+        items: [
           {
             href: `/group/${groupId}/allocations`,
             text: 'Allocations',
@@ -104,8 +107,9 @@ describe('GroupServiceNavigationPresenter', () => {
       const presenter = new GroupServiceNavigationPresenter(groupId, moduleId, 'details')
 
       expect(presenter.getServiceNavigationArgs()).toEqual({
+        label: 'Group service navigation',
         classes: 'group-details__service-navigation',
-        navigation: [
+        items: [
           {
             href: `/group/${groupId}/allocations`,
             text: 'Allocations',
@@ -134,7 +138,7 @@ describe('GroupServiceNavigationPresenter', () => {
       const presenter = new GroupServiceNavigationPresenter(groupId, undefined, 'allocations')
 
       const result = presenter.getServiceNavigationArgs()
-      const scheduleItem = result.navigation.find(item => item.text === 'Schedule')
+      const scheduleItem = result.items.find(item => item.text === 'Schedule')
       expect(scheduleItem?.href).toBe(`/group/${groupId}/schedule`)
     })
   })

@@ -65,6 +65,9 @@
     </div>
     <div class="govuk-grid-column-three-quarters">
       {{ mojSubNavigation(subNavArgs) }}
+      {% if resultsText %}
+        <p class="govuk-body showing-results">{{ resultsText | safe }}</p>
+      {% endif %}
       {% if presenter.referralCaseListItems.content.length > 0 %}
         {{ govukTable(presenter.getCaseloadTableArgs()) }}
       {% else %}

@@ -123,6 +123,7 @@ export default class GroupDetailsView {
         text: this.presenter.text,
         hasResults: this.presenter.hasResults(),
         noResultsString: this.presenter.generateNoResultsString(),
+        resultsText: this.presenter.resultsText,
       },
     ]
   }

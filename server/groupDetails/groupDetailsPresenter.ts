@@ -40,14 +40,23 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
 
   get text() {
     return {
-      pageHeading: this.group.group.regionName,
       pageSubHeading: this.group.group.code,
-      pageTableHeading: `Allocations and waitlist`,
+      pageHeading: `Allocations and waitlist`,
     }
   }
 
   get showReportingTeams(): boolean {
     return !!this.filter?.pdu
+  }
+
+  get resultsText(): string {
+    const { totalElements, number, size, numberOfElements } = this.groupListItems
+    if (totalElements === 0) {
+      return ''
+    }
+    const start = number * size + 1
+    const end = number * size + numberOfElements
+    return `Showing <strong>${start}</strong> to <strong>${end}</strong> of <strong>${totalElements}</strong> results`
   }
 
   getSubNavArgs(): { items: { text: string; href: string; active: boolean }[] } {
