@@ -141,5 +141,13 @@ describe('GroupServiceNavigationPresenter', () => {
       const scheduleItem = result.items.find(item => item.text === 'Schedule')
       expect(scheduleItem?.href).toBe(`/group/${groupId}/schedule`)
     })
+
+    it('should use the group code for the sessions link when provided', () => {
+      const presenter = new GroupServiceNavigationPresenter(groupId, moduleId, 'sessions', 'CODE123')
+
+      const result = presenter.getServiceNavigationArgs()
+      const sessionsItem = result.items.find(item => item.text === 'Sessions and attendance')
+      expect(sessionsItem?.href).toBe('/group/CODE123/sessions-and-attendance')
+    })
   })
 })

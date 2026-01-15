@@ -19,10 +19,11 @@ import {
   EmotionalWellbeing,
   Group,
   GroupsByRegion,
+  GroupSessionsResponse,
+  ModuleSessionTemplatesResponse,
   Health,
   LearningNeeds,
   LifestyleAndAssociates,
-  ModuleSessionTemplate,
   OffenceAnalysis,
   OffenceHistory,
   PersonalDetails,
@@ -38,11 +39,12 @@ import {
   RemoveFromGroupResponse,
   Risks,
   RoshAnalysis,
-  ScheduleIndividualSessionDetailsResponse,
-  ScheduleSessionTypeResponse,
   SentenceInformation,
   SessionScheduleRequest,
   SessionScheduleResponse,
+  ScheduleIndividualSessionDetailsResponse,
+  SessionSchedule,
+  SessionAttendance,
   ThinkingAndBehaviour,
   UpdateAvailability,
   UserTeamMember,
@@ -559,16 +561,37 @@ export default class AccreditedProgrammesManageAndDeliverService
     })) as ProgrammeGroupEntity
   }
 
-  async getSessionTemplates(
-    username: ExpressUsername,
-    groupId: string,
-    moduleId: string,
-  ): Promise<ModuleSessionTemplate[]> {
+  async getSessionTemplates(username: ExpressUsername, groupId: string, moduleId: string): Promise<SessionSchedule[]> {
     const restClient = await this.createRestClientFromUsername(username)
     const response = (await restClient.get({
       path: `/bff/group/${groupId}/module/${moduleId}/schedule-session-type`,
       headers: { Accept: 'application/json' },
-    })) as ScheduleSessionTypeResponse
+    })) as SessionSchedule
+    return response.sessionTemplates
+  }
+
+  async getModuleSessionTemplates(
+    username: ExpressUsername,
+    groupId: string,
+    moduleId: string,
+  ): Promise<ModuleSessionTemplatesResponse> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/group/${groupId}/module/${moduleId}/schedule-session-type`,
+      headers: { Accept: 'application/json' },
+    })) as ModuleSessionTemplatesResponse
+  }
+
+  async getSessionAttendanceTemplates(
+    username: ExpressUsername,
+    groupId: string,
+    moduleId: string,
+  ): Promise<SessionAttendance[]> {
+    const restClient = await this.createRestClientFromUsername(username)
+    const response = (await restClient.get({
+      path: `/bff/group/${groupId}/module/${moduleId}/schedule-session-type`,
+      headers: { Accept: 'application/json' },
+    })) as SessionAttendance
     return response.sessionTemplates
   }
 
@@ -582,5 +605,13 @@ export default class AccreditedProgrammesManageAndDeliverService
       path: `/bff/group/${groupId}/module/${moduleId}/schedule-individual-session-details`,
       headers: { Accept: 'application/json' },
     })) as ScheduleIndividualSessionDetailsResponse
+  }
+
+  async getGroupSessions(username: ExpressUsername, groupId: string): Promise<GroupSessionsResponse> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/group/${groupId}/sessions`,
+      headers: { Accept: 'application/json' },
+    })) as GroupSessionsResponse
   }
 }

@@ -17,6 +17,8 @@ const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesMana
 let app: Express
 const groupId = randomUUID()
 const moduleId = randomUUID()
+const groupCode = 'DDDD1234'
+const moduleName = 'Managing people around me'
 
 const mockSessionTemplates: ModuleSessionTemplate[] = [
   {
@@ -37,17 +39,45 @@ afterEach(() => {
 
 beforeEach(() => {
   const sessionData: Partial<SessionData> = {
-    sessionScheduleData: {},
+    sessionScheduleData: {
+      groupIdsByCode: {
+        [groupCode]: groupId,
+      },
+      moduleIdsByGroupAndName: {
+        [groupCode]: {
+          [moduleName]: moduleId,
+        },
+      },
+      moduleNames: {
+        [moduleId]: moduleName,
+      },
+      groupCode,
+    },
   }
   app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
   accreditedProgrammesManageAndDeliverService.getSessionTemplates.mockResolvedValue(mockSessionTemplates)
+  accreditedProgrammesManageAndDeliverService.getGroupSessions.mockResolvedValue({
+    group: {
+      code: groupCode,
+      regionName: 'North Region',
+    },
+    modules: [],
+  })
+  accreditedProgrammesManageAndDeliverService.getModuleSessionTemplates.mockResolvedValue({
+    sessionTemplates: [],
+  })
+  accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue({
+    id: groupId,
+    code: groupCode,
+    regionName: 'North Region',
+  })
 })
 
 describe('Session Schedule Controller', () => {
   describe('GET /:groupId/:moduleId/schedule-session-type', () => {
     it('loads the session schedule which page', async () => {
       return request(app)
-        .get(`/${groupId}/${moduleId}/schedule-session-type`)
+        .get(`/group/${groupCode}/module/${encodeURIComponent(moduleName)}/schedule-session-type`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Schedule a Getting started one-to-one')
@@ -61,7 +91,7 @@ describe('Session Schedule Controller', () => {
 
     it('displays all available session templates', async () => {
       return request(app)
-        .get(`/${groupId}/${moduleId}/schedule-session-type`)
+        .get(`/group/${groupCode}/module/${encodeURIComponent(moduleName)}/schedule-session-type`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Getting started one-to-one')
@@ -69,18 +99,68 @@ describe('Session Schedule Controller', () => {
         })
     })
 
+    it('uses cached session templates when available', async () => {
+      const sessionData: Partial<SessionData> = {
+        sessionScheduleData: {
+          moduleSessionTemplates: {
+            [moduleId]: mockSessionTemplates,
+          },
+          moduleNames: {
+            [moduleId]: 'Module A',
+          },
+          groupCode: 'GRP1',
+          groupIdsByCode: {
+            GRP1: groupId,
+          },
+          moduleIdsByGroupAndName: {
+            GRP1: {
+              'Module A': moduleId,
+            },
+          },
+        },
+      }
+
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+      accreditedProgrammesManageAndDeliverService.getSessionTemplates.mockClear()
+
+      return request(app)
+        .get(`/group/GRP1/module/${encodeURIComponent('Module A')}/schedule-session-type`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Getting started one-to-one')
+          expect(res.text).toContain('Session 2')
+          expect(res.text).toContain('GRP1 - Module A')
+          expect(accreditedProgrammesManageAndDeliverService.getSessionTemplates).not.toHaveBeenCalled()
+        })
+    })
+
     it('displays previously selected session template from session', async () => {
       const selectedTemplateId = mockSessionTemplates[1].id
       const sessionData: Partial<SessionData> = {
         sessionScheduleData: {
+          moduleSessionTemplates: {
+            [moduleId]: mockSessionTemplates,
+          },
           sessionScheduleTemplateId: selectedTemplateId,
+          groupIdsByCode: {
+            [groupCode]: groupId,
+          },
+          moduleIdsByGroupAndName: {
+            [groupCode]: {
+              [moduleName]: moduleId,
+            },
+          },
+          moduleNames: {
+            [moduleId]: moduleName,
+          },
+          groupCode,
         },
       }
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
       accreditedProgrammesManageAndDeliverService.getSessionTemplates.mockResolvedValue(mockSessionTemplates)
 
       return request(app)
-        .get(`/${groupId}/${moduleId}/schedule-session-type`)
+        .get(`/group/${groupCode}/module/${encodeURIComponent(moduleName)}/schedule-session-type`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(`value="${selectedTemplateId}" checked`)
@@ -91,7 +171,7 @@ describe('Session Schedule Controller', () => {
       accreditedProgrammesManageAndDeliverService.getSessionTemplates.mockResolvedValue([])
 
       return request(app)
-        .get(`/${groupId}/${moduleId}/schedule-session-type`)
+        .get(`/group/${groupCode}/module/${encodeURIComponent(moduleName)}/schedule-session-type`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Schedule a the session')
@@ -104,7 +184,7 @@ describe('Session Schedule Controller', () => {
       const selectedTemplateId = mockSessionTemplates[0].id
 
       return request(app)
-        .post(`/${groupId}/${moduleId}/schedule-session-type`)
+        .post(`/group/${groupCode}/module/${encodeURIComponent(moduleName)}/schedule-session-type`)
         .send({ 'session-template': selectedTemplateId })
         .expect(302)
         .expect(res => {
@@ -114,7 +194,7 @@ describe('Session Schedule Controller', () => {
 
     it('shows validation error when no session template is selected', async () => {
       return request(app)
-        .post(`/${groupId}/${moduleId}/schedule-session-type`)
+        .post(`/group/${groupCode}/module/${encodeURIComponent(moduleName)}/schedule-session-type`)
         .send({})
         .expect(400)
         .expect(res => {
@@ -124,10 +204,70 @@ describe('Session Schedule Controller', () => {
     })
 
     it('does not redirect when validation fails', async () => {
-      const response = await request(app).post(`/${groupId}/${moduleId}/schedule-session-type`).send({}).expect(400)
+      const response = await request(app)
+        .post(`/group/${groupCode}/module/${encodeURIComponent(moduleName)}/schedule-session-type`)
+        .send({})
+        .expect(400)
 
       expect(response.text).not.toContain('Redirecting')
       expect(response.text).toContain('Getting started one-to-one')
+    })
+  })
+
+  describe('GET /group/:identifier/sessions-and-attendance', () => {
+    it('loads the session attendance page when a group id is provided', async () => {
+      return request(app)
+        .get(`/group/${groupId}/sessions-and-attendance`)
+        .expect(200)
+        .expect(() => {
+          expect(accreditedProgrammesManageAndDeliverService.getGroupSessions).toHaveBeenCalledWith('user1', groupId)
+          expect(accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion).not.toHaveBeenCalled()
+        })
+    })
+
+    it('resolves the group code to the group id when no cache exists', async () => {
+      const sessionData: Partial<SessionData> = {}
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      accreditedProgrammesManageAndDeliverService.getGroupSessions.mockResolvedValue({
+        group: {
+          code: groupCode,
+          regionName: 'North Region',
+        },
+        modules: [],
+      })
+
+      accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue({
+        id: groupId,
+        code: groupCode,
+        regionName: 'North Region',
+      })
+
+      return request(app)
+        .get(`/group/${groupCode}/sessions-and-attendance`)
+        .expect(200)
+        .expect(() => {
+          expect(accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion).toHaveBeenCalledWith(
+            'user1',
+            groupCode,
+          )
+          expect(accreditedProgrammesManageAndDeliverService.getGroupSessions).toHaveBeenCalledWith('user1', groupId)
+        })
+    })
+
+    it('redirects to the started groups list when the group code cannot be resolved', async () => {
+      const sessionData: Partial<SessionData> = {}
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue(null)
+
+      return request(app)
+        .get('/group/UNKNOWN_CODE/sessions-and-attendance')
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain('Redirecting to /groups/started')
+          expect(accreditedProgrammesManageAndDeliverService.getGroupSessions).not.toHaveBeenCalled()
+        })
     })
   })
 

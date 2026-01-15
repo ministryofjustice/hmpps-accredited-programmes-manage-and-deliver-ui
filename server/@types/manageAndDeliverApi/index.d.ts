@@ -67,6 +67,48 @@ type ScheduleSessionTypeResponse = components['schemas']['ScheduleSessionTypeRes
 type ScheduleIndividualSessionDetailsResponse = components['schemas']['ScheduleIndividualSessionDetailsResponse']
 type ScheduleSessionRequest = components['schemas']['ScheduleSessionRequest']
 
+type GroupSessionItem = {
+  id: string
+  number: number
+  name: string
+  type?: string
+  sessionType?: string
+  session_type?: string
+  sessionDate?: string
+  dateOfSession?: string
+  time?: string
+  timeOfSession?: string
+  participants?: string
+  facilitators?: string
+}
+
+type ModuleSessionTemplatesResponse = {
+  sessionTemplates: GroupSessionItem[]
+}
+
+type GroupSessionModule = {
+  id: string
+  number: number
+  name: string
+  startDateText: {
+    estimatedStartDateText: string
+    sessionStartDate: string
+  }
+  scheduleButtonText: string
+  sessions: GroupSessionItem[]
+  sessionTemplates?: GroupSessionItem[]
+  sessionType?: string
+  session_type?: string
+}
+
+type GroupSessionsResponse = {
+  group: {
+    code: string
+    regionName: string
+  }
+  modules: GroupSessionModule[]
+}
+
 export type {
   AlcoholMisuseDetails,
   AllocateToGroupRequest,
@@ -93,11 +135,17 @@ export type {
   Group,
   GroupsByRegion,
   GroupItem,
+  GroupSessionItem,
+  GroupSessionModule,
+  GroupSessionsResponse,
+  ModuleSessionTemplatesResponse,
   Health,
   LearningNeeds,
   LifestyleAndAssociates,
   LocationFilterValues,
   ModuleSessionTemplate,
+  SessionSchedule,
+  SessionAttendance,
   OffenceAnalysis,
   OffenceHistory,
   PageGroup,

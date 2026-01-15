@@ -31,6 +31,11 @@ export default class SessionScheduleWhichView {
           classes: 'govuk-fieldset__legend--l',
         },
       },
+      hint: this.presenter.text.headingHintText
+        ? {
+            text: this.presenter.text.headingHintText,
+          }
+        : undefined,
       items: sessionTemplates.map(template => ({
         value: template.id,
         text: template.name,
