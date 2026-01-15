@@ -15,78 +15,80 @@
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block content %}
+<div class="govuk-width-container">
+<main class="govuk-main-wrapper" id="main-content">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-xl">{{ text.pageSubHeading }}</span>
+      <h1 class="govuk-heading-xl">{{ text.pageHeading }}</h1>
+    </div>
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <span class="govuk-caption-xl">{{ text.pageSubHeading }}</span>
-    <h1 class="govuk-heading-xl">{{ text.pageHeading }}</h1>
   </div>
-  
-</div>
-{{ groupServiceNavigation(presenter.navigationPresenter.getServiceNavigationArgs()) }}
-<div class="govuk-grid-row">
+    {{ groupServiceNavigation(serviceNavigationArgs) }}
+  <div class="govuk-grid-row">
+    {%- set filterOptionsHtml %}
+    <a class="clear-filters__link" href="?">Clear filters</a>
+    {{ govukInput(searchByCrnOrPersonNameArgs) }}
+    {% if isWaitlist %}
+      {{ govukSelect(searchByCohortArgs) }}
+      {{ govukSelect(searchBySexArgs) }}
+      {{ govukSelect(searchByPduArgs) }}
 
-  {%- set filterOptionsHtml %}
-  <a class="clear-filters__link" href="?">Clear filters</a>
-  {{ govukInput(searchByCrnOrPersonNameArgs) }}
-  {% if isWaitlist %}
-    {{ govukSelect(searchByCohortArgs) }}
-    {{ govukSelect(searchBySexArgs) }}
-    {{ govukSelect(searchByPduArgs) }}
-
-    {% if not presenter.showReportingLocations %}
-      <h2 class="govuk-heading-s govuk-!-margin-bottom-1 govuk-!-margin-top-6">Reporting team</h2>
-      <p class="govuk-body">Select a PDU and apply filters to see reporting teams</p>
-    {% endif %}
-
-    {% if presenter.showReportingLocations %}
-      {{ govukCheckboxes(reportingTeamCheckboxArgs) }}
-    {% endif %}
-  {% endif %}
-  {% endset -%}
-  <div class="govuk-grid-column-one-quarter">
-    <form id="filter-form" method="get">
-      {{ mojFilter({
-      heading: {
-      text: "Filter"
-      },
-
-      submit: {
-      attributes: {
-      "data-test-id": "submit-button"
-      }
-      },
-
-
-      optionsHtml: filterOptionsHtml
-      }) }}
-    </form>
-  </div>
-  <div class="govuk-grid-column-three-quarters">
-    {% if errorSummary !== null %}
-      {{ govukErrorSummary(errorSummary) }}
-    {% endif %}
-    
-    {% if successMessageArgs !== null %}
-      {{ mojAlert(successMessageArgs) }}
-    {% endif %}
-    
-    {{ mojSubNavigation(subNavArgs) }}
- {% if resultsText %}
-        <p class="govuk-body showing-results">{{ resultsText | safe }}</p>
+      {% if not presenter.showReportingLocations %}
+        <h2 class="govuk-heading-s govuk-!-margin-bottom-1 govuk-!-margin-top-6">Reporting team</h2>
+        <p class="govuk-body">Select a PDU and apply filters to see reporting teams</p>
       {% endif %}
-    <form method="post">
-      <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-      <div id="add-to-group"></div>
-      {% if hasResults %}
-        {{ govukTable(getGroupDetailsTableArgs) }}
-        {{ govukButton(formButtonArgs) }}
-      {% else %}
-        <p class="govuk-body-l">{{ noResultsString }}</p>
+
+      {% if presenter.showReportingLocations %}
+        {{ govukCheckboxes(reportingTeamCheckboxArgs) }}
       {% endif %}
-    </form>
-     {% include "../partials/pagination.njk" %}
-  </div>
+    {% endif %}
+    {% endset -%}
+    <div class="govuk-grid-column-one-quarter">
+      <form id="filter-form" method="get">
+        {{ mojFilter({
+        heading: {
+        text: "Filter"
+        },
+
+        submit: {
+        attributes: {
+        "data-test-id": "submit-button"
+        }
+        },
+
+
+        optionsHtml: filterOptionsHtml
+        }) }}
+      </form>
+    </div>
+    <div class="govuk-grid-column-three-quarters">
+      {% if errorSummary !== null %}
+        {{ govukErrorSummary(errorSummary) }}
+      {% endif %}
+
+      {% if successMessageArgs !== null %}
+        {{ mojAlert(successMessageArgs) }}
+      {% endif %}
+
+      {{ mojSubNavigation(subNavArgs) }}
+      {% if resultsText %}
+          <p class="govuk-body showing-results">{{ resultsText | safe }}</p>
+      {% endif %}
+        <form method="post">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+          <div id="add-to-group"></div>
+          {% if hasResults %}
+            {{ govukTable(getGroupDetailsTableArgs) }}
+            {{ govukButton(formButtonArgs) }}
+          {% else %}
+            <p class="govuk-body-l">{{ noResultsString }}</p>
+          {% endif %}
+        </form>
+       {% include "../partials/pagination.njk" %}
+      </div>
+    </div>
+  </main>
 </div>
 
   {% endblock %}
