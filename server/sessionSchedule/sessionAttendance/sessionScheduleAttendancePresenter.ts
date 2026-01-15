@@ -10,6 +10,7 @@ export default class SessionScheduleAttendancePresenter {
 
   constructor(
     private readonly groupId: string,
+    private readonly groupCode: string | undefined,
     private readonly sessionTypeValue: SessionType,
     private readonly validationError: FormValidationError | null = null,
     private readonly sessionScheduleFormData: Partial<
@@ -17,11 +18,12 @@ export default class SessionScheduleAttendancePresenter {
     > | null = null,
     private readonly groupSessionsData: GroupSessionsResponse | null = null,
   ) {
-    this.navigationPresenter = new GroupServiceNavigationPresenter(groupId, undefined, 'sessions')
+    this.navigationPresenter = new GroupServiceNavigationPresenter(groupId, undefined, 'sessions', this.groupCode)
   }
 
   get backLinkUri() {
-    return `/group/${this.groupId}/sessions`
+    const groupIdentifier = this.groupCode || this.groupId
+    return `/group/${encodeURIComponent(groupIdentifier)}/sessions`
   }
 
   get errorSummary() {
@@ -46,7 +48,14 @@ export default class SessionScheduleAttendancePresenter {
   }
 
   get groupInfo() {
-    return this.groupSessionsData?.group || { code: '', regionName: '' }
+    if (this.groupSessionsData?.group) {
+      return {
+        ...this.groupSessionsData.group,
+        code: this.groupSessionsData.group.code || this.groupCode || '',
+      }
+    }
+
+    return { code: this.groupCode || '', regionName: '' }
   }
 
   get modules() {
@@ -82,7 +91,22 @@ export default class SessionScheduleAttendancePresenter {
         const sessionTime = session.timeOfSession || session.time || '-'
         const sessionType = session.type || session.sessionType || session.session_type || '-'
         const participants = session.participants || '-'
-        const facilitators = session.facilitators || '-'
+        const facilitators = (() => {
+          const value = session.facilitators
+          if (!value) {
+            return '-'
+          }
+          if (Array.isArray(value)) {
+            return value.filter(Boolean).join('<br/>') || '-'
+          }
+          if (typeof value === 'string') {
+            return value
+              .split(/\s*(?:,|\r?\n)\s*/)
+              .filter(Boolean)
+              .join('<br/>')
+          }
+          return String(value)
+        })()
 
         return `
           <tr class="govuk-table__row">
@@ -159,9 +183,16 @@ export default class SessionScheduleAttendancePresenter {
 
     const buttonText = module.scheduleButtonText || 'Schedule session'
 
+    const groupCode = this.groupInfo.code || this.groupCode
+    const moduleName = module.name
+    const href =
+      groupCode && moduleName
+        ? `/group/${encodeURIComponent(groupCode)}/module/${encodeURIComponent(moduleName)}/schedule-session-type`
+        : `/${this.groupId}/${module.id}/schedule-session-type`
+
     return `
       <div class="govuk-!-margin-top-4">
-        <a class="govuk-button govuk-button--secondary" data-module="govuk-button" href="/${this.groupId}/${module.id}/schedule-session-type">
+        <a class="govuk-button govuk-button--secondary" data-module="govuk-button" href="${href}">
           ${buttonText}
         </a>
       </div>

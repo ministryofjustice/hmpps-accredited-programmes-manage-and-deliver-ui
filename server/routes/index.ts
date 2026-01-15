@@ -319,6 +319,10 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await groupController.showStartedGroupListPage(req, res)
   })
 
+  getOrPost('/group/:groupCode/module/:moduleName/schedule-session-type', async (req, res) => {
+    await sessionScheduleController.showSessionSchedule(req, res)
+  })
+
   getOrPost('/:groupId/:moduleId/schedule-session-type', async (req, res) => {
     await sessionScheduleController.showSessionSchedule(req, res)
   })

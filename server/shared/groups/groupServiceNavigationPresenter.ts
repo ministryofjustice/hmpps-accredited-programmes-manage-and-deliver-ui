@@ -5,6 +5,7 @@ export default class GroupServiceNavigationPresenter {
     private readonly groupId: string,
     private readonly moduleId: string | undefined,
     private readonly activePage: GroupServiceNavigationPage,
+    private readonly groupCode?: string,
   ) {}
 
   getServiceNavigationArgs(): {
@@ -27,7 +28,9 @@ export default class GroupServiceNavigationPresenter {
           active: this.activePage === 'schedule',
         },
         {
-          href: `/group/${this.groupId}/sessions-and-attendance`,
+          href: this.groupCode
+            ? `/group/${encodeURIComponent(this.groupCode)}/sessions-and-attendance`
+            : `/group/${this.groupId}/sessions-and-attendance`,
           text: 'Sessions and attendance',
           active: this.activePage === 'sessions',
         },

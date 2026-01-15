@@ -10,7 +10,7 @@ export default class GroupServiceLayoutPresenter {
     readonly moduleId: string | undefined,
     readonly group?: ProgrammeGroupDetails,
   ) {
-    this.navigationPresenter = new GroupServiceNavigationPresenter(groupId, moduleId, activePage)
+    this.navigationPresenter = new GroupServiceNavigationPresenter(groupId, moduleId, activePage, group?.group.code)
   }
 
   get text() {

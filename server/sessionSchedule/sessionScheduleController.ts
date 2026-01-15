@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { ModuleSessionTemplate } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
 import { FormValidationError } from '../utils/formValidationError'
@@ -17,15 +18,100 @@ export default class SessionScheduleController {
   ) {}
 
   async showSessionSchedule(req: Request, res: Response): Promise<void> {
-    const { groupId, moduleId } = req.params
+    const params = req.params as Record<string, string | undefined>
+    let { groupId } = params
+    let { moduleId } = params
+    const groupCodeParam = params.groupCode
+    const moduleNameParam = params.moduleName
+
     const { username } = req.user
+    const groupCodeFromQuery = typeof req.query.groupCode === 'string' ? req.query.groupCode : ''
+    const moduleNameFromQuery = typeof req.query.moduleName === 'string' ? req.query.moduleName : ''
+
+    const resolvedGroupCode = groupCodeParam || groupCodeFromQuery || req.session.sessionScheduleData?.groupCode || ''
+    const moduleIdsByGroup = req.session.sessionScheduleData?.moduleIdsByGroupAndName ?? {}
+
+    if (!groupId && groupCodeParam) {
+      groupId = req.session.sessionScheduleData?.groupIdsByCode?.[groupCodeParam]
+    }
+
+    if (!moduleId && moduleNameParam) {
+      moduleId = moduleIdsByGroup[groupCodeParam ?? resolvedGroupCode]?.[moduleNameParam]
+    }
+
+    if (!moduleId && moduleNameFromQuery) {
+      moduleId = moduleIdsByGroup[resolvedGroupCode]?.[moduleNameFromQuery]
+    }
+
+    if (!groupId || !moduleId) {
+      const fallbackTarget = resolvedGroupCode
+        ? `/group/${encodeURIComponent(resolvedGroupCode)}/sessions-and-attendance`
+        : '/groups/started'
+      return res.redirect(fallbackTarget)
+    }
+
+    const resolvedGroupId = groupId
+    const resolvedModuleId = moduleId
+
     let formError: FormValidationError | null = null
 
-    const sessionTemplates = await this.accreditedProgrammesManageAndDeliverService.getSessionTemplates(
-      username,
-      groupId,
-      moduleId,
-    )
+    const cachedModuleTemplates =
+      req.session.sessionScheduleData?.moduleSessionTemplates?.[resolvedModuleId] ?? ([] as ModuleSessionTemplate[])
+
+    let sourceTemplates: { id: string; number: number; name: string }[] = cachedModuleTemplates
+
+    if (!sourceTemplates.length) {
+      sourceTemplates = await this.accreditedProgrammesManageAndDeliverService.getSessionTemplates(
+        username,
+        resolvedGroupId,
+        resolvedModuleId,
+      )
+    }
+
+    const sessionTemplates: ModuleSessionTemplate[] = sourceTemplates.map(template => ({
+      id: template.id,
+      number: template.number,
+      name: template.name,
+    }))
+
+    if (sessionTemplates.length) {
+      req.session.sessionScheduleData = {
+        ...(req.session.sessionScheduleData ?? {}),
+        groupCode: resolvedGroupCode || req.session.sessionScheduleData?.groupCode,
+        moduleSessionTemplates: {
+          ...(req.session.sessionScheduleData?.moduleSessionTemplates ?? {}),
+          [resolvedModuleId]: sessionTemplates,
+        },
+        moduleNames: {
+          ...(req.session.sessionScheduleData?.moduleNames ?? {}),
+          ...(moduleNameParam
+            ? {
+                [resolvedModuleId]: moduleNameParam,
+              }
+            : {}),
+          ...(moduleNameFromQuery
+            ? {
+                [resolvedModuleId]: moduleNameFromQuery,
+              }
+            : {}),
+        },
+        groupIdsByCode: {
+          ...(req.session.sessionScheduleData?.groupIdsByCode ?? {}),
+          ...(resolvedGroupCode ? { [resolvedGroupCode]: resolvedGroupId } : {}),
+        },
+        moduleIdsByGroupAndName: {
+          ...(req.session.sessionScheduleData?.moduleIdsByGroupAndName ?? {}),
+          ...(resolvedGroupCode && (moduleNameParam || moduleNameFromQuery)
+            ? {
+                [resolvedGroupCode]: {
+                  ...(req.session.sessionScheduleData?.moduleIdsByGroupAndName?.[resolvedGroupCode] ?? {}),
+                  [(moduleNameParam || moduleNameFromQuery) as string]: resolvedModuleId,
+                },
+              }
+            : {}),
+        },
+      }
+    }
 
     if (req.method === 'POST') {
       const selectedTemplateId = req.body['session-template']
@@ -43,16 +129,18 @@ export default class SessionScheduleController {
         }
       } else {
         req.session.sessionScheduleData = {
+          ...(req.session.sessionScheduleData ?? {}),
           sessionScheduleTemplateId: selectedTemplateId,
         }
-        return res.redirect(`/${groupId}/${moduleId}/schedule-group-session-details`)
+        return res.redirect(`/${resolvedGroupId}/${resolvedModuleId}/schedule-group-session-details`)
       }
     }
 
     const presenter = new SessionScheduleWhichPresenter(
-      groupId,
-      moduleId,
-      sessionTemplates.length > 0 ? sessionTemplates[0].name : 'the session',
+      resolvedGroupId,
+      resolvedModuleId,
+      resolvedGroupCode,
+      moduleNameParam || moduleNameFromQuery || req.session.sessionScheduleData?.moduleNames?.[resolvedModuleId] || '',
       sessionTemplates,
       formError,
       req.session.sessionScheduleData?.sessionScheduleTemplateId,
@@ -105,17 +193,48 @@ export default class SessionScheduleController {
   }
 
   async showSessionAttendance(req: Request, res: Response): Promise<void> {
-    const { groupId } = req.params
     const { username } = req.user
     const sessionType = (req.query.sessionType as 'getting-started' | 'one-to-one') || 'getting-started'
 
-    const groupSessionsData = await this.accreditedProgrammesManageAndDeliverService.getGroupSessions(username, groupId)
+    const groupIdentifier = (req.params.groupId || '').trim()
+    if (!groupIdentifier) {
+      return res.redirect('/groups/started')
+    }
+
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+    let resolvedGroupId: string | undefined = uuidRegex.test(groupIdentifier) ? groupIdentifier : undefined
+    let resolvedGroupCode: string | undefined = uuidRegex.test(groupIdentifier) ? undefined : groupIdentifier
+
+    if (!resolvedGroupId && resolvedGroupCode) {
+      resolvedGroupId = req.session.sessionScheduleData?.groupIdsByCode?.[resolvedGroupCode]
+
+      if (!resolvedGroupId) {
+        const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion(
+          username,
+          resolvedGroupCode,
+        )
+
+        if (groupDetails?.id) {
+          resolvedGroupId = groupDetails.id
+          resolvedGroupCode = groupDetails.code || resolvedGroupCode
+        }
+      }
+    }
+
+    if (!resolvedGroupId) {
+      return res.redirect('/groups/started')
+    }
+
+    const groupSessionsData = await this.accreditedProgrammesManageAndDeliverService.getGroupSessions(
+      username,
+      resolvedGroupId,
+    )
 
     const modulesWithTemplates = await Promise.all(
       (groupSessionsData.modules || []).map(async module => {
         const { sessionTemplates } = await this.accreditedProgrammesManageAndDeliverService.getModuleSessionTemplates(
           username,
-          groupId,
+          resolvedGroupId,
           module.id,
         )
 
@@ -127,10 +246,68 @@ export default class SessionScheduleController {
       }),
     )
 
-    const presenter = new SessionScheduleAttendancePresenter(groupId, sessionType, null, null, {
-      ...groupSessionsData,
-      modules: modulesWithTemplates,
+    const modulesTemplateMap: Record<string, ModuleSessionTemplate[]> = {
+      ...(req.session.sessionScheduleData?.moduleSessionTemplates ?? {}),
+    }
+
+    const moduleNamesMap: Record<string, string> = {
+      ...(req.session.sessionScheduleData?.moduleNames ?? {}),
+    }
+
+    const moduleIdsByGroupAndName: Record<string, Record<string, string>> = {
+      ...(req.session.sessionScheduleData?.moduleIdsByGroupAndName ?? {}),
+    }
+
+    const groupIdsByCode: Record<string, string> = {
+      ...(req.session.sessionScheduleData?.groupIdsByCode ?? {}),
+    }
+
+    const groupCode = groupSessionsData.group?.code || resolvedGroupCode
+    if (groupCode) {
+      groupIdsByCode[groupCode] = resolvedGroupId
+    }
+
+    modulesWithTemplates.forEach(module => {
+      if (Array.isArray(module.sessionTemplates) && module.sessionTemplates.length) {
+        modulesTemplateMap[module.id] = module.sessionTemplates.map(template => ({
+          id: template.id,
+          number: template.number,
+          name: template.name,
+        }))
+      }
+      if (module.name) {
+        moduleNamesMap[module.id] = module.name
+      }
+
+      if (groupCode && module.name) {
+        const currentGroupModuleMap = moduleIdsByGroupAndName[groupCode] ?? {}
+        currentGroupModuleMap[module.name] = module.id
+        moduleIdsByGroupAndName[groupCode] = currentGroupModuleMap
+      }
     })
+
+    req.session.sessionScheduleData = {
+      ...(req.session.sessionScheduleData ?? {}),
+      groupCode: groupCode ?? req.session.sessionScheduleData?.groupCode,
+      moduleSessionTemplates: modulesTemplateMap,
+      moduleNames: moduleNamesMap,
+      groupIdsByCode,
+      moduleIdsByGroupAndName,
+    }
+
+    const presenterGroupCode = req.session.sessionScheduleData?.groupCode || groupCode
+
+    const presenter = new SessionScheduleAttendancePresenter(
+      resolvedGroupId,
+      presenterGroupCode,
+      sessionType,
+      null,
+      null,
+      {
+        ...groupSessionsData,
+        modules: modulesWithTemplates,
+      },
+    )
     const view = new SessionScheduleAttendanceView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }

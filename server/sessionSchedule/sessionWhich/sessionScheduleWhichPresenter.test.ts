@@ -28,19 +28,20 @@ describe('SessionScheduleWhichPresenter', () => {
       const presenter = new SessionScheduleWhichPresenter(
         groupId,
         moduleId,
-        'Getting started one-to-one',
+        'GRP1',
+        'Module A',
         mockSessionTemplates,
         null,
       )
 
       expect(presenter.text).toEqual({
-        headingHintText: 'Getting started one-to-one',
+        headingHintText: 'GRP1 - Module A',
         headingCaptionText: 'Schedule a Getting started one-to-one',
       })
     })
 
     it('should return fallback text when session name is generic', () => {
-      const presenter = new SessionScheduleWhichPresenter(groupId, moduleId, 'the session', [], null)
+      const presenter = new SessionScheduleWhichPresenter(groupId, moduleId, '', '', [], null)
 
       expect(presenter.text).toEqual({
         headingHintText: 'the session',
@@ -50,14 +51,21 @@ describe('SessionScheduleWhichPresenter', () => {
   })
 
   describe('backLinkUri', () => {
-    it('should return the correct back link URI', () => {
+    it('should return the correct back link URI when group code is provided', () => {
       const presenter = new SessionScheduleWhichPresenter(
         groupId,
         moduleId,
-        'Getting started one-to-one',
+        'GRP1',
+        'Module A',
         mockSessionTemplates,
         null,
       )
+
+      expect(presenter.backLinkUri).toEqual('/group/GRP1/sessions-and-attendance')
+    })
+
+    it('should fall back to the group id when no group code is provided', () => {
+      const presenter = new SessionScheduleWhichPresenter(groupId, moduleId, '', 'Module A', mockSessionTemplates, null)
 
       expect(presenter.backLinkUri).toEqual(`/group/${groupId}/sessions-and-attendance`)
     })
@@ -68,7 +76,8 @@ describe('SessionScheduleWhichPresenter', () => {
       const presenter = new SessionScheduleWhichPresenter(
         groupId,
         moduleId,
-        'Getting started one-to-one',
+        'GRP1',
+        'Module A',
         mockSessionTemplates,
         null,
       )
@@ -77,7 +86,7 @@ describe('SessionScheduleWhichPresenter', () => {
     })
 
     it('should return an empty array when no templates are available', () => {
-      const presenter = new SessionScheduleWhichPresenter(groupId, moduleId, 'the session', [], null)
+      const presenter = new SessionScheduleWhichPresenter(groupId, moduleId, 'GRP1', '', [], null)
 
       expect(presenter.sessionTemplates).toEqual([])
     })
@@ -89,7 +98,8 @@ describe('SessionScheduleWhichPresenter', () => {
       const presenter = new SessionScheduleWhichPresenter(
         groupId,
         moduleId,
-        'Getting started one-to-one',
+        'GRP1',
+        'Module A',
         mockSessionTemplates,
         null,
         selectedTemplateId,
@@ -107,7 +117,8 @@ describe('SessionScheduleWhichPresenter', () => {
       const presenter = new SessionScheduleWhichPresenter(
         groupId,
         moduleId,
-        'Getting started one-to-one',
+        'GRP1',
+        'Module A',
         mockSessionTemplates,
         null,
       )
@@ -134,7 +145,8 @@ describe('SessionScheduleWhichPresenter', () => {
       const presenter = new SessionScheduleWhichPresenter(
         groupId,
         moduleId,
-        'Getting started one-to-one',
+        'GRP1',
+        'Module A',
         mockSessionTemplates,
         validationError,
       )
@@ -158,7 +170,8 @@ describe('SessionScheduleWhichPresenter', () => {
       const presenter = new SessionScheduleWhichPresenter(
         groupId,
         moduleId,
-        'Getting started one-to-one',
+        'GRP1',
+        'Module A',
         mockSessionTemplates,
         validationError,
       )
@@ -170,7 +183,8 @@ describe('SessionScheduleWhichPresenter', () => {
       const presenter = new SessionScheduleWhichPresenter(
         groupId,
         moduleId,
-        'Getting started one-to-one',
+        'GRP1',
+        'Module A',
         mockSessionTemplates,
         null,
       )
