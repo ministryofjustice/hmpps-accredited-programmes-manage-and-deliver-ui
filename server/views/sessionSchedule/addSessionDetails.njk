@@ -2,7 +2,7 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {%- from "moj/components/date-picker/macro.njk" import mojDatePicker -%}
-{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
@@ -159,7 +159,7 @@
           {{ mojDatePicker(sessionDetailsDateArgs)}}
           {{ timeInput(startTimeInputArgs) }}
           {{ timeInput(endTimeInputArgs) }}
-          {{ govukCheckboxes(sessionDetailsCheckboxArgs) }}
+          {{ govukRadios(sessionDetailsRadioArgs) }}
 
           <div data-module="moj-add-another">
             {% call govukFieldset(sessionFacilitatorsFieldSetArgs) %}

@@ -46,12 +46,15 @@ declare module 'express-session' {
       sessionAttendanceTemplateId?: string
     }
     sessionScheduleData?: Partial<SessionScheduleRequest> & {
+      sessionName?: string
+      referralName?: string
       moduleSessionTemplates?: Record<string, ModuleSessionTemplate[]>
       moduleNames?: Record<string, string>
       groupCode?: string
       groupIdsByCode?: Record<string, string>
       moduleIdsByGroupAndName?: Record<string, Record<string, string>>
     }
+    // sessionScheduleData?: Partial<SessionScheduleRequest> & { sessionName?: string; referralName?: string }
   }
 }
 

@@ -33,6 +33,27 @@ const mockSessionTemplates: ModuleSessionTemplate[] = [
   },
 ]
 
+const completeSessionData: Partial<SessionData> = {
+  sessionScheduleData: {
+    sessionTemplateId: '30db4cee-a79a-420a-b0ff-5f5ce4dcfd7d',
+    sessionName: 'Getting started one-to-one',
+    referralIds: ['a9971fd6-a185-43ee-bb23-a0ab23a14f50'],
+    referralName: 'John Doe',
+    facilitators: [
+      {
+        facilitator: 'John Doe',
+        facilitatorCode: 'N07B001',
+        teamName: 'GM Manchester N1',
+        teamCode: 'N50CAC',
+        teamMemberType: 'REGULAR_FACILITATOR',
+      },
+    ],
+    startDate: '01/01/3055',
+    startTime: { hour: 9, minutes: 0, amOrPm: 'AM' },
+    endTime: { hour: 10, minutes: 30, amOrPm: 'AM' },
+  },
+}
+
 afterEach(() => {
   jest.resetAllMocks()
 })
@@ -141,7 +162,7 @@ describe('Session Schedule Controller', () => {
           moduleSessionTemplates: {
             [moduleId]: mockSessionTemplates,
           },
-          sessionScheduleTemplateId: selectedTemplateId,
+          sessionTemplateId: selectedTemplateId,
           groupIdsByCode: {
             [groupCode]: groupId,
           },
@@ -328,17 +349,6 @@ describe('Session Schedule Controller', () => {
   })
 
   describe('POST /:groupId/:moduleId/schedule-group-session-details', () => {
-    const mockSessionDetails = {
-      sessionTemplateName: 'Getting started one-to-one',
-      referrals: [
-        { id: randomUUID(), name: 'John Doe', prisonNumber: 'A1234BC' },
-        { id: randomUUID(), name: 'Jane Smith', prisonNumber: 'B5678DE' },
-      ],
-      facilitators: [
-        { facilitator: 'John Doe', facilitatorCode: 'N07B001', teamName: 'GM Manchester N1', teamCode: 'N50CAC' },
-      ],
-    }
-
     beforeEach(() => {
       accreditedProgrammesManageAndDeliverService.getIndividualSessionDetails.mockResolvedValue({
         facilitators: [
@@ -358,7 +368,7 @@ describe('Session Schedule Controller', () => {
       return request(app)
         .post(`/${groupId}/${moduleId}/schedule-group-session-details`)
         .send({
-          'session-details-who': [mockSessionDetails.referrals[0].id],
+          'session-details-who': `a9971fd6-a185-43ee-bb23-a0ab23a14f50 + Jane Doe`,
           'session-details-facilitator': JSON.stringify({
             facilitator: 'John Doe',
             facilitatorCode: 'N07B001',
@@ -376,6 +386,60 @@ describe('Session Schedule Controller', () => {
         .expect(302)
         .expect(response => {
           expect(response.text).toContain(`Redirecting to /${groupId}/${moduleId}/session-review-details`)
+        })
+    })
+  })
+  describe('GET /:groupId/:moduleId/session-review-details', () => {
+    beforeEach(() => {
+      app = TestUtils.createTestAppWithSession(completeSessionData, { accreditedProgrammesManageAndDeliverService })
+    })
+
+    it('loads the session review details page and shows data', async () => {
+      return request(app)
+        .get(`/${groupId}/${moduleId}/session-review-details`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Review your session details')
+          expect(res.text).toContain('Schedule a Getting started one-to-one')
+          expect(res.text).toContain('John Doe')
+        })
+    })
+  })
+
+  describe('POST /:groupId/:moduleId/session-review-details', () => {
+    beforeEach(() => {
+      app = TestUtils.createTestAppWithSession(completeSessionData, { accreditedProgrammesManageAndDeliverService })
+      accreditedProgrammesManageAndDeliverService.createSessionSchedule.mockResolvedValue({
+        message: 'Session scheduled successfully',
+      })
+    })
+
+    it('creates session schedule and redirects with success message', async () => {
+      return request(app)
+        .post(`/${groupId}/${moduleId}/session-review-details`)
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain(`Redirecting to /${groupId}/${moduleId}/session-review-details`)
+          expect(accreditedProgrammesManageAndDeliverService.createSessionSchedule).toHaveBeenCalledWith(
+            'user1',
+            groupId,
+            {
+              endTime: { amOrPm: 'AM', hour: 10, minutes: 30 },
+              facilitators: [
+                {
+                  facilitator: 'John Doe',
+                  facilitatorCode: 'N07B001',
+                  teamCode: 'N50CAC',
+                  teamMemberType: 'REGULAR_FACILITATOR',
+                  teamName: 'GM Manchester N1',
+                },
+              ],
+              referralIds: ['a9971fd6-a185-43ee-bb23-a0ab23a14f50'],
+              sessionTemplateId: '30db4cee-a79a-420a-b0ff-5f5ce4dcfd7d',
+              startDate: '3055-01-01',
+              startTime: { amOrPm: 'AM', hour: 9, minutes: 0 },
+            },
+          )
         })
     })
   })

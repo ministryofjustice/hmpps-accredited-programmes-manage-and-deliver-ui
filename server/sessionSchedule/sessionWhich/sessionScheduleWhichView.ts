@@ -12,13 +12,6 @@ export default class SessionScheduleWhichView {
     }
   }
 
-  private homePageLink() {
-    return {
-      text: 'Go to Accredited Programmes homepage',
-      href: `/`,
-    }
-  }
-
   private radioArgs(): RadiosArgs {
     const { sessionTemplates } = this.presenter
 
@@ -46,7 +39,6 @@ export default class SessionScheduleWhichView {
       'sessionSchedule/sessionScheduleWhich',
       {
         backLinkArgs: this.backLinkArgs(),
-        homePageLink: this.homePageLink(),
         radioArgs: this.radioArgs(),
         text: this.presenter.text,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),

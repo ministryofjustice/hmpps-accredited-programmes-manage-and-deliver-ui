@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { ModuleSessionTemplate } from '@manage-and-deliver-api'
+import { ModuleSessionTemplate, SessionScheduleRequest } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
 import { FormValidationError } from '../utils/formValidationError'
@@ -11,6 +11,18 @@ import AddSessionDetailsView from './sessionDetails/addSessionDetailsView'
 import SessionScheduleAttendancePresenter from './sessionAttendance/sessionScheduleAttendancePresenter'
 import SessionScheduleAttendanceView from './sessionAttendance/sessionScheduleAttendanceView'
 import CreateSessionScheduleForm from './sessionScheduleForm'
+import SessionScheduleCyaPresenter from './cya/SessionScheduleCyaPresenter'
+import SessionScheduleCyaView from './cya/sessionScheduleCyaView'
+
+type SessionScheduleSessionData = Partial<SessionScheduleRequest> & {
+  sessionName?: string
+  referralName?: string
+  moduleSessionTemplates?: Record<string, ModuleSessionTemplate[]>
+  moduleNames?: Record<string, string>
+  groupCode?: string
+  groupIdsByCode?: Record<string, string>
+  moduleIdsByGroupAndName?: Record<string, Record<string, string>>
+}
 
 export default class SessionScheduleController {
   constructor(
@@ -128,9 +140,10 @@ export default class SessionScheduleController {
           ],
         }
       } else {
+        const selectedTemplate = sessionTemplates.find(template => template.id === selectedTemplateId)
         req.session.sessionScheduleData = {
           ...(req.session.sessionScheduleData ?? {}),
-          sessionScheduleTemplateId: selectedTemplateId,
+          sessionTemplateId: selectedTemplateId,
         }
         return res.redirect(`/${resolvedGroupId}/${resolvedModuleId}/schedule-group-session-details`)
       }
@@ -143,7 +156,7 @@ export default class SessionScheduleController {
       moduleNameParam || moduleNameFromQuery || req.session.sessionScheduleData?.moduleNames?.[resolvedModuleId] || '',
       sessionTemplates,
       formError,
-      req.session.sessionScheduleData?.sessionScheduleTemplateId,
+      req.session.sessionScheduleData?.sessionTemplateId,
     )
     const view = new SessionScheduleWhichView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
@@ -182,7 +195,7 @@ export default class SessionScheduleController {
     )
 
     const presenter = new AddSessionDetailsPresenter(
-      `/${groupId}/${moduleId}/schedule-session-type`,
+      `/${groupId}/${moduleId}`,
       sessionDetails,
       formError,
       sessionScheduleData,
@@ -309,6 +322,47 @@ export default class SessionScheduleController {
       },
     )
     const view = new SessionScheduleAttendanceView(presenter)
+    return ControllerUtils.renderWithLayout(res, view, null)
+  }
+
+  async scheduleGroupSessionCya(req: Request, res: Response): Promise<void> {
+    const { username } = req.user
+    const { groupId, moduleId } = req.params
+    const { sessionScheduleData } = req.session
+    const scheduleData = (sessionScheduleData ?? {}) as SessionScheduleSessionData
+
+    if (req.method === 'POST') {
+      const {
+        sessionName: _sessionName,
+        referralName: _referralName,
+        moduleSessionTemplates: _moduleSessionTemplates,
+        moduleNames: _moduleNames,
+        groupCode: _cachedGroupCode,
+        groupIdsByCode: _groupIdsByCode,
+        moduleIdsByGroupAndName: _moduleIdsByGroupAndName,
+        ...sessionDataForApi
+      } = scheduleData
+
+      const formattedStartDate = (() => {
+        if (!sessionDataForApi.startDate) {
+          throw new Error('Session start date missing for schedule submission')
+        }
+        const [day, month, year] = sessionDataForApi.startDate.split('/')
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+      })()
+
+      const response = await this.accreditedProgrammesManageAndDeliverService.createSessionSchedule(username, groupId, {
+        ...(sessionDataForApi as SessionScheduleRequest),
+        startDate: formattedStartDate,
+      })
+      // Clear session data on submission
+      req.session.sessionScheduleData = {}
+      // Change this when page exists
+      return res.redirect(`/${groupId}/${moduleId}/session-review-details?message=${response.message}`)
+    }
+
+    const presenter = new SessionScheduleCyaPresenter(`/${groupId}/${moduleId}`, scheduleData)
+    const view = new SessionScheduleCyaView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
 }

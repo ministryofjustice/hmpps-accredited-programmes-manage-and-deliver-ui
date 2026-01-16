@@ -614,4 +614,17 @@ export default class AccreditedProgrammesManageAndDeliverService
       headers: { Accept: 'application/json' },
     })) as GroupSessionsResponse
   }
+
+  async createSessionSchedule(
+    username: ExpressUsername,
+    groupId: string,
+    sessionScheduleRequest: SessionScheduleRequest,
+  ): Promise<{ message: string }> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.post({
+      path: `/group/${groupId}/session/schedule`,
+      headers: { Accept: 'application/json' },
+      data: sessionScheduleRequest,
+    })) as { message: string }
+  }
 }
