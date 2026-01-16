@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { SessionScheduleRequest } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
 import { FormValidationError } from '../utils/formValidationError'
@@ -8,6 +9,8 @@ import SessionScheduleWhichView from './which/sessionScheduleWhichView'
 import AddSessionDetailsPresenter from './sessionDetails/addSessionDetailsPresenter'
 import AddSessionDetailsView from './sessionDetails/addSessionDetailsView'
 import CreateSessionScheduleForm from './sessionScheduleForm'
+import SessionScheduleCyaPresenter from './cya/SessionScheduleCyaPresenter'
+import SessionScheduleCyaView from './cya/sessionScheduleCyaView'
 
 export default class SessionScheduleController {
   constructor(
@@ -41,7 +44,8 @@ export default class SessionScheduleController {
         }
       } else {
         req.session.sessionScheduleData = {
-          sessionScheduleTemplateId: selectedTemplateId,
+          sessionTemplateId: selectedTemplateId,
+          sessionName: sessionTemplates.length > 0 ? sessionTemplates[0].name : 'the session',
         }
         return res.redirect(`/${groupId}/${moduleId}/schedule-group-session-details`)
       }
@@ -53,7 +57,7 @@ export default class SessionScheduleController {
       sessionTemplates.length > 0 ? sessionTemplates[0].name : 'the session',
       sessionTemplates,
       formError,
-      req.session.sessionScheduleData?.sessionScheduleTemplateId,
+      req.session.sessionScheduleData?.sessionTemplateId,
     )
     const view = new SessionScheduleWhichView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
@@ -80,6 +84,7 @@ export default class SessionScheduleController {
           startDate: data.paramsForUpdate.startDate,
           startTime: data.paramsForUpdate.startTime,
           endTime: data.paramsForUpdate.endTime,
+          referralName: req.body['session-details-who'].split('+')[1].trim(),
         }
         return res.redirect(`/${groupId}/${moduleId}/session-review-details`)
       }
@@ -92,13 +97,40 @@ export default class SessionScheduleController {
     )
 
     const presenter = new AddSessionDetailsPresenter(
-      `/${groupId}/${moduleId}/schedule-session-type`,
+      `/${groupId}/${moduleId}`,
       sessionDetails,
       formError,
       sessionScheduleData,
       userInputData,
     )
     const view = new AddSessionDetailsView(presenter)
+    return ControllerUtils.renderWithLayout(res, view, null)
+  }
+
+  async scheduleGroupSessionCya(req: Request, res: Response): Promise<void> {
+    const { username } = req.user
+    const { groupId, moduleId } = req.params
+    const { sessionScheduleData } = req.session
+
+    if (req.method === 'POST') {
+      const { sessionName, referralName, ...sessionDataForApi } = sessionScheduleData
+      sessionDataForApi.startDate = (() => {
+        const [day, month, year] = sessionScheduleData.startDate.split('/')
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+      })()
+      const response = await this.accreditedProgrammesManageAndDeliverService.createSessionSchedule(
+        username,
+        groupId,
+        sessionDataForApi as SessionScheduleRequest,
+      )
+      // Clear session data on submission
+      req.session.sessionScheduleData = {}
+      // Change this when page exists
+      return res.redirect(`/${groupId}/${moduleId}/session-review-details?message=${response.message}`)
+    }
+
+    const presenter = new SessionScheduleCyaPresenter(`/${groupId}/${moduleId}`, sessionScheduleData)
+    const view = new SessionScheduleCyaView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
 }

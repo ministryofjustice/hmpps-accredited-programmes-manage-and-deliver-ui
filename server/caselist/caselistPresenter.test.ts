@@ -255,3 +255,51 @@ describe(`filters`, () => {
     })
   })
 })
+
+describe('resultsText', () => {
+  it('should return blank when there are no results', () => {
+    const filter = { status: undefined, cohort: undefined, crnOrPersonName: undefined } as CaselistFilter
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+      .pageContent([])
+      .build({ totalElements: 0, number: 0, size: 10, numberOfElements: 0 }) as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      1,
+      referralCaseListItemPage,
+      filter,
+      '',
+      true,
+      TestUtils.createCaseListFilters(),
+      0,
+    )
+
+    expect(presenter.resultsText).toBe('')
+  })
+
+  it('should show the current page range when results exist', () => {
+    const filter = { status: undefined, cohort: undefined, crnOrPersonName: undefined } as CaselistFilter
+    const referralCaseListItems = [
+      referralCaseListItemFactory.build(),
+      referralCaseListItemFactory.build(),
+      referralCaseListItemFactory.build(),
+    ]
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory.pageContent(referralCaseListItems).build({
+      totalElements: 23,
+      number: 2,
+      size: 10,
+      numberOfElements: referralCaseListItems.length,
+    }) as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      1,
+      referralCaseListItemPage,
+      filter,
+      '',
+      true,
+      TestUtils.createCaseListFilters(),
+      0,
+    )
+
+    expect(presenter.resultsText).toBe(
+      'Showing <strong>21</strong> to <strong>23</strong> of <strong>23</strong> results',
+    )
+  })
+})

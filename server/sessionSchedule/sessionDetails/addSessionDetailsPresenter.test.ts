@@ -36,32 +36,26 @@ describe('AddSessionDetailsPresenter', () => {
   describe('generateSessionAttendeesCheckboxOptions', () => {
     it('generates checkbox options without selections', () => {
       const presenter = new AddSessionDetailsPresenter(backLinkUri, sessionDetails)
-      const options = presenter.generateSessionAttendeesCheckboxOptions(['X12345'])
+      const options = presenter.generateSessionAttendeesRadioOptions('ref1')
 
       expect(options).toEqual([
-        { text: 'John Doe', value: 'X12345', checked: true },
-        { text: 'Jane Smith', value: 'Y67890', checked: false },
+        { text: 'John Doe (X12345)', value: 'ref1 + John Doe', checked: true },
+        { text: 'Jane Smith (Y67890)', value: 'ref2 + Jane Smith', checked: false },
       ])
     })
   })
 
-  describe('selectedLocationValues', () => {
+  describe('selectedAttendeeValues', () => {
     it('returns values from userInputData when available', () => {
-      const userInputData = { 'session-details-who': ['X12345', 'Y67890'] }
+      const userInputData = { 'session-details-who': 'ref1 + John Doe' }
       const presenter = new AddSessionDetailsPresenter(backLinkUri, sessionDetails, null, null, userInputData)
-      expect(presenter.selectedAttendeeValues()).toEqual(['X12345', 'Y67890'])
+      expect(presenter.selectedAttendeeValues()).toEqual('ref1')
     })
 
     it('returns values from createSessionDetailsFormData when userInputData not available', () => {
       const formData = { referralIds: ['X12345'] }
       const presenter = new AddSessionDetailsPresenter(backLinkUri, sessionDetails, null, formData)
-      expect(presenter.selectedAttendeeValues()).toEqual(['X12345'])
-    })
-
-    it('handles single string value from userInputData', () => {
-      const userInputData = { 'session-details-who': 'X12345' }
-      const presenter = new AddSessionDetailsPresenter(backLinkUri, sessionDetails, null, null, userInputData)
-      expect(presenter.selectedAttendeeValues()).toEqual(['X12345'])
+      expect(presenter.selectedAttendeeValues()).toEqual('X12345')
     })
   })
 
