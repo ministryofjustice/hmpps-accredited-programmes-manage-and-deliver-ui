@@ -36,7 +36,7 @@ describe('SessionScheduleWhichPresenter', () => {
 
       expect(presenter.text).toEqual({
         headingHintText: 'GRP1 - Module A',
-        headingCaptionText: 'Schedule a Getting started one-to-one',
+        headingCaptionText: 'Schedule a Module A session',
       })
     })
 

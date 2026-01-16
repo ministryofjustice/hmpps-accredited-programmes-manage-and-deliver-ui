@@ -15,11 +15,14 @@ export default class SessionScheduleWhichPresenter {
 
   get text() {
     const firstSessionName = this.availableSessionTemplates[0]?.name || 'the session'
-    const captionParts = [this.groupCode, this.moduleName].filter(Boolean)
-    const sessionWhichCaption = captionParts.length ? captionParts.join(' - ') : firstSessionName
+    const moduleDisplayName = this.moduleName || firstSessionName
+    const captionParts = [this.groupCode, moduleDisplayName].filter(Boolean)
+    const headingHintText = captionParts.length ? captionParts.join(' - ') : moduleDisplayName
+    const needsSessionSuffix = !/session/i.test(moduleDisplayName)
+
     return {
-      headingHintText: sessionWhichCaption,
-      headingCaptionText: `Schedule a ${firstSessionName}`,
+      headingHintText,
+      headingCaptionText: `Schedule a ${moduleDisplayName}${needsSessionSuffix ? ' session' : ''}`,
     }
   }
 
@@ -42,6 +45,6 @@ export default class SessionScheduleWhichPresenter {
   }
 
   get sessionTemplates() {
-    return this.availableSessionTemplates
+    return [...this.availableSessionTemplates].sort((a, b) => a.number - b.number)
   }
 }
