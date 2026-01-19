@@ -50,7 +50,7 @@ export default class RemoveFromGroupUpdateStatusView {
         },
       },
       hint: {
-        text: "These details will be show in the person's status history and the status will also be updated in NDelius.",
+        text: "These details will be shown in the person's status history and the status will also be updated in NDelius.",
       },
       items: this.presenter.generateStatusUpdateRadios(),
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.updatedStatus.errorMessage),
