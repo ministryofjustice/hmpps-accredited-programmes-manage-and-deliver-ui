@@ -93,6 +93,15 @@ describe('DateUtils', () => {
       expect(DateUtils.formattedTime('2021-06-02T12:00:00+01:00', { casing: 'capitalized' })).toEqual('Midday')
       expect(DateUtils.formattedTime('2021-06-02T24:00:00+01:00', { casing: 'capitalized' })).toEqual('Midnight')
     })
+
+    it('returns corrently truncated minutes when include minutes option is specified', () => {
+      expect(
+        DateUtils.formattedTime('2021-06-02T10:00:00+01:00', { casing: 'capitalized', includeZeroMinutes: true }),
+      ).toEqual('10:00am')
+      expect(
+        DateUtils.formattedTime('2021-06-02T10:00:00+01:00', { casing: 'capitalized', includeZeroMinutes: false }),
+      ).toEqual('10am')
+    })
   })
 
   describe('formattedTimeRange', () => {

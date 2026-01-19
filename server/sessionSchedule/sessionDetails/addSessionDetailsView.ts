@@ -2,7 +2,7 @@ import { CreateGroupTeamMember } from '@manage-and-deliver-api'
 import { TimeInputArgs } from '@manage-and-deliver-ui'
 import AddSessionDetailsPresenter from './addSessionDetailsPresenter'
 import ViewUtils from '../../utils/viewUtils'
-import { CheckboxesArgs, FieldsetArgs, SelectArgs } from '../../utils/govukFrontendTypes'
+import { FieldsetArgs, RadiosArgs, SelectArgs } from '../../utils/govukFrontendTypes'
 
 export default class AddSessionDetailsView {
   constructor(private readonly presenter: AddSessionDetailsPresenter) {}
@@ -165,7 +165,7 @@ export default class AddSessionDetailsView {
     }
   }
 
-  private get sessionDetailsCheckboxArgs(): CheckboxesArgs {
+  private get sessionDetailsRadioArgs(): RadiosArgs {
     return {
       name: 'session-details-who',
       classes: 'govuk-checkboxes--small',
@@ -180,7 +180,7 @@ export default class AddSessionDetailsView {
         text: 'Select everyone who should attend this session.',
       },
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.who.errorMessage),
-      items: this.presenter.generateSessionAttendeesCheckboxOptions(this.presenter.selectedAttendeeValues()),
+      items: this.presenter.generateSessionAttendeesRadioOptions(this.presenter.selectedAttendeeValues()),
     }
   }
 
@@ -191,7 +191,7 @@ export default class AddSessionDetailsView {
         backLinkArgs: this.backLinkArgs(),
         text: this.presenter.text,
         sessionDetailsDateArgs: this.sessionDetailsDateArgs,
-        sessionDetailsCheckboxArgs: this.sessionDetailsCheckboxArgs,
+        sessionDetailsRadioArgs: this.sessionDetailsRadioArgs,
         startTimeInputArgs: this.startTimeInputArgs,
         endTimeInputArgs: this.endTimeInputArgs,
         sessionFacilitatorArgs: this.sessionFacilitatorArgs(),

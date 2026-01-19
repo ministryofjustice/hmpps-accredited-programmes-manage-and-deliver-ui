@@ -55,7 +55,7 @@ export default class UpdateReferralStatusView {
       fieldset: {
         legend: {
           text: 'Select the new referral status',
-          isPageHeading: true,
+          isPageHeading: false,
           classes: 'govuk-fieldset__legend--m',
         },
       },
