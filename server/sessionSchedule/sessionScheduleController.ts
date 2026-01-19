@@ -9,6 +9,8 @@ import SessionScheduleWhichView from './which/sessionScheduleWhichView'
 import AddSessionDetailsPresenter from './sessionDetails/addSessionDetailsPresenter'
 import AddSessionDetailsView from './sessionDetails/addSessionDetailsView'
 import CreateSessionScheduleForm from './sessionScheduleForm'
+import SessionScheduleAttendancePresenter from './sessionAttendance/sessionScheduleAttendancePresenter'
+import SessionScheduleAttendanceView from './sessionAttendance/sessionScheduleAttendanceView'
 import SessionScheduleCyaPresenter from './cya/SessionScheduleCyaPresenter'
 import SessionScheduleCyaView from './cya/sessionScheduleCyaView'
 
@@ -131,6 +133,20 @@ export default class SessionScheduleController {
 
     const presenter = new SessionScheduleCyaPresenter(`/${groupId}/${moduleId}`, sessionScheduleData)
     const view = new SessionScheduleCyaView(presenter)
+    return ControllerUtils.renderWithLayout(res, view, null)
+  }
+
+  async showSessionAttendance(req: Request, res: Response): Promise<void> {
+    const { username } = req.user
+    const { groupId } = req.params
+
+    const sessionAttendanceData = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionsAndAttendance(
+      username,
+      groupId,
+    )
+
+    const presenter = new SessionScheduleAttendancePresenter(groupId, null, null, sessionAttendanceData)
+    const view = new SessionScheduleAttendanceView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
 }

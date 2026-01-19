@@ -1,5 +1,6 @@
 import RemoveFromGroupUpdateStatusPresenter from './removeFromGroupUpdateStatusPresenter'
 import ViewUtils from '../../utils/viewUtils'
+import { RadiosArgs } from '../../utils/govukFrontendTypes'
 
 export default class RemoveFromGroupUpdateStatusView {
   constructor(private readonly presenter: RemoveFromGroupUpdateStatusPresenter) {}
@@ -38,18 +39,18 @@ export default class RemoveFromGroupUpdateStatusView {
     }
   }
 
-  get statusUpdateRadioButtonsOptions() {
+  get statusUpdateRadioButtonsOptions(): RadiosArgs {
     return {
       name: 'updated-status',
       fieldset: {
         legend: {
           text: 'Select the new referral status',
-          isPageHeading: true,
+          isPageHeading: false,
           classes: 'govuk-fieldset__legend--m',
         },
-        hint: {
-          text: "These details will be show in the person's status history and the status will also be updated in NDelius.",
-        },
+      },
+      hint: {
+        text: "These details will be shown in the person's status history and the status will also be updated in NDelius.",
       },
       items: this.presenter.generateStatusUpdateRadios(),
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.updatedStatus.errorMessage),

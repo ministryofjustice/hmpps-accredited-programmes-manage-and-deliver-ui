@@ -22,7 +22,7 @@ export default class UpdateReferralStatusFixedView {
       },
       maxlength: '500',
       hint: {
-        text: 'You can add more information about this update if you need to',
+        text: 'You can add more information about this update if you need to.',
       },
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.moreDetailsTextArea.errorMessage),
       value: this.presenter.fields.moreDetailsTextArea.value,

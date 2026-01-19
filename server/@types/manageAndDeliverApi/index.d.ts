@@ -62,6 +62,7 @@ type UserTeamMember = components['schemas']['UserTeamMember']
 type CreateGroupTeamMember = components['schemas']['CreateGroupTeamMember']
 type SessionScheduleRequest = components['schemas']['ScheduleSessionRequest']
 type SessionScheduleResponse = components['schemas']['ScheduleSessionTypeResponse']
+type SessionScheduleGroupResponse = components['schemas']['SessionScheduleGroupResponse']
 type ModuleSessionTemplate = components['schemas']['ModuleSessionTemplate']
 type ScheduleSessionTypeResponse = components['schemas']['ScheduleSessionTypeResponse']
 type ScheduleIndividualSessionDetailsResponse = components['schemas']['ScheduleIndividualSessionDetailsResponse']
@@ -131,6 +132,7 @@ export type {
   UpdateCohort,
   UpdateLdc,
   UserTeamMember,
+  SessionScheduleGroupResponse,
   SessionScheduleRequest,
   SessionScheduleResponse,
 }
