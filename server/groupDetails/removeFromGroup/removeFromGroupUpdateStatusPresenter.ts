@@ -6,6 +6,7 @@ import ViewUtils from '../../utils/viewUtils'
 
 export default class RemoveFromGroupUpdateStatusPresenter {
   constructor(
+    readonly groupId: string,
     readonly statusDetails: ReferralStatusTransitions,
     readonly backLinkUri: string,
     private readonly groupManagementData: {
@@ -19,6 +20,10 @@ export default class RemoveFromGroupUpdateStatusPresenter {
     return {
       pageHeading: `Update ${this.groupManagementData.personName}'s referral status`,
     }
+  }
+
+  get cancelLinkHref() {
+    return `/groupDetails/${this.groupId}/waitlist`
   }
 
   get utils() {

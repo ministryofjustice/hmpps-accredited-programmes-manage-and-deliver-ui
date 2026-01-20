@@ -73,6 +73,7 @@ export default class RemoveFromGroupController {
     )
 
     const presenter = new RemoveFromGroupUpdateStatusPresenter(
+      groupId,
       statusDetails,
       `/removeFromGroup/${groupId}/${referralId}`,
       req.session.groupManagementData,
