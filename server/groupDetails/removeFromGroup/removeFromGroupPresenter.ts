@@ -24,6 +24,10 @@ export default class RemoveFromGroupPresenter {
     return this.backLink
   }
 
+  get cancelLinkHref() {
+    return `/groupDetails/${this.groupId}/waitlist`
+  }
+
   get utils() {
     return new PresenterUtils(this.userInputData)
   }
