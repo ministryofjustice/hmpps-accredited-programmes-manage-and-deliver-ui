@@ -870,6 +870,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/bff/group/{groupId}/schedule': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * bff endpoint to retrieve a schedule of a module sessions for a programme group
+     * @description Retrieve group schedule..
+     */
+    get: operations['getGroupSchedule']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/bff/group/{groupId}/module/{moduleId}/schedule-session-type': {
     parameters: {
       query?: never
@@ -2441,14 +2461,14 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -2712,14 +2732,14 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -2829,14 +2849,14 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -2962,6 +2982,53 @@ export interface components {
        * @example Thursday 12 January 2023
        */
       sessionStartDate: string
+    }
+    GroupSchedule: {
+      /**
+       * @description The start date of a group one to one in format DayName DateNumber MonthName YearNumber
+       * @example Monday 22 June 2026
+       */
+      preGroupOneToOneStartDate: string
+      /**
+       * @description The start date of a module in format DayName DateNumber MonthName YearNumber
+       * @example Monday 22 June 2026
+       */
+      gettingStartedModuleStartDate: string
+      /**
+       * @description The end date of a module in format DayName DateNumber MonthName YearNumber
+       * @example Monday 22 September 2026
+       */
+      endDate: string
+      /** @description Details of the Group's sessions */
+      sessions: components['schemas']['GroupScheduleSession'][]
+    }
+    GroupScheduleSession: {
+      /**
+       * Format: uuid
+       * @description id of the session
+       * @example UUID
+       */
+      id: string
+      /**
+       * @description The name of the session
+       * @example Pre Group one-to-ones
+       */
+      name: string
+      /**
+       * @description The type of the session
+       * @example Individual
+       */
+      type: string
+      /**
+       * @description The date of the session
+       * @example Monday 22 June 2026
+       */
+      date: string
+      /**
+       * @description The time(s) of the session. For example 11am to 1:30pm or Various times
+       * @example Various times
+       */
+      time: string
     }
     /** @description A session template item with basic information */
     ModuleSessionTemplate: {
@@ -5677,6 +5744,65 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ProgrammeGroupModuleSessionsResponse']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Group or module not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getGroupSchedule: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The UUID of the Programme Group */
+        groupId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully retrieved group schedule details */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['GroupSchedule']
         }
       }
       /** @description Bad Request */

@@ -124,12 +124,14 @@ export default class GroupDetailsController {
     const { username } = req.user
     const { groupId } = req.params
 
-    // const groupSessionDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionDetails(
-    //   username,
-    //   groupId,
-    // )
+    const groupSchedule = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionDetails(
+      username,
+      groupId,
+    )
 
-    const presenter = new SchedulePresenter(groupId)
+    console.log(JSON.stringify(groupSchedule, null, 2))
+
+    const presenter = new SchedulePresenter(groupId, groupSchedule)
     const view = new ScheduleView(presenter)
     req.session.originPage = req.originalUrl
 

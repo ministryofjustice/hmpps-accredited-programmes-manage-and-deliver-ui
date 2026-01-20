@@ -1,10 +1,13 @@
-import {} from '@manage-and-deliver-api'
+import { GroupSchedule } from '@manage-and-deliver-api'
 import GroupServiceLayoutPresenter, {
   GroupServiceNavigationValues,
 } from '../../shared/groups/groupServiceLayoutPresenter'
 
 export default class SchedulePresenter extends GroupServiceLayoutPresenter {
-  constructor(readonly groupId: string) {
+  constructor(
+    readonly groupId: string,
+    readonly groupSchedule: GroupSchedule,
+  ) {
     super(GroupServiceNavigationValues.scheduleTab, groupId)
   }
 

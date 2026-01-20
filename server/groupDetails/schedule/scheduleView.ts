@@ -12,7 +12,7 @@ export default class ScheduleView {
             text: 'Pre-group one-to-ones start date',
           },
           value: {
-            text: 'Thursday 23 April 2026',
+            text: this.presenter.groupSchedule.preGroupOneToOneStartDate,
           },
           classes: 'govuk-summary-list__row--no-border',
         },
@@ -21,7 +21,7 @@ export default class ScheduleView {
             text: 'Getting started module start date',
           },
           value: {
-            text: 'Thursday 14 May 2026',
+            text: this.presenter.groupSchedule.gettingStartedModuleStartDate,
           },
           classes: 'govuk-summary-list__row--no-border',
         },
@@ -30,7 +30,7 @@ export default class ScheduleView {
             text: 'End date',
           },
           value: {
-            text: 'Monday 21 September 2026',
+            text: this.presenter.groupSchedule.endDate,
           },
           classes: 'govuk-summary-list__row--no-border',
         },
