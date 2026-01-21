@@ -74,14 +74,6 @@ describe('SessionScheduleAttendancePresenter', () => {
     })
   })
 
-  describe('backLinkUri', () => {
-    it('returns the correct back link URI', () => {
-      const presenter = new SessionScheduleAttendancePresenter(groupId, null, null, mockGroupSessionsData)
-
-      expect(presenter.backLinkUri).toBe('/group/group-123/schedule')
-    })
-  })
-
   describe('navigationPresenter', () => {
     it('creates a navigation presenter with sessions active', () => {
       const presenter = new SessionScheduleAttendancePresenter(groupId, null, null, mockGroupSessionsData)

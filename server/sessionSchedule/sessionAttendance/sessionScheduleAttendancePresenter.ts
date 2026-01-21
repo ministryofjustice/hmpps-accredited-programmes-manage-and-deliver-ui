@@ -30,10 +30,6 @@ export default class SessionScheduleAttendancePresenter {
     }
   }
 
-  get backLinkUri() {
-    return `/group/${this.groupId}/schedule`
-  }
-
   get errorSummary() {
     return PresenterUtils.errorSummary(this.validationError)
   }
