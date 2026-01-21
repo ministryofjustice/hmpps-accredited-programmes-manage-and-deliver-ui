@@ -152,14 +152,11 @@ export default class SessionScheduleAttendancePresenter {
     }
 
     const parts = dateString.split(' ')
-    const hasDay = parts.length > 3
-    const day = hasDay ? parts[1] : parts[0]
-    const month = hasDay ? parts[2] : parts[1]
-    const year = hasDay ? parts[3] : parts[2]
-
-    const monthNum = monthMap[month.toLowerCase()]
-    if (!monthNum || !year) return dateString
-
+    const day = parts[1]
+    const month = parts[2]
+    const year = parts[3]
+    const monthNum = monthMap[month?.toLowerCase()]
+    if (!monthNum || !year || !day) return dateString
     return `${year}-${monthNum}-${day.padStart(2, '0')}`
   }
 
