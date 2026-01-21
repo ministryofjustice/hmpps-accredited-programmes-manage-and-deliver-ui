@@ -67,7 +67,7 @@ export default class RemoveFromGroupUpdateStatusView {
         currentStatusTagOptions: this.currentStatusTagOptions,
         getCurrentStatusTimelineOptions: this.getCurrentStatusTimelineOptions.bind(this),
         backLinkArgs: this.backLinkArgs,
-        backLinkUri: this.presenter.backLinkUri,
+        cancelLink: this.presenter.cancelLinkHref,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         text: this.presenter.text,
       },
