@@ -135,7 +135,7 @@ describe('SessionScheduleAttendancePresenter', () => {
       const accordionItems = presenter.getAccordionItems()
       const firstModuleContent = accordionItems[0].content.html
 
-      expect(firstModuleContent).toContain('<table class="govuk-table">')
+      expect(firstModuleContent).toContain('<table class="govuk-table" data-module="moj-sortable-table">')
       expect(firstModuleContent).toContain('Session name')
       expect(firstModuleContent).toContain('Session type')
       expect(firstModuleContent).toContain('Participants')

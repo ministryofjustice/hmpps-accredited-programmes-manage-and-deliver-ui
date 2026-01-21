@@ -77,13 +77,13 @@ export default class SessionScheduleAttendancePresenter {
 
     if (sessions.length) {
       sessionsHtml = `
-      <table class="govuk-table">
+      <table class="govuk-table" data-module="moj-sortable-table">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th scope="col" class="govuk-table__header">Session name</th>
             <th scope="col" class="govuk-table__header">Session type</th>
             <th scope="col" class="govuk-table__header">Participants</th>
-            <th scope="col" class="govuk-table__header">Date of session</th>
+            <th scope="col" class="govuk-table__header" aria-sort="none" data-sortable>Date of session</th>
             <th scope="col" class="govuk-table__header">Time</th>
             <th scope="col" class="govuk-table__header">Facilitators</th>
           </tr>
@@ -123,17 +123,48 @@ export default class SessionScheduleAttendancePresenter {
   private sessionTableRow(session: ModuleSession): string {
     const participants = session.participants?.length ? session.participants.join(', ') : ''
     const facilitators = session.facilitators?.length ? session.facilitators.join('<br/> ') : ''
+    const dateSortValue = this.convertToSortableDate(session.dateOfSession)
 
     return `
     <tr class="govuk-table__row">
       <td class="govuk-table__cell">${session.name || ''}</td>
       <td class="govuk-table__cell">${session.type || ''}</td>
       <td class="govuk-table__cell">${participants}</td>
-      <td class="govuk-table__cell">${session.dateOfSession || ''}</td>
+      <td class="govuk-table__cell" data-sort-value="${dateSortValue}">${session.dateOfSession || ''}</td>
       <td class="govuk-table__cell">${session.timeOfSession || ''}</td>
       <td class="govuk-table__cell">${facilitators}</td>
     </tr>
   `
+  }
+
+  private convertToSortableDate(dateString: string | undefined): string {
+    if (!dateString) return ''
+
+    const monthMap: { [key: string]: string } = {
+      january: '01',
+      february: '02',
+      march: '03',
+      april: '04',
+      may: '05',
+      june: '06',
+      july: '07',
+      august: '08',
+      september: '09',
+      october: '10',
+      november: '11',
+      december: '12',
+    }
+
+    const parts = dateString.split(' ')
+    const hasDay = parts.length > 3
+    const day = hasDay ? parts[1] : parts[0]
+    const month = hasDay ? parts[2] : parts[1]
+    const year = hasDay ? parts[3] : parts[2]
+
+    const monthNum = monthMap[month.toLowerCase()]
+    if (!monthNum || !year) return dateString
+
+    return `${year}-${monthNum}-${day.padStart(2, '0')}`
   }
 
   private scheduleSessionHref(moduleSession: SessionModule) {
