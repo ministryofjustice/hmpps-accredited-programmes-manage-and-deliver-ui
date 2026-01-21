@@ -4,8 +4,8 @@ import AccreditedProgrammesManageAndDeliverService from '../services/accreditedP
 import ControllerUtils from '../utils/controllerUtils'
 import { FormValidationError } from '../utils/formValidationError'
 
-import SessionScheduleWhichPresenter from './which/sessionScheduleWhichPresenter'
-import SessionScheduleWhichView from './which/sessionScheduleWhichView'
+import SessionScheduleWhichPresenter from './sessionWhich/sessionScheduleWhichPresenter'
+import SessionScheduleWhichView from './sessionWhich/sessionScheduleWhichView'
 import AddSessionDetailsPresenter from './sessionDetails/addSessionDetailsPresenter'
 import AddSessionDetailsView from './sessionDetails/addSessionDetailsView'
 import CreateSessionScheduleForm from './sessionScheduleForm'
