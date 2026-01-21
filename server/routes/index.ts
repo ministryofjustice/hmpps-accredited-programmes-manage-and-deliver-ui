@@ -17,6 +17,7 @@ import UpdateReferralStatusController from '../updateReferralStatus/updateReferr
 import RemoveFromGroupController from '../groupDetails/removeFromGroup/removeFromGroupController'
 import GroupController from '../group/groupController'
 import SessionScheduleController from '../sessionSchedule/sessionScheduleController'
+import EditSessionController from '../editSession/editSessionController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
@@ -42,6 +43,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const createGroupController = new CreateGroupController(accreditedProgrammesManageAndDeliverService)
   const groupController = new GroupController(accreditedProgrammesManageAndDeliverService)
   const sessionScheduleController = new SessionScheduleController(accreditedProgrammesManageAndDeliverService)
+  const editSessionController = new EditSessionController(accreditedProgrammesManageAndDeliverService)
 
   get('/', async (req, res, next) => {
     await caselistController.showOpenCaselist(req, res)
@@ -329,6 +331,10 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   getOrPost('/:groupId/:moduleId/session-review-details', async (req, res, next) => {
     await sessionScheduleController.scheduleGroupSessionCya(req, res)
+  })
+
+  getOrPost('/group/:groupId/module/:moduleId/edit-session/:sessionName', async (req, res, next) => {
+    await editSessionController.editSession(req, res)
   })
 
   return router
