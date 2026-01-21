@@ -229,7 +229,7 @@ describe('Session Schedule Controller', () => {
         })
     })
   })
-  describe('GET /:groupId/:moduleId/session-review-details', () => {
+  describe('GET /group/:groupId/module/:moduleId/session-review-details', () => {
     beforeEach(() => {
       app = TestUtils.createTestAppWithSession(completeSessionData, { accreditedProgrammesManageAndDeliverService })
     })
