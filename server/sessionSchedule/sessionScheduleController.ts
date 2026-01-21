@@ -11,8 +11,8 @@ import AddSessionDetailsView from './sessionDetails/addSessionDetailsView'
 import CreateSessionScheduleForm from './sessionScheduleForm'
 import SessionScheduleAttendancePresenter from './sessionAttendance/sessionScheduleAttendancePresenter'
 import SessionScheduleAttendanceView from './sessionAttendance/sessionScheduleAttendanceView'
-import SessionScheduleCyaPresenter from './cya/SessionScheduleCyaPresenter'
-import SessionScheduleCyaView from './cya/sessionScheduleCyaView'
+import SessionScheduleCyaPresenter from './sessionCya/SessionScheduleCyaPresenter'
+import SessionScheduleCyaView from './sessionCya/sessionScheduleCyaView'
 
 export default class SessionScheduleController {
   constructor(
