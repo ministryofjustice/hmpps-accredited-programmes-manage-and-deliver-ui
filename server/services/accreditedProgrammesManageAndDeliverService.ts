@@ -44,6 +44,7 @@ import {
   SentenceInformation,
   SessionScheduleRequest,
   SessionScheduleResponse,
+  SessionScheduleGroupResponse,
   ThinkingAndBehaviour,
   UpdateAvailability,
   UserTeamMember,
@@ -596,6 +597,17 @@ export default class AccreditedProgrammesManageAndDeliverService
       headers: { Accept: 'application/json' },
       data: sessionScheduleRequest,
     })) as { message: string }
+  }
+
+  async getGroupSessionsAndAttendance(
+    username: ExpressUsername,
+    groupId: string,
+  ): Promise<SessionScheduleGroupResponse> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/group/${groupId}/sessions`,
+      headers: { Accept: 'application/json' },
+    })) as SessionScheduleGroupResponse
   }
 
   async getGroupSessionDetails(username: ExpressUsername, groupId: string): Promise<GroupSchedule> {

@@ -57,7 +57,7 @@ describe('SessionScheduleWhichPresenter', () => {
         null,
       )
 
-      expect(presenter.backLinkUri).toEqual(`/group/${groupId}/module/${moduleId}/sessions`)
+      expect(presenter.backLinkUri).toEqual(`/group/${groupId}/sessions-and-attendance`)
     })
   })
 
