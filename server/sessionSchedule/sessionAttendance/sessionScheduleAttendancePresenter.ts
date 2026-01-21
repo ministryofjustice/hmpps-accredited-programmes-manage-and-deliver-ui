@@ -125,8 +125,7 @@ export default class SessionScheduleAttendancePresenter {
 
   private sortableTableDate(dateString: string | undefined): string {
     if (!dateString) return ''
-    const dateWithoutDayName = dateString.split(' ').slice(1).join(' ')
-    const date = new Date(dateWithoutDayName)
+    const date = new Date(dateString)
     return Number.isNaN(date.getTime()) ? dateString : date.getTime().toString()
   }
 
