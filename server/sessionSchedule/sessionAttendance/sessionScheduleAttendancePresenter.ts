@@ -123,7 +123,7 @@ export default class SessionScheduleAttendancePresenter {
   private sessionTableRow(session: ModuleSession): string {
     const participants = session.participants?.length ? session.participants.join(', ') : ''
     const facilitators = session.facilitators?.length ? session.facilitators.join('<br/> ') : ''
-    const dateSortValue = this.convertToSortableDate(session.dateOfSession)
+    const dateSortValue = this.sortableTableDate(session.dateOfSession)
 
     return `
     <tr class="govuk-table__row">
@@ -137,7 +137,7 @@ export default class SessionScheduleAttendancePresenter {
   `
   }
 
-  private convertToSortableDate(dateString: string | undefined): string {
+  private sortableTableDate(dateString: string | undefined): string {
     if (!dateString) return ''
 
     const monthMap: { [key: string]: string } = {
