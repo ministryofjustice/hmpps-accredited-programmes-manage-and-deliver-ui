@@ -706,6 +706,15 @@
           "Content-Type": "application/json"
         }
       }
+    },
+    {
+      "request": {
+        "urlPattern": "/appointments",
+        "method": "POST"
+      },
+      "response": {
+        "status": 201
+      }
     }
   ]
 }

@@ -44,7 +44,7 @@ export default class RemoveFromGroupView {
         presenter: this.presenter,
         backLinkArgs: this.backLinkArgs(),
         radioArgs: this.radioArgs(),
-        cancelLink: this.presenter.backLinkHref,
+        cancelLink: this.presenter.cancelLinkHref,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         text: this.presenter.text,
       },
