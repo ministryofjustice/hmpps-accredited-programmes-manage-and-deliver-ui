@@ -145,7 +145,7 @@ export default class SessionScheduleController {
       groupId,
     )
 
-    const presenter = new SessionScheduleAttendancePresenter(groupId, null, null, sessionAttendanceData)
+    const presenter = new SessionScheduleAttendancePresenter(groupId, sessionAttendanceData)
     const view = new SessionScheduleAttendanceView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }

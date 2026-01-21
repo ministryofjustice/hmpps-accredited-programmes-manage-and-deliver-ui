@@ -1,6 +1,4 @@
-import { SessionScheduleRequest, SessionScheduleGroupResponse } from '@manage-and-deliver-api'
-import { FormValidationError } from '../../utils/formValidationError'
-import PresenterUtils from '../../utils/presenterUtils'
+import { SessionScheduleGroupResponse } from '@manage-and-deliver-api'
 import { AccordionArgsItem } from '../../utils/govukFrontendTypes'
 import GroupServiceNavigationPresenter from '../../shared/groups/groupServiceNavigationPresenter'
 
@@ -12,10 +10,6 @@ export default class SessionScheduleAttendancePresenter {
 
   constructor(
     private readonly groupId: string,
-    private readonly validationError: FormValidationError | null = null,
-    private readonly sessionScheduleFormData: Partial<
-      SessionScheduleRequest & { sessionScheduleGettingStarted?: string; sessionScheduleOnetoOne?: string }
-    > | null = null,
     private readonly groupSessionsData: SessionScheduleGroupResponse | null = null,
   ) {
     this.navigationPresenter = new GroupServiceNavigationPresenter(groupId, undefined, 'sessions')
@@ -28,10 +22,6 @@ export default class SessionScheduleAttendancePresenter {
       headingCaptionText: groupCode || '',
       headingText: 'Sessions and attendance',
     }
-  }
-
-  get errorSummary() {
-    return PresenterUtils.errorSummary(this.validationError)
   }
 
   getAccordionItems(): AccordionArgsItem[] {
@@ -117,7 +107,7 @@ export default class SessionScheduleAttendancePresenter {
   }
 
   private sessionTableRow(session: ModuleSession): string {
-    const participants = session.participants?.length ? session.participants.join(', ') : ''
+    const participants = session.participants?.length ? session.participants.join('<br/> ') : ''
     const facilitators = session.facilitators?.length ? session.facilitators.join('<br/> ') : ''
     const dateSortValue = this.sortableTableDate(session.dateOfSession)
 
@@ -135,29 +125,9 @@ export default class SessionScheduleAttendancePresenter {
 
   private sortableTableDate(dateString: string | undefined): string {
     if (!dateString) return ''
-
-    const monthMap: { [key: string]: string } = {
-      january: '01',
-      february: '02',
-      march: '03',
-      april: '04',
-      may: '05',
-      june: '06',
-      july: '07',
-      august: '08',
-      september: '09',
-      october: '10',
-      november: '11',
-      december: '12',
-    }
-
-    const parts = dateString.split(' ')
-    const day = parts[1]
-    const month = parts[2]
-    const year = parts[3]
-    const monthNum = monthMap[month?.toLowerCase()]
-    if (!monthNum || !year || !day) return dateString
-    return `${year}-${monthNum}-${day.padStart(2, '0')}`
+    const dateWithoutDayName = dateString.split(' ').slice(1).join(' ')
+    const date = new Date(dateWithoutDayName)
+    return Number.isNaN(date.getTime()) ? dateString : date.getTime().toString()
   }
 
   private scheduleSessionHref(moduleSession: SessionModule) {
