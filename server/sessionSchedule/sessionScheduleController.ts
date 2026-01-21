@@ -49,7 +49,7 @@ export default class SessionScheduleController {
           sessionTemplateId: selectedTemplateId,
           sessionName: sessionTemplates.length > 0 ? sessionTemplates[0].name : 'the session',
         }
-        return res.redirect(`/${groupId}/${moduleId}/schedule-group-session-details`)
+        return res.redirect(`/group/${groupId}/module/${moduleId}/schedule-group-session-details`)
       }
     }
 
@@ -88,7 +88,7 @@ export default class SessionScheduleController {
           endTime: data.paramsForUpdate.endTime,
           referralName: req.body['session-details-who'].split('+')[1].trim(),
         }
-        return res.redirect(`/${groupId}/${moduleId}/session-review-details`)
+        return res.redirect(`/group/${groupId}/module/${moduleId}/session-review-details`)
       }
     }
 
@@ -128,7 +128,7 @@ export default class SessionScheduleController {
       // Clear session data on submission
       req.session.sessionScheduleData = {}
       // Change this when page exists
-      return res.redirect(`/${groupId}/${moduleId}/session-review-details?message=${response.message}`)
+      return res.redirect(`/group/${groupId}/module/${moduleId}/session-review-details?message=${response.message}`)
     }
 
     const presenter = new SessionScheduleCyaPresenter(`/${groupId}/${moduleId}`, sessionScheduleData)

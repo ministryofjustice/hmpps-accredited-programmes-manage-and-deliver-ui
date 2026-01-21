@@ -323,11 +323,11 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await sessionScheduleController.showSessionSchedule(req, res)
   })
 
-  getOrPost('/:groupId/:moduleId/schedule-group-session-details', async (req, res, next) => {
+  getOrPost('/group/:groupId/module/:moduleId/schedule-group-session-details', async (req, res, next) => {
     await sessionScheduleController.scheduleGroupSessionDetails(req, res)
   })
 
-  getOrPost('/:groupId/:moduleId/session-review-details', async (req, res, next) => {
+  getOrPost('/group/:groupId/module/:moduleId/session-review-details', async (req, res, next) => {
     await sessionScheduleController.scheduleGroupSessionCya(req, res)
   })
 
