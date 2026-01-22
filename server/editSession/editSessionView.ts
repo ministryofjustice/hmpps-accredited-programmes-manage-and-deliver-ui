@@ -1,5 +1,5 @@
 import EditSessionPresenter from './editSessionPresenter'
-import { SummaryListArgs, TableArgs } from '../utils/govukFrontendTypes'
+import { SummaryListArgs } from '../utils/govukFrontendTypes'
 
 export default class EditSessionView {
   constructor(private readonly presenter: EditSessionPresenter) {}
