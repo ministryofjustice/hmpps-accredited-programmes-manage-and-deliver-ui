@@ -1,6 +1,7 @@
 import { SessionScheduleGroupResponse } from '@manage-and-deliver-api'
 import { AccordionArgsItem } from '../../utils/govukFrontendTypes'
 import GroupServiceNavigationPresenter from '../../shared/groups/groupServiceNavigationPresenter'
+import { MojAlertComponentArgs } from '../../interfaces/alertComponentArgs'
 
 type SessionModule = NonNullable<SessionScheduleGroupResponse['modules']>[number]
 type ModuleSession = NonNullable<SessionModule['sessions']>[number]
@@ -10,7 +11,11 @@ export default class SessionScheduleAttendancePresenter {
 
   constructor(
     private readonly groupId: string,
+    readonly session: SessionScheduleGroupResponse,
     private readonly groupSessionsData: SessionScheduleGroupResponse | null = null,
+    readonly isGroupCatchupUpdated: boolean | null = null,
+    readonly isOnetoOneUpdated: boolean | null = null,
+    readonly isOnetoOneCatchupUpdated: boolean | null = null,
   ) {
     this.navigationPresenter = new GroupServiceNavigationPresenter(groupId, undefined, 'sessions')
   }
@@ -22,6 +27,42 @@ export default class SessionScheduleAttendancePresenter {
       headingCaptionText: groupCode || '',
       headingText: 'Sessions and attendance',
     }
+  }
+
+  get groupCatchupUpdatedSuccessMessageArgs(): MojAlertComponentArgs | null {
+    return this.isGroupCatchupUpdated
+      ? {
+          variant: 'success',
+          title: `Getting started one-to-one catch-up for ${this.session.personName} has been added`,
+          showTitleAsHeading: true,
+          dismissible: true,
+          text: ``,
+        }
+      : null
+  }
+
+  get onetoOneUpdatedSuccessMessageArgs(): MojAlertComponentArgs | null {
+    return this.isOnetoOneUpdated
+      ? {
+          variant: 'success',
+          title: `Getting started one-to-one for ${this.session.personName} has been added`,
+          showTitleAsHeading: true,
+          dismissible: true,
+          text: ``,
+        }
+      : null
+  }
+
+  get onetoOneCatchupUpdatedSuccessMessageArgs(): MojAlertComponentArgs | null {
+    return this.isOnetoOneCatchupUpdated
+      ? {
+          variant: 'success',
+          title: `Getting started one-to-one catch-up for ${this.session.personName} has been added`,
+          showTitleAsHeading: true,
+          dismissible: true,
+          text: ``,
+        }
+      : null
   }
 
   getAccordionItems(): AccordionArgsItem[] {

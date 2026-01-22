@@ -128,7 +128,7 @@ export default class SessionScheduleController {
       // Clear session data on submission
       req.session.sessionScheduleData = {}
       // Change this when page exists
-      return res.redirect(`/group/${groupId}/module/${moduleId}/session-review-details?message=${response.message}`)
+      return res.redirect(`/group/${groupId}/module/${moduleId}/sessions-and-attendance?message=${response.message}`)
     }
 
     const presenter = new SessionScheduleCyaPresenter(`/${groupId}/${moduleId}`, sessionScheduleData)

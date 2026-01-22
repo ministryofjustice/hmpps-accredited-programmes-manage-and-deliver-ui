@@ -55,7 +55,7 @@ describe('SessionScheduleAttendancePresenter', () => {
 
   describe('text', () => {
     it('returns the correct heading caption and text', () => {
-      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
+      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData, mockGroupSessionsData)
 
       expect(presenter.text).toEqual({
         headingCaptionText: 'GRP-001',
@@ -68,7 +68,7 @@ describe('SessionScheduleAttendancePresenter', () => {
         ...mockGroupSessionsData,
         group: { ...mockGroupSessionsData.group, code: undefined },
       }
-      const presenter = new SessionScheduleAttendancePresenter(groupId, dataWithoutCode)
+      const presenter = new SessionScheduleAttendancePresenter(groupId, dataWithoutCode, dataWithoutCode)
 
       expect(presenter.text.headingCaptionText).toBe('')
     })
@@ -76,7 +76,7 @@ describe('SessionScheduleAttendancePresenter', () => {
 
   describe('navigationPresenter', () => {
     it('creates a navigation presenter with sessions active', () => {
-      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
+      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData, mockGroupSessionsData)
 
       expect(presenter.navigationPresenter).toBeDefined()
     })
@@ -84,7 +84,7 @@ describe('SessionScheduleAttendancePresenter', () => {
 
   describe('getAccordionItems', () => {
     it('returns accordion items for each module with sessions', () => {
-      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
+      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData, mockGroupSessionsData)
       const accordionItems = presenter.getAccordionItems()
 
       expect(accordionItems).toHaveLength(2)
@@ -93,7 +93,7 @@ describe('SessionScheduleAttendancePresenter', () => {
     })
 
     it('expands the first accordion item by default', () => {
-      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
+      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData, mockGroupSessionsData)
       const accordionItems = presenter.getAccordionItems()
 
       expect(accordionItems[0].expanded).toBe(true)
@@ -102,7 +102,7 @@ describe('SessionScheduleAttendancePresenter', () => {
 
     it('returns a message when no modules are available', () => {
       const emptyData = { ...mockGroupSessionsData, modules: [] }
-      const presenter = new SessionScheduleAttendancePresenter(groupId, emptyData)
+      const presenter = new SessionScheduleAttendancePresenter(groupId, emptyData, emptyData)
       const accordionItems = presenter.getAccordionItems()
 
       expect(accordionItems).toHaveLength(1)
@@ -113,7 +113,7 @@ describe('SessionScheduleAttendancePresenter', () => {
 
     it('handles null modules gracefully', () => {
       const nullModulesData = { ...mockGroupSessionsData, modules: null }
-      const presenter = new SessionScheduleAttendancePresenter(groupId, nullModulesData)
+      const presenter = new SessionScheduleAttendancePresenter(groupId, nullModulesData, nullModulesData)
       const accordionItems = presenter.getAccordionItems()
 
       expect(accordionItems).toHaveLength(1)
@@ -123,7 +123,7 @@ describe('SessionScheduleAttendancePresenter', () => {
 
   describe('accordion content', () => {
     it('renders a table with sessions when sessions exist', () => {
-      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
+      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData, mockGroupSessionsData)
       const accordionItems = presenter.getAccordionItems()
       const firstModuleContent = accordionItems[0].content.html
 
@@ -137,7 +137,7 @@ describe('SessionScheduleAttendancePresenter', () => {
     })
 
     it('renders session data in table rows', () => {
-      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
+      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData, mockGroupSessionsData)
       const accordionItems = presenter.getAccordionItems()
       const firstModuleContent = accordionItems[0].content.html
 
@@ -150,7 +150,7 @@ describe('SessionScheduleAttendancePresenter', () => {
     })
 
     it('renders facilitators with line breaks', () => {
-      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
+      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData, mockGroupSessionsData)
       const accordionItems = presenter.getAccordionItems()
       const firstModuleContent = accordionItems[0].content.html
 
@@ -158,7 +158,7 @@ describe('SessionScheduleAttendancePresenter', () => {
     })
 
     it('displays message when no sessions are scheduled', () => {
-      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
+      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData, mockGroupSessionsData)
       const accordionItems = presenter.getAccordionItems()
       const secondModuleContent = accordionItems[1].content.html
 
@@ -166,7 +166,7 @@ describe('SessionScheduleAttendancePresenter', () => {
     })
 
     it('displays estimated start date text when available', () => {
-      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
+      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData, mockGroupSessionsData)
       const accordionItems = presenter.getAccordionItems()
       const firstModuleContent = accordionItems[0].content.html
 
@@ -183,7 +183,7 @@ describe('SessionScheduleAttendancePresenter', () => {
           },
         ],
       }
-      const presenter = new SessionScheduleAttendancePresenter(groupId, dataWithoutStartDate)
+      const presenter = new SessionScheduleAttendancePresenter(groupId, dataWithoutStartDate, dataWithoutStartDate)
       const accordionItems = presenter.getAccordionItems()
       const content = accordionItems[0].content.html
 
@@ -192,7 +192,7 @@ describe('SessionScheduleAttendancePresenter', () => {
     })
 
     it('renders schedule button with correct href', () => {
-      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
+      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData, mockGroupSessionsData)
       const accordionItems = presenter.getAccordionItems()
       const firstModuleContent = accordionItems[0].content.html
 
@@ -211,7 +211,7 @@ describe('SessionScheduleAttendancePresenter', () => {
           },
         ],
       }
-      const presenter = new SessionScheduleAttendancePresenter(groupId, dataWithoutButtonText)
+      const presenter = new SessionScheduleAttendancePresenter(groupId, dataWithoutButtonText, dataWithoutButtonText)
       const accordionItems = presenter.getAccordionItems()
       const content = accordionItems[0].content.html
 
@@ -239,7 +239,7 @@ describe('SessionScheduleAttendancePresenter', () => {
           },
         ],
       }
-      const presenter = new SessionScheduleAttendancePresenter(groupId, moduleWithEmptyFields)
+      const presenter = new SessionScheduleAttendancePresenter(groupId, moduleWithEmptyFields, moduleWithEmptyFields)
       const accordionItems = presenter.getAccordionItems()
       const content = accordionItems[0].content.html
 

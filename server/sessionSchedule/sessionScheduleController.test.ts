@@ -259,7 +259,7 @@ describe('Session Schedule Controller', () => {
         .post(`/group/${groupId}/module/${moduleId}/session-review-details`)
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(`Redirecting to /group/${groupId}/module/${moduleId}/session-review-details`)
+          expect(res.text).toContain(`Redirecting to /group/${groupId}/module/${moduleId}/sessions-and-attendance`)
           expect(accreditedProgrammesManageAndDeliverService.createSessionSchedule).toHaveBeenCalledWith(
             'user1',
             groupId,
