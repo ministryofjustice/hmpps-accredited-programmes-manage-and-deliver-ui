@@ -4,13 +4,15 @@ import AccreditedProgrammesManageAndDeliverService from '../services/accreditedP
 import ControllerUtils from '../utils/controllerUtils'
 import { FormValidationError } from '../utils/formValidationError'
 
-import SessionScheduleWhichPresenter from './which/sessionScheduleWhichPresenter'
-import SessionScheduleWhichView from './which/sessionScheduleWhichView'
+import SessionScheduleWhichPresenter from './sessionWhich/sessionScheduleWhichPresenter'
+import SessionScheduleWhichView from './sessionWhich/sessionScheduleWhichView'
 import AddSessionDetailsPresenter from './sessionDetails/addSessionDetailsPresenter'
 import AddSessionDetailsView from './sessionDetails/addSessionDetailsView'
 import CreateSessionScheduleForm from './sessionScheduleForm'
-import SessionScheduleCyaPresenter from './cya/SessionScheduleCyaPresenter'
-import SessionScheduleCyaView from './cya/sessionScheduleCyaView'
+import SessionScheduleAttendancePresenter from './sessionAttendance/sessionScheduleAttendancePresenter'
+import SessionScheduleAttendanceView from './sessionAttendance/sessionScheduleAttendanceView'
+import SessionScheduleCyaPresenter from './sessionCya/SessionScheduleCyaPresenter'
+import SessionScheduleCyaView from './sessionCya/sessionScheduleCyaView'
 
 export default class SessionScheduleController {
   constructor(
@@ -47,7 +49,7 @@ export default class SessionScheduleController {
           sessionTemplateId: selectedTemplateId,
           sessionName: sessionTemplates.length > 0 ? sessionTemplates[0].name : 'the session',
         }
-        return res.redirect(`/${groupId}/${moduleId}/schedule-group-session-details`)
+        return res.redirect(`/group/${groupId}/module/${moduleId}/schedule-group-session-details`)
       }
     }
 
@@ -86,7 +88,7 @@ export default class SessionScheduleController {
           endTime: data.paramsForUpdate.endTime,
           referralName: req.body['session-details-who'].split('+')[1].trim(),
         }
-        return res.redirect(`/${groupId}/${moduleId}/session-review-details`)
+        return res.redirect(`/group/${groupId}/module/${moduleId}/session-review-details`)
       }
     }
 
@@ -126,11 +128,25 @@ export default class SessionScheduleController {
       // Clear session data on submission
       req.session.sessionScheduleData = {}
       // Change this when page exists
-      return res.redirect(`/${groupId}/${moduleId}/session-review-details?message=${response.message}`)
+      return res.redirect(`/group/${groupId}/module/${moduleId}/session-review-details?message=${response.message}`)
     }
 
     const presenter = new SessionScheduleCyaPresenter(`/${groupId}/${moduleId}`, sessionScheduleData)
     const view = new SessionScheduleCyaView(presenter)
+    return ControllerUtils.renderWithLayout(res, view, null)
+  }
+
+  async showSessionAttendance(req: Request, res: Response): Promise<void> {
+    const { username } = req.user
+    const { groupId } = req.params
+
+    const sessionAttendanceData = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionsAndAttendance(
+      username,
+      groupId,
+    )
+
+    const presenter = new SessionScheduleAttendancePresenter(groupId, sessionAttendanceData)
+    const view = new SessionScheduleAttendanceView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
 }
