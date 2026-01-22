@@ -3,7 +3,6 @@ import AccreditedProgrammesManageAndDeliverService from '../services/accreditedP
 import ControllerUtils from '../utils/controllerUtils'
 import EditSessionPresenter from './editSessionPresenter'
 import EditSessionView from './editSessionView'
-import type { ExpressUsername } from '../shared/ExpressUsername'
 
 export default class EditSessionController {
   constructor(
