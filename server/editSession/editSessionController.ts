@@ -3,6 +3,7 @@ import AccreditedProgrammesManageAndDeliverService from '../services/accreditedP
 import ControllerUtils from '../utils/controllerUtils'
 import EditSessionPresenter from './editSessionPresenter'
 import EditSessionView from './editSessionView'
+import type { ExpressUsername } from '../shared/ExpressUsername'
 
 export default class EditSessionController {
   constructor(
@@ -10,17 +11,18 @@ export default class EditSessionController {
   ) {}
 
   async editSession(req: Request, res: Response): Promise<void> {
-    const { groupId, moduleId } = req.params
+    const { groupId, sessionId } = req.params
     const { username } = req.user
 
-    // const sessionDetails = await this.accreditedProgrammesManageAndDeliverService.getSessionDetails(
-    //   moduleId,
-    //   username,
-    // )
+    const sessionDetails = await this.accreditedProgrammesManageAndDeliverService.getSessionDetails(
+      username,
+      groupId,
+      sessionId,
+    )
 
     req.session.originPage = req.path
 
-    const presenter = new EditSessionPresenter()
+    const presenter = new EditSessionPresenter(groupId, sessionDetails)
     const view = new EditSessionView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, null)

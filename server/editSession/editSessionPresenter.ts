@@ -1,10 +1,15 @@
+import { GroupSessionResponse } from '@manage-and-deliver-api'
+
 export default class EditSessionPresenter {
-  constructor() {}
+  constructor(
+    readonly groupId: string,
+    readonly sessionDetails: GroupSessionResponse,
+  ) {}
 
   get text() {
     return {
-      pageHeading: `Getting started 1: Introduction to Building Choices`,
-      pageCaption: 'BCCDD1',
+      pageHeading: `${this.sessionDetails.pageTitle}`,
+      pageCaption: `${this.sessionDetails.code}`,
       subHeading: 'Attendance and session notes',
     }
   }
@@ -12,7 +17,7 @@ export default class EditSessionPresenter {
   get backLinkArgs() {
     return {
       text: 'Back',
-      href: 'Add URL',
+      href: `group/${this.groupId}/sessions-and-attendance`,
     }
   }
 }

@@ -21,16 +21,6 @@
       <div class="govuk-grid-column-two-thirds">
         {{ govukSummaryList(editSessionSummary) }}
       </div>
-      <div class="govuk-grid-column-two-thirds">
-        <h2 class="govuk-heading-m">{{text.subHeading}}</h2>
-        <form method="post" novalidate>
-          <input type="hidden" name="_csrf" value="{{csrfToken}}">
-          {{ govukTable(attendanceAndNotesTableArgs)}}
-          <div class="govuk-button-group">
-            {{ govukButton({ text: "Update attendance and notes", preventDoubleClick: true }) }}
-          </div>
-        </form>
-      </div>
     </div>
   </main>
 </div>
