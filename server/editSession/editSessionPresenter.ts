@@ -17,7 +17,7 @@ export default class EditSessionPresenter {
   get backLinkArgs() {
     return {
       text: 'Back',
-      href: `group/${this.groupId}/sessions-and-attendance`,
+      href: `/group/${this.groupId}/sessions-and-attendance`,
     }
   }
 }
