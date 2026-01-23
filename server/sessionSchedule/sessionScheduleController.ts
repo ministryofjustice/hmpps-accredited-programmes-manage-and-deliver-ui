@@ -87,6 +87,7 @@ export default class SessionScheduleController {
           startTime: data.paramsForUpdate.startTime,
           endTime: data.paramsForUpdate.endTime,
           referralName: req.body['session-details-who'].split('+')[1].trim(),
+          sessionType: req.body['session-type'] || 'GROUP',
         }
         return res.redirect(`/group/${groupId}/module/${moduleId}/session-review-details`)
       }
@@ -116,19 +117,29 @@ export default class SessionScheduleController {
 
     if (req.method === 'POST') {
       const { sessionName, referralName, ...sessionDataForApi } = sessionScheduleData
+      const sessionType = ('sessionType' in sessionScheduleData ? sessionScheduleData.sessionType : 'GROUP') as
+        | 'ONE_TO_ONE'
+        | 'GROUP'
       sessionDataForApi.startDate = (() => {
         const [day, month, year] = sessionScheduleData.startDate.split('/')
         return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
       })()
-      const response = await this.accreditedProgrammesManageAndDeliverService.createSessionSchedule(
+
+      await this.accreditedProgrammesManageAndDeliverService.createSessionSchedule(
         username,
         groupId,
         sessionDataForApi as SessionScheduleRequest,
       )
-      // Clear session data on submission
+
+      let messageParam = ''
+      if (sessionType === 'ONE_TO_ONE') {
+        messageParam = 'one-to-one-created'
+      } else if (sessionType === 'GROUP') {
+        messageParam = 'group-catchup-created'
+      }
+
       req.session.sessionScheduleData = {}
-      // Change this when page exists
-      return res.redirect(`/group/${groupId}/module/${moduleId}/session-review-details?message=${response.message}`)
+      return res.redirect(`/group/${groupId}/module/${moduleId}/sessions-and-attendance?message=${messageParam}`)
     }
 
     const presenter = new SessionScheduleCyaPresenter(`/${groupId}/${moduleId}`, sessionScheduleData)
@@ -138,14 +149,21 @@ export default class SessionScheduleController {
 
   async showSessionAttendance(req: Request, res: Response): Promise<void> {
     const { username } = req.user
-    const { groupId } = req.params
+    const { groupId, moduleId: _moduleId } = req.params
+    const { message } = req.query as { message?: string }
 
     const sessionAttendanceData = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionsAndAttendance(
       username,
       groupId,
     )
 
-    const presenter = new SessionScheduleAttendancePresenter(groupId, sessionAttendanceData)
+    const presenter = new SessionScheduleAttendancePresenter(
+      groupId,
+      sessionAttendanceData,
+      sessionAttendanceData,
+      message === 'group-catchup-created',
+      message === 'one-to-one-created',
+    )
     const view = new SessionScheduleAttendanceView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }

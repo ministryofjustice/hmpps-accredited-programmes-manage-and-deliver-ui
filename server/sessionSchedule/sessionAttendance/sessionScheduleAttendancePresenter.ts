@@ -1,6 +1,7 @@
 import { SessionScheduleGroupResponse } from '@manage-and-deliver-api'
 import { AccordionArgsItem } from '../../utils/govukFrontendTypes'
 import GroupServiceNavigationPresenter from '../../shared/groups/groupServiceNavigationPresenter'
+import { MojAlertComponentArgs } from '../../interfaces/alertComponentArgs'
 
 type SessionModule = NonNullable<SessionScheduleGroupResponse['modules']>[number]
 type ModuleSession = NonNullable<SessionModule['sessions']>[number]
@@ -10,18 +11,54 @@ export default class SessionScheduleAttendancePresenter {
 
   constructor(
     private readonly groupId: string,
-    private readonly groupSessionsData: SessionScheduleGroupResponse | null = null,
+    readonly session: SessionScheduleGroupResponse,
+    readonly isGroupCatchupUpdated: boolean | null = null,
+    readonly isOnetoOneUpdated: boolean | null = null,
+    readonly isOnetoOneCatchupUpdated: boolean | null = null,
   ) {
     this.navigationPresenter = new GroupServiceNavigationPresenter(groupId, undefined, 'sessions')
   }
 
   get text() {
-    const groupCode = this.groupSessionsData?.group?.code
+    const groupCode = this.session?.group?.code
 
     return {
       headingCaptionText: groupCode || '',
       headingText: 'Sessions and attendance',
     }
+  }
+
+  get groupCatchupUpdatedSuccessMessageArgs(): MojAlertComponentArgs | null {
+    return this.isGroupCatchupUpdated
+      ? {
+          variant: 'success',
+          title: 'Success',
+          text: 'Getting started 1 catch-up has been added.',
+          dismissible: true,
+        }
+      : null
+  }
+
+  get onetoOneUpdatedSuccessMessageArgs(): MojAlertComponentArgs | null {
+    return this.isOnetoOneUpdated
+      ? {
+          variant: 'success',
+          title: 'Success',
+          text: `Getting started one-to-one for ${this.session.personName} has been added.`,
+          dismissible: true,
+        }
+      : null
+  }
+
+  get onetoOneCatchupUpdatedSuccessMessageArgs(): MojAlertComponentArgs | null {
+    return this.isOnetoOneCatchupUpdated
+      ? {
+          variant: 'success',
+          title: 'Success',
+          text: `Getting started one-to-one catch-up for ${this.session.personName} has been added.`,
+          dismissible: true,
+        }
+      : null
   }
 
   getAccordionItems(): AccordionArgsItem[] {
@@ -48,7 +85,7 @@ export default class SessionScheduleAttendancePresenter {
   }
 
   private modulesSessions(): SessionModule[] {
-    const modulesSessions = this.groupSessionsData?.modules
+    const modulesSessions = this.session?.modules
     return Array.isArray(modulesSessions) ? (modulesSessions as SessionModule[]) : []
   }
 
