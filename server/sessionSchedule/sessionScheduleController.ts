@@ -160,9 +160,9 @@ export default class SessionScheduleController {
     const presenter = new SessionScheduleAttendancePresenter(
       groupId,
       sessionAttendanceData,
-      sessionAttendanceData,
       message === 'group-catchup-created',
       message === 'one-to-one-created',
+      message === 'one-to-one-catchup-created',
     )
     const view = new SessionScheduleAttendanceView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
