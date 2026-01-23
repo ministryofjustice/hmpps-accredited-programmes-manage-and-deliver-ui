@@ -706,6 +706,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/bff/session/{sessionId}/edit-session-date-and-time': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve session details to edit
+     * @description Retrieve the details for a session so they can be edited
+     */
+    get: operations['retrieveSessionDetailsToEdit']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/bff/remove-from-group/{referralId}': {
     parameters: {
       query?: never
@@ -862,6 +882,26 @@ export interface paths {
      * @description Retrieve group module sessions for scheduling purposes
      */
     get: operations['getGroupSessions']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/bff/group/{groupId}/session/{sessionId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * bff endpoint to retrieve group sessions page data
+     * @description Retrieve group sessions
+     */
+    get: operations['getGroupSessionPage']
     put?: never
     post?: never
     delete?: never
@@ -1384,8 +1424,11 @@ export interface components {
        * @example 30
        */
       minutes: number
-      /** @description AM or PM designation */
-      amOrPm: components['schemas']['AmOrPm']
+      /**
+       * @description AM or PM designation
+       * @enum {string}
+       */
+      amOrPm: 'AM' | 'PM'
     }
     RemoveFromGroupRequest: {
       /**
@@ -2441,14 +2484,14 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -2605,6 +2648,15 @@ export interface components {
       /** @description List of transition statuses */
       availableStatuses: components['schemas']['ReferralStatus'][]
     }
+    EditSessionDetails: {
+      /** Format: uuid */
+      sessionId: string
+      groupCode: string
+      sessionName: string
+      sessionDate: string
+      sessionStartTime: components['schemas']['SessionTime']
+      sessionEndTime: components['schemas']['SessionTime']
+    }
     UserTeamMember: {
       /** @description The code for the team member */
       personCode: string
@@ -2712,14 +2764,14 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -2829,14 +2881,14 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -2927,10 +2979,10 @@ export interface components {
       /**
        * @description The type of session
        * @example one-to-one
-       * @enum {string}
        */
-      type: 'GROUP' | 'ONE_TO_ONE'
+      type: string
       /**
+       * Format: date
        * @description The date of the session
        * @example Thursday 12 January 2023
        */
@@ -2962,6 +3014,52 @@ export interface components {
        * @example Thursday 12 January 2023
        */
       sessionStartDate: string
+    }
+    AttendanceAndSessionNotes: {
+      name: string
+      crn: string
+      attendance: string
+      sessionNotes: string
+    }
+    GroupSessionResponse: {
+      /**
+       * @description A unique code identifying the programme group.
+       * @example AP_BIRMINGHAM_NORTH
+       */
+      code: string
+      /**
+       * @description The title of the page
+       * @example Attendance and notes for Getting started session
+       */
+      pageTitle: string
+      /**
+       * @description The type of session
+       * @example one-to-one
+       */
+      sessionType: string
+      /**
+       * Format: date
+       * @description The date of the session
+       * @example Thursday 12 January 2023
+       */
+      date: string
+      /**
+       * @description The time of the session
+       * @example 11am
+       */
+      time: string
+      /**
+       * @description The list of people scheduled to attend
+       * @example [John Smith, Jane Doe]
+       */
+      scheduledToAttend: string[]
+      /**
+       * @description The names of the facilitators in the session
+       * @example [John Doe, Jane Smith]
+       */
+      facilitators: string[]
+      /** @description The attendance and session notes for each attendee */
+      attendanceAndSessionNotes: components['schemas']['AttendanceAndSessionNotes'][]
     }
     /** @description A session template item with basic information */
     ModuleSessionTemplate: {
@@ -5253,6 +5351,65 @@ export interface operations {
       }
     }
   }
+  retrieveSessionDetailsToEdit: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The unique session identifier */
+        sessionId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Session details retrieved successfully */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EditSessionDetails']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Session not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getRemoveFromGroupStatusTransitions: {
     parameters: {
       query?: never
@@ -5677,6 +5834,65 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ProgrammeGroupModuleSessionsResponse']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Group or module not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getGroupSessionPage: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        groupId: string
+        sessionId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully retrieved group sessions */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['GroupSessionResponse']
         }
       }
       /** @description Bad Request */
