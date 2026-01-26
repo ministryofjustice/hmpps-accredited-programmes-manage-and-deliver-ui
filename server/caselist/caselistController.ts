@@ -2,11 +2,11 @@ import { Request, Response } from 'express'
 
 import { ReferralCaseListItem } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import { Page } from '../shared/models/pagination'
 import ControllerUtils from '../utils/controllerUtils'
 import CaselistFilter from './caselistFilter'
 import CaselistPresenter, { CaselistPageSection } from './caselistPresenter'
 import CaselistView from './caselistView'
-import { Page } from '../shared/models/pagination'
 
 export default class CaselistController {
   constructor(
@@ -31,7 +31,7 @@ export default class CaselistController {
       username,
       {
         page: pageNumber ? Number(pageNumber) - 1 : 0,
-        size: 10,
+        size: 50,
       },
       initialFilter.params,
     )
@@ -63,7 +63,7 @@ export default class CaselistController {
       username,
       {
         page: pageNumber ? Number(pageNumber) - 1 : 0,
-        size: 10,
+        size: 50,
       },
       initialFilter.params,
     )
