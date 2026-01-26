@@ -9,14 +9,8 @@
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    {% if presenter.groupCatchupUpdatedSuccessMessageArgs %}
-      {{ mojAlert(presenter.groupCatchupUpdatedSuccessMessageArgs) }}
-    {% endif %}
-    {% if presenter.onetoOneUpdatedSuccessMessageArgs %}
-      {{ mojAlert(presenter.onetoOneUpdatedSuccessMessageArgs) }}
-    {% endif %}
-    {% if presenter.onetoOneCatchupUpdatedSuccessMessageArgs %}
-      {{ mojAlert(presenter.onetoOneCatchupUpdatedSuccessMessageArgs) }}
+    {% if presenter.scheduleSessionSuccessMessageArgs %}
+      {{ mojAlert(presenter.scheduleSessionSuccessMessageArgs) }}
     {% endif %}
     <span class="govuk-caption-l">{{ text.headingCaptionText }}</span>
     <h1 class="govuk-heading-xl">{{ text.headingText }}</h1>

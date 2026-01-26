@@ -249,109 +249,85 @@ describe('SessionScheduleAttendancePresenter', () => {
   })
 
   describe('success messages', () => {
-    describe('groupCatchupUpdatedSuccessMessageArgs', () => {
-      it('returns success message args when group catchup is created', () => {
-        const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData, true, false, false)
+    describe('scheduleSessionSuccessMessageArgs', () => {
+      it('returns success message for group-catchup-created with button text', () => {
+        const presenter = new SessionScheduleAttendancePresenter(
+          groupId,
+          mockGroupSessionsData,
+          'group-catchup-created',
+          undefined,
+          undefined,
+          'Schedule a Getting started session',
+        )
 
-        const messageArgs = presenter.groupCatchupUpdatedSuccessMessageArgs
+        const messageArgs = presenter.scheduleSessionSuccessMessageArgs
 
         expect(messageArgs).toEqual({
           variant: 'success',
           title: 'Success',
-          text: 'Getting started 1 catch-up has been added.',
+          text: 'Schedule a Getting started session has been added.',
           dismissible: true,
         })
       })
 
-      it('returns null when group catchup is not created', () => {
-        const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData, false, false, false)
-
-        const messageArgs = presenter.groupCatchupUpdatedSuccessMessageArgs
-
-        expect(messageArgs).toBeNull()
-      })
-    })
-
-    describe('onetoOneUpdatedSuccessMessageArgs', () => {
-      it('returns success message args with person name when one-to-one is created', () => {
+      it('returns success message for one-to-one-created with button text and person name', () => {
         const presenter = new SessionScheduleAttendancePresenter(
           groupId,
           mockGroupSessionsData,
-          false,
-          true,
-          false,
+          'one-to-one-created',
           'a9971fd6-a185-43ee-bb23-a0ab23a14f50',
           'Jane Smith',
+          'Schedule a Getting started session',
         )
 
-        const messageArgs = presenter.onetoOneUpdatedSuccessMessageArgs
+        const messageArgs = presenter.scheduleSessionSuccessMessageArgs
 
         expect(messageArgs).toEqual({
           variant: 'success',
           title: 'Success',
-          text: 'Getting started one-to-one for Jane Smith has been added.',
+          text: 'Schedule a Getting started session for Jane Smith has been added.',
           dismissible: true,
         })
       })
 
-      it('returns null when one-to-one is not created', () => {
-        const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData, false, false, false)
-
-        const messageArgs = presenter.onetoOneUpdatedSuccessMessageArgs
-
-        expect(messageArgs).toBeNull()
-      })
-
-      it('handles undefined person name gracefully', () => {
+      it('returns success message for one-to-one-catchup-created with button text and person name', () => {
         const presenter = new SessionScheduleAttendancePresenter(
           groupId,
           mockGroupSessionsData,
-          false,
-          true,
-          false,
-          'a9971fd6-a185-43ee-bb23-a0ab23a14f50',
-          undefined,
-        )
-
-        const messageArgs = presenter.onetoOneUpdatedSuccessMessageArgs
-
-        expect(messageArgs).toEqual({
-          variant: 'success',
-          title: 'Success',
-          text: 'Getting started one-to-one for undefined has been added.',
-          dismissible: true,
-        })
-      })
-    })
-
-    describe('onetoOneCatchupUpdatedSuccessMessageArgs', () => {
-      it('returns success message args with person name when one-to-one catchup is created', () => {
-        const presenter = new SessionScheduleAttendancePresenter(
-          groupId,
-          mockGroupSessionsData,
-          false,
-          false,
-          true,
+          'one-to-one-catchup-created',
           'b1234567-b185-43ee-bb23-a0ab23a14f51',
           'John Doe',
+          'Schedule a Managing myself session',
         )
 
-        const messageArgs = presenter.onetoOneCatchupUpdatedSuccessMessageArgs
+        const messageArgs = presenter.scheduleSessionSuccessMessageArgs
 
         expect(messageArgs).toEqual({
           variant: 'success',
           title: 'Success',
-          text: 'Getting started one-to-one catch-up for John Doe has been added.',
+          text: 'Schedule a Managing myself session catch-up for John Doe has been added.',
           dismissible: true,
         })
       })
 
-      it('returns null when one-to-one catchup is not created', () => {
-        const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData, false, false, false)
+      it('returns null when no message type is provided', () => {
+        const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
 
-        const messageArgs = presenter.onetoOneCatchupUpdatedSuccessMessageArgs
+        const messageArgs = presenter.scheduleSessionSuccessMessageArgs
 
         expect(messageArgs).toBeNull()
+      })
+
+      it('uses default text when button text is not provided', () => {
+        const presenter = new SessionScheduleAttendancePresenter(
+          groupId,
+          mockGroupSessionsData,
+          'group-catchup-created',
+        )
+
+        const messageArgs = presenter.scheduleSessionSuccessMessageArgs
+
+        expect('text' in messageArgs! ? messageArgs.text : messageArgs.html).toBe('Session has been added.')
       })
     })
   })

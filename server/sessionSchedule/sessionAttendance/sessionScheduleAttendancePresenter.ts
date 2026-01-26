@@ -12,11 +12,10 @@ export default class SessionScheduleAttendancePresenter {
   constructor(
     private readonly groupId: string,
     readonly session: SessionScheduleGroupResponse,
-    readonly isGroupCatchupUpdated: boolean | null = null,
-    readonly isOnetoOneUpdated: boolean | null = null,
-    readonly isOnetoOneCatchupUpdated: boolean | null = null,
+    private readonly messageType?: 'group-catchup-created' | 'one-to-one-created' | 'one-to-one-catchup-created',
     private readonly referralId?: string,
     private readonly personName?: string,
+    private readonly buttonText?: string,
   ) {
     this.navigationPresenter = new GroupServiceNavigationPresenter(groupId, undefined, 'sessions')
   }
@@ -30,37 +29,33 @@ export default class SessionScheduleAttendancePresenter {
     }
   }
 
-  get groupCatchupUpdatedSuccessMessageArgs(): MojAlertComponentArgs | null {
-    return this.isGroupCatchupUpdated
-      ? {
-          variant: 'success',
-          title: 'Success',
-          text: 'Getting started 1 catch-up has been added.',
-          dismissible: true,
-        }
-      : null
-  }
+  get scheduleSessionSuccessMessageArgs(): MojAlertComponentArgs | null {
+    if (!this.messageType) return null
 
-  get onetoOneUpdatedSuccessMessageArgs(): MojAlertComponentArgs | null {
-    return this.isOnetoOneUpdated
-      ? {
-          variant: 'success',
-          title: 'Success',
-          text: `Getting started one-to-one for ${this.personName} has been added.`,
-          dismissible: true,
-        }
-      : null
-  }
+    const buttonText = this.buttonText || 'Session'
+    let text = ''
 
-  get onetoOneCatchupUpdatedSuccessMessageArgs(): MojAlertComponentArgs | null {
-    return this.isOnetoOneCatchupUpdated
-      ? {
-          variant: 'success',
-          title: 'Success',
-          text: `Getting started one-to-one catch-up for ${this.personName} has been added.`,
-          dismissible: true,
-        }
-      : null
+    switch (this.messageType) {
+      case 'group-catchup-created':
+        text = `${buttonText} has been added.`
+        break
+      case 'one-to-one-created':
+        text = `${buttonText} for ${this.personName} has been added.`
+        break
+      case 'one-to-one-catchup-created':
+        text = `${buttonText} catch-up for ${this.personName} has been added.`
+        break
+      default:
+        text = `${buttonText} has been added.`
+        break
+    }
+
+    return {
+      variant: 'success',
+      title: 'Success',
+      text,
+      dismissible: true,
+    }
   }
 
   getAccordionItems(): AccordionArgsItem[] {

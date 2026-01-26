@@ -44,6 +44,7 @@ declare module 'express-session' {
       sessionName?: string
       referralName?: string
       sessionType?: 'ONE_TO_ONE' | 'GROUP'
+      scheduleButtonText?: string
     }
   }
 }

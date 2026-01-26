@@ -63,6 +63,17 @@ beforeEach(() => {
   }
   app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
   accreditedProgrammesManageAndDeliverService.getSessionTemplates.mockResolvedValue(mockSessionTemplates)
+  accreditedProgrammesManageAndDeliverService.getGroupSessionsAndAttendance.mockResolvedValue({
+    group: { id: groupId, code: 'GRP-001', name: 'Test Group' },
+    modules: [
+      {
+        id: moduleId,
+        name: 'Module 1: Getting Started',
+        scheduleButtonText: 'Schedule a Getting started session',
+        sessions: [],
+      },
+    ],
+  })
 })
 
 describe('Session Schedule Controller', () => {
@@ -389,31 +400,33 @@ describe('Session Schedule Controller', () => {
     it('shows one-to-one success message when message parameter is one-to-one-created', async () => {
       return request(app)
         .get(
-          `/group/${groupId}/module/${moduleId}/sessions-and-attendance?message=one-to-one-created&referralId=a9971fd6-a185-43ee-bb23-a0ab23a14f50&personName=Jane%20Smith`,
+          `/group/${groupId}/module/${moduleId}/sessions-and-attendance?message=one-to-one-created&referralId=a9971fd6-a185-43ee-bb23-a0ab23a14f50&personName=Jane%20Smith&buttonText=Schedule%20a%20Getting%20started%20session`,
         )
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain('Getting started one-to-one for Jane Smith has been added')
+          expect(res.text).toContain('Schedule a Getting started session for Jane Smith has been added')
         })
     })
 
     it('shows group catchup success message when message parameter is group-catchup-created', async () => {
       return request(app)
-        .get(`/group/${groupId}/module/${moduleId}/sessions-and-attendance?message=group-catchup-created`)
+        .get(
+          `/group/${groupId}/module/${moduleId}/sessions-and-attendance?message=group-catchup-created&buttonText=Schedule%20a%20Getting%20started%20session`,
+        )
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain('Getting started 1 catch-up has been added')
+          expect(res.text).toContain('Schedule a Getting started session has been added')
         })
     })
 
     it('shows one-to-one catchup success message when message parameter is one-to-one-catchup-created', async () => {
       return request(app)
         .get(
-          `/group/${groupId}/module/${moduleId}/sessions-and-attendance?message=one-to-one-catchup-created&referralId=b1234567-b185-43ee-bb23-a0ab23a14f51&personName=John%20Doe`,
+          `/group/${groupId}/module/${moduleId}/sessions-and-attendance?message=one-to-one-catchup-created&referralId=b1234567-b185-43ee-bb23-a0ab23a14f51&personName=John%20Doe&buttonText=Schedule%20a%20Getting%20started%20session`,
         )
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain('Getting started one-to-one catch-up for John Doe has been added')
+          expect(res.text).toContain('Schedule a Getting started session catch-up for John Doe has been added')
         })
     })
 
