@@ -149,7 +149,7 @@ export default class SessionScheduleController {
 
   async showSessionAttendance(req: Request, res: Response): Promise<void> {
     const { username } = req.user
-    const { groupId, moduleId: _moduleId } = req.params
+    const { groupId } = req.params
     const { message } = req.query as { message?: string }
 
     const sessionAttendanceData = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionsAndAttendance(
