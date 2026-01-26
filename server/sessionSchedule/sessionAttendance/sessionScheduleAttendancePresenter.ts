@@ -15,6 +15,8 @@ export default class SessionScheduleAttendancePresenter {
     readonly isGroupCatchupUpdated: boolean | null = null,
     readonly isOnetoOneUpdated: boolean | null = null,
     readonly isOnetoOneCatchupUpdated: boolean | null = null,
+    private readonly referralId?: string,
+    private readonly personName?: string,
   ) {
     this.navigationPresenter = new GroupServiceNavigationPresenter(groupId, undefined, 'sessions')
   }
@@ -44,7 +46,7 @@ export default class SessionScheduleAttendancePresenter {
       ? {
           variant: 'success',
           title: 'Success',
-          text: `Getting started one-to-one for ${this.session.personName} has been added.`,
+          text: `Getting started one-to-one for ${this.personName} has been added.`,
           dismissible: true,
         }
       : null
@@ -55,7 +57,7 @@ export default class SessionScheduleAttendancePresenter {
       ? {
           variant: 'success',
           title: 'Success',
-          text: `Getting started one-to-one catch-up for ${this.session.personName} has been added.`,
+          text: `Getting started one-to-one catch-up for ${this.personName} has been added.`,
           dismissible: true,
         }
       : null

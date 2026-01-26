@@ -87,7 +87,7 @@ export default class SessionScheduleController {
           startTime: data.paramsForUpdate.startTime,
           endTime: data.paramsForUpdate.endTime,
           referralName: req.body['session-details-who'].split('+')[1].trim(),
-          sessionType: req.body['session-type'] || 'GROUP',
+          sessionType: data.paramsForUpdate.referralIds.length === 1 ? 'ONE_TO_ONE' : 'GROUP',
         }
         return res.redirect(`/group/${groupId}/module/${moduleId}/session-review-details`)
       }
@@ -132,14 +132,18 @@ export default class SessionScheduleController {
       )
 
       let messageParam = ''
+      let queryParams = ''
       if (sessionType === 'ONE_TO_ONE') {
         messageParam = 'one-to-one-created'
+        queryParams = `&referralId=${sessionScheduleData.referralIds[0]}&personName=${encodeURIComponent(sessionScheduleData.referralName || '')}`
       } else if (sessionType === 'GROUP') {
         messageParam = 'group-catchup-created'
       }
 
       req.session.sessionScheduleData = {}
-      return res.redirect(`/group/${groupId}/module/${moduleId}/sessions-and-attendance?message=${messageParam}`)
+      return res.redirect(
+        `/group/${groupId}/module/${moduleId}/sessions-and-attendance?message=${messageParam}${queryParams}`,
+      )
     }
 
     const presenter = new SessionScheduleCyaPresenter(`/${groupId}/${moduleId}`, sessionScheduleData)
@@ -150,7 +154,11 @@ export default class SessionScheduleController {
   async showSessionAttendance(req: Request, res: Response): Promise<void> {
     const { username } = req.user
     const { groupId } = req.params
-    const { message } = req.query as { message?: string }
+    const { message, referralId, personName } = req.query as {
+      message?: string
+      referralId?: string
+      personName?: string
+    }
 
     const sessionAttendanceData = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionsAndAttendance(
       username,
@@ -163,6 +171,8 @@ export default class SessionScheduleController {
       message === 'group-catchup-created',
       message === 'one-to-one-created',
       message === 'one-to-one-catchup-created',
+      referralId,
+      personName,
     )
     const view = new SessionScheduleAttendanceView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
