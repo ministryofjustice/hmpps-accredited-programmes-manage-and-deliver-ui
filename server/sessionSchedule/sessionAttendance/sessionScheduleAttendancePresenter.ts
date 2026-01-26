@@ -150,7 +150,7 @@ export default class SessionScheduleAttendancePresenter {
 
     return `
     <tr class="govuk-table__row">
-      <td class="govuk-table__cell">${session.name || ''}</td>
+      <td class="govuk-table__cell"><a href="/group/${this.groupId}/sessionId/${session.id}/${session.name}">${session.name || ''}</a></td>
       <td class="govuk-table__cell">${session.type || ''}</td>
       <td class="govuk-table__cell">${participants}</td>
       <td class="govuk-table__cell" data-sort-value="${dateSortValue}">${session.dateOfSession || ''}</td>

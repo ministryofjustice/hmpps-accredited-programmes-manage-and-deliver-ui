@@ -19,6 +19,7 @@ import {
   EmotionalWellbeing,
   Group,
   GroupsByRegion,
+  GroupSessionResponse,
   Health,
   LearningNeeds,
   LifestyleAndAssociates,
@@ -607,5 +608,17 @@ export default class AccreditedProgrammesManageAndDeliverService
       path: `/bff/group/${groupId}/sessions`,
       headers: { Accept: 'application/json' },
     })) as SessionScheduleGroupResponse
+  }
+
+  async getSessionDetails(
+    username: ExpressUsername,
+    groupId: string,
+    sessionId: string,
+  ): Promise<GroupSessionResponse> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/group/${groupId}/session/${sessionId}`,
+      headers: { Accept: 'application/json' },
+    })) as GroupSessionResponse
   }
 }
