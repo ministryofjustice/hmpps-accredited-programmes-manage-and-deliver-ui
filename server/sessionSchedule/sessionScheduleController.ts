@@ -116,10 +116,9 @@ export default class SessionScheduleController {
     const { sessionScheduleData } = req.session
 
     if (req.method === 'POST') {
-      const { sessionName, referralName, ...sessionDataForApi } = sessionScheduleData
-      const sessionType = ('sessionType' in sessionScheduleData ? sessionScheduleData.sessionType : 'GROUP') as
-        | 'ONE_TO_ONE'
-        | 'GROUP'
+      const { sessionName, referralName, sessionType, ...sessionDataForApi } = sessionScheduleData
+      const sessionTypeValue = (sessionType || 'GROUP') as 'ONE_TO_ONE' | 'GROUP'
+
       sessionDataForApi.startDate = (() => {
         const [day, month, year] = sessionScheduleData.startDate.split('/')
         return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
@@ -133,10 +132,10 @@ export default class SessionScheduleController {
 
       let messageParam = ''
       let queryParams = ''
-      if (sessionType === 'ONE_TO_ONE') {
+      if (sessionTypeValue === 'ONE_TO_ONE') {
         messageParam = 'one-to-one-created'
         queryParams = `&referralId=${sessionScheduleData.referralIds[0]}&personName=${encodeURIComponent(sessionScheduleData.referralName || '')}`
-      } else if (sessionType === 'GROUP') {
+      } else if (sessionTypeValue === 'GROUP') {
         messageParam = 'group-catchup-created'
       }
 
