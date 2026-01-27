@@ -9,7 +9,6 @@ import GroupDetailFilter from './groupDetailFilter'
 import SchedulePresenter from './schedule/schedulePresenter'
 import ScheduleView from './schedule/scheduleView'
 
-
 export default class GroupDetailsController {
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
@@ -125,10 +124,11 @@ export default class GroupDetailsController {
     const { username } = req.user
     const { groupId } = req.params
 
-    const groupSchedule = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionDetails(
-      username,
-      groupId,
-    )
+    // const groupSchedule = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionDetails(
+    //   username,
+    //   groupId,
+    // )
+    const groupSchedule = {}
 
     console.log(JSON.stringify(groupSchedule, null, 2))
 
