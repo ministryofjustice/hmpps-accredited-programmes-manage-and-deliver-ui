@@ -136,7 +136,7 @@ export default class SessionScheduleController {
         sessionDataForApi as SessionScheduleRequest,
       )
 
-      const successMessage = response.successMessage?.text || response.message || 'Session has been added.'
+      const successMessage = response.message || 'Session has been added.'
 
       req.session.sessionScheduleData = {}
       return res.redirect(

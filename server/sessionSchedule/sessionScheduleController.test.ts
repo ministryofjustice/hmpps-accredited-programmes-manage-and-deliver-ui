@@ -268,12 +268,7 @@ describe('Session Schedule Controller', () => {
     beforeEach(() => {
       app = TestUtils.createTestAppWithSession(completeSessionData, { accreditedProgrammesManageAndDeliverService })
       accreditedProgrammesManageAndDeliverService.createSessionSchedule.mockResolvedValue({
-        message: 'Session scheduled successfully',
-        successMessage: {
-          title: 'Success',
-          text: 'Getting started one-to-one for John Doe has been added.',
-          variant: 'success',
-        },
+        message: 'Getting started one-to-one for John Doe has been added.',
       })
     })
 

@@ -590,14 +590,7 @@ export default class AccreditedProgrammesManageAndDeliverService
     username: ExpressUsername,
     groupId: string,
     sessionScheduleRequest: SessionScheduleRequest,
-  ): Promise<{
-    message: string
-    successMessage?: {
-      title: string
-      text: string
-      variant: 'success' | 'warning' | 'error'
-    }
-  }> {
+  ): Promise<{ message: string }> {
     const restClient = await this.createRestClientFromUsername(username)
     return restClient.post({
       path: `/group/${groupId}/session/schedule`,
