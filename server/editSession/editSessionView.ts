@@ -1,5 +1,5 @@
 import EditSessionPresenter from './editSessionPresenter'
-import { SummaryListArgs } from '../utils/govukFrontendTypes'
+import { ButtonArgs, SummaryListArgs } from '../utils/govukFrontendTypes'
 
 export default class EditSessionView {
   constructor(private readonly presenter: EditSessionPresenter) {}
@@ -88,6 +88,14 @@ export default class EditSessionView {
     }
   }
 
+  get deleteButton(): ButtonArgs {
+    return {
+      text: 'Delete session',
+      href: this.presenter.deleteUrl,
+      classes: 'govuk-buttoon-secondary',
+    }
+  }
+
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       'editSession/editSession',
@@ -96,6 +104,7 @@ export default class EditSessionView {
         text: this.presenter.text,
         backLinkArgs: this.presenter.backLinkArgs,
         editSessionSummary: this.editSessionSummary,
+        deleteButton: this.deleteButton,
       },
     ]
   }

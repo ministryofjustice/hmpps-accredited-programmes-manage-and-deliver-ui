@@ -1,4 +1,4 @@
-import { convertToTitleCase, initialiseName } from './utils'
+import { convertToUrlFriendlyKebabCase, convertToTitleCase, initialiseName } from './utils'
 
 describe('convert to title case', () => {
   it.each([
@@ -37,4 +37,23 @@ describe('convert first letter to lower case', () => {
     ['Two words', 'Robert James', 'robert James'],
     ['Three words', 'Does not need', 'does not need'],
   ])
+})
+
+describe('convert to kebab case', () => {
+  it.each([
+    [null, null, ''],
+    ['Empty string', '', ''],
+    ['Single word', 'Hello', 'hello'],
+    ['Two words', 'Hello world', 'hello-world'],
+    ['Leading spaces', '  Hello world ', 'hello-world'],
+    ['Multiple spaces', 'Hello  how   are', 'hello-how-are'],
+    ['Mixed case', 'HeLLo HoW ArE YoU', 'hello-how-are-you'],
+    ['Already kebab', 'hello-world', 'hello-world'],
+    ['With colon', 'Hello: world', 'hello-world'],
+    ['With parentheses', 'Hello (world)', 'hello-world'],
+    ['Colon and parentheses', 'Session: Group (Active)', 'session-group-active'],
+    ['Multiple colons', 'Time: 9:30am', 'time-930am'],
+  ])('%s convertToKebabCase(%s, %s)', (_: string, a: string, expected: string) => {
+    expect(convertToUrlFriendlyKebabCase(a)).toEqual(expected)
+  })
 })

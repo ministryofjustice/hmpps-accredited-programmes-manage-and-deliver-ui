@@ -4,6 +4,7 @@ export default class EditSessionPresenter {
   constructor(
     readonly groupId: string,
     readonly sessionDetails: GroupSessionResponse,
+    readonly deleteUrl: string,
   ) {}
 
   get text() {

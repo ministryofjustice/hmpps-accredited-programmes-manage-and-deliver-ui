@@ -33,3 +33,6 @@ export const formatCohort = (cohort?: string): string | null => {
   // Capitalize first letter only
   return formatted.charAt(0).toUpperCase() + formatted.slice(1)
 }
+
+export const convertToUrlFriendlyKebabCase = (sentence: string): string =>
+  isBlank(sentence) ? '' : sentence.trim().toLowerCase().replace(/[():]/g, '').replace(/\s+/g, '-')

@@ -1,6 +1,7 @@
 import { SessionScheduleGroupResponse } from '@manage-and-deliver-api'
 import { AccordionArgsItem } from '../../utils/govukFrontendTypes'
 import GroupServiceNavigationPresenter from '../../shared/groups/groupServiceNavigationPresenter'
+import { convertToUrlFriendlyKebabCase } from '../../utils/utils'
 
 type SessionModule = NonNullable<SessionScheduleGroupResponse['modules']>[number]
 type ModuleSession = NonNullable<SessionModule['sessions']>[number]
@@ -110,10 +111,11 @@ export default class SessionScheduleAttendancePresenter {
     const participants = session.participants?.length ? session.participants.join('<br/> ') : ''
     const facilitators = session.facilitators?.length ? session.facilitators.join('<br/> ') : ''
     const dateSortValue = this.sortableTableDate(session.dateOfSession)
+    const kebabCaseSessionName = convertToUrlFriendlyKebabCase(session.name || '')
 
     return `
     <tr class="govuk-table__row">
-      <td class="govuk-table__cell"><a href="/group/${this.groupId}/sessionId/${session.id}/${session.name}">${session.name || ''}</a></td>
+      <td class="govuk-table__cell"><a href="/group/${this.groupId}/sessionId/${session.id}/${kebabCaseSessionName}">${session.name || ''}</a></td>
       <td class="govuk-table__cell">${session.type || ''}</td>
       <td class="govuk-table__cell">${participants}</td>
       <td class="govuk-table__cell" data-sort-value="${dateSortValue}">${session.dateOfSession || ''}</td>
