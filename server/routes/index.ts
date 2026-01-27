@@ -336,9 +336,6 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   get('/group/:groupId/sessions-and-attendance', async (req, res) => {
     await sessionScheduleController.showSessionAttendance(req, res)
   })
-  getOrPost('/group/:groupId/module/:moduleId/sessions-and-attendance', async (req, res) => {
-    await sessionScheduleController.showSessionAttendance(req, res)
-  })
 
   getOrPost('/group/:groupId/sessionId/:sessionId/:sessionName', async (req, res, next) => {
     await editSessionController.editSession(req, res)

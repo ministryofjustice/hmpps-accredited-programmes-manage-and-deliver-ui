@@ -277,7 +277,7 @@ describe('Session Schedule Controller', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Redirecting to /group/${groupId}/module/${moduleId}/sessions-and-attendance?successMessage=Getting%20started%20one-to-one%20for%20John%20Doe%20has%20been%20added.`,
+            `Redirecting to /group/${groupId}/sessions-and-attendance?successMessage=Getting%20started%20one-to-one%20for%20John%20Doe%20has%20been%20added.`,
           )
           expect(accreditedProgrammesManageAndDeliverService.createSessionSchedule).toHaveBeenCalledWith(
             'user1',

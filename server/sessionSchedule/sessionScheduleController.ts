@@ -130,7 +130,7 @@ export default class SessionScheduleController {
 
       req.session.sessionScheduleData = {}
       return res.redirect(
-        `/group/${groupId}/module/${moduleId}/sessions-and-attendance?successMessage=${encodeURIComponent(successMessage)}`,
+        `/group/${groupId}/sessions-and-attendance?successMessage=${encodeURIComponent(successMessage)}`,
       )
     }
 
