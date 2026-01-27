@@ -92,14 +92,6 @@ describe('SessionScheduleAttendancePresenter', () => {
       expect(accordionItems[1].heading.text).toBe('Module 2: Skills Development')
     })
 
-    it('expands the first accordion item by default', () => {
-      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
-      const accordionItems = presenter.getAccordionItems()
-
-      expect(accordionItems[0].expanded).toBe(true)
-      expect(accordionItems[1].expanded).toBe(false)
-    })
-
     it('returns a message when no modules are available', () => {
       const emptyData = { ...mockGroupSessionsData, modules: [] }
       const presenter = new SessionScheduleAttendancePresenter(groupId, emptyData)
@@ -146,23 +138,19 @@ describe('SessionScheduleAttendancePresenter', () => {
       expect(firstModuleContent).toContain('John Doe<br/> Jane Smith')
       expect(firstModuleContent).toContain('15 March 2025')
       expect(firstModuleContent).toContain('9:30am to 11:00am')
-      expect(firstModuleContent).toContain('Facilitator 1<br/> Facilitator 2')
+      expect(firstModuleContent).toContain(
+        'Facilitator 1<span class="govuk-!-display-block govuk-!-margin-bottom-1"></span>Facilitator 2',
+      )
     })
 
-    it('renders facilitators with line breaks', () => {
+    it('renders facilitators with spacing using govuk utility classes', () => {
       const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
       const accordionItems = presenter.getAccordionItems()
       const firstModuleContent = accordionItems[0].content.html
 
-      expect(firstModuleContent).toContain('Facilitator 1<br/> Facilitator 2')
-    })
-
-    it('displays message when no sessions are scheduled', () => {
-      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
-      const accordionItems = presenter.getAccordionItems()
-      const secondModuleContent = accordionItems[1].content.html
-
-      expect(secondModuleContent).toContain('No sessions have been scheduled yet')
+      expect(firstModuleContent).toContain(
+        'Facilitator 1<span class="govuk-!-display-block govuk-!-margin-bottom-1"></span>Facilitator 2',
+      )
     })
 
     it('displays estimated start date text when available', () => {

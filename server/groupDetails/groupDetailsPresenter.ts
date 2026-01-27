@@ -245,7 +245,7 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
     }
 
     return this.section === GroupDetailsPageSection.Allocated
-      ? 'There are currently no people allocated to this group'
-      : `There are no people awaiting allocation in ${this.group.group.regionName}`
+      ? 'There are currently no people allocated to this group.'
+      : `There are no people awaiting allocation in ${this.group.group.regionName}.`
   }
 }
