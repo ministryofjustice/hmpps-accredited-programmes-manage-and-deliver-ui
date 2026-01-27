@@ -247,4 +247,204 @@ describe('SessionScheduleAttendancePresenter', () => {
       expect(content).not.toContain('undefined')
     })
   })
+
+  describe('scheduleSessionSuccessMessageArgs', () => {
+    describe('group-catchup-created message', () => {
+      it('returns success message with button text without "Schedule a" prefix', () => {
+        const presenter = new SessionScheduleAttendancePresenter(
+          groupId,
+          mockGroupSessionsData,
+          'group-catchup-created',
+          undefined,
+          undefined,
+          'Schedule a Getting started session',
+        )
+
+        const messageArgs = presenter.scheduleSessionSuccessMessageArgs
+
+        expect(messageArgs).toEqual({
+          variant: 'success',
+          title: 'Success',
+          text: 'Getting started session has been added.',
+          dismissible: true,
+        })
+      })
+
+      it('capitalizes first letter after removing "Schedule a" prefix', () => {
+        const presenter = new SessionScheduleAttendancePresenter(
+          groupId,
+          mockGroupSessionsData,
+          'group-catchup-created',
+          undefined,
+          undefined,
+          'Schedule a managing emotions session',
+        )
+
+        const messageArgs = presenter.scheduleSessionSuccessMessageArgs
+
+        expect(messageArgs && 'text' in messageArgs ? messageArgs.text : '').toBe(
+          'Managing emotions session has been added.',
+        )
+      })
+    })
+
+    describe('one-to-one-created message', () => {
+      it('returns success message with button text and person name', () => {
+        const presenter = new SessionScheduleAttendancePresenter(
+          groupId,
+          mockGroupSessionsData,
+          'one-to-one-created',
+          'a9971fd6-a185-43ee-bb23-a0ab23a14f50',
+          'Jane Smith',
+          'Schedule a Getting started session',
+        )
+
+        const messageArgs = presenter.scheduleSessionSuccessMessageArgs
+
+        expect(messageArgs).toEqual({
+          variant: 'success',
+          title: 'Success',
+          text: 'Getting started session for Jane Smith has been added.',
+          dismissible: true,
+        })
+      })
+
+      it('handles button text without "Schedule a" prefix', () => {
+        const presenter = new SessionScheduleAttendancePresenter(
+          groupId,
+          mockGroupSessionsData,
+          'one-to-one-created',
+          'ref-123',
+          'John Doe',
+          'Pre-group one-to-one',
+        )
+
+        const messageArgs = presenter.scheduleSessionSuccessMessageArgs
+
+        expect(messageArgs && 'text' in messageArgs ? messageArgs.text : '').toBe(
+          'Pre-group one-to-one for John Doe has been added.',
+        )
+      })
+    })
+
+    describe('one-to-one-catchup-created message', () => {
+      it('returns success message with catch-up text, button text and person name', () => {
+        const presenter = new SessionScheduleAttendancePresenter(
+          groupId,
+          mockGroupSessionsData,
+          'one-to-one-catchup-created',
+          'b1234567-b185-43ee-bb23-a0ab23a14f51',
+          'John Doe',
+          'Schedule a Managing myself session',
+        )
+
+        const messageArgs = presenter.scheduleSessionSuccessMessageArgs
+
+        expect(messageArgs).toEqual({
+          variant: 'success',
+          title: 'Success',
+          text: 'Managing myself session catch-up for John Doe has been added.',
+          dismissible: true,
+        })
+      })
+    })
+
+    describe('when no message type is provided', () => {
+      it('returns null', () => {
+        const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
+
+        const messageArgs = presenter.scheduleSessionSuccessMessageArgs
+
+        expect(messageArgs).toBeNull()
+      })
+    })
+
+    describe('when button text is not provided', () => {
+      it('uses default "Session" text', () => {
+        const presenter = new SessionScheduleAttendancePresenter(
+          groupId,
+          mockGroupSessionsData,
+          'group-catchup-created',
+        )
+
+        const messageArgs = presenter.scheduleSessionSuccessMessageArgs
+
+        expect(messageArgs && 'text' in messageArgs ? messageArgs.text : '').toBe('Session has been added.')
+      })
+
+      it('uses default "Session" text for one-to-one messages', () => {
+        const presenter = new SessionScheduleAttendancePresenter(
+          groupId,
+          mockGroupSessionsData,
+          'one-to-one-created',
+          'ref-456',
+          'Jane Doe',
+        )
+
+        const messageArgs = presenter.scheduleSessionSuccessMessageArgs
+
+        expect(messageArgs && 'text' in messageArgs ? messageArgs.text : '').toBe(
+          'Session for Jane Doe has been added.',
+        )
+      })
+    })
+
+    describe('button text transformation', () => {
+      it('removes "Schedule a " with lowercase "a"', () => {
+        const presenter = new SessionScheduleAttendancePresenter(
+          groupId,
+          mockGroupSessionsData,
+          'group-catchup-created',
+          undefined,
+          undefined,
+          'Schedule a new session',
+        )
+
+        const messageArgs = presenter.scheduleSessionSuccessMessageArgs
+        expect(messageArgs && 'text' in messageArgs ? messageArgs.text : '').toBe('New session has been added.')
+      })
+
+      it('removes "Schedule A " with uppercase "A" (case insensitive)', () => {
+        const presenter = new SessionScheduleAttendancePresenter(
+          groupId,
+          mockGroupSessionsData,
+          'group-catchup-created',
+          undefined,
+          undefined,
+          'Schedule A New Session',
+        )
+
+        const messageArgs = presenter.scheduleSessionSuccessMessageArgs
+        expect(messageArgs && 'text' in messageArgs ? messageArgs.text : '').toBe('New Session has been added.')
+      })
+
+      it('preserves text that does not start with "Schedule a"', () => {
+        const presenter = new SessionScheduleAttendancePresenter(
+          groupId,
+          mockGroupSessionsData,
+          'group-catchup-created',
+          undefined,
+          undefined,
+          'Pre-group session',
+        )
+
+        const messageArgs = presenter.scheduleSessionSuccessMessageArgs
+        expect(messageArgs && 'text' in messageArgs ? messageArgs.text : '').toBe('Pre-group session has been added.')
+      })
+
+      it('handles empty string button text', () => {
+        const presenter = new SessionScheduleAttendancePresenter(
+          groupId,
+          mockGroupSessionsData,
+          'group-catchup-created',
+          undefined,
+          undefined,
+          '',
+        )
+
+        const messageArgs = presenter.scheduleSessionSuccessMessageArgs
+        expect(messageArgs && 'text' in messageArgs ? messageArgs.text : '').toBe('Session has been added.')
+      })
+    })
+  })
 })

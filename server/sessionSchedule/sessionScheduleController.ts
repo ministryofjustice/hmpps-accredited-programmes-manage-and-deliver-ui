@@ -29,11 +29,19 @@ export default class SessionScheduleController {
       groupId,
       moduleId,
     )
+    const sessionAttendanceData = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionsAndAttendance(
+      username,
+      groupId,
+    )
+    const currentSessionModule = sessionAttendanceData.modules?.find(
+      (module: NonNullable<typeof sessionAttendanceData.modules>[number]) => module.id === moduleId,
+    )
+    const scheduleButtonText = currentSessionModule?.scheduleButtonText || 'Schedule a session'
 
     if (req.method === 'POST') {
-      const selectedTemplateId = req.body['session-template']
+      const selectedSessionTemplateId = req.body['session-template']
 
-      if (!selectedTemplateId) {
+      if (!selectedSessionTemplateId) {
         res.status(400)
         formError = {
           errors: [
@@ -46,8 +54,9 @@ export default class SessionScheduleController {
         }
       } else {
         req.session.sessionScheduleData = {
-          sessionTemplateId: selectedTemplateId,
+          sessionTemplateId: selectedSessionTemplateId,
           sessionName: sessionTemplates.length > 0 ? sessionTemplates[0].name : 'the session',
+          scheduleButtonText,
         }
         return res.redirect(`/group/${groupId}/module/${moduleId}/schedule-group-session-details`)
       }
@@ -87,6 +96,7 @@ export default class SessionScheduleController {
           startTime: data.paramsForUpdate.startTime,
           endTime: data.paramsForUpdate.endTime,
           referralName: req.body['session-details-who'].split('+')[1].trim(),
+          sessionType: data.paramsForUpdate.referralIds.length === 1 ? 'ONE_TO_ONE' : 'GROUP',
         }
         return res.redirect(`/group/${groupId}/module/${moduleId}/session-review-details`)
       }
@@ -115,20 +125,30 @@ export default class SessionScheduleController {
     const { sessionScheduleData } = req.session
 
     if (req.method === 'POST') {
-      const { sessionName, referralName, ...sessionDataForApi } = sessionScheduleData
+      const { sessionName, referralName, sessionType, scheduleButtonText, ...sessionDataForApi } = sessionScheduleData
+      const sessionTypeValue = (sessionType || 'GROUP') as 'ONE_TO_ONE' | 'GROUP'
       sessionDataForApi.startDate = (() => {
         const [day, month, year] = sessionScheduleData.startDate.split('/')
         return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
       })()
-      const response = await this.accreditedProgrammesManageAndDeliverService.createSessionSchedule(
+      await this.accreditedProgrammesManageAndDeliverService.createSessionSchedule(
         username,
         groupId,
         sessionDataForApi as SessionScheduleRequest,
       )
-      // Clear session data on submission
+      let messageParam = ''
+      let queryParams = ''
+      if (sessionTypeValue === 'ONE_TO_ONE') {
+        messageParam = 'one-to-one-created'
+        queryParams = `&referralId=${sessionScheduleData.referralIds[0]}&personName=${encodeURIComponent(sessionScheduleData.referralName || '')}&buttonText=${encodeURIComponent(scheduleButtonText || '')}`
+      } else if (sessionTypeValue === 'GROUP') {
+        messageParam = 'group-catchup-created'
+        queryParams = `&buttonText=${encodeURIComponent(scheduleButtonText || '')}`
+      }
       req.session.sessionScheduleData = {}
-      // Change this when page exists
-      return res.redirect(`/group/${groupId}/module/${moduleId}/session-review-details?message=${response.message}`)
+      return res.redirect(
+        `/group/${groupId}/module/${moduleId}/sessions-and-attendance?message=${messageParam}${queryParams}`,
+      )
     }
 
     const presenter = new SessionScheduleCyaPresenter(`/${groupId}/${moduleId}`, sessionScheduleData)
@@ -139,13 +159,26 @@ export default class SessionScheduleController {
   async showSessionAttendance(req: Request, res: Response): Promise<void> {
     const { username } = req.user
     const { groupId } = req.params
+    const { message, referralId, personName, buttonText } = req.query as {
+      message?: string
+      referralId?: string
+      personName?: string
+      buttonText?: string
+    }
 
     const sessionAttendanceData = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionsAndAttendance(
       username,
       groupId,
     )
 
-    const presenter = new SessionScheduleAttendancePresenter(groupId, sessionAttendanceData)
+    const presenter = new SessionScheduleAttendancePresenter(
+      groupId,
+      sessionAttendanceData,
+      message as 'group-catchup-created' | 'one-to-one-created' | 'one-to-one-catchup-created' | undefined,
+      referralId,
+      personName,
+      buttonText,
+    )
     const view = new SessionScheduleAttendanceView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }

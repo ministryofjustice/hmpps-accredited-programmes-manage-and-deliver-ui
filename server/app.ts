@@ -40,7 +40,12 @@ declare module 'express-session' {
       removeFromGroup?: boolean
     }
     createGroupFormData?: Partial<CreateGroupRequest>
-    sessionScheduleData?: Partial<SessionScheduleRequest> & { sessionName?: string; referralName?: string }
+    sessionScheduleData?: Partial<SessionScheduleRequest> & {
+      sessionName?: string
+      referralName?: string
+      sessionType?: 'ONE_TO_ONE' | 'GROUP'
+      scheduleButtonText?: string
+    }
   }
 }
 

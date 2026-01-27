@@ -1,4 +1,4 @@
-import { ModuleSessionTemplate } from '@manage-and-deliver-api'
+import { ModuleSessionTemplate, SessionScheduleGroupResponse } from '@manage-and-deliver-api'
 import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import { SessionData } from 'express-session'
@@ -31,12 +31,29 @@ const mockSessionTemplates: ModuleSessionTemplate[] = [
   },
 ]
 
+const mockSessionAttendanceData: SessionScheduleGroupResponse = {
+  group: {
+    id: groupId,
+    code: 'GRP-001',
+    name: 'Test Group',
+  },
+  modules: [
+    {
+      id: moduleId,
+      name: 'Module 1: Getting Started',
+      scheduleButtonText: 'Schedule a Getting started one-to-one',
+      sessions: [],
+    },
+  ],
+}
+
 const completeSessionData: Partial<SessionData> = {
   sessionScheduleData: {
     sessionTemplateId: '30db4cee-a79a-420a-b0ff-5f5ce4dcfd7d',
     sessionName: 'Getting started one-to-one',
     referralIds: ['a9971fd6-a185-43ee-bb23-a0ab23a14f50'],
     referralName: 'John Doe',
+    sessionType: 'ONE_TO_ONE',
     facilitators: [
       {
         facilitator: 'John Doe',
@@ -62,6 +79,7 @@ beforeEach(() => {
   }
   app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
   accreditedProgrammesManageAndDeliverService.getSessionTemplates.mockResolvedValue(mockSessionTemplates)
+  accreditedProgrammesManageAndDeliverService.getGroupSessionsAndAttendance.mockResolvedValue(mockSessionAttendanceData)
 })
 
 describe('Session Schedule Controller', () => {
@@ -259,7 +277,9 @@ describe('Session Schedule Controller', () => {
         .post(`/group/${groupId}/module/${moduleId}/session-review-details`)
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(`Redirecting to /group/${groupId}/module/${moduleId}/session-review-details`)
+          expect(res.text).toContain(
+            `Redirecting to /group/${groupId}/module/${moduleId}/sessions-and-attendance?message=one-to-one-created`,
+          )
           expect(accreditedProgrammesManageAndDeliverService.createSessionSchedule).toHaveBeenCalledWith(
             'user1',
             groupId,

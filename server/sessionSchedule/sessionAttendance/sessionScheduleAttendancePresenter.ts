@@ -1,6 +1,7 @@
 import { SessionScheduleGroupResponse } from '@manage-and-deliver-api'
 import { AccordionArgsItem } from '../../utils/govukFrontendTypes'
 import GroupServiceNavigationPresenter from '../../shared/groups/groupServiceNavigationPresenter'
+import { MojAlertComponentArgs } from '../../interfaces/alertComponentArgs'
 
 type SessionModule = NonNullable<SessionScheduleGroupResponse['modules']>[number]
 type ModuleSession = NonNullable<SessionModule['sessions']>[number]
@@ -10,7 +11,11 @@ export default class SessionScheduleAttendancePresenter {
 
   constructor(
     private readonly groupId: string,
-    private readonly groupSessionsData: SessionScheduleGroupResponse | null = null,
+    private readonly groupSessionsData: SessionScheduleGroupResponse,
+    private readonly messageType?: 'group-catchup-created' | 'one-to-one-created' | 'one-to-one-catchup-created',
+    private readonly referralId?: string,
+    private readonly personName?: string,
+    private readonly buttonText?: string,
   ) {
     this.navigationPresenter = new GroupServiceNavigationPresenter(groupId, undefined, 'sessions')
   }
@@ -21,6 +26,36 @@ export default class SessionScheduleAttendancePresenter {
     return {
       headingCaptionText: groupCode || '',
       headingText: 'Sessions and attendance',
+    }
+  }
+
+  get scheduleSessionSuccessMessageArgs(): MojAlertComponentArgs | null {
+    if (!this.messageType) return null
+
+    const rawButtonText = this.buttonText || 'Session'
+    const buttonText = rawButtonText.replace(/^Schedule a /i, '').replace(/^./, char => char.toUpperCase())
+    let text = ''
+
+    switch (this.messageType) {
+      case 'group-catchup-created':
+        text = `${buttonText} has been added.`
+        break
+      case 'one-to-one-created':
+        text = `${buttonText} for ${this.personName} has been added.`
+        break
+      case 'one-to-one-catchup-created':
+        text = `${buttonText} catch-up for ${this.personName} has been added.`
+        break
+      default:
+        text = `${buttonText} has been added.`
+        break
+    }
+
+    return {
+      variant: 'success',
+      title: 'Success',
+      text,
+      dismissible: true,
     }
   }
 
