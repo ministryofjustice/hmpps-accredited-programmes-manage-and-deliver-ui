@@ -269,6 +269,11 @@ describe('Session Schedule Controller', () => {
       app = TestUtils.createTestAppWithSession(completeSessionData, { accreditedProgrammesManageAndDeliverService })
       accreditedProgrammesManageAndDeliverService.createSessionSchedule.mockResolvedValue({
         message: 'Session scheduled successfully',
+        successMessage: {
+          title: 'Success',
+          text: 'Getting started one-to-one for John Doe has been added.',
+          variant: 'success',
+        },
       })
     })
 
@@ -278,7 +283,7 @@ describe('Session Schedule Controller', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Redirecting to /group/${groupId}/module/${moduleId}/sessions-and-attendance?message=one-to-one-created`,
+            `Redirecting to /group/${groupId}/module/${moduleId}/sessions-and-attendance?successMessage=Getting%20started%20one-to-one%20for%20John%20Doe%20has%20been%20added.`,
           )
           expect(accreditedProgrammesManageAndDeliverService.createSessionSchedule).toHaveBeenCalledWith(
             'user1',

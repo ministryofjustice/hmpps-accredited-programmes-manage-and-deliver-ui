@@ -126,28 +126,21 @@ export default class SessionScheduleController {
 
     if (req.method === 'POST') {
       const { sessionName, referralName, sessionType, scheduleButtonText, ...sessionDataForApi } = sessionScheduleData
-      const sessionTypeValue = (sessionType || 'GROUP') as 'ONE_TO_ONE' | 'GROUP'
       sessionDataForApi.startDate = (() => {
         const [day, month, year] = sessionScheduleData.startDate.split('/')
         return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
       })()
-      await this.accreditedProgrammesManageAndDeliverService.createSessionSchedule(
+      const response = await this.accreditedProgrammesManageAndDeliverService.createSessionSchedule(
         username,
         groupId,
         sessionDataForApi as SessionScheduleRequest,
       )
-      let messageParam = ''
-      let queryParams = ''
-      if (sessionTypeValue === 'ONE_TO_ONE') {
-        messageParam = 'one-to-one-created'
-        queryParams = `&referralId=${sessionScheduleData.referralIds[0]}&personName=${encodeURIComponent(sessionScheduleData.referralName || '')}&buttonText=${encodeURIComponent(scheduleButtonText || '')}`
-      } else if (sessionTypeValue === 'GROUP') {
-        messageParam = 'group-catchup-created'
-        queryParams = `&buttonText=${encodeURIComponent(scheduleButtonText || '')}`
-      }
+
+      const successMessage = response.successMessage?.text || response.message || 'Session has been added.'
+
       req.session.sessionScheduleData = {}
       return res.redirect(
-        `/group/${groupId}/module/${moduleId}/sessions-and-attendance?message=${messageParam}${queryParams}`,
+        `/group/${groupId}/module/${moduleId}/sessions-and-attendance?successMessage=${encodeURIComponent(successMessage)}`,
       )
     }
 
@@ -159,11 +152,8 @@ export default class SessionScheduleController {
   async showSessionAttendance(req: Request, res: Response): Promise<void> {
     const { username } = req.user
     const { groupId } = req.params
-    const { message, referralId, personName, buttonText } = req.query as {
-      message?: string
-      referralId?: string
-      personName?: string
-      buttonText?: string
+    const { successMessage } = req.query as {
+      successMessage?: string
     }
 
     const sessionAttendanceData = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionsAndAttendance(
@@ -171,14 +161,7 @@ export default class SessionScheduleController {
       groupId,
     )
 
-    const presenter = new SessionScheduleAttendancePresenter(
-      groupId,
-      sessionAttendanceData,
-      message as 'group-catchup-created' | 'one-to-one-created' | 'one-to-one-catchup-created' | undefined,
-      referralId,
-      personName,
-      buttonText,
-    )
+    const presenter = new SessionScheduleAttendancePresenter(groupId, sessionAttendanceData, successMessage)
     const view = new SessionScheduleAttendanceView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }

@@ -12,10 +12,7 @@ export default class SessionScheduleAttendancePresenter {
   constructor(
     private readonly groupId: string,
     private readonly groupSessionsData: SessionScheduleGroupResponse,
-    private readonly messageType?: 'group-catchup-created' | 'one-to-one-created' | 'one-to-one-catchup-created',
-    private readonly referralId?: string,
-    private readonly personName?: string,
-    private readonly buttonText?: string,
+    private readonly successMessage?: string,
   ) {
     this.navigationPresenter = new GroupServiceNavigationPresenter(groupId, undefined, 'sessions')
   }
@@ -30,34 +27,12 @@ export default class SessionScheduleAttendancePresenter {
   }
 
   get scheduleSessionSuccessMessageArgs(): MojAlertComponentArgs | null {
-    if (!this.messageType) return null
-
-    const rawButtonText = this.buttonText || 'Session'
-    const buttonText = rawButtonText
-      .replace(/^Schedule a /i, '')
-      .replace(/\s+session$/i, '')
-      .replace(/^./, char => char.toUpperCase())
-    let text = ''
-
-    switch (this.messageType) {
-      case 'group-catchup-created':
-        text = `${buttonText} has been added.`
-        break
-      case 'one-to-one-created':
-        text = `${buttonText} one-to-one for ${this.personName} has been added.`
-        break
-      case 'one-to-one-catchup-created':
-        text = `${buttonText} one-to-one catch-up for ${this.personName} has been added.`
-        break
-      default:
-        text = `${buttonText} has been added.`
-        break
-    }
+    if (!this.successMessage) return null
 
     return {
       variant: 'success',
       title: 'Success',
-      text,
+      text: this.successMessage,
       dismissible: true,
     }
   }
