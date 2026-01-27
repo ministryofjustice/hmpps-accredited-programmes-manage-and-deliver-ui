@@ -1,6 +1,7 @@
 import { SessionScheduleGroupResponse } from '@manage-and-deliver-api'
 import { AccordionArgsItem } from '../../utils/govukFrontendTypes'
 import GroupServiceNavigationPresenter from '../../shared/groups/groupServiceNavigationPresenter'
+import { MojAlertComponentArgs } from '../../interfaces/alertComponentArgs'
 
 type SessionModule = NonNullable<SessionScheduleGroupResponse['modules']>[number]
 type ModuleSession = NonNullable<SessionModule['sessions']>[number]
@@ -11,6 +12,7 @@ export default class SessionScheduleAttendancePresenter {
   constructor(
     private readonly groupId: string,
     private readonly groupSessionsData: SessionScheduleGroupResponse | null = null,
+    private readonly successMessage?: string,
   ) {
     this.navigationPresenter = new GroupServiceNavigationPresenter(groupId, undefined, 'sessions')
   }
@@ -21,6 +23,17 @@ export default class SessionScheduleAttendancePresenter {
     return {
       headingCaptionText: groupCode || '',
       headingText: 'Sessions and attendance',
+    }
+  }
+
+  get scheduleSessionSuccessMessageArgs(): MojAlertComponentArgs | null {
+    if (!this.successMessage) return null
+
+    return {
+      variant: 'success',
+      title: 'Success',
+      text: this.successMessage,
+      dismissible: true,
     }
   }
 

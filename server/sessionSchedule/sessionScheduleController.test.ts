@@ -1,4 +1,4 @@
-import { ModuleSessionTemplate } from '@manage-and-deliver-api'
+import { ModuleSessionTemplate, SessionScheduleGroupResponse } from '@manage-and-deliver-api'
 import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import { SessionData } from 'express-session'
@@ -31,6 +31,22 @@ const mockSessionTemplates: ModuleSessionTemplate[] = [
   },
 ]
 
+const mockSessionAttendanceData: SessionScheduleGroupResponse = {
+  group: {
+    id: groupId,
+    code: 'GRP-001',
+    name: 'Test Group',
+  },
+  modules: [
+    {
+      id: moduleId,
+      name: 'Module 1: Getting Started',
+      scheduleButtonText: 'Schedule a Getting started one-to-one',
+      sessions: [],
+    },
+  ],
+}
+
 const completeSessionData: Partial<SessionData> = {
   sessionScheduleData: {
     sessionTemplateId: '30db4cee-a79a-420a-b0ff-5f5ce4dcfd7d',
@@ -62,6 +78,7 @@ beforeEach(() => {
   }
   app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
   accreditedProgrammesManageAndDeliverService.getSessionTemplates.mockResolvedValue(mockSessionTemplates)
+  accreditedProgrammesManageAndDeliverService.getGroupSessionsAndAttendance.mockResolvedValue(mockSessionAttendanceData)
 })
 
 describe('Session Schedule Controller', () => {
@@ -250,7 +267,7 @@ describe('Session Schedule Controller', () => {
     beforeEach(() => {
       app = TestUtils.createTestAppWithSession(completeSessionData, { accreditedProgrammesManageAndDeliverService })
       accreditedProgrammesManageAndDeliverService.createSessionSchedule.mockResolvedValue({
-        message: 'Session scheduled successfully',
+        message: 'Getting started one-to-one for John Doe has been added.',
       })
     })
 
@@ -259,7 +276,9 @@ describe('Session Schedule Controller', () => {
         .post(`/group/${groupId}/module/${moduleId}/session-review-details`)
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(`Redirecting to /group/${groupId}/module/${moduleId}/session-review-details`)
+          expect(res.text).toContain(
+            `Redirecting to /group/${groupId}/sessions-and-attendance?successMessage=Getting%20started%20one-to-one%20for%20John%20Doe%20has%20been%20added.`,
+          )
           expect(accreditedProgrammesManageAndDeliverService.createSessionSchedule).toHaveBeenCalledWith(
             'user1',
             groupId,
