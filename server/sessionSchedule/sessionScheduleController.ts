@@ -29,14 +29,6 @@ export default class SessionScheduleController {
       groupId,
       moduleId,
     )
-    const sessionAttendanceData = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionsAndAttendance(
-      username,
-      groupId,
-    )
-    const currentSessionModule = sessionAttendanceData.modules?.find(
-      (module: NonNullable<typeof sessionAttendanceData.modules>[number]) => module.id === moduleId,
-    )
-    const scheduleButtonText = currentSessionModule?.scheduleButtonText || 'Schedule a session'
 
     if (req.method === 'POST') {
       const selectedSessionTemplateId = req.body['session-template']
@@ -56,7 +48,6 @@ export default class SessionScheduleController {
         req.session.sessionScheduleData = {
           sessionTemplateId: selectedSessionTemplateId,
           sessionName: sessionTemplates.length > 0 ? sessionTemplates[0].name : 'the session',
-          scheduleButtonText,
         }
         return res.redirect(`/group/${groupId}/module/${moduleId}/schedule-group-session-details`)
       }
@@ -96,7 +87,6 @@ export default class SessionScheduleController {
           startTime: data.paramsForUpdate.startTime,
           endTime: data.paramsForUpdate.endTime,
           referralName: req.body['session-details-who'].split('+')[1].trim(),
-          sessionType: data.paramsForUpdate.referralIds.length === 1 ? 'ONE_TO_ONE' : 'GROUP',
         }
         return res.redirect(`/group/${groupId}/module/${moduleId}/session-review-details`)
       }
@@ -125,7 +115,7 @@ export default class SessionScheduleController {
     const { sessionScheduleData } = req.session
 
     if (req.method === 'POST') {
-      const { sessionName, referralName, sessionType, scheduleButtonText, ...sessionDataForApi } = sessionScheduleData
+      const { sessionName, referralName, ...sessionDataForApi } = sessionScheduleData
       sessionDataForApi.startDate = (() => {
         const [day, month, year] = sessionScheduleData.startDate.split('/')
         return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`

@@ -53,7 +53,6 @@ const completeSessionData: Partial<SessionData> = {
     sessionName: 'Getting started one-to-one',
     referralIds: ['a9971fd6-a185-43ee-bb23-a0ab23a14f50'],
     referralName: 'John Doe',
-    sessionType: 'ONE_TO_ONE',
     facilitators: [
       {
         facilitator: 'John Doe',

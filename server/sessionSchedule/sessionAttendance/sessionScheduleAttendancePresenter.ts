@@ -11,7 +11,7 @@ export default class SessionScheduleAttendancePresenter {
 
   constructor(
     private readonly groupId: string,
-    private readonly groupSessionsData: SessionScheduleGroupResponse,
+    private readonly groupSessionsData: SessionScheduleGroupResponse | null = null,
     private readonly successMessage?: string,
   ) {
     this.navigationPresenter = new GroupServiceNavigationPresenter(groupId, undefined, 'sessions')
