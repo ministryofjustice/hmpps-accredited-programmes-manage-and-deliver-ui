@@ -33,7 +33,10 @@ export default class SessionScheduleAttendancePresenter {
     if (!this.messageType) return null
 
     const rawButtonText = this.buttonText || 'Session'
-    const buttonText = rawButtonText.replace(/^Schedule a /i, '').replace(/^./, char => char.toUpperCase())
+    const buttonText = rawButtonText
+      .replace(/^Schedule a /i, '')
+      .replace(/\s+session$/i, '')
+      .replace(/^./, char => char.toUpperCase())
     let text = ''
 
     switch (this.messageType) {

@@ -265,7 +265,7 @@ describe('SessionScheduleAttendancePresenter', () => {
         expect(messageArgs).toEqual({
           variant: 'success',
           title: 'Success',
-          text: 'Getting started session has been added.',
+          text: 'Getting started has been added.',
           dismissible: true,
         })
       })
@@ -282,9 +282,7 @@ describe('SessionScheduleAttendancePresenter', () => {
 
         const messageArgs = presenter.scheduleSessionSuccessMessageArgs
 
-        expect(messageArgs && 'text' in messageArgs ? messageArgs.text : '').toBe(
-          'Managing emotions session has been added.',
-        )
+        expect(messageArgs && 'text' in messageArgs ? messageArgs.text : '').toBe('Managing emotions has been added.')
       })
     })
 
@@ -304,7 +302,7 @@ describe('SessionScheduleAttendancePresenter', () => {
         expect(messageArgs).toEqual({
           variant: 'success',
           title: 'Success',
-          text: 'Getting started session one-to-one for Jane Smith has been added.',
+          text: 'Getting started one-to-one for Jane Smith has been added.',
           dismissible: true,
         })
       })
@@ -322,7 +320,7 @@ describe('SessionScheduleAttendancePresenter', () => {
         const messageArgs = presenter.scheduleSessionSuccessMessageArgs
 
         expect(messageArgs && 'text' in messageArgs ? messageArgs.text : '').toBe(
-          'Pre-group session one-to-one for John Doe has been added.',
+          'Pre-group one-to-one for John Doe has been added.',
         )
       })
     })
@@ -343,7 +341,7 @@ describe('SessionScheduleAttendancePresenter', () => {
         expect(messageArgs).toEqual({
           variant: 'success',
           title: 'Success',
-          text: 'Managing myself session one-to-one catch-up for John Doe has been added.',
+          text: 'Managing myself one-to-one catch-up for John Doe has been added.',
           dismissible: true,
         })
       })
@@ -401,7 +399,7 @@ describe('SessionScheduleAttendancePresenter', () => {
         )
 
         const messageArgs = presenter.scheduleSessionSuccessMessageArgs
-        expect(messageArgs && 'text' in messageArgs ? messageArgs.text : '').toBe('New session has been added.')
+        expect(messageArgs && 'text' in messageArgs ? messageArgs.text : '').toBe('New has been added.')
       })
 
       it('removes "Schedule A " with uppercase "A" (case insensitive)', () => {
@@ -415,7 +413,7 @@ describe('SessionScheduleAttendancePresenter', () => {
         )
 
         const messageArgs = presenter.scheduleSessionSuccessMessageArgs
-        expect(messageArgs && 'text' in messageArgs ? messageArgs.text : '').toBe('New Session has been added.')
+        expect(messageArgs && 'text' in messageArgs ? messageArgs.text : '').toBe('New has been added.')
       })
 
       it('preserves text that does not start with "Schedule a"', () => {
@@ -429,7 +427,7 @@ describe('SessionScheduleAttendancePresenter', () => {
         )
 
         const messageArgs = presenter.scheduleSessionSuccessMessageArgs
-        expect(messageArgs && 'text' in messageArgs ? messageArgs.text : '').toBe('Pre-group session has been added.')
+        expect(messageArgs && 'text' in messageArgs ? messageArgs.text : '').toBe('Pre-group has been added.')
       })
 
       it('handles empty string button text', () => {
