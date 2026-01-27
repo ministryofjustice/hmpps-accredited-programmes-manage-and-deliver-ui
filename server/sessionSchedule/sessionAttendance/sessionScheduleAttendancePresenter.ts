@@ -41,10 +41,10 @@ export default class SessionScheduleAttendancePresenter {
         text = `${buttonText} has been added.`
         break
       case 'one-to-one-created':
-        text = `${buttonText} for ${this.personName} has been added.`
+        text = `${buttonText} one-to-one for ${this.personName} has been added.`
         break
       case 'one-to-one-catchup-created':
-        text = `${buttonText} catch-up for ${this.personName} has been added.`
+        text = `${buttonText} one-to-one catch-up for ${this.personName} has been added.`
         break
       default:
         text = `${buttonText} has been added.`

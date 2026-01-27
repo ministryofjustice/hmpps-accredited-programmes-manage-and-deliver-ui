@@ -304,7 +304,7 @@ describe('SessionScheduleAttendancePresenter', () => {
         expect(messageArgs).toEqual({
           variant: 'success',
           title: 'Success',
-          text: 'Getting started session for Jane Smith has been added.',
+          text: 'Getting started session one-to-one for Jane Smith has been added.',
           dismissible: true,
         })
       })
@@ -316,13 +316,13 @@ describe('SessionScheduleAttendancePresenter', () => {
           'one-to-one-created',
           'ref-123',
           'John Doe',
-          'Pre-group one-to-one',
+          'Pre-group session',
         )
 
         const messageArgs = presenter.scheduleSessionSuccessMessageArgs
 
         expect(messageArgs && 'text' in messageArgs ? messageArgs.text : '').toBe(
-          'Pre-group one-to-one for John Doe has been added.',
+          'Pre-group session one-to-one for John Doe has been added.',
         )
       })
     })
@@ -343,7 +343,7 @@ describe('SessionScheduleAttendancePresenter', () => {
         expect(messageArgs).toEqual({
           variant: 'success',
           title: 'Success',
-          text: 'Managing myself session catch-up for John Doe has been added.',
+          text: 'Managing myself session one-to-one catch-up for John Doe has been added.',
           dismissible: true,
         })
       })
@@ -384,7 +384,7 @@ describe('SessionScheduleAttendancePresenter', () => {
         const messageArgs = presenter.scheduleSessionSuccessMessageArgs
 
         expect(messageArgs && 'text' in messageArgs ? messageArgs.text : '').toBe(
-          'Session for Jane Doe has been added.',
+          'Session one-to-one for Jane Doe has been added.',
         )
       })
     })
