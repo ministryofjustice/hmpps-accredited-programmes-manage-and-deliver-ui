@@ -68,6 +68,7 @@ type ScheduleSessionTypeResponse = components['schemas']['ScheduleSessionTypeRes
 type ScheduleIndividualSessionDetailsResponse = components['schemas']['ScheduleIndividualSessionDetailsResponse']
 type ScheduleSessionRequest = components['schemas']['ScheduleSessionRequest']
 type GroupSessionResponse = components['schemas']['GroupSessionResponse']
+type GroupSchedule = components['schemas']['GroupSchedule']
 
 export type {
   AlcoholMisuseDetails,
@@ -95,6 +96,7 @@ export type {
   Group,
   GroupsByRegion,
   GroupItem,
+  GroupSchedule,
   GroupSessionResponse,
   Health,
   LearningNeeds,

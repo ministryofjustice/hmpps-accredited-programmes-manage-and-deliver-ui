@@ -1,18 +1,19 @@
 import { SessionScheduleGroupResponse } from '@manage-and-deliver-api'
 import { AccordionArgsItem } from '../../utils/govukFrontendTypes'
-import GroupServiceNavigationPresenter from '../../shared/groups/groupServiceNavigationPresenter'
+import GroupServiceLayoutPresenter, {
+  GroupServiceNavigationValues,
+} from '../../shared/groups/groupServiceLayoutPresenter'
 
 type SessionModule = NonNullable<SessionScheduleGroupResponse['modules']>[number]
 type ModuleSession = NonNullable<SessionModule['sessions']>[number]
 
-export default class SessionScheduleAttendancePresenter {
-  public readonly navigationPresenter: GroupServiceNavigationPresenter
+export default class SessionScheduleAttendancePresenter extends GroupServiceLayoutPresenter {
 
   constructor(
-    private readonly groupId: string,
+    readonly groupId: string,
     private readonly groupSessionsData: SessionScheduleGroupResponse | null = null,
   ) {
-    this.navigationPresenter = new GroupServiceNavigationPresenter(groupId, undefined, 'sessions')
+    super(GroupServiceNavigationValues.sessionsAndAttendanceTab, groupId)
   }
 
   get text() {

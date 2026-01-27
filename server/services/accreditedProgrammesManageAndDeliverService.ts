@@ -48,6 +48,7 @@ import {
   ThinkingAndBehaviour,
   UpdateAvailability,
   UserTeamMember,
+  GroupSchedule,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -620,5 +621,13 @@ export default class AccreditedProgrammesManageAndDeliverService
       path: `/bff/group/${groupId}/session/${sessionId}`,
       headers: { Accept: 'application/json' },
     })) as GroupSessionResponse
+  }
+
+  async getGroupSessionDetails(username: ExpressUsername, groupId: string): Promise<GroupSchedule> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/group/${groupId}/schedule`,
+      headers: { Accept: 'application/json' },
+    })) as GroupSchedule
   }
 }
