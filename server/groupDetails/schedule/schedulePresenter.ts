@@ -14,7 +14,7 @@ export default class SchedulePresenter extends GroupServiceLayoutPresenter {
   get text() {
     return {
       headingCaptionText: 'TODO',
-      headingText: `Sessions and attendance`,
+      headingText: `Schedule`,
     }
   }
 
