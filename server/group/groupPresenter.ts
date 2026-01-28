@@ -8,8 +8,8 @@ import DateUtils from '../utils/dateUtils'
 const cohortConfigMap: Record<ProgrammeGroupCohortEnum, string> = {
   SEXUAL: 'Sexual offence',
   GENERAL: 'General offence',
-  GENERAL_LDC: 'General offence',
-  SEXUAL_LDC: 'General offence',
+  GENERAL_LDC: 'General offence - LDC',
+  SEXUAL_LDC: 'Sexual offence - LDC',
 }
 
 export enum GroupListPageSection {
@@ -193,7 +193,7 @@ export default class GroupPresenter {
   }
 
   generateCohortSelectArgs(): SelectArgsItem[] {
-    const cohortOptions = ['General offence', 'Sexual offence']
+    const cohortOptions = ['General offence', 'General offence - LDC', 'Sexual offence', 'Sexual offence - LDC']
     const selectOptions: SelectArgsItem[] = [
       {
         text: 'Select',

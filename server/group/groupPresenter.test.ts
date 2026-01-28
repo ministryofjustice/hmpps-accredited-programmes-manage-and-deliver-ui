@@ -204,6 +204,120 @@ describe('groupTableArgs', () => {
   })
 })
 
+describe('LDC cohort display', () => {
+  it('should display General offence - LDC with badge for GENERAL_LDC cohort', () => {
+    const groupList = groupsByRegionFactory.build()
+    const ldcGroup = GroupFactory.build({ cohort: 'GENERAL_LDC' })
+    groupList.pagedGroupData.content = [ldcGroup]
+
+    const presenter = new GroupPresenter(
+      groupList.pagedGroupData as Page<Group>,
+      GroupListPageSection.NOT_STARTED,
+      groupList.otherTabTotal,
+      groupList.regionName,
+      GroupListFilter.empty(),
+      [],
+      [],
+    )
+
+    const tableArgs = presenter.groupTableArgs
+    expect(tableArgs.rows[0][4]).toEqual({
+      html: 'General offence - LDC</br><span class="moj-badge moj-badge--bright-purple">LDC</span>',
+    })
+  })
+
+  it('should display Sexual offence - LDC with badge for SEXUAL_LDC cohort', () => {
+    const groupList = groupsByRegionFactory.build()
+    const ldcGroup = GroupFactory.build({ cohort: 'SEXUAL_LDC' })
+    groupList.pagedGroupData.content = [ldcGroup]
+
+    const presenter = new GroupPresenter(
+      groupList.pagedGroupData as Page<Group>,
+      GroupListPageSection.NOT_STARTED,
+      groupList.otherTabTotal,
+      groupList.regionName,
+      GroupListFilter.empty(),
+      [],
+      [],
+    )
+
+    const tableArgs = presenter.groupTableArgs
+    expect(tableArgs.rows[0][4]).toEqual({
+      html: 'Sexual offence - LDC</br><span class="moj-badge moj-badge--bright-purple">LDC</span>',
+    })
+  })
+
+  it('should display Sexual offence without badge for SEXUAL cohort', () => {
+    const groupList = groupsByRegionFactory.build()
+    const sexualGroup = GroupFactory.build({ cohort: 'SEXUAL' })
+    groupList.pagedGroupData.content = [sexualGroup]
+
+    const presenter = new GroupPresenter(
+      groupList.pagedGroupData as Page<Group>,
+      GroupListPageSection.NOT_STARTED,
+      groupList.otherTabTotal,
+      groupList.regionName,
+      GroupListFilter.empty(),
+      [],
+      [],
+    )
+
+    const tableArgs = presenter.groupTableArgs
+    expect(tableArgs.rows[0][4]).toEqual({
+      html: 'Sexual offence',
+    })
+  })
+})
+
+describe('cohort filter select args', () => {
+  it('should include all cohort options including LDC variants', () => {
+    const groupList = groupsByRegionFactory.build()
+    const presenter = new GroupPresenter(
+      groupList.pagedGroupData as Page<Group>,
+      GroupListPageSection.NOT_STARTED,
+      groupList.otherTabTotal,
+      groupList.regionName,
+      GroupListFilter.empty(),
+      [],
+      [],
+    )
+
+    const cohortSelectArgs = presenter.generateCohortSelectArgs()
+
+    expect(cohortSelectArgs).toEqual([
+      { text: 'Select', value: '' },
+      { value: 'General offence', text: 'General offence', selected: false },
+      { value: 'General offence - LDC', text: 'General offence - LDC', selected: false },
+      { value: 'Sexual offence', text: 'Sexual offence', selected: false },
+      { value: 'Sexual offence - LDC', text: 'Sexual offence - LDC', selected: false },
+    ])
+  })
+
+  it('should mark the selected cohort option as selected', () => {
+    const groupList = groupsByRegionFactory.build()
+    const filter = GroupListFilter.empty()
+    filter.cohort = 'General offence - LDC'
+
+    const presenter = new GroupPresenter(
+      groupList.pagedGroupData as Page<Group>,
+      GroupListPageSection.NOT_STARTED,
+      groupList.otherTabTotal,
+      groupList.regionName,
+      filter,
+      [],
+      [],
+    )
+
+    const cohortSelectArgs = presenter.generateCohortSelectArgs()
+
+    expect(cohortSelectArgs[2]).toEqual({
+      value: 'General offence - LDC',
+      text: 'General offence - LDC',
+      selected: true,
+    })
+  })
+})
+
 describe('resultsText', () => {
   it('should return blank when there are no results', () => {
     const filter = GroupListFilter.empty()
