@@ -3,6 +3,7 @@ import { Page } from '../shared/models/pagination'
 import Pagination from '../utils/pagination/pagination'
 import { CheckboxesArgsItem, SelectArgsItem, TableArgs } from '../utils/govukFrontendTypes'
 import GroupListFilter from '../groupDetails/groupListFilter'
+import DateUtils from '../utils/dateUtils'
 
 const cohortConfigMap: Record<ProgrammeGroupCohortEnum, string> = {
   SEXUAL: 'Sexual offence',
@@ -36,7 +37,7 @@ export default class GroupPresenter {
   ) {
     this.params = filter.paramsAsQueryParams
     this.groupListItems = groupListItems
-    this.pagination = new Pagination(this.groupListItems as Required<typeof this.groupListItems>)
+    this.pagination = new Pagination(this.groupListItems as Required<typeof this.groupListItems>, this.params || null)
     this.selectedPdu = this.filter.pdu ?? undefined
     this.deliveryLocations = deliveryLocations ?? []
   }
@@ -98,15 +99,22 @@ export default class GroupPresenter {
   private generateTableRows() {
     const groupData: ({ html: string; text?: undefined } | { text: string; html?: undefined })[][] = []
     this.groupListItems.content.forEach(group => {
+      const rawDate =
+        this.section === GroupListPageSection.NOT_STARTED
+          ? group.earliestStartDate || group.startDate || ''
+          : group.startDate || group.earliestStartDate || ''
+      const displayDate = rawDate ? DateUtils.formattedDate(rawDate) : ''
+      const sortValue = this.dateToSort(rawDate)
+
       groupData.push([
         { html: `<a href='/groupDetails/${group.id}/waitlist'>${group.code}</a>` },
-        { text: group.startDate },
+        { html: `<span data-sort-value="${sortValue}">${displayDate}</span>` },
         { text: group.pduName },
         { text: group.deliveryLocation },
         {
           html: `${cohortConfigMap[group.cohort]}${this.hasLdcTagHtml(group)}`,
         },
-        { text: group.sex },
+        { text: group.sex.charAt(0).toUpperCase() + group.sex.slice(1).toLowerCase() },
       ])
     })
     return groupData
@@ -116,6 +124,12 @@ export default class GroupPresenter {
     return group.cohort.toString() === 'GENERAL_LDC' || group.cohort.toString() === 'SEXUAL_LDC'
       ? '</br><span class="moj-badge moj-badge--bright-purple">LDC</span>'
       : ''
+  }
+
+  private dateToSort(dateString: string): string {
+    if (!dateString) return ''
+    const date = new Date(dateString)
+    return Number.isNaN(date.getTime()) ? '' : date.getTime().toString()
   }
 
   getSubNavArgs(): { items: { text: string; href: string; active: boolean }[] } {
@@ -211,6 +225,11 @@ export default class GroupPresenter {
         value: 'FEMALE',
         text: 'Female',
         selected: this.filter.sex === 'FEMALE',
+      },
+      {
+        value: 'MIXED',
+        text: 'Mixed',
+        selected: this.filter.sex === 'MIXED',
       },
     ]
   }
