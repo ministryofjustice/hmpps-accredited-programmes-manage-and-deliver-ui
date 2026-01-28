@@ -34,12 +34,12 @@
     {{ govukInput(searchByGroupCodeArgs) }}
     {{ govukSelect(searchByPduSelectArgs) }}
 
-    {% if not presenter.deliveryLocations %}
+    {% if not presenter.showDeliveryLocations %}
       <h2 class="govuk-heading-s govuk-!-margin-bottom-1">Delivery location</h2>
       <p class="govuk-body">Select a PDU and apply filters to see delivery locations</p>
     {% endif %}
 
-    {% if presenter.deliveryLocations %}
+    {% if presenter.showDeliveryLocations %}
       {{ govukCheckboxes(deliveryLocationCheckboxArgs) }}
     {% endif %}
 
