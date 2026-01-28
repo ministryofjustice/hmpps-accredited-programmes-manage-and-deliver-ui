@@ -124,6 +124,7 @@ export default class GroupDetailsView {
         hasResults: this.presenter.hasResults(),
         noResultsString: this.presenter.generateNoResultsString(),
         resultsText: this.presenter.resultsText,
+        serviceNavigationArgs: this.presenter.getServiceNavigationArgs(),
       },
     ]
   }
