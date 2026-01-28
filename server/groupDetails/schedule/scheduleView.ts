@@ -62,25 +62,7 @@ export default class ScheduleView {
           text: 'Time',
         },
       ],
-      rows: [
-        [
-          {
-            text: 'Pre-group one-to-ones',
-          },
-          {
-            text: 'Individual',
-          },
-          {
-            text: 'Thursday 23 April 2026',
-            attributes: {
-              'data-sort-value': '6961',
-            },
-          },
-          {
-            text: 'Various Times',
-          },
-        ],
-      ],
+      rows: this.presenter.scheduleTableRows,
     }
   }
 

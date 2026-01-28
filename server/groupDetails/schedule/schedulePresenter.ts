@@ -1,4 +1,4 @@
-import { GroupSchedule } from '@manage-and-deliver-api'
+import { GroupSchedule, GroupScheduleSession } from '@manage-and-deliver-api'
 import GroupServiceLayoutPresenter, {
   GroupServiceNavigationValues,
 } from '../../shared/groups/groupServiceLayoutPresenter'
@@ -16,5 +16,33 @@ export default class SchedulePresenter extends GroupServiceLayoutPresenter {
       headingCaptionText: 'TODO',
       headingText: `Sessions and attendance`,
     }
+  }
+
+  get scheduleTableRows() {
+    const scheduleRows: (
+      | { text: string; attributes?: undefined }
+      | { text: string; attributes: { 'data-sort-value': number } }
+    )[][] = []
+    this.groupSchedule.sessions.forEach((session: GroupScheduleSession) => {
+      const date = new Date(session.date).getTime()
+      scheduleRows.push([
+        {
+          text: session.name,
+        },
+        {
+          text: session.type,
+        },
+        {
+          text: session.date,
+          attributes: {
+            'data-sort-value': date,
+          },
+        },
+        {
+          text: session.time,
+        },
+      ])
+    })
+    return scheduleRows
   }
 }

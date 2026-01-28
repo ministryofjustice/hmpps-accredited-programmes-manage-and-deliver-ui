@@ -124,13 +124,10 @@ export default class GroupDetailsController {
     const { username } = req.user
     const { groupId } = req.params
 
-    // const groupSchedule = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionDetails(
-    //   username,
-    //   groupId,
-    // )
-    const groupSchedule = {}
-
-    console.log(JSON.stringify(groupSchedule, null, 2))
+    const groupSchedule = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionDetails(
+      username,
+      groupId,
+    )
 
     const presenter = new SchedulePresenter(groupId, groupSchedule)
     const view = new ScheduleView(presenter)

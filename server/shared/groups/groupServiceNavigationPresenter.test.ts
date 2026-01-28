@@ -11,7 +11,12 @@ describe('GroupServiceNavigationPresenter', () => {
   describe('getServiceNavigationArgs', () => {
     it('should return navigation args with allocations active', () => {
       // Used as an example to test the schedule tab, as service navigation presenter is protected.
-      const presenter = new SchedulePresenter(groupId, {})
+      const presenter = new SchedulePresenter(groupId, {
+        preGroupOneToOneStartDate: '',
+        gettingStartedModuleStartDate: '',
+        endDate: '',
+        sessions: [],
+      })
 
       expect(presenter.getServiceNavigationArgs()).toEqual({
         classes: 'group-details__service-navigation',
