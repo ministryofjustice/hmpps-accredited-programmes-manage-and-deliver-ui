@@ -8,7 +8,6 @@ type SessionModule = NonNullable<SessionScheduleGroupResponse['modules']>[number
 type ModuleSession = NonNullable<SessionModule['sessions']>[number]
 
 export default class SessionScheduleAttendancePresenter extends GroupServiceLayoutPresenter {
-
   constructor(
     readonly groupId: string,
     private readonly groupSessionsData: SessionScheduleGroupResponse | null = null,
