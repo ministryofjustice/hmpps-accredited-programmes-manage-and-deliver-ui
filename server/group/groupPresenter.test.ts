@@ -342,3 +342,225 @@ describe('resultsText', () => {
     )
   })
 })
+
+describe('date formatting helpers', () => {
+  describe('getGroupDate', () => {
+    it('should prioritize earliestStartDate for NOT_STARTED groups', () => {
+      const groupList = groupsByRegionFactory.build()
+      const group = GroupFactory.build({
+        earliestStartDate: '2024-01-15',
+        startDate: '2024-02-01',
+      })
+      groupList.pagedGroupData.content = [group]
+
+      const presenter = new GroupPresenter(
+        groupList.pagedGroupData as Page<Group>,
+        GroupListPageSection.NOT_STARTED,
+        groupList.otherTabTotal,
+        groupList.regionName,
+        GroupListFilter.empty(),
+        [],
+        [],
+      )
+
+      expect(presenter.getGroupDate(group)).toBe('2024-01-15')
+    })
+
+    it('should prioritize startDate for IN_PROGRESS_OR_COMPLETE groups', () => {
+      const groupList = groupsByRegionFactory.build()
+      const group = GroupFactory.build({
+        earliestStartDate: '2024-01-15',
+        startDate: '2024-02-01',
+      })
+      groupList.pagedGroupData.content = [group]
+
+      const presenter = new GroupPresenter(
+        groupList.pagedGroupData as Page<Group>,
+        GroupListPageSection.IN_PROGRESS_OR_COMPLETE,
+        groupList.otherTabTotal,
+        groupList.regionName,
+        GroupListFilter.empty(),
+        [],
+        [],
+      )
+
+      expect(presenter.getGroupDate(group)).toBe('2024-02-01')
+    })
+
+    it('should fallback to startDate when earliestStartDate is null', () => {
+      const groupList = groupsByRegionFactory.build()
+      const group = GroupFactory.build({
+        earliestStartDate: null,
+        startDate: '2024-02-01',
+      })
+      groupList.pagedGroupData.content = [group]
+
+      const presenter = new GroupPresenter(
+        groupList.pagedGroupData as Page<Group>,
+        GroupListPageSection.NOT_STARTED,
+        groupList.otherTabTotal,
+        groupList.regionName,
+        GroupListFilter.empty(),
+        [],
+        [],
+      )
+
+      expect(presenter.getGroupDate(group)).toBe('2024-02-01')
+    })
+
+    it('should return empty string when both dates are null', () => {
+      const groupList = groupsByRegionFactory.build()
+      const group = GroupFactory.build({
+        earliestStartDate: null,
+        startDate: null,
+      })
+      groupList.pagedGroupData.content = [group]
+
+      const presenter = new GroupPresenter(
+        groupList.pagedGroupData as Page<Group>,
+        GroupListPageSection.NOT_STARTED,
+        groupList.otherTabTotal,
+        groupList.regionName,
+        GroupListFilter.empty(),
+        [],
+        [],
+      )
+
+      expect(presenter.getGroupDate(group)).toBe('')
+    })
+  })
+
+  describe('getFormattedDateCell', () => {
+    it('should return formatted date with sort value', () => {
+      const groupList = groupsByRegionFactory.build()
+      const group = GroupFactory.build({
+        startDate: '2024-01-01',
+      })
+      groupList.pagedGroupData.content = [group]
+
+      const presenter = new GroupPresenter(
+        groupList.pagedGroupData as Page<Group>,
+        GroupListPageSection.NOT_STARTED,
+        groupList.otherTabTotal,
+        groupList.regionName,
+        GroupListFilter.empty(),
+        [],
+        [],
+      )
+
+      const dateCell = presenter.getFormattedDateCell(group)
+      expect(dateCell).toEqual({
+        html: '<span data-sort-value="1704067200000">1 January 2024</span>',
+      })
+    })
+
+    it('should return empty span when no date is available', () => {
+      const groupList = groupsByRegionFactory.build()
+      const group = GroupFactory.build({
+        startDate: null,
+        earliestStartDate: null,
+      })
+      groupList.pagedGroupData.content = [group]
+
+      const presenter = new GroupPresenter(
+        groupList.pagedGroupData as Page<Group>,
+        GroupListPageSection.NOT_STARTED,
+        groupList.otherTabTotal,
+        groupList.regionName,
+        GroupListFilter.empty(),
+        [],
+        [],
+      )
+
+      const dateCell = presenter.getFormattedDateCell(group)
+      expect(dateCell).toEqual({
+        html: '<span data-sort-value=""></span>',
+      })
+    })
+  })
+})
+
+describe('sex formatting', () => {
+  it('should format MALE correctly', () => {
+    const groupList = groupsByRegionFactory.build()
+    const presenter = new GroupPresenter(
+      groupList.pagedGroupData as Page<Group>,
+      GroupListPageSection.NOT_STARTED,
+      groupList.otherTabTotal,
+      groupList.regionName,
+      GroupListFilter.empty(),
+      [],
+      [],
+    )
+
+    expect(presenter.formatSex('MALE')).toBe('Male')
+  })
+
+  it('should format FEMALE correctly', () => {
+    const groupList = groupsByRegionFactory.build()
+    const presenter = new GroupPresenter(
+      groupList.pagedGroupData as Page<Group>,
+      GroupListPageSection.NOT_STARTED,
+      groupList.otherTabTotal,
+      groupList.regionName,
+      GroupListFilter.empty(),
+      [],
+      [],
+    )
+
+    expect(presenter.formatSex('FEMALE')).toBe('Female')
+  })
+
+  it('should format MIXED correctly', () => {
+    const groupList = groupsByRegionFactory.build()
+    const presenter = new GroupPresenter(
+      groupList.pagedGroupData as Page<Group>,
+      GroupListPageSection.NOT_STARTED,
+      groupList.otherTabTotal,
+      groupList.regionName,
+      GroupListFilter.empty(),
+      [],
+      [],
+    )
+
+    expect(presenter.formatSex('MIXED')).toBe('Mixed')
+  })
+})
+
+describe('cohort cell generation', () => {
+  it('should generate cohort cell for GENERAL without badge', () => {
+    const groupList = groupsByRegionFactory.build()
+    const group = GroupFactory.build({ cohort: 'GENERAL' })
+    const presenter = new GroupPresenter(
+      groupList.pagedGroupData as Page<Group>,
+      GroupListPageSection.NOT_STARTED,
+      groupList.otherTabTotal,
+      groupList.regionName,
+      GroupListFilter.empty(),
+      [],
+      [],
+    )
+
+    expect(presenter.getCohortCell(group)).toEqual({
+      html: 'General offence',
+    })
+  })
+
+  it('should generate cohort cell for GENERAL_LDC with badge', () => {
+    const groupList = groupsByRegionFactory.build()
+    const group = GroupFactory.build({ cohort: 'GENERAL_LDC' })
+    const presenter = new GroupPresenter(
+      groupList.pagedGroupData as Page<Group>,
+      GroupListPageSection.NOT_STARTED,
+      groupList.otherTabTotal,
+      groupList.regionName,
+      GroupListFilter.empty(),
+      [],
+      [],
+    )
+
+    expect(presenter.getCohortCell(group)).toEqual({
+      html: 'General offence - LDC</br><span class="moj-badge moj-badge--bright-purple">LDC</span>',
+    })
+  })
+})

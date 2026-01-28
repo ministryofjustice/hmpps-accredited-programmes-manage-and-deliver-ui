@@ -99,25 +99,39 @@ export default class GroupPresenter {
   private generateTableRows() {
     const groupData: ({ html: string; text?: undefined } | { text: string; html?: undefined })[][] = []
     this.groupListItems.content.forEach(group => {
-      const rawDate =
-        this.section === GroupListPageSection.NOT_STARTED
-          ? group.earliestStartDate || group.startDate || ''
-          : group.startDate || group.earliestStartDate || ''
-      const displayDate = rawDate ? DateUtils.formattedDate(rawDate) : ''
-      const sortValue = this.dateToSort(rawDate)
-
       groupData.push([
         { html: `<a href='/groupDetails/${group.id}/waitlist'>${group.code}</a>` },
-        { html: `<span data-sort-value="${sortValue}">${displayDate}</span>` },
+        this.getFormattedDateCell(group),
         { text: group.pduName },
         { text: group.deliveryLocation },
-        {
-          html: `${cohortConfigMap[group.cohort]}${this.hasLdcTagHtml(group)}`,
-        },
-        { text: group.sex.charAt(0).toUpperCase() + group.sex.slice(1).toLowerCase() },
+        this.getCohortCell(group),
+        { text: this.formatSex(group.sex) },
       ])
     })
     return groupData
+  }
+
+  getFormattedDateCell(group: Group): { html: string } {
+    const rawDate = this.getGroupDate(group)
+    const displayDate = rawDate ? DateUtils.formattedDate(rawDate) : ''
+    const sortValue = this.dateToSort(rawDate)
+    return { html: `<span data-sort-value="${sortValue}">${displayDate}</span>` }
+  }
+
+  getGroupDate(group: Group): string {
+    return this.section === GroupListPageSection.NOT_STARTED
+      ? group.earliestStartDate || group.startDate || ''
+      : group.startDate || group.earliestStartDate || ''
+  }
+
+  getCohortCell(group: Group): { html: string } {
+    return {
+      html: `${cohortConfigMap[group.cohort]}${this.hasLdcTagHtml(group)}`,
+    }
+  }
+
+  formatSex(sex: string): string {
+    return sex.charAt(0).toUpperCase() + sex.slice(1).toLowerCase()
   }
 
   private hasLdcTagHtml(group: Group): string {
