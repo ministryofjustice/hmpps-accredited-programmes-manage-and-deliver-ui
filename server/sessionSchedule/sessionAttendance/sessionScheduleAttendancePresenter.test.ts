@@ -78,7 +78,7 @@ describe('SessionScheduleAttendancePresenter', () => {
     it('creates a navigation presenter with sessions active', () => {
       const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
 
-      expect(presenter.navigationPresenter).toBeDefined()
+      expect(presenter.getServiceNavigationArgs()).toBeDefined()
     })
   })
 

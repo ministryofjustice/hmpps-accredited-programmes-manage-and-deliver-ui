@@ -274,6 +274,10 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await groupDetailsController.showGroupDetailsWaitlist(req, res)
   })
 
+  get('/group/:groupId/schedule', async (req, res, next) => {
+    await groupDetailsController.showSchedule(req, res)
+  })
+
   get(
     '/referral/:referralId/group-allocation-notes/motivation-background-and-non-associations',
     async (req, res, next) => {
