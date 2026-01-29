@@ -100,7 +100,9 @@ export default class GroupPresenter {
     const groupData: ({ html: string; text?: undefined } | { text: string; html?: undefined })[][] = []
     this.groupListItems.content.forEach(group => {
       groupData.push([
-        { html: `<a href='/groupDetails/${group.id}/waitlist'>${group.code}</a>` },
+        {
+          html: `<span data-sort-value="${group.code.toLowerCase()}"><a href='/groupDetails/${group.id}/waitlist'>${group.code}</a></span>`,
+        },
         this.getFormattedDateCell(group),
         { text: group.pduName },
         { text: group.deliveryLocation },

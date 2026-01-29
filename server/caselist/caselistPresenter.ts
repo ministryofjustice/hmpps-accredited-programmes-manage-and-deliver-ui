@@ -101,7 +101,7 @@ export default class CaselistPresenter {
     this.referralCaseListItems.content.forEach(referral => {
       referralData.push([
         {
-          html: `<a href='/referral-details/${referral.referralId}/personal-details'>${referral.personName}</a><span>${referral.crn}</span>`,
+          html: `<span data-sort-value="${this.getNameSortValue(referral.personName)}"><a href='/referral-details/${referral.referralId}/personal-details'>${referral.personName}</a><span>${referral.crn}</span></span>`,
         },
         { text: referral.pdu },
         { text: referral.reportingTeam },
@@ -112,6 +112,22 @@ export default class CaselistPresenter {
       ])
     })
     return referralData
+  }
+
+  private getNameSortValue(personName: string): string {
+    // Split the name into parts
+    const nameParts = personName.trim().split(' ')
+
+    if (nameParts.length === 0) {
+      return ''
+    }
+
+    // Assume last part is surname, everything else is firstname
+    const surname = nameParts[nameParts.length - 1]
+    const firstname = nameParts.slice(0, -1).join(' ')
+
+    // Return "surname, firstname" in lowercase for case-insensitive sorting
+    return `${surname}, ${firstname}`.toLowerCase()
   }
 
   getSubNavArgs(): { items: { text: string; href: string; active: boolean }[] } {
