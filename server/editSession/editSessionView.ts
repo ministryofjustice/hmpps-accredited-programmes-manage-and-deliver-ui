@@ -92,7 +92,7 @@ export default class EditSessionView {
     return {
       text: 'Delete session',
       href: this.presenter.deleteUrl,
-      classes: 'govuk-buttoon-secondary',
+      classes: 'govuk-button--secondary',
     }
   }
 
@@ -105,6 +105,7 @@ export default class EditSessionView {
         backLinkArgs: this.presenter.backLinkArgs,
         editSessionSummary: this.editSessionSummary,
         deleteButton: this.deleteButton,
+        canBeDeleted: this.presenter.canBeDeleted,
       },
     ]
   }

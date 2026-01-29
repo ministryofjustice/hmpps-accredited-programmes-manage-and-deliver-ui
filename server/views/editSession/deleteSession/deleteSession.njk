@@ -20,7 +20,7 @@
         {% endif %}
         <form method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{csrfToken}}">
-          <span>{{text.pageCaption}}</span>
+          <span class="govuk-caption-l">{{text.pageCaption}}</span>
           {{ govukRadios(radioArgs) }}
 
           <div class="govuk-button-group">

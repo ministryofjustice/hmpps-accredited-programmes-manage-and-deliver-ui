@@ -4,6 +4,26 @@
  */
 
 export interface paths {
+  '/session/{sessionId}/reschedule': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Reschedule a session and optionally subsequent group sessions
+     * @description Update the start and end time of a session, and optionally update subsequent group sessions in the same programme group.
+     */
+    put: operations['rescheduleSession']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/referral/{id}/update-cohort': {
     parameters: {
       query?: never
@@ -706,6 +726,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/bff/session/{sessionId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve session by an ID
+     * @description Retrieve the details for a session
+     */
+    get: operations['retrieveSessionById']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/bff/session/{sessionId}/edit-session-date-and-time': {
     parameters: {
       query?: never
@@ -910,6 +950,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/bff/group/{groupId}/schedule': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * bff endpoint to retrieve a schedule of a module sessions for a programme group
+     * @description Retrieve group schedule..
+     */
+    get: operations['getGroupSchedule']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/bff/group/{groupId}/module/{moduleId}/schedule-session-type': {
     parameters: {
       query?: never
@@ -988,6 +1048,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/session/{sessionId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /**
+     * Endpoint to delete an individual session
+     * @description Delete sessions
+     */
+    delete: operations['deleteSession']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
 }
 export type webhooks = Record<string, never>
 export interface components {
@@ -1020,6 +1100,42 @@ export interface components {
        * @example null
        */
       moreInfo?: string
+    }
+    RescheduleSessionRequest: {
+      /**
+       * Format: date
+       * @description The start date of the session in DD/MM/YYYY format
+       * @example 12/12/2026
+       */
+      sessionStartDate: string
+      /** @description The start time of the session */
+      sessionStartTime: components['schemas']['SessionTime']
+      /** @description The end time of the session */
+      sessionEndTime?: components['schemas']['SessionTime']
+      /**
+       * @description Whether to reschedule other sessions
+       * @example true
+       */
+      rescheduleOtherSessions: boolean
+    }
+    SessionTime: {
+      /**
+       * Format: int32
+       * @description Hour in 12-hour format (1-12)
+       * @example 10
+       */
+      hour: number
+      /**
+       * Format: int32
+       * @description Minutes (0-59)
+       * @example 30
+       */
+      minutes: number
+      /**
+       * @description AM or PM designation
+       * @enum {string}
+       */
+      amOrPm: 'AM' | 'PM'
     }
     /** @description Cohort to update the referral with */
     UpdateCohort: {
@@ -1311,11 +1427,6 @@ export interface components {
        */
       additionalDetails?: string
     }
-    /**
-     * @description AM/PM time indicator
-     * @enum {string}
-     */
-    AmOrPm: 'AM' | 'PM'
     CreateGroupRequest: {
       /** @description The code for the group */
       groupCode: string
@@ -1364,8 +1475,9 @@ export interface components {
       /**
        * @description AM or PM indicator
        * @example AM
+       * @enum {string}
        */
-      amOrPm: components['schemas']['AmOrPm']
+      amOrPm: 'AM' | 'PM'
     }
     CreateGroupTeamMember: {
       /** @description The full name of the facilitator for the group */
@@ -1410,25 +1522,6 @@ export interface components {
       startTime: components['schemas']['SessionTime']
       /** @description The end time of the one-to-one session */
       endTime: components['schemas']['SessionTime']
-    }
-    SessionTime: {
-      /**
-       * Format: int32
-       * @description Hour in 12-hour format (1-12)
-       * @example 10
-       */
-      hour: number
-      /**
-       * Format: int32
-       * @description Minutes (0-59)
-       * @example 30
-       */
-      minutes: number
-      /**
-       * @description AM or PM designation
-       * @enum {string}
-       */
-      amOrPm: 'AM' | 'PM'
     }
     RemoveFromGroupRequest: {
       /**
@@ -2501,9 +2594,9 @@ export interface components {
       /** Format: int64 */
       offset?: number
       sort?: components['schemas']['SortObject']
+      paged?: boolean
       /** Format: int32 */
       pageSize?: number
-      paged?: boolean
       /** Format: int32 */
       pageNumber?: number
       unpaged?: boolean
@@ -2647,6 +2740,38 @@ export interface components {
       currentStatus: components['schemas']['CurrentStatus']
       /** @description List of transition statuses */
       availableStatuses: components['schemas']['ReferralStatus'][]
+    }
+    /** @description Details of a session */
+    Session: {
+      /**
+       * Format: uuid
+       * @description Unique identifier for a session
+       * @example 0da0096f-8950-4bb9-9695-5e10a1f3a9c2
+       */
+      id: string
+      /**
+       * @description Type of a session
+       * @example Group
+       */
+      type: string
+      /**
+       * @description Name of a session
+       * @example Getting started
+       */
+      name: string
+      /**
+       * Format: int32
+       * @description Number of a session
+       * @example 1
+       */
+      number: number
+      /** @description A list of referrals for a session */
+      referrals: components['schemas']['Referral'][]
+      /**
+       * @description A flag if a session is a catchup or not
+       * @example false
+       */
+      isCatchup: boolean
     }
     EditSessionDetails: {
       /** Format: uuid */
@@ -3061,6 +3186,57 @@ export interface components {
       /** @description The attendance and session notes for each attendee */
       attendanceAndSessionNotes: components['schemas']['AttendanceAndSessionNotes'][]
     }
+    GroupSchedule: {
+      /**
+       * Format: date
+       * @description The start date of a group one to one in format DayName DateNumber MonthName YearNumber
+       * @example Monday 22 June 2026
+       */
+      preGroupOneToOneStartDate: string
+      /**
+       * Format: date
+       * @description The start date of a module in format DayName DateNumber MonthName YearNumber
+       * @example Monday 22 June 2026
+       */
+      gettingStartedModuleStartDate: string
+      /**
+       * Format: date
+       * @description The end date of a module in format DayName DateNumber MonthName YearNumber
+       * @example Monday 22 September 2026
+       */
+      endDate: string
+      /** @description Details of the Group's sessions */
+      sessions: components['schemas']['GroupScheduleSession'][]
+    }
+    GroupScheduleSession: {
+      /**
+       * Format: uuid
+       * @description id of the session
+       * @example UUID
+       */
+      id: string
+      /**
+       * @description The name of the session
+       * @example Pre Group one-to-ones
+       */
+      name: string
+      /**
+       * @description The type of the session
+       * @example Individual
+       */
+      type: string
+      /**
+       * Format: date
+       * @description The date of the session
+       * @example Monday 22 June 2026
+       */
+      date: string
+      /**
+       * @description The time(s) of the session. For example 11am to 1:30pm or Various times
+       * @example Various times
+       */
+      time: string
+    }
     /** @description A session template item with basic information */
     ModuleSessionTemplate: {
       /**
@@ -3115,6 +3291,69 @@ export interface components {
 }
 export type $defs = Record<string, never>
 export interface operations {
+  rescheduleSession: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The unique session identifier */
+        sessionId: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RescheduleSessionRequest']
+      }
+    }
+    responses: {
+      /** @description Session rescheduled successfully */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Session not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   updateCohortForReferral: {
     parameters: {
       query?: never
@@ -5351,6 +5590,65 @@ export interface operations {
       }
     }
   }
+  retrieveSessionById: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The unique session identifier */
+        sessionId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Session details retrieved successfully */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Session']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Session not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   retrieveSessionDetailsToEdit: {
     parameters: {
       query?: never
@@ -5933,6 +6231,65 @@ export interface operations {
       }
     }
   }
+  getGroupSchedule: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The UUID of the Programme Group */
+        groupId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully retrieved group schedule details */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['GroupSchedule']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Group or module not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getSessionTemplatesForGroupModule: {
     parameters: {
       query?: never
@@ -6107,6 +6464,62 @@ export interface operations {
       }
       /** @description Unauthorised. The request was unauthorised. */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  deleteSession: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        sessionId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully deleted session */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Session not found */
+      404: {
         headers: {
           [name: string]: unknown
         }

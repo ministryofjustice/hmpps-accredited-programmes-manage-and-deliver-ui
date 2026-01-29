@@ -17,14 +17,13 @@ export default class EditSessionController {
     const { groupId, sessionId, sessionName } = req.params
     const { username } = req.user
 
-    const sessionDetails = await this.accreditedProgrammesManageAndDeliverService.getSessionDetails(
+    const sessionDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionDetails(
       username,
       groupId,
       sessionId,
     )
 
     req.session.originPage = req.path
-    req.session.sessionScheduleData = { sessionName: sessionDetails.pageTitle }
 
     const presenter = new EditSessionPresenter(
       groupId,
@@ -37,7 +36,7 @@ export default class EditSessionController {
   }
 
   async deleteSession(req: Request, res: Response): Promise<void> {
-    const { groupId, sessionId, sessionName } = req.params
+    const { groupId, sessionId } = req.params
     const { username } = req.user
 
     let formError: FormValidationError | null = null
@@ -48,18 +47,16 @@ export default class EditSessionController {
         res.status(400)
         formError = data.error
       } else if (data.paramsForUpdate?.delete === 'yes') {
-        console.log('delete session')
+        const response = await this.accreditedProgrammesManageAndDeliverService.deleteSession(username, sessionId)
+        return res.redirect(`group/${groupId}/sessions-and-attendance?message=${response.message}`)
       } else {
         return res.redirect(req.session.originPage)
       }
     }
 
-    const presenter = new DeleteSessionPresenter(
-      groupId,
-      req.session.originPage,
-      req.session.sessionScheduleData.sessionName,
-      formError,
-    )
+    const sessionDetails = await this.accreditedProgrammesManageAndDeliverService.getSessionDetails(username, sessionId)
+
+    const presenter = new DeleteSessionPresenter(groupId, req.session.originPage, sessionDetails, formError)
     const view = new DeleteSessionView(presenter)
 
     return ControllerUtils.renderWithLayout(res, view, null)

@@ -28,16 +28,20 @@ beforeEach(() => {
 describe('editSession', () => {
   it('should fetch session details with correct parameters', async () => {
     const sessionDetails = sessionDetailsFactory.build()
-    accreditedProgrammesManageAndDeliverService.getSessionDetails.mockResolvedValue(sessionDetails)
+    accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
 
     await request(app).get(`/group/12345/sessionId/6789/test-session`).expect(200)
 
-    expect(accreditedProgrammesManageAndDeliverService.getSessionDetails).toHaveBeenCalledWith('user1', '12345', '6789')
+    expect(accreditedProgrammesManageAndDeliverService.getGroupSessionDetails).toHaveBeenCalledWith(
+      'user1',
+      '12345',
+      '6789',
+    )
   })
 
   it('loads the session details page and displays all related data', async () => {
     const sessionDetails = sessionDetailsFactory.build()
-    accreditedProgrammesManageAndDeliverService.getSessionDetails.mockResolvedValue(sessionDetails)
+    accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
 
     await request(app)
       .get(`/group/12345/sessionId/6789/test-session`)

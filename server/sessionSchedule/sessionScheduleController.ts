@@ -139,13 +139,15 @@ export default class SessionScheduleController {
   async showSessionAttendance(req: Request, res: Response): Promise<void> {
     const { username } = req.user
     const { groupId } = req.params
+    const { message } = req.query
 
     const sessionAttendanceData = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionsAndAttendance(
       username,
       groupId,
     )
+    const messageString = message ? String(message) : null
 
-    const presenter = new SessionScheduleAttendancePresenter(groupId, sessionAttendanceData)
+    const presenter = new SessionScheduleAttendancePresenter(groupId, sessionAttendanceData, messageString)
     const view = new SessionScheduleAttendanceView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }

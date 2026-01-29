@@ -20,7 +20,9 @@
       </div>
       <div class="govuk-grid-column-two-thirds">
         {{ govukSummaryList(editSessionSummary) }}
+        {% if canBeDeleted %}
         {{ govukButton(deleteButton) }}
+        {% endif %}
       </div>
     </div>
   </main>

@@ -15,6 +15,10 @@ export default class EditSessionPresenter {
     }
   }
 
+  get canBeDeleted(): boolean {
+    return this.sessionDetails.sessionType.toLowerCase() === 'individual'
+  }
+
   get backLinkArgs() {
     return {
       text: 'Back',

@@ -68,6 +68,7 @@ type ScheduleSessionTypeResponse = components['schemas']['ScheduleSessionTypeRes
 type ScheduleIndividualSessionDetailsResponse = components['schemas']['ScheduleIndividualSessionDetailsResponse']
 type ScheduleSessionRequest = components['schemas']['ScheduleSessionRequest']
 type GroupSessionResponse = components['schemas']['GroupSessionResponse']
+type Session = components['schemas']['Session']
 
 export type {
   AlcoholMisuseDetails,
@@ -128,13 +129,14 @@ export type {
   ScheduleIndividualSessionDetailsResponse,
   ScheduleSessionRequest,
   ScheduleSessionTypeResponse,
+  Session,
+  SessionScheduleGroupResponse,
+  SessionScheduleRequest,
+  SessionScheduleResponse,
   SentenceInformation,
   ThinkingAndBehaviour,
   UpdateAvailability,
   UpdateCohort,
   UpdateLdc,
   UserTeamMember,
-  SessionScheduleGroupResponse,
-  SessionScheduleRequest,
-  SessionScheduleResponse,
 }
