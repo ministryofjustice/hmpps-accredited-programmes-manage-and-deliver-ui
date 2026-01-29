@@ -235,4 +235,56 @@ describe('SessionScheduleAttendancePresenter', () => {
       expect(content).not.toContain('undefined')
     })
   })
+
+  describe('scheduleSessionSuccessMessageArgs', () => {
+    it('returns success message when provided by BFF', () => {
+      const presenter = new SessionScheduleAttendancePresenter(
+        groupId,
+        mockGroupSessionsData,
+        'Getting started one-to-one for Jane Smith has been added.',
+      )
+
+      const messageArgs = presenter.scheduleSessionSuccessMessageArgs
+
+      expect(messageArgs).toEqual({
+        variant: 'success',
+        title: 'Success',
+        text: 'Getting started one-to-one for Jane Smith has been added.',
+        dismissible: true,
+      })
+    })
+
+    it('returns success message for group sessions', () => {
+      const presenter = new SessionScheduleAttendancePresenter(
+        groupId,
+        mockGroupSessionsData,
+        'Managing emotions has been added.',
+      )
+
+      const messageArgs = presenter.scheduleSessionSuccessMessageArgs
+
+      expect(messageArgs).toEqual({
+        variant: 'success',
+        title: 'Success',
+        text: 'Managing emotions has been added.',
+        dismissible: true,
+      })
+    })
+
+    it('returns null when no success message is provided', () => {
+      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
+
+      const messageArgs = presenter.scheduleSessionSuccessMessageArgs
+
+      expect(messageArgs).toBeNull()
+    })
+
+    it('handles empty string success message', () => {
+      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData, '')
+
+      const messageArgs = presenter.scheduleSessionSuccessMessageArgs
+
+      expect(messageArgs).toBeNull()
+    })
+  })
 })

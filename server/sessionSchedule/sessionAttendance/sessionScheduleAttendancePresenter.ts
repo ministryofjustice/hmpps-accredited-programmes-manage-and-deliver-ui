@@ -1,5 +1,6 @@
 import { SessionScheduleGroupResponse } from '@manage-and-deliver-api'
 import { AccordionArgsItem } from '../../utils/govukFrontendTypes'
+import { MojAlertComponentArgs } from '../../interfaces/alertComponentArgs'
 import GroupServiceLayoutPresenter, {
   GroupServiceNavigationValues,
 } from '../../shared/groups/groupServiceLayoutPresenter'
@@ -11,6 +12,7 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
   constructor(
     readonly groupId: string,
     private readonly groupSessionsData: SessionScheduleGroupResponse | null = null,
+    private readonly successMessage?: string,
   ) {
     super(GroupServiceNavigationValues.sessionsAndAttendanceTab, groupId)
   }
@@ -21,6 +23,17 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
     return {
       headingCaptionText: groupCode || '',
       headingText: 'Sessions and attendance',
+    }
+  }
+
+  get scheduleSessionSuccessMessageArgs(): MojAlertComponentArgs | null {
+    if (!this.successMessage) return null
+
+    return {
+      variant: 'success',
+      title: 'Success',
+      text: this.successMessage,
+      dismissible: true,
     }
   }
 
