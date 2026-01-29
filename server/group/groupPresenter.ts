@@ -3,12 +3,13 @@ import { Page } from '../shared/models/pagination'
 import Pagination from '../utils/pagination/pagination'
 import { CheckboxesArgsItem, SelectArgsItem, TableArgs } from '../utils/govukFrontendTypes'
 import GroupListFilter from '../groupDetails/groupListFilter'
+import DateUtils from '../utils/dateUtils'
 
 const cohortConfigMap: Record<ProgrammeGroupCohortEnum, string> = {
   SEXUAL: 'Sexual offence',
   GENERAL: 'General offence',
-  GENERAL_LDC: 'General offence',
-  SEXUAL_LDC: 'General offence',
+  GENERAL_LDC: 'General offence - LDC',
+  SEXUAL_LDC: 'Sexual offence - LDC',
 }
 
 export enum GroupListPageSection {
@@ -36,7 +37,7 @@ export default class GroupPresenter {
   ) {
     this.params = filter.paramsAsQueryParams
     this.groupListItems = groupListItems
-    this.pagination = new Pagination(this.groupListItems as Required<typeof this.groupListItems>)
+    this.pagination = new Pagination(this.groupListItems as Required<typeof this.groupListItems>, this.params || null)
     this.selectedPdu = this.filter.pdu ?? undefined
     this.deliveryLocations = deliveryLocations ?? []
   }
@@ -100,22 +101,49 @@ export default class GroupPresenter {
     this.groupListItems.content.forEach(group => {
       groupData.push([
         { html: `<a href='/groupDetails/${group.id}/waitlist'>${group.code}</a>` },
-        { text: group.startDate },
+        this.getFormattedDateCell(group),
         { text: group.pduName },
         { text: group.deliveryLocation },
-        {
-          html: `${cohortConfigMap[group.cohort]}${this.hasLdcTagHtml(group)}`,
-        },
-        { text: group.sex },
+        this.getCohortCell(group),
+        { text: this.formatSex(group.sex) },
       ])
     })
     return groupData
+  }
+
+  getFormattedDateCell(group: Group): { html: string } {
+    const rawDate = this.getGroupDate(group)
+    const displayDate = rawDate ? DateUtils.formattedDate(rawDate) : ''
+    const sortValue = this.dateToSort(rawDate)
+    return { html: `<span data-sort-value="${sortValue}">${displayDate}</span>` }
+  }
+
+  getGroupDate(group: Group): string {
+    return this.section === GroupListPageSection.NOT_STARTED
+      ? group.earliestStartDate || group.startDate || ''
+      : group.startDate || group.earliestStartDate || ''
+  }
+
+  getCohortCell(group: Group): { html: string } {
+    return {
+      html: `${cohortConfigMap[group.cohort]}${this.hasLdcTagHtml(group)}`,
+    }
+  }
+
+  formatSex(sex: string): string {
+    return sex.charAt(0).toUpperCase() + sex.slice(1).toLowerCase()
   }
 
   private hasLdcTagHtml(group: Group): string {
     return group.cohort.toString() === 'GENERAL_LDC' || group.cohort.toString() === 'SEXUAL_LDC'
       ? '</br><span class="moj-badge moj-badge--bright-purple">LDC</span>'
       : ''
+  }
+
+  private dateToSort(dateString: string): string {
+    if (!dateString) return ''
+    const date = new Date(dateString)
+    return Number.isNaN(date.getTime()) ? '' : date.getTime().toString()
   }
 
   getSubNavArgs(): { items: { text: string; href: string; active: boolean }[] } {
@@ -179,7 +207,7 @@ export default class GroupPresenter {
   }
 
   generateCohortSelectArgs(): SelectArgsItem[] {
-    const cohortOptions = ['General offence', 'Sexual offence']
+    const cohortOptions = ['General offence', 'General offence - LDC', 'Sexual offence', 'Sexual offence - LDC']
     const selectOptions: SelectArgsItem[] = [
       {
         text: 'Select',
@@ -211,6 +239,11 @@ export default class GroupPresenter {
         value: 'FEMALE',
         text: 'Female',
         selected: this.filter.sex === 'FEMALE',
+      },
+      {
+        value: 'MIXED',
+        text: 'Mixed',
+        selected: this.filter.sex === 'MIXED',
       },
     ]
   }
