@@ -1,5 +1,6 @@
 import { SessionScheduleGroupResponse } from '@manage-and-deliver-api'
 import { AccordionArgsItem } from '../../utils/govukFrontendTypes'
+// import GroupServiceNavigationPresenter from '../../shared/groups/groupServiceNavigationPresenter'
 import { MojAlertComponentArgs } from '../../interfaces/alertComponentArgs'
 import GroupServiceLayoutPresenter, {
   GroupServiceNavigationValues,
