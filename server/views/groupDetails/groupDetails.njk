@@ -21,9 +21,9 @@
     <span class="govuk-caption-xl">{{ text.pageSubHeading }}</span>
     <h1 class="govuk-heading-xl">{{ text.pageHeading }}</h1>
   </div>
-  
+
 </div>
-{{ groupServiceNavigation(presenter.navigationPresenter.getServiceNavigationArgs()) }}
+{{ groupServiceNavigation(serviceNavigationArgs) }}
 <div class="govuk-grid-row">
 
   {%- set filterOptionsHtml %}
@@ -66,11 +66,11 @@
     {% if errorSummary !== null %}
       {{ govukErrorSummary(errorSummary) }}
     {% endif %}
-    
+
     {% if successMessageArgs !== null %}
       {{ mojAlert(successMessageArgs) }}
     {% endif %}
-    
+
     {{ mojSubNavigation(subNavArgs) }}
  {% if resultsText %}
         <p class="govuk-body showing-results">{{ resultsText | safe }}</p>

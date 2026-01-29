@@ -910,6 +910,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/bff/group/{groupId}/schedule': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * bff endpoint to retrieve a schedule of a module sessions for a programme group
+     * @description Retrieve group schedule..
+     */
+    get: operations['getGroupSchedule']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/bff/group/{groupId}/module/{moduleId}/schedule-session-type': {
     parameters: {
       query?: never
@@ -983,6 +1003,26 @@ export interface paths {
     put?: never
     post?: never
     delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/session/{sessionId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post?: never
+    /**
+     * Endpoint to delete an individual session
+     * @description Delete sessions
+     */
+    delete: operations['deleteSession']
     options?: never
     head?: never
     patch?: never
@@ -2480,10 +2520,10 @@ export interface components {
       reportingTeams: string[]
     }
     PageReferralCaseListItem: {
-      /** Format: int64 */
-      totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      /** Format: int64 */
+      totalElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
@@ -2502,10 +2542,10 @@ export interface components {
       offset?: number
       sort?: components['schemas']['SortObject']
       /** Format: int32 */
+      pageNumber?: number
+      /** Format: int32 */
       pageSize?: number
       paged?: boolean
-      /** Format: int32 */
-      pageNumber?: number
       unpaged?: boolean
     }
     ReferralCaseListItem: {
@@ -2760,10 +2800,10 @@ export interface components {
       regionName: string
     }
     PageGroup: {
-      /** Format: int64 */
-      totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      /** Format: int64 */
+      totalElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
@@ -2877,10 +2917,10 @@ export interface components {
       activeProgrammeGroupId: string
     }
     PageGroupItem: {
-      /** Format: int64 */
-      totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      /** Format: int64 */
+      totalElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
@@ -3060,6 +3100,57 @@ export interface components {
       facilitators: string[]
       /** @description The attendance and session notes for each attendee */
       attendanceAndSessionNotes: components['schemas']['AttendanceAndSessionNotes'][]
+    }
+    GroupSchedule: {
+      /**
+       * Format: date
+       * @description The start date of a group one to one in format DayName DateNumber MonthName YearNumber
+       * @example Monday 22 June 2026
+       */
+      preGroupOneToOneStartDate: string
+      /**
+       * Format: date
+       * @description The start date of a module in format DayName DateNumber MonthName YearNumber
+       * @example Monday 22 June 2026
+       */
+      gettingStartedModuleStartDate: string
+      /**
+       * Format: date
+       * @description The end date of a module in format DayName DateNumber MonthName YearNumber
+       * @example Monday 22 September 2026
+       */
+      endDate: string
+      /** @description Details of the Group's sessions */
+      sessions: components['schemas']['GroupScheduleSession'][]
+    }
+    GroupScheduleSession: {
+      /**
+       * Format: uuid
+       * @description id of the session
+       * @example UUID
+       */
+      id: string
+      /**
+       * @description The name of the session
+       * @example Pre Group one-to-ones
+       */
+      name: string
+      /**
+       * @description The type of the session
+       * @example Individual
+       */
+      type: string
+      /**
+       * Format: date
+       * @description The date of the session
+       * @example Monday 22 June 2026
+       */
+      date: string
+      /**
+       * @description The time(s) of the session. For example 11am to 1:30pm or Various times
+       * @example Various times
+       */
+      time: string
     }
     /** @description A session template item with basic information */
     ModuleSessionTemplate: {
@@ -5933,6 +6024,65 @@ export interface operations {
       }
     }
   }
+  getGroupSchedule: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The UUID of the Programme Group */
+        groupId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully retrieved group schedule details */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['GroupSchedule']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Group or module not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getSessionTemplatesForGroupModule: {
     parameters: {
       query?: never
@@ -6107,6 +6257,62 @@ export interface operations {
       }
       /** @description Unauthorised. The request was unauthorised. */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  deleteSession: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        sessionId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully deleted session */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Session not found */
+      404: {
         headers: {
           [name: string]: unknown
         }

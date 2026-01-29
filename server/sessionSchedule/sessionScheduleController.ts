@@ -31,9 +31,9 @@ export default class SessionScheduleController {
     )
 
     if (req.method === 'POST') {
-      const selectedTemplateId = req.body['session-template']
+      const selectedSessionTemplateId = req.body['session-template']
 
-      if (!selectedTemplateId) {
+      if (!selectedSessionTemplateId) {
         res.status(400)
         formError = {
           errors: [
@@ -46,7 +46,7 @@ export default class SessionScheduleController {
         }
       } else {
         req.session.sessionScheduleData = {
-          sessionTemplateId: selectedTemplateId,
+          sessionTemplateId: selectedSessionTemplateId,
           sessionName: sessionTemplates.length > 0 ? sessionTemplates[0].name : 'the session',
         }
         return res.redirect(`/group/${groupId}/module/${moduleId}/schedule-group-session-details`)
@@ -125,10 +125,13 @@ export default class SessionScheduleController {
         groupId,
         sessionDataForApi as SessionScheduleRequest,
       )
-      // Clear session data on submission
+
+      const successMessage = response.message || 'Session has been added.'
+
       req.session.sessionScheduleData = {}
-      // Change this when page exists
-      return res.redirect(`/group/${groupId}/module/${moduleId}/session-review-details?message=${response.message}`)
+      return res.redirect(
+        `/group/${groupId}/sessions-and-attendance?successMessage=${encodeURIComponent(successMessage)}`,
+      )
     }
 
     const presenter = new SessionScheduleCyaPresenter(`/${groupId}/${moduleId}`, sessionScheduleData)
@@ -139,13 +142,16 @@ export default class SessionScheduleController {
   async showSessionAttendance(req: Request, res: Response): Promise<void> {
     const { username } = req.user
     const { groupId } = req.params
+    const { successMessage } = req.query as {
+      successMessage?: string
+    }
 
     const sessionAttendanceData = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionsAndAttendance(
       username,
       groupId,
     )
 
-    const presenter = new SessionScheduleAttendancePresenter(groupId, sessionAttendanceData)
+    const presenter = new SessionScheduleAttendancePresenter(groupId, sessionAttendanceData, successMessage)
     const view = new SessionScheduleAttendanceView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }

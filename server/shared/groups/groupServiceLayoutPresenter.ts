@@ -1,22 +1,44 @@
-import { ProgrammeGroupDetails } from '@manage-and-deliver-api'
-import GroupServiceNavigationPresenter, { GroupServiceNavigationPage } from './groupServiceNavigationPresenter'
+export enum GroupServiceNavigationValues {
+  allocationsTab = 'allocations',
+  scheduleTab = 'schedule',
+  sessionsAndAttendanceTab = 'sessions',
+  groupDetailsTab = 'details',
+}
 
 export default class GroupServiceLayoutPresenter {
-  public readonly navigationPresenter: GroupServiceNavigationPresenter
-
   protected constructor(
-    readonly activePage: GroupServiceNavigationPage,
+    readonly activePage: GroupServiceNavigationValues,
     readonly groupId: string,
-    readonly moduleId: string | undefined,
-    readonly group?: ProgrammeGroupDetails,
-  ) {
-    this.navigationPresenter = new GroupServiceNavigationPresenter(groupId, moduleId, activePage)
-  }
+  ) {}
 
-  get text() {
+  getServiceNavigationArgs(): {
+    classes: string
+    navigation: { href: string; text: string; active: boolean }[]
+  } {
     return {
-      pageHeading: this.group?.group.regionName ?? '',
-      pageSubHeading: this.group?.group.code ?? '',
+      classes: 'group-details__service-navigation',
+      navigation: [
+        {
+          href: `/groupDetails/${this.groupId}/waitlist`,
+          text: 'Allocations',
+          active: this.activePage === GroupServiceNavigationValues.allocationsTab,
+        },
+        {
+          href: `/group/${this.groupId}/schedule`,
+          text: 'Schedule',
+          active: this.activePage === GroupServiceNavigationValues.scheduleTab,
+        },
+        {
+          href: `/group/${this.groupId}/sessions-and-attendance`,
+          text: 'Sessions and attendance',
+          active: this.activePage === GroupServiceNavigationValues.sessionsAndAttendanceTab,
+        },
+        {
+          href: `/group/${this.groupId}/group-details`,
+          text: 'Group details',
+          active: this.activePage === GroupServiceNavigationValues.groupDetailsTab,
+        },
+      ],
     }
   }
 }
