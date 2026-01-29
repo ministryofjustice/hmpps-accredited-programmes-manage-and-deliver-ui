@@ -39,11 +39,11 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
       ]
     }
 
-    return modules.map((moduleSession, index) => ({
+    return modules.map(moduleSession => ({
       heading: { text: this.moduleHeading(moduleSession) },
 
       content: { html: this.moduleContent(moduleSession) },
-      expanded: index === 0,
+      expanded: false,
     }))
   }
 
@@ -59,10 +59,7 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
   private moduleContent(moduleSession: SessionModule) {
     const sessions = Array.isArray(moduleSession.sessions) ? moduleSession.sessions : []
 
-    let sessionsHtml: string
-
-    if (sessions.length) {
-      sessionsHtml = `
+    const sessionsHtml = `
       <table class="govuk-table" data-module="moj-sortable-table">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
@@ -79,9 +76,7 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
         </tbody>
       </table>
     `
-    } else {
-      sessionsHtml = '<p class="govuk-body">No sessions have been scheduled yet.</p>'
-    }
+
     const startDateTextHtml = this.getStartDateText(moduleSession)
     const scheduleButtonText = moduleSession.scheduleButtonText || 'Schedule a session'
     const scheduleButtonHref = this.scheduleSessionHref(moduleSession)
@@ -108,7 +103,9 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
 
   private sessionTableRow(session: ModuleSession): string {
     const participants = session.participants?.length ? session.participants.join('<br/> ') : ''
-    const facilitators = session.facilitators?.length ? session.facilitators.join('<br/> ') : ''
+    const facilitators = session.facilitators?.length
+      ? session.facilitators.join('<span class="govuk-!-display-block govuk-!-margin-bottom-1"></span>')
+      : ''
     const dateSortValue = this.sortableTableDate(session.dateOfSession)
 
     return `
