@@ -19,7 +19,7 @@ export default class AddSessionDetailsPresenter {
   ) {}
 
   get backLinkUri() {
-    return this.backLinkUrl
+    return `/group/{:groupId}/module/{:moduleId}/schedule-session-type`
   }
 
   get errorSummary() {
