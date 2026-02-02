@@ -715,6 +715,15 @@
       "response": {
         "status": 201
       }
+    },
+    {
+      "request": {
+        "urlPattern": "/appointments",
+        "method": "DELETE"
+      },
+      "response": {
+        "status": 204
+      }
     }
   ]
 }
