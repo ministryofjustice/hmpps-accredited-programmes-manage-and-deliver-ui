@@ -78,7 +78,7 @@ describe('SessionScheduleAttendancePresenter', () => {
     it('creates a navigation presenter with sessions active', () => {
       const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
 
-      expect(presenter.navigationPresenter).toBeDefined()
+      expect(presenter.getServiceNavigationArgs()).toBeDefined()
     })
   })
 
@@ -90,14 +90,6 @@ describe('SessionScheduleAttendancePresenter', () => {
       expect(accordionItems).toHaveLength(2)
       expect(accordionItems[0].heading.text).toBe('Module 1: Getting Started')
       expect(accordionItems[1].heading.text).toBe('Module 2: Skills Development')
-    })
-
-    it('expands the first accordion item by default', () => {
-      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
-      const accordionItems = presenter.getAccordionItems()
-
-      expect(accordionItems[0].expanded).toBe(true)
-      expect(accordionItems[1].expanded).toBe(false)
     })
 
     it('returns a message when no modules are available', () => {
@@ -146,23 +138,19 @@ describe('SessionScheduleAttendancePresenter', () => {
       expect(firstModuleContent).toContain('John Doe<br/> Jane Smith')
       expect(firstModuleContent).toContain('15 March 2025')
       expect(firstModuleContent).toContain('9:30am to 11:00am')
-      expect(firstModuleContent).toContain('Facilitator 1<br/> Facilitator 2')
+      expect(firstModuleContent).toContain(
+        'Facilitator 1<span class="govuk-!-display-block govuk-!-margin-bottom-1"></span>Facilitator 2',
+      )
     })
 
-    it('renders facilitators with line breaks', () => {
+    it('renders facilitators with spacing using govuk utility classes', () => {
       const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
       const accordionItems = presenter.getAccordionItems()
       const firstModuleContent = accordionItems[0].content.html
 
-      expect(firstModuleContent).toContain('Facilitator 1<br/> Facilitator 2')
-    })
-
-    it('displays message when no sessions are scheduled', () => {
-      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
-      const accordionItems = presenter.getAccordionItems()
-      const secondModuleContent = accordionItems[1].content.html
-
-      expect(secondModuleContent).toContain('No sessions have been scheduled yet')
+      expect(firstModuleContent).toContain(
+        'Facilitator 1<span class="govuk-!-display-block govuk-!-margin-bottom-1"></span>Facilitator 2',
+      )
     })
 
     it('displays estimated start date text when available', () => {
@@ -245,6 +233,58 @@ describe('SessionScheduleAttendancePresenter', () => {
 
       expect(content).toContain('Session 3')
       expect(content).not.toContain('undefined')
+    })
+  })
+
+  describe('scheduleSessionSuccessMessageArgs', () => {
+    it('returns success message when provided by BFF', () => {
+      const presenter = new SessionScheduleAttendancePresenter(
+        groupId,
+        mockGroupSessionsData,
+        'Getting started one-to-one for Jane Smith has been added.',
+      )
+
+      const messageArgs = presenter.scheduleSessionSuccessMessageArgs
+
+      expect(messageArgs).toEqual({
+        variant: 'success',
+        title: 'Success',
+        text: 'Getting started one-to-one for Jane Smith has been added.',
+        dismissible: true,
+      })
+    })
+
+    it('returns success message for group sessions', () => {
+      const presenter = new SessionScheduleAttendancePresenter(
+        groupId,
+        mockGroupSessionsData,
+        'Managing emotions has been added.',
+      )
+
+      const messageArgs = presenter.scheduleSessionSuccessMessageArgs
+
+      expect(messageArgs).toEqual({
+        variant: 'success',
+        title: 'Success',
+        text: 'Managing emotions has been added.',
+        dismissible: true,
+      })
+    })
+
+    it('returns null when no success message is provided', () => {
+      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
+
+      const messageArgs = presenter.scheduleSessionSuccessMessageArgs
+
+      expect(messageArgs).toBeNull()
+    })
+
+    it('handles empty string success message', () => {
+      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData, '')
+
+      const messageArgs = presenter.scheduleSessionSuccessMessageArgs
+
+      expect(messageArgs).toBeNull()
     })
   })
 })

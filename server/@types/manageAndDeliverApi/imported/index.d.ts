@@ -766,6 +766,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/bff/session/{sessionId}/edit-session-date-and-time/reschedule': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve details for rescheduling a session
+     * @description Retrieve the details for a session so they can be rescheduled
+     */
+    get: operations['getRescheduleSessionDetails']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/bff/remove-from-group/{referralId}': {
     parameters: {
       query?: never
@@ -2577,14 +2597,14 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -2594,11 +2614,11 @@ export interface components {
       /** Format: int64 */
       offset?: number
       sort?: components['schemas']['SortObject']
-      paged?: boolean
       /** Format: int32 */
       pageSize?: number
       /** Format: int32 */
       pageNumber?: number
+      paged?: boolean
       unpaged?: boolean
     }
     ReferralCaseListItem: {
@@ -2782,6 +2802,25 @@ export interface components {
       sessionStartTime: components['schemas']['SessionTime']
       sessionEndTime: components['schemas']['SessionTime']
     }
+    /** @description Details for rescheduling a session */
+    RescheduleSessionDetails: {
+      /**
+       * Format: uuid
+       * @description The unique session identifier
+       * @example cc4114d2-d27f-449e-8c31-645366432b49
+       */
+      sessionId: string
+      /**
+       * @description The name of the session
+       * @example Edit Session 1
+       */
+      sessionName: string
+      /**
+       * @description The previous date and time of the session
+       * @example Thursday 21 May 2026, 11am to 1:30pm
+       */
+      previousSessionDateAndTime: string
+    }
     UserTeamMember: {
       /** @description The code for the team member */
       personCode: string
@@ -2889,14 +2928,14 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -3006,14 +3045,14 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -3207,6 +3246,11 @@ export interface components {
       endDate: string
       /** @description Details of the Group's sessions */
       sessions: components['schemas']['GroupScheduleSession'][]
+      /**
+       * @description A unique code identifying the programme group.
+       * @example AP_BIRMINGHAM_NORTH
+       */
+      code: string
     }
     GroupScheduleSession: {
       /**
@@ -5668,6 +5712,65 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['EditSessionDetails']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Session not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getRescheduleSessionDetails: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The unique session identifier */
+        sessionId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Reschedule session details retrieved successfully */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['RescheduleSessionDetails']
         }
       }
       /** @description Bad Request */

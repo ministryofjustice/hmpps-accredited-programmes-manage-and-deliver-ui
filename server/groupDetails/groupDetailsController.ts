@@ -6,6 +6,8 @@ import GroupDetailsPresenter, { GroupDetailsPageSection } from './groupDetailsPr
 import GroupDetailsView from './groupDetailsView'
 import GroupForm from './groupForm'
 import GroupDetailFilter from './groupDetailFilter'
+import SchedulePresenter from './schedule/schedulePresenter'
+import ScheduleView from './schedule/scheduleView'
 
 export default class GroupDetailsController {
   constructor(
@@ -113,6 +115,22 @@ export default class GroupDetailsController {
       req.session.filterParams,
     )
     const view = new GroupDetailsView(presenter)
+    req.session.originPage = req.originalUrl
+
+    return ControllerUtils.renderWithLayout(res, view, null)
+  }
+
+  async showSchedule(req: Request, res: Response): Promise<void> {
+    const { username } = req.user
+    const { groupId } = req.params
+
+    const groupSchedule = await this.accreditedProgrammesManageAndDeliverService.getGroupScheduleDetails(
+      username,
+      groupId,
+    )
+
+    const presenter = new SchedulePresenter(groupId, groupSchedule)
+    const view = new ScheduleView(presenter)
     req.session.originPage = req.originalUrl
 
     return ControllerUtils.renderWithLayout(res, view, null)

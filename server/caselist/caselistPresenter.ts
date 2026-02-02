@@ -29,7 +29,10 @@ export default class CaselistPresenter {
     readonly caseListFilters: CaseListFilterValues,
     readonly otherCaselistCountTotal: number,
   ) {
-    this.pagination = new Pagination(referralCaseListItems, params)
+    this.pagination = new Pagination(
+      this.referralCaseListItems as Required<typeof this.referralCaseListItems>,
+      this.params || null,
+    )
     this.referralCaseListItems = referralCaseListItems
     this.openOrClosedUrl = isOpenReferrals ? 'open-referrals' : 'closed-referrals'
   }

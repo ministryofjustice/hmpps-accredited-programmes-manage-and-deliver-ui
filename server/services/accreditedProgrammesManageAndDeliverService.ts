@@ -49,6 +49,7 @@ import {
   UpdateAvailability,
   UserTeamMember,
   Session,
+  GroupSchedule,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -591,13 +592,13 @@ export default class AccreditedProgrammesManageAndDeliverService
     username: ExpressUsername,
     groupId: string,
     sessionScheduleRequest: SessionScheduleRequest,
-  ) {
+  ): Promise<{ message: string }> {
     const restClient = await this.createRestClientFromUsername(username)
-    return (await restClient.post({
+    return restClient.post({
       path: `/group/${groupId}/session/schedule`,
       headers: { Accept: 'application/json' },
       data: sessionScheduleRequest,
-    })) as { message: string }
+    })
   }
 
   async getGroupSessionsAndAttendance(
@@ -621,6 +622,14 @@ export default class AccreditedProgrammesManageAndDeliverService
       path: `/bff/group/${groupId}/session/${sessionId}`,
       headers: { Accept: 'application/json' },
     })) as GroupSessionResponse
+  }
+
+  async getGroupScheduleDetails(username: ExpressUsername, groupId: string): Promise<GroupSchedule> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/group/${groupId}/schedule`,
+      headers: { Accept: 'application/json' },
+    })) as GroupSchedule
   }
 
   async getSessionDetails(username: ExpressUsername, sessionId: string): Promise<Session> {
