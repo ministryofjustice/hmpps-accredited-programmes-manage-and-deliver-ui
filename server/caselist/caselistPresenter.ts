@@ -114,9 +114,12 @@ export default class CaselistPresenter {
     return referralData
   }
 
-  private getNameSortValue(personName: string): string {
+  getNameSortValue(personName: string): string {
     // Split the name into parts
-    const nameParts = personName.trim().split(' ')
+    const nameParts = personName
+      .trim()
+      .split(' ')
+      .filter(part => part.length > 0)
 
     if (nameParts.length === 0) {
       return ''
