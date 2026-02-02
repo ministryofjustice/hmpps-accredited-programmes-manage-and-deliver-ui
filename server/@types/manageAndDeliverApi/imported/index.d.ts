@@ -4,6 +4,26 @@
  */
 
 export interface paths {
+  '/session/{sessionId}/reschedule': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Reschedule a session and optionally subsequent group sessions
+     * @description Update the start and end time of a session, and optionally update subsequent group sessions in the same programme group.
+     */
+    put: operations['rescheduleSession']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/referral/{id}/update-cohort': {
     parameters: {
       query?: never
@@ -706,6 +726,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/bff/session/{sessionId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve session by an ID
+     * @description Retrieve the details for a session
+     */
+    get: operations['retrieveSessionById']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/bff/session/{sessionId}/edit-session-date-and-time': {
     parameters: {
       query?: never
@@ -718,6 +758,26 @@ export interface paths {
      * @description Retrieve the details for a session so they can be edited
      */
     get: operations['retrieveSessionDetailsToEdit']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/bff/session/{sessionId}/edit-session-date-and-time/reschedule': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve details for rescheduling a session
+     * @description Retrieve the details for a session so they can be rescheduled
+     */
+    get: operations['getRescheduleSessionDetails']
     put?: never
     post?: never
     delete?: never
@@ -1061,6 +1121,42 @@ export interface components {
        */
       moreInfo?: string
     }
+    RescheduleSessionRequest: {
+      /**
+       * Format: date
+       * @description The start date of the session in DD/MM/YYYY format
+       * @example 12/12/2026
+       */
+      sessionStartDate: string
+      /** @description The start time of the session */
+      sessionStartTime: components['schemas']['SessionTime']
+      /** @description The end time of the session */
+      sessionEndTime?: components['schemas']['SessionTime']
+      /**
+       * @description Whether to reschedule other sessions
+       * @example true
+       */
+      rescheduleOtherSessions: boolean
+    }
+    SessionTime: {
+      /**
+       * Format: int32
+       * @description Hour in 12-hour format (1-12)
+       * @example 10
+       */
+      hour: number
+      /**
+       * Format: int32
+       * @description Minutes (0-59)
+       * @example 30
+       */
+      minutes: number
+      /**
+       * @description AM or PM designation
+       * @enum {string}
+       */
+      amOrPm: 'AM' | 'PM'
+    }
     /** @description Cohort to update the referral with */
     UpdateCohort: {
       /**
@@ -1351,11 +1447,6 @@ export interface components {
        */
       additionalDetails?: string
     }
-    /**
-     * @description AM/PM time indicator
-     * @enum {string}
-     */
-    AmOrPm: 'AM' | 'PM'
     CreateGroupRequest: {
       /** @description The code for the group */
       groupCode: string
@@ -1404,8 +1495,9 @@ export interface components {
       /**
        * @description AM or PM indicator
        * @example AM
+       * @enum {string}
        */
-      amOrPm: components['schemas']['AmOrPm']
+      amOrPm: 'AM' | 'PM'
     }
     CreateGroupTeamMember: {
       /** @description The full name of the facilitator for the group */
@@ -1450,25 +1542,6 @@ export interface components {
       startTime: components['schemas']['SessionTime']
       /** @description The end time of the one-to-one session */
       endTime: components['schemas']['SessionTime']
-    }
-    SessionTime: {
-      /**
-       * Format: int32
-       * @description Hour in 12-hour format (1-12)
-       * @example 10
-       */
-      hour: number
-      /**
-       * Format: int32
-       * @description Minutes (0-59)
-       * @example 30
-       */
-      minutes: number
-      /**
-       * @description AM or PM designation
-       * @enum {string}
-       */
-      amOrPm: 'AM' | 'PM'
     }
     RemoveFromGroupRequest: {
       /**
@@ -2520,18 +2593,18 @@ export interface components {
       reportingTeams: string[]
     }
     PageReferralCaseListItem: {
-      /** Format: int32 */
-      totalPages?: number
       /** Format: int64 */
       totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -2542,9 +2615,9 @@ export interface components {
       offset?: number
       sort?: components['schemas']['SortObject']
       /** Format: int32 */
-      pageNumber?: number
-      /** Format: int32 */
       pageSize?: number
+      /** Format: int32 */
+      pageNumber?: number
       paged?: boolean
       unpaged?: boolean
     }
@@ -2688,6 +2761,38 @@ export interface components {
       /** @description List of transition statuses */
       availableStatuses: components['schemas']['ReferralStatus'][]
     }
+    /** @description Details of a session */
+    Session: {
+      /**
+       * Format: uuid
+       * @description Unique identifier for a session
+       * @example 0da0096f-8950-4bb9-9695-5e10a1f3a9c2
+       */
+      id: string
+      /**
+       * @description Type of a session
+       * @example Group
+       */
+      type: string
+      /**
+       * @description Name of a session
+       * @example Getting started
+       */
+      name: string
+      /**
+       * Format: int32
+       * @description Number of a session
+       * @example 1
+       */
+      number: number
+      /** @description A list of referrals for a session */
+      referrals: components['schemas']['Referral'][]
+      /**
+       * @description A flag if a session is a catchup or not
+       * @example false
+       */
+      isCatchup: boolean
+    }
     EditSessionDetails: {
       /** Format: uuid */
       sessionId: string
@@ -2696,6 +2801,25 @@ export interface components {
       sessionDate: string
       sessionStartTime: components['schemas']['SessionTime']
       sessionEndTime: components['schemas']['SessionTime']
+    }
+    /** @description Details for rescheduling a session */
+    RescheduleSessionDetails: {
+      /**
+       * Format: uuid
+       * @description The unique session identifier
+       * @example cc4114d2-d27f-449e-8c31-645366432b49
+       */
+      sessionId: string
+      /**
+       * @description The name of the session
+       * @example Edit Session 1
+       */
+      sessionName: string
+      /**
+       * @description The previous date and time of the session
+       * @example Thursday 21 May 2026, 11am to 1:30pm
+       */
+      previousSessionDateAndTime: string
     }
     UserTeamMember: {
       /** @description The code for the team member */
@@ -2800,18 +2924,18 @@ export interface components {
       regionName: string
     }
     PageGroup: {
-      /** Format: int32 */
-      totalPages?: number
       /** Format: int64 */
       totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -2917,18 +3041,18 @@ export interface components {
       activeProgrammeGroupId: string
     }
     PageGroupItem: {
-      /** Format: int32 */
-      totalPages?: number
       /** Format: int64 */
       totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -3122,6 +3246,11 @@ export interface components {
       endDate: string
       /** @description Details of the Group's sessions */
       sessions: components['schemas']['GroupScheduleSession'][]
+      /**
+       * @description A unique code identifying the programme group.
+       * @example AP_BIRMINGHAM_NORTH
+       */
+      code: string
     }
     GroupScheduleSession: {
       /**
@@ -3206,6 +3335,69 @@ export interface components {
 }
 export type $defs = Record<string, never>
 export interface operations {
+  rescheduleSession: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The unique session identifier */
+        sessionId: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RescheduleSessionRequest']
+      }
+    }
+    responses: {
+      /** @description Session rescheduled successfully */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Session not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   updateCohortForReferral: {
     parameters: {
       query?: never
@@ -5442,6 +5634,65 @@ export interface operations {
       }
     }
   }
+  retrieveSessionById: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The unique session identifier */
+        sessionId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Session details retrieved successfully */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['Session']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Session not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   retrieveSessionDetailsToEdit: {
     parameters: {
       query?: never
@@ -5461,6 +5712,65 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['EditSessionDetails']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Session not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getRescheduleSessionDetails: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The unique session identifier */
+        sessionId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Reschedule session details retrieved successfully */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['RescheduleSessionDetails']
         }
       }
       /** @description Bad Request */

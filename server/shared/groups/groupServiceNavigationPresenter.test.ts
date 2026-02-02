@@ -16,6 +16,7 @@ describe('GroupServiceNavigationPresenter', () => {
         gettingStartedModuleStartDate: '',
         endDate: '',
         sessions: [],
+        code: '',
       })
 
       expect(presenter.getServiceNavigationArgs()).toEqual({

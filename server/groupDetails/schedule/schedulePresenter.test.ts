@@ -5,6 +5,7 @@ describe('SchedulePresenter', () => {
   const groupId = 'group-123'
 
   const mockGroupSchedule: GroupSchedule = {
+    code: 'ABC123',
     preGroupOneToOneStartDate: 'Saturday 31 January 2026',
     gettingStartedModuleStartDate: 'Monday 23 February 2026',
     endDate: 'Monday 14 September 2026',
