@@ -13,6 +13,13 @@ describe('AddSessionDetailsPresenter', () => {
     ],
   } as ScheduleIndividualSessionDetailsResponse
 
+  describe('backLinkUri', () => {
+    it('returns the correct back link URI', () => {
+      const presenter = new AddSessionDetailsPresenter(sessionDetails)
+      expect(presenter.backLinkUri).toBe('/group/{:groupId}/module/{:moduleId}/schedule-session-type')
+    })
+  })
+
   describe('generateFacilitatorSelectOptions', () => {
     it('generates select options with facilitator data', () => {
       const presenter = new AddSessionDetailsPresenter(sessionDetails)
