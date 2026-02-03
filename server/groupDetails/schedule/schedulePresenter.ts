@@ -13,7 +13,7 @@ export default class SchedulePresenter extends GroupServiceLayoutPresenter {
 
   get text() {
     return {
-      headingCaptionText: 'TODO',
+      headingCaptionText: this.groupSchedule.code,
       headingText: `Schedule`,
     }
   }
