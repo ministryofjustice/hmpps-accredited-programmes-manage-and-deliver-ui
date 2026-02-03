@@ -9,7 +9,6 @@ import PresenterUtils from '../../utils/presenterUtils'
 
 export default class AddSessionDetailsPresenter {
   constructor(
-    readonly backLinkUrl: string,
     readonly sessionDetails: ScheduleIndividualSessionDetailsResponse,
     private readonly validationError: FormValidationError | null = null,
     private readonly createSessionDetailsFormData:

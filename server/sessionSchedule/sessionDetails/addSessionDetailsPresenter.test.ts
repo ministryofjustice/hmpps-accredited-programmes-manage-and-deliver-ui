@@ -2,7 +2,6 @@ import { ScheduleIndividualSessionDetailsResponse, CreateGroupTeamMember } from 
 import AddSessionDetailsPresenter from './addSessionDetailsPresenter'
 
 describe('AddSessionDetailsPresenter', () => {
-  const backLinkUri = '/schedule-group-session-details'
   const sessionDetails = {
     facilitators: [
       { personName: 'Facilitator One', personCode: 'F001', teamName: 'Team A', teamCode: 'TA01' },
@@ -16,7 +15,7 @@ describe('AddSessionDetailsPresenter', () => {
 
   describe('generateFacilitatorSelectOptions', () => {
     it('generates select options with facilitator data', () => {
-      const presenter = new AddSessionDetailsPresenter(backLinkUri, sessionDetails)
+      const presenter = new AddSessionDetailsPresenter(sessionDetails)
       const options = presenter.generateFacilitatorSelectOptions('F001')
 
       expect(options[0]).toEqual({ text: '', value: '' })
@@ -35,7 +34,7 @@ describe('AddSessionDetailsPresenter', () => {
 
   describe('generateSessionAttendeesCheckboxOptions', () => {
     it('generates checkbox options without selections', () => {
-      const presenter = new AddSessionDetailsPresenter(backLinkUri, sessionDetails)
+      const presenter = new AddSessionDetailsPresenter(sessionDetails)
       const options = presenter.generateSessionAttendeesRadioOptions('ref1')
 
       expect(options).toEqual([
@@ -48,13 +47,13 @@ describe('AddSessionDetailsPresenter', () => {
   describe('selectedAttendeeValues', () => {
     it('returns values from userInputData when available', () => {
       const userInputData = { 'session-details-who': 'ref1 + John Doe' }
-      const presenter = new AddSessionDetailsPresenter(backLinkUri, sessionDetails, null, null, userInputData)
+      const presenter = new AddSessionDetailsPresenter(sessionDetails, null, null, userInputData)
       expect(presenter.selectedAttendeeValues()).toEqual('ref1')
     })
 
     it('returns values from createSessionDetailsFormData when userInputData not available', () => {
       const formData = { referralIds: ['X12345'] }
-      const presenter = new AddSessionDetailsPresenter(backLinkUri, sessionDetails, null, formData)
+      const presenter = new AddSessionDetailsPresenter(sessionDetails, null, formData)
       expect(presenter.selectedAttendeeValues()).toEqual('X12345')
     })
   })
@@ -65,7 +64,7 @@ describe('AddSessionDetailsPresenter', () => {
         'session-details-facilitator-0':
           '{"facilitator":"John Doe", "facilitatorCode":"F001", "teamName":"Team A", "teamCode":"TA01"}',
       }
-      const presenter = new AddSessionDetailsPresenter(backLinkUri, sessionDetails, null, null, userInputData)
+      const presenter = new AddSessionDetailsPresenter(sessionDetails, null, null, userInputData)
       const facilitators = presenter.generateSelectedFacilitators()
 
       expect(facilitators).toHaveLength(1)
@@ -84,7 +83,7 @@ describe('AddSessionDetailsPresenter', () => {
         'session-details-facilitator-1':
           '{"facilitator":"Jane Smith", "facilitatorCode":"F002", "teamName":"Team B", "teamCode":"TB02"}',
       }
-      const presenter = new AddSessionDetailsPresenter(backLinkUri, sessionDetails, null, null, userInputData)
+      const presenter = new AddSessionDetailsPresenter(sessionDetails, null, null, userInputData)
       const facilitators = presenter.generateSelectedFacilitators()
 
       expect(facilitators).toHaveLength(2)
@@ -101,7 +100,7 @@ describe('AddSessionDetailsPresenter', () => {
         },
       ]
       const formData = { facilitators: mockFacilitators }
-      const presenter = new AddSessionDetailsPresenter(backLinkUri, sessionDetails, null, formData)
+      const presenter = new AddSessionDetailsPresenter(sessionDetails, null, formData)
       expect(presenter.generateSelectedFacilitators()).toEqual(mockFacilitators)
     })
 
@@ -111,7 +110,7 @@ describe('AddSessionDetailsPresenter', () => {
           '{"facilitator":"John Doe", "facilitatorCode":"F001", "teamName":"Team A", "teamCode":"TA01"}',
         'session-details-other': 'some value',
       }
-      const presenter = new AddSessionDetailsPresenter(backLinkUri, sessionDetails, null, null, userInputData)
+      const presenter = new AddSessionDetailsPresenter(sessionDetails, null, null, userInputData)
       const facilitators = presenter.generateSelectedFacilitators()
 
       expect(facilitators).toHaveLength(1)
