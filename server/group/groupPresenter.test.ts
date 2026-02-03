@@ -191,7 +191,8 @@ describe('groupTableArgs', () => {
       rows: [
         [
           {
-            html: `<span data-sort-value="abc1234"><a href='/groupDetails/${groupList.pagedGroupData.content[0].id}/waitlist'>ABC1234</a></span>`,
+            html: `<a href='/groupDetails/${groupList.pagedGroupData.content[0].id}/waitlist'>ABC1234</a>`,
+            attributes: { 'data-sort-value': 'ABC1234' },
           },
           { html: '<span data-sort-value="1704067200000">1 January 2024</span>' },
           { text: `${groupList.pagedGroupData.content[0].pduName}` },
