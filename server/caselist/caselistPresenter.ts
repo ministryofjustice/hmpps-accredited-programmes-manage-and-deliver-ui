@@ -97,11 +97,15 @@ export default class CaselistPresenter {
   }
 
   generateTableRows() {
-    const referralData: ({ html: string; text?: undefined } | { text: string; html?: undefined })[][] = []
+    const referralData: (
+      | { html: string; text?: undefined; attributes?: Record<string, string> }
+      | { text: string; html?: undefined }
+    )[][] = []
     this.referralCaseListItems.content.forEach(referral => {
       referralData.push([
         {
-          html: `<span data-sort-value="${this.getNameSortValue(referral.personName)}"><a href='/referral-details/${referral.referralId}/personal-details'>${referral.personName}</a><span>${referral.crn}</span></span>`,
+          html: `<a href='/referral-details/${referral.referralId}/personal-details'>${referral.personName}</a><span>${referral.crn}</span>`,
+          attributes: { 'data-sort-value': referral.personName },
         },
         { text: referral.pdu },
         { text: referral.reportingTeam },
@@ -112,25 +116,6 @@ export default class CaselistPresenter {
       ])
     })
     return referralData
-  }
-
-  getNameSortValue(personName: string): string {
-    // Split the name into parts
-    const nameParts = personName
-      .trim()
-      .split(' ')
-      .filter(part => part.length > 0)
-
-    if (nameParts.length === 0) {
-      return ''
-    }
-
-    // Assume last part is surname, everything else is firstname
-    const surname = nameParts[nameParts.length - 1]
-    const firstname = nameParts.slice(0, -1).join(' ')
-
-    // Return "surname, firstname" in lowercase for case-insensitive sorting
-    return `${surname}, ${firstname}`.toLowerCase()
   }
 
   getSubNavArgs(): { items: { text: string; href: string; active: boolean }[] } {
