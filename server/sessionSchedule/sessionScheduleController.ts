@@ -98,13 +98,7 @@ export default class SessionScheduleController {
       moduleId,
     )
 
-    const presenter = new AddSessionDetailsPresenter(
-      `/${groupId}/${moduleId}`,
-      sessionDetails,
-      formError,
-      sessionScheduleData,
-      userInputData,
-    )
+    const presenter = new AddSessionDetailsPresenter(sessionDetails, formError, sessionScheduleData, userInputData)
     const view = new AddSessionDetailsView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }

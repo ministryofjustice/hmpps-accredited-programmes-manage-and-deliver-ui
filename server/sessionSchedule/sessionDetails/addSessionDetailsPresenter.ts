@@ -9,7 +9,6 @@ import PresenterUtils from '../../utils/presenterUtils'
 
 export default class AddSessionDetailsPresenter {
   constructor(
-    readonly backLinkUrl: string,
     readonly sessionDetails: ScheduleIndividualSessionDetailsResponse,
     private readonly validationError: FormValidationError | null = null,
     private readonly createSessionDetailsFormData:
@@ -19,7 +18,7 @@ export default class AddSessionDetailsPresenter {
   ) {}
 
   get backLinkUri() {
-    return this.backLinkUrl
+    return `/group/{:groupId}/module/{:moduleId}/schedule-session-type`
   }
 
   get errorSummary() {
