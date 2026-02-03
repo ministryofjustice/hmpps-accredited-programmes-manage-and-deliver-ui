@@ -97,10 +97,16 @@ export default class GroupPresenter {
   }
 
   private generateTableRows() {
-    const groupData: ({ html: string; text?: undefined } | { text: string; html?: undefined })[][] = []
+    const groupData: (
+      | { html: string; text?: undefined; attributes?: Record<string, string> }
+      | { text: string; html?: undefined }
+    )[][] = []
     this.groupListItems.content.forEach(group => {
       groupData.push([
-        { html: `<a href='/groupDetails/${group.id}/waitlist'>${group.code}</a>` },
+        {
+          html: `<a href='/groupDetails/${group.id}/waitlist'>${group.code}</a>`,
+          attributes: { 'data-sort-value': group.code },
+        },
         this.getFormattedDateCell(group),
         { text: group.pduName },
         { text: group.deliveryLocation },

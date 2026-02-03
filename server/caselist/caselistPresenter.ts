@@ -97,11 +97,15 @@ export default class CaselistPresenter {
   }
 
   generateTableRows() {
-    const referralData: ({ html: string; text?: undefined } | { text: string; html?: undefined })[][] = []
+    const referralData: (
+      | { html: string; text?: undefined; attributes?: Record<string, string> }
+      | { text: string; html?: undefined }
+    )[][] = []
     this.referralCaseListItems.content.forEach(referral => {
       referralData.push([
         {
           html: `<a href='/referral-details/${referral.referralId}/personal-details'>${referral.personName}</a><span>${referral.crn}</span>`,
+          attributes: { 'data-sort-value': referral.personName },
         },
         { text: referral.pdu },
         { text: referral.reportingTeam },
