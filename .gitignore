@@ -125,3 +125,6 @@ integration_tests/screenshots/
 */*.iml
 **/Chart.lock
 **/.DS_Store
+
+# Seeded wiremock mappings
+seeded/seeded-*.json
