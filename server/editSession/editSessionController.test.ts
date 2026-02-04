@@ -30,7 +30,7 @@ describe('editSession', () => {
     const sessionDetails = sessionDetailsFactory.build()
     accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
 
-    await request(app).get(`/group/12345/sessionId/6789/test-session`).expect(200)
+    await request(app).get(`/group/12345/sessionId/6789/edit-session`).expect(200)
 
     expect(accreditedProgrammesManageAndDeliverService.getGroupSessionDetails).toHaveBeenCalledWith(
       'user1',
@@ -44,7 +44,7 @@ describe('editSession', () => {
     accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
 
     await request(app)
-      .get(`/group/12345/sessionId/6789/test-session`)
+      .get(`/group/12345/sessionId/6789/edit-session`)
       .expect(200)
       .expect(res => {
         expect(res.text).toContain('Test Session')

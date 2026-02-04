@@ -14,7 +14,7 @@ export default class EditSessionController {
   ) {}
 
   async editSession(req: Request, res: Response): Promise<void> {
-    const { groupId, sessionId, sessionName } = req.params
+    const { groupId, sessionId } = req.params
     const { username } = req.user
 
     const sessionDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionDetails(
@@ -28,7 +28,7 @@ export default class EditSessionController {
     const presenter = new EditSessionPresenter(
       groupId,
       sessionDetails,
-      `/group/${groupId}/sessionId/${sessionId}/${sessionName}/delete-session`,
+      `/group/${groupId}/sessionId/${sessionId}/delete-session`,
     )
     const view = new EditSessionView(presenter)
 
