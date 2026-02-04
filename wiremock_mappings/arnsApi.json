@@ -3,7 +3,7 @@
     {
       "request": {
         "method": "GET",
-        "urlPathPattern": "/assessments/id/.*/risk/predictors/all"
+        "urlPathPattern": "^/assessments/id/[^/]+/risk/predictors/all$"
       },
       "response": {
         "status": 200,
