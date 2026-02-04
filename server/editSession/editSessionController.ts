@@ -48,7 +48,7 @@ export default class EditSessionController {
         formError = data.error
       } else if (data.paramsForUpdate?.delete === 'yes') {
         const response = await this.accreditedProgrammesManageAndDeliverService.deleteSession(username, sessionId)
-        return res.redirect(`group/${groupId}/sessions-and-attendance?message=${response.message}`)
+        return res.redirect(`/group/${groupId}/sessions-and-attendance?successMessage=${response.caption}`)
       } else {
         return res.redirect(req.session.originPage)
       }

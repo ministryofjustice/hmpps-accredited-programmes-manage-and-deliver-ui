@@ -645,6 +645,6 @@ export default class AccreditedProgrammesManageAndDeliverService
     return (await restClient.delete({
       path: `/session/${sessionId}`,
       headers: { Accept: 'application/json' },
-    })) as { message: string }
+    })) as { caption: string }
   }
 }
