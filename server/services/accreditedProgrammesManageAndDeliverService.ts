@@ -48,6 +48,10 @@ import {
   ThinkingAndBehaviour,
   UpdateAvailability,
   UserTeamMember,
+  EditSessionDetails,
+  RescheduleSessionDetails,
+  RescheduleSessionRequest,
+  EditSessionDateAndTimeResponse,
   Session,
   GroupSchedule,
 } from '@manage-and-deliver-api'
@@ -622,6 +626,35 @@ export default class AccreditedProgrammesManageAndDeliverService
       path: `/bff/group/${groupId}/session/${sessionId}`,
       headers: { Accept: 'application/json' },
     })) as GroupSessionResponse
+  }
+
+  async getSessionEditDateAndTime(username: ExpressUsername, sessionId: string): Promise<EditSessionDetails> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/session/${sessionId}/edit-session-date-and-time`,
+      headers: { Accept: 'application/json' },
+    })) as EditSessionDetails
+  }
+
+  async getRescheduleSessionDetails(username: ExpressUsername, sessionId: string): Promise<RescheduleSessionDetails> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/session/${sessionId}/edit-session-date-and-time/reschedule`,
+      headers: { Accept: 'application/json' },
+    })) as RescheduleSessionDetails
+  }
+
+  async updateSessionDateAndTime(
+    username: ExpressUsername,
+    sessionId: string,
+    updateSessionParams: RescheduleSessionRequest,
+  ): Promise<EditSessionDateAndTimeResponse> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.put({
+      path: `/session/${sessionId}/reschedule`,
+      headers: { Accept: 'application/json' },
+      data: updateSessionParams,
+    })) as EditSessionDateAndTimeResponse
   }
 
   async getGroupScheduleDetails(username: ExpressUsername, groupId: string): Promise<GroupSchedule> {

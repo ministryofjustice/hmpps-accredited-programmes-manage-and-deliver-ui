@@ -24,6 +24,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/session/{sessionId}/attendees': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Update session attendees
+     * @description Update the attendees for a session
+     */
+    put: operations['updateAttendeesForSession']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/referral/{id}/update-cohort': {
     parameters: {
       query?: never
@@ -746,6 +766,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/bff/session/{sessionId}/session-facilitators': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve session facilitators by session ID
+     * @description Retrieve the facilitators for a session
+     */
+    get: operations['retrieveSessionFacilitators']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/bff/session/{sessionId}/edit-session-date-and-time': {
     parameters: {
       query?: never
@@ -778,6 +818,26 @@ export interface paths {
      * @description Retrieve the details for a session so they can be rescheduled
      */
     get: operations['getRescheduleSessionDetails']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/bff/session/{sessionId}/attendees': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve session attendees by session ID
+     * @description Retrieve the attendees for a session
+     */
+    get: operations['retrieveSessionAttendees']
     put?: never
     post?: never
     delete?: never
@@ -1124,8 +1184,8 @@ export interface components {
     RescheduleSessionRequest: {
       /**
        * Format: date
-       * @description The start date of the session in DD/MM/YYYY format
-       * @example 12/12/2026
+       * @description The start date of the session in YYYY-MM-DD format
+       * @example 2025-12-17
        */
       sessionStartDate: string
       /** @description The start time of the session */
@@ -1156,6 +1216,16 @@ export interface components {
        * @enum {string}
        */
       amOrPm: 'AM' | 'PM'
+    }
+    EditSessionDateAndTimeResponse: {
+      /**
+       * @description The text to show to the user, confirming the update has taken place
+       * @example The date and time and schedule have been updated.
+       */
+      message: string
+    }
+    UpdateSessionAttendeesRequest: {
+      referralIdList: string[]
     }
     /** @description Cohort to update the referral with */
     UpdateCohort: {
@@ -2597,14 +2667,14 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -2793,6 +2863,23 @@ export interface components {
        */
       isCatchup: boolean
     }
+    EditSessionFacilitator: {
+      /** @description The full name of the facilitator for the group */
+      facilitator: string
+      /** @description The code of the facilitator for the group */
+      facilitatorCode: string
+      /** @description The name of the team that the member belongs to */
+      teamName: string
+      /** @description The code of the team that the member belongs to */
+      teamCode: string
+      /** @description Is the facilitator currently scheduled on this session */
+      currentlyFacilitating: boolean
+    }
+    /** @description Response representing facilitators for a specific programme session */
+    EditSessionFacilitatorsResponse: {
+      headingText: string
+      facilitators: components['schemas']['EditSessionFacilitator'][]
+    }
     EditSessionDetails: {
       /** Format: uuid */
       sessionId: string
@@ -2820,6 +2907,56 @@ export interface components {
        * @example Thursday 21 May 2026, 11am to 1:30pm
        */
       previousSessionDateAndTime: string
+    }
+    /** @description Details about an attendee for a session */
+    EditSessionAttendee: {
+      /**
+       * @description Full name of the attendee
+       * @example John Smith
+       */
+      name: string
+      /**
+       * Format: uuid
+       * @description Referral identifier associated with the attendee
+       * @example 7d5bbfae-e3fe-4db4-9d3f-f41dcdafc8b3
+       */
+      referralId: string
+      /**
+       * @description CRN of the attendee
+       * @example X123456
+       */
+      crn: string
+      /**
+       * @description Whether this person is marked as currently attending the session
+       * @example true
+       */
+      currentlyAttending: boolean
+    }
+    /** @description Response representing attendees for a specific programme session */
+    EditSessionAttendeesResponse: {
+      /**
+       * Format: uuid
+       * @description Unique identifier of the session
+       * @example 9f31c7c0-5a80-42ef-8b9a-7bf2deec09f0
+       */
+      sessionId: string
+      /**
+       * @description Ryan Hermiston: Getting started one-to-one
+       * @example Session 3 – Relapse Prevention
+       */
+      sessionName: string
+      /**
+       * @description Type of session being delivered
+       * @enum {string}
+       */
+      sessionType: 'GROUP' | 'ONE_TO_ONE'
+      /**
+       * @description Indicates whether this is a catch-up session
+       * @example false
+       */
+      isCatchup: boolean
+      /** @description List of attendees for the session */
+      attendees: components['schemas']['EditSessionAttendee'][]
     }
     UserTeamMember: {
       /** @description The code for the team member */
@@ -2928,14 +3065,14 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -3045,14 +3182,14 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -3326,6 +3463,10 @@ export interface components {
       /** @description Details of the Group's members via their Referrals */
       groupMembers: components['schemas']['GroupMember'][]
     }
+    DeleteSessionCaptionResponse: {
+      /** @description Caption indicating what session is about to be deleted */
+      caption: string
+    }
   }
   responses: never
   parameters: never
@@ -3352,6 +3493,69 @@ export interface operations {
     }
     responses: {
       /** @description Session rescheduled successfully */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EditSessionDateAndTimeResponse']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Session not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  updateAttendeesForSession: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The unique session identifier */
+        sessionId: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateSessionAttendeesRequest']
+      }
+    }
+    responses: {
+      /** @description Session attendees updated successfully */
       200: {
         headers: {
           [name: string]: unknown
@@ -5693,6 +5897,64 @@ export interface operations {
       }
     }
   }
+  retrieveSessionFacilitators: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        sessionId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Session facilitators retrieved successfully */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EditSessionFacilitatorsResponse']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Session not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   retrieveSessionDetailsToEdit: {
     parameters: {
       query?: never
@@ -5771,6 +6033,64 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['RescheduleSessionDetails']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Session not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  retrieveSessionAttendees: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        sessionId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Session attendees retrieved successfully */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EditSessionAttendeesResponse']
         }
       }
       /** @description Bad Request */
@@ -6588,11 +6908,13 @@ export interface operations {
     requestBody?: never
     responses: {
       /** @description Successfully deleted session */
-      204: {
+      200: {
         headers: {
           [name: string]: unknown
         }
-        content?: never
+        content: {
+          '*/*': components['schemas']['DeleteSessionCaptionResponse']
+        }
       }
       /** @description Bad Request */
       400: {
