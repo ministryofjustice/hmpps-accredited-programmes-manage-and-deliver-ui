@@ -70,6 +70,9 @@ type ScheduleSessionRequest = components['schemas']['ScheduleSessionRequest']
 type GroupSessionResponse = components['schemas']['GroupSessionResponse']
 type GroupSchedule = components['schemas']['GroupSchedule']
 type GroupScheduleSession = components['schemas']['GroupScheduleSession']
+type EditSessionFacilitatorsResponse = components['schemas']['EditSessionFacilitatorsResponse']
+type EditSessionFacilitator = components['schemas']['EditSessionFacilitator']
+type EditSessionFacilitatorsRequest = components['schemas']['EditSessionFacilitatorsRequest']
 
 export type {
   AlcoholMisuseDetails,
@@ -79,24 +82,27 @@ export type {
   Availability,
   CaseListFilterValues,
   CaseListReferrals,
-  CreateGroupTeamMember,
   CodeDescription,
   CohortEnum,
   CreateAvailability,
   CreateDeliveryLocationPreferences,
   CreateGroupRequest,
   CreateGroupSessionSlot,
+  CreateGroupTeamMember,
   CreateOrUpdateReferralMotivationBackgroundAndNonAssociations,
   CreateReferralStatusHistory,
   DailyAvailabilityModel,
   DeliveryLocationPreferences,
   DeliveryLocationPreferencesFormData,
   DrugDetails,
+  EditSessionFacilitator,
+  EditSessionFacilitatorsRequest,
+  EditSessionFacilitatorsResponse,
   EmotionalWellbeing,
   ExistingDeliveryLocationPreferences,
   Group,
-  GroupsByRegion,
   GroupItem,
+  GroupsByRegion,
   GroupSchedule,
   GroupScheduleSession,
   GroupSessionResponse,
@@ -133,12 +139,13 @@ export type {
   ScheduleSessionRequest,
   ScheduleSessionTypeResponse,
   SentenceInformation,
+  SessionScheduleGroupResponse,
+  SessionScheduleRequest,
+  SessionScheduleResponse,
+  st,
   ThinkingAndBehaviour,
   UpdateAvailability,
   UpdateCohort,
   UpdateLdc,
   UserTeamMember,
-  SessionScheduleGroupResponse,
-  SessionScheduleRequest,
-  SessionScheduleResponse,
 }

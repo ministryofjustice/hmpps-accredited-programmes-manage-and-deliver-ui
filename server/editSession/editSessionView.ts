@@ -1,11 +1,12 @@
-import EditSessionPresenter from './editSessionPresenter'
 import { SummaryListArgs } from '../utils/govukFrontendTypes'
+import EditSessionPresenter from './editSessionPresenter'
 
 export default class EditSessionView {
   constructor(private readonly presenter: EditSessionPresenter) {}
 
   get editSessionSummary(): SummaryListArgs {
     const sessionDetailsObj = this.presenter.sessionDetails
+    const editSessionFacilitatorsUrl = `${this.presenter.linkUrl}/edit-session-facilitators`
     return {
       rows: [
         {
@@ -77,7 +78,7 @@ export default class EditSessionView {
           actions: {
             items: [
               {
-                href: '',
+                href: editSessionFacilitatorsUrl,
                 text: 'Change',
                 visuallyHiddenText: 'facilitators',
               },

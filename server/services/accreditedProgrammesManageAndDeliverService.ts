@@ -16,9 +16,11 @@ import {
   DeliveryLocationPreferences,
   DeliveryLocationPreferencesFormData,
   DrugDetails,
+  EditSessionFacilitatorsResponse,
   EmotionalWellbeing,
   Group,
   GroupsByRegion,
+  GroupSchedule,
   GroupSessionResponse,
   Health,
   LearningNeeds,
@@ -42,13 +44,12 @@ import {
   ScheduleIndividualSessionDetailsResponse,
   ScheduleSessionTypeResponse,
   SentenceInformation,
+  SessionScheduleGroupResponse,
   SessionScheduleRequest,
   SessionScheduleResponse,
-  SessionScheduleGroupResponse,
   ThinkingAndBehaviour,
   UpdateAvailability,
   UserTeamMember,
-  GroupSchedule,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -629,5 +630,16 @@ export default class AccreditedProgrammesManageAndDeliverService
       path: `/bff/group/${groupId}/schedule`,
       headers: { Accept: 'application/json' },
     })) as GroupSchedule
+  }
+
+  async getEditSessionFacilitatorDetails(
+    username: ExpressUsername,
+    sessionId: string,
+  ): Promise<EditSessionFacilitatorsResponse> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/session/${sessionId}/session-facilitators`,
+      headers: { Accept: 'application/json' },
+    })) as EditSessionFacilitatorsResponse
   }
 }
