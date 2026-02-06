@@ -113,6 +113,10 @@ export default {
     addToGroupEmpty: `Select whether you want to add the person to the group or not`,
     exceededCharacterLimit: 'Details must be 2,000 characters or fewer',
   },
+  editSession: {
+    selectDeleteSession: 'Select whether to delete the session or not',
+  },
+
   returnedError,
   userHeaderTypes,
   errorHandlerAccessErrorMessages,

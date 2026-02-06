@@ -4,6 +4,7 @@ export default class EditSessionPresenter {
   constructor(
     readonly groupId: string,
     readonly sessionDetails: GroupSessionResponse,
+    readonly deleteUrl: string,
   ) {}
 
   get text() {
@@ -12,6 +13,10 @@ export default class EditSessionPresenter {
       pageCaption: `${this.sessionDetails.code}`,
       subHeading: 'Attendance and session notes',
     }
+  }
+
+  get canBeDeleted(): boolean {
+    return this.sessionDetails.sessionType.toLowerCase() === 'individual'
   }
 
   get backLinkArgs() {

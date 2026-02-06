@@ -124,7 +124,7 @@ export default class GroupDetailsController {
     const { username } = req.user
     const { groupId } = req.params
 
-    const groupSchedule = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionDetails(
+    const groupSchedule = await this.accreditedProgrammesManageAndDeliverService.getGroupScheduleDetails(
       username,
       groupId,
     )

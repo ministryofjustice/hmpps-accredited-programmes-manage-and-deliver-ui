@@ -48,6 +48,7 @@ import {
   ThinkingAndBehaviour,
   UpdateAvailability,
   UserTeamMember,
+  Session,
   GroupSchedule,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
@@ -611,7 +612,7 @@ export default class AccreditedProgrammesManageAndDeliverService
     })) as SessionScheduleGroupResponse
   }
 
-  async getSessionDetails(
+  async getGroupSessionDetails(
     username: ExpressUsername,
     groupId: string,
     sessionId: string,
@@ -623,11 +624,27 @@ export default class AccreditedProgrammesManageAndDeliverService
     })) as GroupSessionResponse
   }
 
-  async getGroupSessionDetails(username: ExpressUsername, groupId: string): Promise<GroupSchedule> {
+  async getGroupScheduleDetails(username: ExpressUsername, groupId: string): Promise<GroupSchedule> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/bff/group/${groupId}/schedule`,
       headers: { Accept: 'application/json' },
     })) as GroupSchedule
+  }
+
+  async getSessionDetails(username: ExpressUsername, sessionId: string): Promise<Session> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/session/${sessionId}`,
+      headers: { Accept: 'application/json' },
+    })) as Session
+  }
+
+  async deleteSession(username: ExpressUsername, sessionId: string) {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.delete({
+      path: `/session/${sessionId}`,
+      headers: { Accept: 'application/json' },
+    })) as { caption: string }
   }
 }
