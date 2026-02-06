@@ -14,9 +14,7 @@
     <script nonce="{{ cspNonce }}">
       // Counters for dynamically added elements
       let selectElementCounter = 1;
-      let selectCoverFacilitatorElementCounter = 1;
       let existingIndex = 1;
-      let existingCoverFacilitatorIndex = 1;
 
       /**
        * Clears the select element when the autocomplete input is empty
@@ -44,7 +42,7 @@
       }
 
       /**
-       * Sets up autocomplete for newly added facilitator/cover facilitator elements
+       * Sets up autocomplete for newly added facilitator elements
        * @param {MutationRecord} mutationRecord - The mutation record from MutationObserver
        */
       function possiblySetUpAutocompleteForMutation(mutationRecord) {
@@ -52,65 +50,39 @@
           return;
         }
 
-        mutationRecord
-          .addedNodes
-          .forEach(node => {
-            if (node.nodeType !== Node.ELEMENT_NODE) {
-              return;
-            }
+        mutationRecord.addedNodes.forEach(node => {
+          if (node.nodeType !== Node.ELEMENT_NODE) {
+            return;
+          }
 
-            const select = node.querySelector('select');
-            if (!select) {
-              return;
-            }
+          const select = node.querySelector('select');
+          if (!select) {
+            return;
+          }
 
-            const input = node.querySelector('input');
-            const label = node.querySelector('label');
-            input.remove();
+          const input = node.querySelector('input');
+          const label = node.querySelector('label');
+          input.remove();
 
-            if (select.classList.contains('add-facilitator-select')) {
-              select.id = select.id + selectElementCounter;
-              select.name = select.name + selectElementCounter;
-              select.value = '';
-              label.htmlFor = label.htmlFor + selectElementCounter;
+          if (select.classList.contains('add-facilitator-select')) {
+            select.id = select.id + selectElementCounter;
+            select.name = select.name + selectElementCounter;
+            select.value = '';
+            label.htmlFor = label.htmlFor + selectElementCounter;
 
-              accessibleAutocomplete.enhanceSelectElement({
-                defaultValue: '',
-                selectElement: document.querySelector(`#${select.id}`)
-              });
+            accessibleAutocomplete.enhanceSelectElement({
+              defaultValue: '',
+              selectElement: document.querySelector(`#${select.id}`)
+            });
 
-              clearAccessibleAutocompleteSelectionWhenInputEmpty('create-group-facilitator-select' + selectElementCounter);
-              selectElementCounter++;
-            }
-
-            if (select.classList.contains('add-cover-facilitator-select')) {
-              select.id = select.id + selectCoverFacilitatorElementCounter;
-              select.name = select.name + selectCoverFacilitatorElementCounter;
-              select.value = '';
-              label.htmlFor = label.htmlFor + selectCoverFacilitatorElementCounter;
-
-              accessibleAutocomplete.enhanceSelectElement({
-                defaultValue: '',
-                selectElement: document.querySelector(`#${select.id}`)
-              });
-
-              clearAccessibleAutocompleteSelectionWhenInputEmpty('create-group-cover-facilitator-select' + selectCoverFacilitatorElementCounter);
-              selectCoverFacilitatorElementCounter++;
-            }
-          });
+            clearAccessibleAutocompleteSelectionWhenInputEmpty('create-group-facilitator-select' + selectElementCounter);
+            selectElementCounter++;
+          }
+        });
 
         // Unhide cloned items (they start hidden if existing items are present)
         const facilitatorItems = document.querySelectorAll('.moj-add-another__item__facilitator');
-        facilitatorItems[facilitatorItems.length - 1]
-          ?
-            .classList
-            .remove('govuk-!-display-none');
-
-        const coverItems = document.querySelectorAll('.moj-add-another__item__cover-facilitator');
-        coverItems[coverItems.length - 1]
-          ?
-            .classList
-            .remove('govuk-!-display-none');
+        facilitatorItems[facilitatorItems.length - 1]?.classList.remove('govuk-!-display-none');
       }
 
       /**
@@ -118,28 +90,25 @@
        */
       function toggleOriginalAddFacilitatorVisibility() {
         const item = document.querySelector('.moj-add-another__item__facilitator');
-        if (!item) 
-          return;
-        
+        if (!item) return;
+
         const hasRemoveButton = document.querySelector('.remove-existing-facilitator');
-        const hasOnlyOneExistingInput = !hasRemoveButton && document
-          .querySelectorAll('.existing-facilitator-input')
-          .length === 1;
+        const hasOnlyOneExistingInput = !hasRemoveButton &&
+          document.querySelectorAll('.existing-facilitator-input').length === 1;
 
         if (hasRemoveButton || hasOnlyOneExistingInput) {
-          item
-            .classList
-            .add('govuk-!-display-none');
+          item.classList.add('govuk-!-display-none');
         } else {
-          item
-            .classList
-            .remove('govuk-!-display-none');
+          item.classList.remove('govuk-!-display-none');
         }
       }
 
       document.addEventListener('DOMContentLoaded', function () {
         // Initialize autocomplete for main select elements
-        accessibleAutocomplete.enhanceSelectElement({defaultValue: '', selectElement: document.getElementById('create-group-facilitator')});
+        accessibleAutocomplete.enhanceSelectElement({
+          defaultValue: '',
+          selectElement: document.getElementById('create-group-facilitator')
+        });
         clearAccessibleAutocompleteSelectionWhenInputEmpty('create-group-facilitator');
 
         // Set up mutation observer for dynamically added elements
@@ -158,7 +127,6 @@
 
         // Toggle visibility on page load
         toggleOriginalAddFacilitatorVisibility();
-        toggleOriginalAddCoverFacilitatorVisibility();
       });
 
       // Handle remove button clicks
@@ -194,7 +162,7 @@
 
               <div data-module="moj-add-another">
                 {% call govukFieldset(createGroupFacilitatorsFieldSetArgs) %}
-                {{ govukSelect(createGroupFacilitatorArgs) }}
+                  {{ govukSelect(createGroupFacilitatorArgs) }}
                 {% endcall %}
 
                 {% for facilitator in facilitators %}
@@ -204,11 +172,9 @@
                       <!-- Hacky store the current loop index so we can bind the select to an accessible autocomplete -->
                       <span class="existingLoopCountFacilitator" data-index="{{ loop.index }}"></span>
                       <script nonce="{{ cspNonce }}">
-                        document
-                          .querySelectorAll('.existingLoopCountFacilitator')
-                          .forEach(element => {
-                            existingIndex = element.dataset.index
-                          })
+                        document.querySelectorAll('.existingLoopCountFacilitator').forEach(element => {
+                          existingIndex = element.dataset.index
+                        })
                         accessibleAutocomplete.enhanceSelectElement({
                           defaultValue: '',
                           selectElement: document.getElementById(`create-group-facilitator-existing-${existingIndex}`),

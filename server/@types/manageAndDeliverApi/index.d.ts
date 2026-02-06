@@ -71,8 +71,8 @@ type GroupSessionResponse = components['schemas']['GroupSessionResponse']
 type GroupSchedule = components['schemas']['GroupSchedule']
 type GroupScheduleSession = components['schemas']['GroupScheduleSession']
 type EditSessionFacilitatorsResponse = components['schemas']['EditSessionFacilitatorsResponse']
-type EditSessionFacilitator = components['schemas']['EditSessionFacilitator']
-type EditSessionFacilitatorsRequest = components['schemas']['EditSessionFacilitatorsRequest']
+type EditSessionFacilitatorResponse = components['schemas']['EditSessionFacilitatorsResponse']['facilitators']
+type EditSessionFacilitatorsRequest = components['schemas']['EditSessionFacilitatorRequest']
 
 export type {
   AlcoholMisuseDetails,
@@ -96,6 +96,7 @@ export type {
   DeliveryLocationPreferencesFormData,
   DrugDetails,
   EditSessionFacilitator,
+  EditSessionFacilitatorResponse,
   EditSessionFacilitatorsRequest,
   EditSessionFacilitatorsResponse,
   EmotionalWellbeing,

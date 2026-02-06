@@ -1,8 +1,4 @@
-import {
-  EditSessionFacilitator,
-  EditSessionFacilitatorsRequest,
-  EditSessionFacilitatorsResponse,
-} from '@manage-and-deliver-api'
+import { EditSessionFacilitatorsRequest, EditSessionFacilitatorsResponse } from '@manage-and-deliver-api'
 import { FormValidationError } from '../utils/formValidationError'
 import { SelectArgsItem } from '../utils/govukFrontendTypes'
 import PresenterUtils from '../utils/presenterUtils'
@@ -11,11 +7,18 @@ export default class EditSessionFacilitatorsPresenter {
   constructor(
     readonly linkUrl: string,
     readonly groupId: string,
-    readonly editSessionFacilitatorsResponse: EditSessionFacilitatorsResponse,
-    private readonly userInputData: Record<string, unknown> | null = null,
-    private readonly editSessionFacilitatorsRequest: Partial<EditSessionFacilitatorsRequest> | null = null,
+    private readonly editSessionFacilitatorsResponse: EditSessionFacilitatorsResponse,
+    // private readonly editSessionFacilitatorsRequest: EditSessionFacilitatorsRequest[],
     private readonly validationError: FormValidationError | null = null,
+    private readonly userInputData: Record<string, unknown> | null = null,
   ) {}
+
+  get backLinkArgs() {
+    return {
+      text: 'Back',
+      href: this.linkUrl,
+    }
+  }
 
   get text() {
     return {
@@ -25,22 +28,19 @@ export default class EditSessionFacilitatorsPresenter {
     }
   }
 
-  get backLinkArgs() {
-    return {
-      text: 'Back',
-      href: this.linkUrl,
-    }
-  }
-
   get errorSummary() {
     return PresenterUtils.errorSummary(this.validationError)
   }
 
+  get utils() {
+    return new PresenterUtils(this.userInputData)
+  }
+
   generateSelectOptions(selectedValue: string = ''): SelectArgsItem[] {
-    const pduItems: SelectArgsItem[] = this.editSessionFacilitatorsResponse.facilitators.map(member => ({
-      text: member.facilitator,
-      value: `{"facilitator":"${member.facilitator}", "facilitatorCode":"${member.facilitatorCode}", "teamName":"${member.teamName}", "teamCode":"${member.teamCode}"}`,
-      selected: selectedValue === member.facilitatorCode,
+    const pduItems: SelectArgsItem[] = this.editSessionFacilitatorsResponse.facilitators.map(facilitator => ({
+      text: facilitator.facilitator,
+      value: `{"facilitator":"${facilitator.facilitator}", "facilitatorCode":"${facilitator.facilitatorCode}", "teamName":"${facilitator.teamName}", "teamCode":"${facilitator.teamCode}"}`,
+      selected: selectedValue === facilitator.facilitatorCode,
     }))
 
     const items: SelectArgsItem[] = [
@@ -55,13 +55,15 @@ export default class EditSessionFacilitatorsPresenter {
   }
 
   generateSelectedUsers(): {
-    facilitators: EditSessionFacilitator[] | []
+    facilitators: EditSessionFacilitatorsRequest[] | []
   } {
-    let parsedMembers: EditSessionFacilitator[]
+    let parsedMembers: EditSessionFacilitatorsRequest[]
     if (this.userInputData) {
       parsedMembers = this.getParsedMembers()
     } else {
-      parsedMembers = this.editSessionFacilitatorsRequest?.teamMembers
+      parsedMembers = this.editSessionFacilitatorsResponse.facilitators.filter(
+        facilitator => facilitator.currentlyFacilitating,
+      )
     }
     if (!parsedMembers) {
       return {
@@ -73,7 +75,7 @@ export default class EditSessionFacilitatorsPresenter {
     }
   }
 
-  private getParsedMembers(): EditSessionFacilitator[] {
+  private getParsedMembers(): EditSessionFacilitatorsRequest[] {
     const { _csrf, ...formValues } = this.userInputData
     const membersToParse = Object.values(formValues) as string[]
 
@@ -83,7 +85,6 @@ export default class EditSessionFacilitatorsPresenter {
   }
 
   get fields() {
-    const members = this.generateSelectedUsers()
     return {
       editSessionFacilitator: {
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'edit-session-facilitator'),

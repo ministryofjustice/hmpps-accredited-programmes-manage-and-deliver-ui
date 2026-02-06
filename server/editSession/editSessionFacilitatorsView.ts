@@ -30,7 +30,7 @@ export default class EditSessionFacilitatorsView {
       },
       classes: 'add-facilitator-select',
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.editSessionFacilitator.errorMessage),
-      items: this.presenter.generateSelectOptions('REGULAR_FACILITATOR'),
+      items: this.presenter.generateSelectOptions(),
     }
   }
 
@@ -63,13 +63,14 @@ export default class EditSessionFacilitatorsView {
     return [
       'editSession/editSessionFacilitators',
       {
-        presenter: this.presenter,
-        text: this.presenter.text,
         backLinkArgs: this.presenter.backLinkArgs,
+        homePageLink: this.homePageLink(),
         createGroupFacilitatorArgs: this.createGroupFacilitatorArgs(),
         createGroupFacilitatorsFieldSetArgs: this.createGroupFacilitatorsFieldSetArgs(),
         createExistingGroupFacilitatorArgs: this.createExistingGroupFacilitatorArgs.bind(this),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
+        text: this.presenter.text,
+        facilitators: this.presenter.generateSelectedUsers().facilitators,
       },
     ]
   }
