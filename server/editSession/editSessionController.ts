@@ -11,7 +11,7 @@ import OtherSessionsView from './dateAndTime/otherSessionsView'
 import RescheduleOtherSessionsForm from './dateAndTime/rescheduleOtherSessionsForm'
 import DeleteSessionPresenter from './deleteSession/deleteSessionPresenter'
 import DeleteSessionView from './deleteSession/deleteSessionView'
-import EditSessionFacilitators from './editSessionFacilitatorsPresenter'
+import EditSessionFacilitatorsPresenter from './editSessionFacilitatorsPresenter'
 import EditSessionFacilitatorsView from './editSessionFacilitatorsView'
 import EditSessionForm from './editSessionForm'
 import EditSessionPresenter from './editSessionPresenter'
@@ -154,11 +154,19 @@ export default class EditSessionController {
   async editSessionFacilitators(req: Request, res: Response): Promise<void> {
     const { groupId, sessionId } = req.params
     const { username } = req.user
+    const formError: FormValidationError | null = null
+    const userInputData = null
 
     const editSessionFacilitators =
       await this.accreditedProgrammesManageAndDeliverService.getEditSessionFacilitatorDetails(username, sessionId)
 
-    const presenter = new EditSessionFacilitators(req.session.originPage, groupId, editSessionFacilitators)
+    const presenter = new EditSessionFacilitatorsPresenter(
+      req.session.originPage,
+      groupId,
+      editSessionFacilitators,
+      formError,
+      userInputData,
+    )
     const view = new EditSessionFacilitatorsView(presenter)
 
     ControllerUtils.renderWithLayout(res, view, null)
