@@ -4,6 +4,8 @@ export default class EditSessionPresenter {
   constructor(
     readonly groupId: string,
     readonly sessionDetails: GroupSessionResponse,
+    readonly sessionId: string,
+    readonly successMessage: string | null = null,
     readonly deleteUrl: string,
   ) {}
 
@@ -11,7 +13,6 @@ export default class EditSessionPresenter {
     return {
       pageHeading: `${this.sessionDetails.pageTitle}`,
       pageCaption: `${this.sessionDetails.code}`,
-      subHeading: 'Attendance and session notes',
     }
   }
 

@@ -17,4 +17,5 @@ export interface SummaryListItem {
   changeLink?: string
   deleteLink?: string
   valueLink?: string
+  keyClass?: string
 }
