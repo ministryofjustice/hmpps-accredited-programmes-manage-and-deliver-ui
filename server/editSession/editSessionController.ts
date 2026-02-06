@@ -10,7 +10,6 @@ import { FormValidationError } from '../utils/formValidationError'
 import EditSessionForm from './editSessionForm'
 import EditSessionDateAndTimePresenter from './dateAndTime/editSessionDateAndTimePresenter'
 import EditSessionDateAndTimeView from './dateAndTime/editSessionDateAndTimeView'
-import { FormValidationError } from '../utils/formValidationError'
 import EditSessionDateAndTimeFormForm from './dateAndTime/editSessionDateAndTimeForm'
 import OtherSessionsPresenter from './dateAndTime/otherSessionsPresenter'
 import OtherSessionsView from './dateAndTime/otherSessionsView'
@@ -39,8 +38,8 @@ export default class EditSessionController {
       groupId,
       sessionDetails,
       sessionId,
-      successMessage,
       `/group/${groupId}/sessionId/${sessionId}/delete-session`,
+      successMessage,
     )
     const view = new EditSessionView(presenter)
 
@@ -140,9 +139,7 @@ export default class EditSessionController {
           req.session.editSessionDateAndTime as RescheduleSessionRequest,
         )
 
-        return res.redirect(
-          `/group/${groupId}/sessionId/${sessionId}/${sessionDetails.sessionName}?message=${message.message}`,
-        )
+        return res.redirect(`/group/${groupId}/sessionId/${sessionId}/edit-session?message=${message.message}`)
       }
     }
 

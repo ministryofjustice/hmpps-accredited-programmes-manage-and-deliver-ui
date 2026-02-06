@@ -154,7 +154,7 @@ describe('submitEditSessionDateAndTime', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Redirecting to /group/111/sessionId/6789/${encodeURIComponent(sessionDetails.sessionName)}?message=${encodeURIComponent('Test message')}`,
+            `Redirecting to /group/111/sessionId/6789/edit-session?message=${encodeURIComponent('Test message')}`,
           )
         })
     })

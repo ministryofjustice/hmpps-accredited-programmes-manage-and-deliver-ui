@@ -5,8 +5,8 @@ export default class EditSessionPresenter {
     readonly groupId: string,
     readonly sessionDetails: GroupSessionResponse,
     readonly sessionId: string,
-    readonly successMessage: string | null = null,
     readonly deleteUrl: string,
+    readonly successMessage: string | null = null,
   ) {}
 
   get text() {
