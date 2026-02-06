@@ -55,12 +55,12 @@ export default class EditSessionView {
             text: 'Scheduled to attend',
           },
           value: {
-            html: sessionDetailsObj.scheduledToAttend.join('<br>'),
+            html: sessionDetailsObj.scheduledToAttend.join('<br/>'),
           },
           actions: {
             items: [
               {
-                href: '',
+                href: this.presenter.editSessionAttendanceWhoUrl,
                 text: 'Change',
                 visuallyHiddenText: 'participants',
               },
@@ -72,7 +72,7 @@ export default class EditSessionView {
             text: 'Facilitators',
           },
           value: {
-            html: sessionDetailsObj.facilitators.join('<br>'),
+            html: sessionDetailsObj.facilitators.join('<br/>'),
           },
           actions: {
             items: [
