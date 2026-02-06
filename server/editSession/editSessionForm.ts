@@ -32,4 +32,30 @@ export default class EditSessionForm {
   static deleteValidations(): ValidationChain[] {
     return [body('delete-session').notEmpty().withMessage(errorMessages.editSession.selectDeleteSession)]
   }
+
+  async attendanceWhoData(): Promise<FormData<{ referralId: string }>> {
+    const validationResult = await FormUtils.runValidations({
+      request: this.request,
+      validations: EditSessionForm.attendanceWhoValidations(),
+    })
+
+    const error = FormUtils.validationErrorFromResult(validationResult)
+    if (error) {
+      return {
+        paramsForUpdate: null,
+        error,
+      }
+    }
+
+    return {
+      paramsForUpdate: {
+        referralId: this.request.body['edit-session-attendance-who'],
+      },
+      error: null,
+    }
+  }
+
+  static attendanceWhoValidations(): ValidationChain[] {
+    return [body('edit-session-attendance-who').notEmpty().withMessage('Select who should attend the session')]
+  }
 }
