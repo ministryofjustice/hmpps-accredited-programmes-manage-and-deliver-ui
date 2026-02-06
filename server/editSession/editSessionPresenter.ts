@@ -2,6 +2,7 @@ import { GroupSessionResponse } from '@manage-and-deliver-api'
 
 export default class EditSessionPresenter {
   constructor(
+    readonly linkUrl: string,
     readonly groupId: string,
     readonly sessionDetails: GroupSessionResponse,
     readonly sessionId: string,

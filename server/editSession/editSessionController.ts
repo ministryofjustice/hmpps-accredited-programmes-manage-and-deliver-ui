@@ -1,19 +1,21 @@
-import { Request, Response } from 'express'
 import { RescheduleSessionRequest } from '@manage-and-deliver-api'
+import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
-import EditSessionPresenter from './editSessionPresenter'
-import EditSessionView from './editSessionView'
-import DeleteSessionPresenter from './deleteSession/deleteSessionPresenter'
-import DeleteSessionView from './deleteSession/deleteSessionView'
 import { FormValidationError } from '../utils/formValidationError'
-import EditSessionForm from './editSessionForm'
+import EditSessionDateAndTimeFormForm from './dateAndTime/editSessionDateAndTimeForm'
 import EditSessionDateAndTimePresenter from './dateAndTime/editSessionDateAndTimePresenter'
 import EditSessionDateAndTimeView from './dateAndTime/editSessionDateAndTimeView'
-import EditSessionDateAndTimeFormForm from './dateAndTime/editSessionDateAndTimeForm'
 import OtherSessionsPresenter from './dateAndTime/otherSessionsPresenter'
 import OtherSessionsView from './dateAndTime/otherSessionsView'
 import RescheduleOtherSessionsForm from './dateAndTime/rescheduleOtherSessionsForm'
+import DeleteSessionPresenter from './deleteSession/deleteSessionPresenter'
+import DeleteSessionView from './deleteSession/deleteSessionView'
+import EditSessionFacilitators from './editSessionFacilitatorsPresenter'
+import EditSessionFacilitatorsView from './editSessionFacilitatorsView'
+import EditSessionForm from './editSessionForm'
+import EditSessionPresenter from './editSessionPresenter'
+import EditSessionView from './editSessionView'
 
 export default class EditSessionController {
   constructor(
@@ -147,5 +149,18 @@ export default class EditSessionController {
     const view = new OtherSessionsView(presenter)
 
     return ControllerUtils.renderWithLayout(res, view, null)
+  }
+
+  async editSessionFacilitators(req: Request, res: Response): Promise<void> {
+    const { groupId, sessionId } = req.params
+    const { username } = req.user
+
+    const editSessionFacilitators =
+      await this.accreditedProgrammesManageAndDeliverService.getEditSessionFacilitatorDetails(username, sessionId)
+
+    const presenter = new EditSessionFacilitators(req.session.originPage, groupId, editSessionFacilitators)
+    const view = new EditSessionFacilitatorsView(presenter)
+
+    ControllerUtils.renderWithLayout(res, view, null)
   }
 }

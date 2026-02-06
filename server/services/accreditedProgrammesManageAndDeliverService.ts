@@ -16,9 +16,13 @@ import {
   DeliveryLocationPreferences,
   DeliveryLocationPreferencesFormData,
   DrugDetails,
+  EditSessionDateAndTimeResponse,
+  EditSessionDetails,
+  EditSessionFacilitatorsResponse,
   EmotionalWellbeing,
   Group,
   GroupsByRegion,
+  GroupSchedule,
   GroupSessionResponse,
   Health,
   LearningNeeds,
@@ -37,23 +41,20 @@ import {
   Relationships,
   RemoveFromGroupRequest,
   RemoveFromGroupResponse,
+  RescheduleSessionDetails,
+  RescheduleSessionRequest,
   Risks,
   RoshAnalysis,
   ScheduleIndividualSessionDetailsResponse,
   ScheduleSessionTypeResponse,
   SentenceInformation,
+  Session,
+  SessionScheduleGroupResponse,
   SessionScheduleRequest,
   SessionScheduleResponse,
-  SessionScheduleGroupResponse,
   ThinkingAndBehaviour,
   UpdateAvailability,
-  UserTeamMember,
-  EditSessionDetails,
-  RescheduleSessionDetails,
-  RescheduleSessionRequest,
-  EditSessionDateAndTimeResponse,
-  Session,
-  GroupSchedule,
+  UserTeamMember
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -679,5 +680,16 @@ export default class AccreditedProgrammesManageAndDeliverService
       path: `/session/${sessionId}`,
       headers: { Accept: 'application/json' },
     })) as { caption: string }
+  }
+
+  async getEditSessionFacilitatorDetails(
+    username: ExpressUsername,
+    sessionId: string,
+  ): Promise<EditSessionFacilitatorsResponse> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/session/${sessionId}/session-facilitators`,
+      headers: { Accept: 'application/json' },
+    })) as EditSessionFacilitatorsResponse
   }
 }

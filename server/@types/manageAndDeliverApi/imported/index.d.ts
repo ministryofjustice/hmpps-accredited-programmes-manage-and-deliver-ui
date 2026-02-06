@@ -4,6 +4,26 @@
  */
 
 export interface paths {
+  '/session/{sessionId}/session-facilitators': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Edit session facilitators of a session
+     * @description Edit the facilitators for a session
+     */
+    put: operations['editSessionFacilitators']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/session/{sessionId}/reschedule': {
     parameters: {
       query?: never
@@ -287,6 +307,22 @@ export interface paths {
      */
     post: operations['allocateToProgrammeGroup']
     delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/dev/seed/referrals': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['seedReferrals']
+    delete: operations['dangerouslyDeleteAllReferrals']
     options?: never
     head?: never
     patch?: never
@@ -718,6 +754,22 @@ export interface paths {
      * @description Get group by GroupCode and in User region
      */
     get: operations['getGroupInUserRegion']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/dev/seed/health': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: operations['health']
     put?: never
     post?: never
     delete?: never
@@ -1180,6 +1232,17 @@ export interface components {
        * @example null
        */
       moreInfo?: string
+    }
+    /** @description Request to edit the facilitators for a session */
+    EditSessionFacilitatorRequest: {
+      /** @description The full name of the facilitator for the group */
+      facilitator: string
+      /** @description The code of the facilitator for the group */
+      facilitatorCode: string
+      /** @description The name of the team that the member belongs to */
+      teamName: string
+      /** @description The code of the team that the member belongs to */
+      teamCode: string
     }
     RescheduleSessionRequest: {
       /**
@@ -1646,6 +1709,17 @@ export interface components {
        * @example Alex River was added to this group. Their referral status is now Scheduled.
        */
       message: string
+    }
+    SeededReferralInfo: {
+      referralId: string
+      crn: string
+      personName: string
+      requirementId: string
+    }
+    SeedingResult: {
+      /** Format: int32 */
+      count: number
+      referrals: components['schemas']['SeededReferralInfo'][]
     }
     CreateAvailability: {
       /**
@@ -2668,6 +2742,9 @@ export interface components {
       /** Format: int32 */
       totalPages?: number
       /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
+      /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
@@ -2681,15 +2758,15 @@ export interface components {
       empty?: boolean
     }
     PageableObject: {
+      paged?: boolean
+      /** Format: int32 */
+      pageNumber?: number
+      /** Format: int32 */
+      pageSize?: number
+      unpaged?: boolean
       /** Format: int64 */
       offset?: number
       sort?: components['schemas']['SortObject']
-      /** Format: int32 */
-      pageSize?: number
-      /** Format: int32 */
-      pageNumber?: number
-      paged?: boolean
-      unpaged?: boolean
     }
     ReferralCaseListItem: {
       /** Format: uuid */
@@ -2707,9 +2784,9 @@ export interface components {
       reportingTeam: string
     }
     SortObject: {
-      empty?: boolean
       sorted?: boolean
       unsorted?: boolean
+      empty?: boolean
     }
     StatusFilterValues: {
       /**
@@ -2878,6 +2955,12 @@ export interface components {
     /** @description Response representing facilitators for a specific programme session */
     EditSessionFacilitatorsResponse: {
       headingText: string
+      /**
+       * @description The title of the page
+       * @example Attendance and notes for Getting started session
+       */
+      pageTitle: string
+      /** @description List of the facilitators for the session */
       facilitators: components['schemas']['EditSessionFacilitator'][]
     }
     EditSessionDetails: {
@@ -3066,6 +3149,9 @@ export interface components {
       /** Format: int32 */
       totalPages?: number
       /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
+      /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
       /** Format: int32 */
@@ -3183,16 +3269,22 @@ export interface components {
       /** Format: int32 */
       totalPages?: number
       /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
+      /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+<<<<<<< HEAD
       first?: boolean
       last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
+=======
+>>>>>>> 78d91a3 (-n)
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
@@ -3467,6 +3559,13 @@ export interface components {
       /** @description Caption indicating what session is about to be deleted */
       caption: string
     }
+<<<<<<< HEAD
+=======
+    TeardownResult: {
+      /** Format: int32 */
+      deletedCount: number
+    }
+>>>>>>> 78d91a3 (-n)
   }
   responses: never
   parameters: never
@@ -3476,6 +3575,68 @@ export interface components {
 }
 export type $defs = Record<string, never>
 export interface operations {
+  editSessionFacilitators: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        sessionId: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['EditSessionFacilitatorRequest'][]
+      }
+    }
+    responses: {
+      /** @description Session facilitators updated successfully */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Session not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   rescheduleSession: {
     parameters: {
       query?: never
@@ -4455,6 +4616,66 @@ export interface operations {
       }
       /** @description The group or referral does not exist */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  seedReferrals: {
+    parameters: {
+      query?: {
+        count?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['SeedingResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  dangerouslyDeleteAllReferrals: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['TeardownResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
         headers: {
           [name: string]: unknown
         }
@@ -5779,6 +6000,37 @@ export interface operations {
       }
       /** @description Forbidden. The client is not authorised to retrieve group details. */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  health: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': {
+            [key: string]: string
+          }
+        }
+      }
+      /** @description Bad Request */
+      400: {
         headers: {
           [name: string]: unknown
         }
