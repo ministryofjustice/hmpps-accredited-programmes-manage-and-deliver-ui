@@ -68,6 +68,10 @@ type ScheduleSessionTypeResponse = components['schemas']['ScheduleSessionTypeRes
 type ScheduleIndividualSessionDetailsResponse = components['schemas']['ScheduleIndividualSessionDetailsResponse']
 type ScheduleSessionRequest = components['schemas']['ScheduleSessionRequest']
 type GroupSessionResponse = components['schemas']['GroupSessionResponse']
+type EditSessionDetails = components['schemas']['EditSessionDetails']
+type RescheduleSessionRequest = components['schemas']['RescheduleSessionRequest']
+type RescheduleSessionDetails = components['schemas']['RescheduleSessionDetails']
+type EditSessionDateAndTimeResponse = components['schemas']['EditSessionDateAndTimeResponse']
 type GroupSchedule = components['schemas']['GroupSchedule']
 type GroupScheduleSession = components['schemas']['GroupScheduleSession']
 type Session = components['schemas']['Session']
@@ -93,6 +97,8 @@ export type {
   DeliveryLocationPreferences,
   DeliveryLocationPreferencesFormData,
   DrugDetails,
+  EditSessionDateAndTimeResponse,
+  EditSessionDetails,
   EmotionalWellbeing,
   ExistingDeliveryLocationPreferences,
   Group,
@@ -128,6 +134,7 @@ export type {
   Relationships,
   RemoveFromGroupRequest,
   RemoveFromGroupResponse,
+  RescheduleSessionRequest,
   Risks,
   RoshAnalysis,
   ScheduleIndividualSessionDetailsResponse,
@@ -138,9 +145,11 @@ export type {
   SessionScheduleRequest,
   SessionScheduleResponse,
   SentenceInformation,
+  SessionTime,
   ThinkingAndBehaviour,
   UpdateAvailability,
   UpdateCohort,
   UpdateLdc,
   UserTeamMember,
+  RescheduleSessionDetails,
 }

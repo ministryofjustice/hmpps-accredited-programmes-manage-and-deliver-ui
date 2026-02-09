@@ -122,4 +122,14 @@ export default class DateUtils {
 
     return new Date(date.getTime() + serverTimezoneOffset).toISOString()
   }
+
+  static convertTo24Hour(hour: number, minute: number, period: 'AM' | 'PM'): { hour: number; minute: number } {
+    let hour24 = hour
+    if (period === 'AM') {
+      hour24 = hour === 12 ? 0 : hour // 12 AM is midnight (0), other AM hours stay the same
+    } else {
+      hour24 = hour === 12 ? 12 : hour + 12 // 12 PM stays 12, other PM hours add 12
+    }
+    return { hour: hour24, minute }
+  }
 }

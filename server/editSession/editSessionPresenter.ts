@@ -6,13 +6,13 @@ export default class EditSessionPresenter {
     readonly sessionId: string,
     readonly sessionDetails: GroupSessionResponse,
     readonly deleteUrl: string,
+    readonly successMessage: string | null = null,
   ) {}
 
   get text() {
     return {
       pageHeading: `${this.sessionDetails.pageTitle}`,
       pageCaption: `${this.sessionDetails.code}`,
-      subHeading: 'Attendance and session notes',
     }
   }
 
