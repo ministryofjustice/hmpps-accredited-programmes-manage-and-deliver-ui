@@ -32,6 +32,30 @@ describe('EditSessionAttendanceWhoPresenter', () => {
     ],
   } as Session
 
+  describe('text', () => {
+    it('should return correct page heading and caption', () => {
+      const presenter = new EditSessionAttendanceWhoPresenter(groupId, backUrl, mockSessionDetails)
+
+      expect(presenter.text).toEqual({
+        pageHeading: 'Getting started',
+        pageCaption: 'John Doe',
+      })
+    })
+
+    it('should return empty string for pageCaption when referrals array is empty', () => {
+      const emptySessionDetails: Session = {
+        ...mockSessionDetails,
+        referrals: [],
+      }
+      const presenter = new EditSessionAttendanceWhoPresenter(groupId, backUrl, emptySessionDetails)
+
+      expect(presenter.text).toEqual({
+        pageHeading: 'Getting started',
+        pageCaption: '',
+      })
+    })
+  })
+
   describe('backLinkArgs', () => {
     it('should return correct back link arguments', () => {
       const presenter = new EditSessionAttendanceWhoPresenter(groupId, backUrl, mockSessionDetails)

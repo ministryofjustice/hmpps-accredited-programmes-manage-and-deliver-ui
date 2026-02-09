@@ -56,6 +56,6 @@ export default class EditSessionForm {
   }
 
   static attendanceWhoValidations(): ValidationChain[] {
-    return [body('edit-session-attendance-who').notEmpty().withMessage('Select who should attend the session')]
+    return [body('edit-session-attendance-who').notEmpty().withMessage(errorMessages.editSession.selectAttendanceWho)]
   }
 }
