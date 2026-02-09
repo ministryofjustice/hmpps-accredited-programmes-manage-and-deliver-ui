@@ -27,6 +27,8 @@ import RoshAnalysisPresenter from './roshAnalysis/roshAnalysisPresenter'
 import RoshAnalysisView from './roshAnalysis/roshAnalysisView'
 import ThinkingAndBehavingPresenter from './thinkingAndBehaving/thinkingAndBehavingPresenter'
 import ThinkingAndBehavingView from './thinkingAndBehaving/thinkingAndBehavingView'
+import RisksAndAlertsOgrs4Presenter from './risksAndAlerts/risksAndAlertsOgrs4Presenter'
+import RisksAndAlertsOgrs4View from './risksAndAlerts/risksAndAlertsOgrs4View'
 
 export default class RisksAndNeedsController {
   constructor(
@@ -49,14 +51,31 @@ export default class RisksAndNeedsController {
       sharedReferralDetailsData.crn,
     )
 
-    const presenter = new RisksAndAlertsPresenter(
+    console.log(risks)
+
+    if (!risks.isLegacy) {
+      const presenter = new RisksAndAlertsPresenter(
+        subNavValue,
+        sharedReferralDetailsData,
+        risks,
+        isLdcUpdated === 'true',
+        isCohortUpdated === 'true',
+      )
+      const view = new RisksAndAlertsView(presenter)
+
+      req.session.originPage = req.path
+
+      return ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    }
+
+    const presenter = new RisksAndAlertsOgrs4Presenter(
       subNavValue,
       sharedReferralDetailsData,
       risks,
       isLdcUpdated === 'true',
       isCohortUpdated === 'true',
     )
-    const view = new RisksAndAlertsView(presenter)
+    const view = new RisksAndAlertsOgrs4View(presenter)
 
     req.session.originPage = req.path
 

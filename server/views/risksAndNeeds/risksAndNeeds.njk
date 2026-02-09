@@ -86,7 +86,11 @@
               </div>
             {% else %}
               <div>
-                {% include "./risksAndAlerts.njk" %}
+                {% if presenter.risks.isLegacy === false %}
+                  {% include "./risksAndAlerts.njk" %}
+                {% else %}
+                  {% include "./risksAndAlertsOgrs4.njk" %}
+                {% endif %}
               </div>
             {% endif %}
           </div>

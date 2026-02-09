@@ -24,10 +24,12 @@ export default class RisksAndNeedsPresenter extends ReferralLayoutPresenter {
     readonly isCohortUpdated: boolean | null = null,
   ) {
     super(HorizontalNavValues.risksAndNeedsTab, referral, isLdcUpdated, isCohortUpdated)
+    console.log('In the super')
+    console.log(subNavValue)
   }
 
   readonly pageDescription =
-    'Relevant sections from OASys to support the referral. The full Layer 3 assessment is available in OASys. Information is accurate at the time of the referral being submitted.'
+    'Relevant information to support the referral, taken from the latest approved assessment in OASys. The full risk and need assessment is available in OASys.'
 
   getVerticalSubNavArgs(): {
     items: { text: string; href: string; active: boolean; attributes: object | null }[]
