@@ -678,8 +678,7 @@ export default class AccreditedProgrammesManageAndDeliverService
     await restClient.put({
       path: `/session/${sessionId}/attendees`,
       data: { referralIdList: [referralId] },
-      headers: { Accept: 'text/plain' },
-      raw: true,
+      responseType: 'text',
     })
   }
 
