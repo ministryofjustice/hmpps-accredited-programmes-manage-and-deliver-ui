@@ -641,14 +641,7 @@ export default class AccreditedProgrammesManageAndDeliverService
   }
 
   async updateSessionAttendees(username: ExpressUsername, sessionId: string, referralId: string): Promise<void> {
-    // TODO: Backend API endpoint not yet implemented - uncomment when ready
-    // const restClient = await this.createRestClientFromUsername(username)
-    // await restClient.put({
-    //   path: `/session/${sessionId}/attendees`,
-    //   data: { referralIdList: [referralId] },
-    //   headers: { Accept: 'application/json' },
-    // })
-    console.log(`[Placeholder] Would update session ${sessionId} with referralIdList: [${referralId}]`)
+    // TODO: Backend API endpoint not yet implemented
   }
 
   async deleteSession(username: ExpressUsername, sessionId: string) {
