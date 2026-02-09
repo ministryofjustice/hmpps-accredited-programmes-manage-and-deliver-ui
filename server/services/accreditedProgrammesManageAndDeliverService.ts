@@ -677,7 +677,7 @@ export default class AccreditedProgrammesManageAndDeliverService
     const restClient = await this.createRestClientFromUsername(username)
     await restClient.put({
       path: `/session/${sessionId}/attendees`,
-      data: { attendeeIds: [referralId] },
+      data: { referralIdList: [referralId] },
       headers: { Accept: 'application/json' },
     })
   }
