@@ -79,6 +79,7 @@ export default class ViewUtils {
         return {
           key: {
             text: item.key,
+            classes: item.keyClass,
           },
           value: (() => {
             if (item.listStyle !== undefined) {
