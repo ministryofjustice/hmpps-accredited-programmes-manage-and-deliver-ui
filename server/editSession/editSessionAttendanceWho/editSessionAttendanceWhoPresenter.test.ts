@@ -1,4 +1,4 @@
-import { Session } from '@manage-and-deliver-api'
+import { Session, EditSessionAttendee } from '@manage-and-deliver-api'
 import EditSessionAttendanceWhoPresenter from './editSessionAttendanceWhoPresenter'
 import { FormValidationError } from '../../utils/formValidationError'
 
@@ -32,9 +32,21 @@ describe('EditSessionAttendanceWhoPresenter', () => {
     ],
   } as Session
 
+  const mockCurrentlyAttending: EditSessionAttendee = {
+    name: 'John Doe',
+    referralId: 'referral-1',
+    crn: 'X123456',
+    currentlyAttending: true,
+  }
+
   describe('text', () => {
     it('should return correct page heading and caption', () => {
-      const presenter = new EditSessionAttendanceWhoPresenter(groupId, backUrl, mockSessionDetails)
+      const presenter = new EditSessionAttendanceWhoPresenter(
+        groupId,
+        backUrl,
+        mockSessionDetails,
+        mockCurrentlyAttending,
+      )
 
       expect(presenter.text).toEqual({
         pageHeading: 'Getting started',
@@ -48,7 +60,12 @@ describe('EditSessionAttendanceWhoPresenter', () => {
         ...mockSessionDetails,
         referrals: [],
       }
-      const presenter = new EditSessionAttendanceWhoPresenter(groupId, backUrl, emptySessionDetails)
+      const presenter = new EditSessionAttendanceWhoPresenter(
+        groupId,
+        backUrl,
+        emptySessionDetails,
+        mockCurrentlyAttending,
+      )
 
       expect(presenter.text).toEqual({
         pageHeading: 'Getting started',
@@ -62,7 +79,12 @@ describe('EditSessionAttendanceWhoPresenter', () => {
         ...mockSessionDetails,
         isCatchup: true,
       }
-      const presenter = new EditSessionAttendanceWhoPresenter(groupId, backUrl, catchupSessionDetails)
+      const presenter = new EditSessionAttendanceWhoPresenter(
+        groupId,
+        backUrl,
+        catchupSessionDetails,
+        mockCurrentlyAttending,
+      )
 
       expect(presenter.text).toEqual({
         pageHeading: 'Getting started',
@@ -74,7 +96,12 @@ describe('EditSessionAttendanceWhoPresenter', () => {
 
   describe('backLinkArgs', () => {
     it('should return correct back link arguments', () => {
-      const presenter = new EditSessionAttendanceWhoPresenter(groupId, backUrl, mockSessionDetails)
+      const presenter = new EditSessionAttendanceWhoPresenter(
+        groupId,
+        backUrl,
+        mockSessionDetails,
+        mockCurrentlyAttending,
+      )
 
       expect(presenter.backLinkArgs).toEqual({
         text: 'Back',
@@ -84,30 +111,13 @@ describe('EditSessionAttendanceWhoPresenter', () => {
   })
 
   describe('generateAttendeeRadioOptions', () => {
-    it('should generate radio options for all referrals without selection', () => {
-      const presenter = new EditSessionAttendanceWhoPresenter(groupId, backUrl, mockSessionDetails)
-
-      const options = presenter.generateAttendeeRadioOptions()
-
-      expect(options).toEqual([
-        {
-          text: 'John Doe (X123456)',
-          value: 'referral-1',
-          checked: false,
-        },
-        {
-          text: 'Jane Smith (Y654321)',
-          value: 'referral-2',
-          checked: false,
-        },
-      ])
-    })
-
-    it('should generate radio options with first referral selected', () => {
-      const userInputData = {
-        'edit-session-attendance-who': 'referral-1',
-      }
-      const presenter = new EditSessionAttendanceWhoPresenter(groupId, backUrl, mockSessionDetails, null, userInputData)
+    it('should generate radio options with currently attending referral pre-selected', () => {
+      const presenter = new EditSessionAttendanceWhoPresenter(
+        groupId,
+        backUrl,
+        mockSessionDetails,
+        mockCurrentlyAttending,
+      )
 
       const options = presenter.generateAttendeeRadioOptions()
 
@@ -125,11 +135,47 @@ describe('EditSessionAttendanceWhoPresenter', () => {
       ])
     })
 
-    it('should generate radio options with second referral selected', () => {
+    it('should generate radio options with first referral selected from user input', () => {
+      const userInputData = {
+        'edit-session-attendance-who': 'referral-1',
+      }
+      const presenter = new EditSessionAttendanceWhoPresenter(
+        groupId,
+        backUrl,
+        mockSessionDetails,
+        mockCurrentlyAttending,
+        null,
+        userInputData,
+      )
+
+      const options = presenter.generateAttendeeRadioOptions()
+
+      expect(options).toEqual([
+        {
+          text: 'John Doe (X123456)',
+          value: 'referral-1',
+          checked: true,
+        },
+        {
+          text: 'Jane Smith (Y654321)',
+          value: 'referral-2',
+          checked: false,
+        },
+      ])
+    })
+
+    it('should generate radio options with second referral selected from user input', () => {
       const userInputData = {
         'edit-session-attendance-who': 'referral-2',
       }
-      const presenter = new EditSessionAttendanceWhoPresenter(groupId, backUrl, mockSessionDetails, null, userInputData)
+      const presenter = new EditSessionAttendanceWhoPresenter(
+        groupId,
+        backUrl,
+        mockSessionDetails,
+        mockCurrentlyAttending,
+        null,
+        userInputData,
+      )
 
       const options = presenter.generateAttendeeRadioOptions()
 
@@ -152,7 +198,13 @@ describe('EditSessionAttendanceWhoPresenter', () => {
         ...mockSessionDetails,
         referrals: [],
       }
-      const presenter = new EditSessionAttendanceWhoPresenter(groupId, backUrl, emptySessionDetails)
+      const emptyAttendee: EditSessionAttendee = {
+        name: '',
+        referralId: '',
+        crn: '',
+        currentlyAttending: false,
+      }
+      const presenter = new EditSessionAttendanceWhoPresenter(groupId, backUrl, emptySessionDetails, emptyAttendee)
 
       const options = presenter.generateAttendeeRadioOptions()
 
@@ -162,7 +214,12 @@ describe('EditSessionAttendanceWhoPresenter', () => {
 
   describe('errorSummary', () => {
     it('should return null when there is no validation error', () => {
-      const presenter = new EditSessionAttendanceWhoPresenter(groupId, backUrl, mockSessionDetails)
+      const presenter = new EditSessionAttendanceWhoPresenter(
+        groupId,
+        backUrl,
+        mockSessionDetails,
+        mockCurrentlyAttending,
+      )
 
       expect(presenter.errorSummary).toBeNull()
     })
@@ -177,7 +234,13 @@ describe('EditSessionAttendanceWhoPresenter', () => {
           },
         ],
       }
-      const presenter = new EditSessionAttendanceWhoPresenter(groupId, backUrl, mockSessionDetails, validationError)
+      const presenter = new EditSessionAttendanceWhoPresenter(
+        groupId,
+        backUrl,
+        mockSessionDetails,
+        mockCurrentlyAttending,
+        validationError,
+      )
 
       expect(presenter.errorSummary).toEqual([
         {
@@ -190,7 +253,12 @@ describe('EditSessionAttendanceWhoPresenter', () => {
 
   describe('fields', () => {
     it('should return field with no error message when there is no validation error', () => {
-      const presenter = new EditSessionAttendanceWhoPresenter(groupId, backUrl, mockSessionDetails)
+      const presenter = new EditSessionAttendanceWhoPresenter(
+        groupId,
+        backUrl,
+        mockSessionDetails,
+        mockCurrentlyAttending,
+      )
 
       expect(presenter.fields).toEqual({
         'edit-session-attendance-who': {
@@ -209,7 +277,13 @@ describe('EditSessionAttendanceWhoPresenter', () => {
           },
         ],
       }
-      const presenter = new EditSessionAttendanceWhoPresenter(groupId, backUrl, mockSessionDetails, validationError)
+      const presenter = new EditSessionAttendanceWhoPresenter(
+        groupId,
+        backUrl,
+        mockSessionDetails,
+        mockCurrentlyAttending,
+        validationError,
+      )
 
       expect(presenter.fields['edit-session-attendance-who'].errorMessage).toBe('Select who should attend the session')
     })

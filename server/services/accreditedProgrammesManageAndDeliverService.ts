@@ -48,6 +48,8 @@ import {
   ThinkingAndBehaviour,
   UpdateAvailability,
   UserTeamMember,
+  EditSessionAttendee,
+  EditSessionAttendeesResponse,
   EditSessionDetails,
   RescheduleSessionDetails,
   RescheduleSessionRequest,
@@ -671,6 +673,14 @@ export default class AccreditedProgrammesManageAndDeliverService
       path: `/bff/session/${sessionId}`,
       headers: { Accept: 'application/json' },
     })) as Session
+  }
+
+  async getSessionAttendees(username: ExpressUsername, sessionId: string): Promise<EditSessionAttendeesResponse> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/session/${sessionId}/attendees`,
+      headers: { Accept: 'application/json' },
+    })) as EditSessionAttendeesResponse
   }
 
   async updateSessionAttendees(username: ExpressUsername, sessionId: string, referralId: string): Promise<void> {

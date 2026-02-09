@@ -75,6 +75,8 @@ type EditSessionDateAndTimeResponse = components['schemas']['EditSessionDateAndT
 type GroupSchedule = components['schemas']['GroupSchedule']
 type GroupScheduleSession = components['schemas']['GroupScheduleSession']
 type Session = components['schemas']['Session']
+type EditSessionAttendeesResponse = components['schemas']['EditSessionAttendeesResponse']
+type EditSessionAttendee = components['schemas']['EditSessionAttendee']
 
 export type {
   AlcoholMisuseDetails,
@@ -97,6 +99,8 @@ export type {
   DeliveryLocationPreferences,
   DeliveryLocationPreferencesFormData,
   DrugDetails,
+  EditSessionAttendee,
+  EditSessionAttendeesResponse,
   EditSessionDateAndTimeResponse,
   EditSessionDetails,
   EmotionalWellbeing,

@@ -97,9 +97,27 @@ export default class EditSessionController {
     }
 
     const sessionDetails = await this.accreditedProgrammesManageAndDeliverService.getSessionDetails(username, sessionId)
+    const sessionAttendees = await this.accreditedProgrammesManageAndDeliverService.getSessionAttendees(
+      username,
+      sessionId,
+    )
+    const currentlyAttending = sessionAttendees.attendees.find(attendee => attendee.currentlyAttending) || {
+      name: '',
+      referralId: '',
+      crn: '',
+      currentlyAttending: false,
+    }
+
     const backUrl = `/group/${groupId}/sessionId/${sessionId}/edit-session`
 
-    const presenter = new EditSessionAttendanceWhoPresenter(groupId, backUrl, sessionDetails, formError, req.body)
+    const presenter = new EditSessionAttendanceWhoPresenter(
+      groupId,
+      backUrl,
+      sessionDetails,
+      currentlyAttending,
+      formError,
+      req.body,
+    )
     const view = new EditSessionAttendanceWhoView(presenter)
 
     return ControllerUtils.renderWithLayout(res, view, null)

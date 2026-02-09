@@ -1,4 +1,4 @@
-import { Session } from '@manage-and-deliver-api'
+import { Session, EditSessionAttendee } from '@manage-and-deliver-api'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
 import { RadiosArgsItem } from '../../utils/govukFrontendTypes'
@@ -8,6 +8,7 @@ export default class EditSessionAttendanceWhoPresenter {
     readonly groupId: string,
     readonly backUrl: string,
     readonly sessionDetails: Session,
+    readonly currentlyAttending: EditSessionAttendee,
     private readonly validationError: FormValidationError | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
   ) {}
@@ -33,7 +34,13 @@ export default class EditSessionAttendanceWhoPresenter {
 
   generateAttendeeRadioOptions(): RadiosArgsItem[] {
     const selectedValue = this.userInputData?.['edit-session-attendance-who'] as string
-
+    if (this.currentlyAttending.referralId && !selectedValue) {
+      return this.sessionDetails.referrals.map(referral => ({
+        text: `${referral.personName} (${referral.crn})`,
+        value: referral.id,
+        checked: referral.id === this.currentlyAttending.referralId,
+      }))
+    }
     return this.sessionDetails.referrals.map(referral => ({
       text: `${referral.personName} (${referral.crn})`,
       value: referral.id,
