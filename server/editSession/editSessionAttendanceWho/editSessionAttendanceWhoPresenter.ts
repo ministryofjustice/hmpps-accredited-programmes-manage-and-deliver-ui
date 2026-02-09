@@ -15,6 +15,7 @@ export default class EditSessionAttendanceWhoPresenter {
   get text() {
     return {
       pageHeading: `${this.sessionDetails.name}`,
+      pageHeadingType: this.sessionDetails.isCatchup ? 'one-to-one catch-up' : 'one-to-one',
       pageCaption: `${this.sessionDetails.referrals[0]?.personName || ''}`,
     }
   }

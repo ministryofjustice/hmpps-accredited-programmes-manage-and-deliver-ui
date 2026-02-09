@@ -38,6 +38,7 @@ describe('EditSessionAttendanceWhoPresenter', () => {
 
       expect(presenter.text).toEqual({
         pageHeading: 'Getting started',
+        pageHeadingType: 'one-to-one',
         pageCaption: 'John Doe',
       })
     })
@@ -51,7 +52,22 @@ describe('EditSessionAttendanceWhoPresenter', () => {
 
       expect(presenter.text).toEqual({
         pageHeading: 'Getting started',
+        pageHeadingType: 'one-to-one',
         pageCaption: '',
+      })
+    })
+
+    it('should return "one-to-one catch-up" for pageHeadingType when session is a catch-up', () => {
+      const catchupSessionDetails: Session = {
+        ...mockSessionDetails,
+        isCatchup: true,
+      }
+      const presenter = new EditSessionAttendanceWhoPresenter(groupId, backUrl, catchupSessionDetails)
+
+      expect(presenter.text).toEqual({
+        pageHeading: 'Getting started',
+        pageHeadingType: 'one-to-one catch-up',
+        pageCaption: 'John Doe',
       })
     })
   })
