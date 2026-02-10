@@ -17,7 +17,7 @@ describe('ServiceUserBannerPresenter', () => {
       referralDetails.dateOfBirth = '1989-02-10'
 
       const presenterWithDOB = new ServiceUserBannerPresenter(referralDetails)
-      expect(presenterWithDOB.dateOfBirth).toEqual('10 February 1989 (36 years old)')
+      expect(presenterWithDOB.dateOfBirth).toEqual('10 February 1989 (37 years old)')
     })
   })
 
