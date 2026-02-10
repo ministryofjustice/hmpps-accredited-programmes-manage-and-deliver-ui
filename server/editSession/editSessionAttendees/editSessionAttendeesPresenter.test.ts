@@ -31,31 +31,55 @@ describe('EditSessionAttendeesPresenter', () => {
   const backUrl = '/back-url'
 
   describe('text', () => {
-    it('returns page heading and type for one-to-one', () => {
+    it('returns page heading for session', () => {
       const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees())
 
       expect(presenter.text).toEqual({
         headingText: 'Edit who should attend the session',
         pageHeading: 'Getting started',
-        pageHeadingType: 'one-to-one',
-        pageCaption: 'John Doe',
       })
     })
+  })
 
-    it('returns catch-up heading type when isCatchup is true', () => {
-      const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees({ isCatchup: true }))
+  describe('generateAttendeeRadioOptions', () => {
+    it('pre-selects the currently attending attendee when no selection is provided', () => {
+      const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees())
 
-      expect(presenter.text.pageHeadingType).toBe('one-to-one catch-up')
+      expect(presenter.generateAttendeeRadioOptions()).toEqual([
+        {
+          text: 'John Doe (X123456)',
+          value: 'referral-1',
+          checked: true,
+        },
+        {
+          text: 'Jane Smith (Y654321)',
+          value: 'referral-2',
+          checked: false,
+        },
+      ])
     })
 
-    it('returns group heading type for group sessions', () => {
-      const presenter = new EditSessionAttendeesPresenter(
-        groupId,
-        backUrl,
-        buildSessionAttendees({ sessionType: 'GROUP' }),
-      )
+    it('selects the provided selected value over currently attending', () => {
+      const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees(), 'referral-2')
 
-      expect(presenter.text.pageHeadingType).toBe('group')
+      expect(presenter.generateAttendeeRadioOptions()).toEqual([
+        {
+          text: 'John Doe (X123456)',
+          value: 'referral-1',
+          checked: false,
+        },
+        {
+          text: 'Jane Smith (Y654321)',
+          value: 'referral-2',
+          checked: true,
+        },
+      ])
+    })
+
+    it('returns empty options when no attendees exist', () => {
+      const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees({ attendees: [] }))
+
+      expect(presenter.generateAttendeeRadioOptions()).toEqual([])
     })
   })
 

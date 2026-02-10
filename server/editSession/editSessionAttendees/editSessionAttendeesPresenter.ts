@@ -16,19 +16,10 @@ export default class EditSessionAttendeesPresenter {
     return this.sessionAttendees.attendees.find(attendee => attendee.currentlyAttending) || null
   }
 
-  private get pageHeadingType(): string {
-    if (this.sessionAttendees.sessionType === 'ONE_TO_ONE') {
-      return this.sessionAttendees.isCatchup ? 'one-to-one catch-up' : 'one-to-one'
-    }
-    return 'group'
-  }
-
   get text() {
     return {
       headingText: 'Edit who should attend the session',
       pageHeading: `${this.sessionAttendees.sessionName}`,
-      pageHeadingType: this.pageHeadingType,
-      pageCaption: this.currentlyAttending.name,
     }
   }
 
