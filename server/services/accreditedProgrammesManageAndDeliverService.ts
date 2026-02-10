@@ -48,7 +48,6 @@ import {
   ThinkingAndBehaviour,
   UpdateAvailability,
   UserTeamMember,
-  EditSessionAttendee,
   EditSessionAttendeesResponse,
   EditSessionDetails,
   RescheduleSessionDetails,
