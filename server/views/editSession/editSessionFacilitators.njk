@@ -161,10 +161,13 @@
               <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
               <div data-module="moj-add-another">
+                {% call govukFieldset(editSessionFacilitatorsFieldSetArgs) %}
+                  {{ govukSelect(editSessionFacilitatorsArgs) }}
+                {% endcall %}
                 {% for facilitator in facilitators %}
                   <fieldset class="govuk-fieldset moj-add-another__item moj-add-another__item__facilitator">
                     <div class="govuk-form-group">
-                      {{ govukSelect(editExistingSessionFacilitatorArgs(facilitator, loop.index)) }}
+                      {{ govukSelect(editExistingSessionFacilitatorsArgs(facilitator, loop.index)) }}
                       <!-- Hacky store the current loop index so we can bind the select to an accessible autocomplete -->
                       <span class="existingLoopCountFacilitator" data-index="{{ loop.index }}"></span>
                       <script nonce="{{ cspNonce }}">

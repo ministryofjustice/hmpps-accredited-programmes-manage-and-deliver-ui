@@ -65,9 +65,9 @@ export default class EditSessionFacilitatorsView {
       {
         backLinkArgs: this.presenter.backLinkArgs,
         homePageLink: this.homePageLink(),
-        editSesssionFacilitatorArgs: this.editSessionFacilitatorsArgs(),
+        editSessionFacilitatorsArgs: this.editSessionFacilitatorsArgs(),
         editSessionFacilitatorsFieldSetArgs: this.editSessionFacilitatorsFieldSetArgs(),
-        editExistingSessionFacilitatorArgs: this.editExistingSessionFacilitatorArgs.bind(this),
+        editExistingSessionFacilitatorsArgs: this.editExistingSessionFacilitatorArgs.bind(this),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         text: this.presenter.text,
         facilitators: this.presenter.generateSelectedUsers().facilitators,
