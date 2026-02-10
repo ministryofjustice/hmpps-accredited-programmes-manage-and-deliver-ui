@@ -1,6 +1,9 @@
-import { Session, EditSessionAttendee } from '@manage-and-deliver-api'
+import { Session, EditSessionAttendee, GroupItem } from '@manage-and-deliver-api'
 import EditSessionAttendanceWhoPresenter from './editSessionAttendanceWhoPresenter'
 import { FormValidationError } from '../../utils/formValidationError'
+
+// Extract the individual group member type from the pagination wrapper
+type IndividualGroupMember = NonNullable<GroupItem['content']>[number]
 
 describe('EditSessionAttendanceWhoPresenter', () => {
   const groupId = 'group-123'
@@ -39,6 +42,41 @@ describe('EditSessionAttendanceWhoPresenter', () => {
     currentlyAttending: true,
   }
 
+  const mockGroupMembers: Array<IndividualGroupMember> = [
+    {
+      referralId: 'referral-1',
+      personName: 'John Doe',
+      crn: 'X123456',
+      sourcedFrom: 'Licence end date',
+      sentenceEndDate: '28 April 2027',
+      cohort: 'GENERAL_OFFENCE',
+      hasLdc: false,
+      age: 36,
+      sex: 'Male',
+      pdu: 'London',
+      reportingTeam: 'London Office 1',
+      status: 'Scheduled',
+      statusColour: 'purple',
+      activeProgrammeGroupId: null,
+    },
+    {
+      referralId: 'referral-2',
+      personName: 'Jane Smith',
+      crn: 'Y654321',
+      sourcedFrom: 'Order end date',
+      sentenceEndDate: '14 April 2028',
+      cohort: 'SEXUAL_OFFENCE',
+      hasLdc: true,
+      age: 29,
+      sex: 'Female',
+      pdu: 'London',
+      reportingTeam: 'London Office 2',
+      status: 'Scheduled',
+      statusColour: 'purple',
+      activeProgrammeGroupId: null,
+    },
+  ]
+
   describe('text', () => {
     it('should return correct page heading and caption', () => {
       const presenter = new EditSessionAttendanceWhoPresenter(
@@ -46,6 +84,7 @@ describe('EditSessionAttendanceWhoPresenter', () => {
         backUrl,
         mockSessionDetails,
         mockCurrentlyAttending,
+        mockGroupMembers,
       )
 
       expect(presenter.text).toEqual({
@@ -60,11 +99,18 @@ describe('EditSessionAttendanceWhoPresenter', () => {
         ...mockSessionDetails,
         referrals: [],
       }
+      const emptyAttendee: EditSessionAttendee = {
+        name: '',
+        referralId: '',
+        crn: '',
+        currentlyAttending: false,
+      }
       const presenter = new EditSessionAttendanceWhoPresenter(
         groupId,
         backUrl,
         emptySessionDetails,
-        mockCurrentlyAttending,
+        emptyAttendee,
+        mockGroupMembers,
       )
 
       expect(presenter.text).toEqual({
@@ -84,6 +130,7 @@ describe('EditSessionAttendanceWhoPresenter', () => {
         backUrl,
         catchupSessionDetails,
         mockCurrentlyAttending,
+        mockGroupMembers,
       )
 
       expect(presenter.text).toEqual({
@@ -101,6 +148,7 @@ describe('EditSessionAttendanceWhoPresenter', () => {
         backUrl,
         mockSessionDetails,
         mockCurrentlyAttending,
+        mockGroupMembers,
       )
 
       expect(presenter.backLinkArgs).toEqual({
@@ -117,6 +165,7 @@ describe('EditSessionAttendanceWhoPresenter', () => {
         backUrl,
         mockSessionDetails,
         mockCurrentlyAttending,
+        mockGroupMembers,
       )
 
       const options = presenter.generateAttendeeRadioOptions()
@@ -144,6 +193,7 @@ describe('EditSessionAttendanceWhoPresenter', () => {
         backUrl,
         mockSessionDetails,
         mockCurrentlyAttending,
+        mockGroupMembers,
         null,
         userInputData,
       )
@@ -173,6 +223,7 @@ describe('EditSessionAttendanceWhoPresenter', () => {
         backUrl,
         mockSessionDetails,
         mockCurrentlyAttending,
+        mockGroupMembers,
         null,
         userInputData,
       )
@@ -204,7 +255,7 @@ describe('EditSessionAttendanceWhoPresenter', () => {
         crn: '',
         currentlyAttending: false,
       }
-      const presenter = new EditSessionAttendanceWhoPresenter(groupId, backUrl, emptySessionDetails, emptyAttendee)
+      const presenter = new EditSessionAttendanceWhoPresenter(groupId, backUrl, emptySessionDetails, emptyAttendee, [])
 
       const options = presenter.generateAttendeeRadioOptions()
 
@@ -219,6 +270,7 @@ describe('EditSessionAttendanceWhoPresenter', () => {
         backUrl,
         mockSessionDetails,
         mockCurrentlyAttending,
+        mockGroupMembers,
       )
 
       expect(presenter.errorSummary).toBeNull()
@@ -239,6 +291,7 @@ describe('EditSessionAttendanceWhoPresenter', () => {
         backUrl,
         mockSessionDetails,
         mockCurrentlyAttending,
+        mockGroupMembers,
         validationError,
       )
 
@@ -258,6 +311,7 @@ describe('EditSessionAttendanceWhoPresenter', () => {
         backUrl,
         mockSessionDetails,
         mockCurrentlyAttending,
+        mockGroupMembers,
       )
 
       expect(presenter.fields).toEqual({
@@ -282,6 +336,7 @@ describe('EditSessionAttendanceWhoPresenter', () => {
         backUrl,
         mockSessionDetails,
         mockCurrentlyAttending,
+        mockGroupMembers,
         validationError,
       )
 

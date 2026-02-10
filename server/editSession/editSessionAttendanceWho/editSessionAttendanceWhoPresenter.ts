@@ -1,7 +1,9 @@
-import { Session, EditSessionAttendee } from '@manage-and-deliver-api'
+import { Session, EditSessionAttendee, GroupItem } from '@manage-and-deliver-api'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
 import { RadiosArgsItem } from '../../utils/govukFrontendTypes'
+
+type IndividualGroupMember = NonNullable<GroupItem['content']>[number]
 
 export default class EditSessionAttendanceWhoPresenter {
   constructor(
@@ -9,6 +11,7 @@ export default class EditSessionAttendanceWhoPresenter {
     readonly backUrl: string,
     readonly sessionDetails: Session,
     readonly currentlyAttending: EditSessionAttendee,
+    readonly groupMembers: Array<IndividualGroupMember>,
     private readonly validationError: FormValidationError | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
   ) {}
@@ -17,7 +20,7 @@ export default class EditSessionAttendanceWhoPresenter {
     return {
       pageHeading: `${this.sessionDetails.name}`,
       pageHeadingType: this.sessionDetails.isCatchup ? 'one-to-one catch-up' : 'one-to-one',
-      pageCaption: `${this.sessionDetails.referrals[0]?.personName || ''}`,
+      pageCaption: `${this.currentlyAttending.name || ''}`,
     }
   }
 
@@ -35,16 +38,16 @@ export default class EditSessionAttendanceWhoPresenter {
   generateAttendeeRadioOptions(): RadiosArgsItem[] {
     const selectedValue = this.userInputData?.['edit-session-attendance-who'] as string
     if (this.currentlyAttending.referralId && !selectedValue) {
-      return this.sessionDetails.referrals.map(referral => ({
-        text: `${referral.personName} (${referral.crn})`,
-        value: referral.id,
-        checked: referral.id === this.currentlyAttending.referralId,
+      return this.groupMembers.map(member => ({
+        text: `${member.personName} (${member.crn})`,
+        value: member.referralId,
+        checked: member.referralId === this.currentlyAttending.referralId,
       }))
     }
-    return this.sessionDetails.referrals.map(referral => ({
-      text: `${referral.personName} (${referral.crn})`,
-      value: referral.id,
-      checked: selectedValue === referral.id,
+    return this.groupMembers.map(member => ({
+      text: `${member.personName} (${member.crn})`,
+      value: member.referralId,
+      checked: selectedValue === member.referralId,
     }))
   }
 

@@ -107,6 +107,12 @@ export default class EditSessionController {
       crn: '',
       currentlyAttending: false,
     }
+    const groupMembers = await this.accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers(
+      username,
+      groupId,
+      { page: 0, size: 1000 },
+      {},
+    )
 
     const backUrl = `/group/${groupId}/sessionId/${sessionId}/edit-session`
 
@@ -115,6 +121,7 @@ export default class EditSessionController {
       backUrl,
       sessionDetails,
       currentlyAttending,
+      groupMembers.pagedGroupData.content || [],
       formError,
       req.body,
     )
