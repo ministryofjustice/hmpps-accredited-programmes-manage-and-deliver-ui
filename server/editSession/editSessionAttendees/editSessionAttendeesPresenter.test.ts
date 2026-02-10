@@ -1,4 +1,4 @@
-import { EditSessionAttendee, EditSessionAttendeesResponse } from '@manage-and-deliver-api'
+import { EditSessionAttendeesResponse } from '@manage-and-deliver-api'
 import EditSessionAttendeesPresenter from './editSessionAttendeesPresenter'
 import { FormValidationError } from '../../utils/formValidationError'
 
