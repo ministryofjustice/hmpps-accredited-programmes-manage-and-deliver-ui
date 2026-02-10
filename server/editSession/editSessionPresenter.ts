@@ -27,7 +27,7 @@ export default class EditSessionPresenter {
     }
   }
 
-  get editSessionAttendanceWhoUrl(): string {
+  get editSessionAttendeesUrl(): string {
     return `/group/${this.groupId}/sessionId/${this.sessionId}/edit-session-attendees`
   }
 }

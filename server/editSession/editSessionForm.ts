@@ -33,10 +33,10 @@ export default class EditSessionForm {
     return [body('delete-session').notEmpty().withMessage(errorMessages.editSession.selectDeleteSession)]
   }
 
-  async attendanceWhoData(): Promise<FormData<{ referralId: string }>> {
+  async attendeesData(): Promise<FormData<{ referralId: string }>> {
     const validationResult = await FormUtils.runValidations({
       request: this.request,
-      validations: EditSessionForm.attendanceWhoValidations(),
+      validations: EditSessionForm.attendeesValidations(),
     })
 
     const error = FormUtils.validationErrorFromResult(validationResult)
@@ -49,13 +49,13 @@ export default class EditSessionForm {
 
     return {
       paramsForUpdate: {
-        referralId: this.request.body['edit-session-attendance-who'],
+        referralId: this.request.body['edit-session-attendees'],
       },
       error: null,
     }
   }
 
-  static attendanceWhoValidations(): ValidationChain[] {
-    return [body('edit-session-attendance-who').notEmpty().withMessage(errorMessages.editSession.selectAttendanceWho)]
+  static attendeesValidations(): ValidationChain[] {
+    return [body('edit-session-attendees').notEmpty().withMessage(errorMessages.editSession.selectAttendees)]
   }
 }

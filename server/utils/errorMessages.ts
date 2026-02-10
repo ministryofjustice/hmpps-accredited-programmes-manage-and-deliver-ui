@@ -132,7 +132,7 @@ export default {
   },
   editSession: {
     selectDeleteSession: 'Select whether to delete the session or not',
-    selectAttendanceWho: 'Select who should attend the session',
+    selectAttendees: 'Select who should attend the session',
   },
 
   returnedError,

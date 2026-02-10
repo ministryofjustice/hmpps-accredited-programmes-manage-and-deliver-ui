@@ -6,8 +6,8 @@ import EditSessionPresenter from './editSessionPresenter'
 import EditSessionView from './editSessionView'
 import DeleteSessionPresenter from './deleteSession/deleteSessionPresenter'
 import DeleteSessionView from './deleteSession/deleteSessionView'
-import EditSessionAttendanceWhoPresenter from './editSessionAttendanceWho/editSessionAttendanceWhoPresenter'
-import EditSessionAttendanceWhoView from './editSessionAttendanceWho/editSessionAttendanceWhoView'
+import EditSessionAttendeesPresenter from './editSessionAttendees/editSessionAttendeesPresenter'
+import EditSessionAttendeesView from './editSessionAttendees/editSessionAttendeesView'
 import { FormValidationError } from '../utils/formValidationError'
 import EditSessionForm from './editSessionForm'
 import EditSessionDateAndTimePresenter from './dateAndTime/editSessionDateAndTimePresenter'
@@ -75,14 +75,14 @@ export default class EditSessionController {
     return ControllerUtils.renderWithLayout(res, view, null)
   }
 
-  async editSessionAttendanceWho(req: Request, res: Response): Promise<void> {
+  async editSessionAttendees(req: Request, res: Response): Promise<void> {
     const { groupId, sessionId } = req.params
     const { username } = req.user
 
     let formError: FormValidationError | null = null
 
     if (req.method === 'POST') {
-      const data = await new EditSessionForm(req).attendanceWhoData()
+      const data = await new EditSessionForm(req).attendeesData()
       if (data.error) {
         res.status(400)
         formError = data.error
@@ -96,36 +96,15 @@ export default class EditSessionController {
       }
     }
 
-    const sessionDetails = await this.accreditedProgrammesManageAndDeliverService.getSessionDetails(username, sessionId)
     const sessionAttendees = await this.accreditedProgrammesManageAndDeliverService.getSessionAttendees(
       username,
       sessionId,
     )
-    const currentlyAttending = sessionAttendees.attendees.find(attendee => attendee.currentlyAttending) || {
-      name: '',
-      referralId: '',
-      crn: '',
-      currentlyAttending: false,
-    }
-    const groupMembers = await this.accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers(
-      username,
-      groupId,
-      { page: 0, size: 1000 },
-      {},
-    )
 
     const backUrl = `/group/${groupId}/sessionId/${sessionId}/edit-session`
 
-    const presenter = new EditSessionAttendanceWhoPresenter(
-      groupId,
-      backUrl,
-      sessionDetails,
-      currentlyAttending,
-      groupMembers.pagedGroupData.content || [],
-      formError,
-      req.body,
-    )
-    const view = new EditSessionAttendanceWhoView(presenter)
+    const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, sessionAttendees, null, req.body)
+    const view = new EditSessionAttendeesView(presenter)
 
     return ControllerUtils.renderWithLayout(res, view, null)
   }

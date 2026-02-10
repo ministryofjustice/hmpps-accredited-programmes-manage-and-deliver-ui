@@ -66,7 +66,7 @@ export default class EditSessionView {
           actions: {
             items: [
               {
-                href: this.presenter.editSessionAttendanceWhoUrl,
+                href: this.presenter.editSessionAttendeesUrl,
                 text: 'Change',
                 visuallyHiddenText: 'participants',
               },

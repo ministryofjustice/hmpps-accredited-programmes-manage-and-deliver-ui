@@ -18,11 +18,11 @@
         {% if errorSummary !== null %}
           {{ govukErrorSummary(errorSummary) }}
         {% endif %}
+        <span class="govuk-caption-l">Edit {{ text.pageHeading }} {{ text.pageHeadingType }}</span>
+        <h1 class="govuk-heading-l">{{ text.headingText }}</h1>
         <form method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{csrfToken}}">
-           <span class="govuk-caption-l">Edit {{ text.pageCaption }}: {{ text.pageHeading }} {{ text.pageHeadingType }}</span>
           {{ govukRadios(radioArgs) }}
-
           <div class="govuk-button-group">
             {{ govukButton({ text: "Submit", preventDoubleClick: true }) }}
           </div>
@@ -35,3 +35,4 @@
 </div>
 
 {% endblock %}
+ 
