@@ -3,8 +3,6 @@ import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
 import { RadiosArgsItem } from '../../utils/govukFrontendTypes'
 
-// type IndividualGroupMember = NonNullable<GroupItem['content']>[number]
-
 export default class EditSessionAttendeesPresenter {
   constructor(
     readonly groupId: string,
@@ -12,7 +10,6 @@ export default class EditSessionAttendeesPresenter {
     readonly sessionAttendees: EditSessionAttendeesResponse,
     readonly selectedValue: string | null = null,
     private readonly validationError: FormValidationError | null = null,
-    private readonly userInputData: Record<string, unknown> | null = null,
   ) {}
 
   private get currentlyAttending(): EditSessionAttendee | null {
@@ -48,17 +45,12 @@ export default class EditSessionAttendeesPresenter {
 
   generateAttendeeRadioOptions(): RadiosArgsItem[] {
     const currentReferralId = this.currentlyAttending?.referralId
-    if (currentReferralId && !this.selectedValue) {
-      return this.sessionAttendees.attendees.map(attendee => ({
-        text: `${attendee.name} (${attendee.crn})`,
-        value: attendee.referralId,
-        checked: attendee.referralId === currentReferralId,
-      }))
-    }
+    const selectedReferralId = this.selectedValue || currentReferralId
+
     return this.sessionAttendees.attendees.map(attendee => ({
       text: `${attendee.name} (${attendee.crn})`,
       value: attendee.referralId,
-      checked: this.selectedValue === attendee.referralId,
+      checked: attendee.referralId === selectedReferralId,
     }))
   }
 
