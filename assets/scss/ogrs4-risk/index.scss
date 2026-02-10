@@ -1,0 +1,24 @@
+$govuk-global-styles: true;
+$path: "/assets/images/";
+
+$moj-page-width: 1170px;
+$govuk-page-width: $moj-page-width;
+
+@import "govuk-frontend/dist/govuk/index";
+@import "@ministryofjustice/frontend/moj/all";
+//@import "@ministryofjustice/hmpps-arns-frontend-components-lib/dist/all";
+
+//@import 'partials/header-bar';
+//@import './overrides/local';
+
+//@import "partials/risk/mappa-widget";
+//@import "partials/risk/predictor-scores";
+//@import "partials/risk/legacy-timeline";
+//@import "partials/risk/legacy-timeline-item";
+//@import "partials/risk/predictor-timeline";
+//@import "risk-flag-widget";
+@import "rosh-widget";
+//@import "partials/risk/predictor-badge";
+@import "expanded-predictor-badge";
+@import "predictor-scale";
+

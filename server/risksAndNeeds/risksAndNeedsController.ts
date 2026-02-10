@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { ReferralDetails } from '@manage-and-deliver-api'
+import { ReferralDetails, Risks } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
 import AlcoholMisusePresenter from './alcoholMisuse/alcoholMisusePresenter'
@@ -46,14 +46,66 @@ export default class RisksAndNeedsController {
     const subNavValue = 'risksAndAlerts'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
-    const risks = await this.accreditedProgrammesManageAndDeliverService.getRisksAndAlerts(
-      username,
-      sharedReferralDetailsData.crn,
-    )
+    // const risks = await this.accreditedProgrammesManageAndDeliverService.getRisksAndAlerts(
+    //   username,
+    //   sharedReferralDetailsData.crn,
+    // )
+
+    const risks: Risks = {
+      assessmentCompleted: '21 January 2026',
+      offenderGroupReconviction: null,
+      offenderViolencePredictor: null,
+      sara: {
+        imminentRiskOfViolenceTowardsPartner: null,
+        imminentRiskOfViolenceTowardsOthers: null,
+      },
+      riskOfSeriousRecidivism: null,
+      riskOfSeriousHarm: {
+        riskPrisonersCustody: 'Medium',
+        riskStaffCustody: 'Medium',
+        riskKnownAdultCustody: 'Medium',
+        riskPublicCustody: 'Medium',
+        riskChildrenCustody: 'Medium',
+        riskStaffCommunity: 'Medium',
+        riskKnownAdultCommunity: 'Medium',
+        riskPublicCommunity: 'Medium',
+        riskChildrenCommunity: 'Medium',
+        overallRoshLevel: 'Medium',
+      },
+      alerts: [
+        'Risk to Children',
+        'Risk to Known Adult',
+        'Risk to Prisoner',
+        'Risk to Public',
+        'Risk to Staff',
+        'Medium RoSH',
+      ],
+      dateRetrieved: '10 February 2026',
+      lastUpdated: '21 January 2026',
+      isLegacy: false,
+      ogrS4Risks: {
+        allReoffendingScoreType: 'DYNAMIC',
+        allReoffendingScore: 16.8,
+        allReoffendingBand: 'Low',
+        violentReoffendingScoreType: 'DYNAMIC',
+        violentReoffendingScore: 16.94,
+        violentReoffendingBand: 'Low',
+        seriousViolentReoffendingScoreType: 'DYNAMIC',
+        seriousViolentReoffendingScore: 0.28,
+        seriousViolentReoffendingBand: 'Low',
+        directContactSexualReoffendingScore: 0,
+        directContactSexualReoffendingBand: 'Not Applicable',
+        indirectImageContactSexualReoffendingScore: 0,
+        indirectImageContactSexualReoffendingBand: 'Not Applicable',
+        combinedSeriousReoffendingScoreType: 'DYNAMIC',
+        combinedSeriousReoffendingScore: 0.28,
+        combinedSeriousReoffendingBand: null,
+      },
+    }
 
     console.log(risks)
 
-    if (!risks.isLegacy) {
+    if (risks.isLegacy) {
       const presenter = new RisksAndAlertsPresenter(
         subNavValue,
         sharedReferralDetailsData,

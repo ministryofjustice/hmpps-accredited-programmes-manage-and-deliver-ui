@@ -10,6 +10,9 @@ export default class RisksAndAlertsOgrs4Presenter extends RisksAndNeedsPresenter
     readonly isCohortUpdated: boolean | null = null,
   ) {
     super(subNavValue, referral, isLdcUpdated, isCohortUpdated)
-    console.log('In here', JSON.stringify(super.subNavValue))
+  }
+
+  levelOrUnknown(level?: string): string {
+    return level ? level.toUpperCase() : 'UNKNOWN'
   }
 }

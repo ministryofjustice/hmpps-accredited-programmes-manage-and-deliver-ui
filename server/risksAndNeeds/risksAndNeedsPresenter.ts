@@ -24,8 +24,6 @@ export default class RisksAndNeedsPresenter extends ReferralLayoutPresenter {
     readonly isCohortUpdated: boolean | null = null,
   ) {
     super(HorizontalNavValues.risksAndNeedsTab, referral, isLdcUpdated, isCohortUpdated)
-    console.log('In the super')
-    console.log(subNavValue)
   }
 
   readonly pageDescription =

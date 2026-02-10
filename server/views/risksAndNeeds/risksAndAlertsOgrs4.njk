@@ -1,10 +1,37 @@
 
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "components/ogrs4/predictor-scale/macro.njk" import predictorScale %}
+{% from "components/ogrs4/expanded-predictor-badge/macro.njk" import expandedPredictorBadge %}
+{% from "components/ogrs4/rosh-widget/macro.njk" import roshWidget %}
+{% from "components/risk-flag-widget/macro.njk" import riskFlagWidget %}
 
 <div>
 
   {{ govukWarningText(updateWarning) }}
   {{ govukDetails(updateDetails) }}
 
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+  {{ govukInsetText(assessmentCompletedText) }}
+  <h3 class="govuk-heading-m">All reoffending predictor scale</h3>
+  {{ predictorScale(allReoffendingPredictor, true, true, true) }}
+
+  <h3 class="govuk-heading-m">Violent reoffending predictor</h3>
+  {{ expandedPredictorBadge(violentReoffendingPredictor, true, false) }}
+
+  <h3 class="govuk-heading-m">Spousal assault risk assessment</h3>
+  {{ expandedPredictorBadge(saraReoffendingPartnerPredictor, false, false) }}
+  {{ expandedPredictorBadge(saraReoffendingOthersPredictor, false, false) }}
+
+  <h3 class="govuk-heading-m">Combined serious reoffending predictor</h3>
+  {{ expandedPredictorBadge(combinedSeriousReoffendingPredictor, true, false) }}
+  {{ expandedPredictorBadge(directContactSexualReoffendingPredictor, true, false) }}
+  {{ expandedPredictorBadge(imagesAndIndirectContactSexualReoffendingPredictor, true, false) }}
+  {{ roshWidget(roshRiskSummary) }}
+  {{ govukInsetText(importedFromNdeliusText) }}
+
+  <h3 class="govuk-heading-m">Risk alerts</h3>
+  {{ riskFlagWidget(activeAlerts) }}
 </div>
