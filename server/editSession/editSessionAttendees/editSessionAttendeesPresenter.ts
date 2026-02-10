@@ -41,7 +41,7 @@ export default class EditSessionAttendeesPresenter {
     return this.sessionAttendees.attendees.map(attendee => ({
       text: `${attendee.name} (${attendee.crn})`,
       value: attendee.referralId,
-      checked: attendee.referralId === selectedReferralId,
+      checked: attendee.currentlyAttending === true
     }))
   }
 
