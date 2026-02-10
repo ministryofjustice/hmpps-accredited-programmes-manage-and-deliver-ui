@@ -356,7 +356,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await editSessionController.deleteSession(req, res)
   })
 
-  getOrPost('/group/:groupId/sessionId/:sessionId/:sessionName/edit-session-facilitators', async (req, res, next) => {
+  getOrPost('/group/:groupId/session/:sessionId/edit-session-facilitators', async (req, res, next) => {
     await editSessionController.editSessionFacilitators(req, res)
   })
 

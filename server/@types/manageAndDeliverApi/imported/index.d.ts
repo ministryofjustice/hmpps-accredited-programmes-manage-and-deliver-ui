@@ -2743,6 +2743,8 @@ export interface components {
       totalPages?: number
       /** Format: int32 */
       numberOfElements?: number
+      first?: boolean
+      last?: boolean
       pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       size?: number
@@ -2750,11 +2752,6 @@ export interface components {
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
-      first?: boolean
-      last?: boolean
-      /** Format: int32 */
-      numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageableObject: {
@@ -2954,7 +2951,6 @@ export interface components {
     }
     /** @description Response representing facilitators for a specific programme session */
     EditSessionFacilitatorsResponse: {
-      headingText: string
       /**
        * @description The title of the page
        * @example Attendance and notes for Getting started session
@@ -3150,6 +3146,8 @@ export interface components {
       totalPages?: number
       /** Format: int32 */
       numberOfElements?: number
+      first?: boolean
+      last?: boolean
       pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       size?: number
@@ -3157,11 +3155,6 @@ export interface components {
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
-      first?: boolean
-      last?: boolean
-      /** Format: int32 */
-      numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Available filter options for viewing programme group data. */
@@ -3270,6 +3263,8 @@ export interface components {
       totalPages?: number
       /** Format: int32 */
       numberOfElements?: number
+      first?: boolean
+      last?: boolean
       pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       size?: number
@@ -3277,14 +3272,6 @@ export interface components {
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
-<<<<<<< HEAD
-      first?: boolean
-      last?: boolean
-      /** Format: int32 */
-      numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
-=======
->>>>>>> 78d91a3 (-n)
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
@@ -3559,13 +3546,10 @@ export interface components {
       /** @description Caption indicating what session is about to be deleted */
       caption: string
     }
-<<<<<<< HEAD
-=======
     TeardownResult: {
       /** Format: int32 */
       deletedCount: number
     }
->>>>>>> 78d91a3 (-n)
   }
   responses: never
   parameters: never

@@ -1,14 +1,13 @@
 import { EditSessionFacilitatorsRequest, EditSessionFacilitatorsResponse } from '@manage-and-deliver-api'
-import { FormValidationError } from '../utils/formValidationError'
-import { SelectArgsItem } from '../utils/govukFrontendTypes'
-import PresenterUtils from '../utils/presenterUtils'
+import { FormValidationError } from '../../utils/formValidationError'
+import { SelectArgsItem } from '../../utils/govukFrontendTypes'
+import PresenterUtils from '../../utils/presenterUtils'
 
 export default class EditSessionFacilitatorsPresenter {
   constructor(
     readonly linkUrl: string,
     readonly groupId: string,
     private readonly editSessionFacilitatorsResponse: EditSessionFacilitatorsResponse,
-    // private readonly editSessionFacilitatorsRequest: EditSessionFacilitatorsRequest[],
     private readonly validationError: FormValidationError | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
   ) {}

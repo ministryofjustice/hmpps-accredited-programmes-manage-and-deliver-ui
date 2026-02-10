@@ -75,7 +75,7 @@
               selectElement: document.querySelector(`#${select.id}`)
             });
 
-            clearAccessibleAutocompleteSelectionWhenInputEmpty('create-group-facilitator-select' + selectElementCounter);
+            clearAccessibleAutocompleteSelectionWhenInputEmpty('edit-session-facilitator-select' + selectElementCounter);
             selectElementCounter++;
           }
         });
@@ -107,9 +107,9 @@
         // Initialize autocomplete for main select elements
         accessibleAutocomplete.enhanceSelectElement({
           defaultValue: '',
-          selectElement: document.getElementById('create-group-facilitator')
+          selectElement: document.getElementById('edit-session-facilitator')
         });
-        clearAccessibleAutocompleteSelectionWhenInputEmpty('create-group-facilitator');
+        clearAccessibleAutocompleteSelectionWhenInputEmpty('edit-session-facilitator');
 
         // Set up mutation observer for dynamically added elements
         const addAnotherForm = document.querySelector('.add-another-form');
@@ -161,14 +161,10 @@
               <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
               <div data-module="moj-add-another">
-                {% call govukFieldset(createGroupFacilitatorsFieldSetArgs) %}
-                  {{ govukSelect(createGroupFacilitatorArgs) }}
-                {% endcall %}
-
                 {% for facilitator in facilitators %}
                   <fieldset class="govuk-fieldset moj-add-another__item moj-add-another__item__facilitator">
                     <div class="govuk-form-group">
-                      {{ govukSelect(createExistingGroupFacilitatorArgs(facilitator, loop.index)) }}
+                      {{ govukSelect(editExistingSessionFacilitatorArgs(facilitator, loop.index)) }}
                       <!-- Hacky store the current loop index so we can bind the select to an accessible autocomplete -->
                       <span class="existingLoopCountFacilitator" data-index="{{ loop.index }}"></span>
                       <script nonce="{{ cspNonce }}">
@@ -177,14 +173,14 @@
                         })
                         accessibleAutocomplete.enhanceSelectElement({
                           defaultValue: '',
-                          selectElement: document.getElementById(`create-group-facilitator-existing-${existingIndex}`),
+                          selectElement: document.getElementById(`edit-session-facilitator-existing-${existingIndex}`),
                           inputClasses: 'existing-facilitator-input'
                         })
-                        clearAccessibleAutocompleteSelectionWhenInputEmpty(`create-group-facilitator-existing-${existingIndex}`);
+                        clearAccessibleAutocompleteSelectionWhenInputEmpty(`edit-session-facilitator-existing-${existingIndex}`);
                       </script>
                     </div>
 
-                    {% if facilitators.length > 1 %}
+                    {% if facilitators.length > 1 and loop.index != 1 %}
                       {{ govukButton({
                         name: "remove",
                         value: loop.index0,

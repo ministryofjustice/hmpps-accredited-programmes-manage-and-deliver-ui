@@ -102,7 +102,6 @@ export type {
   DrugDetails,
   EditSessionDateAndTimeResponse,
   EditSessionDetails,
-  EditSessionFacilitator,
   EditSessionFacilitatorResponse,
   EditSessionFacilitatorsRequest,
   EditSessionFacilitatorsResponse,
@@ -159,6 +158,5 @@ export type {
   UpdateAvailability,
   UpdateCohort,
   UpdateLdc,
-  UserTeamMember
+  UserTeamMember,
 }
-

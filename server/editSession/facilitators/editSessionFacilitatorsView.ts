@@ -1,6 +1,6 @@
-import { EditSessionFacilitator } from '@manage-and-deliver-api'
-import { FieldsetArgs, SelectArgs } from '../utils/govukFrontendTypes'
-import ViewUtils from '../utils/viewUtils'
+import { EditSessionFacilitatorsRequest } from '@manage-and-deliver-api'
+import { FieldsetArgs, SelectArgs } from '../../utils/govukFrontendTypes'
+import ViewUtils from '../../utils/viewUtils'
 import EditSessionFacilitatorsPresenter from './editSessionFacilitatorsPresenter'
 
 export default class EditSessionFacilitatorsView {
@@ -20,10 +20,10 @@ export default class EditSessionFacilitatorsView {
     }
   }
 
-  private createGroupFacilitatorArgs(): SelectArgs {
+  private editSessionFacilitatorsArgs(): SelectArgs {
     return {
-      id: 'create-group-facilitator',
-      name: 'create-group-facilitator',
+      id: 'edit-session-facilitator',
+      name: 'edit-session-facilitator',
       label: {
         text: 'Facilitator',
         classes: 'govuk-label--m',
@@ -34,10 +34,10 @@ export default class EditSessionFacilitatorsView {
     }
   }
 
-  private createExistingGroupFacilitatorArgs(facilitator: EditSessionFacilitator, index: number): SelectArgs {
+  private editExistingSessionFacilitatorArgs(facilitator: EditSessionFacilitatorsRequest, index: number): SelectArgs {
     return {
-      id: `create-group-facilitator-existing-${index}`,
-      name: `create-group-facilitator-existing-${index}`,
+      id: `edit-session-facilitator-existing-${index}`,
+      name: `edit-session-facilitator-existing-${index}`,
       label: {
         text: 'Facilitator',
         classes: 'govuk-label--m',
@@ -48,7 +48,7 @@ export default class EditSessionFacilitatorsView {
     }
   }
 
-  private createGroupFacilitatorsFieldSetArgs(): FieldsetArgs {
+  private editSessionFacilitatorsFieldSetArgs(): FieldsetArgs {
     return {
       classes: 'moj-add-another__item moj-add-another__item__facilitator',
       legend: {
@@ -65,9 +65,9 @@ export default class EditSessionFacilitatorsView {
       {
         backLinkArgs: this.presenter.backLinkArgs,
         homePageLink: this.homePageLink(),
-        createGroupFacilitatorArgs: this.createGroupFacilitatorArgs(),
-        createGroupFacilitatorsFieldSetArgs: this.createGroupFacilitatorsFieldSetArgs(),
-        createExistingGroupFacilitatorArgs: this.createExistingGroupFacilitatorArgs.bind(this),
+        editSesssionFacilitatorArgs: this.editSessionFacilitatorsArgs(),
+        editSessionFacilitatorsFieldSetArgs: this.editSessionFacilitatorsFieldSetArgs(),
+        editExistingSessionFacilitatorArgs: this.editExistingSessionFacilitatorArgs.bind(this),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         text: this.presenter.text,
         facilitators: this.presenter.generateSelectedUsers().facilitators,

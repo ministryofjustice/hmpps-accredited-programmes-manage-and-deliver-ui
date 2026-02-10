@@ -6,7 +6,6 @@ export default class EditSessionView {
 
   get editSessionSummary(): SummaryListArgs {
     const sessionDetailsObj = this.presenter.sessionDetails
-    const editSessionFacilitatorsUrl = `${this.presenter.linkUrl}/edit-session-facilitators`
     return {
       rows: [
         {
@@ -84,7 +83,7 @@ export default class EditSessionView {
           actions: {
             items: [
               {
-                href: editSessionFacilitatorsUrl,
+                href: `/group/${this.presenter.groupId}/session/${this.presenter.sessionId}/edit-session-facilitators`,
                 text: 'Change',
                 visuallyHiddenText: 'facilitators',
               },

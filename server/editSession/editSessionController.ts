@@ -11,11 +11,12 @@ import OtherSessionsView from './dateAndTime/otherSessionsView'
 import RescheduleOtherSessionsForm from './dateAndTime/rescheduleOtherSessionsForm'
 import DeleteSessionPresenter from './deleteSession/deleteSessionPresenter'
 import DeleteSessionView from './deleteSession/deleteSessionView'
-import EditSessionFacilitatorsPresenter from './editSessionFacilitatorsPresenter'
-import EditSessionFacilitatorsView from './editSessionFacilitatorsView'
 import EditSessionForm from './editSessionForm'
 import EditSessionPresenter from './editSessionPresenter'
 import EditSessionView from './editSessionView'
+import EditSessionFacilitatorsForm from './facilitators/editSessionFacilitatorsForm'
+import EditSessionFacilitatorsPresenter from './facilitators/editSessionFacilitatorsPresenter'
+import EditSessionFacilitatorsView from './facilitators/editSessionFacilitatorsView'
 
 export default class EditSessionController {
   constructor(
@@ -154,12 +155,30 @@ export default class EditSessionController {
   async editSessionFacilitators(req: Request, res: Response): Promise<void> {
     const { groupId, sessionId } = req.params
     const { username } = req.user
-    const formError: FormValidationError | null = null
-    const userInputData = null
+    let formError: FormValidationError | null = null
+    let userInputData = null
 
-    const editSessionFacilitators =
-      await this.accreditedProgrammesManageAndDeliverService.getEditSessionFacilitatorDetails(username, sessionId)
+    const editSessionFacilitators = await this.accreditedProgrammesManageAndDeliverService.getEditSessionFacilitators(
+      username,
+      sessionId,
+    )
 
+    if (req.method === 'POST') {
+      const data = await new EditSessionFacilitatorsForm(req).editSessionFacilitatorsData()
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+        userInputData = req.body
+      } else {
+        req.session.sessionFacilitators = data.paramsForUpdate
+        const message = await this.accreditedProgrammesManageAndDeliverService.updateSessionFacilitators(
+          username,
+          sessionId,
+          req.session.sessionFacilitators,
+        )
+        return res.redirect(`/group/${groupId}/sessionId/${sessionId}/edit-session?message=${message}`)
+      }
+    }
     const presenter = new EditSessionFacilitatorsPresenter(
       req.session.originPage,
       groupId,
@@ -169,6 +188,6 @@ export default class EditSessionController {
     )
     const view = new EditSessionFacilitatorsView(presenter)
 
-    ControllerUtils.renderWithLayout(res, view, null)
+    return ControllerUtils.renderWithLayout(res, view, null)
   }
 }

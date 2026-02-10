@@ -18,6 +18,7 @@ import {
   DrugDetails,
   EditSessionDateAndTimeResponse,
   EditSessionDetails,
+  EditSessionFacilitatorsRequest,
   EditSessionFacilitatorsResponse,
   EmotionalWellbeing,
   Group,
@@ -54,7 +55,7 @@ import {
   SessionScheduleResponse,
   ThinkingAndBehaviour,
   UpdateAvailability,
-  UserTeamMember
+  UserTeamMember,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -682,7 +683,7 @@ export default class AccreditedProgrammesManageAndDeliverService
     })) as { caption: string }
   }
 
-  async getEditSessionFacilitatorDetails(
+  async getEditSessionFacilitators(
     username: ExpressUsername,
     sessionId: string,
   ): Promise<EditSessionFacilitatorsResponse> {
@@ -691,5 +692,19 @@ export default class AccreditedProgrammesManageAndDeliverService
       path: `/bff/session/${sessionId}/session-facilitators`,
       headers: { Accept: 'application/json' },
     })) as EditSessionFacilitatorsResponse
+  }
+
+  async updateSessionFacilitators(
+    username: ExpressUsername,
+    sessionId: string,
+    updateSessionFacilitators: EditSessionFacilitatorsRequest[],
+  ): Promise<string> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.put({
+      path: `/session/${sessionId}/session-facilitators`,
+      headers: { Accept: 'application/json' },
+      data: updateSessionFacilitators,
+      responseType: String.name,
+    })) as string
   }
 }
