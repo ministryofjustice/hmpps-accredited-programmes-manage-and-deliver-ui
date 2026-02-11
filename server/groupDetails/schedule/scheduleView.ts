@@ -50,7 +50,7 @@ export default class ScheduleView {
           text: 'Session name',
         },
         {
-          text: 'Session Type',
+          text: 'Session type',
         },
         {
           text: 'Date',

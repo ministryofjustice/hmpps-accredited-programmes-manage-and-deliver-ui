@@ -6,6 +6,7 @@ import {
   CreateDeliveryLocationPreferences,
   CreateGroupRequest,
   DeliveryLocationPreferencesFormData,
+  EditSessionFacilitatorsRequest,
   RescheduleSessionRequest,
   SessionScheduleRequest,
 } from '@manage-and-deliver-api'
@@ -43,6 +44,7 @@ declare module 'express-session' {
     createGroupFormData?: Partial<CreateGroupRequest>
     sessionScheduleData?: Partial<SessionScheduleRequest> & { sessionName?: string; referralName?: string }
     editSessionDateAndTime?: Partial<RescheduleSessionRequest>
+    sessionFacilitators?: Partial<EditSessionFacilitatorsRequest[]>
   }
 }
 
