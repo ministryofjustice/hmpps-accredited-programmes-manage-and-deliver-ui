@@ -17,7 +17,7 @@ const fieldOrder = [
   'session-details-facilitator',
 ]
 
-export default class EditSessionDateAndTimeForm {
+export default class EditSessionDateAndTimeFormForm {
   constructor(private readonly request: Request) {}
 
   async rescheduleSessionDetailsData(): Promise<FormData<Partial<RescheduleSessionRequest>>> {
