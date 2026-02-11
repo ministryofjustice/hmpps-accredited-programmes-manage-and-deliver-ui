@@ -35,9 +35,9 @@ export default class EditSessionFacilitatorsPresenter {
   }
 
   generateSelectOptions(selectedValue: string = ''): SelectArgsItem[] {
-    const pduItems: SelectArgsItem[] = this.editSessionFacilitatorsResponse.facilitators.map(facilitator => ({
-      text: facilitator.facilitator,
-      value: `{"facilitator":"${facilitator.facilitator}", "facilitatorCode":"${facilitator.facilitatorCode}", "teamName":"${facilitator.teamName}", "teamCode":"${facilitator.teamCode}"}`,
+    const facilitatorItems: SelectArgsItem[] = this.editSessionFacilitatorsResponse.facilitators.map(facilitator => ({
+      text: facilitator.facilitatorName,
+      value: `{"facilitatorName":"${facilitator.facilitatorName}", "facilitatorCode":"${facilitator.facilitatorCode}", "teamName":"${facilitator.teamName}", "teamCode":"${facilitator.teamCode}"}`,
       selected: selectedValue === facilitator.facilitatorCode,
     }))
 
@@ -48,7 +48,7 @@ export default class EditSessionFacilitatorsPresenter {
       },
     ]
 
-    items.push(...pduItems)
+    items.push(...facilitatorItems)
     return items
   }
 

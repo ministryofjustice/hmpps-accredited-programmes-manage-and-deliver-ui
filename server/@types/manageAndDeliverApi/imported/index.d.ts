@@ -192,6 +192,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/session/{sessionId}/attendance': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Create attendance of a session
+     * @description Create new attendance for a session
+     */
+    post: operations['createAttendance']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/referral/{referralId}/update-ldc': {
     parameters: {
       query?: never
@@ -1236,7 +1256,7 @@ export interface components {
     /** @description Request to edit the facilitators for a session */
     EditSessionFacilitatorRequest: {
       /** @description The full name of the facilitator for the group */
-      facilitator: string
+      facilitatorName: string
       /** @description The code of the facilitator for the group */
       facilitatorCode: string
       /** @description The name of the team that the member belongs to */
@@ -1519,6 +1539,35 @@ export interface components {
        */
       otherDetails?: string
       availabilities: components['schemas']['DailyAvailabilityModel'][]
+    }
+    /** @description Attendance for a session */
+    SessionAttendance: {
+      /** @description List of attendees for a session */
+      attendees: components['schemas']['SessionAttendee'][]
+      /** @description Session attendance response message after processing */
+      responseMessage?: string
+    }
+    /** @description Attendee of a session */
+    SessionAttendee: {
+      /**
+       * Format: uuid
+       * @description Attendee ID of a session
+       */
+      attendeeId: string
+      /** @description Name of the attendee of a session */
+      name: string
+      /** @description A flag showing if attendee attended a session */
+      attended: boolean
+      /**
+       * Format: date
+       * @description Date when a session was attended
+       */
+      recordedAt: string
+      /**
+       * Format: uuid
+       * @description ID of a session facilitator
+       */
+      recordedByFacilitatorId: string
     }
     /** @description Does the person associated with the referral have LDC needs. */
     UpdateLdc: {
@@ -2939,7 +2988,7 @@ export interface components {
     }
     EditSessionFacilitator: {
       /** @description The full name of the facilitator for the group */
-      facilitator: string
+      facilitatorName: string
       /** @description The code of the facilitator for the group */
       facilitatorCode: string
       /** @description The name of the team that the member belongs to */
@@ -4211,6 +4260,68 @@ export interface operations {
       }
       /** @description Unauthorised. The request was unauthorised. */
       401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  createAttendance: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        sessionId: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['SessionAttendance']
+      }
+    }
+    responses: {
+      /** @description Session attendance created successfully */
+      201: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['SessionAttendance']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Session not found */
+      404: {
         headers: {
           [name: string]: unknown
         }

@@ -11,21 +11,21 @@ describe('EditSessionFacilitatorsPresenter', () => {
     pageTitle: 'Getting Started 1',
     facilitators: [
       {
-        facilitator: 'Facilitator One',
+        facilitatorName: 'Facilitator One',
         facilitatorCode: 'F001',
         teamName: 'Team A',
         teamCode: 'TA01',
         currentlyFacilitating: true,
       },
       {
-        facilitator: 'Facilitator Two',
+        facilitatorName: 'Facilitator Two',
         facilitatorCode: 'F002',
         teamName: 'Team B',
         teamCode: 'TA02',
         currentlyFacilitating: false,
       },
       {
-        facilitator: 'Facilitator Three',
+        facilitatorName: 'Facilitator Three',
         facilitatorCode: 'F003',
         teamName: 'Team C',
         teamCode: 'TA03',
@@ -88,17 +88,20 @@ describe('EditSessionFacilitatorsPresenter', () => {
       expect(options[0]).toEqual({ text: '', value: '' })
       expect(options[1]).toEqual({
         text: 'Facilitator One',
-        value: '{"facilitator":"Facilitator One", "facilitatorCode":"F001", "teamName":"Team A", "teamCode":"TA01"}',
+        value:
+          '{"facilitatorName":"Facilitator One", "facilitatorCode":"F001", "teamName":"Team A", "teamCode":"TA01"}',
         selected: true,
       })
       expect(options[2]).toEqual({
         text: 'Facilitator Two',
-        value: '{"facilitator":"Facilitator Two", "facilitatorCode":"F002", "teamName":"Team B", "teamCode":"TA02"}',
+        value:
+          '{"facilitatorName":"Facilitator Two", "facilitatorCode":"F002", "teamName":"Team B", "teamCode":"TA02"}',
         selected: false,
       })
       expect(options[3]).toEqual({
         text: 'Facilitator Three',
-        value: '{"facilitator":"Facilitator Three", "facilitatorCode":"F003", "teamName":"Team C", "teamCode":"TA03"}',
+        value:
+          '{"facilitatorName":"Facilitator Three", "facilitatorCode":"F003", "teamName":"Team C", "teamCode":"TA03"}',
         selected: false,
       })
     })
@@ -126,9 +129,9 @@ describe('EditSessionFacilitatorsPresenter', () => {
       const userInputData = {
         _csrf: 'token',
         'edit-session-facilitator-0':
-          '{"facilitator":"John Doe", "facilitatorCode":"F001", "teamName":"Team A", "teamCode":"TA01"}',
+          '{"facilitatorName":"John Doe", "facilitatorCode":"F001", "teamName":"Team A", "teamCode":"TA01"}',
         'edit-session-facilitator-1':
-          '{"facilitator":"Jane Smith", "facilitatorCode":"F002", "teamName":"Team B", "teamCode":"TB02"}',
+          '{"facilitatorName":"Jane Smith", "facilitatorCode":"F002", "teamName":"Team B", "teamCode":"TB02"}',
       }
       const presenter = new EditSessionFacilitatorsPresenter(
         linkUrl,
@@ -141,13 +144,13 @@ describe('EditSessionFacilitatorsPresenter', () => {
 
       expect(result.facilitators).toHaveLength(2)
       expect(result.facilitators[0]).toEqual({
-        facilitator: 'John Doe',
+        facilitatorName: 'John Doe',
         facilitatorCode: 'F001',
         teamName: 'Team A',
         teamCode: 'TA01',
       })
       expect(result.facilitators[1]).toEqual({
-        facilitator: 'Jane Smith',
+        facilitatorName: 'Jane Smith',
         facilitatorCode: 'F002',
         teamName: 'Team B',
         teamCode: 'TB02',
@@ -158,7 +161,7 @@ describe('EditSessionFacilitatorsPresenter', () => {
       const userInputData = {
         _csrf: 'token',
         'edit-session-facilitator-0':
-          '{"facilitator":"John Doe", "facilitatorCode":"F001", "teamName":"Team A", "teamCode":"TA01"}',
+          '{"facilitatorName":"John Doe", "facilitatorCode":"F001", "teamName":"Team A", "teamCode":"TA01"}',
         'edit-session-facilitator-1': '',
       }
       const presenter = new EditSessionFacilitatorsPresenter(
@@ -172,7 +175,7 @@ describe('EditSessionFacilitatorsPresenter', () => {
 
       expect(result.facilitators).toHaveLength(1)
       expect(result.facilitators[0]).toEqual({
-        facilitator: 'John Doe',
+        facilitatorName: 'John Doe',
         facilitatorCode: 'F001',
         teamName: 'Team A',
         teamCode: 'TA01',
@@ -183,7 +186,7 @@ describe('EditSessionFacilitatorsPresenter', () => {
       const userInputData = {
         _csrf: 'token',
         'edit-session-facilitator-0':
-          '{"facilitator":"John Doe", "facilitatorCode":"F001", "teamName":"Team A", "teamCode":"TA01"}',
+          '{"facilitatorName":"John Doe", "facilitatorCode":"F001", "teamName":"Team A", "teamCode":"TA01"}',
       }
       const presenter = new EditSessionFacilitatorsPresenter(
         linkUrl,
@@ -205,14 +208,14 @@ describe('EditSessionFacilitatorsPresenter', () => {
       expect(result.facilitators).toHaveLength(2)
       expect(result.facilitators).toEqual([
         {
-          facilitator: 'Facilitator One',
+          facilitatorName: 'Facilitator One',
           facilitatorCode: 'F001',
           teamName: 'Team A',
           teamCode: 'TA01',
           currentlyFacilitating: true,
         },
         {
-          facilitator: 'Facilitator Three',
+          facilitatorName: 'Facilitator Three',
           facilitatorCode: 'F003',
           teamName: 'Team C',
           teamCode: 'TA03',
@@ -226,7 +229,7 @@ describe('EditSessionFacilitatorsPresenter', () => {
         ...editSessionFacilitatorsResponse,
         facilitators: [
           {
-            facilitator: 'Facilitator One',
+            facilitatorName: 'Facilitator One',
             facilitatorCode: 'F001',
             teamName: 'Team A',
             teamCode: 'TA01',

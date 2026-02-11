@@ -167,14 +167,14 @@ describe('editSessionFacilitators', () => {
     pageTitle: 'Getting Started 1',
     facilitators: [
       {
-        facilitator: 'Facilitator One',
+        facilitatorName: 'Facilitator One',
         facilitatorCode: 'F001',
         teamName: 'Team A',
         teamCode: 'TA01',
         currentlyFacilitating: true,
       },
       {
-        facilitator: 'Facilitator Two',
+        facilitatorName: 'Facilitator Two',
         facilitatorCode: 'F002',
         teamName: 'Team B',
         teamCode: 'TA02',
