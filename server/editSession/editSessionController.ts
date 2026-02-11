@@ -16,11 +16,9 @@ import EditSessionDateAndTimeForm from './dateAndTime/editSessionDateAndTimeForm
 import OtherSessionsPresenter from './dateAndTime/otherSessionsPresenter'
 import OtherSessionsView from './dateAndTime/otherSessionsView'
 import RescheduleOtherSessionsForm from './dateAndTime/rescheduleOtherSessionsForm'
-import DeleteSessionPresenter from './deleteSession/deleteSessionPresenter'
-import DeleteSessionView from './deleteSession/deleteSessionView'
+
 import EditSessionForm from './editSessionForm'
-import EditSessionPresenter from './editSessionPresenter'
-import EditSessionView from './editSessionView'
+
 import EditSessionFacilitatorsForm from './facilitators/editSessionFacilitatorsForm'
 import EditSessionFacilitatorsPresenter from './facilitators/editSessionFacilitatorsPresenter'
 import EditSessionFacilitatorsView from './facilitators/editSessionFacilitatorsView'
