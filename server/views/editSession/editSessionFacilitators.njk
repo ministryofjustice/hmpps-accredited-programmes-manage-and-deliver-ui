@@ -139,11 +139,16 @@
 
     <div class="govuk-width-container">
       <main class="govuk-main-wrapper" id="main-content">
-        <div class="govuk-grid-row">
+        <div class="govuk-grid-row govuk-!-margin-bottom-6">
           <div class="govuk-grid-column-two-thirds">
             {{ govukBackLink(backLinkArgs) }}
           </div>
+          <div class="govuk-grid-column-one-third">
+            <a class="return_to_homepage__link" href={{ homePageLink.href }}>{{ homePageLink.text }}</a>
+          </div>
+        </div>
 
+        <div class="govuk-grid-row">
           <div class="govuk-grid-column-two-thirds">
             <span class="govuk-caption-l">{{ text.pageCaption }}</span>
             <h1 class="govuk-heading-l">{{ text.pageHeading }}</h1>
@@ -164,6 +169,7 @@
                 {% call govukFieldset(editSessionFacilitatorsFieldSetArgs) %}
                   {{ govukSelect(editSessionFacilitatorsArgs) }}
                 {% endcall %}
+
                 {% for facilitator in facilitators %}
                   <fieldset class="govuk-fieldset moj-add-another__item moj-add-another__item__facilitator">
                     <div class="govuk-form-group">
