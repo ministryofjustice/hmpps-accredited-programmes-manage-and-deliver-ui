@@ -1,5 +1,5 @@
 import TestUtils from '../../testutils/testUtils'
-import EditSessionDateAndTimeFormForm from './editSessionDateAndTimeForm'
+import EditSessionDateAndTimeForm from './editSessionDateAndTimeForm'
 
 describe('EditSessionDateAndTimeForm', () => {
   const request = TestUtils.createRequest({})
@@ -19,7 +19,7 @@ describe('EditSessionDateAndTimeForm', () => {
       })
 
       it('returns params for update with parsed values', async () => {
-        const data = await new EditSessionDateAndTimeFormForm(request).rescheduleSessionDetailsData()
+        const data = await new EditSessionDateAndTimeForm(request).rescheduleSessionDetailsData()
 
         expect(data.paramsForUpdate).toEqual({
           sessionStartDate: '15/12/3055',
@@ -53,7 +53,7 @@ describe('EditSessionDateAndTimeForm', () => {
 
       it('returns error when data is missing', async () => {
         request.body['session-details-date'] = ''
-        const data = await new EditSessionDateAndTimeFormForm(request).rescheduleSessionDetailsData()
+        const data = await new EditSessionDateAndTimeForm(request).rescheduleSessionDetailsData()
         expect(data.paramsForUpdate).toBeNull()
         expect(data.error).toStrictEqual({
           errors: [
@@ -69,7 +69,7 @@ describe('EditSessionDateAndTimeForm', () => {
       it('returns error when date format is invalid', async () => {
         request.body['session-details-date'] = '2024-12-15'
 
-        const data = await new EditSessionDateAndTimeFormForm(request).rescheduleSessionDetailsData()
+        const data = await new EditSessionDateAndTimeForm(request).rescheduleSessionDetailsData()
 
         expect(data.error).toStrictEqual({
           errors: [
@@ -88,7 +88,7 @@ describe('EditSessionDateAndTimeForm', () => {
         request.body['session-details-date'] =
           `${yesterday.getDate()}/${yesterday.getMonth() + 1}/${yesterday.getFullYear()}`
 
-        const data = await new EditSessionDateAndTimeFormForm(request).rescheduleSessionDetailsData()
+        const data = await new EditSessionDateAndTimeForm(request).rescheduleSessionDetailsData()
 
         expect(data.error).toStrictEqual({
           errors: [
@@ -116,7 +116,7 @@ describe('EditSessionDateAndTimeForm', () => {
         request.body['session-details-start-time-hour'] = ''
         request.body['session-details-start-time-minute'] = '30'
 
-        const data = await new EditSessionDateAndTimeFormForm(request).rescheduleSessionDetailsData()
+        const data = await new EditSessionDateAndTimeForm(request).rescheduleSessionDetailsData()
 
         expect(data.error).toStrictEqual({
           errors: [
@@ -139,7 +139,7 @@ describe('EditSessionDateAndTimeForm', () => {
         request.body['session-details-start-time-minute'] = '-1'
         request.body['session-details-start-time-part-of-day'] = 'AM'
 
-        const data = await new EditSessionDateAndTimeFormForm(request).rescheduleSessionDetailsData()
+        const data = await new EditSessionDateAndTimeForm(request).rescheduleSessionDetailsData()
 
         expect(data.error).toStrictEqual({
           errors: [
@@ -162,7 +162,7 @@ describe('EditSessionDateAndTimeForm', () => {
         request.body['session-details-start-time-minute'] = '60'
         request.body['session-details-start-time-part-of-day'] = 'AM'
 
-        const data = await new EditSessionDateAndTimeFormForm(request).rescheduleSessionDetailsData()
+        const data = await new EditSessionDateAndTimeForm(request).rescheduleSessionDetailsData()
 
         expect(data.error).toStrictEqual({
           errors: [
@@ -188,7 +188,7 @@ describe('EditSessionDateAndTimeForm', () => {
         request.body['session-details-end-time-minute'] = '30'
         request.body['session-details-end-time-part-of-day'] = ''
 
-        const data = await new EditSessionDateAndTimeFormForm(request).rescheduleSessionDetailsData()
+        const data = await new EditSessionDateAndTimeForm(request).rescheduleSessionDetailsData()
 
         expect(data.error).toStrictEqual({
           errors: [
