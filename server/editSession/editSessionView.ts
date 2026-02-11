@@ -1,5 +1,5 @@
-import EditSessionPresenter from './editSessionPresenter'
 import { ButtonArgs, SummaryListArgs } from '../utils/govukFrontendTypes'
+import EditSessionPresenter from './editSessionPresenter'
 
 export default class EditSessionView {
   constructor(private readonly presenter: EditSessionPresenter) {}
@@ -83,7 +83,7 @@ export default class EditSessionView {
           actions: {
             items: [
               {
-                href: '',
+                href: `/group/${this.presenter.groupId}/session/${this.presenter.sessionId}/edit-session-facilitators`,
                 text: 'Change',
                 visuallyHiddenText: 'facilitators',
               },

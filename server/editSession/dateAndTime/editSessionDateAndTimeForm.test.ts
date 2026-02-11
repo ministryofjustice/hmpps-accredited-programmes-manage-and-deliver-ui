@@ -1,5 +1,5 @@
-import EditSessionDateAndTimeFormForm from './editSessionDateAndTimeForm'
 import TestUtils from '../../testutils/testUtils'
+import EditSessionDateAndTimeFormForm from './editSessionDateAndTimeForm'
 
 describe('EditSessionDateAndTimeForm', () => {
   const request = TestUtils.createRequest({})

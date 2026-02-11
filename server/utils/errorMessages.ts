@@ -132,6 +132,8 @@ export default {
   },
   editSession: {
     selectDeleteSession: 'Select whether to delete the session or not',
+    editSessionFacilitatorEmpty: 'Select a Facilitator. Start typing to search.',
+    editSessionFacilitatorDuplicate: 'You cannot add the same facilitator twice. Select a different facilitator.',
   },
 
   returnedError,
