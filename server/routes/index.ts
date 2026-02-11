@@ -3,9 +3,12 @@ import { type RequestHandler, Router } from 'express'
 import CaselistController from '../caselist/caselistController'
 import ChangeCohortController from '../cohort/changeCohortController'
 import CreateGroupController from '../createGroup/createGroupController'
+import EditSessionController from '../editSession/editSessionController'
+import GroupController from '../group/groupController'
 import GroupAllocationNotesController from '../groupAllocationNotes/groupAllocationNotesController'
 import AddToGroupController from '../groupDetails/addToGroup/addToGroupController'
 import GroupDetailsController from '../groupDetails/groupDetailsController'
+import RemoveFromGroupController from '../groupDetails/removeFromGroup/removeFromGroupController'
 import LdcController from '../ldc/ldcController'
 import LocationPreferencesController from '../locationPreferences/locationPreferencesController'
 import asyncMiddleware from '../middleware/asyncMiddleware'
@@ -13,11 +16,8 @@ import PniController from '../pni/pniController'
 import ReferralDetailsController from '../referralDetails/referralDetailsController'
 import RisksAndNeedsController from '../risksAndNeeds/risksAndNeedsController'
 import type { Services } from '../services'
-import UpdateReferralStatusController from '../updateReferralStatus/updateReferralStatusController'
-import RemoveFromGroupController from '../groupDetails/removeFromGroup/removeFromGroupController'
-import GroupController from '../group/groupController'
 import SessionScheduleController from '../sessionSchedule/sessionScheduleController'
-import EditSessionController from '../editSession/editSessionController'
+import UpdateReferralStatusController from '../updateReferralStatus/updateReferralStatusController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
@@ -358,6 +358,8 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   getOrPost('/group/:groupId/sessionId/:sessionId/edit-session-attendees', async (req, res, next) => {
     await editSessionController.editSessionAttendees(req, res)
+  getOrPost('/group/:groupId/session/:sessionId/edit-session-facilitators', async (req, res, next) => {
+    await editSessionController.editSessionFacilitators(req, res)
   })
 
   return router

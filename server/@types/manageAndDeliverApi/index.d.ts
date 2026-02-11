@@ -77,6 +77,9 @@ type GroupScheduleSession = components['schemas']['GroupScheduleSession']
 type Session = components['schemas']['Session']
 type EditSessionAttendeesResponse = components['schemas']['EditSessionAttendeesResponse']
 type EditSessionAttendee = components['schemas']['EditSessionAttendee']
+type EditSessionFacilitatorsResponse = components['schemas']['EditSessionFacilitatorsResponse']
+type EditSessionFacilitatorResponse = components['schemas']['EditSessionFacilitatorsResponse']['facilitators']
+type EditSessionFacilitatorsRequest = components['schemas']['EditSessionFacilitatorRequest']
 
 export type {
   AlcoholMisuseDetails,
@@ -86,13 +89,13 @@ export type {
   Availability,
   CaseListFilterValues,
   CaseListReferrals,
-  CreateGroupTeamMember,
   CodeDescription,
   CohortEnum,
   CreateAvailability,
   CreateDeliveryLocationPreferences,
   CreateGroupRequest,
   CreateGroupSessionSlot,
+  CreateGroupTeamMember,
   CreateOrUpdateReferralMotivationBackgroundAndNonAssociations,
   CreateReferralStatusHistory,
   DailyAvailabilityModel,
@@ -103,11 +106,14 @@ export type {
   EditSessionAttendeesResponse,
   EditSessionDateAndTimeResponse,
   EditSessionDetails,
+  EditSessionFacilitatorResponse,
+  EditSessionFacilitatorsRequest,
+  EditSessionFacilitatorsResponse,
   EmotionalWellbeing,
   ExistingDeliveryLocationPreferences,
   Group,
-  GroupsByRegion,
   GroupItem,
+  GroupsByRegion,
   GroupSchedule,
   GroupScheduleSession,
   GroupSessionResponse,
@@ -138,22 +144,23 @@ export type {
   Relationships,
   RemoveFromGroupRequest,
   RemoveFromGroupResponse,
+  RescheduleSessionDetails,
   RescheduleSessionRequest,
   Risks,
   RoshAnalysis,
   ScheduleIndividualSessionDetailsResponse,
   ScheduleSessionRequest,
   ScheduleSessionTypeResponse,
+  SentenceInformation,
   Session,
   SessionScheduleGroupResponse,
   SessionScheduleRequest,
   SessionScheduleResponse,
-  SentenceInformation,
   SessionTime,
+  st,
   ThinkingAndBehaviour,
   UpdateAvailability,
   UpdateCohort,
   UpdateLdc,
   UserTeamMember,
-  RescheduleSessionDetails,
 }

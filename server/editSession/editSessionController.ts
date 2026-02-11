@@ -1,5 +1,5 @@
-import { Request, Response } from 'express'
 import { RescheduleSessionRequest } from '@manage-and-deliver-api'
+import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
 import EditSessionPresenter from './editSessionPresenter'
@@ -9,13 +9,21 @@ import DeleteSessionView from './deleteSession/deleteSessionView'
 import EditSessionAttendeesPresenter from './editSessionAttendees/editSessionAttendeesPresenter'
 import EditSessionAttendeesView from './editSessionAttendees/editSessionAttendeesView'
 import { FormValidationError } from '../utils/formValidationError'
-import EditSessionForm from './editSessionForm'
+import EditSessionDateAndTimeFormForm from './dateAndTime/editSessionDateAndTimeForm'
 import EditSessionDateAndTimePresenter from './dateAndTime/editSessionDateAndTimePresenter'
 import EditSessionDateAndTimeView from './dateAndTime/editSessionDateAndTimeView'
 import EditSessionDateAndTimeForm from './dateAndTime/editSessionDateAndTimeForm'
 import OtherSessionsPresenter from './dateAndTime/otherSessionsPresenter'
 import OtherSessionsView from './dateAndTime/otherSessionsView'
 import RescheduleOtherSessionsForm from './dateAndTime/rescheduleOtherSessionsForm'
+import DeleteSessionPresenter from './deleteSession/deleteSessionPresenter'
+import DeleteSessionView from './deleteSession/deleteSessionView'
+import EditSessionForm from './editSessionForm'
+import EditSessionPresenter from './editSessionPresenter'
+import EditSessionView from './editSessionView'
+import EditSessionFacilitatorsForm from './facilitators/editSessionFacilitatorsForm'
+import EditSessionFacilitatorsPresenter from './facilitators/editSessionFacilitatorsPresenter'
+import EditSessionFacilitatorsView from './facilitators/editSessionFacilitatorsView'
 
 export default class EditSessionController {
   constructor(
@@ -180,6 +188,45 @@ export default class EditSessionController {
 
     const presenter = new OtherSessionsPresenter(groupId, sessionDetails, req.session.editSessionDateAndTime, formError)
     const view = new OtherSessionsView(presenter)
+
+    return ControllerUtils.renderWithLayout(res, view, null)
+  }
+
+  async editSessionFacilitators(req: Request, res: Response): Promise<void> {
+    const { groupId, sessionId } = req.params
+    const { username } = req.user
+    let formError: FormValidationError | null = null
+    let userInputData = null
+
+    const editSessionFacilitators = await this.accreditedProgrammesManageAndDeliverService.getEditSessionFacilitators(
+      username,
+      sessionId,
+    )
+
+    if (req.method === 'POST') {
+      const data = await new EditSessionFacilitatorsForm(req).editSessionFacilitatorsData()
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+        userInputData = req.body
+      } else {
+        req.session.sessionFacilitators = data.paramsForUpdate
+        const message = await this.accreditedProgrammesManageAndDeliverService.updateSessionFacilitators(
+          username,
+          sessionId,
+          req.session.sessionFacilitators,
+        )
+        return res.redirect(`/group/${groupId}/sessionId/${sessionId}/edit-session?message=${message}`)
+      }
+    }
+    const presenter = new EditSessionFacilitatorsPresenter(
+      req.session.originPage,
+      groupId,
+      editSessionFacilitators,
+      formError,
+      userInputData,
+    )
+    const view = new EditSessionFacilitatorsView(presenter)
 
     return ControllerUtils.renderWithLayout(res, view, null)
   }
