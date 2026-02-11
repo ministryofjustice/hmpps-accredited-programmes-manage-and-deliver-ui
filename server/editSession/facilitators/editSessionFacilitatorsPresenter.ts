@@ -23,7 +23,6 @@ export default class EditSessionFacilitatorsPresenter {
     return {
       pageHeading: `Edit the session facilitators`,
       pageCaption: this.editSessionFacilitatorsResponse.pageTitle,
-      subHeading: 'Attendance and session notes',
     }
   }
 

@@ -35,13 +35,29 @@ export default class EditSessionFacilitatorsForm {
     const hasFacilitator = Object.entries(this.request.body).some(
       ([key, value]) => key.startsWith('edit-session-facilitator') && value !== '',
     )
-    // TODO add validation for duplicate facilitator here
+    const hasDuplicateFacilitator = () => {
+      const facilitatorCodes = Object.entries(this.request.body)
+        .filter(([key, value]) => key.startsWith('edit-session-facilitator') && value !== '')
+        .map(([_, value]) => {
+          try {
+            const parsed = JSON.parse(value as string)
+            return parsed.facilitatorCode
+          } catch {
+            return null
+          }
+        })
+        .filter(code => code !== null)
+
+      const uniqueCodes = new Set(facilitatorCodes)
+      return facilitatorCodes.length !== uniqueCodes.size
+    }
     return [
       body('edit-session-facilitator')
-        .custom(() => {
-          return hasFacilitator
-        })
+        .custom(() => hasFacilitator)
         .withMessage(errorMessages.editSession.editSessionFacilitatorEmpty),
+      body('edit-session-facilitator')
+        .custom(() => !hasDuplicateFacilitator())
+        .withMessage(errorMessages.editSession.editSessionFacilitatorDuplicate),
     ]
   }
 }
