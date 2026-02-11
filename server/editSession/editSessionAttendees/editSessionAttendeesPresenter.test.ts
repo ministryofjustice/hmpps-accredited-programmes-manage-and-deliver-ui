@@ -41,48 +41,6 @@ describe('EditSessionAttendeesPresenter', () => {
     })
   })
 
-  describe('generateAttendeeRadioOptions', () => {
-    it('pre-selects the currently attending attendee when no selection is provided', () => {
-      const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees())
-
-      expect(presenter.generateAttendeeRadioOptions()).toEqual([
-        {
-          text: 'John Doe (X123456)',
-          value: 'referral-1',
-          checked: true,
-        },
-        {
-          text: 'Jane Smith (Y654321)',
-          value: 'referral-2',
-          checked: false,
-        },
-      ])
-    })
-
-    it('selects the provided selected value over currently attending', () => {
-      const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees(), 'referral-2')
-
-      expect(presenter.generateAttendeeRadioOptions()).toEqual([
-        {
-          text: 'John Doe (X123456)',
-          value: 'referral-1',
-          checked: false,
-        },
-        {
-          text: 'Jane Smith (Y654321)',
-          value: 'referral-2',
-          checked: true,
-        },
-      ])
-    })
-
-    it('returns empty options when no attendees exist', () => {
-      const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees({ attendees: [] }))
-
-      expect(presenter.generateAttendeeRadioOptions()).toEqual([])
-    })
-  })
-
   describe('backLinkArgs', () => {
     it('returns correct back link args', () => {
       const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees())
@@ -95,7 +53,7 @@ describe('EditSessionAttendeesPresenter', () => {
   })
 
   describe('generateAttendeeRadioOptions', () => {
-    it('pre-selects the currently attending attendee when no selection is provided', () => {
+    it('pre-selects the currently attending attendee', () => {
       const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees())
 
       expect(presenter.generateAttendeeRadioOptions()).toEqual([
@@ -112,14 +70,39 @@ describe('EditSessionAttendeesPresenter', () => {
       ])
     })
 
-    it('selects the provided selected value over currently attending', () => {
-      const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees(), 'referral-2')
+    it('returns empty options when no attendees exist', () => {
+      const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees({ attendees: [] }))
+
+      expect(presenter.generateAttendeeRadioOptions()).toEqual([])
+    })
+
+    it('pre-selects multiple attendees if multiple have currentlyAttending true', () => {
+      const presenter = new EditSessionAttendeesPresenter(
+        groupId,
+        backUrl,
+        buildSessionAttendees({
+          attendees: [
+            {
+              name: 'John Doe',
+              referralId: 'referral-1',
+              crn: 'X123456',
+              currentlyAttending: true,
+            },
+            {
+              name: 'Jane Smith',
+              referralId: 'referral-2',
+              crn: 'Y654321',
+              currentlyAttending: true,
+            },
+          ],
+        }),
+      )
 
       expect(presenter.generateAttendeeRadioOptions()).toEqual([
         {
           text: 'John Doe (X123456)',
           value: 'referral-1',
-          checked: false,
+          checked: true,
         },
         {
           text: 'Jane Smith (Y654321)',
@@ -127,12 +110,6 @@ describe('EditSessionAttendeesPresenter', () => {
           checked: true,
         },
       ])
-    })
-
-    it('returns empty options when no attendees exist', () => {
-      const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees({ attendees: [] }))
-
-      expect(presenter.generateAttendeeRadioOptions()).toEqual([])
     })
   })
 
@@ -153,13 +130,7 @@ describe('EditSessionAttendeesPresenter', () => {
           },
         ],
       }
-      const presenter = new EditSessionAttendeesPresenter(
-        groupId,
-        backUrl,
-        buildSessionAttendees(),
-        null,
-        validationError,
-      )
+      const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees(), validationError)
 
       expect(presenter.errorSummary).toEqual([
         {
@@ -191,13 +162,7 @@ describe('EditSessionAttendeesPresenter', () => {
           },
         ],
       }
-      const presenter = new EditSessionAttendeesPresenter(
-        groupId,
-        backUrl,
-        buildSessionAttendees(),
-        null,
-        validationError,
-      )
+      const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees(), validationError)
 
       expect(presenter.fields['edit-session-attendees'].errorMessage).toBe('Select who should attend the session')
     })

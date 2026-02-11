@@ -12,7 +12,7 @@ import { FormValidationError } from '../utils/formValidationError'
 import EditSessionForm from './editSessionForm'
 import EditSessionDateAndTimePresenter from './dateAndTime/editSessionDateAndTimePresenter'
 import EditSessionDateAndTimeView from './dateAndTime/editSessionDateAndTimeView'
-import EditSessionDateAndTimeFormForm from './dateAndTime/editSessionDateAndTimeForm'
+import EditSessionDateAndTimeForm from './dateAndTime/editSessionDateAndTimeForm'
 import OtherSessionsPresenter from './dateAndTime/otherSessionsPresenter'
 import OtherSessionsView from './dateAndTime/otherSessionsView'
 import RescheduleOtherSessionsForm from './dateAndTime/rescheduleOtherSessionsForm'
@@ -102,7 +102,7 @@ export default class EditSessionController {
     )
 
     const backUrl = `/group/${groupId}/sessionId/${sessionId}/edit-session`
-    const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, sessionAttendees, null, formError)
+    const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, sessionAttendees, formError)
     const view = new EditSessionAttendeesView(presenter)
 
     return ControllerUtils.renderWithLayout(res, view, null)
@@ -120,7 +120,7 @@ export default class EditSessionController {
     )
 
     if (req.method === 'POST') {
-      const data = await new EditSessionDateAndTimeFormForm(req).rescheduleSessionDetailsData()
+      const data = await new EditSessionDateAndTimeForm(req).rescheduleSessionDetailsData()
       if (data.error) {
         res.status(400)
         formError = data.error

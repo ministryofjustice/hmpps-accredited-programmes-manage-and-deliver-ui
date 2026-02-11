@@ -8,7 +8,6 @@ export default class EditSessionAttendeesPresenter {
     readonly groupId: string,
     readonly backUrl: string,
     readonly sessionAttendees: EditSessionAttendeesResponse,
-    readonly selectedValue: string | null = null,
     private readonly validationError: FormValidationError | null = null,
   ) {}
 
@@ -35,13 +34,10 @@ export default class EditSessionAttendeesPresenter {
   }
 
   generateAttendeeRadioOptions(): RadiosArgsItem[] {
-    const currentReferralId = this.currentlyAttending?.referralId
-    const selectedReferralId = this.selectedValue || currentReferralId
-
     return this.sessionAttendees.attendees.map(attendee => ({
       text: `${attendee.name} (${attendee.crn})`,
       value: attendee.referralId,
-      checked: attendee.referralId === selectedReferralId,
+      checked: attendee.currentlyAttending === true,
     }))
   }
 
