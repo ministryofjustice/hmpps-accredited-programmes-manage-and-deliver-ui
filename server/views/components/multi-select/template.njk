@@ -1,0 +1,29 @@
+<!-- MOJ design system multi-select table converted to a nunjucks template for easy re-use -->
+
+  <table class="govuk-table" data-module="moj-multi-select" data-id-prefix="{{ idPrefix }}">
+    <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th class="govuk-table__header" scope="col" id="{{ idPrefix }}select-all"></th>
+      {% for header in headers %}
+      <th class="govuk-table__header{% if header.numeric %} govuk-table__header--numeric{% endif %}" scope="col">{{ header.text }}</th>
+      {% endfor %}
+    </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+    {% for row in rows %}
+    <tr class="govuk-table__row{% if row.selected %} govuk-table__row--selected{% endif %}">
+      <td class="govuk-table__cell">
+        <div class="govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox">
+          <input type="checkbox" class="govuk-checkboxes__input" id="{{ idPrefix }}{{ row.id }}" value="{{ row.value or row.id }}">
+          <label class="govuk-label govuk-checkboxes__label" for="{{ idPrefix }}{{ row.id }}">
+            <span class="govuk-visually-hidden">Select {{ row.cells[0] }}</span>
+          </label>
+        </div>
+      </td>
+      {% for cell in row.cells %}
+      <td class="govuk-table__cell{% if row.cellsNumeric and row.cellsNumeric[loop.index0] %} govuk-table__cell--numeric{% endif %}">{{ cell }}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
