@@ -4,6 +4,7 @@
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "components/ogrs4/predictor-scale/macro.njk" import predictorScale %}
 {% from "components/ogrs4/expanded-predictor-badge/macro.njk" import expandedPredictorBadge %}
+{% from "./_riskBox.njk" import riskBox %}
 {% from "components/ogrs4/rosh-widget/macro.njk" import roshWidget %}
 {% from "components/risk-flag-widget/macro.njk" import riskFlagWidget %}
 
@@ -22,8 +23,8 @@
   {{ expandedPredictorBadge(violentReoffendingPredictor, true, false) }}
 
   <h3 class="govuk-heading-m">Spousal assault risk assessment</h3>
-  {{ expandedPredictorBadge(saraReoffendingPartnerPredictor, false, false) }}
-  {{ expandedPredictorBadge(saraReoffendingOthersPredictor, false, false) }}
+  {{ riskBox(riskTowardsPartnerBox) }}
+  {{ riskBox(riskTowardsOthersBox) }}
 
   <h3 class="govuk-heading-m">Combined serious reoffending predictor</h3>
   {{ expandedPredictorBadge(combinedSeriousReoffendingPredictor, true, false) }}

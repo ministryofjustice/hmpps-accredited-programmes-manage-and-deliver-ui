@@ -1,0 +1,44 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{%- from "moj/components/date-picker/macro.njk" import mojDatePicker -%}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "components/time-input/macro.njk" import timeInput %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block main %}
+  {% block content %}
+    <div class="govuk-width-container">
+      <main class="govuk-main-wrapper" id="main-content">
+        <div class="govuk-grid-row govuk-!-margin-bottom-3">
+          <div class="govuk-grid-column-two-thirds">
+            {{ govukBackLink(backLinkArgs) }}
+          </div>
+        </div>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            {% if errorSummary !== null %}
+            {{ govukErrorSummary(errorSummary) }}
+            {% endif %}
+            <span class="govuk-caption-l">{{ text.headingCaptionText }}</span>
+            <h1 class="govuk-heading-l">{{ text.headingText }}</h1>
+            <form method="post" novalidate class="add-another-form">
+              <input type="hidden" name="_csrf" value="{{csrfToken}}">
+              {{ mojDatePicker(sessionDetailsDateArgs)}}
+              {{ timeInput(startTimeInputArgs) }}
+              {{ timeInput(endTimeInputArgs) }}
+
+              {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+            </form>
+          </div>
+        </div>
+      </main>
+    </div>
+  {% endblock %}
+{% endblock %}

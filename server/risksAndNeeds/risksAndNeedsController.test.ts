@@ -688,6 +688,7 @@ describe('Risks and alerts section of risks and needs', () => {
         },
         lastUpdated: undefined,
         dateRetrieved: undefined,
+        isLegacy: false,
       })
 
       accreditedProgrammesManageAndDeliverService.getRisksAndAlerts.mockResolvedValue(risks)

@@ -1,5 +1,5 @@
-import EditSessionPresenter from './editSessionPresenter'
 import { ButtonArgs, SummaryListArgs } from '../utils/govukFrontendTypes'
+import EditSessionPresenter from './editSessionPresenter'
 
 export default class EditSessionView {
   constructor(private readonly presenter: EditSessionPresenter) {}
@@ -26,7 +26,10 @@ export default class EditSessionView {
           actions: {
             items: [
               {
-                href: '',
+                href:
+                  this.presenter.sessionDetails.sessionType === 'Group'
+                    ? `/group/${this.presenter.groupId}/session/${this.presenter.sessionId}/edit-session-date-and-time`
+                    : '',
                 text: 'Change',
                 visuallyHiddenText: 'start date',
               },
@@ -43,7 +46,10 @@ export default class EditSessionView {
           actions: {
             items: [
               {
-                href: '',
+                href:
+                  this.presenter.sessionDetails.sessionType === 'Group'
+                    ? `/group/${this.presenter.groupId}/session/${this.presenter.sessionId}/edit-session-date-and-time`
+                    : '',
                 text: 'Change',
                 visuallyHiddenText: 'start time',
               },
@@ -77,7 +83,7 @@ export default class EditSessionView {
           actions: {
             items: [
               {
-                href: '',
+                href: `/group/${this.presenter.groupId}/session/${this.presenter.sessionId}/edit-session-facilitators`,
                 text: 'Change',
                 visuallyHiddenText: 'facilitators',
               },
@@ -85,6 +91,19 @@ export default class EditSessionView {
           },
         },
       ],
+    }
+  }
+
+  private get successMessageArgs() {
+    if (!this.presenter.successMessage) {
+      return null
+    }
+
+    return {
+      variant: 'success',
+      title: this.presenter.successMessage,
+      showTitleAsHeading: true,
+      dismissible: true,
     }
   }
 
@@ -104,6 +123,7 @@ export default class EditSessionView {
         text: this.presenter.text,
         backLinkArgs: this.presenter.backLinkArgs,
         editSessionSummary: this.editSessionSummary,
+        successMessageArgs: this.successMessageArgs,
         deleteButton: this.deleteButton,
         canBeDeleted: this.presenter.canBeDeleted,
       },

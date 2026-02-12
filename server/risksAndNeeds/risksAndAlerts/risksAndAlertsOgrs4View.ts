@@ -1,6 +1,6 @@
 import RisksAndAlertsOgrs4Presenter from './risksAndAlertsOgrs4Presenter'
 import { DetailsArgs, InsetTextArgs, WarningTextArgs } from '../../utils/govukFrontendTypes'
-import { ActiveAlerts } from './risksAndAlertsPresenter'
+import { ActiveAlerts, RiskBox, RiskLevel } from './risksAndAlertsPresenter'
 
 export default class RisksAndAlertsOgrs4View {
   constructor(private readonly presenter: RisksAndAlertsOgrs4Presenter) {}
@@ -69,19 +69,33 @@ export default class RisksAndAlertsOgrs4View {
     }
   }
 
-  get saraReoffendingPartnerPredictor() {
+  get riskTowardsPartnerBox(): RiskBox {
     return {
-      level: this.presenter.levelOrUnknown(this.presenter.risks.sara.imminentRiskOfViolenceTowardsPartner),
-      type: 'SARA Risk of violence towards partner',
-      completedDate: this.presenter.risks.lastUpdated,
+      category: 'SARA',
+      dataTestId: `SARA-partner-risk-box`,
+      levelClass: this.presenter.getLevelClass(
+        this.presenter.risks.sara.imminentRiskOfViolenceTowardsPartner as RiskLevel,
+      ),
+      levelText: this.presenter.getLevelText(
+        this.presenter.risks.sara.imminentRiskOfViolenceTowardsPartner as RiskLevel,
+      ),
+      bodyHtml: `<p class="govuk-body-m govuk-!-margin-bottom-0">Risk of violence towards partner</p>`,
+      lastUpdated: `<p class="risk-box__body-text govuk-!-margin-bottom-0">Last updated: ${this.presenter.risks.lastUpdated}</p>`,
     }
   }
 
-  get saraReoffendingOthersPredictor() {
+  get riskTowardsOthersBox(): RiskBox {
     return {
-      level: this.presenter.levelOrUnknown(this.presenter.risks.sara.imminentRiskOfViolenceTowardsOthers),
-      type: 'SARA Risk of violence towards others',
-      completedDate: this.presenter.risks.lastUpdated,
+      category: 'SARA',
+      dataTestId: `SARA-others-risk-box`,
+      levelClass: this.presenter.getLevelClass(
+        this.presenter.risks.sara.imminentRiskOfViolenceTowardsOthers as RiskLevel,
+      ),
+      levelText: this.presenter.getLevelText(
+        this.presenter.risks.sara.imminentRiskOfViolenceTowardsOthers as RiskLevel,
+      ),
+      bodyHtml: `<p class="govuk-body-m govuk-!-margin-bottom-0">Risk of violence towards others</p>`,
+      lastUpdated: `<p class="risk-box__body-text govuk-!-margin-bottom-0">Last updated: ${this.presenter.risks.lastUpdated}</p>`,
     }
   }
 
@@ -172,8 +186,8 @@ export default class RisksAndAlertsOgrs4View {
         assessmentCompletedText: this.assessmentCompletedText,
         allReoffendingPredictor: this.allReoffendingPredictor,
         violentReoffendingPredictor: this.violentReoffendingPredictor,
-        saraReoffendingPartnerPredictor: this.saraReoffendingPartnerPredictor,
-        saraReoffendingOthersPredictor: this.saraReoffendingOthersPredictor,
+        riskTowardsPartnerBox: this.riskTowardsPartnerBox,
+        riskTowardsOthersBox: this.riskTowardsOthersBox,
         combinedSeriousReoffendingPredictor: this.combinedSeriousReoffendingPredictor,
         directContactSexualReoffendingPredictor: this.directContactSexualReoffendingPredictor,
         imagesAndIndirectContactSexualReoffendingPredictor: this.imagesAndIndirectContactSexualReoffendingPredictor,

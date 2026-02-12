@@ -1,12 +1,22 @@
+import { RescheduleSessionRequest } from '@manage-and-deliver-api'
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
-import EditSessionPresenter from './editSessionPresenter'
-import EditSessionView from './editSessionView'
+import { FormValidationError } from '../utils/formValidationError'
+import EditSessionDateAndTimeFormForm from './dateAndTime/editSessionDateAndTimeForm'
+import EditSessionDateAndTimePresenter from './dateAndTime/editSessionDateAndTimePresenter'
+import EditSessionDateAndTimeView from './dateAndTime/editSessionDateAndTimeView'
+import OtherSessionsPresenter from './dateAndTime/otherSessionsPresenter'
+import OtherSessionsView from './dateAndTime/otherSessionsView'
+import RescheduleOtherSessionsForm from './dateAndTime/rescheduleOtherSessionsForm'
 import DeleteSessionPresenter from './deleteSession/deleteSessionPresenter'
 import DeleteSessionView from './deleteSession/deleteSessionView'
-import { FormValidationError } from '../utils/formValidationError'
 import EditSessionForm from './editSessionForm'
+import EditSessionPresenter from './editSessionPresenter'
+import EditSessionView from './editSessionView'
+import EditSessionFacilitatorsForm from './facilitators/editSessionFacilitatorsForm'
+import EditSessionFacilitatorsPresenter from './facilitators/editSessionFacilitatorsPresenter'
+import EditSessionFacilitatorsView from './facilitators/editSessionFacilitatorsView'
 
 export default class EditSessionController {
   constructor(
@@ -16,6 +26,7 @@ export default class EditSessionController {
   async editSession(req: Request, res: Response): Promise<void> {
     const { groupId, sessionId } = req.params
     const { username } = req.user
+    const { message } = req.query
 
     const sessionDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionDetails(
       username,
@@ -23,12 +34,15 @@ export default class EditSessionController {
       sessionId,
     )
 
+    const successMessage = message ? String(message) : null
     req.session.originPage = req.path
 
     const presenter = new EditSessionPresenter(
       groupId,
       sessionDetails,
+      sessionId,
       `/group/${groupId}/sessionId/${sessionId}/delete-session`,
+      successMessage,
     )
     const view = new EditSessionView(presenter)
 
@@ -58,6 +72,121 @@ export default class EditSessionController {
 
     const presenter = new DeleteSessionPresenter(groupId, req.session.originPage, sessionDetails, formError)
     const view = new DeleteSessionView(presenter)
+
+    return ControllerUtils.renderWithLayout(res, view, null)
+  }
+
+  async editSessionDateAndTime(req: Request, res: Response): Promise<void> {
+    const { groupId, sessionId } = req.params
+    const { username } = req.user
+    let formError: FormValidationError | null = null
+    let userInputData = null
+
+    const sessionDetails = await this.accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime(
+      username,
+      sessionId,
+    )
+
+    if (req.method === 'POST') {
+      const data = await new EditSessionDateAndTimeFormForm(req).rescheduleSessionDetailsData()
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+        userInputData = req.body
+      } else {
+        req.session.editSessionDateAndTime = {
+          sessionStartDate: data.paramsForUpdate.sessionStartDate,
+          sessionStartTime: data.paramsForUpdate.sessionStartTime,
+          sessionEndTime: data.paramsForUpdate.sessionEndTime,
+        }
+        return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session-date-and-time/reschedule`)
+      }
+    }
+
+    const presenter = new EditSessionDateAndTimePresenter(
+      groupId,
+      sessionDetails,
+      req.session.editSessionDateAndTime,
+      formError,
+      userInputData,
+    )
+    const view = new EditSessionDateAndTimeView(presenter)
+
+    return ControllerUtils.renderWithLayout(res, view, null)
+  }
+
+  async submitEditSessionDateAndTime(req: Request, res: Response): Promise<void> {
+    const { groupId, sessionId } = req.params
+    const { username } = req.user
+    let formError: FormValidationError | null = null
+
+    const sessionDetails = await this.accreditedProgrammesManageAndDeliverService.getRescheduleSessionDetails(
+      username,
+      sessionId,
+    )
+
+    if (req.method === 'POST') {
+      const data = await new RescheduleOtherSessionsForm(req).rescheduleSessionDetailsData()
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+      } else {
+        req.session.editSessionDateAndTime.rescheduleOtherSessions = data.paramsForUpdate.rescheduleOtherSessions
+        req.session.editSessionDateAndTime.sessionStartDate = (() => {
+          const [day, month, year] = req.session.editSessionDateAndTime.sessionStartDate.split('/')
+          return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+        })()
+        const message = await this.accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime(
+          username,
+          sessionDetails.sessionId,
+          req.session.editSessionDateAndTime as RescheduleSessionRequest,
+        )
+
+        return res.redirect(`/group/${groupId}/sessionId/${sessionId}/edit-session?message=${message.message}`)
+      }
+    }
+
+    const presenter = new OtherSessionsPresenter(groupId, sessionDetails, req.session.editSessionDateAndTime, formError)
+    const view = new OtherSessionsView(presenter)
+
+    return ControllerUtils.renderWithLayout(res, view, null)
+  }
+
+  async editSessionFacilitators(req: Request, res: Response): Promise<void> {
+    const { groupId, sessionId } = req.params
+    const { username } = req.user
+    let formError: FormValidationError | null = null
+    let userInputData = null
+
+    const editSessionFacilitators = await this.accreditedProgrammesManageAndDeliverService.getEditSessionFacilitators(
+      username,
+      sessionId,
+    )
+
+    if (req.method === 'POST') {
+      const data = await new EditSessionFacilitatorsForm(req).editSessionFacilitatorsData()
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+        userInputData = req.body
+      } else {
+        req.session.sessionFacilitators = data.paramsForUpdate
+        const message = await this.accreditedProgrammesManageAndDeliverService.updateSessionFacilitators(
+          username,
+          sessionId,
+          req.session.sessionFacilitators,
+        )
+        return res.redirect(`/group/${groupId}/sessionId/${sessionId}/edit-session?message=${message}`)
+      }
+    }
+    const presenter = new EditSessionFacilitatorsPresenter(
+      req.session.originPage,
+      groupId,
+      editSessionFacilitators,
+      formError,
+      userInputData,
+    )
+    const view = new EditSessionFacilitatorsView(presenter)
 
     return ControllerUtils.renderWithLayout(res, view, null)
   }

@@ -1,0 +1,219 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{%- from "govuk/components/fieldset/macro.njk" import govukFieldset -%}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block main %}
+  {% block content %}
+    <script src="/assets/accessible-autocomplete.min.js"></script>
+    <script nonce="{{ cspNonce }}">
+      // Counters for dynamically added elements
+      let selectElementCounter = 1;
+      let existingIndex = 1;
+
+      /**
+       * Clears the select element when the autocomplete input is empty
+       * @param {string} inputId - The ID of the autocomplete input element
+       * @returns {boolean} - True if successful, false otherwise
+       */
+      function clearAccessibleAutocompleteSelectionWhenInputEmpty(inputId) {
+        const autocompleteInput = document.getElementById(inputId);
+        const selectElement = document.getElementById(inputId + '-select');
+
+        if (!autocompleteInput || !selectElement) {
+          return false;
+        }
+
+        const clearSelection = () => {
+          if (autocompleteInput.value.trim() === '') {
+            selectElement.value = '';
+            selectElement.selectedIndex = 0;
+          }
+        };
+
+        autocompleteInput.addEventListener('input', clearSelection);
+        autocompleteInput.addEventListener('keyup', clearSelection);
+        return true;
+      }
+
+      /**
+       * Sets up autocomplete for newly added facilitator elements
+       * @param {MutationRecord} mutationRecord - The mutation record from MutationObserver
+       */
+      function possiblySetUpAutocompleteForMutation(mutationRecord) {
+        if (mutationRecord.type !== 'childList' || mutationRecord.addedNodes.length === 0) {
+          return;
+        }
+
+        mutationRecord.addedNodes.forEach(node => {
+          if (node.nodeType !== Node.ELEMENT_NODE) {
+            return;
+          }
+
+          const select = node.querySelector('select');
+          if (!select) {
+            return;
+          }
+
+          const input = node.querySelector('input');
+          const label = node.querySelector('label');
+          input.remove();
+
+          if (select.classList.contains('add-facilitator-select')) {
+            select.id = select.id + selectElementCounter;
+            select.name = select.name + selectElementCounter;
+            select.value = '';
+            label.htmlFor = label.htmlFor + selectElementCounter;
+
+            accessibleAutocomplete.enhanceSelectElement({
+              defaultValue: '',
+              selectElement: document.querySelector(`#${select.id}`)
+            });
+
+            clearAccessibleAutocompleteSelectionWhenInputEmpty('edit-session-facilitator-select' + selectElementCounter);
+            selectElementCounter++;
+          }
+        });
+
+        // Unhide cloned items (they start hidden if existing items are present)
+        const facilitatorItems = document.querySelectorAll('.moj-add-another__item__facilitator');
+        facilitatorItems[facilitatorItems.length - 1]?.classList.remove('govuk-!-display-none');
+      }
+
+      /**
+       * Toggles visibility of the original add facilitator input based on existing facilitators
+       */
+      function toggleOriginalAddFacilitatorVisibility() {
+        const item = document.querySelector('.moj-add-another__item__facilitator');
+        if (!item) return;
+
+        const hasRemoveButton = document.querySelector('.remove-existing-facilitator');
+        const hasOnlyOneExistingInput = !hasRemoveButton &&
+          document.querySelectorAll('.existing-facilitator-input').length === 1;
+
+        if (hasRemoveButton || hasOnlyOneExistingInput) {
+          item.classList.add('govuk-!-display-none');
+        } else {
+          item.classList.remove('govuk-!-display-none');
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        // Initialize autocomplete for main select elements
+        accessibleAutocomplete.enhanceSelectElement({
+          defaultValue: '',
+          selectElement: document.getElementById('edit-session-facilitator')
+        });
+        clearAccessibleAutocompleteSelectionWhenInputEmpty('edit-session-facilitator');
+
+        // Set up mutation observer for dynamically added elements
+        const addAnotherForm = document.querySelector('.add-another-form');
+        if (!addAnotherForm) {
+          console.error('Cannot find the .add-another-form element. This is going to cause problems.');
+          return;
+        }
+
+        new MutationObserver((mutations) => {
+          mutations.forEach(possiblySetUpAutocompleteForMutation);
+        }).observe(addAnotherForm, {
+          childList: true,
+          subtree: true
+        });
+
+        // Toggle visibility on page load
+        toggleOriginalAddFacilitatorVisibility();
+      });
+
+      // Handle remove button clicks
+      document.addEventListener('click', function (e) {
+        if (e.target.classList.contains('remove-existing-facilitator')) {
+          toggleOriginalAddFacilitatorVisibility();
+        }
+      });
+    </script>
+
+    <div class="govuk-width-container">
+      <main class="govuk-main-wrapper" id="main-content">
+        <div class="govuk-grid-row govuk-!-margin-bottom-6">
+          <div class="govuk-grid-column-two-thirds">
+            {{ govukBackLink(backLinkArgs) }}
+          </div>
+          <div class="govuk-grid-column-one-third">
+            <a class="return_to_homepage__link" href={{ homePageLink.href }}>{{ homePageLink.text }}</a>
+          </div>
+        </div>
+
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            <span class="govuk-caption-l">{{ text.pageCaption }}</span>
+            <h1 class="govuk-heading-l">{{ text.pageHeading }}</h1>
+          </div>
+
+          <div class="govuk-grid-column-two-thirds">
+            {% if errorSummary !== null %}
+              {{ govukErrorSummary(errorSummary) }}
+            {% endif %}
+
+            <span class="govuk-caption-l">{{ text.headingHintText }}</span>
+            <h1 class="govuk-heading-l">{{ text.headingText }}</h1>
+
+            <form method="post" novalidate class="add-another-form">
+              <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+              <div data-module="moj-add-another">
+                {% call govukFieldset(editSessionFacilitatorsFieldSetArgs) %}
+                  {{ govukSelect(editSessionFacilitatorsArgs) }}
+                {% endcall %}
+
+                {% for facilitator in facilitators %}
+                  <fieldset class="govuk-fieldset moj-add-another__item moj-add-another__item__facilitator">
+                    <div class="govuk-form-group">
+                      {{ govukSelect(editExistingSessionFacilitatorsArgs(facilitator, loop.index)) }}
+                      <!-- Hacky store the current loop index so we can bind the select to an accessible autocomplete -->
+                      <span class="existingLoopCountFacilitator" data-index="{{ loop.index }}"></span>
+                      <script nonce="{{ cspNonce }}">
+                        document.querySelectorAll('.existingLoopCountFacilitator').forEach(element => {
+                          existingIndex = element.dataset.index
+                        })
+                        accessibleAutocomplete.enhanceSelectElement({
+                          defaultValue: '',
+                          selectElement: document.getElementById(`edit-session-facilitator-existing-${existingIndex}`),
+                          inputClasses: 'existing-facilitator-input'
+                        })
+                        clearAccessibleAutocompleteSelectionWhenInputEmpty(`edit-session-facilitator-existing-${existingIndex}`);
+                      </script>
+                    </div>
+
+                    {% if facilitators.length > 1 and loop.index != 1 %}
+                      {{ govukButton({
+                        name: "remove",
+                        value: loop.index0,
+                        text: "Remove",
+                        classes: "govuk-button--secondary moj-add-another__remove-button remove-existing-facilitator"
+                      }) }}
+                    {% endif %}
+                  </fieldset>
+                {% endfor %}
+
+                <div class="moj-button-action">
+                  {{ govukButton({
+                    id: "add-another-facilitator",
+                    text: "Add another facilitator",
+                    classes: "govuk-button--secondary moj-add-another__add-button govuk-!-margin-bottom-4"
+                  }) }}
+                </div>
+              </div>
+
+              {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+            </form>
+          </div>
+        </div>
+      </main>
+    </div>
+  {% endblock %}
+{% endblock %}

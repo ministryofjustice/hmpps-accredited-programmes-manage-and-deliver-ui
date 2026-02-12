@@ -108,13 +108,32 @@ export default {
     sessionDetailsFacilitator: 'Select a facilitator. Start typing to search',
     sessionDetailsEndTimeBeforeStart: 'End time must be later than start time',
   },
-
+  rescheduleSession: {
+    editSessionDateAndTime: {
+      sessionDetailsDate: 'Enter or select a date',
+      sessionDetailsDateInvalid: 'Enter a date in the format 10/7/2025',
+      sessionDetailsDateInPast: 'Start date must be in the future',
+      sessionDetailsStartTime: 'Enter a complete start time',
+      sessionDetailsEndTime: 'Enter a complete end time',
+      sessionDetailsTimeHour: 'Enter an hour between 1 and 12',
+      sessionDetailsTimeMinute: 'Enter a minute between 00 and 59',
+      sessionDetailsStartTimeAmPm: 'Select whether the start time is am or pm',
+      sessionDetailsEndTimeAmPm: 'Select whether the end time is am or pm',
+      sessionDetailsFacilitator: 'Select a facilitator. Start typing to search',
+      sessionDetailsEndTimeBeforeStart: 'End time must be later than start time',
+    },
+    rescheduleOtherSessions: {
+      rescheduleOtherSessionsEmpty: 'Select whether to reschedule future sessions or not',
+    },
+  },
   motivationBackgroundAndNonAssociations: {
     addToGroupEmpty: `Select whether you want to add the person to the group or not`,
     exceededCharacterLimit: 'Details must be 2,000 characters or fewer',
   },
   editSession: {
     selectDeleteSession: 'Select whether to delete the session or not',
+    editSessionFacilitatorEmpty: 'Select a Facilitator. Start typing to search.',
+    editSessionFacilitatorDuplicate: 'You cannot add the same facilitator twice. Select a different facilitator.',
   },
 
   returnedError,
