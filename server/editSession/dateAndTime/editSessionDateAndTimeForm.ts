@@ -16,9 +16,6 @@ const fieldOrder = [
   'session-details-who',
   'session-details-facilitator',
 ]
-
-// TEST
-
 export default class EditSessionDateAndTimeFormForm {
   constructor(private readonly request: Request) {}
 
