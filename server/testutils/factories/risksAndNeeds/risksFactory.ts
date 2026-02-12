@@ -55,6 +55,6 @@ export default RiskAndAlertsFactory.define(
     dateRetrieved: '1 August 2024',
     isLegacy: true,
     ogrS4Risks: undefined,
-    legacy: undefined,
+    legacy: true,
   }),
 )

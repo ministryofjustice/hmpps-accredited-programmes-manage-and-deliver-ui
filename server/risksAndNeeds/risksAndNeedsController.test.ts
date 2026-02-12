@@ -688,6 +688,35 @@ describe('Risks and alerts section of risks and needs', () => {
         },
         lastUpdated: undefined,
         dateRetrieved: undefined,
+        isLegacy: true,
+      })
+
+      accreditedProgrammesManageAndDeliverService.getRisksAndAlerts.mockResolvedValue(risks)
+
+      const referralId = randomUUID()
+      return request(app).get(`/referral/${referralId}/risks-and-alerts`).expect(200)
+    })
+
+    it('handles risks and alerts with ogrs4 data', async () => {
+      const risks: Risks = risksFactory.build({
+        ogrS4Risks: {
+          allReoffendingScoreType: 'DYNAMIC',
+          allReoffendingScore: 16.8,
+          allReoffendingBand: 'Low',
+          violentReoffendingScoreType: 'DYNAMIC',
+          violentReoffendingScore: 16.94,
+          violentReoffendingBand: 'Low',
+          seriousViolentReoffendingScoreType: 'DYNAMIC',
+          seriousViolentReoffendingScore: 0.28,
+          seriousViolentReoffendingBand: 'Low',
+          directContactSexualReoffendingScore: 55,
+          directContactSexualReoffendingBand: 'Medium',
+          indirectImageContactSexualReoffendingScore: 75,
+          indirectImageContactSexualReoffendingBand: 'High',
+          combinedSeriousReoffendingScoreType: 'DYNAMIC',
+          combinedSeriousReoffendingScore: 0.28,
+          combinedSeriousReoffendingBand: 'Low',
+        },
         isLegacy: false,
       })
 

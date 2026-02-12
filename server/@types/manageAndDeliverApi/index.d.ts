@@ -68,9 +68,16 @@ type ScheduleSessionTypeResponse = components['schemas']['ScheduleSessionTypeRes
 type ScheduleIndividualSessionDetailsResponse = components['schemas']['ScheduleIndividualSessionDetailsResponse']
 type ScheduleSessionRequest = components['schemas']['ScheduleSessionRequest']
 type GroupSessionResponse = components['schemas']['GroupSessionResponse']
+type EditSessionDetails = components['schemas']['EditSessionDetails']
+type RescheduleSessionRequest = components['schemas']['RescheduleSessionRequest']
+type RescheduleSessionDetails = components['schemas']['RescheduleSessionDetails']
+type EditSessionDateAndTimeResponse = components['schemas']['EditSessionDateAndTimeResponse']
 type GroupSchedule = components['schemas']['GroupSchedule']
 type GroupScheduleSession = components['schemas']['GroupScheduleSession']
 type Session = components['schemas']['Session']
+type EditSessionFacilitatorsResponse = components['schemas']['EditSessionFacilitatorsResponse']
+type EditSessionFacilitatorResponse = components['schemas']['EditSessionFacilitatorsResponse']['facilitators']
+type EditSessionFacilitatorsRequest = components['schemas']['EditSessionFacilitatorRequest']
 
 export type {
   AlcoholMisuseDetails,
@@ -80,24 +87,29 @@ export type {
   Availability,
   CaseListFilterValues,
   CaseListReferrals,
-  CreateGroupTeamMember,
   CodeDescription,
   CohortEnum,
   CreateAvailability,
   CreateDeliveryLocationPreferences,
   CreateGroupRequest,
   CreateGroupSessionSlot,
+  CreateGroupTeamMember,
   CreateOrUpdateReferralMotivationBackgroundAndNonAssociations,
   CreateReferralStatusHistory,
   DailyAvailabilityModel,
   DeliveryLocationPreferences,
   DeliveryLocationPreferencesFormData,
   DrugDetails,
+  EditSessionDateAndTimeResponse,
+  EditSessionDetails,
+  EditSessionFacilitatorResponse,
+  EditSessionFacilitatorsRequest,
+  EditSessionFacilitatorsResponse,
   EmotionalWellbeing,
   ExistingDeliveryLocationPreferences,
   Group,
-  GroupsByRegion,
   GroupItem,
+  GroupsByRegion,
   GroupSchedule,
   GroupScheduleSession,
   GroupSessionResponse,
@@ -128,16 +140,19 @@ export type {
   Relationships,
   RemoveFromGroupRequest,
   RemoveFromGroupResponse,
+  RescheduleSessionDetails,
+  RescheduleSessionRequest,
   Risks,
   RoshAnalysis,
   ScheduleIndividualSessionDetailsResponse,
   ScheduleSessionRequest,
   ScheduleSessionTypeResponse,
+  SentenceInformation,
   Session,
   SessionScheduleGroupResponse,
   SessionScheduleRequest,
   SessionScheduleResponse,
-  SentenceInformation,
+  SessionTime,
   ThinkingAndBehaviour,
   UpdateAvailability,
   UpdateCohort,
