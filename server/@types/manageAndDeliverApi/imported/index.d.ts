@@ -2790,10 +2790,10 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      /** Format: int32 */
-      numberOfElements?: number
       first?: boolean
       last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       size?: number
@@ -2985,6 +2985,11 @@ export interface components {
        * @example false
        */
       isCatchup: boolean
+      /**
+       * @description The title of the page
+       * @example Attendance and notes for Getting started session
+       */
+      pageTitle: string
     }
     EditSessionFacilitator: {
       /** @description The full name of the facilitator for the group */
@@ -3193,10 +3198,10 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      /** Format: int32 */
-      numberOfElements?: number
       first?: boolean
       last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       size?: number
@@ -3310,10 +3315,10 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      /** Format: int32 */
-      numberOfElements?: number
       first?: boolean
       last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       size?: number
