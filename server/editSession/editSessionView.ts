@@ -26,10 +26,7 @@ export default class EditSessionView {
           actions: {
             items: [
               {
-                href:
-                  this.presenter.sessionDetails.sessionType === 'Group'
-                    ? `/group/${this.presenter.groupId}/session/${this.presenter.sessionId}/edit-session-date-and-time`
-                    : '',
+                href: `/group/${this.presenter.groupId}/session/${this.presenter.sessionId}/edit-session-date-and-time`,
                 text: 'Change',
                 visuallyHiddenText: 'start date',
               },
@@ -46,10 +43,7 @@ export default class EditSessionView {
           actions: {
             items: [
               {
-                href:
-                  this.presenter.sessionDetails.sessionType === 'Group'
-                    ? `/group/${this.presenter.groupId}/session/${this.presenter.sessionId}/edit-session-date-and-time`
-                    : '',
+                href: `/group/${this.presenter.groupId}/session/${this.presenter.sessionId}/edit-session-date-and-time`,
                 text: 'Change',
                 visuallyHiddenText: 'start time',
               },
@@ -66,6 +60,7 @@ export default class EditSessionView {
           actions: {
             items: [
               {
+                // href: this.presenter.editSessionAttendeesUrl,
                 href: '',
                 text: 'Change',
                 visuallyHiddenText: 'participants',

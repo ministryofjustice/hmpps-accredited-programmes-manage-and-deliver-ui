@@ -1,4 +1,5 @@
-import { EditSessionDetails, RescheduleSessionRequest } from '@manage-and-deliver-api'
+import { EditSessionDetails, RescheduleSessionRequest, EditSessionAttendeesResponse } from '@manage-and-deliver-api'
+
 import PresenterUtils from '../../utils/presenterUtils'
 import { FormValidationError } from '../../utils/formValidationError'
 
@@ -6,13 +7,18 @@ export default class EditSessionDateAndTimePresenter {
   constructor(
     readonly groupId: string,
     private readonly sessionDetails: EditSessionDetails,
+    private readonly sessionType: EditSessionAttendeesResponse['sessionType'],
     private readonly rescheduleSessionStorageData: Partial<RescheduleSessionRequest> | null = null,
     private readonly validationError: FormValidationError | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
   ) {}
 
+  get isGroupSession() {
+    return this.sessionType === 'GROUP'
+  }
+
   get backLinkUri() {
-    return `/group/${this.groupId}/sessionId/${this.sessionDetails.sessionId}/${this.sessionDetails.sessionName}`
+    return `/group/${this.groupId}/sessionId/${this.sessionDetails.sessionId}/edit-session`
   }
 
   get errorSummary() {

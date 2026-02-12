@@ -69,6 +69,8 @@ type ScheduleIndividualSessionDetailsResponse = components['schemas']['ScheduleI
 type ScheduleSessionRequest = components['schemas']['ScheduleSessionRequest']
 type GroupSessionResponse = components['schemas']['GroupSessionResponse']
 type EditSessionDetails = components['schemas']['EditSessionDetails']
+type EditSessionAttendeesResponse = components['schemas']['EditSessionAttendeesResponse']
+type EditSessionAttendee = components['schemas']['EditSessionAttendee']
 type RescheduleSessionRequest = components['schemas']['RescheduleSessionRequest']
 type RescheduleSessionDetails = components['schemas']['RescheduleSessionDetails']
 type EditSessionDateAndTimeResponse = components['schemas']['EditSessionDateAndTimeResponse']
@@ -102,6 +104,8 @@ export type {
   DrugDetails,
   EditSessionDateAndTimeResponse,
   EditSessionDetails,
+  EditSessionAttendeesResponse,
+  EditSessionAttendee,
   EditSessionFacilitatorResponse,
   EditSessionFacilitatorsRequest,
   EditSessionFacilitatorsResponse,

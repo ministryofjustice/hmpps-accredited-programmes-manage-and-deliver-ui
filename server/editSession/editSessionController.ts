@@ -86,6 +86,10 @@ export default class EditSessionController {
       username,
       sessionId,
     )
+    const sessionAttendees = await this.accreditedProgrammesManageAndDeliverService.getSessionAttendees(
+      username,
+      sessionId,
+    )
 
     if (req.method === 'POST') {
       const data = await new EditSessionDateAndTimeFormForm(req).rescheduleSessionDetailsData()
@@ -99,13 +103,39 @@ export default class EditSessionController {
           sessionStartTime: data.paramsForUpdate.sessionStartTime,
           sessionEndTime: data.paramsForUpdate.sessionEndTime,
         }
-        return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session-date-and-time/reschedule`)
+
+        // GROUP sessions and ONE_TO_ONE catch-ups go to the reschedule page
+        if (sessionAttendees.sessionType === 'GROUP' && !sessionAttendees.isCatchup) {
+          return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session-date-and-time/reschedule`)
+        }
+
+        // For ONE_TO_ONE sessions, submit directly to API
+        const [day, month, year] = data.paramsForUpdate.sessionStartDate.split('/')
+        const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+
+        const rescheduleRequest: RescheduleSessionRequest = {
+          sessionStartDate: formattedDate,
+          sessionStartTime: data.paramsForUpdate.sessionStartTime,
+          sessionEndTime: data.paramsForUpdate.sessionEndTime,
+          rescheduleOtherSessions: false,
+        }
+
+        await this.accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime(
+          username,
+          sessionId,
+          rescheduleRequest,
+        )
+
+        delete req.session.editSessionDateAndTime
+
+        return res.redirect(`/group/${groupId}/sessions-and-attendance?successMessage=Session date and time updated`)
       }
     }
 
     const presenter = new EditSessionDateAndTimePresenter(
       groupId,
       sessionDetails,
+      sessionAttendees.sessionType,
       req.session.editSessionDateAndTime,
       formError,
       userInputData,
