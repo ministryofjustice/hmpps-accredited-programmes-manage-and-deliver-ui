@@ -32,7 +32,7 @@ describe('editSession', () => {
     const sessionDetails = sessionDetailsFactory.build()
     accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
 
-    await request(app).get(`/group/12345/sessionId/6789/edit-session`).expect(200)
+    await request(app).get(`/group/12345/session/6789/edit-session`).expect(200)
 
     expect(accreditedProgrammesManageAndDeliverService.getGroupSessionDetails).toHaveBeenCalledWith(
       'user1',
@@ -46,7 +46,7 @@ describe('editSession', () => {
     accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
 
     await request(app)
-      .get(`/group/12345/sessionId/6789/edit-session`)
+      .get(`/group/12345/session/6789/edit-session`)
       .expect(200)
       .expect(res => {
         expect(res.text).toContain('Test Session')
@@ -160,7 +160,7 @@ describe('submitEditSessionDateAndTime', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Redirecting to /group/111/sessionId/6789/edit-session?message=${encodeURIComponent('Test message')}`,
+            `Redirecting to /group/111/session/6789/edit-session?message=${encodeURIComponent('Test message')}`,
           )
         })
     })
@@ -246,7 +246,7 @@ describe('editSessionFacilitators', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Found. Redirecting to /group/${groupId}/sessionId/${sessionId}/edit-session?message=${encodeURIComponent('Facilitators updated successfully')}`,
+            `Found. Redirecting to /group/${groupId}/session/${sessionId}/edit-session?message=${encodeURIComponent('Facilitators updated successfully')}`,
           )
         })
     })

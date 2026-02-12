@@ -18,7 +18,7 @@ export default class EditSessionDateAndTimePresenter {
   }
 
   get backLinkUri() {
-    return `/group/${this.groupId}/sessionId/${this.sessionDetails.sessionId}/edit-session`
+    return `/group/${this.groupId}/session/${this.sessionDetails.sessionId}/edit-session`
   }
 
   get errorSummary() {

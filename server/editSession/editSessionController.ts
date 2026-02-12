@@ -41,7 +41,7 @@ export default class EditSessionController {
       groupId,
       sessionDetails,
       sessionId,
-      `/group/${groupId}/sessionId/${sessionId}/delete-session`,
+      `/group/${groupId}/session/${sessionId}/delete-session`,
       successMessage,
     )
     const view = new EditSessionView(presenter)
@@ -172,7 +172,7 @@ export default class EditSessionController {
           req.session.editSessionDateAndTime as RescheduleSessionRequest,
         )
 
-        return res.redirect(`/group/${groupId}/sessionId/${sessionId}/edit-session?message=${message.message}`)
+        return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session?message=${message.message}`)
       }
     }
 
@@ -206,7 +206,7 @@ export default class EditSessionController {
           sessionId,
           req.session.sessionFacilitators,
         )
-        return res.redirect(`/group/${groupId}/sessionId/${sessionId}/edit-session?message=${message}`)
+        return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session?message=${message}`)
       }
     }
     const presenter = new EditSessionFacilitatorsPresenter(
