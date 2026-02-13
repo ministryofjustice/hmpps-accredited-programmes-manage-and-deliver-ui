@@ -12,26 +12,7 @@ export default class DeleteSessionPresenter {
 
   get text() {
     return {
-      pageCaption: this.generatePageCaption(),
-    }
-  }
-
-  generatePageCaption() {
-    switch (this.sessionDetails.type) {
-      case 'Individual':
-        if (this.sessionDetails.name === 'Post programme review') {
-          return `Delete ${this.sessionDetails.referrals[0].personName}: Post-programme review`
-        }
-        if (this.sessionDetails.isCatchup) {
-          return `Delete ${this.sessionDetails.referrals[0].personName}: ${this.sessionDetails.name} one-to-one catch-up`
-        }
-        return `Delete ${this.sessionDetails.referrals[0].personName}: ${this.sessionDetails.name} one-to-one`
-
-      case 'Group':
-        return `Delete ${this.sessionDetails.name} ${this.sessionDetails.number} catch-up`
-
-      default:
-        return `Delete ${this.sessionDetails.name}`
+      pageCaption: this.sessionDetails.pageTitle,
     }
   }
 
