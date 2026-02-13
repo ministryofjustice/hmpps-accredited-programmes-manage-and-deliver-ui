@@ -1,4 +1,4 @@
-import { GroupSchedule, GroupScheduleSession } from '@manage-and-deliver-api'
+import { GroupScheduleOverview, GroupScheduleSession } from '@manage-and-deliver-api'
 import GroupServiceLayoutPresenter, {
   GroupServiceNavigationValues,
 } from '../../shared/groups/groupServiceLayoutPresenter'
@@ -6,15 +6,15 @@ import GroupServiceLayoutPresenter, {
 export default class SchedulePresenter extends GroupServiceLayoutPresenter {
   constructor(
     readonly groupId: string,
-    readonly groupSchedule: GroupSchedule,
+    readonly groupScheduleOverview: GroupScheduleOverview,
   ) {
-    super(GroupServiceNavigationValues.scheduleTab, groupId)
+    super(GroupServiceNavigationValues.scheduleOverviewTab, groupId)
   }
 
   get text() {
     return {
-      headingCaptionText: this.groupSchedule.code,
-      headingText: `Schedule`,
+      headingCaptionText: this.groupScheduleOverview.code,
+      headingText: `Schedule Overview`,
     }
   }
 
@@ -23,7 +23,7 @@ export default class SchedulePresenter extends GroupServiceLayoutPresenter {
       | { text: string; attributes?: undefined }
       | { text: string; attributes: { 'data-sort-value': number } }
     )[][] = []
-    this.groupSchedule.sessions.forEach((session: GroupScheduleSession) => {
+    this.groupScheduleOverview.sessions.forEach((session: GroupScheduleSession) => {
       const date = new Date(session.date).getTime()
       scheduleRows.push([
         {
