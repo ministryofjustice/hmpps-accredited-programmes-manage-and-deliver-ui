@@ -381,7 +381,7 @@ export default class CreateGroupForm {
         if (facilitators.some(code => coverFacilitators.includes(code))) {
           throw new Error(errorMessages.createGroup.createGroupFacilitatorDuplicate)
         }
-
+        // check for duplicates within regular facilitators
         if (new Set(facilitators).size !== facilitators.length) {
           throw new Error(errorMessages.createGroup.createGroupFacilitatorDuplicate)
         }
