@@ -91,6 +91,7 @@ export default {
     createGroupLocationEmpty: 'Select a delivery location.',
     createGroupTreatmentManagerEmpty: 'Select a Treatment Manager. Start typing to search.',
     createGroupFacilitatorEmpty: 'Select a Facilitator. Start typing to search.',
+    createGroupFacilitatorDuplicate: 'You cannot add the same facilitator twice. Select a different facilitator.',
   },
 
   sessionSchedule: {

@@ -354,7 +354,9 @@ export default class CreateGroupForm {
 
   private createGroupTreatmentManagerValidations(): ValidationChain[] {
     const hasFacilitator = Object.entries(this.request.body).some(
-      ([key, value]) => key.startsWith('create-group-facilitator') && value !== '',
+      ([key, value]) =>
+        (key.startsWith('create-group-facilitator') && !key.includes('cover') && value !== '') ||
+        (key.startsWith('create-group-cover-facilitator') && value !== ''),
     )
     return [
       body('create-group-treatment-manager')
@@ -365,6 +367,27 @@ export default class CreateGroupForm {
           return hasFacilitator
         })
         .withMessage(errorMessages.createGroup.createGroupFacilitatorEmpty),
+      body('create-group-facilitator').custom((_, { req }) => {
+        const facilitators = Object.entries(req.body)
+          .filter(([k, v]) => k.startsWith('create-group-facilitator') && !k.includes('cover') && v)
+          .map(([, v]) => JSON.parse(v as string)?.facilitatorCode)
+          .filter(Boolean)
+
+        const coverFacilitators = Object.entries(req.body)
+          .filter(([k, v]) => k.startsWith('create-group-cover-facilitator') && v)
+          .map(([, v]) => JSON.parse(v as string)?.facilitatorCode)
+          .filter(Boolean)
+
+        if (facilitators.some(code => coverFacilitators.includes(code))) {
+          throw new Error(errorMessages.createGroup.createGroupFacilitatorDuplicate)
+        }
+
+        if (new Set(facilitators).size !== facilitators.length) {
+          throw new Error(errorMessages.createGroup.createGroupFacilitatorDuplicate)
+        }
+
+        return true
+      }),
     ]
   }
 }
