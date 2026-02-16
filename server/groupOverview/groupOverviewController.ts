@@ -47,7 +47,7 @@ export default class GroupOverviewController {
         return res.redirect(`/removeFromGroup/${groupId}/${data.paramsForUpdate.removeFromGroup}`)
       }
     }
-
+    // comments
     const successMessage = message ? String(message) : null
 
     const presenter = new GroupOverviewPresenter(
