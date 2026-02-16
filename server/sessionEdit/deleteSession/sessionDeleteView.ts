@@ -34,7 +34,7 @@ export default class DeleteSessionView {
 
   get renderArgs(): [string, Record<string, unknown>] {
     return [
-      'sessionEdit/sessionDelete',
+      'sessionEdit/sessionDelete/sessionDelete',
       {
         presenter: this.presenter,
         backLinkArgs: this.presenter.backLinkArgs,
