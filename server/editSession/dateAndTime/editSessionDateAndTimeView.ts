@@ -134,6 +134,7 @@ export default class EditSessionDateAndTimeView {
         startTimeInputArgs: this.startTimeInputArgs,
         endTimeInputArgs: this.endTimeInputArgs,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
+        isGroupSession: this.presenter.isGroupSession,
       },
     ]
   }
