@@ -121,6 +121,7 @@ export default class EditSessionView {
         successMessageArgs: this.successMessageArgs,
         deleteButton: this.deleteButton,
         canBeDeleted: this.presenter.canBeDeleted,
+        attendanceTableArgs: this.presenter.attendanceTableArgs,
       },
     ]
   }

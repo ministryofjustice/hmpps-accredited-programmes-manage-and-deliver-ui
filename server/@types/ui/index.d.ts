@@ -115,3 +115,49 @@ export interface TimeInputArgsFormGroup {
   */
   classes?: string | null
 }
+
+export interface MultiSelectTableArgs {
+  /*
+    Prefix for generating unique IDs for table elements
+  */
+  idPrefix: string
+
+  /*
+    Array of column headers with optional numeric flag for right-alignment
+  */
+  headers: Array<{
+    text: string
+    numeric?: boolean
+  }>
+
+  /*
+    Array of table rows containing row data
+  */
+  rows: Array<{
+    /*
+      Unique identifier for the row
+    */
+    id: string
+
+    /*
+      Whether the row is currently selected
+    */
+    selected?: boolean
+
+    /*
+      Array of cell values - can be plain text strings or objects with html/text properties
+    */
+    cells: Array<
+      | string
+      | {
+          text?: string
+          html?: string
+        }
+    >
+
+    /*
+      Optional array indicating which cells should be right-aligned (numeric)
+    */
+    cellsNumeric?: boolean[]
+  }>
+}
