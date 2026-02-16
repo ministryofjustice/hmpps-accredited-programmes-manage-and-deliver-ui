@@ -5,6 +5,7 @@ import request from 'supertest'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import editSessionDetailsFactory from '../testutils/factories/editSessionDetailsFactory'
 import rescheduleSessionDetailsFactory from '../testutils/factories/rescheduleSessionDetailsFactory'
+import editSessionAttendeesFactory from '../testutils/factories/editSessionAttendeesFactory'
 import sessionDetailsFactory from '../testutils/factories/risksAndNeeds/sessionDetailsFactory'
 import TestUtils from '../testutils/testUtils'
 
@@ -31,7 +32,7 @@ describe('editSession', () => {
     const sessionDetails = sessionDetailsFactory.build()
     accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
 
-    await request(app).get(`/group/12345/sessionId/6789/edit-session`).expect(200)
+    await request(app).get(`/group/12345/session/6789/edit-session`).expect(200)
 
     expect(accreditedProgrammesManageAndDeliverService.getGroupSessionDetails).toHaveBeenCalledWith(
       'user1',
@@ -45,7 +46,7 @@ describe('editSession', () => {
     accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
 
     await request(app)
-      .get(`/group/12345/sessionId/6789/edit-session`)
+      .get(`/group/12345/session/6789/edit-session`)
       .expect(200)
       .expect(res => {
         expect(res.text).toContain('Test Session')
@@ -59,7 +60,9 @@ describe('editSessionDateAndTime', () => {
   describe('GET /group/:groupId/session/:sessionId/edit-session-date-and-time', () => {
     it('should fetch session details with correct parameters and load page correctly', async () => {
       const sessionDetails = editSessionDetailsFactory.build()
+      const sessionAttendees = editSessionAttendeesFactory.build()
       accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
+      accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
 
       await request(app)
         .get(`/group/111/session/6789/edit-session-date-and-time`)
@@ -77,7 +80,9 @@ describe('editSessionDateAndTime', () => {
   describe('POST group/:groupId/session/:sessionId/edit-session-date-and-time', () => {
     it('should fetch session details with correct parameters and load page correctly', async () => {
       const sessionDetails = editSessionDetailsFactory.build()
+      const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'GROUP' })
       accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
+      accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
 
       return request(app)
         .post(`/group/111/session/6789/edit-session-date-and-time`)
@@ -155,7 +160,7 @@ describe('submitEditSessionDateAndTime', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Redirecting to /group/111/sessionId/6789/edit-session?message=${encodeURIComponent('Test message')}`,
+            `Redirecting to /group/111/session/6789/edit-session?message=${encodeURIComponent('Test message')}`,
           )
         })
     })
@@ -241,7 +246,7 @@ describe('editSessionFacilitators', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Found. Redirecting to /group/${groupId}/sessionId/${sessionId}/edit-session?message=${encodeURIComponent('Facilitators updated successfully')}`,
+            `Found. Redirecting to /group/${groupId}/session/${sessionId}/edit-session?message=${encodeURIComponent('Facilitators updated successfully')}`,
           )
         })
     })

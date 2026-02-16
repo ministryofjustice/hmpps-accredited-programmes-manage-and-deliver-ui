@@ -1,4 +1,5 @@
 import { GroupSessionResponse } from '@manage-and-deliver-api'
+import { MultiSelectTableArgs } from '@manage-and-deliver-ui'
 
 export default class EditSessionPresenter {
   constructor(
@@ -24,6 +25,35 @@ export default class EditSessionPresenter {
     return {
       text: 'Back',
       href: `/group/${this.groupId}/sessions-and-attendance`,
+    }
+  }
+
+  get attendanceTableArgs(): MultiSelectTableArgs {
+    const attendanceData = this.sessionDetails.attendanceAndSessionNotes || []
+
+    return {
+      idPrefix: 'attendance-multi-select',
+      headers: [
+        {
+          text: 'Name and CRN',
+        },
+        {
+          text: 'Attendance',
+        },
+        {
+          text: 'Session notes',
+        },
+      ],
+      rows: attendanceData.map((it, index) => ({
+        id: `attendance-multi-select-row-${index}`,
+        cells: [
+          {
+            html: `<a href="/person/${it.crn}">${it.name}</a> ${it.crn}`,
+          },
+          it.attendance,
+          it.sessionNotes,
+        ],
+      })),
     }
   }
 }
