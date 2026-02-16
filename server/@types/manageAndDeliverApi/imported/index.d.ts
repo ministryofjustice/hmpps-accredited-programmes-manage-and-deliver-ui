@@ -1102,7 +1102,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/bff/group/{groupId}/schedule': {
+  '/bff/group/{groupId}/schedule-overview': {
     parameters: {
       query?: never
       header?: never
@@ -1110,10 +1110,10 @@ export interface paths {
       cookie?: never
     }
     /**
-     * bff endpoint to retrieve a schedule of a module sessions for a programme group
+     * bff endpoint to retrieve the schedule overview for a programme group
      * @description Retrieve group schedule..
      */
-    get: operations['getGroupSchedule']
+    get: operations['getGroupScheduleOverview']
     put?: never
     post?: never
     delete?: never
@@ -1568,6 +1568,8 @@ export interface components {
        * @description ID of a session facilitator
        */
       recordedByFacilitatorId: string
+      /** @description Session notes for the attendee */
+      sessionNotes?: string
     }
     /** @description Does the person associated with the referral have LDC needs. */
     UpdateLdc: {
@@ -2790,29 +2792,29 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      first?: boolean
-      last?: boolean
-      /** Format: int32 */
-      numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageableObject: {
+      /** Format: int64 */
+      offset?: number
+      sort?: components['schemas']['SortObject']
       paged?: boolean
       /** Format: int32 */
       pageNumber?: number
       /** Format: int32 */
       pageSize?: number
       unpaged?: boolean
-      /** Format: int64 */
-      offset?: number
-      sort?: components['schemas']['SortObject']
     }
     ReferralCaseListItem: {
       /** Format: uuid */
@@ -2830,9 +2832,9 @@ export interface components {
       reportingTeam: string
     }
     SortObject: {
+      empty?: boolean
       sorted?: boolean
       unsorted?: boolean
-      empty?: boolean
     }
     StatusFilterValues: {
       /**
@@ -3198,17 +3200,17 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      first?: boolean
-      last?: boolean
-      /** Format: int32 */
-      numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Available filter options for viewing programme group data. */
@@ -3315,17 +3317,17 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      first?: boolean
-      last?: boolean
-      /** Format: int32 */
-      numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
@@ -3495,7 +3497,7 @@ export interface components {
       /** @description The attendance and session notes for each attendee */
       attendanceAndSessionNotes: components['schemas']['AttendanceAndSessionNotes'][]
     }
-    GroupSchedule: {
+    GroupScheduleOverview: {
       /**
        * Format: date
        * @description The start date of a group one to one in format DayName DateNumber MonthName YearNumber
@@ -3515,14 +3517,14 @@ export interface components {
        */
       endDate: string
       /** @description Details of the Group's sessions */
-      sessions: components['schemas']['GroupScheduleSession'][]
+      sessions: components['schemas']['GroupScheduleOverviewSession'][]
       /**
        * @description A unique code identifying the programme group.
        * @example AP_BIRMINGHAM_NORTH
        */
       code: string
     }
-    GroupScheduleSession: {
+    GroupScheduleOverviewSession: {
       /**
        * Format: uuid
        * @description id of the session
@@ -7006,7 +7008,7 @@ export interface operations {
       }
     }
   }
-  getGroupSchedule: {
+  getGroupScheduleOverview: {
     parameters: {
       query?: never
       header?: never
@@ -7018,13 +7020,13 @@ export interface operations {
     }
     requestBody?: never
     responses: {
-      /** @description Successfully retrieved group schedule details */
+      /** @description Successfully retrieved group schedule overview details */
       200: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['GroupSchedule']
+          'application/json': components['schemas']['GroupScheduleOverview']
         }
       }
       /** @description Bad Request */

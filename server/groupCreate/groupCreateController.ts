@@ -290,7 +290,7 @@ export default class CreateGroupController {
       )
       // Clear session data on submission
       req.session.createGroupFormData = {}
-      return res.redirect(`/?groupCreated`)
+      return res.redirect(`/groups/not-started?groupCreated`)
     }
 
     const presenter = new CreateGroupCyaPresenter(createGroupFormData)

@@ -120,16 +120,16 @@ export default class GroupOverviewController {
     return ControllerUtils.renderWithLayout(res, view, null)
   }
 
-  async showSchedule(req: Request, res: Response): Promise<void> {
+  async showScheduleOverview(req: Request, res: Response): Promise<void> {
     const { username } = req.user
     const { groupId } = req.params
 
-    const groupSchedule = await this.accreditedProgrammesManageAndDeliverService.getGroupScheduleDetails(
+    const groupScheduleOverview = await this.accreditedProgrammesManageAndDeliverService.getGroupScheduleOverview(
       username,
       groupId,
     )
 
-    const presenter = new SchedulePresenter(groupId, groupSchedule)
+    const presenter = new SchedulePresenter(groupId, groupScheduleOverview)
     const view = new ScheduleView(presenter)
     req.session.originPage = req.originalUrl
 

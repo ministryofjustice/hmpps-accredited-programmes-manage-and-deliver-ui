@@ -1,6 +1,6 @@
 export enum GroupServiceNavigationValues {
   allocationsTab = 'allocations',
-  scheduleTab = 'schedule',
+  scheduleOverviewTab = 'scheduleOverview',
   sessionsAndAttendanceTab = 'sessions',
   groupOverviewTab = 'details',
 }
@@ -24,9 +24,9 @@ export default class GroupServiceLayoutPresenter {
           active: this.activePage === GroupServiceNavigationValues.allocationsTab,
         },
         {
-          href: `/group/${this.groupId}/schedule`,
-          text: 'Schedule',
-          active: this.activePage === GroupServiceNavigationValues.scheduleTab,
+          href: `/group/${this.groupId}/schedule-overview`,
+          text: 'Schedule Overview',
+          active: this.activePage === GroupServiceNavigationValues.scheduleOverviewTab,
         },
         {
           href: `/group/${this.groupId}/sessions-and-attendance`,
