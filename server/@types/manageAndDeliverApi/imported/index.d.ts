@@ -1070,7 +1070,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/bff/group/{groupId}/schedule': {
+  '/bff/group/{groupId}/schedule-overview': {
     parameters: {
       query?: never
       header?: never
@@ -1078,10 +1078,10 @@ export interface paths {
       cookie?: never
     }
     /**
-     * bff endpoint to retrieve a schedule of a module sessions for a programme group
+     * bff endpoint to retrieve the schedule overview for a programme group
      * @description Retrieve group schedule..
      */
-    get: operations['getGroupSchedule']
+    get: operations['getGroupScheduleOverview']
     put?: never
     post?: never
     delete?: never
@@ -1536,6 +1536,8 @@ export interface components {
        * @description ID of a session facilitator
        */
       recordedByFacilitatorId: string
+      /** @description Session notes for the attendee */
+      sessionNotes?: string
     }
     /** @description Does the person associated with the referral have LDC needs. */
     UpdateLdc: {
@@ -2942,6 +2944,11 @@ export interface components {
        * @example false
        */
       isCatchup: boolean
+      /**
+       * @description The title of the page
+       * @example Attendance and notes for Getting started session
+       */
+      pageTitle: string
     }
     EditSessionFacilitator: {
       /** @description The full name of the facilitator for the group */
@@ -3447,7 +3454,7 @@ export interface components {
       /** @description The attendance and session notes for each attendee */
       attendanceAndSessionNotes: components['schemas']['AttendanceAndSessionNotes'][]
     }
-    GroupSchedule: {
+    GroupScheduleOverview: {
       /**
        * Format: date
        * @description The start date of a group one to one in format DayName DateNumber MonthName YearNumber
@@ -3467,14 +3474,14 @@ export interface components {
        */
       endDate: string
       /** @description Details of the Group's sessions */
-      sessions: components['schemas']['GroupScheduleSession'][]
+      sessions: components['schemas']['GroupScheduleOverviewSession'][]
       /**
        * @description A unique code identifying the programme group.
        * @example AP_BIRMINGHAM_NORTH
        */
       code: string
     }
-    GroupScheduleSession: {
+    GroupScheduleOverviewSession: {
       /**
        * Format: uuid
        * @description id of the session
@@ -6863,7 +6870,7 @@ export interface operations {
       }
     }
   }
-  getGroupSchedule: {
+  getGroupScheduleOverview: {
     parameters: {
       query?: never
       header?: never
@@ -6875,13 +6882,13 @@ export interface operations {
     }
     requestBody?: never
     responses: {
-      /** @description Successfully retrieved group schedule details */
+      /** @description Successfully retrieved group schedule overview details */
       200: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['GroupSchedule']
+          'application/json': components['schemas']['GroupScheduleOverview']
         }
       }
       /** @description Bad Request */

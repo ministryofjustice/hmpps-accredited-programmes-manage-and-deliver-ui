@@ -10,6 +10,9 @@ $medium-score-colour__text: #a34e00;
 $low-score-colour: #85994b;
 $low-score-colour--light: #dee9bd;
 $low-score-colour__text: #485b10;
+$default-colour: govuk-colour("mid-grey");
+$default-colour--light: govuk-colour("light-grey");
+$default-colour__text: govuk-colour("black");
 
 @mixin expanded-predictor-badge-base($primary-colour, $secondary-colour, $text-colour) {
   display: inline-flex;
@@ -84,6 +87,10 @@ $low-score-colour__text: #485b10;
 
 .expanded-predictor-badge--low {
   @include expanded-predictor-badge-base($low-score-colour, $low-score-colour--light, $low-score-colour__text);
+}
+
+.expanded-predictor-badge--default {
+  @include expanded-predictor-badge-base($default-colour, $default-colour--light, $default-colour__text);
 }
 
 .expanded-predictor-badge__fixed-width {
