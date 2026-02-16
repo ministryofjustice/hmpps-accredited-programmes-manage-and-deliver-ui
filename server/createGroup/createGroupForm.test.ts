@@ -568,6 +568,74 @@ describe('CreateGroupForm', () => {
           expect(data.error).toBeNull()
         })
       })
+
+      describe('when same facilitator is assigned to both regular and cover roles', () => {
+        it('returns an appropriate error', async () => {
+          const request = TestUtils.createRequest({
+            'create-group-treatment-manager':
+              '{"facilitator":"John Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
+            'create-group-facilitator-1':
+              '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
+            'create-group-cover-facilitator-1':
+              '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"COVER_FACILITATOR"}',
+          })
+
+          const data = await new CreateGroupForm(request).createGroupTreatmentManagerData()
+
+          expect(data.paramsForUpdate).toBeNull()
+          expect(data.error).toStrictEqual({
+            errors: [
+              {
+                errorSummaryLinkedField: 'create-group-facilitator',
+                formFields: ['create-group-facilitator'],
+                message: 'You cannot add the same facilitator twice. Select a different facilitator.',
+              },
+            ],
+          })
+        })
+      })
+
+      describe('when multiple facilitators and one is duplicate across regular and cover', () => {
+        it('returns an appropriate error', async () => {
+          const request = TestUtils.createRequest({
+            'create-group-treatment-manager':
+              '{"facilitator":"John Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
+            'create-group-facilitator-1':
+              '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
+            'create-group-facilitator-2':
+              '{"facilitator":"Bob Jones","facilitatorCode":"BJ789","teamName":"Team C","teamCode":"TC003","teamMemberType":"REGULAR_FACILITATOR"}',
+            'create-group-cover-facilitator-1':
+              '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"COVER_FACILITATOR"}',
+          })
+
+          const data = await new CreateGroupForm(request).createGroupTreatmentManagerData()
+
+          expect(data.paramsForUpdate).toBeNull()
+          expect(data.error?.errors[0].message).toBe(
+            'You cannot add the same facilitator twice. Select a different facilitator.',
+          )
+        })
+      })
+
+      describe('when same facilitator is added twice as regular facilitator', () => {
+        it('returns an appropriate error', async () => {
+          const request = TestUtils.createRequest({
+            'create-group-treatment-manager':
+              '{"facilitator":"John Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
+            'create-group-facilitator-1':
+              '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
+            'create-group-facilitator-2':
+              '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
+          })
+
+          const data = await new CreateGroupForm(request).createGroupTreatmentManagerData()
+
+          expect(data.paramsForUpdate).toBeNull()
+          expect(data.error?.errors[0].message).toBe(
+            'You cannot add the same facilitator twice. Select a different facilitator.',
+          )
+        })
+      })
     })
   })
 })

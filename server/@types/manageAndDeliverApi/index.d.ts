@@ -69,10 +69,12 @@ type ScheduleIndividualSessionDetailsResponse = components['schemas']['ScheduleI
 type ScheduleSessionRequest = components['schemas']['ScheduleSessionRequest']
 type GroupSessionResponse = components['schemas']['GroupSessionResponse']
 type EditSessionDetails = components['schemas']['EditSessionDetails']
+type EditSessionAttendeesResponse = components['schemas']['EditSessionAttendeesResponse']
+type EditSessionAttendee = components['schemas']['EditSessionAttendee']
 type RescheduleSessionRequest = components['schemas']['RescheduleSessionRequest']
 type RescheduleSessionDetails = components['schemas']['RescheduleSessionDetails']
 type EditSessionDateAndTimeResponse = components['schemas']['EditSessionDateAndTimeResponse']
-type GroupSchedule = components['schemas']['GroupSchedule']
+type GroupScheduleOverview = components['schemas']['GroupScheduleOverview']
 type GroupScheduleSession = components['schemas']['GroupScheduleSession']
 type Session = components['schemas']['Session']
 type EditSessionAttendeesResponse = components['schemas']['EditSessionAttendeesResponse']
@@ -106,6 +108,8 @@ export type {
   EditSessionAttendeesResponse,
   EditSessionDateAndTimeResponse,
   EditSessionDetails,
+  EditSessionAttendeesResponse,
+  EditSessionAttendee,
   EditSessionFacilitatorResponse,
   EditSessionFacilitatorsRequest,
   EditSessionFacilitatorsResponse,
@@ -114,7 +118,7 @@ export type {
   Group,
   GroupItem,
   GroupsByRegion,
-  GroupSchedule,
+  GroupScheduleOverview,
   GroupScheduleSession,
   GroupSessionResponse,
   Health,

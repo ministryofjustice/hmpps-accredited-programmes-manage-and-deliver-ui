@@ -332,22 +332,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/dev/seed/referrals': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post: operations['seedReferrals']
-    delete: operations['dangerouslyDeleteAllReferrals']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/admin/populate-personal-details': {
     parameters: {
       query?: never
@@ -782,22 +766,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/dev/seed/health': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['health']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/bff/status-transitions/referral/{referralId}': {
     parameters: {
       query?: never
@@ -1102,7 +1070,7 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/bff/group/{groupId}/schedule': {
+  '/bff/group/{groupId}/schedule-overview': {
     parameters: {
       query?: never
       header?: never
@@ -1110,10 +1078,10 @@ export interface paths {
       cookie?: never
     }
     /**
-     * bff endpoint to retrieve a schedule of a module sessions for a programme group
+     * bff endpoint to retrieve the schedule overview for a programme group
      * @description Retrieve group schedule..
      */
-    get: operations['getGroupSchedule']
+    get: operations['getGroupScheduleOverview']
     put?: never
     post?: never
     delete?: never
@@ -1568,6 +1536,8 @@ export interface components {
        * @description ID of a session facilitator
        */
       recordedByFacilitatorId: string
+      /** @description Session notes for the attendee */
+      sessionNotes?: string
     }
     /** @description Does the person associated with the referral have LDC needs. */
     UpdateLdc: {
@@ -1758,17 +1728,6 @@ export interface components {
        * @example Alex River was added to this group. Their referral status is now Scheduled.
        */
       message: string
-    }
-    SeededReferralInfo: {
-      referralId: string
-      crn: string
-      personName: string
-      requirementId: string
-    }
-    SeedingResult: {
-      /** Format: int32 */
-      count: number
-      referrals: components['schemas']['SeededReferralInfo'][]
     }
     CreateAvailability: {
       /**
@@ -2790,29 +2749,29 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      /** Format: int32 */
-      numberOfElements?: number
       first?: boolean
       last?: boolean
-      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageableObject: {
-      paged?: boolean
-      /** Format: int32 */
-      pageNumber?: number
-      /** Format: int32 */
-      pageSize?: number
-      unpaged?: boolean
       /** Format: int64 */
       offset?: number
       sort?: components['schemas']['SortObject']
+      /** Format: int32 */
+      pageSize?: number
+      /** Format: int32 */
+      pageNumber?: number
+      paged?: boolean
+      unpaged?: boolean
     }
     ReferralCaseListItem: {
       /** Format: uuid */
@@ -2830,9 +2789,9 @@ export interface components {
       reportingTeam: string
     }
     SortObject: {
+      empty?: boolean
       sorted?: boolean
       unsorted?: boolean
-      empty?: boolean
     }
     StatusFilterValues: {
       /**
@@ -2985,6 +2944,11 @@ export interface components {
        * @example false
        */
       isCatchup: boolean
+      /**
+       * @description The title of the page
+       * @example Attendance and notes for Getting started session
+       */
+      pageTitle: string
     }
     EditSessionFacilitator: {
       /** @description The full name of the facilitator for the group */
@@ -3193,17 +3157,17 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      /** Format: int32 */
-      numberOfElements?: number
       first?: boolean
       last?: boolean
-      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Available filter options for viewing programme group data. */
@@ -3310,17 +3274,17 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      /** Format: int32 */
-      numberOfElements?: number
       first?: boolean
       last?: boolean
-      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
@@ -3490,7 +3454,7 @@ export interface components {
       /** @description The attendance and session notes for each attendee */
       attendanceAndSessionNotes: components['schemas']['AttendanceAndSessionNotes'][]
     }
-    GroupSchedule: {
+    GroupScheduleOverview: {
       /**
        * Format: date
        * @description The start date of a group one to one in format DayName DateNumber MonthName YearNumber
@@ -3510,14 +3474,14 @@ export interface components {
        */
       endDate: string
       /** @description Details of the Group's sessions */
-      sessions: components['schemas']['GroupScheduleSession'][]
+      sessions: components['schemas']['GroupScheduleOverviewSession'][]
       /**
        * @description A unique code identifying the programme group.
        * @example AP_BIRMINGHAM_NORTH
        */
       code: string
     }
-    GroupScheduleSession: {
+    GroupScheduleOverviewSession: {
       /**
        * Format: uuid
        * @description id of the session
@@ -3594,10 +3558,6 @@ export interface components {
     DeleteSessionCaptionResponse: {
       /** @description Caption indicating what session is about to be deleted */
       caption: string
-    }
-    TeardownResult: {
-      /** Format: int32 */
-      deletedCount: number
     }
   }
   responses: never
@@ -4711,66 +4671,6 @@ export interface operations {
       }
       /** @description The group or referral does not exist */
       404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  seedReferrals: {
-    parameters: {
-      query?: {
-        count?: number
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['SeedingResult']
-        }
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  dangerouslyDeleteAllReferrals: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['TeardownResult']
-        }
-      }
-      /** @description Bad Request */
-      400: {
         headers: {
           [name: string]: unknown
         }
@@ -6104,37 +6004,6 @@ export interface operations {
       }
     }
   }
-  health: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': {
-            [key: string]: string
-          }
-        }
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
   getStatusTransitionsForReferral: {
     parameters: {
       query?: never
@@ -7001,7 +6870,7 @@ export interface operations {
       }
     }
   }
-  getGroupSchedule: {
+  getGroupScheduleOverview: {
     parameters: {
       query?: never
       header?: never
@@ -7013,13 +6882,13 @@ export interface operations {
     }
     requestBody?: never
     responses: {
-      /** @description Successfully retrieved group schedule details */
+      /** @description Successfully retrieved group schedule overview details */
       200: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['GroupSchedule']
+          'application/json': components['schemas']['GroupScheduleOverview']
         }
       }
       /** @description Bad Request */

@@ -1,5 +1,5 @@
-import SchedulePresenter from './schedulePresenter'
 import { SummaryListArgs } from '../../utils/govukFrontendTypes'
+import SchedulePresenter from './schedulePresenter'
 
 export default class ScheduleView {
   constructor(private readonly presenter: SchedulePresenter) {}
@@ -12,7 +12,7 @@ export default class ScheduleView {
             text: 'Pre-group one-to-ones start date',
           },
           value: {
-            text: this.presenter.groupSchedule.preGroupOneToOneStartDate,
+            text: this.presenter.groupScheduleOverview.preGroupOneToOneStartDate,
           },
           classes: 'govuk-summary-list__row--no-border',
         },
@@ -21,7 +21,7 @@ export default class ScheduleView {
             text: 'Getting started module start date',
           },
           value: {
-            text: this.presenter.groupSchedule.gettingStartedModuleStartDate,
+            text: this.presenter.groupScheduleOverview.gettingStartedModuleStartDate,
           },
           classes: 'govuk-summary-list__row--no-border',
         },
@@ -30,7 +30,7 @@ export default class ScheduleView {
             text: 'End date',
           },
           value: {
-            text: this.presenter.groupSchedule.endDate,
+            text: this.presenter.groupScheduleOverview.endDate,
           },
           classes: 'govuk-summary-list__row--no-border',
         },
@@ -68,7 +68,7 @@ export default class ScheduleView {
 
   get renderArgs(): [string, Record<string, unknown>] {
     return [
-      'groupDetails/schedule/schedule',
+      'groupDetails/schedule/scheduleOverview',
       {
         presenter: this.presenter,
         text: this.presenter.text,
