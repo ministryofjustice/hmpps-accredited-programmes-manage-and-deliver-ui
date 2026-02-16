@@ -10,8 +10,6 @@ import CreateGroupCodeView from './code/createGroupCodeView'
 import CreateGroupCohortPresenter from './cohort/createGroupCohortPresenter'
 import CreateGroupCohortView from './cohort/createGroupCohortView'
 import CreateGroupForm from './createGroupForm'
-import CreateGroupTreatmentManagerPresenter from './treatment-manager/createGroupTreatmentManagerPresenter'
-import CreateGroupTreatmentManagerView from './treatment-manager/createGroupTreatmentManagerView'
 import CreateGroupDatePresenter from './date/createGroupDatePresenter'
 import CreateGroupDateView from './date/createGroupDateView'
 import CreateGroupLocationPresenter from './location/createGroupLocationPresenter'
@@ -22,6 +20,8 @@ import CreateGroupSexPresenter from './sex/createGroupSexPresenter'
 import CreateGroupSexView from './sex/createGroupSexView'
 import CreateGroupStartPresenter from './start/createGroupStartPresenter'
 import CreateGroupStartView from './start/createGroupStartView'
+import CreateGroupTreatmentManagerPresenter from './treatment-manager/createGroupTreatmentManagerPresenter'
+import CreateGroupTreatmentManagerView from './treatment-manager/createGroupTreatmentManagerView'
 import CreateGroupWhenPresenter from './when/createGroupWhenPresenter'
 import CreateGroupWhenView from './when/createGroupWhenView'
 
@@ -290,7 +290,7 @@ export default class CreateGroupController {
       )
       // Clear session data on submission
       req.session.createGroupFormData = {}
-      return res.redirect(`/?groupCreated`)
+      return res.redirect(`/groups/not-started?groupCreated`)
     }
 
     const presenter = new CreateGroupCyaPresenter(createGroupFormData)
