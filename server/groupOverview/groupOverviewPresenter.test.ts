@@ -1,17 +1,22 @@
-import ProgrammeGroupDetailsFactory from '../testutils/factories/programmeGroupDetailsFactory'
-import GroupDetailsPresenter, { GroupDetailsPageSection } from './groupOverviewPresenter'
-import GroupDetailFilter from './groupOverviewFilter'
+import ProgrammeGroupOverviewFactory from '../testutils/factories/programmeGroupOverviewFactory'
+import GroupOverviewPresenter, { GroupOverviewPageSection } from './groupOverviewPresenter'
+import GroupOverviewFilter from './groupOverviewFilter'
 
 afterEach(() => {
   jest.restoreAllMocks()
 })
 
-describe('groupDetailsPresenter.', () => {
+describe('groupOverviewPresenter.', () => {
   describe('generateTableHeadings', () => {
     it('should return the correct table headings for allocated list', () => {
-      const filterObject = GroupDetailFilter.empty()
-      const groupDetails = ProgrammeGroupDetailsFactory.build()
-      const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Allocated, groupDetails, '1234', filterObject)
+      const filterObject = GroupOverviewFilter.empty()
+      const groupOverview = ProgrammeGroupOverviewFactory.build()
+      const presenter = new GroupOverviewPresenter(
+        GroupOverviewPageSection.Allocated,
+        groupOverview,
+        '1234',
+        filterObject,
+      )
       expect(presenter.generateTableHeadings()).toEqual([
         { text: '' },
         { text: 'Name and CRN', attributes: { 'aria-sort': 'ascending' } },
@@ -20,9 +25,14 @@ describe('groupDetailsPresenter.', () => {
       ])
     })
     it('should return the correct table headings for waitlist', () => {
-      const filterObject = GroupDetailFilter.empty()
-      const groupDetails = ProgrammeGroupDetailsFactory.build()
-      const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, '1234', filterObject)
+      const filterObject = GroupOverviewFilter.empty()
+      const groupOverview = ProgrammeGroupOverviewFactory.build()
+      const presenter = new GroupOverviewPresenter(
+        GroupOverviewPageSection.Waitlist,
+        groupOverview,
+        '1234',
+        filterObject,
+      )
       expect(presenter.generateTableHeadings()).toEqual([
         { text: '' },
         { text: 'Name and CRN', attributes: { 'aria-sort': 'ascending' } },
@@ -37,9 +47,14 @@ describe('groupDetailsPresenter.', () => {
   })
   describe('generateWaitlistTableArgs', () => {
     it('should return the correct table args for waitlist', () => {
-      const filterObject = GroupDetailFilter.empty()
-      const groupDetails = ProgrammeGroupDetailsFactory.waitlist().build()
-      const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, '1234', filterObject)
+      const filterObject = GroupOverviewFilter.empty()
+      const groupOverview = ProgrammeGroupOverviewFactory.waitlist().build()
+      const presenter = new GroupOverviewPresenter(
+        GroupOverviewPageSection.Waitlist,
+        groupOverview,
+        '1234',
+        filterObject,
+      )
       expect(presenter.generateWaitlistTableArgs()).toEqual([
         [
           {
@@ -96,9 +111,14 @@ describe('groupDetailsPresenter.', () => {
   })
   describe('generateAllocateTableArgs', () => {
     it('should return the correct table args for allocted list', () => {
-      const filterObject = GroupDetailFilter.empty()
-      const groupDetails = ProgrammeGroupDetailsFactory.allocatedList().build()
-      const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, '1234', filterObject)
+      const filterObject = GroupOverviewFilter.empty()
+      const groupOverview = ProgrammeGroupOverviewFactory.allocatedList().build()
+      const presenter = new GroupOverviewPresenter(
+        GroupOverviewPageSection.Waitlist,
+        groupOverview,
+        '1234',
+        filterObject,
+      )
 
       expect(presenter.generateAllocatedTableArgs()).toEqual([
         [
@@ -145,9 +165,14 @@ describe('groupDetailsPresenter.', () => {
 
   describe('generatePduSelectArgs', () => {
     it('should return the correct select args for PDU', () => {
-      const filterObject = { pdu: 'Liverpool' } as GroupDetailFilter
-      const groupDetails = ProgrammeGroupDetailsFactory.build()
-      const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, '1234', filterObject)
+      const filterObject = { pdu: 'Liverpool' } as GroupOverviewFilter
+      const groupOverview = ProgrammeGroupOverviewFactory.build()
+      const presenter = new GroupOverviewPresenter(
+        GroupOverviewPageSection.Waitlist,
+        groupOverview,
+        '1234',
+        filterObject,
+      )
       expect(presenter.generatePduSelectArgs()).toEqual([
         {
           text: 'Select PDU',
@@ -177,9 +202,14 @@ describe('groupDetailsPresenter.', () => {
       const filterObject = {
         pdu: 'Manchester',
         reportingTeam: ['Manchester Office 1'],
-      } as GroupDetailFilter
-      const groupDetails = ProgrammeGroupDetailsFactory.build()
-      const presenter = new GroupDetailsPresenter(GroupDetailsPageSection.Waitlist, groupDetails, '1234', filterObject)
+      } as GroupOverviewFilter
+      const groupOverview = ProgrammeGroupOverviewFactory.build()
+      const presenter = new GroupOverviewPresenter(
+        GroupOverviewPageSection.Waitlist,
+        groupOverview,
+        '1234',
+        filterObject,
+      )
       expect(presenter.generateReportingTeamCheckboxArgs()).toEqual([
         {
           text: 'Manchester Office 1',
@@ -198,12 +228,12 @@ describe('groupDetailsPresenter.', () => {
 
 describe('resultsText', () => {
   it('should return blank when there are no results', () => {
-    const baseGroupDetails = ProgrammeGroupDetailsFactory.build()
-    const groupDetails = {
-      ...baseGroupDetails,
+    const baseGroupOverview = ProgrammeGroupOverviewFactory.build()
+    const groupOverview = {
+      ...baseGroupOverview,
       pagedGroupData: {
-        ...baseGroupDetails.pagedGroupData,
-        content: [] as typeof baseGroupDetails.pagedGroupData.content,
+        ...baseGroupOverview.pagedGroupData,
+        content: [] as typeof baseGroupOverview.pagedGroupData.content,
         totalElements: 0,
         numberOfElements: 0,
         number: 0,
@@ -211,35 +241,35 @@ describe('resultsText', () => {
       },
     }
 
-    const presenter = new GroupDetailsPresenter(
-      GroupDetailsPageSection.Allocated,
-      groupDetails,
+    const presenter = new GroupOverviewPresenter(
+      GroupOverviewPageSection.Allocated,
+      groupOverview,
       '1234',
-      GroupDetailFilter.empty(),
+      GroupOverviewFilter.empty(),
     )
 
     expect(presenter.resultsText).toBe('')
   })
 
   it('should show the current page range when results exist', () => {
-    const baseGroupDetails = ProgrammeGroupDetailsFactory.build()
-    const groupDetails = {
-      ...baseGroupDetails,
+    const baseGroupOverview = ProgrammeGroupOverviewFactory.build()
+    const groupOverview = {
+      ...baseGroupOverview,
       pagedGroupData: {
-        ...baseGroupDetails.pagedGroupData,
-        content: baseGroupDetails.pagedGroupData.content,
+        ...baseGroupOverview.pagedGroupData,
+        content: baseGroupOverview.pagedGroupData.content,
         totalElements: 22,
-        numberOfElements: baseGroupDetails.pagedGroupData.content.length,
+        numberOfElements: baseGroupOverview.pagedGroupData.content.length,
         number: 2,
         size: 10,
       },
     }
 
-    const presenter = new GroupDetailsPresenter(
-      GroupDetailsPageSection.Allocated,
-      groupDetails,
+    const presenter = new GroupOverviewPresenter(
+      GroupOverviewPageSection.Allocated,
+      groupOverview,
       '1234',
-      GroupDetailFilter.empty(),
+      GroupOverviewFilter.empty(),
     )
 
     expect(presenter.resultsText).toBe(

@@ -1,14 +1,14 @@
-import { CohortEnum, GroupItem, ProgrammeGroupDetails } from '@manage-and-deliver-api'
+import { CohortEnum, GroupItem, LocationFilterValues, ProgrammeGroupOverview } from '@manage-and-deliver-api'
 import { Page } from '../shared/models/pagination'
 import { FormValidationError } from '../utils/formValidationError'
 import { ButtonArgs, CheckboxesArgsItem, SelectArgsItem, TableArgsHeadElement } from '../utils/govukFrontendTypes'
 import Pagination from '../utils/pagination/pagination'
 import PresenterUtils from '../utils/presenterUtils'
 import { convertToTitleCase } from '../utils/utils'
-import GroupDetailFilter from './groupOverviewFilter'
+import GroupOverviewFilter from './groupOverviewFilter'
 import GroupServiceLayoutPresenter, { GroupServiceNavigationValues } from '../shared/groups/groupServiceLayoutPresenter'
 
-export enum GroupDetailsPageSection {
+export enum GroupOverviewPageSection {
   Allocated = 1,
   Waitlist = 2,
 }
@@ -18,16 +18,16 @@ const cohortConfigMap: Record<CohortEnum, string> = {
   GENERAL_OFFENCE: 'General offence',
 }
 
-export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
+export default class GroupOverviewPresenter extends GroupServiceLayoutPresenter {
   public readonly pagination: Pagination
 
   readonly groupListItems: Page<GroupItem>
 
   constructor(
-    readonly section: GroupDetailsPageSection,
-    readonly group: ProgrammeGroupDetails,
+    readonly section: GroupOverviewPageSection,
+    readonly group: ProgrammeGroupOverview,
     readonly groupId: string,
-    readonly filter: GroupDetailFilter,
+    readonly filter: GroupOverviewFilter,
     readonly personName: string = '',
     readonly validationError: FormValidationError | null = null,
     readonly successMessage: string | null = null,
@@ -65,19 +65,19 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
       items: [
         {
           text:
-            this.section === GroupDetailsPageSection.Allocated
+            this.section === GroupOverviewPageSection.Allocated
               ? `Allocated (${this.group.pagedGroupData.totalElements})`
               : `Allocated (${this.group.otherTabTotal})`,
-          href: `/groupDetails/${this.groupId}/allocated${nameCrnFilter}`,
-          active: this.section === GroupDetailsPageSection.Allocated,
+          href: `/groupOverview/${this.groupId}/allocated${nameCrnFilter}`,
+          active: this.section === GroupOverviewPageSection.Allocated,
         },
         {
           text:
-            this.section === GroupDetailsPageSection.Waitlist
+            this.section === GroupOverviewPageSection.Waitlist
               ? `Waitlist (${this.group.pagedGroupData.totalElements})`
               : `Waitlist (${this.group.otherTabTotal})`,
-          href: `/groupDetails/${this.groupId}/waitlist${nameCrnFilter}`,
-          active: this.section === GroupDetailsPageSection.Waitlist,
+          href: `/groupOverview/${this.groupId}/waitlist${nameCrnFilter}`,
+          active: this.section === GroupOverviewPageSection.Waitlist,
         },
       ],
     }
@@ -91,7 +91,7 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
     ]
 
     const extra =
-      this.section === GroupDetailsPageSection.Allocated
+      this.section === GroupOverviewPageSection.Allocated
         ? [{ text: 'Referral status', attributes: { 'aria-sort': 'none' } }]
         : [
             { text: 'Cohort', attributes: { 'aria-sort': 'none' } },
@@ -107,9 +107,9 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
   private referralHref = (id: string) => `/referral-details/${encodeURIComponent(id)}/personal-details`
 
   generateWaitlistTableArgs() {
-    const rows = this.group.pagedGroupData.content
+    const rows = this.groupListItems.content
     const out: ({ html: string } | { text: string })[][] = []
-    rows.forEach(member => {
+    rows.forEach((member: GroupItem) => {
       out.push([
         {
           html: `<div class="govuk-radios govuk-radios--small group-details-table">
@@ -145,10 +145,10 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
   }
 
   generateAllocatedTableArgs() {
-    const rows = this.group.pagedGroupData.content
+    const rows = this.groupListItems.content
     const out: ({ html: string } | { text: string })[][] = []
 
-    rows.forEach(member => {
+    rows.forEach((member: GroupItem) => {
       out.push([
         {
           html: `<div class="govuk-radios govuk-radios--small group-details-table">
@@ -193,7 +193,7 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
 
   get formButtonArgs(): ButtonArgs {
     return {
-      text: this.section === GroupDetailsPageSection.Allocated ? 'Remove from group' : 'Add to group',
+      text: this.section === GroupOverviewPageSection.Allocated ? 'Remove from group' : 'Add to group',
     }
   }
 
@@ -204,13 +204,14 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
         value: '',
       },
     ]
-    const pduCheckboxArgs = this.group.filters.locationFilters
-      .map(pdu => ({
+    const locationFilters = this.group.filters.locationFilters as LocationFilterValues[]
+    const pduCheckboxArgs = locationFilters
+      .map((pdu: LocationFilterValues) => ({
         text: pdu.pduName,
         value: pdu.pduName,
         selected: this.filter.pdu === pdu.pduName,
       }))
-      .sort((a, b) => a.text.localeCompare(b.text))
+      .sort((a: SelectArgsItem, b: SelectArgsItem) => a.text.localeCompare(b.text))
     return checkboxArgs.concat(pduCheckboxArgs)
   }
 
@@ -218,14 +219,17 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
     let checkboxItems: CheckboxesArgsItem[] = []
 
     if (this.showReportingTeams) {
-      const pduLocationData = this.group.filters.locationFilters.find(location => location.pduName === this.filter.pdu)
-      checkboxItems = pduLocationData.reportingTeams
-        .map(location => ({
+      const locationFilters = this.group.filters.locationFilters as LocationFilterValues[]
+      const pduLocationData = locationFilters.find(
+        (location: LocationFilterValues) => location.pduName === this.filter.pdu,
+      )
+      checkboxItems = (pduLocationData?.reportingTeams ?? [])
+        .map((location: string) => ({
           text: location,
           value: location,
           checked: this.filter.reportingTeam?.includes(location),
         }))
-        .sort((a, b) => a.text.localeCompare(b.text))
+        .sort((a: CheckboxesArgsItem, b: CheckboxesArgsItem) => a.text.localeCompare(b.text))
     }
 
     return checkboxItems
@@ -244,7 +248,7 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
       return 'No results found. Clear or change the filters'
     }
 
-    return this.section === GroupDetailsPageSection.Allocated
+    return this.section === GroupOverviewPageSection.Allocated
       ? 'There are currently no people allocated to this group.'
       : `There are no people awaiting allocation in ${this.group.group.regionName}.`
   }

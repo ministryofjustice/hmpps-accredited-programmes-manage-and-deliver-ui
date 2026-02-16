@@ -16,12 +16,12 @@ type OffenceAnalysis = components['schemas']['OffenceAnalysis']
 type OffenceHistory = components['schemas']['OffenceHistory']
 type PersonalDetails = components['schemas']['PersonalDetails']
 type PniScore = components['schemas']['PniScore']
-type ProgrammeGroupDetails = components['schemas']['ProgrammeGroupDetails']
+type ProgrammeGroupOverview = components['schemas']['ProgrammeGroupOverview']
 type ReferralCaseListItem = components['schemas']['ReferralCaseListItem']
 type ReferralDetails = components['schemas']['ReferralDetails']
 type RemoveFromGroupRequest = components['schemas']['RemoveFromGroupRequest']
 type RemoveFromGroupResponse = components['schemas']['RemoveFromGroupResponse']
-type GroupItem = components['schemas']['PageGroupItem']
+type GroupItem = components['schemas']['GroupItem']
 type Relationships = components['schemas']['Relationships']
 type Risks = components['schemas']['Risks']
 type RoshAnalysis = components['schemas']['RoshAnalysis']
@@ -126,7 +126,7 @@ export type {
   PreferredDeliveryLocation,
   ProgrammeGroupCohortEnum,
   ProgrammeGroupDate,
-  ProgrammeGroupDetails,
+  ProgrammeGroupOverview,
   ProgrammeGroupEntity,
   ProgrammeGroupSexEnum,
   ProgrammeGroupWhen,

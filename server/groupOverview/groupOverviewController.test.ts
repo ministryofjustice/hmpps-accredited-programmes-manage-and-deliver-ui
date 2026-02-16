@@ -2,7 +2,7 @@ import { Express } from 'express'
 import request from 'supertest'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
-import ProgrammeGroupDetailsFactory from '../testutils/factories/programmeGroupDetailsFactory'
+import ProgrammeGroupOverviewFactory from '../testutils/factories/programmeGroupOverviewFactory'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
@@ -25,11 +25,11 @@ beforeEach(() => {
   })
 })
 
-describe('groupDetails', () => {
+describe('groupOverview', () => {
   describe(`GET /groupOverview/:groupId/waitlist`, () => {
     it('loads the initial page to view the waitlist', async () => {
-      const programmeGroupDetails = ProgrammeGroupDetailsFactory.build()
-      accreditedProgrammesManageAndDeliverService.getGroupWaitlistMembers.mockResolvedValue(programmeGroupDetails)
+      const programmeGroupOverview = ProgrammeGroupOverviewFactory.build()
+      accreditedProgrammesManageAndDeliverService.getGroupWaitlistMembers.mockResolvedValue(programmeGroupOverview)
       return request(app)
         .get(`/groupOverview/:groupId/waitlist`)
         .expect(200)
@@ -41,8 +41,8 @@ describe('groupDetails', () => {
 
   describe(`GET /groupOverview/:groupId/allocated`, () => {
     it('loads the initial page to view the allocated list', async () => {
-      const programmeGroupDetails = ProgrammeGroupDetailsFactory.build()
-      accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers.mockResolvedValue(programmeGroupDetails)
+      const programmeGroupOverview = ProgrammeGroupOverviewFactory.build()
+      accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers.mockResolvedValue(programmeGroupOverview)
       return request(app)
         .get(`/groupOverview/:groupId/allocated`)
         .expect(200)

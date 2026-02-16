@@ -1,9 +1,9 @@
 import { CheckboxesArgs, InputArgs, SelectArgs, TableArgs } from '../utils/govukFrontendTypes'
 import ViewUtils from '../utils/viewUtils'
-import GroupDetailsPresenter, { GroupDetailsPageSection } from './groupOverviewPresenter'
+import GroupOverviewPresenter, { GroupOverviewPageSection } from './groupOverviewPresenter'
 
-export default class GroupDetailsView {
-  constructor(private readonly presenter: GroupDetailsPresenter) {}
+export default class GroupOverviewView {
+  constructor(private readonly presenter: GroupOverviewPresenter) {}
 
   private get searchByCrnOrPersonNameArgs(): InputArgs {
     return {
@@ -61,15 +61,15 @@ export default class GroupDetailsView {
     }
   }
 
-  getGroupDetailsTableArgs(): TableArgs {
+  getGroupOverviewTableArgs(): TableArgs {
     return {
       attributes: {
         'data-module': 'moj-sortable-table',
       },
-      classes: this.presenter.section === GroupDetailsPageSection.Allocated ? 'allocated' : '',
+      classes: this.presenter.section === GroupOverviewPageSection.Allocated ? 'allocated' : '',
       head: this.presenter.generateTableHeadings(),
       rows:
-        this.presenter.section === GroupDetailsPageSection.Allocated
+        this.presenter.section === GroupOverviewPageSection.Allocated
           ? this.presenter.generateAllocatedTableArgs()
           : this.presenter.generateWaitlistTableArgs(),
     }
@@ -110,13 +110,13 @@ export default class GroupDetailsView {
         presenter: this.presenter,
         subNavArgs: this.presenter.getSubNavArgs(),
         searchByCrnOrPersonNameArgs: this.searchByCrnOrPersonNameArgs,
-        isWaitlist: this.presenter.section === GroupDetailsPageSection.Waitlist,
+        isWaitlist: this.presenter.section === GroupOverviewPageSection.Waitlist,
         pagination: this.presenter.pagination.govukPaginationArgs,
         searchByCohortArgs: this.searchByCohortArgs,
         searchBySexArgs: this.searchBySexArgs,
         searchByPduArgs: this.searchByPduArgs,
         formButtonArgs: this.presenter.formButtonArgs,
-        getGroupDetailsTableArgs: this.getGroupDetailsTableArgs(),
+        getGroupOverviewTableArgs: this.getGroupOverviewTableArgs(),
         successMessageArgs: this.successMessageArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         reportingTeamCheckboxArgs: this.reportingTeamCheckboxArgs,
