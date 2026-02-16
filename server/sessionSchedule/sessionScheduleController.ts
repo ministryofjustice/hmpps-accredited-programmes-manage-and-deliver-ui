@@ -128,7 +128,7 @@ export default class SessionScheduleController {
       )
     }
 
-    const presenter = new SessionScheduleCyaPresenter(`/${groupId}/${moduleId}`, sessionScheduleData)
+    const presenter = new SessionScheduleCyaPresenter(`/group/${groupId}/module/${moduleId}`, sessionScheduleData)
     const view = new SessionScheduleCyaView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }

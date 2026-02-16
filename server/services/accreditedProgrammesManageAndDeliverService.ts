@@ -18,9 +18,11 @@ import {
   DrugDetails,
   EditSessionFacilitatorsRequest,
   EditSessionFacilitatorsResponse,
+  EditSessionAttendeesResponse,
   EmotionalWellbeing,
   Group,
   GroupsByRegion,
+  GroupScheduleOverview,
   GroupSessionResponse,
   Health,
   LearningNeeds,
@@ -639,6 +641,14 @@ export default class AccreditedProgrammesManageAndDeliverService
     })) as EditSessionDetails
   }
 
+  async getSessionAttendees(username: ExpressUsername, sessionId: string): Promise<EditSessionAttendeesResponse> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/session/${sessionId}/attendees`,
+      headers: { Accept: 'application/json' },
+    })) as EditSessionAttendeesResponse
+  }
+
   async getRescheduleSessionDetails(username: ExpressUsername, sessionId: string): Promise<RescheduleSessionDetails> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
@@ -660,12 +670,12 @@ export default class AccreditedProgrammesManageAndDeliverService
     })) as EditSessionDateAndTimeResponse
   }
 
-  async getGroupScheduleDetails(username: ExpressUsername, groupId: string): Promise<GroupSchedule> {
+  async getGroupScheduleOverview(username: ExpressUsername, groupId: string): Promise<GroupScheduleOverview> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
-      path: `/bff/group/${groupId}/schedule`,
+      path: `/bff/group/${groupId}/schedule-overview`,
       headers: { Accept: 'application/json' },
-    })) as GroupSchedule
+    })) as GroupScheduleOverview
   }
 
   async getSessionDetails(username: ExpressUsername, sessionId: string): Promise<Session> {

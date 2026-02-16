@@ -11,6 +11,7 @@ describe('DeleteSessionPresenter', () => {
         type: 'Individual',
         name: 'Post programme review',
         referrals: [{ personName: 'Alex River' }],
+        pageTitle: 'Delete Alex River: Post-programme review',
       } as Session
 
       const presenter = new DeleteSessionPresenter(groupId, backUrl, sessionDetails)
@@ -24,6 +25,7 @@ describe('DeleteSessionPresenter', () => {
         name: 'Getting started',
         isCatchup: true,
         referrals: [{ personName: 'Alex River' }],
+        pageTitle: 'Delete Alex River: Getting started one-to-one catch-up',
       } as Session
 
       const presenter = new DeleteSessionPresenter(groupId, backUrl, sessionDetails)
@@ -37,6 +39,7 @@ describe('DeleteSessionPresenter', () => {
         name: 'Getting started',
         isCatchup: false,
         referrals: [{ personName: 'Alex River' }],
+        pageTitle: 'Delete Alex River: Getting started one-to-one',
       } as Session
 
       const presenter = new DeleteSessionPresenter(groupId, backUrl, sessionDetails)
@@ -49,6 +52,7 @@ describe('DeleteSessionPresenter', () => {
         type: 'Group',
         name: 'Getting started',
         number: 1,
+        pageTitle: 'Delete Getting started 1 catch-up',
       } as Session
 
       const presenter = new DeleteSessionPresenter(groupId, backUrl, sessionDetails)
@@ -60,6 +64,7 @@ describe('DeleteSessionPresenter', () => {
       const sessionDetails: Session = {
         type: 'Unknown',
         name: 'Getting started',
+        pageTitle: 'Delete Getting started',
       } as Session
 
       const presenter = new DeleteSessionPresenter(groupId, backUrl, sessionDetails)

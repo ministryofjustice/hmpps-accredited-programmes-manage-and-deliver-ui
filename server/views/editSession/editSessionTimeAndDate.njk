@@ -33,8 +33,11 @@
               {{ mojDatePicker(sessionDetailsDateArgs)}}
               {{ timeInput(startTimeInputArgs) }}
               {{ timeInput(endTimeInputArgs) }}
-
-              {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+                {% if isGroupSession %}
+                   {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+                {% else %}
+                   {{ govukButton({ text: "Submit", preventDoubleClick: true }) }}
+                {% endif %}
             </form>
           </div>
         </div>

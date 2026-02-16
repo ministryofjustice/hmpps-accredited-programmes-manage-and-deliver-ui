@@ -1,10 +1,10 @@
-import { GroupSchedule } from '@manage-and-deliver-api'
+import { GroupScheduleOverview } from '@manage-and-deliver-api'
 import SchedulePresenter from './schedulePresenter'
 
 describe('SchedulePresenter', () => {
   const groupId = 'group-123'
 
-  const mockGroupSchedule: GroupSchedule = {
+  const mockGroupSchedule: GroupScheduleOverview = {
     code: 'ABC123',
     preGroupOneToOneStartDate: 'Saturday 31 January 2026',
     gettingStartedModuleStartDate: 'Monday 23 February 2026',
@@ -48,7 +48,7 @@ describe('SchedulePresenter', () => {
     })
 
     it('should return empty array when no sessions exist', () => {
-      const emptySchedule: GroupSchedule = { sessions: [] } as GroupSchedule
+      const emptySchedule: GroupScheduleOverview = { sessions: [] } as GroupScheduleOverview
       const presenter = new SchedulePresenter(groupId, emptySchedule)
 
       expect(presenter.scheduleTableRows).toEqual([])

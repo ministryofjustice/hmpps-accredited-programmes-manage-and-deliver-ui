@@ -620,7 +620,7 @@ describe('Create Group Controller', () => {
         .post('/group/create-a-group/group-review-details')
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain('Redirecting to /?groupCreated')
+          expect(res.text).toContain('Found. Redirecting to /groups/not-started?groupCreated')
           expect(accreditedProgrammesManageAndDeliverService.createGroup).toHaveBeenCalledWith(expect.any(String), {
             groupCode: 'ABC123',
             earliestStartDate: '10/7/2050',
