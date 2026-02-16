@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto'
-import SchedulePresenter from '../../groupDetails/schedule/schedulePresenter'
+import SchedulePresenter from '../../groupOverview/schedule/schedulePresenter'
 
 describe('GroupServiceNavigationPresenter', () => {
   const groupId = randomUUID()
@@ -23,7 +23,7 @@ describe('GroupServiceNavigationPresenter', () => {
         classes: 'group-details__service-navigation',
         navigation: [
           {
-            href: `/groupDetails/${groupId}/waitlist`,
+            href: `/groupOverview/${groupId}/waitlist`,
             text: 'Allocations',
             active: false,
           },

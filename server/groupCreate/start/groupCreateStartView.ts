@@ -1,0 +1,29 @@
+import CreateGroupStartPresenter from './groupCreateStartPresenter'
+
+export default class CreateGroupStartView {
+  constructor(private readonly presenter: CreateGroupStartPresenter) {}
+
+  private backLinkArgs() {
+    return {
+      text: 'Back',
+      href: this.presenter.backLinkUri,
+    }
+  }
+
+  private homePageLink() {
+    return {
+      text: 'Go to Accredited Programmes homepage',
+      href: `/`,
+    }
+  }
+
+  get renderArgs(): [string, Record<string, unknown>] {
+    return [
+      'groupCreate/groupCreateStart',
+      {
+        backLinkArgs: this.backLinkArgs(),
+        homePageLink: this.homePageLink(),
+      },
+    ]
+  }
+}

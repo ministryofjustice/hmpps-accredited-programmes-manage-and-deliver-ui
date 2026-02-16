@@ -2,13 +2,13 @@ import { type RequestHandler, Router } from 'express'
 
 import CaselistController from '../caselist/caselistController'
 import ChangeCohortController from '../cohort/changeCohortController'
-import CreateGroupController from '../createGroup/createGroupController'
-import EditSessionController from '../editSession/editSessionController'
-import GroupController from '../group/groupController'
+import CreateGroupController from '../groupCreate/groupCreateController'
+import EditSessionController from '../sessionEdit/sessionEditController'
+import GroupController from '../groupList/groupListController'
 import GroupAllocationNotesController from '../groupAllocationNotes/groupAllocationNotesController'
-import AddToGroupController from '../groupDetails/addToGroup/addToGroupController'
-import GroupDetailsController from '../groupDetails/groupDetailsController'
-import RemoveFromGroupController from '../groupDetails/removeFromGroup/removeFromGroupController'
+import AddToGroupController from '../groupOverview/addToGroup/addToGroupController'
+import GroupDetailsController from '../groupOverview/groupOverviewController'
+import RemoveFromGroupController from '../groupOverview/removeFromGroup/removeFromGroupController'
 import LdcController from '../ldc/ldcController'
 import LocationPreferencesController from '../locationPreferences/locationPreferencesController'
 import asyncMiddleware from '../middleware/asyncMiddleware'
@@ -258,19 +258,19 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await createGroupController.showCreateGroupCya(req, res)
   })
 
-  get('/groupDetails/:groupId/allocated', async (req, res) => {
+  get('/groupOverview/:groupId/allocated', async (req, res) => {
     await groupDetailsController.showGroupDetailsAllocated(req, res)
   })
 
-  post('/groupDetails/:groupId/allocated', async (req, res) => {
+  post('/groupOverview/:groupId/allocated', async (req, res) => {
     await groupDetailsController.showGroupDetailsAllocated(req, res)
   })
 
-  get('/groupDetails/:groupId/waitlist', async (req, res, next) => {
+  get('/groupOverview/:groupId/waitlist', async (req, res, next) => {
     await groupDetailsController.showGroupDetailsWaitlist(req, res)
   })
 
-  post('/groupDetails/:groupId/waitlist', async (req, res, next) => {
+  post('/groupOverview/:groupId/waitlist', async (req, res, next) => {
     await groupDetailsController.showGroupDetailsWaitlist(req, res)
   })
 
