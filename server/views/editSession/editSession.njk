@@ -4,6 +4,7 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
+{% from "components/multi-select/macro.njk" import multiSelect %}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -18,7 +19,7 @@
 
       <div class="govuk-grid-column-two-thirds">
         {% if successMessageArgs !== null %}
-        {{ mojAlert(successMessageArgs) }}
+          {{ mojAlert(successMessageArgs) }}
         {% endif %}
         <span class="govuk-caption-l">{{text.pageCaption}}</span>
         <h1 class="govuk-heading-l">{{text.pageHeading}}</h1>
@@ -26,8 +27,20 @@
       <div class="govuk-grid-column-two-thirds">
         {{ govukSummaryList(editSessionSummary) }}
         {% if canBeDeleted %}
-        {{ govukButton(deleteButton) }}
+          {{ govukButton(deleteButton) }}
         {% endif %}
+      </div>
+
+      <div class="govuk-grid-column-two-thirds">
+        <h2 class="govuk-heading-m">Attendance and session notes</h2>
+      </div>
+
+      <div class="govuk-grid-column-two-thirds">
+        <form method="post" novalidate class="add-another-form">
+          <input type="hidden" name="_csrf" value="{{csrfToken}}">
+          {{ multiSelect(attendanceTableArgs) }}
+          {{ govukButton({ text: "Update attendance and notes", preventDoubleClick: true }) }}
+        </form>
       </div>
     </div>
   </main>
