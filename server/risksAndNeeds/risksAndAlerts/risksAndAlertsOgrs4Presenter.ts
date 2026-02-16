@@ -1,6 +1,5 @@
 import { ReferralDetails, Risks } from '@manage-and-deliver-api'
 import RisksAndNeedsPresenter from '../risksAndNeedsPresenter'
-import { RiskLevel, RiskLevelOrUnknown } from './risksAndAlertsPresenter'
 
 export default class RisksAndAlertsOgrs4Presenter extends RisksAndNeedsPresenter {
   constructor(

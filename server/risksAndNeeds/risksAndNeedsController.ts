@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { ReferralDetails, Risks } from '@manage-and-deliver-api'
+import { ReferralDetails } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
 import AlcoholMisusePresenter from './alcoholMisuse/alcoholMisusePresenter'
