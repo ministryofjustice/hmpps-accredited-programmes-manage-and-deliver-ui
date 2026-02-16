@@ -34,39 +34,6 @@ export default class EditSessionController {
       sessionId,
     )
 
-    // sessionDetails.attendanceAndSessionNotes = [
-    //   {
-    //     name: 'John Smith',
-    //     crn: 'X123456',
-    //     attendance: 'Attended',
-    //     sessionNotes: 'Engaged well during the session, participated in group discussions.',
-    //   },
-    //   {
-    //     name: 'Sarah Jones',
-    //     crn: 'X234567',
-    //     attendance: 'Not attended',
-    //     sessionNotes: 'No contact made, unknown reason for absence.',
-    //   },
-    //   {
-    //     name: 'Michael Brown',
-    //     crn: 'X345678',
-    //     attendance: 'Attended',
-    //     sessionNotes: 'Quiet but participated when prompted. Good engagement with peers.',
-    //   },
-    //   {
-    //     name: 'Emma Wilson',
-    //     crn: 'X456789',
-    //     attendance: 'Excused absence',
-    //     sessionNotes: 'Medical appointment scheduled. To reschedule for next session.',
-    //   },
-    //   {
-    //     name: 'David Lee',
-    //     crn: 'X567890',
-    //     attendance: 'Attended',
-    //     sessionNotes: 'Very engaged, asked good questions. Showing positive progress.',
-    //   },
-    // ]
-
     const successMessage = message ? String(message) : null
     req.session.originPage = req.path
 
