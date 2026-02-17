@@ -359,6 +359,9 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   getOrPost('/group/:groupId/session/:sessionId/edit-session-facilitators', async (req, res, next) => {
     await editSessionController.editSessionFacilitators(req, res)
   })
+  getOrPost('/group/:groupId/session/:sessionId/edit-session-attendees', async (req, res, next) => {
+    await editSessionController.editSessionAttendees(req, res)
+  })
 
   return router
 }

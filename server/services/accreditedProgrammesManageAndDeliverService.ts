@@ -684,6 +684,15 @@ export default class AccreditedProgrammesManageAndDeliverService
     })) as Session
   }
 
+  async updateSessionAttendees(username: ExpressUsername, sessionId: string, referralId: string): Promise<void> {
+    const restClient = await this.createRestClientFromUsername(username)
+    await restClient.put({
+      path: `/session/${sessionId}/attendees`,
+      data: { referralIdList: [referralId] },
+      responseType: 'text',
+    })
+  }
+
   async deleteSession(username: ExpressUsername, sessionId: string) {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.delete({

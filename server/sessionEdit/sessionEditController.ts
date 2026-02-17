@@ -17,6 +17,8 @@ import EditSessionView from './sessionEditView'
 import EditSessionFacilitatorsForm from './facilitators/sessionEditFacilitatorsForm'
 import EditSessionFacilitatorsPresenter from './facilitators/sessionEditFacilitatorsPresenter'
 import EditSessionFacilitatorsView from './facilitators/sessionEditFacilitatorsView'
+import EditSessionAttendeesPresenter from './attendees/sessionEditAttendeesPresenter'
+import EditSessionAttendeesView from './attendees/sessionEditAttendeesView'
 
 export default class EditSessionController {
   constructor(
@@ -72,6 +74,39 @@ export default class EditSessionController {
 
     const presenter = new DeleteSessionPresenter(groupId, req.session.originPage, sessionDetails, formError)
     const view = new DeleteSessionView(presenter)
+
+    return ControllerUtils.renderWithLayout(res, view, null)
+  }
+
+  async editSessionAttendees(req: Request, res: Response): Promise<void> {
+    const { groupId, sessionId } = req.params
+    const { username } = req.user
+
+    let formError: FormValidationError | null = null
+
+    if (req.method === 'POST') {
+      const data = await new EditSessionForm(req).attendeesData()
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+      } else {
+        await this.accreditedProgrammesManageAndDeliverService.updateSessionAttendees(
+          username,
+          sessionId,
+          data.paramsForUpdate.referralId,
+        )
+        return res.redirect(`/group/${groupId}/sessions-and-attendance`)
+      }
+    }
+
+    const sessionAttendees = await this.accreditedProgrammesManageAndDeliverService.getSessionAttendees(
+      username,
+      sessionId,
+    )
+
+    const backUrl = `/group/${groupId}/sessionId/${sessionId}/edit-session`
+    const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, sessionAttendees, formError)
+    const view = new EditSessionAttendeesView(presenter)
 
     return ControllerUtils.renderWithLayout(res, view, null)
   }
