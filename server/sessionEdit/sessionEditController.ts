@@ -19,7 +19,7 @@ import EditSessionFacilitatorsPresenter from './facilitators/sessionEditFacilita
 import EditSessionFacilitatorsView from './facilitators/sessionEditFacilitatorsView'
 import EditSessionAttendeesPresenter from './attendees/sessionEditAttendeesPresenter'
 import EditSessionAttendeesView from './attendees/sessionEditAttendeesView'
-
+// comment
 export default class EditSessionController {
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
