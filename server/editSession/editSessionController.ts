@@ -104,7 +104,7 @@ export default class EditSessionController {
       sessionId,
     )
 
-    const backUrl = `/group/${groupId}/sessionId/${sessionId}/edit-session`
+    const backUrl = `/group/${groupId}/session/${sessionId}/edit-session`
     const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, sessionAttendees, formError)
     const view = new EditSessionAttendeesView(presenter)
 
