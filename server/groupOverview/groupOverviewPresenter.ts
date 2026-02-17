@@ -5,10 +5,10 @@ import { ButtonArgs, CheckboxesArgsItem, SelectArgsItem, TableArgsHeadElement } 
 import Pagination from '../utils/pagination/pagination'
 import PresenterUtils from '../utils/presenterUtils'
 import { convertToTitleCase } from '../utils/utils'
-import GroupDetailFilter from './groupDetailFilter'
+import GroupDetailFilter from './groupOverviewFilter'
 import GroupServiceLayoutPresenter, { GroupServiceNavigationValues } from '../shared/groups/groupServiceLayoutPresenter'
 
-export enum GroupDetailsPageSection {
+export enum GroupOverviewPageSection {
   Allocated = 1,
   Waitlist = 2,
 }
@@ -18,13 +18,13 @@ const cohortConfigMap: Record<CohortEnum, string> = {
   GENERAL_OFFENCE: 'General offence',
 }
 
-export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
+export default class GroupOverviewPresenter extends GroupServiceLayoutPresenter {
   public readonly pagination: Pagination
 
   readonly groupListItems: Page<GroupItem>
 
   constructor(
-    readonly section: GroupDetailsPageSection,
+    readonly section: GroupOverviewPageSection,
     readonly group: ProgrammeGroupDetails,
     readonly groupId: string,
     readonly filter: GroupDetailFilter,
@@ -65,19 +65,19 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
       items: [
         {
           text:
-            this.section === GroupDetailsPageSection.Allocated
+            this.section === GroupOverviewPageSection.Allocated
               ? `Allocated (${this.group.pagedGroupData.totalElements})`
               : `Allocated (${this.group.otherTabTotal})`,
           href: `/groupDetails/${this.groupId}/allocated${nameCrnFilter}`,
-          active: this.section === GroupDetailsPageSection.Allocated,
+          active: this.section === GroupOverviewPageSection.Allocated,
         },
         {
           text:
-            this.section === GroupDetailsPageSection.Waitlist
+            this.section === GroupOverviewPageSection.Waitlist
               ? `Waitlist (${this.group.pagedGroupData.totalElements})`
               : `Waitlist (${this.group.otherTabTotal})`,
           href: `/groupDetails/${this.groupId}/waitlist${nameCrnFilter}`,
-          active: this.section === GroupDetailsPageSection.Waitlist,
+          active: this.section === GroupOverviewPageSection.Waitlist,
         },
       ],
     }
@@ -91,7 +91,7 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
     ]
 
     const extra =
-      this.section === GroupDetailsPageSection.Allocated
+      this.section === GroupOverviewPageSection.Allocated
         ? [{ text: 'Referral status', attributes: { 'aria-sort': 'none' } }]
         : [
             { text: 'Cohort', attributes: { 'aria-sort': 'none' } },
@@ -193,7 +193,7 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
 
   get formButtonArgs(): ButtonArgs {
     return {
-      text: this.section === GroupDetailsPageSection.Allocated ? 'Remove from group' : 'Add to group',
+      text: this.section === GroupOverviewPageSection.Allocated ? 'Remove from group' : 'Add to group',
     }
   }
 
@@ -244,7 +244,7 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
       return 'No results found. Clear or change the filters'
     }
 
-    return this.section === GroupDetailsPageSection.Allocated
+    return this.section === GroupOverviewPageSection.Allocated
       ? 'There are currently no people allocated to this group.'
       : `There are no people awaiting allocation in ${this.group.group.regionName}.`
   }

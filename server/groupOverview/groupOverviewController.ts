@@ -2,19 +2,19 @@ import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
 import { FormValidationError } from '../utils/formValidationError'
-import GroupDetailFilter from './groupDetailFilter'
-import GroupDetailsPresenter, { GroupDetailsPageSection } from './groupDetailsPresenter'
-import GroupDetailsView from './groupDetailsView'
+import GroupOverviewFilter from './groupOverviewFilter'
+import GroupOverviewPresenter, { GroupOverviewPageSection } from './groupOverviewPresenter'
+import GroupOverviewView from './groupOverviewView'
 import GroupForm from './groupForm'
 import SchedulePresenter from './schedule/schedulePresenter'
 import ScheduleView from './schedule/scheduleView'
 
-export default class GroupDetailsController {
+export default class GroupOverviewController {
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
   ) {}
 
-  async showGroupDetailsAllocated(req: Request, res: Response): Promise<void> {
+  async showGroupOverviewAllocated(req: Request, res: Response): Promise<void> {
     const { message } = req.query
     const { username } = req.user
     const { groupId } = req.params
@@ -22,9 +22,9 @@ export default class GroupDetailsController {
     req.session.groupManagementData = null
     const pageNumber = req.query.page
 
-    const filter = GroupDetailFilter.fromRequest(req)
+    const filter = GroupOverviewFilter.fromRequest(req)
 
-    const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers(
+    const groupOverview = await this.accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers(
       username,
       groupId,
       {
@@ -42,7 +42,7 @@ export default class GroupDetailsController {
       } else {
         req.session.groupManagementData = {
           personName: data.paramsForUpdate.personName,
-          groupCode: groupDetails.group.code,
+          groupCode: groupOverview.group.code,
         }
         return res.redirect(`/removeFromGroup/${groupId}/${data.paramsForUpdate.removeFromGroup}`)
       }
@@ -50,9 +50,9 @@ export default class GroupDetailsController {
 
     const successMessage = message ? String(message) : null
 
-    const presenter = new GroupDetailsPresenter(
-      GroupDetailsPageSection.Allocated,
-      groupDetails,
+    const presenter = new GroupOverviewPresenter(
+      GroupOverviewPageSection.Allocated,
+      groupOverview,
       groupId,
       filter,
       req.session.groupManagementData?.personName ?? '',
@@ -60,13 +60,13 @@ export default class GroupDetailsController {
       successMessage,
       req.session.filterParams,
     )
-    const view = new GroupDetailsView(presenter)
+    const view = new GroupOverviewView(presenter)
     req.session.groupManagementData = null
     req.session.originPage = req.originalUrl
     return ControllerUtils.renderWithLayout(res, view, null)
   }
 
-  async showGroupDetailsWaitlist(req: Request, res: Response): Promise<void> {
+  async showGroupOverviewWaitlist(req: Request, res: Response): Promise<void> {
     const { username } = req.user
     const { groupId } = req.params
     let formError: FormValidationError | null = null
@@ -77,9 +77,9 @@ export default class GroupDetailsController {
       req.session.filterParams = req.originalUrl.includes('?') ? req.originalUrl.split('?').pop() : undefined
     }
 
-    const filter = GroupDetailFilter.fromRequest(req)
+    const filter = GroupOverviewFilter.fromRequest(req)
 
-    const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupWaitlistMembers(
+    const groupOverview = await this.accreditedProgrammesManageAndDeliverService.getGroupWaitlistMembers(
       username,
       groupId,
       {
@@ -98,15 +98,15 @@ export default class GroupDetailsController {
       } else {
         req.session.groupManagementData = {
           personName: data.paramsForUpdate.personName,
-          groupCode: groupDetails.group.code,
+          groupCode: groupOverview.group.code,
         }
         return res.redirect(`/addToGroup/${groupId}/${data.paramsForUpdate.addToGroup}`)
       }
     }
 
-    const presenter = new GroupDetailsPresenter(
-      GroupDetailsPageSection.Waitlist,
-      groupDetails,
+    const presenter = new GroupOverviewPresenter(
+      GroupOverviewPageSection.Waitlist,
+      groupOverview,
       groupId,
       filter,
       '',
@@ -114,7 +114,7 @@ export default class GroupDetailsController {
       null,
       req.session.filterParams,
     )
-    const view = new GroupDetailsView(presenter)
+    const view = new GroupOverviewView(presenter)
     req.session.originPage = req.originalUrl
 
     return ControllerUtils.renderWithLayout(res, view, null)

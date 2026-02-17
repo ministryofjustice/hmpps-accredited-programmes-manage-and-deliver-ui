@@ -61,7 +61,7 @@ export default class AddToGroupController {
           data.paramsForUpdate.additionalDetails,
         )
         const { message } = response
-        return res.redirect(`/groupDetails/${groupId}/allocated?message=${encodeURIComponent(message)}`)
+        return res.redirect(`/groupOverview/${groupId}/allocated?message=${encodeURIComponent(message)}`)
       }
     }
 

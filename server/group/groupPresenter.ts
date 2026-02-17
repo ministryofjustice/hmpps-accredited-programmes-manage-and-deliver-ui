@@ -2,7 +2,7 @@ import { Group, ProgrammeGroupCohortEnum } from '@manage-and-deliver-api'
 import { Page } from '../shared/models/pagination'
 import Pagination from '../utils/pagination/pagination'
 import { CheckboxesArgsItem, SelectArgsItem, TableArgs } from '../utils/govukFrontendTypes'
-import GroupListFilter from '../groupDetails/groupListFilter'
+import GroupListFilter from '../groupOverview/groupListFilter'
 import DateUtils from '../utils/dateUtils'
 
 const cohortConfigMap: Record<ProgrammeGroupCohortEnum, string> = {
@@ -104,7 +104,7 @@ export default class GroupPresenter {
     this.groupListItems.content.forEach(group => {
       groupData.push([
         {
-          html: `<a href='/groupDetails/${group.id}/waitlist'>${group.code}</a>`,
+          html: `<a href='/groupOverview/${group.id}/waitlist'>${group.code}</a>`,
           attributes: { 'data-sort-value': group.code },
         },
         this.getFormattedDateCell(group),

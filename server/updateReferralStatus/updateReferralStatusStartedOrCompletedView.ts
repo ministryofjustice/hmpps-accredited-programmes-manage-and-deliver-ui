@@ -49,7 +49,7 @@ export default class UpdateReferralStatusStartedOrCompletedView {
   get insetText() {
     return {
       classes: 'govuk-!-margin-top-0',
-      html: `${this.presenter.details.personName} is allocated to <a target="_blank" rel="noopener noreferrer" href='/groupDetails/${this.presenter.details.currentlyAllocatedGroupId}/allocated'>${this.presenter.details.currentlyAllocatedGroupCode} (opens in a new tab)</a>.`,
+      html: `${this.presenter.details.personName} is allocated to <a target="_blank" rel="noopener noreferrer" href='/groupOverview/${this.presenter.details.currentlyAllocatedGroupId}/allocated'>${this.presenter.details.currentlyAllocatedGroupCode} (opens in a new tab)</a>.`,
     }
   }
 

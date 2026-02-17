@@ -62,7 +62,7 @@ import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
 import type { HmppsAuthClient, RestClientBuilderWithoutToken } from '../data'
 import RestClient from '../data/restClient'
-import { GroupListFilterParams } from '../groupDetails/groupListFilterParams'
+import { GroupListFilterParams } from '../groupOverview/groupListFilterParams'
 import type { ExpressUsername } from '../shared/ExpressUsername'
 
 export interface PaginationParams {

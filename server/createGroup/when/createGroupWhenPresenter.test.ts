@@ -5,7 +5,7 @@ afterEach(() => {
   jest.restoreAllMocks()
 })
 
-describe('groupDetailsPresenter.', () => {
+describe('groupOverviewPresenter.', () => {
   describe('whenWillGroupRunCheckBoxArgs', () => {
     it('should return the correct checkbox args', () => {
       const createGroupFormData = createGroupSessionSlotFactory.build()

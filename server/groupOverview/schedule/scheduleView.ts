@@ -68,7 +68,7 @@ export default class ScheduleView {
 
   get renderArgs(): [string, Record<string, unknown>] {
     return [
-      'groupDetails/schedule/scheduleOverview',
+      'groupOverview/schedule/scheduleOverview',
       {
         presenter: this.presenter,
         text: this.presenter.text,

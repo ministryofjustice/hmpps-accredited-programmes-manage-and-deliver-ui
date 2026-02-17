@@ -23,7 +23,7 @@ export default class RemoveFromGroupUpdateStatusPresenter {
   }
 
   get cancelLinkHref() {
-    return `/groupDetails/${this.groupId}/waitlist`
+    return `/groupOverview/${this.groupId}/waitlist`
   }
 
   get utils() {
