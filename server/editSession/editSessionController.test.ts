@@ -57,7 +57,7 @@ describe('editSession', () => {
 })
 
 describe('editSessionDateAndTime', () => {
-  describe('GET /group/:groupId/session/:sessionId/edit-session-date-and-time', () => {
+  describe('GET /group/:groupId/session/:session/edit-session-date-and-time', () => {
     it('should fetch session details with correct parameters and load page correctly', async () => {
       const sessionDetails = editSessionDetailsFactory.build()
       const sessionAttendees = editSessionAttendeesFactory.build()
@@ -77,7 +77,7 @@ describe('editSessionDateAndTime', () => {
     })
   })
 
-  describe('POST group/:groupId/session/:sessionId/edit-session-date-and-time', () => {
+  describe('POST group/:groupId/session/:session/edit-session-date-and-time', () => {
     it('should fetch session details with correct parameters and load page correctly', async () => {
       const sessionDetails = editSessionDetailsFactory.build()
       const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'GROUP' })
@@ -120,7 +120,7 @@ describe('submitEditSessionDateAndTime', () => {
       },
     },
   }
-  describe('GET group/:groupId/session/:sessionId/edit-session-date-and-time/reschedule', () => {
+  describe('GET group/:groupId/session/:session/edit-session-date-and-time/reschedule', () => {
     it('should fetch session details with correct parameters and load page correctly', async () => {
       const sessionDetails = rescheduleSessionDetailsFactory.build()
       accreditedProgrammesManageAndDeliverService.getRescheduleSessionDetails.mockResolvedValue(sessionDetails)
@@ -140,7 +140,7 @@ describe('submitEditSessionDateAndTime', () => {
     })
   })
 
-  describe('POST group/:groupId/session/:sessionId/edit-session-date-and-time/reschedule', () => {
+  describe('POST group/:groupId/session/:session/edit-session-date-and-time/reschedule', () => {
     it('should submit the edit session details correctly', async () => {
       const sessionDetails = rescheduleSessionDetailsFactory.build()
       accreditedProgrammesManageAndDeliverService.getRescheduleSessionDetails.mockResolvedValue(sessionDetails)
@@ -188,7 +188,7 @@ describe('editSessionFacilitators', () => {
     ],
   }
 
-  describe('GET /group/:groupId/session/:sessionId/edit-session-facilitators', () => {
+  describe('GET /group/:groupId/session/:session/edit-session-facilitators', () => {
     it('should fetch session facilitators with correct parameters and load page correctly', async () => {
       accreditedProgrammesManageAndDeliverService.getEditSessionFacilitators.mockResolvedValue(
         editSessionFacilitatorsResponse,
@@ -223,7 +223,7 @@ describe('editSessionFacilitators', () => {
     })
   })
 
-  describe('POST /group/:groupId/session/:sessionId/edit-session-facilitators', () => {
+  describe('POST /group/:groupId/session/:session/edit-session-facilitators', () => {
     const groupId = randomUUID()
     const sessionId = randomUUID()
     it('should submit facilitators update successfully and redirect with success message', async () => {
