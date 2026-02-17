@@ -1,0 +1,38 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+<div class="govuk-width-container">
+  <main class="govuk-main-wrapper" id="main-content">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        {{ govukBackLink(backLinkArgs) }}
+      </div>
+      <div class="govuk-grid-column-two-thirds">
+        {% if errorSummary !== null %}
+          {{ govukErrorSummary(errorSummary) }}
+        {% endif %}
+        <span class="govuk-caption-l">Edit {{ text.pageHeading }} {{ text.pageHeadingType }}</span>
+        <h1 class="govuk-heading-l">{{ text.headingText }}</h1>
+        <form method="post" novalidate>
+          <input type="hidden" name="_csrf" value="{{csrfToken}}">
+          {{ govukRadios(radioArgs) }}
+          <div class="govuk-button-group">
+            {{ govukButton({ text: "Submit", preventDoubleClick: true }) }}
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+{% endblock %}
+ 

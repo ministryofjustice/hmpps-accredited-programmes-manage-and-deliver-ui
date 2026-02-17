@@ -60,8 +60,7 @@ export default class EditSessionView {
           actions: {
             items: [
               {
-                // href: this.presenter.editSessionAttendeesUrl,
-                href: '',
+                href: `/group/${this.presenter.groupId}/session/${this.presenter.sessionId}/edit-session-attendees`,
                 text: 'Change',
                 visuallyHiddenText: 'participants',
               },
