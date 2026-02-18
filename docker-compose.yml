@@ -58,6 +58,7 @@ services:
      - HMPPS_SQS_LOCALSTACKURL=http://localstack:4566
      - SERVICES_NDELIUS_INTEGRATION_API_BASE_URL=http://wiremock:8080
      - SERVICES_OASYS_API_BASE_URL=http://wiremock:8080
+     - SERVICES_ASSESS_RISKS_AND_NEEDS_API_BASE_URL=http://wiremock:8080
      #      - API_CLIENT_SECRET=${API_CLIENT_SECRET}
      # JVM debug options
      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005

@@ -1,0 +1,102 @@
+$very-high-score-colour: #942514;
+$very-high-score-colour--light: #ffac9f;
+$very-high-score-colour__text: #711a0d;
+$high-score-colour: #d4351c;
+$high-score-colour--light: #f6d7d2;
+$high-score-colour__text: #942514;
+$medium-score-colour: #f47738;
+$medium-score-colour--light: #f9e8bd;
+$medium-score-colour__text: #a34e00;
+$low-score-colour: #85994b;
+$low-score-colour--light: #dee9bd;
+$low-score-colour__text: #485b10;
+$default-colour: govuk-colour("mid-grey");
+$default-colour--light: govuk-colour("light-grey");
+$default-colour__text: govuk-colour("black");
+
+@mixin expanded-predictor-badge-base($primary-colour, $secondary-colour, $text-colour) {
+  display: inline-flex;
+  flex-direction: column;
+  outline: 2px solid $primary-colour;
+  width: 259px;
+
+  & .predictor-badge__type {
+    @include govuk-font(19, "bold");
+    color: govuk-colour("black");
+
+    padding: 10px 10px 2px 10px;
+  }
+
+  & .predictor-badge__stats {
+    padding: 2px 10px 2px 10px;
+  }
+
+  & .predictor-badge__level {
+    @include govuk-font(19, "bold");
+    color: $text-colour;
+
+    padding: 0px;
+  }
+
+  & .predictor-badge__score {
+    @include govuk-font(19, "bold");
+    color: govuk-colour("black");
+
+    background-color: $secondary-colour;
+
+    padding: 2px 4px;
+  }
+
+  & .predictor-badge__static_or_dynamic {
+    @include govuk-font(19, "regular");
+    color: #282D30;
+
+    background-color: #E5E6E7;
+
+    padding: 2px 4px;
+  }
+
+  & .predictor-badge__wrapped_static_or_dynamic {
+    display: inline-block;
+    margin-top: 3px;
+  }
+
+  & .predictor-badge__last_updated {
+    @include govuk-font(16, "regular");
+    color: #6E777A;
+
+    padding: 2px 10px 10px 10px;
+  }
+}
+
+.expanded-predictor-badge--very-high {
+  @include expanded-predictor-badge-base(
+      $very-high-score-colour,
+      $very-high-score-colour--light,
+      $very-high-score-colour__text
+  );
+}
+
+.expanded-predictor-badge--high {
+  @include expanded-predictor-badge-base($high-score-colour, $high-score-colour--light, $high-score-colour__text);
+}
+
+.expanded-predictor-badge--medium {
+  @include expanded-predictor-badge-base($medium-score-colour, $medium-score-colour--light, $medium-score-colour__text);
+}
+
+.expanded-predictor-badge--low {
+  @include expanded-predictor-badge-base($low-score-colour, $low-score-colour--light, $low-score-colour__text);
+}
+
+.expanded-predictor-badge--default {
+  @include expanded-predictor-badge-base($default-colour, $default-colour--light, $default-colour__text);
+}
+
+.expanded-predictor-badge__fixed-width {
+  width: 259px;
+}
+
+.expanded-predictor-badge__dynamic {
+  width: 100%;
+}

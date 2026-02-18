@@ -16,6 +16,7 @@ $moj-page-width: 1170px;
 @use 'risk/rosh-widget';
 @use 'risk/risks-and-alerts';
 @use 'risk/risk-flag-widget';
+@use 'ogrs4-risk/index';
 
 @use './components/accessible_autocomplete';
 @use './components/header-bar';
