@@ -1,4 +1,4 @@
-import { CohortEnum, GroupItem, ProgrammeGroupDetails } from '@manage-and-deliver-api'
+import { CohortEnum, GroupItem, ProgrammeGroupOverview } from '@manage-and-deliver-api'
 import { Page } from '../shared/models/pagination'
 import { FormValidationError } from '../utils/formValidationError'
 import { ButtonArgs, CheckboxesArgsItem, SelectArgsItem, TableArgsHeadElement } from '../utils/govukFrontendTypes'
@@ -25,7 +25,7 @@ export default class GroupOverviewPresenter extends GroupServiceLayoutPresenter 
 
   constructor(
     readonly section: GroupOverviewPageSection,
-    readonly group: ProgrammeGroupDetails,
+    readonly group: ProgrammeGroupOverview,
     readonly groupId: string,
     readonly filter: GroupDetailFilter,
     readonly personName: string = '',

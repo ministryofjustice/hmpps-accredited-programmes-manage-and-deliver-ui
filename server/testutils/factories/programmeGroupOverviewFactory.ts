@@ -1,8 +1,8 @@
-import { CohortEnum, ProgrammeGroupDetails } from '@manage-and-deliver-api'
+import { CohortEnum, ProgrammeGroupOverview } from '@manage-and-deliver-api'
 import { Factory } from 'fishery'
 import { randomUUID } from 'crypto'
 
-class ProgrammeGroupOverviewFactory extends Factory<ProgrammeGroupDetails> {
+class ProgrammeGroupOverviewFactory extends Factory<ProgrammeGroupOverview> {
   allocatedList() {
     return this.params({
       pagedGroupData: {
