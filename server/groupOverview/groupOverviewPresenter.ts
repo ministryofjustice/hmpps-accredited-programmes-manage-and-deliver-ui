@@ -5,7 +5,7 @@ import { ButtonArgs, CheckboxesArgsItem, SelectArgsItem, TableArgsHeadElement } 
 import Pagination from '../utils/pagination/pagination'
 import PresenterUtils from '../utils/presenterUtils'
 import { convertToTitleCase } from '../utils/utils'
-import GroupDetailFilter from './groupOverviewFilter'
+import GroupOverviewFilter from './groupOverviewFilter'
 import GroupServiceLayoutPresenter, { GroupServiceNavigationValues } from '../shared/groups/groupServiceLayoutPresenter'
 
 export enum GroupOverviewPageSection {
@@ -27,7 +27,7 @@ export default class GroupOverviewPresenter extends GroupServiceLayoutPresenter 
     readonly section: GroupOverviewPageSection,
     readonly group: ProgrammeGroupOverview,
     readonly groupId: string,
-    readonly filter: GroupDetailFilter,
+    readonly filter: GroupOverviewFilter,
     readonly personName: string = '',
     readonly validationError: FormValidationError | null = null,
     readonly successMessage: string | null = null,
