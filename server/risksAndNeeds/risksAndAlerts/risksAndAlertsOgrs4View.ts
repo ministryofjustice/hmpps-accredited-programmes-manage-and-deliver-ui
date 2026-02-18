@@ -53,7 +53,9 @@ export default class RisksAndAlertsOgrs4View {
       type: 'All reoffending predictor',
       level: this.presenter.levelOrUnknown(this.presenter.risks.ogrS4Risks.allReoffendingBand),
       score: this.presenter.risks.ogrS4Risks.allReoffendingScore,
-      staticOrDynamic: this.presenter.risks.ogrS4Risks.allReoffendingScoreType.toUpperCase(),
+      staticOrDynamic: this.presenter.risks.ogrS4Risks.allReoffendingScoreType
+        ? this.presenter.risks.ogrS4Risks.allReoffendingScoreType.toUpperCase()
+        : null,
       lastUpdated: this.presenter.risks.lastUpdated,
       bandPercentages: ['0%', '49%', '74%', '90%', '100%'],
     }
@@ -64,7 +66,9 @@ export default class RisksAndAlertsOgrs4View {
       level: this.presenter.levelOrUnknown(this.presenter.risks.ogrS4Risks.violentReoffendingBand),
       score: this.presenter.risks.ogrS4Risks.violentReoffendingScore,
       type: 'Violent reoffending predictor',
-      staticOrDynamic: this.presenter.risks.ogrS4Risks.violentReoffendingScoreType.toUpperCase(),
+      staticOrDynamic: this.presenter.risks.ogrS4Risks.violentReoffendingScoreType
+        ? this.presenter.risks.ogrS4Risks.violentReoffendingScoreType.toUpperCase()
+        : null,
       completedDate: this.presenter.risks.lastUpdated,
     }
   }
@@ -104,7 +108,9 @@ export default class RisksAndAlertsOgrs4View {
       level: this.presenter.levelOrUnknown(this.presenter.risks.ogrS4Risks.combinedSeriousReoffendingBand),
       score: this.presenter.risks.ogrS4Risks.combinedSeriousReoffendingScore,
       type: 'Combined serious reoffending predictor',
-      staticOrDynamic: this.presenter.risks.ogrS4Risks.combinedSeriousReoffendingScoreType.toUpperCase(),
+      staticOrDynamic: this.presenter.risks.ogrS4Risks.combinedSeriousReoffendingScoreType
+        ? this.presenter.risks.ogrS4Risks.combinedSeriousReoffendingScoreType.toUpperCase()
+        : null,
       completedDate: this.presenter.risks.lastUpdated,
     }
   }
