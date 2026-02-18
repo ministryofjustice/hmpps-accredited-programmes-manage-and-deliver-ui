@@ -55,7 +55,9 @@ export default class EditSessionView {
             text: 'Scheduled to attend',
           },
           value: {
-            html: sessionDetailsObj.scheduledToAttend.join('<br>'),
+            html: sessionDetailsObj.scheduledToAttend.join(
+              '<span class="govuk-!-display-block govuk-!-margin-bottom-1"></span>',
+            ),
           },
           actions: {
             items: [
@@ -72,7 +74,9 @@ export default class EditSessionView {
             text: 'Facilitators',
           },
           value: {
-            html: sessionDetailsObj.facilitators.join('<br>'),
+            html: sessionDetailsObj.facilitators.join(
+              '<span class="govuk-!-display-block govuk-!-margin-bottom-1"></span>',
+            ),
           },
           actions: {
             items: [
