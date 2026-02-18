@@ -332,6 +332,22 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/dev/seed/referrals': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['seedReferrals']
+    delete: operations['dangerouslyDeleteAllReferrals']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/admin/populate-personal-details': {
     parameters: {
       query?: never
@@ -766,6 +782,22 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/dev/seed/health': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: operations['health']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/bff/status-transitions/referral/{referralId}': {
     parameters: {
       query?: never
@@ -818,6 +850,26 @@ export interface paths {
      * @description Retrieve the facilitators for a session
      */
     get: operations['retrieveSessionFacilitators']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/bff/session/{sessionId}/record-attendance': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * BFF endpoint to retrieve a record attendance for a session
+     * @description Retrieve a record attendance for a session
+     */
+    get: operations['getSessionRecordAttendance']
     put?: never
     post?: never
     delete?: never
@@ -1728,6 +1780,17 @@ export interface components {
        * @example Alex River was added to this group. Their referral status is now Scheduled.
        */
       message: string
+    }
+    SeededReferralInfo: {
+      referralId: string
+      crn: string
+      personName: string
+      requirementId: string
+    }
+    SeedingResult: {
+      /** Format: int32 */
+      count: number
+      referrals: components['schemas']['SeededReferralInfo'][]
     }
     CreateAvailability: {
       /**
@@ -2749,29 +2812,29 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      /** Format: int32 */
+      numberOfElements?: number
       first?: boolean
       last?: boolean
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
-      /** Format: int32 */
-      numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageableObject: {
+      paged?: boolean
+      /** Format: int32 */
+      pageNumber?: number
+      /** Format: int32 */
+      pageSize?: number
+      unpaged?: boolean
       /** Format: int64 */
       offset?: number
       sort?: components['schemas']['SortObject']
-      /** Format: int32 */
-      pageSize?: number
-      /** Format: int32 */
-      pageNumber?: number
-      paged?: boolean
-      unpaged?: boolean
     }
     ReferralCaseListItem: {
       /** Format: uuid */
@@ -2789,9 +2852,9 @@ export interface components {
       reportingTeam: string
     }
     SortObject: {
-      empty?: boolean
       sorted?: boolean
       unsorted?: boolean
+      empty?: boolean
     }
     StatusFilterValues: {
       /**
@@ -2971,6 +3034,65 @@ export interface components {
       pageTitle: string
       /** @description List of the facilitators for the session */
       facilitators: components['schemas']['EditSessionFacilitator'][]
+    }
+    /** @description Details of an Option */
+    Option: {
+      /**
+       * @description A string representing a text
+       * @example Attended
+       */
+      text?: string
+      /**
+       * @description A string representing a subtext
+       * @example Left early
+       */
+      subtext?: string
+      /**
+       * @description A string representing a value
+       * @example ndelius-outcome-1
+       */
+      value?: string
+    }
+    /** @description Details of a Record Attendance */
+    RecordSessionAttendance: {
+      /**
+       * @description A title of a session
+       * @example Getting started 1
+       */
+      sessionTitle: string
+      /**
+       * @description Region name of a programme group
+       * @example North East
+       */
+      groupRegionName: string
+      /** @description List of attendees */
+      people: components['schemas']['SessionAttendancePerson'][]
+    }
+    /** @description Details of an Attendee */
+    SessionAttendancePerson: {
+      /**
+       * Format: uuid
+       * @description A UUID string representing a referral ID
+       * @example cb64c21b-cf10-4a6d-a118-f61d4f27f47b
+       */
+      referralId: string
+      /**
+       * @description A string representing a full name of an attendee
+       * @example Alice Brown
+       */
+      name: string
+      /**
+       * @description A string representing a CRN
+       * @example Alice Brown
+       */
+      crn: string
+      /**
+       * @description A string an attendance
+       * @example Attended, failed to comply
+       */
+      attendance?: string
+      /** @description A list of options */
+      options?: components['schemas']['Option'][]
     }
     EditSessionDetails: {
       /** Format: uuid */
@@ -3157,17 +3279,17 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      /** Format: int32 */
+      numberOfElements?: number
       first?: boolean
       last?: boolean
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
-      /** Format: int32 */
-      numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Available filter options for viewing programme group data. */
@@ -3274,17 +3396,17 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      /** Format: int32 */
+      numberOfElements?: number
       first?: boolean
       last?: boolean
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
-      /** Format: int32 */
-      numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
@@ -3410,6 +3532,8 @@ export interface components {
     }
     AttendanceAndSessionNotes: {
       name: string
+      /** Format: uuid */
+      referralId: string
       crn: string
       attendance: string
       sessionNotes: string
@@ -3555,9 +3679,9 @@ export interface components {
       /** @description Details of the Group's members via their Referrals */
       groupMembers: components['schemas']['GroupMember'][]
     }
-    DeleteSessionCaptionResponse: {
-      /** @description Caption indicating what session is about to be deleted */
-      caption: string
+    TeardownResult: {
+      /** Format: int32 */
+      deletedCount: number
     }
   }
   responses: never
@@ -4671,6 +4795,66 @@ export interface operations {
       }
       /** @description The group or referral does not exist */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  seedReferrals: {
+    parameters: {
+      query?: {
+        count?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['SeedingResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  dangerouslyDeleteAllReferrals: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['TeardownResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
         headers: {
           [name: string]: unknown
         }
@@ -6004,6 +6188,37 @@ export interface operations {
       }
     }
   }
+  health: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': {
+            [key: string]: string
+          }
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getStatusTransitionsForReferral: {
     parameters: {
       query?: never
@@ -6152,6 +6367,65 @@ export interface operations {
         }
       }
       /** @description Forbidden, requires role ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Session not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getSessionRecordAttendance: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Unique identifier of a session */
+        sessionId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully retrieved record attendance details */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['RecordSessionAttendance']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
       403: {
         headers: {
           [name: string]: unknown
@@ -7129,7 +7403,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          '*/*': components['schemas']['DeleteSessionCaptionResponse']
+          'application/json': string
         }
       }
       /** @description Bad Request */
