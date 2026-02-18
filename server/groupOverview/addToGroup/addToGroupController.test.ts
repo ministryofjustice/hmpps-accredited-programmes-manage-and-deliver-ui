@@ -117,7 +117,7 @@ describe('add to group', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Redirecting to /groupOverview/${groupId}/allocated?message=Successfully%20added%20to%20group`,
+            `Redirecting to /group/${groupId}/allocated?message=Successfully%20added%20to%20group`,
           )
         })
     })

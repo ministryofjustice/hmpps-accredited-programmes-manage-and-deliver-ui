@@ -68,7 +68,7 @@ export default class GroupOverviewPresenter extends GroupServiceLayoutPresenter 
             this.section === GroupOverviewPageSection.Allocated
               ? `Allocated (${this.group.pagedGroupData.totalElements})`
               : `Allocated (${this.group.otherTabTotal})`,
-          href: `/groupOverview/${this.groupId}/allocated${nameCrnFilter}`,
+          href: `/group/${this.groupId}/allocated${nameCrnFilter}`,
           active: this.section === GroupOverviewPageSection.Allocated,
         },
         {
