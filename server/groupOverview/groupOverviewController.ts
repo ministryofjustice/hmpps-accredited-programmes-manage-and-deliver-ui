@@ -120,7 +120,7 @@ export default class GroupOverviewController {
     return ControllerUtils.renderWithLayout(res, view, null)
   }
 
-  async showScheduleOverview(req: Request, res: Response): Promise<void> {
+  async showGroupOverviewSchedule(req: Request, res: Response): Promise<void> {
     const { username } = req.user
     const { groupId } = req.params
 

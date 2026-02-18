@@ -275,7 +275,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   })
 
   get('/group/:groupId/schedule-overview', async (req, res, next) => {
-    await groupOverviewController.showScheduleOverview(req, res)
+    await groupOverviewController.showGroupOverviewSchedule(req, res)
   })
 
   get(
