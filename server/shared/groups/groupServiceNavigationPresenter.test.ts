@@ -38,7 +38,7 @@ describe('GroupServiceNavigationPresenter', () => {
             active: false,
           },
           {
-            href: `/group/${groupId}/group-overview`,
+            href: `/group/${groupId}/group-details`,
             text: 'Group details',
             active: false,
           },

@@ -34,7 +34,7 @@ export default class GroupServiceLayoutPresenter {
           active: this.activePage === GroupServiceNavigationValues.sessionsAndAttendanceTab,
         },
         {
-          href: `/group/${this.groupId}/group-overview`,
+          href: `/group/${this.groupId}/group-details`,
           text: 'Group details',
           active: this.activePage === GroupServiceNavigationValues.groupOverviewTab,
         },
