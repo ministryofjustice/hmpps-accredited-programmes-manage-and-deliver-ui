@@ -16,7 +16,7 @@ export default class GroupServiceLayoutPresenter {
     navigation: { href: string; text: string; active: boolean }[]
   } {
     return {
-      classes: 'group-details__service-navigation',
+      classes: 'group-overview__service-navigation',
       navigation: [
         {
           href: `/group/${this.groupId}/waitlist`,
