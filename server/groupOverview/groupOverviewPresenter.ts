@@ -68,7 +68,7 @@ export default class GroupOverviewPresenter extends GroupServiceLayoutPresenter 
             this.section === GroupOverviewPageSection.Allocated
               ? `Allocated (${this.group.pagedGroupData.totalElements})`
               : `Allocated (${this.group.otherTabTotal})`,
-          href: `/groupDetails/${this.groupId}/allocated${nameCrnFilter}`,
+          href: `/groupOverview/${this.groupId}/allocated${nameCrnFilter}`,
           active: this.section === GroupOverviewPageSection.Allocated,
         },
         {
@@ -76,7 +76,7 @@ export default class GroupOverviewPresenter extends GroupServiceLayoutPresenter 
             this.section === GroupOverviewPageSection.Waitlist
               ? `Waitlist (${this.group.pagedGroupData.totalElements})`
               : `Waitlist (${this.group.otherTabTotal})`,
-          href: `/groupDetails/${this.groupId}/waitlist${nameCrnFilter}`,
+          href: `/groupOverview/${this.groupId}/waitlist${nameCrnFilter}`,
           active: this.section === GroupOverviewPageSection.Waitlist,
         },
       ],

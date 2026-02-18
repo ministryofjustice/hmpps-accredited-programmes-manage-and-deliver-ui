@@ -20,10 +20,10 @@ describe('GroupServiceNavigationPresenter', () => {
       })
 
       expect(presenter.getServiceNavigationArgs()).toEqual({
-        classes: 'group-overview__service-navigation',
+        classes: 'group-details__service-navigation',
         navigation: [
           {
-            href: `/groupOverview/${groupId}/waitlist`,
+            href: `/group/${groupId}/waitlist`,
             text: 'Allocations',
             active: false,
           },

@@ -258,23 +258,23 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await createGroupController.showCreateGroupCya(req, res)
   })
 
-  get('/groupOverview/:groupId/allocated', async (req, res) => {
+  get('/group/:groupId/allocated', async (req, res) => {
     await groupOverviewController.showGroupOverviewAllocated(req, res)
   })
 
-  post('/groupOverview/:groupId/allocated', async (req, res) => {
+  post('/group/:groupId/allocated', async (req, res) => {
     await groupOverviewController.showGroupOverviewAllocated(req, res)
   })
 
-  get('/groupOverview/:groupId/waitlist', async (req, res, next) => {
+  get('/group/:groupId/waitlist', async (req, res, next) => {
     await groupOverviewController.showGroupOverviewWaitlist(req, res)
   })
 
-  post('/groupOverview/:groupId/waitlist', async (req, res, next) => {
+  post('/group/:groupId/waitlist', async (req, res, next) => {
     await groupOverviewController.showGroupOverviewWaitlist(req, res)
   })
 
-  get('/groupOverview/:groupId/schedule-overview', async (req, res, next) => {
+  get('/group/:groupId/schedule-overview', async (req, res, next) => {
     await groupOverviewController.showScheduleOverview(req, res)
   })
 

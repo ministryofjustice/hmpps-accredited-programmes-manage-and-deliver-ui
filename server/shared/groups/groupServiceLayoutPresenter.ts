@@ -16,10 +16,10 @@ export default class GroupServiceLayoutPresenter {
     navigation: { href: string; text: string; active: boolean }[]
   } {
     return {
-      classes: 'group-overview__service-navigation',
+      classes: 'group-details__service-navigation',
       navigation: [
         {
-          href: `/groupOverview/${this.groupId}/waitlist`,
+          href: `/group/${this.groupId}/waitlist`,
           text: 'Allocations',
           active: this.activePage === GroupServiceNavigationValues.allocationsTab,
         },
