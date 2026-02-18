@@ -104,7 +104,7 @@ export default class GroupPresenter {
     this.groupListItems.content.forEach(group => {
       groupData.push([
         {
-          html: `<a href='/groupOverview/${group.id}/waitlist'>${group.code}</a>`,
+          html: `<a href='/group/${group.id}/waitlist'>${group.code}</a>`,
           attributes: { 'data-sort-value': group.code },
         },
         this.getFormattedDateCell(group),

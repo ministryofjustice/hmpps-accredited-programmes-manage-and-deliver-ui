@@ -25,7 +25,7 @@ beforeEach(() => {
       groupCode: 'ABC123',
       personName: 'Alex River',
     },
-    originPage: '/groupOverview/123/waitlist?nameOrCRN=&cohort=General+Offence&sex=&pdu=Liverpool',
+    originPage: '/group/123/waitlist?nameOrCRN=&cohort=General+Offence&sex=&pdu=Liverpool',
   }
   app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
   accreditedProgrammesManageAndDeliverService.addToGroup.mockResolvedValue({ message: 'Successfully added to group' })
@@ -72,7 +72,7 @@ describe('add to group', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Redirecting to /groupOverview/${groupId}/waitlist?nameOrCRN=&cohort=General+Offence&sex=&pdu=Liverpool`,
+            `Redirecting to /group/${groupId}/waitlist?nameOrCRN=&cohort=General+Offence&sex=&pdu=Liverpool`,
           )
         })
     })

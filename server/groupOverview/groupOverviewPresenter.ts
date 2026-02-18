@@ -76,7 +76,7 @@ export default class GroupOverviewPresenter extends GroupServiceLayoutPresenter 
             this.section === GroupOverviewPageSection.Waitlist
               ? `Waitlist (${this.group.pagedGroupData.totalElements})`
               : `Waitlist (${this.group.otherTabTotal})`,
-          href: `/groupOverview/${this.groupId}/waitlist${nameCrnFilter}`,
+          href: `/group/${this.groupId}/waitlist${nameCrnFilter}`,
           active: this.section === GroupOverviewPageSection.Waitlist,
         },
       ],
