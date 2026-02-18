@@ -14,7 +14,7 @@ export default class SchedulePresenter extends GroupServiceLayoutPresenter {
   get text() {
     return {
       headingCaptionText: this.groupScheduleOverview.code,
-      headingText: `Schedule Overview`,
+      headingText: `Schedule overview`,
     }
   }
 
