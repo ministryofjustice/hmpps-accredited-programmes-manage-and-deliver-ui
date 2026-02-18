@@ -545,10 +545,8 @@ describe('SessionScheduleAttendancePresenter', () => {
       const accordionItems = presenter.getAccordionItems()
 
       // Rigid check: fail if modules are added, removed, or reordered
-      expect(accordionItems).toHaveLength(7)
-      actualModuleNames.forEach((name, index) => {
-        expect(accordionItems[index].heading.text).toBe(name)
-      })
+      const extractedHeadings = accordionItems.map(item => item.heading.text)
+      expect(extractedHeadings).toEqual(actualModuleNames)
     })
   })
 
