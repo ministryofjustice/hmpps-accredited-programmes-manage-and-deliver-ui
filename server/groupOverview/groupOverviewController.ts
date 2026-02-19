@@ -22,6 +22,10 @@ export default class GroupOverviewController {
     req.session.groupManagementData = null
     const pageNumber = req.query.page
 
+    if (pageNumber === undefined) {
+      req.session.filterParams = req.originalUrl.includes('?') ? req.originalUrl.split('?').pop() : undefined
+    }
+
     const filter = GroupAllocationsFilter.fromRequest(req)
 
     const groupOverview = await this.accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers(
