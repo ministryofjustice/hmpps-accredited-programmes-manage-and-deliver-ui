@@ -157,7 +157,6 @@ export type {
   SessionScheduleRequest,
   SessionScheduleResponse,
   SessionTime,
-  st,
   ThinkingAndBehaviour,
   UpdateAvailability,
   UpdateCohort,

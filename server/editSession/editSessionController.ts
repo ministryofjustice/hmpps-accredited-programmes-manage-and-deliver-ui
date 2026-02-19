@@ -11,14 +11,14 @@ import OtherSessionsView from './dateAndTime/otherSessionsView'
 import RescheduleOtherSessionsForm from './dateAndTime/rescheduleOtherSessionsForm'
 import DeleteSessionPresenter from './deleteSession/deleteSessionPresenter'
 import DeleteSessionView from './deleteSession/deleteSessionView'
+import EditSessionAttendeesPresenter from './editSessionAttendees/editSessionAttendeesPresenter'
+import EditSessionAttendeesView from './editSessionAttendees/editSessionAttendeesView'
 import EditSessionForm from './editSessionForm'
 import EditSessionPresenter from './editSessionPresenter'
 import EditSessionView from './editSessionView'
 import EditSessionFacilitatorsForm from './facilitators/editSessionFacilitatorsForm'
 import EditSessionFacilitatorsPresenter from './facilitators/editSessionFacilitatorsPresenter'
 import EditSessionFacilitatorsView from './facilitators/editSessionFacilitatorsView'
-import EditSessionAttendeesPresenter from './editSessionAttendees/editSessionAttendeesPresenter'
-import EditSessionAttendeesView from './editSessionAttendees/editSessionAttendeesView'
 
 export default class EditSessionController {
   constructor(
@@ -64,7 +64,7 @@ export default class EditSessionController {
         formError = data.error
       } else if (data.paramsForUpdate?.delete === 'yes') {
         const response = await this.accreditedProgrammesManageAndDeliverService.deleteSession(username, sessionId)
-        return res.redirect(`/group/${groupId}/sessions-and-attendance?successMessage=${response.caption}`)
+        return res.redirect(`/group/${groupId}/sessions-and-attendance?successMessage=${response}`)
       } else {
         return res.redirect(req.session.originPage)
       }

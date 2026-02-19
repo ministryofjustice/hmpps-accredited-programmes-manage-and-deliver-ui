@@ -25,7 +25,7 @@ export default class GroupServiceLayoutPresenter {
         },
         {
           href: `/group/${this.groupId}/schedule-overview`,
-          text: 'Schedule Overview',
+          text: 'Schedule overview',
           active: this.activePage === GroupServiceNavigationValues.scheduleOverviewTab,
         },
         {

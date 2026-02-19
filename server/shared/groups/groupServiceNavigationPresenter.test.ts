@@ -29,7 +29,7 @@ describe('GroupServiceNavigationPresenter', () => {
           },
           {
             href: `/group/${groupId}/schedule-overview`,
-            text: 'Schedule Overview',
+            text: 'Schedule overview',
             active: true,
           },
           {

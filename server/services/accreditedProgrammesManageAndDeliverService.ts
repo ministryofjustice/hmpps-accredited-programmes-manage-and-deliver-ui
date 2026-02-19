@@ -16,11 +16,11 @@ import {
   DeliveryLocationPreferences,
   DeliveryLocationPreferencesFormData,
   DrugDetails,
+  EditSessionAttendeesResponse,
   EditSessionDateAndTimeResponse,
   EditSessionDetails,
   EditSessionFacilitatorsRequest,
   EditSessionFacilitatorsResponse,
-  EditSessionAttendeesResponse,
   EmotionalWellbeing,
   Group,
   GroupsByRegion,
@@ -693,12 +693,12 @@ export default class AccreditedProgrammesManageAndDeliverService
     })
   }
 
-  async deleteSession(username: ExpressUsername, sessionId: string) {
+  async deleteSession(username: ExpressUsername, sessionId: string): Promise<string> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.delete({
       path: `/session/${sessionId}`,
-      headers: { Accept: 'application/json' },
-    })) as { caption: string }
+      responseType: String.name,
+    })) as string
   }
 
   async getEditSessionFacilitators(

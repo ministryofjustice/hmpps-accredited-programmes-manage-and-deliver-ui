@@ -159,9 +159,6 @@
               {{ govukErrorSummary(errorSummary) }}
             {% endif %}
 
-            <span class="govuk-caption-l">{{ text.headingHintText }}</span>
-            <h1 class="govuk-heading-l">{{ text.headingText }}</h1>
-
             <form method="post" novalidate class="add-another-form">
               <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
@@ -204,12 +201,12 @@
                   {{ govukButton({
                     id: "add-another-facilitator",
                     text: "Add another facilitator",
-                    classes: "govuk-button--secondary moj-add-another__add-button govuk-!-margin-bottom-4"
+                    classes: "govuk-button--secondary moj-add-another__add-button"
                   }) }}
                 </div>
               </div>
 
-              {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+              {{ govukButton({ text: "Submit", preventDoubleClick: true }) }}
             </form>
           </div>
         </div>
