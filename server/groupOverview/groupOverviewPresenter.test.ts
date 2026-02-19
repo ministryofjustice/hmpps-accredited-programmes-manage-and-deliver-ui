@@ -1,18 +1,18 @@
 import ProgrammeGroupOverviewFactory from '../testutils/factories/programmeGroupOverviewFactory'
-import GroupOverviewPresenter, { GroupOverviewPageSection } from './groupOverviewPresenter'
-import GroupOverviewFilter from './groupOverviewFilter'
+import GroupAllocationsPresenter, { GroupAllocationsPageSection } from './allocations/groupAllocationsPresenter'
+import GroupAllocationsFilter from './allocations/groupAllocationsFilter'
 
 afterEach(() => {
   jest.restoreAllMocks()
 })
 
-describe('groupOverviewPresenter.', () => {
+describe('GroupAllocationsPresenter', () => {
   describe('generateTableHeadings', () => {
     it('should return the correct table headings for allocated list', () => {
-      const filterObject = GroupOverviewFilter.empty()
+      const filterObject = GroupAllocationsFilter.empty()
       const groupOverview = ProgrammeGroupOverviewFactory.build()
-      const presenter = new GroupOverviewPresenter(
-        GroupOverviewPageSection.Allocated,
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Allocated,
         groupOverview,
         '1234',
         filterObject,
@@ -25,10 +25,10 @@ describe('groupOverviewPresenter.', () => {
       ])
     })
     it('should return the correct table headings for waitlist', () => {
-      const filterObject = GroupOverviewFilter.empty()
+      const filterObject = GroupAllocationsFilter.empty()
       const groupOverview = ProgrammeGroupOverviewFactory.build()
-      const presenter = new GroupOverviewPresenter(
-        GroupOverviewPageSection.Waitlist,
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Waitlist,
         groupOverview,
         '1234',
         filterObject,
@@ -47,10 +47,10 @@ describe('groupOverviewPresenter.', () => {
   })
   describe('generateWaitlistTableArgs', () => {
     it('should return the correct table args for waitlist', () => {
-      const filterObject = GroupOverviewFilter.empty()
+      const filterObject = GroupAllocationsFilter.empty()
       const groupOverview = ProgrammeGroupOverviewFactory.waitlist().build()
-      const presenter = new GroupOverviewPresenter(
-        GroupOverviewPageSection.Waitlist,
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Waitlist,
         groupOverview,
         '1234',
         filterObject,
@@ -111,10 +111,10 @@ describe('groupOverviewPresenter.', () => {
   })
   describe('generateAllocateTableArgs', () => {
     it('should return the correct table args for allocted list', () => {
-      const filterObject = GroupOverviewFilter.empty()
+      const filterObject = GroupAllocationsFilter.empty()
       const groupOverview = ProgrammeGroupOverviewFactory.allocatedList().build()
-      const presenter = new GroupOverviewPresenter(
-        GroupOverviewPageSection.Waitlist,
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Waitlist,
         groupOverview,
         '1234',
         filterObject,
@@ -165,10 +165,10 @@ describe('groupOverviewPresenter.', () => {
 
   describe('generatePduSelectArgs', () => {
     it('should return the correct select args for PDU', () => {
-      const filterObject = { pdu: 'Liverpool' } as GroupOverviewFilter
+      const filterObject = { pdu: 'Liverpool' } as GroupAllocationsFilter
       const groupOverview = ProgrammeGroupOverviewFactory.build()
-      const presenter = new GroupOverviewPresenter(
-        GroupOverviewPageSection.Waitlist,
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Waitlist,
         groupOverview,
         '1234',
         filterObject,
@@ -202,10 +202,10 @@ describe('groupOverviewPresenter.', () => {
       const filterObject = {
         pdu: 'Manchester',
         reportingTeam: ['Manchester Office 1'],
-      } as GroupOverviewFilter
+      } as GroupAllocationsFilter
       const groupOverview = ProgrammeGroupOverviewFactory.build()
-      const presenter = new GroupOverviewPresenter(
-        GroupOverviewPageSection.Waitlist,
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Waitlist,
         groupOverview,
         '1234',
         filterObject,
@@ -241,11 +241,11 @@ describe('resultsText', () => {
       },
     }
 
-    const presenter = new GroupOverviewPresenter(
-      GroupOverviewPageSection.Allocated,
+    const presenter = new GroupAllocationsPresenter(
+      GroupAllocationsPageSection.Allocated,
       groupOverview,
       '1234',
-      GroupOverviewFilter.empty(),
+      GroupAllocationsFilter.empty(),
     )
 
     expect(presenter.resultsText).toBe('')
@@ -265,11 +265,11 @@ describe('resultsText', () => {
       },
     }
 
-    const presenter = new GroupOverviewPresenter(
-      GroupOverviewPageSection.Allocated,
+    const presenter = new GroupAllocationsPresenter(
+      GroupAllocationsPageSection.Allocated,
       groupOverview,
       '1234',
-      GroupOverviewFilter.empty(),
+      GroupAllocationsFilter.empty(),
     )
 
     expect(presenter.resultsText).toBe(

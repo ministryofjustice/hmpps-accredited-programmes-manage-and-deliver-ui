@@ -1,9 +1,9 @@
-import { CheckboxesArgs, InputArgs, SelectArgs, TableArgs } from '../utils/govukFrontendTypes'
-import ViewUtils from '../utils/viewUtils'
-import GroupOverviewPresenter, { GroupOverviewPageSection } from './groupOverviewPresenter'
+import { CheckboxesArgs, InputArgs, SelectArgs, TableArgs } from '../../utils/govukFrontendTypes'
+import ViewUtils from '../../utils/viewUtils'
+import GroupAllocationsPresenter, { GroupAllocationsPageSection } from './groupAllocationsPresenter'
 
-export default class GroupOverviewView {
-  constructor(private readonly presenter: GroupOverviewPresenter) {}
+export default class GroupAllocationsView {
+  constructor(private readonly presenter: GroupAllocationsPresenter) {}
 
   private get searchByCrnOrPersonNameArgs(): InputArgs {
     return {
@@ -66,10 +66,10 @@ export default class GroupOverviewView {
       attributes: {
         'data-module': 'moj-sortable-table',
       },
-      classes: this.presenter.section === GroupOverviewPageSection.Allocated ? 'allocated' : '',
+      classes: this.presenter.section === GroupAllocationsPageSection.Allocated ? 'allocated' : '',
       head: this.presenter.generateTableHeadings(),
       rows:
-        this.presenter.section === GroupOverviewPageSection.Allocated
+        this.presenter.section === GroupAllocationsPageSection.Allocated
           ? this.presenter.generateAllocatedTableArgs()
           : this.presenter.generateWaitlistTableArgs(),
     }
@@ -110,7 +110,7 @@ export default class GroupOverviewView {
         presenter: this.presenter,
         subNavArgs: this.presenter.getSubNavArgs(),
         searchByCrnOrPersonNameArgs: this.searchByCrnOrPersonNameArgs,
-        isWaitlist: this.presenter.section === GroupOverviewPageSection.Waitlist,
+        isWaitlist: this.presenter.section === GroupAllocationsPageSection.Waitlist,
         pagination: this.presenter.pagination.govukPaginationArgs,
         searchByCohortArgs: this.searchByCohortArgs,
         searchBySexArgs: this.searchBySexArgs,

@@ -1,7 +1,7 @@
 import { Request } from 'express'
-import GroupOverviewFilter from './groupOverviewFilter'
+import GroupAllocationsFilter from './allocations/groupAllocationsFilter'
 
-describe('GroupOverviewFilter', () => {
+describe('GroupAllocationsFilter', () => {
   describe('.fromRequest', () => {
     it("creates a filter from the request's query params", () => {
       const query = {
@@ -12,7 +12,7 @@ describe('GroupOverviewFilter', () => {
         sex: 'Male',
       }
 
-      const filter = GroupOverviewFilter.fromRequest({ query } as unknown as Request)
+      const filter = GroupAllocationsFilter.fromRequest({ query } as unknown as Request)
 
       expect(filter.cohort).toEqual('SEXUAL_OFFENCE')
       expect(filter.nameOrCRN).toEqual('John Doe')
@@ -26,7 +26,7 @@ describe('GroupOverviewFilter', () => {
         reportingTeam: 'Team1',
       }
 
-      const filter = GroupOverviewFilter.fromRequest({ query } as unknown as Request)
+      const filter = GroupAllocationsFilter.fromRequest({ query } as unknown as Request)
 
       expect(filter.reportingTeam).toEqual(['Team1'])
     })
@@ -36,7 +36,7 @@ describe('GroupOverviewFilter', () => {
         reportingTeam: ['Team1', 'Team2', 'Team3'],
       }
 
-      const filter = GroupOverviewFilter.fromRequest({ query } as unknown as Request)
+      const filter = GroupAllocationsFilter.fromRequest({ query } as unknown as Request)
 
       expect(filter.reportingTeam).toEqual(['Team1', 'Team2', 'Team3'])
     })
@@ -45,7 +45,7 @@ describe('GroupOverviewFilter', () => {
   describe('params', () => {
     describe('No params', () => {
       it('correctly expects fields to be undefined if no values passed', () => {
-        const filter = new GroupOverviewFilter()
+        const filter = new GroupAllocationsFilter()
         expect(filter.cohort).toBeUndefined()
         expect(filter.nameOrCRN).toBeUndefined()
         expect(filter.pdu).toBeUndefined()
@@ -54,20 +54,20 @@ describe('GroupOverviewFilter', () => {
       })
 
       it('returns empty params object when no fields are set', () => {
-        const filter = new GroupOverviewFilter()
+        const filter = new GroupAllocationsFilter()
         expect(filter.params).toEqual({})
       })
     })
 
     describe('sex', () => {
       it('correctly sets sex if only one type is passed', () => {
-        const filter = new GroupOverviewFilter()
+        const filter = new GroupAllocationsFilter()
         filter.sex = 'Male'
         expect(filter.params.sex).toEqual('Male')
       })
 
       it('correctly sets sex to Female', () => {
-        const filter = new GroupOverviewFilter()
+        const filter = new GroupAllocationsFilter()
         filter.sex = 'Female'
         expect(filter.params.sex).toEqual('Female')
       })
@@ -75,7 +75,7 @@ describe('GroupOverviewFilter', () => {
 
     describe('cohort', () => {
       it('correctly sets cohort', () => {
-        const filter = new GroupOverviewFilter()
+        const filter = new GroupAllocationsFilter()
         filter.cohort = 'Sexual offence'
         expect(filter.params.cohort).toEqual('Sexual offence')
       })
@@ -83,13 +83,13 @@ describe('GroupOverviewFilter', () => {
 
     describe('nameOrCRN', () => {
       it('correctly sets nameOrCRN and trims whitespace', () => {
-        const filter = new GroupOverviewFilter()
+        const filter = new GroupAllocationsFilter()
         filter.nameOrCRN = '  John Doe  '
         expect(filter.params.nameOrCRN).toEqual('John Doe')
       })
 
       it('excludes nameOrCRN from params when empty string', () => {
-        const filter = new GroupOverviewFilter()
+        const filter = new GroupAllocationsFilter()
         filter.nameOrCRN = '   '
         expect(filter.params.nameOrCRN).toBeUndefined()
       })
@@ -97,7 +97,7 @@ describe('GroupOverviewFilter', () => {
 
     describe('pdu and reporting team', () => {
       it('correctly sets pdu and reporting team', () => {
-        const filter = new GroupOverviewFilter()
+        const filter = new GroupAllocationsFilter()
         filter.pdu = 'PDU1'
         filter.reportingTeam = ['Team1', 'Team2']
 
@@ -106,7 +106,7 @@ describe('GroupOverviewFilter', () => {
       })
 
       it('correctly sets pdu without reporting team', () => {
-        const filter = new GroupOverviewFilter()
+        const filter = new GroupAllocationsFilter()
         filter.pdu = 'PDU1'
 
         expect(filter.params.pdu).toEqual('PDU1')
@@ -114,7 +114,7 @@ describe('GroupOverviewFilter', () => {
       })
 
       it('correctly sets reporting team without pdu', () => {
-        const filter = new GroupOverviewFilter()
+        const filter = new GroupAllocationsFilter()
         filter.reportingTeam = ['Team1']
 
         expect(filter.params.reportingTeam).toEqual(['Team1'])
@@ -124,7 +124,7 @@ describe('GroupOverviewFilter', () => {
 
     describe('empty', () => {
       it('creates an empty filter', () => {
-        const filter = GroupOverviewFilter.empty()
+        const filter = GroupAllocationsFilter.empty()
 
         expect(filter.cohort).toBeUndefined()
         expect(filter.nameOrCRN).toBeUndefined()

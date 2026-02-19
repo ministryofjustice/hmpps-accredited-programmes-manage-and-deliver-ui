@@ -1,14 +1,16 @@
 import { CohortEnum, GroupItem, ProgrammeGroupOverview } from '@manage-and-deliver-api'
-import { Page } from '../shared/models/pagination'
-import { FormValidationError } from '../utils/formValidationError'
-import { ButtonArgs, CheckboxesArgsItem, SelectArgsItem, TableArgsHeadElement } from '../utils/govukFrontendTypes'
-import Pagination from '../utils/pagination/pagination'
-import PresenterUtils from '../utils/presenterUtils'
-import { convertToTitleCase } from '../utils/utils'
-import GroupOverviewFilter from './groupOverviewFilter'
-import GroupServiceLayoutPresenter, { GroupServiceNavigationValues } from '../shared/groups/groupServiceLayoutPresenter'
+import { Page } from '../../shared/models/pagination'
+import { FormValidationError } from '../../utils/formValidationError'
+import { ButtonArgs, CheckboxesArgsItem, SelectArgsItem, TableArgsHeadElement } from '../../utils/govukFrontendTypes'
+import Pagination from '../../utils/pagination/pagination'
+import PresenterUtils from '../../utils/presenterUtils'
+import { convertToTitleCase } from '../../utils/utils'
+import GroupAllocationsFilter from './groupAllocationsFilter'
+import GroupServiceLayoutPresenter, {
+  GroupServiceNavigationValues,
+} from '../../shared/groups/groupServiceLayoutPresenter'
 
-export enum GroupOverviewPageSection {
+export enum GroupAllocationsPageSection {
   Allocated = 1,
   Waitlist = 2,
 }
@@ -18,16 +20,16 @@ const cohortConfigMap: Record<CohortEnum, string> = {
   GENERAL_OFFENCE: 'General offence',
 }
 
-export default class GroupOverviewPresenter extends GroupServiceLayoutPresenter {
+export default class GroupAllocationsPresenter extends GroupServiceLayoutPresenter {
   public readonly pagination: Pagination
 
   readonly groupListItems: Page<GroupItem>
 
   constructor(
-    readonly section: GroupOverviewPageSection,
+    readonly section: GroupAllocationsPageSection,
     readonly group: ProgrammeGroupOverview,
     readonly groupId: string,
-    readonly filter: GroupOverviewFilter,
+    readonly filter: GroupAllocationsFilter,
     readonly personName: string = '',
     readonly validationError: FormValidationError | null = null,
     readonly successMessage: string | null = null,
@@ -65,19 +67,19 @@ export default class GroupOverviewPresenter extends GroupServiceLayoutPresenter 
       items: [
         {
           text:
-            this.section === GroupOverviewPageSection.Allocated
+            this.section === GroupAllocationsPageSection.Allocated
               ? `Allocated (${this.group.pagedGroupData.totalElements})`
               : `Allocated (${this.group.otherTabTotal})`,
           href: `/group/${this.groupId}/allocated${nameCrnFilter}`,
-          active: this.section === GroupOverviewPageSection.Allocated,
+          active: this.section === GroupAllocationsPageSection.Allocated,
         },
         {
           text:
-            this.section === GroupOverviewPageSection.Waitlist
+            this.section === GroupAllocationsPageSection.Waitlist
               ? `Waitlist (${this.group.pagedGroupData.totalElements})`
               : `Waitlist (${this.group.otherTabTotal})`,
           href: `/group/${this.groupId}/waitlist${nameCrnFilter}`,
-          active: this.section === GroupOverviewPageSection.Waitlist,
+          active: this.section === GroupAllocationsPageSection.Waitlist,
         },
       ],
     }
@@ -91,7 +93,7 @@ export default class GroupOverviewPresenter extends GroupServiceLayoutPresenter 
     ]
 
     const extra =
-      this.section === GroupOverviewPageSection.Allocated
+      this.section === GroupAllocationsPageSection.Allocated
         ? [{ text: 'Referral status', attributes: { 'aria-sort': 'none' } }]
         : [
             { text: 'Cohort', attributes: { 'aria-sort': 'none' } },
@@ -193,7 +195,7 @@ export default class GroupOverviewPresenter extends GroupServiceLayoutPresenter 
 
   get formButtonArgs(): ButtonArgs {
     return {
-      text: this.section === GroupOverviewPageSection.Allocated ? 'Remove from group' : 'Add to group',
+      text: this.section === GroupAllocationsPageSection.Allocated ? 'Remove from group' : 'Add to group',
     }
   }
 
@@ -244,7 +246,7 @@ export default class GroupOverviewPresenter extends GroupServiceLayoutPresenter 
       return 'No results found. Clear or change the filters'
     }
 
-    return this.section === GroupOverviewPageSection.Allocated
+    return this.section === GroupAllocationsPageSection.Allocated
       ? 'There are currently no people allocated to this group.'
       : `There are no people awaiting allocation in ${this.group.group.regionName}.`
   }

@@ -2,9 +2,9 @@ import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
 import { FormValidationError } from '../utils/formValidationError'
-import GroupOverviewFilter from './groupOverviewFilter'
-import GroupOverviewPresenter, { GroupOverviewPageSection } from './groupOverviewPresenter'
-import GroupOverviewView from './groupOverviewView'
+import GroupAllocationsFilter from './allocations/groupAllocationsFilter'
+import GroupAllocationsPresenter, { GroupAllocationsPageSection } from './allocations/groupAllocationsPresenter'
+import GroupAllocationsView from './allocations/groupAllocationsView'
 import GroupForm from './groupForm'
 import SchedulePresenter from './schedule/schedulePresenter'
 import ScheduleView from './schedule/scheduleView'
@@ -22,7 +22,7 @@ export default class GroupOverviewController {
     req.session.groupManagementData = null
     const pageNumber = req.query.page
 
-    const filter = GroupOverviewFilter.fromRequest(req)
+    const filter = GroupAllocationsFilter.fromRequest(req)
 
     const groupOverview = await this.accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers(
       username,
@@ -50,8 +50,8 @@ export default class GroupOverviewController {
 
     const successMessage = message ? String(message) : null
 
-    const presenter = new GroupOverviewPresenter(
-      GroupOverviewPageSection.Allocated,
+    const presenter = new GroupAllocationsPresenter(
+      GroupAllocationsPageSection.Allocated,
       groupOverview,
       groupId,
       filter,
@@ -60,7 +60,7 @@ export default class GroupOverviewController {
       successMessage,
       req.session.filterParams,
     )
-    const view = new GroupOverviewView(presenter)
+    const view = new GroupAllocationsView(presenter)
     req.session.groupManagementData = null
     req.session.originPage = req.originalUrl
     return ControllerUtils.renderWithLayout(res, view, null)
@@ -77,7 +77,7 @@ export default class GroupOverviewController {
       req.session.filterParams = req.originalUrl.includes('?') ? req.originalUrl.split('?').pop() : undefined
     }
 
-    const filter = GroupOverviewFilter.fromRequest(req)
+    const filter = GroupAllocationsFilter.fromRequest(req)
 
     const groupOverview = await this.accreditedProgrammesManageAndDeliverService.getGroupWaitlistMembers(
       username,
@@ -104,8 +104,8 @@ export default class GroupOverviewController {
       }
     }
 
-    const presenter = new GroupOverviewPresenter(
-      GroupOverviewPageSection.Waitlist,
+    const presenter = new GroupAllocationsPresenter(
+      GroupAllocationsPageSection.Waitlist,
       groupOverview,
       groupId,
       filter,
@@ -114,7 +114,7 @@ export default class GroupOverviewController {
       null,
       req.session.filterParams,
     )
-    const view = new GroupOverviewView(presenter)
+    const view = new GroupAllocationsView(presenter)
     req.session.originPage = req.originalUrl
 
     return ControllerUtils.renderWithLayout(res, view, null)
