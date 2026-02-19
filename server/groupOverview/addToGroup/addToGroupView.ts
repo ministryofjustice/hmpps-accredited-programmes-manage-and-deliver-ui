@@ -41,7 +41,7 @@ export default class AddToGroupView {
 
   get renderArgs(): [string, Record<string, unknown>] {
     return [
-      'groupDetails/addToGroup/addToGroup',
+      'groupOverview/addToGroup/addToGroup',
       {
         presenter: this.presenter,
         backLinkArgs: this.backLinkArgs(),

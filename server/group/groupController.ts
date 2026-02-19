@@ -5,7 +5,7 @@ import ControllerUtils from '../utils/controllerUtils'
 import GroupPresenter, { GroupListPageSection } from './groupPresenter'
 import GroupView from './groupView'
 import { Page } from '../shared/models/pagination'
-import GroupListFilter from '../groupDetails/groupListFilter'
+import GroupListFilter from '../groupOverview/groupListFilter'
 
 export default class GroupController {
   constructor(

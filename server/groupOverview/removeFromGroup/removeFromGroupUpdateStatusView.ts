@@ -59,7 +59,7 @@ export default class RemoveFromGroupUpdateStatusView {
 
   get renderArgs(): [string, Record<string, unknown>] {
     return [
-      'groupDetails/removeFromGroup/removeFromGroupUpdateStatus',
+      'groupOverview/removeFromGroup/removeFromGroupUpdateStatus',
       {
         presenter: this.presenter,
         statusUpdateRadioButtons: this.statusUpdateRadioButtonsOptions,

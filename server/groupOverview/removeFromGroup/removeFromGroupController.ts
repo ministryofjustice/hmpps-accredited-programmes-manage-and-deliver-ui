@@ -63,7 +63,7 @@ export default class RemoveFromGroupController {
           data.paramsForUpdate,
         )
         const { message } = response
-        return res.redirect(`/groupDetails/${groupId}/allocated?message=${encodeURIComponent(message)}`)
+        return res.redirect(`/group/${groupId}/allocated?message=${encodeURIComponent(message)}`)
       }
     }
 

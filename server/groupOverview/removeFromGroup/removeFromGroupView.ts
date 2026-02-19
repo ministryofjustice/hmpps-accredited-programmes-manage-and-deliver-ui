@@ -39,7 +39,7 @@ export default class RemoveFromGroupView {
 
   get renderArgs(): [string, Record<string, unknown>] {
     return [
-      'groupDetails/removeFromGroup/removeFromGroup',
+      'groupOverview/removeFromGroup/removeFromGroup',
       {
         presenter: this.presenter,
         backLinkArgs: this.backLinkArgs(),

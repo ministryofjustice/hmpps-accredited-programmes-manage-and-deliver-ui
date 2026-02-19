@@ -1,4 +1,4 @@
-export interface GroupDetailFilterParams {
+export interface GroupAllocationsFilterParams {
   nameOrCRN?: string
   pdu?: string
   reportingTeam?: string[]

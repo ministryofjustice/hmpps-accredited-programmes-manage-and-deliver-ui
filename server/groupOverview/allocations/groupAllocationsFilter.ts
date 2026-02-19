@@ -1,7 +1,7 @@
 import { Request } from 'express'
-import { GroupDetailFilterParams } from './groupDetailFilterParams'
+import { GroupAllocationsFilterParams } from './groupAllocationsFilterParams'
 
-export default class GroupDetailFilter {
+export default class GroupAllocationsFilter {
   nameOrCRN: string | undefined = undefined
 
   cohort: string | undefined = undefined
@@ -12,12 +12,12 @@ export default class GroupDetailFilter {
 
   reportingTeam: string[] | undefined = undefined
 
-  static empty(): GroupDetailFilter {
-    return new GroupDetailFilter()
+  static empty(): GroupAllocationsFilter {
+    return new GroupAllocationsFilter()
   }
 
-  static fromRequest(request: Request): GroupDetailFilter {
-    const filter = new GroupDetailFilter()
+  static fromRequest(request: Request): GroupAllocationsFilter {
+    const filter = new GroupAllocationsFilter()
     filter.cohort = request.query.cohort as string | undefined
     filter.nameOrCRN = request.query.nameOrCRN as string | undefined
     filter.reportingTeam = request.query.reportingTeam as string[] | undefined
@@ -30,8 +30,8 @@ export default class GroupDetailFilter {
     return filter
   }
 
-  get params(): GroupDetailFilterParams {
-    const params: GroupDetailFilterParams = {}
+  get params(): GroupAllocationsFilterParams {
+    const params: GroupAllocationsFilterParams = {}
 
     if (this.cohort) {
       params.cohort = this.cohort

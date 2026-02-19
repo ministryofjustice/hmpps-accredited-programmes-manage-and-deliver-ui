@@ -34,7 +34,7 @@ import {
   OffenceHistory,
   PersonalDetails,
   PniScore,
-  ProgrammeGroupDetails,
+  ProgrammeGroupOverview,
   ProgrammeGroupEntity,
   ReferralDetails,
   ReferralMotivationBackgroundAndNonAssociations,
@@ -62,7 +62,7 @@ import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
 import type { HmppsAuthClient, RestClientBuilderWithoutToken } from '../data'
 import RestClient from '../data/restClient'
-import { GroupListFilterParams } from '../groupDetails/groupListFilterParams'
+import { GroupListFilterParams } from '../groupOverview/groupListFilterParams'
 import type { ExpressUsername } from '../shared/ExpressUsername'
 
 export interface PaginationParams {
@@ -145,14 +145,14 @@ export default class AccreditedProgrammesManageAndDeliverService
     groupId: string,
     paginationParams: PaginationParams,
     filter: GroupListFilterParams,
-  ): Promise<ProgrammeGroupDetails> {
+  ): Promise<ProgrammeGroupOverview> {
     const restClient = await this.createRestClientFromUsername(username)
     const filterQuery: Record<string, unknown> = { ...filter }
     return (await restClient.get({
       path: `/bff/group/${groupId}/ALLOCATED`,
       headers: { Accept: 'application/json' },
       query: { ...paginationParams, ...filterQuery },
-    })) as ProgrammeGroupDetails
+    })) as ProgrammeGroupOverview
   }
 
   async getGroupWaitlistMembers(
@@ -160,14 +160,14 @@ export default class AccreditedProgrammesManageAndDeliverService
     groupId: string,
     paginationParams: PaginationParams,
     filter: GroupListFilterParams,
-  ): Promise<ProgrammeGroupDetails> {
+  ): Promise<ProgrammeGroupOverview> {
     const restClient = await this.createRestClientFromUsername(username)
     const filterQuery: Record<string, unknown> = { ...filter }
     return (await restClient.get({
       path: `/bff/group/${groupId}/WAITLIST`,
       headers: { Accept: 'application/json' },
       query: { ...paginationParams, ...filterQuery },
-    })) as ProgrammeGroupDetails
+    })) as ProgrammeGroupOverview
   }
 
   async getCaseListFilters(username: ExpressUsername): Promise<CaseListFilterValues> {

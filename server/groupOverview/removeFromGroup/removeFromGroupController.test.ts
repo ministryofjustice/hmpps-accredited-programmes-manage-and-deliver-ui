@@ -29,7 +29,7 @@ beforeEach(() => {
       groupCode: '`ABC123`',
       personName: 'Alex River',
     },
-    originPage: '/groupDetails/123/allocated?nameOrCRN=dave',
+    originPage: '/group/123/allocated?nameOrCRN=dave',
   }
   app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 })
@@ -57,7 +57,7 @@ describe('remove from group', () => {
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(`Redirecting to /groupDetails/${groupId}/allocated?nameOrCRN=dave`)
+          expect(res.text).toContain(`Redirecting to /group/${groupId}/allocated?nameOrCRN=dave`)
         })
     })
 
@@ -111,7 +111,7 @@ describe('remove from group', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Redirecting to /groupDetails/${groupId}/allocated?message=John%20Jones%20was%20removed%20from%20this%20group.%20Their%20referral%20status%20is%20now%20Suitable%20but%20not%20ready.`,
+            `Redirecting to /group/${groupId}/allocated?message=John%20Jones%20was%20removed%20from%20this%20group.%20Their%20referral%20status%20is%20now%20Suitable%20but%20not%20ready.`,
           )
         })
     })

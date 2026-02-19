@@ -6,9 +6,9 @@ import CreateGroupController from '../createGroup/createGroupController'
 import EditSessionController from '../editSession/editSessionController'
 import GroupController from '../group/groupController'
 import GroupAllocationNotesController from '../groupAllocationNotes/groupAllocationNotesController'
-import AddToGroupController from '../groupDetails/addToGroup/addToGroupController'
-import GroupDetailsController from '../groupDetails/groupDetailsController'
-import RemoveFromGroupController from '../groupDetails/removeFromGroup/removeFromGroupController'
+import AddToGroupController from '../groupOverview/addToGroup/addToGroupController'
+import GroupOverviewController from '../groupOverview/groupOverviewController'
+import RemoveFromGroupController from '../groupOverview/removeFromGroup/removeFromGroupController'
 import LdcController from '../ldc/ldcController'
 import LocationPreferencesController from '../locationPreferences/locationPreferencesController'
 import asyncMiddleware from '../middleware/asyncMiddleware'
@@ -36,7 +36,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const cohortController = new ChangeCohortController(accreditedProgrammesManageAndDeliverService)
   const ldcController = new LdcController(accreditedProgrammesManageAndDeliverService)
   const updateReferralController = new UpdateReferralStatusController(accreditedProgrammesManageAndDeliverService)
-  const groupDetailsController = new GroupDetailsController(accreditedProgrammesManageAndDeliverService)
+  const groupOverviewController = new GroupOverviewController(accreditedProgrammesManageAndDeliverService)
   const addToGroupController = new AddToGroupController(accreditedProgrammesManageAndDeliverService)
   const removeFromGroupController = new RemoveFromGroupController(accreditedProgrammesManageAndDeliverService)
   const groupAllocationNotesController = new GroupAllocationNotesController(accreditedProgrammesManageAndDeliverService)
@@ -258,24 +258,24 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await createGroupController.showCreateGroupCya(req, res)
   })
 
-  get('/groupDetails/:groupId/allocated', async (req, res) => {
-    await groupDetailsController.showGroupDetailsAllocated(req, res)
+  get('/group/:groupId/allocated', async (req, res) => {
+    await groupOverviewController.showGroupOverviewAllocated(req, res)
   })
 
-  post('/groupDetails/:groupId/allocated', async (req, res) => {
-    await groupDetailsController.showGroupDetailsAllocated(req, res)
+  post('/group/:groupId/allocated', async (req, res) => {
+    await groupOverviewController.showGroupOverviewAllocated(req, res)
   })
 
-  get('/groupDetails/:groupId/waitlist', async (req, res, next) => {
-    await groupDetailsController.showGroupDetailsWaitlist(req, res)
+  get('/group/:groupId/waitlist', async (req, res, next) => {
+    await groupOverviewController.showGroupOverviewWaitlist(req, res)
   })
 
-  post('/groupDetails/:groupId/waitlist', async (req, res, next) => {
-    await groupDetailsController.showGroupDetailsWaitlist(req, res)
+  post('/group/:groupId/waitlist', async (req, res, next) => {
+    await groupOverviewController.showGroupOverviewWaitlist(req, res)
   })
 
   get('/group/:groupId/schedule-overview', async (req, res, next) => {
-    await groupDetailsController.showScheduleOverview(req, res)
+    await groupOverviewController.showGroupOverviewSchedule(req, res)
   })
 
   get(

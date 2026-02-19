@@ -1,9 +1,9 @@
-import { CheckboxesArgs, InputArgs, SelectArgs, TableArgs } from '../utils/govukFrontendTypes'
-import ViewUtils from '../utils/viewUtils'
-import GroupDetailsPresenter, { GroupDetailsPageSection } from './groupDetailsPresenter'
+import { CheckboxesArgs, InputArgs, SelectArgs, TableArgs } from '../../utils/govukFrontendTypes'
+import ViewUtils from '../../utils/viewUtils'
+import GroupAllocationsPresenter, { GroupAllocationsPageSection } from './groupAllocationsPresenter'
 
-export default class GroupDetailsView {
-  constructor(private readonly presenter: GroupDetailsPresenter) {}
+export default class GroupAllocationsView {
+  constructor(private readonly presenter: GroupAllocationsPresenter) {}
 
   private get searchByCrnOrPersonNameArgs(): InputArgs {
     return {
@@ -61,15 +61,15 @@ export default class GroupDetailsView {
     }
   }
 
-  getGroupDetailsTableArgs(): TableArgs {
+  getGroupAllocationsTableArgs(): TableArgs {
     return {
       attributes: {
         'data-module': 'moj-sortable-table',
       },
-      classes: this.presenter.section === GroupDetailsPageSection.Allocated ? 'allocated' : '',
+      classes: this.presenter.section === GroupAllocationsPageSection.Allocated ? 'allocated' : '',
       head: this.presenter.generateTableHeadings(),
       rows:
-        this.presenter.section === GroupDetailsPageSection.Allocated
+        this.presenter.section === GroupAllocationsPageSection.Allocated
           ? this.presenter.generateAllocatedTableArgs()
           : this.presenter.generateWaitlistTableArgs(),
     }
@@ -105,18 +105,18 @@ export default class GroupDetailsView {
 
   get renderArgs(): [string, Record<string, unknown>] {
     return [
-      'groupDetails/groupDetails',
+      'groupOverview/groupOverview',
       {
         presenter: this.presenter,
         subNavArgs: this.presenter.getSubNavArgs(),
         searchByCrnOrPersonNameArgs: this.searchByCrnOrPersonNameArgs,
-        isWaitlist: this.presenter.section === GroupDetailsPageSection.Waitlist,
+        isWaitlist: this.presenter.section === GroupAllocationsPageSection.Waitlist,
         pagination: this.presenter.pagination.govukPaginationArgs,
         searchByCohortArgs: this.searchByCohortArgs,
         searchBySexArgs: this.searchBySexArgs,
         searchByPduArgs: this.searchByPduArgs,
         formButtonArgs: this.presenter.formButtonArgs,
-        getGroupDetailsTableArgs: this.getGroupDetailsTableArgs(),
+        getGroupAllocationsTableArgs: this.getGroupAllocationsTableArgs(),
         successMessageArgs: this.successMessageArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         reportingTeamCheckboxArgs: this.reportingTeamCheckboxArgs,

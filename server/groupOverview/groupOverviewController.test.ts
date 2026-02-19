@@ -2,7 +2,7 @@ import { Express } from 'express'
 import request from 'supertest'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
-import ProgrammeGroupDetailsFactory from '../testutils/factories/programmeGroupDetailsFactory'
+import ProgrammeGroupOverviewFactory from '../testutils/factories/programmeGroupOverviewFactory'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
@@ -25,13 +25,13 @@ beforeEach(() => {
   })
 })
 
-describe('groupDetails', () => {
-  describe(`GET /groupDetails/:groupId/waitlist`, () => {
+describe('groupOverview', () => {
+  describe(`GET /group/:groupId/waitlist`, () => {
     it('loads the initial page to view the waitlist', async () => {
-      const programmeGroupDetails = ProgrammeGroupDetailsFactory.build()
-      accreditedProgrammesManageAndDeliverService.getGroupWaitlistMembers.mockResolvedValue(programmeGroupDetails)
+      const programmeGroupOverview = ProgrammeGroupOverviewFactory.build()
+      accreditedProgrammesManageAndDeliverService.getGroupWaitlistMembers.mockResolvedValue(programmeGroupOverview)
       return request(app)
-        .get(`/groupDetails/:groupId/waitlist`)
+        .get(`/group/1234/waitlist`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(`Allocations and waitlist`)
@@ -39,12 +39,12 @@ describe('groupDetails', () => {
     })
   })
 
-  describe(`GET /groupDetails/:groupId/allocated`, () => {
+  describe(`GET /group/:groupId/allocated`, () => {
     it('loads the initial page to view the allocated list', async () => {
-      const programmeGroupDetails = ProgrammeGroupDetailsFactory.build()
-      accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers.mockResolvedValue(programmeGroupDetails)
+      const programmeGroupOverview = ProgrammeGroupOverviewFactory.build()
+      accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers.mockResolvedValue(programmeGroupOverview)
       return request(app)
-        .get(`/groupDetails/:groupId/allocated`)
+        .get(`/group/1234/allocated`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(`Allocations and waitlist`)

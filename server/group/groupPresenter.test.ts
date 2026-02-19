@@ -4,7 +4,7 @@ import groupsByRegionFactory from '../testutils/factories/groupsByRegionFactory'
 import pageFactory from '../testutils/factories/pageFactory'
 import GroupFactory from '../testutils/factories/groupFactory'
 import GroupPresenter, { GroupListPageSection } from './groupPresenter'
-import GroupListFilter from '../groupDetails/groupListFilter'
+import GroupListFilter from '../groupOverview/groupListFilter'
 
 describe('getSubNavArgs', () => {
   it('should generate correct sub nav arguments when url params are present', () => {
@@ -191,7 +191,7 @@ describe('groupTableArgs', () => {
       rows: [
         [
           {
-            html: `<a href='/groupDetails/${groupList.pagedGroupData.content[0].id}/waitlist'>ABC1234</a>`,
+            html: `<a href='/group/${groupList.pagedGroupData.content[0].id}/waitlist'>ABC1234</a>`,
             attributes: { 'data-sort-value': 'ABC1234' },
           },
           { html: '<span data-sort-value="1704067200000">1 January 2024</span>' },

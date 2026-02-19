@@ -25,7 +25,7 @@ export default class RemoveFromGroupPresenter {
   }
 
   get cancelLinkHref() {
-    return `/groupDetails/${this.groupId}/waitlist`
+    return `/group/${this.groupId}/waitlist`
   }
 
   get utils() {
