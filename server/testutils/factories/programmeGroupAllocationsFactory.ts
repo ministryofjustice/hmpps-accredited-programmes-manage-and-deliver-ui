@@ -1,8 +1,8 @@
-import { CohortEnum, ProgrammeGroupOverview } from '@manage-and-deliver-api'
-import { Factory } from 'fishery'
+import { CohortEnum, ProgrammeGroupAllocations } from '@manage-and-deliver-api'
 import { randomUUID } from 'crypto'
+import { Factory } from 'fishery'
 
-class ProgrammeGroupOverviewFactory extends Factory<ProgrammeGroupOverview> {
+class ProgrammeGroupAllocationsFactory extends Factory<ProgrammeGroupAllocations> {
   allocatedList() {
     return this.params({
       pagedGroupData: {
@@ -136,7 +136,7 @@ class ProgrammeGroupOverviewFactory extends Factory<ProgrammeGroupOverview> {
   }
 }
 
-export default ProgrammeGroupOverviewFactory.define(() => ({
+export default ProgrammeGroupAllocationsFactory.define(() => ({
   group: {
     id: randomUUID(),
     code: 'BCCDD1',

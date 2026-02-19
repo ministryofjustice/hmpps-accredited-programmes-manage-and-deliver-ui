@@ -1,4 +1,7 @@
-import { CohortEnum, GroupItem, ProgrammeGroupOverview } from '@manage-and-deliver-api'
+import { CohortEnum, GroupItem, ProgrammeGroupAllocations } from '@manage-and-deliver-api'
+import GroupServiceLayoutPresenter, {
+  GroupServiceNavigationValues,
+} from '../../shared/groups/groupServiceLayoutPresenter'
 import { Page } from '../../shared/models/pagination'
 import { FormValidationError } from '../../utils/formValidationError'
 import { ButtonArgs, CheckboxesArgsItem, SelectArgsItem, TableArgsHeadElement } from '../../utils/govukFrontendTypes'
@@ -6,9 +9,6 @@ import Pagination from '../../utils/pagination/pagination'
 import PresenterUtils from '../../utils/presenterUtils'
 import { convertToTitleCase } from '../../utils/utils'
 import GroupAllocationsFilter from './groupAllocationsFilter'
-import GroupServiceLayoutPresenter, {
-  GroupServiceNavigationValues,
-} from '../../shared/groups/groupServiceLayoutPresenter'
 
 export enum GroupAllocationsPageSection {
   Allocated = 1,
@@ -27,7 +27,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
 
   constructor(
     readonly section: GroupAllocationsPageSection,
-    readonly group: ProgrammeGroupOverview,
+    readonly group: ProgrammeGroupAllocations,
     readonly groupId: string,
     readonly filter: GroupAllocationsFilter,
     readonly personName: string = '',

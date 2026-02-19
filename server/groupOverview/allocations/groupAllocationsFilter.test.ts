@@ -1,5 +1,5 @@
 import { Request } from 'express'
-import GroupAllocationsFilter from './allocations/groupAllocationsFilter'
+import GroupAllocationsFilter from './groupAllocationsFilter'
 
 describe('GroupAllocationsFilter', () => {
   describe('.fromRequest', () => {
