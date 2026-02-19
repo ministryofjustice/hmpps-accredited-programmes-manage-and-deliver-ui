@@ -11,6 +11,26 @@
           "crn": "D002399",
           "timeline": [
             {
+              "id": 9635384,
+              "completedAt": "2024-08-01T14:20:00",
+              "type": "LAYER3",
+              "status": "COMPLETE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "request": {
+        "urlPattern": "/assessments/timeline/X970644",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "crn": "D002399",
+          "timeline": [
+            {
               "id": 9635383,
               "completedAt": "2024-08-01T14:20:00",
               "type": "LAYER3",
@@ -1018,6 +1038,57 @@
             "name": "LevelOne CentralSupport"
           },
           "crn": "D002399"
+        }
+      }
+    },
+    {
+      "request": {
+        "urlPattern": "/assessments/9635383/section/sectionroshsumm",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "assessmentPk": 10721539,
+          "assessmentType": "LAYER3",
+          "assessmentVersion": "1",
+          "dateCompleted": "2026-02-12T13:58:54",
+          "assessorSignedDate": "2026-02-12T13:58:54",
+          "initiationDate": "2026-02-12T13:57:31",
+          "assessmentStatus": "COMPLETE",
+          "superStatus": "COMPLETE",
+          "laterWIPAssessmentExists": false,
+          "latestWIPDate": null,
+          "laterSignLockAssessmentExists": false,
+          "latestSignLockDate": null,
+          "laterPartCompUnsignedAssessmentExists": false,
+          "latestPartCompUnsignedDate": null,
+          "laterPartCompSignedAssessmentExists": false,
+          "latestPartCompSignedDate": null,
+          "laterCompleteAssessmentExists": false,
+          "latestCompleteDate": "2026-02-12T13:58:54",
+          "whoAtRisk": "OASys Question - 'R10.1 Who is at risk.' - Answer Input - 'Child'",
+          "riskChildrenCustody": null,
+          "factorsLikelyToReduceRisk": null,
+          "riskStaffCustody": null,
+          "riskGreatest": null,
+          "factorsLikelyToIncreaseRisk": null,
+          "riskKnownAdultCustody": null,
+          "riskPrisonersCustody": null,
+          "riskPublicCustody": null,
+          "factorsAnalysisOfRisk": "OASys Question - 'Further analysis of risk factors' - Answer Input - 'Test Risk Greatest'",
+          "riskStaffCommunity": "Medium",
+          "riskKnownAdultCommunity": "High",
+          "riskPublicCommunity": "Medium",
+          "riskChildrenCommunity": "Very High",
+          "natureOfRisk": "OASys Question - 'R10.2 - What is the nature of the risk' - Answer Input - 'Test Nature'",
+          "factorsSituationsLikelyToOffend": "OASys Question - 'R10.3 - In what circumstances or situations would offending be most likely to occur and are any of these currently present' - Answer Input - ' Test lifestyle deterioration & victim proximity circumstances'",
+          "factorsStrengthsAndProtective": "OASys Question - 'R10.5 - What strengths and protective factors are actively present or could be developed and how will they mitigate the risk factors?' - Answer Input - 'Test Factors to mitigate the risk'",
+          "assessor": {
+            "name": "SrikanthAutoTestUser Malepati"
+          },
+          "crn": "X970644",
+          "nomsId": "A0192ED"
         }
       }
     },

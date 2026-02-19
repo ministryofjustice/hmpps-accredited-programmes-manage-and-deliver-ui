@@ -32,6 +32,43 @@
           }
         }
       }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPathPattern": "/assessments/id/9635383/risk/predictors/all"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "outputVersion": "2",
+          "output": {
+            "allReoffendingPredictor": {
+              "staticOrDynamic": "STATIC",
+              "score": 76.2,
+              "band": "HIGH"
+            },
+            "violentReoffendingPredictor": {
+              "staticOrDynamic": "STATIC",
+              "score": 46.73,
+              "band": "MEDIUM"
+            },
+            "seriousViolentReoffendingPredictor": {
+              "staticOrDynamic": "STATIC",
+              "score": 5.48,
+              "band": "HIGH"
+            },
+            "directContactSexualReoffendingPredictor": {},
+            "indirectImageContactSexualReoffendingPredictor": {},
+            "combinedSeriousReoffendingPredictor": {
+              "algorithmVersion": "6"
+            }
+          }
+        }
+      }
     }
   ]
 }
