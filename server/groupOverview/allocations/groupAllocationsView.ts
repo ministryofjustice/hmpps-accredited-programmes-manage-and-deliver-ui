@@ -116,7 +116,7 @@ export default class GroupAllocationsView {
         searchBySexArgs: this.searchBySexArgs,
         searchByPduArgs: this.searchByPduArgs,
         formButtonArgs: this.presenter.formButtonArgs,
-        getGroupAllocationsTableArgs: this.getGroupAllocationsTableArgs(),
+        getGroupOverviewTableArgs: this.getGroupAllocationsTableArgs(),
         successMessageArgs: this.successMessageArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         reportingTeamCheckboxArgs: this.reportingTeamCheckboxArgs,
