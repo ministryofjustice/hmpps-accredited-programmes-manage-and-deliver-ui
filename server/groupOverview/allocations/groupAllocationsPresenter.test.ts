@@ -1,6 +1,6 @@
-import ProgrammeGroupOverviewFactory from '../testutils/factories/programmeGroupOverviewFactory'
-import GroupAllocationsPresenter, { GroupAllocationsPageSection } from './allocations/groupAllocationsPresenter'
-import GroupAllocationsFilter from './allocations/groupAllocationsFilter'
+import ProgrammeGroupOverviewFactory from '../../testutils/factories/programmeGroupAllocationsFactory'
+import GroupAllocationsFilter from './groupAllocationsFilter'
+import GroupAllocationsPresenter, { GroupAllocationsPageSection } from './groupAllocationsPresenter'
 
 afterEach(() => {
   jest.restoreAllMocks()
