@@ -61,7 +61,7 @@ export default class GroupAllocationsView {
     }
   }
 
-  getGroupOverviewTableArgs(): TableArgs {
+  getGroupAllocationsTableArgs(): TableArgs {
     return {
       attributes: {
         'data-module': 'moj-sortable-table',
@@ -116,7 +116,7 @@ export default class GroupAllocationsView {
         searchBySexArgs: this.searchBySexArgs,
         searchByPduArgs: this.searchByPduArgs,
         formButtonArgs: this.presenter.formButtonArgs,
-        getGroupOverviewTableArgs: this.getGroupOverviewTableArgs(),
+        getGroupAllocationsTableArgs: this.getGroupAllocationsTableArgs(),
         successMessageArgs: this.successMessageArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         reportingTeamCheckboxArgs: this.reportingTeamCheckboxArgs,
