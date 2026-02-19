@@ -1,18 +1,18 @@
+import { ScheduleSessionRequest } from '@manage-and-deliver-api'
 import { Request, Response } from 'express'
-import { SessionScheduleRequest } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
 import { FormValidationError } from '../utils/formValidationError'
 
-import SessionScheduleWhichPresenter from './sessionWhich/sessionScheduleWhichPresenter'
-import SessionScheduleWhichView from './sessionWhich/sessionScheduleWhichView'
-import AddSessionDetailsPresenter from './sessionDetails/addSessionDetailsPresenter'
-import AddSessionDetailsView from './sessionDetails/addSessionDetailsView'
-import CreateSessionScheduleForm from './sessionScheduleForm'
 import SessionScheduleAttendancePresenter from './sessionAttendance/sessionScheduleAttendancePresenter'
 import SessionScheduleAttendanceView from './sessionAttendance/sessionScheduleAttendanceView'
 import SessionScheduleCyaPresenter from './sessionCya/SessionScheduleCyaPresenter'
 import SessionScheduleCyaView from './sessionCya/sessionScheduleCyaView'
+import AddSessionDetailsPresenter from './sessionDetails/addSessionDetailsPresenter'
+import AddSessionDetailsView from './sessionDetails/addSessionDetailsView'
+import CreateSessionScheduleForm from './sessionScheduleForm'
+import SessionScheduleWhichPresenter from './sessionWhich/sessionScheduleWhichPresenter'
+import SessionScheduleWhichView from './sessionWhich/sessionScheduleWhichView'
 
 export default class SessionScheduleController {
   constructor(
@@ -117,10 +117,10 @@ export default class SessionScheduleController {
       const response = await this.accreditedProgrammesManageAndDeliverService.createSessionSchedule(
         username,
         groupId,
-        sessionDataForApi as SessionScheduleRequest,
+        sessionDataForApi as ScheduleSessionRequest,
       )
 
-      const successMessage = response.message || 'Session has been added.'
+      const successMessage = response || 'Session has been added.'
 
       req.session.sessionScheduleData = {}
       return res.redirect(

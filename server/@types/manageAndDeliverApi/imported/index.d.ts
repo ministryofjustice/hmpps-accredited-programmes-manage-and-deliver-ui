@@ -1571,23 +1571,11 @@ export interface components {
     SessionAttendee: {
       /**
        * Format: uuid
-       * @description Attendee ID of a session
+       * @description The referral ID linked to the attendee
        */
-      attendeeId: string
-      /** @description Name of the attendee of a session */
-      name: string
-      /** @description A flag showing if attendee attended a session */
-      attended: boolean
-      /**
-       * Format: date
-       * @description Date when a session was attended
-       */
-      recordedAt: string
-      /**
-       * Format: uuid
-       * @description ID of a session facilitator
-       */
-      recordedByFacilitatorId: string
+      referralId: string
+      /** @description The attendance outcome code for the attendee */
+      outcomeCode: string
       /** @description Session notes for the attendee */
       sessionNotes?: string
     }
@@ -1722,10 +1710,6 @@ export interface components {
     ProgrammeGroupCohort: 'GENERAL' | 'GENERAL_LDC' | 'SEXUAL' | 'SEXUAL_LDC'
     /** @enum {string} */
     ProgrammeGroupSexEnum: 'MALE' | 'FEMALE' | 'MIXED'
-    ScheduleSessionResponse: {
-      /** @description Success message indicating the session was scheduled */
-      message: string
-    }
     ScheduleSessionRequest: {
       /**
        * Format: uuid
@@ -2813,28 +2797,28 @@ export interface components {
       /** Format: int32 */
       totalPages?: number
       /** Format: int32 */
-      numberOfElements?: number
-      first?: boolean
-      last?: boolean
-      pageable?: components['schemas']['PageableObject']
-      /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageableObject: {
+      /** Format: int64 */
+      offset?: number
+      sort?: components['schemas']['SortObject']
       paged?: boolean
       /** Format: int32 */
       pageNumber?: number
       /** Format: int32 */
       pageSize?: number
       unpaged?: boolean
-      /** Format: int64 */
-      offset?: number
-      sort?: components['schemas']['SortObject']
     }
     ReferralCaseListItem: {
       /** Format: uuid */
@@ -2852,9 +2836,9 @@ export interface components {
       reportingTeam: string
     }
     SortObject: {
+      empty?: boolean
       sorted?: boolean
       unsorted?: boolean
-      empty?: boolean
     }
     StatusFilterValues: {
       /**
@@ -3280,16 +3264,16 @@ export interface components {
       /** Format: int32 */
       totalPages?: number
       /** Format: int32 */
-      numberOfElements?: number
-      first?: boolean
-      last?: boolean
-      pageable?: components['schemas']['PageableObject']
-      /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Available filter options for viewing programme group data. */
@@ -3397,16 +3381,16 @@ export interface components {
       /** Format: int32 */
       totalPages?: number
       /** Format: int32 */
-      numberOfElements?: number
-      first?: boolean
-      last?: boolean
-      pageable?: components['schemas']['PageableObject']
-      /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
@@ -4642,7 +4626,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          '*/*': components['schemas']['ScheduleSessionResponse']
+          '*/*': string
         }
       }
       /** @description Invalid request parameters */
