@@ -31,7 +31,7 @@ describe('groupOverview', () => {
       const programmeGroupOverview = ProgrammeGroupOverviewFactory.build()
       accreditedProgrammesManageAndDeliverService.getGroupWaitlistMembers.mockResolvedValue(programmeGroupOverview)
       return request(app)
-        .get(`/group/:groupId/waitlist`)
+        .get(`/group/1234/waitlist`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(`Allocations and waitlist`)
@@ -44,7 +44,7 @@ describe('groupOverview', () => {
       const programmeGroupOverview = ProgrammeGroupOverviewFactory.build()
       accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers.mockResolvedValue(programmeGroupOverview)
       return request(app)
-        .get(`/group/:groupId/allocated`)
+        .get(`/group/1234/allocated`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(`Allocations and waitlist`)
