@@ -266,9 +266,9 @@ describe('Session Schedule Controller', () => {
   describe('POST /group/:groupId/module/:moduleId/session-review-details', () => {
     beforeEach(() => {
       app = TestUtils.createTestAppWithSession(completeSessionData, { accreditedProgrammesManageAndDeliverService })
-      accreditedProgrammesManageAndDeliverService.createSessionSchedule.mockResolvedValue({
-        message: 'Getting started one-to-one for John Doe has been added.',
-      })
+      accreditedProgrammesManageAndDeliverService.createSessionSchedule.mockResolvedValue(
+        'Getting started one-to-one for John Doe has been added.',
+      )
     })
 
     it('creates session schedule and redirects with success message', async () => {

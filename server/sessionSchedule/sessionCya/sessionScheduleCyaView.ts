@@ -1,5 +1,5 @@
-import SessionScheduleCyaPresenter from './SessionScheduleCyaPresenter'
 import { SummaryListArgs } from '../../utils/govukFrontendTypes'
+import SessionScheduleCyaPresenter from './SessionScheduleCyaPresenter'
 
 export default class SessionScheduleCyaView {
   constructor(private readonly presenter: SessionScheduleCyaPresenter) {}

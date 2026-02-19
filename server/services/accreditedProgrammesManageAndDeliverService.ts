@@ -48,11 +48,11 @@ import {
   Risks,
   RoshAnalysis,
   ScheduleIndividualSessionDetailsResponse,
+  ScheduleSessionRequest,
   ScheduleSessionTypeResponse,
   SentenceInformation,
   Session,
   SessionScheduleGroupResponse,
-  SessionScheduleRequest,
   SessionScheduleResponse,
   ThinkingAndBehaviour,
   UpdateAvailability,
@@ -560,7 +560,7 @@ export default class AccreditedProgrammesManageAndDeliverService
 
   async sessionSchedule(
     username: Express.User['username'],
-    data: SessionScheduleRequest,
+    data: ScheduleSessionRequest,
   ): Promise<SessionScheduleResponse> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.post({
@@ -598,14 +598,15 @@ export default class AccreditedProgrammesManageAndDeliverService
   async createSessionSchedule(
     username: ExpressUsername,
     groupId: string,
-    sessionScheduleRequest: SessionScheduleRequest,
-  ): Promise<{ message: string }> {
+    sessionScheduleRequest: ScheduleSessionRequest,
+  ): Promise<string> {
     const restClient = await this.createRestClientFromUsername(username)
-    return restClient.post({
+    return (await restClient.post({
       path: `/group/${groupId}/session/schedule`,
       headers: { Accept: 'application/json' },
       data: sessionScheduleRequest,
-    })
+      responseType: String.name,
+    })) as string
   }
 
   async getGroupSessionsAndAttendance(

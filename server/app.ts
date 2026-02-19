@@ -8,7 +8,7 @@ import {
   DeliveryLocationPreferencesFormData,
   EditSessionFacilitatorsRequest,
   RescheduleSessionRequest,
-  SessionScheduleRequest,
+  ScheduleSessionRequest,
 } from '@manage-and-deliver-api'
 import errorHandler from './errorHandler'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
@@ -42,7 +42,7 @@ declare module 'express-session' {
       removeFromGroup?: boolean
     }
     createGroupFormData?: Partial<CreateGroupRequest>
-    sessionScheduleData?: Partial<SessionScheduleRequest> & { sessionName?: string; referralName?: string }
+    sessionScheduleData?: Partial<ScheduleSessionRequest> & { sessionName?: string; referralName?: string }
     editSessionDateAndTime?: Partial<RescheduleSessionRequest>
     sessionFacilitators?: Partial<EditSessionFacilitatorsRequest[]>
   }
