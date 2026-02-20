@@ -57,6 +57,7 @@ import {
   ThinkingAndBehaviour,
   UpdateAvailability,
   UserTeamMember,
+  RecordSessionAttendance,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -725,5 +726,14 @@ export default class AccreditedProgrammesManageAndDeliverService
       data: updateSessionFacilitators,
       responseType: String.name,
     })) as string
+  }
+
+  async getRecordAttendanceBffData(username: ExpressUsername, sessionId: string): Promise<RecordSessionAttendance> {
+    const restClient = await this.createRestClientFromUsername(username)
+
+    return (await restClient.get({
+      path: `/bff/session/${sessionId}/record-attendance`,
+      headers: { Accept: 'application/json' },
+    })) as RecordSessionAttendance
   }
 }

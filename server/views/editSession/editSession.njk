@@ -36,7 +36,7 @@
       </div>
 
       <div class="govuk-grid-column-two-thirds">
-        <form method="post" novalidate class="add-another-form">
+        <form method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{csrfToken}}">
           {{ multiSelect(attendanceTableArgs) }}
           {{ govukButton({ text: "Update attendance and notes", preventDoubleClick: true }) }}

@@ -39,6 +39,17 @@ export default class EditSessionController {
     const successMessage = message ? String(message) : null
     req.session.originPage = req.path
 
+    if (req.method === 'POST') {
+      // const data = await new EditSessionForm(req).deleteData()
+      // if (data.error) {
+      //   res.status(400)
+      //   formError = data.error
+      // }
+      // attendance-multi-select
+      req.session.editSessionAttendance = { referralIds: req.body['multi-select-selected'] as string[] }
+      return res.redirect(`/group/${groupId}/session/${sessionId}/record-attendance`)
+    }
+
     const presenter = new EditSessionPresenter(
       groupId,
       sessionDetails,
@@ -48,7 +59,7 @@ export default class EditSessionController {
     )
     const view = new EditSessionView(presenter)
 
-    ControllerUtils.renderWithLayout(res, view, null)
+    return ControllerUtils.renderWithLayout(res, view, null)
   }
 
   async deleteSession(req: Request, res: Response): Promise<void> {

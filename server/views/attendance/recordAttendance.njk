@@ -1,0 +1,43 @@
+{% extends "../partials/layout.njk" %}
+
+{%- from "moj/components/filter/macro.njk" import mojFilter -%}
+{%- from "govuk/components/checkboxes/macro.njk" import govukCheckboxes -%}
+{%- from "govuk/components/input/macro.njk" import govukInput -%}
+{%- from "govuk/components/table/macro.njk" import govukTable -%}
+{% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "../components/selectWithOptGroup.njk" import govukSelectWithOptgroup %}
+{%- from "govuk/components/button/macro.njk" import govukButton %}
+{%- from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+<div class="govuk-width-container">
+  <main class="govuk-main-wrapper" id="main-content">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        {{ govukBackLink(backLinkArgs) }}
+      </div>
+
+      <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-l">{{text.headingCaption}}</span>
+        <h1 class="govuk-heading-l">{{text.pageHeading}}</h1>
+      </div>
+
+      <div class="govuk-grid-column-two-thirds">
+        <form method="post" novalidate class="add-another-form">
+          <input type="hidden" name="_csrf" value="{{csrfToken}}">
+          {% for radioArgs in radioArgsList %}
+            {{ govukRadios(radioArgs) }}
+          {% endfor %}
+          {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+        </form>
+      </div>
+    </div>
+  </main>
+</div>
+
+{% endblock %}

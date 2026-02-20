@@ -46,6 +46,7 @@ export default class EditSessionPresenter {
       ],
       rows: attendanceData.map((it, index) => ({
         id: `attendance-multi-select-row-${index}`,
+        value: it.referralId,
         cells: [
           {
             html: `<a href="/person/${it.crn}">${it.name}</a> ${it.crn}`,
