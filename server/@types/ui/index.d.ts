@@ -1,3 +1,5 @@
+import { TableArgsHeadElement } from '../../utils/govukFrontendTypes'
+
 export type MojTimelineItem = HtmlOrText & {
   byline: {
     text: string

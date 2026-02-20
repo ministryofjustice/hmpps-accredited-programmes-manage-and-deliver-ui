@@ -80,6 +80,8 @@ type Session = components['schemas']['Session']
 type EditSessionFacilitatorsResponse = components['schemas']['EditSessionFacilitatorsResponse']
 type EditSessionFacilitatorResponse = components['schemas']['EditSessionFacilitatorsResponse']['facilitators']
 type EditSessionFacilitatorsRequest = components['schemas']['EditSessionFacilitatorRequest']
+type RecordSessionAttendance = components['schemas']['RecordSessionAttendance']
+type SessionAttendance = components['schemas']['SessionAttendance']
 
 export type {
   AlcoholMisuseDetails,
@@ -134,6 +136,7 @@ export type {
   ProgrammeGroupEntity,
   ProgrammeGroupSexEnum,
   ProgrammeGroupWhen,
+  RecordSessionAttendance,
   ReferralCaseListItem,
   ReferralDetails,
   ReferralMotivationBackgroundAndNonAssociations,
@@ -153,6 +156,7 @@ export type {
   ScheduleSessionTypeResponse,
   SentenceInformation,
   Session,
+  SessionAttendance,
   SessionScheduleGroupResponse,
   SessionScheduleRequest,
   SessionScheduleResponse,

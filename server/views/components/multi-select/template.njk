@@ -1,5 +1,4 @@
 <!-- MOJ design system multi-select table converted to a nunjucks template for easy re-use -->
-<!-- Can pass in normal Gov-uk TableArgs to the macro to load the data -->
 
   <table class="govuk-table" data-module="moj-multi-select" data-id-prefix="{{ idPrefix }}">
     <thead class="govuk-table__head">
@@ -15,7 +14,11 @@
     <tr class="govuk-table__row{% if row.selected %} govuk-table__row--selected{% endif %}">
       <td class="govuk-table__cell">
         <div class="govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox">
-          <input type="checkbox" class="govuk-checkboxes__input" id="{{ idPrefix }}{{ row.id }}" value="{{ row.value or row.id }}">
+          {%- if row.value -%}
+          <input type="checkbox" class="govuk-checkboxes__input" id="{{ idPrefix }}{{ row.id }}" name="{{ idPrefix }}selected" value="{{ row.value }}">
+          {%- else -%}
+          <input type="checkbox" class="govuk-checkboxes__input" id="{{ idPrefix }}{{ row.id }}" name="{{ idPrefix }}selected" value="{{ row.id }}">
+          {%- endif -%}
           <label class="govuk-label govuk-checkboxes__label" for="{{ idPrefix }}{{ row.id }}">
             <span class="govuk-visually-hidden">Select {{ row.cells[0] }}</span>
           </label>
