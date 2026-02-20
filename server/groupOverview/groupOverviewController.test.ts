@@ -1,8 +1,8 @@
 import { Express } from 'express'
 import request from 'supertest'
-import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
-import ProgrammeGroupOverviewFactory from '../testutils/factories/programmeGroupOverviewFactory'
+import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import ProgrammeGroupOverviewFactory from '../testutils/factories/programmeGroupAllocationsFactory'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')

@@ -34,7 +34,7 @@ import {
   OffenceHistory,
   PersonalDetails,
   PniScore,
-  ProgrammeGroupOverview,
+  ProgrammeGroupAllocations,
   ProgrammeGroupEntity,
   ReferralDetails,
   ReferralMotivationBackgroundAndNonAssociations,
@@ -145,14 +145,14 @@ export default class AccreditedProgrammesManageAndDeliverService
     groupId: string,
     paginationParams: PaginationParams,
     filter: GroupListFilterParams,
-  ): Promise<ProgrammeGroupOverview> {
+  ): Promise<ProgrammeGroupAllocations> {
     const restClient = await this.createRestClientFromUsername(username)
     const filterQuery: Record<string, unknown> = { ...filter }
     return (await restClient.get({
       path: `/bff/group/${groupId}/ALLOCATED`,
       headers: { Accept: 'application/json' },
       query: { ...paginationParams, ...filterQuery },
-    })) as ProgrammeGroupOverview
+    })) as ProgrammeGroupAllocations
   }
 
   async getGroupWaitlistMembers(
@@ -160,14 +160,14 @@ export default class AccreditedProgrammesManageAndDeliverService
     groupId: string,
     paginationParams: PaginationParams,
     filter: GroupListFilterParams,
-  ): Promise<ProgrammeGroupOverview> {
+  ): Promise<ProgrammeGroupAllocations> {
     const restClient = await this.createRestClientFromUsername(username)
     const filterQuery: Record<string, unknown> = { ...filter }
     return (await restClient.get({
       path: `/bff/group/${groupId}/WAITLIST`,
       headers: { Accept: 'application/json' },
       query: { ...paginationParams, ...filterQuery },
-    })) as ProgrammeGroupOverview
+    })) as ProgrammeGroupAllocations
   }
 
   async getCaseListFilters(username: ExpressUsername): Promise<CaseListFilterValues> {

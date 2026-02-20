@@ -1070,10 +1070,10 @@ export interface paths {
       cookie?: never
     }
     /**
-     * Get group details with allocation and waitlist data
-     * @description Retrieve group details including allocation and waitlist data with filtering and pagination support
+     * Get group with allocation and waitlist data
+     * @description Retrieve group allocations including waitlist data with filtering and pagination support
      */
-    get: operations['getGroupDetails']
+    get: operations['getGroupAllocations']
     put?: never
     post?: never
     delete?: never
@@ -2796,29 +2796,29 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
-      first?: boolean
-      last?: boolean
-      /** Format: int32 */
-      numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageableObject: {
-      /** Format: int64 */
-      offset?: number
-      sort?: components['schemas']['SortObject']
       paged?: boolean
       /** Format: int32 */
       pageNumber?: number
       /** Format: int32 */
       pageSize?: number
       unpaged?: boolean
+      /** Format: int64 */
+      offset?: number
+      sort?: components['schemas']['SortObject']
     }
     ReferralCaseListItem: {
       /** Format: uuid */
@@ -2836,9 +2836,9 @@ export interface components {
       reportingTeam: string
     }
     SortObject: {
-      empty?: boolean
       sorted?: boolean
       unsorted?: boolean
+      empty?: boolean
     }
     StatusFilterValues: {
       /**
@@ -3263,40 +3263,18 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
-      first?: boolean
-      last?: boolean
-      /** Format: int32 */
-      numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
-    }
-    /** @description Available filter options for viewing programme group data. */
-    Filters: {
-      /**
-       * @description The available sex options that can be used to filter the data.
-       * @example [
-       *       "Male",
-       *       "Female"
-       *     ]
-       */
-      sex: string[]
-      /**
-       * @description The available cohorts (offence types or programme categories) that can be used for filtering.
-       * @example [
-       *       "General",
-       *       "Sexual",
-       *       "Domestic Violence"
-       *     ]
-       */
-      cohort: string[]
-      /** @description Contains pdu's with a list of their reporting teams */
-      locationFilters: components['schemas']['LocationFilterValues'][]
     }
     GroupItem: {
       /**
@@ -3380,25 +3358,25 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
-      first?: boolean
-      last?: boolean
-      /** Format: int32 */
-      numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
-    ProgrammeGroupDetails: {
+    ProgrammeGroupAllocations: {
       /** @description Details of the group such as its code and regional name. */
       group: components['schemas']['Group']
       /** @description Filter options available for the group data. */
-      filters: components['schemas']['Filters']
+      filters: components['schemas']['ProgrammeGroupAllocationsFilters']
       /** @description Paged data containing the list of group items (referrals or people) for this group. */
       pagedGroupData: components['schemas']['PageGroupItem']
       /**
@@ -3407,6 +3385,28 @@ export interface components {
        * @example 12
        */
       otherTabTotal: number
+    }
+    /** @description Available filter options for viewing programme group data. */
+    ProgrammeGroupAllocationsFilters: {
+      /**
+       * @description The available sex options that can be used to filter the data.
+       * @example [
+       *       "Male",
+       *       "Female"
+       *     ]
+       */
+      sex: string[]
+      /**
+       * @description The available cohorts (offence types or programme categories) that can be used for filtering.
+       * @example [
+       *       "General",
+       *       "Sexual",
+       *       "Domestic Violence"
+       *     ]
+       */
+      cohort: string[]
+      /** @description Contains pdu's with a list of their reporting teams */
+      locationFilters: components['schemas']['LocationFilterValues'][]
     }
     ProgrammeGroupModuleSessionsResponse: {
       /** @description group details */
@@ -6928,7 +6928,7 @@ export interface operations {
       }
     }
   }
-  getGroupDetails: {
+  getGroupAllocations: {
     parameters: {
       query: {
         pageable: components['schemas']['Pageable']
@@ -6960,7 +6960,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['ProgrammeGroupDetails']
+          'application/json': components['schemas']['ProgrammeGroupAllocations']
         }
       }
       /** @description Bad Request */
