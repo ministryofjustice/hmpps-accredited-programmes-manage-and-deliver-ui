@@ -1,4 +1,4 @@
-@import 'node_modules/govuk-frontend/dist/govuk';
+@use 'node_modules/govuk-frontend/dist/govuk' as *;
 
 $very-high-score-colour: #942514;
 $very-high-score-colour--light: #ffac9f;
@@ -12,7 +12,7 @@ $medium-score-colour__text: #a34e00;
 $low-score-colour: #85994b;
 $low-score-colour--light: #dee9bd;
 $low-score-colour__text: #485b10;
-$boarder-colour: #B1B4B6;
+$border-colour: #b1b4b6;
 
 @mixin scale-marker-card-colour($primary-colour, $secondary-colour, $text-colour) {
   & .scale-marker__card {
@@ -43,14 +43,14 @@ $boarder-colour: #B1B4B6;
   position: relative;
   text-align: center;
   display: block;
-  color: govuk-colour("black");
+  color: govuk-colour('black');
 }
 
 @mixin scale-bar-base {
   width: 100%;
 
   &::after {
-    content: "" "";
+    content: '' '';
     display: block;
     visibility: hidden;
     clear: both;
@@ -62,7 +62,7 @@ $boarder-colour: #B1B4B6;
   }
 }
 
-.predictor-scale-header-wrapper{
+.predictor-scale-header-wrapper {
   display: flex;
   justify-content: space-between;
 }
@@ -71,7 +71,7 @@ $boarder-colour: #B1B4B6;
   width: 100%;
   padding: 30px 40px 10px;
   box-sizing: border-box;
-  border: 1px solid $boarder-colour;
+  border: 1px solid $border-colour;
 }
 
 .scale-marker__card-pointer {
@@ -79,7 +79,7 @@ $boarder-colour: #B1B4B6;
   height: 0;
   border-right: 16px solid transparent;
   border-left: 16px solid transparent;
-  border-top: 16px solid govuk-colour("black");
+  border-top: 16px solid govuk-colour('black');
   position: relative;
   top: 0;
   left: 23px;
@@ -87,7 +87,7 @@ $boarder-colour: #B1B4B6;
 }
 
 .scale-marker__card-pointer--white::after {
-  border-top: 14px solid govuk-colour("white") !important;
+  border-top: 14px solid govuk-colour('white') !important;
 }
 
 .scale-marker__card-pointer::after {
@@ -95,11 +95,11 @@ $boarder-colour: #B1B4B6;
   height: 0;
   border-right: 14px solid transparent;
   border-left: 14px solid transparent;
-  border-top: 14px solid govuk-colour("white");
+  border-top: 14px solid govuk-colour('white');
   position: absolute;
   top: -17px;
   left: -14px;
-  content: "";
+  content: '';
 }
 
 .scale-marker {
@@ -150,9 +150,9 @@ $boarder-colour: #B1B4B6;
 
 .scale-marker-wrapper--very-high {
   @include scale-marker-card-colour(
-      $very-high-score-colour,
-      $very-high-score-colour--light,
-      $very-high-score-colour__text
+    $very-high-score-colour,
+    $very-high-score-colour--light,
+    $very-high-score-colour__text
   );
 }
 
@@ -172,8 +172,8 @@ $boarder-colour: #B1B4B6;
   width: 78px;
   bottom: 30px;
   margin: 0 auto;
-  background-color: govuk-colour("white");
-  border: 2px solid govuk-colour("black");
+  background-color: govuk-colour('white');
+  border: 2px solid govuk-colour('black');
 }
 
 .scale-marker__card-top {
@@ -187,16 +187,16 @@ $boarder-colour: #B1B4B6;
   }
 
   & h3 {
-    @include govuk-font(14, "bold");
+    @include govuk-font(14, 'bold');
   }
 
   & p {
-    @include govuk-font(14, "regular");
+    @include govuk-font(14, 'regular');
   }
 }
 
 .scale-marker__card-bottom p {
-  @include govuk-font(14, "bold");
+  @include govuk-font(14, 'bold');
 
   margin: 0;
 }
@@ -222,11 +222,11 @@ $boarder-colour: #B1B4B6;
   }
 
   & > div:nth-child(4n + 1) > span:first-child {
-    &::after{
+    &::after {
       @include govuk-font(16);
       @include scale-bar-label;
 
-      content:"LOW";
+      content: 'LOW';
       bottom: -15px;
       color: $govuk-secondary-text-colour;
     }
@@ -234,11 +234,11 @@ $boarder-colour: #B1B4B6;
   }
 
   & > div:nth-child(4n + 2) > span:first-child {
-    &::after{
+    &::after {
       @include govuk-font(16);
       @include scale-bar-label;
 
-      content:"MEDIUM";
+      content: 'MEDIUM';
       bottom: -15px;
       color: $govuk-secondary-text-colour;
     }
@@ -246,11 +246,11 @@ $boarder-colour: #B1B4B6;
   }
 
   & > div:nth-child(4n + 3) > span:first-child {
-    &::after{
+    &::after {
       @include govuk-font(16);
       @include scale-bar-label;
 
-      content:"HIGH";
+      content: 'HIGH';
       bottom: -15px;
       color: $govuk-secondary-text-colour;
     }
@@ -265,11 +265,11 @@ $boarder-colour: #B1B4B6;
   }
 
   & > div:nth-child(4n + 4) > span:first-child {
-    &::after{
+    &::after {
       @include govuk-font(16);
       @include scale-bar-label;
 
-      content:"VERY HIGH";
+      content: 'VERY HIGH';
       bottom: -15px;
       color: $govuk-secondary-text-colour;
     }
@@ -287,12 +287,12 @@ $boarder-colour: #B1B4B6;
     width: 33.33%;
     height: 30px;
     float: left;
-    border-right: 1px solid govuk-colour("black");
+    border-right: 1px solid govuk-colour('black');
     box-sizing: border-box;
     position: relative;
 
     &:first-child {
-      border-left: 1px solid govuk-colour("black");
+      border-left: 1px solid govuk-colour('black');
     }
 
     & > span:first-child {
@@ -336,13 +336,28 @@ $boarder-colour: #B1B4B6;
   }
 
   & > div:nth-child(1) {
-    & > span:first-child { background-color: $low-score-colour; &::after { content: "LOW"; } }
+    & > span:first-child {
+      background-color: $low-score-colour;
+      &::after {
+        content: 'LOW';
+      }
+    }
   }
   & > div:nth-child(2) {
-    & > span:first-child { background-color: $medium-score-colour; &::after { content: "MEDIUM"; } }
+    & > span:first-child {
+      background-color: $medium-score-colour;
+      &::after {
+        content: 'MEDIUM';
+      }
+    }
   }
   & > div:nth-child(3) {
-    & > span:first-child { background-color: $high-score-colour; &::after { content: "HIGH"; } }
+    & > span:first-child {
+      background-color: $high-score-colour;
+      &::after {
+        content: 'HIGH';
+      }
+    }
   }
 }
 
@@ -353,7 +368,9 @@ $boarder-colour: #B1B4B6;
   & > div:nth-child(4) {
     & > span:first-child {
       background-color: $very-high-score-colour;
-      &::after { content: "VERY HIGH"; }
+      &::after {
+        content: 'VERY HIGH';
+      }
     }
   }
 }

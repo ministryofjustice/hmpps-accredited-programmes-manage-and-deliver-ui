@@ -1,13 +1,12 @@
 // sass-lint:disable-block no-import-deprecation
 $govuk-global-styles: true;
-$path: "/assets/images/";
+$path: '/assets/images/';
 
 $moj-page-width: 1170px;
 $govuk-page-width: $moj-page-width;
 
-@import "govuk-frontend/dist/govuk/index";
-@import "@ministryofjustice/frontend/moj/all";
-@import "rosh-widget";
-@import "expanded-predictor-badge";
-@import "predictor-scale";
-
+@use 'govuk-frontend/dist/govuk/index';
+@use '@ministryofjustice/frontend/moj/all';
+@use 'rosh-widget';
+@use 'expanded-predictor-badge';
+@use 'predictor-scale';
