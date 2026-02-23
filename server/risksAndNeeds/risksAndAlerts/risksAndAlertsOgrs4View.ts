@@ -171,6 +171,7 @@ export default class RisksAndAlertsOgrs4View {
   get importedFromNdeliusText(): InsetTextArgs {
     return {
       text: `Imported from Nomis on ${this.presenter.risks.dateRetrieved}, last updated on ${this.presenter.risks.assessmentCompleted}`,
+      classes: 'govuk-!-margin-top-8',
     }
   }
 
