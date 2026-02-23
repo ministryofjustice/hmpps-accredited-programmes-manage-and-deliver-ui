@@ -16,23 +16,25 @@
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
   {{ govukInsetText(assessmentCompletedText) }}
-  <h3 class="govuk-heading-m">All reoffending predictor scale</h3>
-  {{ predictorScale(allReoffendingPredictor, true, true, true) }}
+  <div class="ogrs4-content">
+    <h2 class="govuk-heading-m">All reoffending predictor scale</h2>
+    {{ predictorScale(allReoffendingPredictor, true, true, true) }}
 
-  <h3 class="govuk-heading-m">Violent reoffending predictor</h3>
-  {{ expandedPredictorBadge(violentReoffendingPredictor, true, false) }}
+    <h2 class="govuk-heading-m">Violent reoffending predictor</h2>
+    {{ expandedPredictorBadge(violentReoffendingPredictor, true, false) }}
 
-  <h3 class="govuk-heading-m">Spousal assault risk assessment</h3>
-  {{ riskBox(riskTowardsPartnerBox) }}
-  {{ riskBox(riskTowardsOthersBox) }}
+    <h2 class="govuk-heading-m">Spousal assault risk assessment</h2>
+    {{ riskBox(riskTowardsPartnerBox) }}
+    {{ riskBox(riskTowardsOthersBox) }}
 
-  <h3 class="govuk-heading-m">Combined serious reoffending predictor</h3>
-  {{ expandedPredictorBadge(combinedSeriousReoffendingPredictor, true, false) }}
-  {{ expandedPredictorBadge(directContactSexualReoffendingPredictor, true, false) }}
-  {{ expandedPredictorBadge(imagesAndIndirectContactSexualReoffendingPredictor, true, false) }}
-  {{ roshWidget(roshRiskSummary) }}
-  {{ govukInsetText(importedFromNdeliusText) }}
+    <h2 class="govuk-heading-m">Combined serious reoffending predictor</h2>
+    {{ expandedPredictorBadge(combinedSeriousReoffendingPredictor, true, false) }}
+    {{ expandedPredictorBadge(directContactSexualReoffendingPredictor, true, false) }}
+    {{ expandedPredictorBadge(imagesAndIndirectContactSexualReoffendingPredictor, true, false) }}
+    {{ roshWidget(roshRiskSummary) }}
+    {{ govukInsetText(importedFromNdeliusText) }}
 
-  <h3 class="govuk-heading-m">Risk alerts</h3>
-  {{ riskFlagWidget(activeAlerts) }}
+    <h2 class="govuk-heading-m">Risk alerts</h2>
+    {{ riskFlagWidget(activeAlerts) }}
+  </div>
 </div>
