@@ -1,5 +1,6 @@
 import { GroupSessionResponse } from '@manage-and-deliver-api'
 import { MultiSelectTableArgs } from '@manage-and-deliver-ui'
+import { FormValidationError } from '../utils/formValidationError'
 
 export default class EditSessionPresenter {
   constructor(
@@ -8,6 +9,7 @@ export default class EditSessionPresenter {
     readonly sessionId: string,
     readonly deleteUrl: string,
     readonly successMessage: string | null = null,
+    private readonly validationError: FormValidationError | null = null,
   ) {}
 
   get text() {

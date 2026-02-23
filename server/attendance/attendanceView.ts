@@ -1,5 +1,5 @@
 import AttendancePresenter from './attendancePresenter'
-import { ButtonArgs, RadiosArgs } from '../utils/govukFrontendTypes'
+import { RadiosArgs } from '../utils/govukFrontendTypes'
 import ViewUtils from '../utils/viewUtils'
 
 export default class AttendanceView {
@@ -41,6 +41,7 @@ export default class AttendanceView {
         text: this.presenter.text,
         radioArgsList: this.radioArgsList,
         backLinkArgs: this.backLinkArgs,
+        errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
       },
     ]
   }

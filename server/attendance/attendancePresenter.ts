@@ -7,7 +7,6 @@ export default class AttendancePresenter {
     readonly recordAttendanceBffData: RecordSessionAttendance,
     readonly backLinkUri: string,
     private readonly validationError: FormValidationError | null = null,
-    private readonly userInputData: Record<string, unknown> | null = null,
   ) {}
 
   get text() {

@@ -136,6 +136,10 @@ export default {
     selectAttendees: 'Select who should attend the session',
     editSessionFacilitatorEmpty: 'Select a Facilitator. Start typing to search.',
     editSessionFacilitatorDuplicate: 'You cannot add the same facilitator twice. Select a different facilitator.',
+    noAttendeesSelected: "Select the checkbox next to a person's name to update their attendance and notes",
+  },
+  recordAttendance: {
+    selectAttendanceOutcome: (name: string) => `Select an attendance status for ${name}`,
   },
 
   returnedError,

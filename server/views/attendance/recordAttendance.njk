@@ -10,6 +10,7 @@
 {%- from "govuk/components/button/macro.njk" import govukButton %}
 {%- from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -23,6 +24,9 @@
       </div>
 
       <div class="govuk-grid-column-two-thirds">
+        {% if errorSummary !== null %}
+          {{ govukErrorSummary(errorSummary) }}
+        {% endif %}
         <span class="govuk-caption-l">{{text.headingCaption}}</span>
         <h1 class="govuk-heading-l">{{text.pageHeading}}</h1>
       </div>
