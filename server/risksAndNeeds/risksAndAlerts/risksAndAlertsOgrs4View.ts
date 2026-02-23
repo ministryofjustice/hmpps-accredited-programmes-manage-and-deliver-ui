@@ -14,26 +14,27 @@ export default class RisksAndAlertsOgrs4View {
 
   get updateDetails(): DetailsArgs {
     return {
-      summaryText: 'How the risk predictor tools have changed',
+      summaryHtml:
+        '<h2 class="govuk-details__summary-text govuk-body risk-changed">How the risk predictor tools have changed</h2>',
       html:
-        '<h2>All reoffending</h2>' +
+        '<h3 class="govuk-heading-m">All reoffending</h3>' +
         '<p class="govuk-!-margin-bottom-0"><span class="govuk-!-font-weight-bold">Old version: </span>Offender group reconviction scale (OGRS)</p>' +
         '<p><span class="govuk-!-font-weight-bold">Updated version: </span>All reoffending predictor</p>' +
         '<p>The All reoffending predictor has static and dynamic versions.</p>' +
-        '<h2>Sexual reoffending </h2>' +
-        '<h3>Direct contact </h3>' +
+        '<h3 class="govuk-heading-m">Sexual reoffending </h3>' +
+        '<h4 class="govuk-heading-s">Direct contact </h4>' +
         '<p class="govuk-!-margin-bottom-0"><span class="govuk-!-font-weight-bold">Old version: </span>OASys sexual predictor: Direct contact (OSP-DC)</p>' +
         '<p><span class="govuk-!-font-weight-bold">Updated version: </span>Direct contact: Sexual reoffending predictor</p>' +
         '<p>The Direct contact: Sexual reoffending predictor only has a static score. </p>' +
-        '<h3>Indirect contact </h3>' +
+        '<h4 class="govuk-heading-s">Indirect contact </h4>' +
         '<p class="govuk-!-margin-bottom-0"><span class="govuk-!-font-weight-bold">Old version: </span>OASys sexual predictor: Images and indirect contact with children (OSP-IIC)</p>' +
         '<p><span class="govuk-!-font-weight-bold">Updated version: </span>Images and indirect contact: Sexual reoffending predictor</p>' +
         '<p>The Images and indirect contact: Sexual reoffending predictor only has a static score.</p>' +
-        '<h2>Serious non-sexual violent reoffending</h2>' +
+        '<h3 class="govuk-heading-m">Serious non-sexual violent reoffending</h3>' +
         '<p class="govuk-!-margin-bottom-0"><span class="govuk-!-font-weight-bold">Old version: </span>Previously part of RSR but not displayed</p>' +
         '<p><span class="govuk-!-font-weight-bold">Updated version: </span>Serious violent reoffending predictor</p>' +
         '<p>The Serious violent reoffending predictor has static and dynamic versions.</p>' +
-        '<h2>Serious reoffending</h2>' +
+        '<h3 class="govuk-heading-m">Serious reoffending</h3>' +
         '<p>This predictor is a combination of the Direct contact: Sexual reoffending predictor, Images and indirect contact: Sexual reoffending predictor and Serious violent reoffending predictor scores.</p>' +
         '<p class="govuk-!-margin-bottom-0"><span class="govuk-!-font-weight-bold">Old version: </span>Risk of serious recidivism (RSR)</p>' +
         '<p><span class="govuk-!-font-weight-bold">Updated version: </span>Combined serious reoffending predictor</p>' +
@@ -44,7 +45,6 @@ export default class RisksAndAlertsOgrs4View {
   get assessmentCompletedText(): InsetTextArgs {
     return {
       text: `Assessment completed ${this.presenter.risks.assessmentCompleted}`,
-      classes: 'govuk-!-margin-top-0',
     }
   }
 
@@ -171,7 +171,6 @@ export default class RisksAndAlertsOgrs4View {
   get importedFromNdeliusText(): InsetTextArgs {
     return {
       text: `Imported from Nomis on ${this.presenter.risks.dateRetrieved}, last updated on ${this.presenter.risks.assessmentCompleted}`,
-      classes: 'govuk-!-margin-top-8',
     }
   }
 
