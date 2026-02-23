@@ -16,6 +16,7 @@ generic-service:
     ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_URL: 'https://accredited-programmes-manage-and-deliver-api-dev.hmpps.service.justice.gov.uk'
     ENVIRONMENT_NAME: DEV
     AUDIT_ENABLED: "false"
+    SENTRY_ENVIRONMENT: dev
 
 generic-prometheus-alerts:
   alertSeverity: hmpps_accredited_programmes_manage_and_deliver_alerts_nonprod

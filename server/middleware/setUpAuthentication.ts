@@ -1,12 +1,13 @@
-import passport from 'passport'
+import { AuthenticatedRequest, VerificationClient } from '@ministryofjustice/hmpps-auth-clients'
+import { setUser } from '@sentry/node'
 import flash from 'connect-flash'
 import { Router } from 'express'
+import passport from 'passport'
 import { Strategy } from 'passport-oauth2'
-import { VerificationClient, AuthenticatedRequest } from '@ministryofjustice/hmpps-auth-clients'
+import logger from '../../logger'
 import config from '../config'
 import { HmppsUser } from '../interfaces/hmppsUser'
 import generateOauthClientToken from '../utils/clientCredentials'
-import logger from '../../logger'
 
 passport.serializeUser((user, done) => {
   // Not used but required for Passport
@@ -76,6 +77,7 @@ export default function setupAuthentication() {
 
   router.use(async (req, res, next) => {
     if (req.isAuthenticated() && (await tokenVerificationClient.verifyToken(req as unknown as AuthenticatedRequest))) {
+      setUser({ username: req.user.username })
       return next()
     }
     req.session.returnTo = req.originalUrl

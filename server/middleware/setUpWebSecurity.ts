@@ -1,5 +1,5 @@
 import crypto from 'crypto'
-import express, { Router, Request, Response, NextFunction } from 'express'
+import express, { NextFunction, Request, Response, Router } from 'express'
 import helmet from 'helmet'
 import config from '../config'
 
@@ -24,7 +24,13 @@ export default function setUpWebSecurity(): Router {
           // <link href="http://example.com/" rel="stylesheet" nonce="{{ cspNonce }}">
           // This ensures only scripts we trust are loaded, and not anything injected into the
           // page by an attacker.
-          scriptSrc: ["'self'", (_req: Request, res: Response) => `'nonce-${res.locals.cspNonce}'`],
+          scriptSrc: [
+            "'self' https://browser.sentry-cdn.com https://js.sentry-cdn.com",
+            '*.applicationinsights.azure.com/v2/track',
+            (_req: Request, res: Response) => `'nonce-${res.locals.cspNonce}'`,
+          ],
+          connectSrc: ["'self' https://*.sentry.io"],
+          workerSrc: ["'self' blob:"],
           styleSrc: ["'self'", (_req: Request, res: Response) => `'nonce-${res.locals.cspNonce}'`],
           fontSrc: ["'self'"],
           formAction: [`'self' ${config.apis.hmppsAuth.externalUrl}`],
