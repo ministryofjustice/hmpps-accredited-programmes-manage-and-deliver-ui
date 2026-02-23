@@ -25,7 +25,9 @@ export default function setUpWebSecurity(): Router {
           // This ensures only scripts we trust are loaded, and not anything injected into the
           // page by an attacker.
           scriptSrc: [
-            "'self' https://browser.sentry-cdn.com https://js.sentry-cdn.com",
+            "'self'",
+            'https://browser.sentry-cdn.com',
+            'https://js.sentry-cdn.com',
             '*.applicationinsights.azure.com/v2/track',
             (_req: Request, res: Response) => `'nonce-${res.locals.cspNonce}'`,
           ],
