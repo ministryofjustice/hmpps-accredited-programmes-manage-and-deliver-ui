@@ -728,12 +728,17 @@ export default class AccreditedProgrammesManageAndDeliverService
     })) as string
   }
 
-  async getRecordAttendanceBffData(username: ExpressUsername, sessionId: string): Promise<RecordSessionAttendance> {
+  async getRecordAttendanceBffData(
+    username: ExpressUsername,
+    sessionId: string,
+    referralIds: string[],
+  ): Promise<RecordSessionAttendance> {
     const restClient = await this.createRestClientFromUsername(username)
 
     return (await restClient.get({
       path: `/bff/session/${sessionId}/record-attendance`,
       headers: { Accept: 'application/json' },
+      query: { referralId: referralIds },
     })) as RecordSessionAttendance
   }
 }

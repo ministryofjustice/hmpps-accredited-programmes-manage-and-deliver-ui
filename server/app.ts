@@ -7,6 +7,7 @@ import {
   CreateGroupRequest,
   DeliveryLocationPreferencesFormData,
   EditSessionFacilitatorsRequest,
+  RecordSessionAttendance,
   RescheduleSessionRequest,
   ScheduleSessionRequest,
   SessionAttendance,

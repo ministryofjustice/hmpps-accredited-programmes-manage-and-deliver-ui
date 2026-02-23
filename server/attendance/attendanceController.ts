@@ -19,7 +19,7 @@ export default class AttendanceController {
     const recordAttendanceBffData = await this.accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData(
       username,
       sessionId,
-      // req.session.editSessionAttendance.referralIds,
+      req.session.editSessionAttendance.referralIds,
     )
 
     const data = await new RecordAttendanceForm(
@@ -33,7 +33,9 @@ export default class AttendanceController {
         formError = data.error
       } else {
         req.session.editSessionAttendance.attendees = data.paramsForUpdate.attendees
-        return res.redirect(`/group/${groupId}/session/${sessionId}/record-attendance`)
+        return res.redirect(
+          `/group/${groupId}/session/${sessionId}/referral/${req.session.editSessionAttendance.referralIds[0]}`,
+        )
       }
     }
 
