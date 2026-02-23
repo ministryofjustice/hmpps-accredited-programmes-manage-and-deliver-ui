@@ -11,7 +11,7 @@ export default class ChangeCohortController {
   ) {}
 
   async showChangeCohortPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as { referralId: string }
     const { username } = req.user
 
     const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(

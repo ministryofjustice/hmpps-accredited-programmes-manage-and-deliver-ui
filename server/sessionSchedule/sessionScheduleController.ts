@@ -20,7 +20,7 @@ export default class SessionScheduleController {
   ) {}
 
   async showSessionSchedule(req: Request, res: Response): Promise<void> {
-    const { groupId, moduleId } = req.params
+    const { groupId, moduleId } = req.params as { groupId: string; moduleId: string }
     const { username } = req.user
     let formError: FormValidationError | null = null
 
@@ -67,7 +67,7 @@ export default class SessionScheduleController {
 
   async scheduleGroupSessionDetails(req: Request, res: Response): Promise<void> {
     const { username } = req.user
-    const { groupId, moduleId } = req.params
+    const { groupId, moduleId } = req.params as { groupId: string; moduleId: string }
     const { sessionScheduleData } = req.session
     let formError: FormValidationError | null = null
     let userInputData = null
@@ -105,7 +105,7 @@ export default class SessionScheduleController {
 
   async scheduleGroupSessionCya(req: Request, res: Response): Promise<void> {
     const { username } = req.user
-    const { groupId, moduleId } = req.params
+    const { groupId, moduleId } = req.params as { groupId: string; moduleId: string }
     const { sessionScheduleData } = req.session
 
     if (req.method === 'POST') {
@@ -135,7 +135,7 @@ export default class SessionScheduleController {
 
   async showSessionAttendance(req: Request, res: Response): Promise<void> {
     const { username } = req.user
-    const { groupId } = req.params
+    const { groupId } = req.params as { groupId: string }
     const { successMessage } = req.query as {
       successMessage?: string
     }

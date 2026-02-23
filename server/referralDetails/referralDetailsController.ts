@@ -34,7 +34,7 @@ export default class ReferralDetailsController {
   }
 
   async showPersonalDetailsPage(req: Request, res: Response): Promise<void> {
-    const { id } = req.params
+    const { id } = req.params as { id: string }
     const { isCohortUpdated, isLdcUpdated } = req.query
     const { username } = req.user
     const subNavValue = 'personalDetails'
@@ -57,7 +57,7 @@ export default class ReferralDetailsController {
   }
 
   async showProgrammeHistoryPage(req: Request, res: Response): Promise<void> {
-    const { id } = req.params
+    const { id } = req.params as { id: string }
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'programmeHistory'
@@ -78,7 +78,7 @@ export default class ReferralDetailsController {
   }
 
   async showOffenceHistoryPage(req: Request, res: Response): Promise<void> {
-    const { id } = req.params
+    const { id } = req.params as { id: string }
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'offenceHistory'
@@ -101,7 +101,7 @@ export default class ReferralDetailsController {
   }
 
   async showSentenceInformationPage(req: Request, res: Response): Promise<void> {
-    const { id } = req.params
+    const { id } = req.params as { id: string }
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'sentenceInformation'
@@ -127,7 +127,7 @@ export default class ReferralDetailsController {
   }
 
   async showAvailabilityPage(req: Request, res: Response): Promise<void> {
-    const { id } = req.params
+    const { id } = req.params as { id: string }
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated, detailsUpdated } = req.query
     const subNavValue = 'availability'
@@ -152,7 +152,7 @@ export default class ReferralDetailsController {
   }
 
   async showLocationPage(req: Request, res: Response): Promise<void> {
-    const { id } = req.params
+    const { id } = req.params as { id: string }
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated, preferredLocationUpdated } = req.query
     const subNavValue = 'location'
@@ -178,7 +178,7 @@ export default class ReferralDetailsController {
   }
 
   async showAdditionalInformationPage(req: Request, res: Response): Promise<void> {
-    const { id } = req.params
+    const { id } = req.params as { id: string }
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'additionalInformation'
@@ -199,7 +199,7 @@ export default class ReferralDetailsController {
   }
 
   async showStatusHistoryPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as { referralId: string }
     const { username } = req.user
     const { message, isCohortUpdated, isLdcUpdated } = req.query
 
@@ -224,12 +224,12 @@ export default class ReferralDetailsController {
   }
 
   async updateAvailability(req: Request, res: Response): Promise<void> {
-    const { availabilityId } = req.params
+    const { availabilityId } = req.params as { availabilityId: string }
     await this.showAddAvailabilityPage(req, res, availabilityId)
   }
 
   async showAddAvailabilityPage(req: Request, res: Response, availabilityId: string = null): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as { referralId: string }
     const { username } = req.user
     const sharedReferralDetailsData = await this.showReferralDetailsPage(referralId, username)
 

@@ -14,7 +14,7 @@ export default class GroupAllocationNotesController {
   ) {}
 
   async showMotivationBackgroundAndNonAssociationsPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as { referralId: string }
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated, isMotivationsUpdated } = req.query
 
@@ -42,7 +42,7 @@ export default class GroupAllocationNotesController {
   }
 
   async showAddMotivationBackgroundAndNonAssociationsNotesPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as { referralId: string }
     const { username } = req.user
     let formError: FormValidationError | null = null
     let userInputData = null

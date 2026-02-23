@@ -15,7 +15,7 @@ export default class AddToGroupController {
 
   async addToGroup(req: Request, res: Response): Promise<void> {
     let formError: FormValidationError | null = null
-    const { groupId, referralId } = req.params
+    const { groupId, referralId } = req.params as { groupId: string; referralId: string }
 
     if (req.method === 'POST') {
       const data = await new AddToGroupForm(req).addToGroupData()
@@ -43,7 +43,7 @@ export default class AddToGroupController {
   async addToGroupMoreDetails(req: Request, res: Response): Promise<void> {
     let formError: FormValidationError | null = null
     let userInputData = null
-    const { groupId, referralId } = req.params
+    const { groupId, referralId } = req.params as { groupId: string; referralId: string }
     const { username } = req.user
 
     if (req.method === 'POST') {

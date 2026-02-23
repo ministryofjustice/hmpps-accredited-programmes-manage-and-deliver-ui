@@ -40,7 +40,7 @@ export default class RisksAndNeedsController {
   }
 
   async showRisksAndAlertsPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as { referralId: string }
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'risksAndAlerts'
@@ -81,7 +81,7 @@ export default class RisksAndNeedsController {
   }
 
   async showLearningNeedsPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as { referralId: string }
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'learningNeeds'
@@ -106,7 +106,7 @@ export default class RisksAndNeedsController {
   }
 
   async showOffenceAnalysisPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as { referralId: string }
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'offenceAnalysis'
@@ -132,7 +132,7 @@ export default class RisksAndNeedsController {
   }
 
   async showRelationshipsPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as { referralId: string }
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'relationships'
@@ -158,7 +158,7 @@ export default class RisksAndNeedsController {
   }
 
   async showLifestyleAndAssociatesPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as { referralId: string }
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'lifestyleAndAssociates'
@@ -184,7 +184,7 @@ export default class RisksAndNeedsController {
   }
 
   async showAlcoholMisusePage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as { referralId: string }
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'alcoholMisuse'
@@ -210,7 +210,7 @@ export default class RisksAndNeedsController {
   }
 
   async showEmotionalWellbeingPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as { referralId: string }
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'emotionalWellbeing'
@@ -237,7 +237,7 @@ export default class RisksAndNeedsController {
   }
 
   async showThinkingAndBehavingPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as { referralId: string }
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'thinkingAndBehaviour'
@@ -264,7 +264,7 @@ export default class RisksAndNeedsController {
   }
 
   async showAttitudesPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as { referralId: string }
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'attitudes'
@@ -290,7 +290,7 @@ export default class RisksAndNeedsController {
   }
 
   async showHealthPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as { referralId: string }
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'health'
@@ -316,7 +316,7 @@ export default class RisksAndNeedsController {
   }
 
   async showDrugDetailsPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as { referralId: string }
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'drugMisuse'
@@ -342,7 +342,7 @@ export default class RisksAndNeedsController {
   }
 
   async showRoshAnalysisPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as { referralId: string }
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'roshAnalysis'

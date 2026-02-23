@@ -10,7 +10,7 @@ export default class PniController {
   ) {}
 
   async showProgrammeNeedsIdentifierPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as { referralId: string }
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated } = req.query
 

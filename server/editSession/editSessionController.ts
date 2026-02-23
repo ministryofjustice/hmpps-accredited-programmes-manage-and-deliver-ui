@@ -26,7 +26,7 @@ export default class EditSessionController {
   ) {}
 
   async editSession(req: Request, res: Response): Promise<void> {
-    const { groupId, sessionId } = req.params
+    const { groupId, sessionId } = req.params as { groupId: string; sessionId: string }
     const { username } = req.user
     const { message } = req.query
 
@@ -52,7 +52,7 @@ export default class EditSessionController {
   }
 
   async deleteSession(req: Request, res: Response): Promise<void> {
-    const { groupId, sessionId } = req.params
+    const { groupId, sessionId } = req.params as { groupId: string; sessionId: string }
     const { username } = req.user
 
     let formError: FormValidationError | null = null
@@ -79,7 +79,7 @@ export default class EditSessionController {
   }
 
   async editSessionAttendees(req: Request, res: Response): Promise<void> {
-    const { groupId, sessionId } = req.params
+    const { groupId, sessionId } = req.params as { groupId: string; sessionId: string }
     const { username } = req.user
 
     let formError: FormValidationError | null = null
@@ -112,7 +112,7 @@ export default class EditSessionController {
   }
 
   async editSessionDateAndTime(req: Request, res: Response): Promise<void> {
-    const { groupId, sessionId } = req.params
+    const { groupId, sessionId } = req.params as { groupId: string; sessionId: string }
     const { username } = req.user
     let formError: FormValidationError | null = null
     let userInputData = null
@@ -181,7 +181,7 @@ export default class EditSessionController {
   }
 
   async submitEditSessionDateAndTime(req: Request, res: Response): Promise<void> {
-    const { groupId, sessionId } = req.params
+    const { groupId, sessionId } = req.params as { groupId: string; sessionId: string }
     const { username } = req.user
     let formError: FormValidationError | null = null
 
@@ -218,7 +218,7 @@ export default class EditSessionController {
   }
 
   async editSessionFacilitators(req: Request, res: Response): Promise<void> {
-    const { groupId, sessionId } = req.params
+    const { groupId, sessionId } = req.params as { groupId: string; sessionId: string }
     const { username } = req.user
     let formError: FormValidationError | null = null
     let userInputData = null
