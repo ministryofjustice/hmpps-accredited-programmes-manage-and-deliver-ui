@@ -17,5 +17,22 @@
 {% endblock %}
 
 {% block bodyEnd %}
+{% if sentry and sentry.loaderScriptId %}
+    <script nonce="{{ cspNonce }}">
+      window.sentryOnLoad = function() {
+        Sentry.init({
+          release: "hmpps-accredited-programmes-manage-and-deliver-ui@{{ version }}",
+          environment: "{{ sentry.environment }}",
+          tracesSampleRate: {{ sentry.tracesSampleRate }},
+          replaysSessionSampleRate: {{ sentry.replaySampleRate }},
+          replaysOnErrorSampleRate: {{ sentry.replayOnErrorSampleRate }},
+          initialScope: {
+            user: { username: "{{ user.username }}" },
+          },
+        });
+      };
+    </script>
+    <script src="https://js.sentry-cdn.com/{{ sentry.loaderScriptId }}.min.js" nonce="{{ cspNonce }}" crossorigin="anonymous"></script>
+  {% endif %}
   <script type="module" src="{{ '/assets/js/index.js' | assetMap }}"></script>
 {% endblock %}

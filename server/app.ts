@@ -10,6 +10,7 @@ import {
   RescheduleSessionRequest,
   ScheduleSessionRequest,
 } from '@manage-and-deliver-api'
+import { setupExpressErrorHandler } from '@sentry/node'
 import errorHandler from './errorHandler'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
 import { appInsightsMiddleware } from './utils/azureAppInsights'
@@ -25,6 +26,7 @@ import setUpWebSecurity from './middleware/setUpWebSecurity'
 import setUpWebSession from './middleware/setUpWebSession'
 
 import config from './config'
+import sentryMiddleware from './middleware/sentryMiddleware'
 import routes from './routes'
 import type { Services } from './services'
 
@@ -55,6 +57,7 @@ export default function createApp(services: Services): express.Application {
   app.set('trust proxy', true)
   app.set('port', process.env.PORT || 3000)
 
+  app.use(sentryMiddleware())
   app.use(appInsightsMiddleware())
   app.use(setUpHealthChecks(services.applicationInfo))
   app.use(setUpWebSecurity())
@@ -69,6 +72,7 @@ export default function createApp(services: Services): express.Application {
 
   app.use(routes(services))
 
+  if (config.sentry.dsn) setupExpressErrorHandler(app)
   app.use((req, res, next) => next(createError(404, 'Not found')))
   app.use(errorHandler(process.env.NODE_ENV === 'production'))
 

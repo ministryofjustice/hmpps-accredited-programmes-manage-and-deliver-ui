@@ -13,6 +13,12 @@
     "noImplicitAny": true,
     "experimentalDecorators": true,
     "typeRoots": ["./server/@types", "./node_modules/@types"],
+    "inlineSources": true,
+
+    // Set `sourceRoot` to  "/" to strip the build path prefix
+    // from generated source code references.
+    // This improves issue grouping in Sentry.
+    "sourceRoot": "/",
     "paths": {
       "@hmpps-auth": ["./server/@types/hmppsAuth/index.d.ts"],
       "@manage-and-deliver-api": ["./server/@types/manageAndDeliverApi/index.d.ts"],
@@ -28,5 +34,5 @@
     "esbuild",
     "eslint.config.mjs"
   ],
-  "include": ["**/*.js", "**/*.ts"]
+  "include": ["**/*.js", "**/*.ts", "sentry.ts"]
 }
