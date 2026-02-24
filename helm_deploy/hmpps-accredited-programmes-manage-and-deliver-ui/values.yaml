@@ -60,7 +60,7 @@ generic-service:
     # sqs-hmpps-audit-secret:
     #   AUDIT_SQS_QUEUE_URL: 'sqs_queue_url'
 
-    sentry:
+    hmpps-accredited-programmes-manage-and-deliver-ui-sentry:
       SENTRY_DSN: SENTRY_DSN
       SENTRY_LOADER_SCRIPT_ID: "SENTRY_LOADER_SCRIPT_ID"
 
