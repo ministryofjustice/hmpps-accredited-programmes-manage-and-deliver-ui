@@ -29,6 +29,7 @@ export default class EditSessionController {
     const { groupId, sessionId } = req.params
     const { username } = req.user
     const { message } = req.query
+    let formError: FormValidationError | null = null
 
     const sessionDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionDetails(
       username,
@@ -39,16 +40,28 @@ export default class EditSessionController {
     const successMessage = message ? String(message) : null
     req.session.originPage = req.path
 
+    const data = await new EditSessionForm(req).attendanceAndSessionNotesData()
+    if (req.method === 'POST') {
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+      } else {
+        req.session.editSessionAttendance = { referralIds: data.paramsForUpdate.referralIds }
+        return res.redirect(`/group/${groupId}/session/${sessionId}/record-attendance`)
+      }
+    }
+
     const presenter = new EditSessionPresenter(
       groupId,
       sessionDetails,
       sessionId,
       `/group/${groupId}/session/${sessionId}/delete-session`,
       successMessage,
+      formError,
     )
     const view = new EditSessionView(presenter)
 
-    ControllerUtils.renderWithLayout(res, view, null)
+    return ControllerUtils.renderWithLayout(res, view, null)
   }
 
   async deleteSession(req: Request, res: Response): Promise<void> {

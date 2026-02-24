@@ -9,6 +9,7 @@ import {
   EditSessionFacilitatorsRequest,
   RescheduleSessionRequest,
   ScheduleSessionRequest,
+  SessionAttendance,
 } from '@manage-and-deliver-api'
 import { setupExpressErrorHandler } from '@sentry/node'
 import errorHandler from './errorHandler'
@@ -47,6 +48,7 @@ declare module 'express-session' {
     sessionScheduleData?: Partial<ScheduleSessionRequest> & { sessionName?: string; referralName?: string }
     editSessionDateAndTime?: Partial<RescheduleSessionRequest>
     sessionFacilitators?: Partial<EditSessionFacilitatorsRequest[]>
+    editSessionAttendance?: Partial<SessionAttendance> & { referralIds?: string[] }
   }
 }
 

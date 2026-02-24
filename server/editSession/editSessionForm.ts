@@ -58,4 +58,30 @@ export default class EditSessionForm {
   static attendeesValidations(): ValidationChain[] {
     return [body('edit-session-attendees').notEmpty().withMessage(errorMessages.editSession.selectAttendees)]
   }
+
+  async attendanceAndSessionNotesData(): Promise<FormData<{ referralIds: string[] }>> {
+    const validationResult = await FormUtils.runValidations({
+      request: this.request,
+      validations: EditSessionForm.attendanceAndSessionNotesValidations(),
+    })
+
+    const error = FormUtils.validationErrorFromResult(validationResult)
+    if (error) {
+      return {
+        paramsForUpdate: null,
+        error,
+      }
+    }
+
+    return {
+      paramsForUpdate: {
+        referralIds: this.request.body['multi-select-selected'],
+      },
+      error: null,
+    }
+  }
+
+  static attendanceAndSessionNotesValidations(): ValidationChain[] {
+    return [body('multi-select-selected').notEmpty().withMessage(errorMessages.editSession.noAttendeesSelected)]
+  }
 }

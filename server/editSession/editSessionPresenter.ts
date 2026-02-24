@@ -1,5 +1,7 @@
 import { GroupSessionResponse } from '@manage-and-deliver-api'
 import { MultiSelectTableArgs } from '@manage-and-deliver-ui'
+import { FormValidationError } from '../utils/formValidationError'
+import PresenterUtils from '../utils/presenterUtils'
 
 export default class EditSessionPresenter {
   constructor(
@@ -8,6 +10,7 @@ export default class EditSessionPresenter {
     readonly sessionId: string,
     readonly deleteUrl: string,
     readonly successMessage: string | null = null,
+    private readonly validationError: FormValidationError | null = null,
   ) {}
 
   get text() {
@@ -28,6 +31,10 @@ export default class EditSessionPresenter {
     }
   }
 
+  get errorSummary() {
+    return PresenterUtils.errorSummary(this.validationError)
+  }
+
   get attendanceTableArgs(): MultiSelectTableArgs {
     const attendanceData = this.sessionDetails.attendanceAndSessionNotes || []
 
@@ -46,6 +53,7 @@ export default class EditSessionPresenter {
       ],
       rows: attendanceData.map((it, index) => ({
         id: `attendance-multi-select-row-${index}`,
+        value: it.referralId,
         cells: [
           {
             html: `<a href="/person/${it.crn}">${it.name}</a> ${it.crn}`,
@@ -54,6 +62,14 @@ export default class EditSessionPresenter {
           it.sessionNotes,
         ],
       })),
+    }
+  }
+
+  get fields() {
+    return {
+      'multi-select-selected': {
+        errorMessage: PresenterUtils.errorMessage(this.validationError, 'multi-select-selected'),
+      },
     }
   }
 }

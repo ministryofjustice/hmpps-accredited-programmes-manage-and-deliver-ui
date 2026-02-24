@@ -18,6 +18,7 @@ import RisksAndNeedsController from '../risksAndNeeds/risksAndNeedsController'
 import type { Services } from '../services'
 import SessionScheduleController from '../sessionSchedule/sessionScheduleController'
 import UpdateReferralStatusController from '../updateReferralStatus/updateReferralStatusController'
+import AttendanceController from '../attendance/attendanceController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
@@ -44,6 +45,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const groupController = new GroupController(accreditedProgrammesManageAndDeliverService)
   const sessionScheduleController = new SessionScheduleController(accreditedProgrammesManageAndDeliverService)
   const editSessionController = new EditSessionController(accreditedProgrammesManageAndDeliverService)
+  const attendanceController = new AttendanceController(accreditedProgrammesManageAndDeliverService)
 
   get('/', async (req, res, next) => {
     await caselistController.showOpenCaselist(req, res)
@@ -361,6 +363,10 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   })
   getOrPost('/group/:groupId/session/:sessionId/edit-session-attendees', async (req, res, next) => {
     await editSessionController.editSessionAttendees(req, res)
+  })
+
+  getOrPost('/group/:groupId/session/:sessionId/record-attendance', async (req, res, next) => {
+    await attendanceController.showRecordAttendancePage(req, res)
   })
 
   return router

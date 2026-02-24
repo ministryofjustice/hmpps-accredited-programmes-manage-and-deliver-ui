@@ -1,5 +1,6 @@
 import { ButtonArgs, SummaryListArgs } from '../utils/govukFrontendTypes'
 import EditSessionPresenter from './editSessionPresenter'
+import ViewUtils from '../utils/viewUtils'
 
 export default class EditSessionView {
   constructor(private readonly presenter: EditSessionPresenter) {}
@@ -125,6 +126,7 @@ export default class EditSessionView {
         deleteButton: this.deleteButton,
         canBeDeleted: this.presenter.canBeDeleted,
         attendanceTableArgs: this.presenter.attendanceTableArgs,
+        errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
       },
     ]
   }
