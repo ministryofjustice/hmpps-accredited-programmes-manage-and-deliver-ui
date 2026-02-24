@@ -9,47 +9,40 @@
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
-{% block main %}
 {% block content %}
-<div class="govuk-width-container">
-  <main class="govuk-main-wrapper" id="main-content">
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
-        {{ govukBackLink(backLinkArgs) }}
-      </div>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+          {{ govukBackLink(backLinkArgs) }}
+        </div>
 
-      <div class="govuk-grid-column-two-thirds">
-        {% if successMessageArgs !== null %}
-          {{ mojAlert(successMessageArgs) }}
-        {% endif %}
-        <span class="govuk-caption-l">{{text.pageCaption}}</span>
-        <h1 class="govuk-heading-l">{{text.pageHeading}}</h1>
-      </div>
-      <div class="govuk-grid-column-two-thirds">
-        {{ govukSummaryList(editSessionSummary) }}
-        {% if canBeDeleted %}
-          {{ govukButton(deleteButton) }}
-        {% endif %}
-      </div>
+        <div class="govuk-grid-column-two-thirds">
+          {% if successMessageArgs !== null %}
+            {{ mojAlert(successMessageArgs) }}
+          {% endif %}
+          <span class="govuk-caption-l">{{text.pageCaption}}</span>
+          <h1 class="govuk-heading-l">{{text.pageHeading}}</h1>
+        </div>
+        <div class="govuk-grid-column-two-thirds">
+          {{ govukSummaryList(editSessionSummary) }}
+          {% if canBeDeleted %}
+            {{ govukButton(deleteButton) }}
+          {% endif %}
+        </div>
 
-      <div class="govuk-grid-column-two-thirds">
-        {% if errorSummary !== null %}
-          {{ govukErrorSummary(errorSummary) }}
-        {% endif %}
+        <div class="govuk-grid-column-two-thirds">
+          {% if errorSummary !== null %}
+            {{ govukErrorSummary(errorSummary) }}
+          {% endif %}
 
-        <h2 class="govuk-heading-m">Attendance and session notes</h2>
+          <h2 class="govuk-heading-m">Attendance and session notes</h2>
+        </div>
+
+        <div class="govuk-grid-column-two-thirds">
+          <form method="post" novalidate>
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            {{ multiSelect(attendanceTableArgs) }}
+            {{ govukButton({ text: "Update attendance and notes", preventDoubleClick: true }) }}
+          </form>
+        </div>
       </div>
-
-      <div class="govuk-grid-column-two-thirds">
-        <form method="post" novalidate>
-          <input type="hidden" name="_csrf" value="{{csrfToken}}">
-          {{ multiSelect(attendanceTableArgs) }}
-          {{ govukButton({ text: "Update attendance and notes", preventDoubleClick: true }) }}
-        </form>
-      </div>
-    </div>
-  </main>
-</div>
-
- {% endblock %}
-{% endblock %}
+{% endblock %}
