@@ -114,6 +114,22 @@ export default class EditSessionView {
     }
   }
 
+  // We use this to catch the single referral ID in the form and pass it up to the API when no checkboxes are present
+  // The ID is the same as the checkboxes to the form can hook into it but only one will ever be present on the screen
+  get singleReferral() {
+    return {
+      label: {
+        text: 'Update session and attendance',
+        isPageHeading: false,
+        classes: 'govuk-!-display-none',
+      },
+      id: 'multi-select-selected',
+      name: 'multi-select-selected',
+      value: this.presenter.sessionDetails.attendanceAndSessionNotes?.[0]?.referralId,
+      classes: 'govuk-!-display-none',
+    }
+  }
+
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       'editSession/editSession',
@@ -127,6 +143,9 @@ export default class EditSessionView {
         canBeDeleted: this.presenter.canBeDeleted,
         attendanceTableArgs: this.presenter.attendanceTableArgs,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
+        hasMultipleReferrals: this.presenter.hasMultipleReferrals,
+        hasReferral: this.presenter.hasReferral,
+        singleReferral: this.singleReferral,
       },
     ]
   }

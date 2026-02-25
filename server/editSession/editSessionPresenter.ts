@@ -1,5 +1,6 @@
 import { GroupSessionResponse } from '@manage-and-deliver-api'
 import { MultiSelectTableArgs } from '@manage-and-deliver-ui'
+import { TableArgs } from '../utils/govukFrontendTypes'
 import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
 
@@ -35,33 +36,58 @@ export default class EditSessionPresenter {
     return PresenterUtils.errorSummary(this.validationError)
   }
 
-  get attendanceTableArgs(): MultiSelectTableArgs {
-    const attendanceData = this.sessionDetails.attendanceAndSessionNotes || []
+  get hasMultipleReferrals() {
+    return this.sessionDetails.attendanceAndSessionNotes?.length > 1
+  }
 
+  get hasReferral() {
+    return this.sessionDetails.attendanceAndSessionNotes?.length > 0
+  }
+
+  get attendanceTableArgs(): MultiSelectTableArgs | TableArgs {
+    const attendanceData = this.sessionDetails.attendanceAndSessionNotes || []
+    const headers = [
+      {
+        text: 'Name and CRN',
+      },
+      {
+        text: 'Attendance',
+      },
+      {
+        text: 'Session notes',
+      },
+    ]
+    if (this.hasMultipleReferrals) {
+      return {
+        idPrefix: 'attendance-multi-select',
+        headers,
+        rows: attendanceData.map((it, index) => ({
+          id: `attendance-multi-select-row-${index}`,
+          value: it.referralId,
+          cells: [
+            {
+              html: `<a href="/referral-details/${it.referralId}/personal-details">${it.name}</a> ${it.crn}`,
+            },
+            it.attendance,
+            it.sessionNotes,
+          ],
+        })),
+      }
+    }
     return {
-      idPrefix: 'attendance-multi-select',
-      headers: [
-        {
-          text: 'Name and CRN',
-        },
-        {
-          text: 'Attendance',
-        },
-        {
-          text: 'Session notes',
-        },
-      ],
-      rows: attendanceData.map((it, index) => ({
-        id: `attendance-multi-select-row-${index}`,
-        value: it.referralId,
-        cells: [
-          {
-            html: `<a href="/person/${it.crn}">${it.name}</a> ${it.crn}`,
-          },
-          it.attendance,
-          it.sessionNotes,
-        ],
-      })),
+      head: headers,
+      rows:
+        attendanceData.length > 0
+          ? [
+              [
+                {
+                  html: `<a href="/referral-details/${attendanceData[0].referralId}/personal-details">${attendanceData[0].name}</a> ${attendanceData[0].crn}`,
+                },
+                { text: attendanceData[0].attendance },
+                { text: attendanceData[0].sessionNotes },
+              ],
+            ]
+          : [],
     }
   }
 
