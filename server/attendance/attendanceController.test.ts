@@ -24,7 +24,7 @@ beforeEach(() => {
 })
 
 describe('showRecordAttendancePage', () => {
-  const sessionData: Partial<SessionData> = {
+  let sessionData: Partial<SessionData> = {
     editSessionAttendance: {
       referralIds: ['referral1'],
     },
@@ -54,7 +54,7 @@ describe('showRecordAttendancePage', () => {
   })
 
   describe('POST /group/:groupId/session/:sessionId/record-attendance', () => {
-    it('should fetch session details with correct parameters and load page correctly', async () => {
+    it('should fetch session details with correct parameters and load page correctly for a single attendee', async () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
       const bffData = recordSessionAttendanceFactory.build()
@@ -74,6 +74,37 @@ describe('showRecordAttendancePage', () => {
         .expect(res => {
           expect(res.text).toContain(`Redirecting to /group/111/session/6789/referral/referral1`)
         })
+    })
+
+    it('should fetch session details with correct parameters and load page correctly for a multiple attendees', async () => {
+      sessionData = {
+        editSessionAttendance: {
+          referralIds: ['referral1', 'referral2'],
+        },
+      }
+
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      const bffData = recordSessionAttendanceFactory.build()
+      accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
+
+      const body = bffData.people
+        .map(person => ({ [`attendance-${person.referralId}`]: 'ATTC' }))
+        .reduce((acc, curr) => ({ ...acc, ...curr }), {})
+
+      await request(app)
+        .post(`/group/111/session/6789/record-attendance`)
+        .type('form')
+        .send(body)
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain(`Redirecting to /group/111/session/6789/referral/referral1`)
+        })
+      expect(accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData).toHaveBeenCalledWith(
+        'user1',
+        '6789',
+        ['referral1', 'referral2'],
+      )
     })
   })
 

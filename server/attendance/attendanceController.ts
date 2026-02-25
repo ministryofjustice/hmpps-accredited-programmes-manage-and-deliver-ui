@@ -14,6 +14,7 @@ export default class AttendanceController {
   async showRecordAttendancePage(req: Request, res: Response): Promise<void> {
     const { username } = req.user
     const { groupId, sessionId } = req.params
+    let userInputData = null
     let formError: FormValidationError | null = null
 
     const recordAttendanceBffData = await this.accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData(
@@ -31,6 +32,7 @@ export default class AttendanceController {
       if (data.error) {
         res.status(400)
         formError = data.error
+        userInputData = req.body
       } else {
         req.session.editSessionAttendance.attendees = data.paramsForUpdate.attendees
         return res.redirect(
@@ -41,7 +43,7 @@ export default class AttendanceController {
 
     const backLinkUri = `/group/${groupId}/session/${sessionId}/edit-session`
 
-    const presenter = new AttendancePresenter(recordAttendanceBffData, backLinkUri, formError)
+    const presenter = new AttendancePresenter(recordAttendanceBffData, backLinkUri, formError, userInputData)
     const view = new AttendanceView(presenter)
 
     return ControllerUtils.renderWithLayout(res, view, null)
