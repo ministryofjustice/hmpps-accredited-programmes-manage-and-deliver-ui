@@ -15,6 +15,9 @@ describe('AttendanceSessionNotesView', () => {
         '6789',
         person,
         'Yes - attended',
+        '',
+        false,
+        '/group/111/session/6789/record-attendance',
       )
       const view = new AttendanceSessionNotesView(presenter)
 
@@ -39,6 +42,9 @@ describe('AttendanceSessionNotesView', () => {
         '6789',
         person,
         'Yes - attended',
+        '',
+        false,
+        '/group/111/session/6789/record-attendance',
       )
       const view = new AttendanceSessionNotesView(presenter)
 
@@ -106,6 +112,9 @@ describe('AttendanceSessionNotesView', () => {
         '6789',
         person,
         'Attended but failed to comply',
+        '',
+        false,
+        '/group/111/session/6789/record-attendance',
       )
       const view = new AttendanceSessionNotesView(presenter)
 
@@ -125,6 +134,9 @@ describe('AttendanceSessionNotesView', () => {
         '6789',
         person,
         'Yes - attended',
+        '',
+        false,
+        '/group/111/session/6789/record-attendance',
       )
       const view = new AttendanceSessionNotesView(presenter)
 
@@ -142,6 +154,9 @@ describe('AttendanceSessionNotesView', () => {
         '6789',
         person,
         'No - not attended',
+        '',
+        false,
+        '/group/111/session/6789/record-attendance',
       )
       const view = new AttendanceSessionNotesView(presenter)
 
@@ -187,6 +202,9 @@ describe('AttendanceSessionNotesView', () => {
         '6789',
         person,
         'Yes - attended',
+        '',
+        false,
+        '/group/111/session/6789/record-attendance',
       )
       const view = new AttendanceSessionNotesView(presenter)
 
@@ -199,6 +217,25 @@ describe('AttendanceSessionNotesView', () => {
       expect(args).toHaveProperty('text')
     })
 
+    it('should hide skip button when notes already exist for the person', () => {
+      const presenter = new AttendanceSessionNotesPresenter(
+        null,
+        recordAttendanceBffData,
+        '111',
+        '6789',
+        person,
+        'Yes - attended',
+        'Existing notes',
+        false,
+        '/group/111/session/6789/record-attendance',
+      )
+      const view = new AttendanceSessionNotesView(presenter)
+
+      const [, args] = view.renderArgs
+
+      expect(args.showSkipAndAddLater).toBe(false)
+    })
+
     it('should include back link pointing to record-attendance page', () => {
       const presenter = new AttendanceSessionNotesPresenter(
         null,
@@ -207,6 +244,9 @@ describe('AttendanceSessionNotesView', () => {
         '6789',
         person,
         'Yes - attended',
+        '',
+        false,
+        '/group/111/session/6789/record-attendance',
       )
       const view = new AttendanceSessionNotesView(presenter)
 
@@ -215,6 +255,27 @@ describe('AttendanceSessionNotesView', () => {
 
       expect((backLinkArgs as { text: string }).text).toBe('Back')
       expect((backLinkArgs as { href: string }).href).toBe('/group/111/session/6789/record-attendance')
+    })
+
+    it('should use custom back link when provided', () => {
+      const customBackLink = '/group/111/session/6789/referral/prev-ref-id/session-title-session-notes'
+      const presenter = new AttendanceSessionNotesPresenter(
+        null,
+        recordAttendanceBffData,
+        '111',
+        '6789',
+        person,
+        'Yes - attended',
+        '',
+        false,
+        customBackLink,
+      )
+      const view = new AttendanceSessionNotesView(presenter)
+
+      const [, args] = view.renderArgs
+      const backLinkArgs = args.backLinkArgs as Record<string, unknown>
+
+      expect((backLinkArgs as { href: string }).href).toBe(customBackLink)
     })
   })
 })

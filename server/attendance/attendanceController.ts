@@ -16,7 +16,7 @@ export default class AttendanceController {
   async showRecordAttendancePage(req: Request, res: Response): Promise<void> {
     const { username } = req.user
     const { groupId, sessionId } = req.params
-    let userInputData = null
+    let userInputData = this.sessionAttendanceToFormData(req.session.editSessionAttendance)
     let formError: FormValidationError | null = null
 
     const recordAttendanceBffData = await this.accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData(
@@ -36,7 +36,14 @@ export default class AttendanceController {
         formError = data.error
         userInputData = req.body
       } else {
-        req.session.editSessionAttendance.attendees = data.paramsForUpdate.attendees
+        const existingAttendees = req.session.editSessionAttendance.attendees ?? []
+        req.session.editSessionAttendance.attendees = data.paramsForUpdate.attendees.map(attendee => {
+          const existing = existingAttendees.find(item => item.referralId === attendee.referralId)
+          if (existing && 'sessionNotes' in existing) {
+            return { ...attendee, sessionNotes: (existing as typeof existing & { sessionNotes?: string }).sessionNotes }
+          }
+          return attendee
+        })
         // Use the first attendee's referralId from the form submission
         const firstReferralId = data.paramsForUpdate.attendees[0]?.referralId
         if (firstReferralId) {
@@ -45,7 +52,9 @@ export default class AttendanceController {
             if (err) {
               throw err
             }
-            res.redirect(`/group/${groupId}/session/${sessionId}/referral/${firstReferralId}/${groupTitle}-notes`)
+            res.redirect(
+              `/group/${groupId}/session/${sessionId}/referral/${firstReferralId}/${groupTitle}-session-notes`,
+            )
           })
           return
         }
@@ -68,18 +77,15 @@ export default class AttendanceController {
     const redirectToRecordAttendance = () => res.redirect(`/group/${groupId}/session/${sessionId}/record-attendance`)
 
     const sessionAttendance = req.session.editSessionAttendance
-    if (
-      !sessionAttendance?.referralIds ||
-      !sessionAttendance?.attendees ||
-      !sessionAttendance.referralIds.includes(referralId)
-    ) {
+    const referralIds = this.referralIdsAsArray(sessionAttendance?.referralIds)
+    if (!referralIds.length || !sessionAttendance?.attendees || !referralIds.includes(referralId)) {
       return redirectToRecordAttendance()
     }
 
     const recordAttendanceBffData = await this.accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData(
       username,
       sessionId,
-      sessionAttendance.referralIds,
+      referralIds,
     )
 
     const person = recordAttendanceBffData.people.find(p => p.referralId === referralId)
@@ -90,29 +96,51 @@ export default class AttendanceController {
     }
 
     const selectedOptionText = person.options?.find(opt => opt.value === attendee.outcomeCode)?.text || ''
+    const sessionNotes = (attendee as typeof attendee & { sessionNotes?: string }).sessionNotes ?? ''
+
+    const currentIndex = referralIds.indexOf(referralId)
+    const isFirstReferral = currentIndex === 0
+    const groupTitle = this.toUrlSlug(recordAttendanceBffData.sessionTitle)
+
+    const backLinkUri = isFirstReferral
+      ? `/group/${groupId}/session/${sessionId}/record-attendance`
+      : `/group/${groupId}/session/${sessionId}/referral/${referralIds[currentIndex - 1]}/${groupTitle}-session-notes`
 
     if (req.method === 'POST') {
-      const notes = String(req.body['record-session-attendance-notes'] ?? '')
-      ;(attendee as typeof attendee & { sessionNotes?: string }).sessionNotes = notes
+      const action = String(req.body['attendance-notes-action'] ?? 'continue')
 
-      const currentIndex = sessionAttendance.referralIds.indexOf(referralId)
-      const isLastReferral = currentIndex === sessionAttendance.referralIds.length - 1
-
-      if (isLastReferral) {
-        await this.accreditedProgrammesManageAndDeliverService.postSessionAttendance(username, sessionId, {
-          attendees: sessionAttendance.attendees.map(a => ({
-            referralId: a.referralId,
-            outcomeCode: a.outcomeCode,
-            sessionNotes: (a as typeof a & { sessionNotes?: string }).sessionNotes ?? '',
-          })),
-          responseMessage: '',
-        })
-        return res.redirect(`/group/${groupId}/session/${sessionId}`)
+      if (action !== 'skip') {
+        const notes = String(req.body['record-session-attendance-notes'] ?? '')
+        ;(attendee as typeof attendee & { sessionNotes?: string }).sessionNotes = notes
       }
 
-      const nextReferralId = sessionAttendance.referralIds[currentIndex + 1]
-      const groupTitle = this.toUrlSlug(recordAttendanceBffData.sessionTitle)
-      return res.redirect(`/group/${groupId}/session/${sessionId}/referral/${nextReferralId}/${groupTitle}-notes`)
+      const isLastReferral = currentIndex === referralIds.length - 1
+
+      if (isLastReferral) {
+        try {
+          await this.accreditedProgrammesManageAndDeliverService.postSessionAttendance(username, sessionId, {
+            attendees: sessionAttendance.attendees.map(a => ({
+              referralId: a.referralId,
+              outcomeCode: a.outcomeCode,
+              ...((a as typeof a & { sessionNotes?: string }).sessionNotes?.trim()
+                ? { sessionNotes: (a as typeof a & { sessionNotes?: string }).sessionNotes?.trim() }
+                : {}),
+            })),
+          })
+        } catch (error) {
+          if (this.isLeadFacilitatorMissingError(error)) {
+            return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session`)
+          }
+
+          throw error
+        }
+        return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session`)
+      }
+
+      const nextReferralId = referralIds[currentIndex + 1]
+      return res.redirect(
+        `/group/${groupId}/session/${sessionId}/referral/${nextReferralId}/${groupTitle}-session-notes`,
+      )
     }
 
     const presenter = new AttendanceSessionNotesPresenter(
@@ -122,6 +150,9 @@ export default class AttendanceController {
       sessionId,
       person,
       selectedOptionText,
+      sessionNotes,
+      currentIndex === referralIds.length - 1,
+      backLinkUri,
     )
     const view = new AttendanceSessionNotesView(presenter)
 
@@ -133,5 +164,45 @@ export default class AttendanceController {
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '')
+  }
+
+  private sessionAttendanceToFormData(sessionAttendance?: {
+    attendees?: { referralId: string; outcomeCode: string }[]
+  }): Record<string, string> | null {
+    if (!sessionAttendance?.attendees?.length) {
+      return null
+    }
+
+    return sessionAttendance.attendees.reduce<Record<string, string>>((acc, attendee) => {
+      acc[`attendance-${attendee.referralId}`] = attendee.outcomeCode
+      return acc
+    }, {})
+  }
+
+  private isLeadFacilitatorMissingError(error: unknown): boolean {
+    const status = (error as { status?: number })?.status
+    const rawData = (error as { data?: unknown })?.data
+
+    if (status !== 400 || !rawData) {
+      return false
+    }
+
+    const body = Buffer.isBuffer(rawData) ? rawData.toString('utf8') : String(rawData)
+
+    try {
+      const parsed = JSON.parse(body) as { userMessage?: string; developerMessage?: string }
+      const message = `${parsed.userMessage ?? ''} ${parsed.developerMessage ?? ''}`.toLowerCase()
+      return message.includes('lead facilitator not found')
+    } catch {
+      return body.toLowerCase().includes('lead facilitator not found')
+    }
+  }
+
+  private referralIdsAsArray(referralIds: unknown): string[] {
+    if (Array.isArray(referralIds)) {
+      return referralIds.filter((value): value is string => typeof value === 'string')
+    }
+
+    return typeof referralIds === 'string' ? [referralIds] : []
   }
 }

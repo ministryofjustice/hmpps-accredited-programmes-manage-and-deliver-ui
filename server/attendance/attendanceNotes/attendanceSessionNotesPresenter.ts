@@ -10,11 +10,17 @@ export default class RecordSessionAttendanceNotesPresenter {
     private sessionId: string = '',
     private readonly person: SessionAttendancePerson | null = null,
     private readonly selectedOptionText: string = '',
+    private readonly sessionNotes: string | null = null,
     private readonly isLastReferral: boolean = false,
+    private readonly backLink: string = '',
   ) {}
 
   get lastReferral() {
     return this.isLastReferral
+  }
+
+  get showSkipAndAddLater(): boolean {
+    return !(this.sessionNotes && this.sessionNotes.trim())
   }
 
   get text() {
@@ -25,7 +31,7 @@ export default class RecordSessionAttendanceNotesPresenter {
 
     return {
       headingCaption: 'Record attendance and progress',
-      pageHeading: `${this.person.name}: ${this.sessionTitle} notes`,
+      pageHeading: `${this.person.name}: ${this.sessionTitle} session notes`,
       recordsSessionNotesCharacterCount: {
         label: 'Add session notes',
         hint: hintText,
@@ -52,7 +58,7 @@ export default class RecordSessionAttendanceNotesPresenter {
   }
 
   get backLinkUri() {
-    return `/group/${this.groupId}/session/${this.sessionId}/record-attendance`
+    return this.backLink
   }
 
   get errorSummary() {
@@ -62,7 +68,7 @@ export default class RecordSessionAttendanceNotesPresenter {
   get fields() {
     return {
       recordSessionAttendanceNotes: {
-        attendanceValue: '',
+        attendanceValue: this.sessionNotes ?? '',
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'record-session-attendance-notes'),
         recordsSessionNotesCharacterCount: {
           label: this.text.recordsSessionNotesCharacterCount.label,

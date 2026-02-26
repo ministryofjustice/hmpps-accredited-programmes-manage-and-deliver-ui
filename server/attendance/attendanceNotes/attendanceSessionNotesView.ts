@@ -68,6 +68,8 @@ export default class AttendanceSessionNotesView {
         backLinkArgs: this.backLinkArgs(),
         homePageLink: this.homePageLink(),
         characterCountArgs: this.characterCountArgs,
+        isLastReferral: this.presenter.lastReferral,
+        showSkipAndAddLater: this.presenter.showSkipAndAddLater,
         summaryListArgs: this.summaryListArgs,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         text: this.presenter.text,

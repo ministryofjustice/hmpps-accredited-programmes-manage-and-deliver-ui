@@ -34,11 +34,13 @@
           {{ govukCharacterCount(characterCountArgs) }}
        
           {% if isLastReferral %}
-            {{ govukButton({ text: "Submit", preventDoubleClick: true }) }}
+            {{ govukButton({ text: "Submit", name: "attendance-notes-action", value: "continue", preventDoubleClick: true }) }}
           {% else %}
-            {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+            {{ govukButton({ text: "Continue", name: "attendance-notes-action", value: "continue", preventDoubleClick: true }) }}
           {% endif %}
-          {{ govukButton({ text: "Skip and add later", classes: "govuk-button--secondary govuk-!-margin-left-1", preventDoubleClick: true }) }}
+          {% if showSkipAndAddLater %}
+            {{ govukButton({ text: "Skip and add later", name: "attendance-notes-action", value: "skip", classes: "govuk-button--secondary govuk-!-margin-left-1", preventDoubleClick: true }) }}
+          {% endif %}
         </form>
       </div>
     </div>

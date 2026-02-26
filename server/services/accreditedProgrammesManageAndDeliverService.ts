@@ -50,6 +50,7 @@ import {
   ScheduleIndividualSessionDetailsResponse,
   ScheduleSessionRequest,
   ScheduleSessionTypeResponse,
+  SessionAttendance,
   SentenceInformation,
   Session,
   SessionScheduleGroupResponse,
@@ -75,24 +76,12 @@ export interface PaginationParams {
   // Sort by property, defaults to ascending order. If descending is required then add ',DESC' at the end of the property you want sorted i.e. ['$PROPERTY_NAME,DESC']
   sort?: string[]
 }
-type PostSessionAttendancePayload = {
-  attendees: Array<{
-    referralId: string
-    outcomeCode: string
-    sessionNotes: string
-  }>
-  responseMessage: string
-}
 export interface IAccreditedProgrammesManageAndDeliverService {
   getPossibleDeliveryLocationsForReferral(
     username: ExpressUsername,
     referralId: string,
   ): Promise<DeliveryLocationPreferencesFormData>
-  postSessionAttendance(
-    username: ExpressUsername,
-    sessionId: string,
-    payload: PostSessionAttendancePayload,
-  ): Promise<void>
+  postSessionAttendance(username: ExpressUsername, sessionId: string, payload: SessionAttendance): Promise<void>
 }
 export default class AccreditedProgrammesManageAndDeliverService
   implements IAccreditedProgrammesManageAndDeliverService
@@ -769,11 +758,7 @@ export default class AccreditedProgrammesManageAndDeliverService
     })) as AttendanceAndSessionNotes
   }
 
-  async postSessionAttendance(
-    username: ExpressUsername,
-    sessionId: string,
-    payload: PostSessionAttendancePayload,
-  ): Promise<void> {
+  async postSessionAttendance(username: ExpressUsername, sessionId: string, payload: SessionAttendance): Promise<void> {
     const restClient = await this.createRestClientFromUsername(username)
     await restClient.post({
       path: `/session/${sessionId}/attendance`,
