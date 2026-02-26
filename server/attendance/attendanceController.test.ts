@@ -57,12 +57,12 @@ describe('showRecordAttendancePage', () => {
   //     it('should fetch session details with correct parameters and load page correctly for a single attendee', async () => {
   //       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-  //       const bffData = recordSessionAttendanceFactory.build()
-  //       bffData.people = [bffData.people[0]]
+  //   //       const bffData = recordSessionAttendanceFactory.build()
+  //   //       bffData.people = [bffData.people[0]]
 
-  //       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
+  //   //       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
 
-  //       const { referralId } = bffData.people[0]
+  //   //       const { referralId } = bffData.people[0]
 
   //       return request(app)
   //         .post(`/group/111/session/6789/record-attendance`)
@@ -75,6 +75,38 @@ describe('showRecordAttendancePage', () => {
   //           expect(res.text).toContain(`Redirecting to /group/111/session/6789/referral/referral1`)
   //         })
   //     })
+
+  //     it('should fetch session details with correct parameters and load page correctly for a multiple attendees', async () => {
+  //       sessionData = {
+  //         editSessionAttendance: {
+  //           referralIds: ['referral1', 'referral2'],
+  //         },
+  //       }
+
+  //       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+  //       const bffData = recordSessionAttendanceFactory.build()
+  //       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
+
+  //       const body = bffData.people
+  //         .map(person => ({ [`attendance-${person.referralId}`]: 'ATTC' }))
+  //         .reduce((acc, curr) => ({ ...acc, ...curr }), {})
+
+  //       await request(app)
+  //         .post(`/group/111/session/6789/record-attendance`)
+  //         .type('form')
+  //         .send(body)
+  //         .expect(302)
+  //         .expect(res => {
+  //           expect(res.text).toContain(`Redirecting to /group/111/session/6789/referral/referral1`)
+  //         })
+  //       expect(accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData).toHaveBeenCalledWith(
+  //         'user1',
+  //         '6789',
+  //         ['referral1', 'referral2'],
+  //       )
+  //     })
+  //   })
 
   //     it('should fetch session details with correct parameters and load page correctly for a multiple attendees', async () => {
   //       sessionData = {

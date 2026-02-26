@@ -347,12 +347,12 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await editSessionController.editSession(req, res)
   })
 
-  getOrPost('/group/:groupId/session/:sessionId/edit-session-date-and-time', async (req, res, next) => {
-    await editSessionController.editSessionDateAndTime(req, res)
-  })
-
   getOrPost('/group/:groupId/session/:sessionId/edit-session-date-and-time/reschedule', async (req, res, next) => {
     await editSessionController.submitEditSessionDateAndTime(req, res)
+  })
+
+  getOrPost('/group/:groupId/session/:sessionId/edit-session-date-and-time', async (req, res, next) => {
+    await editSessionController.editSessionDateAndTime(req, res)
   })
   getOrPost('/group/:groupId/session/:sessionId/delete-session', async (req, res, next) => {
     await editSessionController.deleteSession(req, res)
