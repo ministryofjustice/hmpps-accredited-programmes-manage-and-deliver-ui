@@ -51,7 +51,7 @@ export default class AttendanceSessionNotesView {
             items: [
               {
                 text: 'Change',
-                href: this.presenter.backLinkUri,
+                href: this.presenter.recordAttendanceUri,
                 visuallyHiddenText: `change ${this.presenter.personName}'s attendance status`,
               },
             ],

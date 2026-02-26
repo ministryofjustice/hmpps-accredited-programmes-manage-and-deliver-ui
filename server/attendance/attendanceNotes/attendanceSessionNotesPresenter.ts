@@ -61,6 +61,10 @@ export default class RecordSessionAttendanceNotesPresenter {
     return this.backLink
   }
 
+  get recordAttendanceUri() {
+    return `/group/${this.groupId}/session/${this.sessionId}/record-attendance`
+  }
+
   get errorSummary() {
     return PresenterUtils.errorSummary(this.validationError)
   }
