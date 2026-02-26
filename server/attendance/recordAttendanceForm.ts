@@ -30,7 +30,8 @@ export default class RecordAttendanceForm {
       .filter(([key]) => key.startsWith('attendance-'))
       .map(([key, value]) => ({
         referralId: key.replace('attendance-', ''),
-        outcomeCode: value as string,
+        outcomeCode: value as 'ATTC' | 'AFTC' | 'UAAB',
+        sessionNotes: '',
       }))
 
     return {

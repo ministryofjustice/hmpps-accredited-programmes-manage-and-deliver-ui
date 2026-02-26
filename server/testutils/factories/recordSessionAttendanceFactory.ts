@@ -9,7 +9,7 @@ export default RecordSessionAttendanceFactory.define(({ sequence }) => {
       referralId: `${sequence}-0`,
       name: 'Alice Brown',
       crn: 'X123456',
-      attendance: 'Attended',
+      attendance: { text: 'Attended', code: 'ATTC' },
       options: [
         {
           text: 'Attended',
@@ -30,7 +30,7 @@ export default RecordSessionAttendanceFactory.define(({ sequence }) => {
       referralId: `${sequence}-1`,
       name: 'Bob Smith',
       crn: 'X933591',
-      attendance: 'Absent - not notified',
+      attendance: { text: 'Absent - not notified', code: 'UAAB' },
       options: [
         {
           text: 'Attended',
