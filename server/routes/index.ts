@@ -364,10 +364,11 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   getOrPost('/group/:groupId/session/:sessionId/edit-session-attendees', async (req, res, next) => {
     await editSessionController.editSessionAttendees(req, res)
   })
-
   getOrPost('/group/:groupId/session/:sessionId/record-attendance', async (req, res, next) => {
     await attendanceController.showRecordAttendancePage(req, res)
   })
-
+  getOrPost('/group/:groupId/session/:sessionId/referral/:referralId/:groupTitle-notes', async (req, res, next) => {
+    await attendanceController.showRecordAttendanceNotesPage(req, res)
+  })
   return router
 }

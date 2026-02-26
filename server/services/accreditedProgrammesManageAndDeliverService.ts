@@ -58,6 +58,7 @@ import {
   UpdateAvailability,
   UserTeamMember,
   RecordSessionAttendance,
+  AttendanceAndSessionNotes,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -74,14 +75,28 @@ export interface PaginationParams {
   // Sort by property, defaults to ascending order. If descending is required then add ',DESC' at the end of the property you want sorted i.e. ['$PROPERTY_NAME,DESC']
   sort?: string[]
 }
-
+type PostSessionAttendancePayload = {
+  attendees: Array<{
+    referralId: string
+    outcomeCode: string
+    sessionNotes: string
+  }>
+  responseMessage: string
+}
 export interface IAccreditedProgrammesManageAndDeliverService {
   getPossibleDeliveryLocationsForReferral(
     username: ExpressUsername,
     referralId: string,
   ): Promise<DeliveryLocationPreferencesFormData>
+  postSessionAttendance(
+    username: ExpressUsername,
+    sessionId: string,
+    payload: PostSessionAttendancePayload,
+  ): Promise<void>
 }
-export default class AccreditedProgrammesManageAndDeliverService implements IAccreditedProgrammesManageAndDeliverService {
+export default class AccreditedProgrammesManageAndDeliverService
+  implements IAccreditedProgrammesManageAndDeliverService
+{
   constructor(private readonly hmppsAuthClientBuilder: RestClientBuilderWithoutToken<HmppsAuthClient>) {}
 
   async createRestClientFromUsername(username: ExpressUsername): Promise<RestClient> {
@@ -738,5 +753,33 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
       headers: { Accept: 'application/json' },
       query: { referralId: referralIds },
     })) as RecordSessionAttendance
+  }
+
+  async getRecordAttendanceNotes(
+    username: ExpressUsername,
+    sessionId: string,
+    referralIds: string[],
+  ): Promise<AttendanceAndSessionNotes> {
+    const restClient = await this.createRestClientFromUsername(username)
+
+    return (await restClient.get({
+      path: `/bff/session/${sessionId}/record-attendance`,
+      headers: { Accept: 'application/json' },
+      query: { referralId: referralIds },
+    })) as AttendanceAndSessionNotes
+  }
+
+  async postSessionAttendance(
+    username: ExpressUsername,
+    sessionId: string,
+    payload: PostSessionAttendancePayload,
+  ): Promise<void> {
+    const restClient = await this.createRestClientFromUsername(username)
+    await restClient.post({
+      path: `/session/${sessionId}/attendance`,
+      headers: { Accept: 'application/json' },
+      data: payload,
+      responseType: 'text',
+    })
   }
 }
