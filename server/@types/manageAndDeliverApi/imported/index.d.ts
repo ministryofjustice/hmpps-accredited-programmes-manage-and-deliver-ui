@@ -1542,8 +1542,11 @@ export interface components {
        * @description The referral ID linked to the attendee
        */
       referralId: string
-      /** @description The attendance outcome code for the attendee */
-      outcomeCode: string
+      /**
+       * @description The attendance outcome code for the attendee
+       * @enum {string}
+       */
+      outcomeCode: 'ATTC' | 'AFTC' | 'UAAB'
       /** @description Session notes for the attendee */
       sessionNotes?: string
     }
@@ -3031,9 +3034,27 @@ export interface components {
        * @description A string an attendance
        * @example Attended, failed to comply
        */
-      attendance?: string
+      attendance?: components['schemas']['SessionPersonAttendance']
+      /**
+       * @description The session notes associated with the attendee
+       * @example Some session notes here
+       */
+      sessionNotes?: string
       /** @description A list of options */
       options?: components['schemas']['Option'][]
+    }
+    /** @description Details of attendance */
+    SessionPersonAttendance: {
+      /**
+       * @description A string representing a text
+       * @example Attended
+       */
+      text?: string
+      /**
+       * @description The code value associated with the attendance option
+       * @example ATTC
+       */
+      code?: string
     }
     EditSessionDetails: {
       /** Format: uuid */
@@ -3594,6 +3615,12 @@ export interface components {
        * @example Getting started one-to-one
        */
       name: string
+      /**
+       * @description The type of session schedule
+       * @example SCHEDULED, or CATCH_UP
+       * @enum {string}
+       */
+      sessionScheduleType: 'SCHEDULED' | 'CATCH_UP'
     }
     /** @description Response containing session templates for scheduling */
     ScheduleSessionTypeResponse: {

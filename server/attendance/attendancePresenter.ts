@@ -26,15 +26,13 @@ export default class AttendancePresenter {
 
   get fields() {
     const fields: Record<string, { value: string | null; errorMessage: string | null }> = {}
-
     this.recordAttendanceBffData.people.forEach(person => {
       const fieldName = `attendance-${person.referralId}`
       fields[fieldName] = {
-        value: this.utils.stringValue(null, fieldName),
+        value: this.utils.stringValue(person.attendance.code, fieldName),
         errorMessage: PresenterUtils.errorMessage(this.validationError, fieldName),
       }
     })
-
     return fields
   }
 
