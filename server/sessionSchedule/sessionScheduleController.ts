@@ -147,12 +147,13 @@ export default class SessionScheduleController {
       successMessage?: string
     }
 
+    // Clear session data before starting journeys
+    req.session.sessionScheduleData = {}
+
     const sessionAttendanceData = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionsAndAttendance(
       username,
       groupId,
     )
-
-    console.log(JSON.stringify(sessionAttendanceData, null, 2))
 
     const presenter = new SessionScheduleAttendancePresenter(groupId, sessionAttendanceData, successMessage)
     const view = new SessionScheduleAttendanceView(presenter)
