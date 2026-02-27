@@ -29,7 +29,6 @@ import {
   Health,
   LearningNeeds,
   LifestyleAndAssociates,
-  ModuleSessionTemplate,
   OffenceAnalysis,
   OffenceHistory,
   PersonalDetails,
@@ -573,13 +572,13 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
     username: ExpressUsername,
     groupId: string,
     moduleId: string,
-  ): Promise<ModuleSessionTemplate[]> {
+  ): Promise<ScheduleSessionTypeResponse> {
     const restClient = await this.createRestClientFromUsername(username)
     const response = (await restClient.get({
       path: `/bff/group/${groupId}/module/${moduleId}/schedule-session-type`,
       headers: { Accept: 'application/json' },
     })) as ScheduleSessionTypeResponse
-    return response.sessionTemplates
+    return response as ScheduleSessionTypeResponse
   }
 
   async getIndividualSessionDetails(

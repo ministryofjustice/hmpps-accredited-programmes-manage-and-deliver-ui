@@ -1,4 +1,4 @@
-import { ScheduleSessionRequest } from '@manage-and-deliver-api'
+import { ScheduleSessionRequest, ScheduleSessionTypeResponse } from '@manage-and-deliver-api'
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
@@ -24,16 +24,16 @@ export default class SessionScheduleController {
     const { username } = req.user
     let formError: FormValidationError | null = null
 
-    const sessionTemplates = await this.accreditedProgrammesManageAndDeliverService.getSessionTemplates(
+    const scheduleSessionTypeResponse = await this.accreditedProgrammesManageAndDeliverService.getSessionTemplates(
       username,
       groupId,
       moduleId,
     )
 
     if (req.method === 'POST') {
-      const selectedSessionTemplateId = req.body['session-template']
+      const selectedSession = req.body['session-template']
 
-      if (!selectedSessionTemplateId) {
+      if (!selectedSession) {
         res.status(400)
         formError = {
           errors: [
@@ -45,21 +45,22 @@ export default class SessionScheduleController {
           ],
         }
       } else {
+        const [selectedSessionTemplateId, selectedSessionTemplateType, sessionName] = selectedSession.split('+')
         req.session.sessionScheduleData = {
           sessionTemplateId: selectedSessionTemplateId,
-          sessionName: sessionTemplates.length > 0 ? sessionTemplates[0].name : 'the session',
+          headingText: scheduleSessionTypeResponse.pageHeading,
+          sessionScheduleType: selectedSessionTemplateType,
+          sessionName,
+          selectedSession,
         }
         return res.redirect(`/group/${groupId}/module/${moduleId}/schedule-group-session-details`)
       }
     }
-
     const presenter = new SessionScheduleWhichPresenter(
       groupId,
-      moduleId,
-      sessionTemplates.length > 0 ? sessionTemplates[0].name : 'the session',
-      sessionTemplates,
+      scheduleSessionTypeResponse,
       formError,
-      req.session.sessionScheduleData?.sessionTemplateId,
+      req.session.sessionScheduleData?.selectedSession,
     )
     const view = new SessionScheduleWhichView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
@@ -97,8 +98,14 @@ export default class SessionScheduleController {
       groupId,
       moduleId,
     )
-
-    const presenter = new AddSessionDetailsPresenter(sessionDetails, formError, sessionScheduleData, userInputData)
+    const backLink = `/group/${groupId}/module/${moduleId}/schedule-session-type`
+    const presenter = new AddSessionDetailsPresenter(
+      sessionDetails,
+      backLink,
+      formError,
+      sessionScheduleData,
+      userInputData,
+    )
     const view = new AddSessionDetailsView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
