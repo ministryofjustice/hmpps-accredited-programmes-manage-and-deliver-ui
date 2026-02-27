@@ -22,6 +22,7 @@ export default class SessionScheduleController {
   async showSessionSchedule(req: Request, res: Response): Promise<void> {
     const { groupId, moduleId } = req.params
     const { username } = req.user
+    const { sessionScheduleData } = req.session
     let formError: FormValidationError | null = null
 
     const scheduleSessionTypeResponse = await this.accreditedProgrammesManageAndDeliverService.getSessionTemplates(
@@ -47,6 +48,7 @@ export default class SessionScheduleController {
       } else {
         const [selectedSessionTemplateId, selectedSessionTemplateType, sessionName] = selectedSession.split('+')
         req.session.sessionScheduleData = {
+          ...sessionScheduleData,
           sessionTemplateId: selectedSessionTemplateId,
           headingText: scheduleSessionTypeResponse.pageHeading,
           sessionScheduleType: selectedSessionTemplateType,
