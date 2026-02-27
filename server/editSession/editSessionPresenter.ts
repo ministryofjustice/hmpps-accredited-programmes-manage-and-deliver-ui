@@ -3,6 +3,7 @@ import { MultiSelectTableArgs } from '@manage-and-deliver-ui'
 import { TableArgs } from '../utils/govukFrontendTypes'
 import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
+import { MojAlertComponentArgs } from '../interfaces/alertComponentArgs'
 
 export default class EditSessionPresenter {
   constructor(
@@ -29,6 +30,25 @@ export default class EditSessionPresenter {
     return {
       text: 'Back',
       href: `/group/${this.groupId}/sessions-and-attendance`,
+    }
+  }
+
+  get scheduleSessionSuccessMessageArgs(): MojAlertComponentArgs | null {
+    if (!this.successMessage) return null
+
+    const isAttendanceUpdateSuccess = this.successMessage.toLowerCase() === 'attendance and session notes updated'
+    const referralNames = (this.sessionDetails.attendanceAndSessionNotes ?? []).map(it => it.name).filter(Boolean)
+
+    const messageText =
+      isAttendanceUpdateSuccess && referralNames.length
+        ? `Attendance recorded for ${this.formatList(referralNames)}.`
+        : this.successMessage
+
+    return {
+      variant: 'success',
+      title: 'Success',
+      text: messageText,
+      dismissible: true,
     }
   }
 
@@ -97,5 +117,17 @@ export default class EditSessionPresenter {
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'multi-select-selected'),
       },
     }
+  }
+
+  private formatList(items: string[]): string {
+    if (items.length === 1) {
+      return items[0]
+    }
+
+    if (items.length === 2) {
+      return `${items[0]} and ${items[1]}`
+    }
+
+    return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`
   }
 }

@@ -7,6 +7,7 @@ import errorMessages from '../utils/errorMessages'
 export default class EditSessionForm {
   constructor(private readonly request: Request) {}
 
+  // Parses the delete-session radio selection into an update payload.
   async deleteData(): Promise<FormData<{ delete: string }>> {
     const validationResult = await FormUtils.runValidations({
       request: this.request,
@@ -33,6 +34,7 @@ export default class EditSessionForm {
     return [body('delete-session').notEmpty().withMessage(errorMessages.editSession.selectDeleteSession)]
   }
 
+  // Parses the single attendee selection for the edit-attendees step.
   async attendeesData(): Promise<FormData<{ referralId: string }>> {
     const validationResult = await FormUtils.runValidations({
       request: this.request,
@@ -59,6 +61,7 @@ export default class EditSessionForm {
     return [body('edit-session-attendees').notEmpty().withMessage(errorMessages.editSession.selectAttendees)]
   }
 
+  // Parses selected referrals for attendance/notes.
   async attendanceAndSessionNotesData(): Promise<FormData<{ referralIds: string[] }>> {
     const validationResult = await FormUtils.runValidations({
       request: this.request,

@@ -1,6 +1,7 @@
 import type { components } from './imported'
 
 type AlcoholMisuseDetails = components['schemas']['AlcoholMisuseDetails']
+type AttendanceAndSessionNotes = components['schemas']['AttendanceAndSessionNotes']
 type Attitude = components['schemas']['Attitude']
 type Availability = components['schemas']['Availability']
 type CohortEnum = components['schemas']['ReferralDetails']['cohort']
@@ -81,11 +82,13 @@ type EditSessionFacilitatorResponse = components['schemas']['EditSessionFacilita
 type EditSessionFacilitatorsRequest = components['schemas']['EditSessionFacilitatorRequest']
 type RecordSessionAttendance = components['schemas']['RecordSessionAttendance']
 type SessionAttendance = components['schemas']['SessionAttendance']
+type SessionAttendancePerson = components['schemas']['SessionAttendancePerson']
 
 export type {
   AlcoholMisuseDetails,
   AllocateToGroupRequest,
   AllocateToGroupResponse,
+  AttendanceAndSessionNotes,
   Attitude,
   Availability,
   CaseListFilterValues,
@@ -156,6 +159,7 @@ export type {
   SentenceInformation,
   Session,
   SessionAttendance,
+  SessionAttendancePerson,
   SessionScheduleGroupResponse,
   SessionScheduleRequest,
   SessionScheduleResponse,

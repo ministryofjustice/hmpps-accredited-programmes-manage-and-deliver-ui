@@ -51,6 +51,19 @@ describe('fields', () => {
     })
   })
 
+  it('handles null attendance object without throwing', () => {
+    const data = recordSessionAttendanceFactory.build({
+      people: [{ ...recordSessionAttendanceFactory.build().people[0], attendance: null as never }],
+    })
+
+    const presenter = new AttendancePresenter(data, '/back')
+
+    expect(presenter.fields[`attendance-${data.people[0].referralId}`]).toEqual({
+      value: '',
+      errorMessage: null,
+    })
+  })
+
   it('should return field with error message when validation error is passed', () => {
     const bffData = recordSessionAttendanceFactory.build()
     bffData.people = [bffData.people[0]]
