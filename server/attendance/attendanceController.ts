@@ -48,14 +48,17 @@ export default class AttendanceController {
         const firstReferralId = data.paramsForUpdate.attendees[0]?.referralId
         if (firstReferralId) {
           const groupTitle = this.toUrlSlug(recordAttendanceBffData.sessionTitle)
-          req.session.save(err => {
-            if (err) {
-              throw err
-            }
-            res.redirect(
-              `/group/${groupId}/session/${sessionId}/referral/${firstReferralId}/${groupTitle}-session-notes`,
-            )
-          })
+          const redirectUri = `/group/${groupId}/session/${sessionId}/referral/${firstReferralId}/${groupTitle}-session-notes`
+          if (typeof req.session.save === 'function') {
+            req.session.save(err => {
+              if (err) {
+                throw err
+              }
+              res.redirect(redirectUri)
+            })
+          } else {
+            res.redirect(redirectUri)
+          }
           return
         }
       }
@@ -108,25 +111,26 @@ export default class AttendanceController {
 
     if (req.method === 'POST') {
       const action = String(req.body['attendance-notes-action'] ?? 'continue')
+      const isLastReferral = currentIndex === referralIds.length - 1
 
-      if (action !== 'skip') {
+      if (action !== 'skip' || isLastReferral) {
         const notes = String(req.body['record-session-attendance-notes'] ?? '')
         ;(attendee as typeof attendee & { sessionNotes?: string }).sessionNotes = notes
       }
 
-      const isLastReferral = currentIndex === referralIds.length - 1
-
       if (isLastReferral) {
+        const payload = {
+          attendees: sessionAttendance.attendees.map(a => ({
+            referralId: a.referralId,
+            outcomeCode: a.outcomeCode,
+            ...((a as typeof a & { sessionNotes?: string }).sessionNotes?.trim()
+              ? { sessionNotes: (a as typeof a & { sessionNotes?: string }).sessionNotes?.trim() }
+              : {}),
+          })),
+        }
+
         try {
-          await this.accreditedProgrammesManageAndDeliverService.postSessionAttendance(username, sessionId, {
-            attendees: sessionAttendance.attendees.map(a => ({
-              referralId: a.referralId,
-              outcomeCode: a.outcomeCode,
-              ...((a as typeof a & { sessionNotes?: string }).sessionNotes?.trim()
-                ? { sessionNotes: (a as typeof a & { sessionNotes?: string }).sessionNotes?.trim() }
-                : {}),
-            })),
-          })
+          await this.accreditedProgrammesManageAndDeliverService.postSessionAttendance(username, sessionId, payload)
         } catch (error) {
           if (this.isLeadFacilitatorMissingError(error)) {
             return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session`)
@@ -134,7 +138,9 @@ export default class AttendanceController {
 
           throw error
         }
-        return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session`)
+        return res.redirect(
+          `/group/${groupId}/session/${sessionId}/edit-session?message=${encodeURIComponent('Attendance and session notes updated')}`,
+        )
       }
 
       const nextReferralId = referralIds[currentIndex + 1]

@@ -37,6 +37,10 @@ export default class EditSessionController {
       sessionId,
     )
 
+    if (!sessionDetails) {
+      return res.redirect(`/group/${groupId}/sessions-and-attendance`)
+    }
+
     const successMessage = message ? String(message) : null
     req.session.originPage = req.path
 
@@ -152,12 +156,12 @@ export default class EditSessionController {
           sessionEndTime: data.paramsForUpdate.sessionEndTime,
         }
 
-        // GROUP sessions and ONE_TO_ONE catch-ups go to the reschedule page
+        // Group sessions, group one-to-ones and one-to-one catch-ups go to the reschedule page
         if (sessionAttendees.sessionType === 'GROUP' && !sessionAttendees.isCatchup) {
           return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session-date-and-time/reschedule`)
         }
 
-        // For ONE_TO_ONE sessions, submit directly to API
+        // For one-to-one sessions, submit directly to API
         const [day, month, year] = data.paramsForUpdate.sessionStartDate.split('/')
         const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
 

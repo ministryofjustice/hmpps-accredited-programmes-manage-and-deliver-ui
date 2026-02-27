@@ -54,6 +54,30 @@ describe('editSession', () => {
         expect(res.text).toContain('9:30am to midday')
       })
   })
+
+  it('renders success message when message query parameter is provided', async () => {
+    const sessionDetails = sessionDetailsFactory.build()
+    accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
+
+    await request(app)
+      .get(
+        `/group/12345/session/6789/edit-session?message=${encodeURIComponent('Attendance and session notes updated')}`,
+      )
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('Success')
+        expect(res.text).toContain('Attendance recorded for Person 2.')
+      })
+  })
+
+  it('redirects to sessions and attendance when session details are missing', async () => {
+    accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(null as never)
+
+    await request(app)
+      .get(`/group/12345/session/6789/edit-session`)
+      .expect(302)
+      .expect('Location', '/group/12345/sessions-and-attendance')
+  })
 })
 
 describe('editSessionDateAndTime', () => {

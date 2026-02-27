@@ -94,16 +94,7 @@ export default class EditSessionView {
   }
 
   private get successMessageArgs() {
-    if (!this.presenter.successMessage) {
-      return null
-    }
-
-    return {
-      variant: 'success',
-      title: this.presenter.successMessage,
-      showTitleAsHeading: true,
-      dismissible: true,
-    }
+    return this.presenter.scheduleSessionSuccessMessageArgs
   }
 
   get deleteButton(): ButtonArgs {
@@ -114,8 +105,6 @@ export default class EditSessionView {
     }
   }
 
-  // We use this to catch the single referral ID in the form and pass it up to the API when no checkboxes are present
-  // The ID is the same as the checkboxes to the form can hook into it but only one will ever be present on the screen
   get singleReferral() {
     return {
       label: {
