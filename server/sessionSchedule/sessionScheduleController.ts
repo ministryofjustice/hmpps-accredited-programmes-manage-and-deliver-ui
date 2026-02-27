@@ -1,4 +1,4 @@
-import { ScheduleSessionRequest, ScheduleSessionTypeResponse } from '@manage-and-deliver-api'
+import { ScheduleSessionRequest } from '@manage-and-deliver-api'
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
@@ -151,6 +151,8 @@ export default class SessionScheduleController {
       username,
       groupId,
     )
+
+    console.log(JSON.stringify(sessionAttendanceData, null, 2))
 
     const presenter = new SessionScheduleAttendancePresenter(groupId, sessionAttendanceData, successMessage)
     const view = new SessionScheduleAttendanceView(presenter)

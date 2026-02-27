@@ -1,4 +1,4 @@
-import { ScheduleSessionTypeResponse, SessionScheduleGroupResponse } from '@manage-and-deliver-api'
+import { ProgrammeGroupModuleSessionsResponse, ScheduleSessionTypeResponse } from '@manage-and-deliver-api'
 import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import { SessionData } from 'express-session'
@@ -36,11 +36,10 @@ const mockScheduleSessionTypeResponse: ScheduleSessionTypeResponse = {
   ],
 }
 
-const mockSessionAttendanceData: SessionScheduleGroupResponse = {
+const mockSessionAttendanceData: ProgrammeGroupModuleSessionsResponse = {
   group: {
-    id: groupId,
     code: 'GRP-001',
-    name: 'Test Group',
+    regionName: 'Test Group',
   },
   modules: [
     {
@@ -48,6 +47,11 @@ const mockSessionAttendanceData: SessionScheduleGroupResponse = {
       name: 'Module 1: Getting Started',
       scheduleButtonText: 'Schedule a Getting started one-to-one',
       sessions: [],
+      number: 0,
+      startDateText: {
+        estimatedStartDateText: '',
+        sessionStartDate: '',
+      },
     },
   ],
 }

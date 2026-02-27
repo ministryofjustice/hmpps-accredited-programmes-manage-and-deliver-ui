@@ -1,17 +1,18 @@
-import { SessionScheduleGroupResponse } from '@manage-and-deliver-api'
+import {
+  ProgrammeGroupModuleSessionsResponse,
+  ProgrammeGroupModuleSessionsResponseGroupModule,
+  ProgrammeGroupModuleSessionsResponseGroupSession,
+} from '@manage-and-deliver-api'
 import { AccordionArgsItem } from '../../utils/govukFrontendTypes'
 import { MojAlertComponentArgs } from '../../interfaces/alertComponentArgs'
 import GroupServiceLayoutPresenter, {
   GroupServiceNavigationValues,
 } from '../../shared/groups/groupServiceLayoutPresenter'
 
-type SessionModule = NonNullable<SessionScheduleGroupResponse['modules']>[number]
-type ModuleSession = NonNullable<SessionModule['sessions']>[number]
-
 export default class SessionScheduleAttendancePresenter extends GroupServiceLayoutPresenter {
   constructor(
     readonly groupId: string,
-    private readonly groupSessionsData: SessionScheduleGroupResponse | null = null,
+    private readonly groupSessionsData: ProgrammeGroupModuleSessionsResponse | null = null,
     private readonly successMessage?: string,
   ) {
     super(GroupServiceNavigationValues.sessionsAndAttendanceTab, groupId)
@@ -60,16 +61,16 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
     }))
   }
 
-  private modulesSessions(): SessionModule[] {
+  private modulesSessions(): ProgrammeGroupModuleSessionsResponseGroupModule[] {
     const modulesSessions = this.groupSessionsData?.modules
-    return Array.isArray(modulesSessions) ? (modulesSessions as SessionModule[]) : []
+    return Array.isArray(modulesSessions) ? (modulesSessions as ProgrammeGroupModuleSessionsResponseGroupModule[]) : []
   }
 
-  private moduleHeading(moduleSession: SessionModule) {
+  private moduleHeading(moduleSession: ProgrammeGroupModuleSessionsResponseGroupModule) {
     return `${moduleSession.name ?? ''}`.trim()
   }
 
-  private moduleContent(moduleSession: SessionModule) {
+  private moduleContent(moduleSession: ProgrammeGroupModuleSessionsResponseGroupModule) {
     const sessions = Array.isArray(moduleSession.sessions) ? moduleSession.sessions : []
 
     const sessionsHtml = `
@@ -85,7 +86,7 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
           </tr>
         </thead>
         <tbody class="govuk-table__body">
-          ${sessions.map((session: ModuleSession) => this.sessionTableRow(session)).join('')}
+          ${sessions.map((session: ProgrammeGroupModuleSessionsResponseGroupSession) => this.sessionTableRow(session)).join('')}
         </tbody>
       </table>
     `
@@ -106,7 +107,7 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
     return `${sessionsHtml}${scheduleButtonHtml}`
   }
 
-  private getStartDateText(moduleSession: SessionModule): string {
+  private getStartDateText(moduleSession: ProgrammeGroupModuleSessionsResponseGroupModule): string {
     if (moduleSession.startDateText?.estimatedStartDateText && moduleSession.startDateText?.sessionStartDate) {
       return `<p class="govuk-body"><strong>${moduleSession.startDateText.estimatedStartDateText}:</strong> ${moduleSession.startDateText.sessionStartDate}</p>`
     }
@@ -114,7 +115,7 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
     return ''
   }
 
-  private sessionTableRow(session: ModuleSession): string {
+  private sessionTableRow(session: ProgrammeGroupModuleSessionsResponseGroupSession): string {
     const participants = session.participants?.length ? session.participants.join('<br/> ') : ''
     const facilitators = session.facilitators?.length
       ? session.facilitators.join('<span class="govuk-!-display-block govuk-!-margin-bottom-1"></span>')
@@ -139,7 +140,7 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
     return Number.isNaN(date.getTime()) ? dateString : date.getTime().toString()
   }
 
-  private scheduleSessionHref(moduleSession: SessionModule) {
+  private scheduleSessionHref(moduleSession: ProgrammeGroupModuleSessionsResponseGroupModule) {
     return `/group/${this.groupId}/module/${moduleSession.id}/schedule-session-type`
   }
 }
