@@ -61,8 +61,11 @@ type CodeDescription = components['schemas']['CodeDescription']
 type UserTeamMember = components['schemas']['UserTeamMember']
 type CreateGroupTeamMember = components['schemas']['CreateGroupTeamMember']
 type SessionScheduleResponse = components['schemas']['ScheduleSessionTypeResponse']
-type SessionScheduleGroupResponse = components['schemas']['SessionScheduleGroupResponse']
-type ModuleSessionTemplate = components['schemas']['ModuleSessionTemplate']
+type ProgrammeGroupModuleSessionsResponse = components['schemas']['ProgrammeGroupModuleSessionsResponse']
+type ProgrammeGroupModuleSessionsResponseGroupModule =
+  components['schemas']['ProgrammeGroupModuleSessionsResponseGroupModule']
+type ProgrammeGroupModuleSessionsResponseGroupSession =
+  components['schemas']['ProgrammeGroupModuleSessionsResponse']['ProgrammeGroupModuleSessionsResponseGroupModule']['ProgrammeGroupModuleSessionsResponseGroupSession']
 type ScheduleSessionTypeResponse = components['schemas']['ScheduleSessionTypeResponse']
 type ScheduleIndividualSessionDetailsResponse = components['schemas']['ScheduleIndividualSessionDetailsResponse']
 type ScheduleSessionRequest = components['schemas']['ScheduleSessionRequest']
@@ -122,7 +125,6 @@ export type {
   LearningNeeds,
   LifestyleAndAssociates,
   LocationFilterValues,
-  ModuleSessionTemplate,
   OffenceAnalysis,
   OffenceHistory,
   PageGroup,
@@ -133,6 +135,9 @@ export type {
   ProgrammeGroupCohortEnum,
   ProgrammeGroupDate,
   ProgrammeGroupEntity,
+  ProgrammeGroupModuleSessionsResponse,
+  ProgrammeGroupModuleSessionsResponseGroupModule,
+  ProgrammeGroupModuleSessionsResponseGroupSession,
   ProgrammeGroupSexEnum,
   ProgrammeGroupWhen,
   RecordSessionAttendance,
@@ -156,7 +161,6 @@ export type {
   SentenceInformation,
   Session,
   SessionAttendance,
-  SessionScheduleGroupResponse,
   SessionScheduleRequest,
   SessionScheduleResponse,
   SessionTime,

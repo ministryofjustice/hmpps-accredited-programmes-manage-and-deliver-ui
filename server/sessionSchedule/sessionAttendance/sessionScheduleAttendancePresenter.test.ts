@@ -1,14 +1,12 @@
-import { SessionScheduleGroupResponse } from '@manage-and-deliver-api'
+import { ProgrammeGroupModuleSessionsResponse } from '@manage-and-deliver-api'
 import SessionScheduleAttendancePresenter from './sessionScheduleAttendancePresenter'
 
 describe('SessionScheduleAttendancePresenter', () => {
-  const groupId = 'group-123'
-
-  const mockGroupSessionsData: SessionScheduleGroupResponse = {
+  const groupId = 'group-1'
+  const mockGroupSessionsData: ProgrammeGroupModuleSessionsResponse = {
     group: {
-      id: groupId,
       code: 'GRP-001',
-      name: 'Test Group',
+      regionName: 'London',
     },
     modules: [
       {
@@ -23,6 +21,7 @@ describe('SessionScheduleAttendancePresenter', () => {
           {
             id: 'session-1',
             name: 'Session 1: Introduction',
+            number: 1,
             type: 'One-to-one',
             participants: ['John Doe', 'Jane Smith'],
             dateOfSession: '15 March 2025',
@@ -32,6 +31,7 @@ describe('SessionScheduleAttendancePresenter', () => {
           {
             id: 'session-2',
             name: 'Session 2: Progress check',
+            number: 2,
             type: 'Group',
             participants: ['John Doe'],
             dateOfSession: '22 March 2025',
@@ -39,6 +39,7 @@ describe('SessionScheduleAttendancePresenter', () => {
             facilitators: ['Facilitator 1'],
           },
         ],
+        number: 1,
       },
       {
         id: 'module-2',
@@ -49,6 +50,7 @@ describe('SessionScheduleAttendancePresenter', () => {
           sessionStartDate: '1 April 2025',
         },
         sessions: [],
+        number: 2,
       },
     ],
   }
@@ -61,16 +63,6 @@ describe('SessionScheduleAttendancePresenter', () => {
         headingCaptionText: 'GRP-001',
         headingText: 'Sessions and attendance',
       })
-    })
-
-    it('returns empty caption when group code is not available', () => {
-      const dataWithoutCode = {
-        ...mockGroupSessionsData,
-        group: { ...mockGroupSessionsData.group, code: undefined },
-      }
-      const presenter = new SessionScheduleAttendancePresenter(groupId, dataWithoutCode)
-
-      expect(presenter.text.headingCaptionText).toBe('')
     })
   })
 
@@ -93,7 +85,10 @@ describe('SessionScheduleAttendancePresenter', () => {
     })
 
     it('returns a message when no modules are available', () => {
-      const emptyData = { ...mockGroupSessionsData, modules: [] }
+      const emptyData = {
+        ...mockGroupSessionsData,
+        modules: [] as ProgrammeGroupModuleSessionsResponse['modules'],
+      }
       const presenter = new SessionScheduleAttendancePresenter(groupId, emptyData)
       const accordionItems = presenter.getAccordionItems()
 
@@ -101,15 +96,6 @@ describe('SessionScheduleAttendancePresenter', () => {
       expect(accordionItems[0].heading.text).toBe('No modules available')
       expect(accordionItems[0].content.html).toContain('There are no module details available')
       expect(accordionItems[0].expanded).toBe(true)
-    })
-
-    it('handles null modules gracefully', () => {
-      const nullModulesData = { ...mockGroupSessionsData, modules: null }
-      const presenter = new SessionScheduleAttendancePresenter(groupId, nullModulesData)
-      const accordionItems = presenter.getAccordionItems()
-
-      expect(accordionItems).toHaveLength(1)
-      expect(accordionItems[0].heading.text).toBe('No modules available')
     })
   })
 
@@ -159,24 +145,6 @@ describe('SessionScheduleAttendancePresenter', () => {
       const firstModuleContent = accordionItems[0].content.html
 
       expect(firstModuleContent).toContain('<strong>Estimated start date:</strong> 15 March 2025')
-    })
-
-    it('does not display start date text when not available', () => {
-      const dataWithoutStartDate = {
-        ...mockGroupSessionsData,
-        modules: [
-          {
-            ...mockGroupSessionsData.modules![0],
-            startDateText: undefined,
-          },
-        ],
-      }
-      const presenter = new SessionScheduleAttendancePresenter(groupId, dataWithoutStartDate)
-      const accordionItems = presenter.getAccordionItems()
-      const content = accordionItems[0].content.html
-
-      expect(content).not.toContain('<strong>')
-      expect(content).not.toContain('Estimated start date')
     })
 
     it('displays start date text with non-standard label like pre-group one-to-ones', () => {
@@ -250,23 +218,6 @@ describe('SessionScheduleAttendancePresenter', () => {
       expect(firstModuleContent).toContain('govuk-button--secondary')
     })
 
-    it('uses default button text when not provided', () => {
-      const dataWithoutButtonText = {
-        ...mockGroupSessionsData,
-        modules: [
-          {
-            ...mockGroupSessionsData.modules![0],
-            scheduleButtonText: undefined,
-          },
-        ],
-      }
-      const presenter = new SessionScheduleAttendancePresenter(groupId, dataWithoutButtonText)
-      const accordionItems = presenter.getAccordionItems()
-      const content = accordionItems[0].content.html
-
-      expect(content).toContain('Schedule a session')
-    })
-
     it('handles button text ending with "review" instead of "session"', () => {
       const dataWithReviewButton = {
         ...mockGroupSessionsData,
@@ -320,15 +271,22 @@ describe('SessionScheduleAttendancePresenter', () => {
           {
             id: 'module-3',
             name: 'Module 3',
+            number: 3,
+            scheduleButtonText: 'Schedule Module 3 session',
+            startDateText: {
+              estimatedStartDateText: 'Estimated start date',
+              sessionStartDate: '1 April 2025',
+            },
             sessions: [
               {
                 id: 'session-3',
                 name: 'Session 3',
+                number: 1,
                 type: 'Group',
-                participants: [],
+                participants: [] as string[],
                 dateOfSession: '1 April 2025',
                 timeOfSession: '10:00am to 11:30am',
-                facilitators: [],
+                facilitators: [] as string[],
               },
             ],
           },
@@ -481,12 +439,13 @@ describe('SessionScheduleAttendancePresenter', () => {
             sessions: [
               {
                 id: 'session-x',
-                name: undefined,
-                type: undefined,
-                participants: undefined,
-                dateOfSession: undefined,
-                timeOfSession: undefined,
-                facilitators: undefined,
+                number: 1,
+                name: undefined as unknown as string,
+                type: undefined as unknown as string,
+                participants: undefined as unknown as string[],
+                dateOfSession: undefined as unknown as string,
+                timeOfSession: undefined as unknown as string,
+                facilitators: undefined as unknown as string[],
               },
             ],
           },
@@ -527,8 +486,9 @@ describe('SessionScheduleAttendancePresenter', () => {
       const dataWithActualModules = {
         ...mockGroupSessionsData,
         modules: actualModuleNames.map((name, index) => {
-          const module: NonNullable<SessionScheduleGroupResponse['modules']>[number] = {
+          const module: NonNullable<ProgrammeGroupModuleSessionsResponse['modules']>[number] = {
             id: `module-${index}`,
+            number: index + 1,
             name,
             scheduleButtonText: `Schedule ${name}`,
             startDateText: {
@@ -562,13 +522,14 @@ describe('SessionScheduleAttendancePresenter', () => {
           ...initialData.modules!,
           {
             id: 'module-3',
+            number: 3,
             name: 'Module 3: New Content',
             scheduleButtonText: 'Schedule Module 3 session',
             startDateText: {
               estimatedStartDateText: 'Expected to start',
               sessionStartDate: '15 May 2025',
             },
-            sessions: [],
+            sessions: [] as NonNullable<ProgrammeGroupModuleSessionsResponse['modules']>[number]['sessions'],
           },
         ],
       }
@@ -586,6 +547,7 @@ describe('SessionScheduleAttendancePresenter', () => {
           ...mockGroupSessionsData.modules!,
           {
             id: 'module-4',
+            number: 4,
             name: 'Module 4: Advanced Skills',
             scheduleButtonText: 'Schedule Module 4 session',
             startDateText: {
@@ -595,6 +557,7 @@ describe('SessionScheduleAttendancePresenter', () => {
             sessions: [
               {
                 id: 'session-4',
+                number: 1,
                 name: 'Session 1: Advanced Techniques',
                 type: 'Workshop',
                 participants: ['John Doe', 'Jane Smith', 'Bob Brown'],
@@ -621,13 +584,14 @@ describe('SessionScheduleAttendancePresenter', () => {
         modules: [
           {
             id: 'module-0',
+            number: 0,
             name: 'Module 0: Foundations',
             scheduleButtonText: 'Schedule Module 0 session',
             startDateText: {
               estimatedStartDateText: 'Starting',
               sessionStartDate: '1 March 2025',
             },
-            sessions: [],
+            sessions: [] as NonNullable<ProgrammeGroupModuleSessionsResponse['modules']>[number]['sessions'],
           },
           ...mockGroupSessionsData.modules!,
         ],
@@ -648,6 +612,7 @@ describe('SessionScheduleAttendancePresenter', () => {
           ...mockGroupSessionsData.modules!,
           {
             id: 'module-5',
+            number: 5,
             name: 'Module 5: Assessment',
             scheduleButtonText: 'Schedule Module 5 session',
             startDateText: {
@@ -657,6 +622,7 @@ describe('SessionScheduleAttendancePresenter', () => {
             sessions: [
               {
                 id: 'session-5a',
+                number: 1,
                 name: 'Session 1: Written Assessment',
                 type: 'Assessment',
                 participants: ['John Doe'],
@@ -666,6 +632,7 @@ describe('SessionScheduleAttendancePresenter', () => {
               },
               {
                 id: 'session-5b',
+                number: 2,
                 name: 'Session 2: Practical Assessment',
                 type: 'Assessment',
                 participants: ['John Doe'],

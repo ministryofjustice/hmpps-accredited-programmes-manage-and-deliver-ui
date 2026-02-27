@@ -29,7 +29,6 @@ import {
   Health,
   LearningNeeds,
   LifestyleAndAssociates,
-  ModuleSessionTemplate,
   OffenceAnalysis,
   OffenceHistory,
   PersonalDetails,
@@ -52,12 +51,12 @@ import {
   ScheduleSessionTypeResponse,
   SentenceInformation,
   Session,
-  SessionScheduleGroupResponse,
   SessionScheduleResponse,
   ThinkingAndBehaviour,
   UpdateAvailability,
   UserTeamMember,
   RecordSessionAttendance,
+  ProgrammeGroupModuleSessionsResponse,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -573,13 +572,13 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
     username: ExpressUsername,
     groupId: string,
     moduleId: string,
-  ): Promise<ModuleSessionTemplate[]> {
+  ): Promise<ScheduleSessionTypeResponse> {
     const restClient = await this.createRestClientFromUsername(username)
     const response = (await restClient.get({
       path: `/bff/group/${groupId}/module/${moduleId}/schedule-session-type`,
       headers: { Accept: 'application/json' },
     })) as ScheduleSessionTypeResponse
-    return response.sessionTemplates
+    return response as ScheduleSessionTypeResponse
   }
 
   async getIndividualSessionDetails(
@@ -611,12 +610,12 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
   async getGroupSessionsAndAttendance(
     username: ExpressUsername,
     groupId: string,
-  ): Promise<SessionScheduleGroupResponse> {
+  ): Promise<ProgrammeGroupModuleSessionsResponse> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/bff/group/${groupId}/sessions`,
       headers: { Accept: 'application/json' },
-    })) as SessionScheduleGroupResponse
+    })) as ProgrammeGroupModuleSessionsResponse
   }
 
   async getGroupSessionDetails(
