@@ -30,7 +30,7 @@ export default class SessionScheduleCyaView {
             text: 'Session type',
           },
           value: {
-            text: 'Individual',
+            text: this.presenter.sessionType,
           },
           actions: {
             items: [

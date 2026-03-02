@@ -10,15 +10,16 @@ import PresenterUtils from '../../utils/presenterUtils'
 export default class AddSessionDetailsPresenter {
   constructor(
     readonly sessionDetails: ScheduleIndividualSessionDetailsResponse,
+    private readonly backLink: string,
     private readonly validationError: FormValidationError | null = null,
     private readonly createSessionDetailsFormData:
-      | (Partial<ScheduleSessionRequest> & { sessionName?: string; referralName?: string })
+      | (Partial<ScheduleSessionRequest> & { sessionName?: string; referralName?: string; headingText?: string })
       | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
   ) {}
 
   get backLinkUri() {
-    return `/group/{:groupId}/module/{:moduleId}/schedule-session-type`
+    return this.backLink
   }
 
   get errorSummary() {
@@ -32,7 +33,7 @@ export default class AddSessionDetailsPresenter {
   get text() {
     return {
       headingText: `Add session details`,
-      headingCaptionText: `Schedule a ${this.createSessionDetailsFormData.sessionName} session`,
+      headingCaptionText: this.createSessionDetailsFormData.headingText,
     }
   }
 

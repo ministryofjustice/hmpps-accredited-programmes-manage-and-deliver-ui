@@ -1,4 +1,4 @@
-import { ModuleSessionTemplate, SessionScheduleGroupResponse } from '@manage-and-deliver-api'
+import { ProgrammeGroupModuleSessionsResponse, ScheduleSessionTypeResponse } from '@manage-and-deliver-api'
 import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import { SessionData } from 'express-session'
@@ -18,26 +18,28 @@ let app: Express
 const groupId = randomUUID()
 const moduleId = randomUUID()
 
-const mockSessionTemplates: ModuleSessionTemplate[] = [
-  {
-    id: randomUUID(),
-    number: 1,
-    name: 'Getting started one-to-one',
-    sessionScheduleType: 'SCHEDULED',
-  },
-  {
-    id: randomUUID(),
-    number: 2,
-    name: 'Session 2',
-    sessionScheduleType: 'CATCH_UP',
-  },
-]
+const mockScheduleSessionTypeResponse: ScheduleSessionTypeResponse = {
+  pageHeading: 'Schedule a Getting started one-to-one session',
+  sessionTemplates: [
+    {
+      id: randomUUID(),
+      number: 1,
+      name: 'Getting started one-to-one',
+      sessionScheduleType: 'SCHEDULED',
+    },
+    {
+      id: randomUUID(),
+      number: 2,
+      name: 'Session 2',
+      sessionScheduleType: 'CATCH_UP',
+    },
+  ],
+}
 
-const mockSessionAttendanceData: SessionScheduleGroupResponse = {
+const mockSessionAttendanceData: ProgrammeGroupModuleSessionsResponse = {
   group: {
-    id: groupId,
     code: 'GRP-001',
-    name: 'Test Group',
+    regionName: 'Test Group',
   },
   modules: [
     {
@@ -45,6 +47,11 @@ const mockSessionAttendanceData: SessionScheduleGroupResponse = {
       name: 'Module 1: Getting Started',
       scheduleButtonText: 'Schedule a Getting started one-to-one',
       sessions: [],
+      number: 0,
+      startDateText: {
+        estimatedStartDateText: '',
+        sessionStartDate: '',
+      },
     },
   ],
 }
@@ -67,6 +74,7 @@ const completeSessionData: Partial<SessionData> = {
     startDate: '01/01/3055',
     startTime: { hour: 9, minutes: 0, amOrPm: 'AM' },
     endTime: { hour: 10, minutes: 30, amOrPm: 'AM' },
+    headingText: 'Schedule a Getting started one-to-one session',
   },
 }
 
@@ -79,7 +87,7 @@ beforeEach(() => {
     sessionScheduleData: {},
   }
   app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
-  accreditedProgrammesManageAndDeliverService.getSessionTemplates.mockResolvedValue(mockSessionTemplates)
+  accreditedProgrammesManageAndDeliverService.getSessionTemplates.mockResolvedValue(mockScheduleSessionTypeResponse)
   accreditedProgrammesManageAndDeliverService.getGroupSessionsAndAttendance.mockResolvedValue(mockSessionAttendanceData)
 })
 
@@ -110,38 +118,28 @@ describe('Session Schedule Controller', () => {
     })
 
     it('displays previously selected session template from session', async () => {
-      const selectedTemplateId = mockSessionTemplates[1].id
+      const selectedTemplateId = mockScheduleSessionTypeResponse.sessionTemplates[1]
+      const checkboxValue = `${selectedTemplateId.id}+${selectedTemplateId.sessionScheduleType}+${selectedTemplateId.name}`
       const sessionData: Partial<SessionData> = {
         sessionScheduleData: {
-          sessionTemplateId: selectedTemplateId,
+          selectedSession: checkboxValue,
         },
       }
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
-      accreditedProgrammesManageAndDeliverService.getSessionTemplates.mockResolvedValue(mockSessionTemplates)
+      accreditedProgrammesManageAndDeliverService.getSessionTemplates.mockResolvedValue(mockScheduleSessionTypeResponse)
 
       return request(app)
         .get(`/group/${groupId}/module/${moduleId}/schedule-session-type`)
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain(`value="${selectedTemplateId}" checked`)
-        })
-    })
-
-    it('displays fallback text when no session templates are available', async () => {
-      accreditedProgrammesManageAndDeliverService.getSessionTemplates.mockResolvedValue([])
-
-      return request(app)
-        .get(`/group/${groupId}/module/${moduleId}/schedule-session-type`)
-        .expect(200)
-        .expect(res => {
-          expect(res.text).toContain('Schedule a the session')
+          expect(res.text).toContain(`value="${checkboxValue}" checked`)
         })
     })
   })
 
   describe('POST /group/:groupId/module/:moduleId/schedule-session-type', () => {
     it('redirects to session details page on successful submission', async () => {
-      const selectedTemplateId = mockSessionTemplates[0].id
+      const selectedTemplateId = mockScheduleSessionTypeResponse.sessionTemplates[0].id
 
       return request(app)
         .post(`/group/${groupId}/module/${moduleId}/schedule-session-type`)
@@ -295,6 +293,7 @@ describe('Session Schedule Controller', () => {
                   teamName: 'GM Manchester N1',
                 },
               ],
+              headingText: 'Schedule a Getting started one-to-one session',
               referralIds: ['a9971fd6-a185-43ee-bb23-a0ab23a14f50'],
               sessionTemplateId: '30db4cee-a79a-420a-b0ff-5f5ce4dcfd7d',
               startDate: '3055-01-01',

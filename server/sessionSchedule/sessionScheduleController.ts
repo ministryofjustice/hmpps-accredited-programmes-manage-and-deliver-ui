@@ -22,18 +22,19 @@ export default class SessionScheduleController {
   async showSessionSchedule(req: Request, res: Response): Promise<void> {
     const { groupId, moduleId } = req.params
     const { username } = req.user
+    const { sessionScheduleData } = req.session
     let formError: FormValidationError | null = null
 
-    const sessionTemplates = await this.accreditedProgrammesManageAndDeliverService.getSessionTemplates(
+    const scheduleSessionTypeResponse = await this.accreditedProgrammesManageAndDeliverService.getSessionTemplates(
       username,
       groupId,
       moduleId,
     )
 
     if (req.method === 'POST') {
-      const selectedSessionTemplateId = req.body['session-template']
+      const selectedSession = req.body['session-template']
 
-      if (!selectedSessionTemplateId) {
+      if (!selectedSession) {
         res.status(400)
         formError = {
           errors: [
@@ -45,21 +46,23 @@ export default class SessionScheduleController {
           ],
         }
       } else {
+        const [selectedSessionTemplateId, selectedSessionTemplateType, sessionName] = selectedSession.split('+')
         req.session.sessionScheduleData = {
+          ...sessionScheduleData,
           sessionTemplateId: selectedSessionTemplateId,
-          sessionName: sessionTemplates.length > 0 ? sessionTemplates[0].name : 'the session',
+          headingText: scheduleSessionTypeResponse.pageHeading,
+          sessionScheduleType: selectedSessionTemplateType,
+          sessionName,
+          selectedSession,
         }
         return res.redirect(`/group/${groupId}/module/${moduleId}/schedule-group-session-details`)
       }
     }
-
     const presenter = new SessionScheduleWhichPresenter(
       groupId,
-      moduleId,
-      sessionTemplates.length > 0 ? sessionTemplates[0].name : 'the session',
-      sessionTemplates,
+      scheduleSessionTypeResponse,
       formError,
-      req.session.sessionScheduleData?.sessionTemplateId,
+      req.session.sessionScheduleData?.selectedSession,
     )
     const view = new SessionScheduleWhichView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
@@ -97,8 +100,14 @@ export default class SessionScheduleController {
       groupId,
       moduleId,
     )
-
-    const presenter = new AddSessionDetailsPresenter(sessionDetails, formError, sessionScheduleData, userInputData)
+    const backLink = `/group/${groupId}/module/${moduleId}/schedule-session-type`
+    const presenter = new AddSessionDetailsPresenter(
+      sessionDetails,
+      backLink,
+      formError,
+      sessionScheduleData,
+      userInputData,
+    )
     const view = new AddSessionDetailsView(presenter)
     return ControllerUtils.renderWithLayout(res, view, null)
   }
@@ -139,6 +148,9 @@ export default class SessionScheduleController {
     const { successMessage } = req.query as {
       successMessage?: string
     }
+
+    // Clear session data before starting journeys
+    req.session.sessionScheduleData = {}
 
     const sessionAttendanceData = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionsAndAttendance(
       username,

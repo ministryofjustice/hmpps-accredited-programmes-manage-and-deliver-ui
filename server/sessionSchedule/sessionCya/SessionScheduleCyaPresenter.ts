@@ -7,13 +7,18 @@ export default class SessionScheduleCyaPresenter {
   constructor(
     readonly linkUrl: string,
     readonly createSessionDetails:
-      | (Partial<ScheduleSessionRequest> & { sessionName?: string; referralName?: string })
+      | (Partial<ScheduleSessionRequest> & {
+          sessionName?: string
+          referralName?: string
+          headingText?: string
+          sessionScheduleType?: string
+        })
       | null = null,
   ) {}
 
   get text() {
     return {
-      headingCaptionText: `Schedule a ${this.createSessionDetails.sessionName}`,
+      headingCaptionText: this.createSessionDetails.headingText,
       headingText: `Review your session details`,
     }
   }
@@ -56,6 +61,10 @@ export default class SessionScheduleCyaPresenter {
   }
 
   get backLinkUri() {
-    return `${this.linkUrl}/schedule-session-type`
+    return `${this.linkUrl}/schedule-group-session-details`
+  }
+
+  get sessionType() {
+    return this.createSessionDetails.sessionScheduleType === 'CATCH_UP' ? 'Catch-up' : 'Individual'
   }
 }

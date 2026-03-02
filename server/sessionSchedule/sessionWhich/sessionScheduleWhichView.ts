@@ -25,9 +25,11 @@ export default class SessionScheduleWhichView {
         },
       },
       items: sessionTemplates.map(template => ({
-        value: template.id,
+        value: `${template.id}+${template.sessionScheduleType}+${template.name}`,
         text: template.name,
-        checked: this.presenter.fields.sessionTemplate.value === template.id,
+        checked:
+          this.presenter.fields.sessionTemplate.value ===
+          `${template.id}+${template.sessionScheduleType}+${template.name}`,
       })),
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.sessionTemplate.errorMessage),
     }
