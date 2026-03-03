@@ -185,7 +185,7 @@ describe('showRecordAttendancePage', () => {
       sessionData = {
         editSessionAttendance: {
           referralIds: ['referral1'],
-          attendees: [{ referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: '' }],
+          attendees: [{ referralId: 'referral1', outcomeCode: 'ATTC' }],
         },
       }
 
@@ -244,7 +244,7 @@ describe('showRecordAttendancePage', () => {
       sessionData = {
         editSessionAttendance: {
           referralIds: ['referral1'],
-          attendees: [{ referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: '' }],
+          attendees: [{ referralId: 'referral1', outcomeCode: 'ATTC' }],
         },
       }
 
@@ -267,6 +267,35 @@ describe('showRecordAttendancePage', () => {
         .expect(res => {
           expect(res.text).toContain('Existing note from DB')
           expect(res.text).not.toContain('Skip and add later')
+        })
+    })
+
+    it('keeps a cleared staged note empty when revisiting, even if BFF has older notes', async () => {
+      sessionData = {
+        editSessionAttendance: {
+          referralIds: ['referral1'],
+          attendees: [{ referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: '' }],
+        },
+      }
+
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Pre-group one-to-one' })
+      bffData.people = [
+        {
+          ...bffData.people[0],
+          referralId: 'referral1',
+          sessionNotes: 'Old note from BFF',
+        },
+      ]
+
+      accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
+
+      await request(app)
+        .get('/group/111/session/6789/referral/referral1/pre-group-one-to-one-session-notes')
+        .expect(200)
+        .expect(res => {
+          expect(res.text).not.toContain('Old note from BFF')
         })
     })
 

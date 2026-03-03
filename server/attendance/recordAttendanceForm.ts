@@ -31,7 +31,6 @@ export default class RecordAttendanceForm {
       .map(([key, value]) => ({
         referralId: key.replace('attendance-', ''),
         outcomeCode: value as 'ATTC' | 'AFTC' | 'UAAB',
-        sessionNotes: '',
       }))
 
     return {

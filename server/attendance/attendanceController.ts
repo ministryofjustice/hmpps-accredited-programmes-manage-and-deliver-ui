@@ -40,7 +40,7 @@ export default class AttendanceController {
 
         return {
           ...person,
-          sessionNotes: stagedAttendee.sessionNotes || person.sessionNotes,
+          sessionNotes: stagedAttendee.sessionNotes ?? person.sessionNotes,
           attendance: {
             ...person.attendance,
             code: stagedAttendee.outcomeCode,
@@ -67,7 +67,7 @@ export default class AttendanceController {
 
           return {
             ...attendee,
-            sessionNotes: existingPerson?.sessionNotes || attendee.sessionNotes,
+            sessionNotes: existingPerson?.sessionNotes ?? attendee.sessionNotes,
           }
         })
         const sessionTitle = convertToUrlFriendlyKebabCase(recordAttendanceBffData.sessionTitle)
@@ -233,6 +233,6 @@ export default class AttendanceController {
   }
 
   private resolveNotesValue(attendeeNotes?: string, bffNotes?: string): string {
-    return attendeeNotes || bffNotes || ''
+    return attendeeNotes ?? bffNotes ?? ''
   }
 }
