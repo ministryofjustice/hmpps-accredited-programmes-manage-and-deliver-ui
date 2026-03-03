@@ -82,9 +82,8 @@ export interface IAccreditedProgrammesManageAndDeliverService {
     referralId: string,
   ): Promise<DeliveryLocationPreferencesFormData>
 }
-export default class AccreditedProgrammesManageAndDeliverService
-  implements IAccreditedProgrammesManageAndDeliverService
-{
+// prettier-ignore
+export default class AccreditedProgrammesManageAndDeliverService implements IAccreditedProgrammesManageAndDeliverService {
   constructor(private readonly hmppsAuthClientBuilder: RestClientBuilderWithoutToken<HmppsAuthClient>) {}
 
   async createRestClientFromUsername(username: ExpressUsername): Promise<RestClient> {
