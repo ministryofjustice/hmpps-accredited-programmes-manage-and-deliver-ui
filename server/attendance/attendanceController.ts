@@ -19,6 +19,11 @@ export default class AttendanceController {
     const { username } = req.user
     const { groupId, sessionId } = req.params
     const referralIds = this.referralIds(req)
+
+    if (!referralIds.length) {
+      return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session`)
+    }
+
     const sessionAttendees = (req.session.editSessionAttendance?.attendees || []) as SessionAttendance['attendees']
     let userInputData = null
     let formError: FormValidationError | null = null

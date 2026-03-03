@@ -2,7 +2,7 @@ import { RecordSessionAttendance } from '@manage-and-deliver-api'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
 
-export default class RecordSessionAttendanceNotesPresenter {
+export default class AttendanceSessionNotesPresenter {
   constructor(
     private readonly validationError: FormValidationError | null = null,
     private readonly recordAttendanceBffData: RecordSessionAttendance | null = null,

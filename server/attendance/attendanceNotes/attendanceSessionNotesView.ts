@@ -13,13 +13,6 @@ export default class AttendanceSessionNotesView {
     }
   }
 
-  private homePageLink() {
-    return {
-      text: 'Go to Accredited Programmes homepage',
-      href: `/`,
-    }
-  }
-
   private get characterCountArgs() {
     const hintText = this.presenter.text.recordsSessionNotesCharacterCount.hint
 
@@ -67,7 +60,6 @@ export default class AttendanceSessionNotesView {
       'attendance/recordAttendanceNotes',
       {
         backLinkArgs: this.backLinkArgs(),
-        homePageLink: this.homePageLink(),
         characterCountArgs: this.characterCountArgs,
         isLastReferral: this.presenter.lastReferral,
         showSkipAndAddLater: this.presenter.showSkipAndAddLater,

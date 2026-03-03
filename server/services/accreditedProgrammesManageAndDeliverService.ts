@@ -3,7 +3,6 @@ import {
   AllocateToGroupRequest,
   AllocateToGroupResponse,
   Attitude,
-  AttendanceAndSessionNotes,
   Availability,
   CaseListFilterValues,
   CaseListReferrals,
@@ -756,17 +755,4 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
     })) as SessionAttendance
   }
 
-  async getRecordAttendanceNotes(
-    username: ExpressUsername,
-    sessionId: string,
-    referralIds: string[],
-  ): Promise<AttendanceAndSessionNotes> {
-    const restClient = await this.createRestClientFromUsername(username)
-
-    return (await restClient.get({
-      path: `/bff/session/${sessionId}/record-attendance`,
-      headers: { Accept: 'application/json' },
-      query: { referralId: referralIds },
-    })) as AttendanceAndSessionNotes
-  }
 }

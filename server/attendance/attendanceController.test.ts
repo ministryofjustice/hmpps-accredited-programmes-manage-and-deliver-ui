@@ -32,6 +32,17 @@ describe('showRecordAttendancePage', () => {
   }
 
   describe('GET /group/:groupId/session/:sessionId/record-attendance', () => {
+    it('redirects to edit session when referralIds are missing from session state', async () => {
+      app = TestUtils.createTestAppWithSession({}, { accreditedProgrammesManageAndDeliverService })
+
+      await request(app)
+        .get('/group/111/session/6789/record-attendance')
+        .expect(302)
+        .expect('Location', '/group/111/session/6789/edit-session')
+
+      expect(accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData).not.toHaveBeenCalled()
+    })
+
     it('should fetch attendance options and load page correctly', async () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
@@ -84,6 +95,19 @@ describe('showRecordAttendancePage', () => {
   })
 
   describe('POST /group/:groupId/session/:sessionId/record-attendance', () => {
+    it('redirects to edit session when referralIds are missing from session state', async () => {
+      app = TestUtils.createTestAppWithSession({}, { accreditedProgrammesManageAndDeliverService })
+
+      await request(app)
+        .post('/group/111/session/6789/record-attendance')
+        .type('form')
+        .send({ 'attendance-referral1': 'ATTC' })
+        .expect(302)
+        .expect('Location', '/group/111/session/6789/edit-session')
+
+      expect(accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData).not.toHaveBeenCalled()
+    })
+
     it('should fetch session details with correct parameters and load page correctly for a single attendee', async () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
