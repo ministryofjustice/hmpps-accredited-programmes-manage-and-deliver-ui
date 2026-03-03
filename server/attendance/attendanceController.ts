@@ -29,8 +29,6 @@ export default class AttendanceController {
       referralIds,
     )
 
-    // Keep previously selected attendance outcomes and staged notes visible when users
-    // navigate back to this page from the notes step in the same edit-session journey.
     const recordAttendanceDataWithSessionSelections: RecordSessionAttendance = {
       ...recordAttendanceBffData,
       people: recordAttendanceBffData.people.map(person => {
@@ -51,7 +49,6 @@ export default class AttendanceController {
       }),
     }
 
-    // Build/validate attendee outcome payload from the radios on this page.
     const data = await new RecordAttendanceForm(
       req,
       recordAttendanceBffData.people.map(it => ({ referralId: it.referralId, name: it.name })),
@@ -68,8 +65,6 @@ export default class AttendanceController {
             person => person.referralId === attendee.referralId,
           )
 
-          // Preserve any already-staged notes for each referral while updating the selected
-          // attendance outcome from this page.
           return {
             ...attendee,
             sessionNotes: existingPerson?.sessionNotes || attendee.sessionNotes,
@@ -111,7 +106,7 @@ export default class AttendanceController {
     )
 
     const theGroupTitle = convertToUrlFriendlyKebabCase(recordAttendanceBffData.sessionTitle)
-    // slugged URL to keep links/bookmarks consistent.
+
     if (!groupTitle && req.method === 'GET') {
       return res.redirect(this.notesPageUri(groupId, sessionId, referralId, theGroupTitle))
     }
@@ -129,7 +124,6 @@ export default class AttendanceController {
     if (req.method === 'POST') {
       const isSkipAndAddLater = req.body.action === 'skip-and-add-later'
 
-      // "Skip and add later" must submit attendance without overwriting existing notes.
       if (currentAttendee && !isSkipAndAddLater) {
         currentAttendee.sessionNotes = req.body['record-session-attendance-notes'] || ''
       }
@@ -150,9 +144,6 @@ export default class AttendanceController {
       return res.redirect(this.notesPageUri(groupId, sessionId, referralIds[currentReferralIndex + 1], theGroupTitle))
     }
 
-    // Notes shown on page load are sourced in this order:
-    // 1) in-journey staged notes from session state,
-    // 2) notes from the BFF list payload.
     const selectedAttendanceCode = currentAttendee?.outcomeCode
     const notesValue = this.resolveNotesValue(currentAttendee?.sessionNotes, referralPerson?.sessionNotes)
 
@@ -190,7 +181,6 @@ export default class AttendanceController {
       return rawReferralIds
     }
 
-    // Defensive guard for older/legacy session shapes where a single ID may be stored as string.
     if (typeof rawReferralIds === 'string' && rawReferralIds.length > 0) {
       return [rawReferralIds]
     }
@@ -218,7 +208,6 @@ export default class AttendanceController {
         }
       }
 
-      // Do not send empty notes to the API; omit the field instead.
       const { sessionNotes: _sessionNotes, ...attendeeWithoutNotes } = attendee
       return attendeeWithoutNotes
     })
