@@ -477,6 +477,43 @@ describe('showRecordAttendancePage', () => {
         },
       )
     })
+
+    it('submits an explicit empty session note when user clears existing notes and submits', async () => {
+      sessionData = {
+        editSessionAttendance: {
+          referralIds: ['referral1'],
+          attendees: [{ referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: 'Existing note' }],
+        },
+      }
+
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Getting started 1' })
+      bffData.people = [
+        { ...bffData.people[0], referralId: 'referral1', name: 'Alice Brown', sessionNotes: 'Existing note' },
+      ]
+      accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
+      accreditedProgrammesManageAndDeliverService.createSessionAttendance.mockResolvedValue({
+        attendees: [{ referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: '' }],
+        responseMessage: 'Attendance updated',
+      })
+
+      await request(app)
+        .post('/group/111/session/6789/referral/referral1/getting-started-1-session-notes')
+        .type('form')
+        .send({
+          'record-session-attendance-notes': '',
+        })
+        .expect(302)
+
+      expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).toHaveBeenCalledWith(
+        'user1',
+        '6789',
+        {
+          attendees: [{ referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: '' }],
+        },
+      )
+    })
   })
 
   it('Calling with incorrect parameters returns a 400 and reloads the page with errors', async () => {

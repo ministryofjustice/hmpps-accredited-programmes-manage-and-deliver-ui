@@ -199,17 +199,16 @@ export default class AttendanceController {
 
   private normaliseAttendeesForSubmission(attendees: SessionAttendance['attendees']): SessionAttendance['attendees'] {
     return attendees.map(attendee => {
-      const sessionNotes = attendee.sessionNotes?.trim()
+      const { sessionNotes, ...attendeeWithoutNotes } = attendee
 
-      if (sessionNotes) {
-        return {
-          ...attendee,
-          sessionNotes,
-        }
+      if (typeof sessionNotes === 'undefined') {
+        return attendeeWithoutNotes
       }
 
-      const { sessionNotes: _sessionNotes, ...attendeeWithoutNotes } = attendee
-      return attendeeWithoutNotes
+      return {
+        ...attendeeWithoutNotes,
+        sessionNotes: sessionNotes.trim(),
+      }
     })
   }
 
