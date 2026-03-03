@@ -1,10 +1,14 @@
 import { Request, Response } from 'express'
+import { RecordSessionAttendance, SessionAttendance } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../utils/controllerUtils'
 import AttendancePresenter from './attendancePresenter'
 import AttendanceView from './attendanceView'
 import RecordAttendanceForm from './recordAttendanceForm'
 import { FormValidationError } from '../utils/formValidationError'
+import AttendanceSessionNotesPresenter from './attendanceNotes/attendanceSessionNotesPresenter'
+import AttendanceSessionNotesView from './attendanceNotes/attendanceSessionNotesView'
+import { convertToUrlFriendlyKebabCase } from '../utils/utils'
 
 export default class AttendanceController {
   constructor(
@@ -14,15 +18,40 @@ export default class AttendanceController {
   async showRecordAttendancePage(req: Request, res: Response): Promise<void> {
     const { username } = req.user
     const { groupId, sessionId } = req.params
+    const referralIds = this.referralIds(req)
+    const sessionAttendees = (req.session.editSessionAttendance?.attendees || []) as SessionAttendance['attendees']
     let userInputData = null
     let formError: FormValidationError | null = null
 
     const recordAttendanceBffData = await this.accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData(
       username,
       sessionId,
-      req.session.editSessionAttendance.referralIds,
+      referralIds,
     )
 
+    // Keep previously selected attendance outcomes and staged notes visible when users
+    // navigate back to this page from the notes step in the same edit-session journey.
+    const recordAttendanceDataWithSessionSelections: RecordSessionAttendance = {
+      ...recordAttendanceBffData,
+      people: recordAttendanceBffData.people.map(person => {
+        const stagedAttendee = sessionAttendees.find(attendee => attendee.referralId === person.referralId)
+
+        if (!stagedAttendee?.outcomeCode) {
+          return person
+        }
+
+        return {
+          ...person,
+          sessionNotes: stagedAttendee.sessionNotes || person.sessionNotes,
+          attendance: {
+            ...person.attendance,
+            code: stagedAttendee.outcomeCode,
+          },
+        }
+      }),
+    }
+
+    // Build/validate attendee outcome payload from the radios on this page.
     const data = await new RecordAttendanceForm(
       req,
       recordAttendanceBffData.people.map(it => ({ referralId: it.referralId, name: it.name })),
@@ -34,18 +63,188 @@ export default class AttendanceController {
         formError = data.error
         userInputData = req.body
       } else {
-        req.session.editSessionAttendance.attendees = data.paramsForUpdate.attendees
-        return res.redirect(
-          `/group/${groupId}/session/${sessionId}/referral/${req.session.editSessionAttendance.referralIds[0]}`,
-        )
+        req.session.editSessionAttendance.attendees = data.paramsForUpdate.attendees.map(attendee => {
+          const existingPerson = recordAttendanceDataWithSessionSelections.people.find(
+            person => person.referralId === attendee.referralId,
+          )
+
+          // Preserve any already-staged notes for each referral while updating the selected
+          // attendance outcome from this page.
+          return {
+            ...attendee,
+            sessionNotes: existingPerson?.sessionNotes || attendee.sessionNotes,
+          }
+        })
+        const sessionTitle = convertToUrlFriendlyKebabCase(recordAttendanceBffData.sessionTitle)
+        return res.redirect(this.notesPageUri(groupId, sessionId, referralIds[0], sessionTitle))
       }
     }
 
     const backLinkUri = `/group/${groupId}/session/${sessionId}/edit-session`
 
-    const presenter = new AttendancePresenter(recordAttendanceBffData, backLinkUri, formError, userInputData)
+    const presenter = new AttendancePresenter(
+      recordAttendanceDataWithSessionSelections,
+      backLinkUri,
+      formError,
+      userInputData,
+    )
     const view = new AttendanceView(presenter)
 
     return ControllerUtils.renderWithLayout(res, view, null)
+  }
+
+  async showRecordAttendanceNotesPage(req: Request, res: Response): Promise<void> {
+    const { username } = req.user
+    const { groupId, sessionId, referralId, groupTitle } = req.params
+
+    const referralIds = this.referralIds(req)
+    const attendees = (req.session.editSessionAttendance?.attendees || []) as SessionAttendance['attendees']
+
+    if (!referralIds.length) {
+      return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session`)
+    }
+
+    const recordAttendanceBffData = await this.accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData(
+      username,
+      sessionId,
+      referralIds,
+    )
+
+    const theGroupTitle = convertToUrlFriendlyKebabCase(recordAttendanceBffData.sessionTitle)
+    // slugged URL to keep links/bookmarks consistent.
+    if (!groupTitle && req.method === 'GET') {
+      return res.redirect(this.notesPageUri(groupId, sessionId, referralId, theGroupTitle))
+    }
+
+    const currentReferralIndex = referralIds.findIndex(id => id === referralId)
+
+    if (currentReferralIndex === -1) {
+      return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session`)
+    }
+
+    const isLastReferral = currentReferralIndex === referralIds.length - 1
+    const currentAttendee = attendees.find(attendee => attendee.referralId === referralId)
+    const referralPerson = recordAttendanceBffData.people.find(person => person.referralId === referralId)
+
+    if (req.method === 'POST') {
+      const isSkipAndAddLater = req.body.action === 'skip-and-add-later'
+
+      // "Skip and add later" must submit attendance without overwriting existing notes.
+      if (currentAttendee && !isSkipAndAddLater) {
+        currentAttendee.sessionNotes = req.body['record-session-attendance-notes'] || ''
+      }
+
+      if (isLastReferral) {
+        await this.accreditedProgrammesManageAndDeliverService.createSessionAttendance(username, sessionId, {
+          attendees: this.normaliseAttendeesForSubmission(attendees),
+        })
+
+        const successMessage = this.attendanceSuccessMessage(recordAttendanceBffData, referralIds)
+
+        delete req.session.editSessionAttendance
+        return res.redirect(
+          `/group/${groupId}/session/${sessionId}/edit-session?message=${encodeURIComponent(successMessage)}`,
+        )
+      }
+
+      return res.redirect(this.notesPageUri(groupId, sessionId, referralIds[currentReferralIndex + 1], theGroupTitle))
+    }
+
+    // Notes shown on page load are sourced in this order:
+    // 1) in-journey staged notes from session state,
+    // 2) notes from the BFF list payload.
+    const selectedAttendanceCode = currentAttendee?.outcomeCode
+    const notesValue = this.resolveNotesValue(currentAttendee?.sessionNotes, referralPerson?.sessionNotes)
+
+    const backLinkUri =
+      currentReferralIndex > 0
+        ? this.notesPageUri(groupId, sessionId, referralIds[currentReferralIndex - 1], theGroupTitle)
+        : `/group/${groupId}/session/${sessionId}/record-attendance`
+    let selectedOptionText = 'No - did not attend'
+    if (selectedAttendanceCode === 'ATTC') {
+      selectedOptionText = 'Yes - attended'
+    } else if (selectedAttendanceCode === 'AFTC') {
+      selectedOptionText = 'Attended but failed to comply'
+    }
+
+    const presenter = new AttendanceSessionNotesPresenter(
+      null,
+      recordAttendanceBffData,
+      groupId,
+      sessionId,
+      selectedOptionText,
+      isLastReferral,
+      referralId,
+      notesValue,
+      backLinkUri,
+    )
+    const view = new AttendanceSessionNotesView(presenter)
+
+    return ControllerUtils.renderWithLayout(res, view, null)
+  }
+
+  private referralIds(req: Request): string[] {
+    const rawReferralIds = req.session.editSessionAttendance?.referralIds as unknown
+
+    if (Array.isArray(rawReferralIds)) {
+      return rawReferralIds
+    }
+
+    // Defensive guard for older/legacy session shapes where a single ID may be stored as string.
+    if (typeof rawReferralIds === 'string' && rawReferralIds.length > 0) {
+      return [rawReferralIds]
+    }
+
+    return []
+  }
+
+  private attendanceSuccessMessage(recordAttendanceBffData: RecordSessionAttendance, referralIds: string[]): string {
+    const names = referralIds
+      .map(id => recordAttendanceBffData.people.find(person => person.referralId === id)?.name)
+      .filter((name): name is string => Boolean(name))
+
+    const formattedNames = this.formatNames(names)
+    return `Attendance recorded for '${formattedNames}'.`
+  }
+
+  private normaliseAttendeesForSubmission(attendees: SessionAttendance['attendees']): SessionAttendance['attendees'] {
+    return attendees.map(attendee => {
+      const sessionNotes = attendee.sessionNotes?.trim()
+
+      if (sessionNotes) {
+        return {
+          ...attendee,
+          sessionNotes,
+        }
+      }
+
+      // Do not send empty notes to the API; omit the field instead.
+      const { sessionNotes: _sessionNotes, ...attendeeWithoutNotes } = attendee
+      return attendeeWithoutNotes
+    })
+  }
+
+  private formatNames(names: string[]): string {
+    if (!names.length) {
+      return 'person(s)'
+    }
+
+    if (names.length === 1) {
+      return names[0]
+    }
+
+    if (names.length === 2) {
+      return `${names[0]} and ${names[1]}`
+    }
+
+    return `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`
+  }
+
+  private notesPageUri(groupId: string, sessionId: string, referralId: string, groupTitle: string): string {
+    return `/group/${groupId}/session/${sessionId}/referral/${referralId}/${groupTitle}-session-notes`
+  }
+
+  private resolveNotesValue(attendeeNotes?: string, bffNotes?: string): string {
+    return attendeeNotes || bffNotes || ''
   }
 }

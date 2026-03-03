@@ -3,6 +3,7 @@ import {
   AllocateToGroupRequest,
   AllocateToGroupResponse,
   Attitude,
+  AttendanceAndSessionNotes,
   Availability,
   CaseListFilterValues,
   CaseListReferrals,
@@ -51,6 +52,7 @@ import {
   ScheduleSessionTypeResponse,
   SentenceInformation,
   Session,
+  SessionAttendance,
   SessionScheduleResponse,
   ThinkingAndBehaviour,
   UpdateAvailability,
@@ -80,7 +82,9 @@ export interface IAccreditedProgrammesManageAndDeliverService {
     referralId: string,
   ): Promise<DeliveryLocationPreferencesFormData>
 }
-export default class AccreditedProgrammesManageAndDeliverService implements IAccreditedProgrammesManageAndDeliverService {
+export default class AccreditedProgrammesManageAndDeliverService
+  implements IAccreditedProgrammesManageAndDeliverService
+{
   constructor(private readonly hmppsAuthClientBuilder: RestClientBuilderWithoutToken<HmppsAuthClient>) {}
 
   async createRestClientFromUsername(username: ExpressUsername): Promise<RestClient> {
@@ -737,5 +741,33 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
       headers: { Accept: 'application/json' },
       query: { referralId: referralIds },
     })) as RecordSessionAttendance
+  }
+
+  async createSessionAttendance(
+    username: ExpressUsername,
+    sessionId: string,
+    sessionAttendance: SessionAttendance,
+  ): Promise<SessionAttendance> {
+    const restClient = await this.createRestClientFromUsername(username)
+
+    return (await restClient.post({
+      path: `/session/${sessionId}/attendance`,
+      headers: { Accept: 'application/json' },
+      data: sessionAttendance,
+    })) as SessionAttendance
+  }
+
+  async getRecordAttendanceNotes(
+    username: ExpressUsername,
+    sessionId: string,
+    referralIds: string[],
+  ): Promise<AttendanceAndSessionNotes> {
+    const restClient = await this.createRestClientFromUsername(username)
+
+    return (await restClient.get({
+      path: `/bff/session/${sessionId}/record-attendance`,
+      headers: { Accept: 'application/json' },
+      query: { referralId: referralIds },
+    })) as AttendanceAndSessionNotes
   }
 }

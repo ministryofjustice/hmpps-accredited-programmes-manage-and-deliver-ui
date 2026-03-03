@@ -2,6 +2,7 @@ import type { components } from './imported'
 
 type AlcoholMisuseDetails = components['schemas']['AlcoholMisuseDetails']
 type Attitude = components['schemas']['Attitude']
+type AttendanceAndSessionNotes = components['schemas']['AttendanceAndSessionNotes']
 type Availability = components['schemas']['Availability']
 type CohortEnum = components['schemas']['ReferralDetails']['cohort']
 type CreateAvailability = components['schemas']['CreateAvailability']
@@ -89,6 +90,7 @@ export type {
   AlcoholMisuseDetails,
   AllocateToGroupRequest,
   AllocateToGroupResponse,
+  AttendanceAndSessionNotes,
   Attitude,
   Availability,
   CaseListFilterValues,

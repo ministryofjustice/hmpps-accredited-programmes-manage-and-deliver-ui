@@ -49,6 +49,15 @@ describe('fields', () => {
         expect(Object.keys(fields)).toContain(fieldKey)
       })
     })
+
+    it('should handle null attendance without throwing', () => {
+      const bffData = recordSessionAttendanceFactory.build()
+      bffData.people[0].attendance = null as never
+
+      const presenter = new AttendancePresenter(bffData, 'backlink', null)
+
+      expect(presenter.fields[`attendance-${bffData.people[0].referralId}`].value).toBe('')
+    })
   })
 
   it('should return field with error message when validation error is passed', () => {
