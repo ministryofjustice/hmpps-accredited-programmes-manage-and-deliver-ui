@@ -4,8 +4,6 @@ import AttendanceSessionNotesPresenter from './attendanceSessionNotesPresenter'
 export default class AttendanceSessionNotesView {
   constructor(private readonly presenter: AttendanceSessionNotesPresenter) {}
 
-  readonly sessionTitle: string
-
   private backLinkArgs() {
     return {
       text: 'Back',
