@@ -43,3 +43,15 @@ describe('GET /', () => {
       })
   })
 })
+
+describe('GET /group/:groupId/group-details', () => {
+  it('should render group details page', () => {
+    return request(app)
+      .get('/group/group-id/group-details')
+      .expect('Content-Type', /html/)
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('Group details')
+      })
+  })
+})

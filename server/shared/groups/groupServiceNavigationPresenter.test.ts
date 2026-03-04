@@ -23,8 +23,13 @@ describe('GroupServiceNavigationPresenter', () => {
         classes: 'group-overview__service-navigation',
         navigation: [
           {
+            href: `/group/${groupId}/group-details`,
+            text: 'Group details',
+            active: false,
+          },
+          {
             href: `/group/${groupId}/waitlist`,
-            text: 'Allocations',
+            text: 'Allocations and waitlist',
             active: false,
           },
           {
@@ -35,11 +40,6 @@ describe('GroupServiceNavigationPresenter', () => {
           {
             href: `/group/${groupId}/sessions-and-attendance`,
             text: 'Sessions and attendance',
-            active: false,
-          },
-          {
-            href: `/group/${groupId}/group-details`,
-            text: 'Group details',
             active: false,
           },
         ],

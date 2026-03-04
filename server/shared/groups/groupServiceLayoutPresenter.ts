@@ -1,8 +1,8 @@
 export enum GroupServiceNavigationValues {
+  groupDetailsTab = 'details',
   allocationsTab = 'allocations',
   scheduleOverviewTab = 'scheduleOverview',
   sessionsAndAttendanceTab = 'sessions',
-  groupOverviewTab = 'details',
 }
 
 export default class GroupServiceLayoutPresenter {
@@ -19,8 +19,13 @@ export default class GroupServiceLayoutPresenter {
       classes: 'group-overview__service-navigation',
       navigation: [
         {
+          href: `/group/${this.groupId}/group-details`,
+          text: 'Group details',
+          active: this.activePage === GroupServiceNavigationValues.groupDetailsTab,
+        },
+        {
           href: `/group/${this.groupId}/waitlist`,
-          text: 'Allocations',
+          text: 'Allocations and waitlist',
           active: this.activePage === GroupServiceNavigationValues.allocationsTab,
         },
         {
@@ -32,11 +37,6 @@ export default class GroupServiceLayoutPresenter {
           href: `/group/${this.groupId}/sessions-and-attendance`,
           text: 'Sessions and attendance',
           active: this.activePage === GroupServiceNavigationValues.sessionsAndAttendanceTab,
-        },
-        {
-          href: `/group/${this.groupId}/group-details`,
-          text: 'Group details',
-          active: this.activePage === GroupServiceNavigationValues.groupOverviewTab,
         },
       ],
     }
