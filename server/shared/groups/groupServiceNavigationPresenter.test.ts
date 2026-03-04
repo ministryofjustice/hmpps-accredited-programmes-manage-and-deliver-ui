@@ -8,7 +8,7 @@ describe('GroupServiceNavigationPresenter', () => {
     jest.restoreAllMocks()
   })
 
-  describe('getServiceNavigationArgs', () => {
+  describe('getMojSubNavigationArgs', () => {
     it('should return navigation args with allocations active', () => {
       // Used as an example to test the schedule tab, as service navigation presenter is protected.
       const presenter = new SchedulePresenter(groupId, {
@@ -19,12 +19,16 @@ describe('GroupServiceNavigationPresenter', () => {
         code: '',
       })
 
-      expect(presenter.getServiceNavigationArgs()).toEqual({
-        classes: 'group-overview__service-navigation',
-        navigation: [
+      expect(presenter.getMojSubNavigationArgs()).toEqual({
+        items: [
+          {
+            href: `/group/${groupId}/group-details`,
+            text: 'Group details',
+            active: false,
+          },
           {
             href: `/group/${groupId}/waitlist`,
-            text: 'Allocations',
+            text: 'Allocations and waitlist',
             active: false,
           },
           {
@@ -35,11 +39,6 @@ describe('GroupServiceNavigationPresenter', () => {
           {
             href: `/group/${groupId}/sessions-and-attendance`,
             text: 'Sessions and attendance',
-            active: false,
-          },
-          {
-            href: `/group/${groupId}/group-details`,
-            text: 'Group details',
             active: false,
           },
         ],

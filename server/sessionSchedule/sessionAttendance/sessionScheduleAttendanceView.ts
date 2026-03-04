@@ -14,7 +14,7 @@ export default class SessionScheduleAttendanceView {
           headingLevel: 2,
           items: this.presenter.getAccordionItems(),
         },
-        serviceNavigationArgs: this.presenter.getServiceNavigationArgs(),
+        serviceNavigationArgs: this.presenter.getMojSubNavigationArgs(),
       },
     ]
   }
