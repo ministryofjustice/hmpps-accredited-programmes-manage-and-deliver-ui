@@ -5,7 +5,6 @@ import ChangeCohortController from '../cohort/changeCohortController'
 import CreateGroupController from '../createGroup/createGroupController'
 import EditSessionController from '../editSession/editSessionController'
 import GroupController from '../group/groupController'
-import GroupDetailsController from '../groupDetails/groupDetailsController'
 import GroupAllocationNotesController from '../groupAllocationNotes/groupAllocationNotesController'
 import AddToGroupController from '../groupOverview/addToGroup/addToGroupController'
 import GroupOverviewController from '../groupOverview/groupOverviewController'
@@ -44,7 +43,6 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const groupAllocationNotesController = new GroupAllocationNotesController(accreditedProgrammesManageAndDeliverService)
   const createGroupController = new CreateGroupController(accreditedProgrammesManageAndDeliverService)
   const groupController = new GroupController(accreditedProgrammesManageAndDeliverService)
-  const groupDetailsController = new GroupDetailsController()
   const sessionScheduleController = new SessionScheduleController(accreditedProgrammesManageAndDeliverService)
   const editSessionController = new EditSessionController(accreditedProgrammesManageAndDeliverService)
   const attendanceController = new AttendanceController(accreditedProgrammesManageAndDeliverService)
@@ -229,10 +227,6 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await createGroupController.showCreateGroupStart(req, res)
   })
 
-  getOrPost('/group/:groupId/create-a-group/create-group', async (req, res) => {
-    await createGroupController.showCreateGroupStart(req, res)
-  })
-
   getOrPost('/group/create-a-group/create-group-code', async (req, res) => {
     await createGroupController.showCreateGroupCode(req, res)
   })
@@ -280,10 +274,6 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   post('/group/:groupId/waitlist', async (req, res, next) => {
     await groupOverviewController.showGroupOverviewWaitlist(req, res)
-  })
-
-  get('/group/:groupId/group-details', async (req, res, next) => {
-    await groupDetailsController.showGroupDetailsPage(req, res)
   })
 
   get('/group/:groupId/schedule-overview', async (req, res, next) => {
