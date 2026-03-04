@@ -1,12 +1,12 @@
 import { Request, Response } from 'express'
+import AccreditedProgrammesManageAndDeliverService from '../../services/accreditedProgrammesManageAndDeliverService'
 import ControllerUtils from '../../utils/controllerUtils'
 import { FormValidationError } from '../../utils/formValidationError'
-import AccreditedProgrammesManageAndDeliverService from '../../services/accreditedProgrammesManageAndDeliverService'
 import RemoveFromGroupForm from './removeFromGroupForm'
 import RemoveFromGroupPresenter from './removeFromGroupPresenter'
-import RemoveFromGroupView from './removeFromGroupView'
 import RemoveFromGroupUpdateStatusPresenter from './removeFromGroupUpdateStatusPresenter'
 import RemoveFromGroupUpdateStatusView from './removeFromGroupUpdateStatusView'
+import RemoveFromGroupView from './removeFromGroupView'
 
 export default class RemoveFromGroupController {
   constructor(
@@ -67,7 +67,7 @@ export default class RemoveFromGroupController {
       }
     }
 
-    const statusDetails = await this.accreditedProgrammesManageAndDeliverService.removeFromGroupStatusTransitions(
+    const statusDetails = await this.accreditedProgrammesManageAndDeliverService.removeFromGroupStatusTransitionDetails(
       referralId,
       username,
     )

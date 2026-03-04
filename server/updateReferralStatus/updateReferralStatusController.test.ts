@@ -1,12 +1,12 @@
-import { Express } from 'express'
-import request from 'supertest'
-import { randomUUID } from 'crypto'
-import { ReferralDetails } from '@manage-and-deliver-api'
-import { SessionData } from 'express-session'
 import { fakerEN_GB as faker } from '@faker-js/faker'
-import referralStatusFormDataFactory from '../testutils/factories/referralStatusFormDataFactory'
+import { ReferralDetails } from '@manage-and-deliver-api'
+import { randomUUID } from 'crypto'
+import { Express } from 'express'
+import { SessionData } from 'express-session'
+import request from 'supertest'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
+import referralStatusFormDataFactory from '../testutils/factories/referralStatusFormDataFactory'
 import statusHistoryFactory from '../testutils/factories/statusHistoryFactory'
 import TestUtils from '../testutils/testUtils'
 
@@ -33,7 +33,7 @@ beforeEach(() => {
   }
   app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
   accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
-  accreditedProgrammesManageAndDeliverService.getStatusDetails.mockResolvedValue(statusDetails)
+  accreditedProgrammesManageAndDeliverService.getStatusTransitionDetails.mockResolvedValue(statusDetails)
   accreditedProgrammesManageAndDeliverService.updateStatus.mockResolvedValue({
     referralStatusHistory: statusHistory,
     message: "Jennifer Wilson's referral status is now Awaiting allocation. They have been removed from group BCCDD1",
@@ -56,14 +56,16 @@ describe('Update Referral Status Controller', () => {
 
       it('calls the service with correct parameters', async () => {
         await request(app).get(`/referral/${referralDetails.id}/update-status`).expect(200)
-        expect(accreditedProgrammesManageAndDeliverService.getStatusDetails).toHaveBeenCalledWith(
+        expect(accreditedProgrammesManageAndDeliverService.getStatusTransitionDetails).toHaveBeenCalledWith(
           referralDetails.id,
           'user1',
         )
       })
 
       it('handles service errors gracefully', async () => {
-        accreditedProgrammesManageAndDeliverService.getStatusDetails.mockRejectedValue(new Error('Service unavailable'))
+        accreditedProgrammesManageAndDeliverService.getStatusTransitionDetails.mockRejectedValue(
+          new Error('Service unavailable'),
+        )
         return request(app).get(`/referral/${referralDetails.id}/update-status`).expect(500)
       })
     })
@@ -100,6 +102,19 @@ describe('Update Referral Status Controller', () => {
     })
   })
   describe('update-status-interim', () => {
+    beforeEach(() => {
+      accreditedProgrammesManageAndDeliverService.getStatusTransitionDetails.mockResolvedValue({
+        ...statusDetails,
+        suggestedStatus: {
+          name: 'On programme',
+          statusDescriptionId: randomUUID(),
+        },
+        currentGroupDetails: {
+          currentlyAllocatedGroupCode: 'Building Choices 1',
+          currentlyAllocatedGroupId: randomUUID(),
+        },
+      })
+    })
     describe(`GET /referral/:referralDetails.id/update-status-interim`, () => {
       it('loads the update status interim page', async () => {
         return request(app)
@@ -149,6 +164,17 @@ describe('Update Referral Status Controller', () => {
   describe('update-status-fixed', () => {
     describe(`GET /referral/:referralDetails.id/update-status-details`, () => {
       it('loads the update status fixed page for Scheduled', async () => {
+        accreditedProgrammesManageAndDeliverService.getStatusTransitionDetails.mockResolvedValue({
+          ...statusDetails,
+          suggestedStatus: {
+            name: 'On programme',
+            statusDescriptionId: randomUUID(),
+          },
+          currentGroupDetails: {
+            currentlyAllocatedGroupCode: 'Building Choices 1',
+            currentlyAllocatedGroupId: randomUUID(),
+          },
+        })
         accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue({
           ...referralDetails,
           currentStatusDescription: 'Scheduled',
@@ -163,6 +189,17 @@ describe('Update Referral Status Controller', () => {
       })
 
       it('loads the update status fixed page for On programme', async () => {
+        accreditedProgrammesManageAndDeliverService.getStatusTransitionDetails.mockResolvedValue({
+          ...statusDetails,
+          suggestedStatus: {
+            name: 'On programme',
+            statusDescriptionId: randomUUID(),
+          },
+          currentGroupDetails: {
+            currentlyAllocatedGroupCode: 'Building Choices 1',
+            currentlyAllocatedGroupId: randomUUID(),
+          },
+        })
         accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue({
           ...referralDetails,
           currentStatusDescription: 'On programme',
@@ -183,6 +220,17 @@ describe('Update Referral Status Controller', () => {
           ...referralDetails,
           currentStatusDescription: 'On programme',
         })
+        accreditedProgrammesManageAndDeliverService.getStatusTransitionDetails.mockResolvedValue({
+          ...statusDetails,
+          suggestedStatus: {
+            name: 'On programme',
+            statusDescriptionId: randomUUID(),
+          },
+          currentGroupDetails: {
+            currentlyAllocatedGroupCode: 'Building Choices 1',
+            currentlyAllocatedGroupId: randomUUID(),
+          },
+        })
         return request(app)
           .post(`/referral/${referralDetails.id}/update-status-details`)
           .type('form')
@@ -196,6 +244,17 @@ describe('Update Referral Status Controller', () => {
       })
 
       it('returns 400 and displays error if more-details is too long', async () => {
+        accreditedProgrammesManageAndDeliverService.getStatusTransitionDetails.mockResolvedValue({
+          ...statusDetails,
+          suggestedStatus: {
+            name: 'On programme',
+            statusDescriptionId: randomUUID(),
+          },
+          currentGroupDetails: {
+            currentlyAllocatedGroupCode: 'Building Choices 1',
+            currentlyAllocatedGroupId: randomUUID(),
+          },
+        })
         accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue({
           ...referralDetails,
           currentStatusDescription: 'Scheduled',
