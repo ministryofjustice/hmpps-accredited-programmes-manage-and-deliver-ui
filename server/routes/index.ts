@@ -20,6 +20,7 @@ import type { Services } from '../services'
 import SessionScheduleController from '../sessionSchedule/sessionScheduleController'
 import UpdateReferralStatusController from '../updateReferralStatus/updateReferralStatusController'
 import AttendanceController from '../attendance/attendanceController'
+import HomeController from '../home/homeController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
@@ -48,9 +49,10 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const sessionScheduleController = new SessionScheduleController(accreditedProgrammesManageAndDeliverService)
   const editSessionController = new EditSessionController(accreditedProgrammesManageAndDeliverService)
   const attendanceController = new AttendanceController(accreditedProgrammesManageAndDeliverService)
+  const homeController = new HomeController()
 
   get('/', async (req, res, next) => {
-    await caselistController.showOpenCaselist(req, res)
+    await homeController.showHomePage(req, res)
   })
 
   get('/pdu/open-referrals', async (req, res, next) => {

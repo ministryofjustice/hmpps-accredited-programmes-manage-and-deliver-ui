@@ -1,0 +1,31 @@
+{% extends "../partials/layout.njk" %}
+{% from "../components/card-group/template.njk" import cardGroup %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block main %}
+  <div class="heading-background">
+    {% block content %}
+    <div class="govuk-width-container">
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds ">
+          <span class="govuk-caption-xl">{{text.headingCaption}}</span>
+          <h1 class="govuk-heading-xl">{{text.pageHeading}}</h1>
+        </div>
+      </div>
+    </div>
+
+    <div class="home-background">
+      <div class ="govuk-width-container">
+        <div class="govuk-grid-row">
+          <div>
+              {{ cardGroup(cardGroupArgs) }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% endblock %}
+  </div>
+{% endblock %}
