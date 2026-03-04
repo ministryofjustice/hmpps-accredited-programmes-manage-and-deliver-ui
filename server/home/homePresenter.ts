@@ -4,7 +4,7 @@ export default class HomePresenter {
   get text() {
     return {
       pageHeading: 'Accredited Programmes',
-      headingCaption: `Record attendance and progress`,
+      headingCaption: '',
     }
   }
 }
