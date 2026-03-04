@@ -1,4 +1,5 @@
 import ViewUtils from '../../utils/viewUtils'
+import { SummaryListArgs } from '../../utils/govukFrontendTypes'
 import AttendanceSessionNotesPresenter from './attendanceSessionNotesPresenter'
 
 export default class AttendanceSessionNotesView {
@@ -29,7 +30,7 @@ export default class AttendanceSessionNotesView {
     }
   }
 
-  private get summaryListArgs() {
+  private get summaryListArgs(): SummaryListArgs | null {
     if (!this.presenter.personName || !this.presenter.attendanceOptionText) {
       return null
     }
@@ -64,7 +65,6 @@ export default class AttendanceSessionNotesView {
         summaryListArgs: this.summaryListArgs,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         text: this.presenter.text,
-        value: this.presenter.fields.recordSessionAttendanceNotes.attendanceValue,
       },
     ]
   }

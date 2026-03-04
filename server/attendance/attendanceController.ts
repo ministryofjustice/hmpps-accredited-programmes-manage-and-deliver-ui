@@ -134,11 +134,16 @@ export default class AttendanceController {
       }
 
       if (isLastReferral) {
-        await this.accreditedProgrammesManageAndDeliverService.createSessionAttendance(username, sessionId, {
-          attendees: this.normaliseAttendeesForSubmission(attendees),
-        })
+        const createSessionAttendanceResponse =
+          await this.accreditedProgrammesManageAndDeliverService.createSessionAttendance(username, sessionId, {
+            attendees: this.normaliseAttendeesForSubmission(attendees),
+          })
 
-        const successMessage = this.attendanceSuccessMessage(recordAttendanceBffData, referralIds)
+        const attendeeReferralIds = createSessionAttendanceResponse.attendees.map(attendee => attendee.referralId)
+        const successMessage = this.attendanceSuccessMessage(
+          recordAttendanceBffData,
+          attendeeReferralIds.length ? attendeeReferralIds : referralIds,
+        )
 
         delete req.session.editSessionAttendance
         return res.redirect(
@@ -156,19 +161,13 @@ export default class AttendanceController {
       currentReferralIndex > 0
         ? this.notesPageUri(groupId, sessionId, referralIds[currentReferralIndex - 1], theGroupTitle)
         : `/group/${groupId}/session/${sessionId}/record-attendance`
-    let selectedOptionText = 'No - did not attend'
-    if (selectedAttendanceCode === 'ATTC') {
-      selectedOptionText = 'Yes - attended'
-    } else if (selectedAttendanceCode === 'AFTC') {
-      selectedOptionText = 'Attended but failed to comply'
-    }
 
     const presenter = new AttendanceSessionNotesPresenter(
       null,
       recordAttendanceBffData,
       groupId,
       sessionId,
-      selectedOptionText,
+      selectedAttendanceCode,
       isLastReferral,
       referralId,
       notesValue,
@@ -193,15 +192,6 @@ export default class AttendanceController {
     return []
   }
 
-  private attendanceSuccessMessage(recordAttendanceBffData: RecordSessionAttendance, referralIds: string[]): string {
-    const names = referralIds
-      .map(id => recordAttendanceBffData.people.find(person => person.referralId === id)?.name)
-      .filter((name): name is string => Boolean(name))
-
-    const formattedNames = this.formatNames(names)
-    return `Attendance recorded for '${formattedNames}'.`
-  }
-
   private normaliseAttendeesForSubmission(attendees: SessionAttendance['attendees']): SessionAttendance['attendees'] {
     return attendees.map(attendee => {
       const { sessionNotes, ...attendeeWithoutNotes } = attendee
@@ -215,6 +205,15 @@ export default class AttendanceController {
         sessionNotes: sessionNotes.trim(),
       }
     })
+  }
+
+  private attendanceSuccessMessage(recordAttendanceBffData: RecordSessionAttendance, referralIds: string[]): string {
+    const names = referralIds
+      .map(id => recordAttendanceBffData.people.find(person => person.referralId === id)?.name)
+      .filter((name): name is string => Boolean(name))
+
+    const formattedNames = this.formatNames(names)
+    return `Attendance recorded for ${formattedNames}.`
   }
 
   private formatNames(names: string[]): string {

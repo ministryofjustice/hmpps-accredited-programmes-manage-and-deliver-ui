@@ -4,15 +4,15 @@ import PresenterUtils from '../../utils/presenterUtils'
 
 export default class AttendanceSessionNotesPresenter {
   constructor(
-    private readonly validationError: FormValidationError | null = null,
-    private readonly recordAttendanceBffData: RecordSessionAttendance | null = null,
-    private groupId: string = '',
-    private sessionId: string = '',
-    private readonly selectedOptionText: string = '',
-    private readonly isLastReferral: boolean = false,
-    private readonly referralId: string = '',
-    private readonly notesValue: string = '',
-    private readonly backLink: string = '',
+    private readonly validationError: FormValidationError | null,
+    private readonly recordAttendanceBffData: RecordSessionAttendance | null,
+    private readonly groupId: string,
+    private readonly sessionId: string,
+    private readonly selectedAttendanceCode: string | undefined,
+    private readonly isLastReferral: boolean,
+    private readonly referralId: string,
+    private readonly notesValue: string,
+    private readonly backLink: string,
   ) {}
 
   get lastReferral() {
@@ -29,9 +29,7 @@ export default class AttendanceSessionNotesPresenter {
 
   get text() {
     const hintText =
-      this.selectedOptionText === 'Attended but failed to comply'
-        ? 'Include details of why the person attended but failed to comply.'
-        : ''
+      this.selectedAttendanceCode === 'AFTC' ? 'Include details of why the person attended but failed to comply.' : ''
 
     return {
       headingCaption: 'Record attendance and progress',
@@ -52,10 +50,10 @@ export default class AttendanceSessionNotesPresenter {
   }
 
   get attendanceOptionText() {
-    if (this.selectedOptionText === 'Yes - attended') {
+    if (this.selectedAttendanceCode === 'ATTC') {
       return { attendanceState: '<span class="govuk-tag govuk-tag--blue">Attended</span>' }
     }
-    if (this.selectedOptionText === 'Attended but failed to comply') {
+    if (this.selectedAttendanceCode === 'AFTC') {
       return { attendanceState: '<span class="govuk-tag govuk-tag--yellow">Attended - failed to comply</span>' }
     }
     return { attendanceState: '<span class="govuk-tag govuk-tag--red">Not attended</span>' }

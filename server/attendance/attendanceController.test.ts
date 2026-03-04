@@ -480,7 +480,7 @@ describe('showRecordAttendancePage', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            "Redirecting to /group/111/session/6789/edit-session?message=Attendance%20recorded%20for%20'Alice%20Brown'.",
+            'Redirecting to /group/111/session/6789/edit-session?message=Attendance%20recorded%20for%20Alice%20Brown.',
           )
         })
 
@@ -566,6 +566,51 @@ describe('showRecordAttendancePage', () => {
           attendees: [{ referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: '' }],
         },
       )
+    })
+
+    it('formats success message correctly when submitting attendance for multiple attendees', async () => {
+      sessionData = {
+        editSessionAttendance: {
+          referralIds: ['referral1', 'referral2', 'referral3'],
+          attendees: [
+            { referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: '' },
+            { referralId: 'referral2', outcomeCode: 'ATTC', sessionNotes: '' },
+            { referralId: 'referral3', outcomeCode: 'ATTC', sessionNotes: '' },
+          ],
+        },
+      }
+
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Getting started 1' })
+      bffData.people = [
+        { ...bffData.people[0], referralId: 'referral1', name: 'Sham Booth' },
+        { ...bffData.people[1], referralId: 'referral2', name: 'Adrian Poole' },
+        { ...bffData.people[0], referralId: 'referral3', name: 'Alex River' },
+      ]
+
+      accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
+      accreditedProgrammesManageAndDeliverService.createSessionAttendance.mockResolvedValue({
+        attendees: [
+          { referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: '' },
+          { referralId: 'referral2', outcomeCode: 'ATTC', sessionNotes: '' },
+          { referralId: 'referral3', outcomeCode: 'ATTC', sessionNotes: '' },
+        ],
+        responseMessage: 'Attendance saved for session 80424fbb-464f-4bb3-8fb0-9b32e107c7b9.',
+      })
+
+      await request(app)
+        .post('/group/111/session/6789/referral/referral3/getting-started-1-session-notes')
+        .type('form')
+        .send({
+          'record-session-attendance-notes': '',
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain(
+            'Redirecting to /group/111/session/6789/edit-session?message=Attendance%20recorded%20for%20Sham%20Booth%2C%20Adrian%20Poole%20and%20Alex%20River.',
+          )
+        })
     })
   })
 
