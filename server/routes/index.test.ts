@@ -33,13 +33,13 @@ afterEach(() => {
 })
 
 describe('GET /', () => {
-  it('should render case list page', () => {
+  it('should render the home page', () => {
     return request(app)
       .get('/')
       .expect('Content-Type', /html/)
       .expect(200)
       .expect(res => {
-        expect(res.text).toContain('Open referrals')
+        expect(res.text).toContain('Accredited Programmes')
       })
   })
 })

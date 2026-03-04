@@ -4,53 +4,25 @@
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
 
-{% set cards = [
-  {
-    dataTest: 'global-search',
-    href: '#',
-    title: 'Global search',
-    description: 'Search for someone in any establishment, or who has been released.'
-  },
-  {
-    dataTest: 'manage-prisoner-whereabouts',
-    href: '#',
-    title: 'Manage prisoner whereabouts',
-    description: 'View unlock lists and manage attendance.'
-  },
-  {
-    dataTest: 'use-of-force',
-    href: '#',
-    title: 'Use of force incidents',
-    description: 'Manage and view incident reports and statements.'
-  }
-] %}
-
-
 {% block main %}
   <div class="heading-background">
     {% block content %}
     <div class="govuk-width-container">
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds ">
-
-          <span class="govuk-caption-l">{{text.headingCaption}}</span>
-          <h1 class="govuk-heading-l">{{text.pageHeading}}</h1>
-
-
+          <span class="govuk-caption-xl">{{text.headingCaption}}</span>
+          <h1 class="govuk-heading-xl">{{text.pageHeading}}</h1>
         </div>
       </div>
     </div>
+
     <div class="home-background">
       <div class ="govuk-width-container">
-
-
         <div class="govuk-grid-row">
-          <div class="govuk-grid-column-two-thirds ">
-          aaa
-                  {{ cardGroup(cards) }}
+          <div>
+              {{ cardGroup(cardGroupArgs) }}
           </div>
         </div>
-
       </div>
     </div>
 

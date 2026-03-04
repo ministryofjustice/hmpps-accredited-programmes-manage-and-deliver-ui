@@ -4,7 +4,7 @@ import HomePresenter from './homePresenter'
 import HomeView from './homeView'
 
 export default class HomeController {
-  constructor() {} // private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
+  constructor() {}
 
   async showHomePage(req: Request, res: Response): Promise<void> {
     const presenter = new HomePresenter()

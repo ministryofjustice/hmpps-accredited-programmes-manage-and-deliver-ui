@@ -3,7 +3,7 @@ export default class HomePresenter {
 
   get text() {
     return {
-      pageHeading: 'pageHeading',
+      pageHeading: 'Accredited Programmes',
       headingCaption: `Record attendance and progress`,
     }
   }
