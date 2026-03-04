@@ -11,13 +11,9 @@ export default class GroupServiceLayoutPresenter {
     readonly groupId: string,
   ) {}
 
-  getServiceNavigationArgs(): {
-    classes: string
-    navigation: { href: string; text: string; active: boolean }[]
-  } {
+  getMojSubNavigationArgs(): { items: { href: string; text: string; active: boolean }[] } {
     return {
-      classes: 'group-overview__service-navigation',
-      navigation: [
+      items: [
         {
           href: `/group/${this.groupId}/group-details`,
           text: 'Group details',

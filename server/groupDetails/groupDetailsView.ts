@@ -9,7 +9,7 @@ export default class GroupDetailsView {
       {
         presenter: this.presenter,
         text: this.presenter.text,
-        serviceNavigationArgs: this.presenter.getServiceNavigationArgs(),
+        serviceNavigationArgs: this.presenter.getMojSubNavigationArgs(),
       },
     ]
   }

@@ -1,6 +1,6 @@
 {% extends "../partials/layout.njk" %}
 
-{% from "../components/groupServiceNavigation.njk" import groupServiceNavigation %}
+{%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -8,7 +8,7 @@
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    {{ groupServiceNavigation(serviceNavigationArgs) }}
+     {{ mojSubNavigation(serviceNavigationArgs) }}
     <span class="govuk-caption-xl">{{ text.pageSubHeading }}</span>
     <h1 class="govuk-heading-xl">{{ text.headingText }}</h1>
   </div>

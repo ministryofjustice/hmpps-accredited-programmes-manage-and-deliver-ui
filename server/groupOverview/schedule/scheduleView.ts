@@ -72,7 +72,7 @@ export default class ScheduleView {
       {
         presenter: this.presenter,
         text: this.presenter.text,
-        serviceNavigationArgs: this.presenter.getServiceNavigationArgs(),
+        serviceNavigationArgs: this.presenter.getMojSubNavigationArgs(),
         scheduleSummaryListArgs: this.scheduleSummaryListArgs,
         scheduleSummaryTableArgs: this.scheduleSummaryTableArgs,
       },
