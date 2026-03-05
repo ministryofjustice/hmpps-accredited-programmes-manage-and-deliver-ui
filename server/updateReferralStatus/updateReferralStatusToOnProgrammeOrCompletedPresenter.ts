@@ -1,10 +1,11 @@
-import { ReferralDetails } from '@manage-and-deliver-api'
+import { ReferralDetails, ReferralStatusTransitions } from '@manage-and-deliver-api'
 import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
 
 export default class UpdateReferralStatusFixedPresenter {
   constructor(
     readonly details: ReferralDetails,
+    readonly statusDetails: ReferralStatusTransitions,
     readonly backLinkUri: string,
     readonly cancelUri: string,
     private readonly validationError: FormValidationError | null = null,
@@ -17,10 +18,7 @@ export default class UpdateReferralStatusFixedPresenter {
 
   get text() {
     return {
-      title:
-        this.details.currentStatusDescription === 'Scheduled'
-          ? `${this.details.personName}'s referral status will change to On programme`
-          : `${this.details.personName}'s referral status will change to Programme complete`,
+      title: `${this.details.personName}'s referral status will change to ${this.statusDetails.suggestedStatus.name}`,
     }
   }
 

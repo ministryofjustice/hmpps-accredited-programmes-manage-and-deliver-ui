@@ -35,11 +35,14 @@ import {
   PniScore,
   ProgrammeGroupAllocations,
   ProgrammeGroupEntity,
+  ProgrammeGroupModuleSessionsResponse,
+  RecordSessionAttendance,
   ReferralDetails,
   ReferralMotivationBackgroundAndNonAssociations,
   ReferralStatusHistory,
   ReferralStatusTransitions,
   Relationships,
+  RemoveFromGroupReferralStatusTransitions,
   RemoveFromGroupRequest,
   RemoveFromGroupResponse,
   RescheduleSessionDetails,
@@ -51,12 +54,11 @@ import {
   ScheduleSessionTypeResponse,
   SentenceInformation,
   Session,
+  SessionAttendance,
   SessionScheduleResponse,
   ThinkingAndBehaviour,
   UpdateAvailability,
   UserTeamMember,
-  RecordSessionAttendance,
-  ProgrammeGroupModuleSessionsResponse,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
@@ -458,7 +460,10 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
     })
   }
 
-  async getStatusDetails(referralId: string, username: Express.User['username']): Promise<ReferralStatusTransitions> {
+  async getStatusTransitionDetails(
+    referralId: string,
+    username: Express.User['username'],
+  ): Promise<ReferralStatusTransitions> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/bff/status-transitions/referral/${referralId}`,
@@ -507,15 +512,15 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
     })) as Group | null
   }
 
-  async removeFromGroupStatusTransitions(
+  async removeFromGroupStatusTransitionDetails(
     referralId: string,
     username: Express.User['username'],
-  ): Promise<ReferralStatusTransitions> {
+  ): Promise<RemoveFromGroupReferralStatusTransitions> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/bff/remove-from-group/${referralId}`,
       headers: { Accept: 'application/json' },
-    })) as ReferralStatusTransitions
+    })) as RemoveFromGroupReferralStatusTransitions
   }
 
   async removeFromGroup(
@@ -737,5 +742,19 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
       headers: { Accept: 'application/json' },
       query: { referralId: referralIds },
     })) as RecordSessionAttendance
+  }
+
+  async createSessionAttendance(
+    username: ExpressUsername,
+    sessionId: string,
+    sessionAttendance: SessionAttendance,
+  ): Promise<SessionAttendance> {
+    const restClient = await this.createRestClientFromUsername(username)
+
+    return (await restClient.post({
+      path: `/session/${sessionId}/attendance`,
+      headers: { Accept: 'application/json' },
+      data: sessionAttendance,
+    })) as SessionAttendance
   }
 }

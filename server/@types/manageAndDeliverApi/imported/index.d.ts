@@ -332,22 +332,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/dev/seed/referrals': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post: operations['seedReferrals']
-    delete: operations['dangerouslyDeleteAllReferrals']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/admin/populate-personal-details': {
     parameters: {
       query?: never
@@ -386,6 +370,26 @@ export interface paths {
      * @description Clear down referrals that are missing Oasys and Delius data.
      */
     post: operations['clearMissingDataReferrals']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/subject-access-request': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Provides content for a prisoner to satisfy the needs of a subject access request on their behalf
+     * @description Requires role SAR_DATA_ACCESS or additional role as specified by hmpps.sar.additionalAccessRole configuration.
+     */
+    get: operations['getSarContentByReference']
+    put?: never
+    post?: never
     delete?: never
     options?: never
     head?: never
@@ -605,6 +609,22 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/referral/{referralId}/status-change-details': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: operations['getStatusChangeDetails']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/referral-details/{id}': {
     parameters: {
       query?: never
@@ -774,22 +794,6 @@ export interface paths {
      * @description Get group by GroupCode and in User region
      */
     get: operations['getGroupInUserRegion']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/dev/seed/health': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['health']
     put?: never
     post?: never
     delete?: never
@@ -1410,7 +1414,7 @@ export interface components {
       /**
        * Format: date
        * @description Timestamp of when this referral was created.
-       * @example 11
+       * @example 11 June 2023
        */
       createdAt?: string
       /** @description The user that last created the delivery location preferences */
@@ -1418,7 +1422,7 @@ export interface components {
       /**
        * Format: date-time
        * @description Timestamp of when this referral was created.
-       * @example 11
+       * @example 11 June 2023
        */
       lastUpdatedAt?: string
       /** @description The user that last created the delivery location preferences */
@@ -1774,17 +1778,6 @@ export interface components {
        */
       message: string
     }
-    SeededReferralInfo: {
-      referralId: string
-      crn: string
-      personName: string
-      requirementId: string
-    }
-    SeedingResult: {
-      /** Format: int32 */
-      count: number
-      referrals: components['schemas']['SeededReferralInfo'][]
-    }
     CreateAvailability: {
       /**
        * Format: uuid
@@ -1824,15 +1817,41 @@ export interface components {
     PopulatePersonalDetailsResponse: {
       ids: string[]
     }
+    Attachment: {
+      /**
+       * Format: int32
+       * @description The number of the attachment which will match any corresponding reference in the content section
+       */
+      attachmentNumber: number
+      /** @description The name or description of the attachment which will be included in the report */
+      name: string
+      /** @description The content type of the attachment */
+      contentType: string
+      /** @description The url to be used to download the attachment file */
+      url: string
+      /**
+       * Format: int32
+       * @description The size of the attachment file in bytes
+       */
+      filesize: number
+      /** @description The filename of attachment file */
+      filename: string
+    }
+    HmppsSubjectAccessRequestContent: {
+      /** @description The content of the subject access request response */
+      content: unknown
+      /** @description The details of any attachments for the subject access request response */
+      attachments?: components['schemas']['Attachment'][]
+    }
     ThinkingAndBehaviour: {
       /**
        * Format: date
-       * @example 1
+       * @example 1 August 2023
        */
       assessmentCompleted?: string
       /** @example 1-Some problems */
       temperControl?: string
-      /** @example 2 */
+      /** @example 2 - Significant problems */
       problemSolvingSkills?: string
       /** @example 0-No problems */
       awarenessOfConsequences?: string
@@ -1858,7 +1877,7 @@ export interface components {
       whereAndWhen?: string
       /**
        * @description How the offence was committed for the current offence.
-       * @example false
+       * @example false accounting
        */
       howDone?: string
       /**
@@ -1968,13 +1987,13 @@ export interface components {
       /**
        * Format: date
        * @description The date this data was fetched from nDelius.
-       * @example 1
+       * @example 1 August 2025
        */
       dateRetrieved: string
       /**
        * Format: date
        * @description The date this data was fetched from nDelius.
-       * @example 1
+       * @example 1 August 2025
        */
       lastUpdated: string
       /**
@@ -2069,7 +2088,7 @@ export interface components {
     Relationships: {
       /**
        * Format: date
-       * @example 1
+       * @example 1 August 2023
        */
       assessmentCompleted?: string
       /** @example true */
@@ -2198,12 +2217,12 @@ export interface components {
     LifestyleAndAssociates: {
       /**
        * Format: date
-       * @example 1
+       * @example 1 August 2023
        */
       assessmentCompleted?: string
       /**
        * @description Does the person have any regular activities that encourage reoffending
-       * @example 0
+       * @example 0 - No problems
        */
       regActivitiesEncourageOffending?: string
       /**
@@ -2215,7 +2234,7 @@ export interface components {
     LearningNeeds: {
       /**
        * Format: date
-       * @example 1
+       * @example 1 August 2023
        */
       assessmentCompleted?: string
       /**
@@ -2235,7 +2254,7 @@ export interface components {
        *     ]
        */
       problemAreas?: string[]
-      /** @example 0 */
+      /** @example 0 - Any qualifications */
       qualifications?: string
       /** @example 3 */
       basicSkillsScore?: string
@@ -2245,7 +2264,7 @@ export interface components {
     Health: {
       /**
        * Format: date
-       * @example 1
+       * @example 1 August 2023
        */
       assessmentCompleted?: string
       /**
@@ -2262,12 +2281,12 @@ export interface components {
     EmotionalWellbeing: {
       /**
        * Format: date
-       * @example 1
+       * @example 1 August 2023
        */
       assessmentCompleted?: string
       /** @example 1-Some problems */
       currentPsychologicalProblems?: string
-      /** @example 0 */
+      /** @example 0 - No */
       selfHarmSuicidal?: string
       /** @example 0-No problems */
       currentPsychiatricProblems?: string
@@ -2275,31 +2294,31 @@ export interface components {
     DrugDetails: {
       /**
        * Format: date
-       * @example 1
+       * @example 1 August 2023
        */
       assessmentCompleted?: string
-      /** @example 2 */
+      /** @example 2 - At least weekly */
       levelOfUseOfMainDrug?: string
-      /** @example 1 */
+      /** @example 1 - Some problems */
       drugsMajorActivity?: string
     }
     Attitude: {
       /**
        * Format: date
-       * @example 1
+       * @example 1 August 2023
        */
       assessmentCompleted?: string
-      /** @example 2 */
+      /** @example 2 - Significant problems */
       proCriminalAttitudes?: string
-      /** @example 1 */
+      /** @example 1 - Some motivation to change */
       motivationToAddressBehaviour?: string
-      /** @example 0 */
+      /** @example 0 - No hostile orientation */
       hostileOrientation?: string
     }
     AlcoholMisuseDetails: {
       /**
        * Format: date
-       * @example 1
+       * @example 1 August 2023
        */
       assessmentCompleted?: string
       /** @example 1-Some problems */
@@ -2310,6 +2329,27 @@ export interface components {
       frequencyAndLevel?: string
       /** @example Alcohol dependency affecting employment and relationships */
       alcoholIssuesDetails?: string
+    }
+    ReferralStatusInfo: {
+      /** @enum {string} */
+      newStatus:
+        | 'AWAITING_ALLOCATION'
+        | 'AWAITING_ASSESSMENT'
+        | 'BREACH'
+        | 'DEPRIORITISED'
+        | 'DEFERRED'
+        | 'ON_PROGRAMME'
+        | 'PROGRAMME_COMPLETE'
+        | 'RECALL'
+        | 'RETURN_TO_COURT'
+        | 'SCHEDULED'
+        | 'SUITABLE_BUT_NOT_READY'
+        | 'WITHDRAWN'
+      /** @enum {string} */
+      sourcedFromEntityType: 'REQUIREMENT' | 'LICENCE_CONDITION'
+      /** Format: int64 */
+      sourcedFromEntityId: number
+      notes?: string
     }
     ReferralDetails: {
       /**
@@ -2336,13 +2376,13 @@ export interface components {
       /**
        * Format: date
        * @description Timestamp of when this referral was created.
-       * @example 11
+       * @example 11 June 2023
        */
       createdAt: string
       /**
        * Format: date
        * @description The date of birth of the person being referred.
-       * @example 15
+       * @example 15 March 1985
        */
       dateOfBirth: string
       /**
@@ -2407,25 +2447,25 @@ export interface components {
       /**
        * Format: date
        * @description The end date of the licence.
-       * @example 10
+       * @example 10 June 2025
        */
       licenceEndDate?: string
       /**
        * Format: date
        * @description The start date of the post supervision.
-       * @example 10
+       * @example 10 June 2025
        */
       postSentenceSupervisionStartDate?: string
       /**
        * Format: date
        * @description The end date of the post supervision.
-       * @example 10
+       * @example 10 June 2025
        */
       postSentenceSupervisionEndDate?: string
       /**
        * Format: date
        * @description The date two thirds of the way to the end of the sentence.
-       * @example 10
+       * @example 10 June 2025
        */
       twoThirdsPoint?: string
       /**
@@ -2436,13 +2476,13 @@ export interface components {
       /**
        * Format: date
        * @description The end date of the order.
-       * @example 10
+       * @example 10 June 2025
        */
       orderEndDate?: string
       /**
        * Format: date
        * @description The date this data was fetched from nDelius.
-       * @example 1
+       * @example 1 August 2025
        */
       dateRetrieved: string
     }
@@ -2460,7 +2500,7 @@ export interface components {
       /**
        * Format: date
        * @description The date of birth of the person being referred.
-       * @example 15
+       * @example 15 March 1985
        */
       dateOfBirth: string
       /**
@@ -2492,7 +2532,7 @@ export interface components {
       /**
        * Format: date
        * @description The date this data was fetched from nDelius.
-       * @example 1
+       * @example 1 August 2025
        */
       dateRetrieved: string
     }
@@ -2501,7 +2541,7 @@ export interface components {
       /**
        * Format: date
        * @description The date when the offence was committed
-       * @example 11
+       * @example 11 June 2020
        */
       offenceDate: string
       /**
@@ -2534,7 +2574,7 @@ export interface components {
       /**
        * Format: date
        * @description The date the offence history was imported from NDelius
-       * @example 11
+       * @example 11 June 2020
        */
       importedDate: string
     }
@@ -2706,7 +2746,16 @@ export interface components {
       overallIntensity: 'HIGH' | 'MODERATE' | 'ALTERNATIVE_PATHWAY' | 'MISSING_INFORMATION'
       /** @description Detailed scores across different assessment domains */
       domainScores: components['schemas']['DomainScores']
-      /** @example riskScores */
+      /**
+       * @example "riskScores": {
+       *             "ogrs3": 15.0,
+       *             "ovp": 15.0,
+       *             "ospDc": 1.07,
+       *             "ospIic": 0.11,
+       *             "rsr": 1.46,
+       *             "sara": "High"
+       *           }
+       */
       RiskScore: components['schemas']['RiskScore']
       /** @example ['impulsivity is missing '] */
       validationErrors: string[]
@@ -2822,11 +2871,11 @@ export interface components {
       /** Format: int64 */
       offset?: number
       sort?: components['schemas']['SortObject']
-      paged?: boolean
-      /** Format: int32 */
-      pageNumber?: number
       /** Format: int32 */
       pageSize?: number
+      /** Format: int32 */
+      pageNumber?: number
+      paged?: boolean
       unpaged?: boolean
     }
     ReferralCaseListItem: {
@@ -2915,6 +2964,19 @@ export interface components {
       /** @description Sex that the group is being run for. */
       sex?: components['schemas']['ProgrammeGroupSexEnum']
     }
+    CurrentGroupDetails: {
+      /**
+       * @description The code of the currently allocated group
+       * @example ABC111
+       */
+      currentlyAllocatedGroupCode?: string
+      /**
+       * Format: uuid
+       * @description The unique code of the currently allocated group
+       * @example c98151f4-4081-4c65-9f98-54e63a328c8d
+       */
+      currentlyAllocatedGroupId?: string
+    }
     /** @description Form data for the update status form in the M&D UI */
     CurrentStatus: {
       /**
@@ -2968,6 +3030,19 @@ export interface components {
       currentStatus: components['schemas']['CurrentStatus']
       /** @description List of transition statuses */
       availableStatuses: components['schemas']['ReferralStatus'][]
+      /** @description Suggested status object for the UI to potentially display */
+      suggestedStatus?: components['schemas']['SuggestedStatus']
+      /** @description The details of the group that the user is currently allocated to */
+      currentGroupDetails?: components['schemas']['CurrentGroupDetails']
+    }
+    SuggestedStatus: {
+      /** @description Name of the status description */
+      name: string
+      /**
+       * Format: uuid
+       * @description The id of the status description
+       */
+      statusDescriptionId: string
     }
     /** @description Details of a session */
     Session: {
@@ -3183,6 +3258,17 @@ export interface components {
       /** @description List of attendees for the session */
       attendees: components['schemas']['EditSessionAttendee'][]
     }
+    /** @description Status transition information for the Remove Referral from Group form in the M&D UI */
+    RemoveReferralFromGroupStatusTransitions: {
+      /** @description The current status information */
+      currentStatus: components['schemas']['CurrentStatus']
+      /** @description List of transition statuses */
+      availableStatuses: components['schemas']['ReferralStatus'][]
+      /** @description Suggested status object for the UI to potentially display */
+      suggestedStatus?: components['schemas']['SuggestedStatus']
+      /** @description The details of the group that the user is currently allocated to */
+      currentGroupDetails?: components['schemas']['CurrentGroupDetails']
+    }
     UserTeamMember: {
       /** @description The code for the team member */
       personCode: string
@@ -3328,7 +3414,7 @@ export interface components {
       /**
        * Format: date
        * @description The end date of the person's sentence.
-       * @example 1
+       * @example 1 January 2030
        */
       sentenceEndDate: string
       /**
@@ -3670,6 +3756,12 @@ export interface components {
        * @enum {string}
        */
       sessionScheduleType: 'SCHEDULED' | 'CATCH_UP'
+      /**
+       * @description The type of a session
+       * @example GROUP or ONE_TO_ONE
+       * @enum {string}
+       */
+      sessionType: 'GROUP' | 'ONE_TO_ONE'
     }
     /** @description Response containing session templates for scheduling */
     ScheduleSessionTypeResponse: {
@@ -3697,10 +3789,6 @@ export interface components {
       facilitators: components['schemas']['UserTeamMember'][]
       /** @description Details of the Group's members via their Referrals */
       groupMembers: components['schemas']['GroupMember'][]
-    }
-    TeardownResult: {
-      /** Format: int32 */
-      deletedCount: number
     }
   }
   responses: never
@@ -4823,66 +4911,6 @@ export interface operations {
       }
     }
   }
-  seedReferrals: {
-    parameters: {
-      query?: {
-        count?: number
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['SeedingResult']
-        }
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  dangerouslyDeleteAllReferrals: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['TeardownResult']
-        }
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
   populatePersonalDetails: {
     parameters: {
       query?: never
@@ -4957,6 +4985,89 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getSarContentByReference: {
+    parameters: {
+      query?: {
+        /** @description NOMIS Prison Reference Number */
+        prn?: string
+        /** @description nDelius Case Reference Number */
+        crn?: string
+        /** @description Optional parameter denoting minimum date of event occurrence which should be returned in the response */
+        fromDate?: string
+        /** @description Optional parameter denoting maximum date of event occurrence which should be returned in the response */
+        toDate?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Request successfully processed - content found */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['HmppsSubjectAccessRequestContent']
+        }
+      }
+      /** @description Request successfully processed - no content found */
+      204: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': Record<string, never>
+        }
+      }
+      /** @description Subject Identifier is not recognised by this service */
+      209: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': Record<string, never>
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The client does not have authorisation to make this request */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unexpected error occurred */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -5669,6 +5780,37 @@ export interface operations {
       }
     }
   }
+  getStatusChangeDetails: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        referralId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ReferralStatusInfo']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getReferralDetailsById: {
     parameters: {
       query?: never
@@ -6207,37 +6349,6 @@ export interface operations {
       }
     }
   }
-  health: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': {
-            [key: string]: string
-          }
-        }
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
   getStatusTransitionsForReferral: {
     parameters: {
       query?: never
@@ -6661,7 +6772,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['ReferralStatusTransitions'][]
+          'application/json': components['schemas']['RemoveReferralFromGroupStatusTransitions'][]
         }
       }
       /** @description Bad Request */

@@ -161,3 +161,27 @@ export interface MultiSelectTableArgs {
     cellsNumeric?: boolean[]
   }>
 }
+
+export type CardItem = {
+  /*
+    Data test attribute for identifying the card in tests
+  */
+  dataTest: string
+
+  /*
+    URL or link for the card action
+  */
+  href: string
+
+  /*
+    Title of the card displayed as the heading
+  */
+  title: string
+
+  /*
+    Description text displayed below the card title
+  */
+  description: string
+}
+
+export type CardGroupArgs = CardItem[]

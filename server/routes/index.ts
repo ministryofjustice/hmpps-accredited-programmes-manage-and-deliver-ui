@@ -5,6 +5,7 @@ import ChangeCohortController from '../cohort/changeCohortController'
 import CreateGroupController from '../createGroup/createGroupController'
 import EditSessionController from '../editSession/editSessionController'
 import GroupController from '../group/groupController'
+import GroupDetailsController from '../groupDetails/groupDetailsController'
 import GroupAllocationNotesController from '../groupAllocationNotes/groupAllocationNotesController'
 import AddToGroupController from '../groupOverview/addToGroup/addToGroupController'
 import GroupOverviewController from '../groupOverview/groupOverviewController'
@@ -19,6 +20,7 @@ import type { Services } from '../services'
 import SessionScheduleController from '../sessionSchedule/sessionScheduleController'
 import UpdateReferralStatusController from '../updateReferralStatus/updateReferralStatusController'
 import AttendanceController from '../attendance/attendanceController'
+import HomeController from '../home/homeController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
@@ -43,12 +45,14 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const groupAllocationNotesController = new GroupAllocationNotesController(accreditedProgrammesManageAndDeliverService)
   const createGroupController = new CreateGroupController(accreditedProgrammesManageAndDeliverService)
   const groupController = new GroupController(accreditedProgrammesManageAndDeliverService)
+  const groupDetailsController = new GroupDetailsController()
   const sessionScheduleController = new SessionScheduleController(accreditedProgrammesManageAndDeliverService)
   const editSessionController = new EditSessionController(accreditedProgrammesManageAndDeliverService)
   const attendanceController = new AttendanceController(accreditedProgrammesManageAndDeliverService)
+  const homeController = new HomeController()
 
   get('/', async (req, res, next) => {
-    await caselistController.showOpenCaselist(req, res)
+    await homeController.showHomePage(req, res)
   })
 
   get('/pdu/open-referrals', async (req, res, next) => {
@@ -276,6 +280,10 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await groupOverviewController.showGroupOverviewWaitlist(req, res)
   })
 
+  get('/group/:groupId/group-details', async (req, res, next) => {
+    await groupDetailsController.showGroupDetailsPage(req, res)
+  })
+
   get('/group/:groupId/schedule-overview', async (req, res, next) => {
     await groupOverviewController.showGroupOverviewSchedule(req, res)
   })
@@ -331,7 +339,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await sessionScheduleController.showSessionSchedule(req, res)
   })
 
-  getOrPost('/group/:groupId/module/:moduleId/schedule-group-session-details', async (req, res, next) => {
+  getOrPost('/group/:groupId/module/:moduleId/schedule-session-details', async (req, res, next) => {
     await sessionScheduleController.scheduleGroupSessionDetails(req, res)
   })
 
@@ -368,6 +376,15 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   getOrPost('/group/:groupId/session/:sessionId/record-attendance', async (req, res, next) => {
     await attendanceController.showRecordAttendancePage(req, res)
   })
+  getOrPost('/group/:groupId/session/:sessionId/referral/:referralId', async (req, res, next) => {
+    await attendanceController.showRecordAttendanceNotesPage(req, res)
+  })
+  getOrPost(
+    '/group/:groupId/session/:sessionId/referral/:referralId/:groupTitle-session-notes',
+    async (req, res, next) => {
+      await attendanceController.showRecordAttendanceNotesPage(req, res)
+    },
+  )
 
   return router
 }

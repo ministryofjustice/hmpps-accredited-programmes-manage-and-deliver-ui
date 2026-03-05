@@ -13,12 +13,14 @@ describe('SessionScheduleWhichPresenter', () => {
         number: 1,
         name: 'Getting started one-to-one',
         sessionScheduleType: 'SCHEDULED',
+        sessionType: 'GROUP',
       },
       {
         id: randomUUID(),
         number: 2,
         name: 'Session 2',
         sessionScheduleType: 'CATCH_UP',
+        sessionType: 'ONE_TO_ONE',
       },
     ],
   }

@@ -2,6 +2,7 @@ import type { components } from './imported'
 
 type AlcoholMisuseDetails = components['schemas']['AlcoholMisuseDetails']
 type Attitude = components['schemas']['Attitude']
+type AttendanceAndSessionNotes = components['schemas']['AttendanceAndSessionNotes']
 type Availability = components['schemas']['Availability']
 type CohortEnum = components['schemas']['ReferralDetails']['cohort']
 type CreateAvailability = components['schemas']['CreateAvailability']
@@ -39,6 +40,7 @@ type ExistingDeliveryLocationPreferences = components['schemas']['ExistingDelive
 type UpdateCohort = components['schemas']['UpdateCohort']
 type UpdateLdc = components['schemas']['UpdateLdc']
 type ReferralStatusTransitions = components['schemas']['ReferralStatusTransitions']
+type RemoveFromGroupReferralStatusTransitions = components['schemas']['RemoveReferralFromGroupStatusTransitions']
 type CreateReferralStatusHistory = components['schemas']['CreateReferralStatusHistory']
 type ReferralStatus = components['schemas']['ReferralStatus']
 type CaseListFilterValues = components['schemas']['CaseListFilterValues']
@@ -89,6 +91,7 @@ export type {
   AlcoholMisuseDetails,
   AllocateToGroupRequest,
   AllocateToGroupResponse,
+  AttendanceAndSessionNotes,
   Attitude,
   Availability,
   CaseListFilterValues,
@@ -149,6 +152,7 @@ export type {
   ReferralStatusHistory,
   ReferralStatusTransitions,
   Relationships,
+  RemoveFromGroupReferralStatusTransitions,
   RemoveFromGroupRequest,
   RemoveFromGroupResponse,
   RescheduleSessionDetails,

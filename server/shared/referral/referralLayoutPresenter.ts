@@ -1,6 +1,6 @@
 import { ReferralDetails } from '@manage-and-deliver-api'
-import { firstToLowerCase, formatCohort } from '../../utils/utils'
 import { MojAlertComponentArgs } from '../../interfaces/alertComponentArgs'
+import { firstToLowerCase, formatCohort } from '../../utils/utils'
 
 export enum HorizontalNavValues {
   referralDetailsTab = 'referralDetails',

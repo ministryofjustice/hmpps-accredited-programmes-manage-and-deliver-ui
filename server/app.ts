@@ -50,6 +50,7 @@ declare module 'express-session' {
       sessionName?: string
       referralName?: string
       selectedSession?: string
+      groupOrOneToOne?: string
     }
     editSessionDateAndTime?: Partial<RescheduleSessionRequest>
     sessionFacilitators?: Partial<EditSessionFacilitatorsRequest[]>

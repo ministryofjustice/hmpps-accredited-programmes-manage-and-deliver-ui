@@ -3,7 +3,7 @@ import {
   ScheduleIndividualSessionDetailsResponse,
   CreateGroupTeamMember,
 } from '@manage-and-deliver-api'
-import { RadiosArgsItem, SelectArgsItem } from '../../utils/govukFrontendTypes'
+import { CheckboxesArgsItem, RadiosArgsItem, SelectArgsItem } from '../../utils/govukFrontendTypes'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
 
@@ -13,7 +13,12 @@ export default class AddSessionDetailsPresenter {
     private readonly backLink: string,
     private readonly validationError: FormValidationError | null = null,
     private readonly createSessionDetailsFormData:
-      | (Partial<ScheduleSessionRequest> & { sessionName?: string; referralName?: string; headingText?: string })
+      | (Partial<ScheduleSessionRequest> & {
+          sessionName?: string
+          referralName?: string
+          headingText?: string
+          groupOrOneToOne?: string
+        })
       | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
   ) {}
@@ -28,6 +33,10 @@ export default class AddSessionDetailsPresenter {
 
   get utils() {
     return new PresenterUtils(this.userInputData)
+  }
+
+  get isGroupSession(): boolean {
+    return this.createSessionDetailsFormData?.groupOrOneToOne.toUpperCase() === 'GROUP'
   }
 
   get text() {
@@ -55,23 +64,35 @@ export default class AddSessionDetailsPresenter {
     return items
   }
 
-  generateSessionAttendeesRadioOptions(selectedValue: string): RadiosArgsItem[] {
+  generateSessionAttendeesRadioOptions(selectedValue: string[]): RadiosArgsItem[] {
     const hasSelectedValues = selectedValue && selectedValue.length > 0
 
     return this.sessionDetails.groupMembers.map(member => ({
       text: `${member.name} (${member.crn})`,
       value: `${member.referralId} + ${member.name}`,
-      checked: hasSelectedValues ? selectedValue === member.referralId : false,
+      checked: hasSelectedValues ? selectedValue.includes(member.referralId) : false,
     }))
   }
 
-  selectedAttendeeValues(): string {
-    const whoValueInput = this.userInputData?.['session-details-who'] as string
+  generateSessionAttendeesCheckboxOptions(selectedValue: string[]): CheckboxesArgsItem[] {
+    const hasSelectedValues = selectedValue && selectedValue.length > 0
+
+    return this.sessionDetails.groupMembers.map(member => ({
+      text: `${member.name} (${member.crn})`,
+      value: `${member.referralId} + ${member.name}`,
+      checked: hasSelectedValues ? selectedValue.includes(member.referralId) : false,
+    }))
+  }
+
+  selectedAttendeeValues(): string[] {
+    const whoValueInput = this.userInputData?.['session-details-who']
 
     if (whoValueInput) {
-      return whoValueInput.includes('+') ? whoValueInput.split('+')[0].trim() : whoValueInput
+      // Ensure it's always an array
+      const values = Array.isArray(whoValueInput) ? whoValueInput : [whoValueInput]
+      return values.map(item => (item.includes('+') ? item.split('+')[0].trim() : item))
     }
-    return this.createSessionDetailsFormData?.referralIds?.[0] ?? ''
+    return this.createSessionDetailsFormData?.referralIds ?? []
   }
 
   generateSelectedFacilitators(): CreateGroupTeamMember[] | [] {
