@@ -2,6 +2,7 @@ import { EditSessionDetails, RescheduleSessionRequest, EditSessionAttendeesRespo
 
 import PresenterUtils from '../../utils/presenterUtils'
 import { FormValidationError } from '../../utils/formValidationError'
+import DateUtils from '../../utils/dateUtils'
 
 export default class EditSessionDateAndTimePresenter {
   constructor(
@@ -37,12 +38,13 @@ export default class EditSessionDateAndTimePresenter {
   }
 
   get fields() {
+    const dateValue =
+      this.rescheduleSessionStorageData?.sessionStartDate ?? this.sessionDetails.sessionDate ?? undefined
+    const formattedDate = DateUtils.formatDateToDDMMYYYY(dateValue)
+
     return {
       sessionDate: {
-        value: this.utils.stringValue(
-          this.rescheduleSessionStorageData?.sessionStartDate ?? this.sessionDetails.sessionDate,
-          'session-details-date',
-        ),
+        value: this.utils.stringValue(formattedDate, 'session-details-date'),
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'session-details-date'),
       },
       startTime: this.utils.twelveHourTimeValue(

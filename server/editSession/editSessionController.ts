@@ -31,6 +31,8 @@ export default class EditSessionController {
     const { message } = req.query
     let formError: FormValidationError | null = null
 
+    req.session.editSessionDateAndTime = {}
+
     const sessionDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionDetails(
       username,
       groupId,
@@ -103,12 +105,13 @@ export default class EditSessionController {
         res.status(400)
         formError = data.error
       } else {
-        await this.accreditedProgrammesManageAndDeliverService.updateSessionAttendees(
+        const message = await this.accreditedProgrammesManageAndDeliverService.updateSessionAttendees(
           username,
           sessionId,
           data.paramsForUpdate.referralId,
         )
-        return res.redirect(`/group/${groupId}/sessions-and-attendance`)
+        console.log(message)
+        return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session?message=${message}`)
       }
     }
 
@@ -116,7 +119,6 @@ export default class EditSessionController {
       username,
       sessionId,
     )
-
     const backUrl = `/group/${groupId}/session/${sessionId}/edit-session`
     const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, sessionAttendees, formError)
     const view = new EditSessionAttendeesView(presenter)
@@ -168,7 +170,9 @@ export default class EditSessionController {
           rescheduleOtherSessions: false,
         }
 
-        await this.accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime(
+        console.log(rescheduleRequest)
+
+        const response = await this.accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime(
           username,
           sessionId,
           rescheduleRequest,
@@ -176,10 +180,10 @@ export default class EditSessionController {
 
         delete req.session.editSessionDateAndTime
 
-        return res.redirect(`/group/${groupId}/sessions-and-attendance?successMessage=Session date and time updated`)
+        return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session?message=${response.message}`)
       }
     }
-
+    console.log(sessionDetails)
     const presenter = new EditSessionDateAndTimePresenter(
       groupId,
       sessionDetails,
