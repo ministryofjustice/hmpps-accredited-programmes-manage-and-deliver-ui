@@ -12,7 +12,7 @@ describe('getSubNavArgs', () => {
 
     const presenter = new GroupPresenter(
       groupList.pagedGroupData as Page<Group>,
-      GroupListPageSection.NOT_STARTED,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
       groupList.otherTabTotal,
       groupList.regionName,
       GroupListFilter.empty(),
@@ -22,13 +22,13 @@ describe('getSubNavArgs', () => {
     expect(presenter.getSubNavArgs()).toEqual({
       items: [
         {
-          text: `Not started (100)`,
-          href: `/groups/not-started`,
+          text: `Not started or in progress (100)`,
+          href: `/groups/not-started-and-in-progress`,
           active: true,
         },
         {
-          text: `In progress or completed (10)`,
-          href: `/groups/started`,
+          text: `Completed (10)`,
+          href: `/groups/completed`,
           active: false,
         },
       ],
@@ -42,7 +42,7 @@ describe('getSubNavArgs', () => {
 
     const presenter = new GroupPresenter(
       groupList.pagedGroupData as Page<Group>,
-      GroupListPageSection.NOT_STARTED,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
       groupList.otherTabTotal,
       groupList.regionName,
       filter,
@@ -53,13 +53,13 @@ describe('getSubNavArgs', () => {
     expect(presenter.getSubNavArgs()).toEqual({
       items: [
         {
-          text: `Not started (100)`,
-          href: `/groups/not-started?groupCode=CODE`,
+          text: `Not started or in progress (100)`,
+          href: `/groups/not-started-and-in-progress?groupCode=CODE`,
           active: true,
         },
         {
-          text: `In progress or completed (10)`,
-          href: `/groups/started?groupCode=CODE`,
+          text: `Completed (10)`,
+          href: `/groups/completed?groupCode=CODE`,
           active: false,
         },
       ],
@@ -73,7 +73,7 @@ describe('getSubNavArgs', () => {
 
     const presenter = new GroupPresenter(
       groupList.pagedGroupData as Page<Group>,
-      GroupListPageSection.IN_PROGRESS_OR_COMPLETE,
+      GroupListPageSection.COMPLETED,
       groupList.otherTabTotal,
       groupList.regionName,
       filter,
@@ -83,13 +83,13 @@ describe('getSubNavArgs', () => {
     expect(presenter.getSubNavArgs()).toEqual({
       items: [
         {
-          text: `Not started (10)`,
-          href: `/groups/not-started?groupCode=CODE`,
+          text: `Not started or in progress (10)`,
+          href: `/groups/not-started-and-in-progress?groupCode=CODE`,
           active: false,
         },
         {
-          text: `In progress or completed (100)`,
-          href: `/groups/started?groupCode=CODE`,
+          text: `Completed (100)`,
+          href: `/groups/completed?groupCode=CODE`,
           active: true,
         },
       ],
@@ -105,7 +105,7 @@ describe(`filter and search query params`, () => {
 
     const presenter = new GroupPresenter(
       groupList.pagedGroupData as Page<Group>,
-      GroupListPageSection.NOT_STARTED,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
       groupList.otherTabTotal,
       groupList.regionName,
       filter,
@@ -121,7 +121,7 @@ describe(`filter and search query params`, () => {
 
     const presenter = new GroupPresenter(
       groupList.pagedGroupData as Page<Group>,
-      GroupListPageSection.NOT_STARTED,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
       groupList.otherTabTotal,
       groupList.regionName,
       filter,
@@ -138,7 +138,7 @@ describe('groupTableArgs', () => {
 
     const presenter = new GroupPresenter(
       groupList.pagedGroupData as Page<Group>,
-      GroupListPageSection.NOT_STARTED,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
       groupList.otherTabTotal,
       groupList.regionName,
       GroupListFilter.empty(),
@@ -215,7 +215,7 @@ describe('LDC cohort display', () => {
 
     const presenter = new GroupPresenter(
       groupList.pagedGroupData as Page<Group>,
-      GroupListPageSection.NOT_STARTED,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
       groupList.otherTabTotal,
       groupList.regionName,
       GroupListFilter.empty(),
@@ -236,7 +236,7 @@ describe('LDC cohort display', () => {
 
     const presenter = new GroupPresenter(
       groupList.pagedGroupData as Page<Group>,
-      GroupListPageSection.NOT_STARTED,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
       groupList.otherTabTotal,
       groupList.regionName,
       GroupListFilter.empty(),
@@ -257,7 +257,7 @@ describe('LDC cohort display', () => {
 
     const presenter = new GroupPresenter(
       groupList.pagedGroupData as Page<Group>,
-      GroupListPageSection.NOT_STARTED,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
       groupList.otherTabTotal,
       groupList.regionName,
       GroupListFilter.empty(),
@@ -277,7 +277,7 @@ describe('cohort filter select args', () => {
     const groupList = groupsByRegionFactory.build()
     const presenter = new GroupPresenter(
       groupList.pagedGroupData as Page<Group>,
-      GroupListPageSection.NOT_STARTED,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
       groupList.otherTabTotal,
       groupList.regionName,
       GroupListFilter.empty(),
@@ -303,7 +303,7 @@ describe('cohort filter select args', () => {
 
     const presenter = new GroupPresenter(
       groupList.pagedGroupData as Page<Group>,
-      GroupListPageSection.NOT_STARTED,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
       groupList.otherTabTotal,
       groupList.regionName,
       filter,
@@ -327,7 +327,15 @@ describe('resultsText', () => {
     const pagedGroups: Page<Group> = pageFactory
       .pageContent([])
       .build({ totalElements: 0, number: 0, size: 10, numberOfElements: 0 }) as Page<Group>
-    const presenter = new GroupPresenter(pagedGroups, GroupListPageSection.NOT_STARTED, 0, 'Region', filter, [], [])
+    const presenter = new GroupPresenter(
+      pagedGroups,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
+      0,
+      'Region',
+      filter,
+      [],
+      [],
+    )
 
     expect(presenter.resultsText).toBe('')
   })
@@ -338,7 +346,15 @@ describe('resultsText', () => {
     const pagedGroups: Page<Group> = pageFactory
       .pageContent(groups)
       .build({ totalElements: 23, number: 2, size: 10, numberOfElements: groups.length }) as Page<Group>
-    const presenter = new GroupPresenter(pagedGroups, GroupListPageSection.NOT_STARTED, 0, 'Region', filter, [], [])
+    const presenter = new GroupPresenter(
+      pagedGroups,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
+      0,
+      'Region',
+      filter,
+      [],
+      [],
+    )
 
     expect(presenter.resultsText).toBe(
       'Showing <strong>21</strong> to <strong>23</strong> of <strong>23</strong> results',
@@ -358,7 +374,7 @@ describe('date formatting helpers', () => {
 
       const presenter = new GroupPresenter(
         groupList.pagedGroupData as Page<Group>,
-        GroupListPageSection.NOT_STARTED,
+        GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
         groupList.otherTabTotal,
         groupList.regionName,
         GroupListFilter.empty(),
@@ -369,7 +385,7 @@ describe('date formatting helpers', () => {
       expect(presenter.getGroupDate(group)).toBe('2024-01-15')
     })
 
-    it('should prioritize startDate for IN_PROGRESS_OR_COMPLETE groups', () => {
+    it('should prioritize startDate for NOT_STARTED_OR_IN_PROGRESS groups', () => {
       const groupList = groupsByRegionFactory.build()
       const group = GroupFactory.build({
         earliestStartDate: '2024-01-15',
@@ -379,7 +395,7 @@ describe('date formatting helpers', () => {
 
       const presenter = new GroupPresenter(
         groupList.pagedGroupData as Page<Group>,
-        GroupListPageSection.IN_PROGRESS_OR_COMPLETE,
+        GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
         groupList.otherTabTotal,
         groupList.regionName,
         GroupListFilter.empty(),
@@ -387,7 +403,7 @@ describe('date formatting helpers', () => {
         [],
       )
 
-      expect(presenter.getGroupDate(group)).toBe('2024-02-01')
+      expect(presenter.getGroupDate(group)).toBe('2024-01-15')
     })
 
     it('should fallback to startDate when earliestStartDate is null', () => {
@@ -400,7 +416,7 @@ describe('date formatting helpers', () => {
 
       const presenter = new GroupPresenter(
         groupList.pagedGroupData as Page<Group>,
-        GroupListPageSection.NOT_STARTED,
+        GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
         groupList.otherTabTotal,
         groupList.regionName,
         GroupListFilter.empty(),
@@ -421,7 +437,7 @@ describe('date formatting helpers', () => {
 
       const presenter = new GroupPresenter(
         groupList.pagedGroupData as Page<Group>,
-        GroupListPageSection.NOT_STARTED,
+        GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
         groupList.otherTabTotal,
         groupList.regionName,
         GroupListFilter.empty(),
@@ -443,7 +459,7 @@ describe('date formatting helpers', () => {
 
       const presenter = new GroupPresenter(
         groupList.pagedGroupData as Page<Group>,
-        GroupListPageSection.NOT_STARTED,
+        GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
         groupList.otherTabTotal,
         groupList.regionName,
         GroupListFilter.empty(),
@@ -467,7 +483,7 @@ describe('date formatting helpers', () => {
 
       const presenter = new GroupPresenter(
         groupList.pagedGroupData as Page<Group>,
-        GroupListPageSection.NOT_STARTED,
+        GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
         groupList.otherTabTotal,
         groupList.regionName,
         GroupListFilter.empty(),
@@ -488,7 +504,7 @@ describe('sex formatting', () => {
     const groupList = groupsByRegionFactory.build()
     const presenter = new GroupPresenter(
       groupList.pagedGroupData as Page<Group>,
-      GroupListPageSection.NOT_STARTED,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
       groupList.otherTabTotal,
       groupList.regionName,
       GroupListFilter.empty(),
@@ -503,7 +519,7 @@ describe('sex formatting', () => {
     const groupList = groupsByRegionFactory.build()
     const presenter = new GroupPresenter(
       groupList.pagedGroupData as Page<Group>,
-      GroupListPageSection.NOT_STARTED,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
       groupList.otherTabTotal,
       groupList.regionName,
       GroupListFilter.empty(),
@@ -518,7 +534,7 @@ describe('sex formatting', () => {
     const groupList = groupsByRegionFactory.build()
     const presenter = new GroupPresenter(
       groupList.pagedGroupData as Page<Group>,
-      GroupListPageSection.NOT_STARTED,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
       groupList.otherTabTotal,
       groupList.regionName,
       GroupListFilter.empty(),
@@ -536,7 +552,7 @@ describe('cohort cell generation', () => {
     const group = GroupFactory.build({ cohort: 'GENERAL' })
     const presenter = new GroupPresenter(
       groupList.pagedGroupData as Page<Group>,
-      GroupListPageSection.NOT_STARTED,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
       groupList.otherTabTotal,
       groupList.regionName,
       GroupListFilter.empty(),
@@ -554,7 +570,7 @@ describe('cohort cell generation', () => {
     const group = GroupFactory.build({ cohort: 'GENERAL_LDC' })
     const presenter = new GroupPresenter(
       groupList.pagedGroupData as Page<Group>,
-      GroupListPageSection.NOT_STARTED,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
       groupList.otherTabTotal,
       groupList.regionName,
       GroupListFilter.empty(),
