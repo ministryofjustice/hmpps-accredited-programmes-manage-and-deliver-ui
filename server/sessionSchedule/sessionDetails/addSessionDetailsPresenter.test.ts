@@ -35,7 +35,7 @@ describe('AddSessionDetailsPresenter', () => {
   describe('generateSessionAttendeesCheckboxOptions', () => {
     it('generates checkbox options without selections', () => {
       const presenter = new AddSessionDetailsPresenter(sessionDetails, 'backLinkUri')
-      const options = presenter.generateSessionAttendeesRadioOptions('ref1')
+      const options = presenter.generateSessionAttendeesRadioOptions(['ref1'])
 
       expect(options).toEqual([
         { text: 'John Doe (X12345)', value: 'ref1 + John Doe', checked: true },
@@ -48,13 +48,13 @@ describe('AddSessionDetailsPresenter', () => {
     it('returns values from userInputData when available', () => {
       const userInputData = { 'session-details-who': 'ref1 + John Doe' }
       const presenter = new AddSessionDetailsPresenter(sessionDetails, 'backLinkUri', null, null, userInputData)
-      expect(presenter.selectedAttendeeValues()).toEqual('ref1')
+      expect(presenter.selectedAttendeeValues()).toEqual(['ref1'])
     })
 
     it('returns values from createSessionDetailsFormData when userInputData not available', () => {
       const formData = { referralIds: ['X12345'] }
       const presenter = new AddSessionDetailsPresenter(sessionDetails, 'backLinkUri', null, formData)
-      expect(presenter.selectedAttendeeValues()).toEqual('X12345')
+      expect(presenter.selectedAttendeeValues()).toEqual(['X12345'])
     })
   })
 

@@ -39,9 +39,17 @@ export default class CreateSessionScheduleForm {
       }
     }
 
+    let whoValue = this.request.body['session-details-who']
+    // Ensure whoValue is always an array
+    if (!Array.isArray(whoValue)) {
+      whoValue = [whoValue]
+    }
+    // Generate the list of referralIds from the whoValue which is in format '12345 + Alex River'
+    const referralIds = whoValue.map((IdAndName: string) => IdAndName.split('+')[0].trim())
+
     return {
       paramsForUpdate: {
-        referralIds: [this.request.body['session-details-who'].split('+')[0].trim()],
+        referralIds,
         facilitators: this.getFacilitators(),
         startDate: this.request.body['session-details-date'],
         startTime: {
