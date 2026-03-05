@@ -12,6 +12,7 @@ export default class SessionScheduleCyaPresenter {
           referralName?: string
           headingText?: string
           sessionScheduleType?: string
+          groupOrOneToOne?: string
         })
       | null = null,
   ) {}
@@ -61,7 +62,7 @@ export default class SessionScheduleCyaPresenter {
   }
 
   get backLinkUri() {
-    return `${this.linkUrl}/schedule-group-session-details`
+    return `${this.linkUrl}/schedule-session-details`
   }
 
   get sessionType() {

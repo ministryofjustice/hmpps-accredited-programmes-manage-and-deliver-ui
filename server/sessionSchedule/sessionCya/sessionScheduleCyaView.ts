@@ -14,7 +14,7 @@ export default class SessionScheduleCyaView {
   get sessionScheduleSummary(): SummaryListArgs {
     const sessionDetails = this.presenter.createSessionDetails
     const editSessionTypeUrl = `${this.presenter.linkUrl}/schedule-session-type`
-    const editSessionDetailsUrl = `${this.presenter.linkUrl}/schedule-group-session-details`
+    const editSessionDetailsUrl = `${this.presenter.linkUrl}/schedule-session-details`
     return {
       rows: [
         {
@@ -22,7 +22,10 @@ export default class SessionScheduleCyaView {
             text: 'Session name',
           },
           value: {
-            text: `${sessionDetails.referralName}: ${sessionDetails.sessionName}`,
+            text:
+              sessionDetails.groupOrOneToOne.toUpperCase() === 'GROUP'
+                ? `${sessionDetails.sessionName}`
+                : `${sessionDetails.referralName}: ${sessionDetails.sessionName}`,
           },
         },
         {

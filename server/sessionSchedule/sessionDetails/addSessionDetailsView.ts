@@ -2,7 +2,7 @@ import { CreateGroupTeamMember } from '@manage-and-deliver-api'
 import { TimeInputArgs } from '@manage-and-deliver-ui'
 import AddSessionDetailsPresenter from './addSessionDetailsPresenter'
 import ViewUtils from '../../utils/viewUtils'
-import { FieldsetArgs, RadiosArgs, SelectArgs } from '../../utils/govukFrontendTypes'
+import { CheckboxesArgs, FieldsetArgs, RadiosArgs, SelectArgs } from '../../utils/govukFrontendTypes'
 
 export default class AddSessionDetailsView {
   constructor(private readonly presenter: AddSessionDetailsPresenter) {}
@@ -168,7 +168,6 @@ export default class AddSessionDetailsView {
   private get sessionDetailsRadioArgs(): RadiosArgs {
     return {
       name: 'session-details-who',
-      classes: 'govuk-checkboxes--small',
       fieldset: {
         legend: {
           text: 'Who is this session for?',
@@ -184,6 +183,24 @@ export default class AddSessionDetailsView {
     }
   }
 
+  private get sessionDetailsCheckboxArgs(): CheckboxesArgs {
+    return {
+      name: 'session-details-who',
+      fieldset: {
+        legend: {
+          text: 'Who is this session for?',
+          isPageHeading: false,
+          classes: 'govuk-fieldset__legend--m',
+        },
+      },
+      hint: {
+        text: 'Select everyone who should attend this session.',
+      },
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.who.errorMessage),
+      items: this.presenter.generateSessionAttendeesCheckboxOptions(this.presenter.selectedAttendeeValues()),
+    }
+  }
+
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       'sessionSchedule/addSessionDetails',
@@ -192,6 +209,7 @@ export default class AddSessionDetailsView {
         text: this.presenter.text,
         sessionDetailsDateArgs: this.sessionDetailsDateArgs,
         sessionDetailsRadioArgs: this.sessionDetailsRadioArgs,
+        sessionDetailsCheckboxArgs: this.sessionDetailsCheckboxArgs,
         startTimeInputArgs: this.startTimeInputArgs,
         endTimeInputArgs: this.endTimeInputArgs,
         sessionFacilitatorArgs: this.sessionFacilitatorArgs(),
@@ -199,6 +217,7 @@ export default class AddSessionDetailsView {
         sessionExistingFacilitatorArgs: this.sessionExistingFacilitatorArgs.bind(this),
         facilitators: this.presenter.generateSelectedFacilitators(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
+        isGroupSession: this.presenter.isGroupSession,
       },
     ]
   }

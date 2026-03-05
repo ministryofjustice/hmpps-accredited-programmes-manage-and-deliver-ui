@@ -26,12 +26,14 @@ const mockScheduleSessionTypeResponse: ScheduleSessionTypeResponse = {
       number: 1,
       name: 'Getting started one-to-one',
       sessionScheduleType: 'SCHEDULED',
+      sessionType: 'GROUP',
     },
     {
       id: randomUUID(),
       number: 2,
       name: 'Session 2',
       sessionScheduleType: 'CATCH_UP',
+      sessionType: 'ONE_TO_ONE',
     },
   ],
 }
@@ -75,6 +77,8 @@ const completeSessionData: Partial<SessionData> = {
     startTime: { hour: 9, minutes: 0, amOrPm: 'AM' },
     endTime: { hour: 10, minutes: 30, amOrPm: 'AM' },
     headingText: 'Schedule a Getting started one-to-one session',
+    selectedSession: 'Selected session',
+    groupOrOneToOne: 'GROUP',
   },
 }
 
@@ -119,7 +123,7 @@ describe('Session Schedule Controller', () => {
 
     it('displays previously selected session template from session', async () => {
       const selectedTemplateId = mockScheduleSessionTypeResponse.sessionTemplates[1]
-      const checkboxValue = `${selectedTemplateId.id}+${selectedTemplateId.sessionScheduleType}+${selectedTemplateId.name}`
+      const checkboxValue = `${selectedTemplateId.id}+${selectedTemplateId.sessionScheduleType}+${selectedTemplateId.name}+${selectedTemplateId.sessionType}`
       const sessionData: Partial<SessionData> = {
         sessionScheduleData: {
           selectedSession: checkboxValue,
@@ -146,9 +150,7 @@ describe('Session Schedule Controller', () => {
         .send({ 'session-template': selectedTemplateId })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(
-            `Redirecting to /group/${groupId}/module/${moduleId}/schedule-group-session-details`,
-          )
+          expect(res.text).toContain(`Redirecting to /group/${groupId}/module/${moduleId}/schedule-session-details`)
         })
     })
 
@@ -174,8 +176,17 @@ describe('Session Schedule Controller', () => {
     })
   })
 
-  describe('GET /group/:groupId/module/:moduleId/schedule-group-session-details', () => {
+  describe('GET /group/:groupId/module/:moduleId/schedule-session-details', () => {
     beforeEach(() => {
+      const sessionData: Partial<SessionData> = {
+        sessionScheduleData: {
+          sessionTemplateId: '30db4cee-a79a-420a-b0ff-5f5ce4dcfd7d',
+          sessionName: 'Getting started one-to-one',
+          headingText: 'Schedule a Getting started one-to-one session',
+          groupOrOneToOne: 'ONE_TO_ONE',
+        },
+      }
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
       accreditedProgrammesManageAndDeliverService.getIndividualSessionDetails.mockResolvedValue({
         facilitators: [
           { personName: 'John Doe', personCode: 'N07B001', teamName: 'GM Manchester N1', teamCode: 'N50CAC' },
@@ -192,7 +203,7 @@ describe('Session Schedule Controller', () => {
 
     it('loads the session details page', async () => {
       return request(app)
-        .get(`/group/${groupId}/module/${moduleId}/schedule-group-session-details`)
+        .get(`/group/${groupId}/module/${moduleId}/schedule-session-details`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Add session details')
@@ -205,7 +216,7 @@ describe('Session Schedule Controller', () => {
     })
   })
 
-  describe('POST /group/:groupId/module/:moduleId/schedule-group-session-details', () => {
+  describe('POST /group/:groupId/module/:moduleId/schedule-session-details', () => {
     beforeEach(() => {
       accreditedProgrammesManageAndDeliverService.getIndividualSessionDetails.mockResolvedValue({
         facilitators: [
@@ -223,7 +234,7 @@ describe('Session Schedule Controller', () => {
 
     it('saves valid session details to session and redirects to review your session page', async () => {
       return request(app)
-        .post(`/group/${groupId}/module/${moduleId}/schedule-group-session-details`)
+        .post(`/group/${groupId}/module/${moduleId}/schedule-session-details`)
         .send({
           'session-details-who': `a9971fd6-a185-43ee-bb23-a0ab23a14f50 + Jane Doe`,
           'session-details-facilitator': JSON.stringify({
@@ -293,7 +304,6 @@ describe('Session Schedule Controller', () => {
                   teamName: 'GM Manchester N1',
                 },
               ],
-              headingText: 'Schedule a Getting started one-to-one session',
               referralIds: ['a9971fd6-a185-43ee-bb23-a0ab23a14f50'],
               sessionTemplateId: '30db4cee-a79a-420a-b0ff-5f5ce4dcfd7d',
               startDate: '3055-01-01',
