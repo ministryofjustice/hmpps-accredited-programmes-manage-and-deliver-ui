@@ -6,6 +6,13 @@
   width: 100%;
   padding: 25px
 }
+.card a::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline: 0;
+  cursor: pointer;
+}
 
 .card__heading {
   margin-top: 0;
