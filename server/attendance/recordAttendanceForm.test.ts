@@ -18,7 +18,6 @@ describe('RecordAttendanceForm', () => {
             {
               referralId: 'referral1',
               outcomeCode: 'ATTC',
-              sessionNotes: '',
             },
           ],
         })

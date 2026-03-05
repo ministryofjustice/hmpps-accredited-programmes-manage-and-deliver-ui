@@ -37,7 +37,6 @@ export default class AttendanceView {
     return [
       'attendance/recordAttendance.njk',
       {
-        presenter: this.presenter,
         text: this.presenter.text,
         radioArgsList: this.radioArgsList,
         backLinkArgs: this.backLinkArgs,

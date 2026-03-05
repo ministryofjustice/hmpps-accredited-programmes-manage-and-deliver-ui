@@ -29,7 +29,7 @@ export default class AttendancePresenter {
     this.recordAttendanceBffData.people.forEach(person => {
       const fieldName = `attendance-${person.referralId}`
       fields[fieldName] = {
-        value: this.utils.stringValue(person.attendance.code, fieldName),
+        value: this.utils.stringValue(person.attendance?.code ?? null, fieldName),
         errorMessage: PresenterUtils.errorMessage(this.validationError, fieldName),
       }
     })

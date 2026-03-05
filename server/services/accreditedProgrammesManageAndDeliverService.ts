@@ -51,6 +51,7 @@ import {
   ScheduleSessionTypeResponse,
   SentenceInformation,
   Session,
+  SessionAttendance,
   SessionScheduleResponse,
   ThinkingAndBehaviour,
   UpdateAvailability,
@@ -737,5 +738,19 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
       headers: { Accept: 'application/json' },
       query: { referralId: referralIds },
     })) as RecordSessionAttendance
+  }
+
+  async createSessionAttendance(
+    username: ExpressUsername,
+    sessionId: string,
+    sessionAttendance: SessionAttendance,
+  ): Promise<SessionAttendance> {
+    const restClient = await this.createRestClientFromUsername(username)
+
+    return (await restClient.post({
+      path: `/session/${sessionId}/attendance`,
+      headers: { Accept: 'application/json' },
+      data: sessionAttendance,
+    })) as SessionAttendance
   }
 }
