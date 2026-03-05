@@ -33,6 +33,26 @@ describe('AddSessionDetailsPresenter', () => {
   })
 
   describe('generateSessionAttendeesCheckboxOptions', () => {
+    it('generates checkbox options with selections', () => {
+      const presenter = new AddSessionDetailsPresenter(sessionDetails, 'backLinkUri')
+      const options = presenter.generateSessionAttendeesCheckboxOptions(['ref1'])
+
+      expect(options).toEqual([
+        { text: 'John Doe (X12345)', value: 'ref1 + John Doe', checked: true },
+        { text: 'Jane Smith (Y67890)', value: 'ref2 + Jane Smith', checked: false },
+      ])
+    })
+
+    it('generates checkbox options with multiple selections', () => {
+      const presenter = new AddSessionDetailsPresenter(sessionDetails, 'backLinkUri')
+      const options = presenter.generateSessionAttendeesCheckboxOptions(['ref1', 'ref2'])
+
+      expect(options).toEqual([
+        { text: 'John Doe (X12345)', value: 'ref1 + John Doe', checked: true },
+        { text: 'Jane Smith (Y67890)', value: 'ref2 + Jane Smith', checked: true },
+      ])
+    })
+
     it('generates checkbox options without selections', () => {
       const presenter = new AddSessionDetailsPresenter(sessionDetails, 'backLinkUri')
       const options = presenter.generateSessionAttendeesRadioOptions(['ref1'])
@@ -44,9 +64,41 @@ describe('AddSessionDetailsPresenter', () => {
     })
   })
 
+  describe('isGroupSession', () => {
+    it('returns true when groupOrOneToOne is GROUP', () => {
+      const formData = { groupOrOneToOne: 'GROUP' }
+      const presenter = new AddSessionDetailsPresenter(sessionDetails, 'backLinkUri', null, formData)
+      expect(presenter.isGroupSession).toBe(true)
+    })
+
+    it('returns true when groupOrOneToOne is group (lowercase)', () => {
+      const formData = { groupOrOneToOne: 'group' }
+      const presenter = new AddSessionDetailsPresenter(sessionDetails, 'backLinkUri', null, formData)
+      expect(presenter.isGroupSession).toBe(true)
+    })
+
+    it('returns false when groupOrOneToOne is ONE_TO_ONE', () => {
+      const formData = { groupOrOneToOne: 'ONE_TO_ONE' }
+      const presenter = new AddSessionDetailsPresenter(sessionDetails, 'backLinkUri', null, formData)
+      expect(presenter.isGroupSession).toBe(false)
+    })
+  })
+
   describe('selectedAttendeeValues', () => {
-    it('returns values from userInputData when available', () => {
+    it('returns values from userInputData when available as a single string', () => {
       const userInputData = { 'session-details-who': 'ref1 + John Doe' }
+      const presenter = new AddSessionDetailsPresenter(sessionDetails, 'backLinkUri', null, null, userInputData)
+      expect(presenter.selectedAttendeeValues()).toEqual(['ref1'])
+    })
+
+    it('returns values from userInputData when available as an array', () => {
+      const userInputData = { 'session-details-who': ['ref1 + John Doe', 'ref2 + Jane Smith'] }
+      const presenter = new AddSessionDetailsPresenter(sessionDetails, 'backLinkUri', null, null, userInputData)
+      expect(presenter.selectedAttendeeValues()).toEqual(['ref1', 'ref2'])
+    })
+
+    it('handles values without + separator in userInputData', () => {
+      const userInputData = { 'session-details-who': 'ref1' }
       const presenter = new AddSessionDetailsPresenter(sessionDetails, 'backLinkUri', null, null, userInputData)
       expect(presenter.selectedAttendeeValues()).toEqual(['ref1'])
     })
@@ -55,6 +107,11 @@ describe('AddSessionDetailsPresenter', () => {
       const formData = { referralIds: ['X12345'] }
       const presenter = new AddSessionDetailsPresenter(sessionDetails, 'backLinkUri', null, formData)
       expect(presenter.selectedAttendeeValues()).toEqual(['X12345'])
+    })
+
+    it('returns empty array when neither userInputData nor formData available', () => {
+      const presenter = new AddSessionDetailsPresenter(sessionDetails, 'backLinkUri', null, null)
+      expect(presenter.selectedAttendeeValues()).toEqual([])
     })
   })
 
