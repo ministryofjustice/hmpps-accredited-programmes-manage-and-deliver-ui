@@ -1,12 +1,12 @@
+import { fakerEN_GB as faker } from '@faker-js/faker'
+import { ReferralStatusTransitions } from '@manage-and-deliver-api'
 import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import { SessionData } from 'express-session'
 import request from 'supertest'
-import { ReferralStatusTransitions } from '@manage-and-deliver-api'
-import { fakerEN_GB as faker } from '@faker-js/faker'
 import AccreditedProgrammesManageAndDeliverService from '../../services/accreditedProgrammesManageAndDeliverService'
-import TestUtils from '../../testutils/testUtils'
 import referralStatusTransitionsFactory from '../../testutils/factories/referralStatusTransitionsFactory'
+import TestUtils from '../../testutils/testUtils'
 
 jest.mock('../../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../../data/hmppsAuthClient')
@@ -78,7 +78,7 @@ describe('remove from group', () => {
 
   describe(`GET /removeFromGroup/:groupId/:referralId/updateStatus`, () => {
     it('loads the initial page to remove someone to a group', async () => {
-      accreditedProgrammesManageAndDeliverService.removeFromGroupStatusTransitions.mockResolvedValue(
+      accreditedProgrammesManageAndDeliverService.removeFromGroupStatusTransitionDetails.mockResolvedValue(
         referralStatusTransitions,
       )
       return request(app)
@@ -94,7 +94,7 @@ describe('remove from group', () => {
     it('redirects to the allocated page on successful submit with the API message', async () => {
       const groupId = '123'
       const referralId = '123'
-      accreditedProgrammesManageAndDeliverService.removeFromGroupStatusTransitions.mockResolvedValue(
+      accreditedProgrammesManageAndDeliverService.removeFromGroupStatusTransitionDetails.mockResolvedValue(
         referralStatusTransitions,
       )
       accreditedProgrammesManageAndDeliverService.removeFromGroup.mockResolvedValue({
@@ -118,7 +118,7 @@ describe('remove from group', () => {
     it('returns with errors if validation fails', async () => {
       const groupId = '123'
       const referralId = '123'
-      accreditedProgrammesManageAndDeliverService.removeFromGroupStatusTransitions.mockResolvedValue(
+      accreditedProgrammesManageAndDeliverService.removeFromGroupStatusTransitionDetails.mockResolvedValue(
         referralStatusTransitions,
       )
       return request(app)

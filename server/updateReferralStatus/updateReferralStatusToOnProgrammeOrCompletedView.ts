@@ -30,7 +30,7 @@ export default class UpdateReferralStatusFixedView {
   }
 
   get showInsetText() {
-    return this.presenter.details.currentStatusDescription === 'On programme'
+    return this.presenter.statusDetails.currentStatus.title === 'On programme'
   }
 
   get insetText() {

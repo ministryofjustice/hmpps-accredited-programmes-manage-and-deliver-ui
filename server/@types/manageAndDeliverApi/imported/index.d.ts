@@ -2964,6 +2964,19 @@ export interface components {
       /** @description Sex that the group is being run for. */
       sex?: components['schemas']['ProgrammeGroupSexEnum']
     }
+    CurrentGroupDetails: {
+      /**
+       * @description The code of the currently allocated group
+       * @example ABC111
+       */
+      currentlyAllocatedGroupCode?: string
+      /**
+       * Format: uuid
+       * @description The unique code of the currently allocated group
+       * @example c98151f4-4081-4c65-9f98-54e63a328c8d
+       */
+      currentlyAllocatedGroupId?: string
+    }
     /** @description Form data for the update status form in the M&D UI */
     CurrentStatus: {
       /**
@@ -3017,6 +3030,19 @@ export interface components {
       currentStatus: components['schemas']['CurrentStatus']
       /** @description List of transition statuses */
       availableStatuses: components['schemas']['ReferralStatus'][]
+      /** @description Suggested status object for the UI to potentially display */
+      suggestedStatus?: components['schemas']['SuggestedStatus']
+      /** @description The details of the group that the user is currently allocated to */
+      currentGroupDetails?: components['schemas']['CurrentGroupDetails']
+    }
+    SuggestedStatus: {
+      /** @description Name of the status description */
+      name: string
+      /**
+       * Format: uuid
+       * @description The id of the status description
+       */
+      statusDescriptionId: string
     }
     /** @description Details of a session */
     Session: {
@@ -3231,6 +3257,17 @@ export interface components {
       isCatchup: boolean
       /** @description List of attendees for the session */
       attendees: components['schemas']['EditSessionAttendee'][]
+    }
+    /** @description Status transition information for the Remove Referral from Group form in the M&D UI */
+    RemoveReferralFromGroupStatusTransitions: {
+      /** @description The current status information */
+      currentStatus: components['schemas']['CurrentStatus']
+      /** @description List of transition statuses */
+      availableStatuses: components['schemas']['ReferralStatus'][]
+      /** @description Suggested status object for the UI to potentially display */
+      suggestedStatus?: components['schemas']['SuggestedStatus']
+      /** @description The details of the group that the user is currently allocated to */
+      currentGroupDetails?: components['schemas']['CurrentGroupDetails']
     }
     UserTeamMember: {
       /** @description The code for the team member */
@@ -6735,7 +6772,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['ReferralStatusTransitions'][]
+          'application/json': components['schemas']['RemoveReferralFromGroupStatusTransitions'][]
         }
       }
       /** @description Bad Request */

@@ -17,7 +17,7 @@ export default class UpdateReferralStatusStartedOrCompletedView {
       fieldset: {
         legend: {
           text:
-            this.presenter.details.currentStatusDescription === 'Scheduled'
+            this.presenter.statusDetails.currentStatus.title === 'Scheduled'
               ? `Has ${this.presenter.details.personName} started the programme? `
               : `Has ${this.presenter.details.personName} completed the programme?`,
           isPageHeading: true,
@@ -30,7 +30,7 @@ export default class UpdateReferralStatusStartedOrCompletedView {
           text: 'Yes',
           hint: {
             text:
-              this.presenter.details.currentStatusDescription === 'On programme'
+              this.presenter.statusDetails.currentStatus.title === 'On programme'
                 ? 'The person has finished the programme and a three-way meeting has taken place.'
                 : '',
           },
@@ -49,7 +49,7 @@ export default class UpdateReferralStatusStartedOrCompletedView {
   get insetText() {
     return {
       classes: 'govuk-!-margin-top-0',
-      html: `${this.presenter.details.personName} is allocated to <a target="_blank" rel="noopener noreferrer" href='/group/${this.presenter.details.currentlyAllocatedGroupId}/allocated'>${this.presenter.details.currentlyAllocatedGroupCode} (opens in a new tab)</a>.`,
+      html: `${this.presenter.details.personName} is allocated to <a target="_blank" rel="noopener noreferrer" href='/group/${this.presenter.statusDetails.currentGroupDetails.currentlyAllocatedGroupId}/allocated'>${this.presenter.statusDetails.currentGroupDetails.currentlyAllocatedGroupCode} (opens in a new tab)</a>.`,
     }
   }
 

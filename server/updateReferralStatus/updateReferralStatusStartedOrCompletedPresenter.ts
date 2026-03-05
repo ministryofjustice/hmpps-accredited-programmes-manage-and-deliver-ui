@@ -1,10 +1,11 @@
-import { ReferralDetails } from '@manage-and-deliver-api'
+import { ReferralDetails, ReferralStatusTransitions } from '@manage-and-deliver-api'
 import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
 
 export default class UpdateReferralStatusStartedOrCompletedPresenter {
   constructor(
     readonly details: ReferralDetails,
+    readonly statusDetails: ReferralStatusTransitions,
     readonly backLinkUri: string,
     private readonly validationError: FormValidationError | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
@@ -18,7 +19,7 @@ export default class UpdateReferralStatusStartedOrCompletedPresenter {
   get text() {
     return {
       title:
-        this.details.currentStatusDescription === 'Scheduled'
+        this.statusDetails.currentStatus.title === 'Scheduled'
           ? `${this.details.personName} is allocated to a group`
           : `${this.details.personName} has started Building Choices`,
     }
