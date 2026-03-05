@@ -42,7 +42,7 @@ services:
       - '9095:8080'
     volumes:
       - ./wiremock_mappings:/home/wiremock/mappings
-      - ../hmpps-accredited-programmes-manage-and-deliver-api/wiremock_mappings/seeded:/home/wiremock/mappings/seeded
+      - ${API_SEEDED_WIREMOCKS_PATH}:/home/wiremock/mappings/seeded
     command: '--verbose'
 
   localstack:

@@ -163,7 +163,7 @@ describe('Update Referral Status Controller', () => {
 
   describe('update-status-fixed', () => {
     describe(`GET /referral/:referralDetails.id/update-status-details`, () => {
-      it('loads the update status fixed page for Scheduled', async () => {
+      beforeEach(() => {
         accreditedProgrammesManageAndDeliverService.getStatusTransitionDetails.mockResolvedValue({
           ...statusDetails,
           suggestedStatus: {
@@ -175,6 +175,8 @@ describe('Update Referral Status Controller', () => {
             currentlyAllocatedGroupId: randomUUID(),
           },
         })
+      })
+      it('loads the update status fixed page for Scheduled', async () => {
         accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue({
           ...referralDetails,
           currentStatusDescription: 'Scheduled',
@@ -192,12 +194,8 @@ describe('Update Referral Status Controller', () => {
         accreditedProgrammesManageAndDeliverService.getStatusTransitionDetails.mockResolvedValue({
           ...statusDetails,
           suggestedStatus: {
-            name: 'On programme',
-            statusDescriptionId: randomUUID(),
-          },
-          currentGroupDetails: {
-            currentlyAllocatedGroupCode: 'Building Choices 1',
-            currentlyAllocatedGroupId: randomUUID(),
+            ...statusDetails.suggestedStatus,
+            name: 'Programme complete',
           },
         })
         accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue({
@@ -215,21 +213,23 @@ describe('Update Referral Status Controller', () => {
     })
 
     describe(`POST /referral/:referralDetails.id/update-status-details`, () => {
-      it('updates status and redirects for On programme', async () => {
-        accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue({
-          ...referralDetails,
-          currentStatusDescription: 'On programme',
-        })
+      beforeEach(() => {
         accreditedProgrammesManageAndDeliverService.getStatusTransitionDetails.mockResolvedValue({
           ...statusDetails,
           suggestedStatus: {
-            name: 'On programme',
+            name: 'Programme complete',
             statusDescriptionId: randomUUID(),
           },
           currentGroupDetails: {
             currentlyAllocatedGroupCode: 'Building Choices 1',
             currentlyAllocatedGroupId: randomUUID(),
           },
+        })
+      })
+      it('updates status and redirects for On programme', async () => {
+        accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue({
+          ...referralDetails,
+          currentStatusDescription: 'On programme',
         })
         return request(app)
           .post(`/referral/${referralDetails.id}/update-status-details`)
@@ -244,17 +244,6 @@ describe('Update Referral Status Controller', () => {
       })
 
       it('returns 400 and displays error if more-details is too long', async () => {
-        accreditedProgrammesManageAndDeliverService.getStatusTransitionDetails.mockResolvedValue({
-          ...statusDetails,
-          suggestedStatus: {
-            name: 'On programme',
-            statusDescriptionId: randomUUID(),
-          },
-          currentGroupDetails: {
-            currentlyAllocatedGroupCode: 'Building Choices 1',
-            currentlyAllocatedGroupId: randomUUID(),
-          },
-        })
         accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue({
           ...referralDetails,
           currentStatusDescription: 'Scheduled',

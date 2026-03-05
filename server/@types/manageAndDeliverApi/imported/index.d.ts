@@ -2857,29 +2857,26 @@ export interface components {
       first?: boolean
       last?: boolean
       /** Format: int32 */
-      numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
-      /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageableObject: {
-      paged?: boolean
-      /** Format: int32 */
-      pageNumber?: number
+      /** Format: int64 */
+      offset?: number
+      sort?: components['schemas']['SortObject']
       /** Format: int32 */
       pageSize?: number
       /** Format: int32 */
       pageNumber?: number
       paged?: boolean
       unpaged?: boolean
-      /** Format: int64 */
-      offset?: number
-      sort?: components['schemas']['SortObject']
     }
     ReferralCaseListItem: {
       /** Format: uuid */
@@ -2897,9 +2894,9 @@ export interface components {
       reportingTeam: string
     }
     SortObject: {
+      empty?: boolean
       sorted?: boolean
       unsorted?: boolean
-      empty?: boolean
     }
     StatusFilterValues: {
       /**
@@ -3382,14 +3379,14 @@ export interface components {
       first?: boolean
       last?: boolean
       /** Format: int32 */
-      numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
-      /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     GroupItem: {
@@ -3477,14 +3474,14 @@ export interface components {
       first?: boolean
       last?: boolean
       /** Format: int32 */
-      numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
-      /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
