@@ -124,7 +124,7 @@ export default class GroupAllocationsView {
         hasResults: this.presenter.hasResults(),
         noResultsString: this.presenter.generateNoResultsString(),
         resultsText: this.presenter.resultsText,
-        serviceNavigationArgs: this.presenter.getServiceNavigationArgs(),
+        serviceNavigationArgs: this.presenter.getMojSubNavigationArgs(),
       },
     ]
   }

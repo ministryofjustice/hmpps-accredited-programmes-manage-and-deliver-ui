@@ -1,0 +1,16 @@
+{% macro cardGroup(cards) %}
+  <div class="govuk-width-container">
+    <ul class="govuk-grid-row card-group govuk-!-margin-bottom-9">
+      {% for card in cards %}
+      <li class="govuk-grid-column-one-third card-group__item">
+        <div class="card card--clickable" data-test="{{ card.dataTest }}">
+          <h2 class="govuk-heading-m card__heading">
+            <a class="govuk-link card__link govuk-link--no-visited-state" href="{{ card.href }}">{{ card.title }}</a>
+          </h2>
+          <p class="govuk-body card__description">{{ card.description }}</p>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endmacro %}

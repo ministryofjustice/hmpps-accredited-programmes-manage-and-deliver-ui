@@ -1,6 +1,6 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/accordion/macro.njk" import govukAccordion %}
-{% from "../components/groupServiceNavigation.njk" import groupServiceNavigation %}
+{%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 {% from "moj/components/alert/macro.njk" import mojAlert %}
 
 {% set pageTitle = applicationName + " - Home" %}
@@ -9,6 +9,7 @@
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    {{ mojSubNavigation(serviceNavigationArgs) }}
     {% if presenter.scheduleSessionSuccessMessageArgs %}
       {{ mojAlert(presenter.scheduleSessionSuccessMessageArgs) }}
     {% endif %}
@@ -16,9 +17,6 @@
     <h1 class="govuk-heading-xl">{{ text.headingText }}</h1>
   </div>
 </div>
-
-{{ groupServiceNavigation(serviceNavigationArgs) }}
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     {{ govukAccordion(sessionAttendanceAccordionArgs) }}
