@@ -38,7 +38,8 @@ export default class CaselistPresenter {
   }
 
   readonly text = {
-    pageHeading: `Building Choices: moderate intensity`,
+    pageSubHeading: `Building Choices: moderate intensity`,
+    pageHeading: `Groups`,
   }
 
   get showReportingLocations(): boolean {
