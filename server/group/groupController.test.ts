@@ -35,7 +35,8 @@ describe('GroupController', () => {
         .get('/groups/not-started')
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain('Building Choices groups')
+          expect(res.text).toContain('Building Choices: moderate intensity')
+          expect(res.text).toContain('Groups')
         })
     })
   })
@@ -46,7 +47,8 @@ describe('GroupController', () => {
         .get('/groups/started')
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain('Building Choices groups')
+          expect(res.text).toContain('Building Choices: moderate intensity')
+          expect(res.text).toContain('Groups')
         })
     })
   })
