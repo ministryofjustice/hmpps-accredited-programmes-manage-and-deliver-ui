@@ -53,6 +53,7 @@ export default class EditSessionController {
 
     const presenter = new EditSessionPresenter(
       groupId,
+      sessionDetails.code,
       sessionDetails,
       sessionId,
       `/group/${groupId}/session/${sessionId}/delete-session`,

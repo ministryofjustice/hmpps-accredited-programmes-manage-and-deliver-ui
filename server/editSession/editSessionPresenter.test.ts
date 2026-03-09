@@ -3,6 +3,7 @@ import EditSessionPresenter from './editSessionPresenter'
 
 describe('EditSessionPresenter', () => {
   const mockGroupId = 'group-123'
+  const mockGroupName = 'Sample Group Name'
   const mockSessionId = 'session-456'
   const mockDeleteUrl = '/delete-url'
 
@@ -35,7 +36,13 @@ describe('EditSessionPresenter', () => {
           facilitators: [],
         }
 
-        const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
+        const presenter = new EditSessionPresenter(
+          mockGroupId,
+          mockGroupName,
+          sessionDetails,
+          mockSessionId,
+          mockDeleteUrl,
+        )
         const result = presenter.attendanceTableArgs
 
         expect(result).toEqual({
@@ -47,8 +54,8 @@ describe('EditSessionPresenter', () => {
               value: '123',
               cells: [
                 { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
-                'Attended',
-                'Good participation',
+                { html: 'Attended' },
+                { html: 'Good participation' },
               ],
             },
             {
@@ -56,8 +63,8 @@ describe('EditSessionPresenter', () => {
               value: '456',
               cells: [
                 { html: '<a href="/referral-details/456/personal-details">Jane Doe</a> CRN002' },
-                'Not attended',
-                'Absent',
+                { html: 'Not attended' },
+                { html: 'Absent' },
               ],
             },
           ],
@@ -86,7 +93,13 @@ describe('EditSessionPresenter', () => {
           facilitators: [],
         }
 
-        const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
+        const presenter = new EditSessionPresenter(
+          mockGroupId,
+          mockGroupName,
+          sessionDetails,
+          mockSessionId,
+          mockDeleteUrl,
+        )
         const result = presenter.attendanceTableArgs
 
         expect(result).toEqual({
@@ -94,8 +107,10 @@ describe('EditSessionPresenter', () => {
           rows: [
             [
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
-              { text: 'Attended' },
-              { text: 'Good progress' },
+              { html: 'Attended' },
+              {
+                html: '<a href="/group/group-123/session/session-456/referral/123/sample-group-name-session-notes">Alex River Sample Group Name</a>',
+              },
             ],
           ],
         })
@@ -115,7 +130,13 @@ describe('EditSessionPresenter', () => {
           facilitators: [],
         }
 
-        const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
+        const presenter = new EditSessionPresenter(
+          mockGroupId,
+          mockGroupName,
+          sessionDetails,
+          mockSessionId,
+          mockDeleteUrl,
+        )
         const result = presenter.attendanceTableArgs
 
         expect(result).toEqual({

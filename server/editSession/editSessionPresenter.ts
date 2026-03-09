@@ -3,10 +3,12 @@ import { MultiSelectTableArgs } from '@manage-and-deliver-ui'
 import { TableArgs } from '../utils/govukFrontendTypes'
 import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
+import { convertToUrlFriendlyKebabCase } from '../utils/utils'
 
 export default class EditSessionPresenter {
   constructor(
     readonly groupId: string,
+    readonly groupName: string,
     readonly sessionDetails: GroupSessionResponse,
     readonly sessionId: string,
     readonly deleteUrl: string,
@@ -68,8 +70,8 @@ export default class EditSessionPresenter {
             {
               html: `<a href="/referral-details/${it.referralId}/personal-details">${it.name}</a> ${it.crn}`,
             },
-            it.attendance,
-            it.sessionNotes,
+            { html: it.attendance },
+            { html: it.sessionNotes },
           ],
         })),
       }
@@ -83,8 +85,10 @@ export default class EditSessionPresenter {
                 {
                   html: `<a href="/referral-details/${attendanceData[0].referralId}/personal-details">${attendanceData[0].name}</a> ${attendanceData[0].crn}`,
                 },
-                { text: attendanceData[0].attendance },
-                { text: attendanceData[0].sessionNotes },
+                { html: attendanceData[0].attendance },
+                {
+                  html: `<a href="/group/${this.groupId}/session/${this.sessionId}/referral/${attendanceData[0].referralId}/${convertToUrlFriendlyKebabCase(this.groupName)}-session-notes">${attendanceData[0].name} ${this.groupName}</a>`,
+                },
               ],
             ]
           : [],
