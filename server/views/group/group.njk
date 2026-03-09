@@ -13,15 +13,12 @@
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block content %}
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <span class="govuk-caption-xl">{{ text.regionName }}</span>
-    </div>
-  </div>
+ 
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-l">{{ text.pageHeading }}</h1>
+    <span class="govuk-caption-xl">{{ text.pageSubHeading }}</span>
+    <h1 class="govuk-heading-xl">{{ text.pageHeading }}</h1>
   </div>
   <div class="govuk-grid-column-one-third">
     {{ govukButton({text: "Create a group", href: "/group/create-a-group/create-group", classes: "create_group_button"}) }}
