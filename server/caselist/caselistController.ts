@@ -7,6 +7,7 @@ import ControllerUtils from '../utils/controllerUtils'
 import CaselistFilter from './caselistFilter'
 import CaselistPresenter, { CaselistPageSection } from './caselistPresenter'
 import CaselistView from './caselistView'
+import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 
 export default class CaselistController {
   constructor(
@@ -50,7 +51,7 @@ export default class CaselistController {
 
     const view = new CaselistView(presenter)
 
-    ControllerUtils.renderWithLayout(res, view, null)
+    ControllerUtils.renderWithLayout(res, view, null, PrimaryNavigationTab.Caselist)
   }
 
   async showClosedCaselist(req: Request, res: Response): Promise<void> {
