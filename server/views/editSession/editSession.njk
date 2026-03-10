@@ -17,9 +17,6 @@
       </div>
 
       <div class="govuk-grid-column-two-thirds">
-        {% if successMessageArgs !== null %}
-          {{ mojAlert(successMessageArgs) }}
-        {% endif %}
         <span class="govuk-caption-l">{{text.pageCaption}}</span>
         <h1 class="govuk-heading-l">{{text.pageHeading}}</h1>
       </div>
@@ -40,6 +37,9 @@
       </div>
 
     <div class="govuk-grid-column-two-thirds">
+       {% if successMessageArgs !== null %}
+          {{ mojAlert(successMessageArgs) }}
+        {% endif %}
       <form method="post" novalidate>
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
         {% if hasMultipleReferrals %}
