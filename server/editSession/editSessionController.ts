@@ -79,7 +79,7 @@ export default class EditSessionController {
         formError = data.error
       } else if (data.paramsForUpdate?.delete === 'yes') {
         const response = await this.accreditedProgrammesManageAndDeliverService.deleteSession(username, sessionId)
-        return res.redirect(`/group/${groupId}/sessions-and-attendance?successMessage=${response}`)
+        return res.redirect(`/group/${groupId}/sessions-and-attendance?successMessage=${encodeURIComponent(response)}`)
       } else {
         return res.redirect(req.session.originPage)
       }
@@ -110,7 +110,9 @@ export default class EditSessionController {
           sessionId,
           data.paramsForUpdate.referralId,
         )
-        return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session?message=${message}`)
+        return res.redirect(
+          `/group/${groupId}/session/${sessionId}/edit-session?message=${encodeURIComponent(message)}`,
+        )
       }
     }
 
@@ -177,7 +179,9 @@ export default class EditSessionController {
 
         delete req.session.editSessionDateAndTime
 
-        return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session?message=${response.message}`)
+        return res.redirect(
+          `/group/${groupId}/session/${sessionId}/edit-session?message=${encodeURIComponent(response.message)}`,
+        )
       }
     }
     const presenter = new EditSessionDateAndTimePresenter(
@@ -220,7 +224,9 @@ export default class EditSessionController {
           req.session.editSessionDateAndTime as RescheduleSessionRequest,
         )
 
-        return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session?message=${message.message}`)
+        return res.redirect(
+          `/group/${groupId}/session/${sessionId}/edit-session?message=${encodeURIComponent(message.message)}`,
+        )
       }
     }
 
@@ -254,7 +260,9 @@ export default class EditSessionController {
           sessionId,
           req.session.sessionFacilitators,
         )
-        return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session?message=${message}`)
+        return res.redirect(
+          `/group/${groupId}/session/${sessionId}/edit-session?message=${encodeURIComponent(message)}`,
+        )
       }
     }
     const presenter = new EditSessionFacilitatorsPresenter(
