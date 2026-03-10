@@ -110,7 +110,6 @@ export default class EditSessionController {
           sessionId,
           data.paramsForUpdate.referralId,
         )
-        console.log(message)
         return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session?message=${message}`)
       }
     }
@@ -169,8 +168,6 @@ export default class EditSessionController {
           sessionEndTime: data.paramsForUpdate.sessionEndTime,
           rescheduleOtherSessions: false,
         }
-
-        console.log(rescheduleRequest)
 
         const response = await this.accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime(
           username,
