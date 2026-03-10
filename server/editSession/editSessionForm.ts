@@ -33,7 +33,7 @@ export default class EditSessionForm {
     return [body('delete-session').notEmpty().withMessage(errorMessages.editSession.selectDeleteSession)]
   }
 
-  async attendeesData(): Promise<FormData<{ referralId: string }>> {
+  async attendeesData(): Promise<FormData<{ referralId: string[] }>> {
     const validationResult = await FormUtils.runValidations({
       request: this.request,
       validations: EditSessionForm.attendeesValidations(),
@@ -47,9 +47,15 @@ export default class EditSessionForm {
       }
     }
 
+    let editSessionAttendees = this.request.body['edit-session-attendees']
+    // Ensure edit-session-attendees is always an array
+    if (!Array.isArray(editSessionAttendees)) {
+      editSessionAttendees = [editSessionAttendees]
+    }
+
     return {
       paramsForUpdate: {
-        referralId: this.request.body['edit-session-attendees'],
+        referralId: editSessionAttendees,
       },
       error: null,
     }

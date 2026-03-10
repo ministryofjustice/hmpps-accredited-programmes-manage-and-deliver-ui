@@ -176,4 +176,33 @@ describe('DateUtils', () => {
       expect(DateUtils.ageMonths(birthdate)).toEqual(expectedAge)
     })
   })
+
+  describe('formatDateToDDMMYYYY', () => {
+    it('returns undefined when input is undefined', () => {
+      expect(DateUtils.formatDateToDDMMYYYY(undefined)).toBeUndefined()
+    })
+
+    it('keeps DD/MM/YYYY format as-is', () => {
+      expect(DateUtils.formatDateToDDMMYYYY('15/03/2021')).toEqual('15/03/2021')
+      expect(DateUtils.formatDateToDDMMYYYY('01/01/2000')).toEqual('01/01/2000')
+      expect(DateUtils.formatDateToDDMMYYYY('31/12/2025')).toEqual('31/12/2025')
+    })
+
+    it('converts YYYY-MM-DD format to DD/MM/YYYY', () => {
+      expect(DateUtils.formatDateToDDMMYYYY('2021-03-15')).toEqual('15/03/2021')
+      expect(DateUtils.formatDateToDDMMYYYY('2000-01-01')).toEqual('01/01/2000')
+      expect(DateUtils.formatDateToDDMMYYYY('2025-12-31')).toEqual('31/12/2025')
+    })
+
+    it('handles edge cases with leading zeros', () => {
+      expect(DateUtils.formatDateToDDMMYYYY('2021-01-05')).toEqual('05/01/2021')
+      expect(DateUtils.formatDateToDDMMYYYY('2021-09-09')).toEqual('09/09/2021')
+    })
+
+    it('returns unrecognized format as-is', () => {
+      expect(DateUtils.formatDateToDDMMYYYY('invalid-date')).toEqual('invalid-date')
+      expect(DateUtils.formatDateToDDMMYYYY('2021/03/15')).toEqual('2021/03/15')
+      expect(DateUtils.formatDateToDDMMYYYY('15-03-2021')).toEqual('15-03-2021')
+    })
+  })
 })
