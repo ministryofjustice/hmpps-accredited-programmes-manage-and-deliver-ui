@@ -44,6 +44,21 @@ export default class EditSessionPresenter {
     return this.sessionDetails.attendanceAndSessionNotes?.length > 0
   }
 
+  attendanceOptionText(attendance: string | undefined) {
+    const recordedAttendance = attendance?.trim().toLowerCase()
+
+    if (recordedAttendance === 'attended - complied') {
+      return { attendanceState: '<span class="govuk-tag govuk-tag--blue">Attended - Complied</span>' }
+    }
+    if (recordedAttendance === 'attended - failed to comply') {
+      return { attendanceState: '<span class="govuk-tag govuk-tag--yellow">Attended - failed to comply</span>' }
+    }
+    if (recordedAttendance === 'no - did not attend') {
+      return { attendanceState: '<span class="govuk-tag govuk-tag--red">Not attended</span>' }
+    }
+    return { attendanceState: '<span class="govuk-tag govuk-tag--grey">To be confirmed</span>' }
+  }
+
   get attendanceTableArgs(): MultiSelectTableArgs | TableArgs {
     const attendanceData = this.sessionDetails.attendanceAndSessionNotes || []
     const headers = [
@@ -68,7 +83,7 @@ export default class EditSessionPresenter {
             {
               html: `<a href="/referral-details/${it.referralId}/personal-details">${it.name}</a> ${it.crn}`,
             },
-            it.attendance,
+            { html: this.attendanceOptionText(it.attendance).attendanceState },
             it.sessionNotes,
           ],
         })),
@@ -83,7 +98,7 @@ export default class EditSessionPresenter {
                 {
                   html: `<a href="/referral-details/${attendanceData[0].referralId}/personal-details">${attendanceData[0].name}</a> ${attendanceData[0].crn}`,
                 },
-                { text: attendanceData[0].attendance },
+                { html: this.attendanceOptionText(attendanceData[0].attendance).attendanceState },
                 { text: attendanceData[0].sessionNotes },
               ],
             ]
