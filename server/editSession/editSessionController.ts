@@ -180,7 +180,6 @@ export default class EditSessionController {
         return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session?message=${response.message}`)
       }
     }
-    console.log(sessionDetails)
     const presenter = new EditSessionDateAndTimePresenter(
       groupId,
       sessionDetails,
