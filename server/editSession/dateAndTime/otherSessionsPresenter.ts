@@ -26,7 +26,7 @@ export default class OtherSessionsPresenter {
   }
 
   get backLinkUri() {
-    return `group/${this.groupId}/session/${this.rescheduleSessionDetails.sessionId}/edit-session-date-and-time`
+    return `/group/${this.groupId}/session/${this.rescheduleSessionDetails.sessionId}/edit-session-date-and-time`
   }
 
   get errorSummary() {

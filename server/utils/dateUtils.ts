@@ -132,4 +132,28 @@ export default class DateUtils {
     }
     return { hour: hour24, minute }
   }
+
+  /**
+   * Converts a date string to DD/MM/YYYY format
+   * Handles both YYYY-MM-DD (API format) and DD/MM/YYYY (form format)
+   */
+  static formatDateToDDMMYYYY(dateString: string | undefined): string | undefined {
+    if (!dateString) {
+      return undefined
+    }
+
+    // Check if already in DD/MM/YYYY format
+    if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateString)) {
+      return dateString
+    }
+
+    // Convert from YYYY-MM-DD format
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+      const [year, month, day] = dateString.split('-')
+      return `${day}/${month}/${year}`
+    }
+
+    // Return as-is if unrecognized format
+    return dateString
+  }
 }

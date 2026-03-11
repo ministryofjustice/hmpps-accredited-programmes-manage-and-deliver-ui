@@ -44,8 +44,8 @@ export default class GroupPresenter {
 
   get text() {
     return {
-      pageHeading: `Building Choices groups`,
-      regionName: this.regionName,
+      pageSubHeading: `Building Choices: moderate intensity`,
+      pageHeading: `Groups`,
     }
   }
 

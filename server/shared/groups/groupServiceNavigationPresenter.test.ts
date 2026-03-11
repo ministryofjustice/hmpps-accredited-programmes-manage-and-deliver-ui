@@ -27,7 +27,7 @@ describe('GroupServiceNavigationPresenter', () => {
             active: false,
           },
           {
-            href: `/group/${groupId}/waitlist`,
+            href: `/group/${groupId}/allocations`,
             text: 'Allocations and waitlist',
             active: false,
           },
