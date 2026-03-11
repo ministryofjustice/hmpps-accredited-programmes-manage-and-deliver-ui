@@ -125,4 +125,64 @@ describe('EditSessionPresenter', () => {
       })
     })
   })
+
+  describe('backLinkArgs', () => {
+    const sessionDetails: GroupSessionResponse = {
+      pageTitle: 'Session 1',
+      code: 'group-123',
+      sessionType: 'Group',
+      attendanceAndSessionNotes: [],
+      date: '01 Feb 2026',
+      time: '1:00pm',
+      scheduledToAttend: [],
+      facilitators: [],
+    }
+
+    describe('when isAttendanceHistory is true', () => {
+      it('returns back link to attendance history page', () => {
+        const presenter = new EditSessionPresenter(
+          mockGroupId,
+          sessionDetails,
+          mockSessionId,
+          mockDeleteUrl,
+          null,
+          true,
+        )
+
+        expect(presenter.backLinkArgs).toEqual({
+          text: 'Back to Attendance history',
+          href: '/group/group-123/attendance-history',
+        })
+      })
+    })
+
+    describe('when isAttendanceHistory is false', () => {
+      it('returns back link to sessions and attendance page', () => {
+        const presenter = new EditSessionPresenter(
+          mockGroupId,
+          sessionDetails,
+          mockSessionId,
+          mockDeleteUrl,
+          null,
+          false,
+        )
+
+        expect(presenter.backLinkArgs).toEqual({
+          text: 'Back to Sessions and attendance',
+          href: '/group/group-123/sessions-and-attendance',
+        })
+      })
+    })
+
+    describe('when isAttendanceHistory is not provided (defaults to false)', () => {
+      it('returns back link to sessions and attendance page', () => {
+        const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
+
+        expect(presenter.backLinkArgs).toEqual({
+          text: 'Back to Sessions and attendance',
+          href: '/group/group-123/sessions-and-attendance',
+        })
+      })
+    })
+  })
 })
