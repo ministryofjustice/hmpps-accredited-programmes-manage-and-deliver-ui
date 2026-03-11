@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import { Group } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
-import ControllerUtils from '../utils/controllerUtils'
 import GroupPresenter, { GroupListPageSection } from './groupPresenter'
 import GroupView from './groupView'
 import { Page } from '../shared/models/pagination'

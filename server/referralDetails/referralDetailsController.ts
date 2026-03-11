@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 
 import { ReferralDetails } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
-import ControllerUtils from '../utils/controllerUtils'
 import { FormValidationError } from '../utils/formValidationError'
 import AddAvailabilityForm from './addAvailability/AddAvailabilityForm'
 import AddAvailabilityPresenter from './addAvailability/addAvailabilityPresenter'

@@ -1,7 +1,6 @@
 import { ScheduleSessionRequest } from '@manage-and-deliver-api'
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
-import ControllerUtils from '../utils/controllerUtils'
 import { FormValidationError } from '../utils/formValidationError'
 
 import SessionScheduleAttendancePresenter from './sessionAttendance/sessionScheduleAttendancePresenter'

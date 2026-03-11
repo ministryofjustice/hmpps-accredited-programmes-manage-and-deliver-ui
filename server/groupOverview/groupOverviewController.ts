@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
-import ControllerUtils from '../utils/controllerUtils'
 import { FormValidationError } from '../utils/formValidationError'
 import GroupAllocationsFilter from './allocations/groupAllocationsFilter'
 import GroupAllocationsPresenter, { GroupAllocationsPageSection } from './allocations/groupAllocationsPresenter'

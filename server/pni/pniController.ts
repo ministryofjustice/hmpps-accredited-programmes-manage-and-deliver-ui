@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
-import ControllerUtils from '../utils/controllerUtils'
 import PniPresenter from './pniPresenter'
 import PniView from './pniView'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'

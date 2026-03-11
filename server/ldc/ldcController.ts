@@ -1,7 +1,6 @@
 import { ReferralDetails } from '@manage-and-deliver-api'
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
-import ControllerUtils from '../utils/controllerUtils'
 import UpdateLdcPresenter from './updateLdcPresenter'
 import UpdateLdcView from './updateLdcView'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
