@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import { RecordSessionAttendance, SessionAttendance } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
-import ControllerUtils from '../utils/controllerUtils'
 import AttendancePresenter from './attendancePresenter'
 import AttendanceView from './attendanceView'
 import RecordAttendanceForm from './recordAttendanceForm'
@@ -9,11 +8,17 @@ import { FormValidationError } from '../utils/formValidationError'
 import AttendanceSessionNotesPresenter from './attendanceNotes/attendanceSessionNotesPresenter'
 import AttendanceSessionNotesView from './attendanceNotes/attendanceSessionNotesView'
 import { convertToUrlFriendlyKebabCase } from '../utils/utils'
+import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
+import BaseController from '../shared/baseController'
 
-export default class AttendanceController {
+export default class AttendanceController extends BaseController {
+  protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
+
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
-  ) {}
+  ) {
+    super()
+  }
 
   async showRecordAttendancePage(req: Request, res: Response): Promise<void> {
     const { username } = req.user
@@ -90,7 +95,7 @@ export default class AttendanceController {
     )
     const view = new AttendanceView(presenter)
 
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async showRecordAttendanceNotesPage(req: Request, res: Response): Promise<void> {
@@ -175,7 +180,7 @@ export default class AttendanceController {
     )
     const view = new AttendanceSessionNotesView(presenter)
 
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   private referralIds(req: Request): string[] {

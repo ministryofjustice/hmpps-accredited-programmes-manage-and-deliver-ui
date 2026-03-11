@@ -1,16 +1,21 @@
 import { Request, Response } from 'express'
 import { Group } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
-import ControllerUtils from '../utils/controllerUtils'
 import GroupPresenter, { GroupListPageSection } from './groupPresenter'
 import GroupView from './groupView'
 import { Page } from '../shared/models/pagination'
 import GroupListFilter from '../groupOverview/groupListFilter'
+import BaseController from '../shared/baseController'
+import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 
-export default class GroupController {
+export default class GroupController extends BaseController {
+  protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
+
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
-  ) {}
+  ) {
+    super()
+  }
 
   async showNotStartedGroupListPage(req: Request, res: Response): Promise<void> {
     const { username } = req.user
@@ -40,7 +45,7 @@ export default class GroupController {
     )
     const view = new GroupView(presenter)
 
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async showStartedGroupListPage(req: Request, res: Response): Promise<void> {
@@ -71,6 +76,6 @@ export default class GroupController {
     )
     const view = new GroupView(presenter)
 
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 }

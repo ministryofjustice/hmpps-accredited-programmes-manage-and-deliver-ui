@@ -1,7 +1,6 @@
 import { ScheduleSessionRequest } from '@manage-and-deliver-api'
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
-import ControllerUtils from '../utils/controllerUtils'
 import { FormValidationError } from '../utils/formValidationError'
 
 import SessionScheduleAttendancePresenter from './sessionAttendance/sessionScheduleAttendancePresenter'
@@ -13,11 +12,17 @@ import AddSessionDetailsView from './sessionDetails/addSessionDetailsView'
 import CreateSessionScheduleForm from './sessionScheduleForm'
 import SessionScheduleWhichPresenter from './sessionWhich/sessionScheduleWhichPresenter'
 import SessionScheduleWhichView from './sessionWhich/sessionScheduleWhichView'
+import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
+import BaseController from '../shared/baseController'
 
-export default class SessionScheduleController {
+export default class SessionScheduleController extends BaseController {
+  protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
+
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
-  ) {}
+  ) {
+    super()
+  }
 
   async showSessionSchedule(req: Request, res: Response): Promise<void> {
     const { groupId, moduleId } = req.params
@@ -67,7 +72,7 @@ export default class SessionScheduleController {
       req.session.sessionScheduleData?.selectedSession,
     )
     const view = new SessionScheduleWhichView(presenter)
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async scheduleGroupSessionDetails(req: Request, res: Response): Promise<void> {
@@ -122,7 +127,7 @@ export default class SessionScheduleController {
       userInputData,
     )
     const view = new AddSessionDetailsView(presenter)
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async scheduleGroupSessionCya(req: Request, res: Response): Promise<void> {
@@ -153,7 +158,7 @@ export default class SessionScheduleController {
 
     const presenter = new SessionScheduleCyaPresenter(`/group/${groupId}/module/${moduleId}`, sessionScheduleData)
     const view = new SessionScheduleCyaView(presenter)
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async showSessionAttendance(req: Request, res: Response): Promise<void> {
@@ -173,6 +178,6 @@ export default class SessionScheduleController {
 
     const presenter = new SessionScheduleAttendancePresenter(groupId, sessionAttendanceData, successMessage)
     const view = new SessionScheduleAttendanceView(presenter)
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 }

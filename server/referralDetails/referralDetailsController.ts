@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 
 import { ReferralDetails } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
-import ControllerUtils from '../utils/controllerUtils'
 import { FormValidationError } from '../utils/formValidationError'
 import AddAvailabilityForm from './addAvailability/AddAvailabilityForm'
 import AddAvailabilityPresenter from './addAvailability/addAvailabilityPresenter'
@@ -23,11 +22,17 @@ import SentenceInformationPresenter from './sentenceInformationPresenter'
 import SentenceInformationView from './sentenceInformationView'
 import StatusHistoryPresenter from './statusHistoryPresenter'
 import StatusHistoryView from './statusHistoryView'
+import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
+import BaseController from '../shared/baseController'
 
-export default class ReferralDetailsController {
+export default class ReferralDetailsController extends BaseController {
+  protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
+
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
-  ) {}
+  ) {
+    super()
+  }
 
   async showReferralDetailsPage(id: string, username: string): Promise<ReferralDetails> {
     return this.accreditedProgrammesManageAndDeliverService.getReferralDetails(id, username)
@@ -53,7 +58,7 @@ export default class ReferralDetailsController {
 
     req.session.originPage = req.path
 
-    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    return this.renderPage(res, view, sharedReferralDetailsData)
   }
 
   async showProgrammeHistoryPage(req: Request, res: Response): Promise<void> {
@@ -74,7 +79,7 @@ export default class ReferralDetailsController {
 
     req.session.originPage = req.path
 
-    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    return this.renderPage(res, view, sharedReferralDetailsData)
   }
 
   async showOffenceHistoryPage(req: Request, res: Response): Promise<void> {
@@ -97,7 +102,7 @@ export default class ReferralDetailsController {
 
     req.session.originPage = req.path
 
-    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    return this.renderPage(res, view, sharedReferralDetailsData)
   }
 
   async showSentenceInformationPage(req: Request, res: Response): Promise<void> {
@@ -123,7 +128,7 @@ export default class ReferralDetailsController {
 
     req.session.originPage = req.path
 
-    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    return this.renderPage(res, view, sharedReferralDetailsData)
   }
 
   async showAvailabilityPage(req: Request, res: Response): Promise<void> {
@@ -148,7 +153,7 @@ export default class ReferralDetailsController {
 
     req.session.originPage = req.path
 
-    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    return this.renderPage(res, view, sharedReferralDetailsData)
   }
 
   async showLocationPage(req: Request, res: Response): Promise<void> {
@@ -174,7 +179,7 @@ export default class ReferralDetailsController {
 
     req.session.originPage = req.path
 
-    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    return this.renderPage(res, view, sharedReferralDetailsData)
   }
 
   async showAdditionalInformationPage(req: Request, res: Response): Promise<void> {
@@ -195,7 +200,7 @@ export default class ReferralDetailsController {
 
     req.session.originPage = req.path
 
-    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    return this.renderPage(res, view, sharedReferralDetailsData)
   }
 
   async showStatusHistoryPage(req: Request, res: Response): Promise<void> {
@@ -220,7 +225,7 @@ export default class ReferralDetailsController {
 
     req.session.originPage = req.path
 
-    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    return this.renderPage(res, view, sharedReferralDetailsData)
   }
 
   async updateAvailability(req: Request, res: Response): Promise<void> {
@@ -272,6 +277,6 @@ export default class ReferralDetailsController {
     )
     const view = new AddAvailabilityView(presenter)
 
-    return ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    return this.renderPage(res, view, sharedReferralDetailsData)
   }
 }

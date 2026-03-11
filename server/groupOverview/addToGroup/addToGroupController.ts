@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import ControllerUtils from '../../utils/controllerUtils'
 import AddToGroupPresenter from './addToGroupPresenter'
 import AddToGroupView from './addToGroupView'
 import AddToGroupMoreDetailsPresenter from './addToGroupMoreDetailsPresenter'
@@ -7,11 +6,17 @@ import AddToGroupMoreDetailsView from './addToGroupMoreDetailsView'
 import { FormValidationError } from '../../utils/formValidationError'
 import AddToGroupForm from './addToGroupForm'
 import AccreditedProgrammesManageAndDeliverService from '../../services/accreditedProgrammesManageAndDeliverService'
+import BaseController from '../../shared/baseController'
+import { PrimaryNavigationTab } from '../../shared/routes/layoutPresenter'
 
-export default class AddToGroupController {
+export default class AddToGroupController extends BaseController {
+  protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
+
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
-  ) {}
+  ) {
+    super()
+  }
 
   async addToGroup(req: Request, res: Response): Promise<void> {
     let formError: FormValidationError | null = null
@@ -37,7 +42,7 @@ export default class AddToGroupController {
       formError,
     )
     const view = new AddToGroupView(presenter)
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async addToGroupMoreDetails(req: Request, res: Response): Promise<void> {
@@ -73,6 +78,6 @@ export default class AddToGroupController {
       userInputData,
     )
     const view = new AddToGroupMoreDetailsView(presenter)
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 }
