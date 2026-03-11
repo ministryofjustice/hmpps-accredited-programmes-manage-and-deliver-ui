@@ -1,27 +1,36 @@
 .custom-primary-navigation__region {
-    display: inline-block;
-    vertical-align: middle;
-    font-weight: bold;
+  display: inline-block;
+  vertical-align: middle;
+  font-family: "GDS Transport", arial, sans-serif;
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin: auto 25px;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
+.moj-primary-navigation__nav {
+  margin-left: 25px;
+}
 
-.moj-primary-navigation__container {
+.moj-primary-navigation__container{
   max-width: 1220px;
   margin: 0 15px;
 }
 
 @media (min-width: 40.0625em) {
-  .moj-primary-navigation__container {
-    margin: 0 30px;
+  .moj-primary-navigation__container, {
+    margin: 0 auto;
   }
 }
 @media (min-width: 1020px) {
-  .moj-primary-navigation__container{
-    margin: 0 30px;
-  }
-}
-@media (min-width: 1280px) {
   .moj-primary-navigation__container {
     margin: 0 auto;
   }
 }
+@media (min-width: 1280px) {
+  .moj-primary-navigation__container{
+    margin: 0 auto;
+  }
+}
+

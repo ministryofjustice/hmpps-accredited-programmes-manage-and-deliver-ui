@@ -11,7 +11,7 @@ export default class ControllerUtils {
     primaryNavigationTab?: PrimaryNavigationTab,
   ): void {
     const presenter = new LayoutPresenter(serviceUser, primaryNavigationTab)
-    const view = new LayoutView(presenter, contentView, res.locals.userLocation)
+    const view = new LayoutView(presenter, contentView, res.locals.userLocation ?? '')
 
     res.render(view.renderArgs[0], view.renderArgs[1])
   }

@@ -1,17 +1,22 @@
 import { Request, Response } from 'express'
-import AccreditedProgrammesManageAndDeliverService from '../../services/accreditedProgrammesManageAndDeliverService'
-import ControllerUtils from '../../utils/controllerUtils'
 import { FormValidationError } from '../../utils/formValidationError'
+import AccreditedProgrammesManageAndDeliverService from '../../services/accreditedProgrammesManageAndDeliverService'
 import RemoveFromGroupForm from './removeFromGroupForm'
 import RemoveFromGroupPresenter from './removeFromGroupPresenter'
+import RemoveFromGroupView from './removeFromGroupView'
 import RemoveFromGroupUpdateStatusPresenter from './removeFromGroupUpdateStatusPresenter'
 import RemoveFromGroupUpdateStatusView from './removeFromGroupUpdateStatusView'
-import RemoveFromGroupView from './removeFromGroupView'
+import { PrimaryNavigationTab } from '../../shared/routes/layoutPresenter'
+import BaseController from '../../shared/baseController'
 
-export default class RemoveFromGroupController {
+export default class RemoveFromGroupController extends BaseController {
+  protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
+
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
-  ) {}
+  ) {
+    super()
+  }
 
   async removeFromGroup(req: Request, res: Response): Promise<void> {
     let formError: FormValidationError | null = null
@@ -40,7 +45,7 @@ export default class RemoveFromGroupController {
       userInputData,
     )
     const view = new RemoveFromGroupView(presenter)
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async removeFromGroupUpdateStatus(req: Request, res: Response): Promise<void> {
@@ -82,6 +87,6 @@ export default class RemoveFromGroupController {
     )
 
     const view = new RemoveFromGroupUpdateStatusView(presenter)
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 }

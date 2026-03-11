@@ -9,11 +9,7 @@
 
 {% block header %}
   {% include "./header.njk" %}
-
-{{ customPrimaryNavigation(primaryNavigationArgs) }}
-
-
-
+  {{ customPrimaryNavigation(primaryNavigationArgs) }}
 
   {% if serviceUserBannerPresenter %}
     {% include "./serviceUserBanner.njk" %}

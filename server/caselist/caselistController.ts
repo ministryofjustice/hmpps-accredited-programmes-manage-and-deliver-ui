@@ -1,18 +1,21 @@
 import { Request, Response } from 'express'
-
 import { ReferralCaseListItem } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import { Page } from '../shared/models/pagination'
-import ControllerUtils from '../utils/controllerUtils'
 import CaselistFilter from './caselistFilter'
 import CaselistPresenter, { CaselistPageSection } from './caselistPresenter'
 import CaselistView from './caselistView'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
+import BaseController from '../shared/baseController'
 
-export default class CaselistController {
+export default class CaselistController extends BaseController {
+  protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
+
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
-  ) {}
+  ) {
+    super()
+  }
 
   private prepareSessionFilterParams(req: Request) {
     const pageNumber = req.query.page
@@ -51,7 +54,7 @@ export default class CaselistController {
 
     const view = new CaselistView(presenter)
 
-    ControllerUtils.renderWithLayout(res, view, null, PrimaryNavigationTab.Caselist)
+    return this.renderPage(res, view)
   }
 
   async showClosedCaselist(req: Request, res: Response): Promise<void> {
@@ -83,6 +86,6 @@ export default class CaselistController {
 
     const view = new CaselistView(presenter)
 
-    ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 }

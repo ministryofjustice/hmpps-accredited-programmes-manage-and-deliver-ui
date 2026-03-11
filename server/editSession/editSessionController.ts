@@ -19,11 +19,17 @@ import EditSessionView from './editSessionView'
 import EditSessionFacilitatorsForm from './facilitators/editSessionFacilitatorsForm'
 import EditSessionFacilitatorsPresenter from './facilitators/editSessionFacilitatorsPresenter'
 import EditSessionFacilitatorsView from './facilitators/editSessionFacilitatorsView'
+import BaseController from '../shared/baseController'
+import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 
-export default class EditSessionController {
+export default class EditSessionController extends BaseController {
+  protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
+
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
-  ) {}
+  ) {
+    super()
+  }
 
   async editSession(req: Request, res: Response): Promise<void> {
     const { groupId, sessionId } = req.params
@@ -63,7 +69,7 @@ export default class EditSessionController {
     )
     const view = new EditSessionView(presenter)
 
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async deleteSession(req: Request, res: Response): Promise<void> {
@@ -90,7 +96,7 @@ export default class EditSessionController {
     const presenter = new DeleteSessionPresenter(groupId, req.session.originPage, sessionDetails, formError)
     const view = new DeleteSessionView(presenter)
 
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async editSessionAttendees(req: Request, res: Response): Promise<void> {
@@ -122,7 +128,7 @@ export default class EditSessionController {
     const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, sessionAttendees, formError)
     const view = new EditSessionAttendeesView(presenter)
 
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async editSessionDateAndTime(req: Request, res: Response): Promise<void> {
@@ -190,7 +196,7 @@ export default class EditSessionController {
     )
     const view = new EditSessionDateAndTimeView(presenter)
 
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async submitEditSessionDateAndTime(req: Request, res: Response): Promise<void> {
@@ -227,7 +233,7 @@ export default class EditSessionController {
     const presenter = new OtherSessionsPresenter(groupId, sessionDetails, req.session.editSessionDateAndTime, formError)
     const view = new OtherSessionsView(presenter)
 
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async editSessionFacilitators(req: Request, res: Response): Promise<void> {
@@ -266,6 +272,6 @@ export default class EditSessionController {
     )
     const view = new EditSessionFacilitatorsView(presenter)
 
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 }

@@ -2,7 +2,6 @@ import { Request, Response } from 'express'
 
 import { ReferralDetails } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
-import ControllerUtils from '../utils/controllerUtils'
 import AlcoholMisusePresenter from './alcoholMisuse/alcoholMisusePresenter'
 import AlcoholMisuseView from './alcoholMisuse/alcoholMisuseView'
 import AttitudesPresenter from './attitudes/attitudesPresenter'
@@ -29,11 +28,17 @@ import ThinkingAndBehavingPresenter from './thinkingAndBehaving/thinkingAndBehav
 import ThinkingAndBehavingView from './thinkingAndBehaving/thinkingAndBehavingView'
 import RisksAndAlertsOgrs4Presenter from './risksAndAlerts/risksAndAlertsOgrs4Presenter'
 import RisksAndAlertsOgrs4View from './risksAndAlerts/risksAndAlertsOgrs4View'
+import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
+import BaseController from '../shared/baseController'
 
-export default class RisksAndNeedsController {
+export default class RisksAndNeedsController extends BaseController {
+  protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
+
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
-  ) {}
+  ) {
+    super()
+  }
 
   async getSharedPageData(id: string, username: string): Promise<ReferralDetails> {
     return this.accreditedProgrammesManageAndDeliverService.getReferralDetails(id, username)
@@ -63,7 +68,7 @@ export default class RisksAndNeedsController {
 
       req.session.originPage = req.path
 
-      return ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+      return this.renderPage(res, view, sharedReferralDetailsData)
     }
 
     const presenter = new RisksAndAlertsOgrs4Presenter(
@@ -77,7 +82,7 @@ export default class RisksAndNeedsController {
 
     req.session.originPage = req.path
 
-    return ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    return this.renderPage(res, view, sharedReferralDetailsData)
   }
 
   async showLearningNeedsPage(req: Request, res: Response): Promise<void> {
@@ -102,7 +107,7 @@ export default class RisksAndNeedsController {
 
     req.session.originPage = req.path
 
-    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    return this.renderPage(res, view, sharedReferralDetailsData)
   }
 
   async showOffenceAnalysisPage(req: Request, res: Response): Promise<void> {
@@ -128,7 +133,7 @@ export default class RisksAndNeedsController {
 
     req.session.originPage = req.path
 
-    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    return this.renderPage(res, view, sharedReferralDetailsData)
   }
 
   async showRelationshipsPage(req: Request, res: Response): Promise<void> {
@@ -154,7 +159,7 @@ export default class RisksAndNeedsController {
 
     req.session.originPage = req.path
 
-    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    return this.renderPage(res, view, sharedReferralDetailsData)
   }
 
   async showLifestyleAndAssociatesPage(req: Request, res: Response): Promise<void> {
@@ -180,7 +185,7 @@ export default class RisksAndNeedsController {
 
     req.session.originPage = req.path
 
-    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    return this.renderPage(res, view, sharedReferralDetailsData)
   }
 
   async showAlcoholMisusePage(req: Request, res: Response): Promise<void> {
@@ -206,7 +211,7 @@ export default class RisksAndNeedsController {
 
     req.session.originPage = req.path
 
-    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    return this.renderPage(res, view, sharedReferralDetailsData)
   }
 
   async showEmotionalWellbeingPage(req: Request, res: Response): Promise<void> {
@@ -233,7 +238,7 @@ export default class RisksAndNeedsController {
 
     req.session.originPage = req.path
 
-    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    return this.renderPage(res, view, sharedReferralDetailsData)
   }
 
   async showThinkingAndBehavingPage(req: Request, res: Response): Promise<void> {
@@ -260,7 +265,7 @@ export default class RisksAndNeedsController {
 
     req.session.originPage = req.path
 
-    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    return this.renderPage(res, view, sharedReferralDetailsData)
   }
 
   async showAttitudesPage(req: Request, res: Response): Promise<void> {
@@ -286,7 +291,7 @@ export default class RisksAndNeedsController {
 
     req.session.originPage = req.path
 
-    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    return this.renderPage(res, view, sharedReferralDetailsData)
   }
 
   async showHealthPage(req: Request, res: Response): Promise<void> {
@@ -312,7 +317,7 @@ export default class RisksAndNeedsController {
 
     req.session.originPage = req.path
 
-    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    return this.renderPage(res, view, sharedReferralDetailsData)
   }
 
   async showDrugDetailsPage(req: Request, res: Response): Promise<void> {
@@ -338,7 +343,7 @@ export default class RisksAndNeedsController {
 
     req.session.originPage = req.path
 
-    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    return this.renderPage(res, view, sharedReferralDetailsData)
   }
 
   async showRoshAnalysisPage(req: Request, res: Response): Promise<void> {
@@ -364,6 +369,6 @@ export default class RisksAndNeedsController {
 
     req.session.originPage = req.path
 
-    ControllerUtils.renderWithLayout(res, view, sharedReferralDetailsData)
+    return this.renderPage(res, view, sharedReferralDetailsData)
   }
 }

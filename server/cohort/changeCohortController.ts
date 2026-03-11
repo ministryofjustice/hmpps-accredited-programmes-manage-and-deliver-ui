@@ -4,11 +4,17 @@ import ControllerUtils from '../utils/controllerUtils'
 import ChangeCohortForm from './changeCohortForm'
 import ChangeCohortPresenter from './changeCohortPresenter'
 import ChangeCohortView from './changeCohortView'
+import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
+import BaseController from '../shared/baseController'
 
-export default class ChangeCohortController {
+export default class ChangeCohortController extends BaseController {
+  protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
+
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
-  ) {}
+  ) {
+    super()
+  }
 
   async showChangeCohortPage(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params
@@ -32,6 +38,6 @@ export default class ChangeCohortController {
     const presenter = new ChangeCohortPresenter(referralId, referralDetails, req.session.originPage)
     const view = new ChangeCohortView(presenter)
 
-    return ControllerUtils.renderWithLayout(res, view, referralDetails)
+    return this.renderPage(res, view, referralDetails)
   }
 }

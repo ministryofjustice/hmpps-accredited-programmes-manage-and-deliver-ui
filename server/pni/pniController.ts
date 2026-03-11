@@ -3,11 +3,17 @@ import AccreditedProgrammesManageAndDeliverService from '../services/accreditedP
 import ControllerUtils from '../utils/controllerUtils'
 import PniPresenter from './pniPresenter'
 import PniView from './pniView'
+import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
+import BaseController from '../shared/baseController'
 
-export default class PniController {
+export default class PniController extends BaseController {
+  protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
+
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
-  ) {}
+  ) {
+    super()
+  }
 
   async showProgrammeNeedsIdentifierPage(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params
@@ -31,6 +37,6 @@ export default class PniController {
     )
     const view = new PniView(presenter)
 
-    ControllerUtils.renderWithLayout(res, view, referralDetails)
+    return this.renderPage(res, view, referralDetails)
   }
 }

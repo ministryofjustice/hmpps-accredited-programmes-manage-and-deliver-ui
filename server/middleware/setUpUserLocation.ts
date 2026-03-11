@@ -23,7 +23,6 @@ export default function setUpUserLocation(services: Services) {
 
       const locations = await services.accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion(username)
 
-      // Get the first location (primary location for the user's region)
       if (locations && locations.length > 0) {
         const primaryLocation = locations[0]
         const userLocation = {

@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import ControllerUtils from '../utils/controllerUtils'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import MotivationBackgroundAndNonAssociationsView from './motivationBackgroundAndNonAssociations/motivationBackgroundAndNonAssociationsView'
 import MotivationBackgroundAndNonAssociationsPresenter from './motivationBackgroundAndNonAssociations/motivationBackgroundAndNonAssociationsPresenter'
@@ -7,11 +6,17 @@ import AddMotivationBackgroundAndNonAssociationsNotesView from './addMotivationB
 import AddMotivationBackgroundAndNonAssociationsNotesPresenter from './addMotivationBackgroundAndNonAssociationsNotes/addMotivationBackgroundAndNonAssociationsNotesPresenter'
 import { FormValidationError } from '../utils/formValidationError'
 import AddMotivationBackgroundAndNonAssociatesForm from './addMotivationBackgroundAndNonAssociationsNotes/addMotivationBackgroundAndNonAssociatesForm'
+import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
+import BaseController from '../shared/baseController'
 
-export default class GroupAllocationNotesController {
+export default class GroupAllocationNotesController extends BaseController {
+  protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
+
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
-  ) {}
+  ) {
+    super()
+  }
 
   async showMotivationBackgroundAndNonAssociationsPage(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params
@@ -38,7 +43,7 @@ export default class GroupAllocationNotesController {
       isMotivationsUpdated === 'true',
     )
     const view = new MotivationBackgroundAndNonAssociationsView(presenter)
-    ControllerUtils.renderWithLayout(res, view, referralDetails)
+    return this.renderPage(res, view, referralDetails)
   }
 
   async showAddMotivationBackgroundAndNonAssociationsNotesPage(req: Request, res: Response): Promise<void> {
@@ -95,6 +100,6 @@ export default class GroupAllocationNotesController {
       userInputData,
     )
     const view = new AddMotivationBackgroundAndNonAssociationsNotesView(presenter)
-    return ControllerUtils.renderWithLayout(res, view, referralDetails)
+    return this.renderPage(res, view, referralDetails)
   }
 }
