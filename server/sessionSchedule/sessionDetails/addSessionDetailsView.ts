@@ -176,7 +176,7 @@ export default class AddSessionDetailsView {
         },
       },
       hint: {
-        text: 'Select everyone who should attend this session.',
+        text: 'Select who should attend the session.',
       },
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.who.errorMessage),
       items: this.presenter.generateSessionAttendeesRadioOptions(this.presenter.selectedAttendeeValues()),
