@@ -158,6 +158,62 @@ describe('CreateSessionScheduleForm', () => {
           },
         ])
       })
+
+      it('defaults blank minute inputs to 0 without a validation error', async () => {
+        request.body['session-details-who'] = 'X123456 + John Doe'
+        request.body['session-details-date'] = '10/07/3055'
+        request.body['session-details-start-time-hour'] = '10'
+        request.body['session-details-start-time-minute'] = ''
+        request.body['session-details-start-time-part-of-day'] = 'AM'
+        request.body['session-details-end-time-hour'] = '11'
+        request.body['session-details-end-time-minute'] = ''
+        request.body['session-details-end-time-part-of-day'] = 'AM'
+        request.body['session-details-facilitator'] =
+          '{"facilitator":"John Doe", "facilitatorCode":"N07B656", "teamName":"GM Manchester N1", "teamCode":"N50CAC"}'
+
+        const data = await new CreateSessionScheduleForm(request).sessionDetailsData()
+
+        expect(data.error).toBeNull()
+        expect(data.paramsForUpdate).toMatchObject({
+          startTime: {
+            hour: 10,
+            minutes: 0,
+            amOrPm: 'AM',
+          },
+          endTime: {
+            hour: 11,
+            minutes: 0,
+            amOrPm: 'AM',
+          },
+        })
+      })
+
+      it('returns error when the same facilitator is added twice', async () => {
+        request.body['session-details-who'] = 'X123456 + John Doe'
+        request.body['session-details-date'] = '10/07/3055'
+        request.body['session-details-start-time-hour'] = '10'
+        request.body['session-details-start-time-minute'] = '30'
+        request.body['session-details-start-time-part-of-day'] = 'AM'
+        request.body['session-details-end-time-hour'] = '11'
+        request.body['session-details-end-time-minute'] = '45'
+        request.body['session-details-end-time-part-of-day'] = 'AM'
+        request.body['session-details-facilitator'] =
+          '{"facilitator":"John Doe", "facilitatorCode":"N07B656", "teamName":"GM Manchester N1", "teamCode":"N50CAC"}'
+        request.body['session-details-facilitator-1'] =
+          '{"facilitator":"John Doe", "facilitatorCode":"N07B656", "teamName":"GM Manchester N1", "teamCode":"N50CAC"}'
+
+        const data = await new CreateSessionScheduleForm(request).sessionDetailsData()
+
+        expect(data.error).toStrictEqual({
+          errors: [
+            {
+              errorSummaryLinkedField: 'session-details-facilitator',
+              formFields: ['session-details-facilitator'],
+              message: 'You cannot add the same facilitator twice. Select a different facilitator.',
+            },
+          ],
+        })
+      })
     })
 
     describe('time validation', () => {
