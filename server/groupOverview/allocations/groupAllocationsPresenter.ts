@@ -70,7 +70,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
             this.section === GroupAllocationsPageSection.Allocated
               ? `Allocated (${this.group.pagedGroupData.totalElements})`
               : `Allocated (${this.group.otherTabTotal})`,
-          href: `/group/${this.groupId}/allocated${nameCrnFilter}`,
+          href: `/group/${this.groupId}/allocations${nameCrnFilter}`,
           active: this.section === GroupAllocationsPageSection.Allocated,
         },
         {

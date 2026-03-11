@@ -39,12 +39,12 @@ describe('groupOverview', () => {
     })
   })
 
-  describe(`GET /group/:groupId/allocated`, () => {
+  describe(`GET /group/:groupId/allocations`, () => {
     it('loads the initial page to view the allocated list', async () => {
       const programmeGroupOverview = ProgrammeGroupOverviewFactory.build()
       accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers.mockResolvedValue(programmeGroupOverview)
       return request(app)
-        .get(`/group/1234/allocated`)
+        .get(`/group/1234/allocations`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(`Allocations and waitlist`)

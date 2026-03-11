@@ -113,6 +113,67 @@ describe('EditSessionAttendeesPresenter', () => {
     })
   })
 
+  describe('generateAttendeeCheckboxOptions', () => {
+    it('pre-selects the currently attending attendee', () => {
+      const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees())
+
+      expect(presenter.generateAttendeeCheckboxOptions()).toEqual([
+        {
+          text: 'John Doe (X123456)',
+          value: 'referral-1',
+          checked: true,
+        },
+        {
+          text: 'Jane Smith (Y654321)',
+          value: 'referral-2',
+          checked: false,
+        },
+      ])
+    })
+
+    it('returns empty options when no attendees exist', () => {
+      const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees({ attendees: [] }))
+
+      expect(presenter.generateAttendeeCheckboxOptions()).toEqual([])
+    })
+
+    it('pre-selects multiple attendees if multiple have currentlyAttending true', () => {
+      const presenter = new EditSessionAttendeesPresenter(
+        groupId,
+        backUrl,
+        buildSessionAttendees({
+          attendees: [
+            {
+              name: 'John Doe',
+              referralId: 'referral-1',
+              crn: 'X123456',
+              currentlyAttending: true,
+            },
+            {
+              name: 'Jane Smith',
+              referralId: 'referral-2',
+              crn: 'Y654321',
+              currentlyAttending: true,
+            },
+          ],
+        }),
+      )
+
+      expect(presenter.generateAttendeeCheckboxOptions()).toEqual([
+        {
+          text: 'John Doe (X123456)',
+          value: 'referral-1',
+          checked: true,
+        },
+        {
+          text: 'Jane Smith (Y654321)',
+          value: 'referral-2',
+          checked: true,
+        },
+      ])
+    })
+  })
+
   describe('errorSummary', () => {
     it('returns null when no validation error', () => {
       const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees())

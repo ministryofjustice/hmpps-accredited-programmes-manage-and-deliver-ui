@@ -1,7 +1,7 @@
 import { EditSessionAttendee, EditSessionAttendeesResponse } from '@manage-and-deliver-api'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
-import { RadiosArgsItem } from '../../utils/govukFrontendTypes'
+import { CheckboxesArgsItem, RadiosArgsItem } from '../../utils/govukFrontendTypes'
 
 export default class EditSessionAttendeesPresenter {
   constructor(
@@ -39,6 +39,18 @@ export default class EditSessionAttendeesPresenter {
       value: attendee.referralId,
       checked: attendee.currentlyAttending === true,
     }))
+  }
+
+  generateAttendeeCheckboxOptions(): CheckboxesArgsItem[] {
+    return this.sessionAttendees.attendees.map(attendee => ({
+      text: `${attendee.name} (${attendee.crn})`,
+      value: attendee.referralId,
+      checked: attendee.currentlyAttending === true,
+    }))
+  }
+
+  get isGroupSession(): boolean {
+    return this.sessionAttendees.sessionType.toUpperCase() === 'GROUP'
   }
 
   get fields() {

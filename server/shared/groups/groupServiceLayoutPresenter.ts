@@ -20,7 +20,7 @@ export default class GroupServiceLayoutPresenter {
           active: this.activePage === GroupServiceNavigationValues.groupDetailsTab,
         },
         {
-          href: `/group/${this.groupId}/waitlist`,
+          href: `/group/${this.groupId}/allocations`,
           text: 'Allocations and waitlist',
           active: this.activePage === GroupServiceNavigationValues.allocationsTab,
         },

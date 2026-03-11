@@ -264,11 +264,11 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await createGroupController.showCreateGroupCya(req, res)
   })
 
-  get('/group/:groupId/allocated', async (req, res) => {
+  get('/group/:groupId/allocations', async (req, res) => {
     await groupOverviewController.showGroupOverviewAllocated(req, res)
   })
 
-  post('/group/:groupId/allocated', async (req, res) => {
+  post('/group/:groupId/allocations', async (req, res) => {
     await groupOverviewController.showGroupOverviewAllocated(req, res)
   })
 

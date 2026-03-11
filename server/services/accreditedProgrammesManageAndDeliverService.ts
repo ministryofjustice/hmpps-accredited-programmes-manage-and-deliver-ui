@@ -688,13 +688,13 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
     })) as Session
   }
 
-  async updateSessionAttendees(username: ExpressUsername, sessionId: string, referralId: string): Promise<void> {
+  async updateSessionAttendees(username: ExpressUsername, sessionId: string, referralIds: string[]): Promise<string> {
     const restClient = await this.createRestClientFromUsername(username)
-    await restClient.put({
+    return (await restClient.put({
       path: `/session/${sessionId}/attendees`,
-      data: { referralIdList: [referralId] },
+      data: { referralIdList: referralIds },
       responseType: 'text',
-    })
+    })) as string
   }
 
   async deleteSession(username: ExpressUsername, sessionId: string): Promise<string> {
