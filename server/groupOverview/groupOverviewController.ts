@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
-import ControllerUtils from '../utils/controllerUtils'
 import { FormValidationError } from '../utils/formValidationError'
 import GroupAllocationsFilter from './allocations/groupAllocationsFilter'
 import GroupAllocationsPresenter, { GroupAllocationsPageSection } from './allocations/groupAllocationsPresenter'
@@ -8,11 +7,17 @@ import GroupAllocationsView from './allocations/groupAllocationsView'
 import GroupForm from './groupForm'
 import SchedulePresenter from './schedule/schedulePresenter'
 import ScheduleView from './schedule/scheduleView'
+import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
+import BaseController from '../shared/baseController'
 
-export default class GroupOverviewController {
+export default class GroupOverviewController extends BaseController {
+  protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
+
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
-  ) {}
+  ) {
+    super()
+  }
 
   async showGroupOverviewAllocated(req: Request, res: Response): Promise<void> {
     const { message } = req.query
@@ -67,7 +72,7 @@ export default class GroupOverviewController {
     const view = new GroupAllocationsView(presenter)
     req.session.groupManagementData = null
     req.session.originPage = req.originalUrl
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async showGroupOverviewWaitlist(req: Request, res: Response): Promise<void> {
@@ -121,7 +126,7 @@ export default class GroupOverviewController {
     const view = new GroupAllocationsView(presenter)
     req.session.originPage = req.originalUrl
 
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async showGroupOverviewSchedule(req: Request, res: Response): Promise<void> {
@@ -137,6 +142,6 @@ export default class GroupOverviewController {
     const view = new ScheduleView(presenter)
     req.session.originPage = req.originalUrl
 
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 }

@@ -1,8 +1,9 @@
 import { CreateGroupRequest } from '@manage-and-deliver-api'
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
-import ControllerUtils from '../utils/controllerUtils'
 import { FormValidationError } from '../utils/formValidationError'
+import BaseController from '../shared/baseController'
+import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import CreateGroupCyaPresenter from './check-your-answers/createGroupCyaPresenter'
 import CreateGroupCyaView from './check-your-answers/createGroupCyaView'
 import CreateGroupCodePresenter from './code/createGroupCodePresenter'
@@ -25,10 +26,14 @@ import CreateGroupTreatmentManagerView from './treatment-manager/createGroupTrea
 import CreateGroupWhenPresenter from './when/createGroupWhenPresenter'
 import CreateGroupWhenView from './when/createGroupWhenView'
 
-export default class CreateGroupController {
+export default class CreateGroupController extends BaseController {
+  protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
+
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
-  ) {}
+  ) {
+    super()
+  }
 
   async showCreateGroupStart(req: Request, res: Response): Promise<void> {
     if (req.method === 'POST') {
@@ -40,7 +45,7 @@ export default class CreateGroupController {
 
     const presenter = new CreateGroupStartPresenter()
     const view = new CreateGroupStartView(presenter)
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async showCreateGroupCode(req: Request, res: Response): Promise<void> {
@@ -72,7 +77,7 @@ export default class CreateGroupController {
 
     const presenter = new CreateGroupCodePresenter(formError, createGroupFormData, userInputData)
     const view = new CreateGroupCodeView(presenter)
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async showCreateGroupDate(req: Request, res: Response): Promise<void> {
@@ -103,7 +108,7 @@ export default class CreateGroupController {
 
     const presenter = new CreateGroupDatePresenter(formError, formDataForPresenter)
     const view = new CreateGroupDateView(presenter)
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async showCreateGroupWhen(req: Request, res: Response): Promise<void> {
@@ -140,7 +145,7 @@ export default class CreateGroupController {
       userInputData,
     )
     const view = new CreateGroupWhenView(presenter)
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async showCreateGroupCohort(req: Request, res: Response): Promise<void> {
@@ -162,7 +167,7 @@ export default class CreateGroupController {
 
     const presenter = new CreateGroupCohortPresenter(formError, createGroupFormData)
     const view = new CreateGroupCohortView(presenter)
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async showCreateGroupSex(req: Request, res: Response): Promise<void> {
@@ -184,7 +189,7 @@ export default class CreateGroupController {
 
     const presenter = new CreateGroupSexPresenter(formError, createGroupFormData)
     const view = new CreateGroupSexView(presenter)
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async showCreateGroupPdu(req: Request, res: Response): Promise<void> {
@@ -213,7 +218,7 @@ export default class CreateGroupController {
 
     const presenter = new CreateGroupPduPresenter(pduLocations, formError, createGroupFormData, userInputData)
     const view = new CreateGroupPduView(presenter)
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async showCreateGroupLocation(req: Request, res: Response): Promise<void> {
@@ -245,7 +250,7 @@ export default class CreateGroupController {
 
     const presenter = new CreateGroupLocationPresenter(officeLocations, formError, createGroupFormData, userInputData)
     const view = new CreateGroupLocationView(presenter)
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async showCreateGroupTreatmentManager(req: Request, res: Response): Promise<void> {
@@ -277,7 +282,7 @@ export default class CreateGroupController {
       userInputData,
     )
     const view = new CreateGroupTreatmentManagerView(presenter)
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async showCreateGroupCya(req: Request, res: Response): Promise<void> {
@@ -295,6 +300,6 @@ export default class CreateGroupController {
 
     const presenter = new CreateGroupCyaPresenter(createGroupFormData)
     const view = new CreateGroupCyaView(presenter)
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 }

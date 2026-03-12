@@ -1,7 +1,6 @@
 import { RescheduleSessionRequest } from '@manage-and-deliver-api'
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
-import ControllerUtils from '../utils/controllerUtils'
 import { FormValidationError } from '../utils/formValidationError'
 import EditSessionDateAndTimeFormForm from './dateAndTime/editSessionDateAndTimeForm'
 import EditSessionDateAndTimePresenter from './dateAndTime/editSessionDateAndTimePresenter'
@@ -19,16 +18,22 @@ import EditSessionView from './editSessionView'
 import EditSessionFacilitatorsForm from './facilitators/editSessionFacilitatorsForm'
 import EditSessionFacilitatorsPresenter from './facilitators/editSessionFacilitatorsPresenter'
 import EditSessionFacilitatorsView from './facilitators/editSessionFacilitatorsView'
+import BaseController from '../shared/baseController'
+import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 
-export default class EditSessionController {
+export default class EditSessionController extends BaseController {
+  protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
+
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
-  ) {}
+  ) {
+    super()
+  }
 
   async editSession(req: Request, res: Response): Promise<void> {
     const { groupId, sessionId } = req.params
     const { username } = req.user
-    const { message } = req.query
+    const { message, isAttendanceHistory } = req.query
     let formError: FormValidationError | null = null
 
     req.session.editSessionDateAndTime = {}
@@ -40,6 +45,7 @@ export default class EditSessionController {
     )
 
     const successMessage = message ? String(message) : null
+    const isAttendanceHistoryFlag = isAttendanceHistory === 'true'
     req.session.originPage = req.path
 
     const data = await new EditSessionForm(req).attendanceAndSessionNotesData()
@@ -60,11 +66,12 @@ export default class EditSessionController {
       sessionId,
       `/group/${groupId}/session/${sessionId}/delete-session`,
       successMessage,
+      isAttendanceHistoryFlag,
       formError,
     )
     const view = new EditSessionView(presenter)
 
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async deleteSession(req: Request, res: Response): Promise<void> {
@@ -91,7 +98,7 @@ export default class EditSessionController {
     const presenter = new DeleteSessionPresenter(groupId, req.session.originPage, sessionDetails, formError)
     const view = new DeleteSessionView(presenter)
 
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async editSessionAttendees(req: Request, res: Response): Promise<void> {
@@ -123,7 +130,7 @@ export default class EditSessionController {
     const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, sessionAttendees, formError)
     const view = new EditSessionAttendeesView(presenter)
 
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async editSessionDateAndTime(req: Request, res: Response): Promise<void> {
@@ -191,7 +198,7 @@ export default class EditSessionController {
     )
     const view = new EditSessionDateAndTimeView(presenter)
 
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async submitEditSessionDateAndTime(req: Request, res: Response): Promise<void> {
@@ -228,7 +235,7 @@ export default class EditSessionController {
     const presenter = new OtherSessionsPresenter(groupId, sessionDetails, req.session.editSessionDateAndTime, formError)
     const view = new OtherSessionsView(presenter)
 
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 
   async editSessionFacilitators(req: Request, res: Response): Promise<void> {
@@ -267,6 +274,6 @@ export default class EditSessionController {
     )
     const view = new EditSessionFacilitatorsView(presenter)
 
-    return ControllerUtils.renderWithLayout(res, view, null)
+    return this.renderPage(res, view)
   }
 }

@@ -13,6 +13,7 @@ export default class EditSessionPresenter {
     readonly sessionId: string,
     readonly deleteUrl: string,
     readonly successMessage: string | null = null,
+    readonly isAttendanceHistory: boolean = false,
     private readonly validationError: FormValidationError | null = null,
   ) {}
 
@@ -29,8 +30,10 @@ export default class EditSessionPresenter {
 
   get backLinkArgs() {
     return {
-      text: 'Back',
-      href: `/group/${this.groupId}/sessions-and-attendance`,
+      text: this.isAttendanceHistory ? 'Back to Attendance history' : 'Back to Sessions and attendance',
+      href: this.isAttendanceHistory
+        ? `/group/${this.groupId}/attendance-history`
+        : `/group/${this.groupId}/sessions-and-attendance`,
     }
   }
 

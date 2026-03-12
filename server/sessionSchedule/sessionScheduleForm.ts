@@ -54,12 +54,20 @@ export default class CreateSessionScheduleForm {
         startDate: this.request.body['session-details-date'],
         startTime: {
           hour: parseInt(this.request.body['session-details-start-time-hour'], 10),
-          minutes: parseInt(this.request.body['session-details-start-time-minute'], 10),
+          minutes:
+            this.request.body['session-details-start-time-minute'] === '' ||
+            this.request.body['session-details-start-time-minute'] === undefined
+              ? 0
+              : Number(this.request.body['session-details-start-time-minute']),
           amOrPm: this.request.body['session-details-start-time-part-of-day'] as 'AM' | 'PM',
         },
         endTime: {
           hour: parseInt(this.request.body['session-details-end-time-hour'], 10),
-          minutes: parseInt(this.request.body['session-details-end-time-minute'], 10),
+          minutes:
+            this.request.body['session-details-end-time-minute'] === '' ||
+            this.request.body['session-details-end-time-minute'] === undefined
+              ? 0
+              : Number(this.request.body['session-details-end-time-minute']),
           amOrPm: this.request.body['session-details-end-time-part-of-day'] as 'AM' | 'PM',
         },
       },
@@ -123,6 +131,7 @@ export default class CreateSessionScheduleForm {
         .withMessage(errorMessages.sessionSchedule.sessionDetailsTimeHour),
       body(`session-details-start-time-minute`)
         .if(body('session-details-start-time-hour').notEmpty())
+        .optional({ checkFalsy: true })
         .isInt({ min: 0, max: 59 })
         .withMessage(errorMessages.sessionSchedule.sessionDetailsTimeMinute),
       body(`session-details-start-time-part-of-day`)
@@ -156,6 +165,7 @@ export default class CreateSessionScheduleForm {
         }),
       body(`session-details-end-time-minute`)
         .if(body('session-details-end-time-hour').notEmpty())
+        .optional({ checkFalsy: true })
         .isInt({ min: 0, max: 59 })
         .withMessage(errorMessages.sessionSchedule.sessionDetailsTimeMinute),
       body(`session-details-end-time-part-of-day`)
@@ -166,7 +176,18 @@ export default class CreateSessionScheduleForm {
         .custom(() => {
           return hasFacilitator
         })
-        .withMessage(errorMessages.sessionSchedule.sessionDetailsFacilitator),
+        .withMessage(errorMessages.sessionSchedule.sessionDetailsFacilitator)
+        .custom((_value, { req }) => {
+          const facilitatorCodes = Object.entries(req.body)
+            .filter(([key, value]) => key.startsWith('session-details-facilitator') && value !== '')
+            .map(([, value]) => JSON.parse(value as string)?.facilitatorCode)
+            .filter(Boolean)
+
+          if (new Set(facilitatorCodes).size !== facilitatorCodes.length) {
+            throw new Error(errorMessages.editSession.editSessionFacilitatorDuplicate)
+          }
+          return true
+        }),
     ]
   }
 

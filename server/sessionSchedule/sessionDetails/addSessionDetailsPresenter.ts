@@ -133,7 +133,10 @@ export default class AddSessionDetailsPresenter {
       startTime: this.utils.twelveHourTimeValue(
         {
           hour: this.createSessionDetailsFormData.startTime?.hour,
-          minutes: this.createSessionDetailsFormData.startTime?.minutes,
+          minutes:
+            this.createSessionDetailsFormData.startTime?.minutes === 0
+              ? undefined
+              : this.createSessionDetailsFormData.startTime?.minutes,
           amOrPm: this.createSessionDetailsFormData.startTime?.amOrPm,
         },
         'session-details-start-time',
@@ -142,7 +145,10 @@ export default class AddSessionDetailsPresenter {
       endTime: this.utils.twelveHourTimeValue(
         {
           hour: this.createSessionDetailsFormData.endTime?.hour,
-          minutes: this.createSessionDetailsFormData.endTime?.minutes,
+          minutes:
+            this.createSessionDetailsFormData.endTime?.minutes === 0
+              ? undefined
+              : this.createSessionDetailsFormData.endTime?.minutes,
           amOrPm: this.createSessionDetailsFormData.endTime?.amOrPm,
         },
         'session-details-end-time',

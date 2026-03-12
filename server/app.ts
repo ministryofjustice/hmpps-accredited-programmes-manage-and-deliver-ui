@@ -25,6 +25,7 @@ import setUpWebRequestParsing from './middleware/setupRequestParsing'
 import setUpStaticResources from './middleware/setUpStaticResources'
 import setUpWebSecurity from './middleware/setUpWebSecurity'
 import setUpWebSession from './middleware/setUpWebSession'
+import setUpUserLocation from './middleware/setUpUserLocation'
 
 import config from './config'
 import sentryMiddleware from './middleware/sentryMiddleware'
@@ -34,6 +35,10 @@ import type { Services } from './services'
 declare module 'express-session' {
   export interface SessionData {
     originPage: string
+    userLocation?: {
+      locationCode: string
+      locationDescription: string
+    }
     locationPreferenceFormData?: {
       updatePreferredLocationData?: CreateDeliveryLocationPreferences
       preferredLocationReferenceData?: DeliveryLocationPreferencesFormData
@@ -77,6 +82,7 @@ export default function createApp(services: Services): express.Application {
   app.use(authorisationMiddleware(config.allowedRoles))
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
+  app.use(setUpUserLocation(services))
 
   app.use(routes(services))
 
