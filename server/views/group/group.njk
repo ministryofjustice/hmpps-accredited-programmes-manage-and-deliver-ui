@@ -8,23 +8,23 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "../components/selectWithOptGroup.njk" import govukSelectWithOptgroup %}
 {%- from "govuk/components/button/macro.njk" import govukButton %}
-
+{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block content %}
- 
-
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <span class="govuk-caption-xl">{{ text.pageSubHeading }}</span>
-    <h1 class="govuk-heading-xl">{{ text.pageHeading }}</h1>
-  </div>
-  <div class="govuk-grid-column-one-third">
-    {{ govukButton({text: "Create a group", href: "/group/create-a-group/create-group", classes: "create_group_button"}) }}
-  </div>
+ <div class="govuk-grid-column-full-width">
+{{ mojPageHeaderActions({
+ heading: {
+  html: '<span class="govuk-caption-xl">' ~ text.pageSubHeading ~ '</span>' ~ text.pageHeading
+},
+  items: [{
+    text: "Create a group",
+    classes: "govuk-button--primary",
+    href: "/group/create-a-group/create-group"
+  }]
+}) }}
 </div>
-
 <div class="govuk-grid-row">
     {%- set filterOptionsHtml %}
     <a class="clear-filters__link" href="?">Clear filters</a>
