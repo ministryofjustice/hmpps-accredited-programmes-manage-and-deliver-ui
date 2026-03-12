@@ -20,7 +20,7 @@ export default class GroupController extends BaseController {
   async showNotStartedGroupListPage(req: Request, res: Response): Promise<void> {
     const { username } = req.user
     const pageNumber = req.query.page
-    const selectedTab = 'NOT_STARTED OR_IN_PROGRESS'
+    const selectedTab = 'NOT_STARTED_OR_IN_PROGRESS'
 
     const filters = GroupListFilter.fromRequest(req)
 
