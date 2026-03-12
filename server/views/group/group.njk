@@ -7,28 +7,15 @@
 {% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "../components/selectWithOptGroup.njk" import govukSelectWithOptgroup %}
-{%- from "govuk/components/button/macro.njk" import govukButton %}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block content %}
- 
- <div class="govuk-grid-column-full-width">
+<div class="govuk-grid-column-full-width">
   <span class="govuk-caption-xl">{{ text.pageSubHeading }}</span>
-
-{{ mojPageHeaderActions({
-  heading: {
-    html: text.pageHeading
-  },
-  items: [{
-    text: "Create a group",
-    classes: "govuk-button--primary",
-    href: "/group/create-a-group/create-group"
-  }]
-}) }}
+{{ mojPageHeaderActions(pageHeaderOptions) }}
 </div>
-
 <div class="govuk-grid-row">
     {%- set filterOptionsHtml %}
     <a class="clear-filters__link" href="?">Clear filters</a>
