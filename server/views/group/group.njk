@@ -13,11 +13,14 @@
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block content %}
+ 
  <div class="govuk-grid-column-full-width">
+  <span class="govuk-caption-xl">{{ text.pageSubHeading }}</span>
+
 {{ mojPageHeaderActions({
- heading: {
-  html: '<span class="govuk-caption-xl">' ~ text.pageSubHeading ~ '</span>' ~ text.pageHeading
-},
+  heading: {
+    html: text.pageHeading
+  },
   items: [{
     text: "Create a group",
     classes: "govuk-button--primary",
@@ -25,6 +28,7 @@
   }]
 }) }}
 </div>
+
 <div class="govuk-grid-row">
     {%- set filterOptionsHtml %}
     <a class="clear-filters__link" href="?">Clear filters</a>
