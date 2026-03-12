@@ -45,7 +45,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const groupAllocationNotesController = new GroupAllocationNotesController(accreditedProgrammesManageAndDeliverService)
   const createGroupController = new CreateGroupController(accreditedProgrammesManageAndDeliverService)
   const groupController = new GroupController(accreditedProgrammesManageAndDeliverService)
-  const groupDetailsController = new GroupDetailsController()
+  const groupDetailsController = new GroupDetailsController(accreditedProgrammesManageAndDeliverService)
   const sessionScheduleController = new SessionScheduleController(accreditedProgrammesManageAndDeliverService)
   const editSessionController = new EditSessionController(accreditedProgrammesManageAndDeliverService)
   const attendanceController = new AttendanceController(accreditedProgrammesManageAndDeliverService)

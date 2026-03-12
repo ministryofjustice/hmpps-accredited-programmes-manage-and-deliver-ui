@@ -1,6 +1,7 @@
 {% extends "../partials/layout.njk" %}
 
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -11,6 +12,17 @@
      {{ mojSubNavigation(serviceNavigationArgs) }}
     <span class="govuk-caption-xl">{{ text.pageSubHeading }}</span>
     <h1 class="govuk-heading-xl">{{ text.headingText }}</h1>
+      {{ govukSummaryList(groupCodeSummary) }}
+    <h2 class="govuk-heading-m govuk-!-margin-top-7">Timings</h2>
+    <p class="govuk-body">Editing timings here will affect all sessions in the group. To edit individual session details, use the <a class="govuk-link" href={{sessionsAndAttendanceLink}}>Sessions and attendance tab</a>.</p>
+    {{ govukSummaryList(groupTimingsSummary) }}
+    <h2 class="govuk-heading-m govuk-!-margin-top-7">Participants</h2>
+    {{ govukSummaryList(groupParticipantsSummary) }}
+    <h2 class="govuk-heading-m govuk-!-margin-top-7">Location</h2>
+    {{ govukSummaryList(groupLocationSummary) }}
+    <h2 class="govuk-heading-m govuk-!-margin-top-7">Staff</h2>
+    <p class="govuk-body">Use this section to set staff at a group level. To edit individual session facilitators, use the <a class="govuk-link" href={{sessionsAndAttendanceLink}}>Sessions and attendance tab</a>.</p>
+    {{ govukSummaryList(groupStaffSummary) }}
   </div>
 </div>
 
