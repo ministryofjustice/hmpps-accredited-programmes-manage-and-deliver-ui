@@ -13,8 +13,8 @@ const cohortConfigMap: Record<ProgrammeGroupCohortEnum, string> = {
 }
 
 export enum GroupListPageSection {
-  NOT_STARTED = 1,
-  IN_PROGRESS_OR_COMPLETE = 2,
+  NOT_STARTED_OR_IN_PROGRESS = 1,
+  COMPLETE = 2,
 }
 
 export default class GroupPresenter {
@@ -125,7 +125,7 @@ export default class GroupPresenter {
   }
 
   getGroupDate(group: Group): string {
-    return this.section === GroupListPageSection.NOT_STARTED
+    return this.section === GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS
       ? group.earliestStartDate || group.startDate || ''
       : group.startDate || group.earliestStartDate || ''
   }
@@ -160,14 +160,14 @@ export default class GroupPresenter {
     return {
       items: [
         {
-          text: `Not started (${this.section === GroupListPageSection.NOT_STARTED ? this.groupListItems.totalElements : this.otherGroupListCountTotal})`,
-          href: possiblyAppendParams(`/groups/not-started`, this.params),
-          active: this.section === GroupListPageSection.NOT_STARTED,
+          text: `Not started or in progress (${this.section === GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS ? this.groupListItems.totalElements : this.otherGroupListCountTotal})`,
+          href: possiblyAppendParams(`/groups/not-started-or-in-progress`, this.params),
+          active: this.section === GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
         },
         {
-          text: `In progress or completed (${this.section === GroupListPageSection.IN_PROGRESS_OR_COMPLETE ? this.groupListItems.totalElements : this.otherGroupListCountTotal})`,
-          href: possiblyAppendParams(`/groups/started`, this.params),
-          active: this.section === GroupListPageSection.IN_PROGRESS_OR_COMPLETE,
+          text: `Completed (${this.section === GroupListPageSection.COMPLETE ? this.groupListItems.totalElements : this.otherGroupListCountTotal})`,
+          href: possiblyAppendParams(`/groups/completed`, this.params),
+          active: this.section === GroupListPageSection.COMPLETE,
         },
       ],
     }

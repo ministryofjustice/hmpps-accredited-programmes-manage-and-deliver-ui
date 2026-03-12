@@ -66,7 +66,7 @@ export default class UpdateReferralStatusView {
 
   get topInsetText() {
     return {
-      html: `If you want to change this person's status to Scheduled, you must <a href="/groups/started">allocate them to a group.</a>`,
+      html: `If you want to change this person's status to Scheduled, you must <a href="/groups/completed">allocate them to a group.</a>`,
     }
   }
 

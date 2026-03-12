@@ -29,10 +29,10 @@ beforeEach(() => {
 })
 
 describe('GroupController', () => {
-  describe('GET /groups/not-started', () => {
+  describe('GET /groups/not-started-or-in-progress', () => {
     it('should render the not started group list page', async () => {
       return request(app)
-        .get('/groups/not-started')
+        .get('/groups/not-started-or-in-progress')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Building Choices: moderate intensity')
@@ -41,10 +41,10 @@ describe('GroupController', () => {
     })
   })
 
-  describe('GET /groups/started', () => {
-    it('should render the started group list page', async () => {
+  describe('GET /groups/completed', () => {
+    it('should render the completed group list page', async () => {
       return request(app)
-        .get('/groups/started')
+        .get('/groups/completed')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Building Choices: moderate intensity')

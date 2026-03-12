@@ -14,7 +14,7 @@ export default class HomeView {
       },
       {
         dataTest: 'groups',
-        href: '/groups/not-started',
+        href: '/groups/not-started-or-in-progress',
         title: 'Groups',
         description: 'Create groups, schedule sessions, and record attendance and notes',
       },

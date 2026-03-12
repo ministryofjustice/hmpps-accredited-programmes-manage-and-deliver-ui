@@ -20,7 +20,7 @@ export default class GroupController extends BaseController {
   async showNotStartedGroupListPage(req: Request, res: Response): Promise<void> {
     const { username } = req.user
     const pageNumber = req.query.page
-    const selectedTab = 'NOT_STARTED'
+    const selectedTab = 'NOT_STARTED OR_IN_PROGRESS'
 
     const filters = GroupListFilter.fromRequest(req)
 
@@ -36,7 +36,7 @@ export default class GroupController extends BaseController {
 
     const presenter = new GroupPresenter(
       notStartedGroupList.pagedGroupData as Page<Group>,
-      GroupListPageSection.NOT_STARTED,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
       notStartedGroupList.otherTabTotal,
       notStartedGroupList.regionName,
       filters,
@@ -48,14 +48,14 @@ export default class GroupController extends BaseController {
     return this.renderPage(res, view)
   }
 
-  async showStartedGroupListPage(req: Request, res: Response): Promise<void> {
+  async showCompletedGroupListPage(req: Request, res: Response): Promise<void> {
     const { username } = req.user
     const pageNumber = req.query.page
-    const selectedTab = 'IN_PROGRESS_OR_COMPLETE'
+    const selectedTab = 'COMPLETE'
 
     const filters = GroupListFilter.fromRequest(req)
 
-    const startedGroupList = await this.accreditedProgrammesManageAndDeliverService.getGroupList(
+    const completedGroupList = await this.accreditedProgrammesManageAndDeliverService.getGroupList(
       username,
       {
         page: pageNumber ? Number(pageNumber) - 1 : 0,
@@ -66,13 +66,13 @@ export default class GroupController extends BaseController {
     )
 
     const presenter = new GroupPresenter(
-      startedGroupList.pagedGroupData as Page<Group>,
-      GroupListPageSection.IN_PROGRESS_OR_COMPLETE,
-      startedGroupList.otherTabTotal,
-      startedGroupList.regionName,
+      completedGroupList.pagedGroupData as Page<Group>,
+      GroupListPageSection.COMPLETE,
+      completedGroupList.otherTabTotal,
+      completedGroupList.regionName,
       filters,
-      startedGroupList.probationDeliveryUnitNames,
-      startedGroupList.deliveryLocationNames,
+      completedGroupList.probationDeliveryUnitNames,
+      completedGroupList.deliveryLocationNames,
     )
     const view = new GroupView(presenter)
 
