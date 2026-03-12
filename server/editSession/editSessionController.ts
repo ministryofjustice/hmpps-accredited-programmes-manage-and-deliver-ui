@@ -33,7 +33,7 @@ export default class EditSessionController extends BaseController {
   async editSession(req: Request, res: Response): Promise<void> {
     const { groupId, sessionId } = req.params
     const { username } = req.user
-    const { message } = req.query
+    const { message, isAttendanceHistory } = req.query
     let formError: FormValidationError | null = null
 
     req.session.editSessionDateAndTime = {}
@@ -45,6 +45,7 @@ export default class EditSessionController extends BaseController {
     )
 
     const successMessage = message ? String(message) : null
+    const isAttendanceHistoryFlag = isAttendanceHistory === 'true'
     req.session.originPage = req.path
 
     const data = await new EditSessionForm(req).attendanceAndSessionNotesData()
@@ -64,6 +65,7 @@ export default class EditSessionController extends BaseController {
       sessionId,
       `/group/${groupId}/session/${sessionId}/delete-session`,
       successMessage,
+      isAttendanceHistoryFlag,
       formError,
     )
     const view = new EditSessionView(presenter)
