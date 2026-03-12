@@ -27,6 +27,7 @@ describe(`filters`, () => {
         true,
         caseListFilters,
         2,
+        'test location',
       )
 
       const valuesToAddToSelect = [
@@ -56,6 +57,7 @@ describe(`filters`, () => {
         true,
         caseListFilters,
         2,
+        'test location',
       )
 
       const valuesToAddToSelect: { value: string; text: string }[] = []
@@ -82,6 +84,7 @@ describe(`filters`, () => {
         true,
         TestUtils.createCaseListFilters(),
         2,
+        'test location',
       )
 
       expect(presenter.generatePduSelectArgs()).toEqual([
@@ -113,6 +116,7 @@ describe(`filters`, () => {
         true,
         caseListFilters,
         2,
+        'test location',
       )
 
       expect(presenter.generateCohortSelectArgs()).toEqual([
@@ -140,6 +144,7 @@ describe(`filters`, () => {
         true,
         caseListFilters,
         2,
+        'test location',
       )
 
       expect(presenter.generateCohortSelectArgs()).toEqual([
@@ -169,6 +174,7 @@ describe(`filters`, () => {
         true,
         TestUtils.createCaseListFilters(),
         2,
+        'test location',
       )
 
       expect(presenter.generateReportingTeamCheckboxArgs()).toEqual([
@@ -203,6 +209,7 @@ describe(`filters`, () => {
         true,
         TestUtils.createCaseListFilters(),
         2,
+        'test location',
       )
 
       expect(presenter.getSubNavArgs()).toEqual({
@@ -236,6 +243,7 @@ describe(`filters`, () => {
         true,
         TestUtils.createCaseListFilters(),
         2,
+        'test location',
       )
 
       expect(presenter.getSubNavArgs()).toEqual({
@@ -270,6 +278,7 @@ describe('resultsText', () => {
       true,
       TestUtils.createCaseListFilters(),
       0,
+      'test location',
     )
 
     expect(presenter.resultsText).toBe('')
@@ -296,6 +305,7 @@ describe('resultsText', () => {
       true,
       TestUtils.createCaseListFilters(),
       0,
+      'test location',
     )
 
     expect(presenter.resultsText).toBe(

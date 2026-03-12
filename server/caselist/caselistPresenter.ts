@@ -28,6 +28,7 @@ export default class CaselistPresenter {
     readonly isOpenReferrals: boolean,
     readonly caseListFilters: CaseListFilterValues,
     readonly otherCaselistCountTotal: number,
+    readonly userLocationDescription: string,
   ) {
     this.pagination = new Pagination(
       this.referralCaseListItems as Required<typeof this.referralCaseListItems>,
@@ -37,8 +38,11 @@ export default class CaselistPresenter {
     this.openOrClosedUrl = isOpenReferrals ? 'open-referrals' : 'closed-referrals'
   }
 
-  readonly text = {
-    pageHeading: `Building Choices: moderate intensity`,
+  get text() {
+    return {
+      pageHeading: `Building Choices: moderate intensity`,
+      pageCaption: `Referrals in ${this.userLocationDescription}`,
+    }
   }
 
   get showReportingLocations(): boolean {
