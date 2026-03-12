@@ -39,7 +39,7 @@ export default class LayoutView {
         },
         {
           text: 'Groups',
-          href: '/groups/not-started',
+          href: '/groups/not-started-or-in-progress',
           active: this.presenter.primaryNavigationTab === PrimaryNavigationTab.Groups,
         },
       ],

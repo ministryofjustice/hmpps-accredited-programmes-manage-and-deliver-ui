@@ -327,12 +327,12 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await removeFromGroupController.removeFromGroupUpdateStatus(req, res)
   })
 
-  get('/groups/not-started', async (req, res, next) => {
+  get('/groups/not-started-or-in-progress', async (req, res, next) => {
     await groupController.showNotStartedGroupListPage(req, res)
   })
 
-  get('/groups/started', async (req, res, next) => {
-    await groupController.showStartedGroupListPage(req, res)
+  get('/groups/completed', async (req, res, next) => {
+    await groupController.showCompletedGroupListPage(req, res)
   })
 
   getOrPost('/group/:groupId/module/:moduleId/schedule-session-type', async (req, res) => {
