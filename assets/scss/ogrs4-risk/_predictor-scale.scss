@@ -187,16 +187,16 @@ $boarder-colour: #B1B4B6;
   }
 
   & h3 {
-    @include govuk-font(14, "bold");
+    @include govuk-font(16, "bold");
   }
 
   & p {
-    @include govuk-font(14, "regular");
+    @include govuk-font(16, "regular");
   }
 }
 
 .scale-marker__card-bottom p {
-  @include govuk-font(14, "bold");
+  @include govuk-font(16, "bold");
 
   margin: 0;
 }
