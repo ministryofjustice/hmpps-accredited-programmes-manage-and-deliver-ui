@@ -85,14 +85,6 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
             id: 'location',
           },
         },
-        {
-          text: 'Additional Information',
-          href: `/referral-details/${this.referralDetails.id}/additional-information/#additional-information`,
-          active: this.subNavValue === ReferralDetailsPageSection.AdditionalInformationTab,
-          attributes: {
-            id: 'additional-information',
-          },
-        },
       ],
       classes: 'govuk-!-padding-top-0',
     }

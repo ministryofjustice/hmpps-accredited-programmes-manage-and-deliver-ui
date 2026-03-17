@@ -170,19 +170,6 @@ describe('referral-details', () => {
         })
     })
   })
-
-  describe(`GET /referral-details/:id/additional-information`, () => {
-    it('loads the referral details page with additional information sub-nav', async () => {
-      return request(app)
-        .get(`/referral-details/${randomUUID()}/additional-information`)
-        .expect(200)
-        .expect(res => {
-          expect(res.text).toContain(referralDetails.crn)
-          expect(res.text).toContain(referralDetails.personName)
-          expect(res.text).toContain('Additional Information')
-        })
-    })
-  })
 })
 
 describe(`/referral`, () => {
