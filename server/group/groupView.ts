@@ -69,6 +69,21 @@ export default class GroupView {
     }
   }
 
+  private get pageHeaderOptions(): Record<string, unknown> {
+    return {
+      heading: {
+        html: this.presenter.text.pageHeading,
+      },
+      items: [
+        {
+          text: 'Create a group',
+          classes: 'govuk-button--primary',
+          href: '/group/create-a-group/create-group',
+        },
+      ],
+    }
+  }
+
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       'group/group',
@@ -83,6 +98,7 @@ export default class GroupView {
         searchBySexArgs: this.searchBySexArgs,
         searchByCohortArgs: this.searchByCohortArgs,
         deliveryLocationCheckboxArgs: this.deliveryLocationCheckboxArgs,
+        pageHeaderOptions: this.pageHeaderOptions,
         resultsText: this.presenter.resultsText,
         hasResults: this.presenter.groupListItems.content.length > 0,
         noResultsText: this.presenter.noResultsText,
