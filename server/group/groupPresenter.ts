@@ -187,6 +187,12 @@ export default class GroupPresenter {
     return `Showing <strong>${start}</strong> to <strong>${end}</strong> of <strong>${totalElements}</strong> results`
   }
 
+  get noResultsText(): string {
+    return this.section === GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS
+      ? 'There are currently no groups scheduled in'
+      : 'There are currently no completed groups in'
+  }
+
   generatePduSelectArgs(): SelectArgsItem[] {
     const selectOptions: SelectArgsItem[] = [
       {

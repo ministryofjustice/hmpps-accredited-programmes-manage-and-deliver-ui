@@ -100,6 +100,8 @@ export default class GroupView {
         deliveryLocationCheckboxArgs: this.deliveryLocationCheckboxArgs,
         pageHeaderOptions: this.pageHeaderOptions,
         resultsText: this.presenter.resultsText,
+        hasResults: this.presenter.groupListItems.content.length > 0,
+        noResultsText: this.presenter.noResultsText,
       },
     ]
   }

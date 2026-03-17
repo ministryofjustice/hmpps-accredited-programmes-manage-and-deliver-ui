@@ -583,3 +583,37 @@ describe('cohort cell generation', () => {
     })
   })
 })
+
+describe('noResultsText', () => {
+  it('should return correct message for NOT_STARTED_OR_IN_PROGRESS section', () => {
+    const groupList = groupsByRegionFactory.build()
+
+    const presenter = new GroupPresenter(
+      groupList.pagedGroupData as Page<Group>,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
+      groupList.otherTabTotal,
+      groupList.regionName,
+      GroupListFilter.empty(),
+      [],
+      [],
+    )
+
+    expect(presenter.noResultsText).toBe('There are currently no groups scheduled in')
+  })
+
+  it('should return correct message for COMPLETE section', () => {
+    const groupList = groupsByRegionFactory.build()
+
+    const presenter = new GroupPresenter(
+      groupList.pagedGroupData as Page<Group>,
+      GroupListPageSection.COMPLETE,
+      groupList.otherTabTotal,
+      groupList.regionName,
+      GroupListFilter.empty(),
+      [],
+      [],
+    )
+
+    expect(presenter.noResultsText).toBe('There are currently no completed groups in')
+  })
+})

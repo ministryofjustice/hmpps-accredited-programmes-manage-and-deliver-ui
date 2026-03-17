@@ -56,10 +56,12 @@
       {% if resultsText %}
         <p class="govuk-body showing-results">{{ resultsText | safe }}</p>
       {% endif %}
+
+      {% if hasResults %}
         {{ govukTable(groupTableArgs) }}
-
-        <p class="govuk-body-l">{{ noResultsString }}</p>
-
+      {% else %}
+        <p class="govuk-body-l">{{ noResultsText }} {{ primaryNavigationArgs.regionText }}</p>
+      {% endif %}
 
       {% include "../partials/pagination.njk" %}
     </div>
