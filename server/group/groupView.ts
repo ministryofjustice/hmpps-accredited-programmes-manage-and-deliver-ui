@@ -84,6 +84,8 @@ export default class GroupView {
         searchByCohortArgs: this.searchByCohortArgs,
         deliveryLocationCheckboxArgs: this.deliveryLocationCheckboxArgs,
         resultsText: this.presenter.resultsText,
+        hasResults: this.presenter.groupListItems.content.length > 0,
+        noResultsText: this.presenter.noResultsText,
       },
     ]
   }
