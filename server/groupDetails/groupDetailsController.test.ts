@@ -1,4 +1,4 @@
-import { Group, GroupDetailsResponse } from '@manage-and-deliver-api'
+import { GroupDetailsResponse } from '@manage-and-deliver-api'
 import { Express } from 'express'
 import request from 'supertest'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
