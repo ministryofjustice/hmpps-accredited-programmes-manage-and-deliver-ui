@@ -802,6 +802,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/current-user/region': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Retrieve the current user's region information */
+    get: operations['getCurrentUserRegion']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/bff/status-transitions/referral/{referralId}': {
     parameters: {
       query?: never
@@ -1178,6 +1195,26 @@ export interface paths {
      * @description Retrieve facilitators and group members for scheduling a one-to-one session
      */
     get: operations['getScheduleIndividualSessionDetails']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/bff/group/{groupId}/details': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Get group details by Group ID
+     * @description Get group details by Group ID
+     */
+    get: operations['getGroupDetailsById']
     put?: never
     post?: never
     delete?: never
@@ -1711,7 +1748,7 @@ export interface components {
        * @description The type of the facilitator for the group
        * @enum {string}
        */
-      teamMemberType: 'TREATMENT_MANAGER' | 'LEAD_FACILITATOR' | 'REGULAR_FACILITATOR' | 'COVER_FACILITATOR'
+      teamMemberType: 'TREATMENT_MANAGER' | 'REGULAR_FACILITATOR' | 'COVER_FACILITATOR'
     }
     /** @enum {string} */
     ProgrammeGroupCohort: 'GENERAL' | 'GENERAL_LDC' | 'SEXUAL' | 'SEXUAL_LDC'
@@ -2350,6 +2387,7 @@ export interface components {
       /** Format: int64 */
       sourcedFromEntityId: number
       notes?: string
+      description: string
     }
     ReferralDetails: {
       /**
@@ -2854,14 +2892,14 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -3376,14 +3414,14 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -3471,14 +3509,14 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -3789,6 +3827,71 @@ export interface components {
       facilitators: components['schemas']['UserTeamMember'][]
       /** @description Details of the Group's members via their Referrals */
       groupMembers: components['schemas']['GroupMember'][]
+    }
+    /** @description Information identifying the group. */
+    GroupDetailsResponse: {
+      /**
+       * Format: uuid
+       * @description A unique id identifying the programme group.
+       * @example 1ff57cea-352c-4a99-8f66-3e626aac3265
+       */
+      id: string
+      /**
+       * @description A unique code identifying the programme group.
+       * @example AP_BIRMINGHAM_NORTH
+       */
+      code: string
+      /**
+       * @description The region name the group belongs to.
+       * @example West Midlands
+       */
+      regionName: string
+      /**
+       * Format: date
+       * @description The actual start date initiated by the facilitator
+       * @example Thursday 23 April 2026
+       */
+      startDate?: string
+      /**
+       * @description The Probation Delivery Unit (PDU) name.
+       * @example County Durham and Darlington
+       */
+      pduName: string
+      /**
+       * @description The location description where the group programme will be delivered.
+       * @example County Durham Probation Office
+       */
+      deliveryLocation: string
+      /** @description Cohort for the Programme Group. */
+      cohort: components['schemas']['ProgrammeGroupCohort']
+      /** @description Sex that the group is being run for. */
+      sex: components['schemas']['ProgrammeGroupSexEnum']
+      /**
+       * @description The days and times that group sessions will be delivered.
+       * @example [Mondays, 11am to 1:30pm, Thursdays, 11am to 1:30pm]
+       */
+      daysAndTimes: string[]
+      /**
+       * Format: int32
+       * @description The number of referrals currently allocated to this group.
+       * @example 9
+       */
+      currentlyAllocatedNumber: number
+      /**
+       * @description The treatment manager for this group.
+       * @example Chloe Pascal
+       */
+      treatmentManager: string
+      /**
+       * @description The list of facilitators for this group.
+       * @example [Harpreet Singh, Tom Bassett]
+       */
+      facilitators: string[]
+      /**
+       * @description The list of coverFacilitators for this group.
+       * @example [Tom Saunders]
+       */
+      coverFacilitators?: string[]
     }
   }
   responses: never
@@ -6349,6 +6452,62 @@ export interface operations {
       }
     }
   }
+  getCurrentUserRegion: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Region information for the current user */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['CodeDescription']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access this data. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The user does not exist */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getStatusTransitionsForReferral: {
     parameters: {
       query?: never
@@ -7023,8 +7182,8 @@ export interface operations {
       }
       header?: never
       path: {
-        /** @description Return table data for either the Not started tab or the In progress/Completed tab */
-        selectedTab: 'NOT_STARTED' | 'IN_PROGRESS_OR_COMPLETE'
+        /** @description Return table data for either the Not started/In progress tab or the Completed tab */
+        selectedTab: 'NOT_STARTED_OR_IN_PROGRESS' | 'COMPLETE'
       }
       cookie?: never
     }
@@ -7445,6 +7604,55 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getGroupDetailsById: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        groupId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Returns group details if exists */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['GroupDetailsResponse']
+        }
+      }
+      /** @description Invalid request body */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden. The client is not authorised to retrieve group details. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }

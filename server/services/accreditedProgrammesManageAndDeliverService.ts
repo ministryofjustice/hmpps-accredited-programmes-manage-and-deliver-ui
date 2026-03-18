@@ -23,6 +23,7 @@ import {
   EditSessionFacilitatorsResponse,
   EmotionalWellbeing,
   Group,
+  GroupDetailsResponse,
   GroupsByRegion,
   GroupScheduleOverview,
   GroupSessionResponse,
@@ -756,5 +757,13 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
       headers: { Accept: 'application/json' },
       data: sessionAttendance,
     })) as SessionAttendance
+  }
+
+  async getGroupDetailsById(username: Express.User['username'], groupId: string): Promise<GroupDetailsResponse | null> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/group/${groupId}/details`,
+      headers: { Accept: 'application/json' },
+    })) as GroupDetailsResponse | null
   }
 }
