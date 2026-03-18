@@ -48,18 +48,27 @@ export default class EditSessionPresenter {
   }
 
   attendanceOptionText(attendance: string | undefined) {
-    const recordedAttendance = attendance?.trim().toLowerCase()
+    const recordedAttendance = attendance?.trim().toUpperCase()
 
-    if (recordedAttendance === 'attended - complied') {
+    if (recordedAttendance === 'ATTENDED - COMPLIED') {
       return { attendanceState: '<span class="govuk-tag govuk-tag--blue">Attended - Complied</span>' }
     }
-    if (recordedAttendance === 'attended - failed to comply') {
+    if (recordedAttendance === 'ATTENDED - FAILED TO COMPLY') {
       return { attendanceState: '<span class="govuk-tag govuk-tag--yellow">Attended - failed to comply</span>' }
     }
-    if (recordedAttendance === 'no - did not attend') {
+    if (recordedAttendance === 'DID NOT ATTEND') {
       return { attendanceState: '<span class="govuk-tag govuk-tag--red">Not attended</span>' }
     }
     return { attendanceState: '<span class="govuk-tag govuk-tag--grey">To be confirmed</span>' }
+  }
+
+  private sessionNotesText(sessionNotes: unknown): string {
+    if (typeof sessionNotes !== 'string') {
+      return 'Not added'
+    }
+
+    const theSessionNotes = sessionNotes.trim()
+    return theSessionNotes.length > 0 ? theSessionNotes : 'Not added'
   }
 
   get attendanceTableArgs(): MultiSelectTableArgs | TableArgs {
@@ -87,7 +96,7 @@ export default class EditSessionPresenter {
               html: `<a href="/referral-details/${it.referralId}/personal-details">${it.name}</a> ${it.crn}`,
             },
             { html: this.attendanceOptionText(it.attendance).attendanceState },
-            it.sessionNotes,
+            { text: this.sessionNotesText(it.sessionNotes) },
           ],
         })),
       }
@@ -102,7 +111,7 @@ export default class EditSessionPresenter {
                   html: `<a href="/referral-details/${attendanceData[0].referralId}/personal-details">${attendanceData[0].name}</a> ${attendanceData[0].crn}`,
                 },
                 { html: this.attendanceOptionText(attendanceData[0].attendance).attendanceState },
-                { text: attendanceData[0].sessionNotes },
+                { text: this.sessionNotesText(attendanceData[0].sessionNotes) },
               ],
             ]
           : [],
