@@ -116,6 +116,7 @@ export default class CaselistView {
         searchByCohortArgs: this.searchByCohortArgs,
         noResultsString: this.presenter.generateNoResultsString(),
         resultsText: this.presenter.resultsText,
+        text: this.presenter.text,
       },
     ]
   }

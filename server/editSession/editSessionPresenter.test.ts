@@ -18,7 +18,7 @@ describe('EditSessionPresenter', () => {
               referralId: '123',
               name: 'Alex River',
               crn: 'CRN001',
-              attendance: 'Attended',
+              attendance: 'Attended - Complied',
               sessionNotes: 'Good participation',
             },
             {
@@ -47,7 +47,7 @@ describe('EditSessionPresenter', () => {
               value: '123',
               cells: [
                 { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
-                'Attended',
+                { html: '<span class="govuk-tag govuk-tag--blue">Attended - Complied</span>' },
                 'Good participation',
               ],
             },
@@ -56,7 +56,7 @@ describe('EditSessionPresenter', () => {
               value: '456',
               cells: [
                 { html: '<a href="/referral-details/456/personal-details">Jane Doe</a> CRN002' },
-                'Not attended',
+                { html: '<span class="govuk-tag govuk-tag--grey">To be confirmed</span>' },
                 'Absent',
               ],
             },
@@ -76,7 +76,7 @@ describe('EditSessionPresenter', () => {
               referralId: '123',
               name: 'Alex River',
               crn: 'CRN001',
-              attendance: 'Attended',
+              attendance: 'Attended - failed to comply',
               sessionNotes: 'Good progress',
             },
           ],
@@ -94,7 +94,7 @@ describe('EditSessionPresenter', () => {
           rows: [
             [
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
-              { text: 'Attended' },
+              { html: '<span class="govuk-tag govuk-tag--yellow">Attended - failed to comply</span>' },
               { text: 'Good progress' },
             ],
           ],

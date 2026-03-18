@@ -46,14 +46,6 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
           },
         },
         {
-          text: 'Programme History',
-          href: `/referral-details/${this.referralDetails.id}/programme-history/#programme-history`,
-          active: this.subNavValue === ReferralDetailsPageSection.ProgrammeHistoryTab,
-          attributes: {
-            id: 'programme-history',
-          },
-        },
-        {
           text: 'Offence History',
           href: `/referral-details/${this.referralDetails.id}/offence-history/#offence-history`,
           active: this.subNavValue === ReferralDetailsPageSection.OffenceHistoryTab,
@@ -83,14 +75,6 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
           active: this.subNavValue === ReferralDetailsPageSection.LocationTab,
           attributes: {
             id: 'location',
-          },
-        },
-        {
-          text: 'Additional Information',
-          href: `/referral-details/${this.referralDetails.id}/additional-information/#additional-information`,
-          active: this.subNavValue === ReferralDetailsPageSection.AdditionalInformationTab,
-          attributes: {
-            id: 'additional-information',
           },
         },
       ],

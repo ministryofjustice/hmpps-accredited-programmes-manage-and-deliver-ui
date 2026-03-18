@@ -2,9 +2,10 @@ import { CaseListReferrals } from '@manage-and-deliver-api'
 import * as cheerio from 'cheerio'
 import { Express } from 'express'
 import request from 'supertest'
-import { appWithAllRoutes } from '../routes/testutils/appSetup'
+import { SessionData } from 'express-session'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import caseListReferralsFactory from '../testutils/factories/caseListReferralsFactory'
+import TestUtils from '../testutils/testUtils'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
@@ -20,11 +21,11 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 beforeEach(() => {
-  app = appWithAllRoutes({
-    services: {
-      accreditedProgrammesManageAndDeliverService,
-    },
-  })
+  const sessionData: Partial<SessionData> = {
+    userLocation: { locationDescription: 'Test Location', locationCode: 'ABC123' },
+  }
+  app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
   const caseListReferrals: CaseListReferrals = caseListReferralsFactory.build()
   accreditedProgrammesManageAndDeliverService.getOpenCaselist.mockResolvedValue(caseListReferrals)
   accreditedProgrammesManageAndDeliverService.getClosedCaselist.mockResolvedValue(caseListReferrals)

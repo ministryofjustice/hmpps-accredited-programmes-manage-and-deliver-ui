@@ -44,12 +44,8 @@
 
         </div>
         <div class="govuk-grid-column-two-thirds">
-          {% if presenter.subNavValue == 'programmeHistory' %}
-            <div>
-
-            Programme History
-          </div>
-          {% elif presenter.subNavValue == 'offenceHistory' %}
+           
+          {% if presenter.subNavValue == 'offenceHistory' %}
             <div>
               {% include "./offenceHistory.njk" %}
             </div>
@@ -65,10 +61,6 @@
             <div>
               {% include "./location.njk" %}
             </div>
-          {% elif presenter.subNavValue == 'additionalInformation' %}
-            <div>
-            Additional Information
-          </div>
           {% else %}
             {% include "./personalDetails.njk" %}
           {% endif %}
