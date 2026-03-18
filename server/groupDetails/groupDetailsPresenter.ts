@@ -1,25 +1,9 @@
+import { GroupDetailsResponse } from '@manage-and-deliver-api'
 import GroupServiceLayoutPresenter, { GroupServiceNavigationValues } from '../shared/groups/groupServiceLayoutPresenter'
 import { SummaryListItem } from '../utils/summaryList'
 
 export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
-  constructor(
-    readonly group: {
-      id: string
-      code: string
-      regionName?: string
-      earliestStartDate?: string
-      startDate?: string
-      pduName?: string
-      deliveryLocation?: string
-      cohort?: string
-      sex?: string
-      daysAndTimes?: string[]
-      currentlyAllocatedNumber?: number
-      treatmentManager?: string
-      facilitators?: string[]
-      coverFacilitators?: string[]
-    },
-  ) {
+  constructor(readonly group: GroupDetailsResponse) {
     super(GroupServiceNavigationValues.groupDetailsTab, group.id)
   }
 
@@ -31,8 +15,7 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
     return [
       {
         key: 'Group code',
-        lines: [`BCCDD1`],
-        changeLink: '/group/create-a-group/create-group-code',
+        lines: [this.group.code],
       },
     ]
   }
@@ -42,12 +25,10 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
       {
         key: 'Start date',
         lines: [this.group.startDate],
-        changeLink: '/group/create-a-group/create-group-code',
       },
       {
         key: 'Days and times',
         lines: this.group.daysAndTimes,
-        changeLink: '/group/create-a-group/create-group-code',
       },
     ]
   }
@@ -57,21 +38,17 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
       {
         key: 'Cohort',
         lines: [this.group.cohort],
-        changeLink: '/group/create-a-group/create-group-code',
       },
       {
         key: 'Sex',
         lines: [this.group.sex],
-        changeLink: '/group/create-a-group/create-group-code',
       },
       {
         key: 'Currently allocated',
         lines:
-          this.group.currentlyAllocatedNumber > 0
-            ? [
-                `${this.group.currentlyAllocatedNumber.toString()} participant${this.group.currentlyAllocatedNumber > 1 ? 's' : ''}`,
-              ]
-            : ['0 participants'],
+          this.group.currentlyAllocatedNumber === 1
+            ? [`${this.group.currentlyAllocatedNumber.toString()} participant`]
+            : [`${this.group.currentlyAllocatedNumber.toString()} participants`],
       },
     ]
   }
@@ -81,12 +58,10 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
       {
         key: 'Probation delivery unit (PDU)',
         lines: [this.group.pduName],
-        changeLink: '/group/create-a-group/create-group-code',
       },
       {
         key: 'Delivery location',
         lines: [this.group.deliveryLocation],
-        changeLink: '/group/create-a-group/create-group-code',
       },
     ]
   }
@@ -96,17 +71,14 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
       {
         key: 'Treatment Manager',
         lines: [this.group.treatmentManager],
-        changeLink: '/group/create-a-group/create-group-code',
       },
       {
         key: 'Facilitators',
         lines: this.group.facilitators,
-        changeLink: '/group/create-a-group/create-group-code',
       },
       {
         key: 'Cover facilitators',
         lines: this.group.coverFacilitators.length > 0 ? this.group.coverFacilitators : ['None added'],
-        changeLink: '/group/create-a-group/create-group-code',
       },
     ]
   }

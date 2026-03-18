@@ -1,9 +1,9 @@
-import { Group } from '@manage-and-deliver-api'
+import { Group, GroupDetailsResponse } from '@manage-and-deliver-api'
 import { Express } from 'express'
 import request from 'supertest'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
-import GroupFactory from '../testutils/factories/groupFactory'
+import GroupDetailsFactory from '../testutils/factories/groupDetailsFactory'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
@@ -30,15 +30,15 @@ beforeEach(() => {
 describe('GroupDetailsController', () => {
   describe('GET /group/:groupId/group-details', () => {
     it('should render the group details page', async () => {
-      const groupDetail: Group = GroupFactory.build({ code: 'TEST-GROUP-123' })
-      accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue(groupDetail)
+      const groupDetail: GroupDetailsResponse = GroupDetailsFactory.build({ code: 'TEST-GROUP-123' })
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue(groupDetail)
 
       return request(app)
         .get('/group/GROUP-123/group-details')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Group details')
-          expect(accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion).toHaveBeenCalledWith(
+          expect(accreditedProgrammesManageAndDeliverService.getGroupDetailsById).toHaveBeenCalledWith(
             'user1',
             'GROUP-123',
           )
@@ -46,7 +46,7 @@ describe('GroupDetailsController', () => {
     })
 
     it('should handle errors when fetching group details fails', async () => {
-      accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockRejectedValue(
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockRejectedValue(
         new Error('Failed to fetch group details'),
       )
 
