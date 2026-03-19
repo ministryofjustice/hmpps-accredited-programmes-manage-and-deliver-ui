@@ -6,8 +6,9 @@ export enum HorizontalNavValues {
   referralDetailsTab = 'referralDetails',
   risksAndNeedsTab = 'risksAndNeeds',
   programmeNeedsIdentifierTab = 'programmeNeedsIdentifier',
+  availabilityAndMotivationTab = 'availabilityAndMotivation',
+  attendanceHistoryTab = 'attendanceHistory',
   statusHistoryTab = 'statusHistory',
-  groupAllocationNotesTab = 'GroupAllocationNotes',
 }
 
 export default class ReferralLayoutPresenter {
@@ -17,14 +18,6 @@ export default class ReferralLayoutPresenter {
     readonly isLdcUpdated: boolean | null = null,
     readonly isCohortUpdated: boolean | null = null,
   ) {}
-
-  getButton(): { text: string; classes: string; href: string } {
-    return {
-      text: 'Back to referrals',
-      classes: 'govuk-button--secondary',
-      href: `/pdu/open-referrals`,
-    }
-  }
 
   showButtonMenu() {
     return (
@@ -136,14 +129,19 @@ export default class ReferralLayoutPresenter {
           active: this.horizontalNavValue === HorizontalNavValues.programmeNeedsIdentifierTab,
         },
         {
+          text: 'Availability and motivation',
+          href: `/referral/${this.referral.id}/group-allocation-notes/motivation-background-and-non-associations`,
+          active: this.horizontalNavValue === HorizontalNavValues.availabilityAndMotivationTab,
+        },
+        {
+          text: 'Attendance history',
+          href: `/referral/${this.referral.id}/attendance-history`,
+          active: this.horizontalNavValue === HorizontalNavValues.attendanceHistoryTab,
+        },
+        {
           text: 'Status history',
           href: `/referral/${this.referral.id}/status-history`,
           active: this.horizontalNavValue === HorizontalNavValues.statusHistoryTab,
-        },
-        {
-          text: 'Group allocation notes',
-          href: `/referral/${this.referral.id}/group-allocation-notes/motivation-background-and-non-associations`,
-          active: this.horizontalNavValue === HorizontalNavValues.groupAllocationNotesTab,
         },
       ],
     }

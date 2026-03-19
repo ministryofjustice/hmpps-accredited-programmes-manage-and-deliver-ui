@@ -39,6 +39,10 @@ export default class RisksAndAlertsPresenter extends RisksAndNeedsPresenter {
     super(subNavValue, referral, isLdcUpdated, isCohortUpdated)
   }
 
+  get headingText() {
+    return `Risks and needs: ${this.referral.personName}`
+  }
+
   getLevelClass(scoreLevel: RiskLevel): string {
     return this.levelClass('risk-box', this.levelOrUnknown(scoreLevel))
   }

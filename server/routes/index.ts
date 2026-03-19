@@ -21,6 +21,7 @@ import SessionScheduleController from '../sessionSchedule/sessionScheduleControl
 import UpdateReferralStatusController from '../updateReferralStatus/updateReferralStatusController'
 import AttendanceController from '../attendance/attendanceController'
 import HomeController from '../home/homeController'
+import AttendanceHistoryController from '../attendance/attendanceHistory/attendanceHistoryController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
@@ -50,6 +51,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const editSessionController = new EditSessionController(accreditedProgrammesManageAndDeliverService)
   const attendanceController = new AttendanceController(accreditedProgrammesManageAndDeliverService)
   const homeController = new HomeController()
+  const attendanceHistoryController = new AttendanceHistoryController(accreditedProgrammesManageAndDeliverService)
 
   get('/', async (req, res, next) => {
     await homeController.showHomePage(req, res)
@@ -189,6 +191,10 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   get('/referral/:referralId/status-history', async (req, res, next) => {
     await referralDetailsController.showStatusHistoryPage(req, res)
+  })
+
+  getOrPost('/referral/:referralId/attendance-history', async (req, res, next) => {
+    await attendanceHistoryController.showAttendanceHistoryPage(req, res)
   })
 
   get('/referral/:referralId/change-cohort', async (req, res, next) => {

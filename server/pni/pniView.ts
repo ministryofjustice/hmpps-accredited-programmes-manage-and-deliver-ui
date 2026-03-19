@@ -14,6 +14,7 @@ export default class PniView {
         relationshipsSummary: this.presenter.getRelationshipsSummary(),
         selfManagementSummary: this.presenter.getSelfManagementSummary(),
         pathwayDetails: this.presenter.getPathwayDetails(),
+        headingText: this.presenter.headingText,
       },
     ]
   }

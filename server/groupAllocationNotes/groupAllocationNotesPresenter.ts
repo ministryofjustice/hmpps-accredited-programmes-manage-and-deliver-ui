@@ -15,7 +15,7 @@ export default class GroupAllocationNotesPresenter extends ReferralLayoutPresent
     readonly isLdcUpdated: boolean | null = null,
     readonly isCohortUpdated: boolean | null = null,
   ) {
-    super(HorizontalNavValues.groupAllocationNotesTab, referral, isLdcUpdated, isCohortUpdated)
+    super(HorizontalNavValues.availabilityAndMotivationTab, referral, isLdcUpdated, isCohortUpdated)
   }
 
   get groupAllocationTextArgs(): InsetTextArgs {
@@ -33,28 +33,16 @@ export default class GroupAllocationNotesPresenter extends ReferralLayoutPresent
     }
   }
 
+  get headingText() {
+    return `Availability and motivation: ${this.referral.personName}`
+  }
+
   getVerticalSubNavArgs(): {
     items: { text: string; href: string; active: boolean; attributes: object | null }[]
     classes: string
   } {
     return {
       items: [
-        // {
-        //   text: 'Availability',
-        //   href: `/referral/${this.referral.id}/group-allocation-notes/availability`,
-        //   active: this.subNavValue === GroupAllocationNotesPageSection.AvailabilityTab,
-        //   attributes: {
-        //     id: 'availability',
-        //   },
-        // },
-        // {
-        //   text: 'Location',
-        //   href: `/referral/${this.referral.id}/group-allocation-notes/location`,
-        //   active: this.subNavValue === GroupAllocationNotesPageSection.LocationTab,
-        //   attributes: {
-        //     id: 'location',
-        //   },
-        // },
         {
           text: 'Motivation, background and non-associations',
           href: `/referral/${this.referral.id}/group-allocation-notes/motivation-background-and-non-associations`,

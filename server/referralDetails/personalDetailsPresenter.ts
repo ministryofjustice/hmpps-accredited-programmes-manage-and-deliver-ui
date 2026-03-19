@@ -15,6 +15,10 @@ export default class PersonalDetailsPresenter extends ReferralDetailsPresenter {
     super(referralDetails, subNavValue, isLdcUpdated, isCohortUpdated)
   }
 
+  get headingText() {
+    return `Referral details: ${this.referralDetails.personName}`
+  }
+
   get importFromDeliusText(): InsetTextArgs {
     return {
       text: `Imported from NDelius on ${this.personalDetails.dateRetrieved}, last updated on ${this.personalDetails.dateRetrieved}`,

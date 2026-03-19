@@ -1,0 +1,14 @@
+{% extends "../partials/layout.njk" %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+ {% include "../partials/headerMenu.njk" %}
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">{{ text.headingText }}</h1>
+    </div>
+  </div>
+{% endblock %}
+

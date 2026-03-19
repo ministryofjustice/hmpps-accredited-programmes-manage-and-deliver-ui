@@ -13,18 +13,11 @@
   {% block content %}
     <div class="govuk-width-container">
         <main class="govuk-main-wrapper" id="main-content">
-        <div class="govuk-grid-row">
-          <div class="govuk-grid-column-full">
-            <a class="return_to_homepage__link homepage-link" href={{ homePageLink.href }}>{{ homePageLink.text }}</a>
-          </div>
-        </div>
+        
         <div class="govuk-grid-row">
           {% include "../partials/headerMenu.njk" %}
-            <div class="govuk-grid-column-full">
-              {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
-            </div>
-
             <div class="govuk-grid-column-three-quarters">
+               <h1 class="govuk-heading-xl">{{ text.headingText }}</h1>
               {% if presenter.isCohortUpdated %}
                 {{ mojAlert(presenter.cohortUpdatedSuccessMessageArgs) }}
               {% endif %}

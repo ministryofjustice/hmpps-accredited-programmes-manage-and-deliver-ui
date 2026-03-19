@@ -1,4 +1,5 @@
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+{%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 
 {{ govukPhaseBanner({
   tag: {
@@ -25,3 +26,8 @@
     </div>
   </div>
 </section>
+{% if presenter.getHorizontalSubNavArgs %}
+<div class="govuk-width-container service-user-banner__sub-nav">
+  {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
+</div>
+{% endif %}

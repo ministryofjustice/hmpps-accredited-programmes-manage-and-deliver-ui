@@ -27,13 +27,18 @@ describe(`getHorizontalSubNavArgs.`, () => {
         active: false,
       },
       {
-        text: 'Status history',
-        href: `/referral/${referralDetails.id}/status-history`,
+        text: 'Availability and motivation',
+        href: `/referral/${referralDetails.id}/group-allocation-notes/motivation-background-and-non-associations`,
         active: false,
       },
       {
-        text: 'Group allocation notes',
-        href: `/referral/${referralDetails.id}/group-allocation-notes/motivation-background-and-non-associations`,
+        text: 'Attendance history',
+        href: `/referral/${referralDetails.id}/attendance-history`,
+        active: false,
+      },
+      {
+        text: 'Status history',
+        href: `/referral/${referralDetails.id}/status-history`,
         active: false,
       },
     ])

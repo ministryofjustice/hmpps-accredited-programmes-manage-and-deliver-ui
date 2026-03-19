@@ -19,13 +19,9 @@
      <main class="govuk-main-wrapper" id="main-content">
         <div class="govuk-grid-row">
           {% include "../partials/headerMenu.njk" %}
-          <div class="govuk-grid-column-full">
-            {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
-          </div>
-        </div>
 
-        <div class="govuk-grid-row">
           <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-xl">{{ text.headingText }}</h1>
           {% if errorSummary %}
             {{ govukErrorSummary(errorSummary) }}
           {% endif %}
@@ -44,8 +40,7 @@
 
           {{ mojTimeline(statusHistoryTimelineOptions) }}
 
-          </div>
-          </div>
+          
           </div>
         </div>
       </main>
