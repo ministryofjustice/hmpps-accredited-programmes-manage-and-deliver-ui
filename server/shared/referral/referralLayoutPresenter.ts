@@ -110,8 +110,9 @@ export default class ReferralLayoutPresenter {
     }
   }
 
-  getHorizontalSubNavArgs(): { items: { text: string; href: string; active: boolean }[] } {
+  getHorizontalSubNavArgs(): { classes: string; items: { text: string; href: string; active: boolean }[] } {
     return {
+      classes: 'govuk-!-margin-bottom-0',
       items: [
         {
           text: 'Referral details',
