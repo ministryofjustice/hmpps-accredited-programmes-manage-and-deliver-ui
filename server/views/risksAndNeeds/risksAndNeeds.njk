@@ -1,7 +1,6 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/header/macro.njk" import govukHeader %}
-{%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 {%- from "moj/components/side-navigation/macro.njk" import mojSideNavigation -%}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
@@ -16,7 +15,7 @@
         <div class="govuk-grid-row">
           {% include "../partials/headerMenu.njk" %}
           <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-xl">{{ text.headingText }}</h1>
+  
             {% if presenter.isCohortUpdated %}
             {{ mojAlert(presenter.cohortUpdatedSuccessMessageArgs) }}
             {% endif %}

@@ -1,8 +1,7 @@
-{%- from "govuk/components/button/macro.njk" import govukButton %}
 {%- from "moj/components/button-menu/macro.njk" import mojButtonMenu -%}
 <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-xl">Building Choices: moderate intensity</span>
-     <h1 class="govuk-heading-l">{{ presenter.headingText }}</h1>
+     <h1 class="govuk-heading-xl">{{ presenter.headingText }}</h1>
 </div>
     <div class="moj-button-group moj-button-group--inline header-menu-button">
        
@@ -10,4 +9,3 @@
           {{ mojButtonMenu(presenter.getButtonMenu()) }}
         {% endif %}
     </div>
- {# <h1 class="govuk-heading-xl">{{ text.headingText }}</h1> #}
