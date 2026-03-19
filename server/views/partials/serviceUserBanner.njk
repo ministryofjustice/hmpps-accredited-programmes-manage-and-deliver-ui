@@ -27,7 +27,35 @@
   </div>
 </section>
 {% if presenter.getHorizontalSubNavArgs %}
-<div class="govuk-width-container service-user-banner__sub-nav">
-  {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
+<div class="govuk-width-container service-user-banner__sub-nav govuk-!-margin-bottom-0">
+  {{ mojSubNavigation({
+    label: "Sub navigation",
+    classes: "govuk-!-margin-bottom-0",
+    items: [{
+      text: "Referral details",
+      href: "/referral-details/" + presenter.referral.id + "/personal-details",
+      active: presenter.horizontalNavValue == "referralDetails"
+    }, {
+      text: "Risks and needs",
+      href: "/referral/" + presenter.referral.id + "/risks-and-alerts",
+      active: presenter.horizontalNavValue == "risksAndNeeds"
+    }, {
+      text: "Programme needs identifier",
+      href: "/referral/" + presenter.referral.id + "/programme-needs-identifier",
+      active: presenter.horizontalNavValue == "programmeNeedsIdentifier"
+    }, {
+      text: "Availability and motivation",
+      href: "/referral/" + presenter.referral.id + "/group-allocation-notes/motivation-background-and-non-associations",
+      active: presenter.horizontalNavValue == "availabilityAndMotivation"
+    }, {
+      text: "Attendance history",
+      href: "/referral/" + presenter.referral.id + "/attendance-history",
+      active: presenter.horizontalNavValue == "attendanceHistory"
+    }, {
+      text: "Status history",
+      href: "/referral/" + presenter.referral.id + "/status-history",
+      active: presenter.horizontalNavValue == "statusHistory"
+    }]
+  }) }}
 </div>
 {% endif %}

@@ -1,18 +1,5 @@
 @use '../../../node_modules/govuk-frontend/dist/govuk' as *;
 
-.service-user-banner__sub-nav {
-  display: block;
-}
-
-.service-user-banner__sub-nav .moj-sub-navigation {
-  margin-bottom: govuk-spacing(4);
-  width: 100%;
-}
-
-.service-user-banner__sub-nav .moj-sub-navigation__list {
-  justify-content: center;
-}
-
 .key-details-bar {
   background-color: govuk-colour('blue');
 
