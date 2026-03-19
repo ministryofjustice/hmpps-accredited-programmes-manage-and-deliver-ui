@@ -313,3 +313,176 @@ describe('resultsText', () => {
     )
   })
 })
+
+describe('generateTableRows', () => {
+  const caseListFilters = TestUtils.createCaseListFilters()
+
+  it('should generate complete table rows with all columns for a single referral', () => {
+    const referralCaseListItem = referralCaseListItemFactory.build({
+      referralId: 'REF123',
+      personName: 'Jane Doe',
+      crn: 'X987654',
+      pdu: 'Manchester PDU',
+      reportingTeam: 'Team Bravo',
+      sentenceEndDate: '2024-06-15',
+      sentenceEndDateSource: 'REQUIREMENT',
+      cohort: 'GENERAL_OFFENCE',
+      hasLdc: false,
+      referralStatus: 'Awaiting allocation',
+    })
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+      .pageContent([referralCaseListItem])
+      .build() as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      1,
+      referralCaseListItemPage,
+      {} as CaselistFilter,
+      '',
+      true,
+      caseListFilters,
+      0,
+      'test location',
+    )
+
+    const rows = presenter.generateTableRows()
+    const sentenceEndDateTimestamp = new Date('15 June 2024').getTime()
+
+    expect(rows).toHaveLength(1)
+    expect(rows[0]).toHaveLength(6)
+    expect(rows[0][0]).toEqual({
+      html: `<a href='/referral-details/REF123/personal-details'>Jane Doe</a><span>X987654</span>`,
+      attributes: { 'data-sort-value': 'Jane Doe' },
+    })
+    expect(rows[0][1]).toEqual({ text: 'Manchester PDU' })
+    expect(rows[0][2]).toEqual({ text: 'Team Bravo' })
+    expect(rows[0][3]).toEqual({
+      html: `15 June 2024 <br> Order end date`,
+      attributes: { 'data-sort-value': sentenceEndDateTimestamp },
+    })
+    expect(rows[0][4]).toEqual({ html: 'General offence' })
+    expect(rows[0][5]).toEqual({ text: 'Awaiting allocation' })
+  })
+
+  it('should generate correct sentence end date with LICENCE_CONDITION source', () => {
+    const referralCaseListItem = referralCaseListItemFactory.build({
+      sentenceEndDate: '2024-09-20',
+      sentenceEndDateSource: 'LICENCE_CONDITION',
+    })
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+      .pageContent([referralCaseListItem])
+      .build() as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      1,
+      referralCaseListItemPage,
+      {} as CaselistFilter,
+      '',
+      true,
+      caseListFilters,
+      0,
+      'test location',
+    )
+
+    const rows = presenter.generateTableRows()
+    const sentenceEndDateTimestamp = new Date('20 September 2024').getTime()
+
+    expect(rows[0][3]).toEqual({
+      html: `20 September 2024 <br> Licence end date`,
+      attributes: { 'data-sort-value': sentenceEndDateTimestamp },
+    })
+  })
+
+  it('should display LDC badge for cohorts with LDC', () => {
+    const generalLdc = referralCaseListItemFactory.build({
+      cohort: 'GENERAL_OFFENCE',
+      hasLdc: true,
+      sentenceEndDate: '2024-06-15',
+      sentenceEndDateSource: 'REQUIREMENT',
+    })
+    const sexualLdc = referralCaseListItemFactory.build({
+      cohort: 'SEXUAL_OFFENCE',
+      hasLdc: true,
+      sentenceEndDate: '2024-06-15',
+      sentenceEndDateSource: 'REQUIREMENT',
+    })
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+      .pageContent([generalLdc, sexualLdc])
+      .build() as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      1,
+      referralCaseListItemPage,
+      {} as CaselistFilter,
+      '',
+      true,
+      caseListFilters,
+      0,
+      'test location',
+    )
+
+    const rows = presenter.generateTableRows()
+
+    expect(rows[0][4]).toEqual({
+      html: 'General offence</br><span class="moj-badge moj-badge--bright-purple">LDC</span>',
+    })
+    expect(rows[1][4]).toEqual({
+      html: 'Sexual offence</br><span class="moj-badge moj-badge--bright-purple">LDC</span>',
+    })
+  })
+
+  it('should generate multiple rows with correct sort values', () => {
+    const referralCaseListItems = [
+      referralCaseListItemFactory.build({
+        personName: 'Alice Johnson',
+        sentenceEndDate: '2024-06-15',
+        sentenceEndDateSource: 'REQUIREMENT',
+      }),
+      referralCaseListItemFactory.build({
+        personName: 'Bob Williams',
+        sentenceEndDate: '2024-07-20',
+        sentenceEndDateSource: 'LICENCE_CONDITION',
+      }),
+    ]
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+      .pageContent(referralCaseListItems)
+      .build() as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      1,
+      referralCaseListItemPage,
+      {} as CaselistFilter,
+      '',
+      true,
+      caseListFilters,
+      0,
+      'test location',
+    )
+
+    const rows = presenter.generateTableRows()
+
+    expect(rows).toHaveLength(2)
+    expect((rows[0][0] as { attributes?: Record<string, string | number> }).attributes?.['data-sort-value']).toBe(
+      'Alice Johnson',
+    )
+    expect((rows[1][0] as { attributes?: Record<string, string | number> }).attributes?.['data-sort-value']).toBe(
+      'Bob Williams',
+    )
+  })
+
+  it('should return empty array when no referrals provided', () => {
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+      .pageContent([])
+      .build() as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      1,
+      referralCaseListItemPage,
+      {} as CaselistFilter,
+      '',
+      true,
+      caseListFilters,
+      0,
+      'test location',
+    )
+
+    const rows = presenter.generateTableRows()
+
+    expect(rows).toHaveLength(0)
+  })
+})

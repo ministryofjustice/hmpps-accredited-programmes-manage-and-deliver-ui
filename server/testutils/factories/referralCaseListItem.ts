@@ -12,4 +12,6 @@ export default ReferralCaseListItemFactory.define(({ sequence }) => ({
   hasLdc: false,
   reportingTeam: 'REPORTING_TEAM_1',
   pdu: 'PDU_NAME_1',
+  sentenceEndDate: '2024-01-01',
+  sentenceEndDateSource: 'LICENCE_CONDITION' as 'LICENCE_CONDITION' | 'REQUIREMENT',
 }))
