@@ -4,6 +4,7 @@ import { CheckboxesArgsItem, SelectArgsItem, TableArgs } from '../utils/govukFro
 import Pagination from '../utils/pagination/pagination'
 import CaselistFilter from './caselistFilter'
 import CaselistUtils from './caseListUtils'
+import DateUtils from '../utils/dateUtils'
 
 export enum CaselistPageSection {
   Open = 1,
@@ -13,6 +14,11 @@ export enum CaselistPageSection {
 const cohortConfigMap: Record<CohortEnum, string> = {
   SEXUAL_OFFENCE: 'Sexual offence',
   GENERAL_OFFENCE: 'General offence',
+}
+
+const sentenceEndDateSourceMap: Record<string, string> = {
+  REQUIREMENT: 'Order end date',
+  LICENCE_CONDITION: 'Licence end date',
 }
 
 export default class CaselistPresenter {
@@ -84,6 +90,12 @@ export default class CaselistPresenter {
           },
         },
         {
+          text: 'Sentence end date',
+          attributes: {
+            'aria-sort': 'none',
+          },
+        },
+        {
           text: 'Cohort',
           attributes: {
             'aria-sort': 'none',
@@ -102,10 +114,12 @@ export default class CaselistPresenter {
 
   generateTableRows() {
     const referralData: (
-      | { html: string; text?: undefined; attributes?: Record<string, string> }
+      | { html: string; text?: undefined; attributes?: Record<string, string | number> }
       | { text: string; html?: undefined }
     )[][] = []
     this.referralCaseListItems.content.forEach(referral => {
+      const formattedSentenceEndDate = DateUtils.formattedDate(referral.sentenceEndDate)
+      const sentenceEndDateEpoch = new Date(formattedSentenceEndDate).getTime()
       referralData.push([
         {
           html: `<a href='/referral-details/${referral.referralId}/personal-details'>${referral.personName}</a><span>${referral.crn}</span>`,
@@ -113,6 +127,10 @@ export default class CaselistPresenter {
         },
         { text: referral.pdu },
         { text: referral.reportingTeam },
+        {
+          html: `${formattedSentenceEndDate} <br> ${sentenceEndDateSourceMap[referral.sentenceEndDateSource]}`,
+          attributes: { 'data-sort-value': sentenceEndDateEpoch },
+        },
         {
           html: `${cohortConfigMap[referral.cohort]}${CaselistUtils.hasLdcTagHtml(referral)}`,
         },
