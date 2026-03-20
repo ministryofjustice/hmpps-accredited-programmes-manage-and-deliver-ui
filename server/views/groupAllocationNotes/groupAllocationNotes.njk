@@ -1,6 +1,5 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/header/macro.njk" import govukHeader %}
- 
 {%- from "moj/components/side-navigation/macro.njk" import mojSideNavigation -%}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
@@ -13,11 +12,9 @@
   {% block content %}
     <div class="govuk-width-container">
         <main class="govuk-main-wrapper" id="main-content">
-        
         <div class="govuk-grid-row">
           {% include "../partials/headerMenu.njk" %}
             <div class="govuk-grid-column-three-quarters">
-      
               {% if presenter.isCohortUpdated %}
                 {{ mojAlert(presenter.cohortUpdatedSuccessMessageArgs) }}
               {% endif %}

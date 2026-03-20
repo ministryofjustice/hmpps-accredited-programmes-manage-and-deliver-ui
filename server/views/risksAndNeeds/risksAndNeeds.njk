@@ -15,7 +15,6 @@
         <div class="govuk-grid-row">
           {% include "../partials/headerMenu.njk" %}
           <div class="govuk-grid-column-three-quarters">
-  
             {% if presenter.isCohortUpdated %}
             {{ mojAlert(presenter.cohortUpdatedSuccessMessageArgs) }}
             {% endif %}
