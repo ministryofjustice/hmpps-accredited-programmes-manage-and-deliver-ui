@@ -45,7 +45,10 @@ describe('Group allocation notes', () => {
       return request(app)
         .get(`/referral/${randomUUID()}/group-allocation-notes/motivation-background-and-non-associations`)
         .expect(200)
-        .expect(res => {})
+        .expect(res => {
+          expect(res.text).toContain(`Availability and motivation: ${referralDetails.personName}`)
+          expect(res.text).toContain(`Motivation, background and non-associations`)
+        })
     })
   })
 

@@ -315,6 +315,7 @@ describe('Alcohol Misuse', () => {
         .get(`/referral/${referralId}/alcohol-misuse`)
         .expect(200)
         .expect(res => {
+          expect(res.text).toContain(`Risks and needs: ${referralDetails.personName}`)
           expect(res.text).toContain('Assessment completed 23 August 2025')
           expect(res.text).toContain(alcoholMisuseDetails.currentUse)
           expect(res.text).toContain(alcoholMisuseDetails.bingeDrinking)

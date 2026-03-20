@@ -120,4 +120,23 @@ export default class ReferralLayoutPresenter {
       ],
     }
   }
+
+  get headingText(): string {
+    switch (this.horizontalNavValue) {
+      case HorizontalNavValues.referralDetailsTab:
+        return `Referral details: ${this.referral.personName}`
+      case HorizontalNavValues.risksAndNeedsTab:
+        return `Risks and needs: ${this.referral.personName}`
+      case HorizontalNavValues.programmeNeedsIdentifierTab:
+        return `Programme needs identifier: ${this.referral.personName}`
+      case HorizontalNavValues.availabilityAndMotivationTab:
+        return `Availability and motivation: ${this.referral.personName}`
+      case HorizontalNavValues.attendanceHistoryTab:
+        return `Attendance history: ${this.referral.personName}`
+      case HorizontalNavValues.statusHistoryTab:
+        return `Status history: ${this.referral.personName}`
+      default:
+        return this.referral.personName
+    }
+  }
 }
