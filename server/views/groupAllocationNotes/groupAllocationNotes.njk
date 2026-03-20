@@ -21,8 +21,6 @@
               {% if presenter.isLdcUpdated %}
                 {{ mojAlert(presenter.ldcUpdatedSuccessMessageArgs) }}
               {% endif %}
-
-              <h2 class="govuk-heading-m">Group allocation notes</h2>
               <p class="govuk-body">Use this section to add and view information to help you match the person to a group.</p>
               {% if presenter.referral.currentlyAllocatedGroupId %}
               {{ govukInsetText(groupAllocationTextArgs) }}
