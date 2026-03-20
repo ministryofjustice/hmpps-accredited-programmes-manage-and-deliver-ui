@@ -22,8 +22,7 @@
             {% if presenter.isLdcUpdated %}
               {{ mojAlert(presenter.ldcUpdatedSuccessMessageArgs) }}
             {% endif %}
-            <h2 class="govuk-heading-m">Programme needs identifier</h2>
-            <p class="govuk-body govuk-!-margin-bottom-6">This is {{presenter.details.personName}}'s eligibility for Accredited Programmes, based on their risk and need scores.</p>
+            <p class="govuk-body govuk-!-margin-bottom-6">This is {{ presenter.referral.personName }}'s eligibility for Accredited Programmes, based on their risk and need scores.</p>
           </div>
           <div class="govuk-grid-column-three-quarters">
             <div class="{{pathwayDetails.class}}">
