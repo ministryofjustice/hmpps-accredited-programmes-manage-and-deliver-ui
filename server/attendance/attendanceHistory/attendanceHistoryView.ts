@@ -8,7 +8,6 @@ export default class AttendanceHistoryView {
       'attendanceHistory/attendanceHistory',
       {
         presenter: this.presenter,
-        headingText: this.presenter.headingText,
       },
     ]
   }

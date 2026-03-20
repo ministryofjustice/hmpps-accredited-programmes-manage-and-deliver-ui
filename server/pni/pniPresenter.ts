@@ -12,10 +12,6 @@ export default class PniPresenter extends ReferralLayoutPresenter {
     super(HorizontalNavValues.programmeNeedsIdentifierTab, referral, isLdcUpdated, isCohortUpdated)
   }
 
-  get headingText() {
-    return `Programme needs identifier: ${this.referral.personName}`
-  }
-
   scoreValueText(value?: number | null): string {
     return value?.toString() || 'Score missing'
   }

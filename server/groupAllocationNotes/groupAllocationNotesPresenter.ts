@@ -33,10 +33,6 @@ export default class GroupAllocationNotesPresenter extends ReferralLayoutPresent
     }
   }
 
-  get headingText() {
-    return `Availability and motivation: ${this.referral.personName}`
-  }
-
   getVerticalSubNavArgs(): {
     items: { text: string; href: string; active: boolean; attributes: object | null }[]
     classes: string
