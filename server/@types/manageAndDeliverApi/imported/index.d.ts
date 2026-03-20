@@ -879,6 +879,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/bff/session/{sessionId}/referral/{referralId}/session-notes': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * BFF endpoint to retrieve notes for a session
+     * @description Retrieve notes for a session
+     */
+    get: operations['getSessionNotes']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/bff/session/{sessionId}/record-attendance': {
     parameters: {
       query?: never
@@ -991,6 +1011,23 @@ export interface paths {
      * @description BFF endpoint to retrieve a list of team members for the logged in user's Region.
      */
     get: operations['getMembersInRegion']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/bff/referral/{referralId}/attendance-history': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Retrieve the attendance history for a referral */
+    get: operations['getReferralAttendanceHistory']
     put?: never
     post?: never
     delete?: never
@@ -3145,6 +3182,64 @@ export interface components {
       /** @description List of the facilitators for the session */
       facilitators: components['schemas']['EditSessionFacilitator'][]
     }
+    /** @description Details of the notes for a session */
+    SessionNotes: {
+      /**
+       * @description The page title for the session notes page
+       * @example Alex River: Getting started 1 Introduction to Building Choices session notes
+       */
+      pageTitle: string
+      /**
+       * @description The name of the module the session belongs to
+       * @example Getting started
+       */
+      moduleName: string
+      /**
+       * Format: int32
+       * @description The session number within the module
+       * @example 1
+       */
+      sessionNumber: number
+      /**
+       * @description The user that last updated the session notes
+       * @example John Smith
+       */
+      lastUpdatedBy?: string
+      /**
+       * Format: date
+       * @description The date the session notes were last updated
+       * @example 19 March 2026
+       */
+      lastUpdatedDate?: string
+      /**
+       * Format: uuid
+       * @description The unique identifier of the programme group
+       * @example d193bf89-c98b-4e92-b842-3c1b3e5f5e4a
+       */
+      groupId: string
+      /**
+       * Format: uuid
+       * @description The unique identifier of the session
+       * @example a1b2c3d4-e5f6-7890-abcd-ef1234567890
+       */
+      sessionId: string
+      /**
+       * Format: date
+       * @description The date the session took place
+       * @example 21 July 2025
+       */
+      sessionDate?: string
+      /**
+       * @description The attendance status for the session
+       * @example Attended, failed to comply
+       */
+      sessionAttendance: string
+      /**
+       * @description The notes recorded for this session
+       * @example Participant engaged well.
+       */
+      sessionNotes?: string
+    }
     /** @description Details of an Option */
     Option: {
       /**
@@ -3320,6 +3415,66 @@ export interface components {
       teamName: string
       /** @description The code of the team that the member belongs to */
       teamCode: string
+    }
+    /** @description Response containing attendance history for a referral */
+    AttendanceHistoryResponse: {
+      /**
+       * @description The full name of the person
+       * @example Alex River
+       */
+      popName: string
+      /**
+       * @description The group code of the group the person is currently allocated to
+       * @example abc123
+       */
+      currentlyAllocatedGroupCode?: string
+      /**
+       * Format: uuid
+       * @description The unique identifier of the group the person is currently allocated to
+       * @example a1b2c3d4-e5f6-7890-abcd-ef1234567890
+       */
+      currentlyAllocatedGroupId?: string
+      /** @description List of sessions with attendance information */
+      attendanceHistory: components['schemas']['AttendanceHistorySession'][]
+    }
+    /** @description Session attendance information */
+    AttendanceHistorySession: {
+      /**
+       * Format: uuid
+       * @description The unique identifier of the session
+       * @example a1b2c3d4-e5f6-7890-abcd-ef1234567890
+       */
+      sessionId: string
+      /**
+       * @description The name of the session
+       * @example Pre-group one-to-one
+       */
+      sessionName: string
+      /**
+       * @description The group code for the session
+       * @example abc123
+       */
+      groupCode: string
+      /**
+       * @description The date of the session
+       * @example 11 July 2025
+       */
+      date: string
+      /**
+       * @description The time range of the session
+       * @example 10:30am to 11am
+       */
+      time: string
+      /**
+       * @description The attendance status for the session
+       * @example Attended
+       */
+      attendanceStatus: string
+      /**
+       * @description Whether session notes exist for this attendance
+       * @example true
+       */
+      hasNotes: boolean
     }
     /** @description A delivery location (i.e. Office) with value and label, formatted for the UI */
     DeliveryLocationOption: {
@@ -6679,6 +6834,67 @@ export interface operations {
       }
     }
   }
+  getSessionNotes: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description Unique identifier of a session */
+        sessionId: string
+        /** @description Unique identifier of a referral */
+        referralId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully retrieved session notes */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['SessionNotes']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Session not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getSessionRecordAttendance: {
     parameters: {
       query?: {
@@ -7010,6 +7226,65 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getReferralAttendanceHistory: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id (UUID) of a referral */
+        referralId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Attendance history for a referral */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['AttendanceHistoryResponse']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden.  The client is not authorised to access this referral. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The referral does not exist */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
     }

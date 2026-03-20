@@ -2,6 +2,7 @@ import {
   AlcoholMisuseDetails,
   AllocateToGroupRequest,
   AllocateToGroupResponse,
+  AttendanceHistoryResponse,
   Attitude,
   Availability,
   CaseListFilterValues,
@@ -757,6 +758,14 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
       headers: { Accept: 'application/json' },
       data: sessionAttendance,
     })) as SessionAttendance
+  }
+
+  async getAttendanceHistory(username: ExpressUsername, referralId: string): Promise<AttendanceHistoryResponse> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `bff/referral/${referralId}/attendance-history`,
+      headers: { Accept: 'application/json' },
+    })) as AttendanceHistoryResponse
   }
 
   async getGroupDetailsById(username: Express.User['username'], groupId: string): Promise<GroupDetailsResponse | null> {
