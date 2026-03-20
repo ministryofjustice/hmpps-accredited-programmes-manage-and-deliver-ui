@@ -50,7 +50,6 @@ export default class StatusHistoryView {
     return [
       'statusHistory/statusHistory',
       {
-        buttons: this.presenter.getSubHeaderArgs().items,
         errorSummary: this.presenter.errorMessageSummary,
         successMessageSummary: this.presenter.successMessageSummary,
         headingText: this.presenter.headingText,
