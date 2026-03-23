@@ -48,7 +48,9 @@ describe('EditSessionPresenter', () => {
               cells: [
                 { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
                 { html: '<span class="govuk-tag govuk-tag--blue">Attended - Complied</span>' },
-                { text: 'Good participation' },
+                {
+                  html: '<a href="/group/group-123/session/session-456/session-1-session-notes?referralId=123">Session 1 notes</a>',
+                },
               ],
             },
             {
@@ -57,63 +59,9 @@ describe('EditSessionPresenter', () => {
               cells: [
                 { html: '<a href="/referral-details/456/personal-details">Jane Doe</a> CRN002' },
                 { html: '<span class="govuk-tag govuk-tag--grey">To be confirmed</span>' },
-                { text: 'Absent' },
-              ],
-            },
-          ],
-        })
-      })
-
-      it('returns Not added for non-string session notes in multi-select rows', () => {
-        const sessionDetails: GroupSessionResponse = {
-          pageTitle: 'Session 1',
-          code: 'CODE-123',
-          sessionType: 'Group',
-          attendanceAndSessionNotes: [
-            {
-              referralId: '123',
-              name: 'Alex River',
-              crn: 'CRN001',
-              attendance: 'Attended - Complied',
-              sessionNotes: {} as unknown as string,
-            },
-            {
-              referralId: '456',
-              name: 'Jane Doe',
-              crn: 'CRN002',
-              attendance: 'Not attended',
-              sessionNotes: 'Absent',
-            },
-          ],
-          date: '01 Feb 2026',
-          time: '1:00pm',
-          scheduledToAttend: [],
-          facilitators: [],
-        }
-
-        const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
-        const result = presenter.attendanceTableArgs
-
-        expect(result).toEqual({
-          idPrefix: 'attendance-multi-select',
-          headers: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
-          rows: [
-            {
-              id: 'attendance-multi-select-row-0',
-              value: '123',
-              cells: [
-                { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
-                { html: '<span class="govuk-tag govuk-tag--blue">Attended - Complied</span>' },
-                { text: 'Not added' },
-              ],
-            },
-            {
-              id: 'attendance-multi-select-row-1',
-              value: '456',
-              cells: [
-                { html: '<a href="/referral-details/456/personal-details">Jane Doe</a> CRN002' },
-                { html: '<span class="govuk-tag govuk-tag--grey">To be confirmed</span>' },
-                { text: 'Absent' },
+                {
+                  html: '<a href="/group/group-123/session/session-456/session-1-session-notes?referralId=456">Session 1 notes</a>',
+                },
               ],
             },
           ],
@@ -151,7 +99,9 @@ describe('EditSessionPresenter', () => {
             [
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
               { html: '<span class="govuk-tag govuk-tag--yellow">Attended - failed to comply</span>' },
-              { text: 'Good progress' },
+              {
+                html: '<a href="/group/group-123/session/session-456/session-1-session-notes?referralId=123">Session 1 notes</a>',
+              },
             ],
           ],
         })
@@ -186,7 +136,9 @@ describe('EditSessionPresenter', () => {
             [
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
               { html: '<span class="govuk-tag govuk-tag--blue">Attended - Complied</span>' },
-              { text: 'Not added' },
+              {
+                html: 'Not added',
+              },
             ],
           ],
         })
@@ -247,7 +199,9 @@ describe('EditSessionPresenter', () => {
             [
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
               { html: '<span class="govuk-tag govuk-tag--grey">To be confirmed</span>' },
-              { text: 'Good participation' },
+              {
+                html: '<a href="/group/group-123/session/session-456/session-1-session-notes?referralId=123">Session 1 notes</a>',
+              },
             ],
           ],
         })
@@ -282,7 +236,9 @@ describe('EditSessionPresenter', () => {
             [
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
               { html: '<span class="govuk-tag govuk-tag--grey">To be confirmed</span>' },
-              { text: 'Absent' },
+              {
+                html: '<a href="/group/group-123/session/session-456/session-1-session-notes?referralId=123">Session 1 notes</a>',
+              },
             ],
           ],
         })
@@ -317,7 +273,9 @@ describe('EditSessionPresenter', () => {
             [
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
               { html: '<span class="govuk-tag govuk-tag--red">Not attended</span>' },
-              { text: 'Absent' },
+              {
+                html: '<a href="/group/group-123/session/session-456/session-1-session-notes?referralId=123">Session 1 notes</a>',
+              },
             ],
           ],
         })

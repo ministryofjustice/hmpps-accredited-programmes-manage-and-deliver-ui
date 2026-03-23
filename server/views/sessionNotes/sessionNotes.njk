@@ -1,0 +1,53 @@
+{% extends "../partials/layout.njk" %}
+
+{%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+ 
+{% block content %}
+ {{ govukBackLink(backLinkArgs) }}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+     {{ mojSubNavigation(serviceNavigationArgs) }}
+   
+{{ mojPageHeaderActions({
+  heading: {
+    text: text.headingText,
+    classes: "govuk-heading-l"
+  },
+  items: [{
+    text: text.updateAttendanceAndNotesButtonText,
+    classes: "govuk-button--primary"
+  }]
+}) }}
+</div>
+ 
+{{ govukInsetText({
+  text: text.lastUpdatedText
+}) }}
+ <div class="govuk-grid-column-two-thirds">
+   <div>
+    {% for section in notesBodyArgs %}
+      <section class="govuk-!-margin-bottom-6">
+        {{ section.html | safe }}
+
+        {% if section.data %}
+          <p class="govuk-body">
+           {{ section.data.sessionName }}:  {{ section.data.moduleName }}  {{ section.data.lastUpdatedDate }} {{ section.data.attendance }}
+          </p>
+        {% endif %}
+
+        {% if section.Notes %}
+          {{ section.Notes | safe }}
+        {% endif %}
+      </section>
+    {% endfor %}
+   </div>
+  </div>
+</div>
+{% endblock %}

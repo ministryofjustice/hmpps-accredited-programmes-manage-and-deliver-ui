@@ -10,6 +10,7 @@ import AttendanceSessionNotesView from './attendanceNotes/attendanceSessionNotes
 import { convertToUrlFriendlyKebabCase } from '../utils/utils'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
+import errorMessages from '../utils/errorMessages'
 
 export default class AttendanceController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -130,12 +131,38 @@ export default class AttendanceController extends BaseController {
     const isLastReferral = currentReferralIndex === referralIds.length - 1
     const currentAttendee = attendees.find(attendee => attendee.referralId === referralId)
     const referralPerson = recordAttendanceBffData.people.find(person => person.referralId === referralId)
+    const selectedAttendanceCode = currentAttendee?.outcomeCode
+
+    const backLinkUri =
+      currentReferralIndex > 0
+        ? this.notesPageUri(groupId, sessionId, referralIds[currentReferralIndex - 1], theGroupTitle)
+        : `/group/${groupId}/session/${sessionId}/record-attendance`
 
     if (req.method === 'POST') {
       const isSkipAndAddLater = req.body.action === 'skip-and-add-later'
+      const submittedNotes = (req.body['record-session-attendance-notes'] as string | undefined) || ''
 
       if (currentAttendee && !isSkipAndAddLater) {
-        currentAttendee.sessionNotes = req.body['record-session-attendance-notes'] || ''
+        const validationError = this.validateSessionNotes(submittedNotes)
+
+        if (validationError) {
+          res.status(400)
+          const presenter = new AttendanceSessionNotesPresenter(
+            validationError,
+            recordAttendanceBffData,
+            groupId,
+            sessionId,
+            selectedAttendanceCode,
+            isLastReferral,
+            referralId,
+            submittedNotes,
+            backLinkUri,
+          )
+          const view = new AttendanceSessionNotesView(presenter)
+          return this.renderPage(res, view)
+        }
+
+        currentAttendee.sessionNotes = submittedNotes
       }
 
       if (isLastReferral) {
@@ -159,13 +186,7 @@ export default class AttendanceController extends BaseController {
       return res.redirect(this.notesPageUri(groupId, sessionId, referralIds[currentReferralIndex + 1], theGroupTitle))
     }
 
-    const selectedAttendanceCode = currentAttendee?.outcomeCode
     const notesValue = this.resolveNotesValue(currentAttendee?.sessionNotes, referralPerson?.sessionNotes)
-
-    const backLinkUri =
-      currentReferralIndex > 0
-        ? this.notesPageUri(groupId, sessionId, referralIds[currentReferralIndex - 1], theGroupTitle)
-        : `/group/${groupId}/session/${sessionId}/record-attendance`
 
     const presenter = new AttendanceSessionNotesPresenter(
       null,
@@ -243,5 +264,21 @@ export default class AttendanceController extends BaseController {
 
   private resolveNotesValue(attendeeNotes?: string, bffNotes?: string): string {
     return attendeeNotes ?? bffNotes ?? ''
+  }
+
+  private validateSessionNotes(notes: string): FormValidationError | null {
+    if (notes.length <= 10000) {
+      return null
+    }
+
+    return {
+      errors: [
+        {
+          formFields: ['record-session-attendance-notes'],
+          errorSummaryLinkedField: 'record-session-attendance-notes',
+          message: errorMessages.recordAttendance.sessionNotesTooLong,
+        },
+      ],
+    }
   }
 }

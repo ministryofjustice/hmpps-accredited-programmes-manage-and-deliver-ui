@@ -78,6 +78,19 @@ export interface PaginationParams {
   sort?: string[]
 }
 
+export interface SessionNotesBffResponse {
+  pageTitle: string
+  moduleName: string
+  sessionNumber: number
+  lastUpdatedBy: string
+  lastUpdatedDate: string
+  groupId: string
+  sessionId: string
+  sessionDate: string
+  sessionAttendance: string
+  sessionNotes: string
+}
+
 export interface IAccreditedProgrammesManageAndDeliverService {
   getPossibleDeliveryLocationsForReferral(
     username: ExpressUsername,
@@ -688,6 +701,18 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
       path: `/bff/session/${sessionId}`,
       headers: { Accept: 'application/json' },
     })) as Session
+  }
+
+  async getSessionNotes(
+    username: ExpressUsername,
+    sessionId: string,
+    referralId: string,
+  ): Promise<SessionNotesBffResponse> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/session/${sessionId}/referral/${referralId}/session-notes`,
+      headers: { Accept: 'application/json' },
+    })) as SessionNotesBffResponse
   }
 
   async updateSessionAttendees(username: ExpressUsername, sessionId: string, referralIds: string[]): Promise<string> {

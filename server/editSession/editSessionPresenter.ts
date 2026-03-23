@@ -3,6 +3,8 @@ import { MultiSelectTableArgs } from '@manage-and-deliver-ui'
 import { TableArgs } from '../utils/govukFrontendTypes'
 import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
+import { convertToUrlFriendlyKebabCase } from '../utils/utils'
+import ViewUtils from '../utils/viewUtils'
 
 export default class EditSessionPresenter {
   constructor(
@@ -47,6 +49,28 @@ export default class EditSessionPresenter {
     return this.sessionDetails.attendanceAndSessionNotes?.length > 0
   }
 
+  private sessionNotesPagePath(referralId: string) {
+    return `/group/${this.groupId}/session/${this.sessionId}/${this.sessionNotesSlug}-session-notes?referralId=${referralId}`
+  }
+
+  private get sessionNotesSlug() {
+    const sessionName = this.sessionDetails.pageTitle
+      .trim()
+      .replace(/^Attendance and notes for\s+/i, '')
+      .replace(/\s+session$/i, '')
+
+    return convertToUrlFriendlyKebabCase(sessionName)
+  }
+
+  private sessionNotesLink(notes: string, referralId: string) {
+    if (!notes?.trim()) {
+      return 'Not added'
+    }
+
+    const linkText = `${ViewUtils.escape(this.sessionDetails.pageTitle)} notes`
+    return `<a href="${this.sessionNotesPagePath(referralId)}">${linkText}</a>`
+  }
+
   attendanceOptionText(attendance: string | undefined) {
     const recordedAttendance = attendance?.trim().toUpperCase()
 
@@ -60,15 +84,6 @@ export default class EditSessionPresenter {
       return { attendanceState: '<span class="govuk-tag govuk-tag--red">Not attended</span>' }
     }
     return { attendanceState: '<span class="govuk-tag govuk-tag--grey">To be confirmed</span>' }
-  }
-
-  private sessionNotesText(sessionNotes: unknown): string {
-    if (typeof sessionNotes !== 'string') {
-      return 'Not added'
-    }
-
-    const theSessionNotes = sessionNotes.trim()
-    return theSessionNotes.length > 0 ? theSessionNotes : 'Not added'
   }
 
   get attendanceTableArgs(): MultiSelectTableArgs | TableArgs {
@@ -96,7 +111,7 @@ export default class EditSessionPresenter {
               html: `<a href="/referral-details/${it.referralId}/personal-details">${it.name}</a> ${it.crn}`,
             },
             { html: this.attendanceOptionText(it.attendance).attendanceState },
-            { text: this.sessionNotesText(it.sessionNotes) },
+            { html: this.sessionNotesLink(it.sessionNotes, it.referralId) },
           ],
         })),
       }
@@ -111,7 +126,9 @@ export default class EditSessionPresenter {
                   html: `<a href="/referral-details/${attendanceData[0].referralId}/personal-details">${attendanceData[0].name}</a> ${attendanceData[0].crn}`,
                 },
                 { html: this.attendanceOptionText(attendanceData[0].attendance).attendanceState },
-                { text: this.sessionNotesText(attendanceData[0].sessionNotes) },
+                {
+                  html: this.sessionNotesLink(attendanceData[0].sessionNotes, attendanceData[0].referralId),
+                },
               ],
             ]
           : [],
