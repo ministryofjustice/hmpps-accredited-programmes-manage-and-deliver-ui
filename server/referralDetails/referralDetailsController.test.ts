@@ -12,6 +12,7 @@ import { Express } from 'express'
 import request from 'supertest'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import attendanceHistoryResponseFactory from '../testutils/factories/attendanceHistoryResponseFactory'
 import availabilityFactory from '../testutils/factories/availabilityFactory'
 import offenceHistoryFactory from '../testutils/factories/offenceHistoryFactory'
 import personalDetailsFactory from '../testutils/factories/personalDetailsFactory'
@@ -221,6 +222,45 @@ describe(`Add Availability`, () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(`Redirecting to /referral-details/${referralId}/availability?detailsUpdated=true`)
+        })
+    })
+  })
+})
+
+describe(`Attendance History`, () => {
+  const attendanceHistory = attendanceHistoryResponseFactory.build()
+
+  beforeEach(() => {
+    accreditedProgrammesManageAndDeliverService.getAttendanceHistory.mockResolvedValue(attendanceHistory)
+  })
+
+  describe(`GET /referral/:referralId/attendance-history`, () => {
+    it('loads the attendance history page successfully', async () => {
+      const referralId = randomUUID()
+
+      return request(app)
+        .get(`/referral/${referralId}/attendance-history`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain(referralDetails.crn)
+          expect(res.text).toContain(referralDetails.personName)
+          expect(res.text).toContain('Attendance history')
+        })
+    })
+
+    it('displays sessions in the attendance history table', async () => {
+      const referralId = randomUUID()
+
+      return request(app)
+        .get(`/referral/${referralId}/attendance-history`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Pre-group one-to-one')
+          expect(res.text).toContain('Session 1: Introduction')
+          expect(res.text).toContain('11 July 2025')
+          expect(res.text).toContain('18 July 2025')
+          expect(res.text).toContain('Attended')
+          expect(res.text).toContain('Not attended')
         })
     })
   })

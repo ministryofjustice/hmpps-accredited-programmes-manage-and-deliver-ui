@@ -386,5 +386,9 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     },
   )
 
+  get('/referral/:referralId/attendance-history', async (req, res, next) => {
+    await referralDetailsController.showAttendanceHistoryPage(req, res)
+  })
+
   return router
 }
