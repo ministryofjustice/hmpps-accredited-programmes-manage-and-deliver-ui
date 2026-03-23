@@ -53,7 +53,6 @@ export default class StatusHistoryView {
         errorSummary: this.presenter.errorMessageSummary,
         successMessageSummary: this.presenter.successMessageSummary,
         presenter: this.presenter,
-        subHeaderMenu: this.presenter.subHeaderMenu,
         statusHistoryTimelineOptions: this.getStatusHistoryTimelineOptions(),
         subNavigationItems: this.presenter.getHorizontalSubNavArgs().items,
       },

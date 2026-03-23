@@ -8,7 +8,6 @@ export default class ReferralDetailsView {
       'referralDetails/referralDetails',
       {
         presenter: this.presenter,
-        subHeaderMenu: this.presenter.subHeaderMenu,
       },
     ]
   }

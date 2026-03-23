@@ -84,7 +84,7 @@ export default class ReferralLayoutPresenter {
       : null
   }
 
-  get subHeaderMenu() {
+  get headerMenu() {
     return {
       caption: 'Building Choices: moderate intensity',
       heading: this.headingText,
