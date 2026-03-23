@@ -13,7 +13,7 @@
     <div class="govuk-width-container">
         <main class="govuk-main-wrapper" id="main-content">
         <div class="govuk-grid-row">
-          {% include "../partials/headerMenu.njk" %}
+          {% include "../partials/subHeaderMenu.njk" %}
             <div class="govuk-grid-column-three-quarters">
               {% if presenter.isCohortUpdated %}
                 {{ mojAlert(presenter.cohortUpdatedSuccessMessageArgs) }}

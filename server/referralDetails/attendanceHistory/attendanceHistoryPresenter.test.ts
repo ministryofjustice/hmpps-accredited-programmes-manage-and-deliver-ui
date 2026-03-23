@@ -10,12 +10,12 @@ describe('AttendanceHistoryPresenter', () => {
     currentStatusDescription: 'Awaiting assessment',
   })
 
-  describe('text', () => {
+  describe('headingText', () => {
     it('should return the correct page heading', () => {
       const attendanceHistory = attendanceHistoryResponseFactory.build()
       const presenter = new AttendanceHistoryPresenter(referralId, attendanceHistory, referralDetails)
 
-      expect(presenter.text.pageHeading).toBe('Attendance history: Alex River')
+      expect(presenter.headingText).toBe('Attendance history: Alex River')
     })
   })
 

@@ -8,6 +8,7 @@ export default class RisksAndNeedsView {
       'risksAndNeeds/risksAndNeeds',
       {
         presenter: this.presenter,
+        subHeaderMenu: this.presenter.subHeaderMenu,
       },
     ]
   }

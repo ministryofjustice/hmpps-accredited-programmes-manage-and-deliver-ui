@@ -84,6 +84,15 @@ export default class ReferralLayoutPresenter {
       : null
   }
 
+  get subHeaderMenu() {
+    return {
+      caption: 'Building Choices: moderate intensity',
+      heading: this.headingText,
+      showButtonMenu: this.showButtonMenu(),
+      buttonMenu: this.getButtonMenu(),
+    }
+  }
+
   getHorizontalSubNavArgs(): { classes: string; items: { text: string; href: string; active: boolean }[] } {
     return {
       classes: 'govuk-!-margin-bottom-0',

@@ -43,6 +43,7 @@ export default class MotivationBackgroundAndNonAssociationsView {
       'groupAllocationNotes/groupAllocationNotes',
       {
         presenter: this.presenter,
+        subHeaderMenu: this.presenter.subHeaderMenu,
         groupAllocationTextArgs: this.presenter.groupAllocationTextArgs,
         getVerticalSubNavArgs: this.presenter.getVerticalSubNavArgs(),
         addNotesButtonArgs: this.addNotesButtonArgs,

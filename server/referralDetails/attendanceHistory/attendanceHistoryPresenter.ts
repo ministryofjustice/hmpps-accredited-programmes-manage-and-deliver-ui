@@ -23,8 +23,6 @@ export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter 
 
   get text() {
     return {
-      pageHeading: `Attendance history: ${this.personOnProbationName}`,
-      pageCaption: 'Building Choices: moderate intensity',
       tableDescription: this.tableDescription,
     }
   }
