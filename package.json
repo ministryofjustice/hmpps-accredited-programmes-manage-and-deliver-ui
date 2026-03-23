@@ -82,12 +82,12 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.1009.0",
+    "@aws-sdk/client-sqs": "^3.1012.0",
     "@ministryofjustice/frontend": "^9.0.0",
     "@ministryofjustice/hmpps-auth-clients": "^1.0.2",
     "@ministryofjustice/hmpps-monitoring": "^1.0.2",
     "@ministryofjustice/hmpps-rest-client": "^1.1.0",
-    "@sentry/node": "10.43.0",
+    "@sentry/node": "10.44.0",
     "@types/supertest": "^7.2.0",
     "accessible-autocomplete": "^3.0.1",
     "agentkeepalive": "^4.6.0",
@@ -135,14 +135,14 @@
     "@types/passport-oauth2": "^1.8.0",
     "@types/superagent": "^8.1.9",
     "@types/supertest": "^7.2.0",
-    "@typescript-eslint/eslint-plugin": "^8.56.0",
-    "@typescript-eslint/parser": "^8.56.0",
+    "@typescript-eslint/eslint-plugin": "^8.57.1",
+    "@typescript-eslint/parser": "^8.57.1",
     "audit-ci": "^7.1.0",
     "aws-sdk-client-mock": "^4.1.0",
     "cheerio": "^1.2.0",
     "chokidar": "^3.6.0",
     "concurrently": "^9.2.1",
-    "cypress": "^15.10.0",
+    "cypress": "^15.12.0",
     "cypress-multi-reporters": "^2.0.5",
     "esbuild": "^0.27.4",
     "esbuild-plugin-clean": "^1.0.1",
@@ -172,7 +172,7 @@
     "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.57.0"
+    "typescript-eslint": "^8.57.1"
   },
   "overrides": {
     "@jgoz/esbuild-plugin-typecheck": {
