@@ -9,6 +9,7 @@ export enum HorizontalNavValues {
   availabilityAndMotivationTab = 'availabilityAndMotivation',
   attendanceHistoryTab = 'attendanceHistory',
   statusHistoryTab = 'statusHistory',
+  groupAllocationNotesTab = 'GroupAllocationNotes',
 }
 
 export default class ReferralLayoutPresenter {
@@ -116,6 +117,16 @@ export default class ReferralLayoutPresenter {
           text: 'Status history',
           href: `/referral/${this.referral.id}/status-history`,
           active: this.horizontalNavValue === HorizontalNavValues.statusHistoryTab,
+        },
+        {
+          text: 'Group allocation notes',
+          href: `/referral/${this.referral.id}/group-allocation-notes/motivation-background-and-non-associations`,
+          active: this.horizontalNavValue === HorizontalNavValues.groupAllocationNotesTab,
+        },
+        {
+          text: 'Attendance history',
+          href: `/referral/${this.referral.id}/attendance-history`,
+          active: this.horizontalNavValue === HorizontalNavValues.attendanceHistoryTab,
         },
       ],
     }

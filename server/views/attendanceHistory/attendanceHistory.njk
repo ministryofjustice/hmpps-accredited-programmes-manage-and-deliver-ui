@@ -1,14 +1,53 @@
 {% extends "../partials/layout.njk" %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/header/macro.njk" import govukHeader %}
+{%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
+{%- from "moj/components/side-navigation/macro.njk" import mojSideNavigation -%}
+{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+{%- from "moj/components/alert/macro.njk" import mojAlert -%}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block content %}
+<div class="govuk-width-container">
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
+      </div>
+      {% include "../partials/headerMenu.njk" %}
+
+      <div class="govuk-grid-column-three-quarters">
+        {% if presenter.isCohortUpdated %}
+         {{ mojAlert(presenter.cohortUpdatedSuccessMessageArgs) }}
+        {% endif %}
+          {% if presenter.isLdcUpdated %}
+        {{ mojAlert(presenter.ldcUpdatedSuccessMessageArgs) }}
+        {% endif %}
+      </div>
+    </div>
+
   <div class="govuk-grid-row">
- {% include "../partials/headerMenu.njk" %}
     <div class="govuk-grid-column-two-thirds">
-   
+      <p class="govuk-body-m">{{ text.tableDescription | safe }}</p>
     </div>
   </div>
-{% endblock %}
 
+  {% if showAttendanceHistoryTable %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        {{ govukTable(groupTableArgs) }}
+      </div>
+    </div>
+  {% endif %}
+
+    <div class="govuk-grid-row">
+
+    </div>
+
+</div>
+
+{% endblock %}

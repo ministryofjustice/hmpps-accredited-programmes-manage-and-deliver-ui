@@ -24,6 +24,8 @@ import StatusHistoryPresenter from './statusHistoryPresenter'
 import StatusHistoryView from './statusHistoryView'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
+import AttendanceHistoryPresenter from './attendanceHistory/attendanceHistoryPresenter'
+import AttendanceHistoryView from './attendanceHistory/attendanceHistoryView'
 
 export default class ReferralDetailsController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -276,6 +278,35 @@ export default class ReferralDetailsController extends BaseController {
       referralId,
     )
     const view = new AddAvailabilityView(presenter)
+
+    return this.renderPage(res, view, sharedReferralDetailsData)
+  }
+
+  async showAttendanceHistoryPage(req: Request, res: Response): Promise<void> {
+    const { referralId } = req.params
+    const { username } = req.user
+    const { message, isCohortUpdated, isLdcUpdated } = req.query
+
+    const sharedReferralDetailsData = await this.showReferralDetailsPage(referralId, username)
+
+    const attendanceHistory = await this.accreditedProgrammesManageAndDeliverService.getAttendanceHistory(
+      username,
+      referralId,
+    )
+
+    const successMessage = message ? String(message) : null
+
+    const presenter = new AttendanceHistoryPresenter(
+      referralId,
+      attendanceHistory,
+      sharedReferralDetailsData,
+      successMessage,
+      isLdcUpdated === 'true',
+      isCohortUpdated === 'true',
+    )
+    const view = new AttendanceHistoryView(presenter)
+
+    req.session.originPage = req.path
 
     return this.renderPage(res, view, sharedReferralDetailsData)
   }

@@ -193,10 +193,6 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await referralDetailsController.showStatusHistoryPage(req, res)
   })
 
-  getOrPost('/referral/:referralId/attendance-history', async (req, res, next) => {
-    await attendanceHistoryController.showAttendanceHistoryPage(req, res)
-  })
-
   get('/referral/:referralId/change-cohort', async (req, res, next) => {
     await cohortController.showChangeCohortPage(req, res)
   })
@@ -391,6 +387,10 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
       await attendanceController.showRecordAttendanceNotesPage(req, res)
     },
   )
+
+  get('/referral/:referralId/attendance-history', async (req, res, next) => {
+    await referralDetailsController.showAttendanceHistoryPage(req, res)
+  })
 
   return router
 }

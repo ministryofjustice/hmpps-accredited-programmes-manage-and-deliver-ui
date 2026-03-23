@@ -86,6 +86,7 @@ type EditSessionFacilitatorResponse = components['schemas']['EditSessionFacilita
 type EditSessionFacilitatorsRequest = components['schemas']['EditSessionFacilitatorRequest']
 type RecordSessionAttendance = components['schemas']['RecordSessionAttendance']
 type SessionAttendance = components['schemas']['SessionAttendance']
+type AttendanceHistoryResponse = components['schemas']['AttendanceHistoryResponse']
 type GroupDetailsResponse = components['schemas']['GroupDetailsResponse']
 
 export type {
@@ -93,6 +94,7 @@ export type {
   AllocateToGroupRequest,
   AllocateToGroupResponse,
   AttendanceAndSessionNotes,
+  AttendanceHistoryResponse,
   Attitude,
   Availability,
   CaseListFilterValues,
