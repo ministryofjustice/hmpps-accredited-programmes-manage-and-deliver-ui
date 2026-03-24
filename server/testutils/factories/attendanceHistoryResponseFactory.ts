@@ -24,7 +24,7 @@ class AttendanceHistoryResponseFactory extends Factory<AttendanceHistoryResponse
   }
 }
 
-export default AttendanceHistoryResponseFactory.define(sequence => ({
+export default AttendanceHistoryResponseFactory.define(({ sequence }) => ({
   popName: 'Alex River',
   currentlyAllocatedGroupCode: 'GRP-001',
   currentlyAllocatedGroupId: sequence.toString(),
