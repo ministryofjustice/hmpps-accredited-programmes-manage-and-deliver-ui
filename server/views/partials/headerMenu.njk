@@ -1,15 +1,12 @@
-{%- from "govuk/components/button/macro.njk" import govukButton %}
 {%- from "moj/components/button-menu/macro.njk" import mojButtonMenu -%}
-
 <div class="govuk-grid-column-two-thirds">
-  <span class="govuk-caption-l">{{ text.pageCaption }}</span>
-  <h1 class="govuk-heading-l">{{ text.pageHeading }}</h1>
+    <span class="govuk-caption-xl">{{ presenter.headerMenu.caption }}</span>
+    <h1 class="govuk-heading-xl">{{ presenter.headerMenu.heading }}</h1>
 </div>
-
 <div class="govuk-grid-column-one-third">
     <div class="moj-button-group moj-button-group--inline header-menu-button">
-        {% if presenter.showButtonMenu() %}
-          {{ mojButtonMenu(presenter.getButtonMenu()) }}
+        {% if presenter.headerMenu.showButtonMenu %}
+          {{ mojButtonMenu(presenter.headerMenu.buttonMenu) }}
         {% endif %}
     </div>
 </div>

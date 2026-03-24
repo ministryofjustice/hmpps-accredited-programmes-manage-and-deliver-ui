@@ -84,6 +84,7 @@ describe('referral-details', () => {
         .get(`/referral-details/${randomUUID()}/sentence-information`)
         .expect(200)
         .expect(res => {
+          expect(res.text).toContain(`Referral details: ${referralDetails.personName}`)
           expect(res.text).toContain(referralDetails.crn)
           expect(res.text).toContain(referralDetails.personName)
           expect(res.text).toContain('Sentence details')

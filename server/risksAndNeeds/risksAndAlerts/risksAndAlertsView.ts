@@ -200,6 +200,7 @@ export default class RisksAndAlertsView {
         assessmentCompletedText: this.assessmentCompletedText,
         roshLastupdated: this.presenter.getLastUpdatedStringWithClass(this.presenter.risks.lastUpdated),
         importedFromNdeliusText: this.importedFromNdeliusText,
+        headingText: this.presenter.headingText,
       },
     ]
   }

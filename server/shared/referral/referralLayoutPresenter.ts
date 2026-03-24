@@ -6,9 +6,10 @@ export enum HorizontalNavValues {
   referralDetailsTab = 'referralDetails',
   risksAndNeedsTab = 'risksAndNeeds',
   programmeNeedsIdentifierTab = 'programmeNeedsIdentifier',
+  availabilityAndMotivationTab = 'availabilityAndMotivation',
+  attendanceHistoryTab = 'attendanceHistory',
   statusHistoryTab = 'statusHistory',
   groupAllocationNotesTab = 'GroupAllocationNotes',
-  attendanceHistoryTab = 'AttendanceHistoryTab',
 }
 
 export default class ReferralLayoutPresenter {
@@ -18,14 +19,6 @@ export default class ReferralLayoutPresenter {
     readonly isLdcUpdated: boolean | null = null,
     readonly isCohortUpdated: boolean | null = null,
   ) {}
-
-  getButton(): { text: string; classes: string; href: string } {
-    return {
-      text: 'Back to referrals',
-      classes: 'govuk-button--secondary',
-      href: `/pdu/open-referrals`,
-    }
-  }
 
   showButtonMenu() {
     return (
@@ -91,35 +84,18 @@ export default class ReferralLayoutPresenter {
       : null
   }
 
-  getSubHeaderArgs(): {
-    heading: { text: string; classes: string }
-    items: {
-      text?: string
-      classes?: string
-      href?: string
-      html?: {
-        button: { text: string; classes: string }
-        items: { text: string; href?: string }[]
-      }
-    }[]
-  } {
+  get headerMenu() {
     return {
-      heading: {
-        text: 'Referral to Building Choices: moderate intensity',
-        classes: 'govuk-heading-l',
-      },
-      items: [
-        {
-          text: 'Back to referrals',
-          classes: 'govuk-button--secondary',
-          href: '/pdu/open-referrals',
-        },
-      ],
+      caption: 'Building Choices: moderate intensity',
+      heading: this.headingText,
+      showButtonMenu: this.showButtonMenu(),
+      buttonMenu: this.getButtonMenu(),
     }
   }
 
-  getHorizontalSubNavArgs(): { items: { text: string; href: string; active: boolean }[] } {
+  getHorizontalSubNavArgs(): { classes: string; items: { text: string; href: string; active: boolean }[] } {
     return {
+      classes: 'govuk-!-margin-bottom-0',
       items: [
         {
           text: 'Referral details',
@@ -137,21 +113,40 @@ export default class ReferralLayoutPresenter {
           active: this.horizontalNavValue === HorizontalNavValues.programmeNeedsIdentifierTab,
         },
         {
-          text: 'Status history',
-          href: `/referral/${this.referral.id}/status-history`,
-          active: this.horizontalNavValue === HorizontalNavValues.statusHistoryTab,
-        },
-        {
-          text: 'Group allocation notes',
+          text: 'Availability and motivation',
           href: `/referral/${this.referral.id}/group-allocation-notes/motivation-background-and-non-associations`,
-          active: this.horizontalNavValue === HorizontalNavValues.groupAllocationNotesTab,
+          active: this.horizontalNavValue === HorizontalNavValues.availabilityAndMotivationTab,
         },
         {
           text: 'Attendance history',
           href: `/referral/${this.referral.id}/attendance-history`,
           active: this.horizontalNavValue === HorizontalNavValues.attendanceHistoryTab,
         },
+        {
+          text: 'Status history',
+          href: `/referral/${this.referral.id}/status-history`,
+          active: this.horizontalNavValue === HorizontalNavValues.statusHistoryTab,
+        },
       ],
+    }
+  }
+
+  get headingText(): string {
+    switch (this.horizontalNavValue) {
+      case HorizontalNavValues.referralDetailsTab:
+        return `Referral details: ${this.referral.personName}`
+      case HorizontalNavValues.risksAndNeedsTab:
+        return `Risks and needs: ${this.referral.personName}`
+      case HorizontalNavValues.programmeNeedsIdentifierTab:
+        return `Programme needs identifier: ${this.referral.personName}`
+      case HorizontalNavValues.availabilityAndMotivationTab:
+        return `Availability and motivation: ${this.referral.personName}`
+      case HorizontalNavValues.attendanceHistoryTab:
+        return `Attendance history: ${this.referral.personName}`
+      case HorizontalNavValues.statusHistoryTab:
+        return `Status history: ${this.referral.personName}`
+      default:
+        return this.referral.personName
     }
   }
 }

@@ -20,10 +20,6 @@ export default class StatusHistoryPresenter extends ReferralLayoutPresenter {
     this.currentStatusDescription = referralDetails.currentStatusDescription
   }
 
-  get pageHeading(): string {
-    return 'Status history'
-  }
-
   get errorMessageSummary(): MojAlertComponentArgs | null {
     return null
   }
