@@ -763,7 +763,7 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
   async getAttendanceHistory(username: ExpressUsername, referralId: string): Promise<AttendanceHistoryResponse> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
-      path: `bff/referral/${referralId}/attendance-history`,
+      path: `/bff/referral/${referralId}/attendance-history`,
       headers: { Accept: 'application/json' },
     })) as AttendanceHistoryResponse
   }

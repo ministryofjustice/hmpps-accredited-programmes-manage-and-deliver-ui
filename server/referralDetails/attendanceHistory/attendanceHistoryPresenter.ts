@@ -71,7 +71,9 @@ export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter 
 
   get attendanceHistoryTableArgs(): TableArgs['rows'] {
     return this.attendanceHistory.attendanceHistory.map(session => [
-      { text: session.sessionName },
+      {
+        html: `<a href="/group/${this.referral.currentlyAllocatedGroupId}/session/${session.sessionId}/edit-session?isAttendanceHistory=true&referralId=${this.referralId}" class="govuk-link">${session.sessionName}</a>`,
+      },
       { text: session.groupCode ?? 'N/A' },
       { text: session.date },
       { text: session.time },

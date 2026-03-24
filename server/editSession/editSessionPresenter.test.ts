@@ -346,11 +346,13 @@ describe('EditSessionPresenter', () => {
           mockDeleteUrl,
           null,
           true,
+          null,
+          'abc123',
         )
 
         expect(presenter.backLinkArgs).toEqual({
           text: 'Back to Attendance history',
-          href: '/group/group-123/attendance-history',
+          href: '/referral/abc123/attendance-history',
         })
       })
     })
