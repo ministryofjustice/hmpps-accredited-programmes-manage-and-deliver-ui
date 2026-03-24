@@ -13,6 +13,7 @@ export interface SessionNotesData {
   sessionAttendance: string
   sessionNotes: string
   isAttendanceHistory: boolean
+  isSaved?: boolean
 }
 
 export default class SessionNotesPresenter {

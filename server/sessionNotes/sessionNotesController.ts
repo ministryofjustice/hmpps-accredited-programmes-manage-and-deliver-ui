@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { SessionAttendance } from '@manage-and-deliver-api'
 import BaseController from '../shared/baseController'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
@@ -29,9 +30,36 @@ export default class SessionNotesController extends BaseController {
       referralId,
     )
 
+    if (req.method === 'POST') {
+      const submittedNotes = ((req.body.sessionNotes as string | undefined) || '').trim()
+
+      const attendanceBffData = await this.accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData(
+        username,
+        sessionId,
+        [referralId],
+      )
+
+      const attendee = attendanceBffData.people.find(person => person.referralId === referralId)
+      const outcomeCode = attendee?.attendance?.code as
+        | SessionAttendance['attendees'][number]['outcomeCode']
+        | undefined
+
+      if (!outcomeCode) {
+        return res.redirect(`/group/${req.params.groupId}/session/${sessionId}/edit-session`)
+      }
+
+      await this.accreditedProgrammesManageAndDeliverService.createSessionAttendance(username, sessionId, {
+        attendees: [{ referralId, outcomeCode, sessionNotes: submittedNotes }],
+      })
+
+      const redirectQuery = new URLSearchParams({ referralId, saved: 'true' })
+      return res.redirect(`${req.path}?${redirectQuery.toString()}`)
+    }
+
     const sessionNotesData: SessionNotesData = {
       ...sessionNotesBffData,
       isAttendanceHistory: false,
+      isSaved: req.query.saved === 'true',
     }
 
     const presenter = new SessionNotesPresenter(sessionNotesData)

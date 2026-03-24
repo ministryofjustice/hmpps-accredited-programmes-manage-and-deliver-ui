@@ -4,42 +4,45 @@
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
 
- 
 {% block content %}
  {{ govukBackLink(backLinkArgs) }}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-     {{ mojSubNavigation(serviceNavigationArgs) }}
-   
-{{ mojPageHeaderActions({
-  heading: {
-    text: text.headingText,
-    classes: "govuk-heading-l"
-  },
-  items: [{
-    text: text.updateAttendanceAndNotesButtonText,
-    classes: "govuk-button--primary"
-  }]
-}) }}
-</div>
- 
-{{ govukInsetText({
-  text: text.lastUpdatedText
-}) }}
- <div class="govuk-grid-column-two-thirds">
-   <div>
-    {% for section in notesBodyArgs %}
-      <section class="govuk-!-margin-bottom-6">
-        {{ section.html | safe }}
+    {{ mojSubNavigation(serviceNavigationArgs) }}
 
-        {% if section.data %}
+    {{ mojPageHeaderActions({
+      heading: {
+        text: text.headingText,
+        classes: "govuk-heading-l"
+      }
+    }) }}
+  </div>
+
+  <div class="govuk-grid-column-two-thirds">
+    {{ govukInsetText({
+      text: text.lastUpdatedText
+    }) }}
+
+    {% if isSaved %}
+      {{ govukInsetText({
+        text: "Attendance and notes updated successfully."
+      }) }}
+    {% endif %}
+
+    <form method="post">
+      {% for section in notesBodyArgs %}
+        <section class="govuk-!-margin-bottom-6">
+          {{ section.html | safe }}
+
+         {% if section.data %}
           <p class="govuk-body">
-            <span>{{ section.data.sessionName }}:</span>
-            <span class="govuk-!-margin-left-2">{{ section.data.moduleName }}</span>
+             <a class="govuk-link" style="vertical-align: top; padding-right: 2rem;" href="{{ section.data.sessionDetailsHref }}">{{ section.data.sessionName }}: {{ section.data.moduleName }}</a>
             <span class="govuk-!-margin-left-2 govuk-!-display-inline-block">
               <span class="govuk-!-display-block"><strong>Date</strong></span>
               <span class="govuk-!-display-block">{{ section.data.lastUpdatedDate }}</span>
@@ -48,12 +51,26 @@
           </p>
         {% endif %}
 
-        {% if section.Notes %}
-          {{ section.Notes | safe }}
-        {% endif %}
-      </section>
-    {% endfor %}
-   </div>
+          {% if section.Notes %}
+            {{ govukTextarea({
+              id: "sessionNotes",
+              name: "sessionNotes",
+              value: section.Notes,
+              rows: 10,
+              label: {
+                text: "Session notes",
+                classes: "govuk-visually-hidden"
+              }
+            }) }}
+          {% endif %}
+        </section>
+      {% endfor %}
+
+      {{ govukButton({
+        text: text.updateAttendanceAndNotesButtonText,
+        classes: "govuk-button--primary"
+      }) }}
+    </form>
   </div>
 </div>
 {% endblock %}
