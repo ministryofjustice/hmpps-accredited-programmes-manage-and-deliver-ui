@@ -54,7 +54,6 @@ export default class AttendanceHistoryView {
         text: this.presenter.text,
         errorSummary: this.presenter.errorMessageSummary,
         successMessageSummary: this.presenter.successMessageSummary,
-        subNavigationItems: this.presenter.getHorizontalSubNavArgs().items,
         groupTableArgs: this.groupTableArgs,
         showAttendanceHistoryTable: this.presenter.attendanceHistory.attendanceHistory.length > 0,
       },

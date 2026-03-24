@@ -3,6 +3,7 @@
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "components/rosh-widget/macro.njk" import roshWidget %}
+{%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
 
 {% set pageTitle = applicationName + " - Home" %}
@@ -13,6 +14,9 @@
     <div class="govuk-width-container">
       <main class="govuk-main-wrapper" id="main-content">
         <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full">
+            {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
+          </div>
           {% include "../partials/headerMenu.njk" %}
           <div class="govuk-grid-column-three-quarters">
       

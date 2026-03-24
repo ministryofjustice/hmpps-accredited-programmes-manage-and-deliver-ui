@@ -1,5 +1,6 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}}
+{%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 {%- from "moj/components/side-navigation/macro.njk" import mojSideNavigation -%}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
@@ -12,6 +13,9 @@
     <div class="govuk-width-container">
       <main class="govuk-main-wrapper" id="main-content">
         <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full">
+            {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
+          </div>
           {% include "../partials/headerMenu.njk" %}
           <div class="govuk-grid-column-three-quarters">   
             {% if presenter.isCohortUpdated %}

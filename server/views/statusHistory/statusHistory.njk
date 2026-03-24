@@ -7,6 +7,7 @@
 {% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
 
 {% set pageTitle = applicationName + " - Home" %}
@@ -14,11 +15,12 @@
 
 {% block main %}
   {% block content %}
-    <div class="govuk-width-container">
      <main class="govuk-main-wrapper" id="main-content">
         <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full">
+            {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
+          </div>
           {% include "../partials/headerMenu.njk" %}
-
           <div class="govuk-grid-column-two-thirds">
           {% if errorSummary %}
             {{ govukErrorSummary(errorSummary) }}
@@ -36,6 +38,6 @@
           </div>
         </div>
       </main>
-    </div>
+ 
     {% endblock %}
   {% endblock %}

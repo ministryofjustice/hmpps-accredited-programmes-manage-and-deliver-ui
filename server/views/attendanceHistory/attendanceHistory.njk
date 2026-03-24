@@ -11,11 +11,13 @@
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
 
-{% block main %}
-  {% block content %}
+{% block content %}
 <div class="govuk-width-container">
-  <main class="govuk-main-wrapper" id="main-content">
+
     <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
+      </div>
       {% include "../partials/headerMenu.njk" %}
 
       <div class="govuk-grid-column-three-quarters">
@@ -42,9 +44,10 @@
     </div>
   {% endif %}
 
- </main>   
+    <div class="govuk-grid-row">
+
+    </div>
 
 </div>
 
- {% endblock %}
-  {% endblock %}
+{% endblock %}
