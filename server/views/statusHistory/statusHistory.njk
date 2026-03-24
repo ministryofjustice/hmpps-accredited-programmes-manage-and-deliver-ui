@@ -13,12 +13,6 @@
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
 
-{% block referralSubNavigation %}
-  <div class="govuk-width-container service-user-banner__sub-nav govuk-!-margin-bottom-0">
-    {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
-  </div>
-{% endblock %}
-
 {% block main %}
   {% block content %}
      <main class="govuk-main-wrapper" id="main-content">
