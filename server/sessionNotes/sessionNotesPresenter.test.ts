@@ -73,4 +73,12 @@ describe('SessionNotesPresenter', () => {
       sessionName: 'Building Motivation',
     })
   })
+
+  it('returns coloured attendance tag from the presenter', () => {
+    const presenter = new SessionNotesPresenter(buildData({ sessionAttendance: 'Attended, failed to comply' }))
+
+    expect(presenter.attendanceOptionText).toEqual({
+      attendanceState: '<span class="govuk-tag govuk-tag--yellow">Attended - failed to comply</span>',
+    })
+  })
 })

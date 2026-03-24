@@ -38,7 +38,13 @@
 
         {% if section.data %}
           <p class="govuk-body">
-           {{ section.data.sessionName }}:  {{ section.data.moduleName }}  {{ section.data.lastUpdatedDate }} {{ section.data.attendance }}
+            <span>{{ section.data.sessionName }}:</span>
+            <span class="govuk-!-margin-left-2">{{ section.data.moduleName }}</span>
+            <span class="govuk-!-margin-left-2 govuk-!-display-inline-block">
+              <span class="govuk-!-display-block"><strong>Date</strong></span>
+              <span class="govuk-!-display-block">{{ section.data.lastUpdatedDate }}</span>
+            </span>
+            <span class="govuk-!-margin-left-2">{{ section.data.attendance | safe }}</span>
           </p>
         {% endif %}
 

@@ -1,4 +1,5 @@
 import { RecordSessionAttendance } from '@manage-and-deliver-api'
+import attendanceOptionText from '../../utils/attendanceUtils'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
 
@@ -50,13 +51,7 @@ export default class AttendanceSessionNotesPresenter {
   }
 
   get attendanceOptionText() {
-    if (this.selectedAttendanceCode === 'ATTC') {
-      return { attendanceState: '<span class="govuk-tag govuk-tag--blue">Attended</span>' }
-    }
-    if (this.selectedAttendanceCode === 'AFTC') {
-      return { attendanceState: '<span class="govuk-tag govuk-tag--yellow">Attended - failed to comply</span>' }
-    }
-    return { attendanceState: '<span class="govuk-tag govuk-tag--red">Not attended</span>' }
+    return attendanceOptionText(this.selectedAttendanceCode, { fallbackStatus: 'notAttended' })
   }
 
   get backLinkUri() {

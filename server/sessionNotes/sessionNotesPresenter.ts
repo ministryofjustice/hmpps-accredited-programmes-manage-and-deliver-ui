@@ -1,3 +1,4 @@
+import attendanceOptionText from '../utils/attendanceUtils'
 import { convertToUrlFriendlyKebabCase } from '../utils/utils'
 
 export interface SessionNotesData {
@@ -41,6 +42,10 @@ export default class SessionNotesPresenter {
         ? `/group/${this.data.groupId}/attendance-history`
         : `/group/${this.data.groupId}/sessions-and-attendance`,
     }
+  }
+
+  get attendanceOptionText() {
+    return attendanceOptionText(this.data.sessionAttendance, { fallbackStatus: 'notAttended' })
   }
 
   get pageUrl(): string {
