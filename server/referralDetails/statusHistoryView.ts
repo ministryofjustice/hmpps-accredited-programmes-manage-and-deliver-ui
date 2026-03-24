@@ -50,13 +50,10 @@ export default class StatusHistoryView {
     return [
       'statusHistory/statusHistory',
       {
-        buttons: this.presenter.getSubHeaderArgs().items,
         errorSummary: this.presenter.errorMessageSummary,
         successMessageSummary: this.presenter.successMessageSummary,
-        pageHeading: this.presenter.pageHeading,
         presenter: this.presenter,
         statusHistoryTimelineOptions: this.getStatusHistoryTimelineOptions(),
-        subNavigationItems: this.presenter.getHorizontalSubNavArgs().items,
       },
     ]
   }

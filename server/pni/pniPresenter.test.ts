@@ -8,6 +8,14 @@ describe('PniPresenter', () => {
 
   const referralDetails: ReferralDetails = referralDetailsFactory.build()
 
+  describe('headingText', () => {
+    it('returns the programme needs identifier heading for the referral person', () => {
+      const presenter = new PniPresenter('12345', referralDetails, pniScore)
+
+      expect(presenter.headingText).toBe(`Programme needs identifier: ${referralDetails.personName}`)
+    })
+  })
+
   describe('needScoreToString', () => {
     const presenter = new PniPresenter('12345', referralDetails, pniScore)
     it('returns the string representation of the given score', () => {

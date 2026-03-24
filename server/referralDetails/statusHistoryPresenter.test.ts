@@ -3,6 +3,20 @@ import referralDetailsFactory from '../testutils/factories/referralDetailsFactor
 import statusHistoryFactory from '../testutils/factories/statusHistoryFactory'
 
 describe('StatusHistoryPresenter', () => {
+  describe('headingText', () => {
+    it('returns the status history heading for the referral person', () => {
+      const referralDetails = referralDetailsFactory.build({
+        personName: 'John Doe',
+        currentStatusDescription: 'Assessment complete',
+      })
+      const statusHistory = [statusHistoryFactory.awaitingAssessment().build()]
+
+      const presenter = new StatusHistoryPresenter('referral-id', statusHistory, referralDetails)
+
+      expect(presenter.headingText).toBe(`Status history: ${referralDetails.personName}`)
+    })
+  })
+
   describe('successMessageSummary', () => {
     it('returns success message when a success message is returned from the API', () => {
       const referralDetails = referralDetailsFactory.build({
