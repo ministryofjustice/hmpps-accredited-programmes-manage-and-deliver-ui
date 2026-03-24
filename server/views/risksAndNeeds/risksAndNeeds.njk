@@ -9,14 +9,17 @@
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
 
+{% block referralSubNavigation %}
+  <div class="govuk-width-container service-user-banner__sub-nav govuk-!-margin-bottom-0">
+    {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
+  </div>
+{% endblock %}
+
 {% block main %}
   {% block content %}
     <div class="govuk-width-container">
       <main class="govuk-main-wrapper" id="main-content">
         <div class="govuk-grid-row">
-          <div class="govuk-grid-column-full">
-            {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
-          </div>
           {% include "../partials/headerMenu.njk" %}
           <div class="govuk-grid-column-three-quarters">
             {% if presenter.isCohortUpdated %}
