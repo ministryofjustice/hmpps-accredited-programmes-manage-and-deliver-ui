@@ -3,7 +3,7 @@ import { MultiSelectTableArgs } from '@manage-and-deliver-ui'
 import { TableArgs } from '../utils/govukFrontendTypes'
 import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
-import attendanceOptionText from '../utils/attendanceUtils'
+import attendanceOptionText, { attendanceOptionTextTags } from '../utils/attendanceUtils'
 
 export default class EditSessionPresenter {
   constructor(
@@ -50,7 +50,7 @@ export default class EditSessionPresenter {
   }
 
   attendanceOptionText(attendance: string | undefined) {
-    return attendanceOptionText(attendance, { attendedLabel: 'Attended - Complied' })
+    return attendanceOptionText(attendance, attendanceOptionTextTags.editSession)
   }
 
   private sessionNotesText(sessionNotes: unknown): string {
