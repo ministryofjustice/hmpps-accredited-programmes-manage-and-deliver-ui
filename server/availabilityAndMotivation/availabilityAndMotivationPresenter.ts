@@ -41,7 +41,7 @@ export default class AvailabilityAndMotivationPresenter extends ReferralLayoutPr
       items: [
         {
           text: 'Availability',
-          href: `/referral/${this.referral.id}/availability/#availability`,
+          href: `/referral/${this.referral.id}/availability-and-motivation/availability/#availability`,
           active: this.subNavValue === AvailabilityAndMotivationPageSelection.AvailabilityTab,
           attributes: {
             id: 'availability',
@@ -49,7 +49,7 @@ export default class AvailabilityAndMotivationPresenter extends ReferralLayoutPr
         },
         {
           text: 'Location',
-          href: `/referral/${this.referral.id}/location/#location`,
+          href: `/referral/${this.referral.id}/availability-and-motivation/location/#location`,
           active: this.subNavValue === AvailabilityAndMotivationPageSelection.LocationTab,
           attributes: {
             id: 'location',
@@ -57,7 +57,7 @@ export default class AvailabilityAndMotivationPresenter extends ReferralLayoutPr
         },
         {
           text: 'Motivation, background and non-associations',
-          href: `/referral/${this.referral.id}/motivation-background-and-non-associations/#motivation-background-and-non-associations`,
+          href: `/referral/${this.referral.id}/availability-and-motivation/motivation-background-and-non-associations/#motivation-background-and-non-associations`,
           active: this.subNavValue === AvailabilityAndMotivationPageSelection.MotivationBackgroundAndNonAssociationsTab,
           attributes: {
             id: 'motivation-background-and-non-associations',

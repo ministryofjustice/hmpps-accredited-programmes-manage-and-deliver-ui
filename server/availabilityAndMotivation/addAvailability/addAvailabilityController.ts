@@ -48,7 +48,7 @@ export default class AddAvailabilityController extends BaseController {
         } else {
           await this.accreditedProgrammesManageAndDeliverService.addAvailability(username, data.paramsForUpdate)
         }
-        return res.redirect(`/referral/${referralId}/availability?detailsUpdated=true`)
+        return res.redirect(`/referral/${referralId}/availability-and-motivation/availability?detailsUpdated=true`)
       }
     }
 

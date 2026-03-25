@@ -71,7 +71,7 @@ export default class AdditionalPdusView {
         presenter: this.presenter,
         previousValueArgs: this.previousValueArgs(),
         pduCheckboxArgs: this.pduCheckboxArgs,
-        cancelLink: `/referral/${this.presenter.referralId}/location/#location`,
+        cancelLink: `/referral/${this.presenter.referralId}/availability-and-motivation/location/#location`,
         backLinkArgs: this.backLinkArgs(),
       },
     ]

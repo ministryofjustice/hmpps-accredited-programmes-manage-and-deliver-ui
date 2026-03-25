@@ -256,7 +256,7 @@ describe('location-preferences', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Redirecting to /referral/${referralId}/location?preferredLocationUpdated=true#location`,
+            `Redirecting to /referral/${referralId}/availability-and-motivation/location?preferredLocationUpdated=true#location`,
           )
         })
 
@@ -295,7 +295,7 @@ describe('location-preferences', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Redirecting to /referral/${referralId}/location?preferredLocationUpdated=true#location`,
+            `Redirecting to /referral/${referralId}/availability-and-motivation/location?preferredLocationUpdated=true#location`,
           )
         })
 

@@ -86,7 +86,7 @@ export default class LocationPreferencesView {
         checkboxArgs: this.checkboxArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         locationButtonFormAction: this.presenter.locationButtonFormAction,
-        cancelLink: `/referral/${this.presenter.referralId}/location/#location`,
+        cancelLink: `/referral/${this.presenter.referralId}/availability-and-motivation/location/#location`,
         backLinkArgs: this.backLinkArgs(),
       },
     ]

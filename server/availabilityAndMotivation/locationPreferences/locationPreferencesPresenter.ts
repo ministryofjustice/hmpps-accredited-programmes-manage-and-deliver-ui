@@ -61,7 +61,7 @@ export default class LocationPreferencesPresenter {
   }
 
   get backLinkUri() {
-    return `/referral/${this.referralId}/location#location`
+    return `/referral/${this.referralId}/availability-and-motivation/location#location`
   }
 
   get errorSummary() {

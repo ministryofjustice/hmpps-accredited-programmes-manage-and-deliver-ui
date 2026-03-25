@@ -168,7 +168,9 @@ export default class LocationPreferencesController extends BaseController {
         }
         // Clear session at end of journey
         req.session.locationPreferenceFormData = null
-        return res.redirect(`/referral/${referralId}/location?preferredLocationUpdated=true#location`)
+        return res.redirect(
+          `/referral/${referralId}/availability-and-motivation/location?preferredLocationUpdated=true#location`,
+        )
       }
     }
 
