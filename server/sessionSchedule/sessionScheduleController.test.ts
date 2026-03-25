@@ -198,6 +198,7 @@ describe('Session Schedule Controller', () => {
             referralId: 'Team A',
           },
         ],
+        suggestedDate: '01/01/2026',
       })
     })
 
@@ -229,6 +230,7 @@ describe('Session Schedule Controller', () => {
             referralId: 'Team A',
           },
         ],
+        suggestedDate: '01/01/2026',
       })
     })
 
