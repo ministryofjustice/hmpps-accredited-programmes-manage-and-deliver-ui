@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { ReferralDetails } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import MotivationBackgroundAndNonAssociationsView from './motivationBackgroundAndNonAssociations/motivationBackgroundAndNonAssociationsView'
 import MotivationBackgroundAndNonAssociationsPresenter from './motivationBackgroundAndNonAssociations/motivationBackgroundAndNonAssociationsPresenter'
@@ -10,6 +11,8 @@ import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
 import AvailabilityPresenter from './availability/availabilityPresenter'
 import AvailabilityView from './availability/availabilityView'
+import LocationPresenter from './location/locationPresenter'
+import LocationView from './location/locationView'
 
 export default class AvailabilityAndMotivationController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -127,6 +130,34 @@ export default class AvailabilityAndMotivationController extends BaseController 
     const view = new AvailabilityView(presenter)
 
     req.session.originPage = req.path
+
+    return this.renderPage(res, view, referralDetailsData)
+  }
+
+  async showLocationPage(req: Request, res: Response): Promise<void> {
+    const { id } = req.params
+    const { username } = req.user
+    const { isCohortUpdated, isLdcUpdated, preferredLocationUpdated } = req.query
+    const subNavValue = 'location'
+
+    const referralDetailsData = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(id, username)
+
+    const deliveryLocationPreferences =
+      await this.accreditedProgrammesManageAndDeliverService.getDeliveryLocationPreferences(username, id)
+
+    const presenter = new LocationPresenter(
+      referralDetailsData,
+      subNavValue,
+      deliveryLocationPreferences,
+      preferredLocationUpdated === 'true',
+      isLdcUpdated === 'true',
+      isCohortUpdated === 'true',
+    )
+    const view = new LocationView(presenter)
+
+    req.session.originPage = req.path
+
+    console.log('deliveryLocationPreferences', deliveryLocationPreferences)
 
     return this.renderPage(res, view, referralDetailsData)
   }

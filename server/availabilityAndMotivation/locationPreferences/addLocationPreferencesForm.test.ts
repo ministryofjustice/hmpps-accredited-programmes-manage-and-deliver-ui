@@ -1,7 +1,7 @@
 import { fakerEN_GB as faker } from '@faker-js/faker'
 import { SessionData } from 'express-session'
-import TestUtils from '../testutils/testUtils'
-import deliveryLocationPreferencesFormDataFactory from '../testutils/factories/deliveryLocationPreferences/deliveryLocationPreferencesFormDataFactory'
+import TestUtils from '../../testutils/testUtils'
+import deliveryLocationPreferencesFormDataFactory from '../../testutils/factories/deliveryLocationPreferences/deliveryLocationPreferencesFormDataFactory'
 import AddLocationPreferenceForm from './addLocationPreferenceForm'
 
 describe(`AddLocationPreferenceForm `, () => {

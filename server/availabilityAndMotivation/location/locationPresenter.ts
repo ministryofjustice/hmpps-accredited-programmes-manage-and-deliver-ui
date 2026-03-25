@@ -1,8 +1,9 @@
 import { DeliveryLocationPreferences, ReferralDetails } from '@manage-and-deliver-api'
-import { SummaryListItem } from '../utils/summaryList'
-import ReferralDetailsPresenter from './referralDetailsPresenter'
+import { SummaryListItem } from '../../utils/summaryList'
+import ReferralDetailsPresenter from '../../referralDetails/referralDetailsPresenter'
+import AvailabilityAndMotivationPresenter from '../availabilityAndMotivationPresenter'
 
-export default class LocationPresenter extends ReferralDetailsPresenter {
+export default class LocationPresenter extends AvailabilityAndMotivationPresenter {
   constructor(
     readonly details: ReferralDetails,
     readonly subNavValue: string,

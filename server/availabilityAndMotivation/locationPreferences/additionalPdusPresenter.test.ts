@@ -1,8 +1,8 @@
 import { randomUUID } from 'crypto'
 
-import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
-import deliveryLocationPreferencesFormDataFactory from '../testutils/factories/deliveryLocationPreferences/deliveryLocationPreferencesFormDataFactory'
-import createDeliveryLocationPreferencesFactory from '../testutils/factories/deliveryLocationPreferences/createDeliveryLocationPreferencesFactory'
+import referralDetailsFactory from '../../testutils/factories/referralDetailsFactory'
+import deliveryLocationPreferencesFormDataFactory from '../../testutils/factories/deliveryLocationPreferences/deliveryLocationPreferencesFormDataFactory'
+import createDeliveryLocationPreferencesFactory from '../../testutils/factories/deliveryLocationPreferences/createDeliveryLocationPreferencesFactory'
 import AdditionalPdusPresenter from './additionalPdusPresenter'
 
 afterEach(() => {

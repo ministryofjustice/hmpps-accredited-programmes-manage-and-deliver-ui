@@ -11,7 +11,7 @@ import AddToGroupController from '../groupOverview/addToGroup/addToGroupControll
 import GroupOverviewController from '../groupOverview/groupOverviewController'
 import RemoveFromGroupController from '../groupOverview/removeFromGroup/removeFromGroupController'
 import LdcController from '../ldc/ldcController'
-import LocationPreferencesController from '../locationPreferences/locationPreferencesController'
+import LocationPreferencesController from '../availabilityAndMotivation/locationPreferences/locationPreferencesController'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import PniController from '../pni/pniController'
 import ReferralDetailsController from '../referralDetails/referralDetailsController'
@@ -87,8 +87,8 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await availabilityAndMotivationController.showAvailabilityPage(req, res)
   })
 
-  get('/referral-details/:id/location', async (req, res, next) => {
-    await referralDetailsController.showLocationPage(req, res)
+  get('/referral/:id/location', async (req, res, next) => {
+    await availabilityAndMotivationController.showLocationPage(req, res)
   })
 
   get('/referral/:referralId/add-location-preferences', async (req, res, next) => {

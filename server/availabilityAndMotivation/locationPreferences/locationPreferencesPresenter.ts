@@ -3,8 +3,8 @@ import {
   DeliveryLocationPreferencesFormData,
   ReferralDetails,
 } from '@manage-and-deliver-api'
-import { FormValidationError } from '../utils/formValidationError'
-import PresenterUtils from '../utils/presenterUtils'
+import { FormValidationError } from '../../utils/formValidationError'
+import PresenterUtils from '../../utils/presenterUtils'
 
 export interface DeliveryLocationOptions {
   pdu: {
@@ -61,7 +61,7 @@ export default class LocationPreferencesPresenter {
   }
 
   get backLinkUri() {
-    return `/referral-details/${this.referralId}/location#location`
+    return `/referral/${this.referralId}/location#location`
   }
 
   get errorSummary() {

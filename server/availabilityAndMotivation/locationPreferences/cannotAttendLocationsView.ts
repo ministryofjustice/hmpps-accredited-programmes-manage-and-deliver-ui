@@ -1,6 +1,6 @@
 import CannotAttendLocationsPresenter from './cannotAttendLocationsPresenter'
-import ViewUtils from '../utils/viewUtils'
-import { RadiosArgs } from '../utils/govukFrontendTypes'
+import ViewUtils from '../../utils/viewUtils'
+import { RadiosArgs } from '../../utils/govukFrontendTypes'
 
 export default class CannotAttendLocationsView {
   constructor(private readonly presenter: CannotAttendLocationsPresenter) {}
@@ -63,7 +63,7 @@ export default class CannotAttendLocationsView {
       'locationPreferences/cannotAttendLocations',
       {
         presenter: this.presenter,
-        cancelLink: `/referral-details/${this.presenter.id}/location/#location`,
+        cancelLink: `/referral/${this.presenter.id}/location/#location`,
         cannotAttendLocationsTextAreaArgs: this.cannotAttendLocationsTextAreaArgs(),
         radioArgs: this.radioArgs.bind(this),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
