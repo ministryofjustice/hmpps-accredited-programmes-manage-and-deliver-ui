@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import { ReferralDetails } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import MotivationBackgroundAndNonAssociationsView from './motivationBackgroundAndNonAssociations/motivationBackgroundAndNonAssociationsView'
 import MotivationBackgroundAndNonAssociationsPresenter from './motivationBackgroundAndNonAssociations/motivationBackgroundAndNonAssociationsPresenter'
@@ -21,16 +20,15 @@ export default class AvailabilityAndMotivationController extends BaseController 
     super()
   }
 
-  async getReferralDetails(id: string, username: string): Promise<ReferralDetails> {
-    return this.accreditedProgrammesManageAndDeliverService.getReferralDetails(id, username)
-  }
-
   async showMotivationBackgroundAndNonAssociationsPage(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated, isMotivationsUpdated } = req.query
 
-    const referralDetailsData = await this.getReferralDetails(referralId, username)
+    const referralDetailsData = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
+      referralId,
+      username,
+    )
 
     const motivationBackgroundAndNonAssociations =
       await this.accreditedProgrammesManageAndDeliverService.getMotivationBackgroundAndNonAssociations(
@@ -114,7 +112,7 @@ export default class AvailabilityAndMotivationController extends BaseController 
     const { isCohortUpdated, isLdcUpdated, detailsUpdated } = req.query
     const subNavValue = 'availability'
 
-    const referralDetailsData = await this.getReferralDetails(id, username)
+    const referralDetailsData = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(id, username)
 
     const availability = await this.accreditedProgrammesManageAndDeliverService.getAvailability(username, id)
 
