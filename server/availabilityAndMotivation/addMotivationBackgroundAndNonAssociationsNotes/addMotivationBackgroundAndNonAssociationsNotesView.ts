@@ -91,7 +91,7 @@ export default class AddMotivationBackgroundAndNonAssociationsNotesView {
 
   get renderArgs(): [string, Record<string, unknown>] {
     return [
-      'groupAllocationNotes/addMotivationBackgroundAndNonAssociations/addMotivationBackgroundAndNonAssociationsNotes',
+      'availabilityAndMotivation/addMotivationBackgroundAndNonAssociations/addMotivationBackgroundAndNonAssociationsNotes',
       {
         presenter: this.presenter,
         maintainsInnocenceRadioArgs: this.maintainsInnocenceRadioArgs,

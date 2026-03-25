@@ -40,7 +40,7 @@ export default class AvailabilityView {
 
   get renderArgs(): [string, Record<string, unknown>] {
     return [
-      'referralDetails/referralDetails',
+      'availabilityAndMotivation/availabilityAndMotivation',
       {
         presenter: this.presenter,
         importFromDeliusText: this.importFromDeliusText,
@@ -51,6 +51,7 @@ export default class AvailabilityView {
         isAvailabilityUpdated: this.presenter.isAvailabilityUpdated,
         successMessageArgs: this.successMessageArgs(),
         generalAvailabilityText: this.generalAvailabilityText,
+        getVerticalSubNavArgs: this.presenter.verticalSubNavArgs,
       },
     ]
   }

@@ -32,7 +32,7 @@ beforeEach(() => {
   accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
 })
 
-describe('Group allocation notes', () => {
+describe('availabilityAndMotivation controller', () => {
   describe('GET /referral/:referralId/motivation-background-and-non-associations', () => {
     it('loads the motivation background and non associations page', async () => {
       const motivationBackgroundAndNonAssociations = ReferralMotivationBackgroundAndNonAssociationsFactory.build({

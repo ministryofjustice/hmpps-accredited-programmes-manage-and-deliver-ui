@@ -40,11 +40,11 @@ export default class MotivationBackgroundAndNonAssociationsView {
 
   get renderArgs(): [string, Record<string, unknown>] {
     return [
-      'groupAllocationNotes/groupAllocationNotes',
+      'availabilityAndMotivation/availabilityAndMotivation',
       {
         presenter: this.presenter,
         groupAllocationTextArgs: this.presenter.groupAllocationTextArgs,
-        getVerticalSubNavArgs: this.presenter.getVerticalSubNavArgs(),
+        getVerticalSubNavArgs: this.presenter.verticalSubNavArgs,
         addNotesButtonArgs: this.addNotesButtonArgs,
         motivationBackgroundAndNonAssociationsSummaryListArgs:
           this.motivationBackgroundAndNonAssociationsSummaryListArgs,
