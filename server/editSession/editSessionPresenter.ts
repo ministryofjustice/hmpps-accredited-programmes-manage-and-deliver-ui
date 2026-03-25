@@ -3,6 +3,7 @@ import { MultiSelectTableArgs } from '@manage-and-deliver-ui'
 import { TableArgs } from '../utils/govukFrontendTypes'
 import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
+import attendanceOptionText, { attendanceOptionTextTags } from '../utils/attendanceUtils'
 
 export default class EditSessionPresenter {
   constructor(
@@ -49,18 +50,7 @@ export default class EditSessionPresenter {
   }
 
   attendanceOptionText(attendance: string | undefined) {
-    const recordedAttendance = attendance?.trim().toUpperCase()
-
-    if (recordedAttendance === 'ATTENDED - COMPLIED') {
-      return { attendanceState: '<span class="govuk-tag govuk-tag--blue">Attended - Complied</span>' }
-    }
-    if (recordedAttendance === 'ATTENDED - FAILED TO COMPLY') {
-      return { attendanceState: '<span class="govuk-tag govuk-tag--yellow">Attended - failed to comply</span>' }
-    }
-    if (recordedAttendance === 'DID NOT ATTEND') {
-      return { attendanceState: '<span class="govuk-tag govuk-tag--red">Not attended</span>' }
-    }
-    return { attendanceState: '<span class="govuk-tag govuk-tag--grey">To be confirmed</span>' }
+    return attendanceOptionText(attendance, attendanceOptionTextTags.editSession)
   }
 
   private sessionNotesText(sessionNotes: unknown): string {
