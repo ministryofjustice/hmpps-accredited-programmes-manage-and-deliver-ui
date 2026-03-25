@@ -47,6 +47,9 @@ export default class AvailabilityAndMotivationController extends BaseController 
       isMotivationsUpdated === 'true',
     )
     const view = new MotivationBackgroundAndNonAssociationsView(presenter)
+
+    req.session.originPage = req.path
+
     return this.renderPage(res, view, referralDetailsData)
   }
 
