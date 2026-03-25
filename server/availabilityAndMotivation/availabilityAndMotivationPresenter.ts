@@ -1,7 +1,6 @@
 import { ReferralDetails } from '@manage-and-deliver-api'
 import ReferralLayoutPresenter, { HorizontalNavValues } from '../shared/referral/referralLayoutPresenter'
 import { InsetTextArgs } from '../utils/govukFrontendTypes'
-import { ReferralDetailsPageSection } from '../referralDetails/referralDetailsPresenter'
 
 export enum AvailabilityAndMotivationPageSelection {
   AvailabilityTab = 'availability',
