@@ -1,5 +1,10 @@
 type AttendanceStatus = 'attended' | 'failedToComply' | 'notAttended' | 'toBeConfirmed'
 
+type AttendanceOptionTextOptions = {
+  attendedLabel?: string
+  fallbackStatus?: AttendanceStatus
+}
+
 const ATTENDANCE_TAGS: Record<AttendanceStatus, { colour: string; label: string }> = {
   attended: { colour: 'blue', label: 'Attended' },
   failedToComply: { colour: 'yellow', label: 'Attended - failed to comply' },
@@ -11,31 +16,32 @@ const ATTENDANCE_STATUS_BY_VALUE: Record<string, AttendanceStatus> = {
   ATTC: 'attended',
   ATTENDED: 'attended',
   'ATTENDED - COMPLIED': 'attended',
-  Attended: 'attended',
   AFTC: 'failedToComply',
   'ATTENDED - FAILED TO COMPLY': 'failedToComply',
   'ATTENDED BUT FAILED TO COMPLY': 'failedToComply',
   'ATTENDED, FAILED TO COMPLY': 'failedToComply',
-  'Attended, failed to comply': 'failedToComply',
   UAAB: 'notAttended',
   'DID NOT ATTEND': 'notAttended',
-  'Did not attend': 'notAttended',
+}
+
+export const attendanceOptionTextTags: Record<'attendanceSessionNotes' | 'editSession', AttendanceOptionTextOptions> = {
+  attendanceSessionNotes: { fallbackStatus: 'notAttended' },
+  editSession: { attendedLabel: 'Attended - Complied' },
 }
 
 export default function attendanceOptionText(
-  attendance: string | undefined,
-  options: {
-    attendedLabel?: string
-    fallbackStatus?: AttendanceStatus
-  } = {},
+  attendanceCode: string | undefined,
+  options: AttendanceOptionTextOptions = {},
 ) {
-  const normalisedAttendance = attendance?.trim().replace(/\s+/g, ' ').toUpperCase()
-  const mappedStatus = normalisedAttendance ? ATTENDANCE_STATUS_BY_VALUE[normalisedAttendance] : undefined
-  const status: AttendanceStatus = mappedStatus ?? options.fallbackStatus ?? 'toBeConfirmed'
-  const tag = ATTENDANCE_TAGS[status]
-  const label = status === 'attended' ? (options.attendedLabel ?? tag.label) : tag.label
+  const normalisedAttendance = attendanceCode?.trim().replace(/\s+/g, ' ').toUpperCase()
+  const status: AttendanceStatus =
+    (normalisedAttendance ? ATTENDANCE_STATUS_BY_VALUE[normalisedAttendance] : undefined) ??
+    options.fallbackStatus ??
+    'toBeConfirmed'
+  const { colour, label } = ATTENDANCE_TAGS[status]
+  const displayLabel = status === 'attended' && options.attendedLabel ? options.attendedLabel : label
 
   return {
-    attendanceState: `<span class="govuk-tag govuk-tag--${tag.colour}">${label}</span>`,
+    attendanceState: `<span class="govuk-tag govuk-tag--${colour}">${displayLabel}</span>`,
   }
 }

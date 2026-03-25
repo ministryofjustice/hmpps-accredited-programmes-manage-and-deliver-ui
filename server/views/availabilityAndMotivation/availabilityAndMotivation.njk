@@ -1,0 +1,61 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/header/macro.njk" import govukHeader %}
+{%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
+{%- from "moj/components/side-navigation/macro.njk" import mojSideNavigation -%}
+{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+{%- from "moj/components/alert/macro.njk" import mojAlert -%}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block main %}
+  {% block content %}
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper" id="main-content">
+        <div class="govuk-grid-row">
+          {% include "../partials/headerMenu.njk" %}
+            <div class="govuk-grid-column-three-quarters">
+              {% if presenter.isCohortUpdated %}
+                {{ mojAlert(presenter.cohortUpdatedSuccessMessageArgs) }}
+              {% endif %}
+              {% if presenter.isLdcUpdated %}
+                {{ mojAlert(presenter.ldcUpdatedSuccessMessageArgs) }}
+              {% endif %}
+              <p class="govuk-body">Use this section to add and view information to help you match the person to a group.</p>
+              {% if presenter.referral.currentlyAllocatedGroupId %}
+              {{ govukInsetText(groupAllocationTextArgs) }}
+              {% endif %}
+            </div>
+        </div>
+
+
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full">
+            <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+          </div>
+          <div class="govuk-grid-column-one-quarter">
+            {{ mojSideNavigation(getVerticalSubNavArgs) }}
+          </div>
+          <div class="govuk-grid-column-three-quarters">
+            {% if presenter.subNavValue == 'availability' %}
+            <div>
+              {% include "./availability.njk" %}
+            </div>
+            {% elif presenter.subNavValue == 'location' %}
+            <div>
+              {% include "./location.njk" %}
+            </div>
+            {% else %}
+              {% include "./motivationBackgroundAndNonAssociations.njk" %}
+            {% endif %}
+          </div>
+        </div>
+
+
+      </main>
+    </div>
+
+
+  {% endblock %}
+{% endblock %}

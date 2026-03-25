@@ -1,7 +1,7 @@
 import { RecordSessionAttendance } from '@manage-and-deliver-api'
-import attendanceOptionText from '../../utils/attendanceUtils'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
+import attendanceOptionText, { attendanceOptionTextTags } from '../../utils/attendanceUtils'
 
 export default class AttendanceSessionNotesPresenter {
   constructor(
@@ -51,7 +51,7 @@ export default class AttendanceSessionNotesPresenter {
   }
 
   get attendanceOptionText() {
-    return attendanceOptionText(this.selectedAttendanceCode, { fallbackStatus: 'notAttended' })
+    return attendanceOptionText(this.selectedAttendanceCode, attendanceOptionTextTags.attendanceSessionNotes)
   }
 
   get backLinkUri() {

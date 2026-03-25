@@ -1,11 +1,11 @@
 import { GroupSessionResponse } from '@manage-and-deliver-api'
 import { MultiSelectTableArgs } from '@manage-and-deliver-ui'
 import { TableArgs } from '../utils/govukFrontendTypes'
-import attendanceOptionText from '../utils/attendanceUtils'
 import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
 import { convertToUrlFriendlyKebabCase } from '../utils/utils'
 import ViewUtils from '../utils/viewUtils'
+import attendanceOptionText, { attendanceOptionTextTags } from '../utils/attendanceUtils'
 
 export default class EditSessionPresenter {
   constructor(
@@ -51,8 +51,8 @@ export default class EditSessionPresenter {
     return this.sessionDetails.attendanceAndSessionNotes?.length > 0
   }
 
-  private sessionNotesPagePath(referralId: string) {
-    return `/group/${this.groupId}/session/${this.sessionId}/${this.sessionNotesSlug}-session-notes?referralId=${referralId}`
+  attendanceOptionText(attendance: string | undefined) {
+    return attendanceOptionText(attendance, attendanceOptionTextTags.editSession)
   }
 
   private get sessionNotesSlug() {
@@ -72,8 +72,8 @@ export default class EditSessionPresenter {
     return `<a href="${this.sessionNotesPagePath(referralId)}">${linkText}</a>`
   }
 
-  attendanceOptionText(attendance: string | undefined) {
-    return attendanceOptionText(attendance, { attendedLabel: 'Attended - Complied' })
+  private sessionNotesPagePath(referralId: string): string {
+    return `/referral/${referralId}/session-notes/${this.sessionNotesSlug}`
   }
 
   get attendanceTableArgs(): MultiSelectTableArgs | TableArgs {
