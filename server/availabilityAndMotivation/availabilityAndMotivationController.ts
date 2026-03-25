@@ -21,7 +21,7 @@ export default class AvailabilityAndMotivationController extends BaseController 
     super()
   }
 
-  async showAvailabilityAndMotivationPage(id: string, username: string): Promise<ReferralDetails> {
+  async getReferralDetails(id: string, username: string): Promise<ReferralDetails> {
     return this.accreditedProgrammesManageAndDeliverService.getReferralDetails(id, username)
   }
 
@@ -30,7 +30,7 @@ export default class AvailabilityAndMotivationController extends BaseController 
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated, isMotivationsUpdated } = req.query
 
-    const referralDetailsData = await this.showAvailabilityAndMotivationPage(referralId, username)
+    const referralDetailsData = await this.getReferralDetails(referralId, username)
 
     const motivationBackgroundAndNonAssociations =
       await this.accreditedProgrammesManageAndDeliverService.getMotivationBackgroundAndNonAssociations(
@@ -114,7 +114,7 @@ export default class AvailabilityAndMotivationController extends BaseController 
     const { isCohortUpdated, isLdcUpdated, detailsUpdated } = req.query
     const subNavValue = 'availability'
 
-    const referralDetailsData = await this.showAvailabilityAndMotivationPage(id, username)
+    const referralDetailsData = await this.getReferralDetails(id, username)
 
     const availability = await this.accreditedProgrammesManageAndDeliverService.getAvailability(username, id)
 
