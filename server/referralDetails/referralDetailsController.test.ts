@@ -1,6 +1,4 @@
 import {
-  Availability,
-  DeliveryLocationPreferences,
   OffenceHistory,
   PersonalDetails,
   ReferralDetails,
@@ -13,7 +11,6 @@ import request from 'supertest'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import attendanceHistoryResponseFactory from '../testutils/factories/attendanceHistoryResponseFactory'
-import availabilityFactory from '../testutils/factories/availabilityFactory'
 import offenceHistoryFactory from '../testutils/factories/offenceHistoryFactory'
 import personalDetailsFactory from '../testutils/factories/personalDetailsFactory'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'

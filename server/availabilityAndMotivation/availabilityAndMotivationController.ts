@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import { ReferralDetails } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import MotivationBackgroundAndNonAssociationsView from './motivationBackgroundAndNonAssociations/motivationBackgroundAndNonAssociationsView'
 import MotivationBackgroundAndNonAssociationsPresenter from './motivationBackgroundAndNonAssociations/motivationBackgroundAndNonAssociationsPresenter'
@@ -156,8 +155,6 @@ export default class AvailabilityAndMotivationController extends BaseController 
     const view = new LocationView(presenter)
 
     req.session.originPage = req.path
-
-    console.log('deliveryLocationPreferences', deliveryLocationPreferences)
 
     return this.renderPage(res, view, referralDetailsData)
   }
