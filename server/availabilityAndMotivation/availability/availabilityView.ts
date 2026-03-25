@@ -1,7 +1,7 @@
-import { ButtonArgs, InsetTextArgs } from '../utils/govukFrontendTypes'
+import { ButtonArgs, InsetTextArgs } from '../../utils/govukFrontendTypes'
 import AvailabilityPresenter from './availabilityPresenter'
-import DateUtils from '../utils/dateUtils'
-import { MojAlertComponentArgs } from '../interfaces/alertComponentArgs'
+import DateUtils from '../../utils/dateUtils'
+import { MojAlertComponentArgs } from '../../interfaces/alertComponentArgs'
 
 export default class AvailabilityView {
   constructor(private readonly presenter: AvailabilityPresenter) {}
@@ -23,8 +23,8 @@ export default class AvailabilityView {
     return {
       text: this.presenter.availability.id ? 'Change availability' : 'Add availability',
       href: this.presenter.availability.id
-        ? `/referral/${this.presenter.referralDetails.id}/update-availability/${this.presenter.availability.id}`
-        : `/referral/${this.presenter.referralDetails.id}/add-availability`,
+        ? `/referral/${this.presenter.referral.id}/update-availability/${this.presenter.availability.id}`
+        : `/referral/${this.presenter.referral.id}/add-availability`,
     }
   }
 

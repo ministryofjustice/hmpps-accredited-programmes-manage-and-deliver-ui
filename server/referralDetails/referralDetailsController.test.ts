@@ -92,13 +92,13 @@ describe('referral-details', () => {
     })
   })
 
-  describe(`GET /referral-details/:id/availability`, () => {
+  describe(`GET /referral/:id/availability`, () => {
     it('loads the referral details page with availability sub-nav', async () => {
       const availability: Availability = availabilityFactory.defaultAvailability().build()
       accreditedProgrammesManageAndDeliverService.getAvailability.mockResolvedValue(availability)
 
       return request(app)
-        .get(`/referral-details/${randomUUID()}/availability`)
+        .get(`/referral/${randomUUID()}/availability`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(referralDetails.crn)
@@ -179,50 +179,6 @@ describe(`/referral`, () => {
           expect(res.text).toContain('Awaiting assessment')
 
           expect(res.text).toContain('Awaiting allocation')
-        })
-    })
-  })
-})
-
-describe(`Add Availability`, () => {
-  describe(`GET /referral/:referralId/add-availability`, () => {
-    it('loads the add availability page successfully', async () => {
-      const availability: Availability = availabilityFactory.defaultAvailability().build()
-      const personalDetails: PersonalDetails = personalDetailsFactory.build()
-
-      accreditedProgrammesManageAndDeliverService.getAvailability.mockResolvedValue(availability)
-      accreditedProgrammesManageAndDeliverService.getPersonalDetails.mockResolvedValue(personalDetails)
-
-      return request(app)
-        .get(`/referral/${randomUUID()}/add-availability`)
-        .expect(200)
-        .expect(res => {
-          expect(res.text).toContain(`When is ${referralDetails.personName} available to attend a programme`)
-        })
-    })
-  })
-
-  describe(`POST /referral/:referralId/add-availability`, () => {
-    it('posts to the add availability page and redirects successfully', async () => {
-      const referralId = randomUUID()
-      const availability: Availability = availabilityFactory.defaultAvailability().build()
-      const personalDetails: PersonalDetails = personalDetailsFactory.build()
-
-      accreditedProgrammesManageAndDeliverService.getAvailability.mockResolvedValue(availability)
-      accreditedProgrammesManageAndDeliverService.getPersonalDetails.mockResolvedValue(personalDetails)
-
-      return request(app)
-        .post(`/referral/${referralId}/add-availability`)
-        .type('form')
-        .send({
-          'availability-checkboxes': ['Mondays-daytime', 'Sundays-evening'],
-          'other-availability-details-text-area': 'text',
-          'end-date': 'Yes',
-          date: '31/7/9225',
-        })
-        .expect(302)
-        .expect(res => {
-          expect(res.text).toContain(`Redirecting to /referral-details/${referralId}/availability?detailsUpdated=true`)
         })
     })
   })

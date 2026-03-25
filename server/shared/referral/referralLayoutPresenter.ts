@@ -114,7 +114,7 @@ export default class ReferralLayoutPresenter {
         },
         {
           text: 'Availability and motivation',
-          href: `/referral/${this.referral.id}/group-allocation-notes/motivation-background-and-non-associations`,
+          href: `/referral/${this.referral.id}/availability`,
           active: this.horizontalNavValue === HorizontalNavValues.availabilityAndMotivationTab,
         },
         {

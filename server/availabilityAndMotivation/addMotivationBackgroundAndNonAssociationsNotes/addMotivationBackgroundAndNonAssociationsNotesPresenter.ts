@@ -11,7 +11,7 @@ export default class AddMotivationBackgroundAndNonAssociationsNotesPresenter {
   ) {}
 
   get cancelAndBacklinkUri() {
-    return `/referral/${this.referral.id}/group-allocation-notes/motivation-background-and-non-associations`
+    return `/referral/${this.referral.id}/motivation-background-and-non-associations`
   }
 
   get text() {

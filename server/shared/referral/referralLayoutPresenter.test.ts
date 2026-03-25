@@ -28,7 +28,7 @@ describe(`getHorizontalSubNavArgs.`, () => {
       },
       {
         text: 'Availability and motivation',
-        href: `/referral/${referralDetails.id}/group-allocation-notes/motivation-background-and-non-associations`,
+        href: `/referral/${referralDetails.id}/availability`,
         active: false,
       },
       {

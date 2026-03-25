@@ -33,7 +33,7 @@ beforeEach(() => {
 })
 
 describe('Group allocation notes', () => {
-  describe('GET /referral/:referralId/group-allocation-notes/motivation-background-and-non-associations', () => {
+  describe('GET /referral/:referralId/motivation-background-and-non-associations', () => {
     it('loads the motivation background and non associations page', async () => {
       const motivationBackgroundAndNonAssociations = ReferralMotivationBackgroundAndNonAssociationsFactory.build({
         id: null,
@@ -43,7 +43,7 @@ describe('Group allocation notes', () => {
       )
 
       return request(app)
-        .get(`/referral/${randomUUID()}/group-allocation-notes/motivation-background-and-non-associations`)
+        .get(`/referral/${randomUUID()}/motivation-background-and-non-associations`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(`Availability and motivation: ${referralDetails.personName}`)
@@ -85,7 +85,7 @@ describe('Group allocation notes', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Redirecting to /referral/${referralId}/group-allocation-notes/motivation-background-and-non-associations?isMotivationsUpdated=true`,
+            `Redirecting to /referral/${referralId}/motivation-background-and-non-associations?isMotivationsUpdated=true`,
           )
         })
     })

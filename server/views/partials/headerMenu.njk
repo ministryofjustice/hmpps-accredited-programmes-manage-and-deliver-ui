@@ -1,9 +1,9 @@
 {%- from "moj/components/button-menu/macro.njk" import mojButtonMenu -%}
-<div class="govuk-grid-column-two-thirds">
+<div class="govuk-grid-column-three-quarters">
     <span class="govuk-caption-xl">{{ presenter.headerMenu.caption }}</span>
     <h1 class="govuk-heading-xl">{{ presenter.headerMenu.heading }}</h1>
 </div>
-<div class="govuk-grid-column-one-third">
+<div class="govuk-grid-column-one-quarter">
     <div class="moj-button-group moj-button-group--inline header-menu-button">
         {% if presenter.headerMenu.showButtonMenu %}
           {{ mojButtonMenu(presenter.headerMenu.buttonMenu) }}
