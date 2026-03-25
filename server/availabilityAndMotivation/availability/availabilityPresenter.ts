@@ -1,7 +1,7 @@
 import { Availability, ReferralDetails } from '@manage-and-deliver-api'
-import ReferralDetailsPresenter from './referralDetailsPresenter'
+import AvailabilityAndMotivationPresenter from '../availabilityAndMotivationPresenter'
 
-export default class AvailabilityPresenter extends ReferralDetailsPresenter {
+export default class AvailabilityPresenter extends AvailabilityAndMotivationPresenter {
   constructor(
     readonly details: ReferralDetails,
     readonly subNavValue: string,

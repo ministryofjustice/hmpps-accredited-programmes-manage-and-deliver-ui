@@ -2,13 +2,13 @@ import { ReferralDetails } from '@manage-and-deliver-api'
 import ReferralLayoutPresenter, { HorizontalNavValues } from '../shared/referral/referralLayoutPresenter'
 import { InsetTextArgs } from '../utils/govukFrontendTypes'
 
-export enum GroupAllocationNotesPageSection {
+export enum AvailabilityAndMotivationPageSelection {
   AvailabilityTab = 'availability',
   LocationTab = 'location',
   MotivationBackgroundAndNonAssociationsTab = 'motivationBackgroundAndNonAssociations',
 }
 
-export default class GroupAllocationNotesPresenter extends ReferralLayoutPresenter {
+export default class AvailabilityAndMotivationPresenter extends ReferralLayoutPresenter {
   constructor(
     readonly referral: ReferralDetails,
     readonly subNavValue: string,
@@ -33,16 +33,24 @@ export default class GroupAllocationNotesPresenter extends ReferralLayoutPresent
     }
   }
 
-  getVerticalSubNavArgs(): {
+  get verticalSubNavArgs(): {
     items: { text: string; href: string; active: boolean; attributes: object | null }[]
     classes: string
   } {
     return {
       items: [
         {
+          text: 'Availability',
+          href: `/referral/${this.referral.id}/availability/#availability`,
+          active: this.subNavValue === AvailabilityAndMotivationPageSelection.AvailabilityTab,
+          attributes: {
+            id: 'availability',
+          },
+        },
+        {
           text: 'Motivation, background and non-associations',
-          href: `/referral/${this.referral.id}/group-allocation-notes/motivation-background-and-non-associations`,
-          active: this.subNavValue === GroupAllocationNotesPageSection.MotivationBackgroundAndNonAssociationsTab,
+          href: `/referral/${this.referral.id}/motivation-background-and-non-associations`,
+          active: this.subNavValue === AvailabilityAndMotivationPageSelection.MotivationBackgroundAndNonAssociationsTab,
           attributes: {
             id: 'motivation-background-and-non-associations',
           },

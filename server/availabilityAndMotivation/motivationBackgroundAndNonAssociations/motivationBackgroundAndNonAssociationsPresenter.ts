@@ -1,9 +1,9 @@
 import { ReferralDetails, ReferralMotivationBackgroundAndNonAssociations } from '@manage-and-deliver-api'
-import GroupAllocationNotesPresenter from '../groupAllocationNotesPresenter'
+import AvailabilityAndMotivationPresenter from '../availabilityAndMotivationPresenter'
 import { SummaryListItem } from '../../utils/summaryList'
 import DateUtils from '../../utils/dateUtils'
 
-export default class MotivationBackgroundAndNonAssociationsPresenter extends GroupAllocationNotesPresenter {
+export default class MotivationBackgroundAndNonAssociationsPresenter extends AvailabilityAndMotivationPresenter {
   constructor(
     readonly referral: ReferralDetails,
     readonly motivationBackgroundAndNonAssociations: ReferralMotivationBackgroundAndNonAssociations,

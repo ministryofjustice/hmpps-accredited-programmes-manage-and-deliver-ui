@@ -6,7 +6,7 @@ import CreateGroupController from '../createGroup/createGroupController'
 import EditSessionController from '../editSession/editSessionController'
 import GroupController from '../group/groupController'
 import GroupDetailsController from '../groupDetails/groupDetailsController'
-import GroupAllocationNotesController from '../groupAllocationNotes/groupAllocationNotesController'
+import AvailabilityAndMotivationController from '../availabilityAndMotivation/availabilityAndMotivationController'
 import AddToGroupController from '../groupOverview/addToGroup/addToGroupController'
 import GroupOverviewController from '../groupOverview/groupOverviewController'
 import RemoveFromGroupController from '../groupOverview/removeFromGroup/removeFromGroupController'
@@ -21,6 +21,7 @@ import SessionScheduleController from '../sessionSchedule/sessionScheduleControl
 import UpdateReferralStatusController from '../updateReferralStatus/updateReferralStatusController'
 import AttendanceController from '../attendance/attendanceController'
 import HomeController from '../home/homeController'
+import AddAvailabilityController from '../availabilityAndMotivation/addAvailability/addAvailabilityController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
@@ -42,7 +43,9 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const groupOverviewController = new GroupOverviewController(accreditedProgrammesManageAndDeliverService)
   const addToGroupController = new AddToGroupController(accreditedProgrammesManageAndDeliverService)
   const removeFromGroupController = new RemoveFromGroupController(accreditedProgrammesManageAndDeliverService)
-  const groupAllocationNotesController = new GroupAllocationNotesController(accreditedProgrammesManageAndDeliverService)
+  const availabilityAndMotivationController = new AvailabilityAndMotivationController(
+    accreditedProgrammesManageAndDeliverService,
+  )
   const createGroupController = new CreateGroupController(accreditedProgrammesManageAndDeliverService)
   const groupController = new GroupController(accreditedProgrammesManageAndDeliverService)
   const groupDetailsController = new GroupDetailsController(accreditedProgrammesManageAndDeliverService)
@@ -50,6 +53,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const editSessionController = new EditSessionController(accreditedProgrammesManageAndDeliverService)
   const attendanceController = new AttendanceController(accreditedProgrammesManageAndDeliverService)
   const homeController = new HomeController()
+  const addAvailabilityController = new AddAvailabilityController(accreditedProgrammesManageAndDeliverService)
 
   get('/', async (req, res, next) => {
     await homeController.showHomePage(req, res)
@@ -79,8 +83,8 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await referralDetailsController.showSentenceInformationPage(req, res)
   })
 
-  get('/referral-details/:id/availability', async (req, res, next) => {
-    await referralDetailsController.showAvailabilityPage(req, res)
+  get('/referral/:id/availability', async (req, res, next) => {
+    await availabilityAndMotivationController.showAvailabilityPage(req, res)
   })
 
   get('/referral-details/:id/location', async (req, res, next) => {
@@ -119,20 +123,12 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await referralDetailsController.showAdditionalInformationPage(req, res)
   })
 
-  get('/referral/:referralId/add-availability', async (req, res, next) => {
-    await referralDetailsController.showAddAvailabilityPage(req, res)
+  getOrPost('/referral/:referralId/add-availability', async (req, res, next) => {
+    await addAvailabilityController.showAddAvailabilityPage(req, res)
   })
 
-  post('/referral/:referralId/add-availability', async (req, res, next) => {
-    await referralDetailsController.showAddAvailabilityPage(req, res)
-  })
-
-  get('/referral/:referralId/update-availability/:availabilityId', async (req, res, next) => {
-    await referralDetailsController.updateAvailability(req, res)
-  })
-
-  post('/referral/:referralId/update-availability/:availabilityId', async (req, res, next) => {
-    await referralDetailsController.updateAvailability(req, res)
+  getOrPost('/referral/:referralId/update-availability/:availabilityId', async (req, res, next) => {
+    await addAvailabilityController.updateAvailability(req, res)
   })
 
   get('/referral/:referralId/risks-and-alerts', async (req, res, next) => {
@@ -288,15 +284,12 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await groupOverviewController.showGroupOverviewSchedule(req, res)
   })
 
-  get(
-    '/referral/:referralId/group-allocation-notes/motivation-background-and-non-associations',
-    async (req, res, next) => {
-      await groupAllocationNotesController.showMotivationBackgroundAndNonAssociationsPage(req, res)
-    },
-  )
+  get('/referral/:referralId/motivation-background-and-non-associations', async (req, res, next) => {
+    await availabilityAndMotivationController.showMotivationBackgroundAndNonAssociationsPage(req, res)
+  })
 
   getOrPost('/referral/:referralId/add-motivation-background-and-non-associations', async (req, res, next) => {
-    await groupAllocationNotesController.showAddMotivationBackgroundAndNonAssociationsNotesPage(req, res)
+    await availabilityAndMotivationController.showAddMotivationBackgroundAndNonAssociationsNotesPage(req, res)
   })
 
   get('/addToGroup/:groupId/:referralId', async (req, res, next) => {
