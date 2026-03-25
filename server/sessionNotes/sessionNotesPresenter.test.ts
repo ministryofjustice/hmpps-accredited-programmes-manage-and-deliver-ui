@@ -4,6 +4,7 @@ describe('SessionNotesPresenter', () => {
   const buildData = (overrides: Partial<SessionNotesData> = {}): SessionNotesData => ({
     pageTitle: 'Jane Doe: Building Motivation session notes',
     moduleName: 'Getting started',
+    sessionName: 'Building Motivation',
     sessionNumber: 1,
     lastUpdatedBy: 'Berta Tonka',
     lastUpdatedDate: '2025-09-03',
@@ -16,17 +17,33 @@ describe('SessionNotesPresenter', () => {
     ...overrides,
   })
 
-  it('builds core group URL from module name and module number', () => {
+  it('builds URL from sessionName', () => {
     const presenter = new SessionNotesPresenter(buildData())
 
     expect(presenter.pageUrl).toBe(
-      '/group/b2c3d4e5-f6a7-8901-bcde-f23456789012/session/c3d4e5f6-a7b8-9012-cdef-345678901234/getting-started-1-session-notes',
+      '/group/b2c3d4e5-f6a7-8901-bcde-f23456789012/session/c3d4e5f6-a7b8-9012-cdef-345678901234/building-motivation-session-notes',
+    )
+  })
+
+  it('builds URL from BFF sessionName when provided', () => {
+    const presenter = new SessionNotesPresenter(
+      buildData({
+        sessionName: 'Introduction to Building Choices',
+        pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
+      }),
+    )
+
+    expect(presenter.pageUrl).toBe(
+      '/group/b2c3d4e5-f6a7-8901-bcde-f23456789012/session/c3d4e5f6-a7b8-9012-cdef-345678901234/introduction-to-building-choices-session-notes',
     )
   })
 
   it('builds catch-up URL from session name and appends session-notes', () => {
     const presenter = new SessionNotesPresenter(
-      buildData({ pageTitle: 'Jane Doe: Building Motivation catch-up session notes' }),
+      buildData({
+        sessionName: 'Building Motivation catch-up',
+        pageTitle: 'Jane Doe: Building Motivation catch-up session notes',
+      }),
     )
 
     expect(presenter.pageUrl).toBe(
@@ -36,7 +53,10 @@ describe('SessionNotesPresenter', () => {
 
   it('builds one-to-one URL from session name and appends session-notes', () => {
     const presenter = new SessionNotesPresenter(
-      buildData({ pageTitle: 'Jane Doe: Getting started one-to-one session notes' }),
+      buildData({
+        sessionName: 'Getting started one-to-one',
+        pageTitle: 'Jane Doe: Getting started one-to-one session notes',
+      }),
     )
 
     expect(presenter.pageUrl).toBe(
@@ -46,7 +66,10 @@ describe('SessionNotesPresenter', () => {
 
   it('builds post-programme review URL from session name and appends session-notes', () => {
     const presenter = new SessionNotesPresenter(
-      buildData({ pageTitle: 'Jane Doe: Post-programme review for Jane Doe session notes' }),
+      buildData({
+        sessionName: 'Post-programme review for Jane Doe',
+        pageTitle: 'Jane Doe: Post-programme review for Jane Doe session notes',
+      }),
     )
 
     expect(presenter.pageUrl).toBe(
@@ -66,6 +89,8 @@ describe('SessionNotesPresenter', () => {
 
     expect(presenter.text).toEqual({
       headingText: 'Jane Doe: Building Motivation session notes',
+      personOnProbationName: 'Jane Doe',
+      successMessage: 'Attendance recorded for Jane Doe',
       lastUpdatedText: 'Last updated by Berta Tonka on 2025-09-03.',
       updateAttendanceAndNotesButtonText: 'Update attendance and notes',
       attendanceSummaryTitle: 'Attendance summary',

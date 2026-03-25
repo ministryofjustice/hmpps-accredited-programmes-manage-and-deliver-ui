@@ -3195,6 +3195,11 @@ export interface components {
        */
       moduleName: string
       /**
+       * @description The name of the session
+       * @example Introduction to Building Choices
+       */
+      sessionName: string
+      /**
        * Format: int32
        * @description The session number within the module
        * @example 1
@@ -3871,6 +3876,8 @@ export interface components {
       facilitators: string[]
       /** @description The attendance and session notes for each attendee */
       attendanceAndSessionNotes: components['schemas']['AttendanceAndSessionNotes'][]
+      /** @description The name of the session */
+      sessionName: string
     }
     GroupScheduleOverview: {
       /**

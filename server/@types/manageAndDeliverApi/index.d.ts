@@ -81,6 +81,7 @@ type EditSessionDateAndTimeResponse = components['schemas']['EditSessionDateAndT
 type GroupScheduleOverview = components['schemas']['GroupScheduleOverview']
 type GroupScheduleSession = components['schemas']['GroupScheduleSession']
 type Session = components['schemas']['Session']
+type SessionNotes = components['schemas']['SessionNotes']
 type EditSessionFacilitatorsResponse = components['schemas']['EditSessionFacilitatorsResponse']
 type EditSessionFacilitatorResponse = components['schemas']['EditSessionFacilitatorsResponse']['facilitators']
 type EditSessionFacilitatorsRequest = components['schemas']['EditSessionFacilitatorRequest']
@@ -169,6 +170,7 @@ export type {
   SentenceInformation,
   Session,
   SessionAttendance,
+  SessionNotes,
   SessionScheduleRequest,
   SessionScheduleResponse,
   SessionTime,

@@ -11,6 +11,7 @@ describe('EditSessionPresenter', () => {
       it('returns MultiSelectTableArgs with correct structure', () => {
         const sessionDetails: GroupSessionResponse = {
           pageTitle: 'Session 1',
+          sessionName: 'Session 1',
           code: 'CODE-123',
           sessionType: 'Group',
           attendanceAndSessionNotes: [
@@ -73,6 +74,7 @@ describe('EditSessionPresenter', () => {
       it('returns TableArgs with correct structure', () => {
         const sessionDetails: GroupSessionResponse = {
           pageTitle: 'Session 1',
+          sessionName: 'Session 1',
           code: 'CODE-123',
           sessionType: 'Individual',
           attendanceAndSessionNotes: [
@@ -110,6 +112,7 @@ describe('EditSessionPresenter', () => {
       it('returns Not added when single-referral session notes are blank', () => {
         const sessionDetails: GroupSessionResponse = {
           pageTitle: 'Session 1',
+          sessionName: 'Session 1',
           code: 'CODE-123',
           sessionType: 'Individual',
           attendanceAndSessionNotes: [
@@ -149,6 +152,7 @@ describe('EditSessionPresenter', () => {
       it('returns empty TableArgs', () => {
         const sessionDetails: GroupSessionResponse = {
           pageTitle: 'Session 1',
+          sessionName: 'Session 1',
           code: 'CODE-123',
           sessionType: 'Individual',
           attendanceAndSessionNotes: [],
@@ -172,6 +176,7 @@ describe('EditSessionPresenter', () => {
       it('falls back to to be confirmed for unmapped outcome_type_code values', () => {
         const sessionDetails: GroupSessionResponse = {
           pageTitle: 'Session 1',
+          sessionName: 'Session 1',
           code: 'CODE-123',
           sessionType: 'Group',
           attendanceAndSessionNotes: [
@@ -210,6 +215,7 @@ describe('EditSessionPresenter', () => {
       it('falls back to to be confirmed for no did not attend text', () => {
         const sessionDetails: GroupSessionResponse = {
           pageTitle: 'Session 1',
+          sessionName: 'Session 1',
           code: 'CODE-123',
           sessionType: 'Individual',
           attendanceAndSessionNotes: [
@@ -247,6 +253,7 @@ describe('EditSessionPresenter', () => {
       it('maps did not attend text to not attended tag', () => {
         const sessionDetails: GroupSessionResponse = {
           pageTitle: 'Session 1',
+          sessionName: 'Session 1',
           code: 'CODE-123',
           sessionType: 'Individual',
           attendanceAndSessionNotes: [
@@ -286,6 +293,7 @@ describe('EditSessionPresenter', () => {
   describe('backLinkArgs', () => {
     const sessionDetails: GroupSessionResponse = {
       pageTitle: 'Session 1',
+      sessionName: 'Session 1',
       code: 'group-123',
       sessionType: 'Group',
       attendanceAndSessionNotes: [],

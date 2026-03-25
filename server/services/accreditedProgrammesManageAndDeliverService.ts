@@ -57,6 +57,7 @@ import {
   SentenceInformation,
   Session,
   SessionAttendance,
+  SessionNotes,
   SessionScheduleResponse,
   ThinkingAndBehaviour,
   UpdateAvailability,
@@ -76,19 +77,6 @@ export interface PaginationParams {
   size?: number
   // Sort by property, defaults to ascending order. If descending is required then add ',DESC' at the end of the property you want sorted i.e. ['$PROPERTY_NAME,DESC']
   sort?: string[]
-}
-
-export interface SessionNotesBffResponse {
-  pageTitle: string
-  moduleName: string
-  sessionNumber: number
-  lastUpdatedBy: string
-  lastUpdatedDate: string
-  groupId: string
-  sessionId: string
-  sessionDate: string
-  sessionAttendance: string
-  sessionNotes: string
 }
 
 export interface IAccreditedProgrammesManageAndDeliverService {
@@ -703,16 +691,12 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
     })) as Session
   }
 
-  async getSessionNotes(
-    username: ExpressUsername,
-    sessionId: string,
-    referralId: string,
-  ): Promise<SessionNotesBffResponse> {
+  async getSessionNotes(username: ExpressUsername, sessionId: string, referralId: string): Promise<SessionNotes> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
       path: `/bff/session/${sessionId}/referral/${referralId}/session-notes`,
       headers: { Accept: 'application/json' },
-    })) as SessionNotesBffResponse
+    })) as SessionNotes
   }
 
   async updateSessionAttendees(username: ExpressUsername, sessionId: string, referralIds: string[]): Promise<string> {

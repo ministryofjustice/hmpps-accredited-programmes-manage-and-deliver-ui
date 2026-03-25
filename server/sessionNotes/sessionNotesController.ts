@@ -52,7 +52,11 @@ export default class SessionNotesController extends BaseController {
         attendees: [{ referralId, outcomeCode, sessionNotes: submittedNotes }],
       })
 
-      const redirectQuery = new URLSearchParams({ referralId, saved: 'true' })
+      const redirectQuery = new URLSearchParams({
+        referralId,
+        saved: 'true',
+        personOnProbationName: attendee?.name ?? '',
+      })
       return res.redirect(`${req.path}?${redirectQuery.toString()}`)
     }
 
@@ -60,6 +64,7 @@ export default class SessionNotesController extends BaseController {
       ...sessionNotesBffData,
       isAttendanceHistory: false,
       isSaved: req.query.saved === 'true',
+      personOnProbationName: (req.query.personOnProbationName as string | undefined) || undefined,
     }
 
     const presenter = new SessionNotesPresenter(sessionNotesData)

@@ -4,31 +4,40 @@ import { convertToUrlFriendlyKebabCase } from '../utils/utils'
 export interface SessionNotesData {
   pageTitle: string
   moduleName: string
+  sessionName: string
   sessionNumber: number
-  lastUpdatedBy: string
-  lastUpdatedDate: string
+  lastUpdatedBy?: string
+  lastUpdatedDate?: string
   groupId: string
   sessionId: string
-  sessionDate: string
+  sessionDate?: string
   sessionAttendance: string
-  sessionNotes: string
+  sessionNotes?: string
   isAttendanceHistory: boolean
   isSaved?: boolean
+  personOnProbationName?: string
 }
 
 export default class SessionNotesPresenter {
   constructor(private readonly data: SessionNotesData) {}
 
   get text() {
-    const sessionNameFromTitle = this.data.pageTitle.replace(/^[^:]+:\s*/, '').replace(/\s+session notes$/i, '')
+    const personOnProbationName = this.data.pageTitle.split(':')[0].trim()
+    const successMessageName = this.data.personOnProbationName?.trim() || personOnProbationName
+    const lastUpdatedText =
+      this.data.lastUpdatedBy && this.data.lastUpdatedDate
+        ? `Last updated by ${this.data.lastUpdatedBy} on ${this.data.lastUpdatedDate}.`
+        : 'Last updated details unavailable.'
 
     return {
       headingText: this.data.pageTitle,
-      lastUpdatedText: `Last updated by ${this.data.lastUpdatedBy} on ${this.data.lastUpdatedDate}.`,
+      personOnProbationName,
+      successMessage: `Attendance recorded for ${successMessageName}`,
+      lastUpdatedText,
       updateAttendanceAndNotesButtonText: 'Update attendance and notes',
       attendanceSummaryTitle: 'Attendance summary',
       sessionNotesTitle: 'Session notes',
-      sessionName: sessionNameFromTitle,
+      sessionName: this.data.sessionName,
     }
   }
 
@@ -50,24 +59,7 @@ export default class SessionNotesPresenter {
   }
 
   get pageUrl(): string {
-    const constructURL = this.constructURLFromSessionName()
-
-    if (constructURL) {
-      return `/group/${this.data.groupId}/session/${this.data.sessionId}/${constructURL}-session-notes`
-    }
-
-    const moduleSlug = convertToUrlFriendlyKebabCase(this.data.moduleName)
-    return `/group/${this.data.groupId}/session/${this.data.sessionId}/${moduleSlug}-${this.data.sessionNumber}-session-notes`
-  }
-
-  private constructURLFromSessionName(): string | null {
-    const sessionName = this.text.sessionName.toLowerCase()
-    const isVariation = /(catch-?up|one-to-one|post-programme\s+review)/.test(sessionName)
-
-    if (!isVariation) {
-      return null
-    }
-
-    return convertToUrlFriendlyKebabCase(this.text.sessionName)
+    const sessionSlug = convertToUrlFriendlyKebabCase(this.data.sessionName)
+    return `/group/${this.data.groupId}/session/${this.data.sessionId}/${sessionSlug}-session-notes`
   }
 }

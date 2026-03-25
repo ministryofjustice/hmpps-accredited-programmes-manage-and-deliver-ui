@@ -31,6 +31,7 @@ describe('SessionNotesController', () => {
       accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue({
         pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
         moduleName: 'Getting started',
+        sessionName: 'Introduction to Building Choices',
         sessionNumber: 1,
         lastUpdatedBy: 'John Smith',
         lastUpdatedDate: '19 March 2026',
@@ -82,6 +83,7 @@ describe('SessionNotesController', () => {
       accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue({
         pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
         moduleName: 'Getting started',
+        sessionName: 'Introduction to Building Choices',
         sessionNumber: 1,
         lastUpdatedBy: 'John Smith',
         lastUpdatedDate: '19 March 2026',
@@ -126,7 +128,7 @@ describe('SessionNotesController', () => {
         .expect(302)
         .expect(
           'Location',
-          '/group/111/session/6789/getting-started-1-session-notes?referralId=referral-123&saved=true',
+          '/group/111/session/6789/getting-started-1-session-notes?referralId=referral-123&saved=true&personOnProbationName=Alex+River',
         )
 
       expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).toHaveBeenCalledWith(

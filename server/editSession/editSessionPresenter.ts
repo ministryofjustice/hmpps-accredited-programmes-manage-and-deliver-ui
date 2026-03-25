@@ -55,16 +55,15 @@ export default class EditSessionPresenter {
   }
 
   private get sessionNotesSlug() {
-    const sessionName = this.sessionDetails.pageTitle
-      .trim()
-      .replace(/^Attendance and notes for\s+/i, '')
-      .replace(/\s+session$/i, '')
-
-    return convertToUrlFriendlyKebabCase(sessionName)
+    return convertToUrlFriendlyKebabCase(this.sessionDetails.sessionName)
   }
 
-  private sessionNotesLink(notes: string, referralId: string) {
-    if (!notes?.trim()) {
+  private sessionNotesLink(notes: unknown, referralId: string) {
+    if (typeof notes !== 'string') {
+      return 'Not added'
+    }
+    const text = notes.replace(/<[^>]*>/g, '').trim()
+    if (!text) {
       return 'Not added'
     }
 
