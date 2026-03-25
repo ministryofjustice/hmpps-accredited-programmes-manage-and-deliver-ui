@@ -118,10 +118,16 @@ export default class AddSessionDetailsPresenter {
     return parsedMembers
   }
 
+  get generatePlaceholderSessionDate(): string {
+    return this.isGroupSession
+      ? this.createSessionDetailsFormData?.startDate
+      : this.createSessionDetailsFormData?.startDate || this.sessionDetails.suggestedDate || ''
+  }
+
   get fields() {
     return {
       sessionDate: {
-        value: this.utils.stringValue(this.createSessionDetailsFormData.startDate, 'session-details-date'),
+        value: this.utils.stringValue(this.generatePlaceholderSessionDate, 'session-details-date'),
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'session-details-date'),
       },
       who: {

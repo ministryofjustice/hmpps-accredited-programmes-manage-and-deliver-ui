@@ -20,7 +20,9 @@ export default class AddSessionDetailsView {
       name: 'session-details-date',
 
       hint: {
-        text: 'Enter a date, for example, 10/7/2025, or select one from the calendar.',
+        text: this.presenter.isGroupSession
+          ? 'Enter a date, for example, 10/7/2025, or select one from the calendar.'
+          : 'The date has been set based on the session schedule. To change this, enter a date, for example 10/7/2025, or select one from the calendar.',
       },
       label: {
         text: 'What is the date of the session?',

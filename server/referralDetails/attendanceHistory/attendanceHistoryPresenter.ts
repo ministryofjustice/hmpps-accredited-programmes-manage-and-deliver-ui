@@ -2,6 +2,7 @@ import { AttendanceHistoryResponse, ReferralDetails } from '@manage-and-deliver-
 import ReferralLayoutPresenter, { HorizontalNavValues } from '../../shared/referral/referralLayoutPresenter'
 import { MojAlertComponentArgs } from '../../interfaces/alertComponentArgs'
 import { TableArgs } from '../../utils/govukFrontendTypes'
+import { attendanceTag } from '../../utils/utils'
 
 export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter {
   public readonly personOnProbationName: string
@@ -35,7 +36,7 @@ export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter 
     const hasSessions = attendanceHistory.length > 0
 
     const groupLink = hasGroupCode
-      ? `<a href="/group/${this.attendanceHistory.currentlyAllocatedGroupCode}/sessions-and-attendance" class="govuk-link">group ${currentlyAllocatedGroupCode} Sessions and attendance</a>`
+      ? `<a href="/group/${this.referral.currentlyAllocatedGroupId}/sessions-and-attendance" class="govuk-link">group ${currentlyAllocatedGroupCode} Sessions and attendance</a>`
       : ''
 
     if (hasGroupCode && hasSessions) {
@@ -71,11 +72,13 @@ export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter 
 
   get attendanceHistoryTableArgs(): TableArgs['rows'] {
     return this.attendanceHistory.attendanceHistory.map(session => [
-      { text: session.sessionName },
+      {
+        html: `<a href="/group/${this.referral.currentlyAllocatedGroupId}/session/${session.sessionId}/edit-session?isAttendanceHistory=true&referralId=${this.referralId}" class="govuk-link">${session.sessionName}</a>`,
+      },
       { text: session.groupCode ?? 'N/A' },
       { text: session.date },
       { text: session.time },
-      { text: session.attendanceStatus },
+      { html: attendanceTag(session.attendanceStatus) },
       session.hasNotes
         ? {
             html: `<a href="/session/${session.sessionId}/notes" class="govuk-link">${session.sessionName} attendance and notes</a>`,

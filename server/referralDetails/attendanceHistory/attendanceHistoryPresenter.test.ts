@@ -26,7 +26,9 @@ describe('AttendanceHistoryPresenter', () => {
 
       expect(presenter.tableDescription).toContain("This is Alex River's attendance record and session notes.")
       expect(presenter.tableDescription).toContain('group GRP-001 Sessions and attendance')
-      expect(presenter.tableDescription).toContain('href="/group/GRP-001/sessions-and-attendance"')
+      expect(presenter.tableDescription).toContain(
+        `href="/group/${referralDetails.currentlyAllocatedGroupId}/sessions-and-attendance"`,
+      )
     })
 
     it('should return correct description when has group code but no sessions', () => {
@@ -64,19 +66,23 @@ describe('AttendanceHistoryPresenter', () => {
 
       expect(rows).toHaveLength(2)
       expect(rows[0]).toEqual([
-        { text: 'Pre-group one-to-one' },
+        {
+          html: `<a href="/group/${referralDetails.currentlyAllocatedGroupId}/session/session-1/edit-session?isAttendanceHistory=true&referralId=${referralId}" class="govuk-link">Pre-group one-to-one</a>`,
+        },
         { text: 'GRP-001' },
         { text: '11 July 2025' },
         { text: '10:30am to 11am' },
-        { text: 'Attended' },
+        { html: `<span class="govuk-tag govuk-tag--blue">Attended</span>` },
         { html: '<a href="/session/session-1/notes" class="govuk-link">Pre-group one-to-one attendance and notes</a>' },
       ])
       expect(rows[1]).toEqual([
-        { text: 'Session 1: Introduction' },
+        {
+          html: `<a href="/group/${referralDetails.currentlyAllocatedGroupId}/session/session-2/edit-session?isAttendanceHistory=true&referralId=${referralId}" class="govuk-link">Session 1: Introduction</a>`,
+        },
         { text: 'GRP-001' },
         { text: '18 July 2025' },
         { text: '2pm to 3pm' },
-        { text: 'Not attended' },
+        { html: `<span class="govuk-tag govuk-tag--red">Not attended</span>` },
         { text: 'Not added' },
       ])
     })

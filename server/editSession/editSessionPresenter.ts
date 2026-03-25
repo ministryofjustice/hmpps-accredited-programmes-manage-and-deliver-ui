@@ -16,6 +16,7 @@ export default class EditSessionPresenter {
     readonly successMessage: string | null = null,
     readonly isAttendanceHistory: boolean = false,
     private readonly validationError: FormValidationError | null = null,
+    private readonly attendanceHistoryReferralId: string | null = null,
   ) {}
 
   get text() {
@@ -33,7 +34,7 @@ export default class EditSessionPresenter {
     return {
       text: this.isAttendanceHistory ? 'Back to Attendance history' : 'Back to Sessions and attendance',
       href: this.isAttendanceHistory
-        ? `/group/${this.groupId}/attendance-history`
+        ? `/referral/${this.attendanceHistoryReferralId}/attendance-history`
         : `/group/${this.groupId}/sessions-and-attendance`,
     }
   }
