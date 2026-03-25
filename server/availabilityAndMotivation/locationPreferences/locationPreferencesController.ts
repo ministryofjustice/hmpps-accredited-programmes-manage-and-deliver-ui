@@ -1,17 +1,17 @@
 import { Request, Response } from 'express'
 
 import { DeliveryLocationPreferencesFormData } from '@manage-and-deliver-api'
-import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import AccreditedProgrammesManageAndDeliverService from '../../services/accreditedProgrammesManageAndDeliverService'
 import LocationPreferencesPresenter from './locationPreferencesPresenter'
 import LocationPreferencesView from './locationPreferencesView'
-import { FormValidationError } from '../utils/formValidationError'
+import { FormValidationError } from '../../utils/formValidationError'
 import AddLocationPreferenceForm from './addLocationPreferenceForm'
 import AdditionalPdusPresenter from './additionalPdusPresenter'
 import AdditionalPdusView from './additionalPdusView'
 import CannotAttendLocationsPresenter from './cannotAttendLocationsPresenter'
 import CannotAttendLocationsView from './cannotAttendLocationsView'
-import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
-import BaseController from '../shared/baseController'
+import { PrimaryNavigationTab } from '../../shared/routes/layoutPresenter'
+import BaseController from '../../shared/baseController'
 
 export default class LocationPreferencesController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -168,7 +168,7 @@ export default class LocationPreferencesController extends BaseController {
         }
         // Clear session at end of journey
         req.session.locationPreferenceFormData = null
-        return res.redirect(`/referral-details/${referralId}/location?preferredLocationUpdated=true#location`)
+        return res.redirect(`/referral/${referralId}/location?preferredLocationUpdated=true#location`)
       }
     }
 

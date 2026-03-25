@@ -1,5 +1,5 @@
-import { SummaryListArgs } from '../utils/govukFrontendTypes'
-import ViewUtils from '../utils/viewUtils'
+import { SummaryListArgs } from '../../utils/govukFrontendTypes'
+import ViewUtils from '../../utils/viewUtils'
 import LocationPresenter from './locationPresenter'
 
 export default class LocationView {
@@ -7,7 +7,7 @@ export default class LocationView {
 
   get getPreferredLocationsAsSummaryListArgs(): SummaryListArgs {
     const summary = this.presenter.preferredLocationsSummary()
-    const addLocationPreferenceHref = `/referral/${this.presenter.referralDetails.id}/add-location-preferences`
+    const addLocationPreferenceHref = `/referral/${this.presenter.referral.id}/add-location-preferences`
     return ViewUtils.summaryListArgsWithSummaryCard(
       summary.summary,
       summary.title,
@@ -28,12 +28,14 @@ export default class LocationView {
 
   get renderArgs(): [string, Record<string, unknown>] {
     return [
-      'referralDetails/referralDetails',
+      'availabilityAndMotivation/availabilityAndMotivation',
       {
         presenter: this.presenter,
         getPreferredLocationsAsSummaryListArgs: this.getPreferredLocationsAsSummaryListArgs,
         isPreferredLocationUpdated: this.presenter.isPreferredLocationUpdated,
         successMessageArgs: this.successMessageArgs(),
+        getVerticalSubNavArgs: this.presenter.verticalSubNavArgs,
+        groupAllocationTextArgs: this.presenter.groupAllocationTextArgs,
       },
     ]
   }

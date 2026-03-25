@@ -3,15 +3,15 @@ import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import request from 'supertest'
 import { SessionData } from 'express-session'
-import { appWithAllRoutes } from '../routes/testutils/appSetup'
-import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
-import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
-import deliveryLocationPreferencesFormDataFactory from '../testutils/factories/deliveryLocationPreferences/deliveryLocationPreferencesFormDataFactory'
-import createDeliveryLocationPreferencesFactory from '../testutils/factories/deliveryLocationPreferences/createDeliveryLocationPreferencesFactory'
-import TestUtils from '../testutils/testUtils'
+import { appWithAllRoutes } from '../../routes/testutils/appSetup'
+import AccreditedProgrammesManageAndDeliverService from '../../services/accreditedProgrammesManageAndDeliverService'
+import referralDetailsFactory from '../../testutils/factories/referralDetailsFactory'
+import deliveryLocationPreferencesFormDataFactory from '../../testutils/factories/deliveryLocationPreferences/deliveryLocationPreferencesFormDataFactory'
+import createDeliveryLocationPreferencesFactory from '../../testutils/factories/deliveryLocationPreferences/createDeliveryLocationPreferencesFactory'
+import TestUtils from '../../testutils/testUtils'
 
-jest.mock('../services/accreditedProgrammesManageAndDeliverService')
-jest.mock('../data/hmppsAuthClient')
+jest.mock('../../services/accreditedProgrammesManageAndDeliverService')
+jest.mock('../../data/hmppsAuthClient')
 
 const hmppsAuthClientBuilder = jest.fn()
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
@@ -256,7 +256,7 @@ describe('location-preferences', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Redirecting to /referral-details/${referralId}/location?preferredLocationUpdated=true#location`,
+            `Redirecting to /referral/${referralId}/location?preferredLocationUpdated=true#location`,
           )
         })
 
@@ -295,7 +295,7 @@ describe('location-preferences', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Redirecting to /referral-details/${referralId}/location?preferredLocationUpdated=true#location`,
+            `Redirecting to /referral/${referralId}/location?preferredLocationUpdated=true#location`,
           )
         })
 

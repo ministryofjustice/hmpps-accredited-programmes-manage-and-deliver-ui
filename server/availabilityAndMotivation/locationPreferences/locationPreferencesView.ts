@@ -1,6 +1,6 @@
 import LocationPreferencesPresenter from './locationPreferencesPresenter'
-import ViewUtils from '../utils/viewUtils'
-import { RadiosArgs } from '../utils/govukFrontendTypes'
+import ViewUtils from '../../utils/viewUtils'
+import { RadiosArgs } from '../../utils/govukFrontendTypes'
 
 export default class LocationPreferencesView {
   private primaryPduName = `No Primary Probation Delivery Unit Found`
@@ -86,7 +86,7 @@ export default class LocationPreferencesView {
         checkboxArgs: this.checkboxArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         locationButtonFormAction: this.presenter.locationButtonFormAction,
-        cancelLink: `/referral-details/${this.presenter.referralId}/location/#location`,
+        cancelLink: `/referral/${this.presenter.referralId}/location/#location`,
         backLinkArgs: this.backLinkArgs(),
       },
     ]

@@ -95,7 +95,7 @@ export default class AddAvailabilityView {
 
   get renderArgs(): [string, Record<string, unknown>] {
     return [
-      'referralDetails/addAvailability/addAvailability',
+      'availabilityAndMotivation/addAvailability/addAvailability',
       {
         presenter: this.presenter,
         checkboxArgs: this.checkboxArgs(),

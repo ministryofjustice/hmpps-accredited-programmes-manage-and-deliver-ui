@@ -1,9 +1,9 @@
 import { randomUUID } from 'crypto'
 
 import LocationPreferencesPresenter from './locationPreferencesPresenter'
-import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
-import deliveryLocationPreferencesFormDataFactory from '../testutils/factories/deliveryLocationPreferences/deliveryLocationPreferencesFormDataFactory'
-import createDeliveryLocationPreferencesFactory from '../testutils/factories/deliveryLocationPreferences/createDeliveryLocationPreferencesFactory'
+import referralDetailsFactory from '../../testutils/factories/referralDetailsFactory'
+import deliveryLocationPreferencesFormDataFactory from '../../testutils/factories/deliveryLocationPreferences/deliveryLocationPreferencesFormDataFactory'
+import createDeliveryLocationPreferencesFactory from '../../testutils/factories/deliveryLocationPreferences/createDeliveryLocationPreferencesFactory'
 
 afterEach(() => {
   jest.restoreAllMocks()
@@ -24,7 +24,7 @@ describe('locationsPreferencesPresenter.', () => {
       updateData,
     )
 
-    expect(presenter.backLinkUri).toEqual(`/referral-details/${referralId}/location#location`)
+    expect(presenter.backLinkUri).toEqual(`/referral/${referralId}/location#location`)
   })
 
   it('The locationButtonFormAction uri should be set correctly based on the referral id', () => {
@@ -37,7 +37,7 @@ describe('locationsPreferencesPresenter.', () => {
       updateData,
     )
 
-    expect(presenter.backLinkUri).toEqual(`/referral-details/${referralId}/location#location`)
+    expect(presenter.backLinkUri).toEqual(`/referral/${referralId}/location#location`)
   })
 
   describe('hasPreviouslySelectedOtherPdus.', () => {

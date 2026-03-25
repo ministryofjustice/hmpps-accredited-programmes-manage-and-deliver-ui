@@ -4,8 +4,6 @@ import { ReferralDetails } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import AdditionalInformationPresenter from './additionalInformationPresenter'
 import AdditionalInformationView from './additionalInformationView'
-import LocationPresenter from './locationPresenter'
-import LocationView from './locationView'
 import OffenceHistoryPresenter from './offenceHistoryPresenter'
 import OffenceHistoryView from './offenceHistoryView'
 import PersonalDetailsPresenter from './personalDetailsPresenter'
@@ -121,32 +119,6 @@ export default class ReferralDetailsController extends BaseController {
       isCohortUpdated === 'true',
     )
     const view = new SentenceInformationView(presenter)
-
-    req.session.originPage = req.path
-
-    return this.renderPage(res, view, sharedReferralDetailsData)
-  }
-
-  async showLocationPage(req: Request, res: Response): Promise<void> {
-    const { id } = req.params
-    const { username } = req.user
-    const { isCohortUpdated, isLdcUpdated, preferredLocationUpdated } = req.query
-    const subNavValue = 'location'
-
-    const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
-
-    const deliveryLocationPreferences =
-      await this.accreditedProgrammesManageAndDeliverService.getDeliveryLocationPreferences(username, id)
-
-    const presenter = new LocationPresenter(
-      sharedReferralDetailsData,
-      subNavValue,
-      deliveryLocationPreferences,
-      preferredLocationUpdated === 'true',
-      isLdcUpdated === 'true',
-      isCohortUpdated === 'true',
-    )
-    const view = new LocationView(presenter)
 
     req.session.originPage = req.path
 

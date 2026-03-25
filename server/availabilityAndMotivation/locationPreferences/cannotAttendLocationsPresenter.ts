@@ -1,6 +1,6 @@
 import { DeliveryLocationPreferencesFormData, ReferralDetails } from '@manage-and-deliver-api'
-import PresenterUtils from '../utils/presenterUtils'
-import { FormValidationError } from '../utils/formValidationError'
+import PresenterUtils from '../../utils/presenterUtils'
+import { FormValidationError } from '../../utils/formValidationError'
 
 export default class CannotAttendLocationsPresenter {
   constructor(

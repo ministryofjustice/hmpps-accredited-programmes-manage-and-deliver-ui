@@ -48,8 +48,16 @@ export default class AvailabilityAndMotivationPresenter extends ReferralLayoutPr
           },
         },
         {
+          text: 'Location',
+          href: `/referral/${this.referral.id}/location/#location`,
+          active: this.subNavValue === AvailabilityAndMotivationPageSelection.LocationTab,
+          attributes: {
+            id: 'location',
+          },
+        },
+        {
           text: 'Motivation, background and non-associations',
-          href: `/referral/${this.referral.id}/motivation-background-and-non-associations`,
+          href: `/referral/${this.referral.id}/motivation-background-and-non-associations/#motivation-background-and-non-associations`,
           active: this.subNavValue === AvailabilityAndMotivationPageSelection.MotivationBackgroundAndNonAssociationsTab,
           attributes: {
             id: 'motivation-background-and-non-associations',

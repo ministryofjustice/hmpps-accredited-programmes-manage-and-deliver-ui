@@ -1,9 +1,9 @@
 import { Request } from 'express'
 import { body, ValidationChain } from 'express-validator'
 import { PreferredDeliveryLocation } from '@manage-and-deliver-api'
-import errorMessages from '../utils/errorMessages'
-import { FormData } from '../utils/forms/formData'
-import FormUtils from '../utils/formUtils'
+import errorMessages from '../../utils/errorMessages'
+import { FormData } from '../../utils/forms/formData'
+import FormUtils from '../../utils/formUtils'
 
 export type LocationFormData = {
   referralId: string
