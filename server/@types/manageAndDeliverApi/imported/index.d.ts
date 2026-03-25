@@ -3986,6 +3986,11 @@ export interface components {
       facilitators: components['schemas']['UserTeamMember'][]
       /** @description Details of the Group's members via their Referrals */
       groupMembers: components['schemas']['GroupMember'][]
+      /**
+       * Format: date
+       * @description Suggested date for the next one to one session
+       */
+      suggestedDate: string
     }
     /** @description Information identifying the group. */
     GroupDetailsResponse: {
