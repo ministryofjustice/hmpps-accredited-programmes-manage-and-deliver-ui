@@ -35,7 +35,7 @@ export default AttendanceHistoryResponseFactory.define(({ sequence }) => ({
       groupCode: 'GRP-001',
       date: '11 July 2025',
       time: '10:30am to 11am',
-      attendanceStatus: 'Attended',
+      attendanceStatus: 'Attended - Complied',
       hasNotes: true,
     },
     {
@@ -44,7 +44,7 @@ export default AttendanceHistoryResponseFactory.define(({ sequence }) => ({
       groupCode: 'GRP-001',
       date: '18 July 2025',
       time: '2pm to 3pm',
-      attendanceStatus: 'Not attended',
+      attendanceStatus: 'Did not attend',
       hasNotes: false,
     },
   ],
