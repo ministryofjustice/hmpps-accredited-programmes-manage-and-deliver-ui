@@ -52,6 +52,7 @@ export default class AvailabilityView {
         successMessageArgs: this.successMessageArgs(),
         generalAvailabilityText: this.generalAvailabilityText,
         getVerticalSubNavArgs: this.presenter.verticalSubNavArgs,
+        groupAllocationTextArgs: this.presenter.groupAllocationTextArgs,
       },
     ]
   }

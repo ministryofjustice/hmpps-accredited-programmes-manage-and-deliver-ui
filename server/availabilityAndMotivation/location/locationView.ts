@@ -35,6 +35,7 @@ export default class LocationView {
         isPreferredLocationUpdated: this.presenter.isPreferredLocationUpdated,
         successMessageArgs: this.successMessageArgs(),
         getVerticalSubNavArgs: this.presenter.verticalSubNavArgs,
+        groupAllocationTextArgs: this.presenter.groupAllocationTextArgs,
       },
     ]
   }
