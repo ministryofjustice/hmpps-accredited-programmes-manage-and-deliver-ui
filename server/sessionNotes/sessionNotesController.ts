@@ -62,7 +62,8 @@ export default class SessionNotesController extends BaseController {
 
     const sessionNotesData: SessionNotesData = {
       ...sessionNotesBffData,
-      isAttendanceHistory: false,
+      referralId,
+      isAttendanceHistory: req.query.isAttendanceHistory === 'true',
       isSaved: req.query.saved === 'true',
       personOnProbationName: (req.query.personOnProbationName as string | undefined) || undefined,
     }

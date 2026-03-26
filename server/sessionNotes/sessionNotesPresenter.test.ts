@@ -6,6 +6,7 @@ describe('SessionNotesPresenter', () => {
     moduleName: 'Getting started',
     sessionName: 'Building Motivation',
     sessionNumber: 1,
+    referralId: 'referral-123',
     lastUpdatedBy: 'Berta Tonka',
     lastUpdatedDate: '2025-09-03',
     groupId: 'b2c3d4e5-f6a7-8901-bcde-f23456789012',
@@ -123,5 +124,23 @@ describe('SessionNotesPresenter', () => {
     const presenter = new SessionNotesPresenter(buildData({ isSaved: false }))
 
     expect(presenter.successMessageSummary).toBeNull()
+  })
+
+  it('returns backlink to sessions and attendance when opened from group session flow', () => {
+    const presenter = new SessionNotesPresenter(buildData({ isAttendanceHistory: false }))
+
+    expect(presenter.backLinkArgs).toEqual({
+      text: 'Back to Sessions and attendance',
+      href: '/group/b2c3d4e5-f6a7-8901-bcde-f23456789012/sessions-and-attendance',
+    })
+  })
+
+  it('returns backlink to attendance history when opened from PoP attendance history flow', () => {
+    const presenter = new SessionNotesPresenter(buildData({ isAttendanceHistory: true }))
+
+    expect(presenter.backLinkArgs).toEqual({
+      text: 'Back to Attendance history',
+      href: '/referral/referral-123/attendance-history',
+    })
   })
 })

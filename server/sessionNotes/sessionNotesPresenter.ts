@@ -7,6 +7,7 @@ export interface SessionNotesData {
   moduleName: string
   sessionName: string
   sessionNumber: number
+  referralId: string
   lastUpdatedBy?: string
   lastUpdatedDate?: string
   groupId: string
@@ -60,9 +61,9 @@ export default class SessionNotesPresenter {
 
   get backLinkArgs() {
     return {
-      text: this.data.isAttendanceHistory === false ? 'Back to Attendance history' : `Back to ${this.text.sessionName}`,
+      text: this.data.isAttendanceHistory ? 'Back to Attendance history' : 'Back to Sessions and attendance',
       href: this.data.isAttendanceHistory
-        ? `/group/${this.data.groupId}/attendance-history`
+        ? `/referral/${this.data.referralId}/attendance-history`
         : `/group/${this.data.groupId}/sessions-and-attendance`,
     }
   }
