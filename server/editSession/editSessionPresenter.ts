@@ -56,7 +56,8 @@ export default class EditSessionPresenter {
   }
 
   private get sessionNotesSlug() {
-    return convertToUrlFriendlyKebabCase(this.sessionDetails.sessionName)
+    const slugSource = this.sessionDetails.sessionName || this.sessionDetails.pageTitle
+    return convertToUrlFriendlyKebabCase(slugSource) || 'session'
   }
 
   private sessionNotesLink(notes: unknown, referralId: string) {
@@ -73,7 +74,7 @@ export default class EditSessionPresenter {
   }
 
   private sessionNotesPagePath(referralId: string): string {
-    return `/referral/${referralId}/session-notes/${this.sessionNotesSlug}`
+    return `/group/${this.groupId}/session/${this.sessionId}/${this.sessionNotesSlug}-session-notes?referralId=${encodeURIComponent(referralId)}`
   }
 
   get attendanceTableArgs(): MultiSelectTableArgs | TableArgs {

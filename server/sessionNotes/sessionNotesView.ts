@@ -53,7 +53,7 @@ export default class SessionNotesView {
         backLinkArgs: this.presenter.backLinkArgs,
         notesBodyArgs: this.notesBodyArgs,
         text: this.presenter.text,
-        isSaved: this.presenter.sessionNotesData.isSaved,
+        successMessageSummary: this.presenter.successMessageSummary,
       },
     ]
   }

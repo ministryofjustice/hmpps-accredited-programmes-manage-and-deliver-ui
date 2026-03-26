@@ -145,5 +145,31 @@ describe('SessionNotesController', () => {
         },
       )
     })
+
+    it('shows success alert when saved flag is present', async () => {
+      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue({
+        pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
+        moduleName: 'Getting started',
+        sessionName: 'Introduction to Building Choices',
+        sessionNumber: 1,
+        lastUpdatedBy: 'John Smith',
+        lastUpdatedDate: '19 March 2026',
+        groupId: 'd193bf89-c98b-4e92-b842-3c1b3e5f5e4a',
+        sessionId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+        sessionDate: '21 July 2025',
+        sessionAttendance: 'Attended, failed to comply',
+        sessionNotes: 'Participant engaged well.',
+      })
+
+      await request(app)
+        .get(
+          '/group/111/session/6789/getting-started-1-session-notes?referralId=referral-123&saved=true&personOnProbationName=Alex+River',
+        )
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Attendance recorded for Alex River')
+          expect(res.text).toContain('moj-alert')
+        })
+    })
   })
 })

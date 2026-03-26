@@ -2,6 +2,7 @@
 
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "moj/components/alert/macro.njk" import mojAlert %}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
@@ -15,13 +16,12 @@
 <form id="session-notes-form" method="post">
   <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 <div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds govuk-!-margin-bottom-0">
+   {% if successMessageSummary %}
+      {{ mojAlert(successMessageSummary) }}
+    {% endif %}</div>
   <div class="govuk-grid-column-full">
-    {{ mojSubNavigation(serviceNavigationArgs) }}
-      {% if isSaved %}
-      {{ govukInsetText({
-        text: text.successMessage
-      }) }}
-    {% endif %}
+     
 {{ mojPageHeaderActions({
      classes: "govuk-!-margin-bottom-0",
   heading: {

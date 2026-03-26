@@ -1,5 +1,6 @@
 import attendanceOptionText from '../utils/attendanceUtils'
 import { convertToUrlFriendlyKebabCase } from '../utils/utils'
+import { MojAlertComponentArgs } from '../interfaces/alertComponentArgs'
 
 export interface SessionNotesData {
   pageTitle: string
@@ -38,6 +39,18 @@ export default class SessionNotesPresenter {
       attendanceSummaryTitle: 'Attendance summary',
       sessionNotesTitle: 'Session notes',
       sessionName: this.data.sessionName,
+    }
+  }
+
+  get successMessageSummary(): MojAlertComponentArgs | null {
+    if (!this.data.isSaved) return null
+
+    return {
+      title: '',
+      text: this.text.successMessage,
+      variant: 'success',
+      dismissible: true,
+      showTitleAsHeading: true,
     }
   }
 

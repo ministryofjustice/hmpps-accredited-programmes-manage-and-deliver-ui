@@ -106,4 +106,22 @@ describe('SessionNotesPresenter', () => {
       attendanceState: '<span class="govuk-tag govuk-tag--yellow">Attended - failed to comply</span>',
     })
   })
+
+  it('returns successMessageSummary when saved', () => {
+    const presenter = new SessionNotesPresenter(buildData({ isSaved: true, personOnProbationName: 'Alex River' }))
+
+    expect(presenter.successMessageSummary).toEqual({
+      title: '',
+      text: 'Attendance recorded for Alex River',
+      variant: 'success',
+      dismissible: true,
+      showTitleAsHeading: true,
+    })
+  })
+
+  it('returns null successMessageSummary when not saved', () => {
+    const presenter = new SessionNotesPresenter(buildData({ isSaved: false }))
+
+    expect(presenter.successMessageSummary).toBeNull()
+  })
 })
