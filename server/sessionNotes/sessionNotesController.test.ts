@@ -26,7 +26,7 @@ beforeEach(() => {
     },
   })
 })
-
+// tests for session notes controller are in sessionNotesController.test.ts, this file is for testing the presenter and form validation logic
 describe('SessionNotesController', () => {
   describe('GET /group/:groupId/session/:sessionId/:sessionSlug/session-notes', () => {
     it('renders session notes from BFF', async () => {
