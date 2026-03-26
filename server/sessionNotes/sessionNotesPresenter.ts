@@ -16,6 +16,7 @@ export interface SessionNotesData {
   sessionAttendance: string
   sessionNotes?: string
   isAttendanceHistory: boolean
+  source?: string
   isSaved?: boolean
   personOnProbationName?: string
 }
@@ -60,6 +61,13 @@ export default class SessionNotesPresenter {
   }
 
   get backLinkArgs() {
+    if (this.data.source === 'edit-session') {
+      return {
+        text: `Back to ${this.data.moduleName}`,
+        href: `/group/${this.data.groupId}/session/${this.data.sessionId}/edit-session`,
+      }
+    }
+
     return {
       text: this.data.isAttendanceHistory ? 'Back to Attendance history' : 'Back to Sessions and attendance',
       href: this.data.isAttendanceHistory

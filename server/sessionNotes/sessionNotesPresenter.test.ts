@@ -135,6 +135,15 @@ describe('SessionNotesPresenter', () => {
     })
   })
 
+  it('returns backlink to edit session when opened from edit session', () => {
+    const presenter = new SessionNotesPresenter(buildData({ source: 'edit-session' }))
+
+    expect(presenter.backLinkArgs).toEqual({
+      text: 'Back to Getting started',
+      href: '/group/b2c3d4e5-f6a7-8901-bcde-f23456789012/session/c3d4e5f6-a7b8-9012-cdef-345678901234/edit-session',
+    })
+  })
+
   it('returns backlink to attendance history when opened from PoP attendance history flow', () => {
     const presenter = new SessionNotesPresenter(buildData({ isAttendanceHistory: true }))
 

@@ -50,7 +50,7 @@ describe('EditSessionPresenter', () => {
                 { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
                 { html: '<span class="govuk-tag govuk-tag--blue">Attended - Complied</span>' },
                 {
-                  html: '<a href="/group/group-123/session/session-456/session-1-session-notes?referralId=123">Session 1 notes</a>',
+                  html: '<a href="/group/group-123/session/session-456/session-1-session-notes?referralId=123&source=edit-session">Session 1 notes</a>',
                 },
               ],
             },
@@ -61,7 +61,7 @@ describe('EditSessionPresenter', () => {
                 { html: '<a href="/referral-details/456/personal-details">Jane Doe</a> CRN002' },
                 { html: '<span class="govuk-tag govuk-tag--grey">To be confirmed</span>' },
                 {
-                  html: '<a href="/group/group-123/session/session-456/session-1-session-notes?referralId=456">Session 1 notes</a>',
+                  html: '<a href="/group/group-123/session/session-456/session-1-session-notes?referralId=456&source=edit-session">Session 1 notes</a>',
                 },
               ],
             },
@@ -102,7 +102,7 @@ describe('EditSessionPresenter', () => {
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
               { html: '<span class="govuk-tag govuk-tag--yellow">Attended - failed to comply</span>' },
               {
-                html: '<a href="/group/group-123/session/session-456/session-1-session-notes?referralId=123">Session 1 notes</a>',
+                html: '<a href="/group/group-123/session/session-456/session-1-session-notes?referralId=123&source=edit-session">Session 1 notes</a>',
               },
             ],
           ],
@@ -240,7 +240,7 @@ describe('EditSessionPresenter', () => {
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
               { html: '<span class="govuk-tag govuk-tag--blue">Attended - Complied</span>' },
               {
-                html: '<a href="/group/group-123/session/session-456/pre-group-one-to-one-session-notes?referralId=123">Pre-group one-to-one notes</a>',
+                html: '<a href="/group/group-123/session/session-456/pre-group-one-to-one-session-notes?referralId=123&source=edit-session">Pre-group one-to-one notes</a>',
               },
             ],
           ],
@@ -281,7 +281,7 @@ describe('EditSessionPresenter', () => {
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
               { html: '<span class="govuk-tag govuk-tag--grey">To be confirmed</span>' },
               {
-                html: '<a href="/group/group-123/session/session-456/session-1-session-notes?referralId=123">Session 1 notes</a>',
+                html: '<a href="/group/group-123/session/session-456/session-1-session-notes?referralId=123&source=edit-session">Session 1 notes</a>',
               },
             ],
           ],
@@ -319,7 +319,7 @@ describe('EditSessionPresenter', () => {
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
               { html: '<span class="govuk-tag govuk-tag--grey">To be confirmed</span>' },
               {
-                html: '<a href="/group/group-123/session/session-456/session-1-session-notes?referralId=123">Session 1 notes</a>',
+                html: '<a href="/group/group-123/session/session-456/session-1-session-notes?referralId=123&source=edit-session">Session 1 notes</a>',
               },
             ],
           ],
@@ -357,7 +357,7 @@ describe('EditSessionPresenter', () => {
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
               { html: '<span class="govuk-tag govuk-tag--red">Not attended</span>' },
               {
-                html: '<a href="/group/group-123/session/session-456/session-1-session-notes?referralId=123">Session 1 notes</a>',
+                html: '<a href="/group/group-123/session/session-456/session-1-session-notes?referralId=123&source=edit-session">Session 1 notes</a>',
               },
             ],
           ],

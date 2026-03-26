@@ -19,6 +19,8 @@ export default class SessionNotesController extends BaseController {
     const { username } = req.user
     const { sessionId } = req.params
     const referralId = req.query.referralId as string | undefined
+    const source = req.query.source as string | undefined
+    const isAttendanceHistory = req.query.isAttendanceHistory === 'true'
 
     if (!referralId) {
       return res.redirect(`/group/${req.params.groupId}/session/${sessionId}/edit-session`)
@@ -51,6 +53,15 @@ export default class SessionNotesController extends BaseController {
         saved: 'true',
         personOnProbationName: attendee?.name ?? '',
       })
+
+      if (source === 'edit-session') {
+        redirectQuery.set('source', source)
+      }
+
+      if (isAttendanceHistory) {
+        redirectQuery.set('isAttendanceHistory', 'true')
+      }
+
       return res.redirect(`${req.path}?${redirectQuery.toString()}`)
     }
 
@@ -63,7 +74,8 @@ export default class SessionNotesController extends BaseController {
     const sessionNotesData: SessionNotesData = {
       ...sessionNotesBffData,
       referralId,
-      isAttendanceHistory: req.query.isAttendanceHistory === 'true',
+      isAttendanceHistory,
+      source,
       isSaved: req.query.saved === 'true',
       personOnProbationName: (req.query.personOnProbationName as string | undefined) || undefined,
     }
