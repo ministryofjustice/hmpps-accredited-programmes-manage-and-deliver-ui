@@ -30,6 +30,7 @@ export default class SessionNotesController extends BaseController {
     }
 
     if (req.method === 'POST') {
+      const sessionNotesForm = new SessionNotesForm(req)
       const submittedNotes = ((req.body.sessionNotes as string | undefined) || '').trim()
       const validationError = this.validateSessionNotes(submittedNotes)
 
@@ -68,6 +69,8 @@ export default class SessionNotesController extends BaseController {
       await this.accreditedProgrammesManageAndDeliverService.createSessionAttendance(username, sessionId, {
         attendees: [{ referralId, outcomeCode, sessionNotes: submittedNotes }],
       })
+
+      sessionNotesForm.clearCachedSessionNotes(sessionId, referralId)
 
       const redirectQuery = new URLSearchParams({
         referralId,

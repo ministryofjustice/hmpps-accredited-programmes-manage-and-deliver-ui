@@ -62,4 +62,38 @@ describe('SessionNotesForm', () => {
       data: sessionNotesData,
     })
   })
+
+  it('clears cached session notes when session and referral match', () => {
+    const req = buildRequest({
+      sessionNotesCache: {
+        sessionId: 'session-456',
+        referralId: 'referral-123',
+        data: sessionNotesData,
+      },
+    })
+    const form = new SessionNotesForm(req)
+
+    form.clearCachedSessionNotes('session-456', 'referral-123')
+
+    expect(req.session.sessionNotesCache).toBeUndefined()
+  })
+
+  it('does not clear cached session notes when session or referral do not match', () => {
+    const req = buildRequest({
+      sessionNotesCache: {
+        sessionId: 'session-456',
+        referralId: 'referral-123',
+        data: sessionNotesData,
+      },
+    })
+    const form = new SessionNotesForm(req)
+
+    form.clearCachedSessionNotes('session-789', 'referral-123')
+
+    expect(req.session.sessionNotesCache).toEqual({
+      sessionId: 'session-456',
+      referralId: 'referral-123',
+      data: sessionNotesData,
+    })
+  })
 })

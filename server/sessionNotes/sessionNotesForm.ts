@@ -19,4 +19,11 @@ export default class SessionNotesForm {
       data,
     }
   }
+
+  clearCachedSessionNotes(sessionId: string, referralId: string): void {
+    const cache = this.request.session.sessionNotesCache
+    if (cache && cache.sessionId === sessionId && cache.referralId === referralId) {
+      delete this.request.session.sessionNotesCache
+    }
+  }
 }

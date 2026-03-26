@@ -1,5 +1,6 @@
 import { Express } from 'express'
 import request from 'supertest'
+import { SessionData } from 'express-session'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import TestUtils from '../testutils/testUtils'
@@ -145,6 +146,87 @@ describe('SessionNotesController', () => {
             },
           ],
         },
+      )
+    })
+
+    it('clears cached session notes after saving so redirected page reloads fresh data', async () => {
+      const sessionData: Partial<SessionData> = {
+        sessionNotesCache: {
+          sessionId: '6789',
+          referralId: 'referral-123',
+          data: {
+            pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
+            moduleName: 'Getting started',
+            sessionName: 'Introduction to Building Choices',
+            sessionNumber: 1,
+            lastUpdatedBy: 'John Smith',
+            lastUpdatedDate: '19 March 2026',
+            groupId: 'd193bf89-c98b-4e92-b842-3c1b3e5f5e4a',
+            sessionId: '6789',
+            sessionDate: '21 July 2025',
+            sessionAttendance: 'Attended, failed to comply',
+            sessionNotes: 'Existing note.',
+          },
+        },
+      }
+
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue({
+        sessionTitle: 'Getting started 1',
+        groupRegionName: 'North East',
+        people: [
+          {
+            referralId: 'referral-123',
+            name: 'Alex River',
+            crn: 'X12345',
+            attendance: {
+              code: 'AFTC',
+              text: 'Attended, failed to comply',
+            },
+            sessionNotes: 'Existing note.',
+            options: [],
+          },
+        ],
+      })
+
+      accreditedProgrammesManageAndDeliverService.createSessionAttendance.mockResolvedValue({
+        attendees: [
+          {
+            referralId: 'referral-123',
+            outcomeCode: 'AFTC',
+            sessionNotes: 'Updated note',
+          },
+        ],
+      })
+
+      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue({
+        pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
+        moduleName: 'Getting started',
+        sessionName: 'Introduction to Building Choices',
+        sessionNumber: 1,
+        lastUpdatedBy: 'Jane Smith',
+        lastUpdatedDate: '20 March 2026',
+        groupId: 'd193bf89-c98b-4e92-b842-3c1b3e5f5e4a',
+        sessionId: '6789',
+        sessionDate: '21 July 2025',
+        sessionAttendance: 'Attended, failed to comply',
+        sessionNotes: 'Updated note',
+      })
+
+      const agent = request.agent(app)
+
+      await agent
+        .post('/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123')
+        .send({ sessionNotes: 'Updated note' })
+        .expect(302)
+
+      await agent.get('/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123').expect(200)
+
+      expect(accreditedProgrammesManageAndDeliverService.getSessionNotes).toHaveBeenCalledWith(
+        'user1',
+        '6789',
+        'referral-123',
       )
     })
 
