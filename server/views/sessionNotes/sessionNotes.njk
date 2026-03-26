@@ -79,6 +79,9 @@
 
         <section>
           <h2 class="govuk-heading-m">{{ text.sessionNotesTitle }}</h2>
+          {% if showNoNotesAddedMessage %}
+            <p class="govuk-body">No notes added</p>
+          {% endif %}
           {{ govukTextarea(textareaArgs) }}
         </section>
       </form>

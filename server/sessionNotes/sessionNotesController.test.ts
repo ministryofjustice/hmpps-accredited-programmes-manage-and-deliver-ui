@@ -192,6 +192,7 @@ describe('SessionNotesController', () => {
         .get('/group/111/session/6789/getting-started-1-session-notes?referralId=referral-123')
         .expect(200)
         .expect(res => {
+          expect(res.text).toContain('No notes added')
           expect(res.text).toContain('id="sessionNotes"')
           expect(res.text).toContain('name="sessionNotes"')
         })

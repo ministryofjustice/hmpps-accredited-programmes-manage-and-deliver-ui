@@ -54,6 +54,11 @@ export default class SessionNotesView {
     }
   }
 
+  private get showNoNotesAddedMessage(): boolean {
+    const { value } = this.presenter.fields.sessionNotes
+    return value.trim().length === 0
+  }
+
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       'sessionNotes/sessionNotes',
@@ -61,6 +66,7 @@ export default class SessionNotesView {
         backLinkArgs: this.presenter.backLinkArgs,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         notesBodyArgs: this.notesBodyArgs,
+        showNoNotesAddedMessage: this.showNoNotesAddedMessage,
         textareaArgs: this.textareaArgs,
         text: this.presenter.text,
         successMessageSummary: this.presenter.successMessageSummary,
