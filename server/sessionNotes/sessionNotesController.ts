@@ -3,6 +3,8 @@ import { SessionAttendance } from '@manage-and-deliver-api'
 import BaseController from '../shared/baseController'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import { FormValidationError } from '../utils/formValidationError'
+import errorMessages from '../utils/errorMessages'
 import SessionNotesView from './sessionNotesView'
 import SessionNotesPresenter, { SessionNotesData } from './sessionNotesPresenter'
 
@@ -28,6 +30,31 @@ export default class SessionNotesController extends BaseController {
 
     if (req.method === 'POST') {
       const submittedNotes = ((req.body.sessionNotes as string | undefined) || '').trim()
+      const validationError = this.validateSessionNotes(submittedNotes)
+
+      if (validationError) {
+        res.status(400)
+
+        const sessionNotesBffData = await this.accreditedProgrammesManageAndDeliverService.getSessionNotes(
+          username,
+          sessionId,
+          referralId,
+        )
+
+        return this.renderSessionNotesPage(
+          res,
+          {
+            ...sessionNotesBffData,
+            referralId,
+            isAttendanceHistory,
+            source,
+            isSaved: req.query.saved === 'true',
+            personOnProbationName: (req.query.personOnProbationName as string | undefined) || undefined,
+            sessionNotes: submittedNotes,
+          },
+          validationError,
+        )
+      }
 
       const attendanceBffData = await this.accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData(
         username,
@@ -80,9 +107,33 @@ export default class SessionNotesController extends BaseController {
       personOnProbationName: (req.query.personOnProbationName as string | undefined) || undefined,
     }
 
-    const presenter = new SessionNotesPresenter(sessionNotesData)
+    return this.renderSessionNotesPage(res, sessionNotesData)
+  }
+
+  private renderSessionNotesPage(
+    res: Response,
+    sessionNotesData: SessionNotesData,
+    validationError: FormValidationError | null = null,
+  ): void {
+    const presenter = new SessionNotesPresenter(sessionNotesData, validationError)
     const view = new SessionNotesView(presenter)
 
-    return this.renderPage(res, view)
+    this.renderPage(res, view)
+  }
+
+  private validateSessionNotes(notes: string): FormValidationError | null {
+    if (notes.length <= 10000) {
+      return null
+    }
+
+    return {
+      errors: [
+        {
+          formFields: ['sessionNotes'],
+          errorSummaryLinkedField: 'sessionNotes',
+          message: errorMessages.recordAttendance.sessionNotesTooLong,
+        },
+      ],
+    }
   }
 }

@@ -1,4 +1,6 @@
 import attendanceOptionText from '../utils/attendanceUtils'
+import { FormValidationError } from '../utils/formValidationError'
+import PresenterUtils from '../utils/presenterUtils'
 import { convertToUrlFriendlyKebabCase } from '../utils/utils'
 import { MojAlertComponentArgs } from '../interfaces/alertComponentArgs'
 
@@ -22,7 +24,10 @@ export interface SessionNotesData {
 }
 
 export default class SessionNotesPresenter {
-  constructor(private readonly data: SessionNotesData) {}
+  constructor(
+    private readonly data: SessionNotesData,
+    private readonly validationError: FormValidationError | null = null,
+  ) {}
 
   get text() {
     const personOnProbationName = this.data.pageTitle.split(':')[0].trim()
@@ -78,6 +83,19 @@ export default class SessionNotesPresenter {
 
   get attendanceOptionText() {
     return attendanceOptionText(this.data.sessionAttendance, { fallbackStatus: 'notAttended' })
+  }
+
+  get errorSummary() {
+    return PresenterUtils.errorSummary(this.validationError)
+  }
+
+  get fields() {
+    return {
+      sessionNotes: {
+        errorMessage: PresenterUtils.errorMessage(this.validationError, 'sessionNotes'),
+        value: this.data.sessionNotes ?? '',
+      },
+    }
   }
 
   get pageUrl(): string {

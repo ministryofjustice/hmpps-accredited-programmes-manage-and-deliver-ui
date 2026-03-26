@@ -144,6 +144,23 @@ describe('SessionNotesPresenter', () => {
     })
   })
 
+  it('returns field error message when session notes validation fails', () => {
+    const presenter = new SessionNotesPresenter(buildData(), {
+      errors: [
+        {
+          formFields: ['sessionNotes'],
+          errorSummaryLinkedField: 'sessionNotes',
+          message: 'Session notes must be 10,000 characters or fewer',
+        },
+      ],
+    })
+
+    expect(presenter.fields.sessionNotes.errorMessage).toBe('Session notes must be 10,000 characters or fewer')
+    expect(presenter.errorSummary).toEqual([
+      { field: 'sessionNotes', message: 'Session notes must be 10,000 characters or fewer' },
+    ])
+  })
+
   it('returns backlink to attendance history when opened from PoP attendance history flow', () => {
     const presenter = new SessionNotesPresenter(buildData({ isAttendanceHistory: true }))
 

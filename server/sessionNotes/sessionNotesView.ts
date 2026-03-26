@@ -1,16 +1,15 @@
+import ViewUtils from '../utils/viewUtils'
 import SessionNotesPresenter from './sessionNotesPresenter'
 
-type notesBodyArgs = Array<{
+type NotesBodySection = Array<{
   html: string
   data?: {
     sessionName: string
     moduleName: string
     sessionDetailsHref: string
-    lastUpdatedDate: string
+    sessionDate: string
     attendance: string
   }
-  Notes?: string
-  notesRows?: number
 }>
 
 export default class SessionNotesView {
@@ -24,26 +23,35 @@ export default class SessionNotesView {
     return Math.min(Math.max(estimatedRows, 8), 50)
   }
 
-  private get notesBodyArgs(): notesBodyArgs {
-    const sessionNotes = this.presenter.sessionNotesData.sessionNotes ?? ''
-
+  private get notesBodyArgs(): NotesBodySection {
     return [
       {
         data: {
           sessionName: this.presenter.text.sessionName,
           moduleName: this.presenter.sessionNotesData.moduleName,
           sessionDetailsHref: `/group/${this.presenter.sessionNotesData.groupId}/session/${this.presenter.sessionNotesData.sessionId}/edit-session`,
-          lastUpdatedDate: this.presenter.sessionNotesData.lastUpdatedDate ?? '',
+          sessionDate: this.presenter.sessionNotesData.sessionDate ?? '',
           attendance: this.presenter.attendanceOptionText.attendanceState,
         },
         html: `<h2 class="govuk-heading-m">${this.presenter.text.attendanceSummaryTitle}</h2>`,
       },
-      {
-        Notes: sessionNotes,
-        notesRows: this.getNotesRows(sessionNotes),
-        html: `<h2 class="govuk-heading-m">${this.presenter.text.sessionNotesTitle}</h2>`,
-      },
     ]
+  }
+
+  private get textareaArgs() {
+    const { value } = this.presenter.fields.sessionNotes
+
+    return {
+      id: 'sessionNotes',
+      name: 'sessionNotes',
+      value,
+      rows: this.getNotesRows(value),
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.sessionNotes.errorMessage),
+      label: {
+        text: this.presenter.text.sessionNotesTitle,
+        classes: 'govuk-visually-hidden',
+      },
+    }
   }
 
   get renderArgs(): [string, Record<string, unknown>] {
@@ -51,7 +59,9 @@ export default class SessionNotesView {
       'sessionNotes/sessionNotes',
       {
         backLinkArgs: this.presenter.backLinkArgs,
+        errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         notesBodyArgs: this.notesBodyArgs,
+        textareaArgs: this.textareaArgs,
         text: this.presenter.text,
         successMessageSummary: this.presenter.successMessageSummary,
       },

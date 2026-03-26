@@ -49,6 +49,7 @@ describe('SessionNotesController', () => {
           expect(res.text).toContain('Alex River: Getting started 1 Introduction to Building Choices session notes')
           expect(res.text).toContain('Participant engaged well.\nSecond paragraph.')
           expect(res.text).toContain('Last updated by John Smith on 19 March 2026')
+          expect(res.text).toContain('21 July 2025')
           expect(res.text).toContain('name="sessionNotes"')
         })
 
@@ -170,6 +171,56 @@ describe('SessionNotesController', () => {
           expect(res.text).toContain('Attendance recorded for Alex River')
           expect(res.text).toContain('moj-alert')
         })
+    })
+
+    it('renders textarea when session notes are blank', async () => {
+      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue({
+        pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
+        moduleName: 'Getting started',
+        sessionName: 'Introduction to Building Choices',
+        sessionNumber: 1,
+        lastUpdatedBy: 'John Smith',
+        lastUpdatedDate: '19 March 2026',
+        groupId: 'd193bf89-c98b-4e92-b842-3c1b3e5f5e4a',
+        sessionId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+        sessionDate: '21 July 2025',
+        sessionAttendance: 'Attended, failed to comply',
+        sessionNotes: '',
+      })
+
+      await request(app)
+        .get('/group/111/session/6789/getting-started-1-session-notes?referralId=referral-123')
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('id="sessionNotes"')
+          expect(res.text).toContain('name="sessionNotes"')
+        })
+    })
+
+    it('shows validation error when session notes exceed 10000 characters', async () => {
+      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue({
+        pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
+        moduleName: 'Getting started',
+        sessionName: 'Introduction to Building Choices',
+        sessionNumber: 1,
+        lastUpdatedBy: 'John Smith',
+        lastUpdatedDate: '19 March 2026',
+        groupId: 'd193bf89-c98b-4e92-b842-3c1b3e5f5e4a',
+        sessionId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+        sessionDate: '21 July 2025',
+        sessionAttendance: 'Attended, failed to comply',
+        sessionNotes: 'Existing note.',
+      })
+
+      await request(app)
+        .post('/group/111/session/6789/getting-started-1-session-notes?referralId=referral-123')
+        .send({ sessionNotes: 'a'.repeat(10001) })
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain('Session notes must be 10,000 characters or fewer')
+        })
+
+      expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).not.toHaveBeenCalled()
     })
 
     it('uses attendance history backlink when opened from PoP attendance history', async () => {
