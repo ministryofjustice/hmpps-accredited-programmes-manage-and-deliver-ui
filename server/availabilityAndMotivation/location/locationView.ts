@@ -17,6 +17,15 @@ export default class LocationView {
     )
   }
 
+  get getLocationsAsSummaryListArgs(): SummaryListArgs {
+    const summary = this.presenter.locationsSummary()
+    return ViewUtils.summaryListArgsWithSummaryCard(summary.summary, summary.title, {
+      showBorders: true,
+      showTitle: true,
+      hideKey: false,
+    })
+  }
+
   private successMessageArgs() {
     return {
       variant: 'success',
@@ -32,6 +41,7 @@ export default class LocationView {
       {
         presenter: this.presenter,
         getPreferredLocationsAsSummaryListArgs: this.getPreferredLocationsAsSummaryListArgs,
+        getLocationsAsSummaryListArgs: this.getLocationsAsSummaryListArgs,
         isPreferredLocationUpdated: this.presenter.isPreferredLocationUpdated,
         successMessageArgs: this.successMessageArgs(),
         getVerticalSubNavArgs: this.presenter.verticalSubNavArgs,
