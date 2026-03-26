@@ -73,7 +73,9 @@ export default class AvailabilityAndMotivationController extends BaseController 
           data.paramsForUpdate === null ||
           Object.values(data.paramsForUpdate).every(value => value === null || value === '')
         ) {
-          return res.redirect(`/referral/${referralId}/motivation-background-and-non-associations`)
+          return res.redirect(
+            `/referral/${referralId}/availability-and-motivation/motivation-background-and-non-associations`,
+          )
         }
 
         await this.accreditedProgrammesManageAndDeliverService.createOrUpdateReferralMotivationBackgroundAndNonAssociations(
@@ -82,7 +84,7 @@ export default class AvailabilityAndMotivationController extends BaseController 
           data.paramsForUpdate,
         )
         return res.redirect(
-          `/referral/${referralId}/motivation-background-and-non-associations?isMotivationsUpdated=true`,
+          `/referral/${referralId}/availability-and-motivation/motivation-background-and-non-associations?isMotivationsUpdated=true`,
         )
       }
     }

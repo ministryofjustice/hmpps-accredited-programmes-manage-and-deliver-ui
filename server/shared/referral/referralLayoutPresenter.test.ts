@@ -28,7 +28,7 @@ describe(`getHorizontalSubNavArgs.`, () => {
       },
       {
         text: 'Availability and motivation',
-        href: `/referral/${referralDetails.id}/availability`,
+        href: `/referral/${referralDetails.id}/availability-and-motivation/availability`,
         active: false,
       },
       {

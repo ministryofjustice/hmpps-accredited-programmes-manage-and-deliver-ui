@@ -85,11 +85,11 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await referralDetailsController.showSentenceInformationPage(req, res)
   })
 
-  get('/referral/:id/availability', async (req, res, next) => {
+  get('/referral/:id/availability-and-motivation/availability', async (req, res, next) => {
     await availabilityAndMotivationController.showAvailabilityPage(req, res)
   })
 
-  get('/referral/:id/location', async (req, res, next) => {
+  get('/referral/:id/availability-and-motivation/location', async (req, res, next) => {
     await availabilityAndMotivationController.showLocationPage(req, res)
   })
 
@@ -286,9 +286,12 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await groupOverviewController.showGroupOverviewSchedule(req, res)
   })
 
-  get('/referral/:referralId/motivation-background-and-non-associations', async (req, res, next) => {
-    await availabilityAndMotivationController.showMotivationBackgroundAndNonAssociationsPage(req, res)
-  })
+  get(
+    '/referral/:referralId/availability-and-motivation/motivation-background-and-non-associations',
+    async (req, res, next) => {
+      await availabilityAndMotivationController.showMotivationBackgroundAndNonAssociationsPage(req, res)
+    },
+  )
 
   getOrPost('/referral/:referralId/add-motivation-background-and-non-associations', async (req, res, next) => {
     await availabilityAndMotivationController.showAddMotivationBackgroundAndNonAssociationsNotesPage(req, res)

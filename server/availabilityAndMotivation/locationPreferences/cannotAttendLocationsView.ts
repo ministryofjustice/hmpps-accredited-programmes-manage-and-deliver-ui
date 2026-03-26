@@ -63,7 +63,7 @@ export default class CannotAttendLocationsView {
       'locationPreferences/cannotAttendLocations',
       {
         presenter: this.presenter,
-        cancelLink: `/referral/${this.presenter.id}/location/#location`,
+        cancelLink: `/referral/${this.presenter.id}/availability-and-motivation/location/#location`,
         cannotAttendLocationsTextAreaArgs: this.cannotAttendLocationsTextAreaArgs(),
         radioArgs: this.radioArgs.bind(this),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
