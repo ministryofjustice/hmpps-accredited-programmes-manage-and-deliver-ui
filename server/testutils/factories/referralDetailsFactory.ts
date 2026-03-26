@@ -19,4 +19,6 @@ export default ReferralDetailsFactory.define(({ sequence }) => ({
   currentStatusDescription: 'Awaiting assessment',
   currentlyAllocatedGroupId: null as string | null,
   currentlyAllocatedGroupCode: null as string | null,
+  pdu: 'London',
+  reportingTeam: 'team A',
 }))

@@ -6,5 +6,6 @@
     {{ mojAlert(successMessageArgs) }}
   {% endif %}
   <h2 class="govuk-heading-m">Location</h2>
+  {{ govukSummaryList(getLocationsAsSummaryListArgs) }}
   {{ govukSummaryList(getPreferredLocationsAsSummaryListArgs) }}
 </div>
