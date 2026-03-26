@@ -47,4 +47,20 @@ export default class LocationPresenter extends AvailabilityAndMotivationPresente
       summary: summaryItems,
     }
   }
+
+  locationsSummary(): { title: string; summary: SummaryListItem[] } {
+    return {
+      title: 'Reporting locations',
+      summary: [
+        {
+          key: 'Probation delivery unit',
+          lines: this.referral.pdu ? [this.referral.pdu] : ['No information added'],
+        },
+        {
+          key: 'Reporting team',
+          lines: this.referral.reportingTeam ? [this.referral.reportingTeam] : ['No information added'],
+        },
+      ],
+    }
+  }
 }

@@ -2502,6 +2502,16 @@ export interface components {
        * @example c98151f4-4081-4c65-9f98-54e63a328c8d
        */
       currentlyAllocatedGroupId?: string
+      /**
+       * @description The probation delivery unit responsible for this referral.
+       * @example North London PDU
+       */
+      pdu: string
+      /**
+       * @description The reporting team responsible for this referral.
+       * @example Team A
+       */
+      reportingTeam: string
     }
     SentenceInformation: {
       /**
@@ -3196,6 +3206,7 @@ export interface components {
       moduleName: string
       /**
        * @description The name of the session
+       * @description The name of the session within a module.
        * @example Introduction to Building Choices
        */
       sessionName: string
