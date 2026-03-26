@@ -34,7 +34,7 @@ beforeEach(() => {
 })
 
 describe('availabilityAndMotivation controller', () => {
-  describe('GET /referral/:referralId/motivation-background-and-non-associations', () => {
+  describe('GET /referral/:referralId/availability-and-motivation/motivation-background-and-non-associations', () => {
     it('loads the motivation background and non associations page', async () => {
       const motivationBackgroundAndNonAssociations = ReferralMotivationBackgroundAndNonAssociationsFactory.build({
         id: null,
@@ -44,7 +44,7 @@ describe('availabilityAndMotivation controller', () => {
       )
 
       return request(app)
-        .get(`/referral/${randomUUID()}/motivation-background-and-non-associations`)
+        .get(`/referral/${randomUUID()}/availability-and-motivation/motivation-background-and-non-associations`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(`Availability and motivation: ${referralDetails.personName}`)
@@ -53,7 +53,7 @@ describe('availabilityAndMotivation controller', () => {
     })
   })
 
-  describe('GET /referral/:referralId/add-motivation-background-and-non-associations', () => {
+  describe('GET /referral/:referralId/availability-and-motivation/add-motivation-background-and-non-associations', () => {
     it('loads the page to add motivation background and non associations', async () => {
       const motivationBackgroundAndNonAssociations = ReferralMotivationBackgroundAndNonAssociationsFactory.build({
         id: null,
@@ -86,7 +86,7 @@ describe('availabilityAndMotivation controller', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Redirecting to /referral/${referralId}/motivation-background-and-non-associations?isMotivationsUpdated=true`,
+            `Redirecting to /referral/${referralId}/availability-and-motivation/motivation-background-and-non-associations?isMotivationsUpdated=true`,
           )
         })
     })
@@ -111,7 +111,7 @@ describe('availabilityAndMotivation controller', () => {
     })
   })
 
-  describe(`GET /referral/:id/location`, () => {
+  describe(`GET /referral/availability-and-motivation/:id/location`, () => {
     it('loads the locations sub-nav with no existing details', async () => {
       accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
 
@@ -126,7 +126,7 @@ describe('availabilityAndMotivation controller', () => {
       )
 
       return request(app)
-        .get(`/referral/${randomUUID()}/location`)
+        .get(`/referral/${randomUUID()}/availability-and-motivation/location`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(referralDetails.crn)
@@ -149,7 +149,7 @@ describe('availabilityAndMotivation controller', () => {
       )
 
       return request(app)
-        .get(`/referral/${randomUUID()}/location`)
+        .get(`/referral/${randomUUID()}/availability-and-motivation/location`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(referralDetails.crn)
@@ -161,13 +161,13 @@ describe('availabilityAndMotivation controller', () => {
         })
     })
 
-    describe(`GET /referral/:id/availability`, () => {
+    describe(`GET /referral/:id/availability-and-motivation/availability`, () => {
       it('loads the availability sub-nav', async () => {
         const availability: Availability = availabilityFactory.defaultAvailability().build()
         accreditedProgrammesManageAndDeliverService.getAvailability.mockResolvedValue(availability)
 
         return request(app)
-          .get(`/referral/${randomUUID()}/availability`)
+          .get(`/referral/${randomUUID()}/availability-and-motivation/availability`)
           .expect(200)
           .expect(res => {
             expect(res.text).toContain(referralDetails.crn)

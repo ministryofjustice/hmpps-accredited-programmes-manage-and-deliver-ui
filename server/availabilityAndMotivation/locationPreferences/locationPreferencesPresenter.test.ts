@@ -24,7 +24,7 @@ describe('locationsPreferencesPresenter.', () => {
       updateData,
     )
 
-    expect(presenter.backLinkUri).toEqual(`/referral/${referralId}/location#location`)
+    expect(presenter.backLinkUri).toEqual(`/referral/${referralId}/availability-and-motivation/location#location`)
   })
 
   it('The locationButtonFormAction uri should be set correctly based on the referral id', () => {
@@ -37,7 +37,7 @@ describe('locationsPreferencesPresenter.', () => {
       updateData,
     )
 
-    expect(presenter.backLinkUri).toEqual(`/referral/${referralId}/location#location`)
+    expect(presenter.backLinkUri).toEqual(`/referral/${referralId}/availability-and-motivation/location#location`)
   })
 
   describe('hasPreviouslySelectedOtherPdus.', () => {

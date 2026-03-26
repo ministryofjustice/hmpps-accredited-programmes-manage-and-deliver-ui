@@ -70,7 +70,9 @@ describe(`Add Availability`, () => {
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(`Redirecting to /referral/${referralId}/availability?detailsUpdated=true`)
+          expect(res.text).toContain(
+            `Redirecting to /referral/${referralId}/availability-and-motivation/availability?detailsUpdated=true`,
+          )
         })
     })
   })
