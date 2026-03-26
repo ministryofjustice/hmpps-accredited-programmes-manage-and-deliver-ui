@@ -140,7 +140,45 @@ describe('EditSessionPresenter', () => {
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
               { html: '<span class="govuk-tag govuk-tag--blue">Attended - Complied</span>' },
               {
-                html: 'Not added',
+                text: 'Not added',
+              },
+            ],
+          ],
+        })
+      })
+
+      it('returns Not added text when single-referral session notes equals Not added', () => {
+        const sessionDetails: GroupSessionResponse = {
+          pageTitle: 'Session 1',
+          sessionName: 'Session 1',
+          code: 'CODE-123',
+          sessionType: 'Individual',
+          attendanceAndSessionNotes: [
+            {
+              referralId: '123',
+              name: 'Alex River',
+              crn: 'CRN001',
+              attendance: 'Attended - Complied',
+              sessionNotes: 'Not added',
+            },
+          ],
+          date: '01 Feb 2026',
+          time: '1:00pm',
+          scheduledToAttend: [],
+          facilitators: [],
+        }
+
+        const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
+        const result = presenter.attendanceTableArgs
+
+        expect(result).toEqual({
+          head: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
+          rows: [
+            [
+              { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
+              { html: '<span class="govuk-tag govuk-tag--blue">Attended - Complied</span>' },
+              {
+                text: 'Not added',
               },
             ],
           ],

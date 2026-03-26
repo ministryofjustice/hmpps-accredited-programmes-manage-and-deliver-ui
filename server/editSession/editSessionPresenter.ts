@@ -60,17 +60,22 @@ export default class EditSessionPresenter {
     return convertToUrlFriendlyKebabCase(slugSource) || 'session'
   }
 
-  private sessionNotesLink(notes: unknown, referralId: string) {
+  private hasSessionNotes(notes: unknown): notes is string {
     if (typeof notes !== 'string') {
-      return 'Not added'
+      return false
     }
+
     const text = notes.replace(/<[^>]*>/g, '').trim()
-    if (!text) {
-      return 'Not added'
+    return text.length > 0 && text.toLowerCase() !== 'not added'
+  }
+
+  private sessionNotesCell(notes: unknown, referralId: string) {
+    if (!this.hasSessionNotes(notes)) {
+      return { text: 'Not added' }
     }
 
     const linkText = `${ViewUtils.escape(this.sessionDetails.pageTitle)} notes`
-    return `<a href="${this.sessionNotesPagePath(referralId)}">${linkText}</a>`
+    return { html: `<a href="${this.sessionNotesPagePath(referralId)}">${linkText}</a>` }
   }
 
   private sessionNotesPagePath(referralId: string): string {
@@ -102,7 +107,7 @@ export default class EditSessionPresenter {
               html: `<a href="/referral-details/${it.referralId}/personal-details">${it.name}</a> ${it.crn}`,
             },
             { html: this.attendanceOptionText(it.attendance).attendanceState },
-            { html: this.sessionNotesLink(it.sessionNotes, it.referralId) },
+            this.sessionNotesCell(it.sessionNotes, it.referralId),
           ],
         })),
       }
@@ -117,9 +122,7 @@ export default class EditSessionPresenter {
                   html: `<a href="/referral-details/${attendanceData[0].referralId}/personal-details">${attendanceData[0].name}</a> ${attendanceData[0].crn}`,
                 },
                 { html: this.attendanceOptionText(attendanceData[0].attendance).attendanceState },
-                {
-                  html: this.sessionNotesLink(attendanceData[0].sessionNotes, attendanceData[0].referralId),
-                },
+                this.sessionNotesCell(attendanceData[0].sessionNotes, attendanceData[0].referralId),
               ],
             ]
           : [],
