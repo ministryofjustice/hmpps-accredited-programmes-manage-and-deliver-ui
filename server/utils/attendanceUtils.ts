@@ -22,6 +22,7 @@ const ATTENDANCE_STATUS_BY_VALUE: Record<string, AttendanceStatus> = {
   'ATTENDED, FAILED TO COMPLY': 'failedToComply',
   UAAB: 'notAttended',
   'DID NOT ATTEND': 'notAttended',
+  'NOT ATTENDED': 'notAttended',
 }
 
 export const attendanceOptionTextTags: Record<'attendanceSessionNotes' | 'editSession', AttendanceOptionTextOptions> = {

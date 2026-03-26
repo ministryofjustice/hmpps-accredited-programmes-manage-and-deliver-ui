@@ -40,6 +40,12 @@ describe('attendanceUtils', () => {
       })
     })
 
+    it('renders the not attended tag for not attended text', () => {
+      expect(attendanceOptionText('Not attended')).toEqual({
+        attendanceState: '<span class="govuk-tag govuk-tag--red">Not attended</span>',
+      })
+    })
+
     it('renders a custom attended label when requested', () => {
       expect(attendanceOptionText('ATTC', { attendedLabel: 'Attended - Complied' })).toEqual({
         attendanceState: '<span class="govuk-tag govuk-tag--blue">Attended - Complied</span>',

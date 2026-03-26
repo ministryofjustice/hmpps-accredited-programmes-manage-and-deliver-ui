@@ -87,6 +87,7 @@ type EditSessionFacilitatorResponse = components['schemas']['EditSessionFacilita
 type EditSessionFacilitatorsRequest = components['schemas']['EditSessionFacilitatorRequest']
 type RecordSessionAttendance = components['schemas']['RecordSessionAttendance']
 type SessionAttendance = components['schemas']['SessionAttendance']
+type SessionAttendanceOutcomeCode = components['schemas']['SessionAttendance']['attendees'][number]['outcomeCode']
 type AttendanceHistoryResponse = components['schemas']['AttendanceHistoryResponse']
 type GroupDetailsResponse = components['schemas']['GroupDetailsResponse']
 
@@ -170,6 +171,7 @@ export type {
   SentenceInformation,
   Session,
   SessionAttendance,
+  SessionAttendanceOutcomeCode,
   SessionNotes,
   SessionScheduleRequest,
   SessionScheduleResponse,

@@ -1,22 +1,12 @@
+import { SessionNotes } from '@manage-and-deliver-api'
 import attendanceOptionText from '../utils/attendanceUtils'
 import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
 import { convertToUrlFriendlyKebabCase } from '../utils/utils'
 import { MojAlertComponentArgs } from '../interfaces/alertComponentArgs'
 
-export interface SessionNotesData {
-  pageTitle: string
-  moduleName: string
-  sessionName: string
-  sessionNumber: number
+export type SessionNotesData = SessionNotes & {
   referralId: string
-  lastUpdatedBy?: string
-  lastUpdatedDate?: string
-  groupId: string
-  sessionId: string
-  sessionDate?: string
-  sessionAttendance: string
-  sessionNotes?: string
   isAttendanceHistory: boolean
   source?: string
   isSaved?: boolean
@@ -100,6 +90,6 @@ export default class SessionNotesPresenter {
 
   get pageUrl(): string {
     const sessionSlug = convertToUrlFriendlyKebabCase(this.data.sessionName)
-    return `/group/${this.data.groupId}/session/${this.data.sessionId}/${sessionSlug}-session-notes`
+    return `/group/${this.data.groupId}/session/${this.data.sessionId}/${sessionSlug}/session-notes`
   }
 }

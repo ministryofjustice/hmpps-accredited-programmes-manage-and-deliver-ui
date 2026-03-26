@@ -1,11 +1,12 @@
 import { Request, Response } from 'express'
-import { SessionAttendance } from '@manage-and-deliver-api'
+import { SessionAttendanceOutcomeCode, SessionNotes } from '@manage-and-deliver-api'
 import BaseController from '../shared/baseController'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import { FormValidationError } from '../utils/formValidationError'
 import errorMessages from '../utils/errorMessages'
 import SessionNotesView from './sessionNotesView'
+import SessionNotesForm from './sessionNotesForm'
 import SessionNotesPresenter, { SessionNotesData } from './sessionNotesPresenter'
 
 export default class SessionNotesController extends BaseController {
@@ -34,12 +35,7 @@ export default class SessionNotesController extends BaseController {
 
       if (validationError) {
         res.status(400)
-
-        const sessionNotesBffData = await this.accreditedProgrammesManageAndDeliverService.getSessionNotes(
-          username,
-          sessionId,
-          referralId,
-        )
+        const sessionNotesBffData = await this.getSessionNotesData(req, username, sessionId, referralId)
 
         return this.renderSessionNotesPage(
           res,
@@ -63,9 +59,7 @@ export default class SessionNotesController extends BaseController {
       )
 
       const attendee = attendanceBffData.people.find(person => person.referralId === referralId)
-      const outcomeCode = attendee?.attendance?.code as
-        | SessionAttendance['attendees'][number]['outcomeCode']
-        | undefined
+      const outcomeCode = attendee?.attendance?.code as SessionAttendanceOutcomeCode | undefined
 
       if (!outcomeCode) {
         return res.redirect(`/group/${req.params.groupId}/session/${sessionId}/edit-session`)
@@ -92,11 +86,7 @@ export default class SessionNotesController extends BaseController {
       return res.redirect(`${req.path}?${redirectQuery.toString()}`)
     }
 
-    const sessionNotesBffData = await this.accreditedProgrammesManageAndDeliverService.getSessionNotes(
-      username,
-      sessionId,
-      referralId,
-    )
+    const sessionNotesBffData = await this.getSessionNotesData(req, username, sessionId, referralId)
 
     const sessionNotesData: SessionNotesData = {
       ...sessionNotesBffData,
@@ -108,6 +98,29 @@ export default class SessionNotesController extends BaseController {
     }
 
     return this.renderSessionNotesPage(res, sessionNotesData)
+  }
+
+  private async getSessionNotesData(
+    req: Request,
+    username: string,
+    sessionId: string,
+    referralId: string,
+  ): Promise<SessionNotes> {
+    const sessionNotesForm = new SessionNotesForm(req)
+    const cachedData = sessionNotesForm.getCachedSessionNotes(sessionId, referralId)
+    if (cachedData) {
+      return cachedData
+    }
+
+    const sessionNotesBffData = await this.accreditedProgrammesManageAndDeliverService.getSessionNotes(
+      username,
+      sessionId,
+      referralId,
+    )
+
+    sessionNotesForm.setCachedSessionNotes(sessionId, referralId, sessionNotesBffData)
+
+    return sessionNotesBffData
   }
 
   private renderSessionNotesPage(

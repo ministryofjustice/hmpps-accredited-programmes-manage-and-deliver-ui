@@ -388,7 +388,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await referralDetailsController.showAttendanceHistoryPage(req, res)
   })
 
-  getOrPost('/group/:groupId/session/:sessionId/:sessionSlug-session-notes', async (req, res, next) => {
+  getOrPost('/group/:groupId/session/:sessionId/:sessionSlug/session-notes', async (req, res, next) => {
     await sessionNotesController.showSessionNotesPage(req, res)
   })
 

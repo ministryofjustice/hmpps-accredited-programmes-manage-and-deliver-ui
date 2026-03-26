@@ -2,6 +2,7 @@ import { Express } from 'express'
 import request from 'supertest'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import TestUtils from '../testutils/testUtils'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
@@ -26,7 +27,7 @@ beforeEach(() => {
 })
 
 describe('SessionNotesController', () => {
-  describe('GET /group/:groupId/session/:sessionId/:sessionSlug-session-notes', () => {
+  describe('GET /group/:groupId/session/:sessionId/:sessionSlug/session-notes', () => {
     it('renders session notes from BFF', async () => {
       accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue({
         pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
@@ -43,7 +44,7 @@ describe('SessionNotesController', () => {
       })
 
       await request(app)
-        .get('/group/111/session/6789/getting-started-1-session-notes?referralId=referral-123')
+        .get('/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Alex River: Getting started 1 Introduction to Building Choices session notes')
@@ -62,7 +63,7 @@ describe('SessionNotesController', () => {
 
     it('redirects back to edit session when referralId is missing', async () => {
       await request(app)
-        .get('/group/111/session/6789/getting-started-1-session-notes')
+        .get('/group/111/session/6789/getting-started-1/session-notes')
         .expect(302)
         .expect('Location', '/group/111/session/6789/edit-session')
 
@@ -76,7 +77,7 @@ describe('SessionNotesController', () => {
       })
 
       await request(app)
-        .get('/group/111/session/6789/getting-started-1-session-notes?referralId=missing-referral')
+        .get('/group/111/session/6789/getting-started-1/session-notes?referralId=missing-referral')
         .expect(404)
     })
 
@@ -124,12 +125,12 @@ describe('SessionNotesController', () => {
       })
 
       await request(app)
-        .post('/group/111/session/6789/getting-started-1-session-notes?referralId=referral-123&source=edit-session')
+        .post('/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123&source=edit-session')
         .send({ sessionNotes: 'Updated note' })
         .expect(302)
         .expect(
           'Location',
-          '/group/111/session/6789/getting-started-1-session-notes?referralId=referral-123&saved=true&personOnProbationName=Alex+River&source=edit-session',
+          '/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123&saved=true&personOnProbationName=Alex+River&source=edit-session',
         )
 
       expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).toHaveBeenCalledWith(
@@ -164,7 +165,7 @@ describe('SessionNotesController', () => {
 
       await request(app)
         .get(
-          '/group/111/session/6789/getting-started-1-session-notes?referralId=referral-123&saved=true&personOnProbationName=Alex+River',
+          '/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123&saved=true&personOnProbationName=Alex+River',
         )
         .expect(200)
         .expect(res => {
@@ -189,7 +190,7 @@ describe('SessionNotesController', () => {
       })
 
       await request(app)
-        .get('/group/111/session/6789/getting-started-1-session-notes?referralId=referral-123')
+        .get('/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('No notes added')
@@ -214,13 +215,49 @@ describe('SessionNotesController', () => {
       })
 
       await request(app)
-        .post('/group/111/session/6789/getting-started-1-session-notes?referralId=referral-123')
+        .post('/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123')
         .send({ sessionNotes: 'a'.repeat(10001) })
         .expect(400)
         .expect(res => {
           expect(res.text).toContain('Session notes must be 10,000 characters or fewer')
         })
 
+      expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).not.toHaveBeenCalled()
+    })
+
+    it('reuses cached session notes data on validation error', async () => {
+      app = TestUtils.createTestAppWithSession(
+        {
+          sessionNotesCache: {
+            sessionId: '6789',
+            referralId: 'referral-123',
+            data: {
+              pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
+              moduleName: 'Getting started',
+              sessionName: 'Introduction to Building Choices',
+              sessionNumber: 1,
+              lastUpdatedBy: 'John Smith',
+              lastUpdatedDate: '19 March 2026',
+              groupId: 'd193bf89-c98b-4e92-b842-3c1b3e5f5e4a',
+              sessionId: '6789',
+              sessionDate: '21 July 2025',
+              sessionAttendance: 'Attended, failed to comply',
+              sessionNotes: 'Existing note.',
+            },
+          },
+        },
+        { accreditedProgrammesManageAndDeliverService },
+      )
+
+      await request(app)
+        .post('/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123')
+        .send({ sessionNotes: 'a'.repeat(10001) })
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain('Session notes must be 10,000 characters or fewer')
+        })
+
+      expect(accreditedProgrammesManageAndDeliverService.getSessionNotes).not.toHaveBeenCalled()
       expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).not.toHaveBeenCalled()
     })
 
@@ -240,7 +277,7 @@ describe('SessionNotesController', () => {
       })
 
       await request(app)
-        .get('/group/111/session/6789/getting-started-1-session-notes?referralId=referral-123&isAttendanceHistory=true')
+        .get('/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123&isAttendanceHistory=true')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('/referral/referral-123/attendance-history')
@@ -264,7 +301,7 @@ describe('SessionNotesController', () => {
       })
 
       await request(app)
-        .get('/group/111/session/6789/getting-started-1-session-notes?referralId=referral-123&source=edit-session')
+        .get('/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123&source=edit-session')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(

@@ -60,11 +60,12 @@ export default class EditSessionPresenter {
     return convertToUrlFriendlyKebabCase(slugSource) || 'session'
   }
 
-  private hasSessionNotes(notes: unknown): notes is string {
+  private hasSessionNotes(notes: unknown): boolean {
     if (typeof notes !== 'string') {
       return false
     }
 
+    // HTML tags are stripped so validation is based on visible note text only.
     const text = notes.replace(/<[^>]*>/g, '').trim()
     return text.length > 0 && text.toLowerCase() !== 'not added'
   }
@@ -79,7 +80,7 @@ export default class EditSessionPresenter {
   }
 
   private sessionNotesPagePath(referralId: string): string {
-    return `/group/${this.groupId}/session/${this.sessionId}/${this.sessionNotesSlug}-session-notes?referralId=${encodeURIComponent(referralId)}&source=edit-session`
+    return `/group/${this.groupId}/session/${this.sessionId}/${this.sessionNotesSlug}/session-notes?referralId=${encodeURIComponent(referralId)}&source=edit-session`
   }
 
   get attendanceTableArgs(): MultiSelectTableArgs | TableArgs {

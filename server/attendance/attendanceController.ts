@@ -7,10 +7,10 @@ import RecordAttendanceForm from './recordAttendanceForm'
 import { FormValidationError } from '../utils/formValidationError'
 import AttendanceSessionNotesPresenter from './attendanceNotes/attendanceSessionNotesPresenter'
 import AttendanceSessionNotesView from './attendanceNotes/attendanceSessionNotesView'
+import AttendanceSessionNotesForm from './attendanceNotes/attendanceSessionNotesForm'
 import { convertToUrlFriendlyKebabCase } from '../utils/utils'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
-import errorMessages from '../utils/errorMessages'
 
 export default class AttendanceController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -139,16 +139,19 @@ export default class AttendanceController extends BaseController {
         : `/group/${groupId}/session/${sessionId}/record-attendance`
 
     if (req.method === 'POST') {
-      const isSkipAndAddLater = req.body.action === 'skip-and-add-later'
-      const submittedNotes = (req.body['record-session-attendance-notes'] as string | undefined) || ''
+      const notesFormData = await new AttendanceSessionNotesForm(req).sessionNotesData()
+      const submittedNotes =
+        notesFormData.paramsForUpdate?.sessionNotes ||
+        (req.body['record-session-attendance-notes'] as string | undefined) ||
+        ''
+      const isSkipAndAddLater =
+        notesFormData.paramsForUpdate?.isSkipAndAddLater || req.body.action === 'skip-and-add-later'
 
       if (currentAttendee && !isSkipAndAddLater) {
-        const validationError = this.validateSessionNotes(submittedNotes)
-
-        if (validationError) {
+        if (notesFormData.error) {
           res.status(400)
           const presenter = new AttendanceSessionNotesPresenter(
-            validationError,
+            notesFormData.error,
             recordAttendanceBffData,
             groupId,
             sessionId,
@@ -186,7 +189,10 @@ export default class AttendanceController extends BaseController {
       return res.redirect(this.notesPageUri(groupId, sessionId, referralIds[currentReferralIndex + 1], theGroupTitle))
     }
 
-    const notesValue = this.resolveNotesValue(currentAttendee?.sessionNotes, referralPerson?.sessionNotes)
+    const notesValue = new AttendanceSessionNotesForm(req).resolveNotesValue(
+      currentAttendee?.sessionNotes,
+      referralPerson?.sessionNotes,
+    )
 
     const presenter = new AttendanceSessionNotesPresenter(
       null,
@@ -260,25 +266,5 @@ export default class AttendanceController extends BaseController {
 
   private notesPageUri(groupId: string, sessionId: string, referralId: string, groupTitle: string): string {
     return `/group/${groupId}/session/${sessionId}/referral/${referralId}/${groupTitle}-session-notes`
-  }
-
-  private resolveNotesValue(attendeeNotes?: string, bffNotes?: string): string {
-    return attendeeNotes ?? bffNotes ?? ''
-  }
-
-  private validateSessionNotes(notes: string): FormValidationError | null {
-    if (notes.length <= 10000) {
-      return null
-    }
-
-    return {
-      errors: [
-        {
-          formFields: ['record-session-attendance-notes'],
-          errorSummaryLinkedField: 'record-session-attendance-notes',
-          message: errorMessages.recordAttendance.sessionNotesTooLong,
-        },
-      ],
-    }
   }
 }
