@@ -15,14 +15,6 @@ type NotesBodySection = Array<{
 export default class SessionNotesView {
   constructor(private readonly presenter: SessionNotesPresenter) {}
 
-  private getNotesRows(notes: string): number {
-    const estimatedRows = notes
-      .split(/\r\n|\r|\n/)
-      .reduce((total, line) => total + Math.max(1, Math.ceil(line.length / 100)), 0)
-
-    return Math.min(Math.max(estimatedRows, 8), 50)
-  }
-
   private get notesBodyArgs(): NotesBodySection {
     return [
       {
@@ -45,7 +37,7 @@ export default class SessionNotesView {
       id: 'sessionNotes',
       name: 'sessionNotes',
       value,
-      rows: this.getNotesRows(value),
+      rows: this.presenter.getNotesRows(value),
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.sessionNotes.errorMessage),
       label: {
         text: this.presenter.text.sessionNotesTitle,
@@ -66,6 +58,7 @@ export default class SessionNotesView {
         backLinkArgs: this.presenter.backLinkArgs,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         notesBodyArgs: this.notesBodyArgs,
+        pageHeaderActionsArgs: this.presenter.pageHeaderActionsArgs,
         showNoNotesAddedMessage: this.showNoNotesAddedMessage,
         textareaArgs: this.textareaArgs,
         text: this.presenter.text,

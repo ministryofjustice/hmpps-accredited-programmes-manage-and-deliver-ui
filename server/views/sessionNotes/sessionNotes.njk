@@ -24,22 +24,7 @@
     </div>
 
     <div class="govuk-grid-column-full">
-      {{ mojPageHeaderActions({
-        classes: "govuk-!-margin-bottom-0",
-        heading: {
-          text: text.headingText,
-          classes: "govuk-heading-l"
-        },
-        items: [{
-          text: text.updateAttendanceAndNotesButtonText,
-          classes: "govuk-button--primary",
-          element: "button",
-          type: "submit",
-          attributes: {
-            form: "session-notes-form"
-          }
-        }]
-      }) }}
+      {{ mojPageHeaderActions(pageHeaderActionsArgs) }}
     </div>
 
     <div class="govuk-grid-column-two-thirds">

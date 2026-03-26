@@ -1,29 +1,20 @@
-import { Request } from 'express'
-import { SessionNotes } from '@manage-and-deliver-api'
+import { FormValidationError } from '../utils/formValidationError'
+import errorMessages from '../utils/errorMessages'
 
 export default class SessionNotesForm {
-  constructor(private readonly request: Request) {}
-
-  getCachedSessionNotes(sessionId: string, referralId: string): SessionNotes | null {
-    const cache = this.request.session.sessionNotesCache
-    if (cache && cache.sessionId === sessionId && cache.referralId === referralId) {
-      return cache.data
+  validateSessionNotes(notes: string): FormValidationError | null {
+    if (notes.length <= 10000) {
+      return null
     }
-    return null
-  }
 
-  setCachedSessionNotes(sessionId: string, referralId: string, data: SessionNotes): void {
-    this.request.session.sessionNotesCache = {
-      sessionId,
-      referralId,
-      data,
-    }
-  }
-
-  clearCachedSessionNotes(sessionId: string, referralId: string): void {
-    const cache = this.request.session.sessionNotesCache
-    if (cache && cache.sessionId === sessionId && cache.referralId === referralId) {
-      delete this.request.session.sessionNotesCache
+    return {
+      errors: [
+        {
+          formFields: ['sessionNotes'],
+          errorSummaryLinkedField: 'sessionNotes',
+          message: errorMessages.recordAttendance.sessionNotesTooLong,
+        },
+      ],
     }
   }
 }

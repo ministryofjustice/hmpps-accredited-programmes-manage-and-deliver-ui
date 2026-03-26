@@ -92,4 +92,33 @@ export default class SessionNotesPresenter {
     const sessionSlug = convertToUrlFriendlyKebabCase(this.data.sessionName)
     return `/group/${this.data.groupId}/session/${this.data.sessionId}/${sessionSlug}/session-notes`
   }
+
+  get pageHeaderActionsArgs() {
+    return {
+      classes: 'govuk-!-margin-bottom-0',
+      heading: {
+        text: this.text.headingText,
+        classes: 'govuk-heading-l',
+      },
+      items: [
+        {
+          text: this.text.updateAttendanceAndNotesButtonText,
+          classes: 'govuk-button--primary',
+          element: 'button',
+          type: 'submit',
+          attributes: {
+            form: 'session-notes-form',
+          },
+        },
+      ],
+    }
+  }
+
+  getNotesRows(notes: string): number {
+    const estimatedRows = notes
+      .split(/\r\n|\r|\n/)
+      .reduce((total, line) => total + Math.max(1, Math.ceil(line.length / 100)), 0)
+
+    return Math.min(Math.max(estimatedRows, 8), 50)
+  }
 }

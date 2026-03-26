@@ -4,7 +4,6 @@ import BaseController from '../shared/baseController'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import { FormValidationError } from '../utils/formValidationError'
-import errorMessages from '../utils/errorMessages'
 import SessionNotesView from './sessionNotesView'
 import SessionNotesForm from './sessionNotesForm'
 import SessionNotesPresenter, { SessionNotesData } from './sessionNotesPresenter'
@@ -30,9 +29,9 @@ export default class SessionNotesController extends BaseController {
     }
 
     if (req.method === 'POST') {
-      const sessionNotesForm = new SessionNotesForm(req)
+      const form = new SessionNotesForm()
       const submittedNotes = ((req.body.sessionNotes as string | undefined) || '').trim()
-      const validationError = this.validateSessionNotes(submittedNotes)
+      const validationError = form.validateSessionNotes(submittedNotes)
 
       if (validationError) {
         res.status(400)
@@ -70,7 +69,7 @@ export default class SessionNotesController extends BaseController {
         attendees: [{ referralId, outcomeCode, sessionNotes: submittedNotes }],
       })
 
-      sessionNotesForm.clearCachedSessionNotes(sessionId, referralId)
+      this.clearCachedSessionNotes(req, sessionId, referralId)
 
       const redirectQuery = new URLSearchParams({
         referralId,
@@ -109,8 +108,7 @@ export default class SessionNotesController extends BaseController {
     sessionId: string,
     referralId: string,
   ): Promise<SessionNotes> {
-    const sessionNotesForm = new SessionNotesForm(req)
-    const cachedData = sessionNotesForm.getCachedSessionNotes(sessionId, referralId)
+    const cachedData = this.getCachedSessionNotes(req, sessionId, referralId)
     if (cachedData) {
       return cachedData
     }
@@ -121,9 +119,32 @@ export default class SessionNotesController extends BaseController {
       referralId,
     )
 
-    sessionNotesForm.setCachedSessionNotes(sessionId, referralId, sessionNotesBffData)
+    this.setCachedSessionNotes(req, sessionId, referralId, sessionNotesBffData)
 
     return sessionNotesBffData
+  }
+
+  private getCachedSessionNotes(req: Request, sessionId: string, referralId: string): SessionNotes | null {
+    const cache = req.session.sessionNotesCache
+    if (cache && cache.sessionId === sessionId && cache.referralId === referralId) {
+      return cache.data
+    }
+    return null
+  }
+
+  private setCachedSessionNotes(req: Request, sessionId: string, referralId: string, data: SessionNotes): void {
+    req.session.sessionNotesCache = {
+      sessionId,
+      referralId,
+      data,
+    }
+  }
+
+  private clearCachedSessionNotes(req: Request, sessionId: string, referralId: string): void {
+    const cache = req.session.sessionNotesCache
+    if (cache && cache.sessionId === sessionId && cache.referralId === referralId) {
+      delete req.session.sessionNotesCache
+    }
   }
 
   private renderSessionNotesPage(
@@ -135,21 +156,5 @@ export default class SessionNotesController extends BaseController {
     const view = new SessionNotesView(presenter)
 
     this.renderPage(res, view)
-  }
-
-  private validateSessionNotes(notes: string): FormValidationError | null {
-    if (notes.length <= 10000) {
-      return null
-    }
-
-    return {
-      errors: [
-        {
-          formFields: ['sessionNotes'],
-          errorSummaryLinkedField: 'sessionNotes',
-          message: errorMessages.recordAttendance.sessionNotesTooLong,
-        },
-      ],
-    }
   }
 }
