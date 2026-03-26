@@ -24,12 +24,6 @@ export default class SessionNotesController extends BaseController {
       return res.redirect(`/group/${req.params.groupId}/session/${sessionId}/edit-session`)
     }
 
-    const sessionNotesBffData = await this.accreditedProgrammesManageAndDeliverService.getSessionNotes(
-      username,
-      sessionId,
-      referralId,
-    )
-
     if (req.method === 'POST') {
       const submittedNotes = ((req.body.sessionNotes as string | undefined) || '').trim()
 
@@ -59,6 +53,12 @@ export default class SessionNotesController extends BaseController {
       })
       return res.redirect(`${req.path}?${redirectQuery.toString()}`)
     }
+
+    const sessionNotesBffData = await this.accreditedProgrammesManageAndDeliverService.getSessionNotes(
+      username,
+      sessionId,
+      referralId,
+    )
 
     const sessionNotesData: SessionNotesData = {
       ...sessionNotesBffData,
