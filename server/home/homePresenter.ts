@@ -3,7 +3,7 @@ export default class HomePresenter {
 
   get text() {
     return {
-      pageHeading: 'Accredited Programmes',
+      pageHeading: 'Accredited Progr',
       headingCaption: '',
     }
   }
