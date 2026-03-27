@@ -21,6 +21,7 @@ import SessionScheduleController from '../sessionSchedule/sessionScheduleControl
 import UpdateReferralStatusController from '../updateReferralStatus/updateReferralStatusController'
 import AttendanceController from '../attendance/attendanceController'
 import HomeController from '../home/homeController'
+import SessionNotesController from '../sessionNotes/sessionNotesController'
 import AddAvailabilityController from '../availabilityAndMotivation/addAvailability/addAvailabilityController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
@@ -52,6 +53,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const sessionScheduleController = new SessionScheduleController(accreditedProgrammesManageAndDeliverService)
   const editSessionController = new EditSessionController(accreditedProgrammesManageAndDeliverService)
   const attendanceController = new AttendanceController(accreditedProgrammesManageAndDeliverService)
+  const sessionNotesController = new SessionNotesController(accreditedProgrammesManageAndDeliverService)
   const homeController = new HomeController()
   const addAvailabilityController = new AddAvailabilityController(accreditedProgrammesManageAndDeliverService)
 
@@ -384,6 +386,10 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   get('/referral/:referralId/attendance-history', async (req, res, next) => {
     await referralDetailsController.showAttendanceHistoryPage(req, res)
+  })
+
+  getOrPost('/group/:groupId/session/:sessionId/:sessionSlug/session-notes', async (req, res, next) => {
+    await sessionNotesController.showSessionNotesPage(req, res)
   })
 
   return router

@@ -1,3 +1,5 @@
+import attendanceOptionText from './attendanceUtils'
+
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
 
@@ -38,16 +40,5 @@ export const convertToUrlFriendlyKebabCase = (sentence: string): string =>
   isBlank(sentence) ? '' : sentence.trim().toLowerCase().replace(/[():]/g, '').replace(/\s+/g, '-')
 
 export const attendanceTag = (attendance: string | undefined): string => {
-  const recordedAttendance = attendance?.trim().toUpperCase()
-
-  if (recordedAttendance === 'ATTENDED - COMPLIED') {
-    return '<span class="govuk-tag govuk-tag--blue">Attended</span>'
-  }
-  if (recordedAttendance === 'ATTENDED - FAILED TO COMPLY') {
-    return '<span class="govuk-tag govuk-tag--yellow">Attended - failed to comply</span>'
-  }
-  if (recordedAttendance === 'DID NOT ATTEND') {
-    return '<span class="govuk-tag govuk-tag--red">Not attended</span>'
-  }
-  return '<span class="govuk-tag govuk-tag--grey">To be confirmed</span>'
+  return attendanceOptionText(attendance).attendanceState
 }

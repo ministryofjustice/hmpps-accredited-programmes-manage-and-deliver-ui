@@ -1,0 +1,75 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "moj/components/alert/macro.njk" import mojAlert %}
+{% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+
+{% set pageTitle = applicationName + " - " + text.headingText %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds govuk-!-margin-bottom-2">
+      {{ govukBackLink(backLinkArgs) }}
+
+      {% if successMessageSummary %}
+        {{ mojAlert(successMessageSummary) }}
+      {% endif %}
+
+      {% if errorSummary %}
+        {{ govukErrorSummary(errorSummary) }}
+      {% endif %}
+    </div>
+
+    <div class="govuk-grid-column-full">
+      {{ mojPageHeaderActions(pageHeaderActionsArgs) }}
+    </div>
+
+    <div class="govuk-grid-column-two-thirds">
+      <form id="session-notes-form" method="post" novalidate>
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+        {{ govukInsetText({
+          text: text.lastUpdatedText
+        }) }}
+
+        {% for section in notesBodyArgs %}
+          <section>
+            {{ section.html | safe }}
+
+            {% if section.data %}
+              <div class="govuk-grid-row">
+                <div class="govuk-grid-column-one-half">
+                  <p class="govuk-body">
+                    <a class="govuk-link govuk-!-padding-right-6" href="{{ section.data.sessionDetailsHref }}">
+                      {{ section.data.moduleName }}: {{ section.data.sessionName }}
+                    </a>
+                  </p>
+                </div>
+
+                <div class="govuk-grid-column-one-quarter">
+                  <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Date</h3>
+                  <p class="govuk-body">{{ section.data.sessionDate }}</p>
+                </div>
+
+                <div class="govuk-grid-column-one-quarter">
+                  <p class="session-notes__attendance">{{ section.data.attendance | safe }}</p>
+                </div>
+              </div>
+            {% endif %}
+          </section>
+        {% endfor %}
+
+        <section>
+          <h2 class="govuk-heading-m">{{ text.sessionNotesTitle }}</h2>
+          {% if showNoNotesAddedMessage %}
+            <p class="govuk-body-l">No notes added</p>
+          {% endif %}
+          {{ govukTextarea(textareaArgs) }}
+        </section>
+      </form>
+    </div>
+  </div>
+{% endblock %}

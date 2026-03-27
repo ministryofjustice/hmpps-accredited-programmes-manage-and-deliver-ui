@@ -3,6 +3,7 @@ import type { components } from './imported'
 type AlcoholMisuseDetails = components['schemas']['AlcoholMisuseDetails']
 type Attitude = components['schemas']['Attitude']
 type AttendanceAndSessionNotes = components['schemas']['AttendanceAndSessionNotes']
+type SessionAttendee = components['schemas']['SessionAttendee']
 type Availability = components['schemas']['Availability']
 type CohortEnum = components['schemas']['ReferralDetails']['cohort']
 type CreateAvailability = components['schemas']['CreateAvailability']
@@ -81,11 +82,13 @@ type EditSessionDateAndTimeResponse = components['schemas']['EditSessionDateAndT
 type GroupScheduleOverview = components['schemas']['GroupScheduleOverview']
 type GroupScheduleSession = components['schemas']['GroupScheduleSession']
 type Session = components['schemas']['Session']
+type SessionNotes = components['schemas']['SessionNotes']
 type EditSessionFacilitatorsResponse = components['schemas']['EditSessionFacilitatorsResponse']
 type EditSessionFacilitatorResponse = components['schemas']['EditSessionFacilitatorsResponse']['facilitators']
 type EditSessionFacilitatorsRequest = components['schemas']['EditSessionFacilitatorRequest']
 type RecordSessionAttendance = components['schemas']['RecordSessionAttendance']
 type SessionAttendance = components['schemas']['SessionAttendance']
+type SessionAttendanceOutcomeCode = SessionAttendee['outcomeCode']
 type AttendanceHistoryResponse = components['schemas']['AttendanceHistoryResponse']
 type GroupDetailsResponse = components['schemas']['GroupDetailsResponse']
 
@@ -169,6 +172,9 @@ export type {
   SentenceInformation,
   Session,
   SessionAttendance,
+  SessionAttendee,
+  SessionAttendanceOutcomeCode,
+  SessionNotes,
   SessionScheduleRequest,
   SessionScheduleResponse,
   SessionTime,

@@ -3,6 +3,8 @@ import { MultiSelectTableArgs } from '@manage-and-deliver-ui'
 import { TableArgs } from '../utils/govukFrontendTypes'
 import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
+import { convertToUrlFriendlyKebabCase } from '../utils/utils'
+import ViewUtils from '../utils/viewUtils'
 import attendanceOptionText, { attendanceOptionTextTags } from '../utils/attendanceUtils'
 
 export default class EditSessionPresenter {
@@ -53,13 +55,32 @@ export default class EditSessionPresenter {
     return attendanceOptionText(attendance, attendanceOptionTextTags.editSession)
   }
 
-  private sessionNotesText(sessionNotes: unknown): string {
-    if (typeof sessionNotes !== 'string') {
-      return 'Not added'
+  private get sessionNotesSlug() {
+    const slugSource = this.sessionDetails.sessionName || this.sessionDetails.pageTitle
+    return convertToUrlFriendlyKebabCase(slugSource) || 'session'
+  }
+
+  private hasSessionNotes(notes: unknown): boolean {
+    if (typeof notes !== 'string') {
+      return false
     }
 
-    const theSessionNotes = sessionNotes.trim()
-    return theSessionNotes.length > 0 ? theSessionNotes : 'Not added'
+    // HTML tags are stripped so validation is based on visible note text only.
+    const text = notes.replace(/<[^>]*>/g, '').trim()
+    return text.length > 0 && text.toLowerCase() !== 'not added'
+  }
+
+  private sessionNotesCell(notes: unknown, referralId: string) {
+    if (!this.hasSessionNotes(notes)) {
+      return { text: 'Not added' }
+    }
+
+    const linkText = `${ViewUtils.escape(this.sessionDetails.pageTitle)} notes`
+    return { html: `<a href="${this.sessionNotesPagePath(referralId)}">${linkText}</a>` }
+  }
+
+  private sessionNotesPagePath(referralId: string): string {
+    return `/group/${this.groupId}/session/${this.sessionId}/${this.sessionNotesSlug}/session-notes?referralId=${encodeURIComponent(referralId)}&source=edit-session`
   }
 
   get attendanceTableArgs(): MultiSelectTableArgs | TableArgs {
@@ -87,7 +108,7 @@ export default class EditSessionPresenter {
               html: `<a href="/referral-details/${it.referralId}/personal-details">${it.name}</a> ${it.crn}`,
             },
             { html: this.attendanceOptionText(it.attendance).attendanceState },
-            { text: this.sessionNotesText(it.sessionNotes) },
+            this.sessionNotesCell(it.sessionNotes, it.referralId),
           ],
         })),
       }
@@ -102,7 +123,7 @@ export default class EditSessionPresenter {
                   html: `<a href="/referral-details/${attendanceData[0].referralId}/personal-details">${attendanceData[0].name}</a> ${attendanceData[0].crn}`,
                 },
                 { html: this.attendanceOptionText(attendanceData[0].attendance).attendanceState },
-                { text: this.sessionNotesText(attendanceData[0].sessionNotes) },
+                this.sessionNotesCell(attendanceData[0].sessionNotes, attendanceData[0].referralId),
               ],
             ]
           : [],

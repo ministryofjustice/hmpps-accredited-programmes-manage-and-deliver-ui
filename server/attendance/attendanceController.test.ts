@@ -453,6 +453,34 @@ describe('showRecordAttendancePage', () => {
   })
 
   describe('POST /group/:groupId/session/:sessionId/referral/:referralId/:groupTitle-session-notes', () => {
+    it('returns 400 when session notes exceed 10000 characters', async () => {
+      sessionData = {
+        editSessionAttendance: {
+          referralIds: ['referral1'],
+          attendees: [{ referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: '' }],
+        },
+      }
+
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Getting started 1' })
+      bffData.people = [{ ...bffData.people[0], referralId: 'referral1', name: 'Alice Brown' }]
+      accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
+
+      await request(app)
+        .post('/group/111/session/6789/referral/referral1/getting-started-1-session-notes')
+        .type('form')
+        .send({
+          'record-session-attendance-notes': 'a'.repeat(10001),
+        })
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain('Session notes must be 10,000 characters or fewer')
+        })
+
+      expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).not.toHaveBeenCalled()
+    })
+
     it('submits attendance and redirects to edit session on the last referral', async () => {
       sessionData = {
         editSessionAttendance: {

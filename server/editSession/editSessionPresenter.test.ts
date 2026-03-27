@@ -11,6 +11,7 @@ describe('EditSessionPresenter', () => {
       it('returns MultiSelectTableArgs with correct structure', () => {
         const sessionDetails: GroupSessionResponse = {
           pageTitle: 'Session 1',
+          sessionName: 'Session 1',
           code: 'CODE-123',
           sessionType: 'Group',
           attendanceAndSessionNotes: [
@@ -48,7 +49,9 @@ describe('EditSessionPresenter', () => {
               cells: [
                 { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
                 { html: '<span class="govuk-tag govuk-tag--blue">Attended - Complied</span>' },
-                { text: 'Good participation' },
+                {
+                  html: '<a href="/group/group-123/session/session-456/session-1/session-notes?referralId=123&source=edit-session">Session 1 notes</a>',
+                },
               ],
             },
             {
@@ -56,64 +59,10 @@ describe('EditSessionPresenter', () => {
               value: '456',
               cells: [
                 { html: '<a href="/referral-details/456/personal-details">Jane Doe</a> CRN002' },
-                { html: '<span class="govuk-tag govuk-tag--grey">To be confirmed</span>' },
-                { text: 'Absent' },
-              ],
-            },
-          ],
-        })
-      })
-
-      it('returns Not added for non-string session notes in multi-select rows', () => {
-        const sessionDetails: GroupSessionResponse = {
-          pageTitle: 'Session 1',
-          code: 'CODE-123',
-          sessionType: 'Group',
-          attendanceAndSessionNotes: [
-            {
-              referralId: '123',
-              name: 'Alex River',
-              crn: 'CRN001',
-              attendance: 'Attended - Complied',
-              sessionNotes: {} as unknown as string,
-            },
-            {
-              referralId: '456',
-              name: 'Jane Doe',
-              crn: 'CRN002',
-              attendance: 'Not attended',
-              sessionNotes: 'Absent',
-            },
-          ],
-          date: '01 Feb 2026',
-          time: '1:00pm',
-          scheduledToAttend: [],
-          facilitators: [],
-        }
-
-        const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
-        const result = presenter.attendanceTableArgs
-
-        expect(result).toEqual({
-          idPrefix: 'attendance-multi-select',
-          headers: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
-          rows: [
-            {
-              id: 'attendance-multi-select-row-0',
-              value: '123',
-              cells: [
-                { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
-                { html: '<span class="govuk-tag govuk-tag--blue">Attended - Complied</span>' },
-                { text: 'Not added' },
-              ],
-            },
-            {
-              id: 'attendance-multi-select-row-1',
-              value: '456',
-              cells: [
-                { html: '<a href="/referral-details/456/personal-details">Jane Doe</a> CRN002' },
-                { html: '<span class="govuk-tag govuk-tag--grey">To be confirmed</span>' },
-                { text: 'Absent' },
+                { html: '<span class="govuk-tag govuk-tag--red">Not attended</span>' },
+                {
+                  html: '<a href="/group/group-123/session/session-456/session-1/session-notes?referralId=456&source=edit-session">Session 1 notes</a>',
+                },
               ],
             },
           ],
@@ -125,6 +74,7 @@ describe('EditSessionPresenter', () => {
       it('returns TableArgs with correct structure', () => {
         const sessionDetails: GroupSessionResponse = {
           pageTitle: 'Session 1',
+          sessionName: 'Session 1',
           code: 'CODE-123',
           sessionType: 'Individual',
           attendanceAndSessionNotes: [
@@ -151,7 +101,9 @@ describe('EditSessionPresenter', () => {
             [
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
               { html: '<span class="govuk-tag govuk-tag--yellow">Attended - failed to comply</span>' },
-              { text: 'Good progress' },
+              {
+                html: '<a href="/group/group-123/session/session-456/session-1/session-notes?referralId=123&source=edit-session">Session 1 notes</a>',
+              },
             ],
           ],
         })
@@ -160,6 +112,7 @@ describe('EditSessionPresenter', () => {
       it('returns Not added when single-referral session notes are blank', () => {
         const sessionDetails: GroupSessionResponse = {
           pageTitle: 'Session 1',
+          sessionName: 'Session 1',
           code: 'CODE-123',
           sessionType: 'Individual',
           attendanceAndSessionNotes: [
@@ -186,7 +139,47 @@ describe('EditSessionPresenter', () => {
             [
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
               { html: '<span class="govuk-tag govuk-tag--blue">Attended - Complied</span>' },
-              { text: 'Not added' },
+              {
+                text: 'Not added',
+              },
+            ],
+          ],
+        })
+      })
+
+      it('returns Not added text when single-referral session notes equals Not added', () => {
+        const sessionDetails: GroupSessionResponse = {
+          pageTitle: 'Session 1',
+          sessionName: 'Session 1',
+          code: 'CODE-123',
+          sessionType: 'Individual',
+          attendanceAndSessionNotes: [
+            {
+              referralId: '123',
+              name: 'Alex River',
+              crn: 'CRN001',
+              attendance: 'Attended - Complied',
+              sessionNotes: 'Not added',
+            },
+          ],
+          date: '01 Feb 2026',
+          time: '1:00pm',
+          scheduledToAttend: [],
+          facilitators: [],
+        }
+
+        const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
+        const result = presenter.attendanceTableArgs
+
+        expect(result).toEqual({
+          head: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
+          rows: [
+            [
+              { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
+              { html: '<span class="govuk-tag govuk-tag--blue">Attended - Complied</span>' },
+              {
+                text: 'Not added',
+              },
             ],
           ],
         })
@@ -197,6 +190,7 @@ describe('EditSessionPresenter', () => {
       it('returns empty TableArgs', () => {
         const sessionDetails: GroupSessionResponse = {
           pageTitle: 'Session 1',
+          sessionName: 'Session 1',
           code: 'CODE-123',
           sessionType: 'Individual',
           attendanceAndSessionNotes: [],
@@ -214,12 +208,51 @@ describe('EditSessionPresenter', () => {
           rows: [],
         })
       })
+
+      it('uses pageTitle slug when sessionName is blank', () => {
+        const sessionDetails: GroupSessionResponse = {
+          pageTitle: 'Pre-group one-to-one',
+          sessionName: '',
+          code: 'CODE-123',
+          sessionType: 'Individual',
+          attendanceAndSessionNotes: [
+            {
+              referralId: '123',
+              name: 'Alex River',
+              crn: 'CRN001',
+              attendance: 'Attended - Complied',
+              sessionNotes: 'Notes recorded',
+            },
+          ],
+          date: '01 Feb 2026',
+          time: '1:00pm',
+          scheduledToAttend: [],
+          facilitators: [],
+        }
+
+        const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
+        const result = presenter.attendanceTableArgs
+
+        expect(result).toEqual({
+          head: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
+          rows: [
+            [
+              { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
+              { html: '<span class="govuk-tag govuk-tag--blue">Attended - Complied</span>' },
+              {
+                html: '<a href="/group/group-123/session/session-456/pre-group-one-to-one/session-notes?referralId=123&source=edit-session">Pre-group one-to-one notes</a>',
+              },
+            ],
+          ],
+        })
+      })
     })
 
     describe('when attendance value is unmapped/mapped', () => {
       it('falls back to to be confirmed for unmapped outcome_type_code values', () => {
         const sessionDetails: GroupSessionResponse = {
           pageTitle: 'Session 1',
+          sessionName: 'Session 1',
           code: 'CODE-123',
           sessionType: 'Group',
           attendanceAndSessionNotes: [
@@ -247,7 +280,9 @@ describe('EditSessionPresenter', () => {
             [
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
               { html: '<span class="govuk-tag govuk-tag--grey">To be confirmed</span>' },
-              { text: 'Good participation' },
+              {
+                html: '<a href="/group/group-123/session/session-456/session-1/session-notes?referralId=123&source=edit-session">Session 1 notes</a>',
+              },
             ],
           ],
         })
@@ -256,6 +291,7 @@ describe('EditSessionPresenter', () => {
       it('falls back to to be confirmed for no did not attend text', () => {
         const sessionDetails: GroupSessionResponse = {
           pageTitle: 'Session 1',
+          sessionName: 'Session 1',
           code: 'CODE-123',
           sessionType: 'Individual',
           attendanceAndSessionNotes: [
@@ -282,7 +318,9 @@ describe('EditSessionPresenter', () => {
             [
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
               { html: '<span class="govuk-tag govuk-tag--grey">To be confirmed</span>' },
-              { text: 'Absent' },
+              {
+                html: '<a href="/group/group-123/session/session-456/session-1/session-notes?referralId=123&source=edit-session">Session 1 notes</a>',
+              },
             ],
           ],
         })
@@ -291,6 +329,7 @@ describe('EditSessionPresenter', () => {
       it('maps did not attend text to not attended tag', () => {
         const sessionDetails: GroupSessionResponse = {
           pageTitle: 'Session 1',
+          sessionName: 'Session 1',
           code: 'CODE-123',
           sessionType: 'Individual',
           attendanceAndSessionNotes: [
@@ -317,7 +356,9 @@ describe('EditSessionPresenter', () => {
             [
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
               { html: '<span class="govuk-tag govuk-tag--red">Not attended</span>' },
-              { text: 'Absent' },
+              {
+                html: '<a href="/group/group-123/session/session-456/session-1/session-notes?referralId=123&source=edit-session">Session 1 notes</a>',
+              },
             ],
           ],
         })
@@ -328,6 +369,7 @@ describe('EditSessionPresenter', () => {
   describe('backLinkArgs', () => {
     const sessionDetails: GroupSessionResponse = {
       pageTitle: 'Session 1',
+      sessionName: 'Session 1',
       code: 'group-123',
       sessionType: 'Group',
       attendanceAndSessionNotes: [],

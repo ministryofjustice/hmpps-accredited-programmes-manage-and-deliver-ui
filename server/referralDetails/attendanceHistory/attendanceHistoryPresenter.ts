@@ -2,7 +2,7 @@ import { AttendanceHistoryResponse, ReferralDetails } from '@manage-and-deliver-
 import ReferralLayoutPresenter, { HorizontalNavValues } from '../../shared/referral/referralLayoutPresenter'
 import { MojAlertComponentArgs } from '../../interfaces/alertComponentArgs'
 import { TableArgs } from '../../utils/govukFrontendTypes'
-import { attendanceTag } from '../../utils/utils'
+import { attendanceTag, convertToUrlFriendlyKebabCase } from '../../utils/utils'
 
 export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter {
   public readonly personOnProbationName: string
@@ -81,9 +81,19 @@ export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter 
       { html: attendanceTag(session.attendanceStatus) },
       session.hasNotes
         ? {
-            html: `<a href="/session/${session.sessionId}/notes" class="govuk-link">${session.sessionName} attendance and notes</a>`,
+            html: `<a href="${this.sessionNotesPagePath(session.sessionId, session.sessionName)}" class="govuk-link">${session.sessionName} attendance and notes</a>`,
           }
         : { text: 'Not added' },
     ])
+  }
+
+  private sessionNotesPagePath(sessionId: string, sessionName: string): string {
+    const sessionSlug = convertToUrlFriendlyKebabCase(sessionName) || 'session'
+    const query = new URLSearchParams({
+      referralId: this.referralId,
+      isAttendanceHistory: 'true',
+    })
+
+    return `/group/${this.referral.currentlyAllocatedGroupId}/session/${sessionId}/${sessionSlug}/session-notes?${query.toString()}`
   }
 }

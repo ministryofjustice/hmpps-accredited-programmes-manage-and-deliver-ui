@@ -7,6 +7,7 @@ import RecordAttendanceForm from './recordAttendanceForm'
 import { FormValidationError } from '../utils/formValidationError'
 import AttendanceSessionNotesPresenter from './attendanceNotes/attendanceSessionNotesPresenter'
 import AttendanceSessionNotesView from './attendanceNotes/attendanceSessionNotesView'
+import AttendanceSessionNotesForm from './attendanceNotes/attendanceSessionNotesForm'
 import { convertToUrlFriendlyKebabCase } from '../utils/utils'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
@@ -130,12 +131,41 @@ export default class AttendanceController extends BaseController {
     const isLastReferral = currentReferralIndex === referralIds.length - 1
     const currentAttendee = attendees.find(attendee => attendee.referralId === referralId)
     const referralPerson = recordAttendanceBffData.people.find(person => person.referralId === referralId)
+    const selectedAttendanceCode = currentAttendee?.outcomeCode
+
+    const backLinkUri =
+      currentReferralIndex > 0
+        ? this.notesPageUri(groupId, sessionId, referralIds[currentReferralIndex - 1], theGroupTitle)
+        : `/group/${groupId}/session/${sessionId}/record-attendance`
 
     if (req.method === 'POST') {
-      const isSkipAndAddLater = req.body.action === 'skip-and-add-later'
+      const notesFormData = await new AttendanceSessionNotesForm(req).sessionNotesData()
+      const submittedNotes =
+        notesFormData.paramsForUpdate?.sessionNotes ||
+        (req.body['record-session-attendance-notes'] as string | undefined) ||
+        ''
+      const isSkipAndAddLater =
+        notesFormData.paramsForUpdate?.isSkipAndAddLater || req.body.action === 'skip-and-add-later'
 
       if (currentAttendee && !isSkipAndAddLater) {
-        currentAttendee.sessionNotes = req.body['record-session-attendance-notes'] || ''
+        if (notesFormData.error) {
+          res.status(400)
+          const presenter = new AttendanceSessionNotesPresenter(
+            notesFormData.error,
+            recordAttendanceBffData,
+            groupId,
+            sessionId,
+            selectedAttendanceCode,
+            isLastReferral,
+            referralId,
+            submittedNotes,
+            backLinkUri,
+          )
+          const view = new AttendanceSessionNotesView(presenter)
+          return this.renderPage(res, view)
+        }
+
+        currentAttendee.sessionNotes = submittedNotes
       }
 
       if (isLastReferral) {
@@ -159,13 +189,10 @@ export default class AttendanceController extends BaseController {
       return res.redirect(this.notesPageUri(groupId, sessionId, referralIds[currentReferralIndex + 1], theGroupTitle))
     }
 
-    const selectedAttendanceCode = currentAttendee?.outcomeCode
-    const notesValue = this.resolveNotesValue(currentAttendee?.sessionNotes, referralPerson?.sessionNotes)
-
-    const backLinkUri =
-      currentReferralIndex > 0
-        ? this.notesPageUri(groupId, sessionId, referralIds[currentReferralIndex - 1], theGroupTitle)
-        : `/group/${groupId}/session/${sessionId}/record-attendance`
+    const notesValue = new AttendanceSessionNotesForm(req).resolveNotesValue(
+      currentAttendee?.sessionNotes,
+      referralPerson?.sessionNotes,
+    )
 
     const presenter = new AttendanceSessionNotesPresenter(
       null,
@@ -239,9 +266,5 @@ export default class AttendanceController extends BaseController {
 
   private notesPageUri(groupId: string, sessionId: string, referralId: string, groupTitle: string): string {
     return `/group/${groupId}/session/${sessionId}/referral/${referralId}/${groupTitle}-session-notes`
-  }
-
-  private resolveNotesValue(attendeeNotes?: string, bffNotes?: string): string {
-    return attendeeNotes ?? bffNotes ?? ''
   }
 }

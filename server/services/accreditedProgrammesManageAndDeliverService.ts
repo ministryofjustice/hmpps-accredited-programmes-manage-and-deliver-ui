@@ -57,6 +57,7 @@ import {
   SentenceInformation,
   Session,
   SessionAttendance,
+  SessionNotes,
   SessionScheduleResponse,
   ThinkingAndBehaviour,
   UpdateAvailability,
@@ -688,6 +689,14 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
       path: `/bff/session/${sessionId}`,
       headers: { Accept: 'application/json' },
     })) as Session
+  }
+
+  async getSessionNotes(username: ExpressUsername, sessionId: string, referralId: string): Promise<SessionNotes> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/session/${sessionId}/referral/${referralId}/session-notes`,
+      headers: { Accept: 'application/json' },
+    })) as SessionNotes
   }
 
   async updateSessionAttendees(username: ExpressUsername, sessionId: string, referralIds: string[]): Promise<string> {
