@@ -73,7 +73,7 @@ export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter 
   get attendanceHistoryTableArgs(): TableArgs['rows'] {
     return this.attendanceHistory.attendanceHistory.map(session => [
       {
-        html: `<a href="/group/${this.referral.currentlyAllocatedGroupId}/session/${session.sessionId}/edit-session?isAttendanceHistory=true&referralId=${this.referralId}" class="govuk-link">${session.sessionName}</a>`,
+        html: `<a href="/group/${session.groupId}/session/${session.sessionId}/edit-session?isAttendanceHistory=true&referralId=${this.referralId}" class="govuk-link">${session.sessionName}</a>`,
       },
       { text: session.groupCode ?? 'N/A' },
       { text: session.date },
@@ -81,19 +81,19 @@ export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter 
       { html: attendanceTag(session.attendanceStatus) },
       session.hasNotes
         ? {
-            html: `<a href="${this.sessionNotesPagePath(session.sessionId, session.sessionName)}" class="govuk-link">${session.sessionName} attendance and notes</a>`,
+            html: `<a href="${this.sessionNotesPagePath(session.sessionId, session.sessionName, session.groupId)}" class="govuk-link">${session.sessionName} attendance and notes</a>`,
           }
         : { text: 'Not added' },
     ])
   }
 
-  private sessionNotesPagePath(sessionId: string, sessionName: string): string {
+  private sessionNotesPagePath(sessionId: string, sessionName: string, groupId: string): string {
     const sessionSlug = convertToUrlFriendlyKebabCase(sessionName) || 'session'
     const query = new URLSearchParams({
       referralId: this.referralId,
       isAttendanceHistory: 'true',
     })
 
-    return `/group/${this.referral.currentlyAllocatedGroupId}/session/${sessionId}/${sessionSlug}/session-notes?${query.toString()}`
+    return `/group/${groupId}/session/${sessionId}/${sessionSlug}/session-notes?${query.toString()}`
   }
 }
