@@ -56,10 +56,16 @@ export default class CreateGroupController extends BaseController {
     if (req.method === 'POST') {
       let existingGroup = { code: '' }
       if (req.body['create-group-code']) {
-        existingGroup = await this.accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion(
-          username,
-          req.body['create-group-code'],
-        )
+        try {
+          existingGroup = await this.accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion(
+            username,
+            req.body['create-group-code'],
+          )
+        } catch (error) {
+          if ((error as { status?: number }).status !== 404) {
+            throw error
+          }
+        }
       }
       const data = await new CreateOrEditGroupForm(req, existingGroup.code).createGroupCodeData()
       if (data.error) {
