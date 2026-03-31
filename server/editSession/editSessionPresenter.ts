@@ -56,8 +56,7 @@ export default class EditSessionPresenter {
   }
 
   private get sessionNotesSlug() {
-    const slugSource = this.sessionDetails.sessionName || this.sessionDetails.pageTitle
-    return convertToUrlFriendlyKebabCase(slugSource) || 'session'
+    return convertToUrlFriendlyKebabCase(this.sessionDetails.pageTitle) || 'session'
   }
 
   private hasSessionNotes(notes: unknown): boolean {
