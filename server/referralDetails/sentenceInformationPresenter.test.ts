@@ -27,14 +27,6 @@ describe(`sentenceInformationSummaryList.`, () => {
         lines: [sentenceInformation.licenceEndDate],
       },
       {
-        key: 'Post-sentence supervision start date',
-        lines: [sentenceInformation.postSentenceSupervisionStartDate],
-      },
-      {
-        key: 'Post-sentence supervision end date',
-        lines: [sentenceInformation.postSentenceSupervisionEndDate],
-      },
-      {
         key: 'Two-thirds point',
         lines: [sentenceInformation.twoThirdsPoint],
       },
@@ -72,14 +64,6 @@ describe(`sentenceInformationSummaryList.`, () => {
       },
       {
         key: 'License end date',
-        lines: ['Data not available'],
-      },
-      {
-        key: 'Post-sentence supervision start date',
-        lines: ['Data not available'],
-      },
-      {
-        key: 'Post-sentence supervision end date',
         lines: ['Data not available'],
       },
       {
