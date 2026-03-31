@@ -67,19 +67,19 @@ describe('AttendanceHistoryPresenter', () => {
       expect(rows).toHaveLength(2)
       expect(rows[0]).toEqual([
         {
-          html: `<a href="/group/${referralDetails.currentlyAllocatedGroupId}/session/session-1/edit-session?isAttendanceHistory=true&referralId=${referralId}" class="govuk-link">Pre-group one-to-one</a>`,
+          html: `<a href="/group/1234567890/session/session-1/edit-session?isAttendanceHistory=true&referralId=${referralId}" class="govuk-link">Pre-group one-to-one</a>`,
         },
         { text: 'GRP-001' },
         { text: '11 July 2025' },
         { text: '10:30am to 11am' },
         { html: `<span class="govuk-tag govuk-tag--blue">Attended</span>` },
         {
-          html: `<a href="/group/${referralDetails.currentlyAllocatedGroupId}/session/session-1/pre-group-one-to-one/session-notes?referralId=${referralId}&isAttendanceHistory=true" class="govuk-link">Pre-group one-to-one attendance and notes</a>`,
+          html: `<a href="/group/1234567890/session/session-1/pre-group-one-to-one/session-notes?referralId=${referralId}&isAttendanceHistory=true" class="govuk-link">Pre-group one-to-one attendance and notes</a>`,
         },
       ])
       expect(rows[1]).toEqual([
         {
-          html: `<a href="/group/${referralDetails.currentlyAllocatedGroupId}/session/session-2/edit-session?isAttendanceHistory=true&referralId=${referralId}" class="govuk-link">Session 1: Introduction</a>`,
+          html: `<a href="/group/1234567890/session/session-2/edit-session?isAttendanceHistory=true&referralId=${referralId}" class="govuk-link">Session 1: Introduction</a>`,
         },
         { text: 'GRP-001' },
         { text: '18 July 2025' },

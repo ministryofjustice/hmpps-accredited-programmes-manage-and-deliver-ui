@@ -3567,6 +3567,12 @@ export interface components {
        */
       groupCode: string
       /**
+       * Format: uuid
+       * @description The group id for the session
+       * @example a1b2c3d4-e5f6-7890-abcd-ef1234567890
+       */
+      groupId?: string
+      /**
        * @description The date of the session
        * @example 11 July 2025
        */
