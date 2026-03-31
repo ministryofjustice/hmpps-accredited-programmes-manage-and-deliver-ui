@@ -150,6 +150,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/group/{groupId}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Update programme group information
+     * @description Update programme group information
+     */
+    put: operations['updateProgrammeGroup']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/delivery-location-preferences/referral/{referralId}': {
     parameters: {
       query?: never
@@ -1533,6 +1553,85 @@ export interface components {
       /** Format: int32 */
       messagesFoundCount: number
     }
+    /** @description Response returned when a programme group is updated */
+    UpdateGroupResponse: {
+      /** @description A message describing what was updated on the group */
+      successMessage: string
+    }
+    /** @description Session slot details for a programme group */
+    CreateGroupSessionSlot: {
+      /**
+       * @description The day of the week for the session
+       * @example MONDAY
+       * @enum {string}
+       */
+      dayOfWeek: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
+      /**
+       * Format: int32
+       * @description The hour of the session in 12-hour format
+       * @example 9
+       */
+      hour: number
+      /**
+       * Format: int32
+       * @description The minutes of the session
+       * @example 0
+       */
+      minutes: number
+      /**
+       * @description AM or PM indicator
+       * @example AM
+       * @enum {string}
+       */
+      amOrPm: 'AM' | 'PM'
+    }
+    CreateGroupTeamMember: {
+      /** @description The full name of the facilitator for the group */
+      facilitator: string
+      /** @description The code of the facilitator for the group */
+      facilitatorCode: string
+      /** @description The name of the team that the member belongs to */
+      teamName: string
+      /** @description The code of the team that the member belongs to */
+      teamCode: string
+      /**
+       * @description The type of the facilitator for the group
+       * @enum {string}
+       */
+      teamMemberType: 'TREATMENT_MANAGER' | 'REGULAR_FACILITATOR' | 'COVER_FACILITATOR'
+    }
+    /** @enum {string} */
+    ProgrammeGroupCohort: 'GENERAL' | 'GENERAL_LDC' | 'SEXUAL' | 'SEXUAL_LDC'
+    /** @enum {string} */
+    ProgrammeGroupSexEnum: 'MALE' | 'FEMALE' | 'MIXED'
+    /** @description The delivery location preferences for a referral */
+    UpdateGroupRequest: {
+      /** @description The code for the group */
+      groupCode?: string
+      /** @description Cohort for the Programme Group. */
+      cohort?: components['schemas']['ProgrammeGroupCohort']
+      /** @description Sex that the group is being run for */
+      sex?: components['schemas']['ProgrammeGroupSexEnum']
+      /**
+       * Format: date
+       * @description The earliest date the group can start
+       */
+      earliestStartDate?: string
+      /** @description A list of session slots for the group */
+      createGroupSessionSlot?: components['schemas']['CreateGroupSessionSlot'][]
+      /** @description Boolean value to determine */
+      automaticallyRescheduleOtherSessions?: boolean
+      /** @description The name of the PDU that the group will take place in */
+      pduName?: string
+      /** @description The code of the PDU that the group will take place in */
+      pduCode?: string
+      /** @description The name of the location that the group will be delivered at */
+      deliveryLocationName?: string
+      /** @description The code of the location that the group will be delivered at */
+      deliveryLocationCode?: string
+      /** @description The person code and name and type of the teamMembers of the group */
+      teamMembers?: components['schemas']['CreateGroupTeamMember'][]
+    }
     CodeDescription: {
       code: string
       description: string
@@ -1745,52 +1844,6 @@ export interface components {
       /** @description The person code and name and type of the teamMembers of the group */
       teamMembers: components['schemas']['CreateGroupTeamMember'][]
     }
-    /** @description Session slot details for a programme group */
-    CreateGroupSessionSlot: {
-      /**
-       * @description The day of the week for the session
-       * @example MONDAY
-       * @enum {string}
-       */
-      dayOfWeek: 'MONDAY' | 'TUESDAY' | 'WEDNESDAY' | 'THURSDAY' | 'FRIDAY' | 'SATURDAY' | 'SUNDAY'
-      /**
-       * Format: int32
-       * @description The hour of the session in 12-hour format
-       * @example 9
-       */
-      hour: number
-      /**
-       * Format: int32
-       * @description The minutes of the session
-       * @example 0
-       */
-      minutes: number
-      /**
-       * @description AM or PM indicator
-       * @example AM
-       * @enum {string}
-       */
-      amOrPm: 'AM' | 'PM'
-    }
-    CreateGroupTeamMember: {
-      /** @description The full name of the facilitator for the group */
-      facilitator: string
-      /** @description The code of the facilitator for the group */
-      facilitatorCode: string
-      /** @description The name of the team that the member belongs to */
-      teamName: string
-      /** @description The code of the team that the member belongs to */
-      teamCode: string
-      /**
-       * @description The type of the facilitator for the group
-       * @enum {string}
-       */
-      teamMemberType: 'TREATMENT_MANAGER' | 'REGULAR_FACILITATOR' | 'COVER_FACILITATOR'
-    }
-    /** @enum {string} */
-    ProgrammeGroupCohort: 'GENERAL' | 'GENERAL_LDC' | 'SEXUAL' | 'SEXUAL_LDC'
-    /** @enum {string} */
-    ProgrammeGroupSexEnum: 'MALE' | 'FEMALE' | 'MIXED'
     ScheduleSessionRequest: {
       /**
        * Format: uuid
@@ -3205,7 +3258,6 @@ export interface components {
        */
       moduleName: string
       /**
-       * @description The name of the session
        * @description The name of the session within a module.
        * @example Introduction to Building Choices
        */
@@ -3471,6 +3523,12 @@ export interface components {
        * @example abc123
        */
       groupCode: string
+      /**
+       * Format: uuid
+       * @description The group id for the session
+       * @example a1b2c3d4-e5f6-7890-abcd-ef1234567890
+       */
+      groupId?: string
       /**
        * @description The date of the session
        * @example 11 July 2025
@@ -3865,6 +3923,11 @@ export interface components {
        */
       sessionType: string
       /**
+       * @description Indicates whether this is a catch-up session
+       * @example false
+       */
+      isCatchup: boolean
+      /**
        * Format: date
        * @description The date of the session
        * @example Thursday 12 January 2023
@@ -3887,8 +3950,6 @@ export interface components {
       facilitators: string[]
       /** @description The attendance and session notes for each attendee */
       attendanceAndSessionNotes: components['schemas']['AttendanceAndSessionNotes'][]
-      /** @description The name of the session */
-      sessionName: string
     }
     GroupScheduleOverview: {
       /**
@@ -4544,6 +4605,60 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  updateProgrammeGroup: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id (UUID) of a programme group */
+        groupId: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateGroupRequest']
+      }
+    }
+    responses: {
+      /** @description Programme group information updated */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['UpdateGroupResponse']
+        }
+      }
+      /** @description Bad Request. Blank or missing values */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': string
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The programme group does not exist */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
