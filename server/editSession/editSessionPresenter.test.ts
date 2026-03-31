@@ -209,10 +209,10 @@ describe('EditSessionPresenter', () => {
         })
       })
 
-      it('uses pageTitle slug when sessionName is blank', () => {
+      it('uses pageTitle slug for the session notes link', () => {
         const sessionDetails: GroupSessionResponse = {
           pageTitle: 'Pre-group one-to-one',
-          sessionName: '',
+          sessionName: 'Pre-group one-to-one',
           code: 'CODE-123',
           sessionType: 'Individual',
           attendanceAndSessionNotes: [
