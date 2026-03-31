@@ -139,6 +139,19 @@ describe('SessionScheduleAttendancePresenter', () => {
       )
     })
 
+    it('does not render table when module has no sessions but still shows schedule button', () => {
+      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
+      const accordionItems = presenter.getAccordionItems()
+      const secondModuleContent = accordionItems[1].content.html
+
+      expect(secondModuleContent).not.toContain('<table class="govuk-table"')
+      expect(secondModuleContent).not.toContain('Session name')
+      expect(secondModuleContent).not.toContain('Session type')
+      expect(secondModuleContent).toContain('Schedule Module 2 session')
+      expect(secondModuleContent).toContain(`href="/group/${groupId}/module/module-2/schedule-session-type"`)
+      expect(secondModuleContent).toContain('<strong>Expected to start:</strong> 1 April 2025')
+    })
+
     it('displays estimated start date text when available', () => {
       const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
       const accordionItems = presenter.getAccordionItems()
