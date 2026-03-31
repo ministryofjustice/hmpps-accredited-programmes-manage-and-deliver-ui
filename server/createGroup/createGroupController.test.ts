@@ -205,6 +205,27 @@ describe('Create Group Controller', () => {
           expect(res.text).toContain(`Redirecting to /group/${groupId}/group-details`)
         })
     })
+
+    it('returns with errors if updated group code already exists for another group', async () => {
+      const groupId = randomUUID()
+      accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue({
+        id: randomUUID(),
+        code: 'DUPLICATE123',
+        regionName: 'Test Region',
+      })
+
+      return request(app)
+        .post(`/group/${groupId}/create-a-group/create-group-code`)
+        .type('form')
+        .send({ 'create-group-code': 'DUPLICATE123' })
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain(
+            'Group code DUPLICATE123 already exists for a group in this region. Enter a different code.',
+          )
+          expect(accreditedProgrammesManageAndDeliverService.updateGroup).not.toHaveBeenCalled()
+        })
+    })
   })
 
   describe('GET /group/create-a-group/group-start-date', () => {
