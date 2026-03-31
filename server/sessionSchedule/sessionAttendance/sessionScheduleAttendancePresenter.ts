@@ -73,7 +73,9 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
   private moduleContent(moduleSession: ProgrammeGroupModuleSessionsResponseGroupModule) {
     const sessions = Array.isArray(moduleSession.sessions) ? moduleSession.sessions : []
 
-    const sessionsHtml = `
+    const sessionsHtml =
+      sessions.length > 0
+        ? `
       <table class="govuk-table" data-module="moj-sortable-table">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
@@ -90,6 +92,7 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
         </tbody>
       </table>
     `
+        : ''
 
     const startDateTextHtml = this.getStartDateText(moduleSession)
     const scheduleButtonText = moduleSession.scheduleButtonText || 'Schedule a session'
