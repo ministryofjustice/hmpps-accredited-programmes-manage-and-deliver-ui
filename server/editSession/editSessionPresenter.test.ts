@@ -11,9 +11,9 @@ describe('EditSessionPresenter', () => {
       it('returns MultiSelectTableArgs with correct structure', () => {
         const sessionDetails: GroupSessionResponse = {
           pageTitle: 'Session 1',
-          sessionName: 'Session 1',
           code: 'CODE-123',
           sessionType: 'Group',
+          isCatchup: false,
           attendanceAndSessionNotes: [
             {
               referralId: '123',
@@ -74,9 +74,9 @@ describe('EditSessionPresenter', () => {
       it('returns TableArgs with correct structure', () => {
         const sessionDetails: GroupSessionResponse = {
           pageTitle: 'Session 1',
-          sessionName: 'Session 1',
           code: 'CODE-123',
           sessionType: 'Individual',
+          isCatchup: false,
           attendanceAndSessionNotes: [
             {
               referralId: '123',
@@ -112,9 +112,9 @@ describe('EditSessionPresenter', () => {
       it('returns Not added when single-referral session notes are blank', () => {
         const sessionDetails: GroupSessionResponse = {
           pageTitle: 'Session 1',
-          sessionName: 'Session 1',
           code: 'CODE-123',
           sessionType: 'Individual',
+          isCatchup: false,
           attendanceAndSessionNotes: [
             {
               referralId: '123',
@@ -150,9 +150,9 @@ describe('EditSessionPresenter', () => {
       it('returns Not added text when single-referral session notes equals Not added', () => {
         const sessionDetails: GroupSessionResponse = {
           pageTitle: 'Session 1',
-          sessionName: 'Session 1',
           code: 'CODE-123',
           sessionType: 'Individual',
+          isCatchup: false,
           attendanceAndSessionNotes: [
             {
               referralId: '123',
@@ -190,9 +190,9 @@ describe('EditSessionPresenter', () => {
       it('returns empty TableArgs', () => {
         const sessionDetails: GroupSessionResponse = {
           pageTitle: 'Session 1',
-          sessionName: 'Session 1',
           code: 'CODE-123',
           sessionType: 'Individual',
+          isCatchup: false,
           attendanceAndSessionNotes: [],
           date: '01 Feb 2026',
           time: '1:00pm',
@@ -212,9 +212,9 @@ describe('EditSessionPresenter', () => {
       it('uses pageTitle slug for the session notes link', () => {
         const sessionDetails: GroupSessionResponse = {
           pageTitle: 'Pre-group one-to-one',
-          sessionName: 'Pre-group one-to-one',
           code: 'CODE-123',
           sessionType: 'Individual',
+          isCatchup: false,
           attendanceAndSessionNotes: [
             {
               referralId: '123',
@@ -252,9 +252,9 @@ describe('EditSessionPresenter', () => {
       it('falls back to to be confirmed for unmapped outcome_type_code values', () => {
         const sessionDetails: GroupSessionResponse = {
           pageTitle: 'Session 1',
-          sessionName: 'Session 1',
           code: 'CODE-123',
           sessionType: 'Group',
+          isCatchup: false,
           attendanceAndSessionNotes: [
             {
               referralId: '123',
@@ -291,9 +291,9 @@ describe('EditSessionPresenter', () => {
       it('falls back to to be confirmed for no did not attend text', () => {
         const sessionDetails: GroupSessionResponse = {
           pageTitle: 'Session 1',
-          sessionName: 'Session 1',
           code: 'CODE-123',
           sessionType: 'Individual',
+          isCatchup: false,
           attendanceAndSessionNotes: [
             {
               referralId: '123',
@@ -329,9 +329,9 @@ describe('EditSessionPresenter', () => {
       it('maps did not attend text to not attended tag', () => {
         const sessionDetails: GroupSessionResponse = {
           pageTitle: 'Session 1',
-          sessionName: 'Session 1',
           code: 'CODE-123',
           sessionType: 'Individual',
+          isCatchup: false,
           attendanceAndSessionNotes: [
             {
               referralId: '123',
@@ -369,9 +369,9 @@ describe('EditSessionPresenter', () => {
   describe('backLinkArgs', () => {
     const sessionDetails: GroupSessionResponse = {
       pageTitle: 'Session 1',
-      sessionName: 'Session 1',
       code: 'group-123',
       sessionType: 'Group',
+      isCatchup: false,
       attendanceAndSessionNotes: [],
       date: '01 Feb 2026',
       time: '1:00pm',
