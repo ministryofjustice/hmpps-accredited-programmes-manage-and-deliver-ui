@@ -55,14 +55,6 @@ export default class SentenceInformationPresenter extends ReferralDetailsPresent
         lines: [`${this.sentenceInformation.licenceEndDate ?? 'Data not available'}`],
       },
       {
-        key: 'Post-sentence supervision start date',
-        lines: [`${this.sentenceInformation.postSentenceSupervisionStartDate ?? 'Data not available'}`],
-      },
-      {
-        key: 'Post-sentence supervision end date',
-        lines: [`${this.sentenceInformation.postSentenceSupervisionEndDate ?? 'Data not available'}`],
-      },
-      {
         key: 'Two-thirds point',
         lines: [`${this.sentenceInformation.twoThirdsPoint ?? 'Data not available'}`],
       },
