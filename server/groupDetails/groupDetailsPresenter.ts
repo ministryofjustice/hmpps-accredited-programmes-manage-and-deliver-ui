@@ -16,6 +16,8 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
       {
         key: 'Group code',
         lines: [this.group.code],
+        changeLink: `/group/${this.groupId}/create-a-group/create-group-code`,
+        visuallyHiddenText: 'group code',
       },
     ]
   }

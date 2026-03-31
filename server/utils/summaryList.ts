@@ -18,4 +18,7 @@ export interface SummaryListItem {
   deleteLink?: string
   valueLink?: string
   keyClass?: string
+  href?: string
+  text?: string
+  visuallyHiddenText?: string
 }

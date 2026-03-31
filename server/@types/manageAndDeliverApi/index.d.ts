@@ -91,6 +91,8 @@ type SessionAttendance = components['schemas']['SessionAttendance']
 type SessionAttendanceOutcomeCode = SessionAttendee['outcomeCode']
 type AttendanceHistoryResponse = components['schemas']['AttendanceHistoryResponse']
 type GroupDetailsResponse = components['schemas']['GroupDetailsResponse']
+type UpdateGroupRequest = components['schemas']['UpdateGroupRequest']
+type UpdateGroupResponse = components['schemas']['UpdateGroupResponse']
 
 export type {
   AlcoholMisuseDetails,
@@ -180,6 +182,8 @@ export type {
   SessionTime,
   ThinkingAndBehaviour,
   UpdateAvailability,
+  UpdateGroupRequest,
+  UpdateGroupResponse,
   UpdateCohort,
   UpdateLdc,
   UserTeamMember,

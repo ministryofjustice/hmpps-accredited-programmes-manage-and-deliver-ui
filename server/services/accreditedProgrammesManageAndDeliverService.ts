@@ -61,6 +61,8 @@ import {
   SessionScheduleResponse,
   ThinkingAndBehaviour,
   UpdateAvailability,
+  UpdateGroupRequest,
+  UpdateGroupResponse,
   UserTeamMember,
 } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
@@ -505,6 +507,19 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
       headers: { Accept: 'application/json' },
       data,
     })) as ProgrammeGroupEntity
+  }
+
+  async updateGroup(
+    username: Express.User['username'],
+    groupId: string,
+    data: UpdateGroupRequest,
+  ): Promise<UpdateGroupResponse> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.put({
+      path: `/group/${groupId}`,
+      headers: { Accept: 'application/json' },
+      data,
+    })) as UpdateGroupResponse
   }
 
   async getGroupByCodeInRegion(username: Express.User['username'], groupCode: string): Promise<Group | null> {

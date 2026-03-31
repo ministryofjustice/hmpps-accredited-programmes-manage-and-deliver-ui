@@ -49,24 +49,49 @@ export default class CreateGroupController extends BaseController {
   }
 
   async showCreateGroupCode(req: Request, res: Response): Promise<void> {
-    const { createGroupFormData } = req.session
+    let createGroupFormData = req.session.createGroupFormData || {}
+    const { groupId } = req.params
     const { username } = req.user
     let userInputData = null
     let formError: FormValidationError | null = null
+
+    if (req.method === 'GET' && groupId && !createGroupFormData.groupCode) {
+      const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
+
+      req.session.createGroupFormData = {
+        ...createGroupFormData,
+        groupCode: groupDetails?.code,
+      }
+
+      createGroupFormData = req.session.createGroupFormData
+    }
+
     if (req.method === 'POST') {
       let existingGroup = { code: '' }
       if (req.body['create-group-code']) {
-        existingGroup = await this.accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion(
+        const matchingGroup = await this.accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion(
           username,
           req.body['create-group-code'],
         )
+
+        existingGroup = matchingGroup?.id === groupId ? { code: '' } : { code: matchingGroup?.code || '' }
       }
+
       const data = await new CreateGroupForm(req, existingGroup.code).createGroupCodeData()
       if (data.error) {
         res.status(400)
         formError = data.error
         userInputData = req.body
       } else {
+        if (groupId) {
+          await this.accreditedProgrammesManageAndDeliverService.updateGroup(username, groupId, {
+            groupCode: data.paramsForUpdate.groupCode,
+          })
+
+          req.session.createGroupFormData = {}
+          return res.redirect(`/group/${groupId}/group-details`)
+        }
+
         req.session.createGroupFormData = {
           ...createGroupFormData,
           groupCode: data.paramsForUpdate.groupCode,
@@ -75,7 +100,13 @@ export default class CreateGroupController extends BaseController {
       }
     }
 
-    const presenter = new CreateGroupCodePresenter(formError, createGroupFormData, userInputData)
+    const presenter = new CreateGroupCodePresenter(
+      formError,
+      createGroupFormData,
+      userInputData,
+      groupId,
+      createGroupFormData?.groupCode,
+    )
     const view = new CreateGroupCodeView(presenter)
     return this.renderPage(res, view)
   }

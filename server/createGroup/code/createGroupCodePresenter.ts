@@ -7,10 +7,28 @@ export default class CreateGroupCodePresenter {
     private readonly validationError: FormValidationError | null = null,
     private readonly createGroupFormData: Partial<CreateGroupRequest> | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
+    private readonly groupId?: string,
+    private readonly groupCode?: string,
   ) {}
 
   get backLinkUri() {
+    if (this.groupId) {
+      return `/group/${this.groupId}/group-details`
+    }
+
     return `/group/create-a-group/create-group`
+  }
+
+  get captionText() {
+    return this.groupId ? `Edit group ${this.groupCode}` : 'Create a group'
+  }
+
+  get pageTitle() {
+    return this.groupId ? `Edit group code` : 'Create a group code'
+  }
+
+  get submitButtonText() {
+    return this.groupId ? 'Submit' : 'Continue'
   }
 
   get errorSummary() {
@@ -24,7 +42,7 @@ export default class CreateGroupCodePresenter {
   get fields() {
     return {
       createGroupCode: {
-        value: this.utils.stringValue(this.createGroupFormData.groupCode, 'create-group-code'),
+        value: this.utils.stringValue(this.createGroupFormData?.groupCode, 'create-group-code'),
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'create-group-code'),
       },
     }
