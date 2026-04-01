@@ -61,13 +61,15 @@ export default class EditSessionView {
             ),
           },
           actions: {
-            items: [
-              {
-                href: `/group/${this.presenter.groupId}/session/${this.presenter.sessionId}/edit-session-attendees`,
-                text: 'Change',
-                visuallyHiddenText: 'participants',
-              },
-            ],
+            items: this.presenter.hasReferral
+              ? [
+                  {
+                    href: `/group/${this.presenter.groupId}/session/${this.presenter.sessionId}/edit-session-attendees`,
+                    text: 'Change',
+                    visuallyHiddenText: 'participants',
+                  },
+                ]
+              : [],
           },
         },
         {
