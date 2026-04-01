@@ -1,9 +1,9 @@
 import { InputArgs } from '../../utils/govukFrontendTypes'
 import ViewUtils from '../../utils/viewUtils'
-import CreateGroupCodePresenter from './createGroupCodePresenter'
+import CreateOrEditGroupCodePresenter from './createOrEditGroupCodePresenter'
 
-export default class CreateGroupCodeView {
-  constructor(private readonly presenter: CreateGroupCodePresenter) {}
+export default class CreateOrEditGroupCodeView {
+  constructor(private readonly presenter: CreateOrEditGroupCodePresenter) {}
 
   private backLinkArgs() {
     return {

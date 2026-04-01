@@ -2,7 +2,7 @@ import { CreateGroupRequest } from '@manage-and-deliver-api'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
 
-export default class CreateGroupCodePresenter {
+export default class CreateOrEditGroupCodePresenter {
   constructor(
     private readonly validationError: FormValidationError | null = null,
     private readonly createGroupFormData: Partial<CreateGroupRequest> | null = null,
@@ -11,8 +11,12 @@ export default class CreateGroupCodePresenter {
     private readonly groupCode?: string,
   ) {}
 
+  private get isEditJourney() {
+    return Boolean(this.groupId)
+  }
+
   get backLinkUri() {
-    if (this.groupId) {
+    if (this.isEditJourney) {
       return `/group/${this.groupId}/group-details`
     }
 
@@ -20,15 +24,15 @@ export default class CreateGroupCodePresenter {
   }
 
   get captionText() {
-    return this.groupId ? `Edit group ${this.groupCode}` : 'Create a group'
+    return this.isEditJourney ? `Edit group ${this.groupCode}` : 'Create a group'
   }
 
   get pageTitle() {
-    return this.groupId ? `Edit group code` : 'Create a group code'
+    return this.isEditJourney ? `Edit group code` : 'Create a group code'
   }
 
   get submitButtonText() {
-    return this.groupId ? 'Submit' : 'Continue'
+    return this.isEditJourney ? 'Submit' : 'Continue'
   }
 
   get errorSummary() {

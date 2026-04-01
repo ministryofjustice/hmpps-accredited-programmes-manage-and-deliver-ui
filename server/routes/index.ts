@@ -3,6 +3,7 @@ import { type RequestHandler, Router } from 'express'
 import CaselistController from '../caselist/caselistController'
 import ChangeCohortController from '../cohort/changeCohortController'
 import CreateGroupController from '../createGroup/createGroupController'
+import EditGroupCodeController from '../createGroup/code/editGroupCodeController'
 import EditSessionController from '../editSession/editSessionController'
 import GroupController from '../group/groupController'
 import GroupDetailsController from '../groupDetails/groupDetailsController'
@@ -48,6 +49,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     accreditedProgrammesManageAndDeliverService,
   )
   const createGroupController = new CreateGroupController(accreditedProgrammesManageAndDeliverService)
+  const editGroupCodeController = new EditGroupCodeController(accreditedProgrammesManageAndDeliverService)
   const groupController = new GroupController(accreditedProgrammesManageAndDeliverService)
   const groupDetailsController = new GroupDetailsController(accreditedProgrammesManageAndDeliverService)
   const sessionScheduleController = new SessionScheduleController(accreditedProgrammesManageAndDeliverService)
@@ -233,7 +235,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await createGroupController.showCreateGroupCode(req, res)
   })
   getOrPost('/group/:groupId/create-a-group/create-group-code', async (req, res) => {
-    await createGroupController.showCreateGroupCode(req, res)
+    await editGroupCodeController.showEditGroupCode(req, res)
   })
   getOrPost('/group/create-a-group/group-cohort', async (req, res) => {
     await createGroupController.showCreateGroupCohort(req, res)
