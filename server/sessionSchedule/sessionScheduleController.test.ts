@@ -79,6 +79,7 @@ const completeSessionData: Partial<SessionData> = {
     headingText: 'Schedule a Getting started one-to-one session',
     selectedSession: 'Selected session',
     groupOrOneToOne: 'GROUP',
+    sessionScheduleType: 'SCHEDULED',
   },
 }
 
@@ -184,6 +185,7 @@ describe('Session Schedule Controller', () => {
           sessionName: 'Getting started one-to-one',
           headingText: 'Schedule a Getting started one-to-one session',
           groupOrOneToOne: 'ONE_TO_ONE',
+          sessionScheduleType: 'SCHEDULED',
         },
       }
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
@@ -307,6 +309,7 @@ describe('Session Schedule Controller', () => {
                 },
               ],
               referralIds: ['a9971fd6-a185-43ee-bb23-a0ab23a14f50'],
+              sessionScheduleType: 'SCHEDULED',
               sessionTemplateId: '30db4cee-a79a-420a-b0ff-5f5ce4dcfd7d',
               startDate: '3055-01-01',
               startTime: { amOrPm: 'AM', hour: 9, minutes: 0 },

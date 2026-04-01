@@ -72,6 +72,7 @@ type ProgrammeGroupModuleSessionsResponseGroupSession =
 type ScheduleSessionTypeResponse = components['schemas']['ScheduleSessionTypeResponse']
 type ScheduleIndividualSessionDetailsResponse = components['schemas']['ScheduleIndividualSessionDetailsResponse']
 type ScheduleSessionRequest = components['schemas']['ScheduleSessionRequest']
+type SessionScheduleType = components['schemas']['ModuleSessionTemplate']['sessionScheduleType']
 type GroupSessionResponse = components['schemas']['GroupSessionResponse']
 type EditSessionDetails = components['schemas']['EditSessionDetails']
 type EditSessionAttendeesResponse = components['schemas']['EditSessionAttendeesResponse']
@@ -177,6 +178,7 @@ export type {
   SessionNotes,
   SessionScheduleRequest,
   SessionScheduleResponse,
+  SessionScheduleType,
   SessionTime,
   ThinkingAndBehaviour,
   UpdateAvailability,
