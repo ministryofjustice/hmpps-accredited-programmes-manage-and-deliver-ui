@@ -160,6 +160,43 @@ describe('SessionScheduleAttendancePresenter', () => {
       expect(firstModuleContent).toContain('<strong>Estimated start date:</strong> 15 March 2025')
     })
 
+    it('does not display start date text for "Bringing it all together" module', () => {
+      const dataWithBringingItAllTogether = {
+        ...mockGroupSessionsData,
+        modules: [
+          {
+            id: 'module-bringing',
+            number: 5,
+            name: 'Bringing it all together',
+            scheduleButtonText: 'Schedule Bringing it all together session',
+            startDateText: {
+              estimatedStartDateText: 'Estimated start date',
+              sessionStartDate: '1 May 2025',
+            },
+            sessions: [
+              {
+                id: '7af4998c-0d4c-4628-b0f8-fb6895a80e12',
+                number: 1,
+                name: 'Bringing it all together 1: Future me plan',
+                type: 'Group',
+                dateOfSession: 'Thursday 8 August 2126',
+                timeOfSession: '1pm to 3:30pm',
+                participants: ['All'],
+                facilitators: ['R&MP Practitioner'],
+              },
+            ],
+          },
+        ],
+      }
+      const presenter = new SessionScheduleAttendancePresenter(groupId, dataWithBringingItAllTogether)
+      const accordionItems = presenter.getAccordionItems()
+      const content = accordionItems[0].content.html
+
+      expect(content).not.toContain('<strong>Estimated start date:</strong>')
+      expect(content).not.toContain('1 May 2025')
+      expect(content).toContain('Schedule Bringing it all together session')
+    })
+
     it('displays start date text with non-standard label like pre-group one-to-ones', () => {
       const dataWithPreGroupText = {
         ...mockGroupSessionsData,

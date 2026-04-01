@@ -9,6 +9,8 @@ import GroupServiceLayoutPresenter, {
   GroupServiceNavigationValues,
 } from '../../shared/groups/groupServiceLayoutPresenter'
 
+const BRINING_IT_ALL_TOGETHER_MODULE = 'bringing it all together'
+
 export default class SessionScheduleAttendancePresenter extends GroupServiceLayoutPresenter {
   constructor(
     readonly groupId: string,
@@ -111,11 +113,15 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
   }
 
   private getStartDateText(moduleSession: ProgrammeGroupModuleSessionsResponseGroupModule): string {
-    if (moduleSession.startDateText?.estimatedStartDateText && moduleSession.startDateText?.sessionStartDate) {
-      return `<p class="govuk-body"><strong>${moduleSession.startDateText.estimatedStartDateText}:</strong> ${moduleSession.startDateText.sessionStartDate}</p>`
+    const isBringingItAllTogether = moduleSession.name.toLowerCase() === BRINING_IT_ALL_TOGETHER_MODULE
+    const hasStartDateText =
+      moduleSession.startDateText?.estimatedStartDateText && moduleSession.startDateText?.sessionStartDate
+
+    if (isBringingItAllTogether || !hasStartDateText) {
+      return ''
     }
 
-    return ''
+    return `<p class="govuk-body"><strong>${moduleSession.startDateText.estimatedStartDateText}:</strong> ${moduleSession.startDateText.sessionStartDate}</p>`
   }
 
   private sessionTableRow(session: ProgrammeGroupModuleSessionsResponseGroupSession): string {
