@@ -6,8 +6,8 @@ import BaseController from '../shared/baseController'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import CreateGroupCyaPresenter from './check-your-answers/createGroupCyaPresenter'
 import CreateGroupCyaView from './check-your-answers/createGroupCyaView'
-import CreateGroupCodePresenter from './code/createGroupCodePresenter'
-import CreateGroupCodeView from './code/createGroupCodeView'
+import CreateOrEditGroupCodePresenter from './code/createOrEditGroupCodePresenter'
+import CreateGroupCodeView from './code/createOrEditGroupCodeView'
 import CreateGroupCohortPresenter from './cohort/createGroupCohortPresenter'
 import CreateGroupCohortView from './cohort/createGroupCohortView'
 import CreateGroupForm from './createGroupForm'
@@ -75,7 +75,7 @@ export default class CreateGroupController extends BaseController {
       }
     }
 
-    const presenter = new CreateGroupCodePresenter(formError, createGroupFormData, userInputData)
+    const presenter = new CreateOrEditGroupCodePresenter(formError, createGroupFormData, userInputData)
     const view = new CreateGroupCodeView(presenter)
     return this.renderPage(res, view)
   }

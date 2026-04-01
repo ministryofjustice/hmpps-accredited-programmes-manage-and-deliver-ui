@@ -1,9 +1,9 @@
 import { InputArgs } from '../../utils/govukFrontendTypes'
 import ViewUtils from '../../utils/viewUtils'
-import CreateGroupCodePresenter from './createGroupCodePresenter'
+import CreateOrEditGroupCodePresenter from './createOrEditGroupCodePresenter'
 
-export default class CreateGroupCodeView {
-  constructor(private readonly presenter: CreateGroupCodePresenter) {}
+export default class CreateOrEditGroupCodeView {
+  constructor(private readonly presenter: CreateOrEditGroupCodePresenter) {}
 
   private backLinkArgs() {
     return {
@@ -27,7 +27,7 @@ export default class CreateGroupCodeView {
         text: 'For example, BCCDD1. This will be used to identify your group.',
       },
       label: {
-        text: 'Create a group code',
+        text: this.presenter.pageTitle,
         classes: 'govuk-label--l',
         isPageHeading: true,
       },
@@ -42,8 +42,10 @@ export default class CreateGroupCodeView {
       {
         backLinkArgs: this.backLinkArgs(),
         homePageLink: this.homePageLink(),
+        captionText: this.presenter.captionText,
         createGroupCodeArgs: this.createGroupCodeArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
+        submitButtonText: this.presenter.submitButtonText,
       },
     ]
   }
