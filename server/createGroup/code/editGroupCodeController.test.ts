@@ -28,7 +28,7 @@ beforeEach(() => {
 })
 
 describe('Edit Group Code Controller', () => {
-  describe('GET /group/:groupId/create-a-group/create-group-code', () => {
+  describe('GET /group/:groupId/edit-a-group/edit-group-code', () => {
     it('loads the edit group code page with the current code', async () => {
       const groupId = randomUUID()
       accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
@@ -37,7 +37,7 @@ describe('Edit Group Code Controller', () => {
       } as GroupDetailsResponse)
 
       return request(app)
-        .get(`/group/${groupId}/create-a-group/create-group-code`)
+        .get(`/group/${groupId}/edit-a-group/edit-group-code`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Edit group code')
@@ -55,7 +55,7 @@ describe('Edit Group Code Controller', () => {
       app = TestUtils.createTestAppWithSession({}, { accreditedProgrammesManageAndDeliverService })
 
       return request(app)
-        .get(`/group/${groupId}/create-a-group/create-group-code`)
+        .get(`/group/${groupId}/edit-a-group/edit-group-code`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Edit group code')
@@ -64,7 +64,7 @@ describe('Edit Group Code Controller', () => {
     })
   })
 
-  describe('POST /group/:groupId/create-a-group/create-group-code', () => {
+  describe('POST /group/:groupId/edit-a-group/edit-group-code', () => {
     it('updates the group code and redirects to group details', async () => {
       const groupId = randomUUID()
       accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue({
@@ -75,7 +75,7 @@ describe('Edit Group Code Controller', () => {
       accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({} as never)
 
       return request(app)
-        .post(`/group/${groupId}/create-a-group/create-group-code`)
+        .post(`/group/${groupId}/edit-a-group/edit-group-code`)
         .type('form')
         .send({ 'create-group-code': 'UPDATED123' })
         .expect(302)
@@ -96,7 +96,7 @@ describe('Edit Group Code Controller', () => {
       })
 
       return request(app)
-        .post(`/group/${groupId}/create-a-group/create-group-code`)
+        .post(`/group/${groupId}/edit-a-group/edit-group-code`)
         .type('form')
         .send({ 'create-group-code': 'DUPLICATE123' })
         .expect(400)
