@@ -154,27 +154,6 @@ export default class CreateGroupController extends BaseController {
     return this.renderPage(res, view)
   }
 
-  // async showCreateGroupCohort(req: Request, res: Response): Promise<void> {
-  //   const { createGroupFormData } = req.session
-  //   let formError: FormValidationError | null = null
-  //   if (req.method === 'POST') {
-  //     const data = await new CreateGroupForm(req).createGroupCohortData()
-  //     if (data.error) {
-  //       res.status(400)
-  //       formError = data.error
-  //     } else {
-  //       req.session.createGroupFormData = {
-  //         ...createGroupFormData,
-  //         cohort: data.paramsForUpdate.cohort,
-  //       }
-  //       return res.redirect(`/group/create-a-group/group-sex`)
-  //     }
-  //   }
-
-  //   const presenter = new CreateOrEditGroupCohortPresenter(formError, createGroupFormData)
-  //   const view = new CreateOrEditGroupCohortView(presenter)
-  //   return this.renderPage(res, view)
-  // }
   async showCreateOrEditGroupCohort(req: Request, res: Response): Promise<void> {
     const { createGroupFormData } = req.session
     const { username } = req.user

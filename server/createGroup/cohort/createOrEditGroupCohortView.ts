@@ -20,12 +20,12 @@ export default class CreateGroupCohortView {
     }
   }
 
-  private radioArgs(): RadiosArgs {
+  private createGroupCohortArgs(): RadiosArgs {
     return {
       name: 'create-group-cohort',
       fieldset: {
         legend: {
-          text: 'Select the group cohort',
+          text: this.presenter.pageTitle,
           isPageHeading: true,
           classes: 'govuk-fieldset__legend--l',
         },
@@ -48,9 +48,10 @@ export default class CreateGroupCohortView {
       {
         backLinkArgs: this.backLinkArgs(),
         homePageLink: this.homePageLink(),
-        radioArgs: this.radioArgs(),
+        captionText: this.presenter.captionText,
+        createGroupCohortArgs: this.createGroupCohortArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
-        text: this.presenter.text,
+        submitButtonText: this.presenter.submitButtonText,
       },
     ]
   }

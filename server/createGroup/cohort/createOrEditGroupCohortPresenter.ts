@@ -8,15 +8,11 @@ export default class CreateOrEditGroupCohortPresenter {
     private readonly createGroupFormData: Partial<CreateGroupRequest> | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
     private readonly groupId?: string,
-    private readonly cohort?: string,
+    private readonly groupCode?: string,
   ) {}
 
   private get isEditJourney() {
     return Boolean(this.groupId)
-  }
-
-  get text() {
-    return { headingHintText: `Create group ${this.createGroupFormData?.cohort}` }
   }
 
   get backLinkUri() {
@@ -24,11 +20,11 @@ export default class CreateOrEditGroupCohortPresenter {
   }
 
   get captionText() {
-    return this.isEditJourney ? `Edit group ${this.cohort}` : 'Create a group'
+    return this.isEditJourney ? `Edit group ${this.groupCode}` : 'Create a group'
   }
 
   get pageTitle() {
-    return this.isEditJourney ? `Èdit group cohort` : `Create group cohort`
+    return this.isEditJourney ? `Edit the group cohort` : `Create group cohort`
   }
 
   get submitButtonText() {

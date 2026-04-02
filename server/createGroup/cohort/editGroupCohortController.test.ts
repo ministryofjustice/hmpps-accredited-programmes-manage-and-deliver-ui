@@ -33,6 +33,7 @@ describe('Edit Group Cohort Controller', () => {
       const groupId = randomUUID()
       accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
         id: groupId,
+        code: 'EXISTING123',
         cohort: 'GENERAL',
       } as GroupDetailsResponse)
 
@@ -40,8 +41,41 @@ describe('Edit Group Cohort Controller', () => {
         .get(`/group/${groupId}/edit-a-group/edit-group-cohort`)
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain('Select the group cohort')
+          expect(res.text).toContain('Edit group EXISTING123')
+          expect(res.text).toContain('Edit the group cohort')
           expect(res.text).toContain('General offence')
+        })
+    })
+
+    it('preselects general offence radio when legacy GENERAL_OFFENCE cohort is returned', async () => {
+      const groupId = randomUUID()
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
+        id: groupId,
+        code: 'EXISTING123',
+        cohort: 'GENERAL_OFFENCE',
+      } as unknown as GroupDetailsResponse)
+
+      return request(app)
+        .get(`/group/${groupId}/edit-a-group/edit-group-cohort`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('value="GENERAL" checked')
+        })
+    })
+
+    it('preselects general offence radio when cohort text is returned', async () => {
+      const groupId = randomUUID()
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
+        id: groupId,
+        code: 'EXISTING123',
+        cohort: 'General offence',
+      } as unknown as GroupDetailsResponse)
+
+      return request(app)
+        .get(`/group/${groupId}/edit-a-group/edit-group-cohort`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('value="GENERAL" checked')
         })
     })
 
@@ -49,6 +83,7 @@ describe('Edit Group Cohort Controller', () => {
       const groupId = randomUUID()
       accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
         id: groupId,
+        code: 'EXISTING123',
         cohort: 'GENERAL',
       } as GroupDetailsResponse)
 
@@ -58,7 +93,8 @@ describe('Edit Group Cohort Controller', () => {
         .get(`/group/${groupId}/edit-a-group/edit-group-cohort`)
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain('Select the group cohort')
+          expect(res.text).toContain('Edit group EXISTING123')
+          expect(res.text).toContain('Edit the group cohort')
           expect(res.text).toContain('General offence')
         })
     })

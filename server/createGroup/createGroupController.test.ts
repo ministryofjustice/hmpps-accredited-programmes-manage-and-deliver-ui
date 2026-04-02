@@ -217,7 +217,7 @@ describe('Create Group Controller', () => {
         .get('/group/create-a-group/group-cohort')
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain('Select the group cohort')
+          expect(res.text).toContain('Create group cohort')
         })
     })
 
