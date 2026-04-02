@@ -1,6 +1,6 @@
 import { RadiosArgs } from '../../utils/govukFrontendTypes'
 import ViewUtils from '../../utils/viewUtils'
-import CreateGroupCohortPresenter from './createGroupCohortPresenter'
+import CreateGroupCohortPresenter from './createOrEditGroupCohortPresenter'
 import CreateGroupUtils from '../createGroupUtils'
 
 export default class CreateGroupCohortView {
@@ -36,9 +36,9 @@ export default class CreateGroupCohortView {
       items: new CreateGroupUtils().programmeGroupCohortEnum.map(option => ({
         value: option.value,
         text: option.text,
-        checked: this.presenter.fields.createGroupCohort.value === option.value,
+        checked: this.presenter.fields.createOrEditGroupCohort.value === option.value,
       })),
-      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createGroupCohort.errorMessage),
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createOrEditGroupCohort.errorMessage),
     }
   }
 

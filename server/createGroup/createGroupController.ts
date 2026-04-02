@@ -1,5 +1,6 @@
 import { CreateGroupRequest } from '@manage-and-deliver-api'
 import { Request, Response } from 'express'
+import { create } from 'domain'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import { FormValidationError } from '../utils/formValidationError'
 import BaseController from '../shared/baseController'
@@ -7,9 +8,9 @@ import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import CreateGroupCyaPresenter from './check-your-answers/createGroupCyaPresenter'
 import CreateGroupCyaView from './check-your-answers/createGroupCyaView'
 import CreateOrEditGroupCodePresenter from './code/createOrEditGroupCodePresenter'
-import CreateGroupCodeView from './code/createOrEditGroupCodeView'
-import CreateGroupCohortPresenter from './cohort/createGroupCohortPresenter'
-import CreateGroupCohortView from './cohort/createGroupCohortView'
+import CreateOrEditGroupCodeView from './code/createOrEditGroupCodeView'
+import CreateOrEditGroupCohortPresenter from './cohort/createOrEditGroupCohortPresenter'
+import CreateOrEditGroupCohortView from './cohort/createOrEditGroupCohortView'
 import CreateGroupForm from './createGroupForm'
 import CreateGroupDatePresenter from './date/createGroupDatePresenter'
 import CreateGroupDateView from './date/createGroupDateView'
@@ -82,7 +83,7 @@ export default class CreateGroupController extends BaseController {
     }
 
     const presenter = new CreateOrEditGroupCodePresenter(formError, createGroupFormData, userInputData)
-    const view = new CreateGroupCodeView(presenter)
+    const view = new CreateOrEditGroupCodeView(presenter)
     return this.renderPage(res, view)
   }
 
@@ -154,14 +155,50 @@ export default class CreateGroupController extends BaseController {
     return this.renderPage(res, view)
   }
 
-  async showCreateGroupCohort(req: Request, res: Response): Promise<void> {
+  // async showCreateGroupCohort(req: Request, res: Response): Promise<void> {
+  //   const { createGroupFormData } = req.session
+  //   let formError: FormValidationError | null = null
+  //   if (req.method === 'POST') {
+  //     const data = await new CreateGroupForm(req).createGroupCohortData()
+  //     if (data.error) {
+  //       res.status(400)
+  //       formError = data.error
+  //     } else {
+  //       req.session.createGroupFormData = {
+  //         ...createGroupFormData,
+  //         cohort: data.paramsForUpdate.cohort,
+  //       }
+  //       return res.redirect(`/group/create-a-group/group-sex`)
+  //     }
+  //   }
+
+  //   const presenter = new CreateOrEditGroupCohortPresenter(formError, createGroupFormData)
+  //   const view = new CreateOrEditGroupCohortView(presenter)
+  //   return this.renderPage(res, view)
+  // }
+  async showCreateOrEditGroupCohort(req: Request, res: Response): Promise<void> {
     const { createGroupFormData } = req.session
+    const { username } = req.user
+    let userInputData = null
     let formError: FormValidationError | null = null
     if (req.method === 'POST') {
+      if (req.body['create-group-cohort']) {
+        try {
+          await this.accreditedProgrammesManageAndDeliverService.getGroupByCohortInRegion(
+            username,
+            req.body['create-group-cohort'],
+          )
+        } catch (error) {
+          if ((error as { status?: number }).status !== 404) {
+            throw error
+          }
+        }
+      }
       const data = await new CreateGroupForm(req).createGroupCohortData()
       if (data.error) {
         res.status(400)
         formError = data.error
+        userInputData = req.body
       } else {
         req.session.createGroupFormData = {
           ...createGroupFormData,
@@ -171,8 +208,8 @@ export default class CreateGroupController extends BaseController {
       }
     }
 
-    const presenter = new CreateGroupCohortPresenter(formError, createGroupFormData)
-    const view = new CreateGroupCohortView(presenter)
+    const presenter = new CreateOrEditGroupCohortPresenter(formError, createGroupFormData, userInputData)
+    const view = new CreateOrEditGroupCohortView(presenter)
     return this.renderPage(res, view)
   }
 
