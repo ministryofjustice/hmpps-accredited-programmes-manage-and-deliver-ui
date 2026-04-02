@@ -139,12 +139,62 @@ describe('SessionScheduleAttendancePresenter', () => {
       )
     })
 
+    it('does not render table when module has no sessions but still shows schedule button', () => {
+      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
+      const accordionItems = presenter.getAccordionItems()
+      const secondModuleContent = accordionItems[1].content.html
+
+      expect(secondModuleContent).not.toContain('<table class="govuk-table"')
+      expect(secondModuleContent).not.toContain('Session name')
+      expect(secondModuleContent).not.toContain('Session type')
+      expect(secondModuleContent).toContain('Schedule Module 2 session')
+      expect(secondModuleContent).toContain(`href="/group/${groupId}/module/module-2/schedule-session-type"`)
+      expect(secondModuleContent).toContain('<strong>Expected to start:</strong> 1 April 2025')
+    })
+
     it('displays estimated start date text when available', () => {
       const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
       const accordionItems = presenter.getAccordionItems()
       const firstModuleContent = accordionItems[0].content.html
 
       expect(firstModuleContent).toContain('<strong>Estimated start date:</strong> 15 March 2025')
+    })
+
+    it('does not display start date text for "Bringing it all together" module', () => {
+      const dataWithBringingItAllTogether = {
+        ...mockGroupSessionsData,
+        modules: [
+          {
+            id: 'module-bringing',
+            number: 5,
+            name: 'Bringing it all together',
+            scheduleButtonText: 'Schedule Bringing it all together session',
+            startDateText: {
+              estimatedStartDateText: 'Estimated start date',
+              sessionStartDate: '1 May 2025',
+            },
+            sessions: [
+              {
+                id: '7af4998c-0d4c-4628-b0f8-fb6895a80e12',
+                number: 1,
+                name: 'Bringing it all together 1: Future me plan',
+                type: 'Group',
+                dateOfSession: 'Thursday 8 August 2126',
+                timeOfSession: '1pm to 3:30pm',
+                participants: ['All'],
+                facilitators: ['R&MP Practitioner'],
+              },
+            ],
+          },
+        ],
+      }
+      const presenter = new SessionScheduleAttendancePresenter(groupId, dataWithBringingItAllTogether)
+      const accordionItems = presenter.getAccordionItems()
+      const content = accordionItems[0].content.html
+
+      expect(content).not.toContain('<strong>Estimated start date:</strong>')
+      expect(content).not.toContain('1 May 2025')
+      expect(content).toContain('Schedule Bringing it all together session')
     })
 
     it('displays start date text with non-standard label like pre-group one-to-ones', () => {

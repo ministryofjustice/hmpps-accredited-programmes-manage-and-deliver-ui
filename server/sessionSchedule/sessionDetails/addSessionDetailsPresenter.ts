@@ -39,6 +39,10 @@ export default class AddSessionDetailsPresenter {
     return this.createSessionDetailsFormData?.groupOrOneToOne.toUpperCase() === 'GROUP'
   }
 
+  get isCatchUpSession(): boolean {
+    return this.createSessionDetailsFormData?.sessionScheduleType.toUpperCase() === 'CATCH_UP'
+  }
+
   get text() {
     return {
       headingText: `Add session details`,
@@ -119,7 +123,7 @@ export default class AddSessionDetailsPresenter {
   }
 
   get generatePlaceholderSessionDate(): string {
-    return this.isGroupSession
+    return this.isGroupSession || this.isCatchUpSession
       ? this.createSessionDetailsFormData?.startDate
       : this.createSessionDetailsFormData?.startDate || this.sessionDetails.suggestedDate || ''
   }

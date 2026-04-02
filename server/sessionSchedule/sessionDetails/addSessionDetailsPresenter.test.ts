@@ -1,4 +1,8 @@
-import { ScheduleIndividualSessionDetailsResponse, CreateGroupTeamMember } from '@manage-and-deliver-api'
+import {
+  ScheduleIndividualSessionDetailsResponse,
+  CreateGroupTeamMember,
+  SessionScheduleType,
+} from '@manage-and-deliver-api'
 import AddSessionDetailsPresenter from './addSessionDetailsPresenter'
 
 describe('AddSessionDetailsPresenter', () => {
@@ -118,7 +122,7 @@ describe('AddSessionDetailsPresenter', () => {
   })
 
   describe('generatePlaceholderSessionDate', () => {
-    it('returns only startDate when it is a group session', () => {
+    it('returns startDate when it is a group session', () => {
       const sessionDetailsWithSuggestedDate = {
         ...sessionDetails,
         suggestedDate: '15/01/2026',
@@ -127,23 +131,56 @@ describe('AddSessionDetailsPresenter', () => {
       const formData = {
         startDate: '01/02/2026',
         groupOrOneToOne: 'GROUP',
+        sessionScheduleType: 'SCHEDULED' as SessionScheduleType,
       }
       const presenter = new AddSessionDetailsPresenter(sessionDetailsWithSuggestedDate, 'backLinkUri', null, formData)
 
       expect(presenter.generatePlaceholderSessionDate).toBe('01/02/2026')
     })
 
-    it('returns startDate when it is NOT a group session and startDate is available', () => {
+    it('returns user entered date (startDate) when it is a catch-up session', () => {
+      const sessionDetailsWithSuggestedDate = {
+        ...sessionDetails,
+        suggestedDate: '15/01/2026',
+      } as ScheduleIndividualSessionDetailsResponse
+
       const formData = {
         startDate: '01/02/2026',
         groupOrOneToOne: 'INDIVIDUAL',
+        sessionScheduleType: 'CATCH_UP' as SessionScheduleType,
+      }
+      const presenter = new AddSessionDetailsPresenter(sessionDetailsWithSuggestedDate, 'backLinkUri', null, formData)
+
+      expect(presenter.generatePlaceholderSessionDate).toBe('01/02/2026')
+    })
+
+    it('returns undefined when it is a catch-up session and no user entered date (startDate) is available', () => {
+      const sessionDetailsWithSuggestedDate = {
+        ...sessionDetails,
+        suggestedDate: '15/01/2026',
+      } as ScheduleIndividualSessionDetailsResponse
+
+      const formData = {
+        groupOrOneToOne: 'INDIVIDUAL',
+        sessionScheduleType: 'CATCH_UP' as SessionScheduleType,
+      }
+      const presenter = new AddSessionDetailsPresenter(sessionDetailsWithSuggestedDate, 'backLinkUri', null, formData)
+
+      expect(presenter.generatePlaceholderSessionDate).toBe(undefined)
+    })
+
+    it('returns user entered date (startDate) when it is NOT a group session or catch-up and startDate is available', () => {
+      const formData = {
+        startDate: '01/02/2026',
+        groupOrOneToOne: 'INDIVIDUAL',
+        sessionScheduleType: 'SCHEDULED' as SessionScheduleType,
       }
       const presenter = new AddSessionDetailsPresenter(sessionDetails, 'backLinkUri', null, formData)
 
       expect(presenter.generatePlaceholderSessionDate).toBe('01/02/2026')
     })
 
-    it('returns suggestedDate when it is NOT a group session and startDate is not available', () => {
+    it('returns suggestedDate when it is NOT a group session or catch-up and user entered date (startDate) is not available', () => {
       const sessionDetailsWithSuggestedDate = {
         ...sessionDetails,
         suggestedDate: '05/01/2027',
@@ -151,31 +188,34 @@ describe('AddSessionDetailsPresenter', () => {
 
       const formData = {
         groupOrOneToOne: 'INDIVIDUAL',
+        sessionScheduleType: 'SCHEDULED' as SessionScheduleType,
       }
       const presenter = new AddSessionDetailsPresenter(sessionDetailsWithSuggestedDate, 'backLinkUri', null, formData)
 
       expect(presenter.generatePlaceholderSessionDate).toBe('05/01/2027')
     })
 
-    it('returns empty string when it is NOT a group session and neither startDate nor suggestedDate are available', () => {
+    it('returns empty string when it is NOT a group session or catch-up and neither startDate nor suggestedDate are available', () => {
       const formData = {
         groupOrOneToOne: 'INDIVIDUAL',
+        sessionScheduleType: 'SCHEDULED' as SessionScheduleType,
       }
       const presenter = new AddSessionDetailsPresenter(sessionDetails, 'backLinkUri', null, formData)
 
       expect(presenter.generatePlaceholderSessionDate).toBe('')
     })
 
-    it('returns empty string when it is a group session and no startDate is available', () => {
+    it('returns undefined when it is a group session and no startDate is available', () => {
       const formData = {
         groupOrOneToOne: 'GROUP',
+        sessionScheduleType: 'SCHEDULED' as SessionScheduleType,
       }
       const presenter = new AddSessionDetailsPresenter(sessionDetails, 'backLinkUri', null, formData)
 
       expect(presenter.generatePlaceholderSessionDate).toBe(undefined)
     })
 
-    it('prefers startDate over suggestedDate for individual sessions', () => {
+    it('prefers user entered date (startDate) over suggestedDate for individual scheduled sessions', () => {
       const sessionDetailsWithSuggestedDate = {
         ...sessionDetails,
         suggestedDate: '15/01/2026',
@@ -184,6 +224,7 @@ describe('AddSessionDetailsPresenter', () => {
       const formData = {
         startDate: '01/02/2026',
         groupOrOneToOne: 'INDIVIDUAL',
+        sessionScheduleType: 'SCHEDULED' as SessionScheduleType,
       }
       const presenter = new AddSessionDetailsPresenter(sessionDetailsWithSuggestedDate, 'backLinkUri', null, formData)
 

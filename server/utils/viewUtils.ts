@@ -122,6 +122,7 @@ export default class ViewUtils {
                 items.push({
                   href: item.changeLink,
                   text: 'Change',
+                  visuallyHiddenText: item.visuallyHiddenText,
                   attributes: { id: `change-link-${index}` },
                 })
               }
@@ -196,6 +197,7 @@ export default class ViewUtils {
                   {
                     href: item.changeLink,
                     text: 'Change',
+                    visuallyHiddenText: item.visuallyHiddenText,
                     attributes: { id: `change-link-${index}` },
                   },
                 ],
