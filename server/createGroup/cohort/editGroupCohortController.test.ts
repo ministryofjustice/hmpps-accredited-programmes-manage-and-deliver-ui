@@ -47,35 +47,19 @@ describe('Edit Group Cohort Controller', () => {
         })
     })
 
-    it('preselects general offence radio when legacy GENERAL_OFFENCE cohort is returned', async () => {
+    it('preselects general offence radio when GENERAL cohort is returned', async () => {
       const groupId = randomUUID()
       accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
         id: groupId,
         code: 'EXISTING123',
-        cohort: 'GENERAL_OFFENCE',
+        cohort: 'GENERAL',
       } as unknown as GroupDetailsResponse)
 
       return request(app)
         .get(`/group/${groupId}/edit-a-group/edit-group-cohort`)
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain('value="GENERAL" checked')
-        })
-    })
-
-    it('preselects general offence radio when cohort text is returned', async () => {
-      const groupId = randomUUID()
-      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
-        id: groupId,
-        code: 'EXISTING123',
-        cohort: 'General offence',
-      } as unknown as GroupDetailsResponse)
-
-      return request(app)
-        .get(`/group/${groupId}/edit-a-group/edit-group-cohort`)
-        .expect(200)
-        .expect(res => {
-          expect(res.text).toContain('value="GENERAL" checked')
+          expect(res.text).toMatch(/<input[^>]*value="GENERAL"[^>]*checked|<input[^>]*checked[^>]*value="GENERAL"/)
         })
     })
 

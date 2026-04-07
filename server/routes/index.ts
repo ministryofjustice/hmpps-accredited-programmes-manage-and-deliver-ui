@@ -3,8 +3,8 @@ import { type RequestHandler, Router } from 'express'
 import CaselistController from '../caselist/caselistController'
 import ChangeCohortController from '../cohort/changeCohortController'
 import CreateGroupController from '../createGroup/createGroupController'
-import EditGroupCohortController from '../createGroup/cohort/editGroupCohortController'
 import EditGroupCodeController from '../createGroup/code/editGroupCodeController'
+import EditGroupCohortController from '../createGroup/cohort/editGroupCohortController'
 import EditSessionController from '../editSession/editSessionController'
 import GroupController from '../group/groupController'
 import GroupDetailsController from '../groupDetails/groupDetailsController'
@@ -241,11 +241,11 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   getOrPost('/group/:groupId/edit-a-group/edit-group-code', async (req, res) => {
     await editGroupCodeController.showEditGroupCode(req, res)
   })
-  getOrPost('/group/:groupId/edit-a-group/edit-group-cohort', async (req, res) => {
-    await editGroupCohortController.showEditGroupCohort(req, res)
-  })
   getOrPost('/group/create-a-group/group-cohort', async (req, res) => {
     await createGroupController.showCreateOrEditGroupCohort(req, res)
+  })
+  getOrPost('/group/:groupId/edit-a-group/edit-group-cohort', async (req, res) => {
+    await editGroupCohortController.showEditGroupCohort(req, res)
   })
   getOrPost('/group/create-a-group/group-start-date', async (req, res) => {
     await createGroupController.showCreateGroupDate(req, res)
