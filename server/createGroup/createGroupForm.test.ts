@@ -1,5 +1,5 @@
 import TestUtils from '../testutils/testUtils'
-import CreateGroupForm from './createGroupForm'
+import CreateOrEditGroupForm from './createOrEditGroupForm'
 
 describe('CreateGroupForm', () => {
   describe('createGroupCodeData', () => {
@@ -9,7 +9,7 @@ describe('CreateGroupForm', () => {
           'create-group-code': 'GROUP123',
         })
 
-        const data = await new CreateGroupForm(request).createGroupCodeData()
+        const data = await new CreateOrEditGroupForm(request).createGroupCodeData()
 
         expect(data.paramsForUpdate).toStrictEqual({
           groupCode: 'GROUP123',
@@ -22,7 +22,7 @@ describe('CreateGroupForm', () => {
       it('returns an appropriate error', async () => {
         const request = TestUtils.createRequest({})
 
-        const data = await new CreateGroupForm(request).createGroupCodeData()
+        const data = await new CreateOrEditGroupForm(request).createGroupCodeData()
 
         expect(data.paramsForUpdate).toBeNull()
         expect(data.error).toStrictEqual({
@@ -40,7 +40,7 @@ describe('CreateGroupForm', () => {
       it('returns an appropriate error', async () => {
         const request = TestUtils.createRequest({ 'create-group-code': 'GROUP123' })
 
-        const data = await new CreateGroupForm(request, 'GROUP123').createGroupCodeData()
+        const data = await new CreateOrEditGroupForm(request, 'GROUP123').createGroupCodeData()
 
         expect(data.paramsForUpdate).toBeNull()
         expect(data.error).toStrictEqual({
@@ -62,7 +62,7 @@ describe('CreateGroupForm', () => {
           'create-group-date': '10/7/2050',
         })
 
-        const data = await new CreateGroupForm(request).createGroupDateData()
+        const data = await new CreateOrEditGroupForm(request).createOrEditGroupDateData()
 
         expect(data.paramsForUpdate).toStrictEqual({
           earliestStartDate: '10/7/2050',
@@ -75,7 +75,7 @@ describe('CreateGroupForm', () => {
           'create-group-date': '10/07/2050',
         })
 
-        const data = await new CreateGroupForm(request).createGroupDateData()
+        const data = await new CreateOrEditGroupForm(request).createOrEditGroupDateData()
 
         expect(data.paramsForUpdate).toStrictEqual({
           earliestStartDate: '10/07/2050',
@@ -89,7 +89,7 @@ describe('CreateGroupForm', () => {
           'create-group-date': '2025-07-10',
         })
 
-        const data = await new CreateGroupForm(request).createGroupDateData()
+        const data = await new CreateOrEditGroupForm(request).createOrEditGroupDateData()
 
         expect(data.paramsForUpdate).toBeNull()
         expect(data.error).toStrictEqual({
@@ -107,7 +107,7 @@ describe('CreateGroupForm', () => {
       it('returns an appropriate error', async () => {
         const request = TestUtils.createRequest({})
 
-        const data = await new CreateGroupForm(request).createGroupDateData()
+        const data = await new CreateOrEditGroupForm(request).createOrEditGroupDateData()
 
         expect(data.paramsForUpdate).toBeNull()
         expect(data.error).toStrictEqual({
@@ -127,7 +127,7 @@ describe('CreateGroupForm', () => {
           'create-group-date': '1/1/2000',
         })
 
-        const data = await new CreateGroupForm(request).createGroupDateData()
+        const data = await new CreateOrEditGroupForm(request).createOrEditGroupDateData()
 
         expect(data.paramsForUpdate).toBeNull()
         expect(data.error.errors[0].message).toBe('Start date must be in the future')
@@ -151,7 +151,7 @@ describe('CreateGroupForm', () => {
           'monday-ampm': 'AM',
         })
 
-        const data = await new CreateGroupForm(request).createGroupWhenData()
+        const data = await new CreateOrEditGroupForm(request).createGroupWhenData()
 
         expect(data.error).toBeNull()
         expect(data.paramsForUpdate).not.toBeNull()
@@ -173,7 +173,7 @@ describe('CreateGroupForm', () => {
       it('returns an appropriate error', async () => {
         const request = TestUtils.createRequest({})
 
-        const data = await new CreateGroupForm(request).createGroupWhenData()
+        const data = await new CreateOrEditGroupForm(request).createGroupWhenData()
 
         expect(data.paramsForUpdate).toBeNull()
         expect(data.error).toStrictEqual({
@@ -195,7 +195,7 @@ describe('CreateGroupForm', () => {
           'monday-ampm': 'AM',
         })
 
-        const data = await new CreateGroupForm(request).createGroupWhenData()
+        const data = await new CreateOrEditGroupForm(request).createGroupWhenData()
 
         expect(data.paramsForUpdate).toBeNull()
         expect(data.error).toStrictEqual({
@@ -218,7 +218,7 @@ describe('CreateGroupForm', () => {
           'monday-minute': '0',
         })
 
-        const data = await new CreateGroupForm(request).createGroupWhenData()
+        const data = await new CreateOrEditGroupForm(request).createGroupWhenData()
 
         expect(data.paramsForUpdate).toBeNull()
         expect(data.error).toStrictEqual({
@@ -241,7 +241,7 @@ describe('CreateGroupForm', () => {
           'monday-ampm': 'AM',
         })
 
-        const data = await new CreateGroupForm(request).createGroupWhenData()
+        const data = await new CreateOrEditGroupForm(request).createGroupWhenData()
 
         expect(data.paramsForUpdate).toBeNull()
         expect(data.error).toStrictEqual({
@@ -265,7 +265,7 @@ describe('CreateGroupForm', () => {
           'monday-ampm': 'AM',
         })
 
-        const data = await new CreateGroupForm(request).createGroupWhenData()
+        const data = await new CreateOrEditGroupForm(request).createGroupWhenData()
 
         expect(data.paramsForUpdate).toBeNull()
         expect(data.error).toStrictEqual({
@@ -288,7 +288,7 @@ describe('CreateGroupForm', () => {
           'create-group-cohort': 'SEXUAL',
         })
 
-        const data = await new CreateGroupForm(request).createGroupCohortData()
+        const data = await new CreateOrEditGroupForm(request).createGroupCohortData()
 
         expect(data.paramsForUpdate).toStrictEqual({
           cohort: 'SEXUAL',
@@ -301,7 +301,7 @@ describe('CreateGroupForm', () => {
       it('returns an appropriate error', async () => {
         const request = TestUtils.createRequest({})
 
-        const data = await new CreateGroupForm(request).createGroupCohortData()
+        const data = await new CreateOrEditGroupForm(request).createGroupCohortData()
 
         expect(data.paramsForUpdate).toBeNull()
         expect(data.error).toStrictEqual({
@@ -324,7 +324,7 @@ describe('CreateGroupForm', () => {
           'create-group-sex': 'Male',
         })
 
-        const data = await new CreateGroupForm(request).createGroupSexData()
+        const data = await new CreateOrEditGroupForm(request).createGroupSexData()
 
         expect(data.paramsForUpdate).toStrictEqual({
           sex: 'Male',
@@ -337,7 +337,7 @@ describe('CreateGroupForm', () => {
       it('returns an appropriate error', async () => {
         const request = TestUtils.createRequest({})
 
-        const data = await new CreateGroupForm(request).createGroupSexData()
+        const data = await new CreateOrEditGroupForm(request).createGroupSexData()
 
         expect(data.paramsForUpdate).toBeNull()
         expect(data.error).toStrictEqual({
@@ -360,7 +360,7 @@ describe('CreateGroupForm', () => {
           'create-group-pdu': '{"code":"LDN", "name":"London"}',
         })
 
-        const data = await new CreateGroupForm(request).createGroupPduData()
+        const data = await new CreateOrEditGroupForm(request).createGroupPduData()
 
         expect(data.paramsForUpdate).toStrictEqual({
           pduName: 'London',
@@ -374,7 +374,7 @@ describe('CreateGroupForm', () => {
       it('returns an appropriate error', async () => {
         const request = TestUtils.createRequest({})
 
-        const data = await new CreateGroupForm(request).createGroupPduData()
+        const data = await new CreateOrEditGroupForm(request).createGroupPduData()
 
         expect(data.paramsForUpdate).toBeNull()
         expect(data.error).toStrictEqual({
@@ -397,7 +397,7 @@ describe('CreateGroupForm', () => {
           'create-group-location': '{"code":"CDF", "name":"Cardiff Office"}',
         })
 
-        const data = await new CreateGroupForm(request).createGroupLocationData()
+        const data = await new CreateOrEditGroupForm(request).createGroupLocationData()
 
         expect(data.paramsForUpdate).toStrictEqual({
           deliveryLocationName: 'Cardiff Office',
@@ -411,7 +411,7 @@ describe('CreateGroupForm', () => {
       it('returns an appropriate error', async () => {
         const request = TestUtils.createRequest({})
 
-        const data = await new CreateGroupForm(request).createGroupLocationData()
+        const data = await new CreateOrEditGroupForm(request).createGroupLocationData()
 
         expect(data.paramsForUpdate).toBeNull()
         expect(data.error).toStrictEqual({
@@ -438,7 +438,7 @@ describe('CreateGroupForm', () => {
               '{"facilitator":"Bob Jones","facilitatorCode":"BJ789","teamName":"Team C","teamCode":"TC003","teamMemberType":"COVER_FACILITATOR"}',
           })
 
-          const data = await new CreateGroupForm(request).createGroupTreatmentManagerData()
+          const data = await new CreateOrEditGroupForm(request).createGroupTreatmentManagerData()
 
           expect(data.paramsForUpdate).toStrictEqual({
             teamMembers: [
@@ -476,7 +476,7 @@ describe('CreateGroupForm', () => {
               '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
           })
 
-          const data = await new CreateGroupForm(request).createGroupTreatmentManagerData()
+          const data = await new CreateOrEditGroupForm(request).createGroupTreatmentManagerData()
 
           expect(data.paramsForUpdate).toBeNull()
           expect(data.error).toStrictEqual({
@@ -498,7 +498,7 @@ describe('CreateGroupForm', () => {
               '{"facilitator":"John Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
           })
 
-          const data = await new CreateGroupForm(request).createGroupTreatmentManagerData()
+          const data = await new CreateOrEditGroupForm(request).createGroupTreatmentManagerData()
 
           expect(data.paramsForUpdate).toBeNull()
           expect(data.error).toStrictEqual({
@@ -517,7 +517,7 @@ describe('CreateGroupForm', () => {
         it('returns errors for both fields', async () => {
           const request = TestUtils.createRequest({})
 
-          const data = await new CreateGroupForm(request).createGroupTreatmentManagerData()
+          const data = await new CreateOrEditGroupForm(request).createGroupTreatmentManagerData()
 
           expect(data.paramsForUpdate).toBeNull()
           expect(data.error.errors).toHaveLength(2)
@@ -545,7 +545,7 @@ describe('CreateGroupForm', () => {
             'create-group-facilitator-3': '',
           })
 
-          const data = await new CreateGroupForm(request).createGroupTreatmentManagerData()
+          const data = await new CreateOrEditGroupForm(request).createGroupTreatmentManagerData()
 
           expect(data.paramsForUpdate).toStrictEqual({
             teamMembers: [
@@ -580,7 +580,7 @@ describe('CreateGroupForm', () => {
               '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"COVER_FACILITATOR"}',
           })
 
-          const data = await new CreateGroupForm(request).createGroupTreatmentManagerData()
+          const data = await new CreateOrEditGroupForm(request).createGroupTreatmentManagerData()
 
           expect(data.paramsForUpdate).toBeNull()
           expect(data.error).toStrictEqual({
@@ -608,7 +608,7 @@ describe('CreateGroupForm', () => {
               '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"COVER_FACILITATOR"}',
           })
 
-          const data = await new CreateGroupForm(request).createGroupTreatmentManagerData()
+          const data = await new CreateOrEditGroupForm(request).createGroupTreatmentManagerData()
 
           expect(data.paramsForUpdate).toBeNull()
           expect(data.error?.errors[0].message).toBe(
@@ -628,7 +628,7 @@ describe('CreateGroupForm', () => {
               '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
           })
 
-          const data = await new CreateGroupForm(request).createGroupTreatmentManagerData()
+          const data = await new CreateOrEditGroupForm(request).createGroupTreatmentManagerData()
 
           expect(data.paramsForUpdate).toBeNull()
           expect(data.error?.errors[0].message).toBe(

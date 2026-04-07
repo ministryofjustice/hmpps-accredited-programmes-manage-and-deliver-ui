@@ -10,9 +10,9 @@ import CreateOrEditGroupCodePresenter from './code/createOrEditGroupCodePresente
 import CreateGroupCodeView from './code/createOrEditGroupCodeView'
 import CreateGroupCohortPresenter from './cohort/createGroupCohortPresenter'
 import CreateGroupCohortView from './cohort/createGroupCohortView'
-import CreateGroupForm from './createGroupForm'
-import CreateGroupDatePresenter from './date/createGroupDatePresenter'
-import CreateGroupDateView from './date/createGroupDateView'
+import CreateOrEditGroupForm from './createOrEditGroupForm'
+import CreateOrEditGroupDatePresenter from './date/createOrEditGroupDatePresenter'
+import CreateOrEditGroupDateView from './date/createOrEditGroupDateView'
 import CreateGroupLocationPresenter from './location/createGroupLocationPresenter'
 import CreateGroupLocationView from './location/createGroupLocationView'
 import CreateGroupPduPresenter from './pdu/createGroupPduPresenter'
@@ -61,7 +61,7 @@ export default class CreateGroupController extends BaseController {
           req.body['create-group-code'],
         )
       }
-      const data = await new CreateGroupForm(req, existingGroup.code).createGroupCodeData()
+      const data = await new CreateOrEditGroupForm(req, existingGroup.code).createGroupCodeData()
       if (data.error) {
         res.status(400)
         formError = data.error
@@ -87,7 +87,7 @@ export default class CreateGroupController extends BaseController {
     let formDataForPresenter: Partial<CreateGroupRequest> | null = createGroupFormData
 
     if (req.method === 'POST') {
-      const data = await new CreateGroupForm(req).createGroupDateData()
+      const data = await new CreateOrEditGroupForm(req).createOrEditGroupDateData()
 
       if (data.error) {
         res.status(400)
@@ -106,8 +106,8 @@ export default class CreateGroupController extends BaseController {
       }
     }
 
-    const presenter = new CreateGroupDatePresenter(formError, formDataForPresenter)
-    const view = new CreateGroupDateView(presenter)
+    const presenter = new CreateOrEditGroupDatePresenter(formError, formDataForPresenter)
+    const view = new CreateOrEditGroupDateView(presenter)
     return this.renderPage(res, view)
   }
 
@@ -117,7 +117,7 @@ export default class CreateGroupController extends BaseController {
     let userInputData = null
 
     if (req.method === 'POST') {
-      const data = await new CreateGroupForm(req).createGroupWhenData()
+      const data = await new CreateOrEditGroupForm(req).createGroupWhenData()
 
       const slots =
         data.paramsForUpdate?.createGroupSessionSlot ||
@@ -152,7 +152,7 @@ export default class CreateGroupController extends BaseController {
     const { createGroupFormData } = req.session
     let formError: FormValidationError | null = null
     if (req.method === 'POST') {
-      const data = await new CreateGroupForm(req).createGroupCohortData()
+      const data = await new CreateOrEditGroupForm(req).createGroupCohortData()
       if (data.error) {
         res.status(400)
         formError = data.error
@@ -174,7 +174,7 @@ export default class CreateGroupController extends BaseController {
     const { createGroupFormData } = req.session
     let formError: FormValidationError | null = null
     if (req.method === 'POST') {
-      const data = await new CreateGroupForm(req).createGroupSexData()
+      const data = await new CreateOrEditGroupForm(req).createGroupSexData()
       if (data.error) {
         res.status(400)
         formError = data.error
@@ -199,7 +199,7 @@ export default class CreateGroupController extends BaseController {
     let userInputData = null
 
     if (req.method === 'POST') {
-      const data = await new CreateGroupForm(req).createGroupPduData()
+      const data = await new CreateOrEditGroupForm(req).createGroupPduData()
       if (data.error) {
         res.status(400)
         formError = data.error
@@ -228,7 +228,7 @@ export default class CreateGroupController extends BaseController {
     let userInputData = null
 
     if (req.method === 'POST') {
-      const data = await new CreateGroupForm(req).createGroupLocationData()
+      const data = await new CreateOrEditGroupForm(req).createGroupLocationData()
       if (data.error) {
         res.status(400)
         formError = data.error
@@ -260,7 +260,7 @@ export default class CreateGroupController extends BaseController {
     let userInputData = null
 
     if (req.method === 'POST') {
-      const data = await new CreateGroupForm(req).createGroupTreatmentManagerData()
+      const data = await new CreateOrEditGroupForm(req).createGroupTreatmentManagerData()
       if (data.error) {
         res.status(400)
         formError = data.error

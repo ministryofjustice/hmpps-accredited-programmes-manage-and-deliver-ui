@@ -6,7 +6,7 @@ import { FormData } from '../utils/forms/formData'
 import FormUtils from '../utils/formUtils'
 import { DAY_CONFIG, DayKey } from './when/daysOfWeek'
 
-export default class CreateGroupForm {
+export default class CreateOrEditGroupForm {
   constructor(
     private readonly request: Request,
     private readonly existingGroupCode?: string,
@@ -54,7 +54,7 @@ export default class CreateGroupForm {
     }
   }
 
-  async createGroupDateData(): Promise<FormData<Partial<CreateGroupRequest>>> {
+  async createOrEditGroupDateData(): Promise<FormData<Partial<CreateGroupRequest>>> {
     const validationResult = await FormUtils.runValidations({
       request: this.request,
       validations: this.createGroupDateValidations(),

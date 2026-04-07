@@ -1,6 +1,7 @@
 import GroupDetailsPresenter from './groupDetailsPresenter'
 import { SummaryListArgs } from '../utils/govukFrontendTypes'
 import ViewUtils from '../utils/viewUtils'
+import { MojAlertComponentArgs } from '../interfaces/alertComponentArgs'
 
 export default class GroupDetailsView {
   constructor(private readonly presenter: GroupDetailsPresenter) {}
@@ -35,6 +36,17 @@ export default class GroupDetailsView {
     }
   }
 
+  get successMessageSummary(): MojAlertComponentArgs | null {
+    if (!this.presenter.successMessage) return null
+
+    return {
+      title: 'Success',
+      html: this.presenter.successMessage,
+      variant: 'success',
+      dismissible: true,
+    }
+  }
+
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       'groupDetails/groupDetails',
@@ -48,6 +60,7 @@ export default class GroupDetailsView {
         groupLocationSummary: this.groupLocationSummary,
         groupStaffSummary: this.groupStaffSummary,
         sessionsAndAttendanceLink: this.presenter.sessionsAndAttendanceLink,
+        successMessageSummary: this.successMessageSummary,
       },
     ]
   }

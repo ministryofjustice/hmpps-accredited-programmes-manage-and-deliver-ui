@@ -3,7 +3,7 @@ import AccreditedProgrammesManageAndDeliverService from '../../services/accredit
 import BaseController from '../../shared/baseController'
 import { PrimaryNavigationTab } from '../../shared/routes/layoutPresenter'
 import { FormValidationError } from '../../utils/formValidationError'
-import CreateGroupForm from '../createGroupForm'
+import CreateOrEditGroupForm from '../createOrEditGroupForm'
 import CreateOrEditGroupCodePresenter from './createOrEditGroupCodePresenter'
 import CreateOrEditGroupCodeView from './createOrEditGroupCodeView'
 
@@ -39,7 +39,7 @@ export default class EditGroupCodeController extends BaseController {
         existingGroup = matchingGroup?.id === groupId ? { code: '' } : { code: matchingGroup?.code || '' }
       }
 
-      const data = await new CreateGroupForm(req, existingGroup.code).createGroupCodeData()
+      const data = await new CreateOrEditGroupForm(req, existingGroup.code).createGroupCodeData()
 
       if (data.error) {
         res.status(400)

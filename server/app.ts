@@ -50,7 +50,9 @@ declare module 'express-session' {
       personName?: string
       removeFromGroup?: boolean
     }
-    createGroupFormData?: Partial<CreateGroupRequest>
+    createGroupFormData?: Partial<CreateGroupRequest> & {
+      previousDate?: string
+    }
     sessionScheduleData?: Partial<ScheduleSessionRequest> & {
       headingText?: string
       sessionName?: string

@@ -3,8 +3,20 @@ import GroupServiceLayoutPresenter, { GroupServiceNavigationValues } from '../sh
 import { SummaryListItem } from '../utils/summaryList'
 
 export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
-  constructor(readonly group: GroupDetailsResponse) {
+  constructor(
+    readonly group: GroupDetailsResponse,
+    readonly message: string | null = null,
+  ) {
     super(GroupServiceNavigationValues.groupDetailsTab, group.id)
+  }
+
+  get successMessage(): string {
+    if (this.message) {
+      return this.message === 'Group start date updated'
+        ? `<p>The start date and <a href="/group/${this.group.id}/schedule-overview">schedule</a> have been updated.</p>`
+        : this.message
+    }
+    return null
   }
 
   get sessionsAndAttendanceLink(): string {
@@ -27,6 +39,7 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
       {
         key: 'Start date',
         lines: [this.group.startDate],
+        changeLink: `/group/${this.groupId}/edit-group-start-date`,
       },
       {
         key: 'Days and times',
