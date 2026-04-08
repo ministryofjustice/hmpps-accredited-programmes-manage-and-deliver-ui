@@ -179,6 +179,18 @@ export default class AttendanceController extends BaseController {
 
         const currentPersonName =
           recordAttendanceBffData.people.find(person => person.referralId === referralId)?.name || ''
+        const journeySource = req.session.editSessionAttendance?.source
+
+        if (journeySource === 'edit-session') {
+          delete req.session.editSessionAttendance
+
+          const redirectQuery = new URLSearchParams({
+            message: `Attendance recorded for ${currentPersonName}.`,
+          })
+
+          return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session?${redirectQuery}`)
+        }
+
         const sessionSlug = convertToUrlFriendlyKebabCase(recordAttendanceBffData.sessionTitle)
         const sessionNotesQuery = new URLSearchParams({
           referralId,

@@ -60,7 +60,10 @@ declare module 'express-session' {
     }
     editSessionDateAndTime?: Partial<RescheduleSessionRequest>
     sessionFacilitators?: Partial<EditSessionFacilitatorsRequest[]>
-    editSessionAttendance?: Partial<SessionAttendance> & { referralIds?: string[] }
+    editSessionAttendance?: Partial<SessionAttendance> & {
+      referralIds?: string[]
+      source?: 'edit-session' | 'session-notes'
+    }
     sessionNotesCache?: {
       sessionId: string
       referralId: string

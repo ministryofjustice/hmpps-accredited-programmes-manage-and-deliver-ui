@@ -91,7 +91,7 @@ describe('SessionNotesPresenter', () => {
     expect(presenter.text).toEqual({
       headingText: 'Jane Doe: Building Motivation session notes',
       personOnProbationName: 'Jane Doe',
-      successMessage: 'Attendance recorded for Jane Doe',
+      successMessage: 'Attendance recorded for Jane Doe.',
       lastUpdatedText: 'Last updated by Berta Tonka on 2025-09-03.',
       updateAttendanceAndNotesButtonText: 'Update attendance and notes',
       attendanceSummaryTitle: 'Attendance summary',
@@ -113,7 +113,7 @@ describe('SessionNotesPresenter', () => {
 
     expect(presenter.successMessageSummary).toEqual({
       title: '',
-      text: 'Attendance recorded for Alex River',
+      text: 'Attendance recorded for Alex River.',
       variant: 'success',
       dismissible: true,
       showTitleAsHeading: true,

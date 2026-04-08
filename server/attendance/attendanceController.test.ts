@@ -521,6 +521,39 @@ describe('showRecordAttendancePage', () => {
       )
     })
 
+    it('redirects back to edit session with a success message on the last referral when journey started from edit session', async () => {
+      sessionData = {
+        editSessionAttendance: {
+          source: 'edit-session',
+          referralIds: ['referral1'],
+          attendees: [{ referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: '' }],
+        },
+      }
+
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Getting started 1' })
+      bffData.people = [{ ...bffData.people[0], referralId: 'referral1', name: 'Alice Brown' }]
+      accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
+      accreditedProgrammesManageAndDeliverService.createSessionAttendance.mockResolvedValue({
+        attendees: [{ referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: 'Some notes' }],
+        responseMessage: 'Attendance updated',
+      })
+
+      await request(app)
+        .post('/group/111/session/6789/referral/referral1/getting-started-1-session-notes')
+        .type('form')
+        .send({
+          'record-session-attendance-notes': 'Some notes',
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain(
+            'Redirecting to /group/111/session/6789/edit-session?message=Attendance+recorded+for+Alice+Brown.',
+          )
+        })
+    })
+
     it('skip and add later submits attendance without changing existing notes', async () => {
       sessionData = {
         editSessionAttendance: {
