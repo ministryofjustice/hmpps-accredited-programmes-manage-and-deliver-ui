@@ -24,6 +24,7 @@ import AttendanceController from '../attendance/attendanceController'
 import HomeController from '../home/homeController'
 import SessionNotesController from '../sessionNotes/sessionNotesController'
 import AddAvailabilityController from '../availabilityAndMotivation/addAvailability/addAvailabilityController'
+import EditGroupController from '../createGroup/editGroupController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
@@ -58,6 +59,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const sessionNotesController = new SessionNotesController(accreditedProgrammesManageAndDeliverService)
   const homeController = new HomeController()
   const addAvailabilityController = new AddAvailabilityController(accreditedProgrammesManageAndDeliverService)
+  const editGroupController = new EditGroupController(accreditedProgrammesManageAndDeliverService)
 
   get('/', async (req, res, next) => {
     await homeController.showHomePage(req, res)
@@ -242,6 +244,13 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   })
   getOrPost('/group/create-a-group/group-start-date', async (req, res) => {
     await createGroupController.showCreateGroupDate(req, res)
+  })
+  getOrPost('/group/:groupId/edit-group-start-date', async (req, res) => {
+    await editGroupController.editGroupDate(req, res)
+  })
+
+  getOrPost('/group/:groupId/edit-start-date-rescheduled', async (req, res) => {
+    await editGroupController.editGroupRescheduleDate(req, res)
   })
   getOrPost('/group/create-a-group/group-days-and-times', async (req, res) => {
     await createGroupController.showCreateGroupWhen(req, res)

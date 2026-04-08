@@ -17,10 +17,15 @@ export default class GroupDetailsController extends BaseController {
   async showGroupDetailsPage(req: Request, res: Response): Promise<void> {
     const { groupId } = req.params
     const { username } = req.user
+    const { message } = req.query
+
+    req.session.createGroupFormData = {}
+
+    const successMessage = message ? String(message) : null
 
     const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
 
-    const presenter = new GroupDetailsPresenter(groupDetails)
+    const presenter = new GroupDetailsPresenter(groupDetails, successMessage)
     const view = new GroupDetailsView(presenter)
 
     return this.renderPage(res, view)
