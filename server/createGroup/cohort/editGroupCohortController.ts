@@ -4,7 +4,7 @@ import AccreditedProgrammesManageAndDeliverService from '../../services/accredit
 import BaseController from '../../shared/baseController'
 import { PrimaryNavigationTab } from '../../shared/routes/layoutPresenter'
 import { FormValidationError } from '../../utils/formValidationError'
-import CreateGroupForm from '../createGroupForm'
+import CreateOrEditGroupForm from '../createOrEditGroupForm'
 import CreateGroupUtils from '../createGroupUtils'
 import CreateOrEditGroupCohortPresenter from './createOrEditGroupCohortPresenter'
 import CreateOrEditGroupCohortView from './createOrEditGroupCohortView'
@@ -41,7 +41,7 @@ export default class EditGroupCohortController extends BaseController {
         existingGroup = matchingGroup?.id === groupId ? { cohort: '' } : { cohort: matchingGroup?.cohort || '' }
       }
 
-      const data = await new CreateGroupForm(req, existingGroup.cohort).createGroupCohortData()
+      const data = await new CreateOrEditGroupForm(req, existingGroup.cohort).createGroupCohortData()
 
       if (data.error) {
         res.status(400)
