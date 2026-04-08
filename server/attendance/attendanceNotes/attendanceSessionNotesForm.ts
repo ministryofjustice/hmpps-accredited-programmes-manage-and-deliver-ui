@@ -57,7 +57,7 @@ export default class AttendanceSessionNotesForm {
       body('record-session-attendance-notes')
         .custom((value: unknown) => {
           const notes = typeof value === 'string' ? value : ''
-          return notes.length <= 10000
+          return notes.replace(/\r\n/g, '\n').length <= 10000
         })
         .withMessage(errorMessages.recordAttendance.sessionNotesTooLong),
     ]

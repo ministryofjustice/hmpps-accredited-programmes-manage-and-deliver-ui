@@ -40,6 +40,20 @@ describe('AttendanceSessionNotesForm', () => {
     })
   })
 
+  it('accepts CRLF content that is within the 10000 character limit after normalising line endings', async () => {
+    const req = buildRequest({
+      'record-session-attendance-notes': 'a\r\n'.repeat(5000),
+    })
+
+    const result = await new AttendanceSessionNotesForm(req).sessionNotesData()
+
+    expect(result.error).toBeNull()
+    expect(result.paramsForUpdate).toEqual({
+      sessionNotes: 'a\r\n'.repeat(5000),
+      isSkipAndAddLater: false,
+    })
+  })
+
   it('skips validation when action is skip-and-add-later', async () => {
     const req = buildRequest({
       action: 'skip-and-add-later',
