@@ -10,17 +10,24 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
     super(GroupServiceNavigationValues.groupDetailsTab, group.id)
   }
 
-  get successMessage(): string {
-    if (this.message) {
-      return this.message === 'Group start date updated'
-        ? `<p>The start date and <a href="/group/${this.group.id}/schedule-overview">schedule</a> have been updated.</p>`
-        : this.message
-    }
-    return null
+  get isDateUpdated(): boolean {
+    return this.message === 'Group start date updated'
   }
 
   get sessionsAndAttendanceLink(): string {
     return `/group/${this.group.id}/sessions-and-attendance`
+  }
+
+  get isStartDateInThePast(): boolean {
+    const currentStartDate = new Date(this.group.startDate)
+    const currentStartDateEpoch = Date.UTC(
+      currentStartDate.getFullYear(),
+      currentStartDate.getMonth(),
+      currentStartDate.getDate(),
+    )
+    const currentDate = new Date()
+    const currentDateEpoch = Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())
+    return currentStartDateEpoch < currentDateEpoch
   }
 
   getGroupCodeSummary(): SummaryListItem[] {
@@ -39,7 +46,7 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
       {
         key: 'Start date',
         lines: [this.group.startDate],
-        changeLink: `/group/${this.groupId}/edit-group-start-date`,
+        changeLink: this.isStartDateInThePast ? null : `/group/${this.groupId}/edit-group-start-date`,
       },
       {
         key: 'Days and times',

@@ -37,13 +37,21 @@ export default class GroupDetailsView {
   }
 
   get successMessageSummary(): MojAlertComponentArgs | null {
-    if (!this.presenter.successMessage) return null
+    if (!this.presenter.message) return null
 
+    if (this.presenter.isDateUpdated) {
+      return {
+        title: 'Success',
+        variant: 'success',
+        dismissible: true,
+        html: `<p>The start date and <a href="/group/${this.presenter.group.id}/schedule-overview">schedule</a> have been updated.</p>`,
+      }
+    }
     return {
       title: 'Success',
-      html: this.presenter.successMessage,
       variant: 'success',
       dismissible: true,
+      text: this.presenter.message,
     }
   }
 
