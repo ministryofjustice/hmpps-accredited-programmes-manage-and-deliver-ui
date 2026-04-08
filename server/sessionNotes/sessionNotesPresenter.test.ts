@@ -193,6 +193,26 @@ describe('SessionNotesPresenter', () => {
     })
   })
 
+  it('returns read-only page header action link when opened from edit session', () => {
+    const presenter = new SessionNotesPresenter(buildData({ source: 'edit-session' }))
+
+    expect(presenter.isReadOnly).toBe(true)
+    expect(presenter.pageHeaderActionsArgs).toEqual({
+      classes: 'govuk-!-margin-bottom-0',
+      heading: {
+        text: 'Jane Doe: Building Motivation session notes',
+        classes: 'govuk-heading-l',
+      },
+      items: [
+        {
+          text: 'Update attendance and notes',
+          classes: 'govuk-button--primary',
+          href: '/group/b2c3d4e5-f6a7-8901-bcde-f23456789012/session/c3d4e5f6-a7b8-9012-cdef-345678901234/record-attendance',
+        },
+      ],
+    })
+  })
+
   describe('getNotesRows', () => {
     it('returns minimum of 8 rows for empty string', () => {
       const presenter = new SessionNotesPresenter(buildData())

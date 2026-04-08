@@ -481,7 +481,7 @@ describe('showRecordAttendancePage', () => {
       expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).not.toHaveBeenCalled()
     })
 
-    it('submits attendance and redirects to edit session on the last referral', async () => {
+    it('submits attendance and redirects to session notes read-only page on the last referral', async () => {
       sessionData = {
         editSessionAttendance: {
           referralIds: ['referral1'],
@@ -508,7 +508,7 @@ describe('showRecordAttendancePage', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            'Redirecting to /group/111/session/6789/edit-session?message=Attendance%20recorded%20for%20Alice%20Brown.',
+            'Redirecting to /group/111/session/6789/getting-started-1/session-notes?referralId=referral1&source=edit-session&saved=true&personOnProbationName=Alice+Brown',
           )
         })
 
@@ -596,7 +596,7 @@ describe('showRecordAttendancePage', () => {
       )
     })
 
-    it('formats success message correctly when submitting attendance for multiple attendees', async () => {
+    it('redirects to the current referral session notes read-only page when submitting for multiple attendees', async () => {
       sessionData = {
         editSessionAttendance: {
           referralIds: ['referral1', 'referral2', 'referral3'],
@@ -636,9 +636,79 @@ describe('showRecordAttendancePage', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            'Redirecting to /group/111/session/6789/edit-session?message=Attendance%20recorded%20for%20Sham%20Booth%2C%20Adrian%20Poole%20and%20Alex%20River.',
+            'Redirecting to /group/111/session/6789/getting-started-1/session-notes?referralId=referral3&source=edit-session&saved=true&personOnProbationName=Alex+River',
           )
         })
+    })
+
+    it('clears cached session notes after saving attendance notes so the next session notes page reloads fresh data', async () => {
+      sessionData = {
+        sessionNotesCache: {
+          sessionId: '6789',
+          referralId: 'referral1',
+          data: {
+            pageTitle: 'Alex River: Getting started 1 session notes',
+            moduleName: 'Getting started',
+            sessionName: 'Getting started 1',
+            sessionNumber: 1,
+            lastUpdatedBy: 'John Smith',
+            lastUpdatedDate: '19 March 2026',
+            groupId: '111',
+            sessionId: '6789',
+            sessionDate: '21 July 2025',
+            sessionAttendance: 'Attended, failed to comply',
+            sessionNotes: 'Existing note.',
+          },
+        },
+        editSessionAttendance: {
+          referralIds: ['referral1'],
+          attendees: [{ referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: 'Updated note' }],
+        },
+      }
+
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Getting started 1' })
+      bffData.people = [
+        { ...bffData.people[0], referralId: 'referral1', name: 'Alex River', sessionNotes: 'Existing note.' },
+      ]
+
+      accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
+      accreditedProgrammesManageAndDeliverService.createSessionAttendance.mockResolvedValue({
+        attendees: [{ referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: 'Updated note' }],
+        responseMessage: 'Attendance updated',
+      })
+      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue({
+        pageTitle: 'Alex River: Getting started 1 session notes',
+        moduleName: 'Getting started',
+        sessionName: 'Getting started 1',
+        sessionNumber: 1,
+        lastUpdatedBy: 'Jane Smith',
+        lastUpdatedDate: '20 March 2026',
+        groupId: '111',
+        sessionId: '6789',
+        sessionDate: '21 July 2025',
+        sessionAttendance: 'Attended, failed to comply',
+        sessionNotes: 'Updated note',
+      })
+
+      const agent = request.agent(app)
+
+      await agent
+        .post('/group/111/session/6789/referral/referral1/getting-started-1-session-notes')
+        .type('form')
+        .send({
+          'record-session-attendance-notes': 'Updated note',
+        })
+        .expect(302)
+
+      await agent.get('/group/111/session/6789/getting-started-1/session-notes?referralId=referral1').expect(200)
+
+      expect(accreditedProgrammesManageAndDeliverService.getSessionNotes).toHaveBeenCalledWith(
+        'user1',
+        '6789',
+        'referral1',
+      )
     })
   })
 
