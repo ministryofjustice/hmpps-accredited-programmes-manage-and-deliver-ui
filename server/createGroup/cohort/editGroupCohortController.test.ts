@@ -63,6 +63,22 @@ describe('Edit Group Cohort Controller', () => {
         })
     })
 
+    it('preselects general offence radio when cohort is returned as display text', async () => {
+      const groupId = randomUUID()
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
+        id: groupId,
+        code: 'EXISTING123',
+        cohort: 'General offence',
+      } as unknown as GroupDetailsResponse)
+
+      return request(app)
+        .get(`/group/${groupId}/edit-a-group/edit-group-cohort`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toMatch(/<input[^>]*value="GENERAL"[^>]*checked|<input[^>]*checked[^>]*value="GENERAL"/)
+        })
+    })
+
     it('loads the edit group cohort page when session createGroupFormData is missing', async () => {
       const groupId = randomUUID()
       accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
