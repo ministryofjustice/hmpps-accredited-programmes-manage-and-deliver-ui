@@ -17,6 +17,7 @@ import {
   DeliveryLocationPreferences,
   DeliveryLocationPreferencesFormData,
   DrugDetails,
+  EditGroupCohort,
   EditSessionAttendeesResponse,
   EditSessionDateAndTimeResponse,
   EditSessionDetails,
@@ -536,6 +537,14 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
       path: `/group/${cohort}/details`,
       headers: { Accept: 'application/json' },
     })) as Group | null
+  }
+
+  async getBffEditGroupCohort(username: Express.User['username'], groupId: string): Promise<EditGroupCohort> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/group/${groupId}/edit-cohort`,
+      headers: { Accept: 'application/json' },
+    })) as EditGroupCohort
   }
 
   async removeFromGroupStatusTransitionDetails(
