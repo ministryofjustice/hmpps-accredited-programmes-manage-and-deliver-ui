@@ -531,14 +531,6 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
     })) as Group | null
   }
 
-  async getGroupByCohortInRegion(username: Express.User['username'], cohort: string): Promise<Group | null> {
-    const restClient = await this.createRestClientFromUsername(username)
-    return (await restClient.get({
-      path: `/group/${cohort}/details`,
-      headers: { Accept: 'application/json' },
-    })) as Group | null
-  }
-
   async getBffEditGroupCohort(username: Express.User['username'], groupId: string): Promise<EditGroupCohort> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
