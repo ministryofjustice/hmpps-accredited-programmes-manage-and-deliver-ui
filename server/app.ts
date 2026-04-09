@@ -11,6 +11,7 @@ import {
   ScheduleSessionRequest,
   SessionNotes,
   SessionAttendance,
+  CreateGroupSessionSlot,
 } from '@manage-and-deliver-api'
 import { setupExpressErrorHandler } from '@sentry/node'
 import errorHandler from './errorHandler'
@@ -52,6 +53,7 @@ declare module 'express-session' {
     }
     createGroupFormData?: Partial<CreateGroupRequest> & {
       previousDate?: string
+      previousSessions?: CreateGroupSessionSlot[]
     }
     sessionScheduleData?: Partial<ScheduleSessionRequest> & {
       headingText?: string

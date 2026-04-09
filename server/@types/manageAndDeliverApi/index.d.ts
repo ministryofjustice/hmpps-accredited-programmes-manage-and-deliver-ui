@@ -95,6 +95,7 @@ type EditGroupCohort = components['schemas']['EditGroupCohort']
 type GroupDetailsResponse = components['schemas']['GroupDetailsResponse']
 type UpdateGroupRequest = components['schemas']['UpdateGroupRequest']
 type UpdateGroupResponse = components['schemas']['UpdateGroupResponse']
+type EditGroupDaysAndTimes = components['schemas']['EditGroupDaysAndTimes']
 
 export type {
   AlcoholMisuseDetails,
@@ -119,6 +120,7 @@ export type {
   DeliveryLocationPreferences,
   DeliveryLocationPreferencesFormData,
   DrugDetails,
+  EditGroupDaysAndTimes,
   EditSessionAttendee,
   EditSessionAttendeesResponse,
   EditSessionDateAndTimeResponse,

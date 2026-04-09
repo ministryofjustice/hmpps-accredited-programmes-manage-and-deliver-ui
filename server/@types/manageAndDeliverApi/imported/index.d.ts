@@ -1260,6 +1260,46 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/bff/group/{groupId}/edit-days-and-times': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * bff endpoint to retrieve the edit days and times for a programme group
+     * @description Retrieve group edit days and times details.
+     */
+    get: operations['getBffEditGroupDaysAndTimes']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/bff/group/{groupId}/edit-cohort': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * bff endpoint to retrieve the edit cohort details for a programme group
+     * @description Retrieve group edit cohort details.
+     */
+    get: operations['getBffEditGroupCohort']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/bff/group/{groupId}/details': {
     parameters: {
       query?: never
@@ -1581,9 +1621,8 @@ export interface components {
       /**
        * @description AM or PM indicator
        * @example AM
-       * @enum {string}
        */
-      amOrPm: 'AM' | 'PM'
+      amOrPm: components['schemas']['AmOrPm']
     }
     CreateGroupTeamMember: {
       /** @description The full name of the facilitator for the group */
@@ -3460,7 +3499,7 @@ export interface components {
        * @example false
        */
       isCatchup: boolean
-      /** @description List of attendees for the session */
+      /** @description List of attendees for the session. May be empty if no members are currently allocated to the programme group. */
       attendees: components['schemas']['EditSessionAttendee'][]
     }
     /** @description Status transition information for the Remove Referral from Group form in the M&D UI */
@@ -4070,6 +4109,72 @@ export interface components {
        * @description Suggested date for the next one to one session
        */
       suggestedDate: string
+    }
+    /**
+     * @description AM/PM time indicator
+     * @enum {string}
+     */
+    AmOrPm: 'AM' | 'PM'
+    /** @description Response model for the edit cohort page */
+    EditGroupDaysAndTimes: {
+      /**
+       * Format: uuid
+       * @description A unique id identifying the programme group.
+       * @example 1ff57cea-352c-4a99-8f66-3e626aac3265
+       */
+      id: string
+      /**
+       * @description A unique code identifying the programme group.
+       * @example AP_BIRMINGHAM_NORTH
+       */
+      code: string
+      /**
+       * @description The days and times that group sessions will be delivered.
+       * @example [
+       *       {
+       *         "dayOfWeek": "Monday",
+       *         "hour": 9,
+       *         "minutes": 30,
+       *         "amOrPm": "AM"
+       *       }
+       *     ]
+       */
+      programmeGroupSessionSlots: components['schemas']['CreateGroupSessionSlot'][]
+    }
+    /** @description Response model for the edit cohort page */
+    EditGroupCohort: {
+      /**
+       * @description Caption text displayed above the radio options
+       * @example Select a cohort
+       */
+      captionText: string
+      /**
+       * @description Text to display the page title
+       * @example Edit the group cohort
+       */
+      pageTitle: string
+      /**
+       * @description Text to display on the submit button of the page
+       * @example Submit
+       */
+      submitButtonText: string
+      /** @description List of radio button options for cohort selection */
+      radios: components['schemas']['RadioOptions'][]
+    }
+    /** @description A single radio button option */
+    RadioOptions: {
+      /**
+       * @description Display label for the radio option
+       * @example Cohort A
+       */
+      text: string
+      /** @description Cohort for the Programme Group. */
+      value: components['schemas']['ProgrammeGroupCohort']
+      /**
+       * @description Whether this option is currently selected
+       * @example false
+       */
+      selected: boolean
     }
     /** @description Information identifying the group. */
     GroupDetailsResponse: {
@@ -8015,6 +8120,122 @@ export interface operations {
         }
       }
       /** @description Group or module not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getBffEditGroupDaysAndTimes: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        groupId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully retrieved group edit day and times details */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EditGroupDaysAndTimes']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Group not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getBffEditGroupCohort: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        groupId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully retrieved group edit cohort details */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['EditGroupCohort']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Group not found */
       404: {
         headers: {
           [name: string]: unknown
