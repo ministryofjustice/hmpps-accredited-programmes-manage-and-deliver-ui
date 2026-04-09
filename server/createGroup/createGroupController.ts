@@ -50,7 +50,6 @@ export default class CreateGroupController extends BaseController {
 
   async showCreateGroupCode(req: Request, res: Response): Promise<void> {
     const { createGroupFormData } = req.session
-    const { username } = req.user
     let userInputData = null
     let formError: FormValidationError | null = null
     if (req.method === 'POST') {
@@ -143,7 +142,6 @@ export default class CreateGroupController extends BaseController {
 
   async showCreateOrEditGroupCohort(req: Request, res: Response): Promise<void> {
     const { createGroupFormData } = req.session
-    const { username } = req.user
     let userInputData = null
     let formError: FormValidationError | null = null
     if (req.method === 'POST') {

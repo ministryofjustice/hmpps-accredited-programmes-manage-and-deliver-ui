@@ -1,5 +1,4 @@
 import { CreateGroupRequest } from '@manage-and-deliver-api'
-import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import { SessionData } from 'express-session'
 import request from 'supertest'
