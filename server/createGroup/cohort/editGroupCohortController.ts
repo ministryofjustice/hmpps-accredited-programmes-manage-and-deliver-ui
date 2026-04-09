@@ -4,10 +4,10 @@ import BaseController from '../../shared/baseController'
 import { PrimaryNavigationTab } from '../../shared/routes/layoutPresenter'
 import { FormValidationError } from '../../utils/formValidationError'
 import CreateOrEditGroupForm from '../createOrEditGroupForm'
-import CreateOrEditGroupCodePresenter from './createOrEditGroupCodePresenter'
-import CreateOrEditGroupCodeView from './createOrEditGroupCodeView'
+import CreateOrEditGroupCohortPresenter from './createOrEditGroupCohortPresenter'
+import CreateOrEditGroupCohortView from './createOrEditGroupCohortView'
 
-export default class EditGroupCodeController extends BaseController {
+export default class EditGroupCohortController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
 
   constructor(
@@ -16,30 +16,27 @@ export default class EditGroupCodeController extends BaseController {
     super()
   }
 
-  async showEditGroupCode(req: Request, res: Response): Promise<void> {
+  async showEditGroupCohort(req: Request, res: Response): Promise<void> {
     const { groupId } = req.params
     const { username } = req.user
     let userInputData = null
     let formError: FormValidationError | null = null
 
     const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
+    const bffEditGroupCohortData = await this.accreditedProgrammesManageAndDeliverService.getBffEditGroupCohort(
+      username,
+      groupId,
+    )
+    const selectedCohort = bffEditGroupCohortData.radios.find(
+      (radio: { selected: boolean; value: string }) => radio.selected,
+    )?.value
+
     const createGroupFormData = {
-      groupCode: groupDetails?.code,
+      cohort: selectedCohort || groupDetails?.cohort,
     }
 
     if (req.method === 'POST') {
-      let existingGroup = { code: '' }
-
-      if (req.body['create-group-code']) {
-        const matchingGroup = await this.accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion(
-          username,
-          req.body['create-group-code'],
-        )
-
-        existingGroup = matchingGroup?.id === groupId ? { code: '' } : { code: matchingGroup?.code || '' }
-      }
-
-      const data = await new CreateOrEditGroupForm(req, existingGroup.code).createGroupCodeData()
+      const data = await new CreateOrEditGroupForm(req, '').createGroupCohortData()
 
       if (data.error) {
         res.status(400)
@@ -47,7 +44,7 @@ export default class EditGroupCodeController extends BaseController {
         userInputData = req.body
       } else {
         await this.accreditedProgrammesManageAndDeliverService.updateGroup(username, groupId, {
-          groupCode: data.paramsForUpdate.groupCode,
+          cohort: data.paramsForUpdate.cohort,
         })
 
         req.session.createGroupFormData = {}
@@ -55,14 +52,14 @@ export default class EditGroupCodeController extends BaseController {
       }
     }
 
-    const presenter = new CreateOrEditGroupCodePresenter(
+    const presenter = new CreateOrEditGroupCohortPresenter(
       formError,
       createGroupFormData,
       userInputData,
       groupId,
-      createGroupFormData.groupCode,
+      groupDetails?.code,
     )
-    const view = new CreateOrEditGroupCodeView(presenter)
+    const view = new CreateOrEditGroupCohortView(presenter)
     return this.renderPage(res, view)
   }
 }

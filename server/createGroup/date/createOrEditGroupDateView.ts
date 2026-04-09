@@ -1,8 +1,8 @@
 import ViewUtils from '../../utils/viewUtils'
-import CreateGroupDatePresenter from './createGroupDatePresenter'
+import CreateOrEditGroupDatePresenter from './createOrEditGroupDatePresenter'
 
-export default class CreateGroupDateView {
-  constructor(private readonly presenter: CreateGroupDatePresenter) {}
+export default class CreateOrEditGroupDateView {
+  constructor(private readonly presenter: CreateOrEditGroupDatePresenter) {}
 
   private backLinkArgs() {
     return {
@@ -27,7 +27,7 @@ export default class CreateGroupDateView {
         text: 'This is when the pre-group one-to-ones are expected to start. Enter a date, for example, 10/7/2025, or select one from the calendar.',
       },
       label: {
-        text: 'Add a start date for the group',
+        text: this.presenter.isEdit ? 'Edit start date for the group' : 'Add a start date for the group',
         classes: 'govuk-label--l',
         isPageHeading: true,
       },

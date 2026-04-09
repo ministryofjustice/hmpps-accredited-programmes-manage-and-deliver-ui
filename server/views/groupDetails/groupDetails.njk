@@ -2,6 +2,7 @@
 
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{%- from "moj/components/alert/macro.njk" import mojAlert -%}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -10,6 +11,9 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
      {{ mojSubNavigation(serviceNavigationArgs) }}
+    {% if successMessageSummary %}
+      {{ mojAlert(successMessageSummary) }}
+    {% endif %}
     <span class="govuk-caption-xl">{{ text.pageSubHeading }}</span>
     <h1 class="govuk-heading-xl">{{ text.headingText }}</h1>
       {{ govukSummaryList(groupCodeSummary) }}
