@@ -152,12 +152,6 @@ describe('Edit Group Cohort Controller', () => {
           { text: 'Sexual offence, learning disabilities and challenges (LDC)', value: 'SEXUAL_LDC', selected: false },
         ],
       })
-      accreditedProgrammesManageAndDeliverService.getGroupByCohortInRegion.mockResolvedValue({
-        id: groupId,
-        code: 'EXISTING123',
-        cohort: 'GENERAL',
-        regionName: 'Test Region',
-      })
       accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({} as never)
 
       return request(app)

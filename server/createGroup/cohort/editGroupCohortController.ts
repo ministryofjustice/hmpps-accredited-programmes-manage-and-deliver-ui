@@ -36,18 +36,7 @@ export default class EditGroupCohortController extends BaseController {
     }
 
     if (req.method === 'POST') {
-      let existingGroup = { cohort: '' }
-
-      if (req.body['create-group-cohort']) {
-        const matchingGroup = await this.accreditedProgrammesManageAndDeliverService.getGroupByCohortInRegion(
-          username,
-          req.body['create-group-cohort'],
-        )
-
-        existingGroup = matchingGroup?.id === groupId ? { cohort: '' } : { cohort: matchingGroup?.cohort || '' }
-      }
-
-      const data = await new CreateOrEditGroupForm(req, existingGroup.cohort).createGroupCohortData()
+      const data = await new CreateOrEditGroupForm(req, '').createGroupCohortData()
 
       if (data.error) {
         res.status(400)

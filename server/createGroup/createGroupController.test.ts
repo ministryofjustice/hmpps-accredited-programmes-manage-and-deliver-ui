@@ -98,25 +98,6 @@ describe('Create Group Controller', () => {
 
   describe('POST /group/create-a-group/create-group-code', () => {
     it('redirects to start date page on successful submission', async () => {
-      accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue({
-        id: randomUUID(),
-        code: 'Test Code',
-        regionName: 'Test Region',
-      })
-
-      return request(app)
-        .post('/group/create-a-group/create-group-code')
-        .type('form')
-        .send({ 'create-group-code': 'ABC123' })
-        .expect(302)
-        .expect(res => {
-          expect(res.text).toContain('Redirecting to /group/create-a-group/group-start-date')
-        })
-    })
-
-    it('redirects to start date page when group code lookup returns 404', async () => {
-      accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockRejectedValue({ status: 404 })
-
       return request(app)
         .post('/group/create-a-group/create-group-code')
         .type('form')
@@ -135,27 +116,6 @@ describe('Create Group Controller', () => {
         .expect(400)
         .expect(res => {
           expect(res.text).toContain('Enter a code for your group')
-        })
-    })
-
-    it('returns with errors if group code already exists', async () => {
-      accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue({
-        id: randomUUID(),
-        code: 'Test Code',
-        regionName: 'Test Region',
-      })
-
-      return request(app)
-        .post('/group/create-a-group/create-group-code')
-        .type('form')
-        .send({
-          'create-group-code': 'Test Code',
-        })
-        .expect(400)
-        .expect(res => {
-          expect(res.text).toContain(
-            'Group code Test Code already exists for a group in this region. Enter a different code.',
-          )
         })
     })
   })

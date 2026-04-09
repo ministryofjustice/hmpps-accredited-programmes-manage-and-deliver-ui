@@ -54,20 +54,7 @@ export default class CreateGroupController extends BaseController {
     let userInputData = null
     let formError: FormValidationError | null = null
     if (req.method === 'POST') {
-      let existingGroup = { code: '' }
-      if (req.body['create-group-code']) {
-        try {
-          existingGroup = await this.accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion(
-            username,
-            req.body['create-group-code'],
-          )
-        } catch (error) {
-          if ((error as { status?: number }).status !== 404) {
-            throw error
-          }
-        }
-      }
-      const data = await new CreateOrEditGroupForm(req, existingGroup.code).createGroupCodeData()
+      const data = await new CreateOrEditGroupForm(req, '').createGroupCodeData()
       if (data.error) {
         res.status(400)
         formError = data.error
@@ -160,18 +147,6 @@ export default class CreateGroupController extends BaseController {
     let userInputData = null
     let formError: FormValidationError | null = null
     if (req.method === 'POST') {
-      if (req.body['create-group-cohort']) {
-        try {
-          await this.accreditedProgrammesManageAndDeliverService.getGroupByCohortInRegion(
-            username,
-            req.body['create-group-cohort'],
-          )
-        } catch (error) {
-          if ((error as { status?: number }).status !== 404) {
-            throw error
-          }
-        }
-      }
       const data = await new CreateOrEditGroupForm(req).createGroupCohortData()
       if (data.error) {
         res.status(400)
