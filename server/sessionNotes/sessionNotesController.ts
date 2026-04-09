@@ -28,6 +28,10 @@ export default class SessionNotesController extends BaseController {
       return res.redirect(`/group/${req.params.groupId}/session/${sessionId}/edit-session`)
     }
 
+    if (source === 'edit-session') {
+      this.seedAttendanceSelection(req, referralId)
+    }
+
     if (req.method === 'POST') {
       const form = new SessionNotesForm()
       const submittedNotes = ((req.body.sessionNotes as string | undefined) || '').trim()
@@ -144,6 +148,25 @@ export default class SessionNotesController extends BaseController {
     const cache = req.session.sessionNotesCache
     if (cache && cache.sessionId === sessionId && cache.referralId === referralId) {
       delete req.session.sessionNotesCache
+    }
+  }
+
+  private seedAttendanceSelection(req: Request, referralId: string): void {
+    const existingSelection = req.session.editSessionAttendance
+
+    let existingReferralIds: string[] = []
+
+    if (Array.isArray(existingSelection?.referralIds)) {
+      existingReferralIds = existingSelection.referralIds
+    } else if (existingSelection?.referralIds) {
+      existingReferralIds = [existingSelection.referralIds]
+    }
+
+    req.session.editSessionAttendance = {
+      ...existingSelection,
+      source: 'session-notes',
+      attendees: existingSelection?.attendees ?? [],
+      referralIds: existingReferralIds.length ? existingReferralIds : [referralId],
     }
   }
 

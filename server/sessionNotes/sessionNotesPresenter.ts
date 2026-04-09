@@ -30,7 +30,7 @@ export default class SessionNotesPresenter {
     return {
       headingText: this.data.pageTitle,
       personOnProbationName,
-      successMessage: `Attendance recorded for ${successMessageName}`,
+      successMessage: `Attendance recorded for ${successMessageName}.`,
       lastUpdatedText,
       updateAttendanceAndNotesButtonText: 'Update attendance and notes',
       attendanceSummaryTitle: 'Attendance summary',
@@ -53,6 +53,10 @@ export default class SessionNotesPresenter {
 
   get sessionNotesData(): SessionNotesData {
     return this.data
+  }
+
+  get isReadOnly(): boolean {
+    return this.data.source === 'edit-session'
   }
 
   get backLinkArgs() {
@@ -93,6 +97,10 @@ export default class SessionNotesPresenter {
     return `/group/${this.data.groupId}/session/${this.data.sessionId}/${sessionSlug}/session-notes`
   }
 
+  get recordAttendanceUrl(): string {
+    return `/group/${this.data.groupId}/session/${this.data.sessionId}/record-attendance`
+  }
+
   get pageHeaderActionsArgs() {
     return {
       classes: 'govuk-!-margin-bottom-0',
@@ -101,15 +109,21 @@ export default class SessionNotesPresenter {
         classes: 'govuk-heading-l',
       },
       items: [
-        {
-          text: this.text.updateAttendanceAndNotesButtonText,
-          classes: 'govuk-button--primary',
-          element: 'button',
-          type: 'submit',
-          attributes: {
-            form: 'session-notes-form',
-          },
-        },
+        this.isReadOnly
+          ? {
+              text: this.text.updateAttendanceAndNotesButtonText,
+              classes: 'govuk-button--primary',
+              href: this.recordAttendanceUrl,
+            }
+          : {
+              text: this.text.updateAttendanceAndNotesButtonText,
+              classes: 'govuk-button--primary',
+              element: 'button',
+              type: 'submit',
+              attributes: {
+                form: 'session-notes-form',
+              },
+            },
       ],
     }
   }

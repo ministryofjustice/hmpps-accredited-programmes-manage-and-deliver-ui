@@ -175,15 +175,32 @@ export default class AttendanceController extends BaseController {
           })
 
         const attendeeReferralIds = createSessionAttendanceResponse.attendees.map(attendee => attendee.referralId)
-        const successMessage = this.attendanceSuccessMessage(
-          recordAttendanceBffData,
-          attendeeReferralIds.length ? attendeeReferralIds : referralIds,
-        )
+        this.clearCachedSessionNotes(req, sessionId, attendeeReferralIds.length ? attendeeReferralIds : referralIds)
+
+        const currentPersonName =
+          recordAttendanceBffData.people.find(person => person.referralId === referralId)?.name || ''
+        const journeySource = req.session.editSessionAttendance?.source
+
+        if (journeySource === 'edit-session') {
+          delete req.session.editSessionAttendance
+
+          const redirectQuery = new URLSearchParams({
+            message: `Attendance recorded for ${currentPersonName}.`,
+          })
+
+          return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session?${redirectQuery}`)
+        }
+
+        const sessionSlug = convertToUrlFriendlyKebabCase(recordAttendanceBffData.sessionTitle)
+        const sessionNotesQuery = new URLSearchParams({
+          referralId,
+          source: 'edit-session',
+          saved: 'true',
+          personOnProbationName: currentPersonName,
+        })
 
         delete req.session.editSessionAttendance
-        return res.redirect(
-          `/group/${groupId}/session/${sessionId}/edit-session?message=${encodeURIComponent(successMessage)}`,
-        )
+        return res.redirect(`/group/${groupId}/session/${sessionId}/${sessionSlug}/session-notes?${sessionNotesQuery}`)
       }
 
       return res.redirect(this.notesPageUri(groupId, sessionId, referralIds[currentReferralIndex + 1], theGroupTitle))
@@ -239,29 +256,12 @@ export default class AttendanceController extends BaseController {
     })
   }
 
-  private attendanceSuccessMessage(recordAttendanceBffData: RecordSessionAttendance, referralIds: string[]): string {
-    const names = referralIds
-      .map(id => recordAttendanceBffData.people.find(person => person.referralId === id)?.name)
-      .filter((name): name is string => Boolean(name))
+  private clearCachedSessionNotes(req: Request, sessionId: string, referralIds: string[]): void {
+    const cache = req.session.sessionNotesCache
 
-    const formattedNames = this.formatNames(names)
-    return `Attendance recorded for ${formattedNames}.`
-  }
-
-  private formatNames(names: string[]): string {
-    if (!names.length) {
-      return 'person(s)'
+    if (cache && cache.sessionId === sessionId && referralIds.includes(cache.referralId)) {
+      delete req.session.sessionNotesCache
     }
-
-    if (names.length === 1) {
-      return names[0]
-    }
-
-    if (names.length === 2) {
-      return `${names[0]} and ${names[1]}`
-    }
-
-    return `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`
   }
 
   private notesPageUri(groupId: string, sessionId: string, referralId: string, groupTitle: string): string {

@@ -91,7 +91,7 @@ describe('SessionNotesPresenter', () => {
     expect(presenter.text).toEqual({
       headingText: 'Jane Doe: Building Motivation session notes',
       personOnProbationName: 'Jane Doe',
-      successMessage: 'Attendance recorded for Jane Doe',
+      successMessage: 'Attendance recorded for Jane Doe.',
       lastUpdatedText: 'Last updated by Berta Tonka on 2025-09-03.',
       updateAttendanceAndNotesButtonText: 'Update attendance and notes',
       attendanceSummaryTitle: 'Attendance summary',
@@ -113,7 +113,7 @@ describe('SessionNotesPresenter', () => {
 
     expect(presenter.successMessageSummary).toEqual({
       title: '',
-      text: 'Attendance recorded for Alex River',
+      text: 'Attendance recorded for Alex River.',
       variant: 'success',
       dismissible: true,
       showTitleAsHeading: true,
@@ -188,6 +188,26 @@ describe('SessionNotesPresenter', () => {
           attributes: {
             form: 'session-notes-form',
           },
+        },
+      ],
+    })
+  })
+
+  it('returns read-only page header action link when opened from edit session', () => {
+    const presenter = new SessionNotesPresenter(buildData({ source: 'edit-session' }))
+
+    expect(presenter.isReadOnly).toBe(true)
+    expect(presenter.pageHeaderActionsArgs).toEqual({
+      classes: 'govuk-!-margin-bottom-0',
+      heading: {
+        text: 'Jane Doe: Building Motivation session notes',
+        classes: 'govuk-heading-l',
+      },
+      items: [
+        {
+          text: 'Update attendance and notes',
+          classes: 'govuk-button--primary',
+          href: '/group/b2c3d4e5-f6a7-8901-bcde-f23456789012/session/c3d4e5f6-a7b8-9012-cdef-345678901234/record-attendance',
         },
       ],
     })
