@@ -3,12 +3,31 @@ import GroupServiceLayoutPresenter, { GroupServiceNavigationValues } from '../sh
 import { SummaryListItem } from '../utils/summaryList'
 
 export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
-  constructor(readonly group: GroupDetailsResponse) {
+  constructor(
+    readonly group: GroupDetailsResponse,
+    readonly message: string | null = null,
+  ) {
     super(GroupServiceNavigationValues.groupDetailsTab, group.id)
+  }
+
+  get isDateUpdated(): boolean {
+    return this.message === 'Group start date updated'
   }
 
   get sessionsAndAttendanceLink(): string {
     return `/group/${this.group.id}/sessions-and-attendance`
+  }
+
+  get isStartDateInThePast(): boolean {
+    const currentStartDate = new Date(this.group.startDate)
+    const currentStartDateEpoch = Date.UTC(
+      currentStartDate.getFullYear(),
+      currentStartDate.getMonth(),
+      currentStartDate.getDate(),
+    )
+    const currentDate = new Date()
+    const currentDateEpoch = Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())
+    return currentStartDateEpoch < currentDateEpoch
   }
 
   getGroupCodeSummary(): SummaryListItem[] {
@@ -27,6 +46,7 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
       {
         key: 'Start date',
         lines: [this.group.startDate],
+        changeLink: this.isStartDateInThePast ? null : `/group/${this.groupId}/edit-group-start-date`,
       },
       {
         key: 'Days and times',
@@ -40,6 +60,8 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
       {
         key: 'Cohort',
         lines: [this.group.cohort],
+        changeLink: `/group/${this.groupId}/edit-a-group/edit-group-cohort`,
+        visuallyHiddenText: 'group cohort',
       },
       {
         key: 'Sex',

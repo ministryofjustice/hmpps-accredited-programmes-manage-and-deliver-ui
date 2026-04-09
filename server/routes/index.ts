@@ -4,6 +4,7 @@ import CaselistController from '../caselist/caselistController'
 import ChangeCohortController from '../cohort/changeCohortController'
 import CreateGroupController from '../createGroup/createGroupController'
 import EditGroupCodeController from '../createGroup/code/editGroupCodeController'
+import EditGroupCohortController from '../createGroup/cohort/editGroupCohortController'
 import EditSessionController from '../editSession/editSessionController'
 import GroupController from '../group/groupController'
 import GroupDetailsController from '../groupDetails/groupDetailsController'
@@ -24,6 +25,7 @@ import AttendanceController from '../attendance/attendanceController'
 import HomeController from '../home/homeController'
 import SessionNotesController from '../sessionNotes/sessionNotesController'
 import AddAvailabilityController from '../availabilityAndMotivation/addAvailability/addAvailabilityController'
+import EditGroupController from '../createGroup/editGroupController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
@@ -50,6 +52,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   )
   const createGroupController = new CreateGroupController(accreditedProgrammesManageAndDeliverService)
   const editGroupCodeController = new EditGroupCodeController(accreditedProgrammesManageAndDeliverService)
+  const editGroupCohortController = new EditGroupCohortController(accreditedProgrammesManageAndDeliverService)
   const groupController = new GroupController(accreditedProgrammesManageAndDeliverService)
   const groupDetailsController = new GroupDetailsController(accreditedProgrammesManageAndDeliverService)
   const sessionScheduleController = new SessionScheduleController(accreditedProgrammesManageAndDeliverService)
@@ -58,6 +61,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const sessionNotesController = new SessionNotesController(accreditedProgrammesManageAndDeliverService)
   const homeController = new HomeController()
   const addAvailabilityController = new AddAvailabilityController(accreditedProgrammesManageAndDeliverService)
+  const editGroupController = new EditGroupController(accreditedProgrammesManageAndDeliverService)
 
   get('/', async (req, res, next) => {
     await homeController.showHomePage(req, res)
@@ -238,10 +242,20 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await editGroupCodeController.showEditGroupCode(req, res)
   })
   getOrPost('/group/create-a-group/group-cohort', async (req, res) => {
-    await createGroupController.showCreateGroupCohort(req, res)
+    await createGroupController.showCreateOrEditGroupCohort(req, res)
+  })
+  getOrPost('/group/:groupId/edit-a-group/edit-group-cohort', async (req, res) => {
+    await editGroupCohortController.showEditGroupCohort(req, res)
   })
   getOrPost('/group/create-a-group/group-start-date', async (req, res) => {
     await createGroupController.showCreateGroupDate(req, res)
+  })
+  getOrPost('/group/:groupId/edit-group-start-date', async (req, res) => {
+    await editGroupController.editGroupDate(req, res)
+  })
+
+  getOrPost('/group/:groupId/edit-start-date-rescheduled', async (req, res) => {
+    await editGroupController.editGroupRescheduleDate(req, res)
   })
   getOrPost('/group/create-a-group/group-days-and-times', async (req, res) => {
     await createGroupController.showCreateGroupWhen(req, res)

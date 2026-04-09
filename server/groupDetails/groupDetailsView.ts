@@ -1,6 +1,7 @@
 import GroupDetailsPresenter from './groupDetailsPresenter'
 import { SummaryListArgs } from '../utils/govukFrontendTypes'
 import ViewUtils from '../utils/viewUtils'
+import { MojAlertComponentArgs } from '../interfaces/alertComponentArgs'
 
 export default class GroupDetailsView {
   constructor(private readonly presenter: GroupDetailsPresenter) {}
@@ -35,6 +36,25 @@ export default class GroupDetailsView {
     }
   }
 
+  get successMessageSummary(): MojAlertComponentArgs | null {
+    if (!this.presenter.message) return null
+
+    if (this.presenter.isDateUpdated) {
+      return {
+        title: 'Success',
+        variant: 'success',
+        dismissible: true,
+        html: `<p>The start date and <a href="/group/${this.presenter.group.id}/schedule-overview">schedule</a> have been updated.</p>`,
+      }
+    }
+    return {
+      title: 'Success',
+      variant: 'success',
+      dismissible: true,
+      text: this.presenter.message,
+    }
+  }
+
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       'groupDetails/groupDetails',
@@ -48,6 +68,7 @@ export default class GroupDetailsView {
         groupLocationSummary: this.groupLocationSummary,
         groupStaffSummary: this.groupStaffSummary,
         sessionsAndAttendanceLink: this.presenter.sessionsAndAttendanceLink,
+        successMessageSummary: this.successMessageSummary,
       },
     ]
   }
