@@ -36,6 +36,21 @@ describe('Edit Group Cohort Controller', () => {
         code: 'EXISTING123',
         cohort: 'GENERAL',
       } as GroupDetailsResponse)
+      accreditedProgrammesManageAndDeliverService.getBffEditGroupCohort.mockResolvedValue({
+        captionText: 'Edit group EXISTING123',
+        pageTitle: 'Edit the group cohort',
+        submitButtonText: 'Submit',
+        radios: [
+          { text: 'General offence', value: 'GENERAL', selected: true },
+          {
+            text: 'General offence, learning disabilities and challenges (LDC)',
+            value: 'GENERAL_LDC',
+            selected: false,
+          },
+          { text: 'Sexual offence', value: 'SEXUAL', selected: false },
+          { text: 'Sexual offence, learning disabilities and challenges (LDC)', value: 'SEXUAL_LDC', selected: false },
+        ],
+      })
 
       return request(app)
         .get(`/group/${groupId}/edit-a-group/edit-group-cohort`)
@@ -54,22 +69,21 @@ describe('Edit Group Cohort Controller', () => {
         code: 'EXISTING123',
         cohort: 'GENERAL',
       } as unknown as GroupDetailsResponse)
-
-      return request(app)
-        .get(`/group/${groupId}/edit-a-group/edit-group-cohort`)
-        .expect(200)
-        .expect(res => {
-          expect(res.text).toMatch(/<input[^>]*value="GENERAL"[^>]*checked|<input[^>]*checked[^>]*value="GENERAL"/)
-        })
-    })
-
-    it('preselects general offence radio when cohort is returned as display text', async () => {
-      const groupId = randomUUID()
-      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
-        id: groupId,
-        code: 'EXISTING123',
-        cohort: 'General offence',
-      } as unknown as GroupDetailsResponse)
+      accreditedProgrammesManageAndDeliverService.getBffEditGroupCohort.mockResolvedValue({
+        captionText: 'Edit group EXISTING123',
+        pageTitle: 'Edit the group cohort',
+        submitButtonText: 'Submit',
+        radios: [
+          { text: 'General offence', value: 'GENERAL', selected: true },
+          {
+            text: 'General offence, learning disabilities and challenges (LDC)',
+            value: 'GENERAL_LDC',
+            selected: false,
+          },
+          { text: 'Sexual offence', value: 'SEXUAL', selected: false },
+          { text: 'Sexual offence, learning disabilities and challenges (LDC)', value: 'SEXUAL_LDC', selected: false },
+        ],
+      })
 
       return request(app)
         .get(`/group/${groupId}/edit-a-group/edit-group-cohort`)
@@ -86,6 +100,21 @@ describe('Edit Group Cohort Controller', () => {
         code: 'EXISTING123',
         cohort: 'GENERAL',
       } as GroupDetailsResponse)
+      accreditedProgrammesManageAndDeliverService.getBffEditGroupCohort.mockResolvedValue({
+        captionText: 'Edit group EXISTING123',
+        pageTitle: 'Edit the group cohort',
+        submitButtonText: 'Submit',
+        radios: [
+          { text: 'General offence', value: 'GENERAL', selected: true },
+          {
+            text: 'General offence, learning disabilities and challenges (LDC)',
+            value: 'GENERAL_LDC',
+            selected: false,
+          },
+          { text: 'Sexual offence', value: 'SEXUAL', selected: false },
+          { text: 'Sexual offence, learning disabilities and challenges (LDC)', value: 'SEXUAL_LDC', selected: false },
+        ],
+      })
 
       app = TestUtils.createTestAppWithSession({}, { accreditedProgrammesManageAndDeliverService })
 
@@ -103,6 +132,26 @@ describe('Edit Group Cohort Controller', () => {
   describe('POST /group/:groupId/edit-a-group/edit-group-cohort', () => {
     it('updates the group cohort and redirects to group details', async () => {
       const groupId = randomUUID()
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
+        id: groupId,
+        code: 'EXISTING123',
+        cohort: 'GENERAL',
+      } as unknown as GroupDetailsResponse)
+      accreditedProgrammesManageAndDeliverService.getBffEditGroupCohort.mockResolvedValue({
+        captionText: 'Edit group EXISTING123',
+        pageTitle: 'Edit the group cohort',
+        submitButtonText: 'Submit',
+        radios: [
+          { text: 'General offence', value: 'GENERAL', selected: true },
+          {
+            text: 'General offence, learning disabilities and challenges (LDC)',
+            value: 'GENERAL_LDC',
+            selected: false,
+          },
+          { text: 'Sexual offence', value: 'SEXUAL', selected: false },
+          { text: 'Sexual offence, learning disabilities and challenges (LDC)', value: 'SEXUAL_LDC', selected: false },
+        ],
+      })
       accreditedProgrammesManageAndDeliverService.getGroupByCohortInRegion.mockResolvedValue({
         id: groupId,
         code: 'EXISTING123',
@@ -126,6 +175,26 @@ describe('Edit Group Cohort Controller', () => {
 
     it('returns with errors if cohort is not selected', async () => {
       const groupId = randomUUID()
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
+        id: groupId,
+        code: 'EXISTING123',
+        cohort: 'GENERAL',
+      } as unknown as GroupDetailsResponse)
+      accreditedProgrammesManageAndDeliverService.getBffEditGroupCohort.mockResolvedValue({
+        captionText: 'Edit group EXISTING123',
+        pageTitle: 'Edit the group cohort',
+        submitButtonText: 'Submit',
+        radios: [
+          { text: 'General offence', value: 'GENERAL', selected: true },
+          {
+            text: 'General offence, learning disabilities and challenges (LDC)',
+            value: 'GENERAL_LDC',
+            selected: false,
+          },
+          { text: 'Sexual offence', value: 'SEXUAL', selected: false },
+          { text: 'Sexual offence, learning disabilities and challenges (LDC)', value: 'SEXUAL_LDC', selected: false },
+        ],
+      })
 
       return request(app)
         .post(`/group/${groupId}/edit-a-group/edit-group-cohort`)

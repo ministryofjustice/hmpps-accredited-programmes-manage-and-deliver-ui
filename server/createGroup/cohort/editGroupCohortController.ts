@@ -1,11 +1,9 @@
 import { Request, Response } from 'express'
-import { ProgrammeGroupCohortEnum } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../../services/accreditedProgrammesManageAndDeliverService'
 import BaseController from '../../shared/baseController'
 import { PrimaryNavigationTab } from '../../shared/routes/layoutPresenter'
 import { FormValidationError } from '../../utils/formValidationError'
 import CreateOrEditGroupForm from '../createOrEditGroupForm'
-import CreateGroupUtils from '../createGroupUtils'
 import CreateOrEditGroupCohortPresenter from './createOrEditGroupCohortPresenter'
 import CreateOrEditGroupCohortView from './createOrEditGroupCohortView'
 
@@ -25,8 +23,16 @@ export default class EditGroupCohortController extends BaseController {
     let formError: FormValidationError | null = null
 
     const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
+    const bffEditGroupCohortData = await this.accreditedProgrammesManageAndDeliverService.getBffEditGroupCohort(
+      username,
+      groupId,
+    )
+    const selectedCohort = bffEditGroupCohortData.radios.find(
+      (radio: { selected: boolean; value: string }) => radio.selected,
+    )?.value
+
     const createGroupFormData = {
-      cohort: this.resolveCohortValueForSelection(groupDetails?.cohort),
+      cohort: selectedCohort || groupDetails?.cohort,
     }
 
     if (req.method === 'POST') {
@@ -66,23 +72,5 @@ export default class EditGroupCohortController extends BaseController {
     )
     const view = new CreateOrEditGroupCohortView(presenter)
     return this.renderPage(res, view)
-  }
-
-  private resolveCohortValueForSelection(cohortValue: string | undefined): ProgrammeGroupCohortEnum | undefined {
-    if (!cohortValue) {
-      return undefined
-    }
-
-    const createGroupUtils = new CreateGroupUtils()
-    const cohortEnumFromText = createGroupUtils.getCohortEnumFromText(cohortValue)
-
-    if (cohortEnumFromText) {
-      return cohortEnumFromText
-    }
-
-    const validCohorts: ProgrammeGroupCohortEnum[] = ['GENERAL', 'GENERAL_LDC', 'SEXUAL', 'SEXUAL_LDC']
-    return validCohorts.includes(cohortValue as ProgrammeGroupCohortEnum)
-      ? (cohortValue as ProgrammeGroupCohortEnum)
-      : undefined
   }
 }
