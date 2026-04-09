@@ -6,6 +6,8 @@ import config from '../config'
 export default function setUpWebSecurity(): Router {
   const router = express.Router()
 
+  const isLocal = process.env.NODE_ENV === 'local' || !process.env.NODE_ENV
+
   // Secure code best practice - see:
   // 1. https://expressjs.com/en/advanced/best-practice-security.html,
   // 2. https://www.npmjs.com/package/helmet
@@ -15,6 +17,12 @@ export default function setUpWebSecurity(): Router {
   })
   router.use(
     helmet({
+      strictTransportSecurity: isLocal
+        ? false
+        : {
+            maxAge: 31536000,
+            includeSubDomains: true,
+          },
       contentSecurityPolicy: {
         directives: {
           defaultSrc: ["'self'"],
@@ -36,6 +44,7 @@ export default function setUpWebSecurity(): Router {
           styleSrc: ["'self'", (_req: Request, res: Response) => `'nonce-${res.locals.cspNonce}'`],
           fontSrc: ["'self'"],
           formAction: [`'self' ${config.apis.hmppsAuth.externalUrl}`],
+          upgradeInsecureRequests: isLocal ? null : [],
         },
       },
       crossOriginEmbedderPolicy: true,

@@ -1,6 +1,6 @@
 import { RadiosArgs } from '../../utils/govukFrontendTypes'
 import ViewUtils from '../../utils/viewUtils'
-import CreateGroupCohortPresenter from './createGroupCohortPresenter'
+import CreateGroupCohortPresenter from './createOrEditGroupCohortPresenter'
 import CreateGroupUtils from '../createGroupUtils'
 
 export default class CreateGroupCohortView {
@@ -20,12 +20,12 @@ export default class CreateGroupCohortView {
     }
   }
 
-  private radioArgs(): RadiosArgs {
+  private createGroupCohortArgs(): RadiosArgs {
     return {
       name: 'create-group-cohort',
       fieldset: {
         legend: {
-          text: 'Select the group cohort',
+          text: this.presenter.pageTitle,
           isPageHeading: true,
           classes: 'govuk-fieldset__legend--l',
         },
@@ -36,9 +36,9 @@ export default class CreateGroupCohortView {
       items: new CreateGroupUtils().programmeGroupCohortEnum.map(option => ({
         value: option.value,
         text: option.text,
-        checked: this.presenter.fields.createGroupCohort.value === option.value,
+        checked: this.presenter.fields.createOrEditGroupCohort.value === option.value,
       })),
-      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createGroupCohort.errorMessage),
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createOrEditGroupCohort.errorMessage),
     }
   }
 
@@ -48,9 +48,10 @@ export default class CreateGroupCohortView {
       {
         backLinkArgs: this.backLinkArgs(),
         homePageLink: this.homePageLink(),
-        radioArgs: this.radioArgs(),
+        captionText: this.presenter.captionText,
+        createGroupCohortArgs: this.createGroupCohortArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
-        text: this.presenter.text,
+        submitButtonText: this.presenter.submitButtonText,
       },
     ]
   }
