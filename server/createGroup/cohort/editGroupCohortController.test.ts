@@ -1,9 +1,204 @@
-import EditGroupCohortController from './editGroupCohortController'
+import { GroupDetailsResponse } from '@manage-and-deliver-api'
+import { randomUUID } from 'crypto'
+import { Express } from 'express'
+import { SessionData } from 'express-session'
+import request from 'supertest'
+import AccreditedProgrammesManageAndDeliverService from '../../services/accreditedProgrammesManageAndDeliverService'
+import TestUtils from '../../testutils/testUtils'
 
-describe('EditGroupCohortController', () => {
-  describe('placeholder', () => {
-    it('should exist', () => {
-      expect(EditGroupCohortController).toBeDefined()
+jest.mock('../../services/accreditedProgrammesManageAndDeliverService')
+jest.mock('../../data/hmppsAuthClient')
+
+const hmppsAuthClientBuilder = jest.fn()
+const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
+  hmppsAuthClientBuilder,
+) as jest.Mocked<AccreditedProgrammesManageAndDeliverService>
+
+let app: Express
+
+afterEach(() => {
+  jest.resetAllMocks()
+})
+
+beforeEach(() => {
+  const sessionData: Partial<SessionData> = {
+    createGroupFormData: {},
+  }
+  app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+})
+
+describe('Edit Group Cohort Controller', () => {
+  describe('GET /group/:groupId/edit-a-group/edit-group-cohort', () => {
+    it('loads the edit group cohort page with the current cohort', async () => {
+      const groupId = randomUUID()
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
+        id: groupId,
+        code: 'EXISTING123',
+        cohort: 'GENERAL',
+      } as GroupDetailsResponse)
+      accreditedProgrammesManageAndDeliverService.getBffEditGroupCohort.mockResolvedValue({
+        captionText: 'Edit group EXISTING123',
+        pageTitle: 'Edit the group cohort',
+        submitButtonText: 'Submit',
+        radios: [
+          { text: 'General offence', value: 'GENERAL', selected: true },
+          {
+            text: 'General offence, learning disabilities and challenges (LDC)',
+            value: 'GENERAL_LDC',
+            selected: false,
+          },
+          { text: 'Sexual offence', value: 'SEXUAL', selected: false },
+          { text: 'Sexual offence, learning disabilities and challenges (LDC)', value: 'SEXUAL_LDC', selected: false },
+        ],
+      })
+
+      return request(app)
+        .get(`/group/${groupId}/edit-a-group/edit-group-cohort`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Edit group EXISTING123')
+          expect(res.text).toContain('Edit the group cohort')
+          expect(res.text).toContain('General offence')
+        })
+    })
+
+    it('preselects general offence radio when GENERAL cohort is returned', async () => {
+      const groupId = randomUUID()
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
+        id: groupId,
+        code: 'EXISTING123',
+        cohort: 'GENERAL',
+      } as unknown as GroupDetailsResponse)
+      accreditedProgrammesManageAndDeliverService.getBffEditGroupCohort.mockResolvedValue({
+        captionText: 'Edit group EXISTING123',
+        pageTitle: 'Edit the group cohort',
+        submitButtonText: 'Submit',
+        radios: [
+          { text: 'General offence', value: 'GENERAL', selected: true },
+          {
+            text: 'General offence, learning disabilities and challenges (LDC)',
+            value: 'GENERAL_LDC',
+            selected: false,
+          },
+          { text: 'Sexual offence', value: 'SEXUAL', selected: false },
+          { text: 'Sexual offence, learning disabilities and challenges (LDC)', value: 'SEXUAL_LDC', selected: false },
+        ],
+      })
+
+      return request(app)
+        .get(`/group/${groupId}/edit-a-group/edit-group-cohort`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toMatch(/<input[^>]*value="GENERAL"[^>]*checked|<input[^>]*checked[^>]*value="GENERAL"/)
+        })
+    })
+
+    it('loads the edit group cohort page when session createGroupFormData is missing', async () => {
+      const groupId = randomUUID()
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
+        id: groupId,
+        code: 'EXISTING123',
+        cohort: 'GENERAL',
+      } as GroupDetailsResponse)
+      accreditedProgrammesManageAndDeliverService.getBffEditGroupCohort.mockResolvedValue({
+        captionText: 'Edit group EXISTING123',
+        pageTitle: 'Edit the group cohort',
+        submitButtonText: 'Submit',
+        radios: [
+          { text: 'General offence', value: 'GENERAL', selected: true },
+          {
+            text: 'General offence, learning disabilities and challenges (LDC)',
+            value: 'GENERAL_LDC',
+            selected: false,
+          },
+          { text: 'Sexual offence', value: 'SEXUAL', selected: false },
+          { text: 'Sexual offence, learning disabilities and challenges (LDC)', value: 'SEXUAL_LDC', selected: false },
+        ],
+      })
+
+      app = TestUtils.createTestAppWithSession({}, { accreditedProgrammesManageAndDeliverService })
+
+      return request(app)
+        .get(`/group/${groupId}/edit-a-group/edit-group-cohort`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Edit group EXISTING123')
+          expect(res.text).toContain('Edit the group cohort')
+          expect(res.text).toContain('General offence')
+        })
+    })
+  })
+
+  describe('POST /group/:groupId/edit-a-group/edit-group-cohort', () => {
+    it('updates the group cohort and redirects to group details', async () => {
+      const groupId = randomUUID()
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
+        id: groupId,
+        code: 'EXISTING123',
+        cohort: 'GENERAL',
+      } as unknown as GroupDetailsResponse)
+      accreditedProgrammesManageAndDeliverService.getBffEditGroupCohort.mockResolvedValue({
+        captionText: 'Edit group EXISTING123',
+        pageTitle: 'Edit the group cohort',
+        submitButtonText: 'Submit',
+        radios: [
+          { text: 'General offence', value: 'GENERAL', selected: true },
+          {
+            text: 'General offence, learning disabilities and challenges (LDC)',
+            value: 'GENERAL_LDC',
+            selected: false,
+          },
+          { text: 'Sexual offence', value: 'SEXUAL', selected: false },
+          { text: 'Sexual offence, learning disabilities and challenges (LDC)', value: 'SEXUAL_LDC', selected: false },
+        ],
+      })
+      accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({} as never)
+
+      return request(app)
+        .post(`/group/${groupId}/edit-a-group/edit-group-cohort`)
+        .type('form')
+        .send({ 'create-group-cohort': 'GENERAL_LDC' })
+        .expect(302)
+        .expect(res => {
+          expect(accreditedProgrammesManageAndDeliverService.updateGroup).toHaveBeenCalledWith('user1', groupId, {
+            cohort: 'GENERAL_LDC',
+          })
+          expect(res.text).toContain(`Redirecting to /group/${groupId}/group-details`)
+        })
+    })
+
+    it('returns with errors if cohort is not selected', async () => {
+      const groupId = randomUUID()
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
+        id: groupId,
+        code: 'EXISTING123',
+        cohort: 'GENERAL',
+      } as unknown as GroupDetailsResponse)
+      accreditedProgrammesManageAndDeliverService.getBffEditGroupCohort.mockResolvedValue({
+        captionText: 'Edit group EXISTING123',
+        pageTitle: 'Edit the group cohort',
+        submitButtonText: 'Submit',
+        radios: [
+          { text: 'General offence', value: 'GENERAL', selected: true },
+          {
+            text: 'General offence, learning disabilities and challenges (LDC)',
+            value: 'GENERAL_LDC',
+            selected: false,
+          },
+          { text: 'Sexual offence', value: 'SEXUAL', selected: false },
+          { text: 'Sexual offence, learning disabilities and challenges (LDC)', value: 'SEXUAL_LDC', selected: false },
+        ],
+      })
+
+      return request(app)
+        .post(`/group/${groupId}/edit-a-group/edit-group-cohort`)
+        .type('form')
+        .send({})
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain('Select a cohort')
+          expect(accreditedProgrammesManageAndDeliverService.updateGroup).not.toHaveBeenCalled()
+        })
     })
   })
 })
