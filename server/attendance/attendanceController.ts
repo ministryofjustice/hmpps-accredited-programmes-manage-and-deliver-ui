@@ -146,12 +146,12 @@ export default class AttendanceController extends BaseController {
     const isLastReferral = currentReferralIndex === referralIds.length - 1
     let currentAttendee = attendees.find(attendee => attendee.referralId === referralId)
     const referralPerson = recordAttendanceBffData.people.find(person => person.referralId === referralId)
-    const referralAttendanceCode = referralPerson?.attendance?.code
+    const referralAttendanceCode = this.resolveOutcomeCodeFromPerson(referralPerson)
 
-    if (!currentAttendee && ['ATTC', 'AFTC', 'UAAB'].includes(referralAttendanceCode || '')) {
+    if (!currentAttendee && referralAttendanceCode) {
       currentAttendee = {
         referralId,
-        outcomeCode: referralAttendanceCode as SessionAttendance['attendees'][number]['outcomeCode'],
+        outcomeCode: referralAttendanceCode,
         sessionNotes: referralPerson.sessionNotes,
       }
       attendees.push(currentAttendee)
@@ -307,6 +307,24 @@ export default class AttendanceController extends BaseController {
 
   private notesPageUri(groupId: string, sessionId: string, referralId: string, groupTitle: string): string {
     return `/group/${groupId}/session/${sessionId}/referral/${referralId}/${groupTitle}-session-notes`
+  }
+
+  private resolveOutcomeCodeFromPerson(
+    person: RecordSessionAttendance['people'][number] | undefined,
+  ): SessionAttendance['attendees'][number]['outcomeCode'] | null {
+    const code = person?.attendance?.code
+
+    if (typeof code !== 'string') {
+      return null
+    }
+
+    const validCodes = new Set((person?.options || []).map(option => option.value))
+
+    if (!validCodes.has(code)) {
+      return null
+    }
+
+    return code as SessionAttendance['attendees'][number]['outcomeCode']
   }
 
   private formatNameList(names: string[]): string {
