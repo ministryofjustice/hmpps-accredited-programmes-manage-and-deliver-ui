@@ -154,14 +154,6 @@ export default class SessionNotesController extends BaseController {
   private seedAttendanceSelection(req: Request, referralId: string): void {
     const existingSelection = req.session.editSessionAttendance
 
-    let existingReferralIds: string[] = []
-
-    if (Array.isArray(existingSelection?.referralIds)) {
-      existingReferralIds = existingSelection.referralIds
-    } else if (existingSelection?.referralIds) {
-      existingReferralIds = [existingSelection.referralIds]
-    }
-
     req.session.editSessionAttendance = {
       ...existingSelection,
       source: 'session-notes',
