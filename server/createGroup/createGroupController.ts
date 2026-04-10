@@ -61,7 +61,7 @@ export default class CreateGroupController extends BaseController {
             username,
             req.body['create-group-code'],
           )
-          existingGroupCode = existingGroup.code
+          existingGroupCode = existingGroup?.code || ''
         } catch (error) {
           if ((error as { status?: number }).status !== 404) {
             throw error
