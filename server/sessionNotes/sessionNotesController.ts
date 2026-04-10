@@ -166,7 +166,7 @@ export default class SessionNotesController extends BaseController {
       ...existingSelection,
       source: 'session-notes',
       attendees: existingSelection?.attendees ?? [],
-      referralIds: existingReferralIds.length ? existingReferralIds : [referralId],
+      referralIds: [referralId],
     }
   }
 

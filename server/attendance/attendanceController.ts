@@ -24,7 +24,17 @@ export default class AttendanceController extends BaseController {
   async showRecordAttendancePage(req: Request, res: Response): Promise<void> {
     const { username } = req.user
     const { groupId, sessionId } = req.params
-    const referralIds = this.referralIds(req)
+    const referralIdFromQuery = typeof req.query.referralId === 'string' ? req.query.referralId : null
+
+    let referralIds = this.referralIds(req)
+    if (referralIdFromQuery) {
+      referralIds = [referralIdFromQuery]
+      req.session.editSessionAttendance = {
+        ...req.session.editSessionAttendance,
+        attendees: req.session.editSessionAttendance?.attendees ?? [],
+        referralIds,
+      }
+    }
 
     if (!referralIds.length) {
       return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session`)
@@ -39,6 +49,11 @@ export default class AttendanceController extends BaseController {
       sessionId,
       referralIds,
     )
+
+    if (req.method === 'GET' && referralIdFromQuery) {
+      const sessionTitle = convertToUrlFriendlyKebabCase(recordAttendanceBffData.sessionTitle)
+      return res.redirect(this.notesPageUri(groupId, sessionId, referralIdFromQuery, sessionTitle))
+    }
 
     const recordAttendanceDataWithSessionSelections: RecordSessionAttendance = {
       ...recordAttendanceBffData,
@@ -129,8 +144,20 @@ export default class AttendanceController extends BaseController {
     }
 
     const isLastReferral = currentReferralIndex === referralIds.length - 1
-    const currentAttendee = attendees.find(attendee => attendee.referralId === referralId)
+    let currentAttendee = attendees.find(attendee => attendee.referralId === referralId)
     const referralPerson = recordAttendanceBffData.people.find(person => person.referralId === referralId)
+    const referralAttendanceCode = referralPerson?.attendance?.code
+
+    if (!currentAttendee && ['ATTC', 'AFTC', 'UAAB'].includes(referralAttendanceCode || '')) {
+      currentAttendee = {
+        referralId,
+        outcomeCode: referralAttendanceCode as SessionAttendance['attendees'][number]['outcomeCode'],
+        sessionNotes: referralPerson.sessionNotes,
+      }
+      attendees.push(currentAttendee)
+      req.session.editSessionAttendance.attendees = attendees
+    }
+
     const selectedAttendanceCode = currentAttendee?.outcomeCode
 
     const backLinkUri =
@@ -169,9 +196,15 @@ export default class AttendanceController extends BaseController {
       }
 
       if (isLastReferral) {
+        const attendeesForSubmission = this.normaliseAttendeesForSubmission(attendees)
+
+        if (!attendeesForSubmission.length) {
+          return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session`)
+        }
+
         const createSessionAttendanceResponse =
           await this.accreditedProgrammesManageAndDeliverService.createSessionAttendance(username, sessionId, {
-            attendees: this.normaliseAttendeesForSubmission(attendees),
+            attendees: attendeesForSubmission,
           })
 
         const attendeeReferralIds = createSessionAttendanceResponse.attendees.map(attendee => attendee.referralId)
@@ -179,13 +212,21 @@ export default class AttendanceController extends BaseController {
 
         const currentPersonName =
           recordAttendanceBffData.people.find(person => person.referralId === referralId)?.name || ''
+        const recordedReferralIds = attendeeReferralIds.length ? attendeeReferralIds : referralIds
+        const recordedNames = recordedReferralIds
+          .map(
+            recordedReferralId =>
+              recordAttendanceBffData.people.find(person => person.referralId === recordedReferralId)?.name,
+          )
+          .filter((name): name is string => Boolean(name))
         const journeySource = req.session.editSessionAttendance?.source
 
         if (journeySource === 'edit-session') {
           delete req.session.editSessionAttendance
 
+          const personNames = recordedNames.length ? recordedNames : [currentPersonName]
           const redirectQuery = new URLSearchParams({
-            message: `Attendance recorded for ${currentPersonName}.`,
+            message: `Attendance recorded for ${this.formatNameList(personNames)}.`,
           })
 
           return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session?${redirectQuery}`)
@@ -266,5 +307,17 @@ export default class AttendanceController extends BaseController {
 
   private notesPageUri(groupId: string, sessionId: string, referralId: string, groupTitle: string): string {
     return `/group/${groupId}/session/${sessionId}/referral/${referralId}/${groupTitle}-session-notes`
+  }
+
+  private formatNameList(names: string[]): string {
+    if (names.length <= 1) {
+      return names[0] || 'selected attendees'
+    }
+
+    if (names.length === 2) {
+      return `${names[0]} and ${names[1]}`
+    }
+
+    return `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`
   }
 }

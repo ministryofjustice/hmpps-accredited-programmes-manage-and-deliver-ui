@@ -98,7 +98,9 @@ export default class SessionNotesPresenter {
   }
 
   get recordAttendanceUrl(): string {
-    return `/group/${this.data.groupId}/session/${this.data.sessionId}/record-attendance`
+    const query = new URLSearchParams({ referralId: this.data.referralId })
+
+    return `/group/${this.data.groupId}/session/${this.data.sessionId}/record-attendance?${query.toString()}`
   }
 
   get pageHeaderActionsArgs() {
