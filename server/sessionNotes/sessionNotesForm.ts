@@ -3,7 +3,7 @@ import errorMessages from '../utils/errorMessages'
 
 export default class SessionNotesForm {
   validateSessionNotes(notes: string): FormValidationError | null {
-    if (notes.length <= 10000) {
+    if (SessionNotesForm.normalisedLength(notes) <= 10000) {
       return null
     }
 
@@ -16,5 +16,9 @@ export default class SessionNotesForm {
         },
       ],
     }
+  }
+
+  private static normalisedLength(notes: string): number {
+    return notes.replace(/\r\n/g, '\n').length
   }
 }

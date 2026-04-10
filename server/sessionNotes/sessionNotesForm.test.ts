@@ -45,6 +45,13 @@ describe('SessionNotesForm', () => {
     })
   })
 
+  it('treats CRLF line endings as a single character for length validation', () => {
+    const form = new SessionNotesForm()
+    const notes = 'a\r\n'.repeat(5000)
+
+    expect(form.validateSessionNotes(notes)).toBeNull()
+  })
+
   it('validates empty session notes', () => {
     const form = new SessionNotesForm()
 

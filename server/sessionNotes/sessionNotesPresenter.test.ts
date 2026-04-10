@@ -207,7 +207,7 @@ describe('SessionNotesPresenter', () => {
         {
           text: 'Update attendance and notes',
           classes: 'govuk-button--primary',
-          href: '/group/b2c3d4e5-f6a7-8901-bcde-f23456789012/session/c3d4e5f6-a7b8-9012-cdef-345678901234/record-attendance',
+          href: '/group/b2c3d4e5-f6a7-8901-bcde-f23456789012/session/c3d4e5f6-a7b8-9012-cdef-345678901234/record-attendance?referralId=referral-123',
         },
       ],
     })
