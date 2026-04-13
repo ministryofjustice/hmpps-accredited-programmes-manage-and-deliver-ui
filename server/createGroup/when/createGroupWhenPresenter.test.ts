@@ -1,15 +1,15 @@
-import CreateGroupWhenPresenter from './createGroupWhenPresenter'
+import CreateOrEditGroupWhenPresenter from './createOrEditGroupWhenPresenter'
 import createGroupSessionSlotFactory from '../../testutils/factories/createGroupSessionSlotFactory'
 
 afterEach(() => {
   jest.restoreAllMocks()
 })
 
-describe('CreateGroupWhenPresenter', () => {
+describe('CreateOrEditGroupWhenPresenter', () => {
   describe('whenWillGroupRunCheckBoxArgs', () => {
     it('should return the correct checkbox args', () => {
       const createGroupFormData = createGroupSessionSlotFactory.build()
-      const presenter = new CreateGroupWhenPresenter('ABC123', [createGroupFormData])
+      const presenter = new CreateOrEditGroupWhenPresenter('ABC123', [createGroupFormData])
 
       const result = presenter.whenWillGroupRunCheckBoxArgs
       expect(result[0]).toMatchObject({

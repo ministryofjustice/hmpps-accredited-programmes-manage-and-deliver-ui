@@ -2,6 +2,7 @@ import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import { SessionData } from 'express-session'
 import request from 'supertest'
+import { EditGroupDaysAndTimes } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import GroupDetailsFactory from '../testutils/factories/groupDetailsFactory'
 import TestUtils from '../testutils/testUtils'
@@ -163,6 +164,213 @@ describe('Edit Group Controller', () => {
             automaticallyRescheduleOtherSessions: false,
           })
         })
+    })
+  })
+
+  describe('GET /group/:groupId/edit-group-days-and-times', () => {
+    it('loads the edit group days and times page with current schedule from group details', async () => {
+      const groupDetailsWithDaysAndTimes: EditGroupDaysAndTimes = {
+        id: groupId,
+        code: 'TEST123',
+        programmeGroupSessionSlots: [
+          {
+            dayOfWeek: 'MONDAY',
+            hour: 10,
+            minutes: 0,
+            amOrPm: 'AM',
+          },
+          {
+            dayOfWeek: 'WEDNESDAY',
+            hour: 2,
+            minutes: 0,
+            amOrPm: 'PM',
+          },
+        ],
+      }
+
+      accreditedProgrammesManageAndDeliverService.getBffEditGroupDaysAndTimes.mockResolvedValue(
+        groupDetailsWithDaysAndTimes,
+      )
+
+      return request(app)
+        .get(`/group/${groupId}/edit-group-days-and-times`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Edit when will the group run')
+          expect(accreditedProgrammesManageAndDeliverService.getBffEditGroupDaysAndTimes).toHaveBeenCalledWith(
+            'user1',
+            groupId,
+          )
+        })
+    })
+  })
+
+  describe('POST /group/:groupId/edit-group-days-and-times', () => {
+    it('redirects to reschedule page on successful submission', async () => {
+      const groupDetailsWithDaysAndTimes: EditGroupDaysAndTimes = {
+        id: groupId,
+        code: 'TEST123',
+        programmeGroupSessionSlots: [
+          {
+            dayOfWeek: 'MONDAY',
+            hour: 10,
+            minutes: 0,
+            amOrPm: 'AM',
+          },
+        ],
+      }
+
+      accreditedProgrammesManageAndDeliverService.getBffEditGroupDaysAndTimes.mockResolvedValue(
+        groupDetailsWithDaysAndTimes,
+      )
+
+      return request(app)
+        .post(`/group/${groupId}/edit-group-days-and-times`)
+        .type('form')
+        .send({
+          'days-of-week': 'TUESDAY',
+          'tuesday-hour': '9',
+          'tuesday-minute': '30',
+          'tuesday-ampm': 'am',
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain(`Redirecting to /group/${groupId}/edit-group-days-and-times-rescheduled`)
+        })
+    })
+
+    it('returns with errors if schedule data is invalid', async () => {
+      const groupDetailsWithDaysAndTimes: EditGroupDaysAndTimes = {
+        id: groupId,
+        code: 'TEST123',
+        programmeGroupSessionSlots: [
+          {
+            dayOfWeek: 'MONDAY',
+            hour: 10,
+            minutes: 0,
+            amOrPm: 'AM',
+          },
+        ],
+      }
+
+      accreditedProgrammesManageAndDeliverService.getBffEditGroupDaysAndTimes.mockResolvedValue(
+        groupDetailsWithDaysAndTimes,
+      )
+
+      return request(app).post(`/group/${groupId}/edit-group-days-and-times`).type('form').send({}).expect(400)
+    })
+  })
+
+  describe('GET /group/:groupId/edit-group-days-and-times-rescheduled', () => {
+    it('loads the reschedule confirmation page for days and times', async () => {
+      const sessionData: Partial<SessionData> = {
+        createGroupFormData: {
+          groupCode: 'TEST123',
+          createGroupSessionSlot: [
+            {
+              dayOfWeek: 'TUESDAY',
+              hour: 9,
+              minutes: 30,
+              amOrPm: 'AM',
+            },
+          ],
+          previousSessions: [
+            {
+              dayOfWeek: 'MONDAY',
+              hour: 10,
+              minutes: 0,
+              amOrPm: 'AM',
+            },
+          ],
+        },
+      }
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      return request(app)
+        .get(`/group/${groupId}/edit-group-days-and-times-rescheduled`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Rescheduling sessions')
+          expect(res.text).toContain('Previous days and times')
+          expect(res.text).toContain('New days and times')
+        })
+    })
+  })
+
+  describe('POST /group/:groupId/edit-group-days-and-times-rescheduled', () => {
+    const sessionData: Partial<SessionData> = {
+      createGroupFormData: {
+        groupCode: 'TEST123',
+        createGroupSessionSlot: [
+          {
+            dayOfWeek: 'TUESDAY',
+            hour: 9,
+            minutes: 30,
+            amOrPm: 'AM',
+          },
+        ],
+        previousSessions: [
+          {
+            dayOfWeek: 'MONDAY',
+            hour: 10,
+            minutes: 0,
+            amOrPm: 'AM',
+          },
+        ],
+      },
+    }
+
+    it('updates the group days and times with automatic rescheduling and URL encodes success message', async () => {
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+      accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({
+        successMessage: 'Group days and times updated',
+      })
+
+      return request(app)
+        .post(`/group/${groupId}/edit-group-days-and-times-rescheduled`)
+        .type('form')
+        .send({ 'reschedule-other-sessions': 'true' })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain('Redirecting to /group/')
+          expect(res.text).toContain('/group-details')
+          expect(res.text).toContain(encodeURIComponent('Group days and times updated'))
+          expect(accreditedProgrammesManageAndDeliverService.updateGroup).toHaveBeenCalledWith('user1', groupId, {
+            createGroupSessionSlot: sessionData.createGroupFormData.createGroupSessionSlot,
+            automaticallyRescheduleOtherSessions: true,
+          })
+        })
+    })
+
+    it('updates the group days and times with manual rescheduling', async () => {
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+      accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({
+        successMessage: 'Group days and times updated',
+      })
+
+      return request(app)
+        .post(`/group/${groupId}/edit-group-days-and-times-rescheduled`)
+        .type('form')
+        .send({ 'reschedule-other-sessions': 'false' })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain('Redirecting to /group/')
+          expect(res.text).toContain('/group-details')
+          expect(accreditedProgrammesManageAndDeliverService.updateGroup).toHaveBeenCalledWith('user1', groupId, {
+            createGroupSessionSlot: sessionData.createGroupFormData.createGroupSessionSlot,
+            automaticallyRescheduleOtherSessions: false,
+          })
+        })
+    })
+
+    it('returns with errors if reschedule option is not selected', async () => {
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      return request(app)
+        .post(`/group/${groupId}/edit-group-days-and-times-rescheduled`)
+        .type('form')
+        .send({})
+        .expect(400)
     })
   })
 })

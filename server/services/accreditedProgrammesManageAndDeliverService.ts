@@ -18,6 +18,7 @@ import {
   DeliveryLocationPreferencesFormData,
   DrugDetails,
   EditGroupCohort,
+  EditGroupDaysAndTimes,
   EditSessionAttendeesResponse,
   EditSessionDateAndTimeResponse,
   EditSessionDetails,
@@ -807,5 +808,16 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
       path: `/bff/group/${groupId}/details`,
       headers: { Accept: 'application/json' },
     })) as GroupDetailsResponse | null
+  }
+
+  async getBffEditGroupDaysAndTimes(
+    username: Express.User['username'],
+    groupId: string,
+  ): Promise<EditGroupDaysAndTimes> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/group/${groupId}/edit-days-and-times `,
+      headers: { Accept: 'application/json' },
+    })) as EditGroupDaysAndTimes | null
   }
 }
