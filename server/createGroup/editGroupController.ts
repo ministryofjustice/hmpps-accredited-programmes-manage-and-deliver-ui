@@ -69,11 +69,11 @@ export default class EditGroupController extends BaseController {
         res.status(400)
         formError = data.error
       } else {
-        await this.accreditedProgrammesManageAndDeliverService.updateGroup(username, groupId, {
+        const response = await this.accreditedProgrammesManageAndDeliverService.updateGroup(username, groupId, {
           earliestStartDate: updatedGroupDetails.earliestStartDate,
           automaticallyRescheduleOtherSessions: data.paramsForUpdate.rescheduleOtherSessions,
         })
-        return res.redirect(`/group/${groupId}/group-details?message=Group start date updated`)
+        return res.redirect(`/group/${groupId}/group-details?message=${encodeURIComponent(response.successMessage)}`)
       }
     }
 

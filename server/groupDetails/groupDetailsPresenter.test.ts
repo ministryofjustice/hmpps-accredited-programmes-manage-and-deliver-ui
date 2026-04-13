@@ -112,4 +112,27 @@ describe('GroupDetailsPresenter', () => {
       expect(presenter.isStartDateInThePast).toBe(true)
     })
   })
+
+  describe('isScheduleUpdated', () => {
+    it('returns true when message includes "schedule have been updated"', () => {
+      const groupDetails = GroupDetailsFactory.build()
+      const presenter = new GroupDetailsPresenter(groupDetails, 'The days and times and schedule have been updated.')
+
+      expect(presenter.isScheduleUpdated).toBe(true)
+    })
+
+    it('returns false when message does not contain schedule update text', () => {
+      const groupDetails = GroupDetailsFactory.build()
+      const presenter = new GroupDetailsPresenter(groupDetails, 'The days and times have been updated.')
+
+      expect(presenter.isScheduleUpdated).toBe(false)
+    })
+
+    it('returns false when message is an empty string', () => {
+      const groupDetails = GroupDetailsFactory.build()
+      const presenter = new GroupDetailsPresenter(groupDetails, '')
+
+      expect(presenter.isScheduleUpdated).toBe(false)
+    })
+  })
 })

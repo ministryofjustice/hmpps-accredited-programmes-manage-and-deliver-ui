@@ -130,7 +130,9 @@ describe('Edit Group Controller', () => {
 
     it('updates the group and redirects on successful submission with automatic rescheduling', async () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
-      accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue(null)
+      accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({
+        successMessage: 'The days and times and schedule have been updated.',
+      })
 
       return request(app)
         .post(`/group/${groupId}/edit-start-date-rescheduled`)
@@ -140,6 +142,7 @@ describe('Edit Group Controller', () => {
         .expect(res => {
           expect(res.text).toContain('Redirecting to /group/')
           expect(res.text).toContain('/group-details')
+          expect(res.text).toContain(encodeURIComponent('The days and times and schedule have been updated.'))
           expect(accreditedProgrammesManageAndDeliverService.updateGroup).toHaveBeenCalledWith('user1', groupId, {
             earliestStartDate: '15/06/2026',
             automaticallyRescheduleOtherSessions: true,
@@ -149,7 +152,9 @@ describe('Edit Group Controller', () => {
 
     it('updates the group and redirects on successful submission with manual rescheduling', async () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
-      accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue(null)
+      accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({
+        successMessage: 'The days and times have been updated.',
+      })
 
       return request(app)
         .post(`/group/${groupId}/edit-start-date-rescheduled`)
@@ -159,6 +164,7 @@ describe('Edit Group Controller', () => {
         .expect(res => {
           expect(res.text).toContain('Redirecting to /group/')
           expect(res.text).toContain('/group-details')
+          expect(res.text).toContain(encodeURIComponent('The days and times have been updated.'))
           expect(accreditedProgrammesManageAndDeliverService.updateGroup).toHaveBeenCalledWith('user1', groupId, {
             earliestStartDate: '15/06/2026',
             automaticallyRescheduleOtherSessions: false,

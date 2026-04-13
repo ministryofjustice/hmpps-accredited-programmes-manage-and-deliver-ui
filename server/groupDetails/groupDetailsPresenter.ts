@@ -10,8 +10,8 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
     super(GroupServiceNavigationValues.groupDetailsTab, group.id)
   }
 
-  get isDateUpdated(): boolean {
-    return this.message === 'Group start date updated'
+  get isScheduleUpdated(): boolean {
+    return this.message.includes('schedule have been updated')
   }
 
   get sessionsAndAttendanceLink(): string {
