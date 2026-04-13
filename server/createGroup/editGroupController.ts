@@ -1,4 +1,4 @@
-import { CreateGroupRequest, CreateGroupSessionSlot } from '@manage-and-deliver-api'
+import { CreateGroupRequest } from '@manage-and-deliver-api'
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import { FormValidationError } from '../utils/formValidationError'
