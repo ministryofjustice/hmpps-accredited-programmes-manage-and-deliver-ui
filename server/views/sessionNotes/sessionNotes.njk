@@ -64,10 +64,18 @@
 
         <section>
           <h2 class="govuk-heading-m">{{ text.sessionNotesTitle }}</h2>
-          {% if showNoNotesAddedMessage %}
-            <p class="govuk-body-l">No notes added</p>
+          {% if isReadOnly %}
+            {% if showNoNotesAddedMessage %}
+              <p class="govuk-body-l">No notes added</p>
+            {% else %}
+              <p class="govuk-body-m">{{ textareaArgs.value | escape | replace('\n', '<br/>') | safe }}</p>
+            {% endif %}
+          {% else %}
+            {% if showNoNotesAddedMessage %}
+              <p class="govuk-body-l">No notes added</p>
+            {% endif %}
+            {{ govukTextarea(textareaArgs) }}
           {% endif %}
-          {{ govukTextarea(textareaArgs) }}
         </section>
       </form>
     </div>

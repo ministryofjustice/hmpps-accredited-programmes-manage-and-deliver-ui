@@ -392,5 +392,85 @@ describe('SessionNotesController', () => {
           expect(res.text).toContain('Back to Getting started')
         })
     })
+
+    it('renders notes as body text and links to record attendance when opened from edit session', async () => {
+      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue({
+        pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
+        moduleName: 'Getting started',
+        sessionName: 'Introduction to Building Choices',
+        sessionNumber: 1,
+        lastUpdatedBy: 'John Smith',
+        lastUpdatedDate: '19 March 2026',
+        groupId: 'd193bf89-c98b-4e92-b842-3c1b3e5f5e4a',
+        sessionId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+        sessionDate: '21 July 2025',
+        sessionAttendance: 'Attended, failed to comply',
+        sessionNotes: 'Participant engaged well.',
+      })
+
+      await request(app)
+        .get('/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123&source=edit-session')
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('<p class="govuk-body-m">Participant engaged well.</p>')
+          expect(res.text).not.toContain('id="sessionNotes"')
+          expect(res.text).toContain(
+            '/group/d193bf89-c98b-4e92-b842-3c1b3e5f5e4a/session/a1b2c3d4-e5f6-7890-abcd-ef1234567890/record-attendance',
+          )
+        })
+    })
+
+    it('seeds referral ids so record attendance can be opened from edit session notes', async () => {
+      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue({
+        pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
+        moduleName: 'Getting started',
+        sessionName: 'Introduction to Building Choices',
+        sessionNumber: 1,
+        lastUpdatedBy: 'John Smith',
+        lastUpdatedDate: '19 March 2026',
+        groupId: 'd193bf89-c98b-4e92-b842-3c1b3e5f5e4a',
+        sessionId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+        sessionDate: '21 July 2025',
+        sessionAttendance: 'Attended, failed to comply',
+        sessionNotes: 'Participant engaged well.',
+      })
+
+      accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue({
+        sessionTitle: 'Getting started 1',
+        groupRegionName: 'North East',
+        people: [
+          {
+            referralId: 'referral-123',
+            name: 'Alex River',
+            crn: 'X12345',
+            attendance: {
+              code: 'AFTC',
+              text: 'Attended, failed to comply',
+            },
+            sessionNotes: 'Participant engaged well.',
+            options: [],
+          },
+        ],
+      })
+
+      const agent = request.agent(app)
+
+      await agent
+        .get('/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123&source=edit-session')
+        .expect(200)
+
+      await agent
+        .get('/group/111/session/6789/record-attendance')
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Alex River')
+        })
+
+      expect(accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData).toHaveBeenCalledWith(
+        'user1',
+        '6789',
+        ['referral-123'],
+      )
+    })
   })
 })

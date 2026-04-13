@@ -57,6 +57,7 @@ export default class SessionNotesView {
       {
         backLinkArgs: this.presenter.backLinkArgs,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
+        isReadOnly: this.presenter.isReadOnly,
         notesBodyArgs: this.notesBodyArgs,
         pageHeaderActionsArgs: this.presenter.pageHeaderActionsArgs,
         showNoNotesAddedMessage: this.showNoNotesAddedMessage,

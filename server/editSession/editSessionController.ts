@@ -55,7 +55,10 @@ export default class EditSessionController extends BaseController {
         res.status(400)
         formError = data.error
       } else {
-        req.session.editSessionAttendance = { referralIds: data.paramsForUpdate.referralIds }
+        req.session.editSessionAttendance = {
+          referralIds: data.paramsForUpdate.referralIds,
+          source: 'edit-session',
+        }
         return res.redirect(`/group/${groupId}/session/${sessionId}/record-attendance`)
       }
     }
