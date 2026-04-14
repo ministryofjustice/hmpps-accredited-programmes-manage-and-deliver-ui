@@ -120,6 +120,19 @@ describe('Create Group Controller', () => {
         })
     })
 
+    it('redirects to start date page when group code lookup returns 404', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockRejectedValue({ status: 404 })
+
+      return request(app)
+        .post('/group/create-a-group/create-group-code')
+        .type('form')
+        .send({ 'create-group-code': 'ABC123' })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain('Redirecting to /group/create-a-group/group-start-date')
+        })
+    })
+
     it('returns with errors if group code is missing', async () => {
       return request(app)
         .post('/group/create-a-group/create-group-code')

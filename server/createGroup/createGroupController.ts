@@ -49,11 +49,27 @@ export default class CreateGroupController extends BaseController {
   }
 
   async showCreateGroupCode(req: Request, res: Response): Promise<void> {
+    const { username } = req.user
     const { createGroupFormData } = req.session
     let userInputData = null
     let formError: FormValidationError | null = null
     if (req.method === 'POST') {
-      const data = await new CreateOrEditGroupForm(req, '').createGroupCodeData()
+      let existingGroupCode = ''
+      if (req.body['create-group-code']) {
+        try {
+          const existingGroup = await this.accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion(
+            username,
+            req.body['create-group-code'],
+          )
+          existingGroupCode = existingGroup?.code || ''
+        } catch (error) {
+          if ((error as { status?: number }).status !== 404) {
+            throw error
+          }
+        }
+      }
+
+      const data = await new CreateOrEditGroupForm(req, existingGroupCode).createGroupCodeData()
       if (data.error) {
         res.status(400)
         formError = data.error
