@@ -250,12 +250,12 @@ describe('Create Group Controller', () => {
   })
 
   describe('GET /group/create-a-group/group-sex', () => {
-    it('loads the sex selection page', async () => {
+    it('loads the gender selection page', async () => {
       return request(app)
         .get('/group/create-a-group/group-sex')
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain('Select the sex of the group')
+          expect(res.text).toContain('Select the gender of the group')
         })
     })
 

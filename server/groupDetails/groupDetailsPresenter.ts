@@ -83,8 +83,10 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
         visuallyHiddenText: 'group cohort',
       },
       {
-        key: 'Sex',
+        key: 'Gender',
         lines: [this.group.sex],
+        changeLink: `/group/${this.groupId}/edit-a-group/edit-group-sex`,
+        visuallyHiddenText: 'group sex',
       },
       {
         key: 'Currently allocated',

@@ -5,6 +5,7 @@ import ChangeCohortController from '../cohort/changeCohortController'
 import CreateGroupController from '../createGroup/createGroupController'
 import EditGroupCodeController from '../createGroup/code/editGroupCodeController'
 import EditGroupCohortController from '../createGroup/cohort/editGroupCohortController'
+import EditGroupSexController from '../createGroup/sex/editGroupSexController'
 import EditSessionController from '../editSession/editSessionController'
 import GroupController from '../group/groupController'
 import GroupDetailsController from '../groupDetails/groupDetailsController'
@@ -53,6 +54,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const createGroupController = new CreateGroupController(accreditedProgrammesManageAndDeliverService)
   const editGroupCodeController = new EditGroupCodeController(accreditedProgrammesManageAndDeliverService)
   const editGroupCohortController = new EditGroupCohortController(accreditedProgrammesManageAndDeliverService)
+  const editGroupSexController = new EditGroupSexController(accreditedProgrammesManageAndDeliverService)
   const groupController = new GroupController(accreditedProgrammesManageAndDeliverService)
   const groupDetailsController = new GroupDetailsController(accreditedProgrammesManageAndDeliverService)
   const sessionScheduleController = new SessionScheduleController(accreditedProgrammesManageAndDeliverService)
@@ -247,6 +249,9 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   getOrPost('/group/:groupId/edit-a-group/edit-group-cohort', async (req, res) => {
     await editGroupCohortController.showEditGroupCohort(req, res)
   })
+  getOrPost('/group/:groupId/edit-a-group/edit-group-sex', async (req, res) => {
+    await editGroupSexController.showEditGroupSex(req, res)
+  })
   getOrPost('/group/create-a-group/group-start-date', async (req, res) => {
     await createGroupController.showCreateGroupDate(req, res)
   })
@@ -271,7 +276,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   })
 
   getOrPost('/group/create-a-group/group-sex', async (req, res) => {
-    await createGroupController.showCreateGroupSex(req, res)
+    await createGroupController.showCreateOrEditGroupSex(req, res)
   })
 
   getOrPost('/group/create-a-group/group-probation-delivery-unit', async (req, res) => {

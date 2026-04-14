@@ -1,6 +1,6 @@
 import { RadiosArgs } from '../../utils/govukFrontendTypes'
 import ViewUtils from '../../utils/viewUtils'
-import CreateGroupSexPresenter from './createGroupSexPresenter'
+import CreateGroupSexPresenter from './createOrEditGroupSexPresenter'
 import CreateGroupUtils from '../createGroupUtils'
 
 export default class CreateGroupSexView {
@@ -20,12 +20,12 @@ export default class CreateGroupSexView {
     }
   }
 
-  private radioArgs(): RadiosArgs {
+  private createGroupSexArgs(): RadiosArgs {
     return {
       name: 'create-group-sex',
       fieldset: {
         legend: {
-          text: 'Select the sex of the group',
+          text: this.presenter.pageTitle,
           isPageHeading: true,
           classes: 'govuk-fieldset__legend--l',
         },
@@ -33,9 +33,9 @@ export default class CreateGroupSexView {
       items: new CreateGroupUtils().programmeGroupSexEnum.map(option => ({
         value: option.value,
         text: option.text,
-        checked: this.presenter.fields.createGroupSex.value === option.value,
+        checked: this.presenter.fields.createOrEditGroupSex.value === option.value,
       })),
-      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createGroupSex.errorMessage),
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createOrEditGroupSex.errorMessage),
     }
   }
 
@@ -45,9 +45,10 @@ export default class CreateGroupSexView {
       {
         backLinkArgs: this.backLinkArgs(),
         homePageLink: this.homePageLink(),
-        radioArgs: this.radioArgs(),
+        captionText: this.presenter.captionText,
+        createGroupSexArgs: this.createGroupSexArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
-        text: this.presenter.text,
+        submitButtonText: this.presenter.submitButtonText,
       },
     ]
   }

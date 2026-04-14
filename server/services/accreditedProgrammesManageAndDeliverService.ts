@@ -19,6 +19,7 @@ import {
   DrugDetails,
   EditGroupCohort,
   EditGroupDaysAndTimes,
+  EditGroupSex,
   EditSessionAttendeesResponse,
   EditSessionDateAndTimeResponse,
   EditSessionDetails,
@@ -538,6 +539,14 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
       path: `/bff/group/${groupId}/edit-cohort`,
       headers: { Accept: 'application/json' },
     })) as EditGroupCohort
+  }
+
+  async getBffEditGroupSex(username: Express.User['username'], groupId: string): Promise<EditGroupSex> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/bff/group/${groupId}/edit-sex`,
+      headers: { Accept: 'application/json' },
+    })) as EditGroupSex
   }
 
   async removeFromGroupStatusTransitionDetails(

@@ -17,8 +17,8 @@ import CreateGroupLocationPresenter from './location/createGroupLocationPresente
 import CreateGroupLocationView from './location/createGroupLocationView'
 import CreateGroupPduPresenter from './pdu/createGroupPduPresenter'
 import CreateGroupPduView from './pdu/createGroupPduView'
-import CreateGroupSexPresenter from './sex/createGroupSexPresenter'
-import CreateGroupSexView from './sex/createGroupSexView'
+import CreateOrEditGroupSexPresenter from './sex/createOrEditGroupSexPresenter'
+import CreateOrEditGroupSexView from './sex/createOrEditGroupSexView'
 import CreateGroupStartPresenter from './start/createGroupStartPresenter'
 import CreateGroupStartView from './start/createGroupStartView'
 import CreateGroupTreatmentManagerPresenter from './treatment-manager/createGroupTreatmentManagerPresenter'
@@ -180,14 +180,16 @@ export default class CreateGroupController extends BaseController {
     return this.renderPage(res, view)
   }
 
-  async showCreateGroupSex(req: Request, res: Response): Promise<void> {
+  async showCreateOrEditGroupSex(req: Request, res: Response): Promise<void> {
     const { createGroupFormData } = req.session
+    let userInputData = null
     let formError: FormValidationError | null = null
     if (req.method === 'POST') {
       const data = await new CreateOrEditGroupForm(req).createGroupSexData()
       if (data.error) {
         res.status(400)
         formError = data.error
+        userInputData = req.body
       } else {
         req.session.createGroupFormData = {
           ...createGroupFormData,
@@ -196,9 +198,8 @@ export default class CreateGroupController extends BaseController {
         return res.redirect(`/group/create-a-group/group-probation-delivery-unit`)
       }
     }
-
-    const presenter = new CreateGroupSexPresenter(formError, createGroupFormData)
-    const view = new CreateGroupSexView(presenter)
+    const presenter = new CreateOrEditGroupSexPresenter(formError, createGroupFormData)
+    const view = new CreateOrEditGroupSexView(presenter)
     return this.renderPage(res, view)
   }
 
