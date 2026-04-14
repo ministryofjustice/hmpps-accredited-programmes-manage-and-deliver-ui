@@ -182,14 +182,12 @@ export default class CreateGroupController extends BaseController {
 
   async showCreateOrEditGroupSex(req: Request, res: Response): Promise<void> {
     const { createGroupFormData } = req.session
-    let userInputData = null
     let formError: FormValidationError | null = null
     if (req.method === 'POST') {
       const data = await new CreateOrEditGroupForm(req).createGroupSexData()
       if (data.error) {
         res.status(400)
         formError = data.error
-        userInputData = req.body
       } else {
         req.session.createGroupFormData = {
           ...createGroupFormData,
