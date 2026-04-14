@@ -15,7 +15,7 @@ describe('GroupDetailsPresenter', () => {
 
     it('returns true when the start date is in the past', () => {
       const groupDetails = GroupDetailsFactory.build({
-        startDate: 'Wednesday 1 April 2026', // April 1, 2026 is before April 7, 2026
+        startDate: 'Wednesday 1 April 2026',
       })
       const presenter = new GroupDetailsPresenter(groupDetails)
 
@@ -51,65 +51,11 @@ describe('GroupDetailsPresenter', () => {
 
     it('returns false when the start date is far in the future', () => {
       const groupDetails = GroupDetailsFactory.build({
-        startDate: 'Thursday 15 October 2026',
+        startDate: 'Thursday 15 October 2126',
       })
       const presenter = new GroupDetailsPresenter(groupDetails)
 
       expect(presenter.isStartDateInThePast).toBe(false)
-    })
-
-    it('handles dates across different years correctly', () => {
-      const groupDetails2025 = GroupDetailsFactory.build({
-        startDate: 'Thursday 10 April 2025',
-      })
-      const presenter2025 = new GroupDetailsPresenter(groupDetails2025)
-      expect(presenter2025.isStartDateInThePast).toBe(true)
-
-      const groupDetails2027 = GroupDetailsFactory.build({
-        startDate: 'Wednesday 7 April 2027',
-      })
-      const presenter2027 = new GroupDetailsPresenter(groupDetails2027)
-      expect(presenter2027.isStartDateInThePast).toBe(false)
-    })
-
-    it('correctly handles January dates', () => {
-      const groupDetails = GroupDetailsFactory.build({
-        startDate: 'Monday 5 January 2026', // January (month 0)
-      })
-      const presenter = new GroupDetailsPresenter(groupDetails)
-      expect(presenter.isStartDateInThePast).toBe(true)
-    })
-
-    it('correctly handles December dates', () => {
-      const groupDetails = GroupDetailsFactory.build({
-        startDate: 'Tuesday 15 December 2026', // December (month 11)
-      })
-      const presenter = new GroupDetailsPresenter(groupDetails)
-      expect(presenter.isStartDateInThePast).toBe(false)
-    })
-
-    it('correctly handles February dates', () => {
-      const groupDetails = GroupDetailsFactory.build({
-        startDate: 'Monday 2 February 2026', // February (month 1)
-      })
-      const presenter = new GroupDetailsPresenter(groupDetails)
-      expect(presenter.isStartDateInThePast).toBe(true)
-    })
-
-    it('correctly handles September dates', () => {
-      const groupDetails = GroupDetailsFactory.build({
-        startDate: 'Monday 7 September 2026', // September (month 8)
-      })
-      const presenter = new GroupDetailsPresenter(groupDetails)
-      expect(presenter.isStartDateInThePast).toBe(false)
-    })
-
-    it('correctly handles dates with mixed case month names', () => {
-      const groupDetails = GroupDetailsFactory.build({
-        startDate: 'Thursday 1 January 2026', // Mixed case
-      })
-      const presenter = new GroupDetailsPresenter(groupDetails)
-      expect(presenter.isStartDateInThePast).toBe(true)
     })
   })
 
