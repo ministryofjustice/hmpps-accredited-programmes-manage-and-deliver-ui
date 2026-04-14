@@ -816,7 +816,7 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
   ): Promise<EditGroupDaysAndTimes> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
-      path: `/bff/group/${groupId}/edit-days-and-times `,
+      path: `/bff/group/${groupId}/edit-days-and-times`,
       headers: { Accept: 'application/json' },
     })) as EditGroupDaysAndTimes | null
   }
