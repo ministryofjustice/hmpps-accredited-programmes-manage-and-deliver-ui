@@ -1,5 +1,5 @@
-import { CreateGroupRequest } from '@manage-and-deliver-api'
 import { Request, Response } from 'express'
+import { CreateGroupRequest } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import { FormValidationError } from '../utils/formValidationError'
 import BaseController from '../shared/baseController'
@@ -23,8 +23,8 @@ import CreateGroupStartPresenter from './start/createGroupStartPresenter'
 import CreateGroupStartView from './start/createGroupStartView'
 import CreateGroupTreatmentManagerPresenter from './treatment-manager/createGroupTreatmentManagerPresenter'
 import CreateGroupTreatmentManagerView from './treatment-manager/createGroupTreatmentManagerView'
-import CreateGroupWhenPresenter from './when/createGroupWhenPresenter'
-import CreateGroupWhenView from './when/createGroupWhenView'
+import CreateOrEditGroupWhenPresenter from './when/createOrEditGroupWhenPresenter'
+import CreateOrEditGroupWhenView from './when/createOrEditGroupWhenView'
 
 export default class CreateGroupController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -49,11 +49,27 @@ export default class CreateGroupController extends BaseController {
   }
 
   async showCreateGroupCode(req: Request, res: Response): Promise<void> {
+    const { username } = req.user
     const { createGroupFormData } = req.session
     let userInputData = null
     let formError: FormValidationError | null = null
     if (req.method === 'POST') {
-      const data = await new CreateOrEditGroupForm(req, '').createGroupCodeData()
+      let existingGroupCode = ''
+      if (req.body['create-group-code']) {
+        try {
+          const existingGroup = await this.accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion(
+            username,
+            req.body['create-group-code'],
+          )
+          existingGroupCode = existingGroup?.code || ''
+        } catch (error) {
+          if ((error as { status?: number }).status !== 404) {
+            throw error
+          }
+        }
+      }
+
+      const data = await new CreateOrEditGroupForm(req, existingGroupCode).createGroupCodeData()
       if (data.error) {
         res.status(400)
         formError = data.error
@@ -130,13 +146,13 @@ export default class CreateGroupController extends BaseController {
       }
     }
 
-    const presenter = new CreateGroupWhenPresenter(
+    const presenter = new CreateOrEditGroupWhenPresenter(
       createGroupFormData?.groupCode,
       createGroupFormData?.createGroupSessionSlot,
       formError,
       userInputData,
     )
-    const view = new CreateGroupWhenView(presenter)
+    const view = new CreateOrEditGroupWhenView(presenter)
     return this.renderPage(res, view)
   }
 

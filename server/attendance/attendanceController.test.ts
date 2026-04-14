@@ -92,6 +92,34 @@ describe('showRecordAttendancePage', () => {
           expect(res.text).toContain('value="AFTC" checked')
         })
     })
+
+    it('redirects directly to the selected referral notes when referralId query is present', async () => {
+      sessionData = {
+        editSessionAttendance: {
+          referralIds: ['referral1', 'referral2'],
+          attendees: [
+            { referralId: 'referral1', outcomeCode: 'ATTC' },
+            { referralId: 'referral2', outcomeCode: 'ATTC' },
+          ],
+        },
+      }
+
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Getting started 1' })
+      accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
+
+      await request(app)
+        .get('/group/111/session/6789/record-attendance?referralId=referral2')
+        .expect(302)
+        .expect('Location', '/group/111/session/6789/referral/referral2/getting-started-1-session-notes')
+
+      expect(accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData).toHaveBeenCalledWith(
+        'user1',
+        '6789',
+        ['referral2'],
+      )
+    })
   })
 
   describe('POST /group/:groupId/session/:sessionId/record-attendance', () => {
@@ -521,6 +549,50 @@ describe('showRecordAttendancePage', () => {
       )
     })
 
+    it('stages current attendee from BFF and submits successfully when journey starts on notes page', async () => {
+      sessionData = {
+        editSessionAttendance: {
+          source: 'session-notes',
+          referralIds: ['referral1'],
+          attendees: [],
+        },
+      }
+
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Understanding myself' })
+      bffData.people = [
+        {
+          ...bffData.people[0],
+          referralId: 'referral1',
+          name: 'Hannah Schinner',
+          attendance: { text: 'Attended', code: 'ATTC' },
+        },
+      ]
+
+      accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
+      accreditedProgrammesManageAndDeliverService.createSessionAttendance.mockResolvedValue({
+        attendees: [{ referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: 'Some notes' }],
+        responseMessage: 'Attendance updated',
+      })
+
+      await request(app)
+        .post('/group/111/session/6789/referral/referral1/understanding-myself-session-notes')
+        .type('form')
+        .send({
+          'record-session-attendance-notes': 'Some notes',
+        })
+        .expect(302)
+
+      expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).toHaveBeenCalledWith(
+        'user1',
+        '6789',
+        {
+          attendees: [{ referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: 'Some notes' }],
+        },
+      )
+    })
+
     it('redirects back to edit session with a success message on the last referral when journey started from edit session', async () => {
       sessionData = {
         editSessionAttendance: {
@@ -550,6 +622,52 @@ describe('showRecordAttendancePage', () => {
         .expect(res => {
           expect(res.text).toContain(
             'Redirecting to /group/111/session/6789/edit-session?message=Attendance+recorded+for+Alice+Brown.',
+          )
+        })
+    })
+
+    it('redirects back to edit session with all attendee names when journey started from edit session', async () => {
+      sessionData = {
+        editSessionAttendance: {
+          source: 'edit-session',
+          referralIds: ['referral1', 'referral2', 'referral3'],
+          attendees: [
+            { referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: '' },
+            { referralId: 'referral2', outcomeCode: 'ATTC', sessionNotes: '' },
+            { referralId: 'referral3', outcomeCode: 'ATTC', sessionNotes: '' },
+          ],
+        },
+      }
+
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Getting started 1' })
+      bffData.people = [
+        { ...bffData.people[0], referralId: 'referral1', name: 'Sham Booth' },
+        { ...bffData.people[1], referralId: 'referral2', name: 'Adrian Poole' },
+        { ...bffData.people[0], referralId: 'referral3', name: 'Hannah Schinner' },
+      ]
+
+      accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
+      accreditedProgrammesManageAndDeliverService.createSessionAttendance.mockResolvedValue({
+        attendees: [
+          { referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: '' },
+          { referralId: 'referral2', outcomeCode: 'ATTC', sessionNotes: '' },
+          { referralId: 'referral3', outcomeCode: 'ATTC', sessionNotes: '' },
+        ],
+        responseMessage: 'Attendance updated',
+      })
+
+      await request(app)
+        .post('/group/111/session/6789/referral/referral3/getting-started-1-session-notes')
+        .type('form')
+        .send({
+          'record-session-attendance-notes': 'Some notes',
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain(
+            'Redirecting to /group/111/session/6789/edit-session?message=Attendance+recorded+for+Sham+Booth%2C+Adrian+Poole+and+Hannah+Schinner.',
           )
         })
     })

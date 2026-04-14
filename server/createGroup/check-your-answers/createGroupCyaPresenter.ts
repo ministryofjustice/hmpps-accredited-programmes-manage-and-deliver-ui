@@ -1,6 +1,7 @@
 import { CreateGroupRequest, CreateGroupTeamMember } from '@manage-and-deliver-api'
 import { SummaryListItem } from '../../utils/summaryList'
 import CreateGroupUtils from '../createGroupUtils'
+import GroupDaysTimesUtils from '../../utils/groupDaysTimesUtils'
 
 export default class CreateGroupCyaPresenter {
   constructor(private readonly createGroupFormData: Partial<CreateGroupRequest>) {}
@@ -41,52 +42,6 @@ export default class CreateGroupCyaPresenter {
     }
   }
 
-  private formatTime(hour: number, minutes: number, amOrPm: string): string {
-    const mins = String(minutes).padStart(2, '0')
-    const period = amOrPm.toLowerCase()
-
-    if (hour === 12 && mins === '00' && period === 'pm') {
-      return 'midday'
-    }
-
-    if (hour === 12 && mins === '00' && period === 'am') {
-      return 'midnight'
-    }
-
-    if (minutes === 0) {
-      return `${hour}${period}`
-    }
-
-    return `${hour}:${mins}${period}`
-  }
-
-  private addTwoAndHalfHours(hour: number, minutes: number, amOrPm: string) {
-    let h = hour % 12
-    if (amOrPm.toLowerCase() === 'pm') {
-      h += 12
-    }
-
-    let totalMinutes = h * 60 + minutes
-
-    totalMinutes += 150
-
-    totalMinutes %= 24 * 60
-
-    const endHour24 = Math.floor(totalMinutes / 60)
-    const endMinutes = totalMinutes % 60
-
-    const endAmOrPm = endHour24 >= 12 ? 'pm' : 'am'
-    let endHour12 = endHour24 % 12
-    if (endHour12 === 0) endHour12 = 12
-
-    return { endHour12, endMinutes, endAmOrPm }
-  }
-
-  private sentenceCase(value: string | undefined): string {
-    if (!value) return ''
-    return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()
-  }
-
   getCreateGroupSummary(): SummaryListItem[] {
     const members = this.generateSelectedUsers()
     const summaryList = [
@@ -103,19 +58,7 @@ export default class CreateGroupCyaPresenter {
 
       {
         key: 'Day and time',
-        lines:
-          this.createGroupFormData.createGroupSessionSlot?.map(slot => {
-            const day = this.sentenceCase(slot.dayOfWeek)
-            const startHour = slot.hour
-            const startMinutes = slot.minutes ?? 0
-            const startAmOrPm = slot.amOrPm
-            const formattedStart = this.formatTime(startHour, startMinutes, startAmOrPm)
-            const { endHour12, endMinutes, endAmOrPm } = this.addTwoAndHalfHours(startHour, startMinutes, startAmOrPm)
-
-            const formattedEnd = this.formatTime(endHour12, endMinutes, endAmOrPm)
-
-            return `${day}s, ${formattedStart} to ${formattedEnd}`
-          }) || [],
+        lines: GroupDaysTimesUtils.formatStartDaysAndTimes(this.createGroupFormData.createGroupSessionSlot),
         changeLink: '/group/create-a-group/group-days-and-times',
       },
 

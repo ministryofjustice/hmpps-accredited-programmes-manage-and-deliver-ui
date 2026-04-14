@@ -257,8 +257,17 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   getOrPost('/group/:groupId/edit-start-date-rescheduled', async (req, res) => {
     await editGroupController.editGroupRescheduleDate(req, res)
   })
+
   getOrPost('/group/create-a-group/group-days-and-times', async (req, res) => {
     await createGroupController.showCreateGroupWhen(req, res)
+  })
+
+  getOrPost('/group/:groupId/edit-group-days-and-times', async (req, res) => {
+    await editGroupController.editGroupDaysAndTimes(req, res)
+  })
+
+  getOrPost('/group/:groupId/edit-group-days-and-times-rescheduled', async (req, res) => {
+    await editGroupController.editGroupRescheduleDayTimes(req, res)
   })
 
   getOrPost('/group/create-a-group/group-sex', async (req, res) => {
