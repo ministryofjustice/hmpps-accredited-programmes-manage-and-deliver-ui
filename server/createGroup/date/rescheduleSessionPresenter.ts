@@ -1,14 +1,16 @@
-import { CreateGroupRequest } from '@manage-and-deliver-api'
+import { CreateGroupRequest, CreateGroupSessionSlot } from '@manage-and-deliver-api'
 import PresenterUtils from '../../utils/presenterUtils'
 import { FormValidationError } from '../../utils/formValidationError'
 import { SummaryListItem } from '../../utils/summaryList'
 import DateUtils from '../../utils/dateUtils'
+import GroupDaysTimesUtils from '../../utils/groupDaysTimesUtils'
 
 export default class RescheduleSessionsPresenter {
   constructor(
     readonly groupId: string,
     readonly updatedGroupDetails: Partial<CreateGroupRequest> & {
       previousDate?: string
+      previousSessions?: CreateGroupSessionSlot[]
     },
     readonly isEditDate: boolean = false,
     private readonly validationError: FormValidationError | null = null,
@@ -22,7 +24,9 @@ export default class RescheduleSessionsPresenter {
   }
 
   get backLinkUri() {
-    return `/group/${this.groupId}/edit-group-start-date`
+    return this.isEditDate
+      ? `/group/${this.groupId}/edit-group-start-date`
+      : `/group/${this.groupId}/edit-group-days-and-times`
   }
 
   get errorSummary() {
@@ -58,6 +62,17 @@ export default class RescheduleSessionsPresenter {
             lines: [this.formatDateWithDayOfWeek(this.updatedGroupDetails.earliestStartDate)],
           },
         ]
-      : []
+      : [
+          {
+            key: 'Previous days and times',
+            keyClass: 'session-reschedule-table-key-width',
+            lines: GroupDaysTimesUtils.formatStartDaysAndTimes(this.updatedGroupDetails.previousSessions),
+          },
+          {
+            key: 'New days and times',
+            keyClass: 'session-reschedule-table-key-width',
+            lines: GroupDaysTimesUtils.formatStartDaysAndTimes(this.updatedGroupDetails.createGroupSessionSlot),
+          },
+        ]
   }
 }

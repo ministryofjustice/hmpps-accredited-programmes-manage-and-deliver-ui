@@ -1,8 +1,8 @@
 import ViewUtils from '../../utils/viewUtils'
-import CreateGroupWhenPresenter from './createGroupWhenPresenter'
+import CreateOrEditGroupWhenPresenter from './createOrEditGroupWhenPresenter'
 
-export default class CreateGroupWhenView {
-  constructor(private readonly presenter: CreateGroupWhenPresenter) {}
+export default class CreateOrEditGroupWhenView {
+  constructor(private readonly presenter: CreateOrEditGroupWhenPresenter) {}
 
   private backLinkArgs() {
     return {
@@ -23,14 +23,13 @@ export default class CreateGroupWhenView {
       name: 'days-of-week',
       fieldset: {
         legend: {
-          text: 'When will the group run?',
+          text: this.presenter.isEdit ? 'Edit when will the group run' : 'When will the group run?',
           isPageHeading: true,
           classes: 'govuk-fieldset__legend--l',
         },
       },
       hint: {
         html: `
-        
           <p class="govuk-hint">Select when group sessions will run. You can add extra information later, for example about times of individual sessions.</p>
           <p class="govuk-hint">Sessions that fall on bank holidays will automatically be moved to the next scheduled date.</p>
         `,

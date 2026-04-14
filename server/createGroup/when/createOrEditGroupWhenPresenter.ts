@@ -19,20 +19,22 @@ interface SlotFields {
   }
 }
 
-export default class CreateGroupWhenPresenter {
+export default class CreateOrEditGroupWhenPresenter {
   constructor(
     private readonly groupCode: string,
     private readonly createGroupFormData: CreateGroupSessionSlot[],
     private readonly validationError: FormValidationError | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
+    readonly isEdit: boolean = false,
+    private readonly groupId: string | null = null,
   ) {}
 
   get text() {
-    return { headingHintText: `Create group ${this.groupCode}` }
+    return { headingHintText: this.isEdit ? `Edit group ${this.groupCode}` : `Create group ${this.groupCode}` }
   }
 
   get backLinkUri() {
-    return `/group/create-a-group/group-start-date`
+    return this.isEdit ? `/group/${this.groupId}/group-details` : `/group/create-a-group/group-start-date`
   }
 
   get utils() {

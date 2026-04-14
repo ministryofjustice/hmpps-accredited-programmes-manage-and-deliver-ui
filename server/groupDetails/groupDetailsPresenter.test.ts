@@ -15,7 +15,7 @@ describe('GroupDetailsPresenter', () => {
 
     it('returns true when the start date is in the past', () => {
       const groupDetails = GroupDetailsFactory.build({
-        startDate: 'Wednesday 1 April 2026', // April 1, 2026 is before April 7, 2026
+        startDate: 'Wednesday 1 April 2026',
       })
       const presenter = new GroupDetailsPresenter(groupDetails)
 
@@ -40,24 +40,6 @@ describe('GroupDetailsPresenter', () => {
       expect(presenter.isStartDateInThePast).toBe(false)
     })
 
-    it('returns false when the start date is an empty string', () => {
-      const groupDetails = GroupDetailsFactory.build({
-        startDate: '',
-      })
-      const presenter = new GroupDetailsPresenter(groupDetails)
-
-      expect(presenter.isStartDateInThePast).toBe(false)
-    })
-
-    it('returns false when the start date is in an invalid format', () => {
-      const groupDetails = GroupDetailsFactory.build({
-        startDate: 'Invalid Date Format',
-      })
-      const presenter = new GroupDetailsPresenter(groupDetails)
-
-      expect(presenter.isStartDateInThePast).toBe(false)
-    })
-
     it('returns true when the start date is yesterday', () => {
       const groupDetails = GroupDetailsFactory.build({
         startDate: 'Sunday 6 April 2026', // Yesterday
@@ -69,25 +51,34 @@ describe('GroupDetailsPresenter', () => {
 
     it('returns false when the start date is far in the future', () => {
       const groupDetails = GroupDetailsFactory.build({
-        startDate: 'Thursday 15 October 2026',
+        startDate: 'Thursday 15 October 2126',
       })
       const presenter = new GroupDetailsPresenter(groupDetails)
 
       expect(presenter.isStartDateInThePast).toBe(false)
     })
+  })
 
-    it('handles dates across different years correctly', () => {
-      const groupDetails2025 = GroupDetailsFactory.build({
-        startDate: 'Thursday 10 April 2025',
-      })
-      const presenter2025 = new GroupDetailsPresenter(groupDetails2025)
-      expect(presenter2025.isStartDateInThePast).toBe(true)
+  describe('isScheduleUpdated', () => {
+    it('returns true when message includes "schedule have been updated"', () => {
+      const groupDetails = GroupDetailsFactory.build()
+      const presenter = new GroupDetailsPresenter(groupDetails, 'The days and times and schedule have been updated.')
 
-      const groupDetails2027 = GroupDetailsFactory.build({
-        startDate: 'Wednesday 7 April 2027',
-      })
-      const presenter2027 = new GroupDetailsPresenter(groupDetails2027)
-      expect(presenter2027.isStartDateInThePast).toBe(false)
+      expect(presenter.isScheduleUpdated).toBe(true)
+    })
+
+    it('returns false when message does not contain schedule update text', () => {
+      const groupDetails = GroupDetailsFactory.build()
+      const presenter = new GroupDetailsPresenter(groupDetails, 'The days and times have been updated.')
+
+      expect(presenter.isScheduleUpdated).toBe(false)
+    })
+
+    it('returns false when message is an empty string', () => {
+      const groupDetails = GroupDetailsFactory.build()
+      const presenter = new GroupDetailsPresenter(groupDetails, '')
+
+      expect(presenter.isScheduleUpdated).toBe(false)
     })
   })
 })

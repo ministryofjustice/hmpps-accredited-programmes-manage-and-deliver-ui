@@ -1,5 +1,5 @@
-import { CreateGroupRequest } from '@manage-and-deliver-api'
 import { Request, Response } from 'express'
+import { CreateGroupRequest } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import { FormValidationError } from '../utils/formValidationError'
 import BaseController from '../shared/baseController'
@@ -23,8 +23,8 @@ import CreateGroupStartPresenter from './start/createGroupStartPresenter'
 import CreateGroupStartView from './start/createGroupStartView'
 import CreateGroupTreatmentManagerPresenter from './treatment-manager/createGroupTreatmentManagerPresenter'
 import CreateGroupTreatmentManagerView from './treatment-manager/createGroupTreatmentManagerView'
-import CreateGroupWhenPresenter from './when/createGroupWhenPresenter'
-import CreateGroupWhenView from './when/createGroupWhenView'
+import CreateOrEditGroupWhenPresenter from './when/createOrEditGroupWhenPresenter'
+import CreateOrEditGroupWhenView from './when/createOrEditGroupWhenView'
 
 export default class CreateGroupController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -130,13 +130,13 @@ export default class CreateGroupController extends BaseController {
       }
     }
 
-    const presenter = new CreateGroupWhenPresenter(
+    const presenter = new CreateOrEditGroupWhenPresenter(
       createGroupFormData?.groupCode,
       createGroupFormData?.createGroupSessionSlot,
       formError,
       userInputData,
     )
-    const view = new CreateGroupWhenView(presenter)
+    const view = new CreateOrEditGroupWhenView(presenter)
     return this.renderPage(res, view)
   }
 
