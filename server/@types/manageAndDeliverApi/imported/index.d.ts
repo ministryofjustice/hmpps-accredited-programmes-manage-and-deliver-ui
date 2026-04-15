@@ -352,6 +352,22 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/dev/seed/referrals': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['seedReferrals']
+    delete: operations['dangerouslyDeleteAllReferrals']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/admin/populate-personal-details': {
     parameters: {
       query?: never
@@ -822,6 +838,22 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/dev/seed/health': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: operations['health']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/current-user/region': {
     parameters: {
       query?: never
@@ -1252,6 +1284,26 @@ export interface paths {
      * @description Retrieve facilitators and group members for scheduling a one-to-one session
      */
     get: operations['getScheduleIndividualSessionDetails']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/bff/group/{groupId}/group-sex-details': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * endpoint to retrieve the edit gender details for a programme group
+     * @description Retrieve group edit gender details.
+     */
+    get: operations['getGroupSexDetails']
     put?: never
     post?: never
     delete?: never
@@ -1940,6 +1992,17 @@ export interface components {
        * @example Alex River was added to this group. Their referral status is now Scheduled.
        */
       message: string
+    }
+    SeededReferralInfo: {
+      referralId: string
+      crn: string
+      personName: string
+      requirementId: string
+    }
+    SeedingResult: {
+      /** Format: int32 */
+      count: number
+      referrals: components['schemas']['SeededReferralInfo'][]
     }
     CreateAvailability: {
       /**
@@ -3021,14 +3084,14 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -3039,9 +3102,9 @@ export interface components {
       offset?: number
       sort?: components['schemas']['SortObject']
       /** Format: int32 */
-      pageSize?: number
-      /** Format: int32 */
       pageNumber?: number
+      /** Format: int32 */
+      pageSize?: number
       paged?: boolean
       unpaged?: boolean
     }
@@ -3665,14 +3728,14 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -3760,14 +3823,14 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -4089,6 +4152,41 @@ export interface components {
        */
       suggestedDate: string
     }
+    /** @description Response model for the edit genderpage */
+    GroupSexDetails: {
+      /**
+       * @description Caption text displayed above the radio options
+       * @example Select a gender
+       */
+      captionText: string
+      /**
+       * @description Text to display the page title
+       * @example Edit the gender of the group
+       */
+      pageTitle: string
+      /**
+       * @description Text to display on the submit button of the page
+       * @example Submit
+       */
+      submitButtonText: string
+      /** @description List of radio button options for gender selection */
+      radios: components['schemas']['RadioOptions'][]
+    }
+    /** @description A single radio button option */
+    RadioOptions: {
+      /**
+       * @description Display label for the radio option
+       * @example Cohort A
+       */
+      text: string
+      /** @description Cohort for the Programme Group. */
+      value: components['schemas']['ProgrammeGroupCohort']
+      /**
+       * @description Whether this option is currently selected
+       * @example false
+       */
+      selected: boolean
+    }
     /**
      * @description AM/PM time indicator
      * @enum {string}
@@ -4140,21 +4238,6 @@ export interface components {
       /** @description List of radio button options for cohort selection */
       radios: components['schemas']['RadioOptions'][]
     }
-    /** @description A single radio button option */
-    RadioOptions: {
-      /**
-       * @description Display label for the radio option
-       * @example Cohort A
-       */
-      text: string
-      /** @description Cohort for the Programme Group. */
-      value: components['schemas']['ProgrammeGroupCohort']
-      /**
-       * @description Whether this option is currently selected
-       * @example false
-       */
-      selected: boolean
-    }
     /** @description Information identifying the group. */
     GroupDetailsResponse: {
       /**
@@ -4185,10 +4268,20 @@ export interface components {
        */
       pduName: string
       /**
+       * @description The Probation Delivery Unit (PDU) code.
+       * @example N02CLE
+       */
+      pduCode: string
+      /**
        * @description The location description where the group programme will be delivered.
        * @example County Durham Probation Office
        */
       deliveryLocation: string
+      /**
+       * @description The location code for where the group programme will be delivered.
+       * @example DTVBOR1
+       */
+      deliveryLocationCode: string
       /** @description Cohort for the Programme Group. */
       cohort: components['schemas']['ProgrammeGroupCohort']
       /** @description Sex that the group is being run for. */
@@ -4219,6 +4312,10 @@ export interface components {
        * @example [Tom Saunders]
        */
       coverFacilitators?: string[] | null
+    }
+    TeardownResult: {
+      /** Format: int32 */
+      deletedCount: number
     }
   }
   responses: never
@@ -5386,6 +5483,66 @@ export interface operations {
       }
       /** @description The group or referral does not exist */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  seedReferrals: {
+    parameters: {
+      query?: {
+        count?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['SeedingResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  dangerouslyDeleteAllReferrals: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['TeardownResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
         headers: {
           [name: string]: unknown
         }
@@ -6833,6 +6990,37 @@ export interface operations {
       }
     }
   }
+  health: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': {
+            [key: string]: string
+          }
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getCurrentUserRegion: {
     parameters: {
       query?: never
@@ -8099,6 +8287,64 @@ export interface operations {
         }
       }
       /** @description Group or module not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getGroupSexDetails: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        groupId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully retrieved group edit gender details */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['GroupSexDetails']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Group not found */
       404: {
         headers: {
           [name: string]: unknown

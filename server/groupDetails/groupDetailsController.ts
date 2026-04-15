@@ -20,6 +20,7 @@ export default class GroupDetailsController extends BaseController {
     const { message } = req.query
 
     req.session.createGroupFormData = {}
+    req.session.originPage = req.path
 
     const successMessage = message ? String(message) : null
 

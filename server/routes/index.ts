@@ -277,8 +277,16 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await createGroupController.showCreateGroupPdu(req, res)
   })
 
+  getOrPost('/group/:groupId/edit-group-probation-delivery-unit', async (req, res) => {
+    await editGroupController.editGroupPdu(req, res)
+  })
+
   getOrPost('/group/create-a-group/group-delivery-location', async (req, res) => {
     await createGroupController.showCreateGroupLocation(req, res)
+  })
+
+  getOrPost('/group/:groupId/edit-group-delivery-location', async (req, res) => {
+    await editGroupController.editGroupLocation(req, res)
   })
 
   getOrPost('/group/create-a-group/group-facilitators', async (req, res) => {

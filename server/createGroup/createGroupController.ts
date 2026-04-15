@@ -13,12 +13,12 @@ import CreateOrEditGroupCohortView from './cohort/createOrEditGroupCohortView'
 import CreateOrEditGroupForm from './createOrEditGroupForm'
 import CreateOrEditGroupDatePresenter from './date/createOrEditGroupDatePresenter'
 import CreateOrEditGroupDateView from './date/createOrEditGroupDateView'
-import CreateGroupLocationPresenter from './location/createGroupLocationPresenter'
-import CreateGroupLocationView from './location/createGroupLocationView'
-import CreateGroupPduPresenter from './pdu/createGroupPduPresenter'
-import CreateGroupPduView from './pdu/createGroupPduView'
 import CreateOrEditGroupSexPresenter from './sex/createOrEditGroupSexPresenter'
 import CreateOrEditGroupSexView from './sex/createOrEditGroupSexView'
+import CreateOrEditGroupLocationPresenter from './location/createOrEditGroupLocationPresenter'
+import CreateOrEditGroupLocationView from './location/createOrEditGroupLocationView'
+import CreateOrEditGroupPduPresenter from './pdu/createOrEditGroupPduPresenter'
+import CreateOrEditGroupPduView from './pdu/createOrEditGroupPduView'
 import CreateGroupStartPresenter from './start/createGroupStartPresenter'
 import CreateGroupStartView from './start/createGroupStartView'
 import CreateGroupTreatmentManagerPresenter from './treatment-manager/createGroupTreatmentManagerPresenter'
@@ -225,8 +225,8 @@ export default class CreateGroupController extends BaseController {
 
     const pduLocations = await this.accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion(username)
 
-    const presenter = new CreateGroupPduPresenter(pduLocations, formError, createGroupFormData, userInputData)
-    const view = new CreateGroupPduView(presenter)
+    const presenter = new CreateOrEditGroupPduPresenter(pduLocations, formError, createGroupFormData, userInputData)
+    const view = new CreateOrEditGroupPduView(presenter)
     return this.renderPage(res, view)
   }
 
@@ -257,8 +257,13 @@ export default class CreateGroupController extends BaseController {
       req.session.createGroupFormData.pduCode,
     )
 
-    const presenter = new CreateGroupLocationPresenter(officeLocations, formError, createGroupFormData, userInputData)
-    const view = new CreateGroupLocationView(presenter)
+    const presenter = new CreateOrEditGroupLocationPresenter(
+      officeLocations,
+      formError,
+      createGroupFormData,
+      userInputData,
+    )
+    const view = new CreateOrEditGroupLocationView(presenter)
     return this.renderPage(res, view)
   }
 
