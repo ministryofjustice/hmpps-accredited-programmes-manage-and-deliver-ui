@@ -88,6 +88,7 @@ describe('CreateOrEditGroupLocationPresenter', () => {
         expect(presenter.text).toEqual({
           headingHintText: 'Edit group TEST-GROUP-001',
           subHeadingText: 'Edit where the group will take place',
+          buttonText: 'Submit',
         })
       })
     })
@@ -109,6 +110,7 @@ describe('CreateOrEditGroupLocationPresenter', () => {
         expect(presenter.text).toEqual({
           headingHintText: 'Create group NEW-GROUP-001',
           subHeadingText: 'Where will the group take place?',
+          buttonText: 'Continue',
         })
       })
     })

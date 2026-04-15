@@ -30,6 +30,7 @@ export default class CreateOrEditGroupLocationPresenter {
         ? `Edit group ${this.createGroupFormData?.groupCode}`
         : `Create group ${this.createGroupFormData?.groupCode}`,
       subHeadingText: this.isEdit ? `Edit where the group will take place` : 'Where will the group take place?',
+      buttonText: this.isEdit ? 'Submit' : 'Continue',
     }
   }
 
