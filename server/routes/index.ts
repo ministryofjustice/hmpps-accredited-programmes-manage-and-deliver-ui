@@ -243,7 +243,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   getOrPost('/group/:groupId/edit-a-group/edit-group-cohort', async (req, res) => {
     await editGroupController.editGroupCohort(req, res)
   })
-  getOrPost('/group/:groupId/edit-a-group/edit-group-gender', async (req, res) => {
+  getOrPost('/group/:groupId/edit-group-gender', async (req, res) => {
     await editGroupController.editGroupSex(req, res)
   })
   getOrPost('/group/create-a-group/group-start-date', async (req, res) => {
