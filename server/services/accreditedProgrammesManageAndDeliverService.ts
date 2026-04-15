@@ -541,10 +541,10 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
     })) as EditGroupCohort
   }
 
-  async getBffEditGroupSex(username: Express.User['username'], groupId: string): Promise<EditGroupSex> {
+  async getGroupSexDetails(username: Express.User['username'], groupId: string): Promise<EditGroupSex> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
-      path: `/bff/group/${groupId}/edit-sex`,
+      path: `/bff/group/${groupId}/group-sex-details`,
       headers: { Accept: 'application/json' },
     })) as EditGroupSex
   }

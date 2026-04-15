@@ -36,7 +36,7 @@ describe('Edit Group Sex Controller', () => {
         code: 'EXISTING123',
         sex: 'MALE',
       } as GroupDetailsResponse)
-      accreditedProgrammesManageAndDeliverService.getBffEditGroupSex.mockResolvedValue({
+      accreditedProgrammesManageAndDeliverService.getGroupSexDetails.mockResolvedValue({
         captionText: 'Edit group EXISTING123',
         pageTitle: 'Edit the gender of the group',
         submitButtonText: 'Submit',
@@ -64,7 +64,7 @@ describe('Edit Group Sex Controller', () => {
         code: 'EXISTING123',
         sex: 'MALE',
       } as unknown as GroupDetailsResponse)
-      accreditedProgrammesManageAndDeliverService.getBffEditGroupSex.mockResolvedValue({
+      accreditedProgrammesManageAndDeliverService.getGroupSexDetails.mockResolvedValue({
         captionText: 'Edit group EXISTING123',
         pageTitle: 'Edit the gender of the group',
         submitButtonText: 'Submit',
@@ -90,7 +90,7 @@ describe('Edit Group Sex Controller', () => {
         code: 'EXISTING123',
         sex: 'MALE',
       } as GroupDetailsResponse)
-      accreditedProgrammesManageAndDeliverService.getBffEditGroupSex.mockResolvedValue({
+      accreditedProgrammesManageAndDeliverService.getGroupSexDetails.mockResolvedValue({
         captionText: 'Edit group EXISTING123',
         pageTitle: 'Edit the gender of the group',
         submitButtonText: 'Submit',
@@ -122,7 +122,7 @@ describe('Edit Group Sex Controller', () => {
         code: 'EXISTING123',
         sex: 'MALE',
       } as unknown as GroupDetailsResponse)
-      accreditedProgrammesManageAndDeliverService.getBffEditGroupSex.mockResolvedValue({
+      accreditedProgrammesManageAndDeliverService.getGroupSexDetails.mockResolvedValue({
         captionText: 'Edit group EXISTING123',
         pageTitle: 'Edit the gender of the group',
         submitButtonText: 'Submit',
@@ -154,7 +154,7 @@ describe('Edit Group Sex Controller', () => {
         code: 'EXISTING123',
         sex: 'MALE',
       } as unknown as GroupDetailsResponse)
-      accreditedProgrammesManageAndDeliverService.getBffEditGroupSex.mockResolvedValue({
+      accreditedProgrammesManageAndDeliverService.getGroupSexDetails.mockResolvedValue({
         captionText: 'Edit group EXISTING123',
         pageTitle: 'Edit the gender of the group',
         submitButtonText: 'Submit',

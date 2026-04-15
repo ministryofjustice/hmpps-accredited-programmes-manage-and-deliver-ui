@@ -1394,22 +1394,22 @@ export interface components {
        * @description An application-specific error code
        * @example 404
        */
-      errorCode?: number
+      errorCode?: number | null
       /**
        * @description A human readable message for the error
        * @example Referral Not found
        */
-      userMessage?: string
+      userMessage?: string | null
       /**
        * @description A developer friendly message for the error
        * @example null
        */
-      developerMessage?: string
+      developerMessage?: string | null
       /**
        * @description Additional information about the error
        * @example null
        */
-      moreInfo?: string
+      moreInfo?: string | null
     }
     /** @description Request to edit the facilitators for a session */
     EditSessionFacilitatorRequest: {
@@ -1431,8 +1431,7 @@ export interface components {
       sessionStartDate: string
       /** @description The start time of the session */
       sessionStartTime: components['schemas']['SessionTime']
-      /** @description The end time of the session */
-      sessionEndTime?: components['schemas']['SessionTime']
+      sessionEndTime?: components['schemas']['SessionTime'] | null
       /**
        * @description Whether to reschedule other sessions
        * @example true
@@ -1518,49 +1517,49 @@ export interface components {
        * @description The unique id of the ReferralMotivationBackgroundAndNonAssociations information.
        * @example c98151f4-4081-4c65-9f98-54e63a328c8d
        */
-      id?: string
+      id?: string | null
       /**
        * Format: uuid
        * @description The unique id of this referral.
        * @example c98151f4-4081-4c65-9f98-54e63a328c8d
        */
-      referralId?: string
+      referralId?: string | null
       /**
        * @description Boolean value indicating whether the referral maintains innocence.
        * @example true
        */
-      maintainsInnocence?: boolean
+      maintainsInnocence?: boolean | null
       /**
        * @description Information on the motivation to participate in an accredited programme.
        * @example Motivated to change and improve life circumstances.
        */
-      motivations?: string
+      motivations?: string | null
       /**
        * @description Any other relevant information that should be considered.
        * @example Other information relevant to the referral.
        */
-      otherConsiderations: string
+      otherConsiderations: string | null
       /**
        * @description Information on any non-associations relevant to the referral.
        * @example Should not be in a group with a person who has a history of reoffending on a previous accredited programme.
        */
-      nonAssociations?: string
+      nonAssociations?: string | null
       /**
        * Format: date
        * @description Timestamp of when this referral was created.
        * @example 11 June 2023
        */
-      createdAt?: string
+      createdAt?: string | null
       /** @description The user that last created the delivery location preferences */
-      createdBy?: string
+      createdBy?: string | null
       /**
        * Format: date-time
        * @description Timestamp of when this referral was created.
        * @example 11 June 2023
        */
-      lastUpdatedAt?: string
+      lastUpdatedAt?: string | null
       /** @description The user that last created the delivery location preferences */
-      lastUpdatedBy?: string
+      lastUpdatedBy?: string | null
     }
     /** @description Details of the background and non-associations for a referral */
     CreateOrUpdateReferralMotivationBackgroundAndNonAssociations: {
@@ -1568,22 +1567,22 @@ export interface components {
        * @description Boolean value indicating whether the referral maintains innocence.
        * @example true
        */
-      maintainsInnocence: boolean
+      maintainsInnocence: boolean | null
       /**
        * @description Information on the motivation to participate in an accredited programme.
        * @example Motivated to change and improve life circumstances.
        */
-      motivations: string
+      motivations: string | null
       /**
        * @description Any other relevant information that should be considered.
        * @example Other information relevant to the referral.
        */
-      otherConsiderations: string
+      otherConsiderations: string | null
       /**
        * @description Information on any non-associations relevant to the referral.
        * @example Should not be in a group with a person who has a history of reoffending on a previous accredited programme.
        */
-      nonAssociations: string
+      nonAssociations: string | null
     }
     RetryDlqResult: {
       /** Format: int32 */
@@ -1646,30 +1645,28 @@ export interface components {
     /** @description The delivery location preferences for a referral */
     UpdateGroupRequest: {
       /** @description The code for the group */
-      groupCode?: string
-      /** @description Cohort for the Programme Group. */
-      cohort?: components['schemas']['ProgrammeGroupCohort']
-      /** @description Sex that the group is being run for */
-      sex?: components['schemas']['ProgrammeGroupSexEnum']
+      groupCode?: string | null
+      cohort?: components['schemas']['ProgrammeGroupCohort'] | null
+      sex?: components['schemas']['ProgrammeGroupSexEnum'] | null
       /**
        * Format: date
        * @description The earliest date the group can start
        */
-      earliestStartDate?: string
+      earliestStartDate?: string | null
       /** @description A list of session slots for the group */
-      createGroupSessionSlot?: components['schemas']['CreateGroupSessionSlot'][]
+      createGroupSessionSlot?: components['schemas']['CreateGroupSessionSlot'][] | null
       /** @description Boolean value to determine */
-      automaticallyRescheduleOtherSessions?: boolean
+      automaticallyRescheduleOtherSessions?: boolean | null
       /** @description The name of the PDU that the group will take place in */
-      pduName?: string
+      pduName?: string | null
       /** @description The code of the PDU that the group will take place in */
-      pduCode?: string
+      pduCode?: string | null
       /** @description The name of the location that the group will be delivered at */
-      deliveryLocationName?: string
+      deliveryLocationName?: string | null
       /** @description The code of the location that the group will be delivered at */
-      deliveryLocationCode?: string
+      deliveryLocationCode?: string | null
       /** @description The person code and name and type of the teamMembers of the group */
-      teamMembers?: components['schemas']['CreateGroupTeamMember'][]
+      teamMembers?: components['schemas']['CreateGroupTeamMember'][] | null
     }
     CodeDescription: {
       code: string
@@ -1682,7 +1679,7 @@ export interface components {
        * @description Rich text explaining locations the person cannot attend
        * @example Alex River cannot attend locations in Postcode NE1
        */
-      cannotAttendText?: string
+      cannotAttendText?: string | null
     }
     PreferredDeliveryLocation: {
       /**
@@ -1703,38 +1700,38 @@ export interface components {
        * @description Unique ID of the availability
        * @example null
        */
-      id?: string
+      id?: string | null
       /**
        * Format: uuid
        * @description The ID of the referral
        * @example d3f55f38-7c7b-4b6e-9aa1-e7d7f9e3e785
        */
-      referralId: string
+      referralId: string | null
       /**
        * @description Start date of the availability
        * @example 2025-07-10
        */
-      startDate?: string
+      startDate?: string | null
       /**
        * @description End date of the availability
        * @example 2025-07-20
        */
-      endDate?: string
+      endDate?: string | null
       /**
        * @description Additional details
        * @example Available for remote sessions
        */
-      otherDetails?: string
+      otherDetails?: string | null
       /**
        * @description User who last modified this record
        * @example admin_user
        */
-      lastModifiedBy?: string
+      lastModifiedBy?: string | null
       /**
        * @description Timestamp when last modified
        * @example 2025-07-10T12:00:00
        */
-      lastModifiedAt?: string
+      lastModifiedAt?: string | null
       availabilities: components['schemas']['DailyAvailabilityModel'][]
     }
     DailyAvailabilityModel: {
@@ -1763,17 +1760,17 @@ export interface components {
        * @description Start date of the availability, Start date of the availability, will default to current date if no value is passed in
        * @example 2025-07-10
        */
-      startDate?: string
+      startDate?: string | null
       /**
        * @description End date of the availability
        * @example 2025-07-20
        */
-      endDate?: string
+      endDate?: string | null
       /**
        * @description Additional details
        * @example Available for remote sessions
        */
-      otherDetails?: string
+      otherDetails?: string | null
       availabilities: components['schemas']['DailyAvailabilityModel'][]
     }
     /** @description Attendance for a session */
@@ -1781,7 +1778,7 @@ export interface components {
       /** @description List of attendees for a session */
       attendees: components['schemas']['SessionAttendee'][]
       /** @description Session attendance response message after processing */
-      responseMessage?: string
+      responseMessage?: string | null
     }
     /** @description Attendee of a session */
     SessionAttendee: {
@@ -1796,7 +1793,7 @@ export interface components {
        */
       outcomeCode: 'ATTC' | 'AFTC' | 'UAAB'
       /** @description Session notes for the attendee */
-      sessionNotes?: string
+      sessionNotes?: string | null
     }
     /** @description Does the person associated with the referral have LDC needs. */
     UpdateLdc: {
@@ -1829,7 +1826,7 @@ export interface components {
        * @description Notes from the user, or possibly the system, to explain the change in status
        * @example I have met with xxx, and the assessment has been completed
        */
-      additionalDetails: string
+      additionalDetails: string | null
       /**
        * @description The name of the User who updated the status.  SYSTEM and UNKNOWN_USER are known non-human values.
        * @example John Doe
@@ -1856,7 +1853,7 @@ export interface components {
        * @description A free-text description that allows a user to add context or information to the Status change
        * @example Updating the status following a one-to-one meeting with Person on Probation
        */
-      additionalDetails?: string
+      additionalDetails?: string | null
     }
     CreateGroupRequest: {
       /** @description The code for the group */
@@ -1921,7 +1918,7 @@ export interface components {
        * @description Arbitrary text that will be added to the Status History of the Referral
        * @example Alex has been removed from the group due to conflicting commitments
        */
-      additionalDetails?: string
+      additionalDetails?: string | null
     }
     RemoveFromGroupResponse: {
       /**
@@ -1955,17 +1952,17 @@ export interface components {
        * @description Start date of the availability, Start date of the availability, will default to current date if no value is passed in
        * @example 2025-07-10
        */
-      startDate?: string
+      startDate?: string | null
       /**
        * @description End date of the availability
        * @example 2025-07-20
        */
-      endDate?: string
+      endDate?: string | null
       /**
        * @description Additional details
        * @example Available for remote sessions
        */
-      otherDetails?: string
+      otherDetails?: string | null
       availabilities: components['schemas']['DailyAvailabilityModel'][]
     }
     /** @description IDs of the Referrals to process.  Use "*" in the list to process all referrals. */
@@ -2007,120 +2004,120 @@ export interface components {
       /** @description The content of the subject access request response */
       content: unknown
       /** @description The details of any attachments for the subject access request response */
-      attachments?: components['schemas']['Attachment'][]
+      attachments?: components['schemas']['Attachment'][] | null
     }
     ThinkingAndBehaviour: {
       /**
        * Format: date
        * @example 1 August 2023
        */
-      assessmentCompleted?: string
+      assessmentCompleted?: string | null
       /** @example 1-Some problems */
-      temperControl?: string
+      temperControl?: string | null
       /** @example 2 - Significant problems */
-      problemSolvingSkills?: string
+      problemSolvingSkills?: string | null
       /** @example 0-No problems */
-      awarenessOfConsequences?: string
+      awarenessOfConsequences?: string | null
       /** @example 0-No problems */
-      understandsViewsOfOthers?: string
+      understandsViewsOfOthers?: string | null
       /** @example 0-No problems */
-      achieveGoals?: string
+      achieveGoals?: string | null
       /** @example 0-No problems */
-      concreteAbstractThinking?: string
+      concreteAbstractThinking?: string | null
     }
     RoshAnalysis: {
       /** Format: date */
-      assessmentCompleted: string
+      assessmentCompleted: string | null
       /**
        * @description The details of the current offence.
        * @example Tax evasion
        */
-      offenceDetails?: string
+      offenceDetails?: string | null
       /**
        * @description The where and when of the current offence.
        * @example At home
        */
-      whereAndWhen?: string
+      whereAndWhen?: string | null
       /**
        * @description How the offence was committed for the current offence.
        * @example false accounting
        */
-      howDone?: string
+      howDone?: string | null
       /**
        * @description The victims of the current offence.
        * @example hmrc
        */
-      whoVictims?: string
+      whoVictims?: string | null
       /**
        * @description Text describing if anyone else was present for the current offence.
        * @example company secretary
        */
-      anyoneElsePresent?: string
+      anyoneElsePresent?: string | null
       /**
        * @description The motivation for the current offence.
        * @example Greed
        */
-      whyDone?: string
+      whyDone?: string | null
       /**
        * @description The source of this information for the current offence.
        * @example crown court
        */
-      sources?: string
+      sources?: string | null
       /**
        * @description Identify behaviours / incidents that evidence the individual’s ability to cause serious harm and when they happened
        * @example Physical assault on cellmate requiring medical attention on 22nd March 2024. Weapon possession (improvised blade) discovered during cell search on 8th February 2024.
        */
-      identifyBehavioursIncidents?: string
+      identifyBehavioursIncidents?: string | null
       /**
        * @description Provide an analysis of any patterns related to these behaviours / incidents, for example: victims, triggers, locations, impact.
        * @example Escalating violence in evenings when challenged, targeting vulnerable individuals, causing injuries requiring medical attention.
        */
-      analysisBehaviourIncidents?: string
+      analysisBehaviourIncidents?: string | null
     }
     OGRS4Risks: {
-      allReoffendingScoreType?: string
-      allReoffendingScore?: number
-      allReoffendingBand?: string
-      violentReoffendingScoreType?: string
-      violentReoffendingScore?: number
-      violentReoffendingBand?: string
-      seriousViolentReoffendingScoreType?: string
-      seriousViolentReoffendingScore?: number
-      seriousViolentReoffendingBand?: string
-      directContactSexualReoffendingScore?: number
-      directContactSexualReoffendingBand?: string
-      indirectImageContactSexualReoffendingScore?: number
-      indirectImageContactSexualReoffendingBand?: string
-      combinedSeriousReoffendingScoreType?: string
-      combinedSeriousReoffendingScore?: number
-      combinedSeriousReoffendingBand?: string
+      allReoffendingScoreType?: string | null
+      allReoffendingScore?: number | null
+      allReoffendingBand?: string | null
+      violentReoffendingScoreType?: string | null
+      violentReoffendingScore?: number | null
+      violentReoffendingBand?: string | null
+      seriousViolentReoffendingScoreType?: string | null
+      seriousViolentReoffendingScore?: number | null
+      seriousViolentReoffendingBand?: string | null
+      directContactSexualReoffendingScore?: number | null
+      directContactSexualReoffendingBand?: string | null
+      indirectImageContactSexualReoffendingScore?: number | null
+      indirectImageContactSexualReoffendingBand?: string | null
+      combinedSeriousReoffendingScoreType?: string | null
+      combinedSeriousReoffendingScore?: number | null
+      combinedSeriousReoffendingBand?: string | null
     }
     OasysSara: {
       /**
        * @description Risk of violence towards a partner
        * @example Low
-       * @enum {string}
+       * @enum {string|null}
        */
-      imminentRiskOfViolenceTowardsPartner?: 'Low' | 'Medium' | 'High'
+      imminentRiskOfViolenceTowardsPartner?: 'Low' | 'Medium' | 'High' | null
       /**
        * @description Risk of violence towards others
        * @example Medium
-       * @enum {string}
+       * @enum {string|null}
        */
-      imminentRiskOfViolenceTowardsOthers?: 'Low' | 'Medium' | 'High'
+      imminentRiskOfViolenceTowardsOthers?: 'Low' | 'Medium' | 'High' | null
     }
     RiskOfSeriousRecidivism: {
       /**
        * @description Risk of Serious Recidivism score
        * @example 3.45
        */
-      scoreLevel?: string
+      scoreLevel?: string | null
       /**
        * @description Risk of Serious Recidivism level
        * @example Medium
-       * @enum {number}
+       * @enum {number|null}
        */
-      percentageScore?: 'Low' | 'Medium' | 'High'
+      percentageScore?: 'Low' | 'Medium' | 'High' | null
       /**
        * @description Other person(s) at risk - Children
        * @example Low
@@ -2134,367 +2131,361 @@ export interface components {
     }
     Risks: {
       /** Format: date */
-      assessmentCompleted: string
-      /** @description Offender Group Reconviction scale */
-      offenderGroupReconviction?: components['schemas']['Score']
-      /** @description Offender Violence Predictor */
-      offenderViolencePredictor?: components['schemas']['Score']
-      /** @description Spousal Assault Risk Assessment */
-      sara?: components['schemas']['OasysSara']
-      /** @description Risk of Serious Recidivism */
-      riskOfSeriousRecidivism?: components['schemas']['RiskOfSeriousRecidivism']
-      /** @description Risk of Serious Harm */
-      riskOfSeriousHarm?: components['schemas']['RoshSummary']
+      assessmentCompleted: string | null
+      offenderGroupReconviction?: components['schemas']['Score'] | null
+      offenderViolencePredictor?: components['schemas']['Score'] | null
+      sara?: components['schemas']['OasysSara'] | null
+      riskOfSeriousRecidivism?: components['schemas']['RiskOfSeriousRecidivism'] | null
+      riskOfSeriousHarm?: components['schemas']['RoshSummary'] | null
       /**
        * @description Active alerts for a person
        * @example ["Domestic Abuse History","MAPPA","Domestic Abuse Victim",]
        */
-      alerts?: string[]
+      alerts?: string[] | null
       /**
        * Format: date
        * @description The date this data was fetched from nDelius.
        * @example 1 August 2025
        */
-      dateRetrieved: string
+      dateRetrieved: string | null
       /**
        * Format: date
        * @description The date this data was fetched from nDelius.
        * @example 1 August 2025
        */
-      lastUpdated: string
+      lastUpdated: string | null
       /**
        * @description Whether the data represents an OGRS3 legacy assessment.
        * @example true
        */
       isLegacy: boolean
-      /** @description The OGRS4 Risk predictors for this person. */
-      ogrS4Risks?: components['schemas']['OGRS4Risks']
+      ogrS4Risks?: components['schemas']['OGRS4Risks'] | null
       legacy?: boolean
     }
     RoshSummary: {
       /**
        * @description Risk towards prisoners in Custody
        * @example Medium
-       * @enum {string}
+       * @enum {string|null}
        */
-      riskPrisonersCustody?: 'Low' | 'Medium' | 'High'
+      riskPrisonersCustody?: 'Low' | 'Medium' | 'High' | null
       /**
        * @description Risk towards staff in Custody
        * @example Medium
-       * @enum {string}
+       * @enum {string|null}
        */
-      riskStaffCustody?: 'Low' | 'Medium' | 'High'
+      riskStaffCustody?: 'Low' | 'Medium' | 'High' | null
       /**
        * @description Risk towards known adult in Custody
        * @example Medium
-       * @enum {string}
+       * @enum {string|null}
        */
-      riskKnownAdultCustody?: 'Low' | 'Medium' | 'High'
+      riskKnownAdultCustody?: 'Low' | 'Medium' | 'High' | null
       /**
        * @description Risk towards public in Custody
        * @example Medium
-       * @enum {string}
+       * @enum {string|null}
        */
-      riskPublicCustody?: 'Low' | 'Medium' | 'High'
+      riskPublicCustody?: 'Low' | 'Medium' | 'High' | null
       /**
        * @description Risk towards children in Custody
        * @example Medium
-       * @enum {string}
+       * @enum {string|null}
        */
-      riskChildrenCustody?: 'Low' | 'Medium' | 'High'
+      riskChildrenCustody?: 'Low' | 'Medium' | 'High' | null
       /**
        * @description Risk towards staff in Community
        * @example Medium
-       * @enum {string}
+       * @enum {string|null}
        */
-      riskStaffCommunity?: 'Low' | 'Medium' | 'High'
+      riskStaffCommunity?: 'Low' | 'Medium' | 'High' | null
       /**
        * @description Risk towards known adults in Community
        * @example Medium
-       * @enum {string}
+       * @enum {string|null}
        */
-      riskKnownAdultCommunity?: 'Low' | 'Medium' | 'High'
+      riskKnownAdultCommunity?: 'Low' | 'Medium' | 'High' | null
       /**
        * @description Risk towards the public in Community
        * @example Medium
-       * @enum {string}
+       * @enum {string|null}
        */
-      riskPublicCommunity?: 'Low' | 'Medium' | 'High'
+      riskPublicCommunity?: 'Low' | 'Medium' | 'High' | null
       /**
        * @description Risk towards children in Community
        * @example Medium
-       * @enum {string}
+       * @enum {string|null}
        */
-      riskChildrenCommunity?: 'Low' | 'Medium' | 'High'
+      riskChildrenCommunity?: 'Low' | 'Medium' | 'High' | null
       /**
        * @description Risk of Serious Harm level
        * @example Low
-       * @enum {string}
+       * @enum {string|null}
        */
-      overallRoshLevel?: 'Low' | 'Medium' | 'High'
+      overallRoshLevel?: 'Low' | 'Medium' | 'High' | null
     }
     Score: {
       /**
        * @description One year prediction score
        * @example 0.75
        */
-      oneYear?: number
+      oneYear?: number | null
       /**
        * @description Two year prediction score
        * @example 0.85
        */
-      twoYears?: number
+      twoYears?: number | null
       /**
        * @description Risk level classification
        * @example HIGH
-       * @enum {string}
+       * @enum {string|null}
        */
-      scoreLevel?: 'LOW' | 'MEDIUM' | 'HIGH'
+      scoreLevel?: 'LOW' | 'MEDIUM' | 'HIGH' | null
     }
     Relationships: {
       /**
        * Format: date
        * @example 1 August 2023
        */
-      assessmentCompleted?: string
+      assessmentCompleted?: string | null
       /** @example true */
-      dvEvidence?: boolean
+      dvEvidence?: boolean | null
       /** @example false */
-      victimFormerPartner?: boolean
+      victimFormerPartner?: boolean | null
       /** @example true */
-      victimFamilyMember?: boolean
+      victimFamilyMember?: boolean | null
       /** @example false */
-      victimOfPartnerFamily?: boolean
+      victimOfPartnerFamily?: boolean | null
       /** @example true */
-      perpOfPartnerOrFamily?: boolean
+      perpOfPartnerOrFamily?: boolean | null
       /** @example This person has a history of domestic violence */
-      relIssuesDetails?: string
+      relIssuesDetails?: string | null
       /** @example 0-No problems */
-      relCloseFamily?: string
+      relCloseFamily?: string | null
       /** @example Not in a relationship */
-      relCurrRelationshipStatus?: string
+      relCurrRelationshipStatus?: string | null
       /** @example 2-Significant problems */
-      prevCloseRelationships?: string
+      prevCloseRelationships?: string | null
       /** @example 0-No problems */
-      emotionalCongruence?: string
+      emotionalCongruence?: string | null
       /** @example 0-No problems */
-      relationshipWithPartner?: string
+      relationshipWithPartner?: string | null
       /** @example No */
-      prevOrCurrentDomesticAbuse?: string
+      prevOrCurrentDomesticAbuse?: string | null
     }
     OffenceAnalysis: {
       /** Format: date */
-      assessmentCompleted: string
+      assessmentCompleted: string | null
       /**
        * @description Brief details of the current offence.
        * @example Physical assault on cellmate requiring medical attention on 22nd March 2024. Weapon possession discovered during cell search.
        */
-      briefOffenceDetails?: string
-      victimsAndPartners?: components['schemas']['VictimsAndPartners']
+      briefOffenceDetails?: string | null
+      victimsAndPartners?: components['schemas']['VictimsAndPartners'] | null
       /**
        * @description Whether the individual recognises the impact of their offending behaviour.
        * @example Yes
        */
-      recognisesImpact?: string
-      otherOffendersAndInfluences?: components['schemas']['OtherOffendersAndInfluences']
+      recognisesImpact?: string | null
+      otherOffendersAndInfluences?: components['schemas']['OtherOffendersAndInfluences'] | null
       /**
        * @description The motivation and triggers for the offending behaviour.
        * @example Anger and frustration when challenged by authority
        */
-      motivationAndTriggers?: string
-      responsibility?: components['schemas']['Responsibility']
+      motivationAndTriggers?: string | null
+      responsibility?: components['schemas']['Responsibility'] | null
       /**
        * @description Analysis of patterns in the offending behaviour.
        * @example Escalating violence in evenings when challenged, targeting vulnerable individuals, causing injuries requiring medical attention.
        */
-      patternOfOffending?: string
+      patternOfOffending?: string | null
     }
     OtherOffendersAndInfluences: {
       /**
        * @description Whether other offenders were involved in the offence.
        * @example Yes
        */
-      wereOtherOffendersInvolved?: string
+      wereOtherOffendersInvolved?: string | null
       /**
        * @description The number of other offenders involved.
        * @example 2
        */
-      numberOfOthersInvolved?: string
+      numberOfOthersInvolved?: string | null
       /**
        * @description Whether the offender was the leader among other offenders.
        * @example No
        */
-      wasTheOffenderLeader?: string
+      wasTheOffenderLeader?: string | null
       /**
        * @description Details about peer group influences on the offending.
        * @example Gang pressure and peer approval seeking
        */
-      peerGroupInfluences?: string
+      peerGroupInfluences?: string | null
     }
     Responsibility: {
       /**
        * @description Whether the individual accepts responsibility for their offending.
        * @example false
        */
-      acceptsResponsibility?: string
+      acceptsResponsibility?: string | null
       /**
        * @description Details about the individual's acceptance of responsibility.
        * @example Blames victims and circumstances
        */
-      acceptsResponsibilityDetail?: string
+      acceptsResponsibilityDetail?: string | null
     }
     VictimsAndPartners: {
       /**
        * @description Whether there was direct contact targeting of victims.
        * @example Yes
        */
-      contactTargeting?: string
+      contactTargeting?: string | null
       /**
        * @description Whether the offence was racially motivated or targeted an identifiable group.
        * @example Yes
        */
-      raciallyMotivated?: string
+      raciallyMotivated?: string | null
       /**
        * @description Whether the offence was in response to a specific victim (e.g. revenge, settling grudges).
        * @example No
        */
-      revenge?: string
+      revenge?: string | null
       /**
        * @description Whether there was physical violence towards a partner.
        * @example No
        */
-      physicalViolenceTowardsPartner?: string
+      physicalViolenceTowardsPartner?: string | null
       /**
        * @description Whether there was repeat victimisation of the same person.
        * @example Yes
        */
-      repeatVictimisation?: string
+      repeatVictimisation?: string | null
       /**
        * @description Whether the victim(s) were strangers to the offender.
        * @example No
        */
-      victimWasStranger?: string
+      victimWasStranger?: string | null
       /**
        * @description Whether stalking behaviour was involved.
        * @example No
        */
-      stalking?: string
+      stalking?: string | null
     }
     LifestyleAndAssociates: {
       /**
        * Format: date
        * @example 1 August 2023
        */
-      assessmentCompleted?: string
+      assessmentCompleted?: string | null
       /**
        * @description Does the person have any regular activities that encourage reoffending
        * @example 0 - No problems
        */
-      regActivitiesEncourageOffending?: string
+      regActivitiesEncourageOffending?: string | null
       /**
        * @description Description of lifestyle issues affecting risk of offending or harm
        * @example There are issues around involvement with drugs
        */
-      lifestyleIssuesDetails?: string
+      lifestyleIssuesDetails?: string | null
     }
     LearningNeeds: {
       /**
        * Format: date
        * @example 1 August 2023
        */
-      assessmentCompleted?: string
+      assessmentCompleted?: string | null
       /**
        * @description Whether the person has a fixed abode or is living at a temporary address
        * @example true
        */
-      noFixedAbodeOrTransient?: boolean
+      noFixedAbodeOrTransient?: boolean | null
       /** @example 1-Some problems */
-      workRelatedSkills?: string
+      workRelatedSkills?: string | null
       /** @example 0-No problems */
-      problemsReadWriteNum?: string
+      problemsReadWriteNum?: string | null
       /** @example 2-Significant problems */
-      learningDifficulties?: string
+      learningDifficulties?: string | null
       /**
        * @example [
        *       "Difficulty with concentration"
        *     ]
        */
-      problemAreas?: string[]
+      problemAreas?: string[] | null
       /** @example 0 - Any qualifications */
-      qualifications?: string
+      qualifications?: string | null
       /** @example 3 */
-      basicSkillsScore?: string
+      basicSkillsScore?: string | null
       /** @example Ms Puckett spoke of wanting to secure suitable employment although she knows that she will first need to fully address her drug issues. */
-      basicSkillsScoreDescription?: string
+      basicSkillsScoreDescription?: string | null
     }
     Health: {
       /**
        * Format: date
        * @example 1 August 2023
        */
-      assessmentCompleted?: string
+      assessmentCompleted?: string | null
       /**
        * @description Does the person have any health condition. Can be Yes, empty or null
        * @example false
        */
-      anyHealthConditions?: boolean
+      anyHealthConditions?: boolean | null
       /**
        * @description Description of the health condition
        * @example Blind in one eye
        */
-      description?: string
+      description?: string | null
     }
     EmotionalWellbeing: {
       /**
        * Format: date
        * @example 1 August 2023
        */
-      assessmentCompleted?: string
+      assessmentCompleted?: string | null
       /** @example 1-Some problems */
-      currentPsychologicalProblems?: string
+      currentPsychologicalProblems?: string | null
       /** @example 0 - No */
-      selfHarmSuicidal?: string
+      selfHarmSuicidal?: string | null
       /** @example 0-No problems */
-      currentPsychiatricProblems?: string
+      currentPsychiatricProblems?: string | null
     }
     DrugDetails: {
       /**
        * Format: date
        * @example 1 August 2023
        */
-      assessmentCompleted?: string
+      assessmentCompleted?: string | null
       /** @example 2 - At least weekly */
-      levelOfUseOfMainDrug?: string
+      levelOfUseOfMainDrug?: string | null
       /** @example 1 - Some problems */
-      drugsMajorActivity?: string
+      drugsMajorActivity?: string | null
     }
     Attitude: {
       /**
        * Format: date
        * @example 1 August 2023
        */
-      assessmentCompleted?: string
+      assessmentCompleted?: string | null
       /** @example 2 - Significant problems */
-      proCriminalAttitudes?: string
+      proCriminalAttitudes?: string | null
       /** @example 1 - Some motivation to change */
-      motivationToAddressBehaviour?: string
+      motivationToAddressBehaviour?: string | null
       /** @example 0 - No hostile orientation */
-      hostileOrientation?: string
+      hostileOrientation?: string | null
     }
     AlcoholMisuseDetails: {
       /**
        * Format: date
        * @example 1 August 2023
        */
-      assessmentCompleted?: string
+      assessmentCompleted?: string | null
       /** @example 1-Some problems */
-      currentUse?: string
+      currentUse?: string | null
       /** @example 1-Some problems */
-      bingeDrinking?: string
+      bingeDrinking?: string | null
       /** @example 2-Significant problems */
-      frequencyAndLevel?: string
+      frequencyAndLevel?: string | null
       /** @example Alcohol dependency affecting employment and relationships */
-      alcoholIssuesDetails?: string
+      alcoholIssuesDetails?: string | null
     }
     ReferralStatusInfo: {
       /** @enum {string} */
@@ -2515,7 +2506,7 @@ export interface components {
       sourcedFromEntityType: 'REQUIREMENT' | 'LICENCE_CONDITION'
       /** Format: int64 */
       sourcedFromEntityId: number
-      notes?: string
+      notes?: string | null
       description: string
     }
     ReferralDetails: {
@@ -2556,12 +2547,12 @@ export interface components {
        * @description The name of the probation practitioner associated with this referral.
        * @example Tom Saunders
        */
-      probationPractitionerName: string
+      probationPractitionerName: string | null
       /**
        * @description The email of the probation practitioner associated with this referral.
        * @example tom.saunders@justice.gov.uk
        */
-      probationPractitionerEmail: string
+      probationPractitionerEmail: string | null
       /**
        * @description The offence cohort this referral is classified as.
        * @example SEXUAL_OFFENCE
@@ -2587,13 +2578,13 @@ export interface components {
        * @description The code of the currently allocated group
        * @example ABC111
        */
-      currentlyAllocatedGroupCode?: string
+      currentlyAllocatedGroupCode?: string | null
       /**
        * Format: uuid
        * @description The unique code of the currently allocated group
        * @example c98151f4-4081-4c65-9f98-54e63a328c8d
        */
-      currentlyAllocatedGroupId?: string
+      currentlyAllocatedGroupId?: string | null
       /**
        * @description The probation delivery unit responsible for this referral.
        * @example North London PDU
@@ -2610,52 +2601,52 @@ export interface components {
        * @description The type of sentence.
        * @example ORA community order
        */
-      sentenceType?: string
+      sentenceType?: string | null
       /**
        * @description The release type.
        * @example Released on licence
        */
-      releaseType?: string
+      releaseType?: string | null
       /**
        * @description A list of the licence conditions.
        * @example ['Accredited programme: Building Choices']
        */
-      licenceConditions?: components['schemas']['CodeDescription'][]
+      licenceConditions?: components['schemas']['CodeDescription'][] | null
       /**
        * Format: date
        * @description The end date of the licence.
        * @example 10 June 2025
        */
-      licenceEndDate?: string
+      licenceEndDate?: string | null
       /**
        * Format: date
        * @description The start date of the post supervision.
        * @example 10 June 2025
        */
-      postSentenceSupervisionStartDate?: string
+      postSentenceSupervisionStartDate?: string | null
       /**
        * Format: date
        * @description The end date of the post supervision.
        * @example 10 June 2025
        */
-      postSentenceSupervisionEndDate?: string
+      postSentenceSupervisionEndDate?: string | null
       /**
        * Format: date
        * @description The date two thirds of the way to the end of the sentence.
        * @example 10 June 2025
        */
-      twoThirdsPoint?: string
+      twoThirdsPoint?: string | null
       /**
        * @description A list of the order requirements.
        * @example ['Accredited programme: Building Choices']
        */
-      orderRequirements?: components['schemas']['CodeDescription'][]
+      orderRequirements?: components['schemas']['CodeDescription'][] | null
       /**
        * Format: date
        * @description The end date of the order.
        * @example 10 June 2025
        */
-      orderEndDate?: string
+      orderEndDate?: string | null
       /**
        * Format: date
        * @description The date this data was fetched from nDelius.
@@ -2684,7 +2675,7 @@ export interface components {
        * @description The ethnicity of the person being referred.
        * @example White
        */
-      ethnicity: string
+      ethnicity: string | null
       /**
        * @description The age of the person being referred.
        * @example 38
@@ -2705,7 +2696,7 @@ export interface components {
        * @description The probation delivery unit responsible for this referral.
        * @example North London PDU
        */
-      probationDeliveryUnit: string
+      probationDeliveryUnit: string | null
       /**
        * Format: date
        * @description The date this data was fetched from nDelius.
@@ -2757,7 +2748,7 @@ export interface components {
     }
     FullName: {
       forename: string
-      middleNames?: string
+      middleNames?: string | null
       surname: string
     }
     NDeliusApiProbationDeliveryUnit: {
@@ -2781,14 +2772,14 @@ export interface components {
        * @description Text describing locations or circumstances where the person cannot attend
        * @example Cannot attend evening sessions due to caring responsibilities
        */
-      cannotAttendLocations?: string
+      cannotAttendLocations?: string | null
       /** @description The user that last created the delivery location preferences */
       lastUpdatedBy?: string
       /**
        * Format: date
        * @description The time and date of the last update to the delivery location preferences
        */
-      lastUpdatedAt?: string
+      lastUpdatedAt?: string | null
     }
     DlqMessage: {
       body: {
@@ -2819,99 +2810,98 @@ export interface components {
        * Format: int32
        * @example 2
        */
-      proCriminalAttitudes?: number
+      proCriminalAttitudes?: number | null
       /**
        * Format: int32
        * @example 2
        */
-      hostileOrientation?: number
+      hostileOrientation?: number | null
     }
     IndividualRelationshipScores: {
       /**
        * Format: int32
        * @example 1
        */
-      curRelCloseFamily?: number
+      curRelCloseFamily?: number | null
       /**
        * Format: int32
        * @example 1
        */
-      prevCloseRelationships?: number
+      prevCloseRelationships?: number | null
       /**
        * Format: int32
        * @example 1
        */
-      easilyInfluenced?: number
+      easilyInfluenced?: number | null
       /**
        * Format: int32
        * @example 1
        */
-      aggressiveControllingBehaviour?: number
+      aggressiveControllingBehaviour?: number | null
     }
     IndividualRiskScores: {
       /**
        * @description The Offender Group Reconviction Scale 3 (OGRS3) risk level
        * @example Medium
        */
-      ogrs3Risk?: string
+      ogrs3Risk?: string | null
       /**
        * @description The OVP(OASys Violence Predictor) Risk level
        * @example High
        */
-      ovpRisk?: string
+      ovpRisk?: string | null
       /**
        * @description ospDc - OASys Sexual Reconviction Predictor Direct Contact
        * @example 0
        */
-      ospDc?: string
+      ospDc?: string | null
       /**
        * @description OASys Sexual Reconviction Predictor Indecent Images of Children
        * @example 1
        */
-      ospIic?: string
+      ospIic?: string | null
       /**
        * @description rsr - Risk of Serious Recidivism
        * @example 5
        */
-      rsr?: string
-      /** @description SARA (Spousal Assault Risk Assessment) related risk score */
-      sara?: components['schemas']['Sara']
+      rsr?: string | null
+      sara?: components['schemas']['Sara'] | null
     }
     IndividualSelfManagementScores: {
       /**
        * Format: int32
        * @example 2
        */
-      impulsivity?: number
+      impulsivity?: number | null
       /**
        * Format: int32
        * @example 1
        */
-      temperControl?: number
+      temperControl?: number | null
       /**
        * Format: int32
        * @example 0
        */
-      problemSolvingSkills?: number
+      problemSolvingSkills?: number | null
       /** Format: int32 */
-      difficultiesCoping?: number
+      difficultiesCoping?: number | null
     }
     IndividualSexScores: {
       /**
        * Format: int32
        * @example 1
        */
-      sexualPreOccupation?: number
+      sexualPreOccupation?: number | null
       /**
        * Format: int32
        * @example 1
        */
-      offenceRelatedSexualInterests?: number
+      offenceRelatedSexualInterests?: number | null
       /**
        * Format: int32
        * @example 1
        */
-      emotionalCongruence?: number
+      emotionalCongruence?: number | null
     }
     /** @description Represents an individual's Programme Needs Identifier (PNI) score assessment */
     PniScore: {
@@ -2938,8 +2928,8 @@ export interface components {
       validationErrors: string[]
     }
     RelationshipDomainScore: {
-      /** @enum {string} */
-      overallRelationshipDomainLevel?: 'HIGH_NEED' | 'MEDIUM_NEED' | 'LOW_NEED'
+      /** @enum {string|null} */
+      overallRelationshipDomainLevel?: 'HIGH_NEED' | 'MEDIUM_NEED' | 'LOW_NEED' | null
       individualRelationshipScores: components['schemas']['IndividualRelationshipScores']
     }
     RiskScore: {
@@ -2955,41 +2945,41 @@ export interface components {
       /**
        * @description The highest of what is being returned based on saraRiskOfViolenceTowardsPartner and saraRiskOfViolenceTowardsOthers
        * @example LOW
-       * @enum {string}
+       * @enum {string|null}
        */
-      highestRisk?: 'NOT_APPLICABLE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH'
+      highestRisk?: 'NOT_APPLICABLE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH' | null
       /**
        * @description Risk of violence towards partner
        * @example LOW
        */
-      saraRiskOfViolenceTowardsPartner?: string
+      saraRiskOfViolenceTowardsPartner?: string | null
       /**
        * @description Risk of violence towards others
        * @example LOW
        */
-      saraRiskOfViolenceTowardsOthers?: string
+      saraRiskOfViolenceTowardsOthers?: string | null
       /**
        * @description Assessment ID relevant to the SARA version of the assessment
        * @example 2512235167
        */
-      assessmentId?: string
+      assessmentId?: string | null
     }
     SelfManagementDomainScore: {
-      /** @enum {string} */
-      overallSelfManagementDomainLevel?: 'HIGH_NEED' | 'MEDIUM_NEED' | 'LOW_NEED'
+      /** @enum {string|null} */
+      overallSelfManagementDomainLevel?: 'HIGH_NEED' | 'MEDIUM_NEED' | 'LOW_NEED' | null
       individualSelfManagementScores: components['schemas']['IndividualSelfManagementScores']
     }
     SexDomainScore: {
       /**
        * @example 2
-       * @enum {string}
+       * @enum {string|null}
        */
-      overallSexDomainLevel: 'HIGH_NEED' | 'MEDIUM_NEED' | 'LOW_NEED'
+      overallSexDomainLevel: 'HIGH_NEED' | 'MEDIUM_NEED' | 'LOW_NEED' | null
       individualSexScores: components['schemas']['IndividualSexScores']
     }
     ThinkingDomainScore: {
-      /** @enum {string} */
-      overallThinkingDomainLevel?: 'HIGH_NEED' | 'MEDIUM_NEED' | 'LOW_NEED'
+      /** @enum {string|null} */
+      overallThinkingDomainLevel?: 'HIGH_NEED' | 'MEDIUM_NEED' | 'LOW_NEED' | null
       individualThinkingScores: components['schemas']['IndividualCognitiveScores']
     }
     CaseListFilterValues: {
@@ -3070,9 +3060,9 @@ export interface components {
       pdu: string
       reportingTeam: string
       /** Format: date */
-      sentenceEndDate?: string
-      /** @enum {string} */
-      sentenceEndDateSource?: 'REQUIREMENT' | 'LICENCE_CONDITION'
+      sentenceEndDate?: string | null
+      /** @enum {string|null} */
+      sentenceEndDateSource?: 'REQUIREMENT' | 'LICENCE_CONDITION' | null
     }
     SortObject: {
       empty?: boolean
@@ -3107,7 +3097,7 @@ export interface components {
        * @description A unique id identifying the programme group.
        * @example 1ff57cea-352c-4a99-8f66-3e626aac3265
        */
-      id: string
+      id: string | null
       /**
        * @description A unique code identifying the programme group.
        * @example AP_BIRMINGHAM_NORTH
@@ -3123,40 +3113,38 @@ export interface components {
        * @description The earliest possible start date
        * @example 02-12-2025
        */
-      earliestStartDate?: string
+      earliestStartDate?: string | null
       /**
        * Format: date
        * @description The actual start date initiated by the facilitator
        * @example 23-10-2025
        */
-      startDate?: string
+      startDate?: string | null
       /**
        * @description The Probation Delivery Unit (PDU) name.
        * @example County Durham and Darlington
        */
-      pduName?: string
+      pduName?: string | null
       /**
        * @description The location description where the group programme will be delivered.
        * @example County Durham Probation Office
        */
-      deliveryLocation?: string
-      /** @description Cohort for the Programme Group. */
-      cohort?: components['schemas']['ProgrammeGroupCohort']
-      /** @description Sex that the group is being run for. */
-      sex?: components['schemas']['ProgrammeGroupSexEnum']
+      deliveryLocation?: string | null
+      cohort?: components['schemas']['ProgrammeGroupCohort'] | null
+      sex?: components['schemas']['ProgrammeGroupSexEnum'] | null
     }
     CurrentGroupDetails: {
       /**
        * @description The code of the currently allocated group
        * @example ABC111
        */
-      currentlyAllocatedGroupCode?: string
+      currentlyAllocatedGroupCode?: string | null
       /**
        * Format: uuid
        * @description The unique code of the currently allocated group
        * @example c98151f4-4081-4c65-9f98-54e63a328c8d
        */
-      currentlyAllocatedGroupId?: string
+      currentlyAllocatedGroupId?: string | null
     }
     /** @description Form data for the update status form in the M&D UI */
     CurrentStatus: {
@@ -3193,7 +3181,7 @@ export interface components {
        * @description The description text for this particular status transition
        * @example The person has completed the programme. The referral will be closed.
        */
-      transitionDescription: string
+      transitionDescription: string | null
       /**
        * @description Whether this status represents a closed status for the referral.
        * @example false
@@ -3203,7 +3191,7 @@ export interface components {
        * @description The color to be used for displaying this status label.
        * @example orange
        */
-      labelColour?: string
+      labelColour?: string | null
     }
     /** @description Status transition information for the update status form in the M&D UI */
     ReferralStatusTransitions: {
@@ -3211,10 +3199,8 @@ export interface components {
       currentStatus: components['schemas']['CurrentStatus']
       /** @description List of transition statuses */
       availableStatuses: components['schemas']['ReferralStatus'][]
-      /** @description Suggested status object for the UI to potentially display */
-      suggestedStatus?: components['schemas']['SuggestedStatus']
-      /** @description The details of the group that the user is currently allocated to */
-      currentGroupDetails?: components['schemas']['CurrentGroupDetails']
+      suggestedStatus?: components['schemas']['SuggestedStatus'] | null
+      currentGroupDetails?: components['schemas']['CurrentGroupDetails'] | null
     }
     SuggestedStatus: {
       /** @description Name of the status description */
@@ -3311,13 +3297,13 @@ export interface components {
        * @description The user that last updated the session notes
        * @example John Smith
        */
-      lastUpdatedBy?: string
+      lastUpdatedBy?: string | null
       /**
        * Format: date
        * @description The date the session notes were last updated
        * @example 19 March 2026
        */
-      lastUpdatedDate?: string
+      lastUpdatedDate?: string | null
       /**
        * Format: uuid
        * @description The unique identifier of the programme group
@@ -3335,7 +3321,7 @@ export interface components {
        * @description The date the session took place
        * @example 21 July 2025
        */
-      sessionDate?: string
+      sessionDate?: string | null
       /**
        * @description The attendance status for the session
        * @example Attended, failed to comply
@@ -3345,7 +3331,7 @@ export interface components {
        * @description The notes recorded for this session
        * @example Participant engaged well.
        */
-      sessionNotes?: string
+      sessionNotes?: string | null
     }
     /** @description Details of an Option */
     Option: {
@@ -3353,17 +3339,17 @@ export interface components {
        * @description A string representing a text
        * @example Attended
        */
-      text?: string
+      text?: string | null
       /**
        * @description A string representing a subtext
        * @example Left early
        */
-      subtext?: string
+      subtext?: string | null
       /**
        * @description A string representing a value
        * @example ndelius-outcome-1
        */
-      value?: string
+      value?: string | null
     }
     /** @description Details of a Record Attendance */
     RecordSessionAttendance: {
@@ -3398,18 +3384,14 @@ export interface components {
        * @example Alice Brown
        */
       crn: string
-      /**
-       * @description A string an attendance
-       * @example Attended, failed to comply
-       */
-      attendance?: components['schemas']['SessionPersonAttendance']
+      attendance?: components['schemas']['SessionPersonAttendance'] | null
       /**
        * @description The session notes associated with the attendee
        * @example Some session notes here
        */
-      sessionNotes?: string
+      sessionNotes?: string | null
       /** @description A list of options */
-      options?: components['schemas']['Option'][]
+      options?: components['schemas']['Option'][] | null
     }
     /** @description Details of attendance */
     SessionPersonAttendance: {
@@ -3417,12 +3399,12 @@ export interface components {
        * @description A string representing a text
        * @example Attended
        */
-      text?: string
+      text?: string | null
       /**
        * @description The code value associated with the attendance option
        * @example ATTC
        */
-      code?: string
+      code?: string | null
     }
     EditSessionDetails: {
       /** Format: uuid */
@@ -3508,10 +3490,8 @@ export interface components {
       currentStatus: components['schemas']['CurrentStatus']
       /** @description List of transition statuses */
       availableStatuses: components['schemas']['ReferralStatus'][]
-      /** @description Suggested status object for the UI to potentially display */
-      suggestedStatus?: components['schemas']['SuggestedStatus']
-      /** @description The details of the group that the user is currently allocated to */
-      currentGroupDetails?: components['schemas']['CurrentGroupDetails']
+      suggestedStatus?: components['schemas']['SuggestedStatus'] | null
+      currentGroupDetails?: components['schemas']['CurrentGroupDetails'] | null
     }
     UserTeamMember: {
       /** @description The code for the team member */
@@ -3534,13 +3514,13 @@ export interface components {
        * @description The group code of the group the person is currently allocated to
        * @example abc123
        */
-      currentlyAllocatedGroupCode?: string
+      currentlyAllocatedGroupCode?: string | null
       /**
        * Format: uuid
        * @description The unique identifier of the group the person is currently allocated to
        * @example a1b2c3d4-e5f6-7890-abcd-ef1234567890
        */
-      currentlyAllocatedGroupId?: string
+      currentlyAllocatedGroupId?: string | null
       /** @description List of sessions with attendance information */
       attendanceHistory: components['schemas']['AttendanceHistorySession'][]
     }
@@ -3567,7 +3547,7 @@ export interface components {
        * @description The group id for the session
        * @example a1b2c3d4-e5f6-7890-abcd-ef1234567890
        */
-      groupId?: string
+      groupId?: string | null
       /**
        * @description The date of the session
        * @example 11 July 2025
@@ -3606,8 +3586,7 @@ export interface components {
     DeliveryLocationPreferencesFormData: {
       /** @description Person on Probation details (sourced freshly from nDelius) */
       personOnProbation: components['schemas']['PersonOnProbationSummary']
-      /** @description Existing Delivery Location Preferences, if any */
-      existingDeliveryLocationPreferences?: components['schemas']['ExistingDeliveryLocationPreferences']
+      existingDeliveryLocationPreferences?: components['schemas']['ExistingDeliveryLocationPreferences'] | null
       /** @description Primary PDU of the Manager of the Requirement or Licence Condition associated with a Referral */
       primaryPdu: components['schemas']['ProbationDeliveryUnit']
       /** @description Other PDUs in the same Region as the Manager */
@@ -3621,7 +3600,7 @@ export interface components {
        * @description Rich text explaining locations the person cannot attend
        * @example Locations in BN1
        */
-      cannotAttendLocations?: string
+      cannotAttendLocations?: string | null
     }
     /** @description Summary information about the Person on Probation */
     PersonOnProbationSummary: {
@@ -3639,7 +3618,7 @@ export interface components {
        * @description Risk tier
        * @example C2
        */
-      tier?: string
+      tier?: string | null
       /**
        * Format: date
        * @description Date of birth
@@ -3674,7 +3653,7 @@ export interface components {
       /** @description A list of (unique) Probation Delivery Units names across all of the Groups */
       probationDeliveryUnitNames: string[]
       /** @description A list of (unique) Delivery Locations for Referrals within the current PDU.  Only present if a probationDeliveryUnit is specified */
-      deliveryLocationNames?: string[]
+      deliveryLocationNames?: string[] | null
       /**
        * @description The region name the groups belongs to.
        * @example West Midlands
@@ -3710,7 +3689,7 @@ export interface components {
        * @description A human-readable string describing the entity (Licence Condition or Requirement) that caused the Referral to be created in our system
        * @example Order end date
        */
-      sourcedFrom: string
+      sourcedFrom: string | null
       /**
        * @description The crn associated with this referral.
        * @example X933590
@@ -3726,39 +3705,39 @@ export interface components {
        * @description The end date of the person's sentence.
        * @example 1 January 2030
        */
-      sentenceEndDate: string
+      sentenceEndDate: string | null
       /**
        * @description The offence cohort this referral is classified as.
        * @example SEXUAL_OFFENCE
-       * @enum {string}
+       * @enum {string|null}
        */
-      cohort: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
+      cohort: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE' | null
       /**
        * @description Does the person this referral is associated with have LDC needs.
        * @example true
        */
-      hasLdc: boolean
+      hasLdc: boolean | null
       /**
        * Format: int32
        * @description The age of the person.
        * @example 43
        */
-      age: number
+      age: number | null
       /**
        * @description The sex of the person.
        * @example Male
        */
-      sex: string
+      sex: string | null
       /**
        * @description The PDU this referral is associated with.
        * @example Durham
        */
-      pdu: string
+      pdu: string | null
       /**
        * @description The reporting team this referral is associated with.
        * @example Durham Team 1
        */
-      reportingTeam: string
+      reportingTeam: string | null
       /**
        * @description The display name of the Referral's current Status
        * @example Awaiting assessment
@@ -3774,7 +3753,7 @@ export interface components {
        * @description The unique Id of the group that the referral is assigned to.
        * @example 56470228-3893-450f-b4bc-97b21e18b887
        */
-      activeProgrammeGroupId: string
+      activeProgrammeGroupId: string | null
     }
     PageGroupItem: {
       /** Format: int64 */
@@ -3996,19 +3975,19 @@ export interface components {
        * @description The start date of a group one to one in format DayName DateNumber MonthName YearNumber
        * @example Monday 22 June 2026
        */
-      preGroupOneToOneStartDate: string
+      preGroupOneToOneStartDate: string | null
       /**
        * Format: date
        * @description The start date of a module in format DayName DateNumber MonthName YearNumber
        * @example Monday 22 June 2026
        */
-      gettingStartedModuleStartDate: string
+      gettingStartedModuleStartDate: string | null
       /**
        * Format: date
        * @description The end date of a module in format DayName DateNumber MonthName YearNumber
        * @example Monday 22 September 2026
        */
-      endDate: string
+      endDate: string | null
       /** @description Details of the Group's sessions */
       sessions: components['schemas']['GroupScheduleOverviewSession'][]
       /**
@@ -4023,7 +4002,7 @@ export interface components {
        * @description id of the session
        * @example UUID
        */
-      id: string
+      id: string | null
       /**
        * @description The name of the session
        * @example Pre Group one-to-ones
@@ -4199,7 +4178,7 @@ export interface components {
        * @description The actual start date initiated by the facilitator
        * @example Thursday 23 April 2026
        */
-      startDate?: string
+      startDate?: string | null
       /**
        * @description The Probation Delivery Unit (PDU) name.
        * @example County Durham and Darlington
@@ -4239,7 +4218,7 @@ export interface components {
        * @description The list of coverFacilitators for this group.
        * @example [Tom Saunders]
        */
-      coverFacilitators?: string[]
+      coverFacilitators?: string[] | null
     }
   }
   responses: never

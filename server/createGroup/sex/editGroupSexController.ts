@@ -23,11 +23,11 @@ export default class EditGroupSexController extends BaseController {
     let formError: FormValidationError | null = null
 
     const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
-    const bffEditGroupSexData = await this.accreditedProgrammesManageAndDeliverService.getBffEditGroupSex(
+    const editGroupSexData = await this.accreditedProgrammesManageAndDeliverService.getGroupSexDetails(
       username,
       groupId,
     )
-    const selectedSex = bffEditGroupSexData.radios.find(
+    const selectedSex = editGroupSexData.radios.find(
       (radio: { selected: boolean; value: string }) => radio.selected,
     )?.value
 
