@@ -2,7 +2,7 @@ import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import { SessionData } from 'express-session'
 import request from 'supertest'
-import { EditGroupDaysAndTimes } from '@manage-and-deliver-api'
+import { EditGroupCohort, EditGroupDaysAndTimes, EditGroupSex, GroupDetailsResponse } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import GroupDetailsFactory from '../testutils/factories/groupDetailsFactory'
 import TestUtils from '../testutils/testUtils'
@@ -386,7 +386,7 @@ describe('Edit Group Controller', () => {
         id: groupId,
         code: 'EXISTING123',
         sex: 'MALE',
-      } as unknown as any)
+      } as GroupDetailsResponse)
       accreditedProgrammesManageAndDeliverService.getGroupSexDetails.mockResolvedValue({
         captionText: 'Edit group EXISTING123',
         pageTitle: 'Edit the gender of the group',
@@ -396,7 +396,7 @@ describe('Edit Group Controller', () => {
           { text: 'Female', value: 'FEMALE', selected: false },
           { text: 'Mixed', value: 'MIXED', selected: false },
         ],
-      })
+      } as EditGroupSex)
 
       return request(app)
         .get(`/group/${groupId}/edit-a-group/edit-group-sex`)
@@ -413,7 +413,7 @@ describe('Edit Group Controller', () => {
         id: groupId,
         code: 'EXISTING123',
         sex: 'MALE',
-      } as unknown as any)
+      } as GroupDetailsResponse)
       accreditedProgrammesManageAndDeliverService.getGroupSexDetails.mockResolvedValue({
         captionText: 'Edit group EXISTING123',
         pageTitle: 'Edit the gender of the group',
@@ -423,7 +423,7 @@ describe('Edit Group Controller', () => {
           { text: 'Female', value: 'FEMALE', selected: false },
           { text: 'Mixed', value: 'MIXED', selected: false },
         ],
-      })
+      } as EditGroupSex)
 
       return request(app)
         .get(`/group/${groupId}/edit-a-group/edit-group-sex`)
@@ -438,7 +438,7 @@ describe('Edit Group Controller', () => {
         id: groupId,
         code: 'EXISTING123',
         sex: 'MALE',
-      } as unknown as any)
+      } as GroupDetailsResponse)
       accreditedProgrammesManageAndDeliverService.getGroupSexDetails.mockResolvedValue({
         captionText: 'Edit group EXISTING123',
         pageTitle: 'Edit the gender of the group',
@@ -448,7 +448,7 @@ describe('Edit Group Controller', () => {
           { text: 'Female', value: 'FEMALE', selected: false },
           { text: 'Mixed', value: 'MIXED', selected: false },
         ],
-      })
+      } as EditGroupSex)
 
       const tempApp = TestUtils.createTestAppWithSession({}, { accreditedProgrammesManageAndDeliverService })
 
@@ -469,7 +469,7 @@ describe('Edit Group Controller', () => {
         id: groupId,
         code: 'EXISTING123',
         sex: 'MALE',
-      } as unknown as any)
+      } as GroupDetailsResponse)
       accreditedProgrammesManageAndDeliverService.getGroupSexDetails.mockResolvedValue({
         captionText: 'Edit group EXISTING123',
         pageTitle: 'Edit the gender of the group',
@@ -479,7 +479,7 @@ describe('Edit Group Controller', () => {
           { text: 'Female', value: 'FEMALE', selected: false },
           { text: 'Mixed', value: 'MIXED', selected: false },
         ],
-      })
+      } as EditGroupSex)
       accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({} as never)
 
       return request(app)
@@ -500,7 +500,7 @@ describe('Edit Group Controller', () => {
         id: groupId,
         code: 'EXISTING123',
         sex: 'MALE',
-      } as unknown as any)
+      } as GroupDetailsResponse)
       accreditedProgrammesManageAndDeliverService.getGroupSexDetails.mockResolvedValue({
         captionText: 'Edit group EXISTING123',
         pageTitle: 'Edit the gender of the group',
@@ -510,7 +510,7 @@ describe('Edit Group Controller', () => {
           { text: 'Female', value: 'FEMALE', selected: false },
           { text: 'Mixed', value: 'MIXED', selected: false },
         ],
-      })
+      } as EditGroupSex)
 
       return request(app)
         .post(`/group/${groupId}/edit-a-group/edit-group-sex`)
@@ -530,7 +530,7 @@ describe('Edit Group Controller', () => {
         id: groupId,
         code: 'EXISTING123',
         cohort: 'GENERAL',
-      } as unknown as any)
+      } as GroupDetailsResponse)
       accreditedProgrammesManageAndDeliverService.getBffEditGroupCohort.mockResolvedValue({
         captionText: 'Edit group EXISTING123',
         pageTitle: 'Edit the group cohort',
@@ -545,7 +545,7 @@ describe('Edit Group Controller', () => {
           { text: 'Sexual offence', value: 'SEXUAL', selected: false },
           { text: 'Sexual offence, learning disabilities and challenges (LDC)', value: 'SEXUAL_LDC', selected: false },
         ],
-      })
+      } as EditGroupCohort)
 
       return request(app)
         .get(`/group/${groupId}/edit-a-group/edit-group-cohort`)
@@ -562,7 +562,7 @@ describe('Edit Group Controller', () => {
         id: groupId,
         code: 'EXISTING123',
         cohort: 'GENERAL',
-      } as unknown as any)
+      } as GroupDetailsResponse)
       accreditedProgrammesManageAndDeliverService.getBffEditGroupCohort.mockResolvedValue({
         captionText: 'Edit group EXISTING123',
         pageTitle: 'Edit the group cohort',
@@ -577,7 +577,7 @@ describe('Edit Group Controller', () => {
           { text: 'Sexual offence', value: 'SEXUAL', selected: false },
           { text: 'Sexual offence, learning disabilities and challenges (LDC)', value: 'SEXUAL_LDC', selected: false },
         ],
-      })
+      } as EditGroupCohort)
 
       return request(app)
         .get(`/group/${groupId}/edit-a-group/edit-group-cohort`)
@@ -592,7 +592,7 @@ describe('Edit Group Controller', () => {
         id: groupId,
         code: 'EXISTING123',
         cohort: 'GENERAL',
-      } as unknown as any)
+      } as GroupDetailsResponse)
       accreditedProgrammesManageAndDeliverService.getBffEditGroupCohort.mockResolvedValue({
         captionText: 'Edit group EXISTING123',
         pageTitle: 'Edit the group cohort',
@@ -607,7 +607,7 @@ describe('Edit Group Controller', () => {
           { text: 'Sexual offence', value: 'SEXUAL', selected: false },
           { text: 'Sexual offence, learning disabilities and challenges (LDC)', value: 'SEXUAL_LDC', selected: false },
         ],
-      })
+      } as EditGroupCohort)
 
       const tempApp = TestUtils.createTestAppWithSession({}, { accreditedProgrammesManageAndDeliverService })
 
@@ -628,7 +628,7 @@ describe('Edit Group Controller', () => {
         id: groupId,
         code: 'EXISTING123',
         cohort: 'GENERAL',
-      } as unknown as any)
+      } as GroupDetailsResponse)
       accreditedProgrammesManageAndDeliverService.getBffEditGroupCohort.mockResolvedValue({
         captionText: 'Edit group EXISTING123',
         pageTitle: 'Edit the group cohort',
@@ -643,7 +643,7 @@ describe('Edit Group Controller', () => {
           { text: 'Sexual offence', value: 'SEXUAL', selected: false },
           { text: 'Sexual offence, learning disabilities and challenges (LDC)', value: 'SEXUAL_LDC', selected: false },
         ],
-      })
+      } as EditGroupCohort)
       accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({} as never)
 
       return request(app)
@@ -664,7 +664,7 @@ describe('Edit Group Controller', () => {
         id: groupId,
         code: 'EXISTING123',
         cohort: 'GENERAL',
-      } as unknown as any)
+      } as GroupDetailsResponse)
       accreditedProgrammesManageAndDeliverService.getBffEditGroupCohort.mockResolvedValue({
         captionText: 'Edit group EXISTING123',
         pageTitle: 'Edit the group cohort',
@@ -679,7 +679,7 @@ describe('Edit Group Controller', () => {
           { text: 'Sexual offence', value: 'SEXUAL', selected: false },
           { text: 'Sexual offence, learning disabilities and challenges (LDC)', value: 'SEXUAL_LDC', selected: false },
         ],
-      })
+      } as EditGroupCohort)
 
       return request(app)
         .post(`/group/${groupId}/edit-a-group/edit-group-cohort`)
@@ -698,7 +698,7 @@ describe('Edit Group Controller', () => {
       accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
         id: groupId,
         code: 'EXISTING123',
-      } as unknown as any)
+      } as GroupDetailsResponse)
 
       return request(app)
         .get(`/group/${groupId}/edit-a-group/edit-group-code`)
@@ -713,7 +713,7 @@ describe('Edit Group Controller', () => {
       accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
         id: groupId,
         code: 'EXISTING123',
-      } as unknown as any)
+      } as GroupDetailsResponse)
 
       const tempApp = TestUtils.createTestAppWithSession({}, { accreditedProgrammesManageAndDeliverService })
 
