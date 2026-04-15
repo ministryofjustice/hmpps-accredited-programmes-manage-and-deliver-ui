@@ -380,8 +380,8 @@ describe('Edit Group Controller', () => {
     })
   })
 
-  describe('GET /group/:groupId/edit-a-group/edit-group-sex', () => {
-    it('loads the edit group sex page with the current sex', async () => {
+  describe('GET /group/:groupId/edit-a-group/edit-group-gender', () => {
+    it('loads the edit group gender page with the current gender', async () => {
       accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
         id: groupId,
         code: 'EXISTING123',
@@ -399,7 +399,7 @@ describe('Edit Group Controller', () => {
       } as EditGroupSex)
 
       return request(app)
-        .get(`/group/${groupId}/edit-a-group/edit-group-sex`)
+        .get(`/group/${groupId}/edit-a-group/edit-group-gender`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Edit group EXISTING123')
@@ -426,7 +426,7 @@ describe('Edit Group Controller', () => {
       } as EditGroupSex)
 
       return request(app)
-        .get(`/group/${groupId}/edit-a-group/edit-group-sex`)
+        .get(`/group/${groupId}/edit-a-group/edit-group-gender`)
         .expect(200)
         .expect(res => {
           expect(res.text).toMatch(/<input[^>]*value="MALE"[^>]*checked|<input[^>]*checked[^>]*value="MALE"/)
@@ -453,7 +453,7 @@ describe('Edit Group Controller', () => {
       const tempApp = TestUtils.createTestAppWithSession({}, { accreditedProgrammesManageAndDeliverService })
 
       return request(tempApp)
-        .get(`/group/${groupId}/edit-a-group/edit-group-sex`)
+        .get(`/group/${groupId}/edit-a-group/edit-group-gender`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Edit group EXISTING123')
@@ -463,8 +463,8 @@ describe('Edit Group Controller', () => {
     })
   })
 
-  describe('POST /group/:groupId/edit-a-group/edit-group-sex', () => {
-    it('updates the group sex and redirects to group details', async () => {
+  describe('POST /group/:groupId/edit-a-group/edit-group-gender', () => {
+    it('updates the group gender and redirects to group details', async () => {
       accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
         id: groupId,
         code: 'EXISTING123',
@@ -483,7 +483,7 @@ describe('Edit Group Controller', () => {
       accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({} as never)
 
       return request(app)
-        .post(`/group/${groupId}/edit-a-group/edit-group-sex`)
+        .post(`/group/${groupId}/edit-a-group/edit-group-gender`)
         .type('form')
         .send({ 'create-group-sex': 'FEMALE' })
         .expect(302)
@@ -495,7 +495,7 @@ describe('Edit Group Controller', () => {
         })
     })
 
-    it('returns with errors if sex is not selected', async () => {
+    it('returns with errors if gender is not selected', async () => {
       accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
         id: groupId,
         code: 'EXISTING123',
@@ -513,12 +513,12 @@ describe('Edit Group Controller', () => {
       } as EditGroupSex)
 
       return request(app)
-        .post(`/group/${groupId}/edit-a-group/edit-group-sex`)
+        .post(`/group/${groupId}/edit-a-group/edit-group-gender`)
         .type('form')
         .send({})
         .expect(400)
         .expect(res => {
-          expect(res.text).toContain('Select a sex')
+          expect(res.text).toContain('Select a gender')
           expect(accreditedProgrammesManageAndDeliverService.updateGroup).not.toHaveBeenCalled()
         })
     })
