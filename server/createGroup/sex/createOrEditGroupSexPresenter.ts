@@ -16,7 +16,7 @@ export default class CreateOrEditGroupSexPresenter {
   }
 
   get backLinkUri() {
-    return this.isEditJourney ? `/group/${this.groupId}/group-details` : '/group/create-a-group/group-sex'
+    return this.isEditJourney ? `/group/${this.groupId}/group-details` : '/group/create-a-group/group-cohort'
   }
 
   get captionText() {

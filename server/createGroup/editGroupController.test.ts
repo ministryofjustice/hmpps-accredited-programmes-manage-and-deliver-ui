@@ -379,4 +379,394 @@ describe('Edit Group Controller', () => {
         .expect(400)
     })
   })
+
+  describe('GET /group/:groupId/edit-a-group/edit-group-sex', () => {
+    it('loads the edit group sex page with the current sex', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
+        id: groupId,
+        code: 'EXISTING123',
+        sex: 'MALE',
+      } as unknown as any)
+      accreditedProgrammesManageAndDeliverService.getGroupSexDetails.mockResolvedValue({
+        captionText: 'Edit group EXISTING123',
+        pageTitle: 'Edit the gender of the group',
+        submitButtonText: 'Submit',
+        radios: [
+          { text: 'Male', value: 'MALE', selected: true },
+          { text: 'Female', value: 'FEMALE', selected: false },
+          { text: 'Mixed', value: 'MIXED', selected: false },
+        ],
+      })
+
+      return request(app)
+        .get(`/group/${groupId}/edit-a-group/edit-group-sex`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Edit group EXISTING123')
+          expect(res.text).toContain('Edit the gender of the group')
+          expect(res.text).toContain('Male')
+        })
+    })
+
+    it('preselects male radio when MALE sex is returned', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
+        id: groupId,
+        code: 'EXISTING123',
+        sex: 'MALE',
+      } as unknown as any)
+      accreditedProgrammesManageAndDeliverService.getGroupSexDetails.mockResolvedValue({
+        captionText: 'Edit group EXISTING123',
+        pageTitle: 'Edit the gender of the group',
+        submitButtonText: 'Submit',
+        radios: [
+          { text: 'Male', value: 'MALE', selected: true },
+          { text: 'Female', value: 'FEMALE', selected: false },
+          { text: 'Mixed', value: 'MIXED', selected: false },
+        ],
+      })
+
+      return request(app)
+        .get(`/group/${groupId}/edit-a-group/edit-group-sex`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toMatch(/<input[^>]*value="MALE"[^>]*checked|<input[^>]*checked[^>]*value="MALE"/)
+        })
+    })
+
+    it('loads the edit group sex page when session createGroupFormData is missing', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
+        id: groupId,
+        code: 'EXISTING123',
+        sex: 'MALE',
+      } as unknown as any)
+      accreditedProgrammesManageAndDeliverService.getGroupSexDetails.mockResolvedValue({
+        captionText: 'Edit group EXISTING123',
+        pageTitle: 'Edit the gender of the group',
+        submitButtonText: 'Submit',
+        radios: [
+          { text: 'Male', value: 'MALE', selected: true },
+          { text: 'Female', value: 'FEMALE', selected: false },
+          { text: 'Mixed', value: 'MIXED', selected: false },
+        ],
+      })
+
+      const tempApp = TestUtils.createTestAppWithSession({}, { accreditedProgrammesManageAndDeliverService })
+
+      return request(tempApp)
+        .get(`/group/${groupId}/edit-a-group/edit-group-sex`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Edit group EXISTING123')
+          expect(res.text).toContain('Edit the gender of the group')
+          expect(res.text).toContain('Male')
+        })
+    })
+  })
+
+  describe('POST /group/:groupId/edit-a-group/edit-group-sex', () => {
+    it('updates the group sex and redirects to group details', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
+        id: groupId,
+        code: 'EXISTING123',
+        sex: 'MALE',
+      } as unknown as any)
+      accreditedProgrammesManageAndDeliverService.getGroupSexDetails.mockResolvedValue({
+        captionText: 'Edit group EXISTING123',
+        pageTitle: 'Edit the gender of the group',
+        submitButtonText: 'Submit',
+        radios: [
+          { text: 'Male', value: 'MALE', selected: true },
+          { text: 'Female', value: 'FEMALE', selected: false },
+          { text: 'Mixed', value: 'MIXED', selected: false },
+        ],
+      })
+      accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({} as never)
+
+      return request(app)
+        .post(`/group/${groupId}/edit-a-group/edit-group-sex`)
+        .type('form')
+        .send({ 'create-group-sex': 'FEMALE' })
+        .expect(302)
+        .expect(res => {
+          expect(accreditedProgrammesManageAndDeliverService.updateGroup).toHaveBeenCalledWith('user1', groupId, {
+            sex: 'FEMALE',
+          })
+          expect(res.text).toContain(`Redirecting to /group/${groupId}/group-details`)
+        })
+    })
+
+    it('returns with errors if sex is not selected', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
+        id: groupId,
+        code: 'EXISTING123',
+        sex: 'MALE',
+      } as unknown as any)
+      accreditedProgrammesManageAndDeliverService.getGroupSexDetails.mockResolvedValue({
+        captionText: 'Edit group EXISTING123',
+        pageTitle: 'Edit the gender of the group',
+        submitButtonText: 'Submit',
+        radios: [
+          { text: 'Male', value: 'MALE', selected: true },
+          { text: 'Female', value: 'FEMALE', selected: false },
+          { text: 'Mixed', value: 'MIXED', selected: false },
+        ],
+      })
+
+      return request(app)
+        .post(`/group/${groupId}/edit-a-group/edit-group-sex`)
+        .type('form')
+        .send({})
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain('Select a sex')
+          expect(accreditedProgrammesManageAndDeliverService.updateGroup).not.toHaveBeenCalled()
+        })
+    })
+  })
+
+  describe('GET /group/:groupId/edit-a-group/edit-group-cohort', () => {
+    it('loads the edit group cohort page with the current cohort', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
+        id: groupId,
+        code: 'EXISTING123',
+        cohort: 'GENERAL',
+      } as unknown as any)
+      accreditedProgrammesManageAndDeliverService.getBffEditGroupCohort.mockResolvedValue({
+        captionText: 'Edit group EXISTING123',
+        pageTitle: 'Edit the group cohort',
+        submitButtonText: 'Submit',
+        radios: [
+          { text: 'General offence', value: 'GENERAL', selected: true },
+          {
+            text: 'General offence, learning disabilities and challenges (LDC)',
+            value: 'GENERAL_LDC',
+            selected: false,
+          },
+          { text: 'Sexual offence', value: 'SEXUAL', selected: false },
+          { text: 'Sexual offence, learning disabilities and challenges (LDC)', value: 'SEXUAL_LDC', selected: false },
+        ],
+      })
+
+      return request(app)
+        .get(`/group/${groupId}/edit-a-group/edit-group-cohort`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Edit group EXISTING123')
+          expect(res.text).toContain('Edit the group cohort')
+          expect(res.text).toContain('General offence')
+        })
+    })
+
+    it('preselects general offence radio when GENERAL cohort is returned', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
+        id: groupId,
+        code: 'EXISTING123',
+        cohort: 'GENERAL',
+      } as unknown as any)
+      accreditedProgrammesManageAndDeliverService.getBffEditGroupCohort.mockResolvedValue({
+        captionText: 'Edit group EXISTING123',
+        pageTitle: 'Edit the group cohort',
+        submitButtonText: 'Submit',
+        radios: [
+          { text: 'General offence', value: 'GENERAL', selected: true },
+          {
+            text: 'General offence, learning disabilities and challenges (LDC)',
+            value: 'GENERAL_LDC',
+            selected: false,
+          },
+          { text: 'Sexual offence', value: 'SEXUAL', selected: false },
+          { text: 'Sexual offence, learning disabilities and challenges (LDC)', value: 'SEXUAL_LDC', selected: false },
+        ],
+      })
+
+      return request(app)
+        .get(`/group/${groupId}/edit-a-group/edit-group-cohort`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toMatch(/<input[^>]*value="GENERAL"[^>]*checked|<input[^>]*checked[^>]*value="GENERAL"/)
+        })
+    })
+
+    it('loads the edit group cohort page when session createGroupFormData is missing', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
+        id: groupId,
+        code: 'EXISTING123',
+        cohort: 'GENERAL',
+      } as unknown as any)
+      accreditedProgrammesManageAndDeliverService.getBffEditGroupCohort.mockResolvedValue({
+        captionText: 'Edit group EXISTING123',
+        pageTitle: 'Edit the group cohort',
+        submitButtonText: 'Submit',
+        radios: [
+          { text: 'General offence', value: 'GENERAL', selected: true },
+          {
+            text: 'General offence, learning disabilities and challenges (LDC)',
+            value: 'GENERAL_LDC',
+            selected: false,
+          },
+          { text: 'Sexual offence', value: 'SEXUAL', selected: false },
+          { text: 'Sexual offence, learning disabilities and challenges (LDC)', value: 'SEXUAL_LDC', selected: false },
+        ],
+      })
+
+      const tempApp = TestUtils.createTestAppWithSession({}, { accreditedProgrammesManageAndDeliverService })
+
+      return request(tempApp)
+        .get(`/group/${groupId}/edit-a-group/edit-group-cohort`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Edit group EXISTING123')
+          expect(res.text).toContain('Edit the group cohort')
+          expect(res.text).toContain('General offence')
+        })
+    })
+  })
+
+  describe('POST /group/:groupId/edit-a-group/edit-group-cohort', () => {
+    it('updates the group cohort and redirects to group details', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
+        id: groupId,
+        code: 'EXISTING123',
+        cohort: 'GENERAL',
+      } as unknown as any)
+      accreditedProgrammesManageAndDeliverService.getBffEditGroupCohort.mockResolvedValue({
+        captionText: 'Edit group EXISTING123',
+        pageTitle: 'Edit the group cohort',
+        submitButtonText: 'Submit',
+        radios: [
+          { text: 'General offence', value: 'GENERAL', selected: true },
+          {
+            text: 'General offence, learning disabilities and challenges (LDC)',
+            value: 'GENERAL_LDC',
+            selected: false,
+          },
+          { text: 'Sexual offence', value: 'SEXUAL', selected: false },
+          { text: 'Sexual offence, learning disabilities and challenges (LDC)', value: 'SEXUAL_LDC', selected: false },
+        ],
+      })
+      accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({} as never)
+
+      return request(app)
+        .post(`/group/${groupId}/edit-a-group/edit-group-cohort`)
+        .type('form')
+        .send({ 'create-group-cohort': 'GENERAL_LDC' })
+        .expect(302)
+        .expect(res => {
+          expect(accreditedProgrammesManageAndDeliverService.updateGroup).toHaveBeenCalledWith('user1', groupId, {
+            cohort: 'GENERAL_LDC',
+          })
+          expect(res.text).toContain(`Redirecting to /group/${groupId}/group-details`)
+        })
+    })
+
+    it('returns with errors if cohort is not selected', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
+        id: groupId,
+        code: 'EXISTING123',
+        cohort: 'GENERAL',
+      } as unknown as any)
+      accreditedProgrammesManageAndDeliverService.getBffEditGroupCohort.mockResolvedValue({
+        captionText: 'Edit group EXISTING123',
+        pageTitle: 'Edit the group cohort',
+        submitButtonText: 'Submit',
+        radios: [
+          { text: 'General offence', value: 'GENERAL', selected: true },
+          {
+            text: 'General offence, learning disabilities and challenges (LDC)',
+            value: 'GENERAL_LDC',
+            selected: false,
+          },
+          { text: 'Sexual offence', value: 'SEXUAL', selected: false },
+          { text: 'Sexual offence, learning disabilities and challenges (LDC)', value: 'SEXUAL_LDC', selected: false },
+        ],
+      })
+
+      return request(app)
+        .post(`/group/${groupId}/edit-a-group/edit-group-cohort`)
+        .type('form')
+        .send({})
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain('Select a cohort')
+          expect(accreditedProgrammesManageAndDeliverService.updateGroup).not.toHaveBeenCalled()
+        })
+    })
+  })
+
+  describe('GET /group/:groupId/edit-a-group/edit-group-code', () => {
+    it('loads the edit group code page with the current code', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
+        id: groupId,
+        code: 'EXISTING123',
+      } as unknown as any)
+
+      return request(app)
+        .get(`/group/${groupId}/edit-a-group/edit-group-code`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Edit group code')
+          expect(res.text).toContain('EXISTING123')
+        })
+    })
+
+    it('loads the edit group code page when session createGroupFormData is missing', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
+        id: groupId,
+        code: 'EXISTING123',
+      } as unknown as any)
+
+      const tempApp = TestUtils.createTestAppWithSession({}, { accreditedProgrammesManageAndDeliverService })
+
+      return request(tempApp)
+        .get(`/group/${groupId}/edit-a-group/edit-group-code`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Edit group code')
+          expect(res.text).toContain('EXISTING123')
+        })
+    })
+  })
+
+  describe('POST /group/:groupId/edit-a-group/edit-group-code', () => {
+    it('updates the group code and redirects to group details', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue({
+        id: groupId,
+        code: 'EXISTING123',
+        regionName: 'Test Region',
+      })
+      accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({} as never)
+
+      return request(app)
+        .post(`/group/${groupId}/edit-a-group/edit-group-code`)
+        .type('form')
+        .send({ 'create-group-code': 'UPDATED123' })
+        .expect(302)
+        .expect(res => {
+          expect(accreditedProgrammesManageAndDeliverService.updateGroup).toHaveBeenCalledWith('user1', groupId, {
+            groupCode: 'UPDATED123',
+          })
+          expect(res.text).toContain(`Redirecting to /group/${groupId}/group-details`)
+        })
+    })
+
+    it('returns with errors if updated group code already exists for another group', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue({
+        id: randomUUID(),
+        code: 'DUPLICATE123',
+        regionName: 'Test Region',
+      })
+
+      return request(app)
+        .post(`/group/${groupId}/edit-a-group/edit-group-code`)
+        .type('form')
+        .send({ 'create-group-code': 'DUPLICATE123' })
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain(
+            'Group code DUPLICATE123 already exists for a group in this region. Enter a different code.',
+          )
+          expect(accreditedProgrammesManageAndDeliverService.updateGroup).not.toHaveBeenCalled()
+        })
+    })
+  })
 })
