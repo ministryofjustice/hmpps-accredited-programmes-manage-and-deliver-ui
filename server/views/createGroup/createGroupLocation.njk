@@ -31,7 +31,7 @@
         <form method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{csrfToken}}">
           {{ govukRadios(selectOfficeArgs) }}
-          {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+          {{ govukButton({ text: text.buttonText, preventDoubleClick: true }) }}
         </form>
       </div>
     </div>

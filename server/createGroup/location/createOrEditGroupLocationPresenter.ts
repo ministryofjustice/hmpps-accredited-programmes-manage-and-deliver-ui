@@ -3,22 +3,34 @@ import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
 import { RadiosArgsItem } from '../../utils/govukFrontendTypes'
 
-export default class CreateGroupLocationPresenter {
+export default class CreateOrEditGroupLocationPresenter {
   constructor(
     readonly locations: CodeDescription[],
     private readonly validationError: FormValidationError | null = null,
     readonly createGroupFormData: Partial<CreateGroupRequest> | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
+    private readonly groupId: string | null = null,
+    readonly isEdit = false,
+    private readonly backLink: string | null = null,
   ) {}
 
   get backLinkUri() {
-    return `/group/create-a-group/group-probation-delivery-unit`
+    return this.isEdit ? `${this.backLink}` : `/group/create-a-group/group-probation-delivery-unit`
+  }
+
+  get changeLinkUri() {
+    return this.isEdit
+      ? `/group/${this.groupId}/edit-group-probation-delivery-unit`
+      : `/group/create-a-group/group-probation-delivery-unit`
   }
 
   get text() {
     return {
-      headingHintText: `Create group ${this.createGroupFormData?.groupCode}`,
-      subHeadingText: 'Where will the group take place?',
+      headingHintText: this.isEdit
+        ? `Edit group ${this.createGroupFormData?.groupCode}`
+        : `Create group ${this.createGroupFormData?.groupCode}`,
+      subHeadingText: this.isEdit ? `Edit where the group will take place` : 'Where will the group take place?',
+      buttonText: this.isEdit ? 'Submit' : 'Continue',
     }
   }
 

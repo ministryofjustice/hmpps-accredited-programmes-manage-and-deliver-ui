@@ -1,9 +1,9 @@
 import ViewUtils from '../../utils/viewUtils'
-import CreateGroupLocationPresenter from './createGroupLocationPresenter'
+import CreateOrEditGroupLocationPresenter from './createOrEditGroupLocationPresenter'
 import { RadiosArgs, SummaryListArgs } from '../../utils/govukFrontendTypes'
 
-export default class CreateGroupLocationView {
-  constructor(private readonly presenter: CreateGroupLocationPresenter) {}
+export default class CreateOrEditGroupLocationView {
+  constructor(private readonly presenter: CreateOrEditGroupLocationPresenter) {}
 
   private backLinkArgs() {
     return {
@@ -47,7 +47,7 @@ export default class CreateGroupLocationView {
           actions: {
             items: [
               {
-                href: this.presenter.backLinkUri,
+                href: this.presenter.changeLinkUri,
                 text: 'Change',
               },
             ],

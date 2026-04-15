@@ -379,4 +379,241 @@ describe('Edit Group Controller', () => {
         .expect(400)
     })
   })
+
+  describe('GET /group/:groupId/edit-group-probation-delivery-unit', () => {
+    it('loads the edit PDU page with current PDU from group details', async () => {
+      const groupDetailsWithPdu = GroupDetailsFactory.build({
+        id: groupId,
+        code: 'TEST123',
+        pduCode: 'PDU-NE',
+        pduName: 'North East',
+      })
+
+      const pduLocations = [
+        { code: 'PDU-NE', description: 'North East' },
+        { code: 'PDU-NW', description: 'North West' },
+      ]
+
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue(groupDetailsWithPdu)
+      accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion.mockResolvedValue(pduLocations)
+
+      return request(app)
+        .get(`/group/${groupId}/edit-group-probation-delivery-unit`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Edit the probation delivery unit (PDU) where the group will take place')
+          expect(accreditedProgrammesManageAndDeliverService.getGroupDetailsById).toHaveBeenCalledWith('user1', groupId)
+          expect(accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion).toHaveBeenCalledWith('user1')
+        })
+    })
+
+    it('displays PDU from session if available', async () => {
+      const sessionData: Partial<SessionData> = {
+        createGroupFormData: {
+          groupCode: 'TEST123',
+          pduCode: 'PDU-SW',
+          pduName: 'South West',
+        },
+      }
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      const pduLocations = [{ code: 'PDU-SW', description: 'South West' }]
+      accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion.mockResolvedValue(pduLocations)
+
+      return request(app)
+        .get(`/group/${groupId}/edit-group-probation-delivery-unit`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Edit the probation delivery unit (PDU) where the group will take place')
+        })
+    })
+
+    it('loads group details when session has no pduCode', async () => {
+      const sessionData: Partial<SessionData> = {
+        createGroupFormData: {
+          groupCode: 'TEST123',
+        },
+      }
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      const groupDetailsWithPdu = GroupDetailsFactory.build({
+        id: groupId,
+        code: 'TEST123',
+        pduCode: 'PDU-NE',
+        pduName: 'North East',
+      })
+
+      const pduLocations = [{ code: 'PDU-NE', description: 'North East' }]
+
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue(groupDetailsWithPdu)
+      accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion.mockResolvedValue(pduLocations)
+
+      return request(app)
+        .get(`/group/${groupId}/edit-group-probation-delivery-unit`)
+        .expect(200)
+        .expect(() => {
+          expect(accreditedProgrammesManageAndDeliverService.getGroupDetailsById).toHaveBeenCalledWith('user1', groupId)
+        })
+    })
+  })
+
+  describe('POST /group/:groupId/edit-group-probation-delivery-unit', () => {
+    it('updates PDU and redirects to edit location page on successful submission', async () => {
+      const sessionData: Partial<SessionData> = {
+        createGroupFormData: {
+          groupCode: 'TEST123',
+          pduCode: 'PDU-NE',
+          pduName: 'North East',
+        },
+      }
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      const pduLocations = [{ code: 'PDU-NW', description: 'North West' }]
+      accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion.mockResolvedValue(pduLocations)
+
+      return request(app)
+        .post(`/group/${groupId}/edit-group-probation-delivery-unit`)
+        .type('form')
+        .send({ 'create-group-pdu': JSON.stringify({ code: 'PDU-NW', name: 'North West' }) })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain(`Redirecting to /group/${groupId}/edit-group-delivery-location`)
+        })
+    })
+  })
+
+  describe('GET /group/:groupId/edit-group-delivery-location', () => {
+    it('loads the edit location page with current location from group details', async () => {
+      const sessionData: Partial<SessionData> = {
+        createGroupFormData: {
+          groupCode: 'TEST123',
+          pduCode: 'PDU-NE',
+          pduName: 'North East',
+          deliveryLocationCode: 'LOC-1',
+          deliveryLocationName: 'HMP Leeds',
+        },
+      }
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      const officeLocations = [
+        { code: 'LOC-1', description: 'HMP Leeds' },
+        { code: 'LOC-2', description: 'HMP Manchester' },
+      ]
+
+      accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu.mockResolvedValue(officeLocations)
+
+      return request(app)
+        .get(`/group/${groupId}/edit-group-delivery-location`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Edit where the group will take place')
+          expect(accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu).toHaveBeenCalledWith(
+            'user1',
+            'PDU-NE',
+          )
+        })
+    })
+
+    it('loads group details when createGroupFormData is undefined', async () => {
+      const sessionData: Partial<SessionData> = {}
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      const groupDetailsWithLocation = GroupDetailsFactory.build({
+        id: groupId,
+        code: 'TEST123',
+        pduCode: 'PDU-NE',
+        pduName: 'North East',
+        deliveryLocationCode: 'LOC-1',
+        deliveryLocation: 'HMP Leeds',
+      })
+
+      const officeLocations = [{ code: 'LOC-1', description: 'HMP Leeds' }]
+
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue(groupDetailsWithLocation)
+      accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu.mockResolvedValue(officeLocations)
+
+      return request(app)
+        .get(`/group/${groupId}/edit-group-delivery-location`)
+        .expect(200)
+        .expect(() => {
+          expect(accreditedProgrammesManageAndDeliverService.getGroupDetailsById).toHaveBeenCalledWith('user1', groupId)
+          expect(accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu).toHaveBeenCalledWith(
+            'user1',
+            'PDU-NE',
+          )
+        })
+    })
+
+    it('loads group details when deliveryLocationCode is undefined in session', async () => {
+      const sessionData: Partial<SessionData> = {
+        createGroupFormData: {
+          groupCode: 'TEST123',
+          pduCode: 'PDU-NE',
+        },
+      }
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      const groupDetailsWithLocation = GroupDetailsFactory.build({
+        id: groupId,
+        code: 'TEST123',
+        pduCode: 'PDU-NE',
+        deliveryLocationCode: 'LOC-1',
+        deliveryLocation: 'HMP Leeds',
+      })
+
+      const officeLocations = [{ code: 'LOC-1', description: 'HMP Leeds' }]
+
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue(groupDetailsWithLocation)
+      accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu.mockResolvedValue(officeLocations)
+
+      return request(app)
+        .get(`/group/${groupId}/edit-group-delivery-location`)
+        .expect(200)
+        .expect(() => {
+          expect(accreditedProgrammesManageAndDeliverService.getGroupDetailsById).toHaveBeenCalledWith('user1', groupId)
+        })
+    })
+  })
+
+  describe('POST /group/:groupId/edit-group-delivery-location', () => {
+    it('updates location and redirects to group details with success message', async () => {
+      const sessionData: Partial<SessionData> = {
+        createGroupFormData: {
+          groupCode: 'TEST123',
+          pduCode: 'PDU-NE',
+          pduName: 'North East',
+          deliveryLocationCode: 'LOC-1',
+          deliveryLocationName: 'HMP Leeds',
+        },
+      }
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      const officeLocations = [
+        { code: 'LOC-1', description: 'HMP Leeds' },
+        { code: 'LOC-2', description: 'HMP Manchester' },
+      ]
+
+      accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu.mockResolvedValue(officeLocations)
+      accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({
+        successMessage: 'Group delivery location updated',
+      })
+
+      return request(app)
+        .post(`/group/${groupId}/edit-group-delivery-location`)
+        .type('form')
+        .send({ 'create-group-location': JSON.stringify({ code: 'LOC-2', name: 'HMP Manchester' }) })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain(`Redirecting to /group/${groupId}/group-details`)
+          expect(res.text).toContain(encodeURIComponent('Group delivery location updated'))
+          expect(accreditedProgrammesManageAndDeliverService.updateGroup).toHaveBeenCalledWith(
+            'user1',
+            groupId,
+            expect.objectContaining({
+              deliveryLocationCode: 'LOC-2',
+            }),
+          )
+        })
+    })
+  })
 })

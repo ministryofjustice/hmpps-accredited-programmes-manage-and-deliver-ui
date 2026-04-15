@@ -10,8 +10,12 @@ import CreateOrEditGroupForm from './createOrEditGroupForm'
 import RescheduleSessionsPresenter from './date/rescheduleSessionPresenter'
 import RescheduleSessionsView from './date/rescheduleSessionView'
 import RescheduleOtherSessionsForm from '../editSession/dateAndTime/rescheduleOtherSessionsForm'
+import CreateOrEditGroupPduPresenter from './pdu/createOrEditGroupPduPresenter'
+import CreateOrEditGroupPduView from './pdu/createOrEditGroupPduView'
 import CreateOrEditGroupWhenPresenter from './when/createOrEditGroupWhenPresenter'
 import CreateOrEditGroupWhenView from './when/createOrEditGroupWhenView'
+import CreateOrEditGroupLocationPresenter from './location/createOrEditGroupLocationPresenter'
+import CreateOrEditGroupLocationView from './location/createOrEditGroupLocationView'
 
 export default class EditGroupController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -96,11 +100,11 @@ export default class EditGroupController extends BaseController {
 
     // Use session data if it exists and has slots, otherwise use API data
     if (!createGroupFormData?.createGroupSessionSlot || createGroupFormData.createGroupSessionSlot.length === 0) {
-      if (!createGroupFormData) {
-        createGroupFormData = { groupCode: groupDetails.code }
+      req.session.createGroupFormData = {
+        groupCode: groupDetails.code,
+        createGroupSessionSlot: groupDetails.programmeGroupSessionSlots,
       }
-      createGroupFormData.createGroupSessionSlot = groupDetails.programmeGroupSessionSlots
-      req.session.createGroupFormData = createGroupFormData
+      createGroupFormData = req.session.createGroupFormData
     }
 
     if (req.method === 'POST') {
@@ -164,6 +168,111 @@ export default class EditGroupController extends BaseController {
 
     const presenter = new RescheduleSessionsPresenter(groupId, updatedGroupDetails, false, formError)
     const view = new RescheduleSessionsView(presenter)
+    return this.renderPage(res, view)
+  }
+
+  async editGroupPdu(req: Request, res: Response): Promise<void> {
+    const { createGroupFormData } = req.session
+    const { groupId } = req.params
+    const { username } = req.user
+    let formError: FormValidationError | null = null
+    let userInputData = null
+    req.session.originPage = req.path
+
+    if (!createGroupFormData?.pduCode) {
+      const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
+      req.session.createGroupFormData = {
+        groupCode: groupDetails.code,
+        pduName: groupDetails.pduName,
+        pduCode: groupDetails.pduCode,
+        deliveryLocationCode: groupDetails.deliveryLocationCode,
+        deliveryLocationName: groupDetails.deliveryLocation,
+      }
+    }
+
+    if (req.method === 'POST') {
+      const data = await new CreateOrEditGroupForm(req).createGroupPduData()
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+        userInputData = req.body
+      } else {
+        req.session.createGroupFormData = {
+          ...req.session.createGroupFormData,
+          pduName: data.paramsForUpdate.pduName,
+          pduCode: data.paramsForUpdate.pduCode,
+        }
+        return res.redirect(`/group/${groupId}/edit-group-delivery-location`)
+      }
+    }
+    const pduLocations = await this.accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion(username)
+
+    const presenter = new CreateOrEditGroupPduPresenter(
+      pduLocations,
+      formError,
+      req.session.createGroupFormData,
+      userInputData,
+      groupId,
+      true,
+    )
+    const view = new CreateOrEditGroupPduView(presenter)
+    return this.renderPage(res, view)
+  }
+
+  async editGroupLocation(req: Request, res: Response): Promise<void> {
+    const { createGroupFormData } = req.session
+    const { groupId } = req.params
+    const { username } = req.user
+    let formError: FormValidationError | null = null
+    let userInputData = null
+
+    if (!createGroupFormData?.deliveryLocationCode) {
+      const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
+      req.session.createGroupFormData = {
+        groupCode: groupDetails.code,
+        pduName: groupDetails.pduName,
+        pduCode: groupDetails.pduCode,
+        deliveryLocationCode: groupDetails.deliveryLocationCode,
+        deliveryLocationName: groupDetails.deliveryLocation,
+      }
+    }
+
+    if (req.method === 'POST') {
+      const data = await new CreateOrEditGroupForm(req).createGroupLocationData()
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+        userInputData = req.body
+      } else {
+        req.session.createGroupFormData = {
+          ...req.session.createGroupFormData,
+          deliveryLocationName: data.paramsForUpdate.deliveryLocationName,
+          deliveryLocationCode: data.paramsForUpdate.deliveryLocationCode,
+        }
+        const response = await this.accreditedProgrammesManageAndDeliverService.updateGroup(
+          username,
+          groupId,
+          req.session.createGroupFormData,
+        )
+        return res.redirect(`/group/${groupId}/group-details?message=${encodeURIComponent(response.successMessage)}`)
+      }
+    }
+
+    const officeLocations = await this.accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu(
+      username,
+      req.session.createGroupFormData.pduCode,
+    )
+
+    const presenter = new CreateOrEditGroupLocationPresenter(
+      officeLocations,
+      formError,
+      req.session.createGroupFormData,
+      userInputData,
+      groupId,
+      true,
+      req.session.originPage,
+    )
+    const view = new CreateOrEditGroupLocationView(presenter)
     return this.renderPage(res, view)
   }
 }
