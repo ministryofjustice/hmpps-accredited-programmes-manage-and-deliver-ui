@@ -199,27 +199,6 @@ export default class EditGroupController extends BaseController {
     if (req.method === 'POST') {
       const data = await new CreateOrEditGroupForm(req, '').createGroupSexData()
 
-  async editGroupPdu(req: Request, res: Response): Promise<void> {
-    const { createGroupFormData } = req.session
-    const { groupId } = req.params
-    const { username } = req.user
-    let formError: FormValidationError | null = null
-    let userInputData = null
-    req.session.originPage = req.path
-
-    if (!createGroupFormData?.pduCode) {
-      const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
-      req.session.createGroupFormData = {
-        groupCode: groupDetails.code,
-        pduName: groupDetails.pduName,
-        pduCode: groupDetails.pduCode,
-        deliveryLocationCode: groupDetails.deliveryLocationCode,
-        deliveryLocationName: groupDetails.deliveryLocation,
-      }
-    }
-
-    if (req.method === 'POST') {
-      const data = await new CreateOrEditGroupForm(req).createGroupPduData()
       if (data.error) {
         res.status(400)
         formError = data.error
@@ -267,48 +246,6 @@ export default class EditGroupController extends BaseController {
     if (req.method === 'POST') {
       const data = await new CreateOrEditGroupForm(req, '').createGroupCohortData()
 
-        req.session.createGroupFormData = {
-          ...req.session.createGroupFormData,
-          pduName: data.paramsForUpdate.pduName,
-          pduCode: data.paramsForUpdate.pduCode,
-        }
-        return res.redirect(`/group/${groupId}/edit-group-delivery-location`)
-      }
-    }
-    const pduLocations = await this.accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion(username)
-
-    const presenter = new CreateOrEditGroupPduPresenter(
-      pduLocations,
-      formError,
-      req.session.createGroupFormData,
-      userInputData,
-      groupId,
-      true,
-    )
-    const view = new CreateOrEditGroupPduView(presenter)
-    return this.renderPage(res, view)
-  }
-
-  async editGroupLocation(req: Request, res: Response): Promise<void> {
-    const { createGroupFormData } = req.session
-    const { groupId } = req.params
-    const { username } = req.user
-    let formError: FormValidationError | null = null
-    let userInputData = null
-
-    if (!createGroupFormData?.deliveryLocationCode) {
-      const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
-      req.session.createGroupFormData = {
-        groupCode: groupDetails.code,
-        pduName: groupDetails.pduName,
-        pduCode: groupDetails.pduCode,
-        deliveryLocationCode: groupDetails.deliveryLocationCode,
-        deliveryLocationName: groupDetails.deliveryLocation,
-      }
-    }
-
-    if (req.method === 'POST') {
-      const data = await new CreateOrEditGroupForm(req).createGroupLocationData()
       if (data.error) {
         res.status(400)
         formError = data.error
@@ -381,6 +318,82 @@ export default class EditGroupController extends BaseController {
       createGroupFormData.groupCode,
     )
     const view = new CreateOrEditGroupCodeView(presenter)
+    return this.renderPage(res, view)
+  }
+
+  async editGroupPdu(req: Request, res: Response): Promise<void> {
+    const { createGroupFormData } = req.session
+    const { groupId } = req.params
+    const { username } = req.user
+    let formError: FormValidationError | null = null
+    let userInputData = null
+    req.session.originPage = req.path
+
+    if (!createGroupFormData?.pduCode) {
+      const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
+      req.session.createGroupFormData = {
+        groupCode: groupDetails.code,
+        pduName: groupDetails.pduName,
+        pduCode: groupDetails.pduCode,
+        deliveryLocationCode: groupDetails.deliveryLocationCode,
+        deliveryLocationName: groupDetails.deliveryLocation,
+      }
+    }
+
+    if (req.method === 'POST') {
+      const data = await new CreateOrEditGroupForm(req).createGroupPduData()
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+        userInputData = req.body
+      } else {
+        req.session.createGroupFormData = {
+          ...req.session.createGroupFormData,
+          pduName: data.paramsForUpdate.pduName,
+          pduCode: data.paramsForUpdate.pduCode,
+        }
+        return res.redirect(`/group/${groupId}/edit-group-delivery-location`)
+      }
+    }
+    const pduLocations = await this.accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion(username)
+
+    const presenter = new CreateOrEditGroupPduPresenter(
+      pduLocations,
+      formError,
+      req.session.createGroupFormData,
+      userInputData,
+      groupId,
+      true,
+    )
+    const view = new CreateOrEditGroupPduView(presenter)
+    return this.renderPage(res, view)
+  }
+
+  async editGroupLocation(req: Request, res: Response): Promise<void> {
+    const { createGroupFormData } = req.session
+    const { groupId } = req.params
+    const { username } = req.user
+    let formError: FormValidationError | null = null
+    let userInputData = null
+
+    if (!createGroupFormData?.deliveryLocationCode) {
+      const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
+      req.session.createGroupFormData = {
+        groupCode: groupDetails.code,
+        pduName: groupDetails.pduName,
+        pduCode: groupDetails.pduCode,
+        deliveryLocationCode: groupDetails.deliveryLocationCode,
+        deliveryLocationName: groupDetails.deliveryLocation,
+      }
+    }
+
+    if (req.method === 'POST') {
+      const data = await new CreateOrEditGroupForm(req).createGroupLocationData()
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+        userInputData = req.body
+      } else {
         req.session.createGroupFormData = {
           ...req.session.createGroupFormData,
           deliveryLocationName: data.paramsForUpdate.deliveryLocationName,

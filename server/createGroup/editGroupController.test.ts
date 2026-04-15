@@ -766,6 +766,10 @@ describe('Edit Group Controller', () => {
             'Group code DUPLICATE123 already exists for a group in this region. Enter a different code.',
           )
           expect(accreditedProgrammesManageAndDeliverService.updateGroup).not.toHaveBeenCalled()
+        })
+    })
+  })
+
   describe('GET /group/:groupId/edit-group-probation-delivery-unit', () => {
     it('loads the edit PDU page with current PDU from group details', async () => {
       const groupDetailsWithPdu = GroupDetailsFactory.build({
