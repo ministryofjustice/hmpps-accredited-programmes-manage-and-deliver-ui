@@ -321,7 +321,7 @@ describe('CreateGroupForm', () => {
     describe('when gender is provided', () => {
       it('returns params for update', async () => {
         const request = TestUtils.createRequest({
-            'create-group-sex': 'Male',
+          'create-group-sex': 'Male',
         })
 
         const data = await new CreateOrEditGroupForm(request).createGroupSexData()
