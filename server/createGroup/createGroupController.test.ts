@@ -292,7 +292,7 @@ describe('Create Group Controller', () => {
 
     it('returns with errors if sex is not selected', async () => {
       return request(app)
-        .post('/group/create-a-group/group-gender')
+        .post('/group/create-a-group/group-sex')
         .type('form')
         .send({})
         .expect(400)
