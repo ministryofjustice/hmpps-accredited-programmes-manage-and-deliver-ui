@@ -1,9 +1,9 @@
 import { SelectArgs } from '../../utils/govukFrontendTypes'
 import ViewUtils from '../../utils/viewUtils'
-import CreateGroupPduPresenter from './createGroupPduPresenter'
+import CreateOrEditGroupPduPresenter from './createOrEditGroupPduPresenter'
 
-export default class CreateGroupPduView {
-  constructor(private readonly presenter: CreateGroupPduPresenter) {}
+export default class CreateOrEditGroupPduView {
+  constructor(private readonly presenter: CreateOrEditGroupPduPresenter) {}
 
   private backLinkArgs() {
     return {
@@ -24,7 +24,7 @@ export default class CreateGroupPduView {
       id: 'create-group-pdu',
       name: 'create-group-pdu',
       label: {
-        text: 'In which probation delivery unit (PDU) will the group take place?',
+        text: this.presenter.text.headingText,
         classes: 'govuk-label--l',
         isPageHeading: true,
       },
