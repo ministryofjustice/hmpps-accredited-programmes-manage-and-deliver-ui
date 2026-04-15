@@ -292,12 +292,12 @@ describe('Create Group Controller', () => {
 
     it('returns with errors if sex is not selected', async () => {
       return request(app)
-        .post('/group/create-a-group/group-sex')
+        .post('/group/create-a-group/group-gender')
         .type('form')
         .send({})
         .expect(400)
         .expect(res => {
-          expect(res.text).toContain('Select a sex')
+          expect(res.text).toContain('Select a gender')
         })
     })
   })

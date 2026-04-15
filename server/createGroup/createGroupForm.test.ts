@@ -318,10 +318,10 @@ describe('CreateGroupForm', () => {
   })
 
   describe('createGroupSexData', () => {
-    describe('when sex is provided', () => {
+    describe('when gender is provided', () => {
       it('returns params for update', async () => {
         const request = TestUtils.createRequest({
-          'create-group-sex': 'Male',
+            'create-group-sex': 'Male',
         })
 
         const data = await new CreateOrEditGroupForm(request).createGroupSexData()
@@ -333,7 +333,7 @@ describe('CreateGroupForm', () => {
       })
     })
 
-    describe('when sex is missing', () => {
+    describe('when gender is missing', () => {
       it('returns an appropriate error', async () => {
         const request = TestUtils.createRequest({})
 
@@ -345,7 +345,7 @@ describe('CreateGroupForm', () => {
             {
               errorSummaryLinkedField: 'create-group-sex',
               formFields: ['create-group-sex'],
-              message: 'Select a sex',
+              message: 'Select a gender',
             },
           ],
         })
