@@ -115,6 +115,18 @@ export default class RisksAndAlertsOgrs4View {
     }
   }
 
+  get seriousViolentReoffendingPredictor() {
+    return {
+      level: this.presenter.levelOrUnknown(this.presenter.risks.ogrS4Risks.seriousViolentReoffendingBand),
+      score: this.presenter.risks.ogrS4Risks.seriousViolentReoffendingScore,
+      type: 'Serious violent reoffending predictor',
+      staticOrDynamic: this.presenter.risks.ogrS4Risks.seriousViolentReoffendingScoreType
+        ? this.presenter.risks.ogrS4Risks.seriousViolentReoffendingScoreType.toUpperCase()
+        : null,
+      completedDate: this.presenter.risks.lastUpdated,
+    }
+  }
+
   get directContactSexualReoffendingPredictor() {
     return {
       level: this.presenter.levelOrUnknown(this.presenter.risks.ogrS4Risks.directContactSexualReoffendingBand),
@@ -195,6 +207,7 @@ export default class RisksAndAlertsOgrs4View {
         riskTowardsPartnerBox: this.riskTowardsPartnerBox,
         riskTowardsOthersBox: this.riskTowardsOthersBox,
         combinedSeriousReoffendingPredictor: this.combinedSeriousReoffendingPredictor,
+        seriousViolentReoffendingPredictor: this.seriousViolentReoffendingPredictor,
         directContactSexualReoffendingPredictor: this.directContactSexualReoffendingPredictor,
         imagesAndIndirectContactSexualReoffendingPredictor: this.imagesAndIndirectContactSexualReoffendingPredictor,
         roshRiskSummary: this.roshRiskSummary,

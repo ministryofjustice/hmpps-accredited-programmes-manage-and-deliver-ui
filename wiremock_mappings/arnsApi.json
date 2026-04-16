@@ -48,23 +48,32 @@
           "output": {
             "allReoffendingPredictor": {
               "staticOrDynamic": "STATIC",
-              "score": 76.2,
-              "band": "HIGH"
+              "score": 12.34,
+              "band": "LOW"
             },
             "violentReoffendingPredictor": {
-              "staticOrDynamic": "STATIC",
-              "score": 46.73,
+              "staticOrDynamic": "DYNAMIC",
+              "score": 34.56,
               "band": "MEDIUM"
             },
             "seriousViolentReoffendingPredictor": {
               "staticOrDynamic": "STATIC",
-              "score": 5.48,
+              "score": 4.56,
               "band": "HIGH"
             },
-            "directContactSexualReoffendingPredictor": {},
-            "indirectImageContactSexualReoffendingPredictor": {},
+            "directContactSexualReoffendingPredictor": {
+              "score": 83.1,
+              "band": "VERY_HIGH"
+            },
+            "indirectImageContactSexualReoffendingPredictor": {
+              "score": 0.12,
+              "band": "LOW"
+            },
             "combinedSeriousReoffendingPredictor": {
-              "algorithmVersion": "6"
+              "algorithmVersion": 6,
+              "staticOrDynamic": "DYNAMIC",
+              "score": 0.89,
+              "band": "LOW"
             }
           }
         }
