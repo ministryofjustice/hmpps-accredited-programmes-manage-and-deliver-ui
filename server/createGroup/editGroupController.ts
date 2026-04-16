@@ -204,12 +204,12 @@ export default class EditGroupController extends BaseController {
         formError = data.error
         userInputData = req.body
       } else {
-        await this.accreditedProgrammesManageAndDeliverService.updateGroup(username, groupId, {
+        const response = await this.accreditedProgrammesManageAndDeliverService.updateGroup(username, groupId, {
           sex: data.paramsForUpdate.sex,
         })
 
         req.session.createGroupFormData = {}
-        return res.redirect(`/group/${groupId}/group-details`)
+        return res.redirect(`/group/${groupId}/group-details?message=${encodeURIComponent(response.successMessage)}`)
       }
     }
 
@@ -251,12 +251,12 @@ export default class EditGroupController extends BaseController {
         formError = data.error
         userInputData = req.body
       } else {
-        await this.accreditedProgrammesManageAndDeliverService.updateGroup(username, groupId, {
+        const response = await this.accreditedProgrammesManageAndDeliverService.updateGroup(username, groupId, {
           cohort: data.paramsForUpdate.cohort,
         })
 
         req.session.createGroupFormData = {}
-        return res.redirect(`/group/${groupId}/group-details`)
+        return res.redirect(`/group/${groupId}/group-details?message=${encodeURIComponent(response.successMessage)}`)
       }
     }
 
