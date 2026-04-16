@@ -201,10 +201,10 @@ export default class CreateOrEditGroupForm {
     }
   }
 
-  async createGroupTreatmentManagerData(): Promise<FormData<Partial<CreateGroupRequest>>> {
+  async createOrEditGroupTreatmentManagerData(): Promise<FormData<Partial<CreateGroupRequest>>> {
     const validationResult = await FormUtils.runValidations({
       request: this.request,
-      validations: this.createGroupTreatmentManagerValidations(),
+      validations: this.createOrEditGroupTreatmentManagerValidations(),
     })
 
     const error = FormUtils.validationErrorFromResult(validationResult)
@@ -352,7 +352,7 @@ export default class CreateOrEditGroupForm {
     return [body('create-group-location').notEmpty().withMessage(errorMessages.createGroup.createGroupLocationEmpty)]
   }
 
-  private createGroupTreatmentManagerValidations(): ValidationChain[] {
+  private createOrEditGroupTreatmentManagerValidations(): ValidationChain[] {
     const hasFacilitator = Object.entries(this.request.body).some(
       ([key, value]) =>
         (key.startsWith('create-group-facilitator') && !key.includes('cover') && value !== '') ||

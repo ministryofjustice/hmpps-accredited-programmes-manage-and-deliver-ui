@@ -1,10 +1,10 @@
 import { CreateGroupTeamMember } from '@manage-and-deliver-api'
 import { FieldsetArgs, SelectArgs } from '../../utils/govukFrontendTypes'
 import ViewUtils from '../../utils/viewUtils'
-import CreateGroupTreatmentManagerPresenter from './createGroupTreatmentManagerPresenter'
+import CreateOrEditGroupTreatmentManagerPresenter from './createOrEditGroupTreatmentManagerPresenter'
 
-export default class CreateGroupTreatmentManagerView {
-  constructor(private readonly presenter: CreateGroupTreatmentManagerPresenter) {}
+export default class CreateOrEditGroupTreatmentManagerView {
+  constructor(private readonly presenter: CreateOrEditGroupTreatmentManagerPresenter) {}
 
   private backLinkArgs() {
     return {
@@ -127,7 +127,10 @@ export default class CreateGroupTreatmentManagerView {
         createGroupCoverFacilitatorsFieldSetArgs: this.createGroupCoverFacilitatorsFieldSetArgs(),
         createExistingGroupCoverFacilitatorArgs: this.createExistingGroupCoverFacilitatorArgs.bind(this),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
-        text: this.presenter.text,
+        pageTitle: this.presenter.pageTitle,
+        isEditJourney: this.presenter.isEditJourney,
+        submitButtonText: this.presenter.submitButtonText,
+        captionText: this.presenter.captionText,
         facilitators: this.presenter.generateSelectedUsers().facilitators,
         coverFacilitators: this.presenter.generateSelectedUsers().coverFacilitators,
       },
