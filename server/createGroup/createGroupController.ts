@@ -13,12 +13,12 @@ import CreateOrEditGroupCohortView from './cohort/createOrEditGroupCohortView'
 import CreateOrEditGroupForm from './createOrEditGroupForm'
 import CreateOrEditGroupDatePresenter from './date/createOrEditGroupDatePresenter'
 import CreateOrEditGroupDateView from './date/createOrEditGroupDateView'
+import CreateOrEditGroupSexPresenter from './sex/createOrEditGroupSexPresenter'
+import CreateOrEditGroupSexView from './sex/createOrEditGroupSexView'
 import CreateOrEditGroupLocationPresenter from './location/createOrEditGroupLocationPresenter'
 import CreateOrEditGroupLocationView from './location/createOrEditGroupLocationView'
 import CreateOrEditGroupPduPresenter from './pdu/createOrEditGroupPduPresenter'
 import CreateOrEditGroupPduView from './pdu/createOrEditGroupPduView'
-import CreateGroupSexPresenter from './sex/createGroupSexPresenter'
-import CreateGroupSexView from './sex/createGroupSexView'
 import CreateGroupStartPresenter from './start/createGroupStartPresenter'
 import CreateGroupStartView from './start/createGroupStartView'
 import CreateGroupTreatmentManagerPresenter from './treatment-manager/createGroupTreatmentManagerPresenter'
@@ -180,7 +180,7 @@ export default class CreateGroupController extends BaseController {
     return this.renderPage(res, view)
   }
 
-  async showCreateGroupSex(req: Request, res: Response): Promise<void> {
+  async showCreateOrEditGroupSex(req: Request, res: Response): Promise<void> {
     const { createGroupFormData } = req.session
     let formError: FormValidationError | null = null
     if (req.method === 'POST') {
@@ -196,9 +196,8 @@ export default class CreateGroupController extends BaseController {
         return res.redirect(`/group/create-a-group/group-probation-delivery-unit`)
       }
     }
-
-    const presenter = new CreateGroupSexPresenter(formError, createGroupFormData)
-    const view = new CreateGroupSexView(presenter)
+    const presenter = new CreateOrEditGroupSexPresenter(formError, createGroupFormData)
+    const view = new CreateOrEditGroupSexView(presenter)
     return this.renderPage(res, view)
   }
 

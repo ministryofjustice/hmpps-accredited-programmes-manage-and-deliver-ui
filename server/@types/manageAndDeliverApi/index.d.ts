@@ -92,6 +92,7 @@ type SessionAttendance = components['schemas']['SessionAttendance']
 type SessionAttendanceOutcomeCode = SessionAttendee['outcomeCode']
 type AttendanceHistoryResponse = components['schemas']['AttendanceHistoryResponse']
 type EditGroupCohort = components['schemas']['EditGroupCohort']
+type EditGroupSex = components['schemas']['EditGroupSex']
 type GroupDetailsResponse = components['schemas']['GroupDetailsResponse']
 type UpdateGroupRequest = components['schemas']['UpdateGroupRequest']
 type UpdateGroupResponse = components['schemas']['UpdateGroupResponse']
@@ -129,6 +130,7 @@ export type {
   EditSessionFacilitatorsRequest,
   EditSessionFacilitatorsResponse,
   EditGroupCohort,
+  EditGroupSex,
   EmotionalWellbeing,
   ExistingDeliveryLocationPreferences,
   Group,
