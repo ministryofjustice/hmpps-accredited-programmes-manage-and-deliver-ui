@@ -120,14 +120,20 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
       {
         key: 'Treatment Manager',
         lines: [this.group.treatmentManager],
+        changeLink: `/group/${this.groupId}/edit-group-facilitators`,
+        visuallyHiddenText: ' edit group treatment manager',
       },
       {
         key: 'Facilitators',
         lines: this.group.facilitators,
+        changeLink: `/group/${this.groupId}/edit-group-facilitators`,
+        visuallyHiddenText: 'edit group facilitators',
       },
       {
         key: 'Cover facilitators',
         lines: this.group.coverFacilitators.length > 0 ? this.group.coverFacilitators : ['None added'],
+        changeLink: `/group/${this.groupId}/edit-group-facilitators`,
+        visuallyHiddenText: 'edit group cover facilitators',
       },
     ]
   }

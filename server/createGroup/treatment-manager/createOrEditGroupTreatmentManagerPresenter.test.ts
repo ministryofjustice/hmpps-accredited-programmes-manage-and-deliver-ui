@@ -1,5 +1,5 @@
 import { CreateGroupRequest, UserTeamMember } from '@manage-and-deliver-api'
-import CreateGroupTreatmentManagerPresenter from './createGroupTreatmentManagerPresenter'
+import CreateGroupTreatmentManagerPresenter from './createOrEditGroupTreatmentManagerPresenter'
 
 describe('CreateGroupTreatmentManagerPresenter', () => {
   const mockMembers: UserTeamMember[] = [
@@ -18,7 +18,7 @@ describe('CreateGroupTreatmentManagerPresenter', () => {
   ]
   describe('generateSelectOptions', () => {
     it('generates select options with empty first option', () => {
-      const presenter = new CreateGroupTreatmentManagerPresenter(mockMembers)
+      const presenter = new CreateGroupTreatmentManagerPresenter('', '', mockMembers)
       const options = presenter.generateSelectOptions('TREATMENT_MANAGER')
 
       expect(options[0]).toEqual({
@@ -29,7 +29,7 @@ describe('CreateGroupTreatmentManagerPresenter', () => {
     })
 
     it('generates select options with correct member data', () => {
-      const presenter = new CreateGroupTreatmentManagerPresenter(mockMembers)
+      const presenter = new CreateGroupTreatmentManagerPresenter('', '', mockMembers)
       const options = presenter.generateSelectOptions('REGULAR_FACILITATOR')
 
       expect(options[1]).toEqual({
@@ -47,7 +47,7 @@ describe('CreateGroupTreatmentManagerPresenter', () => {
     })
 
     it('marks the correct option as selected when selectedValue is provided', () => {
-      const presenter = new CreateGroupTreatmentManagerPresenter(mockMembers)
+      const presenter = new CreateGroupTreatmentManagerPresenter('', '', mockMembers)
       const options = presenter.generateSelectOptions('TREATMENT_MANAGER', 'JS123')
 
       expect(options[1].selected).toBe(true)
@@ -57,7 +57,7 @@ describe('CreateGroupTreatmentManagerPresenter', () => {
 
   describe('generateSelectedUsers', () => {
     it('returns empty structure when no data is provided', () => {
-      const presenter = new CreateGroupTreatmentManagerPresenter(mockMembers)
+      const presenter = new CreateGroupTreatmentManagerPresenter('', '', mockMembers)
       const result = presenter.generateSelectedUsers()
 
       expect(result).toEqual({
@@ -82,7 +82,7 @@ describe('CreateGroupTreatmentManagerPresenter', () => {
           '{"facilitator":"Jane Doey", "facilitatorCode":"JD458", "teamName":"Team B", "teamCode":"TB002", "teamMemberType":"COVER_FACILITATOR"}',
         'create-group-cover-facilitator4': '',
       }
-      const presenter = new CreateGroupTreatmentManagerPresenter(mockMembers, null, null, userInputData)
+      const presenter = new CreateGroupTreatmentManagerPresenter('', '', mockMembers, null, null, userInputData)
       const result = presenter.generateSelectedUsers()
 
       expect(result.facilitators).toHaveLength(1)
@@ -117,7 +117,7 @@ describe('CreateGroupTreatmentManagerPresenter', () => {
           },
         ],
       } as unknown as Partial<CreateGroupRequest>
-      const presenter = new CreateGroupTreatmentManagerPresenter(mockMembers, null, createGroupFormData, null)
+      const presenter = new CreateGroupTreatmentManagerPresenter('', '', mockMembers, null, createGroupFormData, null)
       const result = presenter.generateSelectedUsers()
 
       expect(result.treatmentManager.facilitatorCode).toBe('JS123')
