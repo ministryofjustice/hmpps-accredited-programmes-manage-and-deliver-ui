@@ -728,13 +728,15 @@ describe('Edit Group Controller', () => {
   })
 
   describe('POST /group/:groupId/edit-a-group/edit-group-code', () => {
-    it('updates the group code and redirects to group details', async () => {
+    it('updates the group code and redirects to group details with success message', async () => {
       accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue({
         id: groupId,
         code: 'EXISTING123',
         regionName: 'Test Region',
       })
-      accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({} as never)
+      accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({
+        successMessage: 'Group code updated',
+      })
 
       return request(app)
         .post(`/group/${groupId}/edit-a-group/edit-group-code`)
@@ -746,6 +748,7 @@ describe('Edit Group Controller', () => {
             groupCode: 'UPDATED123',
           })
           expect(res.text).toContain(`Redirecting to /group/${groupId}/group-details`)
+          expect(res.text).toContain(encodeURIComponent('Group code updated'))
         })
     })
 
@@ -766,6 +769,68 @@ describe('Edit Group Controller', () => {
             'Group code DUPLICATE123 already exists for a group in this region. Enter a different code.',
           )
           expect(accreditedProgrammesManageAndDeliverService.updateGroup).not.toHaveBeenCalled()
+        })
+    })
+  })
+
+  describe('POST /group/:groupId/edit-group-facilitators', () => {
+    it('updates group staff and redirects to group details with success message', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
+        id: groupId,
+        code: 'EXISTING123',
+        treatmentManager: 'Archibald Queeny',
+        facilitators: ['Chloe Ransom'],
+        coverFacilitators: [],
+      } as GroupDetailsResponse)
+      accreditedProgrammesManageAndDeliverService.getPduMembers.mockResolvedValue([
+        {
+          personName: 'Archibald Queeny',
+          personCode: 'AQ123',
+          teamName: 'Team A',
+          teamCode: 'TA001',
+        },
+        {
+          personName: 'Chloe Ransom',
+          personCode: 'CR456',
+          teamName: 'Team B',
+          teamCode: 'TB002',
+        },
+      ])
+      accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({
+        successMessage: 'Group staff updated',
+      })
+
+      return request(app)
+        .post(`/group/${groupId}/edit-group-facilitators`)
+        .type('form')
+        .send({
+          'create-group-treatment-manager':
+            '{"facilitator":"Archibald Queeny", "facilitatorCode":"AQ123", "teamName":"Team A", "teamCode":"TA001", "teamMemberType":"TREATMENT_MANAGER"}',
+          'create-group-facilitator-1':
+            '{"facilitator":"Chloe Ransom","facilitatorCode":"CR456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain(`Redirecting to /group/${groupId}/group-details`)
+          expect(res.text).toContain(encodeURIComponent('Group staff updated'))
+          expect(accreditedProgrammesManageAndDeliverService.updateGroup).toHaveBeenCalledWith('user1', groupId, {
+            teamMembers: [
+              {
+                facilitator: 'Archibald Queeny',
+                facilitatorCode: 'AQ123',
+                teamName: 'Team A',
+                teamCode: 'TA001',
+                teamMemberType: 'TREATMENT_MANAGER',
+              },
+              {
+                facilitator: 'Chloe Ransom',
+                facilitatorCode: 'CR456',
+                teamName: 'Team B',
+                teamCode: 'TB002',
+                teamMemberType: 'REGULAR_FACILITATOR',
+              },
+            ],
+          })
         })
     })
   })
