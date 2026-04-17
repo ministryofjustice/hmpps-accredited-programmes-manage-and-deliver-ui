@@ -21,8 +21,8 @@ import CreateOrEditGroupPduPresenter from './pdu/createOrEditGroupPduPresenter'
 import CreateOrEditGroupPduView from './pdu/createOrEditGroupPduView'
 import CreateGroupStartPresenter from './start/createGroupStartPresenter'
 import CreateGroupStartView from './start/createGroupStartView'
-import CreateGroupTreatmentManagerPresenter from './treatment-manager/createGroupTreatmentManagerPresenter'
-import CreateGroupTreatmentManagerView from './treatment-manager/createGroupTreatmentManagerView'
+import CreateOrEditGroupTreatmentManagerPresenter from './treatment-manager/createOrEditGroupTreatmentManagerPresenter'
+import CreateOrEditGroupTreatmentManagerView from './treatment-manager/createOrEditGroupTreatmentManagerView'
 import CreateOrEditGroupWhenPresenter from './when/createOrEditGroupWhenPresenter'
 import CreateOrEditGroupWhenView from './when/createOrEditGroupWhenView'
 
@@ -274,7 +274,7 @@ export default class CreateGroupController extends BaseController {
     let userInputData = null
 
     if (req.method === 'POST') {
-      const data = await new CreateOrEditGroupForm(req).createGroupTreatmentManagerData()
+      const data = await new CreateOrEditGroupForm(req).createOrEditGroupTreatmentManagerData()
       if (data.error) {
         res.status(400)
         formError = data.error
@@ -289,13 +289,15 @@ export default class CreateGroupController extends BaseController {
     }
 
     const pduMembers = await this.accreditedProgrammesManageAndDeliverService.getPduMembers(username)
-    const presenter = new CreateGroupTreatmentManagerPresenter(
+    const presenter = new CreateOrEditGroupTreatmentManagerPresenter(
+      '',
+      createGroupFormData.groupCode || '',
       pduMembers,
       formError,
       createGroupFormData,
       userInputData,
     )
-    const view = new CreateGroupTreatmentManagerView(presenter)
+    const view = new CreateOrEditGroupTreatmentManagerView(presenter)
     return this.renderPage(res, view)
   }
 

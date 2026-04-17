@@ -427,6 +427,7 @@ export default class EditGroupController extends BaseController {
     const view = new CreateOrEditGroupLocationView(presenter)
     return this.renderPage(res, view)
   }
+
   async editGroupTreatmentManager(req: Request, res: Response): Promise<void> {
     const { groupId } = req.params
     const { username } = req.user
