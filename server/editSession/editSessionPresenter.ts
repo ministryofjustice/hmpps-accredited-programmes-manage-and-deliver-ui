@@ -26,8 +26,76 @@ export default class EditSessionPresenter {
     }
   }
 
+  private sessionStartDateTime(): Date | null {
+    const dateMatch = this.sessionDetails.date.match(/(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})/)
+    if (!dateMatch) {
+      return null
+    }
+
+    const monthLookup: Record<string, number> = {
+      january: 0,
+      february: 1,
+      march: 2,
+      april: 3,
+      may: 4,
+      june: 5,
+      july: 6,
+      august: 7,
+      september: 8,
+      october: 9,
+      november: 10,
+      december: 11,
+    }
+
+    const day = parseInt(dateMatch[1], 10)
+    const month = monthLookup[dateMatch[2].toLowerCase()]
+    const year = parseInt(dateMatch[3], 10)
+
+    if (Number.isNaN(day) || Number.isNaN(year) || month === undefined) {
+      return null
+    }
+
+    const rawStartTime = this.sessionDetails.time.split('to')[0].trim().toLowerCase()
+    let normalisedStartTime = rawStartTime
+    if (rawStartTime === 'midday') {
+      normalisedStartTime = '12:00pm'
+    } else if (rawStartTime === 'midnight') {
+      normalisedStartTime = '12:00am'
+    }
+    const timeMatch = normalisedStartTime.match(/(\d{1,2})(?::(\d{2}))?\s*([ap]m)/)
+
+    if (!timeMatch) {
+      return null
+    }
+
+    const rawHours = parseInt(timeMatch[1], 10)
+    const minutes = timeMatch[2] ? parseInt(timeMatch[2], 10) : 0
+    const hours = (rawHours % 12) + (timeMatch[3] === 'pm' ? 12 : 0)
+
+    if (Number.isNaN(rawHours) || Number.isNaN(minutes)) {
+      return null
+    }
+
+    const parsed = new Date(year, month, day, hours, minutes, 0, 0)
+
+    if (Number.isNaN(parsed.getTime())) {
+      return null
+    }
+
+    return parsed
+  }
+
   get canBeDeleted(): boolean {
-    return this.sessionDetails.sessionType.toLowerCase() === 'individual'
+    if (this.sessionDetails.sessionType.toLowerCase() !== 'individual') {
+      return false
+    }
+
+    const sessionStart = this.sessionStartDateTime()
+    if (sessionStart === null) {
+      return false
+    }
+
+    return sessionStart.getTime() > Date.now()
   }
 
   get backLinkArgs() {

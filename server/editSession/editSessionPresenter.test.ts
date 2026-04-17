@@ -428,4 +428,56 @@ describe('EditSessionPresenter', () => {
       })
     })
   })
+
+  describe('canBeDeleted', () => {
+    beforeEach(() => {
+      jest.useFakeTimers()
+      jest.setSystemTime(new Date('2026-05-17T23:58:00'))
+    })
+
+    afterEach(() => {
+      jest.useRealTimers()
+    })
+
+    const buildSessionDetails = (overrides: Partial<GroupSessionResponse> = {}): GroupSessionResponse => ({
+      pageTitle: 'Session 1',
+      code: 'CODE-123',
+      sessionType: 'Individual',
+      isCatchup: false,
+      attendanceAndSessionNotes: [],
+      date: 'Sunday 17 May 2026',
+      time: '11:57am to 11:58am',
+      scheduledToAttend: [],
+      facilitators: [],
+      ...overrides,
+    })
+
+    it('returns false when individual session start date/time has passed', () => {
+      const presenter = new EditSessionPresenter(mockGroupId, buildSessionDetails(), mockSessionId, mockDeleteUrl)
+
+      expect(presenter.canBeDeleted).toBe(false)
+    })
+
+    it('returns true when individual session start date/time is in the future', () => {
+      const presenter = new EditSessionPresenter(
+        mockGroupId,
+        buildSessionDetails({ time: '11:59pm to 12:00am' }),
+        mockSessionId,
+        mockDeleteUrl,
+      )
+
+      expect(presenter.canBeDeleted).toBe(true)
+    })
+
+    it('returns false when session type is not individual', () => {
+      const presenter = new EditSessionPresenter(
+        mockGroupId,
+        buildSessionDetails({ sessionType: 'Group' }),
+        mockSessionId,
+        mockDeleteUrl,
+      )
+
+      expect(presenter.canBeDeleted).toBe(false)
+    })
+  })
 })
