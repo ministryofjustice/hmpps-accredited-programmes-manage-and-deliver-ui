@@ -1,6 +1,7 @@
 import { GroupDetailsResponse } from '@manage-and-deliver-api'
 import GroupServiceLayoutPresenter, { GroupServiceNavigationValues } from '../shared/groups/groupServiceLayoutPresenter'
 import { SummaryListItem } from '../utils/summaryList'
+import DateUtils from '../utils/dateUtils'
 
 export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
   constructor(
@@ -18,30 +19,12 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
     return `/group/${this.group.id}/sessions-and-attendance`
   }
 
-  private monthNameToNumber(monthName: string): number {
-    const months: { [key: string]: number } = {
-      january: 0,
-      february: 1,
-      march: 2,
-      april: 3,
-      may: 4,
-      june: 5,
-      july: 6,
-      august: 7,
-      september: 8,
-      october: 9,
-      november: 10,
-      december: 11,
-    }
-    return months[monthName] ?? 0
-  }
-
   get isStartDateInThePast(): boolean {
     const parts = this.group.startDate.split(' ')
     const day = parseInt(parts[1], 10)
     const monthName = parts[2]
     const year = parseInt(parts[3], 10)
-    const monthNumber = this.monthNameToNumber(monthName.toLowerCase())
+    const monthNumber = DateUtils.monthNameToNumber(monthName) ?? 0
     const currentStartDateEpoch = Date.UTC(year, monthNumber, day)
     const currentDate = new Date()
     const currentDateEpoch = Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())

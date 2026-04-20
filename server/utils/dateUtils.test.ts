@@ -4,6 +4,19 @@ import ClockTime from './clockTime'
 import DateUtils from './dateUtils'
 
 describe('DateUtils', () => {
+  describe('monthNameToNumber', () => {
+    it('maps month names to JavaScript month numbers', () => {
+      expect(DateUtils.monthNameToNumber('January')).toEqual(0)
+      expect(DateUtils.monthNameToNumber('february')).toEqual(1)
+      expect(DateUtils.monthNameToNumber('MARCH')).toEqual(2)
+      expect(DateUtils.monthNameToNumber('December')).toEqual(11)
+    })
+
+    it('returns null for unknown month names', () => {
+      expect(DateUtils.monthNameToNumber('NotAMonth')).toBeNull()
+    })
+  })
+
   describe('formattedDayOfWeek', () => {
     it('returns a formatted string with local timezone offset for a valid ISO8601 datetime input', () => {
       expect(DateUtils.formattedDayOfWeek('2021-02-01T13:00:00Z')).toEqual('Monday')
