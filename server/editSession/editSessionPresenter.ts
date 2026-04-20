@@ -3,6 +3,7 @@ import { MultiSelectTableArgs } from '@manage-and-deliver-ui'
 import { TableArgs } from '../utils/govukFrontendTypes'
 import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
+import DateUtils from '../utils/dateUtils'
 import { convertToUrlFriendlyKebabCase } from '../utils/utils'
 import ViewUtils from '../utils/viewUtils'
 import attendanceOptionText, { attendanceOptionTextTags } from '../utils/attendanceUtils'
@@ -26,25 +27,6 @@ export default class EditSessionPresenter {
     }
   }
 
-  private monthNameToNumber(monthName: string): number | null {
-    const months: Record<string, number> = {
-      january: 0,
-      february: 1,
-      march: 2,
-      april: 3,
-      may: 4,
-      june: 5,
-      july: 6,
-      august: 7,
-      september: 8,
-      october: 9,
-      november: 10,
-      december: 11,
-    }
-
-    return months[monthName.toLowerCase()] ?? null
-  }
-
   private sessionStartDateTime(): Date | null {
     const dateParts = this.sessionDetails.date.trim().split(/\s+/)
     if (dateParts.length < 3) {
@@ -52,7 +34,7 @@ export default class EditSessionPresenter {
     }
 
     const day = parseInt(dateParts[dateParts.length - 3], 10)
-    const month = this.monthNameToNumber(dateParts[dateParts.length - 2])
+    const month = DateUtils.monthNameToNumber(dateParts[dateParts.length - 2])
     const year = parseInt(dateParts[dateParts.length - 1], 10)
 
     if (Number.isNaN(day) || Number.isNaN(year) || month === null) {
