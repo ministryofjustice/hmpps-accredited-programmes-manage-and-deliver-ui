@@ -26,13 +26,8 @@ export default class EditSessionPresenter {
     }
   }
 
-  private sessionStartDateTime(): Date | null {
-    const dateMatch = this.sessionDetails.date.match(/(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})/)
-    if (!dateMatch) {
-      return null
-    }
-
-    const monthLookup: Record<string, number> = {
+  private monthNameToNumber(monthName: string): number | null {
+    const months: Record<string, number> = {
       january: 0,
       february: 1,
       march: 2,
@@ -47,11 +42,20 @@ export default class EditSessionPresenter {
       december: 11,
     }
 
-    const day = parseInt(dateMatch[1], 10)
-    const month = monthLookup[dateMatch[2].toLowerCase()]
-    const year = parseInt(dateMatch[3], 10)
+    return months[monthName.toLowerCase()] ?? null
+  }
 
-    if (Number.isNaN(day) || Number.isNaN(year) || month === undefined) {
+  private sessionStartDateTime(): Date | null {
+    const dateParts = this.sessionDetails.date.trim().split(/\s+/)
+    if (dateParts.length < 3) {
+      return null
+    }
+
+    const day = parseInt(dateParts[dateParts.length - 3], 10)
+    const month = this.monthNameToNumber(dateParts[dateParts.length - 2])
+    const year = parseInt(dateParts[dateParts.length - 1], 10)
+
+    if (Number.isNaN(day) || Number.isNaN(year) || month === null) {
       return null
     }
 
