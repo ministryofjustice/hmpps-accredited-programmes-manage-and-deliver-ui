@@ -133,6 +133,7 @@ export default class CreateOrEditGroupTreatmentManagerView {
         captionText: this.presenter.captionText,
         facilitators: this.presenter.generateSelectedUsers().facilitators,
         coverFacilitators: this.presenter.generateSelectedUsers().coverFacilitators,
+        insetText: this.presenter.insetText,
       },
     ]
   }

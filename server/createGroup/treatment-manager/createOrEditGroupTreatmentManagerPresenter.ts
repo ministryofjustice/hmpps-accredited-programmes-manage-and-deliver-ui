@@ -37,6 +37,12 @@ export default class CreateOrEditGroupTreatmentManagerPresenter {
     return PresenterUtils.errorSummary(this.validationError)
   }
 
+  get insetText() {
+    return this.isEditJourney
+      ? 'This will change the overall group details and facilitators assigned to future sessions. The assigned facilitators will not change for any sessions that have already taken place.'
+      : ''
+  }
+
   generateSelectOptions(
     memberType: CreateGroupTeamMember['teamMemberType'],
     selectedValue: string = '',
