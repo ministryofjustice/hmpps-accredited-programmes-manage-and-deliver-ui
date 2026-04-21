@@ -2480,6 +2480,11 @@ export interface components {
       basicSkillsScore?: string | null
       /** @example Ms Puckett spoke of wanting to secure suitable employment although she knows that she will first need to fully address her drug issues. */
       basicSkillsScoreDescription?: string | null
+      /**
+       * Format: int32
+       * @example 2
+       */
+      ldcScore?: number | null
     }
     Health: {
       /**
@@ -3080,10 +3085,10 @@ export interface components {
       reportingTeams: string[]
     }
     PageReferralCaseListItem: {
-      /** Format: int64 */
-      totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      /** Format: int64 */
+      totalElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
@@ -3606,6 +3611,11 @@ export interface components {
        */
       groupCode: string
       /**
+       * @description The name of the person
+       * @example Alex River
+       */
+      popName: string
+      /**
        * Format: uuid
        * @description The group id for the session
        * @example a1b2c3d4-e5f6-7890-abcd-ef1234567890
@@ -3631,6 +3641,11 @@ export interface components {
        * @example true
        */
       hasNotes: boolean
+      /**
+       * @description Whether the session is a catch-up session
+       * @example true
+       */
+      isCatchup: boolean
     }
     /** @description A delivery location (i.e. Office) with value and label, formatted for the UI */
     DeliveryLocationOption: {
@@ -3724,10 +3739,10 @@ export interface components {
       regionName: string
     }
     PageGroup: {
-      /** Format: int64 */
-      totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      /** Format: int64 */
+      totalElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
@@ -3819,10 +3834,10 @@ export interface components {
       activeProgrammeGroupId: string | null
     }
     PageGroupItem: {
-      /** Format: int64 */
-      totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      /** Format: int64 */
+      totalElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
