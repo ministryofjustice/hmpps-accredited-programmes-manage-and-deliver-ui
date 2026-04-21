@@ -46,8 +46,8 @@ export default class CaselistPresenter {
 
   get text() {
     return {
-      pageHeading: `Building Choices: moderate intensity`,
-      pageCaption: `Referrals in ${this.userLocationDescription}`,
+      pageSubHeading: `Building Choices: moderate intensity`,
+      pageHeading: `Case list`,
     }
   }
 

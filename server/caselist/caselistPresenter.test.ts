@@ -314,6 +314,30 @@ describe('resultsText', () => {
   })
 })
 
+describe('text', () => {
+  it('should return the expected page heading and sub heading text', () => {
+    const filter = { status: undefined, cohort: undefined, crnOrPersonName: undefined } as CaselistFilter
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+      .pageContent([])
+      .build({ totalElements: 0, number: 0, size: 10, numberOfElements: 0 }) as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      1,
+      referralCaseListItemPage,
+      filter,
+      '',
+      true,
+      TestUtils.createCaseListFilters(),
+      0,
+      'test location',
+    )
+
+    expect(presenter.text).toEqual({
+      pageSubHeading: 'Building Choices: moderate intensity',
+      pageHeading: 'Case list',
+    })
+  })
+})
+
 describe('generateTableRows', () => {
   const caseListFilters = TestUtils.createCaseListFilters()
 
