@@ -19,7 +19,7 @@ describe('EditSessionPresenter', () => {
               referralId: '123',
               name: 'Alex River',
               crn: 'CRN001',
-              attendance: 'Attended - Complied',
+              attendance: 'Attended',
               sessionNotes: 'Good participation',
             },
             {
@@ -48,7 +48,7 @@ describe('EditSessionPresenter', () => {
               value: '123',
               cells: [
                 { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
-                { html: '<span class="govuk-tag govuk-tag--blue">Attended - Complied</span>' },
+                { html: '<span class="govuk-tag govuk-tag--blue">Attended</span>' },
                 {
                   html: '<a href="/group/group-123/session/session-456/session-1/session-notes?referralId=123&source=edit-session">Session 1 notes</a>',
                 },
@@ -120,7 +120,7 @@ describe('EditSessionPresenter', () => {
               referralId: '123',
               name: 'Alex River',
               crn: 'CRN001',
-              attendance: 'Attended - Complied',
+              attendance: 'Attended',
               sessionNotes: '',
             },
           ],
@@ -138,7 +138,7 @@ describe('EditSessionPresenter', () => {
           rows: [
             [
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
-              { html: '<span class="govuk-tag govuk-tag--blue">Attended - Complied</span>' },
+              { html: '<span class="govuk-tag govuk-tag--blue">Attended</span>' },
               {
                 text: 'Not added',
               },
@@ -158,7 +158,7 @@ describe('EditSessionPresenter', () => {
               referralId: '123',
               name: 'Alex River',
               crn: 'CRN001',
-              attendance: 'Attended - Complied',
+              attendance: 'Attended',
               sessionNotes: 'Not added',
             },
           ],
@@ -176,7 +176,7 @@ describe('EditSessionPresenter', () => {
           rows: [
             [
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
-              { html: '<span class="govuk-tag govuk-tag--blue">Attended - Complied</span>' },
+              { html: '<span class="govuk-tag govuk-tag--blue">Attended</span>' },
               {
                 text: 'Not added',
               },
@@ -220,7 +220,7 @@ describe('EditSessionPresenter', () => {
               referralId: '123',
               name: 'Alex River',
               crn: 'CRN001',
-              attendance: 'Attended - Complied',
+              attendance: 'Attended',
               sessionNotes: 'Notes recorded',
             },
           ],
@@ -238,7 +238,7 @@ describe('EditSessionPresenter', () => {
           rows: [
             [
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
-              { html: '<span class="govuk-tag govuk-tag--blue">Attended - Complied</span>' },
+              { html: '<span class="govuk-tag govuk-tag--blue">Attended</span>' },
               {
                 html: '<a href="/group/group-123/session/session-456/pre-group-one-to-one/session-notes?referralId=123&source=edit-session">Pre-group one-to-one notes</a>',
               },
