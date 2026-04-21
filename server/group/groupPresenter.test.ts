@@ -362,6 +362,29 @@ describe('resultsText', () => {
   })
 })
 
+describe('text', () => {
+  it('should return the expected page heading and sub heading text', () => {
+    const filter = GroupListFilter.empty()
+    const pagedGroups: Page<Group> = pageFactory
+      .pageContent([])
+      .build({ totalElements: 0, number: 0, size: 10, numberOfElements: 0 }) as Page<Group>
+    const presenter = new GroupPresenter(
+      pagedGroups,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
+      0,
+      'Region',
+      filter,
+      [],
+      [],
+    )
+
+    expect(presenter.text).toEqual({
+      pageSubHeading: 'Building Choices: moderate intensity',
+      pageHeading: 'Groups',
+    })
+  })
+})
+
 describe('date formatting helpers', () => {
   describe('getGroupDate', () => {
     it('should prioritize earliestStartDate for NOT_STARTED groups', () => {
