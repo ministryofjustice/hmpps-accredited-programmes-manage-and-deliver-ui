@@ -375,6 +375,14 @@ describe(PresenterUtils, () => {
     })
   })
 
+  describe('.scoreValueText', () => {
+    it('returns the string representation of the given score', () => {
+      expect(PresenterUtils.scoreValueText(0)).toBe('0')
+      expect(PresenterUtils.scoreValueText(null)).toBe('Score missing')
+      expect(PresenterUtils.scoreValueText(undefined)).toBe('Score missing')
+    })
+  })
+
   describe('twelveHourTimeValue', () => {
     describe('hour, minute values', () => {
       describe('when the model has a null value for the property', () => {
