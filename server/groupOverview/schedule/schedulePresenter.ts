@@ -7,6 +7,7 @@ export default class SchedulePresenter extends GroupServiceLayoutPresenter {
   constructor(
     readonly groupId: string,
     readonly groupScheduleOverview: GroupScheduleOverview,
+    readonly successMessage: string | null = null,
   ) {
     super(GroupServiceNavigationValues.scheduleOverviewTab, groupId)
   }

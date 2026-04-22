@@ -303,13 +303,15 @@ export default class CreateGroupController extends BaseController {
     const { createGroupFormData } = req.session
     const { username } = req.user
     if (req.method === 'POST') {
-      await this.accreditedProgrammesManageAndDeliverService.createGroup(
+      const response = await this.accreditedProgrammesManageAndDeliverService.createGroup(
         username,
         createGroupFormData as CreateGroupRequest,
       )
       // Clear session data on submission
       req.session.createGroupFormData = {}
-      return res.redirect(`/groups/not-started-or-in-progress?groupCreated`)
+      return res.redirect(
+        `/group/${response.id}/schedule-overview?message=${encodeURIComponent(response.successMessage)}`,
+      )
     }
 
     const presenter = new CreateGroupCyaPresenter(createGroupFormData)

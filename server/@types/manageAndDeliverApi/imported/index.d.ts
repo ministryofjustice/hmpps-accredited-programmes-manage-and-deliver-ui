@@ -352,22 +352,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/dev/seed/referrals': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post: operations['seedReferrals']
-    delete: operations['dangerouslyDeleteAllReferrals']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/admin/populate-personal-details': {
     parameters: {
       query?: never
@@ -661,6 +645,22 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/referral/{referralId}/completion-data': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: operations['getCompletionData']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/referral-details/{id}': {
     parameters: {
       query?: never
@@ -830,22 +830,6 @@ export interface paths {
      * @description Get group by GroupCode and in User region
      */
     get: operations['getGroupInUserRegion']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/dev/seed/health': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['health']
     put?: never
     post?: never
     delete?: never
@@ -1284,6 +1268,26 @@ export interface paths {
      * @description Retrieve facilitators and group members for scheduling a one-to-one session
      */
     get: operations['getScheduleIndividualSessionDetails']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/bff/group/{groupId}/group-treatment-manager-and-facilitator': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * endpoint to retrieve the edit treatment manager and facilitator details for a programme group
+     * @description Retrieve group edit treatment manager and facilitator details.
+     */
+    get: operations['getGroupTreatmentManagerAndFacilitatorDetails']
     put?: never
     post?: never
     delete?: never
@@ -1907,6 +1911,16 @@ export interface components {
        */
       additionalDetails?: string | null
     }
+    /** @description Response returned when a programme group is created */
+    CreateGroupResponse: {
+      /**
+       * Format: uuid
+       * @description The id for the group
+       */
+      id: string
+      /** @description Success message for creating a group */
+      successMessage: string
+    }
     CreateGroupRequest: {
       /** @description The code for the group */
       groupCode: string
@@ -1992,17 +2006,6 @@ export interface components {
        * @example Alex River was added to this group. Their referral status is now Scheduled.
        */
       message: string
-    }
-    SeededReferralInfo: {
-      referralId: string
-      crn: string
-      personName: string
-      requirementId: string
-    }
-    SeedingResult: {
-      /** Format: int32 */
-      count: number
-      referrals: components['schemas']['SeededReferralInfo'][]
     }
     CreateAvailability: {
       /**
@@ -2577,6 +2580,11 @@ export interface components {
       notes?: string | null
       description: string
     }
+    ReferralCompletionData: {
+      requirementId: string
+      /** Format: date-time */
+      requirementCompletedAt: string
+    }
     ReferralDetails: {
       /**
        * Format: uuid
@@ -3085,18 +3093,18 @@ export interface components {
       reportingTeams: string[]
     }
     PageReferralCaseListItem: {
-      /** Format: int32 */
-      totalPages?: number
       /** Format: int64 */
       totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
-      sort?: components['schemas']['SortObject']
       first?: boolean
       last?: boolean
+      sort?: components['schemas']['SortObject']
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -3107,10 +3115,10 @@ export interface components {
       offset?: number
       sort?: components['schemas']['SortObject']
       /** Format: int32 */
-      pageNumber?: number
-      /** Format: int32 */
       pageSize?: number
       paged?: boolean
+      /** Format: int32 */
+      pageNumber?: number
       unpaged?: boolean
     }
     ReferralCaseListItem: {
@@ -3739,18 +3747,18 @@ export interface components {
       regionName: string
     }
     PageGroup: {
-      /** Format: int32 */
-      totalPages?: number
       /** Format: int64 */
       totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
       /** Format: int32 */
       number?: number
-      sort?: components['schemas']['SortObject']
       first?: boolean
       last?: boolean
+      sort?: components['schemas']['SortObject']
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -3834,18 +3842,18 @@ export interface components {
       activeProgrammeGroupId: string | null
     }
     PageGroupItem: {
-      /** Format: int32 */
-      totalPages?: number
       /** Format: int64 */
       totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
-      sort?: components['schemas']['SortObject']
       first?: boolean
       last?: boolean
+      sort?: components['schemas']['SortObject']
       /** Format: int32 */
       numberOfElements?: number
       pageable?: components['schemas']['PageableObject']
@@ -4167,6 +4175,44 @@ export interface components {
        */
       suggestedDate: string
     }
+    /** @description Response model for the edit treatment managers and facilitators page */
+    GroupTreatmentManagerAndFacilitatorDetails: {
+      /**
+       * @description Caption text displayed above the form
+       * @example Edit group BC123
+       */
+      captionText: string
+      /**
+       * @description Text to display the page title
+       * @example Edit who is responsible for the group
+       */
+      pageTitle: string
+      /**
+       * @description Text to display on the submit button of the page
+       * @example Submit
+       */
+      submitButtonText: string
+      /**
+       * @description Treatment manager for the group
+       * @example Archibald Queenie
+       */
+      treatmentManager: string
+      /**
+       * @description List of regular facilitators assigned to the group
+       * @example [
+       *       "Chloe Ransom",
+       *       "Jordan Lee"
+       *     ]
+       */
+      regularFacilitators: string[]
+      /**
+       * @description List of cover facilitators assigned to the group
+       * @example [
+       *       "James Samhim"
+       *     ]
+       */
+      coverFacilitators: string[]
+    }
     /** @description Response model for the edit genderpage */
     GroupSexDetails: {
       /**
@@ -4327,10 +4373,6 @@ export interface components {
        * @example [Tom Saunders]
        */
       coverFacilitators?: string[] | null
-    }
-    TeardownResult: {
-      /** Format: int32 */
-      deletedCount: number
     }
   }
   responses: never
@@ -5292,7 +5334,9 @@ export interface operations {
         headers: {
           [name: string]: unknown
         }
-        content?: never
+        content: {
+          'application/json': components['schemas']['CreateGroupResponse']
+        }
       }
       /** @description Invalid request body */
       400: {
@@ -5498,66 +5542,6 @@ export interface operations {
       }
       /** @description The group or referral does not exist */
       404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  seedReferrals: {
-    parameters: {
-      query?: {
-        count?: number
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['SeedingResult']
-        }
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  dangerouslyDeleteAllReferrals: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['TeardownResult']
-        }
-      }
-      /** @description Bad Request */
-      400: {
         headers: {
           [name: string]: unknown
         }
@@ -6467,6 +6451,37 @@ export interface operations {
       }
     }
   }
+  getCompletionData: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        referralId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ReferralCompletionData']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getReferralDetailsById: {
     parameters: {
       query?: never
@@ -6996,37 +7011,6 @@ export interface operations {
       }
       /** @description Forbidden. The client is not authorised to retrieve group details. */
       403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  health: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': {
-            [key: string]: string
-          }
-        }
-      }
-      /** @description Bad Request */
-      400: {
         headers: {
           [name: string]: unknown
         }
@@ -8302,6 +8286,64 @@ export interface operations {
         }
       }
       /** @description Group or module not found */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getGroupTreatmentManagerAndFacilitatorDetails: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        groupId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Successfully retrieved group edit treatment manager and facilitator details */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['GroupTreatmentManagerAndFacilitatorDetails']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires role ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_WR */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Group not found */
       404: {
         headers: {
           [name: string]: unknown

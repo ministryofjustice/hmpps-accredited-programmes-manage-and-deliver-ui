@@ -66,6 +66,19 @@ export default class ScheduleView {
     }
   }
 
+  private get successMessageArgs() {
+    if (!this.presenter.successMessage) {
+      return null
+    }
+
+    return {
+      variant: 'success',
+      title: this.presenter.successMessage,
+      showTitleAsHeading: true,
+      dismissible: true,
+    }
+  }
+
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       'groupOverview/schedule/scheduleOverview',
@@ -75,6 +88,7 @@ export default class ScheduleView {
         serviceNavigationArgs: this.presenter.getMojSubNavigationArgs(),
         scheduleSummaryListArgs: this.scheduleSummaryListArgs,
         scheduleSummaryTableArgs: this.scheduleSummaryTableArgs,
+        successMessageArgs: this.successMessageArgs,
       },
     ]
   }

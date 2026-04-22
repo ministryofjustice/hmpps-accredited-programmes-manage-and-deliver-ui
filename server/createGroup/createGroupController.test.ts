@@ -603,7 +603,7 @@ describe('Create Group Controller', () => {
   })
 
   describe('POST /group/create-a-group/group-review-details', () => {
-    it('creates a group and redirects to homepage with success message', async () => {
+    it('creates a group and redirects to schedule overview with success message', async () => {
       const sessionData: Partial<SessionData> = {
         createGroupFormData: {
           groupCode: 'ABC123',
@@ -614,11 +614,16 @@ describe('Create Group Controller', () => {
       }
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
+      accreditedProgrammesManageAndDeliverService.createGroup.mockResolvedValue({
+        id: '123456',
+        successMessage: 'Group created successfully',
+      })
+
       return request(app)
         .post('/group/create-a-group/group-review-details')
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain('Found. Redirecting to /groups/not-started-or-in-progress?groupCreated')
+          expect(res.text).toContain('Redirecting to /group/123456/schedule-overview')
           expect(accreditedProgrammesManageAndDeliverService.createGroup).toHaveBeenCalledWith(expect.any(String), {
             groupCode: 'ABC123',
             earliestStartDate: '10/7/2050',
@@ -638,6 +643,11 @@ describe('Create Group Controller', () => {
         },
       }
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      accreditedProgrammesManageAndDeliverService.createGroup.mockResolvedValue({
+        id: '123456',
+        successMessage: 'Group created successfully',
+      })
 
       await request(app).post('/group/create-a-group/group-review-details').expect(302)
 
