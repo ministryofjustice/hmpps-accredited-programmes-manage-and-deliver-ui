@@ -43,13 +43,11 @@ export default class LearningNeedsPresenter extends RisksAndNeedsPresenter {
   }
 
   learningNeedsScoreSummaryList(): SummaryListItem[] {
-    const score = this.learningNeeds.basicSkillsScore
-    const scoreDescription = this.learningNeeds.basicSkillsScoreDescription
-    const scoreAndDescription = [score, scoreDescription].filter(text => text).join('\n\n')
+    const ldcScore = this.learningNeeds.ldcScore.toString()
     return [
       {
         key: 'Calculated score',
-        lines: [scoreAndDescription],
+        lines: [ldcScore],
       },
     ]
   }
