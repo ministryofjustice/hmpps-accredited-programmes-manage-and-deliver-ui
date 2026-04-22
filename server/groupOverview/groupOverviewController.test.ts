@@ -51,4 +51,40 @@ describe('groupOverview', () => {
         })
     })
   })
+
+  describe('GET /group/:groupId/schedule-overview', () => {
+    it('renders success message when message query param is provided', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupScheduleOverview.mockResolvedValue({
+        code: 'ABC123',
+        preGroupOneToOneStartDate: 'Saturday 31 January 2026',
+        gettingStartedModuleStartDate: 'Monday 23 February 2026',
+        endDate: 'Monday 14 September 2026',
+        sessions: [],
+      })
+
+      return request(app)
+        .get('/group/1234/schedule-overview?message=Group%20created%20successfully')
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Group created successfully')
+        })
+    })
+
+    it('does not render success message when message query param is absent', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupScheduleOverview.mockResolvedValue({
+        code: 'ABC123',
+        preGroupOneToOneStartDate: 'Saturday 31 January 2026',
+        gettingStartedModuleStartDate: 'Monday 23 February 2026',
+        endDate: 'Monday 14 September 2026',
+        sessions: [],
+      })
+
+      return request(app)
+        .get('/group/1234/schedule-overview')
+        .expect(200)
+        .expect(res => {
+          expect(res.text).not.toContain('Group created successfully')
+        })
+    })
+  })
 })

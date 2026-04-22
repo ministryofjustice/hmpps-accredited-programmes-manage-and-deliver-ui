@@ -12,6 +12,7 @@ import {
   CreateAvailability,
   CreateDeliveryLocationPreferences,
   CreateGroupRequest,
+  CreateGroupResponse,
   CreateOrUpdateReferralMotivationBackgroundAndNonAssociations,
   CreateReferralStatusHistory,
   DeliveryLocationPreferences,
@@ -503,13 +504,13 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
     })
   }
 
-  async createGroup(username: Express.User['username'], data: CreateGroupRequest): Promise<AllocateToGroupResponse> {
+  async createGroup(username: Express.User['username'], data: CreateGroupRequest): Promise<CreateGroupResponse> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.post({
       path: `/group`,
       headers: { Accept: 'application/json' },
       data,
-    })) as ProgrammeGroupEntity
+    })) as CreateGroupResponse
   }
 
   async updateGroup(
