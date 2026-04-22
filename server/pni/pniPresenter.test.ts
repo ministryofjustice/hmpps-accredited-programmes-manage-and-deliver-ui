@@ -1,5 +1,6 @@
 import { PniScore, ReferralDetails } from '@manage-and-deliver-api'
 import PniPresenter from './pniPresenter'
+import PresenterUtils from '../utils/presenterUtils'
 import pniScoreFactory from '../testutils/factories/pniScoreFactory'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 
@@ -147,11 +148,10 @@ describe('PniPresenter', () => {
   })
 
   describe('scoreValueText', () => {
-    const presenter = new PniPresenter('12345', referralDetails, pniScore)
     it('returns the string representation of the given score', () => {
-      expect(presenter.scoreValueText(0)).toBe('0')
-      expect(presenter.scoreValueText(null)).toBe('Score missing')
-      expect(presenter.scoreValueText(undefined)).toBe('Score missing')
+      expect(PresenterUtils.scoreValueText(0)).toBe('0')
+      expect(PresenterUtils.scoreValueText(null)).toBe('Score missing')
+      expect(PresenterUtils.scoreValueText(undefined)).toBe('Score missing')
     })
   })
 

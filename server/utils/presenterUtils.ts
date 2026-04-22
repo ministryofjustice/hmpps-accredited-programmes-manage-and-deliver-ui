@@ -101,6 +101,10 @@ export default class PresenterUtils {
     return value ? 'Yes' : 'No'
   }
 
+  static scoreValueText(value?: number | null): string {
+    return value?.toString() || 'Score missing'
+  }
+
   twelveHourTimeValue(
     modelValue: {
       hour?: number

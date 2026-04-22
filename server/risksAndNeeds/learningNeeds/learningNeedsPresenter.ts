@@ -43,7 +43,7 @@ export default class LearningNeedsPresenter extends RisksAndNeedsPresenter {
   }
 
   learningNeedsScoreSummaryList(): SummaryListItem[] {
-    const ldcScore = this.learningNeeds.ldcScore.toString()
+    const ldcScore = PresenterUtils.scoreValueText(this.learningNeeds.ldcScore)
     return [
       {
         key: 'Calculated score',
