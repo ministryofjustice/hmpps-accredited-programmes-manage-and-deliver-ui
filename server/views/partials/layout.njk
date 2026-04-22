@@ -1,5 +1,6 @@
 {% from "components/custom-primary-navigation/macro.njk" import customPrimaryNavigation %}
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
+{%- from "moj/components/domain-specific/probation/footer/macro.njk" import pdsFooter -%}
 {% extends "govuk/template.njk" %}
 
 {% block head %}
@@ -23,6 +24,12 @@
       {% endif %}
     {% endblock %}
   {% endif %}
+{% endblock %}
+
+{% block footer %}
+  {{ pdsFooter({
+    baseUrl: '#'
+  }) }}
 {% endblock %}
 
 {% block bodyStart %}
