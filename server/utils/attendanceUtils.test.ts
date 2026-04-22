@@ -7,7 +7,7 @@ describe('attendanceUtils', () => {
         attendanceState: '<span class="govuk-tag govuk-tag--blue">Attended</span>',
       })
 
-      expect(attendanceOptionText('Attended - Complied')).toEqual({
+      expect(attendanceOptionText('Attended')).toEqual({
         attendanceState: '<span class="govuk-tag govuk-tag--blue">Attended</span>',
       })
     })
@@ -47,8 +47,8 @@ describe('attendanceUtils', () => {
     })
 
     it('renders a custom attended label when requested', () => {
-      expect(attendanceOptionText('ATTC', { attendedLabel: 'Attended - Complied' })).toEqual({
-        attendanceState: '<span class="govuk-tag govuk-tag--blue">Attended - Complied</span>',
+      expect(attendanceOptionText('ATTC', { attendedLabel: 'Attended' })).toEqual({
+        attendanceState: '<span class="govuk-tag govuk-tag--blue">Attended</span>',
       })
     })
 
