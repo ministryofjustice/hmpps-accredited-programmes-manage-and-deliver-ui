@@ -7,6 +7,10 @@ $moj-page-width: 1170px;
   $govuk-assets-path: '/assets/images/'
 );
 
+//HMPPS specific styles
+@use 'node_modules/@ministryofjustice/hmpps-probation-frontend-components/dist/assets/footer';
+@use 'node_modules/@ministryofjustice/hmpps-probation-frontend-components/dist/assets/header';
+
 // MoJ 7.x
 @use 'node_modules/@ministryofjustice/frontend/moj/all';
 

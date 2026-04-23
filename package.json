@@ -86,6 +86,7 @@
     "@ministryofjustice/frontend": "^9.0.0",
     "@ministryofjustice/hmpps-auth-clients": "^1.0.2",
     "@ministryofjustice/hmpps-monitoring": "^1.0.2",
+    "@ministryofjustice/hmpps-probation-frontend-components": "1.0.2",
     "@ministryofjustice/hmpps-rest-client": "^1.1.0",
     "@sentry/node": "10.44.0",
     "@types/supertest": "^7.2.0",
