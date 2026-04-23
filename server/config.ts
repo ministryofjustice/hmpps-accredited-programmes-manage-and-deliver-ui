@@ -109,6 +109,18 @@ export default {
       },
       agent: new AgentConfig(),
     },
+    probationApi: {
+      url: get(
+        'COMPONENT_API_URL',
+        'https://probation-frontend-components-dev.hmpps.service.justice.gov.uk',
+        requiredInProduction,
+      ),
+      healthPath: '/health/ping',
+      timeout: {
+        response: 10000,
+        deadline: 10000,
+      },
+    },
   },
   sqs: {
     audit: auditConfig(),

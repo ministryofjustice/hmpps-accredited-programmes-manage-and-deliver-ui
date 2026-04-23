@@ -1,6 +1,13 @@
 {% from "components/custom-primary-navigation/macro.njk" import customPrimaryNavigation %}
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
-{%- from "moj/components/domain-specific/probation/footer/macro.njk" import pdsFooter -%}
+
+{% for js in feComponents.jsIncludes %}
+    <script src="{{ js }}" nonce="{{ cspNonce }}"></script>
+{% endfor %}
+
+{% for css in feComponents.cssIncludes %}
+    <link href="{{ css }}" nonce="{{ cspNonce }}" rel="stylesheet" />
+{% endfor %}
 {% extends "govuk/template.njk" %}
 
 {% block head %}
@@ -27,9 +34,7 @@
 {% endblock %}
 
 {% block footer %}
-  {{ pdsFooter({
-    baseUrl: '#'
-  }) }}
+    {{ feComponents.footer | safe }}
 {% endblock %}
 
 {% block bodyStart %}

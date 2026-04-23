@@ -28,6 +28,7 @@ import setUpStaticResources from './middleware/setUpStaticResources'
 import setUpWebSecurity from './middleware/setUpWebSecurity'
 import setUpWebSession from './middleware/setUpWebSession'
 import setUpUserLocation from './middleware/setUpUserLocation'
+import setupFrontendComponent from './middleware/setupFrontendComponent'
 
 import config from './config'
 import sentryMiddleware from './middleware/sentryMiddleware'
@@ -96,6 +97,7 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
   app.use(setUpUserLocation(services))
+  app.use(setupFrontendComponent())
 
   app.use(routes(services))
 
