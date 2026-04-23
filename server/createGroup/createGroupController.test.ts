@@ -35,6 +35,7 @@ describe('Create Group Controller', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Create a group')
+          expect(res.text).toContain('href="/groups/not-started-or-in-progress"')
         })
     })
 
@@ -75,6 +76,7 @@ describe('Create Group Controller', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Create a group code')
+          expect(res.text).toContain('href="/group/create-a-group/create-group"')
         })
     })
 
@@ -152,6 +154,7 @@ describe('Create Group Controller', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(' Add a start date for the group')
+          expect(res.text).toContain('href="/group/create-a-group/create-group-code"')
         })
     })
 
@@ -196,6 +199,25 @@ describe('Create Group Controller', () => {
     })
   })
 
+  describe('GET /group/create-a-group/group-days-and-times', () => {
+    it('loads the days and times page', async () => {
+      const sessionData: Partial<SessionData> = {
+        createGroupFormData: {
+          groupCode: 'ABC123',
+        },
+      }
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      return request(app)
+        .get('/group/create-a-group/group-days-and-times')
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('When will the group run?')
+          expect(res.text).toContain('href="/group/create-a-group/group-start-date"')
+        })
+    })
+  })
+
   describe('GET /group/create-a-group/group-cohort', () => {
     it('loads the cohort selection page', async () => {
       return request(app)
@@ -203,6 +225,7 @@ describe('Create Group Controller', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Create group cohort')
+          expect(res.text).toContain('href="/group/create-a-group/group-days-and-times"')
         })
     })
 
@@ -256,6 +279,7 @@ describe('Create Group Controller', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Select the gender of the group')
+          expect(res.text).toContain('href="/group/create-a-group/group-cohort"')
         })
     })
 
@@ -312,6 +336,7 @@ describe('Create Group Controller', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('In which probation delivery unit (PDU) will the group take place?')
+          expect(res.text).toContain('href="/group/create-a-group/group-sex"')
         })
     })
 
@@ -378,6 +403,7 @@ describe('Create Group Controller', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Where will the group take place?')
+          expect(res.text).toContain('href="/group/create-a-group/group-probation-delivery-unit"')
         })
     })
 
@@ -450,6 +476,7 @@ describe('Create Group Controller', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Who is responsible for the group')
+          expect(res.text).toContain('href="/group/create-a-group/group-delivery-location"')
         })
     })
 
@@ -594,6 +621,7 @@ describe('Create Group Controller', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Review your group details')
+          expect(res.text).toContain('href="/group/create-a-group/group-facilitators"')
           expect(res.text).toContain('ABC123')
           expect(res.text).toContain('10/7/2050')
           expect(res.text).toContain('General offence')
