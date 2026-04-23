@@ -13,7 +13,7 @@ export default class CreateGroupCyaPresenter {
   }
 
   get backLinkUri() {
-    return `/group/create-a-group/group-delivery-location`
+    return `/group/create-a-group/group-facilitators`
   }
 
   generateSelectedUsers(): {
