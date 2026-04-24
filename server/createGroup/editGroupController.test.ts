@@ -95,6 +95,20 @@ describe('Edit Group Controller', () => {
           expect(res.text).toContain('Enter or select a date')
         })
     })
+
+    it('displays user input when date validation fails', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue(groupDetails)
+
+      return request(app)
+        .post(`/group/${groupId}/edit-group-start-date`)
+        .type('form')
+        .send({ 'create-group-date': '32/13/2026' })
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain('32/13/2026')
+          expect(res.text).toContain('Enter a date in the format 10/7/2025')
+        })
+    })
   })
 
   describe('GET /group/:groupId/edit-start-date-rescheduled', () => {
