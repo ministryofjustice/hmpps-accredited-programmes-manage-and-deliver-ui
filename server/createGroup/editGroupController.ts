@@ -51,6 +51,7 @@ export default class EditGroupController extends BaseController {
       if (data.error) {
         res.status(400)
         formError = data.error
+        groupData.earliestStartDate = req.body['create-group-date']
       } else {
         req.session.createGroupFormData = {
           ...groupData,
