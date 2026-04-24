@@ -199,7 +199,7 @@ export default class EditGroupController extends BaseController {
     }
 
     if (req.method === 'POST') {
-      const data = await new CreateOrEditGroupForm(req, '').createGroupSexData()
+      const data = await new CreateOrEditGroupForm(req).createGroupSexData()
 
       if (data.error) {
         res.status(400)
@@ -246,7 +246,7 @@ export default class EditGroupController extends BaseController {
     }
 
     if (req.method === 'POST') {
-      const data = await new CreateOrEditGroupForm(req, '').createGroupCohortData()
+      const data = await new CreateOrEditGroupForm(req).createGroupCohortData()
 
       if (data.error) {
         res.status(400)
@@ -467,7 +467,7 @@ export default class EditGroupController extends BaseController {
     }
 
     if (req.method === 'POST') {
-      const data = await new CreateOrEditGroupForm(req, '').createOrEditGroupTreatmentManagerData()
+      const data = await new CreateOrEditGroupForm(req).createOrEditGroupTreatmentManagerData()
 
       if (data.error) {
         res.status(400)

@@ -292,10 +292,7 @@
               classes: "govuk-button--secondary moj-add-another__add-button govuk-!-margin-bottom-4"
               }) }}
                 {% if  isEditJourney %}
-         {{ govukInsetText({
-              text: "This will change the overall group details and facilitators assigned to future sessions. The assigned facilitators will not change for any sessions that have already taken place.",
-              classes: "govuk-!-margin-top-0"
-            }) }}
+               {{ govukInsetText({ text: insetText, classes: "govuk-!-margin-top-0" }) }}
             {% endif %}
             </div>
           </div>
