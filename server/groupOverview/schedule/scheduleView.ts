@@ -55,7 +55,7 @@ export default class ScheduleView {
         {
           text: 'Date',
           attributes: {
-            'aria-sort': 'none',
+            'aria-sort': 'ascending',
           },
         },
         {
