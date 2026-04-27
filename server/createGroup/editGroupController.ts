@@ -1,4 +1,4 @@
-import { CreateGroupRequest } from '@manage-and-deliver-api'
+import { CreateGroupRequest, CreateGroupTeamMember } from '@manage-and-deliver-api'
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import { FormValidationError } from '../utils/formValidationError'
@@ -22,6 +22,8 @@ import CreateOrEditGroupCodePresenter from './code/createOrEditGroupCodePresente
 import CreateOrEditGroupCodeView from './code/createOrEditGroupCodeView'
 import CreateOrEditGroupLocationPresenter from './location/createOrEditGroupLocationPresenter'
 import CreateOrEditGroupLocationView from './location/createOrEditGroupLocationView'
+import CreateOrEditGroupTreatmentManagerView from './treatment-manager/createOrEditGroupTreatmentManagerView'
+import CreateOrEditGroupTreatmentManagerPresenter from './treatment-manager/createOrEditGroupTreatmentManagerPresenter'
 
 export default class EditGroupController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -30,6 +32,56 @@ export default class EditGroupController extends BaseController {
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
   ) {
     super()
+  }
+
+  async editGroupCode(req: Request, res: Response): Promise<void> {
+    const { groupId } = req.params
+    const { username } = req.user
+    let userInputData = null
+    let formError: FormValidationError | null = null
+
+    const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
+    const createGroupFormData = {
+      groupCode: groupDetails?.code,
+    }
+
+    if (req.method === 'POST') {
+      let existingGroup = { code: '' }
+
+      if (req.body['create-group-code']) {
+        const matchingGroup = await this.accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion(
+          username,
+          req.body['create-group-code'],
+        )
+
+        existingGroup = matchingGroup?.id === groupId ? { code: '' } : { code: matchingGroup?.code || '' }
+      }
+
+      const data = await new CreateOrEditGroupForm(req, existingGroup.code).createGroupCodeData()
+
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+        userInputData = req.body
+      } else {
+        const response = await this.accreditedProgrammesManageAndDeliverService.updateGroup(username, groupId, {
+          groupCode: data.paramsForUpdate.groupCode,
+        })
+
+        req.session.createGroupFormData = {}
+        return res.redirect(`/group/${groupId}/group-details?message=${encodeURIComponent(response.successMessage)}`)
+      }
+    }
+
+    const presenter = new CreateOrEditGroupCodePresenter(
+      formError,
+      createGroupFormData,
+      userInputData,
+      groupId,
+      createGroupFormData.groupCode,
+    )
+    const view = new CreateOrEditGroupCodeView(presenter)
+    return this.renderPage(res, view)
   }
 
   async editGroupDate(req: Request, res: Response): Promise<void> {
@@ -272,56 +324,6 @@ export default class EditGroupController extends BaseController {
     return this.renderPage(res, view)
   }
 
-  async editGroupCode(req: Request, res: Response): Promise<void> {
-    const { groupId } = req.params
-    const { username } = req.user
-    let userInputData = null
-    let formError: FormValidationError | null = null
-
-    const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
-    const createGroupFormData = {
-      groupCode: groupDetails?.code,
-    }
-
-    if (req.method === 'POST') {
-      let existingGroup = { code: '' }
-
-      if (req.body['create-group-code']) {
-        const matchingGroup = await this.accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion(
-          username,
-          req.body['create-group-code'],
-        )
-
-        existingGroup = matchingGroup?.id === groupId ? { code: '' } : { code: matchingGroup?.code || '' }
-      }
-
-      const data = await new CreateOrEditGroupForm(req, existingGroup.code).createGroupCodeData()
-
-      if (data.error) {
-        res.status(400)
-        formError = data.error
-        userInputData = req.body
-      } else {
-        await this.accreditedProgrammesManageAndDeliverService.updateGroup(username, groupId, {
-          groupCode: data.paramsForUpdate.groupCode,
-        })
-
-        req.session.createGroupFormData = {}
-        return res.redirect(`/group/${groupId}/group-details`)
-      }
-    }
-
-    const presenter = new CreateOrEditGroupCodePresenter(
-      formError,
-      createGroupFormData,
-      userInputData,
-      groupId,
-      createGroupFormData.groupCode,
-    )
-    const view = new CreateOrEditGroupCodeView(presenter)
-    return this.renderPage(res, view)
-  }
-
   async editGroupPdu(req: Request, res: Response): Promise<void> {
     const { createGroupFormData } = req.session
     const { groupId } = req.params
@@ -424,6 +426,73 @@ export default class EditGroupController extends BaseController {
       req.session.originPage,
     )
     const view = new CreateOrEditGroupLocationView(presenter)
+    return this.renderPage(res, view)
+  }
+
+  async editGroupTreatmentManager(req: Request, res: Response): Promise<void> {
+    const { groupId } = req.params
+    const { username } = req.user
+    let userInputData = null
+    let formError: FormValidationError | null = null
+
+    const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
+    const pduMembers = await this.accreditedProgrammesManageAndDeliverService.getPduMembers(username)
+
+    const mapMember = (
+      personName: string,
+      teamMemberType: CreateGroupTeamMember['teamMemberType'],
+    ): CreateGroupTeamMember | null => {
+      const matchingMember = pduMembers.find(member => member.personName === personName)
+      if (!matchingMember) {
+        return null
+      }
+
+      return {
+        facilitator: matchingMember.personName,
+        facilitatorCode: matchingMember.personCode,
+        teamName: matchingMember.teamName,
+        teamCode: matchingMember.teamCode,
+        teamMemberType,
+      }
+    }
+
+    const existingTeamMembers = [
+      ...(groupDetails?.treatmentManager ? [mapMember(groupDetails.treatmentManager, 'TREATMENT_MANAGER')] : []),
+      ...((groupDetails?.facilitators || []).map(name => mapMember(name, 'REGULAR_FACILITATOR')) || []),
+      ...((groupDetails?.coverFacilitators || []).map(name => mapMember(name, 'COVER_FACILITATOR')) || []),
+    ].filter((member): member is CreateGroupTeamMember => member !== null)
+
+    const createGroupFormData = {
+      groupCode: groupDetails?.code,
+      teamMembers: existingTeamMembers,
+    }
+
+    if (req.method === 'POST') {
+      const data = await new CreateOrEditGroupForm(req, '').createOrEditGroupTreatmentManagerData()
+
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+        userInputData = req.body
+      } else {
+        const response = await this.accreditedProgrammesManageAndDeliverService.updateGroup(username, groupId, {
+          teamMembers: data.paramsForUpdate.teamMembers,
+        })
+
+        req.session.createGroupFormData = {}
+        return res.redirect(`/group/${groupId}/group-details?message=${encodeURIComponent(response.successMessage)}`)
+      }
+    }
+
+    const presenter = new CreateOrEditGroupTreatmentManagerPresenter(
+      groupId,
+      createGroupFormData.groupCode || '',
+      pduMembers,
+      formError,
+      createGroupFormData,
+      userInputData,
+    )
+    const view = new CreateOrEditGroupTreatmentManagerView(presenter)
     return this.renderPage(res, view)
   }
 }
