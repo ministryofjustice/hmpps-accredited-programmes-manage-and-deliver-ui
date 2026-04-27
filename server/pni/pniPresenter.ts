@@ -1,5 +1,6 @@
 import { PniScore, ReferralDetails } from '@manage-and-deliver-api'
 import ReferralLayoutPresenter, { HorizontalNavValues } from '../shared/referral/referralLayoutPresenter'
+import PresenterUtils from '../utils/presenterUtils'
 
 export default class PniPresenter extends ReferralLayoutPresenter {
   constructor(
@@ -10,10 +11,6 @@ export default class PniPresenter extends ReferralLayoutPresenter {
     readonly isCohortUpdated: boolean | null = null,
   ) {
     super(HorizontalNavValues.programmeNeedsIdentifierTab, referral, isLdcUpdated, isCohortUpdated)
-  }
-
-  scoreValueText(value?: number | null): string {
-    return value?.toString() || 'Score missing'
   }
 
   needScoreToString(needScore: string): string {
@@ -41,7 +38,7 @@ export default class PniPresenter extends ReferralLayoutPresenter {
             text: '11.11 - Sexual preoccupation',
           },
           value: {
-            text: this.scoreValueText(sexDomainScores.individualSexScores.sexualPreOccupation),
+            text: PresenterUtils.scoreValueText(sexDomainScores.individualSexScores.sexualPreOccupation),
           },
         },
         {
@@ -49,7 +46,7 @@ export default class PniPresenter extends ReferralLayoutPresenter {
             text: '11.12 - Offence-related sexual interests',
           },
           value: {
-            text: this.scoreValueText(sexDomainScores.individualSexScores.offenceRelatedSexualInterests),
+            text: PresenterUtils.scoreValueText(sexDomainScores.individualSexScores.offenceRelatedSexualInterests),
           },
         },
         {
@@ -57,7 +54,7 @@ export default class PniPresenter extends ReferralLayoutPresenter {
             text: '6.12 - Emotional congruence with children or feeling closer to children than adults',
           },
           value: {
-            text: this.scoreValueText(sexDomainScores.individualSexScores.emotionalCongruence),
+            text: PresenterUtils.scoreValueText(sexDomainScores.individualSexScores.emotionalCongruence),
           },
         },
         {
@@ -87,7 +84,7 @@ export default class PniPresenter extends ReferralLayoutPresenter {
             text: '12.1 - Pro-criminal attitudes',
           },
           value: {
-            text: this.scoreValueText(thinkingDomainScores.individualThinkingScores.proCriminalAttitudes),
+            text: PresenterUtils.scoreValueText(thinkingDomainScores.individualThinkingScores.proCriminalAttitudes),
           },
         },
         {
@@ -95,7 +92,7 @@ export default class PniPresenter extends ReferralLayoutPresenter {
             text: '12.9 - Hostile orientation',
           },
           value: {
-            text: this.scoreValueText(thinkingDomainScores.individualThinkingScores.hostileOrientation),
+            text: PresenterUtils.scoreValueText(thinkingDomainScores.individualThinkingScores.hostileOrientation),
           },
         },
         {
@@ -125,7 +122,9 @@ export default class PniPresenter extends ReferralLayoutPresenter {
             text: '6.1 - Current relationship with close family',
           },
           value: {
-            text: this.scoreValueText(relationshipsDomainScores.individualRelationshipScores.curRelCloseFamily),
+            text: PresenterUtils.scoreValueText(
+              relationshipsDomainScores.individualRelationshipScores.curRelCloseFamily,
+            ),
           },
         },
         {
@@ -133,7 +132,9 @@ export default class PniPresenter extends ReferralLayoutPresenter {
             text: '6.6 - Previous experience of close relationships',
           },
           value: {
-            text: this.scoreValueText(relationshipsDomainScores.individualRelationshipScores.prevCloseRelationships),
+            text: PresenterUtils.scoreValueText(
+              relationshipsDomainScores.individualRelationshipScores.prevCloseRelationships,
+            ),
           },
         },
         {
@@ -141,7 +142,9 @@ export default class PniPresenter extends ReferralLayoutPresenter {
             text: '7.3 - Easily influenced by criminal associates',
           },
           value: {
-            text: this.scoreValueText(relationshipsDomainScores.individualRelationshipScores.easilyInfluenced),
+            text: PresenterUtils.scoreValueText(
+              relationshipsDomainScores.individualRelationshipScores.easilyInfluenced,
+            ),
           },
         },
         {
@@ -149,7 +152,7 @@ export default class PniPresenter extends ReferralLayoutPresenter {
             text: '11.3 - Aggressive or controlling behaviour',
           },
           value: {
-            text: this.scoreValueText(
+            text: PresenterUtils.scoreValueText(
               relationshipsDomainScores.individualRelationshipScores.aggressiveControllingBehaviour,
             ),
           },
@@ -181,7 +184,7 @@ export default class PniPresenter extends ReferralLayoutPresenter {
             text: '11.2 - Impulsivity',
           },
           value: {
-            text: this.scoreValueText(selfManagementDomainScores.individualSelfManagementScores.impulsivity),
+            text: PresenterUtils.scoreValueText(selfManagementDomainScores.individualSelfManagementScores.impulsivity),
           },
         },
         {
@@ -189,7 +192,9 @@ export default class PniPresenter extends ReferralLayoutPresenter {
             text: '11.4 - Temper control',
           },
           value: {
-            text: this.scoreValueText(selfManagementDomainScores.individualSelfManagementScores.temperControl),
+            text: PresenterUtils.scoreValueText(
+              selfManagementDomainScores.individualSelfManagementScores.temperControl,
+            ),
           },
         },
         {
@@ -197,7 +202,9 @@ export default class PniPresenter extends ReferralLayoutPresenter {
             text: '11.6 - Problem-solving skills',
           },
           value: {
-            text: this.scoreValueText(selfManagementDomainScores.individualSelfManagementScores.problemSolvingSkills),
+            text: PresenterUtils.scoreValueText(
+              selfManagementDomainScores.individualSelfManagementScores.problemSolvingSkills,
+            ),
           },
         },
         {
@@ -205,7 +212,9 @@ export default class PniPresenter extends ReferralLayoutPresenter {
             text: '10.1 - Difficulties coping',
           },
           value: {
-            text: this.scoreValueText(selfManagementDomainScores.individualSelfManagementScores.difficultiesCoping),
+            text: PresenterUtils.scoreValueText(
+              selfManagementDomainScores.individualSelfManagementScores.difficultiesCoping,
+            ),
           },
         },
         {

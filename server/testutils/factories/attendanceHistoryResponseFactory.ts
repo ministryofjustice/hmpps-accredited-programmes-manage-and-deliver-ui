@@ -38,6 +38,8 @@ export default AttendanceHistoryResponseFactory.define(({ sequence }) => ({
       time: '10:30am to 11am',
       attendanceStatus: 'Attended - Complied',
       hasNotes: true,
+      popName: '',
+      isCatchup: false,
     },
     {
       sessionId: 'session-2',
@@ -48,6 +50,8 @@ export default AttendanceHistoryResponseFactory.define(({ sequence }) => ({
       time: '2pm to 3pm',
       attendanceStatus: 'Did not attend',
       hasNotes: false,
+      popName: '',
+      isCatchup: false,
     },
   ],
 }))

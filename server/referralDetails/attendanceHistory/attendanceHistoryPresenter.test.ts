@@ -100,6 +100,8 @@ describe('AttendanceHistoryPresenter', () => {
             time: '10:30am',
             attendanceStatus: 'Attended',
             hasNotes: false,
+            popName: '',
+            isCatchup: false,
           },
         ],
       })

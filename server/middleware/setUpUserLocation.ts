@@ -10,6 +10,9 @@ export default function setUpUserLocation(services: Services) {
       // Check if location is already cached in session
       if (req.session.userLocation) {
         res.locals.userLocation = req.session.userLocation
+        // Temporary logs while we debug a preprod issue --TJWC 2026-04-22
+        logger.info(`[setUpUserLocation] req.session.userLocation is present, going to next()`)
+        logger.info({ userLocation: req.session.userLocation })
         next()
         return
       }
@@ -17,6 +20,9 @@ export default function setUpUserLocation(services: Services) {
       // Fetch location for user's region
       const username = res.locals.user?.username
       if (!username) {
+        // Temporary logs while we debug a preprod issue --TJWC 2026-04-22
+        logger.info(`[setUpUserLocation] No username in locals.user`)
+        logger.info({ user: res.locals.user })
         next()
         return
       }

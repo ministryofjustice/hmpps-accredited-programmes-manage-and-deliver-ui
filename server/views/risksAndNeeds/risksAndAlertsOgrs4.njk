@@ -35,10 +35,12 @@
     {{ expandedPredictorBadge(seriousViolentReoffendingPredictor, true, false) }}
     {{ expandedPredictorBadge(directContactSexualReoffendingPredictor, true, false) }}
     {{ expandedPredictorBadge(imagesAndIndirectContactSexualReoffendingPredictor, true, false) }}
+
+    <h2 class="govuk-heading-m">Risk of serious harm</h2>
     {{ roshWidget(roshRiskSummary) }}
     {{ govukInsetText(importedFromNdeliusText) }}
 
-    <h2 class="govuk-heading-m">Risk alerts</h2>
+    <h2 class="govuk-heading-m">Risk flags</h2>
     {{ riskFlagWidget(activeAlerts) }}
   </div>
 </div>

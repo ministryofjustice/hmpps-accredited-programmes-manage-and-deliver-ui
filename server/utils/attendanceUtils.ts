@@ -27,7 +27,7 @@ const ATTENDANCE_STATUS_BY_VALUE: Record<string, AttendanceStatus> = {
 
 export const attendanceOptionTextTags: Record<'attendanceSessionNotes' | 'editSession', AttendanceOptionTextOptions> = {
   attendanceSessionNotes: { fallbackStatus: 'notAttended' },
-  editSession: { attendedLabel: 'Attended - Complied' },
+  editSession: { attendedLabel: 'Attended' },
 }
 
 export default function attendanceOptionText(

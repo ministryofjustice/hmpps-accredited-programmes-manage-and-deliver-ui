@@ -78,7 +78,7 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
             ? [
                 `${this.group.currentlyAllocatedNumber.toString()} participant${this.group.currentlyAllocatedNumber > 1 ? 's' : ''}`,
               ]
-            : ['No people added'],
+            : ['No people allocated'],
       },
     ]
   }

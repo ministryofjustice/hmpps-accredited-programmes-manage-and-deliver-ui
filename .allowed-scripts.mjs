@@ -4,7 +4,7 @@ export default configureAllowedScripts({
   allowlist: {
     'node_modules/dtrace-provider@0.8.8': 'ALLOW',
     'node_modules/fsevents@2.3.3': 'ALLOW',
-    'node_modules/protobufjs@7.5.4': 'FORBID',
+    'node_modules/protobufjs@7.5.5': 'ALLOW',
     'node_modules/unrs-resolver@1.11.1': 'ALLOW',
     'node_modules/@parcel/watcher@2.5.6': 'ALLOW',
     'node_modules/cypress@15.12.0': 'ALLOW',

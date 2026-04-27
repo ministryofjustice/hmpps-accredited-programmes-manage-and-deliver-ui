@@ -18,4 +18,5 @@ export default LearningNeedsFactory.define(() => ({
   basicSkillsScore: '3',
   basicSkillsScoreDescription:
     'Ms Puckett told me that her formal school education was regularly interrupted as she and her family travelled a lot whilst she was growing up.',
+  ldcScore: 3,
 }))

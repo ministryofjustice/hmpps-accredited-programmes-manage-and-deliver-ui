@@ -92,15 +92,15 @@ describe('Learning Needs', () => {
         .get(`/referral/${referralId}/learning-needs`)
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain(learningNeeds.workRelatedSkills)
-          expect(res.text).toContain(learningNeeds.problemsReadWriteNum)
-          expect(res.text).toContain(learningNeeds.learningDifficulties)
-          expect(res.text).toContain(learningNeeds.qualifications)
-          expect(res.text).toContain(learningNeeds.basicSkillsScore)
-          expect(res.text).toContain(learningNeeds.basicSkillsScoreDescription)
+          expect(res.text).toContain(learningNeeds.workRelatedSkills as string)
+          expect(res.text).toContain(learningNeeds.problemsReadWriteNum as string)
+          expect(res.text).toContain(learningNeeds.learningDifficulties as string)
+          expect(res.text).toContain(learningNeeds.qualifications as string)
+          expect(res.text).toContain(learningNeeds.ldcScore.toString())
           learningNeeds.problemAreas?.forEach(problemArea => {
             expect(res.text).toContain(problemArea)
           })
+          expect(res.text).toContain('Yes')
         })
     })
 
@@ -118,6 +118,19 @@ describe('Learning Needs', () => {
 
       const referralId = randomUUID()
       return request(app).get(`/referral/${referralId}/learning-needs`).expect(200)
+    })
+
+    it('renders Score missing when ldcScore is null', async () => {
+      const learningNeeds: LearningNeeds = learningNeedsFactory.build({ ldcScore: null })
+      accreditedProgrammesManageAndDeliverService.getLearningNeeds.mockResolvedValue(learningNeeds)
+
+      const referralId = randomUUID()
+      return request(app)
+        .get(`/referral/${referralId}/learning-needs`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Score missing')
+        })
     })
 
     it('calls the service with correct parameters', async () => {
