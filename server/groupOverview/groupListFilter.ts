@@ -16,7 +16,7 @@ export default class GroupListFilter {
     return new GroupListFilter()
   }
 
-  static fromRequest(request: Request): GroupListFilter {
+  static fromRequest(request: Request, availableDeliveryLocations?: string[] | null): GroupListFilter {
     const filter = new GroupListFilter()
     filter.cohort = request.query.cohort as string | undefined
     filter.groupCode = request.query.groupCode as string | undefined
@@ -29,6 +29,15 @@ export default class GroupListFilter {
     } else if (filter?.pdu.length) {
       const reportingTeams = request.query.deliveryLocations as string[] | undefined
       filter.deliveryLocations = typeof reportingTeams === 'string' ? [reportingTeams] : reportingTeams
+      if (filter.deliveryLocations && availableDeliveryLocations !== undefined) {
+        const allLocationsValid =
+          availableDeliveryLocations.length > 0 &&
+          filter.deliveryLocations.every(location => availableDeliveryLocations.includes(location))
+
+        if (!allLocationsValid) {
+          filter.deliveryLocations = undefined
+        }
+      }
     }
 
     return filter

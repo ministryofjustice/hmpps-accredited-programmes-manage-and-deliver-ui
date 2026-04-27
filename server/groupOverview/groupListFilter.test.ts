@@ -20,6 +20,18 @@ describe(GroupListFilter, () => {
       expect(filter.deliveryLocations).toEqual(['delivery-location-1'])
       expect(filter.sex).toEqual('Male')
     })
+
+    it('removes deliveryLocations when they are not available for the selected PDU', () => {
+      const query = {
+        pdu: 'PDU3',
+        deliveryLocations: ['delivery-location-1'],
+      }
+
+      const filter = GroupListFilter.fromRequest({ query } as unknown as Request, ['delivery-location-2'])
+
+      expect(filter.pdu).toEqual('PDU3')
+      expect(filter.deliveryLocations).toBeUndefined()
+    })
   })
 
   describe('params', () => {

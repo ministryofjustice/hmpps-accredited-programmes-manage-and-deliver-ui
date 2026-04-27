@@ -17,22 +17,41 @@ export default class GroupController extends BaseController {
     super()
   }
 
+  private filtersDiffer(left: GroupListFilter, right: GroupListFilter): boolean {
+    return JSON.stringify(left.params) !== JSON.stringify(right.params)
+  }
+
   async showNotStartedGroupListPage(req: Request, res: Response): Promise<void> {
     const { username } = req.user
     const pageNumber = req.query.page
     const selectedTab = 'NOT_STARTED_OR_IN_PROGRESS'
 
-    const filters = GroupListFilter.fromRequest(req)
+    const requestedFilter = GroupListFilter.fromRequest(req)
 
-    const notStartedGroupList = await this.accreditedProgrammesManageAndDeliverService.getGroupList(
+    let notStartedGroupList = await this.accreditedProgrammesManageAndDeliverService.getGroupList(
       username,
       {
         page: pageNumber ? Number(pageNumber) - 1 : 0,
         size: 50,
       },
-      filters.params,
+      requestedFilter.params,
       selectedTab,
     )
+
+    let filters = GroupListFilter.fromRequest(req, notStartedGroupList.deliveryLocationNames)
+
+    if (this.filtersDiffer(requestedFilter, filters)) {
+      notStartedGroupList = await this.accreditedProgrammesManageAndDeliverService.getGroupList(
+        username,
+        {
+          page: pageNumber ? Number(pageNumber) - 1 : 0,
+          size: 50,
+        },
+        filters.params,
+        selectedTab,
+      )
+      filters = GroupListFilter.fromRequest(req, notStartedGroupList.deliveryLocationNames)
+    }
 
     const presenter = new GroupPresenter(
       notStartedGroupList.pagedGroupData as Page<Group>,
@@ -53,17 +72,32 @@ export default class GroupController extends BaseController {
     const pageNumber = req.query.page
     const selectedTab = 'COMPLETE'
 
-    const filters = GroupListFilter.fromRequest(req)
+    const requestedFilter = GroupListFilter.fromRequest(req)
 
-    const completedGroupList = await this.accreditedProgrammesManageAndDeliverService.getGroupList(
+    let completedGroupList = await this.accreditedProgrammesManageAndDeliverService.getGroupList(
       username,
       {
         page: pageNumber ? Number(pageNumber) - 1 : 0,
         size: 50,
       },
-      filters.params,
+      requestedFilter.params,
       selectedTab,
     )
+
+    let filters = GroupListFilter.fromRequest(req, completedGroupList.deliveryLocationNames)
+
+    if (this.filtersDiffer(requestedFilter, filters)) {
+      completedGroupList = await this.accreditedProgrammesManageAndDeliverService.getGroupList(
+        username,
+        {
+          page: pageNumber ? Number(pageNumber) - 1 : 0,
+          size: 50,
+        },
+        filters.params,
+        selectedTab,
+      )
+      filters = GroupListFilter.fromRequest(req, completedGroupList.deliveryLocationNames)
+    }
 
     const presenter = new GroupPresenter(
       completedGroupList.pagedGroupData as Page<Group>,
