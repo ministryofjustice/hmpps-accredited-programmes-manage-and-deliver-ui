@@ -3,27 +3,44 @@ import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
 import { SelectArgsItem } from '../../utils/govukFrontendTypes'
 
-export default class CreateGroupTreatmentManagerPresenter {
+export default class CreateOrEditGroupTreatmentManagerPresenter {
   constructor(
+    private readonly groupId: string,
+    private readonly groupCode: string,
     readonly members: UserTeamMember[] = [],
     private readonly validationError: FormValidationError | null = null,
     private readonly createGroupFormData: Partial<CreateGroupRequest> | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
   ) {}
 
-  get backLinkUri() {
-    return `/group/create-a-group/group-delivery-location`
+  get isEditJourney() {
+    return Boolean(this.groupId)
   }
 
-  get text() {
-    return {
-      headingHintText: `Create group ${this.createGroupFormData.groupCode}`,
-      headingText: `Who is responsible for the group ?`,
-    }
+  get backLinkUri() {
+    return this.isEditJourney ? `/group/${this.groupId}/group-details` : '/group/create-a-group/group-delivery-location'
+  }
+
+  get captionText() {
+    return this.isEditJourney ? `Edit group ${this.groupCode}` : `Create group ${this.groupCode}`
+  }
+
+  get pageTitle() {
+    return this.isEditJourney ? `Edit who is responsible for the group` : `Who is responsible for the group?`
+  }
+
+  get submitButtonText() {
+    return this.isEditJourney ? `Submit` : `Continue`
   }
 
   get errorSummary() {
     return PresenterUtils.errorSummary(this.validationError)
+  }
+
+  get insetText() {
+    return this.isEditJourney
+      ? 'This will change the overall group details and facilitators assigned to future sessions. The assigned facilitators will not change for any sessions that have already taken place.'
+      : ''
   }
 
   generateSelectOptions(
