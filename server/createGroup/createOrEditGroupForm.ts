@@ -353,10 +353,8 @@ export default class CreateOrEditGroupForm {
   }
 
   private createOrEditGroupTreatmentManagerValidations(): ValidationChain[] {
-    const hasFacilitator = Object.entries(this.request.body).some(
-      ([key, value]) =>
-        (key.startsWith('create-group-facilitator') && !key.includes('cover') && value !== '') ||
-        (key.startsWith('create-group-cover-facilitator') && value !== ''),
+    const hasRegularFacilitator = Object.entries(this.request.body).some(
+      ([key, value]) => key.startsWith('create-group-facilitator') && !key.includes('cover') && value !== '',
     )
     return [
       body('create-group-treatment-manager')
@@ -364,7 +362,7 @@ export default class CreateOrEditGroupForm {
         .withMessage(errorMessages.createGroup.createGroupTreatmentManagerEmpty),
       body('create-group-facilitator')
         .custom(() => {
-          return hasFacilitator
+          return hasRegularFacilitator
         })
         .withMessage(errorMessages.createGroup.createGroupFacilitatorEmpty),
       body('create-group-facilitator').custom((_, { req }) => {
