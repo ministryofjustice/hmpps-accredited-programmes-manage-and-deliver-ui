@@ -70,4 +70,32 @@ describe(`Caselist controller`, () => {
         })
     },
   )
+
+  it('refetches open referrals without stale reporting teams when the selected PDU changes', async () => {
+    const firstResponse = caseListReferralsFactory.build({
+      filters: TestUtils.createCaseListFilters(),
+    })
+    const secondResponse = caseListReferralsFactory.build({
+      filters: TestUtils.createCaseListFilters(),
+    })
+
+    accreditedProgrammesManageAndDeliverService.getOpenCaselist
+      .mockResolvedValueOnce(firstResponse)
+      .mockResolvedValueOnce(secondResponse)
+
+    await request(app).get('/pdu/open-referrals?pdu=PDU2&reportingTeam=Team1').expect(200)
+
+    expect(accreditedProgrammesManageAndDeliverService.getOpenCaselist).toHaveBeenNthCalledWith(
+      1,
+      'user1',
+      { page: 0, size: 50 },
+      { pdu: 'PDU2', reportingTeam: ['Team1'] },
+    )
+    expect(accreditedProgrammesManageAndDeliverService.getOpenCaselist).toHaveBeenNthCalledWith(
+      2,
+      'user1',
+      { page: 0, size: 50 },
+      { pdu: 'PDU2' },
+    )
+  })
 })
