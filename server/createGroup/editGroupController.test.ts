@@ -1027,9 +1027,31 @@ describe('Edit Group Controller', () => {
         GroupDetailsFactory.build({
           id: groupId,
           code: 'TEST123',
-          treatmentManager: 'John Smith',
-          facilitators: ['Jane Doe'],
-          coverFacilitators: ['Alex Brown'],
+          treatmentManager: {
+            facilitator: 'Archibald Queeny',
+            facilitatorCode: 'JS001',
+            teamName: 'Team A',
+            teamCode: 'TEAM001',
+            teamMemberType: 'TREATMENT_MANAGER',
+          },
+          facilitators: [
+            {
+              facilitator: 'Jane Doe',
+              facilitatorCode: 'JD001',
+              teamName: 'Team A',
+              teamCode: 'TEAM001',
+              teamMemberType: 'REGULAR_FACILITATOR',
+            },
+          ],
+          coverFacilitators: [
+            {
+              facilitator: 'Alex River',
+              facilitatorCode: 'AB001',
+              teamName: 'Team B',
+              teamCode: 'TEAM002',
+              teamMemberType: 'COVER_FACILITATOR',
+            },
+          ],
         }),
       )
 
@@ -1074,8 +1096,22 @@ describe('Edit Group Controller', () => {
         GroupDetailsFactory.build({
           id: groupId,
           code: 'TEST123',
-          treatmentManager: 'John Smith',
-          facilitators: ['Jane Doe'],
+          treatmentManager: {
+            facilitator: 'John Smith',
+            facilitatorCode: 'JS001',
+            teamName: 'Team A',
+            teamCode: 'TEAM001',
+            teamMemberType: 'TREATMENT_MANAGER',
+          },
+          facilitators: [
+            {
+              facilitator: 'Jane Doe',
+              facilitatorCode: 'JD001',
+              teamName: 'Team A',
+              teamCode: 'TEAM001',
+              teamMemberType: 'REGULAR_FACILITATOR',
+            },
+          ],
           coverFacilitators: [],
         }),
       )
@@ -1143,8 +1179,22 @@ describe('Edit Group Controller', () => {
         GroupDetailsFactory.build({
           id: groupId,
           code: 'TEST123',
-          treatmentManager: 'John Smith',
-          facilitators: ['Jane Doe'],
+          treatmentManager: {
+            facilitator: 'John Smith',
+            facilitatorCode: 'JS001',
+            teamName: 'Team A',
+            teamCode: 'TEAM001',
+            teamMemberType: 'TREATMENT_MANAGER',
+          },
+          facilitators: [
+            {
+              facilitator: 'Jane Doe',
+              facilitatorCode: 'JD001',
+              teamName: 'Team A',
+              teamCode: 'TEAM001',
+              teamMemberType: 'REGULAR_FACILITATOR',
+            },
+          ],
           coverFacilitators: [],
         }),
       )

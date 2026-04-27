@@ -430,45 +430,21 @@ export default class EditGroupController extends BaseController {
   }
 
   async editGroupTreatmentManager(req: Request, res: Response): Promise<void> {
-    let { createGroupFormData } = req.session
     const { groupId } = req.params
     const { username } = req.user
-    let formError: FormValidationError | null = null
     let userInputData = null
+    let formError: FormValidationError | null = null
+
+    const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
     const pduMembers = await this.accreditedProgrammesManageAndDeliverService.getPduMembers(username)
 
-    if (!createGroupFormData?.teamMembers) {
-      const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
-
-      const mapMember = (
-        personName: string,
-        teamMemberType: CreateGroupTeamMember['teamMemberType'],
-      ): CreateGroupTeamMember | null => {
-        const matchingMember = pduMembers.find(member => member.personName === personName)
-        if (!matchingMember) {
-          return null
-        }
-
-        return {
-          facilitator: matchingMember.personName,
-          facilitatorCode: matchingMember.personCode,
-          teamName: matchingMember.teamName,
-          teamCode: matchingMember.teamCode,
-          teamMemberType,
-        }
-      }
-
-      const existingTeamMembers = [
-        ...(groupDetails?.treatmentManager ? [mapMember(groupDetails.treatmentManager, 'TREATMENT_MANAGER')] : []),
-        ...((groupDetails?.facilitators || []).map(name => mapMember(name, 'REGULAR_FACILITATOR')) || []),
-        ...((groupDetails?.coverFacilitators || []).map(name => mapMember(name, 'COVER_FACILITATOR')) || []),
-      ].filter((member): member is CreateGroupTeamMember => member !== null)
-
-      req.session.createGroupFormData = {
-        groupCode: groupDetails.code,
-        teamMembers: existingTeamMembers,
-      }
-      createGroupFormData = req.session.createGroupFormData
+    const createGroupFormData = {
+      groupCode: groupDetails?.code,
+      teamMembers: [
+        ...(groupDetails?.treatmentManager ? [groupDetails.treatmentManager] : []),
+        ...(groupDetails?.facilitators || []),
+        ...(groupDetails?.coverFacilitators || []),
+      ],
     }
 
     if (req.method === 'POST') {
@@ -490,7 +466,7 @@ export default class EditGroupController extends BaseController {
 
     const presenter = new CreateOrEditGroupTreatmentManagerPresenter(
       groupId,
-      createGroupFormData?.groupCode || '',
+      createGroupFormData.groupCode || '',
       pduMembers,
       formError,
       createGroupFormData,
