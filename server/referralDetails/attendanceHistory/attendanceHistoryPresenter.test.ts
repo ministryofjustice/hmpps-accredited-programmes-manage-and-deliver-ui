@@ -65,6 +65,11 @@ describe('AttendanceHistoryPresenter', () => {
       const rows = presenter.attendanceHistoryTableArgs
 
       expect(rows).toHaveLength(2)
+
+      // Calculate expected epoch times from the unformatted dates
+      const session1EpochTime = new Date('2025-07-11 10:30:00').getTime()
+      const session2EpochTime = new Date('2025-07-18 14:00:00').getTime()
+
       expect(rows[0]).toEqual([
         {
           html: `<a href="/group/1234567890/session/session-1/edit-session?isAttendanceHistory=true&referralId=${referralId}" class="govuk-link">Pre-group one-to-one</a>`,
@@ -73,7 +78,7 @@ describe('AttendanceHistoryPresenter', () => {
         {
           text: '11 July 2025',
           attributes: {
-            'data-sort-value': 1752226200000,
+            'data-sort-value': session1EpochTime,
           },
         },
         { text: 'Midday to 1pm' },
@@ -90,7 +95,7 @@ describe('AttendanceHistoryPresenter', () => {
         {
           text: '18 July 2025',
           attributes: {
-            'data-sort-value': 1752843600000,
+            'data-sort-value': session2EpochTime,
           },
         },
         { text: '2pm to 3pm' },
