@@ -3105,9 +3105,9 @@ export interface components {
       first?: boolean
       last?: boolean
       sort?: components['schemas']['SortObject']
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageableObject: {
@@ -3115,10 +3115,10 @@ export interface components {
       offset?: number
       sort?: components['schemas']['SortObject']
       /** Format: int32 */
-      pageSize?: number
+      pageNumber?: number
       paged?: boolean
       /** Format: int32 */
-      pageNumber?: number
+      pageSize?: number
       unpaged?: boolean
     }
     ReferralCaseListItem: {
@@ -3635,6 +3635,11 @@ export interface components {
        */
       date: string
       /**
+       * Format: date-time
+       * @description The unformatted date of the session for sorting
+       */
+      unformattedDate: string
+      /**
        * @description The time range of the session
        * @example 10:30am to 11am
        */
@@ -3759,9 +3764,9 @@ export interface components {
       first?: boolean
       last?: boolean
       sort?: components['schemas']['SortObject']
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     GroupItem: {
@@ -3854,9 +3859,9 @@ export interface components {
       first?: boolean
       last?: boolean
       sort?: components['schemas']['SortObject']
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
@@ -4358,21 +4363,12 @@ export interface components {
        * @example 9
        */
       currentlyAllocatedNumber: number
-      /**
-       * @description The treatment manager for this group.
-       * @example Chloe Pascal
-       */
-      treatmentManager: string
-      /**
-       * @description The list of facilitators for this group.
-       * @example [Harpreet Singh, Tom Bassett]
-       */
-      facilitators: string[]
-      /**
-       * @description The list of coverFacilitators for this group.
-       * @example [Tom Saunders]
-       */
-      coverFacilitators?: string[] | null
+      /** @description The treatment manager for this group. */
+      treatmentManager: components['schemas']['CreateGroupTeamMember']
+      /** @description The list of facilitators for this group. */
+      facilitators: components['schemas']['CreateGroupTeamMember'][]
+      /** @description The list of coverFacilitators for this group. */
+      coverFacilitators?: components['schemas']['CreateGroupTeamMember'][] | null
     }
   }
   responses: never

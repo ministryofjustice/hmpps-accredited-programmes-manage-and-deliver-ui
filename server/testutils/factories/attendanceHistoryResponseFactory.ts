@@ -35,11 +35,12 @@ export default AttendanceHistoryResponseFactory.define(({ sequence }) => ({
       groupCode: 'GRP-001',
       groupId: '1234567890',
       date: '11 July 2025',
-      time: '10:30am to 11am',
+      time: 'midday to 1pm',
       attendanceStatus: 'Attended - Complied',
       hasNotes: true,
       popName: '',
       isCatchup: false,
+      unformattedDate: '2025-07-11 10:30:00',
     },
     {
       sessionId: 'session-2',
@@ -52,6 +53,7 @@ export default AttendanceHistoryResponseFactory.define(({ sequence }) => ({
       hasNotes: false,
       popName: '',
       isCatchup: false,
+      unformattedDate: '2025-07-18 14:00:00',
     },
   ],
 }))

@@ -70,8 +70,13 @@ describe('AttendanceHistoryPresenter', () => {
           html: `<a href="/group/1234567890/session/session-1/edit-session?isAttendanceHistory=true&referralId=${referralId}" class="govuk-link">Pre-group one-to-one</a>`,
         },
         { text: 'GRP-001' },
-        { text: '11 July 2025' },
-        { text: '10:30am to 11am' },
+        {
+          text: '11 July 2025',
+          attributes: {
+            'data-sort-value': 1752226200000,
+          },
+        },
+        { text: 'Midday to 1pm' },
         { html: `<span class="govuk-tag govuk-tag--blue">Attended</span>` },
         {
           html: `<a href="/group/1234567890/session/session-1/pre-group-one-to-one/session-notes?referralId=${referralId}&isAttendanceHistory=true" class="govuk-link">Pre-group one-to-one attendance and notes</a>`,
@@ -82,7 +87,12 @@ describe('AttendanceHistoryPresenter', () => {
           html: `<a href="/group/1234567890/session/session-2/edit-session?isAttendanceHistory=true&referralId=${referralId}" class="govuk-link">Session 1: Introduction</a>`,
         },
         { text: 'GRP-001' },
-        { text: '18 July 2025' },
+        {
+          text: '18 July 2025',
+          attributes: {
+            'data-sort-value': 1752843600000,
+          },
+        },
         { text: '2pm to 3pm' },
         { html: `<span class="govuk-tag govuk-tag--red">Not attended</span>` },
         { text: 'Not added' },
@@ -98,6 +108,7 @@ describe('AttendanceHistoryPresenter', () => {
             groupCode: null as unknown as string,
             date: '11 July 2025',
             time: '10:30am',
+            unformattedDate: '2025-07-11 10:30:00.00',
             attendanceStatus: 'Attended',
             hasNotes: false,
             popName: '',

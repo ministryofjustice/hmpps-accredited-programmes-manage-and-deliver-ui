@@ -20,7 +20,7 @@ export default class AttendanceHistoryView {
         {
           text: 'Session',
           attributes: {
-            'aria-sort': 'ascending',
+            'aria-sort': 'none',
           },
         },
         {
