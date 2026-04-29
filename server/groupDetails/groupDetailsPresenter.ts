@@ -99,7 +99,6 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
   }
 
   getGroupStaffSummary(): SummaryListItem[] {
-    const facilitators = this.group.facilitators.map(f => f.facilitator)
     const coverFacilitators =
       this.group.coverFacilitators.length > 0 ? this.group.coverFacilitators.map(f => f.facilitator) : ['None added']
 
