@@ -31,6 +31,7 @@
     "assets/**/*.js",
     "integration_tests",
     "dist",
+    "out",
     "cypress.config.ts",
     "esbuild",
     "eslint.config.mjs"

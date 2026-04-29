@@ -95,6 +95,20 @@ describe('Edit Group Controller', () => {
           expect(res.text).toContain('Enter or select a date')
         })
     })
+
+    it('displays user input when date validation fails', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue(groupDetails)
+
+      return request(app)
+        .post(`/group/${groupId}/edit-group-start-date`)
+        .type('form')
+        .send({ 'create-group-date': '32/13/2026' })
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain('32/13/2026')
+          expect(res.text).toContain('Enter a date in the format 10/7/2025')
+        })
+    })
   })
 
   describe('GET /group/:groupId/edit-start-date-rescheduled', () => {
@@ -1003,6 +1017,204 @@ describe('Edit Group Controller', () => {
               deliveryLocationCode: 'LOC-2',
             }),
           )
+        })
+    })
+  })
+
+  describe('GET /group/:groupId/edit-group-facilitators', () => {
+    it('loads the edit facilitators page with existing assigned staff', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue(
+        GroupDetailsFactory.build({
+          id: groupId,
+          code: 'TEST123',
+          treatmentManager: {
+            facilitator: 'Archibald Queeny',
+            facilitatorCode: 'JS001',
+            teamName: 'Team A',
+            teamCode: 'TEAM001',
+            teamMemberType: 'TREATMENT_MANAGER',
+          },
+          facilitators: [
+            {
+              facilitator: 'Jane Doe',
+              facilitatorCode: 'JD001',
+              teamName: 'Team A',
+              teamCode: 'TEAM001',
+              teamMemberType: 'REGULAR_FACILITATOR',
+            },
+          ],
+          coverFacilitators: [
+            {
+              facilitator: 'Alex River',
+              facilitatorCode: 'AB001',
+              teamName: 'Team B',
+              teamCode: 'TEAM002',
+              teamMemberType: 'COVER_FACILITATOR',
+            },
+          ],
+        }),
+      )
+
+      accreditedProgrammesManageAndDeliverService.getPduMembers.mockResolvedValue([
+        {
+          personName: 'John Smith',
+          personCode: 'JS123',
+          teamName: 'Team A',
+          teamCode: 'TA001',
+        },
+        {
+          personName: 'Jane Doe',
+          personCode: 'JD456',
+          teamName: 'Team A',
+          teamCode: 'TA001',
+        },
+        {
+          personName: 'Alex Brown',
+          personCode: 'AB789',
+          teamName: 'Team B',
+          teamCode: 'TB001',
+        },
+      ])
+
+      return request(app)
+        .get(`/group/${groupId}/edit-group-facilitators`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Edit who is responsible for the group')
+          expect(res.text).toContain('John Smith')
+          expect(res.text).toContain('Jane Doe')
+          expect(res.text).toContain('Alex Brown')
+          expect(accreditedProgrammesManageAndDeliverService.getGroupDetailsById).toHaveBeenCalledWith('user1', groupId)
+          expect(accreditedProgrammesManageAndDeliverService.getPduMembers).toHaveBeenCalledWith('user1')
+        })
+    })
+  })
+
+  describe('POST /group/:groupId/edit-group-facilitators', () => {
+    it('updates group facilitators and redirects to group details on success', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue(
+        GroupDetailsFactory.build({
+          id: groupId,
+          code: 'TEST123',
+          treatmentManager: {
+            facilitator: 'John Smith',
+            facilitatorCode: 'JS001',
+            teamName: 'Team A',
+            teamCode: 'TEAM001',
+            teamMemberType: 'TREATMENT_MANAGER',
+          },
+          facilitators: [
+            {
+              facilitator: 'Jane Doe',
+              facilitatorCode: 'JD001',
+              teamName: 'Team A',
+              teamCode: 'TEAM001',
+              teamMemberType: 'REGULAR_FACILITATOR',
+            },
+          ],
+          coverFacilitators: [],
+        }),
+      )
+
+      accreditedProgrammesManageAndDeliverService.getPduMembers.mockResolvedValue([
+        {
+          personName: 'John Smith',
+          personCode: 'JS123',
+          teamName: 'Team A',
+          teamCode: 'TA001',
+        },
+        {
+          personName: 'Jane Doe',
+          personCode: 'JD456',
+          teamName: 'Team A',
+          teamCode: 'TA001',
+        },
+      ])
+
+      return request(app)
+        .post(`/group/${groupId}/edit-group-facilitators`)
+        .type('form')
+        .send({
+          'create-group-treatment-manager': JSON.stringify({
+            facilitator: 'John Smith',
+            facilitatorCode: 'JS123',
+            teamName: 'Team A',
+            teamCode: 'TA001',
+            teamMemberType: 'TREATMENT_MANAGER',
+          }),
+          'create-group-facilitator': JSON.stringify({
+            facilitator: 'Jane Doe',
+            facilitatorCode: 'JD456',
+            teamName: 'Team A',
+            teamCode: 'TA001',
+            teamMemberType: 'REGULAR_FACILITATOR',
+          }),
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain(`Redirecting to /group/${groupId}/group-details`)
+          expect(accreditedProgrammesManageAndDeliverService.updateGroup).toHaveBeenCalledWith('user1', groupId, {
+            teamMembers: [
+              {
+                facilitator: 'John Smith',
+                facilitatorCode: 'JS123',
+                teamName: 'Team A',
+                teamCode: 'TA001',
+                teamMemberType: 'TREATMENT_MANAGER',
+              },
+              {
+                facilitator: 'Jane Doe',
+                facilitatorCode: 'JD456',
+                teamName: 'Team A',
+                teamCode: 'TA001',
+                teamMemberType: 'REGULAR_FACILITATOR',
+              },
+            ],
+          })
+        })
+    })
+
+    it('returns 400 and does not update group when required selections are missing', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue(
+        GroupDetailsFactory.build({
+          id: groupId,
+          code: 'TEST123',
+          treatmentManager: {
+            facilitator: 'John Smith',
+            facilitatorCode: 'JS001',
+            teamName: 'Team A',
+            teamCode: 'TEAM001',
+            teamMemberType: 'TREATMENT_MANAGER',
+          },
+          facilitators: [
+            {
+              facilitator: 'Jane Doe',
+              facilitatorCode: 'JD001',
+              teamName: 'Team A',
+              teamCode: 'TEAM001',
+              teamMemberType: 'REGULAR_FACILITATOR',
+            },
+          ],
+          coverFacilitators: [],
+        }),
+      )
+
+      accreditedProgrammesManageAndDeliverService.getPduMembers.mockResolvedValue([
+        {
+          personName: 'John Smith',
+          personCode: 'JS123',
+          teamName: 'Team A',
+          teamCode: 'TA001',
+        },
+      ])
+
+      return request(app)
+        .post(`/group/${groupId}/edit-group-facilitators`)
+        .type('form')
+        .send({})
+        .expect(400)
+        .expect(() => {
+          expect(accreditedProgrammesManageAndDeliverService.updateGroup).not.toHaveBeenCalled()
         })
     })
   })

@@ -438,7 +438,7 @@ describe('CreateGroupForm', () => {
               '{"facilitator":"Bob Jones","facilitatorCode":"BJ789","teamName":"Team C","teamCode":"TC003","teamMemberType":"COVER_FACILITATOR"}',
           })
 
-          const data = await new CreateOrEditGroupForm(request).createGroupTreatmentManagerData()
+          const data = await new CreateOrEditGroupForm(request).createOrEditGroupTreatmentManagerData()
 
           expect(data.paramsForUpdate).toStrictEqual({
             teamMembers: [
@@ -476,7 +476,7 @@ describe('CreateGroupForm', () => {
               '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
           })
 
-          const data = await new CreateOrEditGroupForm(request).createGroupTreatmentManagerData()
+          const data = await new CreateOrEditGroupForm(request).createOrEditGroupTreatmentManagerData()
 
           expect(data.paramsForUpdate).toBeNull()
           expect(data.error).toStrictEqual({
@@ -498,7 +498,7 @@ describe('CreateGroupForm', () => {
               '{"facilitator":"John Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
           })
 
-          const data = await new CreateOrEditGroupForm(request).createGroupTreatmentManagerData()
+          const data = await new CreateOrEditGroupForm(request).createOrEditGroupTreatmentManagerData()
 
           expect(data.paramsForUpdate).toBeNull()
           expect(data.error).toStrictEqual({
@@ -517,7 +517,7 @@ describe('CreateGroupForm', () => {
         it('returns errors for both fields', async () => {
           const request = TestUtils.createRequest({})
 
-          const data = await new CreateOrEditGroupForm(request).createGroupTreatmentManagerData()
+          const data = await new CreateOrEditGroupForm(request).createOrEditGroupTreatmentManagerData()
 
           expect(data.paramsForUpdate).toBeNull()
           expect(data.error.errors).toHaveLength(2)
@@ -534,6 +534,30 @@ describe('CreateGroupForm', () => {
         })
       })
 
+      describe('when facilitator is missing but cover facilitator is present', () => {
+        it('returns an appropriate error', async () => {
+          const request = TestUtils.createRequest({
+            'create-group-treatment-manager':
+              '{"facilitator":"John Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
+            'create-group-cover-facilitator-1':
+              '{"facilitator":"Alex Brown","facilitatorCode":"AB789","teamName":"Team C","teamCode":"TC003","teamMemberType":"COVER_FACILITATOR"}',
+          })
+
+          const data = await new CreateOrEditGroupForm(request).createOrEditGroupTreatmentManagerData()
+
+          expect(data.paramsForUpdate).toBeNull()
+          expect(data.error).toStrictEqual({
+            errors: [
+              {
+                errorSummaryLinkedField: 'create-group-facilitator',
+                formFields: ['create-group-facilitator'],
+                message: 'Select a Facilitator. Start typing to search.',
+              },
+            ],
+          })
+        })
+      })
+
       describe('when empty facilitator fields are included', () => {
         it('filters out empty values and returns params for update', async () => {
           const request = TestUtils.createRequest({
@@ -545,7 +569,7 @@ describe('CreateGroupForm', () => {
             'create-group-facilitator-3': '',
           })
 
-          const data = await new CreateOrEditGroupForm(request).createGroupTreatmentManagerData()
+          const data = await new CreateOrEditGroupForm(request).createOrEditGroupTreatmentManagerData()
 
           expect(data.paramsForUpdate).toStrictEqual({
             teamMembers: [
@@ -580,7 +604,7 @@ describe('CreateGroupForm', () => {
               '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"COVER_FACILITATOR"}',
           })
 
-          const data = await new CreateOrEditGroupForm(request).createGroupTreatmentManagerData()
+          const data = await new CreateOrEditGroupForm(request).createOrEditGroupTreatmentManagerData()
 
           expect(data.paramsForUpdate).toBeNull()
           expect(data.error).toStrictEqual({
@@ -608,7 +632,7 @@ describe('CreateGroupForm', () => {
               '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"COVER_FACILITATOR"}',
           })
 
-          const data = await new CreateOrEditGroupForm(request).createGroupTreatmentManagerData()
+          const data = await new CreateOrEditGroupForm(request).createOrEditGroupTreatmentManagerData()
 
           expect(data.paramsForUpdate).toBeNull()
           expect(data.error?.errors[0].message).toBe(
@@ -628,7 +652,7 @@ describe('CreateGroupForm', () => {
               '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
           })
 
-          const data = await new CreateOrEditGroupForm(request).createGroupTreatmentManagerData()
+          const data = await new CreateOrEditGroupForm(request).createOrEditGroupTreatmentManagerData()
 
           expect(data.paramsForUpdate).toBeNull()
           expect(data.error?.errors[0].message).toBe(

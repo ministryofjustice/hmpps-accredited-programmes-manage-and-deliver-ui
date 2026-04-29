@@ -1,5 +1,8 @@
 # Stage: base image
-FROM node:22-alpine AS base
+FROM ghcr.io/ministryofjustice/hmpps-node:24-alpine AS base
+
+ARG BUILD_NUMBER=1_0_0
+ARG GIT_REF=not-available
 
 LABEL maintainer="HMPPS Digital Studio <info@digital.justice.gov.uk>"
 
@@ -10,8 +13,8 @@ RUN apk --update-cache upgrade --available \
 ENV TZ=Europe/London
 RUN ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime && echo "$TZ" > /etc/timezone
 
-RUN addgroup --gid 2000 --system appgroup && \
-    adduser --uid 2000 --system appuser --ingroup appgroup
+RUN if ! getent group appgroup; then addgroup --gid 2000 --system appgroup; fi && \
+    if ! id -u appuser 2>/dev/null; then adduser --uid 2000 --system appuser --ingroup appgroup; fi
 
 WORKDIR /app
 

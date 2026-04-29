@@ -16,7 +16,36 @@ export default GroupDetailsFactory.define(({ sequence }) => ({
   sex: 'MALE' as Group['sex'],
   daysAndTimes: ['Mondays 10am to 12:30pm, Fridays 11am to 1:30pm'],
   currentlyAllocatedNumber: 3,
-  treatmentManager: 'Treatment Manager',
-  facilitators: ['Facilitator 1', 'Facilitator 2'],
-  coverFacilitators: ['Cover Facilitator'],
+  treatmentManager: {
+    facilitator: 'Treatment Manager',
+    facilitatorCode: '1234',
+    teamName: 'Team A',
+    teamCode: '9876',
+    teamMemberType: 'TREATMENT_MANAGER' as 'TREATMENT_MANAGER' | 'REGULAR_FACILITATOR' | 'COVER_FACILITATOR',
+  },
+  facilitators: [
+    {
+      facilitator: 'Facilitator 1',
+      facilitatorCode: '1111',
+      teamName: 'Team A',
+      teamCode: '9876',
+      teamMemberType: 'REGULAR_FACILITATOR' as 'TREATMENT_MANAGER' | 'REGULAR_FACILITATOR' | 'COVER_FACILITATOR',
+    },
+    {
+      facilitator: 'Facilitator 2',
+      facilitatorCode: '2222',
+      teamName: 'Team A',
+      teamCode: '9876',
+      teamMemberType: 'REGULAR_FACILITATOR' as 'TREATMENT_MANAGER' | 'REGULAR_FACILITATOR' | 'COVER_FACILITATOR',
+    },
+  ],
+  coverFacilitators: [
+    {
+      facilitator: 'Cover Facilitator',
+      facilitatorCode: '9876',
+      teamName: 'Team A',
+      teamCode: '9876',
+      teamMemberType: 'COVER_FACILITATOR' as 'TREATMENT_MANAGER' | 'REGULAR_FACILITATOR' | 'COVER_FACILITATOR',
+    },
+  ],
 }))
