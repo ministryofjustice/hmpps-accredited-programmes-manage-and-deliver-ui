@@ -76,8 +76,8 @@ export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter 
         html: `<a href="/group/${session.groupId}/session/${session.sessionId}/edit-session?isAttendanceHistory=true&referralId=${this.referralId}" class="govuk-link">${session.sessionName}</a>`,
       },
       { text: session.groupCode ?? 'N/A' },
-      { text: session.date },
-      { text: session.time },
+      { text: session.date, attributes: { 'data-sort-value': new Date(session.unformattedDate).getTime() } },
+      { text: session.time.charAt(0).toUpperCase() + session.time.slice(1) },
       { html: attendanceTag(session.attendanceStatus) },
       session.hasNotes
         ? {
