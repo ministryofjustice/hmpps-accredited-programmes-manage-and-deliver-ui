@@ -24,23 +24,41 @@ export default class CaselistController extends BaseController {
     }
   }
 
+  private filtersDiffer(left: CaselistFilter, right: CaselistFilter): boolean {
+    return JSON.stringify(left.params) !== JSON.stringify(right.params)
+  }
+
   async showOpenCaselist(req: Request, res: Response): Promise<void> {
     this.prepareSessionFilterParams(req)
     const { username } = req.user
     const pageNumber = req.query.page
 
-    const initialFilter = CaselistFilter.fromRequest(req)
+    const requestedFilter = CaselistFilter.fromRequest(req)
 
-    const openCaseList = await this.accreditedProgrammesManageAndDeliverService.getOpenCaselist(
+    let openCaseList = await this.accreditedProgrammesManageAndDeliverService.getOpenCaselist(
       username,
       {
         page: pageNumber ? Number(pageNumber) - 1 : 0,
         size: 50,
       },
-      initialFilter.params,
+      requestedFilter.params,
     )
 
-    const filter = CaselistFilter.fromRequest(req, openCaseList.filters.locationFilters)
+    let filter = CaselistFilter.fromRequest(req, openCaseList.filters.locationFilters)
+
+    // If incoming reporting teams don't belong to the selected PDU,
+    // fetch once more with updated filter params so results and filters match.
+    if (this.filtersDiffer(requestedFilter, filter)) {
+      openCaseList = await this.accreditedProgrammesManageAndDeliverService.getOpenCaselist(
+        username,
+        {
+          page: pageNumber ? Number(pageNumber) - 1 : 0,
+          size: 50,
+        },
+        filter.params,
+      )
+      filter = CaselistFilter.fromRequest(req, openCaseList.filters.locationFilters)
+    }
 
     const presenter = new CaselistPresenter(
       CaselistPageSection.Open,
@@ -62,18 +80,33 @@ export default class CaselistController extends BaseController {
     this.prepareSessionFilterParams(req)
     const { username } = req.user
     const pageNumber = req.query.page
-    const initialFilter = CaselistFilter.fromRequest(req)
 
-    const closedCaseList = await this.accreditedProgrammesManageAndDeliverService.getClosedCaselist(
+    const requestedFilter = CaselistFilter.fromRequest(req)
+
+    let closedCaseList = await this.accreditedProgrammesManageAndDeliverService.getClosedCaselist(
       username,
       {
         page: pageNumber ? Number(pageNumber) - 1 : 0,
         size: 50,
       },
-      initialFilter.params,
+      requestedFilter.params,
     )
 
-    const filter = CaselistFilter.fromRequest(req, closedCaseList.filters.locationFilters)
+    let filter = CaselistFilter.fromRequest(req, closedCaseList.filters.locationFilters)
+
+    // If incoming reporting teams don't belong to the selected PDU,
+    // fetch once more with updated filter params so results and filters match.
+    if (this.filtersDiffer(requestedFilter, filter)) {
+      closedCaseList = await this.accreditedProgrammesManageAndDeliverService.getClosedCaselist(
+        username,
+        {
+          page: pageNumber ? Number(pageNumber) - 1 : 0,
+          size: 50,
+        },
+        filter.params,
+      )
+      filter = CaselistFilter.fromRequest(req, closedCaseList.filters.locationFilters)
+    }
 
     const presenter = new CaselistPresenter(
       CaselistPageSection.Closed,

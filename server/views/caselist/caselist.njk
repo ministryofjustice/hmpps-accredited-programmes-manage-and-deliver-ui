@@ -7,7 +7,6 @@
 {% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "../components/selectWithOptGroup.njk" import govukSelectWithOptgroup %}
-{%- from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -40,7 +39,7 @@
 
     {% endset -%}
     <div class="govuk-grid-column-one-quarter">
-      <form id="filter-form" method="get">
+      <form method="get">
         {{ mojFilter({
           heading: {
             text: "Filter"
