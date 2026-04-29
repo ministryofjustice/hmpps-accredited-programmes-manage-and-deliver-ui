@@ -22,6 +22,8 @@ import CreateOrEditGroupCodePresenter from './code/createOrEditGroupCodePresente
 import CreateOrEditGroupCodeView from './code/createOrEditGroupCodeView'
 import CreateOrEditGroupLocationPresenter from './location/createOrEditGroupLocationPresenter'
 import CreateOrEditGroupLocationView from './location/createOrEditGroupLocationView'
+import CreateOrEditGroupTreatmentManagerView from './treatment-manager/createOrEditGroupTreatmentManagerView'
+import CreateOrEditGroupTreatmentManagerPresenter from './treatment-manager/createOrEditGroupTreatmentManagerPresenter'
 
 export default class EditGroupController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -198,7 +200,7 @@ export default class EditGroupController extends BaseController {
     }
 
     if (req.method === 'POST') {
-      const data = await new CreateOrEditGroupForm(req, '').createGroupSexData()
+      const data = await new CreateOrEditGroupForm(req).createGroupSexData()
 
       if (data.error) {
         res.status(400)
@@ -245,7 +247,7 @@ export default class EditGroupController extends BaseController {
     }
 
     if (req.method === 'POST') {
-      const data = await new CreateOrEditGroupForm(req, '').createGroupCohortData()
+      const data = await new CreateOrEditGroupForm(req).createGroupCohortData()
 
       if (data.error) {
         res.status(400)
@@ -424,6 +426,53 @@ export default class EditGroupController extends BaseController {
       req.session.originPage,
     )
     const view = new CreateOrEditGroupLocationView(presenter)
+    return this.renderPage(res, view)
+  }
+
+  async editGroupTreatmentManager(req: Request, res: Response): Promise<void> {
+    const { groupId } = req.params
+    const { username } = req.user
+    let userInputData = null
+    let formError: FormValidationError | null = null
+
+    const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
+    const pduMembers = await this.accreditedProgrammesManageAndDeliverService.getPduMembers(username)
+
+    const createGroupFormData = {
+      groupCode: groupDetails?.code,
+      teamMembers: [
+        ...(groupDetails?.treatmentManager ? [groupDetails.treatmentManager] : []),
+        ...(groupDetails?.facilitators || []),
+        ...(groupDetails?.coverFacilitators || []),
+      ],
+    }
+
+    if (req.method === 'POST') {
+      const data = await new CreateOrEditGroupForm(req).createOrEditGroupTreatmentManagerData()
+
+      if (data.error) {
+        res.status(400)
+        formError = data.error
+        userInputData = req.body
+      } else {
+        await this.accreditedProgrammesManageAndDeliverService.updateGroup(username, groupId, {
+          teamMembers: data.paramsForUpdate.teamMembers,
+        })
+
+        req.session.createGroupFormData = {}
+        return res.redirect(`/group/${groupId}/group-details`)
+      }
+    }
+
+    const presenter = new CreateOrEditGroupTreatmentManagerPresenter(
+      groupId,
+      createGroupFormData.groupCode || '',
+      pduMembers,
+      formError,
+      createGroupFormData,
+      userInputData,
+    )
+    const view = new CreateOrEditGroupTreatmentManagerView(presenter)
     return this.renderPage(res, view)
   }
 }
