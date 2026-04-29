@@ -65,13 +65,23 @@ describe('AttendanceHistoryPresenter', () => {
       const rows = presenter.attendanceHistoryTableArgs
 
       expect(rows).toHaveLength(2)
+
+      // Calculate expected epoch times from the unformatted dates
+      const session1EpochTime = new Date('2025-07-11 10:30:00').getTime()
+      const session2EpochTime = new Date('2025-07-18 14:00:00').getTime()
+
       expect(rows[0]).toEqual([
         {
           html: `<a href="/group/1234567890/session/session-1/edit-session?isAttendanceHistory=true&referralId=${referralId}" class="govuk-link">Pre-group one-to-one</a>`,
         },
         { text: 'GRP-001' },
-        { text: '11 July 2025' },
-        { text: '10:30am to 11am' },
+        {
+          text: '11 July 2025',
+          attributes: {
+            'data-sort-value': session1EpochTime,
+          },
+        },
+        { text: 'Midday to 1pm' },
         { html: `<span class="govuk-tag govuk-tag--blue">Attended</span>` },
         {
           html: `<a href="/group/1234567890/session/session-1/pre-group-one-to-one/session-notes?referralId=${referralId}&isAttendanceHistory=true" class="govuk-link">Pre-group one-to-one attendance and notes</a>`,
@@ -82,7 +92,12 @@ describe('AttendanceHistoryPresenter', () => {
           html: `<a href="/group/1234567890/session/session-2/edit-session?isAttendanceHistory=true&referralId=${referralId}" class="govuk-link">Session 1: Introduction</a>`,
         },
         { text: 'GRP-001' },
-        { text: '18 July 2025' },
+        {
+          text: '18 July 2025',
+          attributes: {
+            'data-sort-value': session2EpochTime,
+          },
+        },
         { text: '2pm to 3pm' },
         { html: `<span class="govuk-tag govuk-tag--red">Not attended</span>` },
         { text: 'Not added' },
@@ -98,6 +113,7 @@ describe('AttendanceHistoryPresenter', () => {
             groupCode: null as unknown as string,
             date: '11 July 2025',
             time: '10:30am',
+            unformattedDate: '2025-07-11 10:30:00.00',
             attendanceStatus: 'Attended',
             hasNotes: false,
             popName: '',
