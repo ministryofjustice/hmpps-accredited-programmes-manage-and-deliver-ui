@@ -177,6 +177,9 @@
   "overrides": {
     "@jgoz/esbuild-plugin-typecheck": {
       "esbuild": "$esbuild"
+    },
+    "mocha-junit-reporter": {
+      "serialize-javascript": "7.0.5"
     }
   }
 }
