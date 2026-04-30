@@ -494,8 +494,10 @@ describe('Edit Group Controller', () => {
           { text: 'Mixed', value: 'MIXED', selected: false },
         ],
       } as EditGroupSex)
-      accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({} as never)
 
+      accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({
+        successMessage: 'The gender has been updated.',
+      })
       return request(app)
         .post(`/group/${groupId}/edit-group-gender`)
         .type('form')
@@ -658,7 +660,9 @@ describe('Edit Group Controller', () => {
           { text: 'Sexual offence, learning disabilities and challenges (LDC)', value: 'SEXUAL_LDC', selected: false },
         ],
       } as EditGroupCohort)
-      accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({} as never)
+      accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({
+        successMessage: 'The cohort has been updated.',
+      })
 
       return request(app)
         .post(`/group/${groupId}/edit-a-group/edit-group-cohort`)
@@ -748,8 +752,9 @@ describe('Edit Group Controller', () => {
         code: 'EXISTING123',
         regionName: 'Test Region',
       })
-      accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({} as never)
-
+      accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({
+        successMessage: 'The group code has been updated.',
+      })
       return request(app)
         .post(`/group/${groupId}/edit-a-group/edit-group-code`)
         .type('form')
@@ -1001,7 +1006,7 @@ describe('Edit Group Controller', () => {
 
       accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu.mockResolvedValue(officeLocations)
       accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({
-        successMessage: 'Group delivery location updated',
+        successMessage: 'The delivery location has been updated.',
       })
 
       return request(app)
@@ -1011,7 +1016,7 @@ describe('Edit Group Controller', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(`Redirecting to /group/${groupId}/group-details`)
-          expect(res.text).toContain(encodeURIComponent('Group delivery location updated'))
+          expect(res.text).toContain(encodeURIComponent('The delivery location has been updated.'))
           expect(accreditedProgrammesManageAndDeliverService.updateGroup).toHaveBeenCalledWith(
             'user1',
             groupId,
@@ -1134,7 +1139,7 @@ describe('Edit Group Controller', () => {
       ])
 
       accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({
-        successMessage: 'Group facilitators updated',
+        successMessage: 'The people responsible for the group have been updated.',
       })
 
       return request(app)
