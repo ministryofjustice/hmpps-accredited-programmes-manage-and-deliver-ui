@@ -508,6 +508,7 @@ describe('Edit Group Controller', () => {
             sex: 'FEMALE',
           })
           expect(res.text).toContain(`Redirecting to /group/${groupId}/group-details`)
+          expect(res.text).toContain(encodeURIComponent('The gender has been updated.'))
         })
     })
 
@@ -674,6 +675,7 @@ describe('Edit Group Controller', () => {
             cohort: 'GENERAL_LDC',
           })
           expect(res.text).toContain(`Redirecting to /group/${groupId}/group-details`)
+          expect(res.text).toContain(encodeURIComponent('The cohort has been updated.'))
         })
     })
 
@@ -1164,6 +1166,7 @@ describe('Edit Group Controller', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(`Redirecting to /group/${groupId}/group-details`)
+          expect(res.text).toContain(encodeURIComponent('The people responsible for the group have been updated.'))
           expect(accreditedProgrammesManageAndDeliverService.updateGroup).toHaveBeenCalledWith('user1', groupId, {
             teamMembers: [
               {
