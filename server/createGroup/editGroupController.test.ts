@@ -1131,6 +1131,10 @@ describe('Edit Group Controller', () => {
         },
       ])
 
+      accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({
+        successMessage: 'Group facilitators updated',
+      })
+
       return request(app)
         .post(`/group/${groupId}/edit-group-facilitators`)
         .type('form')
