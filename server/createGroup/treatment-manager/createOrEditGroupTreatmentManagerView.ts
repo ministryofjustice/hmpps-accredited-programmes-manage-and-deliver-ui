@@ -13,13 +13,6 @@ export default class CreateOrEditGroupTreatmentManagerView {
     }
   }
 
-  private homePageLink() {
-    return {
-      text: 'Go to Accredited Programmes homepage',
-      href: `/`,
-    }
-  }
-
   private createGroupTreatmentManagerArgs(): SelectArgs {
     return {
       id: 'create-group-treatment-manager',
@@ -27,7 +20,7 @@ export default class CreateOrEditGroupTreatmentManagerView {
       label: {
         text: 'Treatment Manager',
         classes: 'govuk-label--m',
-        isPageHeading: true,
+        isPageHeading: false,
       },
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createGroupTreatmentManager.errorMessage),
       items: this.presenter.generateSelectOptions(
@@ -118,7 +111,6 @@ export default class CreateOrEditGroupTreatmentManagerView {
       'createGroup/createGroupTreatmentManager',
       {
         backLinkArgs: this.backLinkArgs(),
-        homePageLink: this.homePageLink(),
         createGroupTreatmentManagerArgs: this.createGroupTreatmentManagerArgs(),
         createGroupFacilitatorArgs: this.createGroupFacilitatorArgs(),
         createGroupFacilitatorsFieldSetArgs: this.createGroupFacilitatorsFieldSetArgs(),

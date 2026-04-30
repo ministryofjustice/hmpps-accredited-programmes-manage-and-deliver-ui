@@ -12,13 +12,6 @@ export default class CreateOrEditGroupCodeView {
     }
   }
 
-  private homePageLink() {
-    return {
-      text: 'Go to Accredited Programmes homepage',
-      href: `/`,
-    }
-  }
-
   private createGroupCodeArgs(): InputArgs {
     return {
       id: 'create-group-code',
@@ -41,7 +34,6 @@ export default class CreateOrEditGroupCodeView {
       'createGroup/createGroupCode',
       {
         backLinkArgs: this.backLinkArgs(),
-        homePageLink: this.homePageLink(),
         captionText: this.presenter.captionText,
         createGroupCodeArgs: this.createGroupCodeArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),

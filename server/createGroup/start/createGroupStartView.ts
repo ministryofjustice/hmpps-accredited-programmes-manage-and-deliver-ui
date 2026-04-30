@@ -10,19 +10,11 @@ export default class CreateGroupStartView {
     }
   }
 
-  private homePageLink() {
-    return {
-      text: 'Go to Accredited Programmes homepage',
-      href: `/`,
-    }
-  }
-
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       'createGroup/createGroupStart',
       {
         backLinkArgs: this.backLinkArgs(),
-        homePageLink: this.homePageLink(),
       },
     ]
   }
