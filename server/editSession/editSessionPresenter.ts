@@ -77,7 +77,7 @@ export default class EditSessionPresenter {
       return false
     }
     // Cant be deleted if its in the past
-    if (this.sessionStartDateTime() === null || this.sessionStartDateTime().getTime() < Date.now()) {
+    if (this.sessionStartDateTime() === null || this.sessionStartDateTime().getTime() <= Date.now()) {
       return false
     }
 

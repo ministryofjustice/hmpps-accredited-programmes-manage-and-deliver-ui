@@ -587,7 +587,7 @@ describe('EditSessionPresenter', () => {
       expect(presenter.canBeDeleted).toBe(false)
     })
 
-    it('returns true when no referrals are allocated, the session is in the past and is a group catch up', () => {
+    it('returns true when no referrals are allocated, the session is in the future and is a group catch up', () => {
       const presenter = new EditSessionPresenter(
         mockGroupId,
         buildSessionDetails({
