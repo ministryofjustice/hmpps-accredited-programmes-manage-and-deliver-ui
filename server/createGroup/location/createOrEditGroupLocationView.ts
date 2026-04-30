@@ -12,13 +12,6 @@ export default class CreateOrEditGroupLocationView {
     }
   }
 
-  private homePageLink() {
-    return {
-      text: 'Go to Accredited Programmes homepage',
-      href: `/`,
-    }
-  }
-
   private selectOfficeArgs(): RadiosArgs {
     return {
       name: 'create-group-location',
@@ -62,7 +55,6 @@ export default class CreateOrEditGroupLocationView {
       'createGroup/createGroupLocation',
       {
         backLinkArgs: this.backLinkArgs(),
-        homePageLink: this.homePageLink(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         text: this.presenter.text,
         selectOfficeArgs: this.selectOfficeArgs(),

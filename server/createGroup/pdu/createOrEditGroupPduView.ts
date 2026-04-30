@@ -12,13 +12,6 @@ export default class CreateOrEditGroupPduView {
     }
   }
 
-  private homePageLink() {
-    return {
-      text: 'Go to Accredited Programmes homepage',
-      href: `/`,
-    }
-  }
-
   private createGroupPduArgs(): SelectArgs {
     return {
       id: 'create-group-pdu',
@@ -42,7 +35,6 @@ export default class CreateOrEditGroupPduView {
       'createGroup/createGroupPdu',
       {
         backLinkArgs: this.backLinkArgs(),
-        homePageLink: this.homePageLink(),
         createGroupPduArgs: this.createGroupPduArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         text: this.presenter.text,

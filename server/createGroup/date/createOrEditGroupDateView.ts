@@ -11,13 +11,6 @@ export default class CreateOrEditGroupDateView {
     }
   }
 
-  private homePageLink() {
-    return {
-      text: 'Go to Accredited Programmes homepage',
-      href: `/`,
-    }
-  }
-
   private get createGroupDateArgs() {
     return {
       id: 'create-group-date',
@@ -41,7 +34,6 @@ export default class CreateOrEditGroupDateView {
       'createGroup/createGroupDate',
       {
         backLinkArgs: this.backLinkArgs(),
-        homePageLink: this.homePageLink(),
         createGroupDateArgs: this.createGroupDateArgs,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         text: this.presenter.text,

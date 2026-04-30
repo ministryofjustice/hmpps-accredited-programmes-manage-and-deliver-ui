@@ -13,13 +13,6 @@ export default class CreateGroupCohortView {
     }
   }
 
-  private homePageLink() {
-    return {
-      text: 'Go to Accredited Programmes homepage',
-      href: `/`,
-    }
-  }
-
   private createGroupCohortArgs(): RadiosArgs {
     return {
       name: 'create-group-cohort',
@@ -47,7 +40,6 @@ export default class CreateGroupCohortView {
       'createGroup/createGroupCohort',
       {
         backLinkArgs: this.backLinkArgs(),
-        homePageLink: this.homePageLink(),
         captionText: this.presenter.captionText,
         createGroupCohortArgs: this.createGroupCohortArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),

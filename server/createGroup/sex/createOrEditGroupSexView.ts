@@ -13,13 +13,6 @@ export default class CreateGroupSexView {
     }
   }
 
-  private homePageLink() {
-    return {
-      text: 'Go to Accredited Programmes homepage',
-      href: `/`,
-    }
-  }
-
   private createGroupSexArgs(): RadiosArgs {
     return {
       name: 'create-group-sex',
@@ -44,7 +37,6 @@ export default class CreateGroupSexView {
       'createGroup/createGroupSex',
       {
         backLinkArgs: this.backLinkArgs(),
-        homePageLink: this.homePageLink(),
         captionText: this.presenter.captionText,
         createGroupSexArgs: this.createGroupSexArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),

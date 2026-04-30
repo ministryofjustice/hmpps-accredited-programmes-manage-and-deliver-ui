@@ -11,13 +11,6 @@ export default class CreateOrEditGroupWhenView {
     }
   }
 
-  private homePageLink() {
-    return {
-      text: 'Go to Accredited Programmes homepage',
-      href: `/`,
-    }
-  }
-
   private checkboxArgs() {
     return {
       name: 'days-of-week',
@@ -44,7 +37,6 @@ export default class CreateOrEditGroupWhenView {
       'createGroup/createGroupWhen',
       {
         backLinkArgs: this.backLinkArgs(),
-        homePageLink: this.homePageLink(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         text: this.presenter.text,
         checkboxArgs: this.checkboxArgs(),
