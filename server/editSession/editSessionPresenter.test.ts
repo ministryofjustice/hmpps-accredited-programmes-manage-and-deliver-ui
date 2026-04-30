@@ -445,7 +445,7 @@ describe('EditSessionPresenter', () => {
       sessionType: 'Individual',
       isCatchup: false,
       attendanceAndSessionNotes: [],
-      date: 'Sunday 17 May 2026',
+      date: 'Sunday 17 May 2126',
       time: '11:57am to 11:58am',
       scheduledToAttend: [],
       facilitators: [],
@@ -453,15 +453,37 @@ describe('EditSessionPresenter', () => {
     })
 
     it('returns false when individual session start date/time has passed', () => {
-      const presenter = new EditSessionPresenter(mockGroupId, buildSessionDetails(), mockSessionId, mockDeleteUrl)
+      const presenter = new EditSessionPresenter(
+        mockGroupId,
+        buildSessionDetails({ date: 'Sunday 17 May 2026', time: '11:57am to 11:58am' }),
+        mockSessionId,
+        mockDeleteUrl,
+      )
 
       expect(presenter.canBeDeleted).toBe(false)
     })
 
     it('returns true when individual session start date/time is in the future', () => {
+      const presenter = new EditSessionPresenter(mockGroupId, buildSessionDetails(), mockSessionId, mockDeleteUrl)
+
+      expect(presenter.canBeDeleted).toBe(true)
+    })
+
+    it('returns false when session type is core group (e.g. Getting started 1)', () => {
       const presenter = new EditSessionPresenter(
         mockGroupId,
-        buildSessionDetails({ time: '11:59pm to 12:00am' }),
+        buildSessionDetails({ sessionType: 'Group', isCatchup: false }),
+        mockSessionId,
+        mockDeleteUrl,
+      )
+
+      expect(presenter.canBeDeleted).toBe(false)
+    })
+
+    it('returns true when session type is group catch up (e.g. Getting started 1 catch-up)', () => {
+      const presenter = new EditSessionPresenter(
+        mockGroupId,
+        buildSessionDetails({ sessionType: 'Group', isCatchup: true }),
         mockSessionId,
         mockDeleteUrl,
       )
@@ -469,15 +491,115 @@ describe('EditSessionPresenter', () => {
       expect(presenter.canBeDeleted).toBe(true)
     })
 
-    it('returns false when session type is not individual', () => {
+    it('returns true when session type is Individual (e.g. Pre-group one-to-one)', () => {
       const presenter = new EditSessionPresenter(
         mockGroupId,
-        buildSessionDetails({ sessionType: 'Group' }),
+        buildSessionDetails({ sessionType: 'Individual', isCatchup: false }),
+        mockSessionId,
+        mockDeleteUrl,
+      )
+
+      expect(presenter.canBeDeleted).toBe(true)
+    })
+
+    it('returns true when session type is Individual catch up (e.g Getting started one-to-one catch-up)', () => {
+      const presenter = new EditSessionPresenter(
+        mockGroupId,
+        buildSessionDetails({ sessionType: 'Individual', isCatchup: true }),
+        mockSessionId,
+        mockDeleteUrl,
+      )
+
+      expect(presenter.canBeDeleted).toBe(true)
+    })
+
+    it('returns true when no attendance has been recorded', () => {
+      const presenter = new EditSessionPresenter(
+        mockGroupId,
+        buildSessionDetails({
+          sessionType: 'Group',
+          isCatchup: true,
+          attendanceAndSessionNotes: [
+            {
+              name: 'Chase Gottlieb',
+              referralId: 'c9cefced-480a-42aa-ac5c-d49ac242b759',
+              crn: 'S347158170',
+              attendance: 'To be confirmed',
+              sessionNotes: '',
+            },
+            {
+              name: 'Clarita Hermann',
+              referralId: '3c039300-380f-4aab-9196-5a48a9f0a933',
+              crn: 'S512196735',
+              attendance: 'To be confirmed',
+              sessionNotes: '',
+            },
+            {
+              name: 'Daine Lehner',
+              referralId: '69342294-7b88-47ac-b1fc-a55d2b6733b2',
+              crn: 'S085511223',
+              attendance: 'To be confirmed',
+              sessionNotes: '',
+            },
+          ],
+        }),
+        mockSessionId,
+        mockDeleteUrl,
+      )
+
+      expect(presenter.canBeDeleted).toBe(true)
+    })
+
+    it('returns false when attendance has been recorded', () => {
+      const presenter = new EditSessionPresenter(
+        mockGroupId,
+        buildSessionDetails({
+          sessionType: 'Group',
+          isCatchup: true,
+          attendanceAndSessionNotes: [
+            {
+              name: 'Chase Gottlieb',
+              referralId: 'c9cefced-480a-42aa-ac5c-d49ac242b759',
+              crn: 'S347158170',
+              attendance: 'To be confirmed',
+              sessionNotes: '',
+            },
+            {
+              name: 'Clarita Hermann',
+              referralId: '3c039300-380f-4aab-9196-5a48a9f0a933',
+              crn: 'S512196735',
+              attendance: 'Attended - Failed to Comply',
+              sessionNotes: '',
+            },
+            {
+              name: 'Daine Lehner',
+              referralId: '69342294-7b88-47ac-b1fc-a55d2b6733b2',
+              crn: 'S085511223',
+              attendance: 'To be confirmed',
+              sessionNotes: '',
+            },
+          ],
+        }),
         mockSessionId,
         mockDeleteUrl,
       )
 
       expect(presenter.canBeDeleted).toBe(false)
+    })
+
+    it('returns true when no referrals are allocated, the session is in the future and is a group catch up', () => {
+      const presenter = new EditSessionPresenter(
+        mockGroupId,
+        buildSessionDetails({
+          sessionType: 'Group',
+          isCatchup: true,
+          attendanceAndSessionNotes: [],
+        }),
+        mockSessionId,
+        mockDeleteUrl,
+      )
+
+      expect(presenter.canBeDeleted).toBe(true)
     })
   })
 })
