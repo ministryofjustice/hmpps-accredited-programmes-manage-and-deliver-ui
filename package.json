@@ -180,6 +180,9 @@
     },
     "mocha-junit-reporter": {
       "serialize-javascript": "7.0.5"
+    },
+    "applicationinsights": {
+      "uuid": "14.0.0"
     }
   }
 }
