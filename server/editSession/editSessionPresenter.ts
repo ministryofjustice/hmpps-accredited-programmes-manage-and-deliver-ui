@@ -72,16 +72,20 @@ export default class EditSessionPresenter {
   }
 
   get canBeDeleted(): boolean {
-    if (this.sessionDetails.sessionType.toLowerCase() !== 'individual') {
+    // Cant be deleted if its a core group session
+    if (this.sessionDetails.sessionType.toUpperCase() === 'GROUP' && this.sessionDetails.isCatchup === false) {
+      return false
+    }
+    // Cant be deleted if its in the past
+    if (this.sessionStartDateTime() === null || this.sessionStartDateTime().getTime() < Date.now()) {
       return false
     }
 
-    const sessionStart = this.sessionStartDateTime()
-    if (sessionStart === null) {
-      return false
-    }
-
-    return sessionStart.getTime() > Date.now()
+    // Cant be deleted if it has attendance recorded
+    return !this.sessionDetails.attendanceAndSessionNotes?.some(
+      attendanceRecord =>
+        attendanceRecord.attendance && attendanceRecord.attendance.toLowerCase() !== 'to be confirmed',
+    )
   }
 
   get backLinkArgs() {
