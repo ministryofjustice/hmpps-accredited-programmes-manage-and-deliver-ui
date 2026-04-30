@@ -17,6 +17,7 @@ generic-service:
     ENVIRONMENT_NAME: preprod
     AUDIT_ENABLED: "false"
     SENTRY_ENVIRONMENT: preprod
+    ENABLE_PAST_DATE_REGION_RESTRICTION: "true"
 
 generic-prometheus-alerts:
   alertSeverity: hmpps_accredited_programmes_manage_and_deliver_alerts_nonprod
