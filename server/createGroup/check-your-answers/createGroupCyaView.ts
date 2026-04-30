@@ -12,13 +12,6 @@ export default class CreateGroupCyaView {
     }
   }
 
-  private homePageLink() {
-    return {
-      text: 'Go to Accredited Programmes homepage',
-      href: `/`,
-    }
-  }
-
   get getCreateGroupSummary(): SummaryListArgs {
     return {
       ...ViewUtils.summaryListArgs(this.presenter.getCreateGroupSummary()),
@@ -30,7 +23,6 @@ export default class CreateGroupCyaView {
       'createGroup/createGroupCya',
       {
         backLinkArgs: this.backLinkArgs(),
-        homePageLink: this.homePageLink(),
         createGroupSummary: this.getCreateGroupSummary,
         cancelLink: `/`,
         text: this.presenter.text,
