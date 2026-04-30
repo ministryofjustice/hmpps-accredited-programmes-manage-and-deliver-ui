@@ -769,7 +769,9 @@ describe('Edit Group Controller', () => {
         code: 'DUPLICATE123',
         regionName: 'Test Region',
       })
-
+      accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({
+        successMessage: 'The group code has been updated',
+      })
       return request(app)
         .post(`/group/${groupId}/edit-a-group/edit-group-code`)
         .type('form')
