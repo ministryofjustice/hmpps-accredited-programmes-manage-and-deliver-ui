@@ -5,11 +5,13 @@ import errorMessages from '../utils/errorMessages'
 import { FormData } from '../utils/forms/formData'
 import FormUtils from '../utils/formUtils'
 import { DAY_CONFIG, DayKey } from './when/daysOfWeek'
+import { isRegionAllowedPastDates } from './allowedPastDateRegions'
 
 export default class CreateOrEditGroupForm {
   constructor(
     private readonly request: Request,
     private readonly existingGroupCode?: string,
+    private readonly userRegionCode?: string,
   ) {}
 
   async createGroupCodeData(): Promise<FormData<Partial<CreateGroupRequest>>> {
@@ -262,7 +264,9 @@ export default class CreateOrEditGroupForm {
           const inputDate = new Date(year, month - 1, day)
           const today = new Date()
           today.setHours(0, 0, 0, 0)
-          if (inputDate < today) {
+
+          // Allow past dates for regions in the allowed list
+          if (inputDate < today && !isRegionAllowedPastDates(this.userRegionCode)) {
             throw new Error(errorMessages.createGroup.createGroupDateInPast)
           }
 

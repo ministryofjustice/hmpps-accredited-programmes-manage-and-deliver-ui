@@ -122,15 +122,72 @@ describe('CreateGroupForm', () => {
       })
     })
     describe('when date is in the past', () => {
-      it('returns appropriate error', async () => {
-        const request = TestUtils.createRequest({
-          'create-group-date': '1/1/2000',
+      describe('when region restriction is disabled (default)', () => {
+        beforeEach(() => {
+          delete process.env.ENABLE_PAST_DATE_REGION_RESTRICTION
         })
 
-        const data = await new CreateOrEditGroupForm(request).createOrEditGroupDateData()
+        it('allows past dates for any region', async () => {
+          const request = TestUtils.createRequest({
+            'create-group-date': '1/1/2000',
+          })
 
-        expect(data.paramsForUpdate).toBeNull()
-        expect(data.error.errors[0].message).toBe('Start date must be in the future')
+          const data = await new CreateOrEditGroupForm(request, undefined, 'ANY_REGION').createOrEditGroupDateData()
+
+          expect(data.paramsForUpdate).toStrictEqual({
+            earliestStartDate: '1/1/2000',
+          })
+          expect(data.error).toBeNull()
+        })
+      })
+
+      describe('when region restriction is enabled', () => {
+        beforeEach(() => {
+          process.env.ENABLE_PAST_DATE_REGION_RESTRICTION = 'true'
+        })
+
+        afterEach(() => {
+          delete process.env.ENABLE_PAST_DATE_REGION_RESTRICTION
+        })
+
+        it('returns error for region not in allowed list', async () => {
+          const request = TestUtils.createRequest({
+            'create-group-date': '1/1/2000',
+          })
+
+          const data = await new CreateOrEditGroupForm(
+            request,
+            undefined,
+            'NOT_ALLOWED_REGION',
+          ).createOrEditGroupDateData()
+
+          expect(data.paramsForUpdate).toBeNull()
+          expect(data.error.errors[0].message).toBe('Start date must be in the future')
+        })
+
+        it('returns error when no region is provided', async () => {
+          const request = TestUtils.createRequest({
+            'create-group-date': '1/1/2000',
+          })
+
+          const data = await new CreateOrEditGroupForm(request).createOrEditGroupDateData()
+
+          expect(data.paramsForUpdate).toBeNull()
+          expect(data.error.errors[0].message).toBe('Start date must be in the future')
+        })
+
+        it('allows past dates for region in allowed list (N50MANC)', async () => {
+          const request = TestUtils.createRequest({
+            'create-group-date': '1/1/2000',
+          })
+
+          const data = await new CreateOrEditGroupForm(request, undefined, 'N50MANC').createOrEditGroupDateData()
+
+          expect(data.paramsForUpdate).toStrictEqual({
+            earliestStartDate: '1/1/2000',
+          })
+          expect(data.error).toBeNull()
+        })
       })
     })
   })
