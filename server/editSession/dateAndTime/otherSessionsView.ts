@@ -23,14 +23,15 @@ export default class OtherSessionsView {
       name: 'reschedule-other-sessions',
       fieldset: {
         legend: {
-          text: 'Automatically reschedule other sessions?',
+          text: 'Automatically move the date of later sessions?',
           isPageHeading: false,
           classes: 'govuk-fieldset__legend--m',
         },
       },
       hint: {
-        html: `<p class="govuk-hint">You are updating one session. The service can automatically move group sessions scheduled to take place after this session to reflect the changes you have made.</p>
-               <p class="govuk-hint">Any scheduled one-to-one and catch-up sessions will not be moved.</p>`,
+        html: `<p class="govuk-hint">You are updating one session. The service can automatically move group sessions scheduled to take place after this session to reflect the changes you are making.</p>
+               <p class="govuk-hint">Any scheduled one-to-one and catch-up sessions will not be moved.</p>
+               <p class="govuk-hint">Times of other sessions will not be changed. To edit the time of all sessions, go to Group details.</p>`,
       },
       items: [
         {
