@@ -9,7 +9,7 @@ describe('AttendancePresenter', () => {
         bffData.people = [bffData.people[0]]
         const presenter = new AttendancePresenter(bffData, 'backlink', null)
 
-        expect(presenter.text.pageHeading).toBe(`Did ${bffData.people[0].name} attend ${bffData.sessionTitle}?`)
+        expect(presenter.text.pageHeading).toBe(`Did ${bffData.people[0].name} attend ${bffData.sessionModule}?`)
       })
     })
     describe('multiple attendees', () => {
@@ -17,7 +17,7 @@ describe('AttendancePresenter', () => {
         const bffData = recordSessionAttendanceFactory.build()
         const presenter = new AttendancePresenter(bffData, 'backlink', null)
 
-        expect(presenter.text.pageHeading).toBe(`Record attendance for ${bffData.sessionTitle}?`)
+        expect(presenter.text.pageHeading).toBe(`Record attendance for ${bffData.sessionModule}`)
       })
     })
   })

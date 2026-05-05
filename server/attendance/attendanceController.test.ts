@@ -106,7 +106,7 @@ describe('showRecordAttendancePage', () => {
 
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Getting started 1' })
+      const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Getting started 1' })
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
 
       await request(app)
@@ -155,7 +155,7 @@ describe('showRecordAttendancePage', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Redirecting to /group/111/session/6789/referral/referral1/${convertToUrlFriendlyKebabCase(bffData.sessionTitle)}-session-notes`,
+            `Redirecting to /group/111/session/6789/referral/referral1/${convertToUrlFriendlyKebabCase(bffData.sessionModule)}-session-notes`,
           )
         })
     })
@@ -183,7 +183,7 @@ describe('showRecordAttendancePage', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Redirecting to /group/111/session/6789/referral/referral1/${convertToUrlFriendlyKebabCase(bffData.sessionTitle)}-session-notes`,
+            `Redirecting to /group/111/session/6789/referral/referral1/${convertToUrlFriendlyKebabCase(bffData.sessionModule)}-session-notes`,
           )
         })
       expect(accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData).toHaveBeenCalledWith(
@@ -203,7 +203,7 @@ describe('showRecordAttendancePage', () => {
 
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Pre-group one-to-one' })
+      const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Pre-group one-to-one' })
       bffData.people = [
         {
           ...bffData.people[0],
@@ -243,7 +243,7 @@ describe('showRecordAttendancePage', () => {
 
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Getting started 1' })
+      const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Getting started 1' })
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
 
       await request(app)
@@ -251,7 +251,7 @@ describe('showRecordAttendancePage', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Redirecting to /group/111/session/6789/referral/referral1/${convertToUrlFriendlyKebabCase(bffData.sessionTitle)}-session-notes`,
+            `Redirecting to /group/111/session/6789/referral/referral1/${convertToUrlFriendlyKebabCase(bffData.sessionModule)}-session-notes`,
           )
         })
     })
@@ -266,7 +266,7 @@ describe('showRecordAttendancePage', () => {
 
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Pre-group one-to-one' })
+      const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Pre-group one-to-one' })
       bffData.people = [
         {
           ...bffData.people[0],
@@ -302,7 +302,7 @@ describe('showRecordAttendancePage', () => {
 
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Pre-group one-to-one' })
+      const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Pre-group one-to-one' })
       bffData.people = [
         {
           ...bffData.people[0],
@@ -332,7 +332,7 @@ describe('showRecordAttendancePage', () => {
 
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Pre-group one-to-one' })
+      const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Pre-group one-to-one' })
       bffData.people = [
         {
           ...bffData.people[0],
@@ -364,7 +364,7 @@ describe('showRecordAttendancePage', () => {
 
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Pre-group one-to-one' })
+      const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Pre-group one-to-one' })
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
 
       await request(app)
@@ -389,7 +389,7 @@ describe('showRecordAttendancePage', () => {
 
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Pre-group one-to-one' })
+      const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Pre-group one-to-one' })
       bffData.people = [
         {
           ...bffData.people[0],
@@ -423,7 +423,7 @@ describe('showRecordAttendancePage', () => {
 
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Pre-group one-to-one' })
+      const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Pre-group one-to-one' })
       bffData.people = [
         {
           ...bffData.people[0],
@@ -455,7 +455,7 @@ describe('showRecordAttendancePage', () => {
 
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Pre-group one-to-one' })
+      const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Pre-group one-to-one' })
       bffData.people = [
         {
           ...bffData.people[0],
@@ -491,7 +491,7 @@ describe('showRecordAttendancePage', () => {
 
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Getting started 1' })
+      const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Getting started 1' })
       bffData.people = [{ ...bffData.people[0], referralId: 'referral1', name: 'Alice Brown' }]
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
 
@@ -519,7 +519,7 @@ describe('showRecordAttendancePage', () => {
 
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Getting started 1' })
+      const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Getting started 1' })
       bffData.people = [{ ...bffData.people[0], referralId: 'referral1', name: 'Alice Brown' }]
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
       accreditedProgrammesManageAndDeliverService.createSessionAttendance.mockResolvedValue({
@@ -560,7 +560,7 @@ describe('showRecordAttendancePage', () => {
 
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Understanding myself' })
+      const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Understanding myself' })
       bffData.people = [
         {
           ...bffData.people[0],
@@ -604,7 +604,7 @@ describe('showRecordAttendancePage', () => {
 
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Getting started 1' })
+      const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Getting started 1' })
       bffData.people = [{ ...bffData.people[0], referralId: 'referral1', name: 'Alice Brown' }]
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
       accreditedProgrammesManageAndDeliverService.createSessionAttendance.mockResolvedValue({
@@ -641,7 +641,7 @@ describe('showRecordAttendancePage', () => {
 
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Getting started 1' })
+      const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Getting started 1' })
       bffData.people = [
         { ...bffData.people[0], referralId: 'referral1', name: 'Sham Booth' },
         { ...bffData.people[1], referralId: 'referral2', name: 'Adrian Poole' },
@@ -682,7 +682,7 @@ describe('showRecordAttendancePage', () => {
 
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Getting started 1' })
+      const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Getting started 1' })
       bffData.people = [
         { ...bffData.people[0], referralId: 'referral1', name: 'Alice Brown', sessionNotes: 'Existing note' },
       ]
@@ -720,7 +720,7 @@ describe('showRecordAttendancePage', () => {
 
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Getting started 1' })
+      const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Getting started 1' })
       bffData.people = [
         { ...bffData.people[0], referralId: 'referral1', name: 'Alice Brown', sessionNotes: 'Existing note' },
       ]
@@ -761,7 +761,7 @@ describe('showRecordAttendancePage', () => {
 
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Getting started 1' })
+      const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Getting started 1' })
       bffData.people = [
         { ...bffData.people[0], referralId: 'referral1', name: 'Sham Booth' },
         { ...bffData.people[1], referralId: 'referral2', name: 'Adrian Poole' },
@@ -819,7 +819,7 @@ describe('showRecordAttendancePage', () => {
 
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-      const bffData = recordSessionAttendanceFactory.build({ sessionTitle: 'Getting started 1' })
+      const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Getting started 1' })
       bffData.people = [
         { ...bffData.people[0], referralId: 'referral1', name: 'Alex River', sessionNotes: 'Existing note.' },
       ]

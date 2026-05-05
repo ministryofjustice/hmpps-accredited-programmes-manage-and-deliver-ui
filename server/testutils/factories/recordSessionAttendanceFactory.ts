@@ -50,7 +50,8 @@ export default RecordSessionAttendanceFactory.define(({ sequence }) => {
   ]
 
   return {
-    sessionTitle: `Getting started ${sequence}`,
+    sessionTitle: `Introduction to Building Choices ${sequence}`,
+    sessionModule: `Getting started ${sequence}`,
     groupRegionName: 'North East',
     people,
   }
