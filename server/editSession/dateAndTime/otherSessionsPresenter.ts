@@ -20,7 +20,7 @@ export default class OtherSessionsPresenter {
 
   get text() {
     return {
-      headingText: 'Rescheduling other sessions?',
+      headingText: 'Rescheduling later sessions',
       headingCaptionText: `Edit ${this.rescheduleSessionDetails.sessionName}`,
     }
   }
