@@ -22,7 +22,7 @@ afterEach(() => {
 })
 beforeEach(() => {
   const sessionData: Partial<SessionData> = {
-    userLocation: { locationDescription: 'Test Location', locationCode: 'ABC123' },
+    userRegion: { regionDescription: 'Test Location', regionCode: 'ABC123' },
   }
   app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 

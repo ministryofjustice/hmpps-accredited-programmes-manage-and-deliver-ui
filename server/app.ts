@@ -37,9 +37,9 @@ import type { Services } from './services'
 declare module 'express-session' {
   export interface SessionData {
     originPage: string
-    userLocation?: {
-      locationCode: string
-      locationDescription: string
+    userRegion?: {
+      regionCode: string
+      regionDescription: string
     }
     locationPreferenceFormData?: {
       updatePreferredLocationData?: CreateDeliveryLocationPreferences

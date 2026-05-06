@@ -1,4 +1,4 @@
-export const ALLOWED_PAST_DATE_REGIONS: string[] = ['N50MANC']
+export const ALLOWED_PAST_DATE_REGIONS: string[] = ['N53']
 
 /**
  * Checks if the region restriction for past dates is enabled.
