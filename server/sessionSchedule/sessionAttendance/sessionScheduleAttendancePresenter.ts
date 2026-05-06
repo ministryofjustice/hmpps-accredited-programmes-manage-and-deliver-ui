@@ -29,6 +29,10 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
     }
   }
 
+  isCatchupSession(session: ProgrammeGroupModuleSessionsResponseGroupSession): boolean {
+    return session.isCatchup || session.type?.toUpperCase() === 'CATCH_UP'
+  }
+
   get scheduleSessionSuccessMessageArgs(): MojAlertComponentArgs | null {
     if (!this.successMessage) return null
 
@@ -130,11 +134,11 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
       ? session.facilitators.join('<span class="govuk-!-display-block govuk-!-margin-bottom-1"></span>')
       : ''
     const dateSortValue = this.sortableTableDate(session.dateOfSession)
-
+    console.log(session)
     return `
     <tr class="govuk-table__row">
       <td class="govuk-table__cell"><a href="/group/${this.groupId}/session/${session.id}/edit-session">${session.name || ''}</a></td>
-      <td class="govuk-table__cell">${session.type || ''}</td>
+      <td class="govuk-table__cell">${this.isCatchupSession(session) ? 'Catch-up' : session.type || ''}</td>
       <td class="govuk-table__cell">${participants}</td>
       <td class="govuk-table__cell" data-sort-value="${dateSortValue}">${session.dateOfSession || ''}</td>
       <td class="govuk-table__cell">${session.timeOfSession || ''}</td>

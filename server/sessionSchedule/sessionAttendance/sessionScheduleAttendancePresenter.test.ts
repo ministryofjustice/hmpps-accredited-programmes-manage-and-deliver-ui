@@ -23,6 +23,7 @@ describe('SessionScheduleAttendancePresenter', () => {
             name: 'Session 1: Introduction',
             number: 1,
             type: 'One-to-one',
+            isCatchup: false,
             participants: ['John Doe', 'Jane Smith'],
             dateOfSession: '15 March 2025',
             timeOfSession: '9:30am to 11:00am',
@@ -33,6 +34,7 @@ describe('SessionScheduleAttendancePresenter', () => {
             name: 'Session 2: Progress check',
             number: 2,
             type: 'Group',
+            isCatchup: false,
             participants: ['John Doe'],
             dateOfSession: '22 March 2025',
             timeOfSession: '2:00pm to 3:30pm',
@@ -129,6 +131,47 @@ describe('SessionScheduleAttendancePresenter', () => {
       )
     })
 
+    it('shows the original session type when catch-up is false', () => {
+      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
+      const accordionItems = presenter.getAccordionItems()
+      const firstModuleContent = accordionItems[0].content.html
+
+      expect(firstModuleContent).toContain('One-to-one')
+      expect(firstModuleContent).toContain('Group')
+      expect(firstModuleContent).not.toContain('Catch-up')
+    })
+
+    it('shows Catch-up when isCatchup is true', () => {
+      const dataWithCatchupSessions = {
+        ...mockGroupSessionsData,
+        modules: [
+          {
+            ...mockGroupSessionsData.modules![0],
+            sessions: [
+              {
+                ...mockGroupSessionsData.modules![0].sessions![0],
+                type: 'Individual',
+                isCatchup: true,
+              },
+              {
+                ...mockGroupSessionsData.modules![0].sessions![1],
+                type: 'Group',
+                isCatchup: true,
+              },
+            ],
+          },
+        ],
+      }
+
+      const presenter = new SessionScheduleAttendancePresenter(groupId, dataWithCatchupSessions)
+      const accordionItems = presenter.getAccordionItems()
+      const content = accordionItems[0].content.html
+
+      expect(content.match(/Catch-up/g)).toHaveLength(2)
+      expect(content).not.toContain('<td class="govuk-table__cell">Individual</td>')
+      expect(content).not.toContain('<td class="govuk-table__cell">Group</td>')
+    })
+
     it('renders facilitators with spacing using govuk utility classes', () => {
       const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
       const accordionItems = presenter.getAccordionItems()
@@ -179,6 +222,7 @@ describe('SessionScheduleAttendancePresenter', () => {
                 number: 1,
                 name: 'Bringing it all together 1: Future me plan',
                 type: 'Group',
+                isCatchup: false,
                 dateOfSession: 'Thursday 8 August 2126',
                 timeOfSession: '1pm to 3:30pm',
                 participants: ['All'],
@@ -333,6 +377,7 @@ describe('SessionScheduleAttendancePresenter', () => {
                 name: 'Session 3',
                 number: 1,
                 type: 'Group',
+                isCatchup: false,
                 participants: [] as string[],
                 dateOfSession: '1 April 2025',
                 timeOfSession: '10:00am to 11:30am',
@@ -492,6 +537,7 @@ describe('SessionScheduleAttendancePresenter', () => {
                 number: 1,
                 name: undefined as unknown as string,
                 type: undefined as unknown as string,
+                isCatchup: false,
                 participants: undefined as unknown as string[],
                 dateOfSession: undefined as unknown as string,
                 timeOfSession: undefined as unknown as string,
@@ -610,6 +656,7 @@ describe('SessionScheduleAttendancePresenter', () => {
                 number: 1,
                 name: 'Session 1: Advanced Techniques',
                 type: 'Workshop',
+                isCatchup: false,
                 participants: ['John Doe', 'Jane Smith', 'Bob Brown'],
                 dateOfSession: '1 June 2025',
                 timeOfSession: '10:00am to 12:00pm',
@@ -675,6 +722,7 @@ describe('SessionScheduleAttendancePresenter', () => {
                 number: 1,
                 name: 'Session 1: Written Assessment',
                 type: 'Assessment',
+                isCatchup: false,
                 participants: ['John Doe'],
                 dateOfSession: '15 June 2025',
                 timeOfSession: '9:00am to 10:00am',
@@ -685,6 +733,7 @@ describe('SessionScheduleAttendancePresenter', () => {
                 number: 2,
                 name: 'Session 2: Practical Assessment',
                 type: 'Assessment',
+                isCatchup: false,
                 participants: ['John Doe'],
                 dateOfSession: '22 June 2025',
                 timeOfSession: '2:00pm to 3:30pm',

@@ -14,7 +14,7 @@ export default class EditSessionView {
             text: 'Session type',
           },
           value: {
-            text: sessionDetailsObj.sessionType,
+            text: this.presenter.sessionTypeLabel,
           },
         },
         {

@@ -429,6 +429,43 @@ describe('EditSessionPresenter', () => {
     })
   })
 
+  describe('sessionTypeLabel', () => {
+    const buildSessionDetails = (overrides: Partial<GroupSessionResponse> = {}): GroupSessionResponse => ({
+      pageTitle: 'Session 1',
+      code: 'CODE-123',
+      sessionType: 'Group',
+      isCatchup: false,
+      attendanceAndSessionNotes: [],
+      date: '01 Feb 2026',
+      time: '1:00pm',
+      scheduledToAttend: [],
+      facilitators: [],
+      ...overrides,
+    })
+
+    it('returns Catch-up when the session is a catch-up', () => {
+      const presenter = new EditSessionPresenter(
+        mockGroupId,
+        buildSessionDetails({ sessionType: 'Group', isCatchup: true }),
+        mockSessionId,
+        mockDeleteUrl,
+      )
+
+      expect(presenter.sessionTypeLabel).toBe('Catch-up')
+    })
+
+    it('returns the raw session type when the session is not a catch-up', () => {
+      const presenter = new EditSessionPresenter(
+        mockGroupId,
+        buildSessionDetails({ sessionType: 'Group', isCatchup: false }),
+        mockSessionId,
+        mockDeleteUrl,
+      )
+
+      expect(presenter.sessionTypeLabel).toBe('Group')
+    })
+  })
+
   describe('canBeDeleted', () => {
     beforeEach(() => {
       jest.useFakeTimers()
