@@ -14,8 +14,8 @@ export default class AttendancePresenter {
     return {
       pageHeading:
         this.recordAttendanceBffData.people.length === 1
-          ? `Did ${this.recordAttendanceBffData.people[0].name} attend ${this.recordAttendanceBffData.sessionTitle}?`
-          : `Record attendance for ${this.recordAttendanceBffData.sessionTitle}?`,
+          ? `Did ${this.recordAttendanceBffData.people[0].name} attend ${this.recordAttendanceBffData.sessionModule}?`
+          : `Record attendance for ${this.recordAttendanceBffData.sessionModule}`,
       headingCaption: `Record attendance and progress`,
     }
   }

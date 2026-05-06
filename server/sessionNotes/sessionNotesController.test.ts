@@ -98,7 +98,8 @@ describe('SessionNotesController', () => {
       })
 
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue({
-        sessionTitle: 'Getting started 1',
+        sessionTitle: 'Introduction to Building Choices',
+        sessionModule: 'Getting started 1',
         groupRegionName: 'North East',
         people: [
           {
@@ -173,7 +174,8 @@ describe('SessionNotesController', () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue({
-        sessionTitle: 'Getting started 1',
+        sessionTitle: 'Introduction to Building Choices',
+        sessionModule: 'Getting started 1',
         groupRegionName: 'North East',
         people: [
           {
@@ -436,7 +438,8 @@ describe('SessionNotesController', () => {
       })
 
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue({
-        sessionTitle: 'Getting started 1',
+        sessionTitle: 'Introduction to Building Choices',
+        sessionModule: 'Getting started 1',
         groupRegionName: 'North East',
         people: [
           {
@@ -498,7 +501,8 @@ describe('SessionNotesController', () => {
       })
 
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue({
-        sessionTitle: 'Getting started 1',
+        sessionTitle: 'Introduction to Building Choices',
+        sessionModule: 'Getting started 1',
         groupRegionName: 'North East',
         people: [
           {

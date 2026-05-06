@@ -43,7 +43,7 @@ export default class AttendanceSessionNotesPresenter {
   }
 
   get sessionTitle() {
-    return this.recordAttendanceBffData?.sessionTitle || ''
+    return this.recordAttendanceBffData?.sessionModule || ''
   }
 
   get personName() {

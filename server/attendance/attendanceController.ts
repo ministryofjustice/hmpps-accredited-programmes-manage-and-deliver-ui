@@ -51,8 +51,8 @@ export default class AttendanceController extends BaseController {
     )
 
     if (req.method === 'GET' && referralIdFromQuery) {
-      const sessionTitle = convertToUrlFriendlyKebabCase(recordAttendanceBffData.sessionTitle)
-      return res.redirect(this.notesPageUri(groupId, sessionId, referralIdFromQuery, sessionTitle))
+      const sessionModule = convertToUrlFriendlyKebabCase(recordAttendanceBffData.sessionModule)
+      return res.redirect(this.notesPageUri(groupId, sessionId, referralIdFromQuery, sessionModule))
     }
 
     const recordAttendanceDataWithSessionSelections: RecordSessionAttendance = {
@@ -96,8 +96,8 @@ export default class AttendanceController extends BaseController {
             sessionNotes: existingPerson?.sessionNotes ?? attendee.sessionNotes,
           }
         })
-        const sessionTitle = convertToUrlFriendlyKebabCase(recordAttendanceBffData.sessionTitle)
-        return res.redirect(this.notesPageUri(groupId, sessionId, referralIds[0], sessionTitle))
+        const sessionModule = convertToUrlFriendlyKebabCase(recordAttendanceBffData.sessionModule)
+        return res.redirect(this.notesPageUri(groupId, sessionId, referralIds[0], sessionModule))
       }
     }
 
@@ -131,7 +131,7 @@ export default class AttendanceController extends BaseController {
       referralIds,
     )
 
-    const theGroupTitle = convertToUrlFriendlyKebabCase(recordAttendanceBffData.sessionTitle)
+    const theGroupTitle = convertToUrlFriendlyKebabCase(recordAttendanceBffData.sessionModule)
 
     if (!groupTitle && req.method === 'GET') {
       return res.redirect(this.notesPageUri(groupId, sessionId, referralId, theGroupTitle))
@@ -232,7 +232,7 @@ export default class AttendanceController extends BaseController {
           return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session?${redirectQuery}`)
         }
 
-        const sessionSlug = convertToUrlFriendlyKebabCase(recordAttendanceBffData.sessionTitle)
+        const sessionSlug = convertToUrlFriendlyKebabCase(recordAttendanceBffData.sessionModule)
         const sessionNotesQuery = new URLSearchParams({
           referralId,
           source: 'edit-session',
