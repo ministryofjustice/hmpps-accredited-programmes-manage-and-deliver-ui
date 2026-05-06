@@ -429,7 +429,7 @@ describe('EditSessionPresenter', () => {
     })
   })
 
-  describe('sessionTypeLabel', () => {
+  describe('sessionType', () => {
     const buildSessionDetails = (overrides: Partial<GroupSessionResponse> = {}): GroupSessionResponse => ({
       pageTitle: 'Session 1',
       code: 'CODE-123',
@@ -451,7 +451,7 @@ describe('EditSessionPresenter', () => {
         mockDeleteUrl,
       )
 
-      expect(presenter.sessionTypeLabel).toBe('Catch-up')
+      expect(presenter.sessionType).toBe('Catch-up')
     })
 
     it('returns the raw session type when the session is not a catch-up', () => {
@@ -462,7 +462,7 @@ describe('EditSessionPresenter', () => {
         mockDeleteUrl,
       )
 
-      expect(presenter.sessionTypeLabel).toBe('Group')
+      expect(presenter.sessionType).toBe('Group')
     })
   })
 
