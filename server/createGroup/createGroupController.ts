@@ -95,7 +95,7 @@ export default class CreateGroupController extends BaseController {
     let formDataForPresenter: Partial<CreateGroupRequest> | null = createGroupFormData
 
     if (req.method === 'POST') {
-      const userRegionCode = req.session.userLocation?.locationCode
+      const userRegionCode = req.session.userRegion?.regionCode
       const data = await new CreateOrEditGroupForm(req, undefined, userRegionCode).createOrEditGroupDateData()
 
       if (data.error) {

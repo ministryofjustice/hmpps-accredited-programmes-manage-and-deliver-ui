@@ -68,7 +68,7 @@ export default class CaselistController extends BaseController {
       true,
       openCaseList.filters,
       openCaseList.otherTabTotal,
-      req.session.userLocation?.locationDescription ?? '',
+      req.session.userRegion?.regionDescription ?? '',
     )
 
     const view = new CaselistView(presenter)
@@ -116,7 +116,7 @@ export default class CaselistController extends BaseController {
       false,
       closedCaseList.filters,
       closedCaseList.otherTabTotal,
-      req.session.userLocation?.locationDescription ?? '',
+      req.session.userRegion?.regionDescription ?? '',
     )
 
     const view = new CaselistView(presenter)

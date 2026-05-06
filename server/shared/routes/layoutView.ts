@@ -6,9 +6,9 @@ export interface PageContentView {
   renderArgs: [string, Record<string, unknown>]
 }
 
-export interface UserLocation {
-  locationCode: string
-  locationDescription: string
+export interface UserRegion {
+  regionCode: string
+  regionDescription: string
 }
 
 export default class LayoutView {
@@ -17,7 +17,7 @@ export default class LayoutView {
   constructor(
     private readonly presenter: LayoutPresenter,
     private readonly content: PageContentView,
-    private readonly userLocation?: UserLocation,
+    private readonly userRegion?: UserRegion,
   ) {
     this.serviceUserBannerView = this.presenter.serviceUserBannerPresenter
       ? new ServiceUserBannerView(this.presenter.serviceUserBannerPresenter)
@@ -44,7 +44,7 @@ export default class LayoutView {
           active: this.presenter.primaryNavigationTab === PrimaryNavigationTab.Groups,
         },
       ],
-      regionText: this.userLocation.locationDescription,
+      regionText: this.userRegion.regionDescription,
     }
   }
 

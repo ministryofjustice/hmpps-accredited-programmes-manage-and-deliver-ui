@@ -48,7 +48,7 @@ export default class EditGroupController extends BaseController {
     }
 
     if (req.method === 'POST') {
-      const userRegionCode = req.session.userLocation?.locationCode
+      const userRegionCode = req.session.userRegion?.regionCode
       const data = await new CreateOrEditGroupForm(req, undefined, userRegionCode).createOrEditGroupDateData()
 
       if (data.error) {

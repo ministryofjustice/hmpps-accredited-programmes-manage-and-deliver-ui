@@ -8,11 +8,11 @@ export default function setUpUserLocation(services: Services) {
   router.use(async (req, res, next) => {
     try {
       // Check if location is already cached in session
-      if (req.session.userLocation) {
-        res.locals.userLocation = req.session.userLocation
+      if (req.session.userRegion) {
+        res.locals.userRegion = req.session.userRegion
         // Temporary logs while we debug a preprod issue --TJWC 2026-04-22
         logger.info(`[setUpUserLocation] req.session.userLocation is present, going to next()`)
-        logger.info({ userLocation: req.session.userLocation })
+        logger.info({ userRegion: req.session.userRegion })
         next()
         return
       }
@@ -27,20 +27,19 @@ export default function setUpUserLocation(services: Services) {
         return
       }
 
-      const locations = await services.accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion(username)
+      const region = await services.accreditedProgrammesManageAndDeliverService.getCurrentUserRegion(username)
 
-      if (locations && locations.length > 0) {
-        const primaryLocation = locations[0]
-        const userLocation = {
-          locationCode: primaryLocation.code,
-          locationDescription: primaryLocation.description,
+      if (region) {
+        const userRegion = {
+          regionCode: region.code,
+          regionDescription: region.description,
         }
 
         // Store in session for entire session duration
-        req.session.userLocation = userLocation
+        req.session.userRegion = userRegion
 
         // Make available to all views
-        res.locals.userLocation = userLocation
+        res.locals.userRegion = userRegion
       }
 
       next()

@@ -583,6 +583,14 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
     })) as CodeDescription[]
   }
 
+  async getCurrentUserRegion(username: Express.User['username']): Promise<CodeDescription> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/current-user/region`,
+      headers: { Accept: 'application/json' },
+    })) as CodeDescription
+  }
+
   async getOfficeLocationsForPdu(username: Express.User['username'], pduCode: string): Promise<CodeDescription[]> {
     const restClient = await this.createRestClientFromUsername(username)
     return (await restClient.get({
