@@ -1,5 +1,6 @@
-import LayoutPresenter, { PrimaryNavigationTab } from './layoutPresenter'
+import config from '../../config'
 import ServiceUserBannerView from '../serviceUserBannerView'
+import LayoutPresenter, { PrimaryNavigationTab } from './layoutPresenter'
 
 export interface PageContentView {
   renderArgs: [string, Record<string, unknown>]
@@ -54,6 +55,7 @@ export default class LayoutView {
         ...this.content.renderArgs[1],
         ...(this.serviceUserBannerView?.locals ?? {}),
         primaryNavigationArgs: this.primaryNavigationArgs,
+        authUrl: config.apis.hmppsAuth.url,
       },
     ]
   }

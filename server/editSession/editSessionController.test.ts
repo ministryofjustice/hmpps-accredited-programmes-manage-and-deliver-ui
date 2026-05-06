@@ -131,7 +131,7 @@ describe('submitEditSessionDateAndTime', () => {
         .get(`/group/111/session/6789/edit-session-date-and-time/reschedule`)
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain('Rescheduling other sessions')
+          expect(res.text).toContain('Rescheduling later sessions')
         })
       expect(accreditedProgrammesManageAndDeliverService.getRescheduleSessionDetails).toHaveBeenCalledWith(
         'user1',
