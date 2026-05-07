@@ -109,6 +109,10 @@ export default class EditSessionPresenter {
     return this.sessionDetails.attendanceAndSessionNotes?.length > 0
   }
 
+  get sessionType() {
+    return this.sessionDetails.isCatchup ? 'Catch-up' : this.sessionDetails.sessionType
+  }
+
   attendanceOptionText(attendance: string | undefined) {
     return attendanceOptionText(attendance, attendanceOptionTextTags.editSession)
   }

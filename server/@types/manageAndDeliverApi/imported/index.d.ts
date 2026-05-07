@@ -3110,24 +3110,24 @@ export interface components {
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
-      sort?: components['schemas']['SortObject']
       first?: boolean
       last?: boolean
+      sort?: components['schemas']['SortObject']
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageableObject: {
       /** Format: int64 */
       offset?: number
       sort?: components['schemas']['SortObject']
-      unpaged?: boolean
       /** Format: int32 */
       pageSize?: number
-      paged?: boolean
       /** Format: int32 */
       pageNumber?: number
+      paged?: boolean
+      unpaged?: boolean
     }
     ReferralCaseListItem: {
       /** Format: uuid */
@@ -3150,8 +3150,8 @@ export interface components {
     }
     SortObject: {
       empty?: boolean
-      unsorted?: boolean
       sorted?: boolean
+      unsorted?: boolean
     }
     StatusFilterValues: {
       /**
@@ -3774,12 +3774,12 @@ export interface components {
       content?: components['schemas']['Group'][]
       /** Format: int32 */
       number?: number
-      sort?: components['schemas']['SortObject']
       first?: boolean
       last?: boolean
+      sort?: components['schemas']['SortObject']
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     GroupItem: {
@@ -3869,12 +3869,12 @@ export interface components {
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
-      sort?: components['schemas']['SortObject']
       first?: boolean
       last?: boolean
+      sort?: components['schemas']['SortObject']
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
@@ -3986,6 +3986,11 @@ export interface components {
        * @example one-to-one
        */
       type: string
+      /**
+       * @description Whether the session is a catch-up session
+       * @example false
+       */
+      isCatchup: boolean
       /**
        * Format: date
        * @description The date of the session
