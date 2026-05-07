@@ -32,6 +32,7 @@ describe('EditSessionPresenter', () => {
           ],
           date: '01 Feb 2026',
           time: '1:00pm',
+          unformattedEndDate: '2026-02-01T14:00:00',
           scheduledToAttend: [],
           facilitators: [],
         }
@@ -88,6 +89,7 @@ describe('EditSessionPresenter', () => {
           ],
           date: '01 Feb 2026',
           time: '1:00pm',
+          unformattedEndDate: '2026-02-01T14:00:00',
           scheduledToAttend: [],
           facilitators: [],
         }
@@ -126,6 +128,7 @@ describe('EditSessionPresenter', () => {
           ],
           date: '01 Feb 2026',
           time: '1:00pm',
+          unformattedEndDate: '2026-02-01T14:00:00',
           scheduledToAttend: [],
           facilitators: [],
         }
@@ -164,6 +167,7 @@ describe('EditSessionPresenter', () => {
           ],
           date: '01 Feb 2026',
           time: '1:00pm',
+          unformattedEndDate: '2026-02-01T14:00:00',
           scheduledToAttend: [],
           facilitators: [],
         }
@@ -196,6 +200,7 @@ describe('EditSessionPresenter', () => {
           attendanceAndSessionNotes: [],
           date: '01 Feb 2026',
           time: '1:00pm',
+          unformattedEndDate: '2026-02-01T14:00:00',
           scheduledToAttend: [],
           facilitators: [],
         }
@@ -226,6 +231,7 @@ describe('EditSessionPresenter', () => {
           ],
           date: '01 Feb 2026',
           time: '1:00pm',
+          unformattedEndDate: '2026-02-01T14:00:00',
           scheduledToAttend: [],
           facilitators: [],
         }
@@ -267,6 +273,7 @@ describe('EditSessionPresenter', () => {
           ],
           date: '01 Feb 2026',
           time: '1:00pm',
+          unformattedEndDate: '2026-02-01T14:00:00',
           scheduledToAttend: [],
           facilitators: [],
         }
@@ -305,6 +312,7 @@ describe('EditSessionPresenter', () => {
           ],
           date: '01 Feb 2026',
           time: '1:00pm',
+          unformattedEndDate: '2026-02-01T14:00:00',
           scheduledToAttend: [],
           facilitators: [],
         }
@@ -343,6 +351,7 @@ describe('EditSessionPresenter', () => {
           ],
           date: '01 Feb 2026',
           time: '1:00pm',
+          unformattedEndDate: '2026-02-01T14:00:00',
           scheduledToAttend: [],
           facilitators: [],
         }
@@ -375,6 +384,7 @@ describe('EditSessionPresenter', () => {
       attendanceAndSessionNotes: [],
       date: '01 Feb 2026',
       time: '1:00pm',
+      unformattedEndDate: '2026-02-01T14:00:00',
       scheduledToAttend: [],
       facilitators: [],
     }
@@ -438,6 +448,7 @@ describe('EditSessionPresenter', () => {
       attendanceAndSessionNotes: [],
       date: '01 Feb 2026',
       time: '1:00pm',
+      unformattedEndDate: '2026-02-01T14:00:00',
       scheduledToAttend: [],
       facilitators: [],
       ...overrides,
@@ -469,7 +480,7 @@ describe('EditSessionPresenter', () => {
   describe('canBeDeleted', () => {
     beforeEach(() => {
       jest.useFakeTimers()
-      jest.setSystemTime(new Date('2026-05-17T23:58:00'))
+      jest.setSystemTime(new Date('2026-05-17T11:58:00'))
     })
 
     afterEach(() => {
@@ -483,27 +494,47 @@ describe('EditSessionPresenter', () => {
       isCatchup: false,
       attendanceAndSessionNotes: [],
       date: 'Sunday 17 May 2126',
-      time: '11:57am to 11:58am',
+      unformattedEndDate: '2126-05-17T13:00:00',
+      time: '11:00am to 1:00pm',
       scheduledToAttend: [],
       facilitators: [],
       ...overrides,
     })
 
-    it('returns false when individual session start date/time has passed', () => {
+    it('returns false when individual session end date/time has passed', () => {
       const presenter = new EditSessionPresenter(
         mockGroupId,
-        buildSessionDetails({ date: 'Sunday 17 May 2026', time: '11:57am to 11:58am' }),
+        buildSessionDetails({
+          date: 'Sunday 17 May 2026',
+          time: '10:00am to 11:00am',
+          unformattedEndDate: '2026-05-17T11:00:00',
+        }),
+        mockSessionId,
+        mockDeleteUrl,
+      )
+      expect(presenter.canBeDeleted).toBe(false)
+    })
+
+    it('returns true when individual session start date/time is in the past and the end date/time is in the future', () => {
+      // Current time 2026-05-17T11:58:00
+      // Session start date 2026-05-17T10:00:00
+      // Session end date 2026-05-17T13:00:00
+      const presenter = new EditSessionPresenter(mockGroupId, buildSessionDetails(), mockSessionId, mockDeleteUrl)
+
+      expect(presenter.canBeDeleted).toBe(true)
+    })
+
+    it('returns false when end date time equals current time exactly', () => {
+      const presenter = new EditSessionPresenter(
+        mockGroupId,
+        buildSessionDetails({
+          unformattedEndDate: '2026-05-17T11:58:00', // Exact current time
+        }),
         mockSessionId,
         mockDeleteUrl,
       )
 
       expect(presenter.canBeDeleted).toBe(false)
-    })
-
-    it('returns true when individual session start date/time is in the future', () => {
-      const presenter = new EditSessionPresenter(mockGroupId, buildSessionDetails(), mockSessionId, mockDeleteUrl)
-
-      expect(presenter.canBeDeleted).toBe(true)
     })
 
     it('returns false when session type is core group (e.g. Getting started 1)', () => {
@@ -539,7 +570,7 @@ describe('EditSessionPresenter', () => {
       expect(presenter.canBeDeleted).toBe(true)
     })
 
-    it('returns true when session type is Individual catch up (e.g Getting started one-to-one catch-up)', () => {
+    it('returns false when session type is not individual', () => {
       const presenter = new EditSessionPresenter(
         mockGroupId,
         buildSessionDetails({ sessionType: 'Individual', isCatchup: true }),
@@ -624,7 +655,7 @@ describe('EditSessionPresenter', () => {
       expect(presenter.canBeDeleted).toBe(false)
     })
 
-    it('returns true when no referrals are allocated, the session is in the future and is a group catch up', () => {
+    it('returns true when no referrals are allocated, the session end is in the future and is a group catch up', () => {
       const presenter = new EditSessionPresenter(
         mockGroupId,
         buildSessionDetails({

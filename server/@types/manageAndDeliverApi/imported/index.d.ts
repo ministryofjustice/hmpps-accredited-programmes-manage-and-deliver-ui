@@ -3112,8 +3112,8 @@ export interface components {
       number?: number
       first?: boolean
       last?: boolean
-      sort?: components['schemas']['SortObject']
       pageable?: components['schemas']['PageableObject']
+      sort?: components['schemas']['SortObject']
       /** Format: int32 */
       numberOfElements?: number
       empty?: boolean
@@ -3121,11 +3121,11 @@ export interface components {
     PageableObject: {
       /** Format: int64 */
       offset?: number
+      /** Format: int32 */
+      pageNumber?: number
       sort?: components['schemas']['SortObject']
       /** Format: int32 */
       pageSize?: number
-      /** Format: int32 */
-      pageNumber?: number
       paged?: boolean
       unpaged?: boolean
     }
@@ -3776,8 +3776,8 @@ export interface components {
       number?: number
       first?: boolean
       last?: boolean
-      sort?: components['schemas']['SortObject']
       pageable?: components['schemas']['PageableObject']
+      sort?: components['schemas']['SortObject']
       /** Format: int32 */
       numberOfElements?: number
       empty?: boolean
@@ -3871,8 +3871,8 @@ export interface components {
       number?: number
       first?: boolean
       last?: boolean
-      sort?: components['schemas']['SortObject']
       pageable?: components['schemas']['PageableObject']
+      sort?: components['schemas']['SortObject']
       /** Format: int32 */
       numberOfElements?: number
       empty?: boolean
@@ -4004,12 +4004,18 @@ export interface components {
       timeOfSession: string
       /**
        * @description The names of the participants in the session
-       * @example [John Doe, Jane Smith]
+       * @example [
+       *       "John Doe",
+       *       "Jane Smith"
+       *     ]
        */
       participants: string[]
       /**
        * @description The names of the facilitators in the session
-       * @example [John Doe, Jane Smith]
+       * @example [
+       *       "John Doe",
+       *       "Jane Smith"
+       *     ]
        */
       facilitators: string[]
     }
@@ -4054,6 +4060,11 @@ export interface components {
        * @example false
        */
       isCatchup: boolean
+      /**
+       * Format: date-time
+       * @description The unformatted end date and time of the session for sorting
+       */
+      unformattedEndDate: string
       /**
        * Format: date
        * @description The date of the session
