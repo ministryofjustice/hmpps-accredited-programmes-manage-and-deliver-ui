@@ -46,7 +46,7 @@ export default class UpdateLdcView {
       items: [
         {
           value: 'true',
-          text: 'May need an LDC-adapted programme(Building Choices Plus)',
+          text: 'May need an LDC-adapted programme (Building Choices Plus)',
           checked: this.presenter.fields.hasLdc.value === true,
         },
         {
