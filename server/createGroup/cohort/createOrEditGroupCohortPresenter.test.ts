@@ -1,5 +1,4 @@
 import { CreateGroupRequest } from '@manage-and-deliver-api'
-import { FormValidationError } from '../../utils/formValidationError'
 import CreateOrEditGroupCohortPresenter from './createOrEditGroupCohortPresenter'
 
 describe('CreateOrEditGroupCohortPresenter', () => {
