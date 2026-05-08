@@ -78,7 +78,7 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
 
   private moduleHeadingAppended(moduleSession: ProgrammeGroupModuleSessionsResponseGroupModule): string {
     const heading = this.moduleHeading(moduleSession)
-    return heading === 'Pre-group one-to-ones' || heading === 'Post-programme reviews' ? '' : ' session'
+    return heading === 'Pre-group one-to-ones' || heading === 'Post-programme reviews' ? '' : ' sessions'
   }
 
   private moduleContent(moduleSession: ProgrammeGroupModuleSessionsResponseGroupModule) {

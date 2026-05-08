@@ -137,7 +137,7 @@ describe('SessionScheduleAttendancePresenter', () => {
       const firstModuleContent = accordionItems[0].content.html
 
       expect(firstModuleContent).toContain(
-        '<caption class="govuk-table__caption--s govuk-!-text-align-left"><strong>Scheduled Module 1: Getting Started session</strong></caption>',
+        '<caption class="govuk-table__caption--s govuk-!-text-align-left"><strong>Scheduled Module 1: Getting Started sessions</strong></caption>',
       )
     })
 
