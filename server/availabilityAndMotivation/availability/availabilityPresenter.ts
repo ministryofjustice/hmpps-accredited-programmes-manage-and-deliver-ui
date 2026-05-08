@@ -49,6 +49,7 @@ export default class AvailabilityPresenter extends AvailabilityAndMotivationPres
 
     return {
       caption: 'Availability schedule',
+      captionClasses: 'govuk-heading-s',
       firstCellIsHeader: true,
       head: headings,
       rows,

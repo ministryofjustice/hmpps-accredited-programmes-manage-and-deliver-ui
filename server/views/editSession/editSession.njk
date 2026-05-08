@@ -32,8 +32,6 @@
         {% if errorSummary !== null %}
           {{ govukErrorSummary(errorSummary) }}
         {% endif %}
-
-        <h2 class="govuk-heading-m">Attendance and session notes</h2>
       </div>
 
     <div class="govuk-grid-column-two-thirds">
@@ -46,7 +44,7 @@
           {{ multiSelect(attendanceTableArgs) }}
         {% elif hasMultipleReferrals != true %}
           {% set tableArgs = attendanceTableArgs %}
-          {% set tableArgs = { rows: tableArgs.rows, head: tableArgs.head, caption: "Attendance and session notes", captionClasses: "govuk-visually-hidden" } %}
+          {% set tableArgs = { rows: tableArgs.rows, head: tableArgs.head, caption: "Attendance and session notes", captionClasses: "govuk-heading-m" } %}
           {{ govukTable(tableArgs) }}
           {{ govukInput(singleReferral) }}
         {% endif %}
