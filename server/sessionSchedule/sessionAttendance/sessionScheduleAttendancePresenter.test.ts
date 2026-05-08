@@ -131,6 +131,59 @@ describe('SessionScheduleAttendancePresenter', () => {
       )
     })
 
+    it('renders the new scheduled caption with the left-aligned class', () => {
+      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
+      const accordionItems = presenter.getAccordionItems()
+      const firstModuleContent = accordionItems[0].content.html
+
+      expect(firstModuleContent).toContain(
+        '<caption class="govuk-table__caption--s govuk-!-text-align-left"><strong>Scheduled Module 1: Getting Started session</strong></caption>',
+      )
+    })
+
+    it('does not append "session" in caption for pre-group one-to-ones and post-programme reviews', () => {
+      const modules = ['Pre-group one-to-ones', 'Post-programme reviews'].map((name, index) => ({
+        id: `module-special-${index + 1}`,
+        number: index + 1,
+        name,
+        scheduleButtonText: `Schedule ${name}`,
+        startDateText: {
+          estimatedStartDateText: 'Estimated start date',
+          sessionStartDate: '15 March 2025',
+        },
+        sessions: [
+          {
+            id: `session-special-${index + 1}`,
+            number: 1,
+            name: `${name} 1`,
+            type: 'One-to-one',
+            isCatchup: false,
+            participants: ['John Doe'],
+            dateOfSession: '15 March 2025',
+            timeOfSession: '9:30am to 11:00am',
+            facilitators: ['Facilitator 1'],
+          },
+        ],
+      }))
+
+      const dataWithSpecialModules = {
+        ...mockGroupSessionsData,
+        modules,
+      }
+
+      const presenter = new SessionScheduleAttendancePresenter(groupId, dataWithSpecialModules)
+      const accordionItems = presenter.getAccordionItems()
+
+      expect(accordionItems[0].content.html).toContain(
+        '<caption class="govuk-table__caption--s govuk-!-text-align-left"><strong>Scheduled Pre-group one-to-ones</strong></caption>',
+      )
+      expect(accordionItems[0].content.html).not.toContain('Pre-group one-to-ones session')
+      expect(accordionItems[1].content.html).toContain(
+        '<caption class="govuk-table__caption--s govuk-!-text-align-left"><strong>Scheduled Post-programme reviews</strong></caption>',
+      )
+      expect(accordionItems[1].content.html).not.toContain('Post-programme reviews session')
+    })
+
     it('shows the original session type when catch-up is false', () => {
       const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
       const accordionItems = presenter.getAccordionItems()

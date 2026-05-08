@@ -76,6 +76,11 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
     return `${moduleSession.name ?? ''}`.trim()
   }
 
+  private moduleHeadingAppended(moduleSession: ProgrammeGroupModuleSessionsResponseGroupModule): string {
+    const heading = this.moduleHeading(moduleSession)
+    return heading === 'Pre-group one-to-ones' || heading === 'Post-programme reviews' ? '' : ' session'
+  }
+
   private moduleContent(moduleSession: ProgrammeGroupModuleSessionsResponseGroupModule) {
     const sessions = Array.isArray(moduleSession.sessions) ? moduleSession.sessions : []
 
@@ -83,6 +88,7 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
       sessions.length > 0
         ? `
       <table class="govuk-table" data-module="moj-sortable-table">
+      <caption class="govuk-table__caption--s govuk-!-text-align-left"><strong>Scheduled ${this.moduleHeading(moduleSession)}${this.moduleHeadingAppended(moduleSession)}</strong></caption>
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th scope="col" class="govuk-table__header">Session name</th>

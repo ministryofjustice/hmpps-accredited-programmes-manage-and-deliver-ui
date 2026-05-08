@@ -277,3 +277,66 @@ describe('resultsText', () => {
     )
   })
 })
+
+describe('tableCaptionClass', () => {
+  it('should return govuk-visually-hidden when there are no rows', () => {
+    const baseGroupOverview = ProgrammeGroupOverviewFactory.build()
+    const groupOverview = {
+      ...baseGroupOverview,
+      pagedGroupData: {
+        ...baseGroupOverview.pagedGroupData,
+        content: [] as typeof baseGroupOverview.pagedGroupData.content,
+      },
+    }
+
+    const presenter = new GroupAllocationsPresenter(
+      GroupAllocationsPageSection.Allocated,
+      groupOverview,
+      '1234',
+      GroupAllocationsFilter.empty(),
+    )
+
+    expect(presenter.tableCaptionClass).toBe('govuk-visually-hidden')
+  })
+
+  it('should return govuk-table__caption--m when rows exist', () => {
+    const groupOverview = ProgrammeGroupOverviewFactory.build()
+
+    const presenter = new GroupAllocationsPresenter(
+      GroupAllocationsPageSection.Allocated,
+      groupOverview,
+      '1234',
+      GroupAllocationsFilter.empty(),
+    )
+
+    expect(presenter.tableCaptionClass).toBe('govuk-table__caption--m')
+  })
+})
+
+describe('tableCaption', () => {
+  it('should return Allocated to <group code> for the allocated section', () => {
+    const groupOverview = ProgrammeGroupOverviewFactory.build()
+
+    const presenter = new GroupAllocationsPresenter(
+      GroupAllocationsPageSection.Allocated,
+      groupOverview,
+      '1234',
+      GroupAllocationsFilter.empty(),
+    )
+
+    expect(presenter.tableCaption).toBe('Allocated to BCCDD1')
+  })
+
+  it('should return Waitlist for Building Choices for the waitlist section', () => {
+    const groupOverview = ProgrammeGroupOverviewFactory.build()
+
+    const presenter = new GroupAllocationsPresenter(
+      GroupAllocationsPageSection.Waitlist,
+      groupOverview,
+      '1234',
+      GroupAllocationsFilter.empty(),
+    )
+
+    expect(presenter.tableCaption).toBe('Waitlist for Building Choices')
+  })
+})

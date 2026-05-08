@@ -61,6 +61,19 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
     return `Showing <strong>${start}</strong> to <strong>${end}</strong> of <strong>${totalElements}</strong> results`
   }
 
+  get tableCaptionClass(): string {
+    if (this.group.pagedGroupData.content.length === 0) {
+      return 'govuk-visually-hidden'
+    }
+    return 'govuk-table__caption--m'
+  }
+
+  get tableCaption(): string {
+    return this.section === GroupAllocationsPageSection.Waitlist
+      ? 'Waitlist for Building Choices'
+      : `Allocated to ${this.group.group.code}`
+  }
+
   getSubNavArgs(): { items: { text: string; href: string; active: boolean }[] } {
     const nameCrnFilter = this.filter.nameOrCRN === undefined ? `` : `?nameOrCRN=${this.filter.nameOrCRN}`
     return {

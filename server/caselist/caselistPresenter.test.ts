@@ -510,3 +510,82 @@ describe('generateTableRows', () => {
     expect(rows).toHaveLength(0)
   })
 })
+
+describe('tableCaptionClass', () => {
+  it('should return govuk-visually-hidden when there are no rows', () => {
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+      .pageContent([])
+      .build({ totalElements: 0, number: 0, size: 10, numberOfElements: 0 }) as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      1,
+      referralCaseListItemPage,
+      {} as CaselistFilter,
+      '',
+      true,
+      TestUtils.createCaseListFilters(),
+      0,
+      'test location',
+    )
+
+    expect(presenter.tableCaptionClass).toBe('govuk-visually-hidden')
+  })
+
+  it('should return govuk-table__caption--m when rows exist', () => {
+    const referralCaseListItem = referralCaseListItemFactory.build()
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+      .pageContent([referralCaseListItem])
+      .build() as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      1,
+      referralCaseListItemPage,
+      {} as CaselistFilter,
+      '',
+      true,
+      TestUtils.createCaseListFilters(),
+      0,
+      'test location',
+    )
+
+    expect(presenter.tableCaptionClass).toBe('govuk-table__caption--m')
+  })
+})
+
+describe('tableCaption', () => {
+  it('should return Open referrals for the open section', () => {
+    const referralCaseListItem = referralCaseListItemFactory.build()
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+      .pageContent([referralCaseListItem])
+      .build() as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      1,
+      referralCaseListItemPage,
+      {} as CaselistFilter,
+      '',
+      true,
+      TestUtils.createCaseListFilters(),
+      0,
+      'test location',
+    )
+
+    expect(presenter.tableCaption).toBe('Open referrals')
+  })
+
+  it('should return Closed referrals for the closed section', () => {
+    const referralCaseListItem = referralCaseListItemFactory.build()
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+      .pageContent([referralCaseListItem])
+      .build() as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      2,
+      referralCaseListItemPage,
+      {} as CaselistFilter,
+      '',
+      false,
+      TestUtils.createCaseListFilters(),
+      0,
+      'test location',
+    )
+
+    expect(presenter.tableCaption).toBe('Closed referrals')
+  })
+})

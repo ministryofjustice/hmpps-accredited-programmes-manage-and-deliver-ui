@@ -34,6 +34,7 @@ export default class GroupPresenter {
     readonly filter: GroupListFilter,
     readonly pduNames: string[],
     deliveryLocations?: string[],
+    readonly caption?: string[],
   ) {
     this.params = filter.paramsAsQueryParams
     this.groupListItems = groupListItems
@@ -49,8 +50,21 @@ export default class GroupPresenter {
     }
   }
 
+  get tableCaptionClass(): string {
+    if (this.groupListItems.content.length === 0) {
+      return 'govuk-visually-hidden'
+    }
+    return 'govuk-table__caption--m'
+  }
+
+  get tableCaption(): string {
+    return this.section === GroupListPageSection.COMPLETE ? 'Completed groups' : 'Not started or in progress groups'
+  }
+
   get groupTableArgs(): TableArgs {
     return {
+      caption: this.tableCaption,
+      captionClasses: this.tableCaptionClass,
       attributes: {
         'data-module': 'moj-sortable-table',
       },

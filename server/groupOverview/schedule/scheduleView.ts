@@ -44,7 +44,7 @@ export default class ScheduleView {
         'data-module': 'moj-sortable-table',
       },
       caption: 'Schedule overview',
-      captionClasses: 'govuk-table__caption--m',
+      captionClasses: 'govuk-visually-hidden',
       head: [
         {
           text: 'Session name',

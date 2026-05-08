@@ -63,6 +63,8 @@ export default class GroupAllocationsView {
 
   getGroupAllocationsTableArgs(): TableArgs {
     return {
+      caption: this.presenter.tableCaption,
+      captionClasses: this.presenter.tableCaptionClass,
       attributes: {
         'data-module': 'moj-sortable-table',
       },

@@ -45,7 +45,9 @@
         {% if hasMultipleReferrals %}
           {{ multiSelect(attendanceTableArgs) }}
         {% elif hasMultipleReferrals != true %}
-          {{ govukTable(attendanceTableArgs) }}
+          {% set tableArgs = attendanceTableArgs %}
+          {% set tableArgs = { rows: tableArgs.rows, head: tableArgs.head, caption: "Attendance and session notes", captionClasses: "govuk-visually-hidden" } %}
+          {{ govukTable(tableArgs) }}
           {{ govukInput(singleReferral) }}
         {% endif %}
         {% if hasReferral == false %}

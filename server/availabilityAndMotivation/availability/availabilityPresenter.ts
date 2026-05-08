@@ -48,6 +48,7 @@ export default class AvailabilityPresenter extends AvailabilityAndMotivationPres
     })
 
     return {
+      caption: 'Availability schedule',
       firstCellIsHeader: true,
       head: headings,
       rows,
