@@ -1,6 +1,9 @@
 <!-- MOJ design system multi-select table converted to a nunjucks template for easy re-use -->
 
   <table class="govuk-table" data-module="moj-multi-select" data-id-prefix="{{ idPrefix }}">
+    {% if caption %}
+    <caption class="govuk-table__caption{% if captionClasses %} {{ captionClasses }}{% endif %}">{{ caption }}</caption>
+    {% endif %}
     <thead class="govuk-table__head">
     <tr class="govuk-table__row">
       <th class="govuk-table__header" scope="col" id="{{ idPrefix }}select-all"></th>

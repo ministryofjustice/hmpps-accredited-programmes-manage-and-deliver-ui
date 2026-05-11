@@ -150,6 +150,8 @@ describe('groupTableArgs', () => {
       attributes: {
         'data-module': 'moj-sortable-table',
       },
+      caption: 'Not started or in progress groups',
+      captionClasses: 'govuk-table__caption--m',
       head: [
         {
           text: 'Group code',
@@ -204,6 +206,59 @@ describe('groupTableArgs', () => {
         ],
       ],
     })
+  })
+
+  it('should use the closed referrals caption for the completed tab', () => {
+    const groupList = groupsByRegionFactory.build()
+
+    const presenter = new GroupPresenter(
+      groupList.pagedGroupData as Page<Group>,
+      GroupListPageSection.COMPLETE,
+      groupList.otherTabTotal,
+      groupList.regionName,
+      GroupListFilter.empty(),
+      [],
+      [],
+    )
+
+    expect(presenter.groupTableArgs.caption).toBe('Completed groups')
+  })
+})
+
+describe('captionClasses', () => {
+  it('should return govuk-visually-hidden when there are no table rows', () => {
+    const filter = GroupListFilter.empty()
+    const pagedGroups: Page<Group> = pageFactory
+      .pageContent([])
+      .build({ totalElements: 0, number: 0, size: 10, numberOfElements: 0 }) as Page<Group>
+
+    const presenter = new GroupPresenter(
+      pagedGroups,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
+      0,
+      'Region',
+      filter,
+      [],
+      [],
+      ['govuk-heading-m'],
+    )
+
+    expect(presenter.tableCaptionClass).toBe('govuk-visually-hidden')
+  })
+
+  it('should return govuk-table__caption--m when table rows exist', () => {
+    const groupList = groupsByRegionFactory.build()
+    const presenter = new GroupPresenter(
+      groupList.pagedGroupData as Page<Group>,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
+      groupList.otherTabTotal,
+      groupList.regionName,
+      GroupListFilter.empty(),
+      [],
+      [],
+    )
+
+    expect(presenter.tableCaptionClass).toBe('govuk-table__caption--m')
   })
 })
 

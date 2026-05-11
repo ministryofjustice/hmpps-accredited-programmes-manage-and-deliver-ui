@@ -148,6 +148,7 @@ export default class EditSessionView {
         hasMultipleReferrals: this.presenter.hasMultipleReferrals,
         hasReferral: this.presenter.hasReferral,
         singleReferral: this.singleReferral,
+        attendanceHeading: this.presenter.attendanceHeading,
       },
     ]
   }

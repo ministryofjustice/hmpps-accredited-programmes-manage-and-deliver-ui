@@ -65,8 +65,21 @@ export default class CaselistPresenter {
     return `Showing <strong>${start}</strong> to <strong>${end}</strong> of <strong>${totalElements}</strong> results`
   }
 
+  get tableCaptionClass(): string {
+    if (this.referralCaseListItems.content.length === 0) {
+      return 'govuk-visually-hidden'
+    }
+    return 'govuk-table__caption--m'
+  }
+
+  get tableCaption(): string {
+    return this.section === CaselistPageSection.Closed ? 'Closed referrals' : 'Open referrals'
+  }
+
   getCaseloadTableArgs(): TableArgs {
     return {
+      caption: this.tableCaption,
+      captionClasses: this.tableCaptionClass,
       attributes: {
         'data-module': 'moj-sortable-table',
       },

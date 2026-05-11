@@ -13,6 +13,8 @@ export default class AttendanceHistoryView {
 
   get groupTableArgs(): TableArgs {
     return {
+      caption: 'Attendance record and session notes',
+      captionClasses: 'govuk-visually-hidden',
       attributes: {
         'data-module': 'moj-sortable-table',
       },

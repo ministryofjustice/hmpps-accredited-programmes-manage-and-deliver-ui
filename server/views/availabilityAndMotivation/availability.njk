@@ -11,6 +11,7 @@
       <h2 class="govuk-heading-l">Availability</h2>
       {{ govukInsetText(importFromDeliusText) }}
       <p>{{ generalAvailabilityText }}</p>
+      <h3 class="{{ availabilityTableHeading.classes }}">{{ availabilityTableHeading.text }}</h3>
       {{ govukTable(availabilityTableArgs) }}
 
       {% if presenter.availability.otherDetails !== '' %}

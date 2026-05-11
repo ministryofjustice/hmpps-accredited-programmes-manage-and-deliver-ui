@@ -43,6 +43,8 @@ describe('EditSessionPresenter', () => {
         expect(result).toEqual({
           idPrefix: 'attendance-multi-select',
           headers: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
+          caption: 'Attendance record and session notes',
+          captionClasses: 'govuk-visually-hidden',
           rows: [
             {
               id: 'attendance-multi-select-row-0',
@@ -99,6 +101,8 @@ describe('EditSessionPresenter', () => {
 
         expect(result).toEqual({
           head: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
+          caption: 'Attendance record and session notes',
+          captionClasses: 'govuk-visually-hidden',
           rows: [
             [
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
@@ -138,6 +142,8 @@ describe('EditSessionPresenter', () => {
 
         expect(result).toEqual({
           head: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
+          caption: 'Attendance record and session notes',
+          captionClasses: 'govuk-visually-hidden',
           rows: [
             [
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
@@ -177,6 +183,8 @@ describe('EditSessionPresenter', () => {
 
         expect(result).toEqual({
           head: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
+          caption: 'Attendance record and session notes',
+          captionClasses: 'govuk-visually-hidden',
           rows: [
             [
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
@@ -210,6 +218,8 @@ describe('EditSessionPresenter', () => {
 
         expect(result).toEqual({
           head: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
+          caption: 'Attendance record and session notes',
+          captionClasses: 'govuk-visually-hidden',
           rows: [],
         })
       })
@@ -241,6 +251,8 @@ describe('EditSessionPresenter', () => {
 
         expect(result).toEqual({
           head: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
+          caption: 'Attendance record and session notes',
+          captionClasses: 'govuk-visually-hidden',
           rows: [
             [
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
@@ -283,6 +295,8 @@ describe('EditSessionPresenter', () => {
 
         expect(result).toEqual({
           head: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
+          caption: 'Attendance record and session notes',
+          captionClasses: 'govuk-visually-hidden',
           rows: [
             [
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
@@ -322,6 +336,8 @@ describe('EditSessionPresenter', () => {
 
         expect(result).toEqual({
           head: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
+          caption: 'Attendance record and session notes',
+          captionClasses: 'govuk-visually-hidden',
           rows: [
             [
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
@@ -361,6 +377,8 @@ describe('EditSessionPresenter', () => {
 
         expect(result).toEqual({
           head: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
+          caption: 'Attendance record and session notes',
+          captionClasses: 'govuk-visually-hidden',
           rows: [
             [
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },

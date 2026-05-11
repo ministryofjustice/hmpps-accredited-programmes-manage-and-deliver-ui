@@ -17,6 +17,13 @@ export default class AvailabilityPresenter extends AvailabilityAndMotivationPres
     return this.availability.id !== null
   }
 
+  get availabilityTableHeading() {
+    return {
+      text: 'Availability schedule',
+      classes: 'govuk-heading-s',
+    }
+  }
+
   getAvailabilityTableArgs() {
     // Get all the possible headings out of the object e.g. daytime, evening
     const uniqueSlotLabels = [
@@ -48,6 +55,8 @@ export default class AvailabilityPresenter extends AvailabilityAndMotivationPres
     })
 
     return {
+      caption: 'Availability schedule',
+      captionClasses: 'govuk-visually-hidden',
       firstCellIsHeader: true,
       head: headings,
       rows,

@@ -47,6 +47,7 @@ export default class AvailabilityView {
         availabilityButtonArgs: this.availabilityButtonArgs,
         availability: this.presenter.availability,
         availabilityTableArgs: this.presenter.getAvailabilityTableArgs(),
+        availabilityTableHeading: this.presenter.availabilityTableHeading,
         showAvailability: this.presenter.showAvailability,
         isAvailabilityUpdated: this.presenter.isAvailabilityUpdated,
         successMessageArgs: this.successMessageArgs(),

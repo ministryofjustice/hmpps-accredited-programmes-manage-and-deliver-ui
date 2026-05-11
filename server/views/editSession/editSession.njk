@@ -32,14 +32,13 @@
         {% if errorSummary !== null %}
           {{ govukErrorSummary(errorSummary) }}
         {% endif %}
-
-        <h2 class="govuk-heading-m">Attendance and session notes</h2>
       </div>
 
     <div class="govuk-grid-column-two-thirds">
        {% if successMessageArgs !== null %}
           {{ mojAlert(successMessageArgs) }}
         {% endif %}
+      <h2 class="{{ attendanceHeading.classes }}">{{ attendanceHeading.text }}</h2>
       <form method="post" novalidate>
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
         {% if hasMultipleReferrals %}
@@ -57,4 +56,3 @@
     </div>
   </div>
 {% endblock %}
-
