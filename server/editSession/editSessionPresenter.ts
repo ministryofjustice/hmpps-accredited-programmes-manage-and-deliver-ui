@@ -151,14 +151,6 @@ export default class EditSessionPresenter {
     }
   }
 
-  private get tableCaptionClass(): string {
-    const attendanceData = this.sessionDetails.attendanceAndSessionNotes || []
-    if (attendanceData.length === 0) {
-      return ''
-    }
-    return 'govuk-visually-hidden'
-  }
-
   get attendanceHeading() {
     return {
       text: 'Attendance and session notes',
