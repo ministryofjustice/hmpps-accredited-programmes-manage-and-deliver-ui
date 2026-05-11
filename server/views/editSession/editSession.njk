@@ -38,14 +38,13 @@
        {% if successMessageArgs !== null %}
           {{ mojAlert(successMessageArgs) }}
         {% endif %}
+      <h2 class="{{ attendanceHeading.classes }}">{{ attendanceHeading.text }}</h2>
       <form method="post" novalidate>
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
         {% if hasMultipleReferrals %}
           {{ multiSelect(attendanceTableArgs) }}
         {% elif hasMultipleReferrals != true %}
-          {% set tableArgs = attendanceTableArgs %}
-          {% set tableArgs = { rows: tableArgs.rows, head: tableArgs.head, caption: "Attendance and session notes", captionClasses: "govuk-heading-m" } %}
-          {{ govukTable(tableArgs) }}
+          {{ govukTable(attendanceTableArgs) }}
           {{ govukInput(singleReferral) }}
         {% endif %}
         {% if hasReferral == false %}
@@ -57,4 +56,3 @@
     </div>
   </div>
 {% endblock %}
-

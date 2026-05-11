@@ -147,6 +147,13 @@ export default class EditSessionPresenter {
     }
   }
 
+  get attendanceHeading() {
+    return {
+      text: 'Attendance and session notes',
+      classes: 'govuk-table__caption--m',
+    }
+  }
+
   get fields() {
     return {
       'multi-select-selected': {

@@ -88,8 +88,6 @@ describe(`getAvailabilityTableArgs.`, () => {
     }
     const presenter = new AvailabilityPresenter(referralDetails, 'availability', availability)
     expect(presenter.getAvailabilityTableArgs()).toEqual({
-      caption: 'Availability schedule',
-      captionClasses: 'govuk-heading-s',
       firstCellIsHeader: true,
       head: [{ text: 'Day' }, { text: 'Daytime' }, { text: 'Evening' }, { text: 'Nighttime' }],
       rows: [

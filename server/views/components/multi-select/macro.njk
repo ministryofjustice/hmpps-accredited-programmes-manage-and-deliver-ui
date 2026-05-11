@@ -1,5 +1,7 @@
 {% macro multiSelect(tableArgs, idPrefix = 'multi-select-') %}
   {% set headers = tableArgs.headers %}
   {% set rows = tableArgs.rows %}
+  {% set caption = tableArgs.caption %}
+  {% set captionClasses = tableArgs.captionClasses %}
   {%- include "./template.njk" -%}
 {% endmacro %}
