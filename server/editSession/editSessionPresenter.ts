@@ -116,6 +116,8 @@ export default class EditSessionPresenter {
     if (this.hasMultipleReferrals) {
       return {
         idPrefix: 'attendance-multi-select',
+        caption: 'Attendance record and session notes',
+        captionClasses: 'govuk-visually-hidden',
         headers,
         rows: attendanceData.map((it, index) => ({
           id: `attendance-multi-select-row-${index}`,
@@ -132,6 +134,8 @@ export default class EditSessionPresenter {
     }
     return {
       head: headers,
+      caption: 'Attendance record and session notes',
+      captionClasses: 'govuk-visually-hidden',
       rows:
         attendanceData.length > 0
           ? [
@@ -145,6 +149,14 @@ export default class EditSessionPresenter {
             ]
           : [],
     }
+  }
+
+  private get tableCaptionClass(): string {
+    const attendanceData = this.sessionDetails.attendanceAndSessionNotes || []
+    if (attendanceData.length === 0) {
+      return ''
+    }
+    return 'govuk-visually-hidden'
   }
 
   get attendanceHeading() {
