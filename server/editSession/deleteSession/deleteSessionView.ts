@@ -20,11 +20,11 @@ export default class DeleteSessionView {
       },
       items: [
         {
-          text: 'Yes',
+          text: 'Yes, delete session',
           value: 'yes',
         },
         {
-          text: 'No',
+          text: 'No, return to session details',
           value: 'no',
         },
       ],
