@@ -20,7 +20,7 @@ export default class ChangeCohortView {
 
   get currentCohortText(): InsetTextArgs {
     return {
-      html: `<p> ${this.presenter.details.personName}'s, current cohort: </p>
+      html: `<p> ${this.presenter.details.personName}'s current cohort: </p>
         <p class="govuk-!-font-weight-bold">${formatCohort(this.presenter.details.cohort)}</p>`,
 
       classes: 'govuk-!-margin-top-0',
@@ -40,7 +40,7 @@ export default class ChangeCohortView {
       fieldset: {
         legend: {
           text: 'Select the new cohort',
-          isPageHeading: true,
+          isPageHeading: false,
           classes: 'govuk-fieldset__legend--m',
         },
       },

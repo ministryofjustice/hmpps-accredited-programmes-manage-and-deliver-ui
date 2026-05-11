@@ -20,7 +20,7 @@ export default class CreateOrEditGroupCohortPresenter {
   }
 
   get captionText() {
-    return this.isEditJourney ? `Edit group ${this.groupCode}` : 'Create a group'
+    return this.isEditJourney ? `Edit group ${this.groupCode}` : `Create a group ${this.createGroupFormData.groupCode}`
   }
 
   get pageTitle() {

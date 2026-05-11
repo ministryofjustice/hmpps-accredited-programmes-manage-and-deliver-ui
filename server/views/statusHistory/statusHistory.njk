@@ -1,18 +1,9 @@
 {% extends "../partials/layout.njk" %}
-
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {%- from "moj/components/timeline/macro.njk" import mojTimeline -%}
-{%- from "govuk/components/tag/macro.njk" import govukTag -%}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
-{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
-
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
-
 {% block main %}
   {% block content %}
      <main class="govuk-main-wrapper" id="main-content">
@@ -35,6 +26,5 @@
           </div>
         </div>
       </main>
- 
     {% endblock %}
   {% endblock %}
