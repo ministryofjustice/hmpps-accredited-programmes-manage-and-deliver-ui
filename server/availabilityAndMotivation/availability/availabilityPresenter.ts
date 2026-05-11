@@ -55,6 +55,8 @@ export default class AvailabilityPresenter extends AvailabilityAndMotivationPres
     })
 
     return {
+      caption: 'Availability schedule',
+      captionClasses: 'govuk-visually-hidden',
       firstCellIsHeader: true,
       head: headings,
       rows,
