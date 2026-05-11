@@ -20,7 +20,7 @@ export default class AvailabilityPresenter extends AvailabilityAndMotivationPres
   get availabilityTableHeading() {
     return {
       text: 'Availability schedule',
-      classes: 'govuk-heading-s govuk-table__caption--s',
+      classes: 'govuk-heading-s',
     }
   }
 

@@ -171,7 +171,7 @@ describe('availabilityTableHeading', () => {
     const presenter = new AvailabilityPresenter(referralDetails, 'availability', availability)
     expect(presenter.availabilityTableHeading).toEqual({
       text: 'Availability schedule',
-      classes: 'govuk-heading-s govuk-table__caption--s',
+      classes: 'govuk-heading-s',
     })
   })
 })

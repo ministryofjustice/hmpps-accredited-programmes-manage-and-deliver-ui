@@ -162,7 +162,7 @@ export default class EditSessionPresenter {
   get attendanceHeading() {
     return {
       text: 'Attendance and session notes',
-      classes: 'govuk-table__caption--m',
+      classes: 'govuk-heading-m',
     }
   }
 
