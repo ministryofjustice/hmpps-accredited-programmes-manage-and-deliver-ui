@@ -181,7 +181,7 @@
     "mocha-junit-reporter": {
       "serialize-javascript": "7.0.5"
     },
-    "diff": "8.0.3",
+    "diff": "9.0.0",
     "uuid": "14.0.0"
   }
 }
