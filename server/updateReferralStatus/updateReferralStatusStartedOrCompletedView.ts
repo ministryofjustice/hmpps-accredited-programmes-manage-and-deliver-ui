@@ -20,7 +20,7 @@ export default class UpdateReferralStatusStartedOrCompletedView {
             this.presenter.statusDetails.currentStatus.title === 'Scheduled'
               ? `Has ${this.presenter.details.personName} started the programme? `
               : `Has ${this.presenter.details.personName} completed the programme?`,
-          isPageHeading: true,
+          isPageHeading: false,
           classes: 'govuk-fieldset__legend--m',
         },
       },
