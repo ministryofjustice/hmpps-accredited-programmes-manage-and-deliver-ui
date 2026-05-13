@@ -2,6 +2,7 @@ import { RescheduleSessionRequest } from '@manage-and-deliver-api'
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import { FormValidationError } from '../utils/formValidationError'
+import DateFormatUtils from '../utils/dateFormatUtils'
 import EditSessionDateAndTimeFormForm from './dateAndTime/editSessionDateAndTimeForm'
 import EditSessionDateAndTimePresenter from './dateAndTime/editSessionDateAndTimePresenter'
 import EditSessionDateAndTimeView from './dateAndTime/editSessionDateAndTimeView'
@@ -35,25 +36,7 @@ export default class EditSessionController extends BaseController {
    * Accepts ISO with or without time, or UK format (DD/MM/YYYY).
    */
   private static toDateOnlyString(dateStr: string): string | null {
-    if (!dateStr) return null
-    // ISO format with or without time
-    const isoMatch = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})/)
-    if (isoMatch) {
-      const [, year, month, day] = isoMatch
-      return `${year}-${month}-${day}`
-    }
-    // UK format DD/MM/YYYY
-    const ukMatch = dateStr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
-    if (ukMatch) {
-      const [, day, month, year] = ukMatch
-      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-    }
-    // Fallback: preserve any explicit YYYY-MM-DD present in the original string
-    const d = new Date(dateStr)
-    if (!Number.isNaN(d.getTime())) {
-      return d.toISOString().slice(0, 10)
-    }
-    return null
+    return DateFormatUtils.toDateOnlyISO(dateStr)
   }
 
   private static hasSessionDateAndTimeChanged(
@@ -93,54 +76,12 @@ export default class EditSessionController extends BaseController {
     sessionDate: string
     sessionStartTime: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' }
   }): boolean {
-    const now = new Date()
-    const today = new Date(now)
-    today.setHours(0, 0, 0, 0)
-    const { sessionDate } = sessionDetails
-
-    let sessionDateParsed: Date | null = null
-
-    const isoMatch = sessionDate.match(/^(\d{4})-(\d{2})-(\d{2})/)
-    if (isoMatch) {
-      const [, year, month, day] = isoMatch
-      sessionDateParsed = new Date(Number(year), Number(month) - 1, Number(day))
-    }
-
-    if (!sessionDateParsed) {
-      const ukMatch = sessionDate.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
-      if (ukMatch) {
-        const [, day, month, year] = ukMatch
-        sessionDateParsed = new Date(Number(year), Number(month) - 1, Number(day))
-      }
-    }
-
-    if (!sessionDateParsed) {
-      const fallback = new Date(sessionDate)
-      if (Number.isNaN(fallback.getTime())) {
-        return false
-      }
-      fallback.setHours(0, 0, 0, 0)
-      sessionDateParsed = fallback
-    }
-
-    if (sessionDateParsed < today) {
-      return true
-    }
-
-    if (sessionDateParsed.getTime() !== today.getTime()) {
-      return false
-    }
-
-    // Session is today — check if the start time has already passed
-    const startHour24 =
-      sessionDetails.sessionStartTime.amOrPm === 'AM'
-        ? sessionDetails.sessionStartTime.hour % 12
-        : (sessionDetails.sessionStartTime.hour % 12) + 12
-
-    const sessionStartDateTime = new Date(sessionDateParsed)
-    sessionStartDateTime.setHours(startHour24, sessionDetails.sessionStartTime.minutes, 0, 0)
-
-    return sessionStartDateTime < now
+    return DateFormatUtils.isSessionInPast(
+      sessionDetails.sessionDate,
+      sessionDetails.sessionStartTime.hour,
+      sessionDetails.sessionStartTime.minutes,
+      sessionDetails.sessionStartTime.amOrPm,
+    )
   }
 
   async editSession(req: Request, res: Response): Promise<void> {

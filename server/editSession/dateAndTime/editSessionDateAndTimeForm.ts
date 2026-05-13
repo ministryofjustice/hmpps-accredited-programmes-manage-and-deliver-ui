@@ -4,6 +4,8 @@ import { body, ValidationChain } from 'express-validator'
 import FormUtils from '../../utils/formUtils'
 import { FormData } from '../../utils/forms/formData'
 import errorMessages from '../../utils/errorMessages'
+import DateUtils from '../../utils/dateUtils'
+import DateFormatUtils from '../../utils/dateFormatUtils'
 
 const fieldOrder = [
   'session-details-date',
@@ -64,16 +66,6 @@ export default class EditSessionDateAndTimeFormForm {
   private createSessionDetailsValidations(): ValidationChain[] {
     const { isSessionInPast } = this
 
-    function convertTo24Hour(hour: number, minute: number, period: 'AM' | 'PM'): { hour: number; minute: number } {
-      let hour24 = hour
-      if (period === 'AM') {
-        hour24 = hour === 12 ? 0 : hour // 12 AM is midnight (0), other AM hours stay the same
-      } else {
-        hour24 = hour === 12 ? 12 : hour + 12 // 12 PM stays 12, other PM hours add 12
-      }
-      return { hour: hour24, minute }
-    }
-
     function durationInMinutes(
       startHour: number,
       startMinute: number,
@@ -82,8 +74,8 @@ export default class EditSessionDateAndTimeFormForm {
       endMinute: number,
       endPeriod: 'AM' | 'PM',
     ): number {
-      const start = convertTo24Hour(startHour, startMinute, startPeriod)
-      const end = convertTo24Hour(endHour, endMinute, endPeriod)
+      const start = DateUtils.convertTo24Hour(startHour, startMinute, startPeriod)
+      const end = DateUtils.convertTo24Hour(endHour, endMinute, endPeriod)
       return end.hour * 60 + end.minute - (start.hour * 60 + start.minute)
     }
 
@@ -95,8 +87,8 @@ export default class EditSessionDateAndTimeFormForm {
       endMinute: number,
       endPeriod: 'AM' | 'PM',
     ): boolean {
-      const start = convertTo24Hour(startHour, startMinute, startPeriod)
-      const end = convertTo24Hour(endHour, endMinute, endPeriod)
+      const start = DateUtils.convertTo24Hour(startHour, startMinute, startPeriod)
+      const end = DateUtils.convertTo24Hour(endHour, endMinute, endPeriod)
 
       if (start.hour !== end.hour) {
         return start.hour < end.hour
@@ -104,84 +96,75 @@ export default class EditSessionDateAndTimeFormForm {
       return start.minute < end.minute
     }
 
-    function isSubmittedDateInPast(value: unknown): boolean {
-      if (typeof value !== 'string') {
-        return false
-      }
-
-      const ukMatch = value.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
-      if (!ukMatch) {
-        return false
-      }
-
-      const [, day, month, year] = ukMatch
-      const inputDate = new Date(Number(year), Number(month) - 1, Number(day))
-      const today = new Date()
-      today.setHours(0, 0, 0, 0)
-
-      return inputDate < today
-    }
-
-    function isSubmittedDateTodayAndStarted(
-      value: unknown,
-      startHour: number,
-      startMinute: number,
-      startPeriod: 'AM' | 'PM',
-    ): boolean {
-      if (typeof value !== 'string') {
-        return false
-      }
-
-      const ukMatch = value.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
-      if (!ukMatch) {
-        return false
-      }
-
-      const [, day, month, year] = ukMatch
-      const inputDate = new Date(Number(year), Number(month) - 1, Number(day))
-      const now = new Date()
-      const today = new Date(now)
-      today.setHours(0, 0, 0, 0)
-      inputDate.setHours(0, 0, 0, 0)
-
-      if (inputDate.getTime() !== today.getTime()) {
-        return false
-      }
-
-      const start24 = convertTo24Hour(startHour, startMinute, startPeriod)
-      const submittedStart = new Date(inputDate)
-      submittedStart.setHours(start24.hour, start24.minute, 0, 0)
-
-      return submittedStart < now
-    }
-
     const { originalStartTime, originalEndTime } = this
 
     function startTimeChanged(submittedHour: number, submittedMinute: number, submittedPeriod: 'AM' | 'PM'): boolean {
       if (!originalStartTime) return true
-      const orig = convertTo24Hour(originalStartTime.hour, originalStartTime.minutes, originalStartTime.amOrPm)
-      const sub = convertTo24Hour(submittedHour, submittedMinute, submittedPeriod)
+      const orig = DateUtils.convertTo24Hour(
+        originalStartTime.hour,
+        originalStartTime.minutes,
+        originalStartTime.amOrPm,
+      )
+      const sub = DateUtils.convertTo24Hour(submittedHour, submittedMinute, submittedPeriod)
       return orig.hour !== sub.hour || orig.minute !== sub.minute
     }
 
     function endTimeChanged(submittedHour: number, submittedMinute: number, submittedPeriod: 'AM' | 'PM'): boolean {
       if (!originalEndTime) return true
-      const orig = convertTo24Hour(originalEndTime.hour, originalEndTime.minutes, originalEndTime.amOrPm)
-      const sub = convertTo24Hour(submittedHour, submittedMinute, submittedPeriod)
+      const orig = DateUtils.convertTo24Hour(originalEndTime.hour, originalEndTime.minutes, originalEndTime.amOrPm)
+      const sub = DateUtils.convertTo24Hour(submittedHour, submittedMinute, submittedPeriod)
       return orig.hour !== sub.hour || orig.minute !== sub.minute
     }
 
-    const originalDurationMinutes =
-      originalStartTime && originalEndTime
-        ? durationInMinutes(
-            originalStartTime.hour,
-            originalStartTime.minutes,
-            originalStartTime.amOrPm,
-            originalEndTime.hour,
-            originalEndTime.minutes,
-            originalEndTime.amOrPm,
-          )
-        : null
+    /**
+     * Checks if the submitted duration exceeds the original duration for a past session.
+     * Returns error message if validation should throw, or null if valid.
+     */
+    function validatePastSessionDuration(
+      dateStr: string,
+      startHour: number,
+      startMinute: number,
+      startPeriod: 'AM' | 'PM',
+      endHour: number,
+      endMinute: number,
+      endPeriod: 'AM' | 'PM',
+      timeFieldThatChanged: 'start' | 'end',
+    ): string | null {
+      const shouldValidatePastDuration =
+        isSessionInPast ||
+        DateFormatUtils.isDateInPast(dateStr) ||
+        DateFormatUtils.isSessionInPast(dateStr, startHour, startMinute, startPeriod)
+
+      if (!shouldValidatePastDuration) {
+        return null
+      }
+
+      const duration = durationInMinutes(startHour, startMinute, startPeriod, endHour, endMinute, endPeriod)
+      const originalDurationMinutes =
+        originalStartTime && originalEndTime
+          ? durationInMinutes(
+              originalStartTime.hour,
+              originalStartTime.minutes,
+              originalStartTime.amOrPm,
+              originalEndTime.hour,
+              originalEndTime.minutes,
+              originalEndTime.amOrPm,
+            )
+          : null
+
+      if (originalDurationMinutes !== null && duration > originalDurationMinutes) {
+        // Only throw error if the relevant field changed
+        const relevantFieldChanged =
+          timeFieldThatChanged === 'start'
+            ? startTimeChanged(startHour, startMinute, startPeriod)
+            : endTimeChanged(endHour, endMinute, endPeriod)
+        if (relevantFieldChanged) {
+          return errorMessages.sessionSchedule.sessionDetailsDurationLongerThanOriginallyScheduled
+        }
+      }
+
+      return null
+    }
 
     const dateValidation = body('session-details-date')
       .notEmpty()
@@ -192,11 +175,7 @@ export default class EditSessionDateAndTimeFormForm {
 
     if (!isSessionInPast) {
       dateValidation.bail().custom((value: string) => {
-        const [day, month, year] = value.split('/').map(Number)
-        const inputDate = new Date(year, month - 1, day)
-        const today = new Date()
-        today.setHours(0, 0, 0, 0)
-        if (inputDate < today) {
+        if (DateFormatUtils.isDateInPast(value)) {
           throw new Error(errorMessages.sessionSchedule.sessionDetailsDateInPast)
         }
         return true
@@ -243,26 +222,18 @@ export default class EditSessionDateAndTimeFormForm {
             return true
           }
 
-          const shouldValidatePastDuration =
-            isSessionInPast ||
-            isSubmittedDateInPast(req.body['session-details-date']) ||
-            isSubmittedDateTodayAndStarted(req.body['session-details-date'], startHour, startMinute, startPartOfDay)
-
-          if (shouldValidatePastDuration) {
-            const startChanged = startTimeChanged(startHour, startMinute, startPartOfDay)
-            if (startChanged) {
-              const duration = durationInMinutes(
-                startHour,
-                startMinute,
-                startPartOfDay,
-                endHour,
-                endMinute,
-                endPartOfDay,
-              )
-              if (originalDurationMinutes !== null && duration > originalDurationMinutes) {
-                throw new Error(errorMessages.sessionSchedule.sessionDetailsDurationLongerThanOriginallyScheduled)
-              }
-            }
+          const durationError = validatePastSessionDuration(
+            req.body['session-details-date'],
+            startHour,
+            startMinute,
+            startPartOfDay,
+            endHour,
+            endMinute,
+            endPartOfDay,
+            'start',
+          )
+          if (durationError) {
+            throw new Error(durationError)
           }
 
           return true
@@ -324,25 +295,18 @@ export default class EditSessionDateAndTimeFormForm {
             throw new Error(errorMessages.sessionSchedule.sessionDetailsEndTimeBeforeStart)
           }
 
-          const shouldValidatePastDuration =
-            isSessionInPast ||
-            isSubmittedDateInPast(req.body['session-details-date']) ||
-            isSubmittedDateTodayAndStarted(req.body['session-details-date'], startHour, startMinute, startPartOfDay)
-          if (shouldValidatePastDuration) {
-            const endChanged = endTimeChanged(endHour, endMinute, endPartOfDay)
-            if (endChanged) {
-              const duration = durationInMinutes(
-                startHour,
-                startMinute,
-                startPartOfDay,
-                endHour,
-                endMinute,
-                endPartOfDay,
-              )
-              if (originalDurationMinutes !== null && duration > originalDurationMinutes) {
-                throw new Error(errorMessages.sessionSchedule.sessionDetailsDurationLongerThanOriginallyScheduled)
-              }
-            }
+          const durationError = validatePastSessionDuration(
+            req.body['session-details-date'],
+            startHour,
+            startMinute,
+            startPartOfDay,
+            endHour,
+            endMinute,
+            endPartOfDay,
+            'end',
+          )
+          if (durationError) {
+            throw new Error(durationError)
           }
 
           return true
