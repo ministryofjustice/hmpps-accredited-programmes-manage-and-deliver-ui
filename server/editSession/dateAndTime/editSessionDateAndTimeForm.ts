@@ -250,8 +250,6 @@ export default class EditSessionDateAndTimeFormForm {
 
           if (shouldValidatePastDuration) {
             const startChanged = startTimeChanged(startHour, startMinute, startPartOfDay)
-            const endChanged = endTimeChanged(endHour, endMinute, endPartOfDay)
-            // Show error on start time if start was changed (whether or not end was also changed)
             if (startChanged) {
               const duration = durationInMinutes(
                 startHour,
