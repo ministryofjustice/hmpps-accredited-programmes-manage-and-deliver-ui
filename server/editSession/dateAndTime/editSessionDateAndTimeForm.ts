@@ -260,10 +260,7 @@ export default class EditSessionDateAndTimeFormForm {
                 endPartOfDay,
               )
               if (originalDurationMinutes !== null && duration > originalDurationMinutes) {
-                throw new Error(
-                  errorMessages.rescheduleSession.editSessionDateAndTime
-                    .sessionDetailsDurationLongerThanOriginallyScheduled,
-                )
+                throw new Error(errorMessages.sessionSchedule.sessionDetailsDurationLongerThanOriginallyScheduled)
               }
             }
           }
@@ -343,10 +340,7 @@ export default class EditSessionDateAndTimeFormForm {
                 endPartOfDay,
               )
               if (originalDurationMinutes !== null && duration > originalDurationMinutes) {
-                throw new Error(
-                  errorMessages.rescheduleSession.editSessionDateAndTime
-                    .sessionDetailsDurationLongerThanOriginallyScheduled,
-                )
+                throw new Error(errorMessages.sessionSchedule.sessionDetailsDurationLongerThanOriginallyScheduled)
               }
             }
           }

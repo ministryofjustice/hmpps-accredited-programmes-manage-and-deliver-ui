@@ -160,17 +160,25 @@ describe('editSessionDateAndTime', () => {
       const [year, month, day] = todayIso.split('-')
       const todayUk = `${day}/${month}/${year}`
 
+      // Submit a start time that is guaranteed to be in the past and
+      // an end time that is explicitly longer than the original 1-minute duration.
+      const submittedEndMinutesSinceMidnight = Math.min(startMinutesSinceMidnight + 5 * 60, 23 * 60 + 59)
+      const submittedEndHour24 = Math.floor(submittedEndMinutesSinceMidnight / 60)
+      const submittedEndMinute = submittedEndMinutesSinceMidnight % 60
+      const submittedEndHour12 = submittedEndHour24 % 12 === 0 ? 12 : submittedEndHour24 % 12
+      const submittedEndAmPm = submittedEndHour24 >= 12 ? 'PM' : 'AM'
+
       await request(app)
         .post(`/group/111/session/6789/edit-session-date-and-time`)
         .type('form')
         .send({
           'session-details-date': todayUk,
-          'session-details-start-time-hour': '4',
-          'session-details-start-time-minute': '39',
-          'session-details-start-time-part-of-day': 'AM',
-          'session-details-end-time-hour': '9',
-          'session-details-end-time-minute': '30',
-          'session-details-end-time-part-of-day': 'AM',
+          'session-details-start-time-hour': String(startHour12),
+          'session-details-start-time-minute': String(startMinute).padStart(2, '0'),
+          'session-details-start-time-part-of-day': startAmPm,
+          'session-details-end-time-hour': String(submittedEndHour12),
+          'session-details-end-time-minute': String(submittedEndMinute).padStart(2, '0'),
+          'session-details-end-time-part-of-day': submittedEndAmPm,
         })
         .expect(400)
         .expect(res => {
