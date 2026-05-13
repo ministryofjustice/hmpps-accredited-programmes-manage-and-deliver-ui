@@ -60,15 +60,21 @@ export default class PresenterUtils {
 
   static errorSummary(
     error: { errors: { errorSummaryLinkedField: string; message: string }[] } | null,
-    options: { fieldOrder: string[] } = { fieldOrder: [] },
+    options: { fieldOrder: string[]; duplicateMessage?: boolean } = { fieldOrder: [] },
   ): { field: string; message: string }[] | null {
     if (error === null) {
       return null
     }
 
     const sortedErrors = this.sortedErrors(error.errors, options.fieldOrder)
+    const duplicateErrors = options.duplicateMessage
+      ? sortedErrors.filter(
+          (subError, index, allErrors) =>
+            index === allErrors.findIndex(session => session.message === subError.message),
+        )
+      : sortedErrors
 
-    return sortedErrors.map(subError => {
+    return duplicateErrors.map(subError => {
       return { field: subError.errorSummaryLinkedField, message: subError.message }
     })
   }
@@ -144,19 +150,25 @@ export default class PresenterUtils {
       partOfDayValue = modelValue.amOrPm ?? null
     }
 
+    // If any of the three fields has an error, highlight all three
+    const groupHasError =
+      PresenterUtils.hasError(error, hourKey) ||
+      PresenterUtils.hasError(error, minuteKey) ||
+      PresenterUtils.hasError(error, partOfDayKey)
+
     return {
       errorMessages,
       partOfDay: {
         value: partOfDayValue,
-        hasError: PresenterUtils.hasError(error, partOfDayKey),
+        hasError: groupHasError,
       },
       hour: {
         value: hourValue,
-        hasError: PresenterUtils.hasError(error, hourKey),
+        hasError: groupHasError,
       },
       minute: {
         value: minuteValue,
-        hasError: PresenterUtils.hasError(error, minuteKey),
+        hasError: groupHasError,
       },
     }
   }

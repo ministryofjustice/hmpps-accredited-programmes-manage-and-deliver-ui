@@ -292,6 +292,41 @@ describe(PresenterUtils, () => {
         ])
       })
 
+      it('keeps duplicate messages when duplicateMessage is false', () => {
+        expect(
+          PresenterUtils.errorSummary(
+            {
+              errors: [
+                { errorSummaryLinkedField: 'first', message: 'same msg' },
+                { errorSummaryLinkedField: 'second', message: 'same msg' },
+              ],
+            },
+            { fieldOrder: ['first', 'second'], duplicateMessage: false },
+          ),
+        ).toEqual([
+          { field: 'first', message: 'same msg' },
+          { field: 'second', message: 'same msg' },
+        ])
+      })
+
+      it('removes duplicate messages when duplicateMessage is true', () => {
+        expect(
+          PresenterUtils.errorSummary(
+            {
+              errors: [
+                { errorSummaryLinkedField: 'first', message: 'same msg' },
+                { errorSummaryLinkedField: 'second', message: 'same msg' },
+                { errorSummaryLinkedField: 'third', message: 'different msg' },
+              ],
+            },
+            { fieldOrder: ['first', 'second', 'third'], duplicateMessage: true },
+          ),
+        ).toEqual([
+          { field: 'first', message: 'same msg' },
+          { field: 'third', message: 'different msg' },
+        ])
+      })
+
       describe('when a field in the array of errors is missing from the fieldOrder array', () => {
         it('places that field at the end of the return value', () => {
           expect(
@@ -525,8 +560,7 @@ describe(PresenterUtils, () => {
             'Please enter an hour and select whether the time is in the AM or the PM',
           ])
           expect(value.hour.hasError).toEqual(true)
-          expect(value.minute.hasError).toEqual(false)
-          expect(value.partOfDay.hasError).toEqual(false)
+          expect(value.partOfDay.hasError).toEqual(true)
         })
 
         it('returns multiple error information', () => {
@@ -551,7 +585,6 @@ describe(PresenterUtils, () => {
             'Please enter an hour and select whether the time is in the AM or the PM',
           ])
           expect(value.hour.hasError).toEqual(true)
-          expect(value.minute.hasError).toEqual(false)
           expect(value.partOfDay.hasError).toEqual(true)
         })
       })

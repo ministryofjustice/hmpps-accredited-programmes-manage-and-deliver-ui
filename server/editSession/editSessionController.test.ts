@@ -79,7 +79,7 @@ describe('editSessionDateAndTime', () => {
 
   describe('POST group/:groupId/session/:sessionId/edit-session-date-and-time', () => {
     it('should fetch session details with correct parameters and load page correctly', async () => {
-      const sessionDetails = editSessionDetailsFactory.build()
+      const sessionDetails = editSessionDetailsFactory.build({ sessionDate: '3055-12-15' })
       const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'GROUP' })
       accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
       accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
@@ -99,6 +99,76 @@ describe('editSessionDateAndTime', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(`Redirecting to /group/111/session/6789/edit-session-date-and-time/reschedule`)
+        })
+    })
+
+    it('shows validation error when a past session duration is increased beyond 2.5 hours', async () => {
+      const sessionDetails = editSessionDetailsFactory.build({ sessionDate: '01/01/2020' })
+      const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'ONE_TO_ONE' })
+      accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
+      accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
+
+      await request(app)
+        .post(`/group/111/session/6789/edit-session-date-and-time`)
+        .type('form')
+        .send({
+          'session-details-date': '01/01/2020',
+          'session-details-start-time-hour': '10',
+          'session-details-start-time-minute': '00',
+          'session-details-start-time-part-of-day': 'AM',
+          'session-details-end-time-hour': '12',
+          'session-details-end-time-minute': '31',
+          'session-details-end-time-part-of-day': 'PM',
+        })
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain(
+            'The session duration cannot be longer than originally scheduled. Change the start or end time.',
+          )
+        })
+    })
+
+    it('shows validation error when session is today and has already started', async () => {
+      const now = new Date()
+      const todayIso = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(
+        now.getDate(),
+      ).padStart(2, '0')}`
+
+      // Choose a start-time that is in the past for "today".
+      const startMinutesSinceMidnight = Math.max(now.getHours() * 60 + now.getMinutes() - 1, 0)
+      const startHour24 = Math.floor(startMinutesSinceMidnight / 60)
+      const startMinute = startMinutesSinceMidnight % 60
+      const startHour12 = startHour24 % 12 === 0 ? 12 : startHour24 % 12
+      const startAmPm = startHour24 >= 12 ? 'PM' : 'AM'
+
+      const sessionDetails = editSessionDetailsFactory.build({
+        sessionDate: todayIso,
+        sessionStartTime: { hour: startHour12, minutes: startMinute, amOrPm: startAmPm },
+      })
+      const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'ONE_TO_ONE' })
+      accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
+      accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
+
+      const [year, month, day] = todayIso.split('-')
+      const todayUk = `${day}/${month}/${year}`
+
+      await request(app)
+        .post(`/group/111/session/6789/edit-session-date-and-time`)
+        .type('form')
+        .send({
+          'session-details-date': todayUk,
+          'session-details-start-time-hour': '4',
+          'session-details-start-time-minute': '39',
+          'session-details-start-time-part-of-day': 'AM',
+          'session-details-end-time-hour': '9',
+          'session-details-end-time-minute': '30',
+          'session-details-end-time-part-of-day': 'AM',
+        })
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain(
+            'The session duration cannot be longer than originally scheduled. Change the start or end time.',
+          )
         })
     })
   })

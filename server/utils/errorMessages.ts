@@ -122,6 +122,8 @@ export default {
       sessionDetailsEndTimeAmPm: 'Select whether the end time is am or pm',
       sessionDetailsFacilitator: 'Select a facilitator. Start typing to search',
       sessionDetailsEndTimeBeforeStart: 'End time must be later than start time',
+      sessionDetailsDurationLongerThanOriginallyScheduled:
+        'The session duration cannot be longer than originally scheduled. Change the start or end time.',
     },
     rescheduleOtherSessions: {
       rescheduleOtherSessionsEmpty: 'Select whether to reschedule future sessions or not',

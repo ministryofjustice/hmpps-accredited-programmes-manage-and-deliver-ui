@@ -30,6 +30,89 @@ export default class EditSessionController extends BaseController {
     super()
   }
 
+  private static hasSessionDateAndTimeChanged(
+    sessionDetails: {
+      sessionDate: string
+      sessionStartTime: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' }
+      sessionEndTime: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' }
+    },
+    submitted: {
+      sessionStartDate: string // DD/MM/YYYY
+      sessionStartTime: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' }
+      sessionEndTime: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' }
+    },
+  ): boolean {
+    // Convert submitted DD/MM/YYYY to YYYY-MM-DD for comparison
+    const [day, month, year] = submitted.sessionStartDate.split('/')
+    const submittedDateIso = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+
+    if (sessionDetails.sessionDate !== submittedDateIso) return true
+
+    const origStart = sessionDetails.sessionStartTime
+    const subStart = submitted.sessionStartTime
+    if (
+      origStart.hour !== subStart.hour ||
+      origStart.minutes !== subStart.minutes ||
+      origStart.amOrPm !== subStart.amOrPm
+    )
+      return true
+
+    const origEnd = sessionDetails.sessionEndTime
+    const subEnd = submitted.sessionEndTime
+    if (origEnd.hour !== subEnd.hour || origEnd.minutes !== subEnd.minutes || origEnd.amOrPm !== subEnd.amOrPm)
+      return true
+
+    return false
+  }
+
+  private isSessionInPast(sessionDetails: {
+    sessionDate: string
+    sessionStartTime: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' }
+  }): boolean {
+    const now = new Date()
+    const today = new Date(now)
+    today.setHours(0, 0, 0, 0)
+    const { sessionDate } = sessionDetails
+
+    const isoMatch = sessionDate.match(/^(\d{4})-(\d{2})-(\d{2})/)
+    if (isoMatch) {
+      const [, year, month, day] = isoMatch
+      const parsed = new Date(Number(year), Number(month) - 1, Number(day))
+      return parsed < today
+    }
+
+    const ukMatch = sessionDate.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
+    if (ukMatch) {
+      const [, day, month, year] = ukMatch
+      const parsed = new Date(Number(year), Number(month) - 1, Number(day))
+      return parsed < today
+    }
+
+    const parsed = new Date(sessionDate)
+    if (Number.isNaN(parsed.getTime())) {
+      return false
+    }
+    parsed.setHours(0, 0, 0, 0)
+
+    if (parsed < today) {
+      return true
+    }
+
+    if (parsed.getTime() !== today.getTime()) {
+      return false
+    }
+
+    const startHour24 =
+      sessionDetails.sessionStartTime.amOrPm === 'AM'
+        ? sessionDetails.sessionStartTime.hour % 12
+        : (sessionDetails.sessionStartTime.hour % 12) + 12
+
+    const sessionStartDateTime = new Date(parsed)
+    sessionStartDateTime.setHours(startHour24, sessionDetails.sessionStartTime.minutes, 0, 0)
+
+    return sessionStartDateTime < now
+  }
+
   async editSession(req: Request, res: Response): Promise<void> {
     const { groupId, sessionId } = req.params
     const { username } = req.user
@@ -44,7 +127,11 @@ export default class EditSessionController extends BaseController {
       sessionId,
     )
 
-    const successMessage = message ? String(message) : null
+    // Only show the message if it is present
+    let successMessage: string | null = null
+    if (message) {
+      successMessage = String(message)
+    }
     const isAttendanceHistoryFlag = isAttendanceHistory === 'true'
     const attendanceHistoryReferralId = referralId ? String(referralId) : null
     req.session.originPage = req.path
@@ -153,12 +240,31 @@ export default class EditSessionController extends BaseController {
     )
 
     if (req.method === 'POST') {
-      const data = await new EditSessionDateAndTimeFormForm(req).rescheduleSessionDetailsData()
+      const isSessionInPast = this.isSessionInPast(sessionDetails)
+
+      const data = await new EditSessionDateAndTimeFormForm(
+        req,
+        isSessionInPast,
+        sessionDetails.sessionStartTime,
+        sessionDetails.sessionEndTime,
+      ).rescheduleSessionDetailsData()
+
       if (data.error) {
         res.status(400)
         formError = data.error
         userInputData = req.body
       } else {
+        const { sessionStartDate, sessionStartTime, sessionEndTime } = data.paramsForUpdate
+        const hasChanged = EditSessionController.hasSessionDateAndTimeChanged(sessionDetails, {
+          sessionStartDate,
+          sessionStartTime,
+          sessionEndTime,
+        })
+
+        if (!hasChanged) {
+          return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session`)
+        }
+
         req.session.editSessionDateAndTime = {
           sessionStartDate: data.paramsForUpdate.sessionStartDate,
           sessionStartTime: data.paramsForUpdate.sessionStartTime,
@@ -188,7 +294,6 @@ export default class EditSessionController extends BaseController {
         )
 
         delete req.session.editSessionDateAndTime
-
         return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session?message=${response.message}`)
       }
     }
@@ -231,7 +336,6 @@ export default class EditSessionController extends BaseController {
           sessionDetails.sessionId,
           req.session.editSessionDateAndTime as RescheduleSessionRequest,
         )
-
         return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session?message=${message.message}`)
       }
     }
