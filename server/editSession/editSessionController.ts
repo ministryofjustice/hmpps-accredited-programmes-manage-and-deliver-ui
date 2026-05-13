@@ -48,7 +48,7 @@ export default class EditSessionController extends BaseController {
       const [, day, month, year] = ukMatch
       return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
     }
-    // Fallback: try to parse as Date
+    // Fallback: preserve any explicit YYYY-MM-DD present in the original string
     const d = new Date(dateStr)
     if (!Number.isNaN(d.getTime())) {
       return d.toISOString().slice(0, 10)
