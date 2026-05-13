@@ -74,40 +74,46 @@ export default class EditSessionController extends BaseController {
     today.setHours(0, 0, 0, 0)
     const { sessionDate } = sessionDetails
 
+    let sessionDateParsed: Date | null = null
+
     const isoMatch = sessionDate.match(/^(\d{4})-(\d{2})-(\d{2})/)
     if (isoMatch) {
       const [, year, month, day] = isoMatch
-      const parsed = new Date(Number(year), Number(month) - 1, Number(day))
-      return parsed < today
+      sessionDateParsed = new Date(Number(year), Number(month) - 1, Number(day))
     }
 
-    const ukMatch = sessionDate.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
-    if (ukMatch) {
-      const [, day, month, year] = ukMatch
-      const parsed = new Date(Number(year), Number(month) - 1, Number(day))
-      return parsed < today
+    if (!sessionDateParsed) {
+      const ukMatch = sessionDate.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
+      if (ukMatch) {
+        const [, day, month, year] = ukMatch
+        sessionDateParsed = new Date(Number(year), Number(month) - 1, Number(day))
+      }
     }
 
-    const parsed = new Date(sessionDate)
-    if (Number.isNaN(parsed.getTime())) {
-      return false
+    if (!sessionDateParsed) {
+      const fallback = new Date(sessionDate)
+      if (Number.isNaN(fallback.getTime())) {
+        return false
+      }
+      fallback.setHours(0, 0, 0, 0)
+      sessionDateParsed = fallback
     }
-    parsed.setHours(0, 0, 0, 0)
 
-    if (parsed < today) {
+    if (sessionDateParsed < today) {
       return true
     }
 
-    if (parsed.getTime() !== today.getTime()) {
+    if (sessionDateParsed.getTime() !== today.getTime()) {
       return false
     }
 
+    // Session is today — check if the start time has already passed
     const startHour24 =
       sessionDetails.sessionStartTime.amOrPm === 'AM'
         ? sessionDetails.sessionStartTime.hour % 12
         : (sessionDetails.sessionStartTime.hour % 12) + 12
 
-    const sessionStartDateTime = new Date(parsed)
+    const sessionStartDateTime = new Date(sessionDateParsed)
     sessionStartDateTime.setHours(startHour24, sessionDetails.sessionStartTime.minutes, 0, 0)
 
     return sessionStartDateTime < now

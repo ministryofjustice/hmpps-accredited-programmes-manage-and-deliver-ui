@@ -230,19 +230,29 @@ describe('EditSessionDateAndTimeForm', () => {
       expect(data.error).toBeNull()
     })
 
-    it('accepts a duration of exactly 2.5 hours', async () => {
-      request.body['session-details-start-time-hour'] = '10'
+    it('accepts a duration equal to the original duration', async () => {
+      const originalStart = { hour: 10, minutes: 0, amOrPm: 'AM' as const }
+      const originalEnd = { hour: 12, minutes: 30, amOrPm: 'PM' as const } // 150 mins
+      // Submit same duration but shifted (start earlier, end earlier by same amount)
+      request.body['session-details-start-time-hour'] = '9'
       request.body['session-details-start-time-minute'] = '0'
       request.body['session-details-start-time-part-of-day'] = 'AM'
-      request.body['session-details-end-time-hour'] = '12'
+      request.body['session-details-end-time-hour'] = '11'
       request.body['session-details-end-time-minute'] = '30'
-      request.body['session-details-end-time-part-of-day'] = 'PM'
+      request.body['session-details-end-time-part-of-day'] = 'AM'
 
-      const data = await new EditSessionDateAndTimeFormForm(request, true).rescheduleSessionDetailsData()
+      const data = await new EditSessionDateAndTimeFormForm(
+        request,
+        true,
+        originalStart,
+        originalEnd,
+      ).rescheduleSessionDetailsData()
       expect(data.error).toBeNull()
     })
 
-    it('returns error when duration exceeds 2.5 hours', async () => {
+    it('returns error when submitted duration exceeds original duration', async () => {
+      const originalStart = { hour: 10, minutes: 0, amOrPm: 'AM' as const }
+      const originalEnd = { hour: 12, minutes: 30, amOrPm: 'PM' as const } // 150 mins
       request.body['session-details-start-time-hour'] = '10'
       request.body['session-details-start-time-minute'] = '0'
       request.body['session-details-start-time-part-of-day'] = 'AM'
@@ -250,10 +260,14 @@ describe('EditSessionDateAndTimeForm', () => {
       request.body['session-details-end-time-minute'] = '31'
       request.body['session-details-end-time-part-of-day'] = 'PM'
 
-      const data = await new EditSessionDateAndTimeFormForm(request, true).rescheduleSessionDetailsData()
+      const data = await new EditSessionDateAndTimeFormForm(
+        request,
+        true,
+        originalStart,
+        originalEnd,
+      ).rescheduleSessionDetailsData()
 
       expect(data.paramsForUpdate).toBeNull()
-      // No original times supplied → both start and end treated as changed → error on both fields
       expect(data.error?.errors).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
@@ -278,6 +292,8 @@ describe('EditSessionDateAndTimeForm', () => {
     })
 
     it('checks duration when submitted date is past even if session flag is false', async () => {
+      const originalStart = { hour: 10, minutes: 0, amOrPm: 'AM' as const }
+      const originalEnd = { hour: 12, minutes: 30, amOrPm: 'PM' as const } // 150 mins
       request.body['session-details-date'] = pastDate
       request.body['session-details-start-time-hour'] = '10'
       request.body['session-details-start-time-minute'] = '0'
@@ -286,7 +302,12 @@ describe('EditSessionDateAndTimeForm', () => {
       request.body['session-details-end-time-minute'] = '31'
       request.body['session-details-end-time-part-of-day'] = 'PM'
 
-      const data = await new EditSessionDateAndTimeFormForm(request, false).rescheduleSessionDetailsData()
+      const data = await new EditSessionDateAndTimeFormForm(
+        request,
+        false,
+        originalStart,
+        originalEnd,
+      ).rescheduleSessionDetailsData()
       expect(data.error?.errors).toEqual(
         expect.arrayContaining([
           expect.objectContaining({

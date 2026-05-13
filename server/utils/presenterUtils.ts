@@ -60,14 +60,14 @@ export default class PresenterUtils {
 
   static errorSummary(
     error: { errors: { errorSummaryLinkedField: string; message: string }[] } | null,
-    options: { fieldOrder: string[]; duplicateMessage?: boolean } = { fieldOrder: [] },
+    options: { fieldOrder: string[]; removeDuplicateMessage?: boolean } = { fieldOrder: [] },
   ): { field: string; message: string }[] | null {
     if (error === null) {
       return null
     }
 
     const sortedErrors = this.sortedErrors(error.errors, options.fieldOrder)
-    const duplicateErrors = options.duplicateMessage
+    const duplicateErrors = options.removeDuplicateMessage
       ? sortedErrors.filter(
           (subError, index, allErrors) =>
             index === allErrors.findIndex(session => session.message === subError.message),

@@ -23,7 +23,7 @@ export default class EditSessionDateAndTimePresenter {
   }
 
   get errorSummary() {
-    return PresenterUtils.errorSummary(this.validationError, { fieldOrder: [], duplicateMessage: true })
+    return PresenterUtils.errorSummary(this.validationError, { fieldOrder: [], removeDuplicateMessage: true })
   }
 
   get utils() {

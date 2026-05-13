@@ -292,7 +292,7 @@ describe(PresenterUtils, () => {
         ])
       })
 
-      it('keeps duplicate messages when duplicateMessage is false', () => {
+      it('keeps duplicate messages when removeDuplicateMessage is false', () => {
         expect(
           PresenterUtils.errorSummary(
             {
@@ -301,7 +301,7 @@ describe(PresenterUtils, () => {
                 { errorSummaryLinkedField: 'second', message: 'same msg' },
               ],
             },
-            { fieldOrder: ['first', 'second'], duplicateMessage: false },
+            { fieldOrder: ['first', 'second'], removeDuplicateMessage: false },
           ),
         ).toEqual([
           { field: 'first', message: 'same msg' },
@@ -309,7 +309,7 @@ describe(PresenterUtils, () => {
         ])
       })
 
-      it('removes duplicate messages when duplicateMessage is true', () => {
+      it('removes duplicate messages when removeDuplicateMessage is true', () => {
         expect(
           PresenterUtils.errorSummary(
             {
@@ -319,7 +319,7 @@ describe(PresenterUtils, () => {
                 { errorSummaryLinkedField: 'third', message: 'different msg' },
               ],
             },
-            { fieldOrder: ['first', 'second', 'third'], duplicateMessage: true },
+            { fieldOrder: ['first', 'second', 'third'], removeDuplicateMessage: true },
           ),
         ).toEqual([
           { field: 'first', message: 'same msg' },

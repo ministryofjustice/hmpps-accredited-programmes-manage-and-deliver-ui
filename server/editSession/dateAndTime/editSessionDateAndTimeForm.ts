@@ -171,7 +171,17 @@ export default class EditSessionDateAndTimeFormForm {
       return orig.hour !== sub.hour || orig.minute !== sub.minute
     }
 
-    const maxDurationMinutes = 150 // 2.5 hours
+    const originalDurationMinutes =
+      originalStartTime && originalEndTime
+        ? durationInMinutes(
+            originalStartTime.hour,
+            originalStartTime.minutes,
+            originalStartTime.amOrPm,
+            originalEndTime.hour,
+            originalEndTime.minutes,
+            originalEndTime.amOrPm,
+          )
+        : null
 
     const dateValidation = body('session-details-date')
       .notEmpty()
@@ -204,22 +214,31 @@ export default class EditSessionDateAndTimeFormForm {
         .if(body('session-details-end-time-hour').notEmpty())
         .custom((startHourValue, { req }) => {
           const startHour = parseInt(startHourValue, 10)
-          const startMinute = parseInt(req.body['session-details-start-time-minute'] || '0', 10)
+          const startMinuteValue = req.body['session-details-start-time-minute']
+          const startMinute = parseInt(startMinuteValue, 10)
           const startPartOfDay = req.body['session-details-start-time-part-of-day']
 
-          const endHour = parseInt(req.body['session-details-end-time-hour'], 10)
-          const endMinute = parseInt(req.body['session-details-end-time-minute'] || '0', 10)
+          const endHourValue = req.body['session-details-end-time-hour']
+          const endHour = parseInt(endHourValue, 10)
+          const endMinuteValue = req.body['session-details-end-time-minute']
+          const endMinute = parseInt(endMinuteValue, 10)
           const endPartOfDay = req.body['session-details-end-time-part-of-day']
 
           if (
-            !startHour ||
-            !startPartOfDay ||
+            Number.isNaN(startHour) ||
             startHour < 1 ||
             startHour > 12 ||
-            !endHour ||
-            !endPartOfDay ||
+            !startPartOfDay ||
+            Number.isNaN(startMinute) ||
+            startMinute < 0 ||
+            startMinute > 59 ||
+            Number.isNaN(endHour) ||
             endHour < 1 ||
-            endHour > 12
+            endHour > 12 ||
+            !endPartOfDay ||
+            Number.isNaN(endMinute) ||
+            endMinute < 0 ||
+            endMinute > 59
           ) {
             return true
           }
@@ -242,16 +261,7 @@ export default class EditSessionDateAndTimeFormForm {
                 endMinute,
                 endPartOfDay,
               )
-              if (duration > maxDurationMinutes) {
-                // Only throw here if end time didn't also change (end-time validator handles the "both changed" case for end)
-                // But we always want to show on start when start was changed
-                if (!endChanged) {
-                  throw new Error(
-                    errorMessages.rescheduleSession.editSessionDateAndTime
-                      .sessionDetailsDurationLongerThanOriginallyScheduled,
-                  )
-                }
-                // When both changed, throw on start too
+              if (originalDurationMinutes !== null && duration > originalDurationMinutes) {
                 throw new Error(
                   errorMessages.rescheduleSession.editSessionDateAndTime
                     .sessionDetailsDurationLongerThanOriginallyScheduled,
@@ -277,15 +287,26 @@ export default class EditSessionDateAndTimeFormForm {
         .withMessage(errorMessages.sessionSchedule.sessionDetailsTimeHour)
         .if(body('session-details-start-time-hour').notEmpty())
         .custom((endHourValue, { req }) => {
-          const startHour = parseInt(req.body['session-details-start-time-hour'], 10)
-          const startMinute = parseInt(req.body['session-details-start-time-minute'] || '0', 10)
+          const startHourValue = req.body['session-details-start-time-hour']
+          const startHour = parseInt(startHourValue, 10)
+          const startMinuteValue = req.body['session-details-start-time-minute']
+          const startMinute = parseInt(startMinuteValue, 10)
           const startPartOfDay = req.body['session-details-start-time-part-of-day']
 
           const endHour = parseInt(endHourValue, 10)
-          const endMinute = parseInt(req.body['session-details-end-time-minute'] || '0', 10)
+          const endMinuteValue = req.body['session-details-end-time-minute']
+          const endMinute = parseInt(endMinuteValue, 10)
           const endPartOfDay = req.body['session-details-end-time-part-of-day']
 
-          if (!startHour || !startPartOfDay || startHour < 1 || startHour > 12 || startMinute < 0 || startMinute > 59) {
+          if (
+            Number.isNaN(startHour) ||
+            startHour < 1 ||
+            startHour > 12 ||
+            !startPartOfDay ||
+            Number.isNaN(startMinute) ||
+            startMinute < 0 ||
+            startMinute > 59
+          ) {
             // Skip validation if start time is invalid
             return true
           }
@@ -310,7 +331,7 @@ export default class EditSessionDateAndTimeFormForm {
                 endMinute,
                 endPartOfDay,
               )
-              if (duration > maxDurationMinutes) {
+              if (originalDurationMinutes !== null && duration > originalDurationMinutes) {
                 throw new Error(
                   errorMessages.rescheduleSession.editSessionDateAndTime
                     .sessionDetailsDurationLongerThanOriginallyScheduled,

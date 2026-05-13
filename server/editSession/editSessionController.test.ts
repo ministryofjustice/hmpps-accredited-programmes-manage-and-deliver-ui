@@ -102,7 +102,7 @@ describe('editSessionDateAndTime', () => {
         })
     })
 
-    it('shows validation error when a past session duration is increased beyond 2.5 hours', async () => {
+    it('shows error when a past session duration is increased to more than 2.5 hours', async () => {
       const sessionDetails = editSessionDetailsFactory.build({ sessionDate: '01/01/2020' })
       const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'ONE_TO_ONE' })
       accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
