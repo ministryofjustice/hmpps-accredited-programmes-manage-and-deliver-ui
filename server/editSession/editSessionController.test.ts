@@ -141,9 +141,17 @@ describe('editSessionDateAndTime', () => {
       const startHour12 = startHour24 % 12 === 0 ? 12 : startHour24 % 12
       const startAmPm = startHour24 >= 12 ? 'PM' : 'AM'
 
+      // Keep the original duration explicit and positive (1 minute)
+      const endMinutesSinceMidnight = Math.min(startMinutesSinceMidnight + 1, 23 * 60 + 59)
+      const endHour24 = Math.floor(endMinutesSinceMidnight / 60)
+      const endMinute = endMinutesSinceMidnight % 60
+      const endHour12 = endHour24 % 12 === 0 ? 12 : endHour24 % 12
+      const endAmPm = endHour24 >= 12 ? 'PM' : 'AM'
+
       const sessionDetails = editSessionDetailsFactory.build({
         sessionDate: todayIso,
         sessionStartTime: { hour: startHour12, minutes: startMinute, amOrPm: startAmPm },
+        sessionEndTime: { hour: endHour12, minutes: endMinute, amOrPm: endAmPm },
       })
       const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'ONE_TO_ONE' })
       accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)

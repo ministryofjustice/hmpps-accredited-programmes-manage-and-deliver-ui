@@ -30,6 +30,32 @@ export default class EditSessionController extends BaseController {
     super()
   }
 
+  /**
+   * Convert a date string to YYYY-MM-DD (date-only format).
+   * Accepts ISO with or without time, or UK format (DD/MM/YYYY).
+   */
+  private static toDateOnlyString(dateStr: string): string | null {
+    if (!dateStr) return null
+    // ISO format with or without time
+    const isoMatch = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})/)
+    if (isoMatch) {
+      const [, year, month, day] = isoMatch
+      return `${year}-${month}-${day}`
+    }
+    // UK format DD/MM/YYYY
+    const ukMatch = dateStr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
+    if (ukMatch) {
+      const [, day, month, year] = ukMatch
+      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+    }
+    // Fallback: try to parse as Date
+    const d = new Date(dateStr)
+    if (!Number.isNaN(d.getTime())) {
+      return d.toISOString().slice(0, 10)
+    }
+    return null
+  }
+
   private static hasSessionDateAndTimeChanged(
     sessionDetails: {
       sessionDate: string
@@ -42,11 +68,9 @@ export default class EditSessionController extends BaseController {
       sessionEndTime: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' }
     },
   ): boolean {
-    // Convert submitted DD/MM/YYYY to YYYY-MM-DD for comparison
-    const [day, month, year] = submitted.sessionStartDate.split('/')
-    const submittedDateIso = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-
-    if (sessionDetails.sessionDate !== submittedDateIso) return true
+    const sessionDateForComparison = EditSessionController.toDateOnlyString(sessionDetails.sessionDate)
+    const submittedDateForComparison = EditSessionController.toDateOnlyString(submitted.sessionStartDate)
+    if (sessionDateForComparison !== submittedDateForComparison) return true
 
     const origStart = sessionDetails.sessionStartTime
     const subStart = submitted.sessionStartTime

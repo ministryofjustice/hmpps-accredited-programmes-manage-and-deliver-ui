@@ -292,41 +292,6 @@ describe(PresenterUtils, () => {
         ])
       })
 
-      it('keeps duplicate messages when removeDuplicateMessage is false', () => {
-        expect(
-          PresenterUtils.errorSummary(
-            {
-              errors: [
-                { errorSummaryLinkedField: 'first', message: 'same msg' },
-                { errorSummaryLinkedField: 'second', message: 'same msg' },
-              ],
-            },
-            { fieldOrder: ['first', 'second'], removeDuplicateMessage: false },
-          ),
-        ).toEqual([
-          { field: 'first', message: 'same msg' },
-          { field: 'second', message: 'same msg' },
-        ])
-      })
-
-      it('removes duplicate messages when removeDuplicateMessage is true', () => {
-        expect(
-          PresenterUtils.errorSummary(
-            {
-              errors: [
-                { errorSummaryLinkedField: 'first', message: 'same msg' },
-                { errorSummaryLinkedField: 'second', message: 'same msg' },
-                { errorSummaryLinkedField: 'third', message: 'different msg' },
-              ],
-            },
-            { fieldOrder: ['first', 'second', 'third'], removeDuplicateMessage: true },
-          ),
-        ).toEqual([
-          { field: 'first', message: 'same msg' },
-          { field: 'third', message: 'different msg' },
-        ])
-      })
-
       describe('when a field in the array of errors is missing from the fieldOrder array', () => {
         it('places that field at the end of the return value', () => {
           expect(

@@ -283,6 +283,7 @@ export default class EditSessionDateAndTimeFormForm {
         .bail()
         .isInt({ min: 1, max: 12 })
         .withMessage(errorMessages.sessionSchedule.sessionDetailsTimeHour)
+        .bail()
         .if(body('session-details-start-time-hour').notEmpty())
         .custom((endHourValue, { req }) => {
           const startHourValue = req.body['session-details-start-time-hour']
@@ -309,6 +310,19 @@ export default class EditSessionDateAndTimeFormForm {
             return true
           }
 
+          if (
+            Number.isNaN(endHour) ||
+            endHour < 1 ||
+            endHour > 12 ||
+            !endPartOfDay ||
+            Number.isNaN(endMinute) ||
+            endMinute < 0 ||
+            endMinute > 59
+          ) {
+            // Skip cross-field validation if end time is invalid or incomplete
+            return true
+          }
+
           if (!isTimeBefore(startHour, startMinute, startPartOfDay, endHour, endMinute, endPartOfDay)) {
             throw new Error(errorMessages.sessionSchedule.sessionDetailsEndTimeBeforeStart)
           }
@@ -319,7 +333,6 @@ export default class EditSessionDateAndTimeFormForm {
             isSubmittedDateTodayAndStarted(req.body['session-details-date'], startHour, startMinute, startPartOfDay)
           if (shouldValidatePastDuration) {
             const endChanged = endTimeChanged(endHour, endMinute, endPartOfDay)
-            // Show error on end time if end was changed (whether or not start was also changed)
             if (endChanged) {
               const duration = durationInMinutes(
                 startHour,
