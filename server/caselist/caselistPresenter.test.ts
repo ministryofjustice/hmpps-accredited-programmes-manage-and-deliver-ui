@@ -216,12 +216,12 @@ describe(`filters`, () => {
         items: [
           {
             text: `Open referrals (100)`,
-            href: `/pdu/open-referrals?crnOrPersonName=&pdu=London&cohort=GENERAL_OFFENCE&status=Awaiting+allocation`,
+            href: `/region/open-referrals?crnOrPersonName=&pdu=London&cohort=GENERAL_OFFENCE&status=Awaiting+allocation`,
             active: true,
           },
           {
             text: `Closed referrals (2)`,
-            href: `/pdu/closed-referrals?crnOrPersonName=&pdu=London&cohort=GENERAL_OFFENCE&status=Awaiting+allocation`,
+            href: `/region/closed-referrals?crnOrPersonName=&pdu=London&cohort=GENERAL_OFFENCE&status=Awaiting+allocation`,
             active: false,
           },
         ],
@@ -250,12 +250,12 @@ describe(`filters`, () => {
         items: [
           {
             text: `Open referrals (2)`,
-            href: `/pdu/open-referrals`,
+            href: `/region/open-referrals`,
             active: false,
           },
           {
             text: `Closed referrals (100)`,
-            href: `/pdu/closed-referrals`,
+            href: `/region/closed-referrals`,
             active: true,
           },
         ],

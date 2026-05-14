@@ -8,7 +8,7 @@ export default class HomeView {
     return [
       {
         dataTest: 'case-list',
-        href: '/pdu/open-referrals',
+        href: '/region/open-referrals',
         title: 'Case list',
         description: 'Track and update referrals for your region',
       },

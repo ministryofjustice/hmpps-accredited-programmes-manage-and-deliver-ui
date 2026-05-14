@@ -107,6 +107,7 @@ export default class CaselistView {
       'caselist/caselist',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         subNavArgs: this.presenter.getSubNavArgs(),
         searchByStatusArgs: this.searchByStatusArgs(),
         pagination: this.presenter.pagination.govukPaginationArgs,

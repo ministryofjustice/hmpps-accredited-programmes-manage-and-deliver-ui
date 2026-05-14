@@ -42,7 +42,7 @@ export default class StatusHistoryView {
   get backLinkArgs() {
     return {
       text: 'Back',
-      href: `/pdu/referrals/${this.presenter.referralId}`,
+      href: `/region/referrals/${this.presenter.referralId}`,
     }
   }
 

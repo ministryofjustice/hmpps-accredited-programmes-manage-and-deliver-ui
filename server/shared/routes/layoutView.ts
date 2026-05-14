@@ -35,7 +35,7 @@ export default class LayoutView {
         },
         {
           text: 'Case list',
-          href: '/pdu/open-referrals',
+          href: '/region/open-referrals',
           active: this.presenter.primaryNavigationTab === PrimaryNavigationTab.Caselist,
         },
         {
