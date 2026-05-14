@@ -128,57 +128,43 @@ describe('editSessionDateAndTime', () => {
         })
     })
 
-    it('shows validation error when session is today and has already started', async () => {
-      const now = new Date()
-      const todayIso = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(
-        now.getDate(),
+    it('shows validation error when session has already ended', async () => {
+      // Use yesterday to ensure the session is definitely in the past
+      const yesterday = new Date()
+      yesterday.setDate(yesterday.getDate() - 1)
+      const yesterdayIso = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(
+        yesterday.getDate(),
       ).padStart(2, '0')}`
 
-      // Choose a start-time that is in the past for "today".
-      const startMinutesSinceMidnight = Math.max(now.getHours() * 60 + now.getMinutes() - 1, 0)
-      const startHour24 = Math.floor(startMinutesSinceMidnight / 60)
-      const startMinute = startMinutesSinceMidnight % 60
-      const startHour12 = startHour24 % 12 === 0 ? 12 : startHour24 % 12
-      const startAmPm = startHour24 >= 12 ? 'PM' : 'AM'
-
-      // Keep the original duration explicit and positive (1 minute)
-      const endMinutesSinceMidnight = Math.min(startMinutesSinceMidnight + 1, 23 * 60 + 59)
-      const endHour24 = Math.floor(endMinutesSinceMidnight / 60)
-      const endMinute = endMinutesSinceMidnight % 60
-      const endHour12 = endHour24 % 12 === 0 ? 12 : endHour24 % 12
-      const endAmPm = endHour24 >= 12 ? 'PM' : 'AM'
-
       const sessionDetails = editSessionDetailsFactory.build({
-        sessionDate: todayIso,
-        sessionStartTime: { hour: startHour12, minutes: startMinute, amOrPm: startAmPm },
-        sessionEndTime: { hour: endHour12, minutes: endMinute, amOrPm: endAmPm },
+        sessionDate: yesterdayIso,
+        sessionStartTime: { hour: 10, minutes: 0, amOrPm: 'AM' },
+        sessionEndTime: { hour: 11, minutes: 0, amOrPm: 'AM' },
       })
       const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'ONE_TO_ONE' })
       accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
       accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
 
-      const [year, month, day] = todayIso.split('-')
-      const todayUk = `${day}/${month}/${year}`
+      // Mock the API call in case validation doesn't trigger
+      accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime.mockResolvedValue({
+        message: 'Test message',
+      })
 
-      // Submit a start time that is guaranteed to be in the past and
-      // an end time that is explicitly longer than the original 1-minute duration.
-      const submittedEndMinutesSinceMidnight = Math.min(startMinutesSinceMidnight + 5 * 60, 23 * 60 + 59)
-      const submittedEndHour24 = Math.floor(submittedEndMinutesSinceMidnight / 60)
-      const submittedEndMinute = submittedEndMinutesSinceMidnight % 60
-      const submittedEndHour12 = submittedEndHour24 % 12 === 0 ? 12 : submittedEndHour24 % 12
-      const submittedEndAmPm = submittedEndHour24 >= 12 ? 'PM' : 'AM'
+      const [year, month, day] = yesterdayIso.split('-')
+      const yesterdayUk = `${day}/${month}/${year}`
 
+      // Attempt to extend the end time beyond the original duration
       await request(app)
         .post(`/group/111/session/6789/edit-session-date-and-time`)
         .type('form')
         .send({
-          'session-details-date': todayUk,
-          'session-details-start-time-hour': String(startHour12),
-          'session-details-start-time-minute': String(startMinute).padStart(2, '0'),
-          'session-details-start-time-part-of-day': startAmPm,
-          'session-details-end-time-hour': String(submittedEndHour12),
-          'session-details-end-time-minute': String(submittedEndMinute).padStart(2, '0'),
-          'session-details-end-time-part-of-day': submittedEndAmPm,
+          'session-details-date': yesterdayUk,
+          'session-details-start-time-hour': '10',
+          'session-details-start-time-minute': '00',
+          'session-details-start-time-part-of-day': 'AM',
+          'session-details-end-time-hour': '1',
+          'session-details-end-time-minute': '30',
+          'session-details-end-time-part-of-day': 'PM',
         })
         .expect(400)
         .expect(res => {

@@ -21,7 +21,7 @@ const fieldOrder = [
 export default class EditSessionDateAndTimeFormForm {
   constructor(
     private readonly request: Request,
-    private readonly isSessionInPast: boolean = false,
+    private readonly isSessionEnded: boolean = false,
     private readonly originalStartTime?: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' },
     private readonly originalEndTime?: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' },
   ) {}
@@ -64,7 +64,7 @@ export default class EditSessionDateAndTimeFormForm {
   }
 
   private createSessionDetailsValidations(): ValidationChain[] {
-    const { isSessionInPast } = this
+    const { isSessionEnded } = this
 
     function durationInMinutes(
       startHour: number,
@@ -117,7 +117,7 @@ export default class EditSessionDateAndTimeFormForm {
     }
 
     /**
-     * Checks if the submitted duration exceeds the original duration for a past session.
+     * Checks if the submitted duration exceeds the original duration for a completed session.
      * Returns error message if validation should throw, or null if valid.
      */
     function validatePastSessionDuration(
@@ -130,10 +130,11 @@ export default class EditSessionDateAndTimeFormForm {
       endPeriod: 'AM' | 'PM',
       timeFieldThatChanged: 'start' | 'end',
     ): string | null {
+      // Check if the session has ended (using end time)
       const shouldValidatePastDuration =
-        isSessionInPast ||
+        isSessionEnded ||
         DateFormatUtils.isDateInPast(dateStr) ||
-        DateFormatUtils.isSessionInPast(dateStr, startHour, startMinute, startPeriod)
+        DateFormatUtils.isSessionEnded(dateStr, endHour, endMinute, endPeriod)
 
       if (!shouldValidatePastDuration) {
         return null
@@ -173,7 +174,8 @@ export default class EditSessionDateAndTimeFormForm {
       .matches(/^(0?[1-9]|[12]\d|3[01])\/(0?[1-9]|1[0-2])\/\d{4}$/)
       .withMessage(errorMessages.sessionSchedule.sessionDetailsDateInvalid)
 
-    if (!isSessionInPast) {
+    // Only prevent past dates if the session hasn't ended
+    if (!isSessionEnded) {
       dateValidation.bail().custom((value: string) => {
         if (DateFormatUtils.isDateInPast(value)) {
           throw new Error(errorMessages.sessionSchedule.sessionDetailsDateInPast)

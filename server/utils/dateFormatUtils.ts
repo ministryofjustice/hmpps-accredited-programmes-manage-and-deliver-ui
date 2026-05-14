@@ -157,4 +157,30 @@ export default class DateFormatUtils {
     // Date is today - check if start time has passed
     return DateFormatUtils.hasTimePassedOnDate(dateStr, hour, minute, amOrPm)
   }
+
+  /**
+   * Checks if a session (with date and end time) has ended
+   * Returns true if the end time has already passed
+   * Used to prevent modifications to completed sessions
+   */
+  static isSessionEnded(dateStr: string, hour: number, minute: number, amOrPm: 'AM' | 'PM'): boolean {
+    const date = DateFormatUtils.parseDate(dateStr)
+    if (!date) return false
+
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
+    // If date is before today, session has already ended
+    if (date < today) {
+      return true
+    }
+
+    // If date is in the future, session has not ended
+    if (date > today) {
+      return false
+    }
+
+    // Date is today - check if end time has passed
+    return DateFormatUtils.hasTimePassedOnDate(dateStr, hour, minute, amOrPm)
+  }
 }

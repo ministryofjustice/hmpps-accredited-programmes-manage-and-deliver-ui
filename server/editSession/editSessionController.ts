@@ -72,15 +72,15 @@ export default class EditSessionController extends BaseController {
     return false
   }
 
-  private isSessionInPast(sessionDetails: {
+  private isSessionEnded(sessionDetails: {
     sessionDate: string
-    sessionStartTime: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' }
+    sessionEndTime: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' }
   }): boolean {
-    return DateFormatUtils.isSessionInPast(
+    return DateFormatUtils.isSessionEnded(
       sessionDetails.sessionDate,
-      sessionDetails.sessionStartTime.hour,
-      sessionDetails.sessionStartTime.minutes,
-      sessionDetails.sessionStartTime.amOrPm,
+      sessionDetails.sessionEndTime.hour,
+      sessionDetails.sessionEndTime.minutes,
+      sessionDetails.sessionEndTime.amOrPm,
     )
   }
 
@@ -211,11 +211,11 @@ export default class EditSessionController extends BaseController {
     )
 
     if (req.method === 'POST') {
-      const isSessionInPast = this.isSessionInPast(sessionDetails)
+      const isSessionEnded = this.isSessionEnded(sessionDetails)
 
       const data = await new EditSessionDateAndTimeFormForm(
         req,
-        isSessionInPast,
+        isSessionEnded,
         sessionDetails.sessionStartTime,
         sessionDetails.sessionEndTime,
       ).rescheduleSessionDetailsData()
