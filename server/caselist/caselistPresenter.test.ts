@@ -589,3 +589,43 @@ describe('tableCaption', () => {
     expect(presenter.tableCaption).toBe('Closed referrals')
   })
 })
+
+describe('pageTitle', () => {
+  it('should return "Building Choices open referrals" for open referrals', () => {
+    const referralCaseListItem = referralCaseListItemFactory.build()
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+      .pageContent([referralCaseListItem])
+      .build() as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      1,
+      referralCaseListItemPage,
+      {} as CaselistFilter,
+      '',
+      true,
+      TestUtils.createCaseListFilters(),
+      0,
+      'test location',
+    )
+
+    expect(presenter.pageTitle).toBe('Building Choices open referrals')
+  })
+
+  it('should return "Building Choices closed referrals" for closed referrals', () => {
+    const referralCaseListItem = referralCaseListItemFactory.build()
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+      .pageContent([referralCaseListItem])
+      .build() as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      2,
+      referralCaseListItemPage,
+      {} as CaselistFilter,
+      '',
+      false,
+      TestUtils.createCaseListFilters(),
+      0,
+      'test location',
+    )
+
+    expect(presenter.pageTitle).toBe('Building Choices closed referrals')
+  })
+})
