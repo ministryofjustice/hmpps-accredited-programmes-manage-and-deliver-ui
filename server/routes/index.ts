@@ -63,11 +63,11 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await homeController.showHomePage(req, res)
   })
 
-  get('/pdu/open-referrals', async (req, res, next) => {
+  get('/region/open-referrals', async (req, res, next) => {
     await caselistController.showOpenCaselist(req, res)
   })
 
-  get('/pdu/closed-referrals', async (req, res, next) => {
+  get('/region/closed-referrals', async (req, res, next) => {
     await caselistController.showClosedCaselist(req, res)
   })
 

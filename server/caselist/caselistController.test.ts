@@ -34,22 +34,22 @@ beforeEach(() => {
 describe(`Caselist controller`, () => {
   test.each([
     [
-      '/pdu/open-referrals?cohort=Sexual offence&status=Awaiting+assessment',
+      '/region/open-referrals?cohort=Sexual offence&status=Awaiting+assessment',
       'Sexual offence',
       'Awaiting assessment',
       undefined,
       undefined,
     ],
-    [`/pdu/open-referrals`, undefined, undefined, undefined, undefined],
-    ['/pdu/closed-referrals', undefined, undefined, undefined, undefined],
+    [`/region/open-referrals`, undefined, undefined, undefined, undefined],
+    ['/region/closed-referrals', undefined, undefined, undefined, undefined],
     [
-      '/pdu/open-referrals?cohort=General offence - LDC&status=Programme+complete',
+      '/region/open-referrals?cohort=General offence - LDC&status=Programme+complete',
       'General offence - LDC',
       'Programme complete',
       undefined,
       undefined,
     ],
-    ['/pdu/open-referrals?pdu=PDU1&reportingTeam=Team1', undefined, undefined, 'PDU1', 'Team1'],
+    ['/region/open-referrals?pdu=PDU1&reportingTeam=Team1', undefined, undefined, 'PDU1', 'Team1'],
   ])(
     `should set the correct filters based on the url provided %s`,
     async (url: string, cohortValue, referralStatusValue, pduValue, reportingTeamValue) => {
@@ -83,7 +83,7 @@ describe(`Caselist controller`, () => {
       .mockResolvedValueOnce(firstResponse)
       .mockResolvedValueOnce(secondResponse)
 
-    await request(app).get('/pdu/open-referrals?pdu=PDU2&reportingTeam=Team1').expect(200)
+    await request(app).get('/region/open-referrals?pdu=PDU2&reportingTeam=Team1').expect(200)
 
     expect(accreditedProgrammesManageAndDeliverService.getOpenCaselist).toHaveBeenNthCalledWith(
       1,

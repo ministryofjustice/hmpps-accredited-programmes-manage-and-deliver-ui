@@ -76,6 +76,12 @@ export default class CaselistPresenter {
     return this.section === CaselistPageSection.Closed ? 'Closed referrals' : 'Open referrals'
   }
 
+  get pageTitle(): string {
+    return this.section === CaselistPageSection.Closed
+      ? 'Building Choices closed referrals'
+      : 'Building Choices open referrals'
+  }
+
   getCaseloadTableArgs(): TableArgs {
     return {
       caption: this.tableCaption,
@@ -158,12 +164,12 @@ export default class CaselistPresenter {
       items: [
         {
           text: `Open referrals (${this.section === CaselistPageSection.Open ? this.referralCaseListItems.totalElements : this.otherCaselistCountTotal})`,
-          href: this.params !== undefined ? `/pdu/open-referrals?${this.params}` : `/pdu/open-referrals`,
+          href: this.params !== undefined ? `/region/open-referrals?${this.params}` : `/region/open-referrals`,
           active: this.section === CaselistPageSection.Open,
         },
         {
           text: `Closed referrals (${this.section === CaselistPageSection.Closed ? this.referralCaseListItems.totalElements : this.otherCaselistCountTotal})`,
-          href: this.params !== undefined ? `/pdu/closed-referrals?${this.params}` : `/pdu/closed-referrals`,
+          href: this.params !== undefined ? `/region/closed-referrals?${this.params}` : `/region/closed-referrals`,
           active: this.section === CaselistPageSection.Closed,
         },
       ],
