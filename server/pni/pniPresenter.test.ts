@@ -294,7 +294,7 @@ describe('PniPresenter', () => {
     it('returns the correct page title', () => {
       const presenter = new PniPresenter('12345', referralDetails, pniScore)
 
-      expect(presenter.PageTitle).toBe('Programme needs identifier ')
+      expect(presenter.pageTitle).toBe('Programme needs identifier')
     })
   })
 })
