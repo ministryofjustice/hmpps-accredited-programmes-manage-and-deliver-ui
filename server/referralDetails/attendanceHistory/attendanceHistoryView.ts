@@ -53,6 +53,7 @@ export default class AttendanceHistoryView {
       'attendanceHistory/attendanceHistory',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         text: this.presenter.text,
         errorSummary: this.presenter.errorMessageSummary,
         successMessageSummary: this.presenter.successMessageSummary,

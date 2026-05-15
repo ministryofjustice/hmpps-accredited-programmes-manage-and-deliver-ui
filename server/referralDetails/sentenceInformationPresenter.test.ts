@@ -123,3 +123,13 @@ describe(`sentenceInformationSummaryList.`, () => {
     expect(presenter.sentenceInformationSummaryList()).toEqual(expectedResult)
   })
 })
+
+describe('pageTitle', () => {
+  it('returns the correct page title', () => {
+    const referralDetails = referralDetailsFactory.build()
+    const sentenceInformation = sentenceInformationFactory.licence().build()
+    const presenter = new SentenceInformationPresenter(referralDetails, 'sentence-information', sentenceInformation)
+
+    expect(presenter.pageTitle).toBe('Sentence information - Referral details')
+  })
+})

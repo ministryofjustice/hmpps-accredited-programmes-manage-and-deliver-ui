@@ -40,6 +40,7 @@ export default class LocationView {
       'availabilityAndMotivation/availabilityAndMotivation',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         getPreferredLocationsAsSummaryListArgs: this.getPreferredLocationsAsSummaryListArgs,
         getLocationsAsSummaryListArgs: this.getLocationsAsSummaryListArgs,
         isPreferredLocationUpdated: this.presenter.isPreferredLocationUpdated,

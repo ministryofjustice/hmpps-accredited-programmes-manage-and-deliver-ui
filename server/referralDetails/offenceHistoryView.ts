@@ -26,6 +26,7 @@ export default class OffenceHistoryView {
       'referralDetails/referralDetails',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         offenceHistorySummaries: this.offenceHistorySummaries,
         importFromDeliusText: this.importFromDeliusText,
       },

@@ -13,6 +13,10 @@ export default class SentenceInformationPresenter extends ReferralDetailsPresent
     super(details, subNavValue, isLdcUpdated, isCohortUpdated)
   }
 
+  get pageTitle(): string {
+    return 'Sentence information - Referral details'
+  }
+
   orderSummaryList(): SummaryListItem[] {
     return [
       {

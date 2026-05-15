@@ -6,7 +6,7 @@
 {% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
 
 
-{% set pageTitle = applicationName + " - Home" %}
+{% set pageTitle = pageTitle + " - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block main %}

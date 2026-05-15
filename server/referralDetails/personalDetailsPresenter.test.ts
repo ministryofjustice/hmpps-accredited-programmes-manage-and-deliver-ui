@@ -12,4 +12,14 @@ describe('PersonalDetailsPresenter', () => {
       expect(presenter.headingText).toBe(`Referral details: ${referralDetails.personName}`)
     })
   })
+
+  describe('pageTitle', () => {
+    it('returns the correct page title', () => {
+      const referralDetails = referralDetailsFactory.build()
+      const personalDetails = personalDetailsFactory.build()
+      const presenter = new PersonalDetailsPresenter(referralDetails, 'personal-details', personalDetails)
+
+      expect(presenter.pageTitle).toBe('Personal details - Referral details')
+    })
+  })
 })

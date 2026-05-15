@@ -62,4 +62,18 @@ describe('StatusHistoryPresenter', () => {
       expect(successMessage).toBeNull()
     })
   })
+
+  describe('pageTitle', () => {
+    it('returns the correct page title', () => {
+      const referralDetails = referralDetailsFactory.build({
+        personName: 'Alex River',
+        currentStatusDescription: 'Assessment complete',
+      })
+      const statusHistory = [statusHistoryFactory.awaitingAssessment().build()]
+
+      const presenter = new StatusHistoryPresenter('referral-id', statusHistory, referralDetails)
+
+      expect(presenter.pageTitle).toBe('Status history - Accredited Programmes')
+    })
+  })
 })
