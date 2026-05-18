@@ -29,6 +29,10 @@ export default class AdditionalPdusPresenter {
     return `/referral/${this.referralId}/add-location-preferences`
   }
 
+  get pageTitle(): string {
+    return 'Other PDUs the person can attend a programme'
+  }
+
   // Returns a list of offices that can be used to pre-populate checkboxes if they were previously selected
   selectedLocationValues(updatedData: CreateDeliveryLocationPreferences) {
     const updateDataDeliveryLocations = updatedData.preferredDeliveryLocations.flatMap(

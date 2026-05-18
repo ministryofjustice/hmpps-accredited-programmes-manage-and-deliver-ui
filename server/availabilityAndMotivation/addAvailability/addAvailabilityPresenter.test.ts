@@ -44,6 +44,16 @@ describe(`generateCheckboxItems.`, () => {
   })
 })
 
+describe('pageTitle', () => {
+  it('returns add availability page title', () => {
+    const personalDetails = personalDetailsFactory.build()
+    const availability = availabilityFactory.defaultAvailability().build()
+    const presenter = new AddAvailabilityPresenter(personalDetails, null, availability)
+
+    expect(presenter.pageTitle).toBe("Person's availability to attend a programme")
+  })
+})
+
 describe(`generateCheckboxItems.`, () => {
   it('should generate the checkboxes correctly from the values supplied', () => {
     const availabilities = [

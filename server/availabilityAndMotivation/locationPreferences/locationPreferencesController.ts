@@ -58,10 +58,10 @@ export default class LocationPreferencesController extends BaseController {
           cannotAttendText: null,
         }
         if (data.paramsForUpdate.addOtherPduLocations.toLowerCase() === 'yes') {
-          return res.redirect(`/referral/${referralId}/add-location-preferences/additional-pdus`)
+          return res.redirect(`/referral/${referralId}/add-location-preferences/other-pdu`)
         }
         req.session.originPage = req.originalUrl
-        return res.redirect(`/referral/${referralId}/add-location-preferences/cannot-attend-locations`)
+        return res.redirect(`/referral/${referralId}/add-locations-cannot-attend`)
       }
     }
 
@@ -88,7 +88,7 @@ export default class LocationPreferencesController extends BaseController {
     )
 
     const preferredLocationReferenceData: DeliveryLocationPreferencesFormData =
-      req.session.locationPreferenceFormData.preferredLocationReferenceData ??
+      req.session.locationPreferenceFormData?.preferredLocationReferenceData ??
       (await this.accreditedProgrammesManageAndDeliverService.getPossibleDeliveryLocationsForReferral(
         req.user.username,
         referralId,
@@ -115,7 +115,7 @@ export default class LocationPreferencesController extends BaseController {
           .concat(data.paramsForUpdate.otherPduLocations)
       req.session.locationPreferenceFormData.hasUpdatedAdditionalLocationData = true
       req.session.originPage = req.originalUrl
-      return res.redirect(`/referral/${referralId}/add-location-preferences/cannot-attend-locations`)
+      return res.redirect(`/referral/${referralId}/add-locations-cannot-attend`)
     }
 
     const presenter = new AdditionalPdusPresenter(

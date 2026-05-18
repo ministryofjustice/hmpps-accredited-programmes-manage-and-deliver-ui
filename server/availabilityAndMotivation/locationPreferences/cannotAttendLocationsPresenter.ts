@@ -50,4 +50,8 @@ export default class CannotAttendLocationsPresenter {
       },
     }
   }
+
+  get pageTitle(): string {
+    return 'Locations the person cannot attend'
+  }
 }
