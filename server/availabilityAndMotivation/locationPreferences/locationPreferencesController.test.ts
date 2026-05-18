@@ -92,7 +92,7 @@ describe('location-preferences', () => {
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(`Redirecting to /referral/${referralId}/add-location-preferences/additional-pdus`)
+          expect(res.text).toContain(`Redirecting to /referral/${referralId}/add-location-preferences/other-pdu`)
         })
     })
 
@@ -112,14 +112,12 @@ describe('location-preferences', () => {
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(
-            `Redirecting to /referral/${referralId}/add-location-preferences/cannot-attend-locations`,
-          )
+          expect(res.text).toContain(`Redirecting to /referral/${referralId}/add-locations-cannot-attend`)
         })
     })
   })
 
-  describe(`GET /referral/:referralId/add-location-preferences/additional-pdus`, () => {
+  describe(`GET /referral/:referralId/add-locations-cannot-attend`, () => {
     it('loads the add additional location preferences page', async () => {
       const deliveryLocationPreferencesFormData = deliveryLocationPreferencesFormDataFactory.build()
       const createDeliveryLocationPreferences = createDeliveryLocationPreferencesFactory.build({
@@ -141,7 +139,7 @@ describe('location-preferences', () => {
       )
 
       return request(app)
-        .get(`/referral/${randomUUID()}/add-location-preferences/additional-pdus`)
+        .get(`/referral/${randomUUID()}/add-location-preferences/other-pdu`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(referralDetails.crn)
@@ -151,7 +149,7 @@ describe('location-preferences', () => {
     })
   })
 
-  describe(`POST /referral/:referralId/add-location-preferences/additional-pdus`, () => {
+  describe(`POST /referral/:referralId/add-location-preferences/other-pdu`, () => {
     it('loads the add additional location preferences page', async () => {
       const referralId = randomUUID()
       const deliveryLocationPreferencesFormData = deliveryLocationPreferencesFormDataFactory.build()
@@ -174,7 +172,7 @@ describe('location-preferences', () => {
       )
 
       return request(app)
-        .post(`/referral/${referralId}/add-location-preferences/additional-pdus`)
+        .post(`/referral/${referralId}/add-location-preferences/other-pdu`)
         .type('form')
         .send({
           PDU002: ['LOC005', 'LOC003'],
@@ -182,14 +180,12 @@ describe('location-preferences', () => {
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(
-            `Redirecting to /referral/${referralId}/add-location-preferences/cannot-attend-locations`,
-          )
+          expect(res.text).toContain(`Redirecting to /referral/${referralId}/add-locations-cannot-attend`)
         })
     })
   })
 
-  describe(`GET /referral/:referralId/add-location-preferences/cannot-attend-locations`, () => {
+  describe(`GET /referral/:referralId/add-locations-cannot-attend`, () => {
     it('loads the add cannot attend location preferences page', async () => {
       const deliveryLocationPreferencesFormData = deliveryLocationPreferencesFormDataFactory.build()
       const createDeliveryLocationPreferences = createDeliveryLocationPreferencesFactory.build({
@@ -211,7 +207,7 @@ describe('location-preferences', () => {
       )
 
       return request(app)
-        .get(`/referral/${randomUUID()}/add-location-preferences/cannot-attend-locations`)
+        .get(`/referral/${randomUUID()}/add-locations-cannot-attend`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(referralDetails.crn)
@@ -221,7 +217,7 @@ describe('location-preferences', () => {
     })
   })
 
-  describe(`POST /referral/:referralId/add-location-preferences/cannot-attend-locations`, () => {
+  describe(`POST /referral/:referralId/add-locations-cannot-attend`, () => {
     const createDeliveryLocationPreferences = createDeliveryLocationPreferencesFactory.build({
       cannotAttendText: 'A reason',
     })
@@ -247,7 +243,7 @@ describe('location-preferences', () => {
       )
 
       await request(app)
-        .post(`/referral/${referralId}/add-location-preferences/cannot-attend-locations`)
+        .post(`/referral/${referralId}/add-locations-cannot-attend`)
         .type('form')
         .send({
           'cannot-attend-locations-radio': 'yes',
@@ -286,7 +282,7 @@ describe('location-preferences', () => {
       )
 
       await request(app)
-        .post(`/referral/${referralId}/add-location-preferences/cannot-attend-locations`)
+        .post(`/referral/${referralId}/add-locations-cannot-attend`)
         .type('form')
         .send({
           'cannot-attend-locations-radio': 'yes',

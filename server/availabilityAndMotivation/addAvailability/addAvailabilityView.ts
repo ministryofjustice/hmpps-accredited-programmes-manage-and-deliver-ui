@@ -98,6 +98,7 @@ export default class AddAvailabilityView {
       'availabilityAndMotivation/addAvailability/addAvailability',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         checkboxArgs: this.checkboxArgs(),
         otherDetailsTextAreaArgs: this.otherDetailsTextAreaArgs(),
         radioArgs: this.radioArgs.bind(this),

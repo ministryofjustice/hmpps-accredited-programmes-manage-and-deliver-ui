@@ -103,19 +103,19 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await locationPreferencesController.showLocationPreferencesPage(req, res)
   })
 
-  get('/referral/:referralId/add-location-preferences/additional-pdus', async (req, res, next) => {
+  get('/referral/:referralId/add-location-preferences/other-pdu', async (req, res, next) => {
     await locationPreferencesController.showAdditionalPduLocationPreferencesPage(req, res)
   })
 
-  post('/referral/:referralId/add-location-preferences/additional-pdus', async (req, res, next) => {
+  post('/referral/:referralId/add-location-preferences/other-pdu', async (req, res, next) => {
     await locationPreferencesController.showAdditionalPduLocationPreferencesPage(req, res)
   })
 
-  get('/referral/:referralId/add-location-preferences/cannot-attend-locations', async (req, res, next) => {
+  get('/referral/:referralId/add-locations-cannot-attend', async (req, res, next) => {
     await locationPreferencesController.showCannotAttendLocationsPage(req, res)
   })
 
-  post('/referral/:referralId/add-location-preferences/cannot-attend-locations', async (req, res, next) => {
+  post('/referral/:referralId/add-locations-cannot-attend', async (req, res, next) => {
     await locationPreferencesController.showCannotAttendLocationsPage(req, res)
   })
 

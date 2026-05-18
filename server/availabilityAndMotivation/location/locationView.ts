@@ -26,6 +26,10 @@ export default class LocationView {
     })
   }
 
+  get pageTitle(): string {
+    return 'Locations the person can attend a programme'
+  }
+
   private successMessageArgs() {
     return {
       variant: 'success',

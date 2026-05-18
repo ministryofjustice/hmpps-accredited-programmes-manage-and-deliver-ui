@@ -23,22 +23,25 @@ export default class LocationPreferencesPresenter {
 
   constructor(
     readonly referralId: string,
+    readonly subNavValue: string,
     readonly details: ReferralDetails,
     readonly preferredLocationReferenceData: DeliveryLocationPreferencesFormData,
     readonly updateData: CreateDeliveryLocationPreferences,
     private readonly validationError: FormValidationError | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
   ) {
-    this.deliveryLocationOptions = [
-      {
-        pdu: {
-          code: preferredLocationReferenceData.primaryPdu.code,
-          isPrimaryPduForReferral: true,
-          name: preferredLocationReferenceData.primaryPdu.name,
-        },
-        offices: preferredLocationReferenceData.primaryPdu.deliveryLocations,
-      },
-    ]
+    this.deliveryLocationOptions = preferredLocationReferenceData?.primaryPdu
+      ? [
+          {
+            pdu: {
+              code: preferredLocationReferenceData.primaryPdu.code,
+              isPrimaryPduForReferral: true,
+              name: preferredLocationReferenceData.primaryPdu.name,
+            },
+            offices: preferredLocationReferenceData.primaryPdu.deliveryLocations,
+          },
+        ]
+      : []
   }
 
   // Returns a list of offices that can be used to pre-populate checkboxes if they were previously selected
@@ -58,6 +61,10 @@ export default class LocationPreferencesPresenter {
 
   private get utils() {
     return new PresenterUtils(this.userInputData)
+  }
+
+  get pageTitle(): string {
+    return 'Locations the person can attend a programme'
   }
 
   get backLinkUri() {

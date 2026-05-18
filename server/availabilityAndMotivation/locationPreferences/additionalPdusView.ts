@@ -69,6 +69,7 @@ export default class AdditionalPdusView {
       'locationPreferences/additionalPdus',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         previousValueArgs: this.previousValueArgs(),
         pduCheckboxArgs: this.pduCheckboxArgs,
         cancelLink: `/referral/${this.presenter.referralId}/availability-and-motivation/location/#location`,

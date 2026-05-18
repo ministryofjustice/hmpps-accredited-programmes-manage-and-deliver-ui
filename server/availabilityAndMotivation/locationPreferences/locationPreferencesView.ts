@@ -9,10 +9,13 @@ export default class LocationPreferencesView {
 
   constructor(private readonly presenter: LocationPreferencesPresenter) {
     const primaryPdu = presenter.deliveryLocationOptions.find(({ pdu }) => pdu.isPrimaryPduForReferral)
-    const selectedValues = this.presenter.selectedLocationValues(
-      this.presenter.updateData,
-      this.presenter.preferredLocationReferenceData.primaryPdu.code,
-    )
+    const selectedValues =
+      primaryPdu && this.presenter.preferredLocationReferenceData?.primaryPdu?.code
+        ? this.presenter.selectedLocationValues(
+            this.presenter.updateData,
+            this.presenter.preferredLocationReferenceData.primaryPdu.code,
+          )
+        : []
 
     if (primaryPdu) {
       this.deliveryLocations = primaryPdu.offices.map(({ label, value }) => ({ text: label, value, checked: false }))
@@ -82,6 +85,7 @@ export default class LocationPreferencesView {
       'locationPreferences/locationPreferences',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         radioArgs: this.radioArgs(),
         checkboxArgs: this.checkboxArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
