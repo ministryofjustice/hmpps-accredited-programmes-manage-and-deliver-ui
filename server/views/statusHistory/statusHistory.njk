@@ -2,7 +2,7 @@
 {%- from "moj/components/timeline/macro.njk" import mojTimeline -%}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
-{% set pageTitle = applicationName + " - Home" %}
+{% set pageTitle = pageTitle + " - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
 {% block main %}
   {% block content %}

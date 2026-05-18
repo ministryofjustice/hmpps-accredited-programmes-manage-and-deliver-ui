@@ -24,6 +24,10 @@ export default class AvailabilityPresenter extends AvailabilityAndMotivationPres
     }
   }
 
+  get pageTitle(): string {
+    return 'Availability - Availability and motivation'
+  }
+
   getAvailabilityTableArgs() {
     // Get all the possible headings out of the object e.g. daytime, evening
     const uniqueSlotLabels = [

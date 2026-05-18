@@ -72,4 +72,14 @@ describe('RisksAndAlertsOgrs4Presenter', () => {
       expect(presenter.levelOrUnknown(input)).toEqual(expectedResult)
     })
   })
+
+  describe('pageTitle', () => {
+    it('returns the correct page title', () => {
+      const risks = risksFactory.build()
+      const referral = referralDetailsFactory.build()
+      const presenter = new RisksAndAlertsOgrs4Presenter('risksAndAlerts', referral, risks)
+
+      expect(presenter.pageTitle).toBe('Risks and alerts - Risks and needs')
+    })
+  })
 })

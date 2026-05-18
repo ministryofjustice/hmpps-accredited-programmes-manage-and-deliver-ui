@@ -199,6 +199,7 @@ export default class RisksAndAlertsOgrs4View {
       'risksAndNeeds/risksAndNeeds',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         updateWarning: this.updateWarning,
         updateDetails: this.updateDetails,
         assessmentCompletedText: this.assessmentCompletedText,

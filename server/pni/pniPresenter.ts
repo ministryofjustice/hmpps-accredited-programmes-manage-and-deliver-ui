@@ -23,6 +23,10 @@ export default class PniPresenter extends ReferralLayoutPresenter {
     return needsMap && needsMap[needScore] ? needsMap[needScore] : 'Cannot calculate – information missing'
   }
 
+  get pageTitle(): string {
+    return 'Programme needs identifier'
+  }
+
   getSexSummary() {
     const sexDomainScores = this.pniScore.domainScores.SexDomainScore
     return {

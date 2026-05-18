@@ -43,6 +43,7 @@ export default class MotivationBackgroundAndNonAssociationsView {
       'availabilityAndMotivation/availabilityAndMotivation',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         groupAllocationTextArgs: this.presenter.groupAllocationTextArgs,
         getVerticalSubNavArgs: this.presenter.verticalSubNavArgs,
         addNotesButtonArgs: this.addNotesButtonArgs,

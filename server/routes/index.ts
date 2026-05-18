@@ -135,51 +135,51 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await addAvailabilityController.updateAvailability(req, res)
   })
 
-  get('/referral/:referralId/risks-and-alerts', async (req, res, next) => {
+  get('/referral/:referralId/risks-and-needs/risks-and-alerts', async (req, res, next) => {
     await risksAndNeedsController.showRisksAndAlertsPage(req, res)
   })
 
-  get('/referral/:referralId/learning-needs', async (req, res, next) => {
+  get('/referral/:referralId/risks-and-needs/learning-needs/', async (req, res, next) => {
     await risksAndNeedsController.showLearningNeedsPage(req, res)
   })
 
-  get('/referral/:referralId/offence-analysis', async (req, res, next) => {
+  get('/referral/:referralId/risks-and-needs/section-2-offence-analysis', async (req, res, next) => {
     await risksAndNeedsController.showOffenceAnalysisPage(req, res)
   })
 
-  get('/referral/:referralId/relationships', async (req, res, next) => {
+  get('/referral/:referralId/risks-and-needs/section-6-relationships', async (req, res, next) => {
     await risksAndNeedsController.showRelationshipsPage(req, res)
   })
 
-  get('/referral/:referralId/lifestyle-and-associates', async (req, res, next) => {
+  get('/referral/:referralId/risks-and-needs/section-7-lifestyle-and-associates', async (req, res, next) => {
     await risksAndNeedsController.showLifestyleAndAssociatesPage(req, res)
   })
 
-  get('/referral/:referralId/drug-misuse', async (req, res, next) => {
+  get('/referral/:referralId/risks-and-needs/section-8-drug-misuse', async (req, res, next) => {
     await risksAndNeedsController.showDrugDetailsPage(req, res)
   })
 
-  get('/referral/:referralId/alcohol-misuse', async (req, res, next) => {
+  get('/referral/:referralId/risks-and-needs/section-9-alcohol-misuse', async (req, res, next) => {
     await risksAndNeedsController.showAlcoholMisusePage(req, res)
   })
 
-  get('/referral/:referralId/emotional-wellbeing', async (req, res, next) => {
+  get('/referral/:referralId/risks-and-needs/section-10-emotional-wellbeing', async (req, res, next) => {
     await risksAndNeedsController.showEmotionalWellbeingPage(req, res)
   })
 
-  get('/referral/:referralId/thinking-and-behaving', async (req, res, next) => {
+  get('/referral/:referralId/risks-and-needs/section-11-thinking-and-behaving', async (req, res, next) => {
     await risksAndNeedsController.showThinkingAndBehavingPage(req, res)
   })
 
-  get('/referral/:referralId/attitudes', async (req, res, next) => {
+  get('/referral/:referralId/risks-and-needs/section-12-attitudes', async (req, res, next) => {
     await risksAndNeedsController.showAttitudesPage(req, res)
   })
 
-  get('/referral/:referralId/health', async (req, res, next) => {
+  get('/referral/:referralId/risks-and-needs/section-13-health', async (req, res, next) => {
     await risksAndNeedsController.showHealthPage(req, res)
   })
 
-  get('/referral/:referralId/rosh-analysis', async (req, res, next) => {
+  get('/referral/:referralId/risks-and-needs/section-r6-rosh-analysis', async (req, res, next) => {
     await risksAndNeedsController.showRoshAnalysisPage(req, res)
   })
 

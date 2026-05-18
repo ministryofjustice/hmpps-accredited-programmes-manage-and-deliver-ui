@@ -26,6 +26,17 @@ export default class AvailabilityAndMotivationPresenter extends ReferralLayoutPr
     }
   }
 
+  get pageTitle(): string {
+    switch (this.subNavValue) {
+      case AvailabilityAndMotivationPageSelection.LocationTab:
+        return 'Location - Availability and motivation'
+      case AvailabilityAndMotivationPageSelection.MotivationBackgroundAndNonAssociationsTab:
+        return 'Motivation, background and non-associations - Availability and motivation'
+      default:
+        return 'Availability - Availability and motivation'
+    }
+  }
+
   get homePageLink() {
     return {
       text: 'Go to Accredited Programmes homepage',

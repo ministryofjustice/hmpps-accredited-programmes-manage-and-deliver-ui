@@ -16,6 +16,10 @@ export default class RisksAndAlertsOgrs4Presenter extends RisksAndNeedsPresenter
     return level ? level.toUpperCase().replace(/\s/g, '_') : 'UNKNOWN'
   }
 
+  get pageTitle(): string {
+    return 'Risks and alerts - Risks and needs'
+  }
+
   getLevelClass(scoreLevel: string): string {
     return this.levelClass('risk-box', this.levelOrUnknown(scoreLevel))
   }
