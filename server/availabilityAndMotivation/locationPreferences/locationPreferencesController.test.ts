@@ -117,7 +117,7 @@ describe('location-preferences', () => {
     })
   })
 
-  describe(`GET /referral/:referralId/add-locations-cannot-attend`, () => {
+  describe(`GET /referral/:referralId/add-location-preferences/other-pdu`, () => {
     it('loads the add additional location preferences page', async () => {
       const deliveryLocationPreferencesFormData = deliveryLocationPreferencesFormDataFactory.build()
       const createDeliveryLocationPreferences = createDeliveryLocationPreferencesFactory.build({

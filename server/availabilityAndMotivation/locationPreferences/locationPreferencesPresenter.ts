@@ -30,18 +30,16 @@ export default class LocationPreferencesPresenter {
     private readonly validationError: FormValidationError | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
   ) {
-    this.deliveryLocationOptions = preferredLocationReferenceData?.primaryPdu
-      ? [
-          {
-            pdu: {
-              code: preferredLocationReferenceData.primaryPdu.code,
-              isPrimaryPduForReferral: true,
-              name: preferredLocationReferenceData.primaryPdu.name,
-            },
-            offices: preferredLocationReferenceData.primaryPdu.deliveryLocations,
-          },
-        ]
-      : []
+    this.deliveryLocationOptions = [
+      {
+        pdu: {
+          code: preferredLocationReferenceData.primaryPdu.code,
+          isPrimaryPduForReferral: true,
+          name: preferredLocationReferenceData.primaryPdu.name,
+        },
+        offices: preferredLocationReferenceData.primaryPdu.deliveryLocations,
+      },
+    ]
   }
 
   // Returns a list of offices that can be used to pre-populate checkboxes if they were previously selected

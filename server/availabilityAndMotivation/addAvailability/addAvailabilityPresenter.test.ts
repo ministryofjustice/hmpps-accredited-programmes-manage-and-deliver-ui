@@ -45,22 +45,12 @@ describe(`generateCheckboxItems.`, () => {
 })
 
 describe('pageTitle', () => {
-  it('returns add availability page title when availability id is not present', () => {
+  it('returns add availability page title', () => {
     const personalDetails = personalDetailsFactory.build()
     const availability = availabilityFactory.defaultAvailability().build()
-
     const presenter = new AddAvailabilityPresenter(personalDetails, null, availability)
 
     expect(presenter.pageTitle).toBe("Person's availability to attend a programme")
-  })
-
-  it('returns update availability page title when availability id is present', () => {
-    const personalDetails = personalDetailsFactory.build()
-    const availability = availabilityFactory.build()
-
-    const presenter = new AddAvailabilityPresenter(personalDetails, null, availability)
-
-    expect(presenter.pageTitle).toBe("Update person's availability to attend a programme")
   })
 })
 
