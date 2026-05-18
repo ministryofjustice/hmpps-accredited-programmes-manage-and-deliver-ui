@@ -23,7 +23,6 @@ export default class LocationPreferencesPresenter {
 
   constructor(
     readonly referralId: string,
-    readonly subNavValue: string,
     readonly details: ReferralDetails,
     readonly preferredLocationReferenceData: DeliveryLocationPreferencesFormData,
     readonly updateData: CreateDeliveryLocationPreferences,

@@ -19,7 +19,6 @@ describe('locationsPreferencesPresenter.', () => {
 
     const presenter = new LocationPreferencesPresenter(
       referralId,
-      'add-location-preferences',
       referralDetails,
       preferredLocationDetails,
       updateData,
@@ -33,7 +32,6 @@ describe('locationsPreferencesPresenter.', () => {
 
     const presenter = new LocationPreferencesPresenter(
       referralId,
-      'add-location-preferences',
       referralDetails,
       preferredLocationDetails,
       updateData,
@@ -50,7 +48,6 @@ describe('locationsPreferencesPresenter.', () => {
 
       const presenter = new LocationPreferencesPresenter(
         referralId,
-        'add-location-preferences',
         referralDetails,
         preferredLocationDetails,
         updateData,
@@ -68,7 +65,6 @@ describe('locationsPreferencesPresenter.', () => {
 
       const presenter = new LocationPreferencesPresenter(
         referralId,
-        'add-location-preferences',
         referralDetails,
         preferredLocationDetails,
         null, // no updateData
@@ -84,7 +80,6 @@ describe('locationsPreferencesPresenter.', () => {
 
       const presenter = new LocationPreferencesPresenter(
         referralId,
-        'add-location-preferences',
         referralDetails,
         preferredLocationDetails,
         updateData,
@@ -100,7 +95,6 @@ describe('locationsPreferencesPresenter.', () => {
 
       const presenter = new LocationPreferencesPresenter(
         referralId,
-        'add-location-preferences',
         referralDetails,
         preferredLocationDetails,
         null, // no updateData
@@ -114,7 +108,6 @@ describe('locationsPreferencesPresenter.', () => {
 
       const presenter = new LocationPreferencesPresenter(
         referralId,
-        'add-location-preferences',
         referralDetails,
         preferredLocationDetails,
         null, // no updateData

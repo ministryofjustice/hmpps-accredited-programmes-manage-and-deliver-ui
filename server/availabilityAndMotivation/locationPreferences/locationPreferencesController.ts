@@ -38,7 +38,7 @@ export default class LocationPreferencesController extends BaseController {
       )
 
     req.session.locationPreferenceFormData = {
-      ...(req.session.locationPreferenceFormData || {}),
+      ...req.session.locationPreferenceFormData,
       preferredLocationReferenceData,
     }
 
@@ -67,7 +67,6 @@ export default class LocationPreferencesController extends BaseController {
 
     const presenter = new LocationPreferencesPresenter(
       referralId,
-      'add-location-preferences',
       referralDetails,
       preferredLocationReferenceData,
       req.session.locationPreferenceFormData.updatePreferredLocationData,
@@ -96,7 +95,7 @@ export default class LocationPreferencesController extends BaseController {
       ))
 
     req.session.locationPreferenceFormData = {
-      ...(req.session.locationPreferenceFormData || {}),
+      ...req.session.locationPreferenceFormData,
       preferredLocationReferenceData,
     }
 
