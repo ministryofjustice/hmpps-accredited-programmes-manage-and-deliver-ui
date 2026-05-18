@@ -2,6 +2,7 @@ import { RescheduleSessionRequest } from '@manage-and-deliver-api'
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import { FormValidationError } from '../utils/formValidationError'
+import DateFormatUtils from '../utils/dateFormatUtils'
 import EditSessionDateAndTimeFormForm from './dateAndTime/editSessionDateAndTimeForm'
 import EditSessionDateAndTimePresenter from './dateAndTime/editSessionDateAndTimePresenter'
 import EditSessionDateAndTimeView from './dateAndTime/editSessionDateAndTimeView'
@@ -30,6 +31,59 @@ export default class EditSessionController extends BaseController {
     super()
   }
 
+  /**
+   * Convert a date string to YYYY-MM-DD (date-only format).
+   * Accepts ISO with or without time, or UK format (DD/MM/YYYY).
+   */
+  private static toDateOnlyString(dateStr: string): string | null {
+    return DateFormatUtils.toDateOnlyISO(dateStr)
+  }
+
+  private static hasSessionDateAndTimeChanged(
+    sessionDetails: {
+      sessionDate: string
+      sessionStartTime: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' }
+      sessionEndTime: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' }
+    },
+    submitted: {
+      sessionStartDate: string // DD/MM/YYYY
+      sessionStartTime: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' }
+      sessionEndTime: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' }
+    },
+  ): boolean {
+    const sessionDateForComparison = EditSessionController.toDateOnlyString(sessionDetails.sessionDate)
+    const submittedDateForComparison = EditSessionController.toDateOnlyString(submitted.sessionStartDate)
+    if (sessionDateForComparison !== submittedDateForComparison) return true
+
+    const origStart = sessionDetails.sessionStartTime
+    const subStart = submitted.sessionStartTime
+    if (
+      origStart.hour !== subStart.hour ||
+      origStart.minutes !== subStart.minutes ||
+      origStart.amOrPm !== subStart.amOrPm
+    )
+      return true
+
+    const origEnd = sessionDetails.sessionEndTime
+    const subEnd = submitted.sessionEndTime
+    if (origEnd.hour !== subEnd.hour || origEnd.minutes !== subEnd.minutes || origEnd.amOrPm !== subEnd.amOrPm)
+      return true
+
+    return false
+  }
+
+  private isSessionEnded(sessionDetails: {
+    sessionDate: string
+    sessionEndTime: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' }
+  }): boolean {
+    return DateFormatUtils.isSessionEnded(
+      sessionDetails.sessionDate,
+      sessionDetails.sessionEndTime.hour,
+      sessionDetails.sessionEndTime.minutes,
+      sessionDetails.sessionEndTime.amOrPm,
+    )
+  }
+
   async editSession(req: Request, res: Response): Promise<void> {
     const { groupId, sessionId } = req.params
     const { username } = req.user
@@ -44,7 +98,11 @@ export default class EditSessionController extends BaseController {
       sessionId,
     )
 
-    const successMessage = message ? String(message) : null
+    // Only show the message if it is present
+    let successMessage: string | null = null
+    if (message) {
+      successMessage = String(message)
+    }
     const isAttendanceHistoryFlag = isAttendanceHistory === 'true'
     const attendanceHistoryReferralId = referralId ? String(referralId) : null
     req.session.originPage = req.path
@@ -153,12 +211,31 @@ export default class EditSessionController extends BaseController {
     )
 
     if (req.method === 'POST') {
-      const data = await new EditSessionDateAndTimeFormForm(req).rescheduleSessionDetailsData()
+      const isSessionEnded = this.isSessionEnded(sessionDetails)
+
+      const data = await new EditSessionDateAndTimeFormForm(
+        req,
+        isSessionEnded,
+        sessionDetails.sessionStartTime,
+        sessionDetails.sessionEndTime,
+      ).rescheduleSessionDetailsData()
+
       if (data.error) {
         res.status(400)
         formError = data.error
         userInputData = req.body
       } else {
+        const { sessionStartDate, sessionStartTime, sessionEndTime } = data.paramsForUpdate
+        const hasChanged = EditSessionController.hasSessionDateAndTimeChanged(sessionDetails, {
+          sessionStartDate,
+          sessionStartTime,
+          sessionEndTime,
+        })
+
+        if (!hasChanged) {
+          return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session`)
+        }
+
         req.session.editSessionDateAndTime = {
           sessionStartDate: data.paramsForUpdate.sessionStartDate,
           sessionStartTime: data.paramsForUpdate.sessionStartTime,
@@ -188,7 +265,6 @@ export default class EditSessionController extends BaseController {
         )
 
         delete req.session.editSessionDateAndTime
-
         return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session?message=${response.message}`)
       }
     }
@@ -231,7 +307,6 @@ export default class EditSessionController extends BaseController {
           sessionDetails.sessionId,
           req.session.editSessionDateAndTime as RescheduleSessionRequest,
         )
-
         return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session?message=${message.message}`)
       }
     }
