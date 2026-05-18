@@ -134,4 +134,16 @@ describe('AttendanceHistoryPresenter', () => {
       expect(presenter.attendanceHistoryTableArgs).toEqual([])
     })
   })
+
+  describe('pageTitle', () => {
+    it('returns the correct page title', () => {
+      const presenter = new AttendanceHistoryPresenter(
+        '12345',
+        attendanceHistoryResponseFactory.build(),
+        referralDetails,
+      )
+
+      expect(presenter.pageTitle).toBe("Person's attendance history - Accredited Programmes")
+    })
+  })
 })

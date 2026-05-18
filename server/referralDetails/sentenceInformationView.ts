@@ -23,6 +23,7 @@ export default class SentenceInformationView {
       'referralDetails/referralDetails',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         sentenceDetailsSummary: this.sentenceDetailsSummary,
         importFromDeliusText: this.importFromDeliusText,
       },

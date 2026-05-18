@@ -58,12 +58,12 @@ beforeEach(() => {
 })
 
 describe('Rosh Analysis', () => {
-  describe('GET /referral/:id/rosh-analysis', () => {
+  describe('GET /referral/:id/risks-and-needs/section-r6-rosh-analysis', () => {
     it('loads the risks and needs page with ROSH analysis sub-nav', async () => {
       const roshAnalysis: RoshAnalysis = roshAnalysisFactory.build()
       accreditedProgrammesManageAndDeliverService.getRoshAnalysis.mockResolvedValue(roshAnalysis)
       return request(app)
-        .get(`/referral/${randomUUID()}/rosh-analysis`)
+        .get(`/referral/${randomUUID()}/risks-and-needs/section-r6-rosh-analysis`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(roshAnalysis.assessmentCompleted)
@@ -82,14 +82,14 @@ describe('Rosh Analysis', () => {
 })
 
 describe('Learning Needs', () => {
-  describe('GET /referral/:id/learning-needs', () => {
+  describe('GET /referral/:id/risks-and-needs/learning-needs/', () => {
     it('loads the risks and needs page with learning needs sub-nav and displays all learning needs data', async () => {
       const learningNeeds: LearningNeeds = learningNeedsFactory.build()
       accreditedProgrammesManageAndDeliverService.getLearningNeeds.mockResolvedValue(learningNeeds)
 
       const referralId = randomUUID()
       return request(app)
-        .get(`/referral/${referralId}/learning-needs`)
+        .get(`/referral/${referralId}/risks-and-needs/learning-needs/`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(learningNeeds.workRelatedSkills as string)
@@ -117,7 +117,7 @@ describe('Learning Needs', () => {
       accreditedProgrammesManageAndDeliverService.getLearningNeeds.mockResolvedValue(learningNeeds)
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/learning-needs`).expect(200)
+      return request(app).get(`/referral/${referralId}/risks-and-needs/learning-needs`).expect(200)
     })
 
     it('renders Score missing when ldcScore is null', async () => {
@@ -126,7 +126,7 @@ describe('Learning Needs', () => {
 
       const referralId = randomUUID()
       return request(app)
-        .get(`/referral/${referralId}/learning-needs`)
+        .get(`/referral/${referralId}/risks-and-needs/learning-needs`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Score missing')
@@ -138,7 +138,7 @@ describe('Learning Needs', () => {
       accreditedProgrammesManageAndDeliverService.getLearningNeeds.mockResolvedValue(learningNeeds)
 
       const referralId = randomUUID()
-      await request(app).get(`/referral/${referralId}/learning-needs`).expect(200)
+      await request(app).get(`/referral/${referralId}/risks-and-needs/learning-needs`).expect(200)
 
       expect(accreditedProgrammesManageAndDeliverService.getLearningNeeds).toHaveBeenCalledWith(
         'user1',
@@ -150,20 +150,20 @@ describe('Learning Needs', () => {
       accreditedProgrammesManageAndDeliverService.getLearningNeeds.mockRejectedValue(new Error('Service unavailable'))
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/learning-needs`).expect(500)
+      return request(app).get(`/referral/${referralId}/risks-and-needs/learning-needs`).expect(500)
     })
   })
 })
 
 describe('Health section of risks and needs', () => {
-  describe('GET /referral/:id/health', () => {
+  describe('GET /referral/:id/risks-and-needs/section-13-health', () => {
     it('loads the risks and needs page with health sub-nav and displays all health related data', async () => {
       const health: Health = healthFactory.build()
       accreditedProgrammesManageAndDeliverService.getHealth.mockResolvedValue(health)
 
       const referralId = randomUUID()
       return request(app)
-        .get(`/referral/${referralId}/health`)
+        .get(`/referral/${referralId}/risks-and-needs/section-13-health`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Assessment completed 23 August 2025')
@@ -183,7 +183,7 @@ describe('Health section of risks and needs', () => {
       accreditedProgrammesManageAndDeliverService.getHealth.mockResolvedValue(health)
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/health`).expect(200)
+      return request(app).get(`/referral/${referralId}/risks-and-needs/section-13-health`).expect(200)
     })
 
     it('calls the service with correct parameters', async () => {
@@ -192,7 +192,7 @@ describe('Health section of risks and needs', () => {
       const health: Health = healthFactory.build()
       accreditedProgrammesManageAndDeliverService.getHealth.mockResolvedValue(health)
 
-      await request(app).get(`/referral/${referralId}/health`).expect(200)
+      await request(app).get(`/referral/${referralId}/risks-and-needs/section-13-health`).expect(200)
 
       expect(accreditedProgrammesManageAndDeliverService.getHealth).toHaveBeenCalledWith('user1', referralDetails.crn)
     })
@@ -201,20 +201,20 @@ describe('Health section of risks and needs', () => {
       accreditedProgrammesManageAndDeliverService.getHealth.mockRejectedValue(new Error('Service unavailable'))
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/health`).expect(500)
+      return request(app).get(`/referral/${referralId}/risks-and-needs/section-13-health`).expect(500)
     })
   })
 })
 
 describe('Lifestyle and associates section of risks and needs', () => {
-  describe('GET /referral/:id/lifestyle-and-associates', () => {
+  describe('GET /referral/:id/risks-and-needs/section-7-lifestyle-and-associates', () => {
     it('loads the risks and needs page with lifestyle and associates sub-nav and displays all related data', async () => {
       const lifestyleAndAssociates: LifestyleAndAssociates = lifestyleAndAssociatesFactory.build()
       accreditedProgrammesManageAndDeliverService.getLifestyleAndAssociates.mockResolvedValue(lifestyleAndAssociates)
 
       const referralId = randomUUID()
       return request(app)
-        .get(`/referral/${referralId}/lifestyle-and-associates`)
+        .get(`/referral/${referralId}/risks-and-needs/section-7-lifestyle-and-associates`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Assessment completed 23 August 2025')
@@ -231,7 +231,7 @@ describe('Lifestyle and associates section of risks and needs', () => {
       accreditedProgrammesManageAndDeliverService.getLifestyleAndAssociates.mockResolvedValue(lifestyleAndAssociates)
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/lifestyle-and-associates`).expect(200)
+      return request(app).get(`/referral/${referralId}/risks-and-needs/section-7-lifestyle-and-associates`).expect(200)
     })
 
     it('calls the service with correct parameters', async () => {
@@ -240,7 +240,7 @@ describe('Lifestyle and associates section of risks and needs', () => {
       const lifestyleAndAssociates: LifestyleAndAssociates = lifestyleAndAssociatesFactory.build()
       accreditedProgrammesManageAndDeliverService.getLifestyleAndAssociates.mockResolvedValue(lifestyleAndAssociates)
 
-      await request(app).get(`/referral/${referralId}/lifestyle-and-associates`).expect(200)
+      await request(app).get(`/referral/${referralId}/risks-and-needs/section-7-lifestyle-and-associates`).expect(200)
 
       expect(accreditedProgrammesManageAndDeliverService.getLifestyleAndAssociates).toHaveBeenCalledWith(
         'user1',
@@ -254,20 +254,20 @@ describe('Lifestyle and associates section of risks and needs', () => {
       )
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/lifestyle-and-associates`).expect(500)
+      return request(app).get(`/referral/${referralId}/risks-and-needs/section-7-lifestyle-and-associates`).expect(500)
     })
   })
 })
 
 describe('Relationships', () => {
-  describe('GET /referral/:id/relationships', () => {
+  describe('GET /referral/:id/risks-and-needs/section-6-relationships', () => {
     it('loads the risks and needs page with relationships sub-nav and displays all relationships data', async () => {
       const relationships: Relationships = relationshipsFactory.build()
       accreditedProgrammesManageAndDeliverService.getRelationships.mockResolvedValue(relationships)
 
       const referralId = randomUUID()
       return request(app)
-        .get(`/referral/${referralId}/relationships`)
+        .get(`/referral/${referralId}/risks-and-needs/section-6-relationships`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Assessment completed 23 August 2025')
@@ -292,7 +292,7 @@ describe('Relationships', () => {
       accreditedProgrammesManageAndDeliverService.getRelationships.mockResolvedValue(relationships)
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/relationships`).expect(200)
+      return request(app).get(`/referral/${referralId}/risks-and-needs/section-6-relationships`).expect(200)
     })
 
     it('calls the service with correct parameters', async () => {
@@ -300,7 +300,7 @@ describe('Relationships', () => {
       accreditedProgrammesManageAndDeliverService.getRelationships.mockResolvedValue(relationships)
 
       const referralId = randomUUID()
-      await request(app).get(`/referral/${referralId}/relationships`).expect(200)
+      await request(app).get(`/referral/${referralId}/risks-and-needs/section-6-relationships`).expect(200)
 
       expect(accreditedProgrammesManageAndDeliverService.getRelationships).toHaveBeenCalledWith(
         'user1',
@@ -312,20 +312,20 @@ describe('Relationships', () => {
       accreditedProgrammesManageAndDeliverService.getRelationships.mockRejectedValue(new Error('Service unavailable'))
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/relationships`).expect(500)
+      return request(app).get(`/referral/${referralId}/risks-and-needs/section-6-relationships`).expect(500)
     })
   })
 })
 
 describe('Alcohol Misuse', () => {
-  describe('GET /referral/:id/alcohol-misuse', () => {
+  describe('GET /referral/:id/risks-and-needs/section-9-alcohol-misuse', () => {
     it('loads the risks and needs page with alcohol misuse sub-nav and displays all alcohol misuse data', async () => {
       const alcoholMisuseDetails: AlcoholMisuseDetails = alcoholMisuseFactory.build()
       accreditedProgrammesManageAndDeliverService.getAlcoholMisuseDetails.mockResolvedValue(alcoholMisuseDetails)
 
       const referralId = randomUUID()
       return request(app)
-        .get(`/referral/${referralId}/alcohol-misuse`)
+        .get(`/referral/${referralId}/risks-and-needs/section-9-alcohol-misuse`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(`Risks and needs: ${referralDetails.personName}`)
@@ -347,7 +347,7 @@ describe('Alcohol Misuse', () => {
       accreditedProgrammesManageAndDeliverService.getAlcoholMisuseDetails.mockResolvedValue(alcoholMisuseDetails)
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/alcohol-misuse`).expect(200)
+      return request(app).get(`/referral/${referralId}/risks-and-needs/section-9-alcohol-misuse`).expect(200)
     })
 
     it('calls the service with correct parameters', async () => {
@@ -355,7 +355,7 @@ describe('Alcohol Misuse', () => {
       accreditedProgrammesManageAndDeliverService.getAlcoholMisuseDetails.mockResolvedValue(alcoholMisuseDetails)
 
       const referralId = randomUUID()
-      await request(app).get(`/referral/${referralId}/alcohol-misuse`).expect(200)
+      await request(app).get(`/referral/${referralId}/risks-and-needs/section-9-alcohol-misuse`).expect(200)
 
       expect(accreditedProgrammesManageAndDeliverService.getAlcoholMisuseDetails).toHaveBeenCalledWith(
         'user1',
@@ -369,20 +369,20 @@ describe('Alcohol Misuse', () => {
       )
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/alcohol-misuse`).expect(500)
+      return request(app).get(`/referral/${referralId}/risks-and-needs/section-9-alcohol-misuse`).expect(500)
     })
   })
 })
 
 describe('Drug misuse section of risks and needs', () => {
-  describe('GET /referral/:id/drug-misuse', () => {
+  describe('GET /referral/:id/risks-and-needs/section-8-drug-misuse', () => {
     it('loads the risks and needs page with drug misuse sub-nav and displays all drug misuse related data', async () => {
       const drugDetails: DrugDetails = drugDetailsFactory.build()
       accreditedProgrammesManageAndDeliverService.getDrugDetails.mockResolvedValue(drugDetails)
 
       const referralId = randomUUID()
       return request(app)
-        .get(`/referral/${referralId}/drug-misuse`)
+        .get(`/referral/${referralId}/risks-and-needs/section-8-drug-misuse`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Assessment completed 23 August 2025')
@@ -400,7 +400,7 @@ describe('Drug misuse section of risks and needs', () => {
       accreditedProgrammesManageAndDeliverService.getDrugDetails.mockResolvedValue(drugDetails)
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/drug-misuse`).expect(200)
+      return request(app).get(`/referral/${referralId}/risks-and-needs/section-8-drug-misuse`).expect(200)
     })
 
     it('calls the service with correct parameters', async () => {
@@ -409,7 +409,7 @@ describe('Drug misuse section of risks and needs', () => {
       const drugDetails: DrugDetails = drugDetailsFactory.build()
       accreditedProgrammesManageAndDeliverService.getDrugDetails.mockResolvedValue(drugDetails)
 
-      await request(app).get(`/referral/${referralId}/drug-misuse`).expect(200)
+      await request(app).get(`/referral/${referralId}/risks-and-needs/section-8-drug-misuse`).expect(200)
 
       expect(accreditedProgrammesManageAndDeliverService.getDrugDetails).toHaveBeenCalledWith(
         'user1',
@@ -421,20 +421,20 @@ describe('Drug misuse section of risks and needs', () => {
       accreditedProgrammesManageAndDeliverService.getDrugDetails.mockRejectedValue(new Error('Service unavailable'))
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/drug-misuse`).expect(500)
+      return request(app).get(`/referral/${referralId}/risks-and-needs/section-8-drug-misuse`).expect(500)
     })
   })
 })
 
 describe('Offence Analysis', () => {
-  describe('GET /referral/:id/offence-analysis', () => {
+  describe('GET /referral/:id/risks-and-needs/section-2-offence-analysis', () => {
     it('loads the risks and needs page with offence analysis sub-nav and displays all offence analysis data', async () => {
       const offenceAnalysis: OffenceAnalysis = offenceAnalysisFactory.build()
       accreditedProgrammesManageAndDeliverService.getOffenceAnalysis.mockResolvedValue(offenceAnalysis)
 
       const referralId = randomUUID()
       return request(app)
-        .get(`/referral/${referralId}/offence-analysis`)
+        .get(`/referral/${referralId}/risks-and-needs/section-2-offence-analysis`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Assessment completed 23 August 2025')
@@ -455,7 +455,7 @@ describe('Offence Analysis', () => {
       accreditedProgrammesManageAndDeliverService.getOffenceAnalysis.mockResolvedValue(offenceAnalysis)
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/offence-analysis`).expect(200)
+      return request(app).get(`/referral/${referralId}/risks-and-needs/section-2-offence-analysis`).expect(200)
     })
 
     it('calls the service with correct parameters', async () => {
@@ -463,7 +463,7 @@ describe('Offence Analysis', () => {
       accreditedProgrammesManageAndDeliverService.getOffenceAnalysis.mockResolvedValue(offenceAnalysis)
 
       const referralId = randomUUID()
-      await request(app).get(`/referral/${referralId}/offence-analysis`).expect(200)
+      await request(app).get(`/referral/${referralId}/risks-and-needs/section-2-offence-analysis`).expect(200)
 
       expect(accreditedProgrammesManageAndDeliverService.getOffenceAnalysis).toHaveBeenCalledWith(
         'user1',
@@ -475,20 +475,20 @@ describe('Offence Analysis', () => {
       accreditedProgrammesManageAndDeliverService.getOffenceAnalysis.mockRejectedValue(new Error('Service unavailable'))
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/offence-analysis`).expect(500)
+      return request(app).get(`/referral/${referralId}/risks-and-needs/section-2-offence-analysis`).expect(500)
     })
   })
 })
 
 describe('Emotional wellbeing section of risks and needs', () => {
-  describe('GET /referral/:id/emotional-wellbeing', () => {
+  describe('GET /referral/:id/risks-and-needs/section-10-emotional-wellbeing', () => {
     it('loads the risks and needs page with emotional wellbeing sub-nav and displays all emotional wellbeing related data', async () => {
       const emotionalWellbeing: EmotionalWellbeing = emotionalWellbeingFactory.build()
       accreditedProgrammesManageAndDeliverService.getEmotionalWellbeing.mockResolvedValue(emotionalWellbeing)
 
       const referralId = randomUUID()
       return request(app)
-        .get(`/referral/${referralId}/emotional-wellbeing`)
+        .get(`/referral/${referralId}/risks-and-needs/section-10-emotional-wellbeing`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Assessment completed 23 August 2025')
@@ -507,7 +507,7 @@ describe('Emotional wellbeing section of risks and needs', () => {
       accreditedProgrammesManageAndDeliverService.getEmotionalWellbeing.mockResolvedValue(emotionalWellbeing)
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/emotional-wellbeing`).expect(200)
+      return request(app).get(`/referral/${referralId}/risks-and-needs/section-10-emotional-wellbeing`).expect(200)
     })
 
     it('calls the service with correct parameters', async () => {
@@ -516,7 +516,7 @@ describe('Emotional wellbeing section of risks and needs', () => {
       const emotionalWellbeing: EmotionalWellbeing = emotionalWellbeingFactory.build()
       accreditedProgrammesManageAndDeliverService.getEmotionalWellbeing.mockResolvedValue(emotionalWellbeing)
 
-      await request(app).get(`/referral/${referralId}/emotional-wellbeing`).expect(200)
+      await request(app).get(`/referral/${referralId}/risks-and-needs/section-10-emotional-wellbeing`).expect(200)
 
       expect(accreditedProgrammesManageAndDeliverService.getEmotionalWellbeing).toHaveBeenCalledWith(
         'user1',
@@ -530,20 +530,20 @@ describe('Emotional wellbeing section of risks and needs', () => {
       )
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/emotional-wellbeing`).expect(500)
+      return request(app).get(`/referral/${referralId}/risks-and-needs/section-10-emotional-wellbeing`).expect(500)
     })
   })
 })
 
 describe('Thinking and behaviour section of risks and needs', () => {
-  describe('GET /referral/:id/thinking-and-behaving', () => {
+  describe('GET /referral/:id/risks-and-needs/section-11-thinking-and-behaving', () => {
     it('loads the risks and needs page with thinking and behaving sub-nav and displays all thinking and behaving related data', async () => {
       const thinkingAndBehaviour: ThinkingAndBehaviour = thinkingAndBehaviourFactory.build()
       accreditedProgrammesManageAndDeliverService.getThinkingAndBehaviour.mockResolvedValue(thinkingAndBehaviour)
 
       const referralId = randomUUID()
       return request(app)
-        .get(`/referral/${referralId}/thinking-and-behaving`)
+        .get(`/referral/${referralId}/risks-and-needs/section-11-thinking-and-behaving`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Assessment completed 23 August 2025')
@@ -567,7 +567,7 @@ describe('Thinking and behaviour section of risks and needs', () => {
       accreditedProgrammesManageAndDeliverService.getThinkingAndBehaviour.mockResolvedValue(thinkingAndBehaviour)
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/thinking-and-behaving`).expect(200)
+      return request(app).get(`/referral/${referralId}/risks-and-needs/section-11-thinking-and-behaving`).expect(200)
     })
 
     it('calls the service with correct parameters', async () => {
@@ -576,7 +576,7 @@ describe('Thinking and behaviour section of risks and needs', () => {
       const thinkingAndBehaviour: ThinkingAndBehaviour = thinkingAndBehaviourFactory.build()
       accreditedProgrammesManageAndDeliverService.getThinkingAndBehaviour.mockResolvedValue(thinkingAndBehaviour)
 
-      await request(app).get(`/referral/${referralId}/thinking-and-behaving`).expect(200)
+      await request(app).get(`/referral/${referralId}/risks-and-needs/section-11-thinking-and-behaving`).expect(200)
 
       expect(accreditedProgrammesManageAndDeliverService.getThinkingAndBehaviour).toHaveBeenCalledWith(
         'user1',
@@ -590,20 +590,20 @@ describe('Thinking and behaviour section of risks and needs', () => {
       )
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/thinking-and-behaving`).expect(500)
+      return request(app).get(`/referral/${referralId}/risks-and-needs/section-11-thinking-and-behaving`).expect(500)
     })
   })
 })
 
 describe('Attitudes section of risks and needs', () => {
-  describe('GET /referral/:id/attitudes', () => {
+  describe('GET /referral/:id/risks-and-needs/section-12-attitudes', () => {
     it('loads the risks and needs page with attitude sub-nav and displays all attitude related data', async () => {
       const attitudes: Attitude = attitudesFactory.build()
       accreditedProgrammesManageAndDeliverService.getAttitudes.mockResolvedValue(attitudes)
 
       const referralId = randomUUID()
       return request(app)
-        .get(`/referral/${referralId}/attitudes`)
+        .get(`/referral/${referralId}/risks-and-needs/section-12-attitudes`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Assessment completed 23 August 2025')
@@ -622,7 +622,7 @@ describe('Attitudes section of risks and needs', () => {
       accreditedProgrammesManageAndDeliverService.getAttitudes.mockResolvedValue(attitude)
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/attitudes`).expect(200)
+      return request(app).get(`/referral/${referralId}/risks-and-needs/section-12-attitudes`).expect(200)
     })
 
     it('calls the service with correct parameters', async () => {
@@ -631,7 +631,7 @@ describe('Attitudes section of risks and needs', () => {
       const attitude: Attitude = attitudesFactory.build()
       accreditedProgrammesManageAndDeliverService.getAttitudes.mockResolvedValue(attitude)
 
-      await request(app).get(`/referral/${referralId}/attitudes`).expect(200)
+      await request(app).get(`/referral/${referralId}/risks-and-needs/section-12-attitudes`).expect(200)
 
       expect(accreditedProgrammesManageAndDeliverService.getAttitudes).toHaveBeenCalledWith(
         'user1',
@@ -643,20 +643,20 @@ describe('Attitudes section of risks and needs', () => {
       accreditedProgrammesManageAndDeliverService.getAttitudes.mockRejectedValue(new Error('Service unavailable'))
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/attitudes`).expect(500)
+      return request(app).get(`/referral/${referralId}/risks-and-needs/section-12-attitudes`).expect(500)
     })
   })
 })
 
 describe('Risks and alerts section of risks and needs', () => {
-  describe('GET /referral/:id/risks-and-alerts', () => {
+  describe('GET /referral/:id/risks-and-needs/risks-and-alerts', () => {
     it('loads the risks and needs page with risks and alerts sub-nav and displays all related data', async () => {
       const risks: Risks = risksFactory.build()
       accreditedProgrammesManageAndDeliverService.getRisksAndAlerts.mockResolvedValue(risks)
 
       const referralId = randomUUID()
       return request(app)
-        .get(`/referral/${referralId}/risks-and-alerts`)
+        .get(`/referral/${referralId}/risks-and-needs/risks-and-alerts`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Assessment completed')
@@ -708,7 +708,7 @@ describe('Risks and alerts section of risks and needs', () => {
       accreditedProgrammesManageAndDeliverService.getRisksAndAlerts.mockResolvedValue(risks)
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/risks-and-alerts`).expect(200)
+      return request(app).get(`/referral/${referralId}/risks-and-needs/risks-and-alerts`).expect(200)
     })
 
     it('handles risks and alerts with ogrs4 data', async () => {
@@ -737,7 +737,7 @@ describe('Risks and alerts section of risks and needs', () => {
       accreditedProgrammesManageAndDeliverService.getRisksAndAlerts.mockResolvedValue(risks)
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/risks-and-alerts`).expect(200)
+      return request(app).get(`/referral/${referralId}/risks-and-needs/risks-and-alerts`).expect(200)
     })
 
     it('calls the service with correct parameters', async () => {
@@ -746,7 +746,7 @@ describe('Risks and alerts section of risks and needs', () => {
       const risks: Risks = risksFactory.build()
       accreditedProgrammesManageAndDeliverService.getRisksAndAlerts.mockResolvedValue(risks)
 
-      await request(app).get(`/referral/${referralId}/risks-and-alerts`).expect(200)
+      await request(app).get(`/referral/${referralId}/risks-and-needs/risks-and-alerts`).expect(200)
 
       expect(accreditedProgrammesManageAndDeliverService.getRisksAndAlerts).toHaveBeenCalledWith(
         'user1',
@@ -758,7 +758,7 @@ describe('Risks and alerts section of risks and needs', () => {
       accreditedProgrammesManageAndDeliverService.getRisksAndAlerts.mockRejectedValue(new Error('Service unavailable'))
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/risks-and-alerts`).expect(500)
+      return request(app).get(`/referral/${referralId}/risks-and-needs/risks-and-alerts`).expect(500)
     })
   })
 })

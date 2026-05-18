@@ -22,6 +22,10 @@ export default class PersonalDetailsPresenter extends ReferralDetailsPresenter {
     }
   }
 
+  get pageTitle(): string {
+    return 'Personal details - Referral details'
+  }
+
   personalDetailsSummaryList(): SummaryListItem[] {
     return [
       {

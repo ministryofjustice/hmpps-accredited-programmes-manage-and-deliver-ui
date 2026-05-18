@@ -14,6 +14,10 @@ export default class OffenceHistoryPresenter extends ReferralDetailsPresenter {
     super(details, subNavValue, isLdcUpdated, isCohortUpdated)
   }
 
+  get pageTitle(): string {
+    return 'Offence history - Referral details'
+  }
+
   offenceHistorySummaryLists(): { title: string; summary: SummaryListItem[] }[] {
     const summaries = []
     summaries.push({

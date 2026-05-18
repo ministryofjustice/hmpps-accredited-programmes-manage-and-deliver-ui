@@ -43,6 +43,7 @@ export default class AvailabilityView {
       'availabilityAndMotivation/availabilityAndMotivation',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         importFromDeliusText: this.importFromDeliusText,
         availabilityButtonArgs: this.availabilityButtonArgs,
         availability: this.presenter.availability,

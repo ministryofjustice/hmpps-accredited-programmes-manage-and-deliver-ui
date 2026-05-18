@@ -30,6 +30,10 @@ export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter 
     }
   }
 
+  get pageTitle(): string {
+    return "Person's attendance history - Accredited Programmes"
+  }
+
   get tableDescription(): string {
     const { popName, currentlyAllocatedGroupCode, attendanceHistory } = this.attendanceHistory
     const hasGroupCode = Boolean(currentlyAllocatedGroupCode)

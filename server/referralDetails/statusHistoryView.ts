@@ -51,6 +51,7 @@ export default class StatusHistoryView {
       'statusHistory/statusHistory',
       {
         errorSummary: this.presenter.errorMessageSummary,
+        pageTitle: this.presenter.pageTitle,
         successMessageSummary: this.presenter.successMessageSummary,
         presenter: this.presenter,
         statusHistoryTimelineOptions: this.getStatusHistoryTimelineOptions(),

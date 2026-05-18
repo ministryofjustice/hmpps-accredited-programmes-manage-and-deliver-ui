@@ -16,6 +16,7 @@ export default class PersonalDetailsView {
       'referralDetails/referralDetails',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         summary: this.summary,
         importFromDeliusText: this.presenter.importFromDeliusText,
       },

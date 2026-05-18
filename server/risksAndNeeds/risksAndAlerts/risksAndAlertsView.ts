@@ -185,6 +185,7 @@ export default class RisksAndAlertsView {
       'risksAndNeeds/risksAndNeeds',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         ogrsYear1Box: this.ogrsYear1Box,
         ogrsYear2Box: this.ogrsYear2Box,
         ovpYear1Box: this.ovpYear1Box,

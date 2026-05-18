@@ -8,7 +8,8 @@ export default class PniView {
       'pni/pni',
       {
         presenter: this.presenter,
-        riskAndNeedsUrl: `/referral/${this.presenter.id}/risks-and-needs`,
+        pageTitle: this.presenter.pageTitle,
+        riskAndNeedsUrl: `/referral/${this.presenter.id}/risks-and-needs/risks-and-alerts`,
         sexSummary: this.presenter.getSexSummary(),
         thinkingSummary: this.presenter.getThinkingSummary(),
         relationshipsSummary: this.presenter.getRelationshipsSummary(),
