@@ -35,7 +35,6 @@ export default class CreateOrEditGroupCodeView {
       {
         backLinkArgs: this.backLinkArgs(),
         pageTitle: this.presenter.pageTitle,
-        pageHeading: this.presenter.pageHeading,
         captionText: this.presenter.captionText,
         createGroupCodeArgs: this.createGroupCodeArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),

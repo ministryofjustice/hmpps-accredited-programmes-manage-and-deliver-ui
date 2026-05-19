@@ -72,7 +72,7 @@ export default class CreateGroupCyaPresenter {
         changeLink: '/group-cohort',
       },
       {
-        key: 'Sex',
+        key: 'Gender',
         lines: [`${this.createGroupUtils.getSexTextFromEnum(this.createGroupFormData.sex)}`],
         changeLink: '/group-gender',
       },

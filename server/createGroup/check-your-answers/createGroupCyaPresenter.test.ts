@@ -232,7 +232,7 @@ describe('CreateGroupCyaPresenter', () => {
         changeLink: '/group-cohort',
       })
       expect(summary).toContainEqual({
-        key: 'Sex',
+        key: 'Gender',
         lines: ['Male'],
         changeLink: '/group-gender',
       })
@@ -473,7 +473,7 @@ describe('CreateGroupCyaPresenter', () => {
       expect(summary[1].key).toBe('Date')
       expect(summary[2].key).toBe('Day and time')
       expect(summary[3].key).toBe('Cohort')
-      expect(summary[4].key).toBe('Sex')
+      expect(summary[4].key).toBe('Gender')
       expect(summary[5].key).toBe('PDU')
       expect(summary[6].key).toBe('Delivery Location')
       expect(summary[7].key).toBe('Treatment Manager:')

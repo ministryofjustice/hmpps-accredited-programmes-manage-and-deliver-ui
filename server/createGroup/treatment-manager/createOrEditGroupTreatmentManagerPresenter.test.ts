@@ -152,5 +152,16 @@ describe('CreateGroupTreatmentManagerPresenter', () => {
       expect(presenter.pageTitle).toBe('Edit people responsible for the group')
       expect(presenter.submitButtonText).toBe('Submit')
     })
+
+    it('returns create journey values when groupId is not provided', () => {
+      const presenter = new CreateGroupTreatmentManagerPresenter('', 'TEST123', mockMembers)
+
+      expect(presenter.isEditJourney).toBe(false)
+      expect(presenter.backLinkUri).toBe('/group-delivery-location')
+      expect(presenter.captionText).toBe('Create group TEST123')
+      expect(presenter.pageTitle).toBe('People responsible for the group')
+      expect(presenter.pageHeading).toBe('Who is responsible for the group?')
+      expect(presenter.submitButtonText).toBe('Continue')
+    })
   })
 })
