@@ -11,6 +11,10 @@ export default class ChangeCohortPresenter {
     return `/referral/${this.id}/change-cohort`
   }
 
+  get pageTitle(): string {
+    return 'Update cohort'
+  }
+
   get fields() {
     return {
       updatedCohort: {

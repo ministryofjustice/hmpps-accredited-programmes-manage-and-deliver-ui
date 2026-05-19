@@ -10,6 +10,7 @@ export default class ChangeCohortView {
       'referralDetails/cohort/changeCohort',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         currentCohortText: this.currentCohortText,
         radioArgs: this.radioArgs(),
         backLinkArgs: this.backLinkArgs(),

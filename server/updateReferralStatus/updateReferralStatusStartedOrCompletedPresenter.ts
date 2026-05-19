@@ -16,6 +16,10 @@ export default class UpdateReferralStatusStartedOrCompletedPresenter {
     return new PresenterUtils(this.userInputData)
   }
 
+  get pageTitle(): string {
+    return 'Update status'
+  }
+
   get text() {
     return {
       title:

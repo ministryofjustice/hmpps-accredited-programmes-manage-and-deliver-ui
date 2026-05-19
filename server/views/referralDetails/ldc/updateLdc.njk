@@ -1,7 +1,7 @@
 {% extends "../../partials/layout.njk" %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
-{% set pageTitle = applicationName + " - Home" %}
+{% set pageTitle = pageTitle + " - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
