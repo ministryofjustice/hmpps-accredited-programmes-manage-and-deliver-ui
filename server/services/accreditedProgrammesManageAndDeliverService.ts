@@ -69,6 +69,8 @@ import {
   UpdateGroupResponse,
   UserTeamMember,
 } from '@manage-and-deliver-api'
+import type { Response as SuperAgentResponse } from 'superagent'
+
 import { CaselistFilterParams } from '../caselist/CaseListFilterParams'
 import config, { ApiConfig } from '../config'
 import type { HmppsAuthClient, RestClientBuilderWithoutToken } from '../data'
@@ -149,14 +151,26 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
     })) as CaseListReferrals
   }
 
-  async getGroupSizeReport(username: ExpressUsername, groupStartedSince: string): Promise<string> {
+  async getGroupSizeReport(
+    username: ExpressUsername,
+    groupStartedSince: string,
+  ): Promise<{
+    csv: string
+    headers: { [key: string]: string }
+  }> {
     const restClient = await this.createRestClientFromUsername(username)
-    return (await restClient.get({
+    const response = await restClient.get<SuperAgentResponse>({
       path: '/reporting/group-size.csv',
       headers: { Accept: 'text/csv' },
       query: { groupStartedSince },
       responseType: 'text',
-    })) as string
+      raw: true,
+    })
+
+    return {
+      csv: response.body,
+      headers: response.headers,
+    }
   }
 
   async getGroupAllocatedMembers(

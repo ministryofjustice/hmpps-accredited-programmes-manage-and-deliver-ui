@@ -78,6 +78,17 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   router.get(
     '/reporting/group-size.csv',
+    /**
+     * @INFO - At time of writing the user REFER_MONITOR_PP
+     * does not have the reporting role.  i (wilson) will open a
+     * PR on the hmpps-auth repo to create and assign that role.  until
+     * then, if you want to test this endpoint, you will need to comment out
+     * the call to `authorisationMiddleware` and re-start the server.
+     * the ROLE_PROBATION is granted through the (wiremocked) nDelius
+     * integration, but the reporting role needs to be assigned separately
+     * through hmpps-auth.
+     * --TJWC 2026-05-19
+     * */
     authorisationMiddleware([reportingRole]),
     asyncMiddleware(async (req, res) => {
       await reportingController.downloadGroupSizeReport(req, res)

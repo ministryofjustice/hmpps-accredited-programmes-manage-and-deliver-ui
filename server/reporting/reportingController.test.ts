@@ -23,7 +23,12 @@ afterEach(() => {
 describe('Reporting controller', () => {
   it('returns CSV for group size report when user has reporting role', async () => {
     const csv = 'groupCode,size\\nGRP-001,12\\n'
-    accreditedProgrammesManageAndDeliverService.getGroupSizeReport.mockResolvedValue(csv)
+    accreditedProgrammesManageAndDeliverService.getGroupSizeReport.mockResolvedValue({
+      csv,
+      headers: {
+        'Content-Disposition': 'attachment; filename="group-size-report.csv"',
+      },
+    })
 
     app = appWithAllRoutes({
       services: {
@@ -39,6 +44,7 @@ describe('Reporting controller', () => {
       .get('/reporting/group-size.csv?groupStartedSince=2026-05-18T13:30:00')
       .expect(200)
       .expect('Content-Type', /text\/csv/)
+      .expect('Content-Disposition', 'attachment; filename="group-size-report.csv"')
       .expect(res => {
         expect(res.text).toBe(csv)
       })

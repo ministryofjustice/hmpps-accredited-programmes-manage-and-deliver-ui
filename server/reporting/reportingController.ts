@@ -31,9 +31,15 @@ export default class ReportingController {
     }
 
     const { username } = req.user
-    const csv = await this.accreditedProgrammesManageAndDeliverService.getGroupSizeReport(username, groupStartedSince)
+    const { csv, headers } = await this.accreditedProgrammesManageAndDeliverService.getGroupSizeReport(
+      username,
+      groupStartedSince,
+    )
 
     res.setHeader('Content-Type', 'text/csv; charset=utf-8')
+    Object.entries(headers).forEach(([key, value]) => {
+      res.setHeader(key, value)
+    })
     res.send(csv)
   }
 }
