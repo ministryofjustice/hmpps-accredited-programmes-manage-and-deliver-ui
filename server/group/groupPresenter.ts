@@ -61,6 +61,12 @@ export default class GroupPresenter {
     return this.section === GroupListPageSection.COMPLETE ? 'Completed groups' : 'Not started or in progress groups'
   }
 
+  get pageTitle(): string {
+    return this.section === GroupListPageSection.COMPLETE
+      ? 'Completed Building Choices groups'
+      : 'Not started and in progress Building Choices groups'
+  }
+
   get groupTableArgs(): TableArgs {
     return {
       caption: this.tableCaption,
@@ -175,7 +181,7 @@ export default class GroupPresenter {
       items: [
         {
           text: `Not started or in progress (${this.section === GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS ? this.groupListItems.totalElements : this.otherGroupListCountTotal})`,
-          href: possiblyAppendParams(`/groups/not-started-or-in-progress`, this.params),
+          href: possiblyAppendParams(`/groups/not-started-and-in-progress`, this.params),
           active: this.section === GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
         },
         {

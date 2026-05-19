@@ -89,6 +89,7 @@ export default class GroupView {
       'group/group',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         groupTableArgs: this.presenter.groupTableArgs,
         subNavArgs: this.presenter.getSubNavArgs(),
         pagination: this.presenter.pagination.govukPaginationArgs,

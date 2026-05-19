@@ -7,7 +7,7 @@
 {% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
-{% set pageTitle = applicationName + " - Home" %}
+{% set pageTitle = pageTitle + " - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block content %}

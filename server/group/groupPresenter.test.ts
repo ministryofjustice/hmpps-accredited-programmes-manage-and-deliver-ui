@@ -23,7 +23,7 @@ describe('getSubNavArgs', () => {
       items: [
         {
           text: `Not started or in progress (100)`,
-          href: `/groups/not-started-or-in-progress`,
+          href: `/groups/not-started-and-in-progress`,
           active: true,
         },
         {
@@ -54,7 +54,7 @@ describe('getSubNavArgs', () => {
       items: [
         {
           text: `Not started or in progress (100)`,
-          href: `/groups/not-started-or-in-progress?groupCode=CODE`,
+          href: `/groups/not-started-and-in-progress?groupCode=CODE`,
           active: true,
         },
         {
@@ -84,7 +84,7 @@ describe('getSubNavArgs', () => {
       items: [
         {
           text: `Not started or in progress (10)`,
-          href: `/groups/not-started-or-in-progress?groupCode=CODE`,
+          href: `/groups/not-started-and-in-progress?groupCode=CODE`,
           active: false,
         },
         {
@@ -437,6 +437,36 @@ describe('text', () => {
       pageSubHeading: 'Building Choices: moderate intensity',
       pageHeading: 'Groups',
     })
+  })
+})
+
+describe('pageTitle', () => {
+  it('should return not started title for NOT_STARTED_OR_IN_PROGRESS section', () => {
+    const filter = GroupListFilter.empty()
+    const pagedGroups: Page<Group> = pageFactory
+      .pageContent([])
+      .build({ totalElements: 0, number: 0, size: 10, numberOfElements: 0 }) as Page<Group>
+    const presenter = new GroupPresenter(
+      pagedGroups,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
+      0,
+      'Region',
+      filter,
+      [],
+      [],
+    )
+
+    expect(presenter.pageTitle).toBe('Not started and in progress Building Choices groups')
+  })
+
+  it('should return completed title for COMPLETE section', () => {
+    const filter = GroupListFilter.empty()
+    const pagedGroups: Page<Group> = pageFactory
+      .pageContent([])
+      .build({ totalElements: 0, number: 0, size: 10, numberOfElements: 0 }) as Page<Group>
+    const presenter = new GroupPresenter(pagedGroups, GroupListPageSection.COMPLETE, 0, 'Region', filter, [], [])
+
+    expect(presenter.pageTitle).toBe('Completed Building Choices groups')
   })
 })
 

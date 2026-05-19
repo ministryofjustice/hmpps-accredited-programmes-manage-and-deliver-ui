@@ -29,10 +29,10 @@ beforeEach(() => {
 })
 
 describe('GroupController', () => {
-  describe('GET /groups/not-started-or-in-progress', () => {
+  describe('GET /groups/not-started-and-in-progress', () => {
     it('should render the not started group list page', async () => {
       return request(app)
-        .get('/groups/not-started-or-in-progress')
+        .get('/groups/not-started-and-in-progress')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Building Choices: moderate intensity')
@@ -45,7 +45,7 @@ describe('GroupController', () => {
       accreditedProgrammesManageAndDeliverService.getGroupList.mockResolvedValue(groupList)
 
       await request(app)
-        .get('/groups/not-started-or-in-progress?pdu=PDU3&deliveryLocations=delivery-location-1')
+        .get('/groups/not-started-and-in-progress?pdu=PDU3&deliveryLocations=delivery-location-1')
         .expect(200)
 
       expect(accreditedProgrammesManageAndDeliverService.getGroupList).toHaveBeenCalledTimes(2)

@@ -363,7 +363,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await removeFromGroupController.removeFromGroupUpdateStatus(req, res)
   })
 
-  get('/groups/not-started-or-in-progress', async (req, res, next) => {
+  get('/groups/not-started-and-in-progress', async (req, res, next) => {
     await groupController.showNotStartedGroupListPage(req, res)
   })
 
