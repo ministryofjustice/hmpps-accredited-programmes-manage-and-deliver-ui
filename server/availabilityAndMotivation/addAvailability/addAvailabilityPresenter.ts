@@ -20,6 +20,12 @@ export default class AddAvailabilityPresenter {
     return PresenterUtils.errorSummary(this.validationError)
   }
 
+  get pageTitle(): string {
+    return this.availability.id
+      ? "Update person's availability to attend a programme"
+      : "Person's availability to attend a programme"
+  }
+
   get locationButtonFormAction(): string {
     return this.availability.id
       ? `/referral/${this.referralId}/update-availability/${this.availability.id}`

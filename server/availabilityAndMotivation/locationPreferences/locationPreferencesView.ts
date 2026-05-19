@@ -82,6 +82,7 @@ export default class LocationPreferencesView {
       'locationPreferences/locationPreferences',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         radioArgs: this.radioArgs(),
         checkboxArgs: this.checkboxArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),

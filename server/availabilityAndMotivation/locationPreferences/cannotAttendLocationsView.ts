@@ -63,6 +63,7 @@ export default class CannotAttendLocationsView {
       'locationPreferences/cannotAttendLocations',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         cancelLink: `/referral/${this.presenter.id}/availability-and-motivation/location/#location`,
         cannotAttendLocationsTextAreaArgs: this.cannotAttendLocationsTextAreaArgs(),
         radioArgs: this.radioArgs.bind(this),

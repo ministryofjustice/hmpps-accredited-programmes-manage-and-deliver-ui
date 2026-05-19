@@ -60,6 +60,10 @@ export default class LocationPreferencesPresenter {
     return new PresenterUtils(this.userInputData)
   }
 
+  get pageTitle(): string {
+    return 'Locations the person can attend a programme'
+  }
+
   get backLinkUri() {
     return `/referral/${this.referralId}/availability-and-motivation/location#location`
   }

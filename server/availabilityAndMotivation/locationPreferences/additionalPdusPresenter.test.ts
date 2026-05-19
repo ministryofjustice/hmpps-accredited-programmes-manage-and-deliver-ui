@@ -27,6 +27,23 @@ describe(`additionalPdusPresenter.`, () => {
     expect(presenter.backLinkUri).toEqual(`/referral/${referralId}/add-location-preferences`)
   })
 
+  it('should return the correct page title', () => {
+    const referralId = randomUUID()
+    const referralDetails = referralDetailsFactory.build()
+    const preferredLocationDetails = deliveryLocationPreferencesFormDataFactory.build()
+    const currentFormData = createDeliveryLocationPreferencesFactory.build()
+
+    const presenter = new AdditionalPdusPresenter(
+      referralId,
+      referralDetails,
+      preferredLocationDetails,
+      currentFormData,
+      false,
+    )
+
+    expect(presenter.pageTitle).toEqual('Other PDUs the person can attend a programme')
+  })
+
   describe(`selectedLocationValues.`, () => {
     it('should return the offices within the update data if they exists and hasUpdatedAdditionalLocationData is set to true.', () => {
       const referralId = randomUUID()
