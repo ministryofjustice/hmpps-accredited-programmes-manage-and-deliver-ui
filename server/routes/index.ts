@@ -199,11 +199,11 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await cohortController.showChangeCohortPage(req, res)
   })
 
-  get('/referral/:referralId/update-ldc', async (req, res, next) => {
+  get('/referral/:referralId/update-learning-disabilities-and-challenges', async (req, res, next) => {
     await ldcController.showChangeLdcPage(req, res)
   })
 
-  post('/referral/:referralId/update-ldc', async (req, res, next) => {
+  post('/referral/:referralId/update-learning-disabilities-and-challenges', async (req, res, next) => {
     await ldcController.showChangeLdcPage(req, res)
   })
 

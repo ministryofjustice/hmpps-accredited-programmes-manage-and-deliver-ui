@@ -58,6 +58,7 @@ export default class UpdateReferralStatusStartedOrCompletedView {
       'updateReferralStatus/updateReferralStatusStartedOrCompleted',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         statusUpdateRadioButtons: this.statusUpdateRadioButtonsOptions,
         backLinkArgs: this.backLinkArgs,
         backLinkUri: this.presenter.backLinkUri,

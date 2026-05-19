@@ -45,6 +45,7 @@ export default class UpdateReferralStatusFixedView {
       'updateReferralStatus/updateReferralStatusToOnProgrammeOrCompleted',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         addDetailsTextboxOptions: this.addDetailsTextboxOptions,
         backLinkArgs: this.backLinkArgs,
         cancelLinkUri: this.presenter.cancelUri,

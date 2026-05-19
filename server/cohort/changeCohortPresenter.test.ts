@@ -18,6 +18,17 @@ describe('ChangeCohortPresenter', () => {
     expect(presenter.changeCohortFormAction).toEqual(`/referral/${referralId}/change-cohort`)
   })
 
+  it('should return the correct page title', () => {
+    const referralId = randomUUID()
+    const mockDetails = {
+      cohort: 'SEXUAL_OFFENCE' as CohortEnum,
+    } as ReferralDetails
+
+    const presenter = new ChangeCohortPresenter(referralId, mockDetails, null)
+
+    expect(presenter.pageTitle).toEqual('Update cohort')
+  })
+
   it('should return the correct cohort in fields.updatedCohort.value', () => {
     const referralId = randomUUID()
     const mockDetails = {

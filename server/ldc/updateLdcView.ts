@@ -9,6 +9,7 @@ export default class UpdateLdcView {
       'referralDetails/ldc/updateLdc',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         currentLdcStatusText: this.currentLdcStatusText,
         radioArgs: this.radioArgs(),
         backLinkArgs: this.backLinkArgs(),

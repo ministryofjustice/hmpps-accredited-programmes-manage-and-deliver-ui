@@ -20,6 +20,10 @@ export default class UpdateReferralStatusPresenter {
     return PresenterUtils.errorSummary(this.validationError)
   }
 
+  get pageTitle(): string {
+    return 'Update status'
+  }
+
   get backLinkArgs() {
     let backUri = this.backLinkUri
     if (this.statusDetails.currentStatus.title === 'Scheduled') {

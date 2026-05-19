@@ -81,6 +81,7 @@ export default class UpdateReferralStatusView {
       'updateReferralStatus/updateReferralStatus',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         statusUpdateRadioButtons: this.statusUpdateRadioButtonsOptions,
         addDetailsTextboxOptions: this.addDetailsTextboxOptions,
         currentStatusTagOptions: this.currentStatusTagOptions,

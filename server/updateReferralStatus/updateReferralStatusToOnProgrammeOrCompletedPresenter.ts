@@ -16,6 +16,10 @@ export default class UpdateReferralStatusFixedPresenter {
     return new PresenterUtils(this.userInputData)
   }
 
+  get pageTitle(): string {
+    return 'Update status'
+  }
+
   get text() {
     return {
       title: `${this.details.personName}'s referral status will change to ${this.statusDetails.suggestedStatus.name}`,

@@ -32,12 +32,12 @@ beforeEach(() => {
 })
 
 describe('Update ldc status', () => {
-  describe(`GET /referral/:referralId/update-ldc`, () => {
+  describe(`GET /referral/:referralId/update-learning-disabilities-and-challenges`, () => {
     it('calls the API with the correct params', async () => {
       const referralId = randomUUID()
 
       return request(app)
-        .get(`/referral/${referralId}/update-ldc`)
+        .get(`/referral/${referralId}/update-learning-disabilities-and-challenges`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(referralDetails.crn)
@@ -47,12 +47,12 @@ describe('Update ldc status', () => {
     })
   })
 
-  describe(`POST /referral/:referralId/update-ldc`, () => {
+  describe(`POST /referral/:referralId/update-learning-disabilities-and-challenges`, () => {
     it('posts to the update ldc page and redirects successfully', async () => {
       const referralId = randomUUID()
 
       return request(app)
-        .post(`/referral/${referralId}/update-ldc`)
+        .post(`/referral/${referralId}/update-learning-disabilities-and-challenges`)
         .type('form')
         .send({
           hasLdc: true,

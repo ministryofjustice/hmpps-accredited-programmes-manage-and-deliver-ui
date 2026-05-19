@@ -50,7 +50,7 @@ export default class ReferralLayoutPresenter {
         },
         {
           text: 'Change LDC status',
-          href: `/referral/${this.referral.id}/update-ldc`,
+          href: `/referral/${this.referral.id}/update-learning-disabilities-and-challenges`,
         },
         {
           text: 'Change cohort',

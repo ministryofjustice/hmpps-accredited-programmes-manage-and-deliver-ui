@@ -7,6 +7,10 @@ export default class UpdateLdcPresenter {
     readonly backlinkUri: string | null,
   ) {}
 
+  get pageTitle(): string {
+    return 'Update learning disabilities and challenges'
+  }
+
   get fields() {
     return {
       hasLdc: {
