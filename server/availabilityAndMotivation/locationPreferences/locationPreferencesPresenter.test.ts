@@ -40,6 +40,17 @@ describe('locationsPreferencesPresenter.', () => {
     expect(presenter.backLinkUri).toEqual(`/referral/${referralId}/availability-and-motivation/location#location`)
   })
 
+  it('should return the correct page title', () => {
+    const preferredLocationDetails = deliveryLocationPreferencesFormDataFactory.build()
+    const presenter = new LocationPreferencesPresenter(
+      referralId,
+      referralDetails,
+      preferredLocationDetails,
+      updateData,
+    )
+    expect(presenter.pageTitle).toEqual('Locations the person can attend a programme')
+  })
+
   describe('hasPreviouslySelectedOtherPdus.', () => {
     it('should return true if there have been offices selected for the non-primary pdu previously', () => {
       const preferredLocationDetails = deliveryLocationPreferencesFormDataFactory
