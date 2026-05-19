@@ -23,6 +23,7 @@ export default class CreateGroupCyaView {
       'createGroup/createGroupCya',
       {
         backLinkArgs: this.backLinkArgs(),
+        pageTitle: this.presenter.pageTitle,
         createGroupSummary: this.getCreateGroupSummary,
         cancelLink: `/`,
         text: this.presenter.text,

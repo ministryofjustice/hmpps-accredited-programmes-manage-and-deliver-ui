@@ -36,12 +36,12 @@ describe('Edit Group Controller', () => {
     startDate: '2026-05-28',
   })
 
-  describe('GET /group/:groupId/edit-group-start-date', () => {
+  describe('GET /:groupId/edit-group-start-date', () => {
     it('loads the edit group date page and displays the current start date from group details', async () => {
       accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue(groupDetails)
 
       return request(app)
-        .get(`/group/${groupId}/edit-group-start-date`)
+        .get(`/${groupId}/edit-group-start-date`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Edit start date for the group')
@@ -61,7 +61,7 @@ describe('Edit Group Controller', () => {
       accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue(groupDetails)
 
       return request(app)
-        .get(`/group/${groupId}/edit-group-start-date`)
+        .get(`/${groupId}/edit-group-start-date`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('15/06/2026')
@@ -69,17 +69,17 @@ describe('Edit Group Controller', () => {
     })
   })
 
-  describe('POST /group/:groupId/edit-group-start-date', () => {
+  describe('POST /:groupId/edit-group-start-date', () => {
     it('redirects to reschedule page on successful submission', async () => {
       accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue(groupDetails)
 
       return request(app)
-        .post(`/group/${groupId}/edit-group-start-date`)
+        .post(`/${groupId}/edit-group-start-date`)
         .type('form')
         .send({ 'create-group-date': '15/06/2026' })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(`Redirecting to /group/${groupId}/edit-start-date-rescheduled`)
+          expect(res.text).toContain(`Redirecting to /${groupId}/edit-start-date-rescheduled`)
         })
     })
 
@@ -87,7 +87,7 @@ describe('Edit Group Controller', () => {
       accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue(groupDetails)
 
       return request(app)
-        .post(`/group/${groupId}/edit-group-start-date`)
+        .post(`/${groupId}/edit-group-start-date`)
         .type('form')
         .send({})
         .expect(400)
@@ -100,7 +100,7 @@ describe('Edit Group Controller', () => {
       accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue(groupDetails)
 
       return request(app)
-        .post(`/group/${groupId}/edit-group-start-date`)
+        .post(`/${groupId}/edit-group-start-date`)
         .type('form')
         .send({ 'create-group-date': '32/13/2026' })
         .expect(400)
@@ -111,7 +111,7 @@ describe('Edit Group Controller', () => {
     })
   })
 
-  describe('GET /group/:groupId/edit-start-date-rescheduled', () => {
+  describe('GET /:groupId/edit-start-date-rescheduled', () => {
     it('loads the reschedule confirmation page', async () => {
       const sessionData: Partial<SessionData> = {
         createGroupFormData: {
@@ -123,7 +123,7 @@ describe('Edit Group Controller', () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
       return request(app)
-        .get(`/group/${groupId}/edit-start-date-rescheduled`)
+        .get(`/${groupId}/edit-start-date-rescheduled`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Rescheduling sessions')
@@ -133,7 +133,7 @@ describe('Edit Group Controller', () => {
     })
   })
 
-  describe('POST /group/:groupId/edit-start-date-rescheduled', () => {
+  describe('POST /:groupId/edit-start-date-rescheduled', () => {
     const sessionData: Partial<SessionData> = {
       createGroupFormData: {
         groupCode: 'TEST123',
@@ -149,13 +149,13 @@ describe('Edit Group Controller', () => {
       })
 
       return request(app)
-        .post(`/group/${groupId}/edit-start-date-rescheduled`)
+        .post(`/${groupId}/edit-start-date-rescheduled`)
         .type('form')
         .send({ 'reschedule-other-sessions': 'true' })
         .expect(302)
         .expect(res => {
           expect(res.text).toContain('Redirecting to /group/')
-          expect(res.text).toContain('/group-details')
+          expect(res.text).toContain(`/group/${groupId}/group-details`)
           expect(res.text).toContain(encodeURIComponent('The days and times and schedule have been updated.'))
           expect(accreditedProgrammesManageAndDeliverService.updateGroup).toHaveBeenCalledWith('user1', groupId, {
             earliestStartDate: '15/06/2026',
@@ -171,13 +171,13 @@ describe('Edit Group Controller', () => {
       })
 
       return request(app)
-        .post(`/group/${groupId}/edit-start-date-rescheduled`)
+        .post(`/${groupId}/edit-start-date-rescheduled`)
         .type('form')
         .send({ 'reschedule-other-sessions': 'false' })
         .expect(302)
         .expect(res => {
           expect(res.text).toContain('Redirecting to /group/')
-          expect(res.text).toContain('/group-details')
+          expect(res.text).toContain(`/group/${groupId}/group-details`)
           expect(res.text).toContain(encodeURIComponent('The days and times have been updated.'))
           expect(accreditedProgrammesManageAndDeliverService.updateGroup).toHaveBeenCalledWith('user1', groupId, {
             earliestStartDate: '15/06/2026',
@@ -187,7 +187,7 @@ describe('Edit Group Controller', () => {
     })
   })
 
-  describe('GET /group/:groupId/edit-group-days-and-times', () => {
+  describe('GET /:groupId/edit-group-days-and-times', () => {
     it('loads the edit group days and times page with current schedule from group details', async () => {
       const groupDetailsWithDaysAndTimes: EditGroupDaysAndTimes = {
         id: groupId,
@@ -213,7 +213,7 @@ describe('Edit Group Controller', () => {
       )
 
       return request(app)
-        .get(`/group/${groupId}/edit-group-days-and-times`)
+        .get(`/${groupId}/edit-group-days-and-times`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Edit when will the group run')
@@ -225,7 +225,7 @@ describe('Edit Group Controller', () => {
     })
   })
 
-  describe('POST /group/:groupId/edit-group-days-and-times', () => {
+  describe('POST /:groupId/edit-group-days-and-times', () => {
     it('redirects to reschedule page on successful submission', async () => {
       const groupDetailsWithDaysAndTimes: EditGroupDaysAndTimes = {
         id: groupId,
@@ -245,7 +245,7 @@ describe('Edit Group Controller', () => {
       )
 
       return request(app)
-        .post(`/group/${groupId}/edit-group-days-and-times`)
+        .post(`/${groupId}/edit-group-days-and-times`)
         .type('form')
         .send({
           'days-of-week': 'TUESDAY',
@@ -255,7 +255,7 @@ describe('Edit Group Controller', () => {
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(`Redirecting to /group/${groupId}/edit-group-days-and-times-rescheduled`)
+          expect(res.text).toContain(`Redirecting to /${groupId}/edit-group-days-and-times-rescheduled`)
         })
     })
 
@@ -277,11 +277,11 @@ describe('Edit Group Controller', () => {
         groupDetailsWithDaysAndTimes,
       )
 
-      return request(app).post(`/group/${groupId}/edit-group-days-and-times`).type('form').send({}).expect(400)
+      return request(app).post(`/${groupId}/edit-group-days-and-times`).type('form').send({}).expect(400)
     })
   })
 
-  describe('GET /group/:groupId/edit-group-days-and-times-rescheduled', () => {
+  describe('GET /:groupId/edit-group-days-and-times-rescheduled', () => {
     it('loads the reschedule confirmation page for days and times', async () => {
       const sessionData: Partial<SessionData> = {
         createGroupFormData: {
@@ -307,7 +307,7 @@ describe('Edit Group Controller', () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
       return request(app)
-        .get(`/group/${groupId}/edit-group-days-and-times-rescheduled`)
+        .get(`/${groupId}/edit-group-days-and-times-rescheduled`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Rescheduling sessions')
@@ -317,7 +317,7 @@ describe('Edit Group Controller', () => {
     })
   })
 
-  describe('POST /group/:groupId/edit-group-days-and-times-rescheduled', () => {
+  describe('POST /:groupId/edit-group-days-and-times-rescheduled', () => {
     const sessionData: Partial<SessionData> = {
       createGroupFormData: {
         groupCode: 'TEST123',
@@ -347,13 +347,13 @@ describe('Edit Group Controller', () => {
       })
 
       return request(app)
-        .post(`/group/${groupId}/edit-group-days-and-times-rescheduled`)
+        .post(`/${groupId}/edit-group-days-and-times-rescheduled`)
         .type('form')
         .send({ 'reschedule-other-sessions': 'true' })
         .expect(302)
         .expect(res => {
           expect(res.text).toContain('Redirecting to /group/')
-          expect(res.text).toContain('/group-details')
+          expect(res.text).toContain(`/group/${groupId}/group-details?message=Group%20days%20and%20times%20updated`)
           expect(res.text).toContain(encodeURIComponent('Group days and times updated'))
           expect(accreditedProgrammesManageAndDeliverService.updateGroup).toHaveBeenCalledWith('user1', groupId, {
             createGroupSessionSlot: sessionData.createGroupFormData.createGroupSessionSlot,
@@ -369,13 +369,13 @@ describe('Edit Group Controller', () => {
       })
 
       return request(app)
-        .post(`/group/${groupId}/edit-group-days-and-times-rescheduled`)
+        .post(`/${groupId}/edit-group-days-and-times-rescheduled`)
         .type('form')
         .send({ 'reschedule-other-sessions': 'false' })
         .expect(302)
         .expect(res => {
           expect(res.text).toContain('Redirecting to /group/')
-          expect(res.text).toContain('/group-details')
+          expect(res.text).toContain(`/group/${groupId}/group-details?message=Group%20days%20and%20times%20updated`)
           expect(accreditedProgrammesManageAndDeliverService.updateGroup).toHaveBeenCalledWith('user1', groupId, {
             createGroupSessionSlot: sessionData.createGroupFormData.createGroupSessionSlot,
             automaticallyRescheduleOtherSessions: false,
@@ -386,15 +386,11 @@ describe('Edit Group Controller', () => {
     it('returns with errors if reschedule option is not selected', async () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-      return request(app)
-        .post(`/group/${groupId}/edit-group-days-and-times-rescheduled`)
-        .type('form')
-        .send({})
-        .expect(400)
+      return request(app).post(`/${groupId}/edit-group-days-and-times-rescheduled`).type('form').send({}).expect(400)
     })
   })
 
-  describe('GET /group/:groupId/edit-group-gender', () => {
+  describe('GET /:groupId/edit-group-gender', () => {
     it('loads the edit group gender page with the current gender', async () => {
       accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
         id: groupId,
@@ -403,7 +399,7 @@ describe('Edit Group Controller', () => {
       } as GroupDetailsResponse)
       accreditedProgrammesManageAndDeliverService.getGroupSexDetails.mockResolvedValue({
         captionText: 'Edit group EXISTING123',
-        pageTitle: 'Edit the gender of the group',
+        pageTitle: 'Edit group gender',
         submitButtonText: 'Submit',
         radios: [
           { text: 'Male', value: 'MALE', selected: true },
@@ -413,11 +409,11 @@ describe('Edit Group Controller', () => {
       } as EditGroupSex)
 
       return request(app)
-        .get(`/group/${groupId}/edit-group-gender`)
+        .get(`/${groupId}/edit-group-gender`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Edit group EXISTING123')
-          expect(res.text).toContain('Edit the gender of the group')
+          expect(res.text).toContain('Edit group gender')
           expect(res.text).toContain('Male')
         })
     })
@@ -440,7 +436,7 @@ describe('Edit Group Controller', () => {
       } as EditGroupSex)
 
       return request(app)
-        .get(`/group/${groupId}/edit-group-gender`)
+        .get(`/${groupId}/edit-group-gender`)
         .expect(200)
         .expect(res => {
           expect(res.text).toMatch(/<input[^>]*value="MALE"[^>]*checked|<input[^>]*checked[^>]*value="MALE"/)
@@ -467,17 +463,17 @@ describe('Edit Group Controller', () => {
       const tempApp = TestUtils.createTestAppWithSession({}, { accreditedProgrammesManageAndDeliverService })
 
       return request(tempApp)
-        .get(`/group/${groupId}/edit-group-gender`)
+        .get(`/${groupId}/edit-group-gender`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Edit group EXISTING123')
-          expect(res.text).toContain('Edit the gender of the group')
+          expect(res.text).toContain('Edit group gender')
           expect(res.text).toContain('Male')
         })
     })
   })
 
-  describe('POST /group/:groupId/edit-group-gender', () => {
+  describe('POST /:groupId/edit-group-gender', () => {
     it('updates the group gender and redirects to group details', async () => {
       accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
         id: groupId,
@@ -499,7 +495,7 @@ describe('Edit Group Controller', () => {
         successMessage: 'The gender has been updated.',
       })
       return request(app)
-        .post(`/group/${groupId}/edit-group-gender`)
+        .post(`/${groupId}/edit-group-gender`)
         .type('form')
         .send({ 'create-group-sex': 'FEMALE' })
         .expect(302)
@@ -530,7 +526,7 @@ describe('Edit Group Controller', () => {
       } as EditGroupSex)
 
       return request(app)
-        .post(`/group/${groupId}/edit-group-gender`)
+        .post(`/${groupId}/edit-group-gender`)
         .type('form')
         .send({})
         .expect(400)
@@ -541,7 +537,7 @@ describe('Edit Group Controller', () => {
     })
   })
 
-  describe('GET /group/:groupId/edit-a-group/edit-group-cohort', () => {
+  describe('GET /:groupId/edit-group-cohort', () => {
     it('loads the edit group cohort page with the current cohort', async () => {
       accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
         id: groupId,
@@ -565,7 +561,7 @@ describe('Edit Group Controller', () => {
       } as EditGroupCohort)
 
       return request(app)
-        .get(`/group/${groupId}/edit-a-group/edit-group-cohort`)
+        .get(`/${groupId}/edit-group-cohort`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Edit group EXISTING123')
@@ -597,7 +593,7 @@ describe('Edit Group Controller', () => {
       } as EditGroupCohort)
 
       return request(app)
-        .get(`/group/${groupId}/edit-a-group/edit-group-cohort`)
+        .get(`/${groupId}/edit-group-cohort`)
         .expect(200)
         .expect(res => {
           expect(res.text).toMatch(/<input[^>]*value="GENERAL"[^>]*checked|<input[^>]*checked[^>]*value="GENERAL"/)
@@ -629,7 +625,7 @@ describe('Edit Group Controller', () => {
       const tempApp = TestUtils.createTestAppWithSession({}, { accreditedProgrammesManageAndDeliverService })
 
       return request(tempApp)
-        .get(`/group/${groupId}/edit-a-group/edit-group-cohort`)
+        .get(`/${groupId}/edit-group-cohort`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Edit group EXISTING123')
@@ -639,7 +635,7 @@ describe('Edit Group Controller', () => {
     })
   })
 
-  describe('POST /group/:groupId/edit-a-group/edit-group-cohort', () => {
+  describe('POST /:groupId/edit-group-cohort', () => {
     it('updates the group cohort and redirects to group details', async () => {
       accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
         id: groupId,
@@ -666,7 +662,7 @@ describe('Edit Group Controller', () => {
       })
 
       return request(app)
-        .post(`/group/${groupId}/edit-a-group/edit-group-cohort`)
+        .post(`/${groupId}/edit-group-cohort`)
         .type('form')
         .send({ 'create-group-cohort': 'GENERAL_LDC' })
         .expect(302)
@@ -702,7 +698,7 @@ describe('Edit Group Controller', () => {
       } as EditGroupCohort)
 
       return request(app)
-        .post(`/group/${groupId}/edit-a-group/edit-group-cohort`)
+        .post(`/${groupId}/edit-group-cohort`)
         .type('form')
         .send({})
         .expect(400)
@@ -713,7 +709,7 @@ describe('Edit Group Controller', () => {
     })
   })
 
-  describe('GET /group/:groupId/edit-a-group/edit-group-code', () => {
+  describe('GET /:groupId/edit-group-code', () => {
     it('loads the edit group code page with the current code', async () => {
       accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue({
         id: groupId,
@@ -721,7 +717,7 @@ describe('Edit Group Controller', () => {
       } as GroupDetailsResponse)
 
       return request(app)
-        .get(`/group/${groupId}/edit-a-group/edit-group-code`)
+        .get(`/${groupId}/edit-group-code`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Edit group code')
@@ -738,7 +734,7 @@ describe('Edit Group Controller', () => {
       const tempApp = TestUtils.createTestAppWithSession({}, { accreditedProgrammesManageAndDeliverService })
 
       return request(tempApp)
-        .get(`/group/${groupId}/edit-a-group/edit-group-code`)
+        .get(`/${groupId}/edit-group-code`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Edit group code')
@@ -747,7 +743,7 @@ describe('Edit Group Controller', () => {
     })
   })
 
-  describe('POST /group/:groupId/edit-a-group/edit-group-code', () => {
+  describe('POST /:groupId/edit-group-code', () => {
     it('updates the group code and redirects to group details', async () => {
       accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue({
         id: groupId,
@@ -758,7 +754,7 @@ describe('Edit Group Controller', () => {
         successMessage: 'The group code has been updated.',
       })
       return request(app)
-        .post(`/group/${groupId}/edit-a-group/edit-group-code`)
+        .post(`/${groupId}/edit-group-code`)
         .type('form')
         .send({ 'create-group-code': 'UPDATED123' })
         .expect(302)
@@ -780,7 +776,7 @@ describe('Edit Group Controller', () => {
         successMessage: 'The group code has been updated',
       })
       return request(app)
-        .post(`/group/${groupId}/edit-a-group/edit-group-code`)
+        .post(`/${groupId}/edit-group-code`)
         .type('form')
         .send({ 'create-group-code': 'DUPLICATE123' })
         .expect(400)
@@ -793,7 +789,7 @@ describe('Edit Group Controller', () => {
     })
   })
 
-  describe('GET /group/:groupId/edit-group-probation-delivery-unit', () => {
+  describe('GET /:groupId/edit-group-probation-delivery-unit', () => {
     it('loads the edit PDU page with current PDU from group details', async () => {
       const groupDetailsWithPdu = GroupDetailsFactory.build({
         id: groupId,
@@ -811,7 +807,7 @@ describe('Edit Group Controller', () => {
       accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion.mockResolvedValue(pduLocations)
 
       return request(app)
-        .get(`/group/${groupId}/edit-group-probation-delivery-unit`)
+        .get(`/${groupId}/edit-group-probation-delivery-unit`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Edit the probation delivery unit (PDU) where the group will take place')
@@ -834,7 +830,7 @@ describe('Edit Group Controller', () => {
       accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion.mockResolvedValue(pduLocations)
 
       return request(app)
-        .get(`/group/${groupId}/edit-group-probation-delivery-unit`)
+        .get(`/${groupId}/edit-group-probation-delivery-unit`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Edit the probation delivery unit (PDU) where the group will take place')
@@ -862,7 +858,7 @@ describe('Edit Group Controller', () => {
       accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion.mockResolvedValue(pduLocations)
 
       return request(app)
-        .get(`/group/${groupId}/edit-group-probation-delivery-unit`)
+        .get(`/${groupId}/edit-group-probation-delivery-unit`)
         .expect(200)
         .expect(() => {
           expect(accreditedProgrammesManageAndDeliverService.getGroupDetailsById).toHaveBeenCalledWith('user1', groupId)
@@ -870,7 +866,7 @@ describe('Edit Group Controller', () => {
     })
   })
 
-  describe('POST /group/:groupId/edit-group-probation-delivery-unit', () => {
+  describe('POST /:groupId/edit-group-probation-delivery-unit', () => {
     it('updates PDU and redirects to edit location page on successful submission', async () => {
       const sessionData: Partial<SessionData> = {
         createGroupFormData: {
@@ -885,17 +881,17 @@ describe('Edit Group Controller', () => {
       accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion.mockResolvedValue(pduLocations)
 
       return request(app)
-        .post(`/group/${groupId}/edit-group-probation-delivery-unit`)
+        .post(`/${groupId}/edit-group-probation-delivery-unit`)
         .type('form')
         .send({ 'create-group-pdu': JSON.stringify({ code: 'PDU-NW', name: 'North West' }) })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(`Redirecting to /group/${groupId}/edit-group-delivery-location`)
+          expect(res.text).toContain(`Redirecting to /${groupId}/edit-group-delivery-location`)
         })
     })
   })
 
-  describe('GET /group/:groupId/edit-group-delivery-location', () => {
+  describe('GET /:groupId/edit-group-delivery-location', () => {
     it('loads the edit location page with current location from group details', async () => {
       const sessionData: Partial<SessionData> = {
         createGroupFormData: {
@@ -916,7 +912,7 @@ describe('Edit Group Controller', () => {
       accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu.mockResolvedValue(officeLocations)
 
       return request(app)
-        .get(`/group/${groupId}/edit-group-delivery-location`)
+        .get(`/${groupId}/edit-group-delivery-location`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Edit where the group will take place')
@@ -946,7 +942,7 @@ describe('Edit Group Controller', () => {
       accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu.mockResolvedValue(officeLocations)
 
       return request(app)
-        .get(`/group/${groupId}/edit-group-delivery-location`)
+        .get(`/${groupId}/edit-group-delivery-location`)
         .expect(200)
         .expect(() => {
           expect(accreditedProgrammesManageAndDeliverService.getGroupDetailsById).toHaveBeenCalledWith('user1', groupId)
@@ -980,7 +976,7 @@ describe('Edit Group Controller', () => {
       accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu.mockResolvedValue(officeLocations)
 
       return request(app)
-        .get(`/group/${groupId}/edit-group-delivery-location`)
+        .get(`/${groupId}/edit-group-delivery-location`)
         .expect(200)
         .expect(() => {
           expect(accreditedProgrammesManageAndDeliverService.getGroupDetailsById).toHaveBeenCalledWith('user1', groupId)
@@ -988,7 +984,7 @@ describe('Edit Group Controller', () => {
     })
   })
 
-  describe('POST /group/:groupId/edit-group-delivery-location', () => {
+  describe('POST /:groupId/edit-group-delivery-location', () => {
     it('updates location and redirects to group details with success message', async () => {
       const sessionData: Partial<SessionData> = {
         createGroupFormData: {
@@ -1012,7 +1008,7 @@ describe('Edit Group Controller', () => {
       })
 
       return request(app)
-        .post(`/group/${groupId}/edit-group-delivery-location`)
+        .post(`/${groupId}/edit-group-delivery-location`)
         .type('form')
         .send({ 'create-group-location': JSON.stringify({ code: 'LOC-2', name: 'HMP Manchester' }) })
         .expect(302)
@@ -1030,7 +1026,7 @@ describe('Edit Group Controller', () => {
     })
   })
 
-  describe('GET /group/:groupId/edit-group-facilitators', () => {
+  describe('GET /:groupId/edit-group-facilitators', () => {
     it('loads the edit facilitators page with existing assigned staff', async () => {
       accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue(
         GroupDetailsFactory.build({
@@ -1086,10 +1082,10 @@ describe('Edit Group Controller', () => {
       ])
 
       return request(app)
-        .get(`/group/${groupId}/edit-group-facilitators`)
+        .get(`/${groupId}/edit-group-facilitators`)
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain('Edit who is responsible for the group')
+          expect(res.text).toContain('Edit people responsible for the group')
           expect(res.text).toContain('John Smith')
           expect(res.text).toContain('Jane Doe')
           expect(res.text).toContain('Alex Brown')
@@ -1099,7 +1095,7 @@ describe('Edit Group Controller', () => {
     })
   })
 
-  describe('POST /group/:groupId/edit-group-facilitators', () => {
+  describe('POST /:groupId/edit-group-facilitators', () => {
     it('updates group facilitators and redirects to group details on success', async () => {
       accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue(
         GroupDetailsFactory.build({
@@ -1145,7 +1141,7 @@ describe('Edit Group Controller', () => {
       })
 
       return request(app)
-        .post(`/group/${groupId}/edit-group-facilitators`)
+        .post(`/${groupId}/edit-group-facilitators`)
         .type('form')
         .send({
           'create-group-treatment-manager': JSON.stringify({
@@ -1223,7 +1219,7 @@ describe('Edit Group Controller', () => {
       ])
 
       return request(app)
-        .post(`/group/${groupId}/edit-group-facilitators`)
+        .post(`/${groupId}/edit-group-facilitators`)
         .type('form')
         .send({})
         .expect(400)

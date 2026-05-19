@@ -24,9 +24,7 @@ export default class RescheduleSessionsPresenter {
   }
 
   get backLinkUri() {
-    return this.isEditDate
-      ? `/group/${this.groupId}/edit-group-start-date`
-      : `/group/${this.groupId}/edit-group-days-and-times`
+    return this.isEditDate ? `/${this.groupId}/edit-group-start-date` : `/${this.groupId}/edit-group-days-and-times`
   }
 
   get errorSummary() {

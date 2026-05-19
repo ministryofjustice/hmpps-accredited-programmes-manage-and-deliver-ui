@@ -37,7 +37,7 @@ describe('CreateOrEditGroupPduPresenter', () => {
         false,
       )
 
-      expect(presenter.backLinkUri).toEqual('/group/create-a-group/group-sex')
+      expect(presenter.backLinkUri).toEqual('/group-gender')
     })
   })
 

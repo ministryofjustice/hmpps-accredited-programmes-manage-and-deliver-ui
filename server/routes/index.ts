@@ -227,76 +227,76 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await updateReferralController.updateStatusToOnProgrammeOrCompleted(req, res)
   })
 
-  getOrPost('/group/create-a-group/create-group', async (req, res) => {
+  getOrPost('/create-group', async (req, res) => {
     await createGroupController.showCreateGroupStart(req, res)
   })
 
-  getOrPost('/group/create-a-group/create-group-code', async (req, res) => {
+  getOrPost('/create-group-code', async (req, res) => {
     await createGroupController.showCreateGroupCode(req, res)
   })
-  getOrPost('/group/:groupId/edit-a-group/edit-group-code', async (req, res) => {
+  getOrPost('/:groupId/edit-group-code', async (req, res) => {
     await editGroupController.editGroupCode(req, res)
   })
-  getOrPost('/group/create-a-group/group-cohort', async (req, res) => {
+  getOrPost('/group-cohort', async (req, res) => {
     await createGroupController.showCreateOrEditGroupCohort(req, res)
   })
-  getOrPost('/group/:groupId/edit-a-group/edit-group-cohort', async (req, res) => {
+  getOrPost('/:groupId/edit-group-cohort', async (req, res) => {
     await editGroupController.editGroupCohort(req, res)
   })
-  getOrPost('/group/:groupId/edit-group-gender', async (req, res) => {
+  getOrPost('/:groupId/edit-group-gender', async (req, res) => {
     await editGroupController.editGroupSex(req, res)
   })
-  getOrPost('/group/create-a-group/group-start-date', async (req, res) => {
+  getOrPost('/group-start-date', async (req, res) => {
     await createGroupController.showCreateGroupDate(req, res)
   })
-  getOrPost('/group/:groupId/edit-group-start-date', async (req, res) => {
+  getOrPost('/:groupId/edit-group-start-date', async (req, res) => {
     await editGroupController.editGroupDate(req, res)
   })
 
-  getOrPost('/group/:groupId/edit-start-date-rescheduled', async (req, res) => {
+  getOrPost('/:groupId/edit-start-date-rescheduled', async (req, res) => {
     await editGroupController.editGroupRescheduleDate(req, res)
   })
 
-  getOrPost('/group/create-a-group/group-days-and-times', async (req, res) => {
+  getOrPost('/group-days-and-times', async (req, res) => {
     await createGroupController.showCreateGroupWhen(req, res)
   })
 
-  getOrPost('/group/:groupId/edit-group-days-and-times', async (req, res) => {
+  getOrPost('/:groupId/edit-group-days-and-times', async (req, res) => {
     await editGroupController.editGroupDaysAndTimes(req, res)
   })
 
-  getOrPost('/group/:groupId/edit-group-days-and-times-rescheduled', async (req, res) => {
+  getOrPost('/:groupId/edit-group-days-and-times-rescheduled', async (req, res) => {
     await editGroupController.editGroupRescheduleDayTimes(req, res)
   })
 
-  getOrPost('/group/create-a-group/group-sex', async (req, res) => {
-    await createGroupController.showCreateOrEditGroupSex(req, res)
+  getOrPost('/group-gender', async (req, res) => {
+    await createGroupController.showCreateOrEditGroupGender(req, res)
   })
 
-  getOrPost('/group/create-a-group/group-probation-delivery-unit', async (req, res) => {
+  getOrPost('/group-probation-delivery-unit', async (req, res) => {
     await createGroupController.showCreateGroupPdu(req, res)
   })
 
-  getOrPost('/group/:groupId/edit-group-probation-delivery-unit', async (req, res) => {
+  getOrPost('/:groupId/edit-group-probation-delivery-unit', async (req, res) => {
     await editGroupController.editGroupPdu(req, res)
   })
 
-  getOrPost('/group/create-a-group/group-delivery-location', async (req, res) => {
+  getOrPost('/group-delivery-location', async (req, res) => {
     await createGroupController.showCreateGroupLocation(req, res)
   })
 
-  getOrPost('/group/:groupId/edit-group-delivery-location', async (req, res) => {
+  getOrPost('/:groupId/edit-group-delivery-location', async (req, res) => {
     await editGroupController.editGroupLocation(req, res)
   })
 
-  getOrPost('/group/create-a-group/group-facilitators', async (req, res) => {
+  getOrPost('/group-facilitators', async (req, res) => {
     await createGroupController.showCreateGroupTreatmentManager(req, res)
   })
-  getOrPost('/group/:groupId/edit-group-facilitators', async (req, res) => {
+  getOrPost('/:groupId/edit-group-facilitators', async (req, res) => {
     await editGroupController.editGroupTreatmentManager(req, res)
   })
 
-  getOrPost('/group/create-a-group/group-review-details', async (req, res) => {
+  getOrPost('/group-review-details', async (req, res) => {
     await createGroupController.showCreateGroupCya(req, res)
   })
 

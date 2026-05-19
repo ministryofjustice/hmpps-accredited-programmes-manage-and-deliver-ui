@@ -13,7 +13,11 @@ export default class CreateGroupCyaPresenter {
   }
 
   get backLinkUri() {
-    return `/group/create-a-group/group-facilitators`
+    return `/group-facilitators`
+  }
+
+  get pageTitle(): string {
+    return 'Review your group details'
   }
 
   generateSelectedUsers(): {
@@ -48,50 +52,50 @@ export default class CreateGroupCyaPresenter {
       {
         key: 'Group Code',
         lines: [`${this.createGroupFormData.groupCode}`],
-        changeLink: '/group/create-a-group/create-group-code',
+        changeLink: '/create-group-code',
       },
       {
         key: 'Date',
         lines: [`${this.createGroupFormData.earliestStartDate}`],
-        changeLink: '/group/create-a-group/group-start-date',
+        changeLink: '/group-start-date',
       },
 
       {
         key: 'Day and time',
         lines: GroupDaysTimesUtils.formatStartDaysAndTimes(this.createGroupFormData.createGroupSessionSlot),
-        changeLink: '/group/create-a-group/group-days-and-times',
+        changeLink: '/group-days-and-times',
       },
 
       {
         key: 'Cohort',
         lines: [`${this.createGroupUtils.getCohortTextFromEnum(this.createGroupFormData.cohort)}`],
-        changeLink: '/group/create-a-group/group-cohort',
+        changeLink: '/group-cohort',
       },
       {
         key: 'Sex',
         lines: [`${this.createGroupUtils.getSexTextFromEnum(this.createGroupFormData.sex)}`],
-        changeLink: '/group/create-a-group/group-sex',
+        changeLink: '/group-gender',
       },
       {
         key: 'PDU',
         lines: [`${this.createGroupFormData.pduName}`],
-        changeLink: '/group/create-a-group/group-probation-delivery-unit',
+        changeLink: '/group-probation-delivery-unit',
       },
       {
         key: 'Delivery Location',
         lines: [`${this.createGroupFormData.deliveryLocationName}`],
-        changeLink: '/group/create-a-group/group-delivery-location',
+        changeLink: '/group-delivery-location',
       },
       {
         key: 'Treatment Manager:',
         lines: [members.treatmentManager?.facilitator ?? 'Not assigned'],
-        changeLink: '/group/create-a-group/group-facilitators',
+        changeLink: '/group-facilitators',
       },
       {
         key: 'Facilitators:',
         lines:
           members.facilitators.length > 0 ? members.facilitators.map(member => member.facilitator) : ['None assigned'],
-        changeLink: '/group/create-a-group/group-facilitators',
+        changeLink: '/group-facilitators',
       },
     ]
     if (members.coverFacilitators.length > 0) {
@@ -101,7 +105,7 @@ export default class CreateGroupCyaPresenter {
           members.coverFacilitators.length > 0
             ? members.coverFacilitators.map(member => member.facilitator)
             : ['None assigned'],
-        changeLink: '/group/create-a-group/group-facilitators',
+        changeLink: '/group-facilitators',
       })
     }
     return summaryList

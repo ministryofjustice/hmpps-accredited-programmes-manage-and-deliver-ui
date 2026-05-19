@@ -14,8 +14,8 @@ import CreateOrEditGroupPduPresenter from './region/createOrEditGroupPduPresente
 import CreateOrEditGroupPduView from './region/createOrEditGroupPduView'
 import CreateOrEditGroupWhenPresenter from './when/createOrEditGroupWhenPresenter'
 import CreateOrEditGroupWhenView from './when/createOrEditGroupWhenView'
-import CreateOrEditGroupSexPresenter from './sex/createOrEditGroupSexPresenter'
-import CreateOrEditGroupSexView from './sex/createOrEditGroupSexView'
+import CreateOrEditGroupGenderPresenter from './gender/createOrEditGroupGenderPresenter'
+import CreateOrEditGroupGenderView from './gender/createOrEditGroupGenderView'
 import CreateOrEditGroupCohortPresenter from './cohort/createOrEditGroupCohortPresenter'
 import CreateOrEditGroupCohortView from './cohort/createOrEditGroupCohortView'
 import CreateOrEditGroupCodePresenter from './code/createOrEditGroupCodePresenter'
@@ -61,11 +61,11 @@ export default class EditGroupController extends BaseController {
           earliestStartDate: data.paramsForUpdate.earliestStartDate,
           previousDate: groupDetails?.startDate,
         }
-        return res.redirect(`/group/${groupId}/edit-start-date-rescheduled`)
+        return res.redirect(`/${groupId}/edit-start-date-rescheduled`)
       }
     }
 
-    const presenter = new CreateOrEditGroupDatePresenter(formError, groupData, groupId, true)
+    const presenter = new CreateOrEditGroupDatePresenter(formError, groupData, groupId)
     const view = new CreateOrEditGroupDateView(presenter)
     return this.renderPage(res, view)
   }
@@ -139,7 +139,7 @@ export default class EditGroupController extends BaseController {
           ...req.session.createGroupFormData,
           previousSessions: groupDetails.programmeGroupSessionSlots,
         }
-        return res.redirect(`/group/${groupId}/edit-group-days-and-times-rescheduled`)
+        return res.redirect(`/${groupId}/edit-group-days-and-times-rescheduled`)
       }
     }
 
@@ -148,7 +148,6 @@ export default class EditGroupController extends BaseController {
       createGroupFormData.createGroupSessionSlot,
       formError,
       userInputData,
-      true,
       groupId,
     )
     const view = new CreateOrEditGroupWhenView(presenter)
@@ -217,14 +216,14 @@ export default class EditGroupController extends BaseController {
       }
     }
 
-    const presenter = new CreateOrEditGroupSexPresenter(
+    const presenter = new CreateOrEditGroupGenderPresenter(
       formError,
       createGroupFormData,
       userInputData,
       groupId,
       groupDetails?.code,
     )
-    const view = new CreateOrEditGroupSexView(presenter)
+    const view = new CreateOrEditGroupGenderView(presenter)
     return this.renderPage(res, view)
   }
 
@@ -356,7 +355,7 @@ export default class EditGroupController extends BaseController {
           pduName: data.paramsForUpdate.pduName,
           pduCode: data.paramsForUpdate.pduCode,
         }
-        return res.redirect(`/group/${groupId}/edit-group-delivery-location`)
+        return res.redirect(`/${groupId}/edit-group-delivery-location`)
       }
     }
     const pduLocations = await this.accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion(username)

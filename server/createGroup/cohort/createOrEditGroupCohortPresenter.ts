@@ -16,7 +16,7 @@ export default class CreateOrEditGroupCohortPresenter {
   }
 
   get backLinkUri() {
-    return this.isEditJourney ? `/group/${this.groupId}/group-details` : '/group/create-a-group/group-days-and-times'
+    return this.isEditJourney ? `/group/${this.groupId}/group-details` : '/group-days-and-times'
   }
 
   get captionText() {
@@ -24,7 +24,11 @@ export default class CreateOrEditGroupCohortPresenter {
   }
 
   get pageTitle() {
-    return this.isEditJourney ? `Edit the group cohort` : `Create group cohort`
+    return this.isEditJourney ? `Edit group cohort` : `Select group cohort`
+  }
+
+  get pageHeading() {
+    return this.isEditJourney ? `Edit the group cohort` : `Select the group cohort`
   }
 
   get submitButtonText() {

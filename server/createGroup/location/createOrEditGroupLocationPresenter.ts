@@ -10,27 +10,29 @@ export default class CreateOrEditGroupLocationPresenter {
     readonly createGroupFormData: Partial<CreateGroupRequest> | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
     private readonly groupId: string | null = null,
-    readonly isEdit = false,
+    readonly isEditJourney = false,
     private readonly backLink: string | null = null,
   ) {}
 
   get backLinkUri() {
-    return this.isEdit ? `${this.backLink}` : `/group/create-a-group/group-probation-delivery-unit`
+    return this.isEditJourney ? `${this.backLink}` : `/group-probation-delivery-unit`
+  }
+
+  get pageTitle() {
+    return this.isEditJourney ? 'Edit group delivery location' : 'Group delivery location'
   }
 
   get changeLinkUri() {
-    return this.isEdit
-      ? `/group/${this.groupId}/edit-group-probation-delivery-unit`
-      : `/group/create-a-group/group-probation-delivery-unit`
+    return this.isEditJourney ? `/${this.groupId}/edit-group-probation-delivery-unit` : `/group-probation-delivery-unit`
   }
 
   get text() {
     return {
-      headingHintText: this.isEdit
+      headingHintText: this.isEditJourney
         ? `Edit group ${this.createGroupFormData?.groupCode}`
         : `Create group ${this.createGroupFormData?.groupCode}`,
-      subHeadingText: this.isEdit ? `Edit where the group will take place` : 'Where will the group take place?',
-      buttonText: this.isEdit ? 'Submit' : 'Continue',
+      subHeadingText: this.isEditJourney ? `Edit where the group will take place` : 'Where will the group take place?',
+      buttonText: this.isEditJourney ? 'Submit' : 'Continue',
     }
   }
 

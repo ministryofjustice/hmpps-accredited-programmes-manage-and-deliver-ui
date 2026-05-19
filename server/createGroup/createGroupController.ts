@@ -13,8 +13,8 @@ import CreateOrEditGroupCohortView from './cohort/createOrEditGroupCohortView'
 import CreateOrEditGroupForm from './createOrEditGroupForm'
 import CreateOrEditGroupDatePresenter from './date/createOrEditGroupDatePresenter'
 import CreateOrEditGroupDateView from './date/createOrEditGroupDateView'
-import CreateOrEditGroupSexPresenter from './sex/createOrEditGroupSexPresenter'
-import CreateOrEditGroupSexView from './sex/createOrEditGroupSexView'
+import CreateOrEditGroupGenderPresenter from './gender/createOrEditGroupGenderPresenter'
+import CreateOrEditGroupGenderView from './gender/createOrEditGroupGenderView'
 import CreateOrEditGroupLocationPresenter from './location/createOrEditGroupLocationPresenter'
 import CreateOrEditGroupLocationView from './location/createOrEditGroupLocationView'
 import CreateOrEditGroupPduPresenter from './region/createOrEditGroupPduPresenter'
@@ -37,7 +37,7 @@ export default class CreateGroupController extends BaseController {
 
   async showCreateGroupStart(req: Request, res: Response): Promise<void> {
     if (req.method === 'POST') {
-      return res.redirect('/group/create-a-group/create-group-code')
+      return res.redirect('/create-group-code')
     }
 
     // Clear session data at start of journey
@@ -79,7 +79,7 @@ export default class CreateGroupController extends BaseController {
           ...createGroupFormData,
           groupCode: data.paramsForUpdate.groupCode,
         }
-        return res.redirect(`/group/create-a-group/group-start-date`)
+        return res.redirect(`/group-start-date`)
       }
     }
 
@@ -111,7 +111,7 @@ export default class CreateGroupController extends BaseController {
           ...createGroupFormData,
           earliestStartDate: data.paramsForUpdate.earliestStartDate,
         }
-        return res.redirect(`/group/create-a-group/group-days-and-times`)
+        return res.redirect(`/group-days-and-times`)
       }
     }
 
@@ -143,7 +143,7 @@ export default class CreateGroupController extends BaseController {
         formError = data.error
         userInputData = req.body
       } else {
-        return res.redirect(`/group/create-a-group/group-cohort`)
+        return res.redirect(`/group-cohort`)
       }
     }
 
@@ -172,7 +172,7 @@ export default class CreateGroupController extends BaseController {
           ...createGroupFormData,
           cohort: data.paramsForUpdate.cohort,
         }
-        return res.redirect(`/group/create-a-group/group-sex`)
+        return res.redirect(`/group-gender`)
       }
     }
 
@@ -181,7 +181,7 @@ export default class CreateGroupController extends BaseController {
     return this.renderPage(res, view)
   }
 
-  async showCreateOrEditGroupSex(req: Request, res: Response): Promise<void> {
+  async showCreateOrEditGroupGender(req: Request, res: Response): Promise<void> {
     const { createGroupFormData } = req.session
     let formError: FormValidationError | null = null
     if (req.method === 'POST') {
@@ -194,11 +194,11 @@ export default class CreateGroupController extends BaseController {
           ...createGroupFormData,
           sex: data.paramsForUpdate.sex,
         }
-        return res.redirect(`/group/create-a-group/group-probation-delivery-unit`)
+        return res.redirect(`/group-probation-delivery-unit`)
       }
     }
-    const presenter = new CreateOrEditGroupSexPresenter(formError, createGroupFormData)
-    const view = new CreateOrEditGroupSexView(presenter)
+    const presenter = new CreateOrEditGroupGenderPresenter(formError, createGroupFormData)
+    const view = new CreateOrEditGroupGenderView(presenter)
     return this.renderPage(res, view)
   }
 
@@ -220,7 +220,7 @@ export default class CreateGroupController extends BaseController {
           pduName: data.paramsForUpdate.pduName,
           pduCode: data.paramsForUpdate.pduCode,
         }
-        return res.redirect(`/group/create-a-group/group-delivery-location`)
+        return res.redirect(`/group-delivery-location`)
       }
     }
 
@@ -249,7 +249,7 @@ export default class CreateGroupController extends BaseController {
           deliveryLocationName: data.paramsForUpdate.deliveryLocationName,
           deliveryLocationCode: data.paramsForUpdate.deliveryLocationCode,
         }
-        return res.redirect(`/group/create-a-group/group-facilitators`)
+        return res.redirect(`/group-facilitators`)
       }
     }
 
@@ -285,7 +285,7 @@ export default class CreateGroupController extends BaseController {
           ...createGroupFormData,
           teamMembers: data.paramsForUpdate.teamMembers,
         }
-        return res.redirect(`/group/create-a-group/group-review-details`)
+        return res.redirect(`/group-review-details`)
       }
     }
 

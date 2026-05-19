@@ -22,10 +22,10 @@ describe('CreateOrEditGroupLocationPresenter', () => {
         null,
         groupId,
         true,
-        '/group/group-123/edit-group-probation-delivery-unit',
+        '/group-123/edit-group-probation-delivery-unit',
       )
 
-      expect(presenter.backLinkUri).toEqual('/group/group-123/edit-group-probation-delivery-unit')
+      expect(presenter.backLinkUri).toEqual('/group-123/edit-group-probation-delivery-unit')
     })
 
     it('returns create group PDU link when isEdit is false', () => {
@@ -38,7 +38,7 @@ describe('CreateOrEditGroupLocationPresenter', () => {
         false,
       )
 
-      expect(presenter.backLinkUri).toEqual('/group/create-a-group/group-probation-delivery-unit')
+      expect(presenter.backLinkUri).toEqual('/group-probation-delivery-unit')
     })
   })
 
@@ -53,7 +53,7 @@ describe('CreateOrEditGroupLocationPresenter', () => {
         true,
       )
 
-      expect(presenter.changeLinkUri).toEqual('/group/group-123/edit-group-probation-delivery-unit')
+      expect(presenter.changeLinkUri).toEqual('/group-123/edit-group-probation-delivery-unit')
     })
 
     it('returns create group PDU link when isEdit is false', () => {
@@ -66,7 +66,7 @@ describe('CreateOrEditGroupLocationPresenter', () => {
         false,
       )
 
-      expect(presenter.changeLinkUri).toEqual('/group/create-a-group/group-probation-delivery-unit')
+      expect(presenter.changeLinkUri).toEqual('/group-probation-delivery-unit')
     })
   })
 
