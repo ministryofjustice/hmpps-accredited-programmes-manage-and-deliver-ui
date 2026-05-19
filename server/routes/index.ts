@@ -12,9 +12,11 @@ import GroupOverviewController from '../groupOverview/groupOverviewController'
 import RemoveFromGroupController from '../groupOverview/removeFromGroup/removeFromGroupController'
 import LdcController from '../ldc/ldcController'
 import LocationPreferencesController from '../availabilityAndMotivation/locationPreferences/locationPreferencesController'
+import authorisationMiddleware from '../middleware/authorisationMiddleware'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import PniController from '../pni/pniController'
 import ReferralDetailsController from '../referralDetails/referralDetailsController'
+import ReportingController from '../reporting/reportingController'
 import RisksAndNeedsController from '../risksAndNeeds/risksAndNeedsController'
 import type { Services } from '../services'
 import SessionScheduleController from '../sessionSchedule/sessionScheduleController'
@@ -58,6 +60,9 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const homeController = new HomeController()
   const addAvailabilityController = new AddAvailabilityController(accreditedProgrammesManageAndDeliverService)
   const editGroupController = new EditGroupController(accreditedProgrammesManageAndDeliverService)
+  const reportingController = new ReportingController(accreditedProgrammesManageAndDeliverService)
+
+  const reportingRole = 'ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_REPORTING'
 
   get('/', async (req, res, next) => {
     await homeController.showHomePage(req, res)
@@ -70,6 +75,14 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   get('/region/closed-referrals', async (req, res, next) => {
     await caselistController.showClosedCaselist(req, res)
   })
+
+  router.get(
+    '/reporting/group-size.csv',
+    authorisationMiddleware([reportingRole]),
+    asyncMiddleware(async (req, res) => {
+      await reportingController.downloadGroupSizeReport(req, res)
+    }),
+  )
 
   get('/referral-details/:id/personal-details', async (req, res, next) => {
     await referralDetailsController.showPersonalDetailsPage(req, res)

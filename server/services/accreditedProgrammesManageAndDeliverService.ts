@@ -149,6 +149,16 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
     })) as CaseListReferrals
   }
 
+  async getGroupSizeReport(username: ExpressUsername, groupStartedSince: string): Promise<string> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: '/reporting/group-size.csv',
+      headers: { Accept: 'text/csv' },
+      query: { groupStartedSince },
+      responseType: 'text',
+    })) as string
+  }
+
   async getGroupAllocatedMembers(
     username: ExpressUsername,
     groupId: string,
