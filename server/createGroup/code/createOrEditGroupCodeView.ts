@@ -20,7 +20,7 @@ export default class CreateOrEditGroupCodeView {
         text: 'For example, BCCDD1. This will be used to identify your group.',
       },
       label: {
-        text: this.presenter.pageHeader,
+        text: this.presenter.pageHeading,
         classes: 'govuk-label--l',
         isPageHeading: true,
       },
@@ -35,7 +35,7 @@ export default class CreateOrEditGroupCodeView {
       {
         backLinkArgs: this.backLinkArgs(),
         pageTitle: this.presenter.pageTitle,
-        pageHeader: this.presenter.pageHeader,
+        pageHeading: this.presenter.pageHeading,
         captionText: this.presenter.captionText,
         createGroupCodeArgs: this.createGroupCodeArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),

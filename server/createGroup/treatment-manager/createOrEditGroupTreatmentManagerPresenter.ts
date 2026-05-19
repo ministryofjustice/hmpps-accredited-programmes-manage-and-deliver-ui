@@ -29,7 +29,7 @@ export default class CreateOrEditGroupTreatmentManagerPresenter {
     return this.isEditJourney ? `Edit people responsible for the group` : `People responsible for the group`
   }
 
-  get pageHeader() {
+  get pageHeading() {
     return this.isEditJourney ? `Edit who is responsible for the group` : `Who is responsible for the group?`
   }
 

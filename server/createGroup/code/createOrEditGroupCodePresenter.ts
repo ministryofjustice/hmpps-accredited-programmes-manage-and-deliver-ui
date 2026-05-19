@@ -31,7 +31,7 @@ export default class CreateOrEditGroupCodePresenter {
     return this.isEditJourney ? `Edit group code` : 'Create group code'
   }
 
-  get pageHeader() {
+  get pageHeading() {
     return this.isEditJourney ? `Edit group code` : 'Create a group code'
   }
 

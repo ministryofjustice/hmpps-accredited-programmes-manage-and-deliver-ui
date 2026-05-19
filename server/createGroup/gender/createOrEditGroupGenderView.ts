@@ -18,7 +18,7 @@ export default class CreateGroupSexView {
       name: 'create-group-sex',
       fieldset: {
         legend: {
-          text: this.presenter.pageHeader,
+          text: this.presenter.pageHeading,
           isPageHeading: true,
           classes: 'govuk-fieldset__legend--l',
         },

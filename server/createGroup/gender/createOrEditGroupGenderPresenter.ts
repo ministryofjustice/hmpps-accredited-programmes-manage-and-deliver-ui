@@ -27,7 +27,7 @@ export default class CreateOrEditGroupSGenderPresenter {
     return this.isEditJourney ? `Edit group gender` : `Select group gender`
   }
 
-  get pageHeader() {
+  get pageHeading() {
     return this.isEditJourney ? `Edit the gender of the group` : `Select the gender of the group`
   }
 

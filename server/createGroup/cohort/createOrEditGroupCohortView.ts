@@ -41,7 +41,6 @@ export default class CreateGroupCohortView {
       {
         backLinkArgs: this.backLinkArgs(),
         pageTitle: this.presenter.pageTitle,
-        // pageHeading: this.presenter.pageHeading,
         captionText: this.presenter.captionText,
         createGroupCohortArgs: this.createGroupCohortArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
