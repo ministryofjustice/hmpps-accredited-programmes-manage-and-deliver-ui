@@ -7,6 +7,21 @@ afterEach(() => {
   jest.restoreAllMocks()
 })
 
+describe('pageTitle', () => {
+  it('should return the correct page title', () => {
+    const details = referralDetailsFactory.build()
+    const statusDetails = referralStatusFormDataFactory.build()
+
+    const presenter = new UpdateReferralStatusPresenter(
+      details,
+      statusDetails,
+      '', // backLinkUri
+    )
+
+    expect(presenter.pageTitle).toEqual('Update status')
+  })
+})
+
 describe('generateStatusUpdateRadios.', () => {
   it('should generate items for the data given', () => {
     const details = referralDetailsFactory.build()
