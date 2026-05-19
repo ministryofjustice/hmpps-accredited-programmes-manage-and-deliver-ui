@@ -35,7 +35,7 @@ describe('Create Group Controller', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Create a group')
-          expect(res.text).toContain('href="/groups/not-started-or-in-progress"')
+          expect(res.text).toContain('href="/groups/not-started-and-in-progress"')
         })
     })
 
