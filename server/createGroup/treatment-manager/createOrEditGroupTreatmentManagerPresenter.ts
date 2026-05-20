@@ -18,7 +18,7 @@ export default class CreateOrEditGroupTreatmentManagerPresenter {
   }
 
   get backLinkUri() {
-    return this.isEditJourney ? `/group/${this.groupId}/group-details` : '/group/create-a-group/group-delivery-location'
+    return this.isEditJourney ? `/group/${this.groupId}/group-details` : '/group-delivery-location'
   }
 
   get captionText() {
@@ -26,6 +26,10 @@ export default class CreateOrEditGroupTreatmentManagerPresenter {
   }
 
   get pageTitle() {
+    return this.isEditJourney ? `Edit people responsible for the group` : `People responsible for the group`
+  }
+
+  get pageHeading() {
     return this.isEditJourney ? `Edit who is responsible for the group` : `Who is responsible for the group?`
   }
 

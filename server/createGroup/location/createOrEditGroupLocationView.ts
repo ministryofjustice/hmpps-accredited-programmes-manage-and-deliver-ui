@@ -55,6 +55,7 @@ export default class CreateOrEditGroupLocationView {
       'createGroup/createGroupLocation',
       {
         backLinkArgs: this.backLinkArgs(),
+        pageTitle: this.presenter.pageTitle,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         text: this.presenter.text,
         selectOfficeArgs: this.selectOfficeArgs(),

@@ -2,7 +2,7 @@ import { CreateGroupRequest } from '@manage-and-deliver-api'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
 
-export default class CreateOrEditGroupSexPresenter {
+export default class CreateOrEditGroupGenderPresenter {
   constructor(
     private readonly validationError: FormValidationError | null = null,
     private readonly createGroupFormData: Partial<CreateGroupRequest> | null = null,
@@ -16,7 +16,7 @@ export default class CreateOrEditGroupSexPresenter {
   }
 
   get backLinkUri() {
-    return this.isEditJourney ? `/group/${this.groupId}/group-details` : '/group/create-a-group/group-cohort'
+    return this.isEditJourney ? `/group/${this.groupId}/group-details` : '/group-cohort'
   }
 
   get captionText() {
@@ -24,6 +24,10 @@ export default class CreateOrEditGroupSexPresenter {
   }
 
   get pageTitle() {
+    return this.isEditJourney ? `Edit group gender` : `Select group gender`
+  }
+
+  get pageHeading() {
     return this.isEditJourney ? `Edit the gender of the group` : `Select the gender of the group`
   }
 
@@ -41,7 +45,7 @@ export default class CreateOrEditGroupSexPresenter {
 
   get fields() {
     return {
-      createOrEditGroupSex: {
+      createOrEditGroupGender: {
         value: this.utils.stringValue(this.createGroupFormData?.sex, 'create-group-sex'),
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'create-group-sex'),
       },
