@@ -8,6 +8,7 @@ export default class SessionScheduleAttendanceView {
       'sessionSchedule/sessionAttendance',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         text: this.presenter.text,
         sessionAttendanceAccordionArgs: {
           id: 'sessions-accordion',

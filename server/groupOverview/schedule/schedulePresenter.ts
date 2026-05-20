@@ -12,6 +12,10 @@ export default class SchedulePresenter extends GroupServiceLayoutPresenter {
     super(GroupServiceNavigationValues.scheduleOverviewTab, groupId)
   }
 
+  get pageTitle(): string {
+    return 'Schedule overview'
+  }
+
   get text() {
     return {
       headingCaptionText: this.groupScheduleOverview.code,

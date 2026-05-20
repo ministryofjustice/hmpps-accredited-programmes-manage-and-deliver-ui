@@ -2,6 +2,15 @@ import GroupDetailsPresenter from './groupDetailsPresenter'
 import GroupDetailsFactory from '../testutils/factories/groupDetailsFactory'
 
 describe('GroupDetailsPresenter', () => {
+  describe('pageTitle', () => {
+    it('returns the correct page title', () => {
+      const groupDetails = GroupDetailsFactory.build()
+      const presenter = new GroupDetailsPresenter(groupDetails)
+
+      expect(presenter.pageTitle).toEqual('Group details')
+    })
+  })
+
   describe('isStartDateInThePast', () => {
     beforeEach(() => {
       // Mock the current date to be April 7, 2026

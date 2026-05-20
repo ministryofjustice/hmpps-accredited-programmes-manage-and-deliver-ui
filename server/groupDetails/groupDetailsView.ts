@@ -62,6 +62,7 @@ export default class GroupDetailsView {
       'groupDetails/groupDetails',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         text: this.presenter.text,
         serviceNavigationArgs: this.presenter.getMojSubNavigationArgs(),
         groupCodeSummary: this.groupCodeSummary,

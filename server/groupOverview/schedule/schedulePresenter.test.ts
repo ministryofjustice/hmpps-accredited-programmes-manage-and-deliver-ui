@@ -27,6 +27,14 @@ describe('SchedulePresenter', () => {
     ],
   }
 
+  describe('pageTitle', () => {
+    it('returns the correct page title', () => {
+      const presenter = new SchedulePresenter(groupId, mockGroupSchedule)
+
+      expect(presenter.pageTitle).toEqual('Schedule overview')
+    })
+  })
+
   describe('scheduleTableRows', () => {
     it('should convert sessions to table rows', () => {
       const presenter = new SchedulePresenter(groupId, mockGroupSchedule)

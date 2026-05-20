@@ -19,6 +19,10 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
     return `/group/${this.group.id}/sessions-and-attendance`
   }
 
+  get pageTitle(): string {
+    return 'Group details'
+  }
+
   get isStartDateInThePast(): boolean {
     const parts = this.group.startDate.split(' ')
     const day = parseInt(parts[1], 10)

@@ -47,6 +47,10 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
     }
   }
 
+  get pageTitle(): string {
+    return this.section === GroupAllocationsPageSection.Allocated ? 'Group allocations' : 'Building Choices waitlist'
+  }
+
   get showReportingTeams(): boolean {
     return !!this.filter?.pdu
   }
