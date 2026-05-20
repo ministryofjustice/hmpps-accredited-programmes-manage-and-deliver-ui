@@ -31,7 +31,7 @@ export default class EditSessionController extends BaseController {
   }
 
   async editSession(req: Request, res: Response): Promise<void> {
-    const { groupId, sessionId } = req.params
+    const { groupId, sessionId } = req.params as Record<string, string>
     const { username } = req.user
     const { message, isAttendanceHistory, referralId } = req.query
     let formError: FormValidationError | null = null
@@ -79,7 +79,7 @@ export default class EditSessionController extends BaseController {
   }
 
   async deleteSession(req: Request, res: Response): Promise<void> {
-    const { groupId, sessionId } = req.params
+    const { groupId, sessionId } = req.params as Record<string, string>
     const { username } = req.user
 
     let formError: FormValidationError | null = null
@@ -106,7 +106,7 @@ export default class EditSessionController extends BaseController {
   }
 
   async editSessionAttendees(req: Request, res: Response): Promise<void> {
-    const { groupId, sessionId } = req.params
+    const { groupId, sessionId } = req.params as Record<string, string>
     const { username } = req.user
 
     let formError: FormValidationError | null = null
@@ -138,7 +138,7 @@ export default class EditSessionController extends BaseController {
   }
 
   async editSessionDateAndTime(req: Request, res: Response): Promise<void> {
-    const { groupId, sessionId } = req.params
+    const { groupId, sessionId } = req.params as Record<string, string>
     const { username } = req.user
     let formError: FormValidationError | null = null
     let userInputData = null
@@ -206,7 +206,7 @@ export default class EditSessionController extends BaseController {
   }
 
   async submitEditSessionDateAndTime(req: Request, res: Response): Promise<void> {
-    const { groupId, sessionId } = req.params
+    const { groupId, sessionId } = req.params as Record<string, string>
     const { username } = req.user
     let formError: FormValidationError | null = null
 
@@ -243,7 +243,7 @@ export default class EditSessionController extends BaseController {
   }
 
   async editSessionFacilitators(req: Request, res: Response): Promise<void> {
-    const { groupId, sessionId } = req.params
+    const { groupId, sessionId } = req.params as Record<string, string>
     const { username } = req.user
     let formError: FormValidationError | null = null
     let userInputData = null

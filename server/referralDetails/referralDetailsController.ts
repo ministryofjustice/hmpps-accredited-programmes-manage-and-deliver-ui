@@ -33,7 +33,7 @@ export default class ReferralDetailsController extends BaseController {
   }
 
   async showPersonalDetailsPage(req: Request, res: Response): Promise<void> {
-    const { id } = req.params
+    const { id } = req.params as Record<string, string>
     const { isCohortUpdated, isLdcUpdated } = req.query
     const { username } = req.user
     const subNavValue = 'personalDetails'
@@ -56,7 +56,7 @@ export default class ReferralDetailsController extends BaseController {
   }
 
   async showProgrammeHistoryPage(req: Request, res: Response): Promise<void> {
-    const { id } = req.params
+    const { id } = req.params as Record<string, string>
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'programmeHistory'
@@ -77,7 +77,7 @@ export default class ReferralDetailsController extends BaseController {
   }
 
   async showOffenceHistoryPage(req: Request, res: Response): Promise<void> {
-    const { id } = req.params
+    const { id } = req.params as Record<string, string>
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'offenceHistory'
@@ -100,7 +100,7 @@ export default class ReferralDetailsController extends BaseController {
   }
 
   async showSentenceInformationPage(req: Request, res: Response): Promise<void> {
-    const { id } = req.params
+    const { id } = req.params as Record<string, string>
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'sentenceInformation'
@@ -126,7 +126,7 @@ export default class ReferralDetailsController extends BaseController {
   }
 
   async showAdditionalInformationPage(req: Request, res: Response): Promise<void> {
-    const { id } = req.params
+    const { id } = req.params as Record<string, string>
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated } = req.query
     const subNavValue = 'additionalInformation'
@@ -147,7 +147,7 @@ export default class ReferralDetailsController extends BaseController {
   }
 
   async showStatusHistoryPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as Record<string, string>
     const { username } = req.user
     const { message, isCohortUpdated, isLdcUpdated } = req.query
 
@@ -172,7 +172,7 @@ export default class ReferralDetailsController extends BaseController {
   }
 
   async showAttendanceHistoryPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as Record<string, string>
     const { username } = req.user
     const { message, isCohortUpdated, isLdcUpdated } = req.query
 
