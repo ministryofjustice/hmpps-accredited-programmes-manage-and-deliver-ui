@@ -15,7 +15,7 @@ export default class GroupDetailsController extends BaseController {
   }
 
   async showGroupDetailsPage(req: Request, res: Response): Promise<void> {
-    const { groupId } = req.params
+    const { groupId } = req.params as Record<string, string>
     const { username } = req.user
     const { message } = req.query
 

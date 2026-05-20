@@ -2,7 +2,7 @@ import { CreateGroupRequest } from '@manage-and-deliver-api'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
 
-export default class CreateOrEditGroupSGenderPresenter {
+export default class CreateOrEditGroupGenderPresenter {
   constructor(
     private readonly validationError: FormValidationError | null = null,
     private readonly createGroupFormData: Partial<CreateGroupRequest> | null = null,

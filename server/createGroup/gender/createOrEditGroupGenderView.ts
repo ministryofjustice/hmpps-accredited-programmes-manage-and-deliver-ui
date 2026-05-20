@@ -3,7 +3,7 @@ import ViewUtils from '../../utils/viewUtils'
 import CreateGroupSexPresenter from './createOrEditGroupGenderPresenter'
 import CreateGroupUtils from '../createGroupUtils'
 
-export default class CreateGroupSexView {
+export default class CreateGroupGenderView {
   constructor(private readonly presenter: CreateGroupSexPresenter) {}
 
   private backLinkArgs() {

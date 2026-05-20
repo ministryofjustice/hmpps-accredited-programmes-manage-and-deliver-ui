@@ -1,0 +1,319 @@
+
+> hmpps-accredited-programmes-manage-and-deliver-ui@0.0.1 build
+> node esbuild/esbuild.config.js --build
+
+[1m✨ Building app...[0m
+[1m✨ Building assets...[0m
+ℹ  Typecheck started…
+▲ [WARNING] sass warning: The `govuk-text-colour` mixin is deprecated. Use `color: govuk-colour(text)` instead. To silence this warning, update $govuk-suppressed-warnings with key: "govuk-text-colour" [plugin sass-plugin]
+
+▲ [WARNING] sass warning: We've updated GOV.UK Frontend's colour palette. Use `govuk-colour("green", $variant: "tint-25")` instead of `govuk-colour("light-green")`. The `light-green` colour is deprecated and we'll remove it in the next major version. To silence this warning, update $govuk-suppressed-warnings with key: "pre-brand-colour" [plugin sass-plugin]
+
+▲ [WARNING] sass warning: We've updated GOV.UK Frontend's colour palette. Use `govuk-colour("black", $variant: "tint-25")` instead of `govuk-colour("dark-grey")`. The `dark-grey` colour is deprecated and we'll remove it in the next major version. To silence this warning, update $govuk-suppressed-warnings with key: "pre-brand-colour" [plugin sass-plugin]
+
+▲ [WARNING] sass warning: We've updated GOV.UK Frontend's colour palette. Use `govuk-colour("black", $variant: "tint-80")` instead of `govuk-colour("mid-grey")`. The `mid-grey` colour is deprecated and we'll remove it in the next major version. To silence this warning, update $govuk-suppressed-warnings with key: "pre-brand-colour" [plugin sass-plugin]
+
+▲ [WARNING] sass warning: We've updated GOV.UK Frontend's colour palette. Use `govuk-colour("black", $variant: "tint-95")` instead of `govuk-colour("light-grey")`. The `light-grey` colour is deprecated and we'll remove it in the next major version. To silence this warning, update $govuk-suppressed-warnings with key: "pre-brand-colour" [plugin sass-plugin]
+
+▲ [WARNING] sass warning: 1 repetitive deprecation warnings omitted.
+Run in verbose mode to see all warnings. [plugin sass-plugin]
+
+▲ [WARNING] Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import [plugin sass-plugin]
+
+    assets/scss/ogrs4-risk/index.scss:7:8:
+      7 │ "govuk-frontend/dist/govuk/index"
+        ╵         ^
+
+▲ [WARNING] Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import [plugin sass-plugin]
+
+    assets/scss/ogrs4-risk/index.scss:8:8:
+      8 │ "@ministryofjustice/frontend/moj/all"
+        ╵         ^
+
+▲ [WARNING] Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import [plugin sass-plugin]
+
+    assets/scss/ogrs4-risk/index.scss:9:8:
+      9 │ "rosh-widget"
+        ╵         ^
+
+▲ [WARNING] Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import [plugin sass-plugin]
+
+    assets/scss/ogrs4-risk/index.scss:10:8:
+      10 │ "expanded-predictor-badge"
+         ╵         ^
+
+▲ [WARNING] Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import [plugin sass-plugin]
+
+    assets/scss/ogrs4-risk/index.scss:11:8:
+      11 │ "predictor-scale"
+         ╵         ^
+
+server/cohort/changeCohortController.ts(23,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/cohort/changeCohortController.ts(28,52): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/cohort/changeCohortController.ts(31,9): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/cohort/changeCohortController.ts(37,49): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/createGroup/createGroupController.ts(294,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/editSession/editSessionController.ts(43,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/editSession/editSessionController.ts(67,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/editSession/editSessionController.ts(93,105): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/editSession/editSessionController.ts(100,111): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/editSession/editSessionController.ts(102,50): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/editSession/editSessionController.ts(122,11): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/editSession/editSessionController.ts(131,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/editSession/editSessionController.ts(134,57): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/editSession/editSessionController.ts(148,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/editSession/editSessionController.ts(152,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/editSession/editSessionController.ts(186,11): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/editSession/editSessionController.ts(196,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/editSession/editSessionController.ts(215,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/editSession/editSessionController.ts(239,50): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/editSession/editSessionController.ts(253,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/editSession/editSessionController.ts(266,11): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/editSession/editSessionController.ts(274,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/groupDetails/groupDetailsController.ts(27,111): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/availabilityAndMotivationController.ts(31,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/availabilityAndMotivationController.ts(38,9): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/availabilityAndMotivationController.ts(83,11): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/availabilityAndMotivationController.ts(93,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/availabilityAndMotivationController.ts(100,9): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/availabilityAndMotivationController.ts(119,107): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/availabilityAndMotivationController.ts(121,107): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/availabilityAndMotivationController.ts(144,107): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/availabilityAndMotivationController.ts(147,103): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/groupOverview/addToGroup/addToGroupController.ts(39,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/groupOverview/addToGroup/addToGroupController.ts(64,11): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/groupOverview/addToGroup/addToGroupController.ts(74,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/groupOverview/groupOverviewController.ts(38,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/groupOverview/groupOverviewController.ts(65,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/groupOverview/groupOverviewController.ts(93,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/groupOverview/groupOverviewController.ts(119,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/groupOverview/groupOverviewController.ts(139,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/groupOverview/groupOverviewController.ts(142,45): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/groupOverview/removeFromGroup/removeFromGroupController.ts(41,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/groupOverview/removeFromGroup/removeFromGroupController.ts(66,11): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/groupOverview/removeFromGroup/removeFromGroupController.ts(76,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/groupOverview/removeFromGroup/removeFromGroupController.ts(81,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/ldc/ldcController.ts(22,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/ldc/ldcController.ts(27,82): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/ldc/ldcController.ts(31,46): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/locationPreferences/locationPreferencesController.ts(30,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/locationPreferences/locationPreferencesController.ts(37,9): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/locationPreferences/locationPreferencesController.ts(49,61): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/locationPreferences/locationPreferencesController.ts(69,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/locationPreferences/locationPreferencesController.ts(86,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/locationPreferences/locationPreferencesController.ts(94,9): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/locationPreferences/locationPreferencesController.ts(103,61): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/locationPreferences/locationPreferencesController.ts(122,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/locationPreferences/locationPreferencesController.ts(137,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/locationPreferences/locationPreferencesController.ts(145,61): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/locationPreferences/locationPreferencesController.ts(158,13): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/locationPreferences/locationPreferencesController.ts(165,13): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/locationPreferences/locationPreferencesController.ts(178,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/pni/pniController.ts(23,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/pni/pniController.ts(31,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/referralDetails/referralDetailsController.ts(41,74): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/referralDetails/referralDetailsController.ts(42,103): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/referralDetails/referralDetailsController.ts(64,74): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/referralDetails/referralDetailsController.ts(85,74): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/referralDetails/referralDetailsController.ts(86,111): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/referralDetails/referralDetailsController.ts(108,74): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/referralDetails/referralDetailsController.ts(111,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/referralDetails/referralDetailsController.ts(134,74): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/referralDetails/referralDetailsController.ts(154,74): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/referralDetails/referralDetailsController.ts(155,109): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/referralDetails/referralDetailsController.ts(160,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/referralDetails/referralDetailsController.ts(179,74): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/referralDetails/referralDetailsController.ts(183,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/referralDetails/referralDetailsController.ts(189,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/risksAndNeeds/risksAndNeedsController.ts(53,68): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/risksAndNeeds/risksAndNeedsController.ts(94,68): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/risksAndNeeds/risksAndNeedsController.ts(119,68): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/risksAndNeeds/risksAndNeedsController.ts(145,68): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/risksAndNeeds/risksAndNeedsController.ts(171,68): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/risksAndNeeds/risksAndNeedsController.ts(197,68): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/risksAndNeeds/risksAndNeedsController.ts(223,68): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/risksAndNeeds/risksAndNeedsController.ts(250,68): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/risksAndNeeds/risksAndNeedsController.ts(277,68): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/risksAndNeeds/risksAndNeedsController.ts(303,68): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/risksAndNeeds/risksAndNeedsController.ts(329,68): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/risksAndNeeds/risksAndNeedsController.ts(355,68): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/sessionSchedule/sessionScheduleController.ts(35,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/sessionSchedule/sessionScheduleController.ts(69,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/sessionSchedule/sessionScheduleController.ts(118,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/sessionSchedule/sessionScheduleController.ts(147,9): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/sessionSchedule/sessionScheduleController.ts(176,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/sessionSchedule/sessionScheduleController.ts(179,62): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/updateReferralStatus/updateReferralStatusController.ts(24,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/updateReferralStatus/updateReferralStatusController.ts(29,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/updateReferralStatus/updateReferralStatusController.ts(45,11): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/updateReferralStatus/updateReferralStatusController.ts(69,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/updateReferralStatus/updateReferralStatusController.ts(74,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/updateReferralStatus/updateReferralStatusController.ts(114,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/updateReferralStatus/updateReferralStatusController.ts(119,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/updateReferralStatus/updateReferralStatusController.ts(140,11): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/attendance/attendanceController.ts(49,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/attendance/attendanceController.ts(55,45): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/attendance/attendanceController.ts(100,47): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/attendance/attendanceController.ts(130,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/attendance/attendanceController.ts(137,45): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/attendance/attendanceController.ts(153,9): error TS2322: Type 'string | string[]' is not assignable to type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/attendance/attendanceController.ts(165,29): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/attendance/attendanceController.ts(183,13): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/attendance/attendanceController.ts(206,100): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/attendance/attendanceController.ts(211,43): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/attendance/attendanceController.ts(236,55): error TS2345: Argument of type '{ referralId: string | string[]; source: string; saved: string; personOnProbationName: string; }' is not assignable to parameter of type 'string | Record<string, string> | string[][] | URLSearchParams'.
+  Types of property 'referralId' are incompatible.
+    Type 'string | string[]' is not assignable to type 'string'.
+      Type 'string[]' is not assignable to type 'string'.
+server/attendance/attendanceController.ts(247,45): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/attendance/attendanceController.ts(258,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/sessionNotes/sessionNotesController.ts(42,83): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/sessionNotes/sessionNotesController.ts(61,9): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/sessionNotes/sessionNotesController.ts(72,96): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/sessionNotes/sessionNotesController.ts(76,41): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/sessionNotes/sessionNotesController.ts(95,79): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/addAvailability/addAvailabilityController.ts(22,50): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/addAvailability/addAvailabilityController.ts(29,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/addAvailability/addAvailabilityController.ts(36,55): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/addAvailability/addAvailabilityController.ts(55,107): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/addAvailability/addAvailabilityController.ts(58,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+server/availabilityAndMotivation/addAvailability/addAvailabilityController.ts(68,7): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+
+✖  Typecheck failed with 127 errors
+ℹ  Typecheck finished in 4452ms

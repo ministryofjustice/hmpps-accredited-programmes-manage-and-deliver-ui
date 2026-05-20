@@ -23,7 +23,7 @@ export default class AttendanceController extends BaseController {
 
   async showRecordAttendancePage(req: Request, res: Response): Promise<void> {
     const { username } = req.user
-    const { groupId, sessionId } = req.params
+    const { groupId, sessionId } = req.params as Record<string, string>
     const referralIdFromQuery = typeof req.query.referralId === 'string' ? req.query.referralId : null
 
     let referralIds = this.referralIds(req)
@@ -116,7 +116,7 @@ export default class AttendanceController extends BaseController {
 
   async showRecordAttendanceNotesPage(req: Request, res: Response): Promise<void> {
     const { username } = req.user
-    const { groupId, sessionId, referralId, groupTitle } = req.params
+    const { groupId, sessionId, referralId, groupTitle } = req.params as Record<string, string>
 
     const referralIds = this.referralIds(req)
     const attendees = (req.session.editSessionAttendance?.attendees || []) as SessionAttendance['attendees']
