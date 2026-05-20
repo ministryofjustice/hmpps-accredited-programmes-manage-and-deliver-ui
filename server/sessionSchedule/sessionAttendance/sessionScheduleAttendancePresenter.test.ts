@@ -252,7 +252,7 @@ describe('SessionScheduleAttendancePresenter', () => {
       expect(secondModuleContent).not.toContain('Session name')
       expect(secondModuleContent).not.toContain('Session type')
       expect(secondModuleContent).toContain('Schedule Module 2 session')
-      expect(secondModuleContent).toContain(`href="/group/${groupId}/module/module-2/schedule-session-type"`)
+      expect(secondModuleContent).toContain(`href="/${groupId}/module-2/schedule-session-type"`)
       expect(secondModuleContent).toContain('<strong>Expected to start:</strong> 1 April 2025')
     })
 
@@ -369,7 +369,7 @@ describe('SessionScheduleAttendancePresenter', () => {
       const firstModuleContent = accordionItems[0].content.html
 
       expect(firstModuleContent).toContain('Schedule Module 1 session')
-      expect(firstModuleContent).toContain(`href="/group/${groupId}/module/module-1/schedule-session-type"`)
+      expect(firstModuleContent).toContain(`href="/${groupId}/module-1/schedule-session-type"`)
       expect(firstModuleContent).toContain('govuk-button--secondary')
     })
 
@@ -388,7 +388,7 @@ describe('SessionScheduleAttendancePresenter', () => {
       const content = accordionItems[0].content.html
 
       expect(content).toContain('Schedule post-programme review')
-      expect(content).toContain(`href="/group/${groupId}/module/module-1/schedule-session-type"`)
+      expect(content).toContain(`href="/${groupId}/module-1/schedule-session-type"`)
     })
 
     it('handles various non-standard button text endings', () => {
@@ -415,7 +415,7 @@ describe('SessionScheduleAttendancePresenter', () => {
 
         expect(content).toContain(buttonText)
         expect(content).toContain('govuk-button--secondary')
-        expect(content).toContain(`href="/group/${groupId}/module/module-1/schedule-session-type"`)
+        expect(content).toContain(`href="/${groupId}/module-1/schedule-session-type"`)
       })
     })
 

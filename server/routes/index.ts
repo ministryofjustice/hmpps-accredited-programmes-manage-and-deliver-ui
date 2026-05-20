@@ -395,15 +395,15 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await groupController.showCompletedGroupListPage(req, res)
   })
 
-  getOrPost('/group/:groupId/module/:moduleId/schedule-session-type', async (req, res) => {
+  getOrPost('/:groupId/:moduleId/schedule-session-type', async (req, res) => {
     await sessionScheduleController.showSessionSchedule(req, res)
   })
 
-  getOrPost('/group/:groupId/module/:moduleId/schedule-session-details', async (req, res, next) => {
+  getOrPost('/:groupId/:moduleId/schedule-session-details', async (req, res, next) => {
     await sessionScheduleController.scheduleGroupSessionDetails(req, res)
   })
 
-  getOrPost('/group/:groupId/module/:moduleId/session-review-details', async (req, res, next) => {
+  getOrPost('/:groupId/:moduleId/session-review-details', async (req, res, next) => {
     await sessionScheduleController.scheduleGroupSessionCya(req, res)
   })
 
