@@ -29,7 +29,7 @@ export default class AddToGroupController extends BaseController {
         res.status(400)
         formError = data.error
       } else if (data.paramsForUpdate.addToGroup.toLowerCase() === 'yes') {
-        return res.redirect(`/addToGroup/${groupId}/${referralId}/moreDetails`)
+        return res.redirect(`/${groupId}/${referralId}/scheduled-status-details`)
       } else {
         return res.redirect(req.session.originPage)
       }

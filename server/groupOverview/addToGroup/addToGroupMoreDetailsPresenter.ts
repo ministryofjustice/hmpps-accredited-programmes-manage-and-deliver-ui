@@ -13,6 +13,10 @@ export default class AddToGroupMoreDetailsPresenter {
     private readonly userInputData: Record<string, unknown> | null = null,
   ) {}
 
+  get pageTitle(): string {
+    return 'Change status to scheduled'
+  }
+
   get text() {
     return {
       pageHeading: `${this.groupManagementData.personName}'s referral status will change to Scheduled`,

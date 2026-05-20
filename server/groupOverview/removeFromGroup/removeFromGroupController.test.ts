@@ -35,10 +35,10 @@ beforeEach(() => {
 })
 
 describe('remove from group', () => {
-  describe(`GET /removeFromGroup/:groupId/:referralId`, () => {
+  describe(`GET /remove-from-group/:groupId/:referralId`, () => {
     it('loads the initial page to remove someone from a group', async () => {
       return request(app)
-        .get(`/removeFromGroup/${randomUUID()}/${randomUUID()}`)
+        .get(`/remove-from-group/${randomUUID()}/${randomUUID()}`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(`Remove Alex River from this group`)
@@ -50,7 +50,7 @@ describe('remove from group', () => {
       const referralId = '123'
 
       return request(app)
-        .post(`/removeFromGroup/${groupId}/${referralId}`)
+        .post(`/remove-from-group/${groupId}/${referralId}`)
         .type('form')
         .send({
           'remove-from-group': 'No',
@@ -66,7 +66,7 @@ describe('remove from group', () => {
       const referralId = '123'
 
       return request(app)
-        .post(`/removeFromGroup/${groupId}/${referralId}`)
+        .post(`/remove-from-group/${groupId}/${referralId}`)
         .type('form')
         .send({})
         .expect(400)
@@ -76,13 +76,13 @@ describe('remove from group', () => {
     })
   })
 
-  describe(`GET /removeFromGroup/:groupId/:referralId/updateStatus`, () => {
+  describe(`GET /remove-from-group/:groupId/:referralId/update-status`, () => {
     it('loads the initial page to remove someone to a group', async () => {
       accreditedProgrammesManageAndDeliverService.removeFromGroupStatusTransitionDetails.mockResolvedValue(
         referralStatusTransitions,
       )
       return request(app)
-        .get(`/removeFromGroup/${randomUUID()}/${randomUUID()}/updateStatus`)
+        .get(`/remove-from-group/${randomUUID()}/${randomUUID()}/update-status`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(`Update Alex River&#39;s referral status`)
@@ -90,7 +90,7 @@ describe('remove from group', () => {
     })
   })
 
-  describe(`POST removeFromGroup/:groupId/:referralId/updateStatus`, () => {
+  describe(`POST remove-from-group/:groupId/:referralId/update-status`, () => {
     it('redirects to the allocated page on successful submit with the API message', async () => {
       const groupId = '123'
       const referralId = '123'
@@ -102,7 +102,7 @@ describe('remove from group', () => {
       })
 
       return request(app)
-        .post(`/removeFromGroup/${groupId}/${referralId}/updateStatus`)
+        .post(`/remove-from-group/${groupId}/${referralId}/update-status`)
         .type('form')
         .send({
           'updated-status': '336b59cd-b467-4305-8547-6a645a8a3f91',
@@ -122,7 +122,7 @@ describe('remove from group', () => {
         referralStatusTransitions,
       )
       return request(app)
-        .post(`/removeFromGroup/${groupId}/${referralId}/updateStatus`)
+        .post(`/remove-from-group/${groupId}/${referralId}/update-status`)
         .type('form')
         .send({
           'additional-details': faker.string.alpha({ length: 501 }),
