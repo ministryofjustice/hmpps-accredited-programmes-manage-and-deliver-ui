@@ -164,6 +164,6 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
   }
 
   private scheduleSessionHref(moduleSession: ProgrammeGroupModuleSessionsResponseGroupModule) {
-    return `/${this.groupId}/module/${moduleSession.id}/schedule-session-type`
+    return `/${this.groupId}/${moduleSession.id}/schedule-session-type`
   }
 }

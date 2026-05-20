@@ -122,6 +122,7 @@ export default class SessionScheduleCyaView {
       'sessionSchedule/sessionScheduleCya',
       {
         backLinkArgs: this.backLinkArgs(),
+        pageTitle: this.presenter.pageTitle,
         text: this.presenter.text,
         sessionScheduleSummary: this.sessionScheduleSummary,
       },

@@ -17,6 +17,10 @@ export default class SessionScheduleCyaPresenter {
       | null = null,
   ) {}
 
+  get pageTitle(): string {
+    return 'Review your session details'
+  }
+
   get text() {
     return {
       headingCaptionText: this.createSessionDetails.headingText,
