@@ -20,7 +20,7 @@ export default class RemoveFromGroupController extends BaseController {
 
   async removeFromGroup(req: Request, res: Response): Promise<void> {
     let formError: FormValidationError | null = null
-    const { groupId, referralId } = req.params
+    const { groupId, referralId } = req.params as Record<string, string>
     if (req.method === 'POST') {
       const data = await new RemoveFromGroupForm(req).removeFromGroupData()
 
@@ -49,7 +49,7 @@ export default class RemoveFromGroupController extends BaseController {
   }
 
   async removeFromGroupUpdateStatus(req: Request, res: Response): Promise<void> {
-    const { groupId, referralId } = req.params
+    const { groupId, referralId } = req.params as Record<string, string>
     const { username } = req.user
 
     let formError: FormValidationError | null = null

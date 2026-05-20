@@ -23,7 +23,7 @@ export default class AvailabilityAndMotivationController extends BaseController 
   }
 
   async showMotivationBackgroundAndNonAssociationsPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as Record<string, string>
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated, isMotivationsUpdated } = req.query
 
@@ -54,7 +54,7 @@ export default class AvailabilityAndMotivationController extends BaseController 
   }
 
   async showAddMotivationBackgroundAndNonAssociationsNotesPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as Record<string, string>
     const { username } = req.user
     let formError: FormValidationError | null = null
     let userInputData = null
@@ -111,7 +111,7 @@ export default class AvailabilityAndMotivationController extends BaseController 
   }
 
   async showAvailabilityPage(req: Request, res: Response): Promise<void> {
-    const { id } = req.params
+    const { id } = req.params as Record<string, string>
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated, detailsUpdated } = req.query
     const subNavValue = 'availability'
@@ -136,7 +136,7 @@ export default class AvailabilityAndMotivationController extends BaseController 
   }
 
   async showLocationPage(req: Request, res: Response): Promise<void> {
-    const { id } = req.params
+    const { id } = req.params as Record<string, string>
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated, preferredLocationUpdated } = req.query
     const subNavValue = 'location'

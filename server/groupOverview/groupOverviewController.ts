@@ -22,7 +22,7 @@ export default class GroupOverviewController extends BaseController {
   async showGroupOverviewAllocated(req: Request, res: Response): Promise<void> {
     const { message } = req.query
     const { username } = req.user
-    const { groupId } = req.params
+    const { groupId } = req.params as Record<string, string>
     let formError: FormValidationError | null = null
     req.session.groupManagementData = null
     const pageNumber = req.query.page
@@ -77,7 +77,7 @@ export default class GroupOverviewController extends BaseController {
 
   async showGroupOverviewWaitlist(req: Request, res: Response): Promise<void> {
     const { username } = req.user
-    const { groupId } = req.params
+    const { groupId } = req.params as Record<string, string>
     let formError: FormValidationError | null = null
     req.session.groupManagementData = null
     const pageNumber = req.query.page
@@ -131,7 +131,7 @@ export default class GroupOverviewController extends BaseController {
 
   async showGroupOverviewSchedule(req: Request, res: Response): Promise<void> {
     const { username } = req.user
-    const { groupId } = req.params
+    const { groupId } = req.params as Record<string, string>
     const { message } = req.query
 
     const groupScheduleOverview = await this.accreditedProgrammesManageAndDeliverService.getGroupScheduleOverview(
