@@ -42,6 +42,7 @@ export default class RemoveFromGroupView {
       'groupOverview/removeFromGroup/removeFromGroup',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         backLinkArgs: this.backLinkArgs(),
         radioArgs: this.radioArgs(),
         cancelLink: this.presenter.cancelLinkHref,

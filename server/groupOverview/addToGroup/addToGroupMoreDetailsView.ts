@@ -38,6 +38,7 @@ export default class AddToGroupMoreDetailsView {
       'groupOverview/addToGroup/addToGroupMoreDetails',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         backLinkArgs: this.backLinkArgs(),
         cancelLink: this.presenter.backLinkHref,
         addDetailsCharacterCountArgs: this.addDetailsCharacterCountArgs(),

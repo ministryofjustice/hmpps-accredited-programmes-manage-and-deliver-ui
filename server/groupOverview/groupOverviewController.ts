@@ -53,7 +53,7 @@ export default class GroupOverviewController extends BaseController {
           personName: data.paramsForUpdate.personName,
           groupCode: groupOverview.group.code,
         }
-        return res.redirect(`/removeFromGroup/${groupId}/${data.paramsForUpdate.removeFromGroup}`)
+        return res.redirect(`/remove-from-group/${groupId}/${data.paramsForUpdate.removeFromGroup}`)
       }
     }
 
@@ -109,7 +109,7 @@ export default class GroupOverviewController extends BaseController {
           personName: data.paramsForUpdate.personName,
           groupCode: groupOverview.group.code,
         }
-        return res.redirect(`/addToGroup/${groupId}/${data.paramsForUpdate.addToGroup}`)
+        return res.redirect(`/add-to-group/${groupId}/${data.paramsForUpdate.addToGroup}`)
       }
     }
 

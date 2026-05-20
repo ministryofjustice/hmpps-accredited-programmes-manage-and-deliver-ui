@@ -359,31 +359,31 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await availabilityAndMotivationController.showAddMotivationBackgroundAndNonAssociationsNotesPage(req, res)
   })
 
-  get('/addToGroup/:groupId/:referralId', async (req, res, next) => {
+  get('/add-to-group/:groupId/:referralId', async (req, res, next) => {
     await addToGroupController.addToGroup(req, res)
   })
 
-  post('/addToGroup/:groupId/:referralId', async (req, res, next) => {
+  post('/add-to-group/:groupId/:referralId', async (req, res, next) => {
     await addToGroupController.addToGroup(req, res)
   })
 
-  get('/addToGroup/:groupId/:referralId/moreDetails', async (req, res, next) => {
+  get('/:groupId/:referralId/scheduled-status-details', async (req, res, next) => {
     await addToGroupController.addToGroupMoreDetails(req, res)
   })
 
-  post('/addToGroup/:groupId/:referralId/moreDetails', async (req, res, next) => {
+  post('/:groupId/:referralId/scheduled-status-details', async (req, res, next) => {
     await addToGroupController.addToGroupMoreDetails(req, res)
   })
 
-  get('/removeFromGroup/:groupId/:referralId', async (req, res, next) => {
+  get('/remove-from-group/:groupId/:referralId', async (req, res, next) => {
     await removeFromGroupController.removeFromGroup(req, res)
   })
 
-  post('/removeFromGroup/:groupId/:referralId', async (req, res, next) => {
+  post('/remove-from-group/:groupId/:referralId', async (req, res, next) => {
     await removeFromGroupController.removeFromGroup(req, res)
   })
 
-  getOrPost('/removeFromGroup/:groupId/:referralId/updateStatus', async (req, res, next) => {
+  getOrPost('/remove-from-group/:groupId/:referralId/update-status', async (req, res, next) => {
     await removeFromGroupController.removeFromGroupUpdateStatus(req, res)
   })
 
