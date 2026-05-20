@@ -18,7 +18,7 @@ export default class CreateGroupCohortView {
       name: 'create-group-cohort',
       fieldset: {
         legend: {
-          text: this.presenter.pageTitle,
+          text: this.presenter.pageHeading,
           isPageHeading: true,
           classes: 'govuk-fieldset__legend--l',
         },
@@ -40,6 +40,7 @@ export default class CreateGroupCohortView {
       'createGroup/createGroupCohort',
       {
         backLinkArgs: this.backLinkArgs(),
+        pageTitle: this.presenter.pageTitle,
         captionText: this.presenter.captionText,
         createGroupCohortArgs: this.createGroupCohortArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),

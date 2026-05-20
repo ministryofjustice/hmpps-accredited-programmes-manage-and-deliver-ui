@@ -15,7 +15,7 @@ describe('RescheduleSessionsPresenter', () => {
       }
       const presenter = new RescheduleSessionsPresenter(groupId, mockGroupDetails, true)
 
-      expect(presenter.backLinkUri).toEqual('/group/group-123/edit-group-start-date')
+      expect(presenter.backLinkUri).toEqual('/group-123/edit-group-start-date')
     })
 
     it('returns edit-group-days-and-times link when isEditDate is false', () => {
@@ -24,7 +24,18 @@ describe('RescheduleSessionsPresenter', () => {
       }
       const presenter = new RescheduleSessionsPresenter(groupId, mockGroupDetails, false)
 
-      expect(presenter.backLinkUri).toEqual('/group/group-123/edit-group-days-and-times')
+      expect(presenter.backLinkUri).toEqual('/group-123/edit-group-days-and-times')
+    })
+  })
+
+  describe('pageTitle', () => {
+    it('returns the correct page title', () => {
+      const mockGroupDetails: Partial<CreateGroupRequest> = {
+        groupCode: 'TEST-GROUP-001',
+      }
+      const presenter = new RescheduleSessionsPresenter(groupId, mockGroupDetails, true)
+
+      expect(presenter.pageTitle).toEqual('Rescheduling other sessions')
     })
   })
 

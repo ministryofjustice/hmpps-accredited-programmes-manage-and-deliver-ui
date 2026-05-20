@@ -20,7 +20,7 @@ export default class CreateOrEditGroupCodePresenter {
       return `/group/${this.groupId}/group-details`
     }
 
-    return `/group/create-a-group/create-group`
+    return `/create-group`
   }
 
   get captionText() {
@@ -28,6 +28,10 @@ export default class CreateOrEditGroupCodePresenter {
   }
 
   get pageTitle() {
+    return this.isEditJourney ? `Edit group code` : 'Create group code'
+  }
+
+  get pageHeading() {
     return this.isEditJourney ? `Edit group code` : 'Create a group code'
   }
 

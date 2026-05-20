@@ -16,7 +16,7 @@ export default class CreateOrEditGroupWhenView {
       name: 'days-of-week',
       fieldset: {
         legend: {
-          text: this.presenter.isEdit ? 'Edit when will the group run' : 'When will the group run?',
+          text: this.presenter.isEditJourney ? 'Edit when will the group run' : 'When will the group run?',
           isPageHeading: true,
           classes: 'govuk-fieldset__legend--l',
         },
@@ -37,6 +37,7 @@ export default class CreateOrEditGroupWhenView {
       'createGroup/createGroupWhen',
       {
         backLinkArgs: this.backLinkArgs(),
+        pageTitle: this.presenter.pageTitle,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         text: this.presenter.text,
         checkboxArgs: this.checkboxArgs(),
