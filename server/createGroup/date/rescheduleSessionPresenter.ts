@@ -18,9 +18,13 @@ export default class RescheduleSessionsPresenter {
 
   get text() {
     return {
-      headingText: 'Rescheduling sessions',
+      headingText: 'Rescheduling other sessions',
       headingCaptionText: `Edit group ${this.updatedGroupDetails.groupCode}`,
     }
+  }
+
+  get pageTitle(): string {
+    return 'Rescheduling other sessions'
   }
 
   get backLinkUri() {

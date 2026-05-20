@@ -139,7 +139,7 @@ export default class EditGroupController extends BaseController {
           ...req.session.createGroupFormData,
           previousSessions: groupDetails.programmeGroupSessionSlots,
         }
-        return res.redirect(`/${groupId}/edit-group-days-and-times-rescheduled`)
+        return res.redirect(`/${groupId}/edit-session-date-and-time/reschedule`)
       }
     }
 

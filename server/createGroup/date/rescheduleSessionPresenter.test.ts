@@ -28,6 +28,17 @@ describe('RescheduleSessionsPresenter', () => {
     })
   })
 
+  describe('pageTitle', () => {
+    it('returns the correct page title', () => {
+      const mockGroupDetails: Partial<CreateGroupRequest> = {
+        groupCode: 'TEST-GROUP-001',
+      }
+      const presenter = new RescheduleSessionsPresenter(groupId, mockGroupDetails, true)
+
+      expect(presenter.pageTitle).toEqual('Rescheduling other sessions')
+    })
+  })
+
   describe('sessionDateAndTimesSummary', () => {
     describe('when isEditDate is true', () => {
       it('returns summary list with both previous and new start dates', () => {

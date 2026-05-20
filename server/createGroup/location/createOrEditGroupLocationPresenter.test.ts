@@ -70,6 +70,40 @@ describe('CreateOrEditGroupLocationPresenter', () => {
     })
   })
 
+  describe('pageTitle', () => {
+    it('returns edit page title when isEdit is true', () => {
+      const createGroupFormData: Partial<CreateGroupRequest> = {
+        groupCode: 'TEST-GROUP-001',
+      }
+      const presenter = new CreateOrEditGroupLocationPresenter(
+        mockLocations,
+        null,
+        createGroupFormData,
+        null,
+        groupId,
+        true,
+      )
+
+      expect(presenter.pageTitle).toEqual('Edit group delivery location')
+    })
+
+    it('returns create page title when isEdit is false', () => {
+      const createGroupFormData: Partial<CreateGroupRequest> = {
+        groupCode: 'NEW-GROUP-001',
+      }
+      const presenter = new CreateOrEditGroupLocationPresenter(
+        mockLocations,
+        null,
+        createGroupFormData,
+        null,
+        null,
+        false,
+      )
+
+      expect(presenter.pageTitle).toEqual('Group delivery location')
+    })
+  })
+
   describe('text', () => {
     describe('when isEdit is true', () => {
       it('returns edit mode heading text', () => {

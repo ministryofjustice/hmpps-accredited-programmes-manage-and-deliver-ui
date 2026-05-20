@@ -49,6 +49,7 @@ export default class RescheduleSessionsView {
       'editSession/otherSessions',
       {
         backLinkArgs: this.backLinkArgs(),
+        pageTitle: this.presenter.pageTitle,
         text: this.presenter.text,
         radioArgs: this.radioArgs,
         sessionDateAndTimesSummary: this.sessionDateAndTimesSummary,

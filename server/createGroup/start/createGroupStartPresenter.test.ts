@@ -8,4 +8,12 @@ describe('CreateGroupStartPresenter', () => {
       expect(presenter.backLinkUri).toEqual('/groups/not-started-and-in-progress')
     })
   })
+
+  describe('pageTitle', () => {
+    it('returns the correct page title', () => {
+      const presenter = new CreateGroupStartPresenter()
+
+      expect(presenter.pageTitle).toEqual('Create group')
+    })
+  })
 })

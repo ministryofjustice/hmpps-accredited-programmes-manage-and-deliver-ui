@@ -78,6 +78,26 @@ describe('CreateOrEditGroupPduPresenter', () => {
     })
   })
 
+  describe('pageTitle', () => {
+    it('returns edit page title when isEdit is true', () => {
+      const createGroupFormData: Partial<CreateGroupRequest> = {
+        groupCode: 'TEST-GROUP-001',
+      }
+      const presenter = new CreateOrEditGroupPduPresenter(mockLocations, null, createGroupFormData, null, groupId, true)
+
+      expect(presenter.pageTitle).toEqual('Edit probation delivery unit where the group will take place')
+    })
+
+    it('returns create page title when isEdit is false', () => {
+      const createGroupFormData: Partial<CreateGroupRequest> = {
+        groupCode: 'NEW-GROUP-001',
+      }
+      const presenter = new CreateOrEditGroupPduPresenter(mockLocations, null, createGroupFormData, null, null, false)
+
+      expect(presenter.pageTitle).toEqual('Probation delivery unit where the group will take place')
+    })
+  })
+
   describe('generateSelectOptions', () => {
     it('generates select options from locations with no selection', () => {
       const createGroupFormData: Partial<CreateGroupRequest> = {

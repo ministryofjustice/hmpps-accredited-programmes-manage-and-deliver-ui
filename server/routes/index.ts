@@ -265,7 +265,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await editGroupController.editGroupDaysAndTimes(req, res)
   })
 
-  getOrPost('/:groupId/edit-group-days-and-times-rescheduled', async (req, res) => {
+  getOrPost('/:groupId/edit-session-date-and-time/reschedule', async (req, res) => {
     await editGroupController.editGroupRescheduleDayTimes(req, res)
   })
 
