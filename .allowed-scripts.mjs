@@ -6,7 +6,7 @@ export default configureAllowedScripts({
     'node_modules/dtrace-provider@0.8.8': 'ALLOW',
     'node_modules/fsevents@2.3.3': 'ALLOW',
     'node_modules/protobufjs@8.0.1': 'ALLOW',
-    'node_modules/unrs-resolver@1.12.1': 'ALLOW',
+    'node_modules/unrs-resolver@1.12.2': 'ALLOW',
     'node_modules/@parcel/watcher@2.5.6': 'ALLOW',
     'node_modules/cypress@15.15.0': 'ALLOW',
     'node_modules/esbuild@0.28.0': 'ALLOW',

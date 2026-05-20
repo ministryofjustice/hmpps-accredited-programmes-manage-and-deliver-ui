@@ -23,7 +23,7 @@ export default class LocationPreferencesController extends BaseController {
   }
 
   async showLocationPreferencesPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as Record<string, string>
     const { username } = req.user
 
     const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
@@ -79,7 +79,7 @@ export default class LocationPreferencesController extends BaseController {
   }
 
   async showAdditionalPduLocationPreferencesPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as Record<string, string>
     const { username } = req.user
 
     const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
@@ -130,7 +130,7 @@ export default class LocationPreferencesController extends BaseController {
   }
 
   async showCannotAttendLocationsPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as Record<string, string>
     const { username } = req.user
 
     const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(

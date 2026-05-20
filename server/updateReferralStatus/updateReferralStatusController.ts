@@ -17,7 +17,7 @@ export default class UpdateReferralStatusController {
   ) {}
 
   async updateStatus(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as Record<string, string>
     const { username } = req.user
 
     const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
@@ -62,7 +62,7 @@ export default class UpdateReferralStatusController {
   }
 
   async updateStatusStartedOrCompleted(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as Record<string, string>
     const { username } = req.user
 
     const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
@@ -107,7 +107,7 @@ export default class UpdateReferralStatusController {
   }
 
   async updateStatusToOnProgrammeOrCompleted(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as Record<string, string>
     const { username } = req.user
 
     const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
