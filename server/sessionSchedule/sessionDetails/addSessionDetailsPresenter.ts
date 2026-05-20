@@ -27,6 +27,10 @@ export default class AddSessionDetailsPresenter {
     return this.backLink
   }
 
+  get pageTitle(): string {
+    return 'Add session details'
+  }
+
   get errorSummary() {
     return PresenterUtils.errorSummary(this.validationError)
   }

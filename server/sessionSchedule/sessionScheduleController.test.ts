@@ -97,10 +97,10 @@ beforeEach(() => {
 })
 
 describe('Session Schedule Controller', () => {
-  describe('GET /group/:groupId/module/:moduleId/schedule-session-type', () => {
+  describe('GET /:groupId/module/:moduleId/schedule-session-type', () => {
     it('loads the session schedule which page', async () => {
       return request(app)
-        .get(`/group/${groupId}/module/${moduleId}/schedule-session-type`)
+        .get(`/${groupId}/module/${moduleId}/schedule-session-type`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Schedule a Getting started one-to-one')
@@ -114,7 +114,7 @@ describe('Session Schedule Controller', () => {
 
     it('displays all available session templates', async () => {
       return request(app)
-        .get(`/group/${groupId}/module/${moduleId}/schedule-session-type`)
+        .get(`/${groupId}/module/${moduleId}/schedule-session-type`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Getting started one-to-one')
@@ -134,7 +134,7 @@ describe('Session Schedule Controller', () => {
       accreditedProgrammesManageAndDeliverService.getSessionTemplates.mockResolvedValue(mockScheduleSessionTypeResponse)
 
       return request(app)
-        .get(`/group/${groupId}/module/${moduleId}/schedule-session-type`)
+        .get(`/${groupId}/module/${moduleId}/schedule-session-type`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(`value="${checkboxValue}" checked`)
@@ -142,22 +142,22 @@ describe('Session Schedule Controller', () => {
     })
   })
 
-  describe('POST /group/:groupId/module/:moduleId/schedule-session-type', () => {
+  describe('POST /:groupId/module/:moduleId/schedule-session-type', () => {
     it('redirects to session details page on successful submission', async () => {
       const selectedTemplateId = mockScheduleSessionTypeResponse.sessionTemplates[0].id
 
       return request(app)
-        .post(`/group/${groupId}/module/${moduleId}/schedule-session-type`)
+        .post(`/${groupId}/module/${moduleId}/schedule-session-type`)
         .send({ 'session-template': selectedTemplateId })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(`Redirecting to /group/${groupId}/module/${moduleId}/schedule-session-details`)
+          expect(res.text).toContain(`Redirecting to /${groupId}/module/${moduleId}/schedule-session-details`)
         })
     })
 
     it('shows validation error when no session template is selected', async () => {
       return request(app)
-        .post(`/group/${groupId}/module/${moduleId}/schedule-session-type`)
+        .post(`/${groupId}/module/${moduleId}/schedule-session-type`)
         .send({})
         .expect(400)
         .expect(res => {
@@ -168,7 +168,7 @@ describe('Session Schedule Controller', () => {
 
     it('does not redirect when validation fails', async () => {
       const response = await request(app)
-        .post(`/group/${groupId}/module/${moduleId}/schedule-session-type`)
+        .post(`/${groupId}/module/${moduleId}/schedule-session-type`)
         .send({})
         .expect(400)
 
@@ -177,7 +177,7 @@ describe('Session Schedule Controller', () => {
     })
   })
 
-  describe('GET /group/:groupId/module/:moduleId/schedule-session-details', () => {
+  describe('GET /:groupId/module/:moduleId/schedule-session-details', () => {
     beforeEach(() => {
       const sessionData: Partial<SessionData> = {
         sessionScheduleData: {
@@ -206,7 +206,7 @@ describe('Session Schedule Controller', () => {
 
     it('loads the session details page', async () => {
       return request(app)
-        .get(`/group/${groupId}/module/${moduleId}/schedule-session-details`)
+        .get(`/${groupId}/module/${moduleId}/schedule-session-details`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Add session details')
@@ -219,7 +219,7 @@ describe('Session Schedule Controller', () => {
     })
   })
 
-  describe('POST /group/:groupId/module/:moduleId/schedule-session-details', () => {
+  describe('POST /:groupId/module/:moduleId/schedule-session-details', () => {
     beforeEach(() => {
       accreditedProgrammesManageAndDeliverService.getIndividualSessionDetails.mockResolvedValue({
         facilitators: [
@@ -238,7 +238,7 @@ describe('Session Schedule Controller', () => {
 
     it('saves valid session details to session and redirects to review your session page', async () => {
       return request(app)
-        .post(`/group/${groupId}/module/${moduleId}/schedule-session-details`)
+        .post(`/${groupId}/module/${moduleId}/schedule-session-details`)
         .send({
           'session-details-who': `a9971fd6-a185-43ee-bb23-a0ab23a14f50 + Jane Doe`,
           'session-details-facilitator': JSON.stringify({

@@ -209,6 +209,7 @@ export default class AddSessionDetailsView {
       'sessionSchedule/addSessionDetails',
       {
         backLinkArgs: this.backLinkArgs(),
+        pageTitle: this.presenter.pageTitle,
         text: this.presenter.text,
         sessionDetailsDateArgs: this.sessionDetailsDateArgs,
         sessionDetailsRadioArgs: this.sessionDetailsRadioArgs,

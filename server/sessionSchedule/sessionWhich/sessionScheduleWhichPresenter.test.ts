@@ -47,6 +47,14 @@ describe('SessionScheduleWhichPresenter', () => {
     })
   })
 
+  describe('pageTitle', () => {
+    it('should return the correct page title', () => {
+      const presenter = new SessionScheduleWhichPresenter(groupId, mockScheduleSessionTypeResponse, null)
+
+      expect(presenter.pageTitle).toEqual('Which session are you scheduling?')
+    })
+  })
+
   describe('sessionTemplates', () => {
     it('should return the available session templates', () => {
       const presenter = new SessionScheduleWhichPresenter(groupId, mockScheduleSessionTypeResponse, null)

@@ -17,6 +17,14 @@ describe('AddSessionDetailsPresenter', () => {
     ],
   } as ScheduleIndividualSessionDetailsResponse
 
+  describe('pageTitle', () => {
+    it('returns the correct page title', () => {
+      const presenter = new AddSessionDetailsPresenter(sessionDetails, 'backLinkUri')
+
+      expect(presenter.pageTitle).toBe('Add session details')
+    })
+  })
+
   describe('generateFacilitatorSelectOptions', () => {
     it('generates select options with facilitator data', () => {
       const presenter = new AddSessionDetailsPresenter(sessionDetails, 'backLinkUri')

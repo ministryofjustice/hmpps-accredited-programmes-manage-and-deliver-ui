@@ -62,7 +62,7 @@ export default class SessionScheduleController extends BaseController {
           selectedSession,
           groupOrOneToOne,
         }
-        return res.redirect(`/group/${groupId}/module/${moduleId}/schedule-session-details`)
+        return res.redirect(`/${groupId}/module/${moduleId}/schedule-session-details`)
       }
     }
     const presenter = new SessionScheduleWhichPresenter(
@@ -118,7 +118,7 @@ export default class SessionScheduleController extends BaseController {
       groupId,
       moduleId,
     )
-    const backLink = `/group/${groupId}/module/${moduleId}/schedule-session-type`
+    const backLink = `/${groupId}/module/${moduleId}/schedule-session-type`
     const presenter = new AddSessionDetailsPresenter(
       sessionDetails,
       backLink,
