@@ -19,7 +19,7 @@ export default class SessionNotesController extends BaseController {
 
   async showSessionNotesPage(req: Request, res: Response): Promise<void> {
     const { username } = req.user
-    const { sessionId } = req.params
+    const { sessionId } = req.params as Record<string, string>
     const referralId = req.query.referralId as string | undefined
     const source = req.query.source as string | undefined
     const isAttendanceHistory = req.query.isAttendanceHistory === 'true'

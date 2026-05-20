@@ -16,7 +16,7 @@ export default class LdcController extends BaseController {
   }
 
   async showChangeLdcPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as Record<string, string>
     const { username } = req.user
     const referralDetails: ReferralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
       referralId,
