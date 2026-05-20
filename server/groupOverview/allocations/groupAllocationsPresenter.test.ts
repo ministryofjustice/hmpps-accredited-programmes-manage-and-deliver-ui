@@ -7,6 +7,34 @@ afterEach(() => {
 })
 
 describe('GroupAllocationsPresenter', () => {
+  describe('pageTitle', () => {
+    it('returns "Group allocations" when section is Allocated', () => {
+      const filterObject = GroupAllocationsFilter.empty()
+      const groupOverview = ProgrammeGroupOverviewFactory.build()
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Allocated,
+        groupOverview,
+        '1234',
+        filterObject,
+      )
+
+      expect(presenter.pageTitle).toEqual('Group allocations')
+    })
+
+    it('returns "Building Choices waitlist" when section is Waitlist', () => {
+      const filterObject = GroupAllocationsFilter.empty()
+      const groupOverview = ProgrammeGroupOverviewFactory.build()
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Waitlist,
+        groupOverview,
+        '1234',
+        filterObject,
+      )
+
+      expect(presenter.pageTitle).toEqual('Building Choices waitlist')
+    })
+  })
+
   describe('generateTableHeadings', () => {
     it('should return the correct table headings for allocated list', () => {
       const filterObject = GroupAllocationsFilter.empty()

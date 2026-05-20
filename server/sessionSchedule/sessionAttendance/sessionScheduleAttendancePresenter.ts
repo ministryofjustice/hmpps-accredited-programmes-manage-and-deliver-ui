@@ -20,6 +20,10 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
     super(GroupServiceNavigationValues.sessionsAndAttendanceTab, groupId)
   }
 
+  get pageTitle(): string {
+    return 'Sessions and attendance'
+  }
+
   get text() {
     const groupCode = this.groupSessionsData?.group?.code
 

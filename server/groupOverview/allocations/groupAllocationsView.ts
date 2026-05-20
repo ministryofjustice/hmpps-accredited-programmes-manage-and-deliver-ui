@@ -110,6 +110,7 @@ export default class GroupAllocationsView {
       'groupOverview/groupOverview',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         subNavArgs: this.presenter.getSubNavArgs(),
         searchByCrnOrPersonNameArgs: this.searchByCrnOrPersonNameArgs,
         isWaitlist: this.presenter.section === GroupAllocationsPageSection.Waitlist,

@@ -57,6 +57,14 @@ describe('SessionScheduleAttendancePresenter', () => {
     ],
   }
 
+  describe('pageTitle', () => {
+    it('returns the correct page title', () => {
+      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
+
+      expect(presenter.pageTitle).toEqual('Sessions and attendance')
+    })
+  })
+
   describe('text', () => {
     it('returns the correct heading caption and text', () => {
       const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)

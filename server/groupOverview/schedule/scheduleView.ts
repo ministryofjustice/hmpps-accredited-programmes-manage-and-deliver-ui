@@ -84,6 +84,7 @@ export default class ScheduleView {
       'groupOverview/schedule/scheduleOverview',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         text: this.presenter.text,
         serviceNavigationArgs: this.presenter.getMojSubNavigationArgs(),
         scheduleSummaryListArgs: this.scheduleSummaryListArgs,
