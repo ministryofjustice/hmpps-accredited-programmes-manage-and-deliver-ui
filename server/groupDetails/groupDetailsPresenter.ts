@@ -52,7 +52,7 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
       {
         key: 'Days and times',
         lines: this.group.daysAndTimes,
-        changeLink: `/group/${this.groupId}/edit-group-days-and-times`,
+        changeLink: `/${this.groupId}/edit-group-days-and-times`,
       },
     ]
   }
