@@ -35,6 +35,7 @@ export default class CreateOrEditGroupPduView {
       'createGroup/createGroupPdu',
       {
         backLinkArgs: this.backLinkArgs(),
+        pageTitle: this.presenter.pageTitle,
         createGroupPduArgs: this.createGroupPduArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         text: this.presenter.text,

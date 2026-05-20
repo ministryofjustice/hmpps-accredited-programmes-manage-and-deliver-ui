@@ -40,7 +40,7 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
       {
         key: 'Group code',
         lines: [this.group.code],
-        changeLink: `/group/${this.groupId}/edit-a-group/edit-group-code`,
+        changeLink: `/${this.groupId}/edit-group-code`,
         visuallyHiddenText: 'group code',
       },
     ]
@@ -51,12 +51,12 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
       {
         key: 'Start date',
         lines: [this.group.startDate],
-        changeLink: this.isStartDateInThePast ? null : `/group/${this.groupId}/edit-group-start-date`,
+        changeLink: this.isStartDateInThePast ? null : `/${this.groupId}/edit-group-start-date`,
       },
       {
         key: 'Days and times',
         lines: this.group.daysAndTimes,
-        changeLink: `/group/${this.groupId}/edit-group-days-and-times`,
+        changeLink: `/${this.groupId}/edit-group-days-and-times`,
       },
     ]
   }
@@ -66,13 +66,13 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
       {
         key: 'Cohort',
         lines: [this.group.cohort],
-        changeLink: `/group/${this.groupId}/edit-a-group/edit-group-cohort`,
+        changeLink: `/${this.groupId}/edit-group-cohort`,
         visuallyHiddenText: 'group cohort',
       },
       {
         key: 'Gender',
         lines: [this.group.sex],
-        changeLink: `/group/${this.groupId}/edit-group-gender`,
+        changeLink: `/${this.groupId}/edit-group-gender`,
         visuallyHiddenText: 'group gender',
       },
       {
@@ -92,12 +92,12 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
       {
         key: 'Probation delivery unit (PDU)',
         lines: [this.group.pduName],
-        changeLink: `/group/${this.groupId}/edit-group-probation-delivery-unit`,
+        changeLink: `/${this.groupId}/edit-group-probation-delivery-unit`,
       },
       {
         key: 'Delivery location',
         lines: [this.group.deliveryLocation],
-        changeLink: `/group/${this.groupId}/edit-group-delivery-location`,
+        changeLink: `/${this.groupId}/edit-group-delivery-location`,
       },
     ]
   }
@@ -110,19 +110,19 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
       {
         key: 'Treatment Manager',
         lines: [this.group.treatmentManager?.facilitator || 'None added'],
-        changeLink: `/group/${this.groupId}/edit-group-facilitators`,
+        changeLink: `/${this.groupId}/edit-group-facilitators`,
         visuallyHiddenText: ' edit group treatment manager',
       },
       {
         key: 'Facilitators',
         lines: this.group.facilitators.length > 0 ? this.group.facilitators.map(f => f.facilitator) : ['None added'],
-        changeLink: `/group/${this.groupId}/edit-group-facilitators`,
+        changeLink: `/${this.groupId}/edit-group-facilitators`,
         visuallyHiddenText: 'edit group facilitators',
       },
       {
         key: 'Cover facilitators',
         lines: coverFacilitators.length > 0 ? coverFacilitators : ['None added'],
-        changeLink: `/group/${this.groupId}/edit-group-facilitators`,
+        changeLink: `/${this.groupId}/edit-group-facilitators`,
         visuallyHiddenText: 'edit group cover facilitators',
       },
     ]

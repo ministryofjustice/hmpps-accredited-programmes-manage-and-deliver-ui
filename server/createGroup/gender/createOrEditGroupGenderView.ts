@@ -1,9 +1,9 @@
 import { RadiosArgs } from '../../utils/govukFrontendTypes'
 import ViewUtils from '../../utils/viewUtils'
-import CreateGroupSexPresenter from './createOrEditGroupSexPresenter'
+import CreateGroupSexPresenter from './createOrEditGroupGenderPresenter'
 import CreateGroupUtils from '../createGroupUtils'
 
-export default class CreateGroupSexView {
+export default class CreateGroupGenderView {
   constructor(private readonly presenter: CreateGroupSexPresenter) {}
 
   private backLinkArgs() {
@@ -18,7 +18,7 @@ export default class CreateGroupSexView {
       name: 'create-group-sex',
       fieldset: {
         legend: {
-          text: this.presenter.pageTitle,
+          text: this.presenter.pageHeading,
           isPageHeading: true,
           classes: 'govuk-fieldset__legend--l',
         },
@@ -26,17 +26,18 @@ export default class CreateGroupSexView {
       items: new CreateGroupUtils().programmeGroupSexEnum.map(option => ({
         value: option.value,
         text: option.text,
-        checked: this.presenter.fields.createOrEditGroupSex.value === option.value,
+        checked: this.presenter.fields.createOrEditGroupGender.value === option.value,
       })),
-      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createOrEditGroupSex.errorMessage),
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createOrEditGroupGender.errorMessage),
     }
   }
 
   get renderArgs(): [string, Record<string, unknown>] {
     return [
-      'createGroup/createGroupSex',
+      'createGroup/createGroupGender',
       {
         backLinkArgs: this.backLinkArgs(),
+        pageTitle: this.presenter.pageTitle,
         captionText: this.presenter.captionText,
         createGroupSexArgs: this.createGroupSexArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),

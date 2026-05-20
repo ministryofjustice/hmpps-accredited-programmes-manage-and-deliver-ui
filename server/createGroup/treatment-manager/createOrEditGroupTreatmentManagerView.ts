@@ -120,6 +120,7 @@ export default class CreateOrEditGroupTreatmentManagerView {
         createExistingGroupCoverFacilitatorArgs: this.createExistingGroupCoverFacilitatorArgs.bind(this),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         pageTitle: this.presenter.pageTitle,
+        pageHeading: this.presenter.pageHeading,
         isEditJourney: this.presenter.isEditJourney,
         submitButtonText: this.presenter.submitButtonText,
         captionText: this.presenter.captionText,

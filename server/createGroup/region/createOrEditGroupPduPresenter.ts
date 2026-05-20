@@ -10,19 +10,25 @@ export default class CreateOrEditGroupPduPresenter {
     private readonly createGroupFormData: Partial<CreateGroupRequest> | null = null,
     private readonly userInputData: Record<string, unknown> | null = null,
     private readonly groupId: string | null = null,
-    readonly isEdit = false,
+    readonly isEditJourney = false,
   ) {}
 
   get backLinkUri() {
-    return this.isEdit ? `/group/${this.groupId}/group-details` : `/group/create-a-group/group-sex`
+    return this.isEditJourney ? `/group/${this.groupId}/group-details` : `/group-gender`
+  }
+
+  get pageTitle(): string {
+    return this.isEditJourney
+      ? 'Edit probation delivery unit where the group will take place'
+      : 'Probation delivery unit where the group will take place'
   }
 
   get text() {
     return {
-      headingHintText: this.isEdit
+      headingHintText: this.isEditJourney
         ? `Edit group ${this.createGroupFormData?.groupCode}`
         : `Create group ${this.createGroupFormData?.groupCode}`,
-      headingText: this.isEdit
+      headingText: this.isEditJourney
         ? `Edit the probation delivery unit (PDU) where the group will take place`
         : `In which probation delivery unit (PDU) will the group take place?`,
     }

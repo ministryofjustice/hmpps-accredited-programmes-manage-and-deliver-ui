@@ -4,4 +4,8 @@ export default class CreateGroupStartPresenter {
   get backLinkUri() {
     return `/groups/not-started-and-in-progress`
   }
+
+  get pageTitle(): string {
+    return 'Create group'
+  }
 }

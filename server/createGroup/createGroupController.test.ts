@@ -28,10 +28,10 @@ beforeEach(() => {
 })
 
 describe('Create Group Controller', () => {
-  describe('GET /group/create-a-group/create-group', () => {
+  describe('GET /create-group', () => {
     it('loads the initial start page for creating a group', async () => {
       return request(app)
-        .get('/group/create-a-group/create-group')
+        .get('/create-group')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Create a group')
@@ -50,7 +50,7 @@ describe('Create Group Controller', () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
       return request(app)
-        .get('/group/create-a-group/create-group')
+        .get('/create-group')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Create a group')
@@ -58,25 +58,25 @@ describe('Create Group Controller', () => {
     })
   })
 
-  describe('POST /group/create-a-group/create-group', () => {
+  describe('POST /create-group', () => {
     it('redirects to the code page', async () => {
       return request(app)
-        .post('/group/create-a-group/create-group')
+        .post('/create-group')
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain('Redirecting to /group/create-a-group/create-group-code')
+          expect(res.text).toContain('Redirecting to /create-group-code')
         })
     })
   })
 
-  describe('GET /group/create-a-group/create-group-code', () => {
+  describe('GET /create-group-code', () => {
     it('loads the group code page', async () => {
       return request(app)
-        .get('/group/create-a-group/create-group-code')
+        .get('/create-group-code')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Create a group code')
-          expect(res.text).toContain('href="/group/create-a-group/create-group"')
+          expect(res.text).toContain('href="/create-group"')
         })
     })
 
@@ -89,7 +89,7 @@ describe('Create Group Controller', () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
       return request(app)
-        .get('/group/create-a-group/create-group-code')
+        .get('/create-group-code')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('TEST123')
@@ -97,15 +97,15 @@ describe('Create Group Controller', () => {
     })
   })
 
-  describe('POST /group/create-a-group/create-group-code', () => {
+  describe('POST /create-group-code', () => {
     it('redirects to start date page on successful submission', async () => {
       return request(app)
-        .post('/group/create-a-group/create-group-code')
+        .post('/create-group-code')
         .type('form')
         .send({ 'create-group-code': 'ABC123' })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain('Redirecting to /group/create-a-group/group-start-date')
+          expect(res.text).toContain('Redirecting to /group-start-date')
         })
     })
 
@@ -114,18 +114,18 @@ describe('Create Group Controller', () => {
       accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockRejectedValue({ status: 404 })
 
       return request(app)
-        .post('/group/create-a-group/create-group-code')
+        .post('/create-group-code')
         .type('form')
         .send({ 'create-group-code': 'ABC123' })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain('Redirecting to /group/create-a-group/group-start-date')
+          expect(res.text).toContain('Redirecting to /group-start-date')
         })
     })
 
     it('returns with errors if group code is missing', async () => {
       return request(app)
-        .post('/group/create-a-group/create-group-code')
+        .post('/create-group-code')
         .type('form')
         .send({})
         .expect(400)
@@ -135,14 +135,14 @@ describe('Create Group Controller', () => {
     })
   })
 
-  describe('GET /group/create-a-group/group-start-date', () => {
+  describe('GET /group-start-date', () => {
     it('loads the date selection page', async () => {
       return request(app)
-        .get('/group/create-a-group/group-start-date')
+        .get('/group-start-date')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(' Add a start date for the group')
-          expect(res.text).toContain('href="/group/create-a-group/create-group-code"')
+          expect(res.text).toContain('href="/create-group-code"')
         })
     })
 
@@ -155,7 +155,7 @@ describe('Create Group Controller', () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
       return request(app)
-        .get('/group/create-a-group/group-start-date')
+        .get('/group-start-date')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('10/7/2050')
@@ -163,21 +163,21 @@ describe('Create Group Controller', () => {
     })
   })
 
-  describe('POST /group/create-a-group/group-start-date', () => {
+  describe('POST /group-start-date', () => {
     it('redirects to cohort page on successful submission', async () => {
       return request(app)
-        .post('/group/create-a-group/group-start-date')
+        .post('/group-start-date')
         .type('form')
         .send({ 'create-group-date': '10/7/2050' })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain('Redirecting to /group/create-a-group/group-days-and-times')
+          expect(res.text).toContain('Redirecting to /group-days-and-times')
         })
     })
 
     it('returns with errors if date is missing', async () => {
       return request(app)
-        .post('/group/create-a-group/group-start-date')
+        .post('/group-start-date')
         .type('form')
         .send({})
         .expect(400)
@@ -187,7 +187,7 @@ describe('Create Group Controller', () => {
     })
   })
 
-  describe('GET /group/create-a-group/group-days-and-times', () => {
+  describe('GET /group-days-and-times', () => {
     it('loads the days and times page', async () => {
       const sessionData: Partial<SessionData> = {
         createGroupFormData: {
@@ -197,23 +197,23 @@ describe('Create Group Controller', () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
       return request(app)
-        .get('/group/create-a-group/group-days-and-times')
+        .get('/group-days-and-times')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('When will the group run?')
-          expect(res.text).toContain('href="/group/create-a-group/group-start-date"')
+          expect(res.text).toContain('href="/group-start-date"')
         })
     })
   })
 
-  describe('GET /group/create-a-group/group-cohort', () => {
+  describe('GET /group-cohort', () => {
     it('loads the cohort selection page', async () => {
       return request(app)
-        .get('/group/create-a-group/group-cohort')
+        .get('/group-cohort')
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain('Create group cohort')
-          expect(res.text).toContain('href="/group/create-a-group/group-days-and-times"')
+          expect(res.text).toContain('Select the group cohort')
+          expect(res.text).toContain('href="/group-days-and-times"')
         })
     })
 
@@ -226,7 +226,7 @@ describe('Create Group Controller', () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
       return request(app)
-        .get('/group/create-a-group/group-cohort')
+        .get('/group-cohort')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('General offence')
@@ -234,23 +234,23 @@ describe('Create Group Controller', () => {
     })
   })
 
-  describe('POST /group/create-a-group/group-cohort', () => {
+  describe('POST /group-cohort', () => {
     it('redirects to sex page on successful submission', async () => {
       return request(app)
-        .post('/group/create-a-group/group-cohort')
+        .post('/group-cohort')
         .type('form')
         .send({
           'create-group-cohort': 'GENERAL',
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain('Redirecting to /group/create-a-group/group-sex')
+          expect(res.text).toContain('Redirecting to /group-gender')
         })
     })
 
     it('returns with errors if cohort is not selected', async () => {
       return request(app)
-        .post('/group/create-a-group/group-cohort')
+        .post('/group-cohort')
         .type('form')
         .send({})
         .expect(400)
@@ -260,14 +260,14 @@ describe('Create Group Controller', () => {
     })
   })
 
-  describe('GET /group/create-a-group/group-sex', () => {
+  describe('GET /group-gender', () => {
     it('loads the gender selection page', async () => {
       return request(app)
-        .get('/group/create-a-group/group-sex')
+        .get('/group-gender')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Select the gender of the group')
-          expect(res.text).toContain('href="/group/create-a-group/group-cohort"')
+          expect(res.text).toContain('href="/group-cohort"')
         })
     })
 
@@ -280,7 +280,7 @@ describe('Create Group Controller', () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
       return request(app)
-        .get('/group/create-a-group/group-sex')
+        .get('/group-gender')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Male')
@@ -288,23 +288,23 @@ describe('Create Group Controller', () => {
     })
   })
 
-  describe('POST /group/create-a-group/group-sex', () => {
+  describe('POST /group-gender', () => {
     it('redirects to PDU page on successful submission', async () => {
       return request(app)
-        .post('/group/create-a-group/group-sex')
+        .post('/group-gender')
         .type('form')
         .send({
           'create-group-sex': 'MALE',
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain('Redirecting to /group/create-a-group/group-probation-delivery-unit')
+          expect(res.text).toContain('Redirecting to /group-probation-delivery-unit')
         })
     })
 
     it('returns with errors if sex is not selected', async () => {
       return request(app)
-        .post('/group/create-a-group/group-sex')
+        .post('/group-gender')
         .type('form')
         .send({})
         .expect(400)
@@ -314,17 +314,17 @@ describe('Create Group Controller', () => {
     })
   })
 
-  describe('GET /group/create-a-group/group-probation-delivery-unit', () => {
+  describe('GET /group-probation-delivery-unit', () => {
     it('loads the pdu selection page', async () => {
       accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion.mockResolvedValue([
         { code: 'LDN', description: 'London' },
       ])
       return request(app)
-        .get('/group/create-a-group/group-probation-delivery-unit')
+        .get('/group-probation-delivery-unit')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('In which probation delivery unit (PDU) will the group take place?')
-          expect(res.text).toContain('href="/group/create-a-group/group-sex"')
+          expect(res.text).toContain('href="/group-gender"')
         })
     })
 
@@ -340,7 +340,7 @@ describe('Create Group Controller', () => {
         { code: 'LDN', description: 'London' },
       ])
       return request(app)
-        .get('/group/create-a-group/group-probation-delivery-unit')
+        .get('/group-probation-delivery-unit')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('London')
@@ -348,20 +348,20 @@ describe('Create Group Controller', () => {
     })
   })
 
-  describe('POST /group/create-a-group/group-probation-delivery-unit', () => {
+  describe('POST /group-probation-delivery-unit', () => {
     it('redirects to select location page on successful submission', async () => {
       accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion.mockResolvedValue([
         { code: 'LDN', description: 'London' },
       ])
       return request(app)
-        .post('/group/create-a-group/group-probation-delivery-unit')
+        .post('/group-probation-delivery-unit')
         .type('form')
         .send({
           'create-group-pdu': '{"code":"LDN", "name":"London"}',
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain('Redirecting to /group/create-a-group/group-delivery-location')
+          expect(res.text).toContain('Redirecting to /group-delivery-location')
         })
     })
 
@@ -370,7 +370,7 @@ describe('Create Group Controller', () => {
         { code: 'LDN', description: 'London' },
       ])
       return request(app)
-        .post('/group/create-a-group/group-probation-delivery-unit')
+        .post('/group-probation-delivery-unit')
         .type('form')
         .send({})
         .expect(400)
@@ -380,18 +380,18 @@ describe('Create Group Controller', () => {
     })
   })
 
-  describe('GET /group/create-a-group/group-delivery-location', () => {
+  describe('GET /group-delivery-location', () => {
     it('loads the location selection page', async () => {
       accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu.mockResolvedValue([
         { code: 'WMO', description: 'Westminster Office' },
         { code: 'WHO', description: 'Whitehall Office' },
       ])
       return request(app)
-        .get('/group/create-a-group/group-delivery-location')
+        .get('/group-delivery-location')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Where will the group take place?')
-          expect(res.text).toContain('href="/group/create-a-group/group-probation-delivery-unit"')
+          expect(res.text).toContain('href="/group-probation-delivery-unit"')
         })
     })
 
@@ -409,7 +409,7 @@ describe('Create Group Controller', () => {
         { code: 'WHO', description: 'Whitehall Office' },
       ])
       return request(app)
-        .get('/group/create-a-group/group-delivery-location')
+        .get('/group-delivery-location')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Whitehall Office')
@@ -417,20 +417,20 @@ describe('Create Group Controller', () => {
     })
   })
 
-  describe('POST /group/create-a-group/group-delivery-location', () => {
+  describe('POST /group-delivery-location', () => {
     it('redirects to check your answers page on successful submission', async () => {
       accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu.mockResolvedValue([
         { code: 'LDN', description: 'London' },
       ])
       return request(app)
-        .post('/group/create-a-group/group-delivery-location')
+        .post('/group-delivery-location')
         .type('form')
         .send({
           'create-group-location': '{ "code": "WMO", "name": "Westminster Office" }',
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain('Redirecting to /group/create-a-group/group-facilitators')
+          expect(res.text).toContain('Redirecting to /group-facilitators')
         })
     })
 
@@ -439,7 +439,7 @@ describe('Create Group Controller', () => {
         { code: 'LDN', description: 'London' },
       ])
       return request(app)
-        .post('/group/create-a-group/group-delivery-location')
+        .post('/group-delivery-location')
         .type('form')
         .send({})
         .expect(400)
@@ -449,7 +449,7 @@ describe('Create Group Controller', () => {
     })
   })
 
-  describe('GET /group/create-a-group/group-facilitators', () => {
+  describe('GET /group-facilitators', () => {
     it('loads the treatment manager selection page', async () => {
       accreditedProgrammesManageAndDeliverService.getPduMembers.mockResolvedValue([
         {
@@ -460,11 +460,11 @@ describe('Create Group Controller', () => {
         },
       ])
       return request(app)
-        .get('/group/create-a-group/group-facilitators')
+        .get('/group-facilitators')
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain('Who is responsible for the group')
-          expect(res.text).toContain('href="/group/create-a-group/group-delivery-location"')
+          expect(res.text).toContain('People responsible for the group')
+          expect(res.text).toContain('href="/group-delivery-location"')
         })
     })
 
@@ -493,7 +493,7 @@ describe('Create Group Controller', () => {
         },
       ])
       return request(app)
-        .get('/group/create-a-group/group-facilitators')
+        .get('/group-facilitators')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('John Smith')
@@ -502,7 +502,7 @@ describe('Create Group Controller', () => {
     })
   })
 
-  describe('POST /group/create-a-group/group-facilitators', () => {
+  describe('POST /group-facilitators', () => {
     it('redirects to check your answers page on successful submission', async () => {
       accreditedProgrammesManageAndDeliverService.getPduMembers.mockResolvedValue([
         {
@@ -513,7 +513,7 @@ describe('Create Group Controller', () => {
         },
       ])
       return request(app)
-        .post('/group/create-a-group/group-facilitators')
+        .post('/group-facilitators')
         .type('form')
         .send({
           'create-group-treatment-manager':
@@ -523,7 +523,7 @@ describe('Create Group Controller', () => {
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain('Redirecting to /group/create-a-group/group-review-details')
+          expect(res.text).toContain('Redirecting to /group-review-details')
         })
     })
 
@@ -537,7 +537,7 @@ describe('Create Group Controller', () => {
         },
       ])
       return request(app)
-        .post('/group/create-a-group/group-facilitators')
+        .post('/group-facilitators')
         .type('form')
         .send({})
         .expect(400)
@@ -564,7 +564,7 @@ describe('Create Group Controller', () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
       await request(app)
-        .post('/group/create-a-group/group-facilitators')
+        .post('/group-facilitators')
         .type('form')
         .send({
           'create-group-treatment-manager':
@@ -575,7 +575,7 @@ describe('Create Group Controller', () => {
         .expect(302)
 
       return request(app)
-        .get('/group/create-a-group/group-facilitators')
+        .get('/group-facilitators')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('John Smith')
@@ -583,7 +583,7 @@ describe('Create Group Controller', () => {
     })
   })
 
-  describe('GET /group/create-a-group/group-review-details', () => {
+  describe('GET /group-review-details', () => {
     it('loads the check your answers page with all session data', async () => {
       const sessionData: Partial<SessionData> = {
         createGroupFormData: {
@@ -605,11 +605,11 @@ describe('Create Group Controller', () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
       return request(app)
-        .get('/group/create-a-group/group-review-details')
+        .get('/group-review-details')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Review your group details')
-          expect(res.text).toContain('href="/group/create-a-group/group-facilitators"')
+          expect(res.text).toContain('href="/group-facilitators"')
           expect(res.text).toContain('ABC123')
           expect(res.text).toContain('10/7/2050')
           expect(res.text).toContain('General offence')
@@ -618,7 +618,7 @@ describe('Create Group Controller', () => {
     })
   })
 
-  describe('POST /group/create-a-group/group-review-details', () => {
+  describe('POST /group-review-details', () => {
     it('creates a group and redirects to schedule overview with success message', async () => {
       const sessionData: Partial<SessionData> = {
         createGroupFormData: {
@@ -636,7 +636,7 @@ describe('Create Group Controller', () => {
       })
 
       return request(app)
-        .post('/group/create-a-group/group-review-details')
+        .post('/group-review-details')
         .expect(302)
         .expect(res => {
           expect(res.text).toContain('Redirecting to /group/123456/schedule-overview')
@@ -665,11 +665,11 @@ describe('Create Group Controller', () => {
         successMessage: 'Group created successfully',
       })
 
-      await request(app).post('/group/create-a-group/group-review-details').expect(302)
+      await request(app).post('/group-review-details').expect(302)
 
       // Verify session is cleared by checking subsequent request
       return request(app)
-        .get('/group/create-a-group/group-review-details')
+        .get('/group-review-details')
         .expect(200)
         .expect(res => {
           expect(res.text).not.toContain('ABC123')
