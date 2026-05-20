@@ -16,7 +16,7 @@ export default class ChangeCohortController extends BaseController {
   }
 
   async showChangeCohortPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as Record<string, string>
     const { username } = req.user
 
     const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(

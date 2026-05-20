@@ -15,7 +15,7 @@ export default class PniController extends BaseController {
   }
 
   async showProgrammeNeedsIdentifierPage(req: Request, res: Response): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as Record<string, string>
     const { username } = req.user
     const { isCohortUpdated, isLdcUpdated } = req.query
 

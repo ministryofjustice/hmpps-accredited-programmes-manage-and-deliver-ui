@@ -18,12 +18,12 @@ export default class AddAvailabilityController extends BaseController {
   }
 
   async updateAvailability(req: Request, res: Response): Promise<void> {
-    const { availabilityId } = req.params
+    const { availabilityId } = req.params as Record<string, string>
     await this.showAddAvailabilityPage(req, res, availabilityId)
   }
 
   async showAddAvailabilityPage(req: Request, res: Response, availabilityId: string = null): Promise<void> {
-    const { referralId } = req.params
+    const { referralId } = req.params as Record<string, string>
     const { username } = req.user
     const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
       referralId,

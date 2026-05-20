@@ -35,7 +35,7 @@ export default class EditGroupController extends BaseController {
   }
 
   async editGroupDate(req: Request, res: Response): Promise<void> {
-    const { groupId } = req.params
+    const { groupId } = req.params as { groupId: string }
     const { username } = req.user
     let formError: FormValidationError | null = null
 
@@ -71,7 +71,7 @@ export default class EditGroupController extends BaseController {
   }
 
   async editGroupRescheduleDate(req: Request, res: Response): Promise<void> {
-    const { groupId } = req.params
+    const { groupId } = req.params as { groupId: string }
     const { username } = req.user
     let formError: FormValidationError | null = null
 
@@ -97,7 +97,7 @@ export default class EditGroupController extends BaseController {
   }
 
   async editGroupDaysAndTimes(req: Request, res: Response): Promise<void> {
-    const { groupId } = req.params
+    const { groupId } = req.params as { groupId: string }
     const { username } = req.user
     let { createGroupFormData } = req.session
     let formError: FormValidationError | null = null
@@ -156,7 +156,7 @@ export default class EditGroupController extends BaseController {
   }
 
   async editGroupRescheduleDayTimes(req: Request, res: Response): Promise<void> {
-    const { groupId } = req.params
+    const { groupId } = req.params as { groupId: string }
     const { username } = req.user
     let formError: FormValidationError | null = null
 
@@ -182,7 +182,7 @@ export default class EditGroupController extends BaseController {
   }
 
   async editGroupSex(req: Request, res: Response): Promise<void> {
-    const { groupId } = req.params
+    const { groupId } = req.params as { groupId: string }
     const { username } = req.user
     let userInputData = null
     let formError: FormValidationError | null = null
@@ -229,7 +229,7 @@ export default class EditGroupController extends BaseController {
   }
 
   async editGroupCohort(req: Request, res: Response): Promise<void> {
-    const { groupId } = req.params
+    const { groupId } = req.params as { groupId: string }
     const { username } = req.user
     let userInputData = null
     let formError: FormValidationError | null = null
@@ -276,7 +276,7 @@ export default class EditGroupController extends BaseController {
   }
 
   async editGroupCode(req: Request, res: Response): Promise<void> {
-    const { groupId } = req.params
+    const { groupId } = req.params as { groupId: string }
     const { username } = req.user
     let userInputData = null
     let formError: FormValidationError | null = null
@@ -327,7 +327,7 @@ export default class EditGroupController extends BaseController {
 
   async editGroupPdu(req: Request, res: Response): Promise<void> {
     const { createGroupFormData } = req.session
-    const { groupId } = req.params
+    const { groupId } = req.params as { groupId: string }
     const { username } = req.user
     let formError: FormValidationError | null = null
     let userInputData = null
@@ -375,7 +375,7 @@ export default class EditGroupController extends BaseController {
 
   async editGroupLocation(req: Request, res: Response): Promise<void> {
     const { createGroupFormData } = req.session
-    const { groupId } = req.params
+    const { groupId } = req.params as { groupId: string }
     const { username } = req.user
     let formError: FormValidationError | null = null
     let userInputData = null
@@ -431,7 +431,7 @@ export default class EditGroupController extends BaseController {
   }
 
   async editGroupTreatmentManager(req: Request, res: Response): Promise<void> {
-    const { groupId } = req.params
+    const { groupId } = req.params as { groupId: string }
     const { username } = req.user
     let userInputData = null
     let formError: FormValidationError | null = null
