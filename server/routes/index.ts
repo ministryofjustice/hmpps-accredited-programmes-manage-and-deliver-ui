@@ -12,9 +12,11 @@ import GroupOverviewController from '../groupOverview/groupOverviewController'
 import RemoveFromGroupController from '../groupOverview/removeFromGroup/removeFromGroupController'
 import LdcController from '../ldc/ldcController'
 import LocationPreferencesController from '../availabilityAndMotivation/locationPreferences/locationPreferencesController'
+import authorisationMiddleware from '../middleware/authorisationMiddleware'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import PniController from '../pni/pniController'
 import ReferralDetailsController from '../referralDetails/referralDetailsController'
+import ReportingController from '../reporting/reportingController'
 import RisksAndNeedsController from '../risksAndNeeds/risksAndNeedsController'
 import type { Services } from '../services'
 import SessionScheduleController from '../sessionSchedule/sessionScheduleController'
@@ -58,6 +60,9 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const homeController = new HomeController()
   const addAvailabilityController = new AddAvailabilityController(accreditedProgrammesManageAndDeliverService)
   const editGroupController = new EditGroupController(accreditedProgrammesManageAndDeliverService)
+  const reportingController = new ReportingController(accreditedProgrammesManageAndDeliverService)
+
+  const reportingRole = 'ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_REPORTING'
 
   get('/', async (req, res, next) => {
     await homeController.showHomePage(req, res)
@@ -70,6 +75,25 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   get('/region/closed-referrals', async (req, res, next) => {
     await caselistController.showClosedCaselist(req, res)
   })
+
+  router.get(
+    '/reporting/group-size.csv',
+    /**
+     * @INFO - At time of writing the user REFER_MONITOR_PP
+     * does not have the reporting role.  i (wilson) will open a
+     * PR on the hmpps-auth repo to create and assign that role.  until
+     * then, if you want to test this endpoint, you will need to comment out
+     * the call to `authorisationMiddleware` and re-start the server.
+     * the ROLE_PROBATION is granted through the (wiremocked) nDelius
+     * integration, but the reporting role needs to be assigned separately
+     * through hmpps-auth.
+     * --TJWC 2026-05-19
+     * */
+    authorisationMiddleware([reportingRole]),
+    asyncMiddleware(async (req, res) => {
+      await reportingController.downloadGroupSizeReport(req, res)
+    }),
+  )
 
   get('/referral-details/:id/personal-details', async (req, res, next) => {
     await referralDetailsController.showPersonalDetailsPage(req, res)

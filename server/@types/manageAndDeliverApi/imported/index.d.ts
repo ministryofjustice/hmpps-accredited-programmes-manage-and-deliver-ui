@@ -352,6 +352,22 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/dev/seed/referrals': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['seedReferrals']
+    delete: operations['dangerouslyDeleteAllReferrals']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/admin/populate-personal-details': {
     parameters: {
       query?: never
@@ -408,6 +424,22 @@ export interface paths {
      * @description Requires role SAR_DATA_ACCESS or additional role as specified by hmpps.sar.additionalAccessRole configuration.
      */
     get: operations['getSarContentByReference']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/subject-access-request/template': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: operations['getServiceTemplate']
     put?: never
     post?: never
     delete?: never
@@ -629,6 +661,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/reporting/group-size.csv': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Download group size reporting data as CSV
+     * @description Returns group size reporting data where the earliest possible start date is after groupStartedSince.
+     */
+    get: operations['getGroupSizeReport']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/referral/{referralId}/status-change-details': {
     parameters: {
       query?: never
@@ -830,6 +882,22 @@ export interface paths {
      * @description Get group by GroupCode and in User region
      */
     get: operations['getGroupInUserRegion']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/dev/seed/health': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: operations['health']
     put?: never
     post?: never
     delete?: never
@@ -2007,6 +2075,17 @@ export interface components {
        */
       message: string
     }
+    SeededReferralInfo: {
+      referralId: string
+      crn: string
+      personName: string
+      requirementId: string
+    }
+    SeedingResult: {
+      /** Format: int32 */
+      count: number
+      referrals: components['schemas']['SeededReferralInfo'][]
+    }
     CreateAvailability: {
       /**
        * Format: uuid
@@ -2650,7 +2729,7 @@ export interface components {
       hasLdc: boolean
       /**
        * @description The text to display in the UI for the LDC status of this referral
-       * @example May need an LDC-adapted programme(Building Choices Plus)
+       * @example May need an LDC-adapted programme (Building Choices Plus)
        */
       hasLdcDisplayText: string
       /**
@@ -2992,9 +3071,9 @@ export interface components {
       /**
        * @description The overall intensity level derived from the PNI assessment
        * @example HIGH
-       * @enum {string}
+       * @enum {string|null}
        */
-      overallIntensity: 'HIGH' | 'MODERATE' | 'ALTERNATIVE_PATHWAY' | 'MISSING_INFORMATION'
+      overallIntensity?: 'HIGH' | 'MODERATE' | 'ALTERNATIVE_PATHWAY' | 'MISSING_INFORMATION' | null
       /** @description Detailed scores across different assessment domains */
       domainScores: components['schemas']['DomainScores']
       /**
@@ -3021,7 +3100,7 @@ export interface components {
        * @description classification associated with PNI Eg. HIGH_RISK, MEDIUM_RISK, LOW_RISK
        * @example HIGH_RISK
        */
-      classification: string
+      classification?: string | null
       /** @example 2 */
       IndividualRiskScores: components['schemas']['IndividualRiskScores']
     }
@@ -3105,29 +3184,29 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
+      sort?: components['schemas']['SortObject']
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
-      first?: boolean
-      last?: boolean
-      pageable?: components['schemas']['PageableObject']
-      sort?: components['schemas']['SortObject']
-      /** Format: int32 */
-      numberOfElements?: number
       empty?: boolean
     }
     PageableObject: {
-      /** Format: int64 */
-      offset?: number
+      paged?: boolean
       /** Format: int32 */
       pageNumber?: number
-      sort?: components['schemas']['SortObject']
       /** Format: int32 */
       pageSize?: number
-      paged?: boolean
+      sort?: components['schemas']['SortObject']
       unpaged?: boolean
+      /** Format: int64 */
+      offset?: number
     }
     ReferralCaseListItem: {
       /** Format: uuid */
@@ -3149,9 +3228,9 @@ export interface components {
       sentenceEndDateSource?: 'REQUIREMENT' | 'LICENCE_CONDITION' | null
     }
     SortObject: {
-      empty?: boolean
       sorted?: boolean
       unsorted?: boolean
+      empty?: boolean
     }
     StatusFilterValues: {
       /**
@@ -3769,17 +3848,17 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
+      sort?: components['schemas']['SortObject']
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
       /** Format: int32 */
       number?: number
-      first?: boolean
-      last?: boolean
-      pageable?: components['schemas']['PageableObject']
-      sort?: components['schemas']['SortObject']
-      /** Format: int32 */
-      numberOfElements?: number
       empty?: boolean
     }
     GroupItem: {
@@ -3864,17 +3943,17 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
+      sort?: components['schemas']['SortObject']
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
-      first?: boolean
-      last?: boolean
-      pageable?: components['schemas']['PageableObject']
-      sort?: components['schemas']['SortObject']
-      /** Format: int32 */
-      numberOfElements?: number
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
@@ -4398,6 +4477,10 @@ export interface components {
       facilitators: components['schemas']['CreateGroupTeamMember'][]
       /** @description The list of coverFacilitators for this group. */
       coverFacilitators?: components['schemas']['CreateGroupTeamMember'][] | null
+    }
+    TeardownResult: {
+      /** Format: int32 */
+      deletedCount: number
     }
   }
   responses: never
@@ -5576,6 +5659,66 @@ export interface operations {
       }
     }
   }
+  seedReferrals: {
+    parameters: {
+      query?: {
+        count?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['SeedingResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  dangerouslyDeleteAllReferrals: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['TeardownResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   populatePersonalDetails: {
     parameters: {
       query?: never
@@ -5697,6 +5840,62 @@ export interface operations {
         }
         content: {
           'application/json': Record<string, never>
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The client does not have authorisation to make this request */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden, requires an appropriate role */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unexpected error occurred */
+      500: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getServiceTemplate: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Request successfully processed - return template file content */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'plain/text': string
         }
       }
       /** @description Bad Request */
@@ -6445,6 +6644,50 @@ export interface operations {
       }
     }
   }
+  getGroupSizeReport: {
+    parameters: {
+      query: {
+        /**
+         * @description Only include groups that started after this date-time (must be in the past).
+         * @example 2026-05-18T13:30:00
+         */
+        groupStartedSince: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description CSV file containing group size reporting data. */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'text/csv': string
+        }
+      }
+      /** @description Invalid or non-past groupStartedSince query parameter. */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'text/csv': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'text/csv': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getStatusChangeDetails: {
     parameters: {
       query?: never
@@ -6942,7 +7185,7 @@ export interface operations {
           'application/json': components['schemas']['ErrorResponse']
         }
       }
-      /** @description The PNI Score does not exist for this CRN */
+      /** @description The person resource itself is not found */
       404: {
         headers: {
           [name: string]: unknown
@@ -7036,6 +7279,37 @@ export interface operations {
       }
       /** @description Forbidden. The client is not authorised to retrieve group details. */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  health: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': {
+            [key: string]: string
+          }
+        }
+      }
+      /** @description Bad Request */
+      400: {
         headers: {
           [name: string]: unknown
         }
