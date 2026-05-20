@@ -35,7 +35,7 @@ describe('EditSessionAttendeesPresenter', () => {
       const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees())
 
       expect(presenter.text).toEqual({
-        headingText: 'Edit who should attend the session',
+        headingText: 'Who is the session for?',
         pageHeading: 'Getting started',
       })
     })
@@ -226,6 +226,14 @@ describe('EditSessionAttendeesPresenter', () => {
       const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees(), validationError)
 
       expect(presenter.fields['edit-session-attendees'].errorMessage).toBe('Select who should attend the session')
+    })
+  })
+
+  describe('pageTitle', () => {
+    it('returns the correct page title', () => {
+      const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees())
+
+      expect(presenter.pageTitle).toBe('Edit who should attend the session')
     })
   })
 })

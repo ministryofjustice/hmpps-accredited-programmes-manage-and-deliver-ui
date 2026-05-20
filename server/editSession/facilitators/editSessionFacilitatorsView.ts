@@ -64,6 +64,7 @@ export default class EditSessionFacilitatorsView {
       'editSession/editSessionFacilitators',
       {
         backLinkArgs: this.presenter.backLinkArgs,
+        pageTitles: this.presenter.pageTitles,
         homePageLink: this.homePageLink(),
         editSessionFacilitatorsArgs: this.editSessionFacilitatorsArgs(),
         editSessionFacilitatorsFieldSetArgs: this.editSessionFacilitatorsFieldSetArgs(),

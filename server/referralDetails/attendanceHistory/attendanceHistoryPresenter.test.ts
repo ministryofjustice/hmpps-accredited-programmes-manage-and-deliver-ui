@@ -72,7 +72,7 @@ describe('AttendanceHistoryPresenter', () => {
 
       expect(rows[0]).toEqual([
         {
-          html: `<a href="/group/1234567890/session/session-1/edit-session?isAttendanceHistory=true&referralId=${referralId}" class="govuk-link">Pre-group one-to-one</a>`,
+          html: `<a href="/1234567890/session-1/edit-session?isAttendanceHistory=true&referralId=${referralId}" class="govuk-link">Pre-group one-to-one</a>`,
         },
         { text: 'GRP-001' },
         {
@@ -89,7 +89,7 @@ describe('AttendanceHistoryPresenter', () => {
       ])
       expect(rows[1]).toEqual([
         {
-          html: `<a href="/group/1234567890/session/session-2/edit-session?isAttendanceHistory=true&referralId=${referralId}" class="govuk-link">Session 1: Introduction</a>`,
+          html: `<a href="/1234567890/session-2/edit-session?isAttendanceHistory=true&referralId=${referralId}" class="govuk-link">Session 1: Introduction</a>`,
         },
         { text: 'GRP-001' },
         {

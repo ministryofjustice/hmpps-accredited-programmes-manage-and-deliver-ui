@@ -411,25 +411,25 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await sessionScheduleController.showSessionAttendance(req, res)
   })
 
-  getOrPost('/group/:groupId/session/:sessionId/edit-session', async (req, res, next) => {
+  getOrPost('/:groupId/:sessionId/edit-session', async (req, res, next) => {
     await editSessionController.editSession(req, res)
   })
 
-  getOrPost('/group/:groupId/session/:sessionId/edit-session-date-and-time', async (req, res, next) => {
+  getOrPost('/:groupId/:sessionId/edit-session-date-and-time', async (req, res, next) => {
     await editSessionController.editSessionDateAndTime(req, res)
   })
 
-  getOrPost('/group/:groupId/session/:sessionId/edit-session-date-and-time/reschedule', async (req, res, next) => {
+  getOrPost('/:groupId/:sessionId/edit-session-date-and-time/reschedule', async (req, res, next) => {
     await editSessionController.submitEditSessionDateAndTime(req, res)
   })
-  getOrPost('/group/:groupId/session/:sessionId/delete-session', async (req, res, next) => {
+  getOrPost('/:groupId/:sessionId/delete-session', async (req, res, next) => {
     await editSessionController.deleteSession(req, res)
   })
 
-  getOrPost('/group/:groupId/session/:sessionId/edit-session-facilitators', async (req, res, next) => {
+  getOrPost('/:groupId/:sessionId/edit-session-facilitators', async (req, res, next) => {
     await editSessionController.editSessionFacilitators(req, res)
   })
-  getOrPost('/group/:groupId/session/:sessionId/edit-session-attendees', async (req, res, next) => {
+  getOrPost('/:groupId/:sessionId/edit-session-attendees', async (req, res, next) => {
     await editSessionController.editSessionAttendees(req, res)
   })
 

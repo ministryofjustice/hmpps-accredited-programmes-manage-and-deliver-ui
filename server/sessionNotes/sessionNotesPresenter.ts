@@ -63,7 +63,7 @@ export default class SessionNotesPresenter {
     if (this.data.source === 'edit-session') {
       return {
         text: `Back to ${this.data.moduleName}`,
-        href: `/group/${this.data.groupId}/session/${this.data.sessionId}/edit-session`,
+        href: `/${this.data.groupId}/${this.data.sessionId}/edit-session`,
       }
     }
 

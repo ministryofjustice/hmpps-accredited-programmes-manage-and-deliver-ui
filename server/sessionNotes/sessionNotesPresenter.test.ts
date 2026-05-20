@@ -140,7 +140,7 @@ describe('SessionNotesPresenter', () => {
 
     expect(presenter.backLinkArgs).toEqual({
       text: 'Back to Getting started',
-      href: '/group/b2c3d4e5-f6a7-8901-bcde-f23456789012/session/c3d4e5f6-a7b8-9012-cdef-345678901234/edit-session',
+      href: '/b2c3d4e5-f6a7-8901-bcde-f23456789012/c3d4e5f6-a7b8-9012-cdef-345678901234/edit-session',
     })
   })
 

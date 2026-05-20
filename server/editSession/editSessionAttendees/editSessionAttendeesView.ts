@@ -46,6 +46,7 @@ export default class EditSessionAttendeesView {
       'editSession/editSessionAttendees',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         backLinkArgs: this.presenter.backLinkArgs,
         radioArgs: this.radioArgs,
         checkboxArgs: this.checkboxArgs,

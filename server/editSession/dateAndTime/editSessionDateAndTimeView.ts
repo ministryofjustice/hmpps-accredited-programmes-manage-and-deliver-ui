@@ -129,6 +129,7 @@ export default class EditSessionDateAndTimeView {
       'editSession/editSessionTimeAndDate',
       {
         backLinkArgs: this.backLinkArgs(),
+        pageTitle: this.presenter.pageTitle,
         text: this.presenter.text,
         sessionDetailsDateArgs: this.sessionDetailsDateArgs,
         startTimeInputArgs: this.startTimeInputArgs,

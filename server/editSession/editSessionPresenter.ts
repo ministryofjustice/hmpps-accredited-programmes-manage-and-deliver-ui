@@ -26,6 +26,10 @@ export default class EditSessionPresenter {
     }
   }
 
+  get pageTitle(): string {
+    return this.sessionDetails.pageTitle || 'Edit session'
+  }
+
   get canBeDeleted(): boolean {
     // Cant be deleted if its a core group session
     if (this.sessionDetails.sessionType.toUpperCase() === 'GROUP' && this.sessionDetails.isCatchup === false) {

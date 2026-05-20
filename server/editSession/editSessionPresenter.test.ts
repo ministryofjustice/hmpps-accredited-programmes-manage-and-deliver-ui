@@ -6,6 +6,27 @@ describe('EditSessionPresenter', () => {
   const mockSessionId = 'session-456'
   const mockDeleteUrl = '/delete-url'
 
+  describe('pageTitle', () => {
+    it('returns the session page title', () => {
+      const sessionDetails: GroupSessionResponse = {
+        pageTitle: 'Session 1',
+        code: 'CODE-123',
+        sessionType: 'Group',
+        isCatchup: false,
+        attendanceAndSessionNotes: [],
+        date: '01 Feb 2026',
+        time: '1:00pm',
+        unformattedEndDate: '2026-02-01T14:00:00',
+        scheduledToAttend: [],
+        facilitators: [],
+      }
+
+      const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
+
+      expect(presenter.pageTitle).toBe('Session 1')
+    })
+  })
+
   describe('attendanceTableArgs', () => {
     describe('when there are multiple referrals', () => {
       it('returns MultiSelectTableArgs with correct structure', () => {

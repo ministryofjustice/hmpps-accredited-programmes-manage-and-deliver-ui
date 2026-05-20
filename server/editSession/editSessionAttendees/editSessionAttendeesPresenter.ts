@@ -15,9 +15,13 @@ export default class EditSessionAttendeesPresenter {
     return this.sessionAttendees.attendees.find(attendee => attendee.currentlyAttending) || null
   }
 
+  get pageTitle(): string {
+    return 'Edit who should attend the session'
+  }
+
   get text() {
     return {
-      headingText: 'Edit who should attend the session',
+      headingText: 'Who is the session for?',
       pageHeading: `${this.sessionAttendees.sessionName}`,
     }
   }

@@ -5,6 +5,21 @@ describe('DeleteSessionPresenter', () => {
   const groupId = 'group-123'
   const backUrl = '/back'
 
+  describe('pageTitle', () => {
+    it('should return the correct page title', () => {
+      const sessionDetails: Session = {
+        type: 'Group',
+        name: 'Getting started',
+        number: 1,
+        pageTitle: 'Delete Getting started 1 catch-up',
+      } as Session
+
+      const presenter = new DeleteSessionPresenter(groupId, backUrl, sessionDetails)
+
+      expect(presenter.pageTitle).toBe('Delete session')
+    })
+  })
+
   describe('generatePageCaption', () => {
     it('should return caption for individual post programme review', () => {
       const sessionDetails: Session = {

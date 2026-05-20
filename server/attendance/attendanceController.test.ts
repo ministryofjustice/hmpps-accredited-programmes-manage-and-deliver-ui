@@ -38,7 +38,7 @@ describe('showRecordAttendancePage', () => {
       await request(app)
         .get('/group/111/session/6789/record-attendance')
         .expect(302)
-        .expect('Location', '/group/111/session/6789/edit-session')
+        .expect('Location', '/111/6789/edit-session')
 
       expect(accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData).not.toHaveBeenCalled()
     })
@@ -131,7 +131,7 @@ describe('showRecordAttendancePage', () => {
         .type('form')
         .send({ 'attendance-referral1': 'ATTC' })
         .expect(302)
-        .expect('Location', '/group/111/session/6789/edit-session')
+        .expect('Location', '/111/6789/edit-session')
 
       expect(accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData).not.toHaveBeenCalled()
     })
@@ -621,7 +621,7 @@ describe('showRecordAttendancePage', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            'Redirecting to /group/111/session/6789/edit-session?message=Attendance+recorded+for+Alice+Brown.',
+            'Redirecting to /111/6789/edit-session?message=Attendance+recorded+for+Alice+Brown.',
           )
         })
     })
@@ -667,7 +667,7 @@ describe('showRecordAttendancePage', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            'Redirecting to /group/111/session/6789/edit-session?message=Attendance+recorded+for+Sham+Booth%2C+Adrian+Poole+and+Hannah+Schinner.',
+            'Redirecting to /111/6789/edit-session?message=Attendance+recorded+for+Sham+Booth%2C+Adrian+Poole+and+Hannah+Schinner.',
           )
         })
     })
