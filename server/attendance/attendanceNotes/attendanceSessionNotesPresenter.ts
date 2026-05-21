@@ -42,6 +42,10 @@ export default class AttendanceSessionNotesPresenter {
     }
   }
 
+  get pageTitle(): string {
+    return `Add ${this.sessionTitle} session notes`
+  }
+
   get sessionTitle() {
     return this.recordAttendanceBffData?.sessionModule || ''
   }

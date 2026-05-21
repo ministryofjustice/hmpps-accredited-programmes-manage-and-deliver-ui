@@ -38,6 +38,7 @@ export default class AttendanceView {
       'attendance/recordAttendance.njk',
       {
         text: this.presenter.text,
+        pageTitle: this.presenter.pageTitle,
         radioArgsList: this.radioArgsList,
         backLinkArgs: this.backLinkArgs,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),

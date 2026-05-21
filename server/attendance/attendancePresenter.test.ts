@@ -2,6 +2,23 @@ import recordSessionAttendanceFactory from '../testutils/factories/recordSession
 import AttendancePresenter from './attendancePresenter'
 
 describe('AttendancePresenter', () => {
+  describe('pageTitle', () => {
+    it('returns person name in page title for a single attendee', () => {
+      const bffData = recordSessionAttendanceFactory.build()
+      bffData.people = [bffData.people[0]]
+      const presenter = new AttendancePresenter(bffData, 'backlink', null)
+
+      expect(presenter.pageTitle).toBe(`${bffData.people[0].name} record attendance and progress`)
+    })
+
+    it('returns generic page title for multiple attendees', () => {
+      const bffData = recordSessionAttendanceFactory.build()
+      const presenter = new AttendancePresenter(bffData, 'backlink', null)
+
+      expect(presenter.pageTitle).toBe('Record attendance and progress')
+    })
+  })
+
   describe('text', () => {
     describe('single attendee', () => {
       it('should return the correct page heading', () => {

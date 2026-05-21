@@ -10,6 +10,14 @@ export default class AttendancePresenter {
     private readonly userInputData: Record<string, unknown> | null = null,
   ) {}
 
+  get pageTitle(): string {
+    if (this.recordAttendanceBffData.people.length === 1) {
+      return `${this.recordAttendanceBffData.people[0].name} record attendance and progress`
+    }
+
+    return 'Record attendance and progress'
+  }
+
   get text() {
     return {
       pageHeading:

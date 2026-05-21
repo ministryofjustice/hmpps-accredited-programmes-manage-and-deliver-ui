@@ -49,6 +49,7 @@ describe('editSession', () => {
       .get(`/group/12345/session/6789/edit-session`)
       .expect(200)
       .expect(res => {
+        expect(res.text).toContain('<title>Test Session - Accredited Programmes</title>')
         expect(res.text).toContain('Test Session')
         expect(res.text).toContain('15 March 2025')
         expect(res.text).toContain('9:30am to midday')

@@ -59,6 +59,7 @@ export default class AttendanceSessionNotesView {
       'attendance/recordAttendanceNotes',
       {
         backLinkArgs: this.backLinkArgs(),
+        pageTitle: this.presenter.pageTitle,
         characterCountArgs: this.characterCountArgs,
         isLastReferral: this.presenter.lastReferral,
         showSkipAndAddLater: this.presenter.showSkipAndAddLater,

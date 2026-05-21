@@ -138,6 +138,7 @@ export default class EditSessionView {
       {
         presenter: this.presenter,
         text: this.presenter.text,
+        pageTitle: this.presenter.pageTitle,
         backLinkArgs: this.presenter.backLinkArgs,
         editSessionSummary: this.editSessionSummary,
         successMessageArgs: this.successMessageArgs,

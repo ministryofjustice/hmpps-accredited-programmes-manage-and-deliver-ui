@@ -19,6 +19,10 @@ export default class SessionNotesPresenter {
     private readonly validationError: FormValidationError | null = null,
   ) {}
 
+  get pageTitle(): string {
+    return `${this.data.personOnProbationName} record attendance and progress`
+  }
+
   get text() {
     const personOnProbationName = this.data.pageTitle.split(':')[0].trim()
     const successMessageName = this.data.personOnProbationName?.trim() || personOnProbationName

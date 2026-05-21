@@ -19,6 +19,10 @@ export default class EditSessionPresenter {
     private readonly attendanceHistoryReferralId: string | null = null,
   ) {}
 
+  get pageTitle(): string {
+    return this.sessionDetails.pageTitle
+  }
+
   get text() {
     return {
       pageHeading: `${this.sessionDetails.pageTitle}`,
