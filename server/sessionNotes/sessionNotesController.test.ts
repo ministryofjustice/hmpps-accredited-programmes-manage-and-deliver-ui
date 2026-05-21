@@ -28,7 +28,7 @@ beforeEach(() => {
 })
 
 describe('SessionNotesController', () => {
-  describe('GET /group/:groupId/session/:sessionId/:sessionSlug/session-notes', () => {
+  describe('GET /:groupId/:sessionId/:sessionSlug/session-notes', () => {
     it('renders session notes from BFF', async () => {
       accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue({
         pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
@@ -45,7 +45,7 @@ describe('SessionNotesController', () => {
       })
 
       await request(app)
-        .get('/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123')
+        .get('/111/6789/getting-started-1/session-notes?referralId=referral-123')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Alex River: Getting started 1 Introduction to Building Choices session notes')
@@ -64,9 +64,9 @@ describe('SessionNotesController', () => {
 
     it('redirects back to edit session when referralId is missing', async () => {
       await request(app)
-        .get('/group/111/session/6789/getting-started-1/session-notes')
+        .get('/111/6789/getting-started-1/session-notes')
         .expect(302)
-        .expect('Location', '/group/111/session/6789/edit-session')
+        .expect('Location', '/111/6789/edit-session')
 
       expect(accreditedProgrammesManageAndDeliverService.getSessionNotes).not.toHaveBeenCalled()
     })
@@ -77,9 +77,7 @@ describe('SessionNotesController', () => {
         message: 'Referral Not found',
       })
 
-      await request(app)
-        .get('/group/111/session/6789/getting-started-1/session-notes?referralId=missing-referral')
-        .expect(404)
+      await request(app).get('/111/6789/getting-started-1/session-notes?referralId=missing-referral').expect(404)
     })
 
     it('saves edited notes and redirects back to page', async () => {
@@ -127,12 +125,12 @@ describe('SessionNotesController', () => {
       })
 
       await request(app)
-        .post('/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123&source=edit-session')
+        .post('/111/6789/getting-started-1/session-notes?referralId=referral-123&source=edit-session')
         .send({ sessionNotes: 'Updated note' })
         .expect(302)
         .expect(
           'Location',
-          '/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123&saved=true&personOnProbationName=Alex+River&source=edit-session',
+          '/111/6789/getting-started-1/session-notes?referralId=referral-123&saved=true&personOnProbationName=Alex+River&source=edit-session',
         )
 
       expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).toHaveBeenCalledWith(
@@ -219,11 +217,11 @@ describe('SessionNotesController', () => {
       const agent = request.agent(app)
 
       await agent
-        .post('/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123')
+        .post('/111/6789/getting-started-1/session-notes?referralId=referral-123')
         .send({ sessionNotes: 'Updated note' })
         .expect(302)
 
-      await agent.get('/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123').expect(200)
+      await agent.get('/111/6789/getting-started-1/session-notes?referralId=referral-123').expect(200)
 
       expect(accreditedProgrammesManageAndDeliverService.getSessionNotes).toHaveBeenCalledWith(
         'user1',
@@ -249,7 +247,7 @@ describe('SessionNotesController', () => {
 
       await request(app)
         .get(
-          '/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123&saved=true&personOnProbationName=Alex+River',
+          '/111/6789/getting-started-1/session-notes?referralId=referral-123&saved=true&personOnProbationName=Alex+River',
         )
         .expect(200)
         .expect(res => {
@@ -274,7 +272,7 @@ describe('SessionNotesController', () => {
       })
 
       await request(app)
-        .get('/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123')
+        .get('/111/6789/getting-started-1/session-notes?referralId=referral-123')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('No notes added')
@@ -299,7 +297,7 @@ describe('SessionNotesController', () => {
       })
 
       await request(app)
-        .post('/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123')
+        .post('/111/6789/getting-started-1/session-notes?referralId=referral-123')
         .send({ sessionNotes: 'a'.repeat(10001) })
         .expect(400)
         .expect(res => {
@@ -334,7 +332,7 @@ describe('SessionNotesController', () => {
       )
 
       await request(app)
-        .post('/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123')
+        .post('/111/6789/getting-started-1/session-notes?referralId=referral-123')
         .send({ sessionNotes: 'a'.repeat(10001) })
         .expect(400)
         .expect(res => {
@@ -361,7 +359,7 @@ describe('SessionNotesController', () => {
       })
 
       await request(app)
-        .get('/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123&isAttendanceHistory=true')
+        .get('/111/6789/getting-started-1/session-notes?referralId=referral-123&isAttendanceHistory=true')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('/referral/referral-123/attendance-history')
@@ -385,11 +383,11 @@ describe('SessionNotesController', () => {
       })
 
       await request(app)
-        .get('/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123&source=edit-session')
+        .get('/111/6789/getting-started-1/session-notes?referralId=referral-123&source=edit-session')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(
-            '/group/d193bf89-c98b-4e92-b842-3c1b3e5f5e4a/session/a1b2c3d4-e5f6-7890-abcd-ef1234567890/edit-session',
+            '/d193bf89-c98b-4e92-b842-3c1b3e5f5e4a/a1b2c3d4-e5f6-7890-abcd-ef1234567890/edit-session',
           )
           expect(res.text).toContain('Back to Getting started')
         })
@@ -411,13 +409,13 @@ describe('SessionNotesController', () => {
       })
 
       await request(app)
-        .get('/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123&source=edit-session')
+        .get('/111/6789/getting-started-1/session-notes?referralId=referral-123&source=edit-session')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('<p class="govuk-body-m">Participant engaged well.</p>')
           expect(res.text).not.toContain('id="sessionNotes"')
           expect(res.text).toContain(
-            '/group/d193bf89-c98b-4e92-b842-3c1b3e5f5e4a/session/a1b2c3d4-e5f6-7890-abcd-ef1234567890/record-attendance?referralId=referral-123',
+            '/d193bf89-c98b-4e92-b842-3c1b3e5f5e4a/a1b2c3d4-e5f6-7890-abcd-ef1234567890/record-attendance?referralId=referral-123',
           )
         })
     })
@@ -459,11 +457,11 @@ describe('SessionNotesController', () => {
       const agent = request.agent(app)
 
       await agent
-        .get('/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123&source=edit-session')
+        .get('/111/6789/getting-started-1/session-notes?referralId=referral-123&source=edit-session')
         .expect(200)
 
       await agent
-        .get('/group/111/session/6789/record-attendance')
+        .get('/111/6789/record-attendance')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Alex River')
@@ -533,13 +531,13 @@ describe('SessionNotesController', () => {
       const agent = request.agent(app)
 
       await agent
-        .get('/group/111/session/6789/getting-started-1/session-notes?referralId=referral-123&source=edit-session')
+        .get('/111/6789/getting-started-1/session-notes?referralId=referral-123&source=edit-session')
         .expect(200)
 
       await agent
-        .get('/group/111/session/6789/record-attendance?referralId=referral-123')
+        .get('/111/6789/record-attendance?referralId=referral-123')
         .expect(302)
-        .expect('Location', '/group/111/session/6789/referral/referral-123/getting-started-1-session-notes')
+        .expect('Location', '/111/6789/referral/referral-123/getting-started-1-session-notes')
 
       expect(accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData).toHaveBeenCalledWith(
         'user1',

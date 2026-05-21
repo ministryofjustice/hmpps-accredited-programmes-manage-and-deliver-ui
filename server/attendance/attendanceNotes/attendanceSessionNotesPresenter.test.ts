@@ -135,8 +135,8 @@ describe('AttendanceSessionNotesPresenter', () => {
     it('falls back to record attendance path when backlink is empty', () => {
       const presenter = buildPresenter({ backLink: '' })
 
-      expect(presenter.backLinkUri).toBe('/group/group-1/session/session-1/record-attendance')
-      expect(presenter.changeAttendanceUri).toBe('/group/group-1/session/session-1/record-attendance')
+      expect(presenter.backLinkUri).toBe('/group-1/session-1/record-attendance')
+      expect(presenter.changeAttendanceUri).toBe('/group-1/session-1/record-attendance')
     })
   })
 

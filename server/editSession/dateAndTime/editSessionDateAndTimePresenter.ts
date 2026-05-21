@@ -19,7 +19,7 @@ export default class EditSessionDateAndTimePresenter {
   }
 
   get backLinkUri() {
-    return `/group/${this.groupId}/session/${this.sessionDetails.sessionId}/edit-session`
+    return `/${this.groupId}/${this.sessionDetails.sessionId}/edit-session`
   }
 
   get errorSummary() {
@@ -28,6 +28,10 @@ export default class EditSessionDateAndTimePresenter {
 
   get utils() {
     return new PresenterUtils(this.userInputData)
+  }
+
+  get pageTitle(): string {
+    return 'Edit the session date and time'
   }
 
   get text() {

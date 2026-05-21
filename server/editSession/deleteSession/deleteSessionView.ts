@@ -37,6 +37,7 @@ export default class DeleteSessionView {
       'editSession/deleteSession/deleteSession',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         backLinkArgs: this.presenter.backLinkArgs,
         radioArgs: this.radioArgs,
         text: this.presenter.text,

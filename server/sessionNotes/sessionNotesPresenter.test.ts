@@ -22,7 +22,7 @@ describe('SessionNotesPresenter', () => {
     const presenter = new SessionNotesPresenter(buildData())
 
     expect(presenter.pageUrl).toBe(
-      '/group/b2c3d4e5-f6a7-8901-bcde-f23456789012/session/c3d4e5f6-a7b8-9012-cdef-345678901234/building-motivation/session-notes',
+      '/b2c3d4e5-f6a7-8901-bcde-f23456789012/c3d4e5f6-a7b8-9012-cdef-345678901234/building-motivation/session-notes',
     )
   })
 
@@ -35,7 +35,7 @@ describe('SessionNotesPresenter', () => {
     )
 
     expect(presenter.pageUrl).toBe(
-      '/group/b2c3d4e5-f6a7-8901-bcde-f23456789012/session/c3d4e5f6-a7b8-9012-cdef-345678901234/introduction-to-building-choices/session-notes',
+      '/b2c3d4e5-f6a7-8901-bcde-f23456789012/c3d4e5f6-a7b8-9012-cdef-345678901234/introduction-to-building-choices/session-notes',
     )
   })
 
@@ -48,7 +48,7 @@ describe('SessionNotesPresenter', () => {
     )
 
     expect(presenter.pageUrl).toBe(
-      '/group/b2c3d4e5-f6a7-8901-bcde-f23456789012/session/c3d4e5f6-a7b8-9012-cdef-345678901234/building-motivation-catch-up/session-notes',
+      '/b2c3d4e5-f6a7-8901-bcde-f23456789012/c3d4e5f6-a7b8-9012-cdef-345678901234/building-motivation-catch-up/session-notes',
     )
   })
 
@@ -61,7 +61,7 @@ describe('SessionNotesPresenter', () => {
     )
 
     expect(presenter.pageUrl).toBe(
-      '/group/b2c3d4e5-f6a7-8901-bcde-f23456789012/session/c3d4e5f6-a7b8-9012-cdef-345678901234/getting-started-one-to-one/session-notes',
+      '/b2c3d4e5-f6a7-8901-bcde-f23456789012/c3d4e5f6-a7b8-9012-cdef-345678901234/getting-started-one-to-one/session-notes',
     )
   })
 
@@ -74,7 +74,23 @@ describe('SessionNotesPresenter', () => {
     )
 
     expect(presenter.pageUrl).toBe(
-      '/group/b2c3d4e5-f6a7-8901-bcde-f23456789012/session/c3d4e5f6-a7b8-9012-cdef-345678901234/post-programme-review-for-jane-doe/session-notes',
+      '/b2c3d4e5-f6a7-8901-bcde-f23456789012/c3d4e5f6-a7b8-9012-cdef-345678901234/post-programme-review-for-jane-doe/session-notes',
+    )
+  })
+
+  it('builds record attendance URL with referral ID query parameter', () => {
+    const presenter = new SessionNotesPresenter(buildData())
+
+    expect(presenter.recordAttendanceUrl).toBe(
+      '/b2c3d4e5-f6a7-8901-bcde-f23456789012/c3d4e5f6-a7b8-9012-cdef-345678901234/record-attendance?referralId=referral-123',
+    )
+  })
+
+  it('builds record attendance URL with different referral ID', () => {
+    const presenter = new SessionNotesPresenter(buildData({ referralId: 'referral-999' }))
+
+    expect(presenter.recordAttendanceUrl).toBe(
+      '/b2c3d4e5-f6a7-8901-bcde-f23456789012/c3d4e5f6-a7b8-9012-cdef-345678901234/record-attendance?referralId=referral-999',
     )
   })
 
@@ -140,7 +156,7 @@ describe('SessionNotesPresenter', () => {
 
     expect(presenter.backLinkArgs).toEqual({
       text: 'Back to Getting started',
-      href: '/group/b2c3d4e5-f6a7-8901-bcde-f23456789012/session/c3d4e5f6-a7b8-9012-cdef-345678901234/edit-session',
+      href: '/b2c3d4e5-f6a7-8901-bcde-f23456789012/c3d4e5f6-a7b8-9012-cdef-345678901234/edit-session',
     })
   })
 
@@ -207,7 +223,7 @@ describe('SessionNotesPresenter', () => {
         {
           text: 'Update attendance and notes',
           classes: 'govuk-button--primary',
-          href: '/group/b2c3d4e5-f6a7-8901-bcde-f23456789012/session/c3d4e5f6-a7b8-9012-cdef-345678901234/record-attendance?referralId=referral-123',
+          href: '/b2c3d4e5-f6a7-8901-bcde-f23456789012/c3d4e5f6-a7b8-9012-cdef-345678901234/record-attendance?referralId=referral-123',
         },
       ],
     })

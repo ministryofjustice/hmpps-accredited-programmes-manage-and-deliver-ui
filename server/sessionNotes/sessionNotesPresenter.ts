@@ -63,7 +63,7 @@ export default class SessionNotesPresenter {
     if (this.data.source === 'edit-session') {
       return {
         text: `Back to ${this.data.moduleName}`,
-        href: `/group/${this.data.groupId}/session/${this.data.sessionId}/edit-session`,
+        href: `/${this.data.groupId}/${this.data.sessionId}/edit-session`,
       }
     }
 
@@ -94,13 +94,13 @@ export default class SessionNotesPresenter {
 
   get pageUrl(): string {
     const sessionSlug = convertToUrlFriendlyKebabCase(this.data.sessionName)
-    return `/group/${this.data.groupId}/session/${this.data.sessionId}/${sessionSlug}/session-notes`
+    return `/${this.data.groupId}/${this.data.sessionId}/${sessionSlug}/session-notes`
   }
 
   get recordAttendanceUrl(): string {
     const query = new URLSearchParams({ referralId: this.data.referralId })
 
-    return `/group/${this.data.groupId}/session/${this.data.sessionId}/record-attendance?${query.toString()}`
+    return `/${this.data.groupId}/${this.data.sessionId}/record-attendance?${query.toString()}`
   }
 
   get pageHeaderActionsArgs() {

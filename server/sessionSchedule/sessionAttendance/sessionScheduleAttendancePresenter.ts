@@ -147,7 +147,7 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
 
     return `
     <tr class="govuk-table__row">
-      <td class="govuk-table__cell"><a href="/group/${this.groupId}/session/${session.id}/edit-session">${session.name || ''}</a></td>
+      <td class="govuk-table__cell"><a href="/${this.groupId}/${session.id}/edit-session">${session.name || ''}</a></td>
       <td class="govuk-table__cell">${this.isCatchupSession(session) ? 'Catch-up' : session.type || ''}</td>
       <td class="govuk-table__cell">${participants}</td>
       <td class="govuk-table__cell" data-sort-value="${dateSortValue}">${session.dateOfSession || ''}</td>
