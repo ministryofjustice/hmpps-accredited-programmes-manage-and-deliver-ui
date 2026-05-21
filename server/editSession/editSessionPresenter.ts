@@ -52,7 +52,7 @@ export default class EditSessionPresenter {
     return {
       text: this.isAttendanceHistory ? 'Back to Attendance history' : 'Back to Sessions and attendance',
       href: this.isAttendanceHistory
-        ? `/${this.attendanceHistoryReferralId}/attendance-history`
+        ? `/referral/${this.attendanceHistoryReferralId}/attendance-history`
         : `/group/${this.groupId}/sessions-and-attendance`,
     }
   }

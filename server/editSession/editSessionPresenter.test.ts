@@ -443,7 +443,7 @@ describe('EditSessionPresenter', () => {
 
         expect(presenter.backLinkArgs).toEqual({
           text: 'Back to Attendance history',
-          href: '/abc123/attendance-history',
+          href: '/referral/abc123/attendance-history',
         })
       })
     })
