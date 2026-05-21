@@ -20,6 +20,7 @@ import EditSessionFacilitatorsPresenter from './facilitators/editSessionFacilita
 import EditSessionFacilitatorsView from './facilitators/editSessionFacilitatorsView'
 import BaseController from '../shared/baseController'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
+import { convertToUrlFriendlyKebabCase, getEditSessionRouteTitle } from '../utils/utils'
 
 export default class EditSessionController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -47,6 +48,7 @@ export default class EditSessionController extends BaseController {
     const successMessage = message ? String(message) : null
     const isAttendanceHistoryFlag = isAttendanceHistory === 'true'
     const attendanceHistoryReferralId = referralId ? String(referralId) : null
+    const moduleName = convertToUrlFriendlyKebabCase(getEditSessionRouteTitle(sessionDetails.pageTitle))
     req.session.originPage = req.path
 
     const data = await new EditSessionForm(req).attendanceAndSessionNotesData()
@@ -59,7 +61,7 @@ export default class EditSessionController extends BaseController {
           referralIds: data.paramsForUpdate.referralIds,
           source: 'edit-session',
         }
-        return res.redirect(`/${groupId}/${sessionId}/record-attendance`)
+        return res.redirect(`/${groupId}/${sessionId}/${moduleName}-attendance`)
       }
     }
 

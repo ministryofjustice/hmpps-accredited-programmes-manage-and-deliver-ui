@@ -5,6 +5,7 @@ import {
 } from '@manage-and-deliver-api'
 import { AccordionArgsItem } from '../../utils/govukFrontendTypes'
 import { MojAlertComponentArgs } from '../../interfaces/alertComponentArgs'
+import { convertToUrlFriendlyKebabCase, getEditSessionRouteTitle } from '../../utils/utils'
 import GroupServiceLayoutPresenter, {
   GroupServiceNavigationValues,
 } from '../../shared/groups/groupServiceLayoutPresenter'
@@ -144,10 +145,13 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
       ? session.facilitators.join('<span class="govuk-!-display-block govuk-!-margin-bottom-1"></span>')
       : ''
     const dateSortValue = this.sortableTableDate(session.dateOfSession)
+    const sessionTitle = getEditSessionRouteTitle(session.name || '')
+    const baseSlug = convertToUrlFriendlyKebabCase(sessionTitle) || 'session'
+    const sessionSlug = this.isCatchupSession(session) ? `${baseSlug}-catch-up` : baseSlug
 
     return `
     <tr class="govuk-table__row">
-      <td class="govuk-table__cell"><a href="/${this.groupId}/${session.id}/edit-session">${session.name || ''}</a></td>
+      <td class="govuk-table__cell"><a href="/${this.groupId}/${session.id}/${sessionSlug}">${session.name || ''}</a></td>
       <td class="govuk-table__cell">${this.isCatchupSession(session) ? 'Catch-up' : session.type || ''}</td>
       <td class="govuk-table__cell">${participants}</td>
       <td class="govuk-table__cell" data-sort-value="${dateSortValue}">${session.dateOfSession || ''}</td>

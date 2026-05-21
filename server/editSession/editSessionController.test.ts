@@ -55,6 +55,61 @@ describe('editSession', () => {
         expect(res.text).toContain('9:30am to midday')
       })
   })
+
+  it('normalises one-to-one title and slug on the session-slug route', async () => {
+    const groupId = 'd721e8ad-948d-4e48-bff9-9c6fc1c26ece'
+    const sessionId = '89180e89-a335-4ce8-bfad-2ea61620a444'
+    const sessionDetails = sessionDetailsFactory.build({
+      pageTitle: 'Barton Pfannerstill S688890821: Getting started one-to-one',
+      sessionType: 'Individual',
+      attendanceAndSessionNotes: [
+        {
+          referralId: 'referral-123',
+          name: 'Barton Pfannerstill',
+          crn: 'S688890821',
+          attendance: 'Attended',
+          sessionNotes: 'Notes recorded',
+        },
+      ],
+    })
+    accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
+
+    await request(app)
+      .get(`/${groupId}/${sessionId}/barton-pfannerstill-s688890821`)
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('<title>Add Getting started one-to-one - Accredited Programmes</title>')
+        expect(res.text).toContain('Getting started one-to-one')
+        expect(res.text).toContain(`/${groupId}/${sessionId}/getting-started-one-to-one/session-notes`)
+      })
+  })
+
+  it('redirects to module attendance route with slug suffix when updating attendance and notes', async () => {
+    const groupId = '12345'
+    const sessionId = '6789'
+    const sessionDetails = sessionDetailsFactory.build({
+      pageTitle: 'Getting started 1',
+      attendanceAndSessionNotes: [
+        {
+          referralId: 'referral-123',
+          name: 'Barton Pfannerstill',
+          crn: 'S688890821',
+          attendance: 'Attended',
+          sessionNotes: 'Notes recorded',
+        },
+      ],
+    })
+    accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
+
+    await request(app)
+      .post(`/${groupId}/${sessionId}/edit-session`)
+      .type('form')
+      .send({
+        'multi-select-selected': ['referral-123'],
+      })
+      .expect(302)
+      .expect('Location', `/${groupId}/${sessionId}/getting-started-1-attendance`)
+  })
 })
 
 describe('editSessionDateAndTime', () => {

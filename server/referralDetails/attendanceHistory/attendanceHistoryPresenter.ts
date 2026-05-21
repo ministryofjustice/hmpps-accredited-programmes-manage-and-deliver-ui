@@ -2,7 +2,7 @@ import { AttendanceHistoryResponse, ReferralDetails } from '@manage-and-deliver-
 import ReferralLayoutPresenter, { HorizontalNavValues } from '../../shared/referral/referralLayoutPresenter'
 import { MojAlertComponentArgs } from '../../interfaces/alertComponentArgs'
 import { TableArgs } from '../../utils/govukFrontendTypes'
-import { attendanceTag, convertToUrlFriendlyKebabCase } from '../../utils/utils'
+import { attendanceTag, convertToUrlFriendlyKebabCase, getEditSessionRouteTitle } from '../../utils/utils'
 
 export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter {
   public readonly personOnProbationName: string
@@ -77,7 +77,7 @@ export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter 
   get attendanceHistoryTableArgs(): TableArgs['rows'] {
     return this.attendanceHistory.attendanceHistory.map(session => [
       {
-        html: `<a href="/${session.groupId}/${session.sessionId}/edit-session?isAttendanceHistory=true&referralId=${this.referralId}" class="govuk-link">${session.sessionName}</a>`,
+        html: `<a href="/${session.groupId}/${session.sessionId}/${convertToUrlFriendlyKebabCase(getEditSessionRouteTitle(session.sessionName)) || 'session'}?isAttendanceHistory=true&referralId=${this.referralId}" class="govuk-link">${session.sessionName}</a>`,
       },
       { text: session.groupCode ?? 'N/A' },
       { text: session.date, attributes: { 'data-sort-value': new Date(session.unformattedDate).getTime() } },

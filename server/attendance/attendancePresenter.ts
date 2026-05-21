@@ -11,11 +11,7 @@ export default class AttendancePresenter {
   ) {}
 
   get pageTitle(): string {
-    if (this.recordAttendanceBffData.people.length === 1) {
-      return `${this.recordAttendanceBffData.people[0].name} record attendance and progress`
-    }
-
-    return 'Record attendance and progress'
+    return `Add ${this.recordAttendanceBffData.sessionModule} attendance`
   }
 
   get text() {

@@ -39,6 +39,26 @@ export const formatCohort = (cohort?: string): string | null => {
 export const convertToUrlFriendlyKebabCase = (sentence: string): string =>
   isBlank(sentence) ? '' : sentence.trim().toLowerCase().replace(/[():]/g, '').replace(/\s+/g, '-')
 
+export const getEditSessionRouteTitle = (sessionName: string): string => {
+  if (isBlank(sessionName)) {
+    return ''
+  }
+
+  const [firstSegment, ...remainingSegments] = sessionName
+    .split(':')
+    .map(segment => segment.trim())
+    .filter(Boolean)
+
+  const trailingSegment = remainingSegments.join(':').trim()
+
+  // One-to-one names can be prefixed by person details; use the trailing part as the canonical route title.
+  if (trailingSegment && trailingSegment.toLowerCase().includes('one-to-one')) {
+    return trailingSegment
+  }
+
+  return firstSegment || sessionName.trim()
+}
+
 export const attendanceTag = (attendance: string | undefined): string => {
   return attendanceOptionText(attendance).attendanceState
 }

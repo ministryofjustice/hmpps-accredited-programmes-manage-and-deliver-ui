@@ -2,7 +2,7 @@ import { SessionNotes } from '@manage-and-deliver-api'
 import attendanceOptionText from '../utils/attendanceUtils'
 import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
-import { convertToUrlFriendlyKebabCase } from '../utils/utils'
+import { convertToUrlFriendlyKebabCase, getEditSessionRouteTitle } from '../utils/utils'
 import { MojAlertComponentArgs } from '../interfaces/alertComponentArgs'
 
 export type SessionNotesData = SessionNotes & {
@@ -65,9 +65,14 @@ export default class SessionNotesPresenter {
 
   get backLinkArgs() {
     if (this.data.source === 'edit-session') {
+      const sessionRouteTitle = this.data.sessionName.toLowerCase().includes('one-to-one')
+        ? getEditSessionRouteTitle(this.data.sessionName)
+        : `${this.data.moduleName} ${this.data.sessionNumber}`
+      const sessionSlug = convertToUrlFriendlyKebabCase(sessionRouteTitle) || 'session'
+
       return {
         text: `Back to ${this.data.moduleName}`,
-        href: `/${this.data.groupId}/${this.data.sessionId}/edit-session`,
+        href: `/${this.data.groupId}/${this.data.sessionId}/${sessionSlug}`,
       }
     }
 
