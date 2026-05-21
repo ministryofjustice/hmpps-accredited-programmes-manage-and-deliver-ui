@@ -463,7 +463,11 @@ describe('Create Group Controller', () => {
         .get('/group-facilitators')
         .expect(200)
         .expect(res => {
+          expect(res.text).toContain('<title>People responsible for the group - Accredited Programmes</title>')
           expect(res.text).toContain('People responsible for the group')
+          expect(res.text).toContain('Who is responsible for the group?')
+          expect(res.text).not.toContain('Edit people responsible for the group')
+          expect(res.text).not.toContain('Edit who is responsible for the group')
           expect(res.text).toContain('href="/group-delivery-location"')
         })
     })
