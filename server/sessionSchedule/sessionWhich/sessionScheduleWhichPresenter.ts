@@ -10,6 +10,10 @@ export default class SessionScheduleWhichPresenter {
     private readonly selectedSession: string | undefined = undefined,
   ) {}
 
+  get pageTitle(): string {
+    return 'Which session are you scheduling?'
+  }
+
   get text() {
     return { headingHintText: this.scheduleSessionTypeResponse.pageHeading }
   }

@@ -12,6 +12,10 @@ export default class AddToGroupPresenter {
     private readonly validationError: FormValidationError | null = null,
   ) {}
 
+  get pageTitle(): string {
+    return 'Add person to group'
+  }
+
   get text() {
     return {
       pageHeading: this.groupManagementData.groupCode,

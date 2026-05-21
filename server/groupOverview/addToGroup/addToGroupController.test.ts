@@ -32,10 +32,10 @@ beforeEach(() => {
 })
 
 describe('add to group', () => {
-  describe(`GET /addToGroup/:groupId/:referralId`, () => {
+  describe(`GET /add-to-group/:groupId/:referralId`, () => {
     it('loads the initial page to add someone to a group', async () => {
       return request(app)
-        .get(`/addToGroup/${randomUUID()}/${randomUUID()}`)
+        .get(`/add-to-group/${randomUUID()}/${randomUUID()}`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(`Add Alex River to this group?`)
@@ -43,19 +43,19 @@ describe('add to group', () => {
     })
   })
 
-  describe(`POST /addToGroup/:groupId/:referralId`, () => {
+  describe(`POST /add-to-group/:groupId/:referralId`, () => {
     it('posts to the add to group page and redirects successfully to the more details page if Yes is selected', async () => {
       const groupId = '123'
       const referralId = '123'
       return request(app)
-        .post(`/addToGroup/${groupId}/${referralId}`)
+        .post(`/add-to-group/${groupId}/${referralId}`)
         .type('form')
         .send({
           'add-to-group': 'Yes',
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(`Redirecting to /addToGroup/${groupId}/${referralId}/moreDetails`)
+          expect(res.text).toContain(`Redirecting to /${groupId}/${referralId}/scheduled-status-details`)
         })
     })
 
@@ -64,7 +64,7 @@ describe('add to group', () => {
       const referralId = '123'
 
       return request(app)
-        .post(`/addToGroup/${groupId}/${referralId}`)
+        .post(`/add-to-group/${groupId}/${referralId}`)
         .type('form')
         .send({
           'add-to-group': 'No',
@@ -82,7 +82,7 @@ describe('add to group', () => {
       const referralId = '123'
 
       return request(app)
-        .post(`/addToGroup/${groupId}/${referralId}`)
+        .post(`/add-to-group/${groupId}/${referralId}`)
         .type('form')
         .send({})
         .expect(400)
@@ -92,10 +92,10 @@ describe('add to group', () => {
     })
   })
 
-  describe(`GET /addToGroup/:groupId/:referralId/moreDetails`, () => {
+  describe(`GET /:groupId/:referralId/scheduled-status-details`, () => {
     it('loads the initial page to add someone to a group', async () => {
       return request(app)
-        .get(`/addToGroup/${randomUUID()}/${randomUUID()}/moreDetails`)
+        .get(`/${randomUUID()}/${randomUUID()}/scheduled-status-details`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(`referral status will change to Scheduled`)
@@ -103,13 +103,13 @@ describe('add to group', () => {
     })
   })
 
-  describe(`POST /addToGroup/:groupId/:referralId/moreDetails`, () => {
+  describe(`POST /:groupId/:referralId/scheduled-status-details`, () => {
     it('redirects to the allocated page on successful submit with the API message', async () => {
       const groupId = '123'
       const referralId = '123'
 
       return request(app)
-        .post(`/addToGroup/${groupId}/${referralId}/moreDetails`)
+        .post(`/${groupId}/${referralId}/scheduled-status-details`)
         .type('form')
         .send({
           'additional-details': 'Some details',
@@ -126,7 +126,7 @@ describe('add to group', () => {
       const referralId = '123'
 
       return request(app)
-        .post(`/addToGroup/${groupId}/${referralId}/moreDetails`)
+        .post(`/${groupId}/${referralId}/scheduled-status-details`)
         .type('form')
         .send({
           'additional-details': faker.string.alpha({ length: 501 }),

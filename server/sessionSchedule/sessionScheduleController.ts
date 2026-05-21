@@ -62,7 +62,7 @@ export default class SessionScheduleController extends BaseController {
           selectedSession,
           groupOrOneToOne,
         }
-        return res.redirect(`/group/${groupId}/module/${moduleId}/schedule-session-details`)
+        return res.redirect(`/${groupId}/${moduleId}/schedule-session-details`)
       }
     }
     const presenter = new SessionScheduleWhichPresenter(
@@ -109,7 +109,7 @@ export default class SessionScheduleController extends BaseController {
           endTime: data.paramsForUpdate.endTime,
           referralName,
         }
-        return res.redirect(`/group/${groupId}/module/${moduleId}/session-review-details`)
+        return res.redirect(`/${groupId}/${moduleId}/session-review-details`)
       }
     }
 
@@ -118,7 +118,7 @@ export default class SessionScheduleController extends BaseController {
       groupId,
       moduleId,
     )
-    const backLink = `/group/${groupId}/module/${moduleId}/schedule-session-type`
+    const backLink = `/${groupId}/${moduleId}/schedule-session-type`
     const presenter = new AddSessionDetailsPresenter(
       sessionDetails,
       backLink,
@@ -156,7 +156,7 @@ export default class SessionScheduleController extends BaseController {
       )
     }
 
-    const presenter = new SessionScheduleCyaPresenter(`/group/${groupId}/module/${moduleId}`, sessionScheduleData)
+    const presenter = new SessionScheduleCyaPresenter(`/${groupId}/${moduleId}`, sessionScheduleData)
     const view = new SessionScheduleCyaView(presenter)
     return this.renderPage(res, view)
   }

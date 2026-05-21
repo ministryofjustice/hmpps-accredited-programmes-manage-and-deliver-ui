@@ -22,6 +22,28 @@ describe('SessionScheduleCyaPresenter', () => {
     endTime: { hour: 11, minutes: 0, amOrPm: 'AM' },
   }
 
+  describe('pageTitle', () => {
+    it('returns the correct page title', () => {
+      const presenter = new SessionScheduleCyaPresenter(linkUrl, mockSessionDetails)
+
+      expect(presenter.pageTitle).toBe('Review your session details')
+    })
+  })
+
+  describe('text', () => {
+    it('returns the correct heading caption text and heading text', () => {
+      const presenter = new SessionScheduleCyaPresenter(linkUrl, {
+        ...mockSessionDetails,
+        headingText: 'Session details caption',
+      })
+
+      expect(presenter.text).toEqual({
+        headingCaptionText: 'Session details caption',
+        headingText: 'Review your session details',
+      })
+    })
+  })
+
   describe('convertTo24Hour', () => {
     let presenter: SessionScheduleCyaPresenter
 

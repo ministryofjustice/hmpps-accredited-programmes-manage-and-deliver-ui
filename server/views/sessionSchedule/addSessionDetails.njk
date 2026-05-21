@@ -9,7 +9,7 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "components/time-input/macro.njk" import timeInput %}
 
-{% set pageTitle = applicationName + " - Home" %}
+{% set pageTitle = pageTitle + " - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block main %}

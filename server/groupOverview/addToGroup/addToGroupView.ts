@@ -44,6 +44,7 @@ export default class AddToGroupView {
       'groupOverview/addToGroup/addToGroup',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         backLinkArgs: this.backLinkArgs(),
         radioArgs: this.radioArgs(),
         cancelLink: this.presenter.backLinkHref,
