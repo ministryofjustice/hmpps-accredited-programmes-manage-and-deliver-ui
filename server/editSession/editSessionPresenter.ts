@@ -26,6 +26,10 @@ export default class EditSessionPresenter {
     }
   }
 
+  get pageTitle(): string {
+    return this.sessionDetails.pageTitle || 'Edit session'
+  }
+
   get canBeDeleted(): boolean {
     // Cant be deleted if its a core group session
     if (this.sessionDetails.sessionType.toUpperCase() === 'GROUP' && this.sessionDetails.isCatchup === false) {
@@ -97,7 +101,7 @@ export default class EditSessionPresenter {
   }
 
   private sessionNotesPagePath(referralId: string): string {
-    return `/group/${this.groupId}/session/${this.sessionId}/${this.sessionNotesSlug}/session-notes?referralId=${encodeURIComponent(referralId)}&source=edit-session`
+    return `/${this.groupId}/${this.sessionId}/${this.sessionNotesSlug}/session-notes?referralId=${encodeURIComponent(referralId)}&source=edit-session`
   }
 
   get attendanceTableArgs(): MultiSelectTableArgs | TableArgs {

@@ -10,6 +10,10 @@ export default class DeleteSessionPresenter {
     private readonly validationError: FormValidationError | null = null,
   ) {}
 
+  get pageTitle(): string {
+    return 'Delete session'
+  }
+
   get text() {
     return {
       pageCaption: this.sessionDetails.pageTitle,

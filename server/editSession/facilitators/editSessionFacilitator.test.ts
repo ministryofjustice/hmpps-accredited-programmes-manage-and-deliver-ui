@@ -5,8 +5,8 @@ import EditSessionFacilitatorsPresenter from './editSessionFacilitatorsPresenter
 
 describe('EditSessionFacilitatorsPresenter', () => {
   const groupId = randomUUID()
-  const sesionId = randomUUID()
-  const linkUrl = `/group/${groupId}/session/${sesionId}`
+  const sessionId = randomUUID()
+  const linkUrl = `/${groupId}/${sessionId}`
   const editSessionFacilitatorsResponse = {
     pageTitle: 'Getting Started 1',
     facilitators: [

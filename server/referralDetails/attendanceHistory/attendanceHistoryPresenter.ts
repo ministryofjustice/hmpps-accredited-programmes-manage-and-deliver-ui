@@ -77,7 +77,7 @@ export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter 
   get attendanceHistoryTableArgs(): TableArgs['rows'] {
     return this.attendanceHistory.attendanceHistory.map(session => [
       {
-        html: `<a href="/group/${session.groupId}/session/${session.sessionId}/edit-session?isAttendanceHistory=true&referralId=${this.referralId}" class="govuk-link">${session.sessionName}</a>`,
+        html: `<a href="/${session.groupId}/${session.sessionId}/edit-session?isAttendanceHistory=true&referralId=${this.referralId}" class="govuk-link">${session.sessionName}</a>`,
       },
       { text: session.groupCode ?? 'N/A' },
       { text: session.date, attributes: { 'data-sort-value': new Date(session.unformattedDate).getTime() } },
@@ -98,6 +98,6 @@ export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter 
       isAttendanceHistory: 'true',
     })
 
-    return `/group/${groupId}/session/${sessionId}/${sessionSlug}/session-notes?${query.toString()}`
+    return `/${groupId}/${sessionId}/${sessionSlug}/session-notes?${query.toString()}`
   }
 }

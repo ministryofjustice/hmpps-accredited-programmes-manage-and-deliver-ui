@@ -27,7 +27,7 @@ export default class EditSessionView {
           actions: {
             items: [
               {
-                href: `/group/${this.presenter.groupId}/session/${this.presenter.sessionId}/edit-session-date-and-time`,
+                href: `/${this.presenter.groupId}/${this.presenter.sessionId}/edit-session-date-and-time`,
                 text: 'Change',
                 visuallyHiddenText: 'start date',
               },
@@ -44,7 +44,7 @@ export default class EditSessionView {
           actions: {
             items: [
               {
-                href: `/group/${this.presenter.groupId}/session/${this.presenter.sessionId}/edit-session-date-and-time`,
+                href: `/${this.presenter.groupId}/${this.presenter.sessionId}/edit-session-date-and-time`,
                 text: 'Change',
                 visuallyHiddenText: 'start time',
               },
@@ -64,7 +64,7 @@ export default class EditSessionView {
             items: this.presenter.hasReferral
               ? [
                   {
-                    href: `/group/${this.presenter.groupId}/session/${this.presenter.sessionId}/edit-session-attendees`,
+                    href: `/${this.presenter.groupId}/${this.presenter.sessionId}/edit-session-attendees`,
                     text: 'Change',
                     visuallyHiddenText: 'participants',
                   },
@@ -84,7 +84,7 @@ export default class EditSessionView {
           actions: {
             items: [
               {
-                href: `/group/${this.presenter.groupId}/session/${this.presenter.sessionId}/edit-session-facilitators`,
+                href: `/${this.presenter.groupId}/${this.presenter.sessionId}/edit-session-facilitators`,
                 text: 'Change',
                 visuallyHiddenText: 'facilitators',
               },
@@ -137,6 +137,7 @@ export default class EditSessionView {
       'editSession/editSession',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         text: this.presenter.text,
         backLinkArgs: this.presenter.backLinkArgs,
         editSessionSummary: this.editSessionSummary,
