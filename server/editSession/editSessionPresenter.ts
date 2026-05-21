@@ -28,7 +28,7 @@ export default class EditSessionPresenter {
   }
 
   private get sessionTitle(): string {
-    return getEditSessionRouteTitle(this.sessionDetails.pageTitle)
+    return getEditSessionRouteTitle(this.sessionDetails.pageTitle, this.sessionDetails.sessionType)
   }
 
   get text() {

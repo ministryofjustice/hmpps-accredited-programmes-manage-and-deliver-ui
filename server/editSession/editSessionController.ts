@@ -48,7 +48,9 @@ export default class EditSessionController extends BaseController {
     const successMessage = message ? String(message) : null
     const isAttendanceHistoryFlag = isAttendanceHistory === 'true'
     const attendanceHistoryReferralId = referralId ? String(referralId) : null
-    const moduleName = convertToUrlFriendlyKebabCase(getEditSessionRouteTitle(sessionDetails.pageTitle))
+    const moduleName = convertToUrlFriendlyKebabCase(
+      getEditSessionRouteTitle(sessionDetails.pageTitle, sessionDetails.sessionType),
+    )
     req.session.originPage = req.path
 
     const data = await new EditSessionForm(req).attendanceAndSessionNotesData()

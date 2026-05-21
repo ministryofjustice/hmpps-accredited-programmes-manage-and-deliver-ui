@@ -145,7 +145,7 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
       ? session.facilitators.join('<span class="govuk-!-display-block govuk-!-margin-bottom-1"></span>')
       : ''
     const dateSortValue = this.sortableTableDate(session.dateOfSession)
-    const sessionTitle = getEditSessionRouteTitle(session.name || '')
+    const sessionTitle = getEditSessionRouteTitle(session.name || '', session.type)
     const baseSlug = convertToUrlFriendlyKebabCase(sessionTitle) || 'session'
     const sessionSlug = this.isCatchupSession(session) ? `${baseSlug}-catch-up` : baseSlug
 
