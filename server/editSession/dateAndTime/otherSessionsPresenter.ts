@@ -18,6 +18,10 @@ export default class OtherSessionsPresenter {
     return new PresenterUtils()
   }
 
+  get pageTitle(): string {
+    return 'Rescheduling other sessions'
+  }
+
   get text() {
     return {
       headingText: 'Rescheduling later sessions',

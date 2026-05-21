@@ -52,7 +52,7 @@ export default class EditSessionPresenter {
     return {
       text: this.isAttendanceHistory ? 'Back to Attendance history' : 'Back to Sessions and attendance',
       href: this.isAttendanceHistory
-        ? `/referral/${this.attendanceHistoryReferralId}/attendance-history`
+        ? `/${this.attendanceHistoryReferralId}/attendance-history`
         : `/group/${this.groupId}/sessions-and-attendance`,
     }
   }
@@ -101,7 +101,7 @@ export default class EditSessionPresenter {
   }
 
   private sessionNotesPagePath(referralId: string): string {
-    return `/group/${this.groupId}/session/${this.sessionId}/${this.sessionNotesSlug}/session-notes?referralId=${encodeURIComponent(referralId)}&source=edit-session`
+    return `/${this.groupId}/${this.sessionId}/${this.sessionNotesSlug}/session-notes?referralId=${encodeURIComponent(referralId)}&source=edit-session`
   }
 
   get attendanceTableArgs(): MultiSelectTableArgs | TableArgs {

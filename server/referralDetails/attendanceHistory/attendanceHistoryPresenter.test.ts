@@ -84,7 +84,7 @@ describe('AttendanceHistoryPresenter', () => {
         { text: 'Midday to 1pm' },
         { html: `<span class="govuk-tag govuk-tag--blue">Attended</span>` },
         {
-          html: `<a href="/group/1234567890/session/session-1/pre-group-one-to-one/session-notes?referralId=${referralId}&isAttendanceHistory=true" class="govuk-link">Pre-group one-to-one attendance and notes</a>`,
+          html: `<a href="/1234567890/session-1/pre-group-one-to-one/session-notes?referralId=${referralId}&isAttendanceHistory=true" class="govuk-link">Pre-group one-to-one attendance and notes</a>`,
         },
       ])
       expect(rows[1]).toEqual([

@@ -25,7 +25,7 @@ export default class SessionNotesController extends BaseController {
     const isAttendanceHistory = req.query.isAttendanceHistory === 'true'
 
     if (!referralId) {
-      return res.redirect(`/group/${req.params.groupId}/session/${sessionId}/edit-session`)
+      return res.redirect(`/${req.params.groupId}/${sessionId}/edit-session`)
     }
 
     if (source === 'edit-session') {

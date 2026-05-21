@@ -59,7 +59,7 @@ export default class EditSessionController extends BaseController {
           referralIds: data.paramsForUpdate.referralIds,
           source: 'edit-session',
         }
-        return res.redirect(`/group/${groupId}/session/${sessionId}/record-attendance`)
+        return res.redirect(`/${groupId}/${sessionId}/record-attendance`)
       }
     }
 

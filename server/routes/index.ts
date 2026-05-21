@@ -433,24 +433,21 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await editSessionController.editSessionAttendees(req, res)
   })
 
-  getOrPost('/group/:groupId/session/:sessionId/record-attendance', async (req, res, next) => {
+  getOrPost('/:groupId/:sessionId/record-attendance', async (req, res, next) => {
     await attendanceController.showRecordAttendancePage(req, res)
   })
-  getOrPost('/group/:groupId/session/:sessionId/referral/:referralId', async (req, res, next) => {
+  getOrPost('/:groupId/:sessionId/referral/:referralId', async (req, res, next) => {
     await attendanceController.showRecordAttendanceNotesPage(req, res)
   })
-  getOrPost(
-    '/group/:groupId/session/:sessionId/referral/:referralId/:groupTitle-session-notes',
-    async (req, res, next) => {
-      await attendanceController.showRecordAttendanceNotesPage(req, res)
-    },
-  )
+  getOrPost('/:groupId/:sessionId/referral/:referralId/:groupTitle-session-notes', async (req, res, next) => {
+    await attendanceController.showRecordAttendanceNotesPage(req, res)
+  })
 
   get('/referral/:referralId/attendance-history', async (req, res, next) => {
     await referralDetailsController.showAttendanceHistoryPage(req, res)
   })
 
-  getOrPost('/group/:groupId/session/:sessionId/:sessionSlug/session-notes', async (req, res, next) => {
+  getOrPost('/:groupId/:sessionId/:sessionSlug/session-notes', async (req, res, next) => {
     await sessionNotesController.showSessionNotesPage(req, res)
   })
 

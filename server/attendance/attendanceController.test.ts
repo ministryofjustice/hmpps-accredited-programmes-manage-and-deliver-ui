@@ -31,14 +31,11 @@ describe('showRecordAttendancePage', () => {
     },
   }
 
-  describe('GET /group/:groupId/session/:sessionId/record-attendance', () => {
+  describe('GET /:groupId/:sessionId/record-attendance', () => {
     it('redirects to edit session when referralIds are missing from session state', async () => {
       app = TestUtils.createTestAppWithSession({}, { accreditedProgrammesManageAndDeliverService })
 
-      await request(app)
-        .get('/group/111/session/6789/record-attendance')
-        .expect(302)
-        .expect('Location', '/111/6789/edit-session')
+      await request(app).get('/111/6789/record-attendance').expect(302).expect('Location', '/111/6789/edit-session')
 
       expect(accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData).not.toHaveBeenCalled()
     })
@@ -52,7 +49,7 @@ describe('showRecordAttendancePage', () => {
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
 
       await request(app)
-        .get(`/group/111/session/6789/record-attendance`)
+        .get(`/111/6789/record-attendance`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(`Did ${bffData.people[0].name} attend Getting started 1?`)
@@ -86,7 +83,7 @@ describe('showRecordAttendancePage', () => {
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
 
       await request(app)
-        .get('/group/111/session/6789/record-attendance')
+        .get('/111/6789/record-attendance')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('value="AFTC" checked')
@@ -110,9 +107,9 @@ describe('showRecordAttendancePage', () => {
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
 
       await request(app)
-        .get('/group/111/session/6789/record-attendance?referralId=referral2')
+        .get('/111/6789/record-attendance?referralId=referral2')
         .expect(302)
-        .expect('Location', '/group/111/session/6789/referral/referral2/getting-started-1-session-notes')
+        .expect('Location', '/111/6789/referral/referral2/getting-started-1-session-notes')
 
       expect(accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData).toHaveBeenCalledWith(
         'user1',
@@ -122,12 +119,12 @@ describe('showRecordAttendancePage', () => {
     })
   })
 
-  describe('POST /group/:groupId/session/:sessionId/record-attendance', () => {
+  describe('POST /:groupId/:sessionId/record-attendance', () => {
     it('redirects to edit session when referralIds are missing from session state', async () => {
       app = TestUtils.createTestAppWithSession({}, { accreditedProgrammesManageAndDeliverService })
 
       await request(app)
-        .post('/group/111/session/6789/record-attendance')
+        .post('/111/6789/record-attendance')
         .type('form')
         .send({ 'attendance-referral1': 'ATTC' })
         .expect(302)
@@ -147,7 +144,7 @@ describe('showRecordAttendancePage', () => {
       const { referralId } = bffData.people[0]
 
       return request(app)
-        .post(`/group/111/session/6789/record-attendance`)
+        .post(`/111/6789/record-attendance`)
         .type('form')
         .send({
           [`attendance-${referralId}`]: 'ATTC',
@@ -155,7 +152,7 @@ describe('showRecordAttendancePage', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Redirecting to /group/111/session/6789/referral/referral1/${convertToUrlFriendlyKebabCase(bffData.sessionModule)}-session-notes`,
+            `Redirecting to /111/6789/referral/referral1/${convertToUrlFriendlyKebabCase(bffData.sessionModule)}-session-notes`,
           )
         })
     })
@@ -177,13 +174,13 @@ describe('showRecordAttendancePage', () => {
         .reduce((acc, curr) => ({ ...acc, ...curr }), {})
 
       await request(app)
-        .post(`/group/111/session/6789/record-attendance`)
+        .post(`/111/6789/record-attendance`)
         .type('form')
         .send(body)
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Redirecting to /group/111/session/6789/referral/referral1/${convertToUrlFriendlyKebabCase(bffData.sessionModule)}-session-notes`,
+            `Redirecting to /111/6789/referral/referral1/${convertToUrlFriendlyKebabCase(bffData.sessionModule)}-session-notes`,
           )
         })
       expect(accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData).toHaveBeenCalledWith(
@@ -216,7 +213,7 @@ describe('showRecordAttendancePage', () => {
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
 
       await request(app)
-        .post('/group/111/session/6789/record-attendance')
+        .post('/111/6789/record-attendance')
         .type('form')
         .send({
           'attendance-referral1': 'AFTC',
@@ -224,7 +221,7 @@ describe('showRecordAttendancePage', () => {
         .expect(302)
 
       await request(app)
-        .get('/group/111/session/6789/referral/referral1/pre-group-one-to-one-session-notes')
+        .get('/111/6789/referral/referral1/pre-group-one-to-one-session-notes')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Keep this note')
@@ -232,7 +229,7 @@ describe('showRecordAttendancePage', () => {
     })
   })
 
-  describe('GET /group/:groupId/session/:sessionId/referral/:referralId', () => {
+  describe('GET /:groupId/:sessionId/referral/:referralId', () => {
     it('redirects to the canonical notes URL when group title slug is missing', async () => {
       sessionData = {
         editSessionAttendance: {
@@ -247,11 +244,11 @@ describe('showRecordAttendancePage', () => {
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
 
       await request(app)
-        .get('/group/111/session/6789/referral/referral1')
+        .get('/111/6789/referral/referral1')
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Redirecting to /group/111/session/6789/referral/referral1/${convertToUrlFriendlyKebabCase(bffData.sessionModule)}-session-notes`,
+            `Redirecting to /111/6789/referral/referral1/${convertToUrlFriendlyKebabCase(bffData.sessionModule)}-session-notes`,
           )
         })
     })
@@ -277,7 +274,7 @@ describe('showRecordAttendancePage', () => {
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
 
       await request(app)
-        .get('/group/111/session/6789/referral/referral1/pre-group-one-to-one-session-notes')
+        .get('/111/6789/referral/referral1/pre-group-one-to-one-session-notes')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Submit')
@@ -314,7 +311,7 @@ describe('showRecordAttendancePage', () => {
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
 
       await request(app)
-        .get('/group/111/session/6789/referral/referral1/pre-group-one-to-one-session-notes')
+        .get('/111/6789/referral/referral1/pre-group-one-to-one-session-notes')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Existing note from DB')
@@ -344,7 +341,7 @@ describe('showRecordAttendancePage', () => {
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
 
       await request(app)
-        .get('/group/111/session/6789/referral/referral1/pre-group-one-to-one-session-notes')
+        .get('/111/6789/referral/referral1/pre-group-one-to-one-session-notes')
         .expect(200)
         .expect(res => {
           expect(res.text).not.toContain('Old note from BFF')
@@ -368,7 +365,7 @@ describe('showRecordAttendancePage', () => {
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
 
       await request(app)
-        .get('/group/111/session/6789/referral/referral1/pre-group-one-to-one-session-notes')
+        .get('/111/6789/referral/referral1/pre-group-one-to-one-session-notes')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Continue')
@@ -405,7 +402,7 @@ describe('showRecordAttendancePage', () => {
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
 
       await request(app)
-        .get('/group/111/session/6789/referral/referral2/pre-group-one-to-one-session-notes')
+        .get('/111/6789/referral/referral2/pre-group-one-to-one-session-notes')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Submit')
@@ -434,7 +431,7 @@ describe('showRecordAttendancePage', () => {
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
 
       await request(app)
-        .get('/group/111/session/6789/referral/referral1/pre-group-one-to-one-session-notes')
+        .get('/111/6789/referral/referral1/pre-group-one-to-one-session-notes')
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Submit')
@@ -471,16 +468,16 @@ describe('showRecordAttendancePage', () => {
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
 
       await request(app)
-        .get('/group/111/session/6789/referral/referral2/pre-group-one-to-one-session-notes')
+        .get('/111/6789/referral/referral2/pre-group-one-to-one-session-notes')
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain('/group/111/session/6789/referral/referral1/pre-group-one-to-one-session-notes')
-          expect(res.text).toContain('/group/111/session/6789/record-attendance')
+          expect(res.text).toContain('/111/6789/referral/referral1/pre-group-one-to-one-session-notes')
+          expect(res.text).toContain('/111/6789/record-attendance')
         })
     })
   })
 
-  describe('POST /group/:groupId/session/:sessionId/referral/:referralId/:groupTitle-session-notes', () => {
+  describe('POST /:groupId/:sessionId/referral/:referralId/:groupTitle-session-notes', () => {
     it('returns 400 when session notes exceed 10000 characters', async () => {
       sessionData = {
         editSessionAttendance: {
@@ -496,7 +493,7 @@ describe('showRecordAttendancePage', () => {
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
 
       await request(app)
-        .post('/group/111/session/6789/referral/referral1/getting-started-1-session-notes')
+        .post('/111/6789/referral/referral1/getting-started-1-session-notes')
         .type('form')
         .send({
           'record-session-attendance-notes': 'a'.repeat(10001),
@@ -528,7 +525,7 @@ describe('showRecordAttendancePage', () => {
       })
 
       await request(app)
-        .post('/group/111/session/6789/referral/referral1/getting-started-1-session-notes')
+        .post('/111/6789/referral/referral1/getting-started-1-session-notes')
         .type('form')
         .send({
           'record-session-attendance-notes': 'Some notes',
@@ -536,7 +533,7 @@ describe('showRecordAttendancePage', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            'Redirecting to /group/111/session/6789/getting-started-1/session-notes?referralId=referral1&source=edit-session&saved=true&personOnProbationName=Alice+Brown',
+            'Redirecting to /111/6789/getting-started-1/session-notes?referralId=referral1&source=edit-session&saved=true&personOnProbationName=Alice+Brown',
           )
         })
 
@@ -577,7 +574,7 @@ describe('showRecordAttendancePage', () => {
       })
 
       await request(app)
-        .post('/group/111/session/6789/referral/referral1/understanding-myself-session-notes')
+        .post('/111/6789/referral/referral1/understanding-myself-session-notes')
         .type('form')
         .send({
           'record-session-attendance-notes': 'Some notes',
@@ -613,7 +610,7 @@ describe('showRecordAttendancePage', () => {
       })
 
       await request(app)
-        .post('/group/111/session/6789/referral/referral1/getting-started-1-session-notes')
+        .post('/111/6789/referral/referral1/getting-started-1-session-notes')
         .type('form')
         .send({
           'record-session-attendance-notes': 'Some notes',
@@ -659,7 +656,7 @@ describe('showRecordAttendancePage', () => {
       })
 
       await request(app)
-        .post('/group/111/session/6789/referral/referral3/getting-started-1-session-notes')
+        .post('/111/6789/referral/referral3/getting-started-1-session-notes')
         .type('form')
         .send({
           'record-session-attendance-notes': 'Some notes',
@@ -693,7 +690,7 @@ describe('showRecordAttendancePage', () => {
       })
 
       await request(app)
-        .post('/group/111/session/6789/referral/referral1/getting-started-1-session-notes')
+        .post('/111/6789/referral/referral1/getting-started-1-session-notes')
         .type('form')
         .send({
           action: 'skip-and-add-later',
@@ -731,7 +728,7 @@ describe('showRecordAttendancePage', () => {
       })
 
       await request(app)
-        .post('/group/111/session/6789/referral/referral1/getting-started-1-session-notes')
+        .post('/111/6789/referral/referral1/getting-started-1-session-notes')
         .type('form')
         .send({
           'record-session-attendance-notes': '',
@@ -779,7 +776,7 @@ describe('showRecordAttendancePage', () => {
       })
 
       await request(app)
-        .post('/group/111/session/6789/referral/referral3/getting-started-1-session-notes')
+        .post('/111/6789/referral/referral3/getting-started-1-session-notes')
         .type('form')
         .send({
           'record-session-attendance-notes': '',
@@ -787,7 +784,7 @@ describe('showRecordAttendancePage', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            'Redirecting to /group/111/session/6789/getting-started-1/session-notes?referralId=referral3&source=edit-session&saved=true&personOnProbationName=Alex+River',
+            'Redirecting to /111/6789/getting-started-1/session-notes?referralId=referral3&source=edit-session&saved=true&personOnProbationName=Alex+River',
           )
         })
     })
@@ -846,14 +843,14 @@ describe('showRecordAttendancePage', () => {
       const agent = request.agent(app)
 
       await agent
-        .post('/group/111/session/6789/referral/referral1/getting-started-1-session-notes')
+        .post('/111/6789/referral/referral1/getting-started-1-session-notes')
         .type('form')
         .send({
           'record-session-attendance-notes': 'Updated note',
         })
         .expect(302)
 
-      await agent.get('/group/111/session/6789/getting-started-1/session-notes?referralId=referral1').expect(200)
+      await agent.get('/111/6789/getting-started-1/session-notes?referralId=referral1').expect(200)
 
       expect(accreditedProgrammesManageAndDeliverService.getSessionNotes).toHaveBeenCalledWith(
         'user1',
@@ -872,7 +869,7 @@ describe('showRecordAttendancePage', () => {
     accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
 
     return request(app)
-      .post(`/group/111/session/6789/record-attendance`)
+      .post(`/111/6789/record-attendance`)
       .type('form')
       .send({})
       .expect(400)
