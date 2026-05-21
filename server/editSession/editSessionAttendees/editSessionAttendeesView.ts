@@ -34,7 +34,7 @@ export default class EditSessionAttendeesView {
         },
       },
       hint: {
-        text: 'Select who should attend the session.',
+        text: 'Select everyone who should attend the session.',
       },
       items: this.presenter.generateAttendeeCheckboxOptions(),
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields['edit-session-attendees'].errorMessage),

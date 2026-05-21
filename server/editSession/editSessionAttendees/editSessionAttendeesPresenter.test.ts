@@ -35,7 +35,7 @@ describe('EditSessionAttendeesPresenter', () => {
       const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees())
 
       expect(presenter.text).toEqual({
-        headingText: 'Who is the session for?',
+        headingText: 'Edit who should attend the session',
         pageHeading: 'Getting started',
       })
     })

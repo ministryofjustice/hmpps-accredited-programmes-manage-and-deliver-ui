@@ -21,7 +21,7 @@ export default class EditSessionAttendeesPresenter {
 
   get text() {
     return {
-      headingText: 'Who is the session for?',
+      headingText: 'Edit who should attend the session',
       pageHeading: `${this.sessionAttendees.sessionName}`,
     }
   }
