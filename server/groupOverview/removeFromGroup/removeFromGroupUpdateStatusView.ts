@@ -62,6 +62,7 @@ export default class RemoveFromGroupUpdateStatusView {
       'groupOverview/removeFromGroup/removeFromGroupUpdateStatus',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         statusUpdateRadioButtons: this.statusUpdateRadioButtonsOptions,
         addDetailsTextboxOptions: this.presenter.generateMoreDetailsTextBox(),
         currentStatusTagOptions: this.currentStatusTagOptions,

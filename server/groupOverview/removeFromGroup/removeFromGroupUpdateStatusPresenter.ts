@@ -16,6 +16,10 @@ export default class RemoveFromGroupUpdateStatusPresenter {
     private readonly userInputData: Record<string, unknown> | null = null,
   ) {}
 
+  get pageTitle(): string {
+    return 'Update status: remove person from group'
+  }
+
   get text() {
     return {
       pageHeading: `Update ${this.groupManagementData.personName}'s referral status`,

@@ -29,7 +29,7 @@ export default class RemoveFromGroupController extends BaseController {
         formError = data.error
       } else if (data.paramsForUpdate.removeFromGroup.toLowerCase() === 'yes') {
         req.session.groupManagementData.removeFromGroup = true
-        return res.redirect(`/removeFromGroup/${groupId}/${referralId}/updateStatus`)
+        return res.redirect(`/remove-from-group/${groupId}/${referralId}/update-status`)
       } else {
         return res.redirect(req.session.originPage)
       }
@@ -80,7 +80,7 @@ export default class RemoveFromGroupController extends BaseController {
     const presenter = new RemoveFromGroupUpdateStatusPresenter(
       groupId,
       statusDetails,
-      `/removeFromGroup/${groupId}/${referralId}`,
+      `/remove-from-group/${groupId}/${referralId}`,
       req.session.groupManagementData,
       formError,
       userInputData,

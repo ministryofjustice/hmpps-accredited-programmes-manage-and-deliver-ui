@@ -13,6 +13,10 @@ export default class RemoveFromGroupPresenter {
     private readonly userInputData: Record<string, unknown> | null = null,
   ) {}
 
+  get pageTitle(): string {
+    return 'Remove person from group'
+  }
+
   get text() {
     return {
       pageHeading: this.groupManagementData.groupCode,
