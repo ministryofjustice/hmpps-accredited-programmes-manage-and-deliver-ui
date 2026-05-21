@@ -192,6 +192,17 @@ describe('SessionScheduleAttendancePresenter', () => {
       expect(accordionItems[1].content.html).not.toContain('Post-programme reviews session')
     })
 
+    it('renders session table row with correct edit session link format', () => {
+      const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
+      const accordionItems = presenter.getAccordionItems()
+      const firstModuleContent = accordionItems[0].content.html
+
+      expect(firstModuleContent).toContain(`href="/${groupId}/session-1/edit-session"`)
+      expect(firstModuleContent).toContain(`href="/${groupId}/session-2/edit-session"`)
+      expect(firstModuleContent).not.toContain('/group/')
+      expect(firstModuleContent).not.toContain('/session/')
+    })
+
     it('shows the original session type when catch-up is false', () => {
       const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
       const accordionItems = presenter.getAccordionItems()

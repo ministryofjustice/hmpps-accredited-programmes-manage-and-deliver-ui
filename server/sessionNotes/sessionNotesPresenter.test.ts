@@ -78,6 +78,22 @@ describe('SessionNotesPresenter', () => {
     )
   })
 
+  it('builds record attendance URL with referral ID query parameter', () => {
+    const presenter = new SessionNotesPresenter(buildData())
+
+    expect(presenter.recordAttendanceUrl).toBe(
+      '/b2c3d4e5-f6a7-8901-bcde-f23456789012/c3d4e5f6-a7b8-9012-cdef-345678901234/record-attendance?referralId=referral-123',
+    )
+  })
+
+  it('builds record attendance URL with different referral ID', () => {
+    const presenter = new SessionNotesPresenter(buildData({ referralId: 'referral-999' }))
+
+    expect(presenter.recordAttendanceUrl).toBe(
+      '/b2c3d4e5-f6a7-8901-bcde-f23456789012/c3d4e5f6-a7b8-9012-cdef-345678901234/record-attendance?referralId=referral-999',
+    )
+  })
+
   it('returns full session notes data payload', () => {
     const data = buildData()
     const presenter = new SessionNotesPresenter(data)
