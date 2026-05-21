@@ -69,10 +69,12 @@ export default class OtherSessionsPresenter {
 
   private get formattedDate(): string {
     const dateComponents = this.rescheduleSessionRequest.sessionStartDate.split('/')
-    const dayOfWeek = DateUtils.dayOfWeek(
-      CalendarDay.fromComponents(Number(dateComponents[0]), Number(dateComponents[1]), Number(dateComponents[2])),
-    )
-    const date = DateUtils.formattedDate(`${dateComponents[2]}-${dateComponents[1]}-${dateComponents[0]}`)
+    const day = Number(dateComponents[0])
+    const month = Number(dateComponents[1])
+    const year = Number(dateComponents[2])
+    const calendarDay = CalendarDay.fromComponents(day, month, year)
+    const dayOfWeek = DateUtils.dayOfWeek(calendarDay)
+    const date = DateUtils.formattedDate(calendarDay)
     return `${dayOfWeek} ${date}`
   }
 
