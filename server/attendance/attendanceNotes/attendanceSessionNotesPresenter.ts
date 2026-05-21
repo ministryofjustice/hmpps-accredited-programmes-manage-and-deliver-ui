@@ -59,11 +59,11 @@ export default class AttendanceSessionNotesPresenter {
   }
 
   get backLinkUri() {
-    return this.backLink || `/group/${this.groupId}/session/${this.sessionId}/record-attendance`
+    return this.backLink || `/${this.groupId}/${this.sessionId}/record-attendance`
   }
 
   get changeAttendanceUri() {
-    return `/group/${this.groupId}/session/${this.sessionId}/record-attendance`
+    return `/${this.groupId}/${this.sessionId}/record-attendance`
   }
 
   get errorSummary() {

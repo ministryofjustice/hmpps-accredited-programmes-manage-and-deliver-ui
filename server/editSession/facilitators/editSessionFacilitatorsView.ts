@@ -6,13 +6,6 @@ import EditSessionFacilitatorsPresenter from './editSessionFacilitatorsPresenter
 export default class EditSessionFacilitatorsView {
   constructor(private readonly presenter: EditSessionFacilitatorsPresenter) {}
 
-  private backLinkArgs() {
-    return {
-      text: 'Back',
-      href: this.presenter.backLinkArgs,
-    }
-  }
-
   private homePageLink() {
     return {
       text: 'Go to Accredited Programmes homepage',
@@ -64,6 +57,7 @@ export default class EditSessionFacilitatorsView {
       'editSession/editSessionFacilitators',
       {
         backLinkArgs: this.presenter.backLinkArgs,
+        pageTitles: this.presenter.pageTitles,
         homePageLink: this.homePageLink(),
         editSessionFacilitatorsArgs: this.editSessionFacilitatorsArgs(),
         editSessionFacilitatorsFieldSetArgs: this.editSessionFacilitatorsFieldSetArgs(),

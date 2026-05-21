@@ -37,7 +37,7 @@ export default class AttendanceController extends BaseController {
     }
 
     if (!referralIds.length) {
-      return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session`)
+      return res.redirect(`/${groupId}/${sessionId}/edit-session`)
     }
 
     const sessionAttendees = (req.session.editSessionAttendance?.attendees || []) as SessionAttendance['attendees']
@@ -101,7 +101,7 @@ export default class AttendanceController extends BaseController {
       }
     }
 
-    const backLinkUri = `/group/${groupId}/session/${sessionId}/edit-session`
+    const backLinkUri = `/${groupId}/${sessionId}/edit-session`
 
     const presenter = new AttendancePresenter(
       recordAttendanceDataWithSessionSelections,
@@ -122,7 +122,7 @@ export default class AttendanceController extends BaseController {
     const attendees = (req.session.editSessionAttendance?.attendees || []) as SessionAttendance['attendees']
 
     if (!referralIds.length) {
-      return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session`)
+      return res.redirect(`/${groupId}/${sessionId}/edit-session`)
     }
 
     const recordAttendanceBffData = await this.accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData(
@@ -140,7 +140,7 @@ export default class AttendanceController extends BaseController {
     const currentReferralIndex = referralIds.findIndex(id => id === referralId)
 
     if (currentReferralIndex === -1) {
-      return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session`)
+      return res.redirect(`/${groupId}/${sessionId}/edit-session`)
     }
 
     const isLastReferral = currentReferralIndex === referralIds.length - 1
@@ -163,7 +163,7 @@ export default class AttendanceController extends BaseController {
     const backLinkUri =
       currentReferralIndex > 0
         ? this.notesPageUri(groupId, sessionId, referralIds[currentReferralIndex - 1], theGroupTitle)
-        : `/group/${groupId}/session/${sessionId}/record-attendance`
+        : `/${groupId}/${sessionId}/record-attendance`
 
     if (req.method === 'POST') {
       const notesFormData = await new AttendanceSessionNotesForm(req).sessionNotesData()
@@ -199,7 +199,7 @@ export default class AttendanceController extends BaseController {
         const attendeesForSubmission = this.normaliseAttendeesForSubmission(attendees)
 
         if (!attendeesForSubmission.length) {
-          return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session`)
+          return res.redirect(`/${groupId}/${sessionId}/edit-session`)
         }
 
         const createSessionAttendanceResponse =
@@ -229,7 +229,7 @@ export default class AttendanceController extends BaseController {
             message: `Attendance recorded for ${this.formatNameList(personNames)}.`,
           })
 
-          return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session?${redirectQuery}`)
+          return res.redirect(`/${groupId}/${sessionId}/edit-session?${redirectQuery}`)
         }
 
         const sessionSlug = convertToUrlFriendlyKebabCase(recordAttendanceBffData.sessionModule)
@@ -241,7 +241,7 @@ export default class AttendanceController extends BaseController {
         })
 
         delete req.session.editSessionAttendance
-        return res.redirect(`/group/${groupId}/session/${sessionId}/${sessionSlug}/session-notes?${sessionNotesQuery}`)
+        return res.redirect(`/${groupId}/${sessionId}/${sessionSlug}/session-notes?${sessionNotesQuery}`)
       }
 
       return res.redirect(this.notesPageUri(groupId, sessionId, referralIds[currentReferralIndex + 1], theGroupTitle))
@@ -306,7 +306,7 @@ export default class AttendanceController extends BaseController {
   }
 
   private notesPageUri(groupId: string, sessionId: string, referralId: string, groupTitle: string): string {
-    return `/group/${groupId}/session/${sessionId}/referral/${referralId}/${groupTitle}-session-notes`
+    return `/${groupId}/${sessionId}/referral/${referralId}/${groupTitle}-session-notes`
   }
 
   private resolveOutcomeCodeFromPerson(

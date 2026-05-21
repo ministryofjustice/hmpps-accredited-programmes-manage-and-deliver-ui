@@ -228,4 +228,12 @@ describe('EditSessionAttendeesPresenter', () => {
       expect(presenter.fields['edit-session-attendees'].errorMessage).toBe('Select who should attend the session')
     })
   })
+
+  describe('pageTitle', () => {
+    it('returns the correct page title', () => {
+      const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees())
+
+      expect(presenter.pageTitle).toBe('Edit who should attend the session')
+    })
+  })
 })

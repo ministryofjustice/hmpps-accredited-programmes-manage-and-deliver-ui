@@ -19,6 +19,10 @@ export default class EditSessionFacilitatorsPresenter {
     }
   }
 
+  get pageTitles(): string {
+    return 'Edit the session facilitators'
+  }
+
   get text() {
     return {
       pageHeading: `Edit the session facilitators`,

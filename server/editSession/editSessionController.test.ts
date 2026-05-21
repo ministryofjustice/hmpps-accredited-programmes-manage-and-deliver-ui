@@ -32,7 +32,7 @@ describe('editSession', () => {
     const sessionDetails = sessionDetailsFactory.build()
     accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
 
-    await request(app).get(`/group/12345/session/6789/edit-session`).expect(200)
+    await request(app).get(`/12345/6789/edit-session`).expect(200)
 
     expect(accreditedProgrammesManageAndDeliverService.getGroupSessionDetails).toHaveBeenCalledWith(
       'user1',
@@ -46,7 +46,7 @@ describe('editSession', () => {
     accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
 
     await request(app)
-      .get(`/group/12345/session/6789/edit-session`)
+      .get(`/12345/6789/edit-session`)
       .expect(200)
       .expect(res => {
         expect(res.text).toContain('<title>Test Session - Accredited Programmes</title>')
@@ -58,7 +58,7 @@ describe('editSession', () => {
 })
 
 describe('editSessionDateAndTime', () => {
-  describe('GET /group/:groupId/session/:sessionId/edit-session-date-and-time', () => {
+  describe('GET /:groupId/:sessionId/edit-session-date-and-time', () => {
     it('should fetch session details with correct parameters and load page correctly', async () => {
       const sessionDetails = editSessionDetailsFactory.build()
       const sessionAttendees = editSessionAttendeesFactory.build()
@@ -66,7 +66,7 @@ describe('editSessionDateAndTime', () => {
       accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
 
       await request(app)
-        .get(`/group/111/session/6789/edit-session-date-and-time`)
+        .get(`/111/6789/edit-session-date-and-time`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Edit the session date and time')
@@ -78,7 +78,7 @@ describe('editSessionDateAndTime', () => {
     })
   })
 
-  describe('POST group/:groupId/session/:sessionId/edit-session-date-and-time', () => {
+  describe('POST /:groupId/:sessionId/edit-session-date-and-time', () => {
     it('should fetch session details with correct parameters and load page correctly', async () => {
       const sessionDetails = editSessionDetailsFactory.build()
       const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'GROUP' })
@@ -86,7 +86,7 @@ describe('editSessionDateAndTime', () => {
       accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
 
       return request(app)
-        .post(`/group/111/session/6789/edit-session-date-and-time`)
+        .post(`/111/6789/edit-session-date-and-time`)
         .type('form')
         .send({
           'session-details-date': '15/12/3055',
@@ -99,7 +99,7 @@ describe('editSessionDateAndTime', () => {
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(`Redirecting to /group/111/session/6789/edit-session-date-and-time/reschedule`)
+          expect(res.text).toContain(`Redirecting to /111/6789/edit-session-date-and-time/reschedule`)
         })
     })
   })
@@ -121,7 +121,7 @@ describe('submitEditSessionDateAndTime', () => {
       },
     },
   }
-  describe('GET group/:groupId/session/:sessionId/edit-session-date-and-time/reschedule', () => {
+  describe('GET /:groupId/:sessionId/edit-session-date-and-time/reschedule', () => {
     it('should fetch session details with correct parameters and load page correctly', async () => {
       const sessionDetails = rescheduleSessionDetailsFactory.build()
       accreditedProgrammesManageAndDeliverService.getRescheduleSessionDetails.mockResolvedValue(sessionDetails)
@@ -129,7 +129,7 @@ describe('submitEditSessionDateAndTime', () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
       await request(app)
-        .get(`/group/111/session/6789/edit-session-date-and-time/reschedule`)
+        .get(`/111/6789/edit-session-date-and-time/reschedule`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Rescheduling later sessions')
@@ -141,7 +141,7 @@ describe('submitEditSessionDateAndTime', () => {
     })
   })
 
-  describe('POST group/:groupId/session/:sessionId/edit-session-date-and-time/reschedule', () => {
+  describe('POST /:groupId/:sessionId/edit-session-date-and-time/reschedule', () => {
     it('should submit the edit session details correctly', async () => {
       const sessionDetails = rescheduleSessionDetailsFactory.build()
       accreditedProgrammesManageAndDeliverService.getRescheduleSessionDetails.mockResolvedValue(sessionDetails)
@@ -153,7 +153,7 @@ describe('submitEditSessionDateAndTime', () => {
       })
 
       return request(app)
-        .post(`/group/111/session/6789/edit-session-date-and-time/reschedule`)
+        .post(`/111/6789/edit-session-date-and-time/reschedule`)
         .type('form')
         .send({
           'reschedule-other-sessions': 'false',
@@ -161,7 +161,7 @@ describe('submitEditSessionDateAndTime', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Redirecting to /group/111/session/6789/edit-session?message=${encodeURIComponent('Test message')}`,
+            `Redirecting to /111/6789/edit-session?message=${encodeURIComponent('Test message')}`,
           )
         })
     })
@@ -189,14 +189,14 @@ describe('editSessionFacilitators', () => {
     ],
   }
 
-  describe('GET /group/:groupId/session/:sessionId/edit-session-facilitators', () => {
+  describe('GET /:groupId/:sessionId/edit-session-facilitators', () => {
     it('should fetch session facilitators with correct parameters and load page correctly', async () => {
       accreditedProgrammesManageAndDeliverService.getEditSessionFacilitators.mockResolvedValue(
         editSessionFacilitatorsResponse,
       )
 
       await request(app)
-        .get(`/group/123/session/456/edit-session-facilitators`)
+        .get(`/123/456/edit-session-facilitators`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Edit the session facilitators')
@@ -215,7 +215,7 @@ describe('editSessionFacilitators', () => {
       )
 
       await request(app)
-        .get(`/group/123/session/456/edit-session-facilitators`)
+        .get(`/123/456/edit-session-facilitators`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Facilitator One')
@@ -224,7 +224,7 @@ describe('editSessionFacilitators', () => {
     })
   })
 
-  describe('POST /group/:groupId/session/:sessionId/edit-session-facilitators', () => {
+  describe('POST /:groupId/:sessionId/edit-session-facilitators', () => {
     const groupId = randomUUID()
     const sessionId = randomUUID()
     it('should submit facilitators update successfully and redirect with success message', async () => {
@@ -236,7 +236,7 @@ describe('editSessionFacilitators', () => {
       )
 
       return request(app)
-        .post(`/group/${groupId}/session/${sessionId}/edit-session-facilitators`)
+        .post(`/${groupId}/${sessionId}/edit-session-facilitators`)
         .type('form')
         .send({
           'edit-session-facilitator-0':
@@ -247,7 +247,7 @@ describe('editSessionFacilitators', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Found. Redirecting to /group/${groupId}/session/${sessionId}/edit-session?message=${encodeURIComponent('Facilitators updated successfully')}`,
+            `Found. Redirecting to /${groupId}/${sessionId}/edit-session?message=${encodeURIComponent('Facilitators updated successfully')}`,
           )
         })
     })
@@ -258,7 +258,7 @@ describe('editSessionFacilitators', () => {
       )
 
       await request(app)
-        .post(`/group/${groupId}/session/${sessionId}/edit-session-facilitators`)
+        .post(`/${groupId}/${sessionId}/edit-session-facilitators`)
         .type('form')
         .send({
           'edit-session-facilitator-0': '',
@@ -283,7 +283,7 @@ describe('editSessionFacilitators', () => {
       const agent = request.agent(app)
 
       await agent
-        .post(`/group/${groupId}/session/${sessionId}/edit-session-facilitators`)
+        .post(`/${groupId}/${sessionId}/edit-session-facilitators`)
         .type('form')
         .send({
           'edit-session-facilitator-0':
@@ -305,7 +305,7 @@ describe('editSessionFacilitators', () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
       await request(app)
-        .post(`/group/${groupId}/session/${sessionId}/edit-session-facilitators`)
+        .post(`/${groupId}/${sessionId}/edit-session-facilitators`)
         .type('form')
         .send({
           'edit-session-facilitator-0': '',

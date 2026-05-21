@@ -59,7 +59,7 @@ export default class EditSessionController extends BaseController {
           referralIds: data.paramsForUpdate.referralIds,
           source: 'edit-session',
         }
-        return res.redirect(`/group/${groupId}/session/${sessionId}/record-attendance`)
+        return res.redirect(`/${groupId}/${sessionId}/record-attendance`)
       }
     }
 
@@ -67,7 +67,7 @@ export default class EditSessionController extends BaseController {
       groupId,
       sessionDetails,
       sessionId,
-      `/group/${groupId}/session/${sessionId}/delete-session`,
+      `/${groupId}/${sessionId}/delete-session`,
       successMessage,
       isAttendanceHistoryFlag,
       formError,
@@ -122,7 +122,7 @@ export default class EditSessionController extends BaseController {
           sessionId,
           data.paramsForUpdate.referralId,
         )
-        return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session?message=${message}`)
+        return res.redirect(`/${groupId}/${sessionId}/edit-session?message=${message}`)
       }
     }
 
@@ -130,7 +130,7 @@ export default class EditSessionController extends BaseController {
       username,
       sessionId,
     )
-    const backUrl = `/group/${groupId}/session/${sessionId}/edit-session`
+    const backUrl = `/${groupId}/${sessionId}/edit-session`
     const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, sessionAttendees, formError)
     const view = new EditSessionAttendeesView(presenter)
 
@@ -167,7 +167,7 @@ export default class EditSessionController extends BaseController {
 
         // GROUP sessions and ONE_TO_ONE catch-ups go to the reschedule page
         if (sessionAttendees.sessionType === 'GROUP' && !sessionAttendees.isCatchup) {
-          return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session-date-and-time/reschedule`)
+          return res.redirect(`/${groupId}/${sessionId}/edit-session-date-and-time/reschedule`)
         }
 
         // For ONE_TO_ONE sessions, submit directly to API
@@ -189,7 +189,7 @@ export default class EditSessionController extends BaseController {
 
         delete req.session.editSessionDateAndTime
 
-        return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session?message=${response.message}`)
+        return res.redirect(`/${groupId}/${sessionId}/edit-session?message=${response.message}`)
       }
     }
     const presenter = new EditSessionDateAndTimePresenter(
@@ -232,7 +232,7 @@ export default class EditSessionController extends BaseController {
           req.session.editSessionDateAndTime as RescheduleSessionRequest,
         )
 
-        return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session?message=${message.message}`)
+        return res.redirect(`/${groupId}/${sessionId}/edit-session?message=${message.message}`)
       }
     }
 
@@ -266,7 +266,7 @@ export default class EditSessionController extends BaseController {
           sessionId,
           req.session.sessionFacilitators,
         )
-        return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session?message=${message}`)
+        return res.redirect(`/${groupId}/${sessionId}/edit-session?message=${message}`)
       }
     }
     const presenter = new EditSessionFacilitatorsPresenter(

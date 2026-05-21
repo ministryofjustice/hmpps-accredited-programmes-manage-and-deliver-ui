@@ -21,7 +21,7 @@ export default class SessionNotesView {
         data: {
           sessionName: this.presenter.text.sessionName,
           moduleName: this.presenter.sessionNotesData.moduleName,
-          sessionDetailsHref: `/group/${this.presenter.sessionNotesData.groupId}/session/${this.presenter.sessionNotesData.sessionId}/edit-session`,
+          sessionDetailsHref: `/${this.presenter.sessionNotesData.groupId}/${this.presenter.sessionNotesData.sessionId}/edit-session`,
           sessionDate: this.presenter.sessionNotesData.sessionDate ?? '',
           attendance: this.presenter.attendanceOptionText.attendanceState,
         },
