@@ -60,12 +60,12 @@ describe('editSession', () => {
     const groupId = 'd721e8ad-948d-4e48-bff9-9c6fc1c26ece'
     const sessionId = '89180e89-a335-4ce8-bfad-2ea61620a444'
     const sessionDetails = sessionDetailsFactory.build({
-      pageTitle: 'Barton Pfannerstill S688890821: Getting started one-to-one',
+      pageTitle: 'Alex River S688890821: Getting started one-to-one',
       sessionType: 'Individual',
       attendanceAndSessionNotes: [
         {
           referralId: 'referral-123',
-          name: 'Barton Pfannerstill',
+          name: 'Alex River',
           crn: 'S688890821',
           attendance: 'Attended',
           sessionNotes: 'Notes recorded',
@@ -92,7 +92,7 @@ describe('editSession', () => {
       attendanceAndSessionNotes: [
         {
           referralId: 'referral-123',
-          name: 'Barton Pfannerstill',
+          name: 'Alex River',
           crn: 'S688890821',
           attendance: 'Attended',
           sessionNotes: 'Notes recorded',

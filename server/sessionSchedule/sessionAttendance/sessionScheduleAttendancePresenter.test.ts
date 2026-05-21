@@ -212,7 +212,7 @@ describe('SessionScheduleAttendancePresenter', () => {
             sessions: [
               {
                 ...mockGroupSessionsData.modules![0].sessions![0],
-                name: 'Barton Pfannerstill S688890821: Getting started one-to-one',
+                name: 'Alex River S688890821: Getting started one-to-one',
                 type: 'One-to-one',
               },
             ],

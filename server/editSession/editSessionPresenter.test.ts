@@ -28,7 +28,7 @@ describe('EditSessionPresenter', () => {
 
     it('normalises one-to-one page title when prefixed with person details', () => {
       const sessionDetails: GroupSessionResponse = {
-        pageTitle: 'Barton Pfannerstill S688890821: Getting started one-to-one',
+        pageTitle: 'Alex River S688890821: Getting started one-to-one',
         code: 'CODE-123',
         sessionType: 'Individual',
         isCatchup: false,

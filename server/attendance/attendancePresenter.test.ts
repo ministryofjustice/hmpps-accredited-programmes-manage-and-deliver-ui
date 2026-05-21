@@ -3,6 +3,13 @@ import AttendancePresenter from './attendancePresenter'
 
 describe('AttendancePresenter', () => {
   describe('pageTitle', () => {
+    it('prefixes the session module with Add and suffixes attendance', () => {
+      const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Getting started 1' })
+      const presenter = new AttendancePresenter(bffData, 'backlink', null)
+
+      expect(presenter.pageTitle).toBe('Add Getting started 1 attendance')
+    })
+
     it('returns session-based page title for a single attendee', () => {
       const bffData = recordSessionAttendanceFactory.build()
       bffData.people = [bffData.people[0]]

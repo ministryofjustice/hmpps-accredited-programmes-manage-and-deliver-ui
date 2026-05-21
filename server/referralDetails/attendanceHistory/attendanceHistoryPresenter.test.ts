@@ -111,13 +111,13 @@ describe('AttendanceHistoryPresenter', () => {
             sessionId: 'session-abc',
             groupId: 'group-xyz',
             groupCode: 'GRP-XYZ',
-            sessionName: 'Barton Pfannerstill S688890821: Getting started one-to-one',
+            sessionName: 'Alex River S688890821: Getting started one-to-one',
             date: '11 July 2025',
             time: 'Midday to 1pm',
             unformattedDate: '2025-07-11 12:00:00.00',
             attendanceStatus: 'Attended',
             hasNotes: false,
-            popName: 'Barton Pfannerstill',
+            popName: 'Alex River',
             isCatchup: false,
           },
         ],
@@ -127,7 +127,7 @@ describe('AttendanceHistoryPresenter', () => {
       const rows = presenter.attendanceHistoryTableArgs
 
       expect(rows[0][0]).toEqual({
-        html: `<a href="/group-xyz/session-abc/getting-started-one-to-one?isAttendanceHistory=true&referralId=${referralId}" class="govuk-link">Barton Pfannerstill S688890821: Getting started one-to-one</a>`,
+        html: `<a href="/group-xyz/session-abc/getting-started-one-to-one?isAttendanceHistory=true&referralId=${referralId}" class="govuk-link">Alex River S688890821: Getting started one-to-one</a>`,
       })
     })
 
