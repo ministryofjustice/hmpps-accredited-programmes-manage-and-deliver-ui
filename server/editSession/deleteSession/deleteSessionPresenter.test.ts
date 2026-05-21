@@ -6,7 +6,7 @@ describe('DeleteSessionPresenter', () => {
   const backUrl = '/back'
 
   describe('pageTitle', () => {
-    it('should return the correct page title', () => {
+    it('should return Delete session', () => {
       const sessionDetails: Session = {
         type: 'Group',
         name: 'Getting started',
