@@ -92,6 +92,35 @@ describe('generateStatusUpdateRadios.', () => {
       },
     ])
   })
+  it('should set disabled to true for the Deprioritised option', () => {
+    const details = referralDetailsFactory.build()
+    const statusDetails = referralStatusFormDataFactory.build({
+      availableStatuses: [
+        {
+          id: 'bb1e8c72-cf52-4297-94a4-3745c2a25178',
+          status: 'Awaiting allocation',
+          transitionDescription: 'The person has been assessed as suitable and can be allocated to a group.',
+          isClosed: false,
+          labelColour: 'light-blue',
+        },
+        {
+          id: 'bc8c7024-045b-4a82-bb97-e6b8c0f198cb',
+          status: 'Deprioritised',
+          transitionDescription:
+            'The person is suitable but does not meet the prioritisation criteria. The referral will be paused in case they are re-prioritised.',
+          isClosed: false,
+          labelColour: 'yellow',
+        },
+      ],
+    })
+
+    const presenter = new UpdateReferralStatusPresenter(details, statusDetails, '')
+    const radios = presenter.generateStatusUpdateRadios()
+
+    expect(radios.find(r => r.text === 'Awaiting allocation')).not.toHaveProperty('disabled')
+    expect(radios.find(r => r.text === 'Deprioritised')).toMatchObject({ disabled: true })
+  })
+
   describe('generateAddDetailsHintText', () => {
     it('returns the correct hint for Awaiting allocation', () => {
       const details = referralDetailsFactory.build()

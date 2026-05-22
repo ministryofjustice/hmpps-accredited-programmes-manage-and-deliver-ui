@@ -48,6 +48,7 @@ export default class UpdateReferralStatusPresenter {
           text: status.transitionDescription,
         },
         checked: this.fields.updatedStatus.value.toLowerCase() === status.id.toLowerCase(),
+        ...(status.status === 'Deprioritised' && { disabled: true }),
       })
     })
     return statusRadios
