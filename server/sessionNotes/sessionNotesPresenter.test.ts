@@ -156,8 +156,42 @@ describe('SessionNotesPresenter', () => {
 
     expect(presenter.backLinkArgs).toEqual({
       text: 'Back to Getting started',
-      href: '/b2c3d4e5-f6a7-8901-bcde-f23456789012/c3d4e5f6-a7b8-9012-cdef-345678901234/edit-session',
+      href: '/b2c3d4e5-f6a7-8901-bcde-f23456789012/c3d4e5f6-a7b8-9012-cdef-345678901234/getting-started-1',
     })
+  })
+
+  it('returns one-to-one backlink slug when opened from edit session', () => {
+    const presenter = new SessionNotesPresenter(
+      buildData({
+        source: 'edit-session',
+        sessionName: 'Alex River: Getting started one-to-one',
+      }),
+    )
+
+    expect(presenter.backLinkArgs).toEqual({
+      text: 'Back to Getting started',
+      href: '/b2c3d4e5-f6a7-8901-bcde-f23456789012/c3d4e5f6-a7b8-9012-cdef-345678901234/getting-started-one-to-one',
+    })
+  })
+
+  it('returns session details href with module and session number slug', () => {
+    const presenter = new SessionNotesPresenter(buildData())
+
+    expect(presenter.sessionDetailsHref).toBe(
+      '/b2c3d4e5-f6a7-8901-bcde-f23456789012/c3d4e5f6-a7b8-9012-cdef-345678901234/getting-started-1',
+    )
+  })
+
+  it('returns session details href with one-to-one slug when session name is one-to-one', () => {
+    const presenter = new SessionNotesPresenter(
+      buildData({
+        sessionName: 'Alex River: Getting started one-to-one',
+      }),
+    )
+
+    expect(presenter.sessionDetailsHref).toBe(
+      '/b2c3d4e5-f6a7-8901-bcde-f23456789012/c3d4e5f6-a7b8-9012-cdef-345678901234/getting-started-one-to-one',
+    )
   })
 
   it('returns field error message when session notes validation fails', () => {

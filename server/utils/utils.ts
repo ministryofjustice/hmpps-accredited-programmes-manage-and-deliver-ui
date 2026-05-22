@@ -39,6 +39,42 @@ export const formatCohort = (cohort?: string): string | null => {
 export const convertToUrlFriendlyKebabCase = (sentence: string): string =>
   isBlank(sentence) ? '' : sentence.trim().toLowerCase().replace(/[():]/g, '').replace(/\s+/g, '-')
 
+const isOneToOneSessionType = (sessionType?: string): boolean => {
+  if (isBlank(sessionType || '')) {
+    return false
+  }
+
+  const normalisedType = (sessionType || '').trim().toLowerCase()
+  return normalisedType === 'individual' || normalisedType === 'one-to-one' || normalisedType === 'one_to_one'
+}
+
+export const getEditSessionRouteTitle = (sessionName: string, sessionType?: string): string => {
+  if (isBlank(sessionName)) {
+    return ''
+  }
+
+  const title = sessionName.trim()
+
+  const [firstSegment, ...remainingSegments] = sessionName
+    .split(':')
+    .map(segment => segment.trim())
+    .filter(Boolean)
+
+  const trailingSegment = remainingSegments.join(':').trim()
+
+  // Prefer BFF-provided session type to identify one-to-one titles when available.
+  if (isOneToOneSessionType(sessionType) && trailingSegment) {
+    return trailingSegment
+  }
+
+  // Fallback for call sites where sessionType is not available.
+  if (trailingSegment && trailingSegment.toLowerCase().includes('one-to-one')) {
+    return trailingSegment
+  }
+
+  return firstSegment || title
+}
+
 export const attendanceTag = (attendance: string | undefined): string => {
   return attendanceOptionText(attendance).attendanceState
 }

@@ -3,7 +3,7 @@ import { MultiSelectTableArgs } from '@manage-and-deliver-ui'
 import { TableArgs } from '../utils/govukFrontendTypes'
 import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
-import { convertToUrlFriendlyKebabCase } from '../utils/utils'
+import { convertToUrlFriendlyKebabCase, getEditSessionRouteTitle } from '../utils/utils'
 import ViewUtils from '../utils/viewUtils'
 import attendanceOptionText, { attendanceOptionTextTags } from '../utils/attendanceUtils'
 
@@ -19,6 +19,18 @@ export default class EditSessionPresenter {
     private readonly attendanceHistoryReferralId: string | null = null,
   ) {}
 
+  get pageTitle(): string {
+    if (this.isOneToOneSession) {
+      return `${this.sessionTitle}`
+    }
+
+    return this.sessionDetails.pageTitle
+  }
+
+  private get sessionTitle(): string {
+    return getEditSessionRouteTitle(this.sessionDetails.pageTitle, this.sessionDetails.sessionType)
+  }
+
   get text() {
     return {
       pageHeading: `${this.sessionDetails.pageTitle}`,
@@ -26,8 +38,9 @@ export default class EditSessionPresenter {
     }
   }
 
-  get pageTitle(): string {
-    return this.sessionDetails.pageTitle || 'Edit session'
+  private get isOneToOneSession(): boolean {
+    const sessionType = this.sessionDetails.sessionType.toLowerCase()
+    return sessionType === 'individual' || sessionType === 'one-to-one' || sessionType === 'one_to_one'
   }
 
   get canBeDeleted(): boolean {
@@ -78,7 +91,8 @@ export default class EditSessionPresenter {
   }
 
   private get sessionNotesSlug() {
-    return convertToUrlFriendlyKebabCase(this.sessionDetails.pageTitle) || 'session'
+    const baseSlug = convertToUrlFriendlyKebabCase(this.sessionTitle) || 'session'
+    return this.sessionDetails.isCatchup && !baseSlug.endsWith('-catch-up') ? `${baseSlug}-catch-up` : baseSlug
   }
 
   private hasSessionNotes(notes: unknown): boolean {
@@ -96,7 +110,7 @@ export default class EditSessionPresenter {
       return { text: 'Not added' }
     }
 
-    const linkText = `${ViewUtils.escape(this.sessionDetails.pageTitle)} notes`
+    const linkText = `${ViewUtils.escape(this.sessionTitle)} notes`
     return { html: `<a href="${this.sessionNotesPagePath(referralId)}">${linkText}</a>` }
   }
 

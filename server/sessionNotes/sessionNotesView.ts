@@ -21,7 +21,7 @@ export default class SessionNotesView {
         data: {
           sessionName: this.presenter.text.sessionName,
           moduleName: this.presenter.sessionNotesData.moduleName,
-          sessionDetailsHref: `/${this.presenter.sessionNotesData.groupId}/${this.presenter.sessionNotesData.sessionId}/edit-session`,
+          sessionDetailsHref: this.presenter.sessionDetailsHref,
           sessionDate: this.presenter.sessionNotesData.sessionDate ?? '',
           attendance: this.presenter.attendanceOptionText.attendanceState,
         },
@@ -56,6 +56,7 @@ export default class SessionNotesView {
       'sessionNotes/sessionNotes',
       {
         backLinkArgs: this.presenter.backLinkArgs,
+        pageTitle: this.presenter.pageTitle,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         isReadOnly: this.presenter.isReadOnly,
         notesBodyArgs: this.notesBodyArgs,

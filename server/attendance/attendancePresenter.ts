@@ -10,6 +10,10 @@ export default class AttendancePresenter {
     private readonly userInputData: Record<string, unknown> | null = null,
   ) {}
 
+  get pageTitle(): string {
+    return `Add ${this.recordAttendanceBffData.sessionModule} attendance`
+  }
+
   get text() {
     return {
       pageHeading:

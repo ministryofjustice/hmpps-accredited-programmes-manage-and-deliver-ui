@@ -197,10 +197,34 @@ describe('SessionScheduleAttendancePresenter', () => {
       const accordionItems = presenter.getAccordionItems()
       const firstModuleContent = accordionItems[0].content.html
 
-      expect(firstModuleContent).toContain(`href="/${groupId}/session-1/edit-session"`)
-      expect(firstModuleContent).toContain(`href="/${groupId}/session-2/edit-session"`)
+      expect(firstModuleContent).toContain(`href="/${groupId}/session-1/introduction"`)
+      expect(firstModuleContent).toContain(`href="/${groupId}/session-2/session-2"`)
       expect(firstModuleContent).not.toContain('/group/')
       expect(firstModuleContent).not.toContain('/session/')
+    })
+
+    it('uses one-to-one session title segment for link slug when name includes person details', () => {
+      const dataWithNamedOneToOne = {
+        ...mockGroupSessionsData,
+        modules: [
+          {
+            ...mockGroupSessionsData.modules![0],
+            sessions: [
+              {
+                ...mockGroupSessionsData.modules![0].sessions![0],
+                name: 'Alex River S688890821: Getting started one-to-one',
+                type: 'One-to-one',
+              },
+            ],
+          },
+        ],
+      }
+
+      const presenter = new SessionScheduleAttendancePresenter(groupId, dataWithNamedOneToOne)
+      const accordionItems = presenter.getAccordionItems()
+      const firstModuleContent = accordionItems[0].content.html
+
+      expect(firstModuleContent).toContain(`href="/${groupId}/session-1/getting-started-one-to-one"`)
     })
 
     it('shows the original session type when catch-up is false', () => {
@@ -240,6 +264,8 @@ describe('SessionScheduleAttendancePresenter', () => {
       const content = accordionItems[0].content.html
 
       expect(content.match(/Catch-up/g)).toHaveLength(2)
+      expect(content).toContain(`href="/${groupId}/session-1/introduction-catch-up"`)
+      expect(content).toContain(`href="/${groupId}/session-2/session-2-catch-up"`)
       expect(content).not.toContain('<td class="govuk-table__cell">Individual</td>')
       expect(content).not.toContain('<td class="govuk-table__cell">Group</td>')
     })

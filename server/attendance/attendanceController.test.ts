@@ -40,6 +40,17 @@ describe('showRecordAttendancePage', () => {
       expect(accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData).not.toHaveBeenCalled()
     })
 
+    it('maps module attendance slug route to attendance flow', async () => {
+      app = TestUtils.createTestAppWithSession({}, { accreditedProgrammesManageAndDeliverService })
+
+      await request(app)
+        .get('/111/6789/getting-started-1-attendance')
+        .expect(302)
+        .expect('Location', '/111/6789/edit-session')
+
+      expect(accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData).not.toHaveBeenCalled()
+    })
+
     it('should fetch attendance options and load page correctly', async () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 

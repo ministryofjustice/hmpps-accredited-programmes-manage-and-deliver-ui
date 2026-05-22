@@ -72,7 +72,7 @@ describe('AttendanceHistoryPresenter', () => {
 
       expect(rows[0]).toEqual([
         {
-          html: `<a href="/1234567890/session-1/edit-session?isAttendanceHistory=true&referralId=${referralId}" class="govuk-link">Pre-group one-to-one</a>`,
+          html: `<a href="/1234567890/session-1/pre-group-one-to-one?isAttendanceHistory=true&referralId=${referralId}" class="govuk-link">Pre-group one-to-one</a>`,
         },
         { text: 'GRP-001' },
         {
@@ -89,7 +89,7 @@ describe('AttendanceHistoryPresenter', () => {
       ])
       expect(rows[1]).toEqual([
         {
-          html: `<a href="/1234567890/session-2/edit-session?isAttendanceHistory=true&referralId=${referralId}" class="govuk-link">Session 1: Introduction</a>`,
+          html: `<a href="/1234567890/session-2/session-1?isAttendanceHistory=true&referralId=${referralId}" class="govuk-link">Session 1: Introduction</a>`,
         },
         { text: 'GRP-001' },
         {
@@ -102,6 +102,33 @@ describe('AttendanceHistoryPresenter', () => {
         { html: `<span class="govuk-tag govuk-tag--red">Not attended</span>` },
         { text: 'Not added' },
       ])
+    })
+
+    it('uses one-to-one session title segment for session link slug when prefixed by person details', () => {
+      const attendanceHistory = attendanceHistoryResponseFactory.build({
+        attendanceHistory: [
+          {
+            sessionId: 'session-abc',
+            groupId: 'group-xyz',
+            groupCode: 'GRP-XYZ',
+            sessionName: 'Alex River S688890821: Getting started one-to-one',
+            date: '11 July 2025',
+            time: 'Midday to 1pm',
+            unformattedDate: '2025-07-11 12:00:00.00',
+            attendanceStatus: 'Attended',
+            hasNotes: false,
+            popName: 'Alex River',
+            isCatchup: false,
+          },
+        ],
+      })
+
+      const presenter = new AttendanceHistoryPresenter(referralId, attendanceHistory, referralDetails)
+      const rows = presenter.attendanceHistoryTableArgs
+
+      expect(rows[0][0]).toEqual({
+        html: `<a href="/group-xyz/session-abc/getting-started-one-to-one?isAttendanceHistory=true&referralId=${referralId}" class="govuk-link">Alex River S688890821: Getting started one-to-one</a>`,
+      })
     })
 
     it('should return "N/A" for group code when not provided', () => {

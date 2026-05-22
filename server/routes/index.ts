@@ -436,6 +436,9 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   getOrPost('/:groupId/:sessionId/record-attendance', async (req, res, next) => {
     await attendanceController.showRecordAttendancePage(req, res)
   })
+  getOrPost('/:groupId/:sessionId/:sessionSlug-attendance', async (req, res, next) => {
+    await attendanceController.showRecordAttendancePage(req, res)
+  })
   getOrPost('/:groupId/:sessionId/referral/:referralId', async (req, res, next) => {
     await attendanceController.showRecordAttendanceNotesPage(req, res)
   })
@@ -449,6 +452,10 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   getOrPost('/:groupId/:sessionId/:sessionSlug/session-notes', async (req, res, next) => {
     await sessionNotesController.showSessionNotesPage(req, res)
+  })
+
+  getOrPost('/:groupId/:sessionId/:sessionSlug', async (req, res, next) => {
+    await editSessionController.editSession(req, res)
   })
 
   return router
