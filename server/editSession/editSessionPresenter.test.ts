@@ -42,7 +42,7 @@ describe('EditSessionPresenter', () => {
 
       const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
 
-      expect(presenter.pageTitle).toBe('Add Getting started one-to-one')
+      expect(presenter.pageTitle).toBe('Getting started one-to-one')
     })
   })
 

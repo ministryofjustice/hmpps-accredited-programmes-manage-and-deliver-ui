@@ -21,7 +21,7 @@ export default class EditSessionPresenter {
 
   get pageTitle(): string {
     if (this.isOneToOneSession) {
-      return `Add ${this.sessionTitle}`
+      return `${this.sessionTitle}`
     }
 
     return this.sessionDetails.pageTitle
@@ -92,7 +92,7 @@ export default class EditSessionPresenter {
 
   private get sessionNotesSlug() {
     const baseSlug = convertToUrlFriendlyKebabCase(this.sessionTitle) || 'session'
-    return this.sessionDetails.isCatchup ? `${baseSlug}-catch-up` : baseSlug
+    return this.sessionDetails.isCatchup && !baseSlug.endsWith('-catch-up') ? `${baseSlug}-catch-up` : baseSlug
   }
 
   private hasSessionNotes(notes: unknown): boolean {

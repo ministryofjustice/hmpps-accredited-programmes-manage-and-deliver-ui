@@ -147,7 +147,8 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
     const dateSortValue = this.sortableTableDate(session.dateOfSession)
     const sessionTitle = getEditSessionRouteTitle(session.name || '', session.type)
     const baseSlug = convertToUrlFriendlyKebabCase(sessionTitle) || 'session'
-    const sessionSlug = this.isCatchupSession(session) ? `${baseSlug}-catch-up` : baseSlug
+    const sessionSlug =
+      this.isCatchupSession(session) && !baseSlug.endsWith('-catch-up') ? `${baseSlug}-catch-up` : baseSlug
 
     return `
     <tr class="govuk-table__row">
