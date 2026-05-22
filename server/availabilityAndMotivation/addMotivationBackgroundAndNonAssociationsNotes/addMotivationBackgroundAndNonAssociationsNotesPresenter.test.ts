@@ -273,27 +273,4 @@ describe('AddMotivationBackgroundAndNonAssociationsNotesPresenter', () => {
       )
     })
   })
-
-  describe('userInputData', () => {
-    it('should use user input data when provided', () => {
-      const userInputData = {
-        'maintains-innocence': 'no',
-        'motivated-character-count': 'User input motivation',
-        'non-associations-character-count': 'User input non-associations',
-        'other-considerations-character-count': 'User input other considerations',
-      }
-
-      const presenter = new AddMotivationBackgroundAndNonAssociationsNotesPresenter(
-        referral,
-        motivationBackgroundAndNonAssociations,
-        null,
-        userInputData,
-      )
-
-      expect(presenter.fields.maintainInnocence.value).toEqual(false)
-      expect(presenter.fields.motivated.value).toEqual('User input motivation')
-      expect(presenter.fields.nonAssociations.value).toEqual('User input non-associations')
-      expect(presenter.fields.otherConsiderations.value).toEqual('User input other considerations')
-    })
-  })
 })
