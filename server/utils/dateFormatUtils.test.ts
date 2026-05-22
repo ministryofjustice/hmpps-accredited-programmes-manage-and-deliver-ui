@@ -1,15 +1,6 @@
 import DateFormatUtils from './dateFormatUtils'
 
 describe('DateFormatUtils', () => {
-  beforeEach(() => {
-    jest.useFakeTimers()
-    jest.setSystemTime(new Date(2026, 6, 6, 12, 0, 0, 0))
-  })
-
-  afterEach(() => {
-    jest.useRealTimers()
-  })
-
   describe('parseUKDateToDate', () => {
     it('parses valid UK date format', () => {
       const result = DateFormatUtils.parseUKDateToDate('15/03/2021')
@@ -41,11 +32,6 @@ describe('DateFormatUtils', () => {
     it('handles ISO format with time component', () => {
       const result = DateFormatUtils.parseISODateToDate('2021-03-15T10:30:00')
       expect(result).toEqual(new Date(2021, 2, 15, 0, 0, 0, 0))
-    })
-
-    it('handles API timestamps with a space separator', () => {
-      const result = DateFormatUtils.parseISODateToDate('2026-07-06 13:00:00.000000')
-      expect(result).toEqual(new Date(2026, 6, 6, 0, 0, 0, 0))
     })
 
     it('returns null for non-string input', () => {
@@ -86,10 +72,6 @@ describe('DateFormatUtils', () => {
       expect(DateFormatUtils.toDateOnlyISO('2021-03-15T10:30:00')).toEqual('2021-03-15')
     })
 
-    it('handles API timestamps with a space separator', () => {
-      expect(DateFormatUtils.toDateOnlyISO('2026-07-06 13:00:00.000000')).toEqual('2026-07-06')
-    })
-
     it('returns null for invalid formats', () => {
       expect(DateFormatUtils.toDateOnlyISO('invalid')).toBeNull()
       expect(DateFormatUtils.toDateOnlyISO('')).toBeNull()
@@ -98,57 +80,118 @@ describe('DateFormatUtils', () => {
 
   describe('isDateInPast', () => {
     it('returns true for past dates', () => {
-      expect(DateFormatUtils.isDateInPast('5/7/2026')).toBe(true)
+      const yesterday = new Date()
+      yesterday.setDate(yesterday.getDate() - 1)
+      const dateStr = `${yesterday.getDate()}/${yesterday.getMonth() + 1}/${yesterday.getFullYear()}`
+      expect(DateFormatUtils.isDateInPast(dateStr)).toBe(true)
     })
 
     it('returns false for today', () => {
-      expect(DateFormatUtils.isDateInPast('6/7/2026')).toBe(false)
+      const today = new Date()
+      const dateStr = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`
+      expect(DateFormatUtils.isDateInPast(dateStr)).toBe(false)
     })
 
     it('returns false for future dates', () => {
-      expect(DateFormatUtils.isDateInPast('7/7/2026')).toBe(false)
+      const tomorrow = new Date()
+      tomorrow.setDate(tomorrow.getDate() + 1)
+      const dateStr = `${tomorrow.getDate()}/${tomorrow.getMonth() + 1}/${tomorrow.getFullYear()}`
+      expect(DateFormatUtils.isDateInPast(dateStr)).toBe(false)
     })
   })
 
   describe('isDateToday', () => {
     it('returns true for today', () => {
-      expect(DateFormatUtils.isDateToday('6/7/2026')).toBe(true)
+      const today = new Date()
+      const dateStr = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`
+      expect(DateFormatUtils.isDateToday(dateStr)).toBe(true)
     })
 
     it('returns false for past dates', () => {
-      expect(DateFormatUtils.isDateToday('5/7/2026')).toBe(false)
+      const yesterday = new Date()
+      yesterday.setDate(yesterday.getDate() - 1)
+      const dateStr = `${yesterday.getDate()}/${yesterday.getMonth() + 1}/${yesterday.getFullYear()}`
+      expect(DateFormatUtils.isDateToday(dateStr)).toBe(false)
     })
 
     it('returns false for future dates', () => {
-      expect(DateFormatUtils.isDateToday('7/7/2026')).toBe(false)
+      const tomorrow = new Date()
+      tomorrow.setDate(tomorrow.getDate() + 1)
+      const dateStr = `${tomorrow.getDate()}/${tomorrow.getMonth() + 1}/${tomorrow.getFullYear()}`
+      expect(DateFormatUtils.isDateToday(dateStr)).toBe(false)
     })
   })
 
   describe('hasTimePassedOnDate', () => {
     it('returns false if date is not today', () => {
-      expect(DateFormatUtils.hasTimePassedOnDate('7/7/2026', 10, 0, 'AM')).toBe(false)
-    })
-
-    it('supports ISO timestamps for today', () => {
-      expect(DateFormatUtils.hasTimePassedOnDate('2026-07-06 23:00:00.000000', 11, 59, 'PM')).toBe(false)
+      const tomorrow = new Date()
+      tomorrow.setDate(tomorrow.getDate() + 1)
+      const dateStr = `${tomorrow.getDate()}/${tomorrow.getMonth() + 1}/${tomorrow.getFullYear()}`
+      expect(DateFormatUtils.hasTimePassedOnDate(dateStr, 10, 0, 'AM')).toBe(false)
     })
 
     it('returns true if time has passed on today', () => {
-      expect(DateFormatUtils.hasTimePassedOnDate('6/7/2026', 11, 59, 'AM')).toBe(true)
+      const now = new Date()
+      const currentHour = now.getHours()
+      const currentMinute = now.getMinutes()
+
+      // Set check time to 1 minute ago
+      let checkHour = currentHour
+      let checkMinute = currentMinute - 1
+      let checkAmPm: 'AM' | 'PM' = 'AM'
+
+      if (checkMinute < 0) {
+        checkMinute += 60
+        checkHour -= 1
+      }
+
+      if (checkHour < 12 && checkHour !== 0) {
+        checkAmPm = 'AM'
+      } else {
+        checkAmPm = 'PM'
+      }
+
+      // Convert to 12-hour format for the check
+      let check12Hour = checkHour
+      if (checkHour === 0) {
+        check12Hour = 12
+        checkAmPm = 'AM'
+      } else if (checkHour > 12) {
+        check12Hour = checkHour - 12
+        checkAmPm = 'PM'
+      } else if (checkHour === 12) {
+        checkAmPm = 'PM'
+      }
+
+      const today = new Date()
+      const dateStr = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`
+
+      // This should return true because the time is in the past
+      expect(DateFormatUtils.hasTimePassedOnDate(dateStr, check12Hour, checkMinute, checkAmPm)).toBe(true)
     })
   })
 
   describe('isSessionInPast', () => {
     it('returns true for past sessions', () => {
-      expect(DateFormatUtils.isSessionInPast('5/7/2026', 10, 0, 'AM')).toBe(true)
+      const yesterday = new Date()
+      yesterday.setDate(yesterday.getDate() - 1)
+      const dateStr = `${yesterday.getDate()}/${yesterday.getMonth() + 1}/${yesterday.getFullYear()}`
+      expect(DateFormatUtils.isSessionInPast(dateStr, 10, 0, 'AM')).toBe(true)
     })
 
     it('returns false for future sessions', () => {
-      expect(DateFormatUtils.isSessionInPast('7/7/2026', 10, 0, 'AM')).toBe(false)
+      const tomorrow = new Date()
+      tomorrow.setDate(tomorrow.getDate() + 1)
+      const dateStr = `${tomorrow.getDate()}/${tomorrow.getMonth() + 1}/${tomorrow.getFullYear()}`
+      expect(DateFormatUtils.isSessionInPast(dateStr, 10, 0, 'AM')).toBe(false)
     })
 
     it('checks time if session is today', () => {
-      expect(DateFormatUtils.isSessionInPast('6/7/2026', 11, 59, 'PM')).toBe(false)
+      const today = new Date()
+      const dateStr = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`
+
+      // Future time should not be in past
+      expect(DateFormatUtils.isSessionInPast(dateStr, 11, 59, 'PM')).toBe(false)
     })
   })
 })

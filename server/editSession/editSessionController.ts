@@ -2,7 +2,6 @@ import { RescheduleSessionRequest } from '@manage-and-deliver-api'
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import { FormValidationError } from '../utils/formValidationError'
-import DateFormatUtils from '../utils/dateFormatUtils'
 import EditSessionDateAndTimeFormForm from './dateAndTime/editSessionDateAndTimeForm'
 import EditSessionDateAndTimePresenter from './dateAndTime/editSessionDateAndTimePresenter'
 import EditSessionDateAndTimeView from './dateAndTime/editSessionDateAndTimeView'
@@ -22,6 +21,7 @@ import EditSessionFacilitatorsView from './facilitators/editSessionFacilitatorsV
 import BaseController from '../shared/baseController'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import { convertToUrlFriendlyKebabCase, getEditSessionRouteTitle } from '../utils/utils'
+import DateFormatUtils from '../utils/dateFormatUtils'
 
 export default class EditSessionController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -30,6 +30,14 @@ export default class EditSessionController extends BaseController {
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
   ) {
     super()
+  }
+
+  /**
+   * Convert a date string to YYYY-MM-DD (date-only format).
+   * Accepts ISO with or without time, or UK format (DD/MM/YYYY).
+   */
+  private static toDateOnlyString(dateStr: string): string | null {
+    return DateFormatUtils.toDateOnlyISO(dateStr)
   }
 
   private static hasSessionDateAndTimeChanged(
@@ -44,8 +52,8 @@ export default class EditSessionController extends BaseController {
       sessionEndTime: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' }
     },
   ): boolean {
-    const sessionDateForComparison = DateFormatUtils.toDateOnlyISO(sessionDetails.sessionDate)
-    const submittedDateForComparison = DateFormatUtils.toDateOnlyISO(submitted.sessionStartDate)
+    const sessionDateForComparison = EditSessionController.toDateOnlyString(sessionDetails.sessionDate)
+    const submittedDateForComparison = EditSessionController.toDateOnlyString(submitted.sessionStartDate)
     if (sessionDateForComparison !== submittedDateForComparison) return true
 
     const origStart = sessionDetails.sessionStartTime
@@ -91,12 +99,7 @@ export default class EditSessionController extends BaseController {
       sessionId,
     )
 
-    // Only show the message if it is present
-    let successMessage: string | null = null
-    if (message) {
-      successMessage = String(message)
-    }
-
+    const successMessage = message ? String(message) : null
     const isAttendanceHistoryFlag = isAttendanceHistory === 'true'
     const attendanceHistoryReferralId = referralId ? String(referralId) : null
     const moduleName = convertToUrlFriendlyKebabCase(
@@ -210,15 +213,7 @@ export default class EditSessionController extends BaseController {
     )
 
     if (req.method === 'POST') {
-      const isSessionEnded = this.isSessionEnded(sessionDetails)
-
-      const data = await new EditSessionDateAndTimeFormForm(
-        req,
-        isSessionEnded,
-        sessionDetails.sessionStartTime,
-        sessionDetails.sessionEndTime,
-      ).rescheduleSessionDetailsData()
-
+      const data = await new EditSessionDateAndTimeFormForm(req).rescheduleSessionDetailsData()
       if (data.error) {
         res.status(400)
         formError = data.error
@@ -240,9 +235,8 @@ export default class EditSessionController extends BaseController {
           sessionEndTime: data.paramsForUpdate.sessionEndTime,
         }
 
-        // GROUP sessions that have not yet ended go to the reschedule page.
-        // Ended sessions submit directly so users are not asked to reschedule later sessions.
-        if (sessionAttendees.sessionType === 'GROUP' && !sessionAttendees.isCatchup && !isSessionEnded) {
+        // GROUP sessions and ONE_TO_ONE catch-ups go to the reschedule page
+        if (sessionAttendees.sessionType === 'GROUP' && !sessionAttendees.isCatchup) {
           return res.redirect(`/${groupId}/${sessionId}/edit-group-days-and-times/reschedule`)
         }
 
@@ -268,13 +262,11 @@ export default class EditSessionController extends BaseController {
         return res.redirect(`/${groupId}/${sessionId}/edit-session?message=${response.message}`)
       }
     }
-    const sessionStorageForPresenter = req.method === 'GET' ? null : req.session.editSessionDateAndTime
-
     const presenter = new EditSessionDateAndTimePresenter(
       groupId,
       sessionDetails,
       sessionAttendees.sessionType,
-      sessionStorageForPresenter,
+      req.session.editSessionDateAndTime,
       formError,
       userInputData,
     )
@@ -309,8 +301,6 @@ export default class EditSessionController extends BaseController {
           sessionDetails.sessionId,
           req.session.editSessionDateAndTime as RescheduleSessionRequest,
         )
-
-        delete req.session.editSessionDateAndTime
 
         return res.redirect(`/${groupId}/${sessionId}/edit-session?message=${message.message}`)
       }

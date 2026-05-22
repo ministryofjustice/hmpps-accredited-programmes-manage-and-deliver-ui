@@ -312,6 +312,115 @@ describe('submitEditSessionDateAndTime', () => {
     })
   })
 
+  it('shows error when a past session duration is increased to more than 2.5 hours', async () => {
+    const sessionDetails = editSessionDetailsFactory.build({ sessionDate: '01/01/2020' })
+    const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'ONE_TO_ONE' })
+    accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
+    accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
+
+    await request(app)
+      .post(`/111/6789/edit-session-date-and-time`)
+      .type('form')
+      .send({
+        'session-details-date': '01/01/2020',
+        'session-details-start-time-hour': '10',
+        'session-details-start-time-minute': '00',
+        'session-details-start-time-part-of-day': 'AM',
+        'session-details-end-time-hour': '12',
+        'session-details-end-time-minute': '31',
+        'session-details-end-time-part-of-day': 'PM',
+      })
+      .expect(400)
+      .expect(res => {
+        expect(res.text).toContain(
+          'The session duration cannot be longer than originally scheduled. Change the start or end time.',
+        )
+      })
+  })
+
+  it('shows validation error when session has already ended', async () => {
+    // Use yesterday to ensure the session is definitely in the past
+    const yesterday = new Date()
+    yesterday.setDate(yesterday.getDate() - 1)
+    const yesterdayIso = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(
+      yesterday.getDate(),
+    ).padStart(2, '0')}`
+
+    const sessionDetails = editSessionDetailsFactory.build({
+      sessionDate: yesterdayIso,
+      sessionStartTime: { hour: 10, minutes: 0, amOrPm: 'AM' },
+      sessionEndTime: { hour: 11, minutes: 0, amOrPm: 'AM' },
+    })
+    const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'ONE_TO_ONE' })
+    accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
+    accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
+
+    // Mock the API call in case validation doesn't trigger
+    accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime.mockResolvedValue({
+      message: 'Test message',
+    })
+
+    const [year, month, day] = yesterdayIso.split('-')
+    const yesterdayUk = `${day}/${month}/${year}`
+
+    // Attempt to extend the end time beyond the original duration
+    await request(app)
+      .post(`/111/6789/edit-session-date-and-time`)
+      .type('form')
+      .send({
+        'session-details-date': yesterdayUk,
+        'session-details-start-time-hour': '10',
+        'session-details-start-time-minute': '00',
+        'session-details-start-time-part-of-day': 'AM',
+        'session-details-end-time-hour': '1',
+        'session-details-end-time-minute': '30',
+        'session-details-end-time-part-of-day': 'PM',
+      })
+      .expect(400)
+      .expect(res => {
+        expect(res.text).toContain(
+          'The session duration cannot be longer than originally scheduled. Change the start or end time.',
+        )
+      })
+  })
+})
+
+describe('submitEditSessionDateAndTime', () => {
+  const sessionData: Partial<SessionData> = {
+    editSessionDateAndTime: {
+      sessionStartDate: '12/12/2026',
+      sessionStartTime: {
+        hour: 9,
+        minutes: 30,
+        amOrPm: 'AM',
+      },
+      sessionEndTime: {
+        hour: 12,
+        minutes: 0,
+        amOrPm: 'PM',
+      },
+    },
+  }
+  describe('GET /:groupId/:sessionId/edit-group-days-and-times/reschedule', () => {
+    it('should fetch session details with correct parameters and load page correctly', async () => {
+      const sessionDetails = rescheduleSessionDetailsFactory.build()
+      accreditedProgrammesManageAndDeliverService.getRescheduleSessionDetails.mockResolvedValue(sessionDetails)
+
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      await request(app)
+        .get(`/111/6789/edit-group-days-and-times/reschedule`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Rescheduling later sessions')
+        })
+      expect(accreditedProgrammesManageAndDeliverService.getRescheduleSessionDetails).toHaveBeenCalledWith(
+        'user1',
+        '6789',
+      )
+    })
+  })
+
   describe('POST /:groupId/:sessionId/edit-group-days-and-times/reschedule', () => {
     it('should submit the edit session details correctly', async () => {
       const sessionDetails = rescheduleSessionDetailsFactory.build()
