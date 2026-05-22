@@ -41,15 +41,16 @@ export default class UpdateReferralStatusPresenter {
   generateStatusUpdateRadios() {
     const statusRadios: RadiosArgsItem[] = []
     this.statusDetails.availableStatuses.forEach((status: ReferralStatus) => {
-      statusRadios.push({
-        value: status.id,
-        text: status.status,
-        hint: {
-          text: status.transitionDescription,
-        },
-        checked: this.fields.updatedStatus.value.toLowerCase() === status.id.toLowerCase(),
-        ...(status.status === 'Deprioritised' && { disabled: true }),
-      })
+      if (status.status !== 'Deprioritised') {
+        statusRadios.push({
+          value: status.id,
+          text: status.status,
+          hint: {
+            text: status.transitionDescription,
+          },
+          checked: this.fields.updatedStatus.value.toLowerCase() === status.id.toLowerCase(),
+        })
+      }
     })
     return statusRadios
   }

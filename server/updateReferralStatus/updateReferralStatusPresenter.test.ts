@@ -92,7 +92,7 @@ describe('generateStatusUpdateRadios.', () => {
       },
     ])
   })
-  it('should set disabled to true for the Deprioritised option', () => {
+  it('should hide the Deprioritised option', () => {
     const details = referralDetailsFactory.build()
     const statusDetails = referralStatusFormDataFactory.build({
       availableStatuses: [
@@ -117,8 +117,8 @@ describe('generateStatusUpdateRadios.', () => {
     const presenter = new UpdateReferralStatusPresenter(details, statusDetails, '')
     const radios = presenter.generateStatusUpdateRadios()
 
-    expect(radios.find(r => r.text === 'Awaiting allocation')).not.toHaveProperty('disabled')
-    expect(radios.find(r => r.text === 'Deprioritised')).toMatchObject({ disabled: true })
+    expect(radios.find(r => r.text === 'Awaiting allocation')).toBeDefined()
+    expect(radios.find(r => r.text === 'Deprioritised')).toBeUndefined()
   })
 
   describe('generateAddDetailsHintText', () => {
