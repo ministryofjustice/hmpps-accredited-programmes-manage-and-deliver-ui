@@ -345,6 +345,47 @@ describe('EditSessionPresenter', () => {
           ],
         })
       })
+
+      it('appends catch-up to the session notes link slug for catch-up sessions', () => {
+        const sessionDetails: GroupSessionResponse = {
+          pageTitle: 'Getting started 1',
+          code: 'CODE-123',
+          sessionType: 'Group',
+          isCatchup: true,
+          attendanceAndSessionNotes: [
+            {
+              referralId: '123',
+              name: 'Alex River',
+              crn: 'CRN001',
+              attendance: 'Attended',
+              sessionNotes: 'Notes recorded',
+            },
+          ],
+          date: '01 Feb 2026',
+          time: '1:00pm',
+          unformattedEndDate: '2026-02-01T14:00:00',
+          scheduledToAttend: [],
+          facilitators: [],
+        }
+
+        const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
+        const result = presenter.attendanceTableArgs
+
+        expect(result).toEqual({
+          head: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
+          caption: 'Attendance record and session notes',
+          captionClasses: 'govuk-visually-hidden',
+          rows: [
+            [
+              { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
+              { html: '<span class="govuk-tag govuk-tag--blue">Attended</span>' },
+              {
+                html: '<a href="/group-123/session-456/getting-started-1-catch-up-attendance-and-session-notes?referralId=123&source=edit-session">Getting started 1 notes</a>',
+              },
+            ],
+          ],
+        })
+      })
     })
 
     describe('when attendance value is unmapped/mapped', () => {

@@ -81,6 +81,7 @@ describe('editSession', () => {
         expect(res.text).toContain('<title>Getting started one-to-one - Accredited Programmes</title>')
         expect(res.text).toContain('Getting started one-to-one')
         expect(res.text).toContain(`/${groupId}/${sessionId}/getting-started-one-to-one-attendance-and-session-notes`)
+ 
       })
   })
 
@@ -321,7 +322,7 @@ describe('submitEditSessionDateAndTime', () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
       await request(app)
-        .get(`/111/6789/edit-session-date-and-time/reschedule`)
+        .get(`/111/6789/edit-group-days-and-times/reschedule`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Rescheduling later sessions')
