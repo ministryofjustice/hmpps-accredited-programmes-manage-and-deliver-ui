@@ -1,6 +1,5 @@
 import ViewUtils from '../utils/viewUtils'
 import SessionNotesPresenter from './sessionNotesPresenter'
-import { convertToUrlFriendlyKebabCase, getEditSessionRouteTitle } from '../utils/utils'
 
 type NotesBodySection = Array<{
   html: string
@@ -17,17 +16,12 @@ export default class SessionNotesView {
   constructor(private readonly presenter: SessionNotesPresenter) {}
 
   private get notesBodyArgs(): NotesBodySection {
-    const sessionRouteTitle = this.presenter.sessionNotesData.sessionName.toLowerCase().includes('one-to-one')
-      ? getEditSessionRouteTitle(this.presenter.sessionNotesData.sessionName)
-      : `${this.presenter.sessionNotesData.moduleName} ${this.presenter.sessionNotesData.sessionNumber}`
-    const sessionSlug = convertToUrlFriendlyKebabCase(sessionRouteTitle) || 'session'
-
     return [
       {
         data: {
           sessionName: this.presenter.text.sessionName,
           moduleName: this.presenter.sessionNotesData.moduleName,
-          sessionDetailsHref: `/${this.presenter.sessionNotesData.groupId}/${this.presenter.sessionNotesData.sessionId}/${sessionSlug}`,
+          sessionDetailsHref: this.presenter.sessionDetailsHref,
           sessionDate: this.presenter.sessionNotesData.sessionDate ?? '',
           attendance: this.presenter.attendanceOptionText.attendanceState,
         },

@@ -63,16 +63,20 @@ export default class SessionNotesPresenter {
     return this.data.source === 'edit-session'
   }
 
+  get sessionDetailsHref(): string {
+    const sessionRouteTitle = this.data.sessionName.toLowerCase().includes('one-to-one')
+      ? getEditSessionRouteTitle(this.data.sessionName)
+      : `${this.data.moduleName} ${this.data.sessionNumber}`
+    const sessionSlug = convertToUrlFriendlyKebabCase(sessionRouteTitle) || 'session'
+
+    return `/${this.data.groupId}/${this.data.sessionId}/${sessionSlug}`
+  }
+
   get backLinkArgs() {
     if (this.data.source === 'edit-session') {
-      const sessionRouteTitle = this.data.sessionName.toLowerCase().includes('one-to-one')
-        ? getEditSessionRouteTitle(this.data.sessionName)
-        : `${this.data.moduleName} ${this.data.sessionNumber}`
-      const sessionSlug = convertToUrlFriendlyKebabCase(sessionRouteTitle) || 'session'
-
       return {
         text: `Back to ${this.data.moduleName}`,
-        href: `/${this.data.groupId}/${this.data.sessionId}/${sessionSlug}`,
+        href: this.sessionDetailsHref,
       }
     }
 
