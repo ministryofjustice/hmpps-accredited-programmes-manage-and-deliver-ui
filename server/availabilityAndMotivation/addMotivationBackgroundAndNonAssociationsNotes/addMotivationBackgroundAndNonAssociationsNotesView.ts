@@ -94,6 +94,7 @@ export default class AddMotivationBackgroundAndNonAssociationsNotesView {
       'availabilityAndMotivation/addMotivationBackgroundAndNonAssociations/addMotivationBackgroundAndNonAssociationsNotes',
       {
         presenter: this.presenter,
+        pageTitle: this.presenter.pageTitle,
         maintainsInnocenceRadioArgs: this.maintainsInnocenceRadioArgs,
         motivatedCharacterCountArgs: this.motivatedCharacterCountArgs,
         nonAssociationsCharacterCountArgs: this.nonAssociationsCharacterCountArgs,

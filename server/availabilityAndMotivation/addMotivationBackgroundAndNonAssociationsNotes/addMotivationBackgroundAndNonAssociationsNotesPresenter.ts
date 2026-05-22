@@ -14,6 +14,10 @@ export default class AddMotivationBackgroundAndNonAssociationsNotesPresenter {
     return `/referral/${this.referral.id}/availability-and-motivation/motivation-background-and-non-associations`
   }
 
+  get pageTitle(): string {
+    return 'Motivation, background and non-associations - Availability and motivation'
+  }
+
   get text() {
     return {
       pageHeading: `Provide information about motivation, background and non-associations`,
