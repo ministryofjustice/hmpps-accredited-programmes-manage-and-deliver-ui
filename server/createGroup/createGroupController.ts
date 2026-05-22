@@ -290,9 +290,8 @@ export default class CreateGroupController extends BaseController {
     }
 
     const pduMembers = await this.accreditedProgrammesManageAndDeliverService.getPduMembers(username)
-    const { groupCode = '' } = createGroupFormData
     const presenter = new CreateOrEditGroupTreatmentManagerPresenter(
-      groupCode,
+      '',
       createGroupFormData.groupCode || '',
       pduMembers,
       formError,
