@@ -795,7 +795,7 @@ describe('showRecordAttendancePage', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            'Redirecting to /111/6789/getting-started-1/session-notes?referralId=referral3&source=edit-session&saved=true&personOnProbationName=Alex+River',
+            'Redirecting to /111/6789/getting-started-1-attendance-and-session-notes?referralId=referral3&source=edit-session&saved=true&personOnProbationName=Alex+River',
           )
         })
     })
@@ -861,7 +861,7 @@ describe('showRecordAttendancePage', () => {
         })
         .expect(302)
 
-      await agent.get('/111/6789/getting-started-1/session-notes?referralId=referral1').expect(200)
+      await agent.get('/111/6789/getting-started-1-attendance-and-session-notes?referralId=referral1').expect(200)
 
       expect(accreditedProgrammesManageAndDeliverService.getSessionNotes).toHaveBeenCalledWith(
         'user1',

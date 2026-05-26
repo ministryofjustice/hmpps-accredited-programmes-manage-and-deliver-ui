@@ -98,6 +98,6 @@ export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter 
       isAttendanceHistory: 'true',
     })
 
-    return `/${groupId}/${sessionId}/${sessionSlug}/session-notes?${query.toString()}`
+    return `/${groupId}/${sessionId}/${sessionSlug}-attendance-and-session-notes?${query.toString()}`
   }
 }
