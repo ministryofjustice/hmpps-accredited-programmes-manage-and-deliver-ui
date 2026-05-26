@@ -544,7 +544,7 @@ describe('showRecordAttendancePage', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            'Redirecting to /111/6789/getting-started-1/session-notes?referralId=referral1&source=edit-session&saved=true&personOnProbationName=Alice+Brown',
+            'Redirecting to /111/6789/getting-started-1-attendance-and-session-notes?referralId=referral1&source=edit-session&saved=true&personOnProbationName=Alice+Brown',
           )
         })
 

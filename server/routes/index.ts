@@ -450,7 +450,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await referralDetailsController.showAttendanceHistoryPage(req, res)
   })
 
-  getOrPost('/:groupId/:sessionId/:sessionSlug/session-notes', async (req, res, next) => {
+  getOrPost('/:groupId/:sessionId/:sessionSlug-attendance-and-session-notes', async (req, res, next) => {
     await sessionNotesController.showSessionNotesPage(req, res)
   })
 
