@@ -20,7 +20,7 @@ export default class SessionNotesPresenter {
   ) {}
 
   get pageTitle(): string {
-    return `${this.data.personOnProbationName} record attendance and progress`
+    return `${this.data.moduleName} ${this.data.sessionNumber} attendance and session notes`
   }
 
   get text() {
@@ -107,7 +107,7 @@ export default class SessionNotesPresenter {
 
   get pageUrl(): string {
     const sessionSlug = convertToUrlFriendlyKebabCase(this.data.sessionName)
-    return `/${this.data.groupId}/${this.data.sessionId}/${sessionSlug}/session-notes`
+    return `/${this.data.groupId}/${this.data.sessionId}/${sessionSlug}-attendance-and-session-notes`
   }
 
   get recordAttendanceUrl(): string {

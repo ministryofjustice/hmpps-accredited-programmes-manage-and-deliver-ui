@@ -1,4 +1,4 @@
-import { convertToTitleCase, initialiseName } from './utils'
+import { convertToTitleCase, convertToUrlFriendlyKebabCase, initialiseName } from './utils'
 
 describe('convert to title case', () => {
   it.each([
@@ -37,4 +37,14 @@ describe('convert first letter to lower case', () => {
     ['Two words', 'Robert James', 'robert James'],
     ['Three words', 'Does not need', 'does not need'],
   ])
+})
+
+describe('convert to URL friendly kebab case', () => {
+  it('removes ASCII apostrophes from slugs', () => {
+    expect(convertToUrlFriendlyKebabCase("Managing life's problems 1")).toEqual('managing-lifes-problems-1')
+  })
+
+  it('removes typographic apostrophes from slugs', () => {
+    expect(convertToUrlFriendlyKebabCase('Managing life\u2019s problems 1')).toEqual('managing-lifes-problems-1')
+  })
 })

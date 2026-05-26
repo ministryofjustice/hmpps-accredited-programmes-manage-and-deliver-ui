@@ -115,7 +115,7 @@ export default class EditSessionPresenter {
   }
 
   private sessionNotesPagePath(referralId: string): string {
-    return `/${this.groupId}/${this.sessionId}/${this.sessionNotesSlug}/session-notes?referralId=${encodeURIComponent(referralId)}&source=edit-session`
+    return `/${this.groupId}/${this.sessionId}/${this.sessionNotesSlug}-attendance-and-session-notes?referralId=${encodeURIComponent(referralId)}&source=edit-session`
   }
 
   get attendanceTableArgs(): MultiSelectTableArgs | TableArgs {

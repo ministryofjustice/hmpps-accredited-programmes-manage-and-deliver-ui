@@ -37,7 +37,14 @@ export const formatCohort = (cohort?: string): string | null => {
 }
 
 export const convertToUrlFriendlyKebabCase = (sentence: string): string =>
-  isBlank(sentence) ? '' : sentence.trim().toLowerCase().replace(/[():]/g, '').replace(/\s+/g, '-')
+  isBlank(sentence)
+    ? ''
+    : sentence
+        .trim()
+        .toLowerCase()
+        .replace(/[():]/g, '')
+        .replace(/['\u2019]/g, '')
+        .replace(/\s+/g, '-')
 
 const isOneToOneSessionType = (sessionType?: string): boolean => {
   if (isBlank(sessionType || '')) {

@@ -241,7 +241,7 @@ export default class AttendanceController extends BaseController {
         })
 
         delete req.session.editSessionAttendance
-        return res.redirect(`/${groupId}/${sessionId}/${sessionSlug}/session-notes?${sessionNotesQuery}`)
+        return res.redirect(`/${groupId}/${sessionId}/${sessionSlug}-attendance-and-session-notes?${sessionNotesQuery}`)
       }
 
       return res.redirect(this.notesPageUri(groupId, sessionId, referralIds[currentReferralIndex + 1], theGroupTitle))
