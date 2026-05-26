@@ -24,7 +24,7 @@ beforeEach(() => {
   app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 })
 
-describe('showRecordAttendancePage', () => {
+describe('showRecordAttendancePages', () => {
   let sessionData: Partial<SessionData> = {
     editSessionAttendance: {
       referralIds: ['referral1'],
