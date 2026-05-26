@@ -80,8 +80,7 @@ describe('editSession', () => {
       .expect(res => {
         expect(res.text).toContain('<title>Getting started one-to-one - Accredited Programmes</title>')
         expect(res.text).toContain('Getting started one-to-one')
-        expect(res.text).toContain(`/${groupId}/${sessionId}/getting-started-one-to-one/session-notes`)
- 
+        expect(res.text).toContain(`/${groupId}/${sessionId}/getting-started-one-to-one-attendance-and-session-notes`)
       })
   })
 
