@@ -272,6 +272,23 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/onboarding/referrals': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /** Fetches the personal details and OASys details for specified Referrals */
+    post: operations['fetchPersonalDetailsForReferrals']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/group': {
     parameters: {
       query?: never
@@ -1926,6 +1943,22 @@ export interface components {
        */
       additionalDetails?: string | null
     }
+    /** @description IDs of the Referrals to fetch personal details for. */
+    FetchPersonalDetailsRequest: {
+      /**
+       * @description List of referral IDs to populate personal details for.
+       * @example [
+       *       "981421e1-0242-4cde-92a2-44c737077f86",
+       *       "af2e88f7-8a89-4a01-b52a-5d7e6805f605"
+       *     ]
+       */
+      referralIds: string[]
+    }
+    FetchPersonalDetailsResponse: {
+      successIds: string[]
+      notFoundIds: string[]
+      failureIds: string[]
+    }
     /** @description Response returned when a programme group is created */
     CreateGroupResponse: {
       /**
@@ -3128,9 +3161,9 @@ export interface components {
       first?: boolean
       last?: boolean
       sort?: components['schemas']['SortObject']
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageableObject: {
@@ -3139,9 +3172,9 @@ export interface components {
       sort?: components['schemas']['SortObject']
       /** Format: int32 */
       pageSize?: number
-      paged?: boolean
       /** Format: int32 */
       pageNumber?: number
+      paged?: boolean
       unpaged?: boolean
     }
     ReferralCaseListItem: {
@@ -3797,9 +3830,9 @@ export interface components {
       first?: boolean
       last?: boolean
       sort?: components['schemas']['SortObject']
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     GroupItem: {
@@ -3892,9 +3925,9 @@ export interface components {
       first?: boolean
       last?: boolean
       sort?: components['schemas']['SortObject']
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
@@ -5357,6 +5390,39 @@ export interface operations {
         }
         content: {
           'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  fetchPersonalDetailsForReferrals: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['FetchPersonalDetailsRequest']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['FetchPersonalDetailsResponse']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
     }
