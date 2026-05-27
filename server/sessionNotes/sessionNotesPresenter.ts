@@ -20,7 +20,7 @@ export default class SessionNotesPresenter {
   ) {}
 
   get pageTitle(): string {
-    return `${this.data.personOnProbationName} record attendance and progress`
+    return `${this.data.moduleName} ${this.data.sessionNumber} attendance and session notes`
   }
 
   get text() {
