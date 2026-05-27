@@ -47,6 +47,20 @@ $ script/seed.sh seed
 
 For more complete information, view the relevant documentation in the API codebase ([github link](https://github.com/ministryofjustice/hmpps-accredited-programmes-manage-and-deliver-api))
 
+## Reporting CSV URL generator
+
+For manual reporting CSV downloads, use:
+
+`script/reporting-url-generator.v1.0.0.html`
+
+This standalone HTML file (inline CSS + JavaScript) generates click-ready reporting download URLs using the current time (`Date.now()`) and defaults the report window to the last month. Users only need to:
+
+1. Open the file in a browser.
+2. Select the target environment from the dropdown (Preprod or Dev).
+3. Click the generated report link(s) to download CSV files (assuming they are already authenticated).
+
+The generator includes a visible release label (for example `Release v1.0.0`) so people can confirm which version they are using when files are shared in Slack. When updating report endpoints or query params, create a new versioned file (for example `...v1.1.0.html`) and update this README reference.
+
 # Instructions
 
 If this is a HMPPS project then the project will be created as part of bootstrapping -
