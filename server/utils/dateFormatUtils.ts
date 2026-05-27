@@ -1,3 +1,5 @@
+import DateUtils from './dateUtils'
+
 /**
  * Utilities for parsing and comparing dates in various formats (UK DD/MM/YYYY and ISO YYYY-MM-DD)
  */
@@ -113,7 +115,7 @@ export default class DateFormatUtils {
   }
 
   /**
-   * Checks if a time on a given date (in UK format) has already passed
+   * Checks if a time on a given date (in UK or ISO format) has already passed
    * Date should be today; returns false if date is not today
    */
   static hasTimePassedOnDate(dateStr: string, hour: number, minute: number, amOrPm: 'AM' | 'PM'): boolean {
@@ -124,13 +126,7 @@ export default class DateFormatUtils {
     const date = DateFormatUtils.parseDate(dateStr)
     if (!date) return false
 
-    // Convert 12-hour format to 24-hour
-    let hour24 = hour
-    if (amOrPm === 'AM') {
-      hour24 = hour === 12 ? 0 : hour
-    } else {
-      hour24 = hour === 12 ? 12 : hour + 12
-    }
+    const { hour: hour24 } = DateUtils.convertTo24Hour(hour, minute, amOrPm)
 
     const timeOnDate = new Date(date)
     timeOnDate.setHours(hour24, minute, 0, 0)

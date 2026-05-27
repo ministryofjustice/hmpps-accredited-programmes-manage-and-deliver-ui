@@ -32,14 +32,6 @@ export default class EditSessionController extends BaseController {
     super()
   }
 
-  /**
-   * Convert a date string to YYYY-MM-DD (date-only format).
-   * Accepts ISO with or without time, or UK format (DD/MM/YYYY).
-   */
-  private static toDateOnlyString(dateStr: string): string | null {
-    return DateFormatUtils.toDateOnlyISO(dateStr)
-  }
-
   private static hasSessionDateAndTimeChanged(
     sessionDetails: {
       sessionDate: string
@@ -52,8 +44,8 @@ export default class EditSessionController extends BaseController {
       sessionEndTime: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' }
     },
   ): boolean {
-    const sessionDateForComparison = EditSessionController.toDateOnlyString(sessionDetails.sessionDate)
-    const submittedDateForComparison = EditSessionController.toDateOnlyString(submitted.sessionStartDate)
+    const sessionDateForComparison = DateFormatUtils.toDateOnlyISO(sessionDetails.sessionDate)
+    const submittedDateForComparison = DateFormatUtils.toDateOnlyISO(submitted.sessionStartDate)
     if (sessionDateForComparison !== submittedDateForComparison) return true
 
     const origStart = sessionDetails.sessionStartTime
@@ -273,11 +265,13 @@ export default class EditSessionController extends BaseController {
         return res.redirect(`/${groupId}/${sessionId}/edit-session?message=${response.message}`)
       }
     }
+    const sessionStorageForPresenter = req.method === 'GET' ? null : req.session.editSessionDateAndTime
+
     const presenter = new EditSessionDateAndTimePresenter(
       groupId,
       sessionDetails,
       sessionAttendees.sessionType,
-      req.session.editSessionDateAndTime,
+      sessionStorageForPresenter,
       formError,
       userInputData,
     )
@@ -312,6 +306,8 @@ export default class EditSessionController extends BaseController {
           sessionDetails.sessionId,
           req.session.editSessionDateAndTime as RescheduleSessionRequest,
         )
+
+        delete req.session.editSessionDateAndTime
 
         return res.redirect(`/${groupId}/${sessionId}/edit-session?message=${message.message}`)
       }
