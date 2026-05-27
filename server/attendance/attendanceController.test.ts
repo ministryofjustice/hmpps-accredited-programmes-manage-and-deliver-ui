@@ -806,6 +806,7 @@ describe('showRecordAttendancePages', () => {
           sessionId: '6789',
           referralId: 'referral1',
           data: {
+            personName: 'Alex River',
             pageTitle: 'Alex River: Getting started 1 session notes',
             moduleName: 'Getting started',
             sessionName: 'Getting started 1',
@@ -838,6 +839,7 @@ describe('showRecordAttendancePages', () => {
         responseMessage: 'Attendance updated',
       })
       accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue({
+        personName: 'Alex River',
         pageTitle: 'Alex River: Getting started 1 session notes',
         moduleName: 'Getting started',
         sessionName: 'Getting started 1',
