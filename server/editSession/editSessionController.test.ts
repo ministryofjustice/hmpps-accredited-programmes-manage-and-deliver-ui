@@ -305,7 +305,7 @@ describe('submitEditSessionDateAndTime', () => {
   })
 
   it('shows error when a past session duration is increased to more than 2.5 hours', async () => {
-    const sessionDetails = editSessionDetailsFactory.build({ sessionDate: '01/01/2020' })
+    const sessionDetails = editSessionDetailsFactory.build({ sessionDate: '2020-01-01' })
     const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'ONE_TO_ONE' })
     accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
     accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
@@ -375,45 +375,7 @@ describe('submitEditSessionDateAndTime', () => {
         )
       })
   })
-})
-
-describe('submitEditSessionDateAndTime', () => {
-  const sessionData: Partial<SessionData> = {
-    editSessionDateAndTime: {
-      sessionStartDate: '12/12/2026',
-      sessionStartTime: {
-        hour: 9,
-        minutes: 30,
-        amOrPm: 'AM',
-      },
-      sessionEndTime: {
-        hour: 12,
-        minutes: 0,
-        amOrPm: 'PM',
-      },
-    },
-  }
-  describe('GET /:groupId/:sessionId/edit-group-days-and-times/reschedule', () => {
-    it('should fetch session details with correct parameters and load page correctly', async () => {
-      const sessionDetails = rescheduleSessionDetailsFactory.build()
-      accreditedProgrammesManageAndDeliverService.getRescheduleSessionDetails.mockResolvedValue(sessionDetails)
-
-      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
-
-      await request(app)
-        .get(`/111/6789/edit-group-days-and-times/reschedule`)
-        .expect(200)
-        .expect(res => {
-          expect(res.text).toContain('Rescheduling later sessions')
-        })
-      expect(accreditedProgrammesManageAndDeliverService.getRescheduleSessionDetails).toHaveBeenCalledWith(
-        'user1',
-        '6789',
-      )
-    })
-  })
-
-  describe('POST /:groupId/:sessionId/edit-group-days-and-times/reschedule', () => {
+  describe('POST /:groupId/:sessionId/edit-group-dates-and-times/reschedule', () => {
     it('should submit the edit session details correctly', async () => {
       const sessionDataForTest: Partial<SessionData> = {
         editSessionDateAndTime: {
