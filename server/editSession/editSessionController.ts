@@ -240,7 +240,7 @@ export default class EditSessionController extends BaseController {
         })
 
         if (!hasChanged) {
-          return res.redirect(`/group/${groupId}/session/${sessionId}/edit-session`)
+          return res.redirect(`/${groupId}/${sessionId}/edit-session`)
         }
         req.session.editSessionDateAndTime = {
           sessionStartDate: data.paramsForUpdate.sessionStartDate,
