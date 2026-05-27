@@ -159,6 +159,49 @@ describe('editSessionDateAndTime', () => {
         '6789',
       )
     })
+
+    it('prefers API time values over stale session values on GET', async () => {
+      const sessionData: Partial<SessionData> = {
+        editSessionDateAndTime: {
+          sessionStartDate: '12/12/2026',
+          sessionStartTime: {
+            hour: 9,
+            minutes: 30,
+            amOrPm: 'AM',
+          },
+          sessionEndTime: {
+            hour: 10,
+            minutes: 0,
+            amOrPm: 'AM',
+          },
+        },
+      }
+
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      const sessionDetails = editSessionDetailsFactory.build({
+        sessionDate: '2026-12-13',
+        sessionStartTime: { hour: 4, minutes: 45, amOrPm: 'PM' },
+        sessionEndTime: { hour: 6, minutes: 15, amOrPm: 'PM' },
+      })
+      const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'GROUP' })
+      accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
+      accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
+
+      await request(app)
+        .get(`/111/6789/edit-session-date-and-time`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('id="session-details-start-time-hour"')
+          expect(res.text).toContain('value="04"')
+          expect(res.text).toContain('id="session-details-start-time-minute"')
+          expect(res.text).toContain('value="45"')
+          expect(res.text).toContain('id="session-details-end-time-hour"')
+          expect(res.text).toContain('value="06"')
+          expect(res.text).toContain('id="session-details-end-time-minute"')
+          expect(res.text).toContain('value="15"')
+        })
+    })
   })
 
   describe('POST /:groupId/:sessionId/edit-session-date-and-time', () => {
@@ -333,10 +376,25 @@ describe('submitEditSessionDateAndTime', () => {
   })
   describe('POST /:groupId/:sessionId/edit-session-date-and-time/reschedule', () => {
     it('should submit the edit session details correctly', async () => {
+      const sessionDataForTest: Partial<SessionData> = {
+        editSessionDateAndTime: {
+          sessionStartDate: '12/12/2026',
+          sessionStartTime: {
+            hour: 9,
+            minutes: 30,
+            amOrPm: 'AM',
+          },
+          sessionEndTime: {
+            hour: 12,
+            minutes: 0,
+            amOrPm: 'PM',
+          },
+        },
+      }
       const sessionDetails = rescheduleSessionDetailsFactory.build()
       accreditedProgrammesManageAndDeliverService.getRescheduleSessionDetails.mockResolvedValue(sessionDetails)
 
-      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+      app = TestUtils.createTestAppWithSession(sessionDataForTest, { accreditedProgrammesManageAndDeliverService })
 
       accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime.mockResolvedValue({
         message: 'Test message',
@@ -353,6 +411,65 @@ describe('submitEditSessionDateAndTime', () => {
           expect(res.text).toContain(
             `Redirecting to /111/6789/edit-session?message=${encodeURIComponent('Test message')}`,
           )
+        })
+    })
+
+    it('clears in-progress date/time session data so subsequent page loads show API values', async () => {
+      const sessionDataForTest: Partial<SessionData> = {
+        editSessionDateAndTime: {
+          sessionStartDate: '12/12/2026',
+          sessionStartTime: {
+            hour: 9,
+            minutes: 30,
+            amOrPm: 'AM',
+          },
+          sessionEndTime: {
+            hour: 12,
+            minutes: 0,
+            amOrPm: 'PM',
+          },
+        },
+      }
+      const sessionDetails = rescheduleSessionDetailsFactory.build()
+      const refreshedEditSessionDetails = editSessionDetailsFactory.build({
+        sessionDate: '2026-12-13',
+        sessionStartTime: { hour: 4, minutes: 45, amOrPm: 'PM' },
+        sessionEndTime: { hour: 6, minutes: 15, amOrPm: 'PM' },
+      })
+      const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'GROUP' })
+
+      accreditedProgrammesManageAndDeliverService.getRescheduleSessionDetails.mockResolvedValue(sessionDetails)
+      accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime.mockResolvedValue({
+        message: 'Test message',
+      })
+      accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(
+        refreshedEditSessionDetails,
+      )
+      accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
+
+      app = TestUtils.createTestAppWithSession(sessionDataForTest, { accreditedProgrammesManageAndDeliverService })
+      const agent = request.agent(app)
+
+      await agent
+        .post(`/111/6789/edit-session-date-and-time/reschedule`)
+        .type('form')
+        .send({
+          'reschedule-other-sessions': 'false',
+        })
+        .expect(302)
+
+      await agent
+        .get(`/111/6789/edit-session-date-and-time`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('id="session-details-start-time-hour"')
+          expect(res.text).toContain('value="04"')
+          expect(res.text).toContain('id="session-details-start-time-minute"')
+          expect(res.text).toContain('value="45"')
+          expect(res.text).toContain('id="session-details-end-time-hour"')
+          expect(res.text).toContain('value="06"')
+          expect(res.text).toContain('id="session-details-end-time-minute"')
+          expect(res.text).toContain('value="15"')
         })
     })
   })
