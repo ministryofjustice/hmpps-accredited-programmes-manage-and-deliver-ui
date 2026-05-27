@@ -2,6 +2,15 @@
  * Utilities for parsing and comparing dates in various formats (UK DD/MM/YYYY and ISO YYYY-MM-DD)
  */
 export default class DateFormatUtils {
+  private static readonly isoDatePrefixPattern = /^\d{4}-\d{2}-\d{2}$/
+
+  private static readonly ukDatePattern = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/
+
+  private static extractISODatePrefix(dateStr: string): string | null {
+    const isoDatePrefix = dateStr.slice(0, 10)
+    return DateFormatUtils.isoDatePrefixPattern.test(isoDatePrefix) ? isoDatePrefix : null
+  }
+
   /**
    * Parses a UK format date string (DD/MM/YYYY) to a Date object
    * Sets time to midnight (00:00:00)
@@ -11,7 +20,7 @@ export default class DateFormatUtils {
       return null
     }
 
-    const ukMatch = dateStr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
+    const ukMatch = dateStr.match(DateFormatUtils.ukDatePattern)
     if (!ukMatch) {
       return null
     }
@@ -31,12 +40,12 @@ export default class DateFormatUtils {
       return null
     }
 
-    const isoMatch = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})/)
-    if (!isoMatch) {
+    const isoDatePrefix = DateFormatUtils.extractISODatePrefix(dateStr)
+    if (!isoDatePrefix) {
       return null
     }
 
-    const [, year, month, day] = isoMatch
+    const [year, month, day] = isoDatePrefix.split('-')
     const date = new Date(Number(year), Number(month) - 1, Number(day))
     date.setHours(0, 0, 0, 0)
     return date
@@ -63,15 +72,12 @@ export default class DateFormatUtils {
   static toDateOnlyISO(dateStr: string): string | null {
     if (!dateStr) return null
 
-    // Already in ISO format
-    const isoMatch = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})/)
-    if (isoMatch) {
-      const [, year, month, day] = isoMatch
-      return `${year}-${month}-${day}`
+    const isoDatePrefix = DateFormatUtils.extractISODatePrefix(dateStr)
+    if (isoDatePrefix) {
+      return isoDatePrefix
     }
 
-    // Parse UK format
-    const ukMatch = dateStr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)
+    const ukMatch = dateStr.match(DateFormatUtils.ukDatePattern)
     if (ukMatch) {
       const [, day, month, year] = ukMatch
       return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
@@ -115,7 +121,7 @@ export default class DateFormatUtils {
       return false
     }
 
-    const date = DateFormatUtils.parseUKDateToDate(dateStr)
+    const date = DateFormatUtils.parseDate(dateStr)
     if (!date) return false
 
     // Convert 12-hour format to 24-hour
