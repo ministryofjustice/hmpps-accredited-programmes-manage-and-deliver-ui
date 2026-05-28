@@ -21,7 +21,7 @@ export default class StatusHistoryPresenter extends ReferralLayoutPresenter {
   }
 
   get pageTitle(): string {
-    return 'Status history - Accredited Programmes'
+    return 'Status history'
   }
 
   get errorMessageSummary(): MojAlertComponentArgs | null {

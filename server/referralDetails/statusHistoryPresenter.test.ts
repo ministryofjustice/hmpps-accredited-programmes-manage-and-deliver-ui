@@ -73,7 +73,7 @@ describe('StatusHistoryPresenter', () => {
 
       const presenter = new StatusHistoryPresenter('referral-id', statusHistory, referralDetails)
 
-      expect(presenter.pageTitle).toBe('Status history - Accredited Programmes')
+      expect(presenter.pageTitle).toBe('Status history')
     })
   })
 })

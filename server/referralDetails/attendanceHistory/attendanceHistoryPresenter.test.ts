@@ -170,7 +170,7 @@ describe('AttendanceHistoryPresenter', () => {
         referralDetails,
       )
 
-      expect(presenter.pageTitle).toBe("Person's attendance history - Accredited Programmes")
+      expect(presenter.pageTitle).toBe("Person's attendance history")
     })
   })
 })

@@ -171,7 +171,7 @@ export default class EditSessionController extends BaseController {
 
         // GROUP sessions and ONE_TO_ONE catch-ups go to the reschedule page
         if (sessionAttendees.sessionType === 'GROUP' && !sessionAttendees.isCatchup) {
-          return res.redirect(`/${groupId}/${sessionId}/edit-session-date-and-time/reschedule`)
+          return res.redirect(`/${groupId}/${sessionId}/edit-group-days-and-times/reschedule`)
         }
 
         // For ONE_TO_ONE sessions, submit directly to API
