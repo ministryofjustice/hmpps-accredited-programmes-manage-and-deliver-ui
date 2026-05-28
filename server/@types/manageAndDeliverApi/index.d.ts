@@ -11,6 +11,8 @@ type DailyAvailabilityModel = components['schemas']['DailyAvailabilityModel']
 type DeliveryLocationPreferencesFormData = components['schemas']['DeliveryLocationPreferencesFormData']
 type DrugDetails = components['schemas']['DrugDetails']
 type EmotionalWellbeing = components['schemas']['EmotionalWellbeing']
+type FetchPersonalDetailsRequest = components['schemas']['FetchPersonalDetailsRequest']
+type FetchPersonalDetailsResponse = components['schemas']['FetchPersonalDetailsResponse']
 type Health = components['schemas']['Health']
 type LearningNeeds = components['schemas']['LearningNeeds']
 type LifestyleAndAssociates = components['schemas']['LifestyleAndAssociates']
@@ -135,6 +137,8 @@ export type {
   EditGroupSex,
   EmotionalWellbeing,
   ExistingDeliveryLocationPreferences,
+  FetchPersonalDetailsRequest,
+  FetchPersonalDetailsResponse,
   Group,
   GroupDetailsResponse,
   GroupItem,

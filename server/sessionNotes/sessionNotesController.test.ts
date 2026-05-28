@@ -1,6 +1,7 @@
 import { Express } from 'express'
 import request from 'supertest'
 import { SessionData } from 'express-session'
+import { SessionNotes } from '@manage-and-deliver-api'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import TestUtils from '../testutils/testUtils'
@@ -27,22 +28,26 @@ beforeEach(() => {
   })
 })
 
+const sessionNotesFactory = (overrides: Partial<SessionNotes> = {}): SessionNotes => ({
+  personName: `Alex River`,
+  pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
+  moduleName: 'Getting started',
+  sessionName: 'Introduction to Building Choices',
+  sessionNumber: 1,
+  lastUpdatedBy: 'John Smith',
+  lastUpdatedDate: '19 March 2026',
+  groupId: 'd193bf89-c98b-4e92-b842-3c1b3e5f5e4a',
+  sessionId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+  sessionDate: '21 July 2025',
+  sessionAttendance: 'Attended, failed to comply',
+  sessionNotes: 'Participant engaged well.\nSecond paragraph.',
+  ...overrides,
+})
+
 describe('SessionNotesController', () => {
   describe('GET /:groupId/:sessionId/:sessionSlug-attendance-and-session-notes', () => {
     it('renders session notes from BFF', async () => {
-      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue({
-        pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
-        moduleName: 'Getting started',
-        sessionName: 'Introduction to Building Choices',
-        sessionNumber: 1,
-        lastUpdatedBy: 'John Smith',
-        lastUpdatedDate: '19 March 2026',
-        groupId: 'd193bf89-c98b-4e92-b842-3c1b3e5f5e4a',
-        sessionId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-        sessionDate: '21 July 2025',
-        sessionAttendance: 'Attended, failed to comply',
-        sessionNotes: 'Participant engaged well.\nSecond paragraph.',
-      })
+      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue(sessionNotesFactory())
 
       await request(app)
         .get('/111/6789/getting-started-1-attendance-and-session-notes?referralId=referral-123')
@@ -83,19 +88,7 @@ describe('SessionNotesController', () => {
     })
 
     it('saves edited notes and redirects back to page', async () => {
-      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue({
-        pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
-        moduleName: 'Getting started',
-        sessionName: 'Introduction to Building Choices',
-        sessionNumber: 1,
-        lastUpdatedBy: 'John Smith',
-        lastUpdatedDate: '19 March 2026',
-        groupId: 'd193bf89-c98b-4e92-b842-3c1b3e5f5e4a',
-        sessionId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-        sessionDate: '21 July 2025',
-        sessionAttendance: 'Attended, failed to comply',
-        sessionNotes: 'Existing note.',
-      })
+      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue(sessionNotesFactory())
 
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue({
         sessionTitle: 'Introduction to Building Choices',
@@ -155,19 +148,7 @@ describe('SessionNotesController', () => {
         sessionNotesCache: {
           sessionId: '6789',
           referralId: 'referral-123',
-          data: {
-            pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
-            moduleName: 'Getting started',
-            sessionName: 'Introduction to Building Choices',
-            sessionNumber: 1,
-            lastUpdatedBy: 'John Smith',
-            lastUpdatedDate: '19 March 2026',
-            groupId: 'd193bf89-c98b-4e92-b842-3c1b3e5f5e4a',
-            sessionId: '6789',
-            sessionDate: '21 July 2025',
-            sessionAttendance: 'Attended, failed to comply',
-            sessionNotes: 'Existing note.',
-          },
+          data: sessionNotesFactory({}),
         },
       }
 
@@ -202,19 +183,7 @@ describe('SessionNotesController', () => {
         ],
       })
 
-      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue({
-        pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
-        moduleName: 'Getting started',
-        sessionName: 'Introduction to Building Choices',
-        sessionNumber: 1,
-        lastUpdatedBy: 'Jane Smith',
-        lastUpdatedDate: '20 March 2026',
-        groupId: 'd193bf89-c98b-4e92-b842-3c1b3e5f5e4a',
-        sessionId: '6789',
-        sessionDate: '21 July 2025',
-        sessionAttendance: 'Attended, failed to comply',
-        sessionNotes: 'Updated note',
-      })
+      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue(sessionNotesFactory())
 
       const agent = request.agent(app)
 
@@ -233,19 +202,7 @@ describe('SessionNotesController', () => {
     })
 
     it('shows success alert when saved flag is present', async () => {
-      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue({
-        pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
-        moduleName: 'Getting started',
-        sessionName: 'Introduction to Building Choices',
-        sessionNumber: 1,
-        lastUpdatedBy: 'John Smith',
-        lastUpdatedDate: '19 March 2026',
-        groupId: 'd193bf89-c98b-4e92-b842-3c1b3e5f5e4a',
-        sessionId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-        sessionDate: '21 July 2025',
-        sessionAttendance: 'Attended, failed to comply',
-        sessionNotes: 'Participant engaged well.',
-      })
+      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue(sessionNotesFactory())
 
       await request(app)
         .get(
@@ -259,19 +216,11 @@ describe('SessionNotesController', () => {
     })
 
     it('renders textarea when session notes are blank', async () => {
-      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue({
-        pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
-        moduleName: 'Getting started',
-        sessionName: 'Introduction to Building Choices',
-        sessionNumber: 1,
-        lastUpdatedBy: 'John Smith',
-        lastUpdatedDate: '19 March 2026',
-        groupId: 'd193bf89-c98b-4e92-b842-3c1b3e5f5e4a',
-        sessionId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-        sessionDate: '21 July 2025',
-        sessionAttendance: 'Attended, failed to comply',
-        sessionNotes: '',
-      })
+      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue(
+        sessionNotesFactory({
+          sessionNotes: null,
+        }),
+      )
 
       await request(app)
         .get('/111/6789/getting-started-1-attendance-and-session-notes?referralId=referral-123')
@@ -284,19 +233,7 @@ describe('SessionNotesController', () => {
     })
 
     it('shows validation error when session notes exceed 10000 characters', async () => {
-      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue({
-        pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
-        moduleName: 'Getting started',
-        sessionName: 'Introduction to Building Choices',
-        sessionNumber: 1,
-        lastUpdatedBy: 'John Smith',
-        lastUpdatedDate: '19 March 2026',
-        groupId: 'd193bf89-c98b-4e92-b842-3c1b3e5f5e4a',
-        sessionId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-        sessionDate: '21 July 2025',
-        sessionAttendance: 'Attended, failed to comply',
-        sessionNotes: 'Existing note.',
-      })
+      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue(sessionNotesFactory())
 
       await request(app)
         .post('/111/6789/getting-started-1-attendance-and-session-notes?referralId=referral-123')
@@ -315,19 +252,7 @@ describe('SessionNotesController', () => {
           sessionNotesCache: {
             sessionId: '6789',
             referralId: 'referral-123',
-            data: {
-              pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
-              moduleName: 'Getting started',
-              sessionName: 'Introduction to Building Choices',
-              sessionNumber: 1,
-              lastUpdatedBy: 'John Smith',
-              lastUpdatedDate: '19 March 2026',
-              groupId: 'd193bf89-c98b-4e92-b842-3c1b3e5f5e4a',
-              sessionId: '6789',
-              sessionDate: '21 July 2025',
-              sessionAttendance: 'Attended, failed to comply',
-              sessionNotes: 'Existing note.',
-            },
+            data: sessionNotesFactory(),
           },
         },
         { accreditedProgrammesManageAndDeliverService },
@@ -346,19 +271,7 @@ describe('SessionNotesController', () => {
     })
 
     it('uses attendance history backlink when opened from PoP attendance history', async () => {
-      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue({
-        pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
-        moduleName: 'Getting started',
-        sessionName: 'Introduction to Building Choices',
-        sessionNumber: 1,
-        lastUpdatedBy: 'John Smith',
-        lastUpdatedDate: '19 March 2026',
-        groupId: 'd193bf89-c98b-4e92-b842-3c1b3e5f5e4a',
-        sessionId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-        sessionDate: '21 July 2025',
-        sessionAttendance: 'Attended, failed to comply',
-        sessionNotes: 'Participant engaged well.',
-      })
+      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue(sessionNotesFactory())
 
       await request(app)
         .get(
@@ -372,19 +285,7 @@ describe('SessionNotesController', () => {
     })
 
     it('uses edit session backlink when opened from edit session', async () => {
-      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue({
-        pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
-        moduleName: 'Getting started',
-        sessionName: 'Introduction to Building Choices',
-        sessionNumber: 1,
-        lastUpdatedBy: 'John Smith',
-        lastUpdatedDate: '19 March 2026',
-        groupId: 'd193bf89-c98b-4e92-b842-3c1b3e5f5e4a',
-        sessionId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-        sessionDate: '21 July 2025',
-        sessionAttendance: 'Attended, failed to comply',
-        sessionNotes: 'Participant engaged well.',
-      })
+      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue(sessionNotesFactory())
 
       await request(app)
         .get('/111/6789/getting-started-1-attendance-and-session-notes?referralId=referral-123&source=edit-session')
@@ -398,19 +299,12 @@ describe('SessionNotesController', () => {
     })
 
     it('renders notes as body text and links to record attendance when opened from edit session', async () => {
-      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue({
-        pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
-        moduleName: 'Getting started',
-        sessionName: 'Introduction to Building Choices',
-        sessionNumber: 1,
-        lastUpdatedBy: 'John Smith',
-        lastUpdatedDate: '19 March 2026',
-        groupId: 'd193bf89-c98b-4e92-b842-3c1b3e5f5e4a',
-        sessionId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-        sessionDate: '21 July 2025',
-        sessionAttendance: 'Attended, failed to comply',
-        sessionNotes: 'Participant engaged well.',
-      })
+      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue(
+        sessionNotesFactory({
+          sessionAttendance: '',
+          sessionNotes: 'Participant engaged well.',
+        }),
+      )
 
       await request(app)
         .get('/111/6789/getting-started-1-attendance-and-session-notes?referralId=referral-123&source=edit-session')
@@ -425,19 +319,7 @@ describe('SessionNotesController', () => {
     })
 
     it('seeds referral ids so record attendance can be opened from edit session notes', async () => {
-      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue({
-        pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
-        moduleName: 'Getting started',
-        sessionName: 'Introduction to Building Choices',
-        sessionNumber: 1,
-        lastUpdatedBy: 'John Smith',
-        lastUpdatedDate: '19 March 2026',
-        groupId: 'd193bf89-c98b-4e92-b842-3c1b3e5f5e4a',
-        sessionId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-        sessionDate: '21 July 2025',
-        sessionAttendance: 'Attended, failed to comply',
-        sessionNotes: 'Participant engaged well.',
-      })
+      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue(sessionNotesFactory())
 
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue({
         sessionTitle: 'Introduction to Building Choices',
@@ -488,19 +370,7 @@ describe('SessionNotesController', () => {
 
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue({
-        pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
-        moduleName: 'Getting started',
-        sessionName: 'Introduction to Building Choices',
-        sessionNumber: 1,
-        lastUpdatedBy: 'John Smith',
-        lastUpdatedDate: '19 March 2026',
-        groupId: 'd193bf89-c98b-4e92-b842-3c1b3e5f5e4a',
-        sessionId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-        sessionDate: '21 July 2025',
-        sessionAttendance: 'Attended, failed to comply',
-        sessionNotes: 'Participant engaged well.',
-      })
+      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue(sessionNotesFactory())
 
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue({
         sessionTitle: 'Introduction to Building Choices',

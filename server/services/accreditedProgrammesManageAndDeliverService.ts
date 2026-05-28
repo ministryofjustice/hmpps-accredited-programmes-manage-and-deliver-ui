@@ -27,6 +27,8 @@ import {
   EditSessionFacilitatorsRequest,
   EditSessionFacilitatorsResponse,
   EmotionalWellbeing,
+  FetchPersonalDetailsRequest,
+  FetchPersonalDetailsResponse,
   Group,
   GroupDetailsResponse,
   GroupsByRegion,
@@ -171,6 +173,19 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
       csv: response.body,
       headers: response.headers,
     }
+  }
+
+  async fetchPersonalDetailsForReferrals(
+    username: ExpressUsername,
+    referralIds: FetchPersonalDetailsRequest['referralIds'],
+  ): Promise<FetchPersonalDetailsResponse> {
+    const restClient = await this.createRestClientFromUsername(username)
+
+    return (await restClient.post({
+      path: '/onboarding/referrals',
+      headers: { Accept: 'application/json' },
+      data: { referralIds },
+    })) as FetchPersonalDetailsResponse
   }
 
   async getGroupAllocatedMembers(

@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Onboarding Referral Refresh URL Generator</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #ece9df;
+        --panel: #f8f5ec;
+        --text: #1f2a35;
+        --muted: #49576a;
+        --accent: #0b5ea8;
+        --border: #7e8fa4;
+        --border-strong: #304764;
+        --panel-shadow: #d1c8b5;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family:
+          'Trebuchet MS',
+          Verdana,
+          system-ui,
+          -apple-system,
+          sans-serif;
+        color: var(--text);
+        background:
+          repeating-linear-gradient(
+            0deg,
+            rgba(255, 255, 255, 0.12),
+            rgba(255, 255, 255, 0.12) 2px,
+            transparent 2px,
+            transparent 4px
+          ),
+          linear-gradient(180deg, #f2eee3, var(--bg));
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 960px;
+        margin: 2rem auto;
+        padding: 0 1rem 2rem;
+      }
+
+      .panel {
+        background: var(--panel);
+        border: 2px solid var(--border-strong);
+        border-radius: 4px;
+        padding: 1rem;
+        box-shadow:
+          0 0 0 2px var(--border),
+          5px 5px 0 0 var(--panel-shadow);
+      }
+
+      h1 {
+        margin: 0 0 0.25rem;
+        font-size: 1.45rem;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .meta {
+        margin-top: 0.5rem;
+        display: inline-block;
+        font-size: 0.8rem;
+        font-family: 'Courier New', Courier, monospace;
+        background: #e8eef6;
+        color: #183153;
+        border: 1px solid #5f7896;
+        border-radius: 4px;
+        padding: 0.25rem 0.5rem;
+      }
+
+      .form-grid {
+        margin-top: 1rem;
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+
+      .full-width {
+        grid-column: 1 / -1;
+      }
+
+      label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.35rem;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        border: 2px solid #6f8198;
+        border-radius: 4px;
+        background: #fdfcf8;
+        padding: 0.65rem 0.75rem;
+        font-size: 1rem;
+      }
+
+      textarea {
+        min-height: 180px;
+        resize: vertical;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 0.92rem;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: 2px solid #1d70b8;
+        outline-offset: 1px;
+      }
+
+      .help {
+        margin-top: 0.3rem;
+        font-size: 0.9rem;
+      }
+
+      .stats {
+        margin-top: 0.8rem;
+        font-size: 0.92rem;
+      }
+
+      .report-list {
+        margin-top: 1rem;
+        display: grid;
+        gap: 0.9rem;
+      }
+
+      .report-card {
+        border: 2px solid var(--border);
+        border-radius: 4px;
+        padding: 0.8rem;
+        background: #f5f8fb;
+        box-shadow: inset 0 0 0 1px #dce4ee;
+      }
+
+      .report-title {
+        margin: 0 0 0.35rem;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+      }
+
+      .link-row {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .report-link {
+        color: var(--accent);
+        text-decoration: none;
+        word-break: break-all;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 0.92rem;
+      }
+
+      .report-link:hover {
+        text-decoration: underline;
+      }
+
+      button {
+        border: 2px solid #355379;
+        color: #f0f7ff;
+        background: linear-gradient(180deg, #4b6f99, #33527a);
+        border-radius: 4px;
+        padding: 0.28rem 0.55rem;
+        font-family: 'Trebuchet MS', Verdana, sans-serif;
+        font-size: 0.9rem;
+        cursor: pointer;
+      }
+
+      button:hover {
+        filter: brightness(1.06);
+      }
+
+      .error {
+        color: #b10e1e;
+        font-weight: 600;
+        margin-top: 0.75rem;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <section class="panel">
+        <h1>Onboarding Referral Refresh URL Generator</h1>
+        <p class="muted">
+          Paste referral IDs (one per line), then generate browser-ready URLs that call the onboarding refresh endpoint in
+          batches.
+        </p>
+        <span class="meta" id="release-version"></span>
+
+        <div class="form-grid">
+          <div>
+            <label for="environment">Environment</label>
+            <select id="environment">
+              <option value="https://accredited-programmes-manage-and-deliver-preprod.hmpps.service.justice.gov.uk/">
+                Preprod
+              </option>
+              <option value="https://accredited-programmes-manage-and-deliver-dev.hmpps.service.justice.gov.uk/">
+                Dev
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label for="batch-size">Batch size</label>
+            <input id="batch-size" type="number" min="1" max="200" step="1" value="10" />
+            <p class="muted help">Each generated URL includes up to this many referral IDs.</p>
+          </div>
+
+          <div class="full-width">
+            <label for="referral-ids">Referral IDs (line-separated)</label>
+            <textarea
+              id="referral-ids"
+              placeholder="981421e1-0242-4cde-92a2-44c737077f86&#10;af2e88f7-8a89-4a01-b52a-5d7e6805f605"
+            ></textarea>
+            <p class="muted help">Duplicate IDs are de-duplicated in first-seen order.</p>
+          </div>
+        </div>
+
+        <p class="muted stats" id="stats"></p>
+        <p class="error" id="error-message" aria-live="polite"></p>
+
+        <div class="report-list" id="report-list"></div>
+      </section>
+    </main>
+
+    <script>
+      ;(() => {
+        const GENERATOR_VERSION = 'v1.0.0'
+        const ONBOARDING_PATH = '/onboarding/referrals'
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+
+        const environmentSelect = document.getElementById('environment')
+        const batchSizeInput = document.getElementById('batch-size')
+        const referralIdsTextarea = document.getElementById('referral-ids')
+        const releaseVersion = document.getElementById('release-version')
+        const stats = document.getElementById('stats')
+        const errorMessage = document.getElementById('error-message')
+        const reportList = document.getElementById('report-list')
+
+        releaseVersion.textContent = `Release ${GENERATOR_VERSION}`
+
+        if (window.location.protocol.startsWith('http')) {
+          const currentOrigin = `${window.location.origin}/`
+          const matchingOption = Array.from(environmentSelect.options).find(option => option.value === currentOrigin)
+          if (matchingOption) {
+            environmentSelect.value = currentOrigin
+          }
+        }
+
+        const normaliseBaseUrl = rawBase => rawBase.trim().replace(/\/+$/, '')
+
+        const parseReferralIds = text => {
+          const uniqueIds = []
+          const seen = new Set()
+          const invalidIds = []
+
+          text
+            .split(/\r?\n/)
+            .map(line => line.trim())
+            .filter(Boolean)
+            .forEach(line => {
+              if (!uuidRegex.test(line)) {
+                invalidIds.push(line)
+                return
+              }
+
+              if (!seen.has(line)) {
+                seen.add(line)
+                uniqueIds.push(line)
+              }
+            })
+
+          return { uniqueIds, invalidIds }
+        }
+
+        const toBatches = (items, batchSize) => {
+          const batches = []
+          for (let i = 0; i < items.length; i += batchSize) {
+            batches.push(items.slice(i, i + batchSize))
+          }
+          return batches
+        }
+
+        const buildBatchUrl = (baseUrl, referralIdBatch) => {
+          const url = new URL(`${normaliseBaseUrl(baseUrl)}${ONBOARDING_PATH}`)
+          referralIdBatch.forEach(referralId => {
+            url.searchParams.append('referralId', referralId)
+          })
+          return url.toString()
+        }
+
+        const render = () => {
+          const baseUrl = environmentSelect.value
+          const rawBatchSize = Number.parseInt(batchSizeInput.value, 10)
+          const batchSize = Number.isNaN(rawBatchSize) ? 10 : Math.max(1, Math.min(200, rawBatchSize))
+          batchSizeInput.value = String(batchSize)
+
+          reportList.innerHTML = ''
+          errorMessage.textContent = ''
+
+          const { uniqueIds, invalidIds } = parseReferralIds(referralIdsTextarea.value)
+          const batches = toBatches(uniqueIds, batchSize)
+
+          stats.textContent = `Valid IDs: ${uniqueIds.length}. Invalid IDs: ${invalidIds.length}. Batches: ${batches.length}.`
+
+          if (invalidIds.length) {
+            const previewInvalid = invalidIds.slice(0, 8).join('\n')
+            const truncatedSuffix = invalidIds.length > 8 ? `\n...and ${invalidIds.length - 8} more` : ''
+            errorMessage.textContent = `Invalid referral IDs (must be UUIDs):\n${previewInvalid}${truncatedSuffix}`
+          }
+
+          batches.forEach((batch, index) => {
+            const reportUrl = buildBatchUrl(baseUrl, batch)
+
+            const card = document.createElement('article')
+            card.className = 'report-card'
+
+            const title = document.createElement('h2')
+            title.className = 'report-title'
+            title.textContent = `Batch ${index + 1} (${batch.length} IDs)`
+            card.appendChild(title)
+
+            const linkRow = document.createElement('div')
+            linkRow.className = 'link-row'
+
+            const link = document.createElement('a')
+            link.href = reportUrl
+            link.textContent = reportUrl
+            link.target = '_blank'
+            link.rel = 'noopener noreferrer'
+            link.className = 'report-link'
+            linkRow.appendChild(link)
+
+            const copyButton = document.createElement('button')
+            copyButton.type = 'button'
+            copyButton.textContent = 'Copy URL'
+            copyButton.addEventListener('click', async () => {
+              await navigator.clipboard.writeText(reportUrl)
+              copyButton.textContent = 'Copied'
+              setTimeout(() => {
+                copyButton.textContent = 'Copy URL'
+              }, 1200)
+            })
+            linkRow.appendChild(copyButton)
+
+            card.appendChild(linkRow)
+            reportList.appendChild(card)
+          })
+        }
+
+        environmentSelect.addEventListener('change', render)
+        batchSizeInput.addEventListener('input', render)
+        referralIdsTextarea.addEventListener('input', render)
+
+        render()
+      })()
+    </script>
+  </body>
+</html>
