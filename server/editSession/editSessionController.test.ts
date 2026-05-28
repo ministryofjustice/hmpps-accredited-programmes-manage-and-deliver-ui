@@ -374,6 +374,121 @@ describe('submitEditSessionDateAndTime', () => {
         )
       })
   })
+
+  it('allows changing only start time when past-session duration is shortened', async () => {
+    const sessionDetails = editSessionDetailsFactory.build({
+      sessionDate: '2020-01-01',
+      sessionStartTime: { hour: 10, minutes: 0, amOrPm: 'AM' },
+      sessionEndTime: { hour: 12, minutes: 30, amOrPm: 'PM' },
+    })
+    const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'ONE_TO_ONE' })
+    accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
+    accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
+    accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime.mockResolvedValue({ message: 'Test message' })
+
+    await request(app)
+      .post(`/111/6789/edit-session-date-and-time`)
+      .type('form')
+      .send({
+        'session-details-date': '01/01/2020',
+        'session-details-start-time-hour': '10',
+        'session-details-start-time-minute': '30',
+        'session-details-start-time-part-of-day': 'AM',
+        'session-details-end-time-hour': '12',
+        'session-details-end-time-minute': '30',
+        'session-details-end-time-part-of-day': 'PM',
+      })
+      .expect(302)
+      .expect(res => {
+        expect(res.text).toContain(
+          `Redirecting to /111/6789/edit-session?message=${encodeURIComponent('Test message')}`,
+        )
+      })
+
+    expect(accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime).toHaveBeenCalledWith('user1', '6789', {
+      sessionStartDate: '2020-01-01',
+      sessionStartTime: { hour: 10, minutes: 30, amOrPm: 'AM' },
+      sessionEndTime: { hour: 12, minutes: 30, amOrPm: 'PM' },
+      rescheduleOtherSessions: false,
+    })
+  })
+
+  it('allows changing only end time when past-session duration is shortened', async () => {
+    const sessionDetails = editSessionDetailsFactory.build({
+      sessionDate: '2020-01-01',
+      sessionStartTime: { hour: 10, minutes: 0, amOrPm: 'AM' },
+      sessionEndTime: { hour: 12, minutes: 30, amOrPm: 'PM' },
+    })
+    const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'ONE_TO_ONE' })
+    accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
+    accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
+    accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime.mockResolvedValue({ message: 'Test message' })
+
+    await request(app)
+      .post(`/111/6789/edit-session-date-and-time`)
+      .type('form')
+      .send({
+        'session-details-date': '01/01/2020',
+        'session-details-start-time-hour': '10',
+        'session-details-start-time-minute': '00',
+        'session-details-start-time-part-of-day': 'AM',
+        'session-details-end-time-hour': '12',
+        'session-details-end-time-minute': '00',
+        'session-details-end-time-part-of-day': 'PM',
+      })
+      .expect(302)
+      .expect(res => {
+        expect(res.text).toContain(
+          `Redirecting to /111/6789/edit-session?message=${encodeURIComponent('Test message')}`,
+        )
+      })
+
+    expect(accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime).toHaveBeenCalledWith('user1', '6789', {
+      sessionStartDate: '2020-01-01',
+      sessionStartTime: { hour: 10, minutes: 0, amOrPm: 'AM' },
+      sessionEndTime: { hour: 12, minutes: 0, amOrPm: 'PM' },
+      rescheduleOtherSessions: false,
+    })
+  })
+
+  it('allows changing both times when past-session duration is not longer', async () => {
+    const sessionDetails = editSessionDetailsFactory.build({
+      sessionDate: '2020-01-01',
+      sessionStartTime: { hour: 10, minutes: 0, amOrPm: 'AM' },
+      sessionEndTime: { hour: 12, minutes: 30, amOrPm: 'PM' },
+    })
+    const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'ONE_TO_ONE' })
+    accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
+    accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
+    accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime.mockResolvedValue({ message: 'Test message' })
+
+    await request(app)
+      .post(`/111/6789/edit-session-date-and-time`)
+      .type('form')
+      .send({
+        'session-details-date': '01/01/2020',
+        'session-details-start-time-hour': '9',
+        'session-details-start-time-minute': '00',
+        'session-details-start-time-part-of-day': 'AM',
+        'session-details-end-time-hour': '11',
+        'session-details-end-time-minute': '30',
+        'session-details-end-time-part-of-day': 'AM',
+      })
+      .expect(302)
+      .expect(res => {
+        expect(res.text).toContain(
+          `Redirecting to /111/6789/edit-session?message=${encodeURIComponent('Test message')}`,
+        )
+      })
+
+    expect(accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime).toHaveBeenCalledWith('user1', '6789', {
+      sessionStartDate: '2020-01-01',
+      sessionStartTime: { hour: 9, minutes: 0, amOrPm: 'AM' },
+      sessionEndTime: { hour: 11, minutes: 30, amOrPm: 'AM' },
+      rescheduleOtherSessions: false,
+    })
+  })
+
   describe('POST /:groupId/:sessionId/edit-session-date-and-time/reschedule', () => {
     it('should submit the edit session details correctly', async () => {
       const sessionDataForTest: Partial<SessionData> = {
