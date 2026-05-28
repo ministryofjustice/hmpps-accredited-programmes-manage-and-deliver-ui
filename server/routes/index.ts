@@ -12,7 +12,6 @@ import GroupOverviewController from '../groupOverview/groupOverviewController'
 import RemoveFromGroupController from '../groupOverview/removeFromGroup/removeFromGroupController'
 import LdcController from '../ldc/ldcController'
 import LocationPreferencesController from '../availabilityAndMotivation/locationPreferences/locationPreferencesController'
-import authorisationMiddleware from '../middleware/authorisationMiddleware'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import PniController from '../pni/pniController'
 import ReferralDetailsController from '../referralDetails/referralDetailsController'
@@ -64,7 +63,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const reportingController = new ReportingController(accreditedProgrammesManageAndDeliverService)
   const onboardingController = new OnboardingController(accreditedProgrammesManageAndDeliverService)
 
-  const reportingRole = 'ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_REPORTING'
+  // const reportingRole = 'ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_REPORTING'
 
   get('/', async (req, res, next) => {
     await homeController.showHomePage(req, res)
