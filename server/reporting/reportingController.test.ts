@@ -21,6 +21,8 @@ afterEach(() => {
 })
 
 describe('Reporting controller', () => {
+  const reportingRole = ['ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_REPORTING']
+
   it('returns CSV for group size report when user has reporting role', async () => {
     const csv = 'groupCode,size\\nGRP-001,12\\n'
     accreditedProgrammesManageAndDeliverService.getGroupSizeReport.mockResolvedValue({
@@ -36,7 +38,7 @@ describe('Reporting controller', () => {
       },
       userSupplier: () => ({
         ...defaultUser,
-        token: createUserToken(['ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_REPORTING']),
+        token: createUserToken(reportingRole),
       }),
     })
 
@@ -55,7 +57,110 @@ describe('Reporting controller', () => {
     )
   })
 
-  it('redirects to auth error when user does not have reporting role', async () => {
+  it('returns CSV for dosage report when user has reporting role', async () => {
+    const csv = 'referralId,dosage\\nREF-001,87\\n'
+    accreditedProgrammesManageAndDeliverService.getDosageReport.mockResolvedValue({
+      csv,
+      headers: {
+        'Content-Disposition': 'attachment; filename="dosage-report.csv"',
+      },
+    })
+
+    app = appWithAllRoutes({
+      services: {
+        accreditedProgrammesManageAndDeliverService,
+      },
+      userSupplier: () => ({
+        ...defaultUser,
+        token: createUserToken(reportingRole),
+      }),
+    })
+
+    await request(app)
+      .get('/reporting/dosage.csv?referralsCreatedSince=2026-05-21')
+      .expect(200)
+      .expect('Content-Type', /text\/csv/)
+      .expect('Content-Disposition', 'attachment; filename="dosage-report.csv"')
+      .expect(res => {
+        expect(res.text).toBe(csv)
+      })
+
+    expect(accreditedProgrammesManageAndDeliverService.getDosageReport).toHaveBeenCalledWith('user1', {
+      referralsCreatedSince: '2026-05-21',
+    })
+  })
+
+  it('returns CSV for session rate report when user has reporting role', async () => {
+    const csv = 'weekEnding,sessionRate\\n2026-05-24,0.92\\n'
+    accreditedProgrammesManageAndDeliverService.getSessionRateReport.mockResolvedValue({
+      csv,
+      headers: {
+        'Content-Disposition': 'attachment; filename="session-rate-report.csv"',
+      },
+    })
+
+    app = appWithAllRoutes({
+      services: {
+        accreditedProgrammesManageAndDeliverService,
+      },
+      userSupplier: () => ({
+        ...defaultUser,
+        token: createUserToken(reportingRole),
+      }),
+    })
+
+    await request(app)
+      .get('/reporting/session-rate.csv?groupsStartedAfter=2026-05-21')
+      .expect(200)
+      .expect('Content-Type', /text\/csv/)
+      .expect('Content-Disposition', 'attachment; filename="session-rate-report.csv"')
+      .expect(res => {
+        expect(res.text).toBe(csv)
+      })
+
+    expect(accreditedProgrammesManageAndDeliverService.getSessionRateReport).toHaveBeenCalledWith('user1', {
+      groupsStartedAfter: '2026-05-21',
+    })
+  })
+
+  it('returns CSV for facilitator continuity report when user has reporting role', async () => {
+    const csv = 'groupCode,continuity\\nGRP-001,0.8\\n'
+    accreditedProgrammesManageAndDeliverService.getFacilitatorContinuityReport.mockResolvedValue({
+      csv,
+      headers: {
+        'Content-Disposition': 'attachment; filename="facilitator-continuity-report.csv"',
+      },
+    })
+
+    app = appWithAllRoutes({
+      services: {
+        accreditedProgrammesManageAndDeliverService,
+      },
+      userSupplier: () => ({
+        ...defaultUser,
+        token: createUserToken(reportingRole),
+      }),
+    })
+
+    await request(app)
+      .get('/reporting/facilitator-continuity.csv?groupsCreatedSince=2026-05-21T12:00:00')
+      .expect(200)
+      .expect('Content-Type', /text\/csv/)
+      .expect('Content-Disposition', 'attachment; filename="facilitator-continuity-report.csv"')
+      .expect(res => {
+        expect(res.text).toBe(csv)
+      })
+
+    expect(accreditedProgrammesManageAndDeliverService.getFacilitatorContinuityReport).toHaveBeenCalledWith('user1', {
+      groupsCreatedSince: '2026-05-21T12:00:00',
+    })
+  })
+
+  /**
+   * Skipping because the role does not currently exist in HMPPS Auth, and therefore we have no way
+   * to protect/prevent access
+   */
+  it.skip('redirects to auth error when user does not have reporting role', async () => {
     app = appWithAllRoutes({
       services: {
         accreditedProgrammesManageAndDeliverService,
@@ -81,7 +186,7 @@ describe('Reporting controller', () => {
       },
       userSupplier: () => ({
         ...defaultUser,
-        token: createUserToken(['ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_REPORTING']),
+        token: createUserToken(reportingRole),
       }),
     })
 

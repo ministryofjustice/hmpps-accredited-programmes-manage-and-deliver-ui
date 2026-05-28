@@ -174,7 +174,7 @@
       <section class="panel">
         <h1>Reporting CSV URL Generator</h1>
         <p class="muted">
-          Generates click-ready CSV download URLs for the most recent month, based on the current date/time.
+          Generates click-ready CSV download URLs for reporting endpoints, with defaults set to the last week.
         </p>
         <span class="meta" id="release-version"></span>
 
@@ -200,12 +200,92 @@
 
     <script>
       ;(() => {
-        const GENERATOR_VERSION = 'v1.0.0'
+        const GENERATOR_VERSION = 'v1.1.0'
+        const DATE_INPUT = 'date'
+        const DATETIME_INPUT = 'datetime-local'
+
+        const formatDateInput = date => date.toISOString().slice(0, 10)
+        const formatDateTimeLocalInput = date => {
+          const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+          return localDate.toISOString().slice(0, 16)
+        }
+
         const reports = [
           {
             title: 'Group size report',
             path: '/reporting/group-size.csv',
-            queryParams: fromDateIso => ({ groupStartedSince: fromDateIso }),
+            fields: [
+              {
+                key: 'groupStartedSince',
+                label: 'Group started since',
+                type: DATETIME_INPUT,
+                defaultValue: date => formatDateTimeLocalInput(date),
+                serialiseValue: value => new Date(value).toISOString(),
+              },
+            ],
+          },
+          {
+            title: 'Dosage report',
+            path: '/reporting/dosage.csv',
+            fields: [
+              {
+                key: 'referralsCreatedSince',
+                label: 'Referrals created since',
+                type: DATE_INPUT,
+                defaultValue: date => formatDateInput(date),
+              },
+              {
+                key: 'referralsCompletedAfter',
+                label: 'Referrals completed after',
+                type: DATE_INPUT,
+                defaultValue: date => formatDateInput(date),
+              },
+            ],
+          },
+          {
+            title: 'Session rate report',
+            path: '/reporting/session-rate.csv',
+            fields: [
+              {
+                key: 'groupsStartedAfter',
+                label: 'Groups started after',
+                type: DATE_INPUT,
+                defaultValue: date => formatDateInput(date),
+              },
+              {
+                key: 'groupsFinishedAfter',
+                label: 'Groups finished after',
+                type: DATE_INPUT,
+                defaultValue: date => formatDateInput(date),
+              },
+            ],
+          },
+          {
+            title: 'Facilitator continuity report',
+            path: '/reporting/facilitator-continuity.csv',
+            fields: [
+              {
+                key: 'groupsCreatedSince',
+                label: 'Groups created since',
+                type: DATETIME_INPUT,
+                defaultValue: date => formatDateTimeLocalInput(date),
+                serialiseValue: value => new Date(value).toISOString(),
+              },
+              {
+                key: 'firstSessionAtOrAfter',
+                label: 'First session at or after',
+                type: DATETIME_INPUT,
+                defaultValue: date => formatDateTimeLocalInput(date),
+                serialiseValue: value => new Date(value).toISOString(),
+              },
+              {
+                key: 'lastSessionAtOrBefore',
+                label: 'Last session at or before',
+                type: DATETIME_INPUT,
+                defaultValue: date => formatDateTimeLocalInput(date),
+                serialiseValue: value => new Date(value).toISOString(),
+              },
+            ],
           },
         ]
 
@@ -218,11 +298,10 @@
         releaseVersion.textContent = `Release ${GENERATOR_VERSION}`
 
         const now = new Date(Date.now())
-        const monthAgo = new Date(now)
-        monthAgo.setMonth(monthAgo.getMonth() - 1)
-        const monthAgoIso = monthAgo.toISOString()
+        const weekAgo = new Date(now)
+        weekAgo.setDate(weekAgo.getDate() - 7)
 
-        dateWindow.textContent = `Using data from the last month: ${monthAgoIso} to ${now.toISOString()}`
+        dateWindow.textContent = `Default date window is last week: ${weekAgo.toISOString()} to ${now.toISOString()}`
 
         if (window.location.protocol.startsWith('http')) {
           const currentOrigin = `${window.location.origin}/`
@@ -234,57 +313,99 @@
 
         const normaliseBaseUrl = rawBase => rawBase.trim().replace(/\/+$/, '')
 
-        const tryBuildUrl = (baseUrl, report) => {
+        const tryBuildUrl = (baseUrl, report, reportFieldValues) => {
           const url = new URL(`${normaliseBaseUrl(baseUrl)}${report.path}`)
-          const params = report.queryParams(monthAgoIso)
-          Object.entries(params).forEach(([key, value]) => {
-            url.searchParams.set(key, value)
+          Object.entries(reportFieldValues).forEach(([key, value]) => {
+            if (value) {
+              url.searchParams.set(key, value)
+            }
           })
           return url.toString()
         }
 
+        const reportDomState = reports.map(report => ({ report, fieldInputs: {}, link: null }))
+
+        const getFieldValue = (field, inputElement) => {
+          const rawValue = inputElement.value
+          if (!rawValue) {
+            return ''
+          }
+
+          if (typeof field.serialiseValue === 'function') {
+            return field.serialiseValue(rawValue)
+          }
+
+          return rawValue
+        }
+
+        const createReportCard = reportState => {
+          const { report } = reportState
+          const card = document.createElement('article')
+          card.className = 'report-card'
+
+          const title = document.createElement('h2')
+          title.className = 'report-title'
+          title.textContent = report.title
+          card.appendChild(title)
+
+          report.fields.forEach(field => {
+            const label = document.createElement('label')
+            const fieldId = `${report.path.replace(/[^a-z0-9]/gi, '-')}-${field.key}`
+            label.setAttribute('for', fieldId)
+            label.textContent = field.label
+            card.appendChild(label)
+
+            const input = document.createElement('input')
+            input.id = fieldId
+            input.type = field.type
+            input.value = field.defaultValue(weekAgo)
+            input.addEventListener('input', render)
+            card.appendChild(input)
+            reportState.fieldInputs[field.key] = input
+          })
+
+          const linkRow = document.createElement('div')
+          linkRow.className = 'link-row'
+
+          const link = document.createElement('a')
+          link.target = '_blank'
+          link.rel = 'noopener noreferrer'
+          link.className = 'report-link'
+          linkRow.appendChild(link)
+
+          const copyButton = document.createElement('button')
+          copyButton.type = 'button'
+          copyButton.textContent = 'Copy URL'
+          copyButton.addEventListener('click', async () => {
+            await navigator.clipboard.writeText(link.href)
+            copyButton.textContent = 'Copied'
+            setTimeout(() => {
+              copyButton.textContent = 'Copy URL'
+            }, 1200)
+          })
+          linkRow.appendChild(copyButton)
+
+          reportState.link = link
+          card.appendChild(linkRow)
+
+          return card
+        }
+
         const render = () => {
           const baseUrl = environmentSelect.value
-          reportList.innerHTML = ''
           errorMessage.textContent = ''
 
           try {
-            reports.forEach(report => {
-              const reportUrl = tryBuildUrl(baseUrl, report)
-
-              const card = document.createElement('article')
-              card.className = 'report-card'
-
-              const title = document.createElement('h2')
-              title.className = 'report-title'
-              title.textContent = report.title
-              card.appendChild(title)
-
-              const linkRow = document.createElement('div')
-              linkRow.className = 'link-row'
-
-              const link = document.createElement('a')
-              link.href = reportUrl
-              link.textContent = reportUrl
-              link.target = '_blank'
-              link.rel = 'noopener noreferrer'
-              link.className = 'report-link'
-              linkRow.appendChild(link)
-
-              const copyButton = document.createElement('button')
-              copyButton.type = 'button'
-              copyButton.textContent = 'Copy URL'
-              copyButton.addEventListener('click', async () => {
-                await navigator.clipboard.writeText(reportUrl)
-                copyButton.textContent = 'Copied'
-                setTimeout(() => {
-                  copyButton.textContent = 'Copy URL'
-                }, 1200)
+            reportDomState.forEach(reportState => {
+              const queryParams = {}
+              reportState.report.fields.forEach(field => {
+                const inputElement = reportState.fieldInputs[field.key]
+                queryParams[field.key] = getFieldValue(field, inputElement)
               })
-              linkRow.appendChild(copyButton)
 
-              card.appendChild(linkRow)
-              reportList.appendChild(card)
+              const reportUrl = tryBuildUrl(baseUrl, reportState.report, queryParams)
+              reportState.link.href = reportUrl
+              reportState.link.textContent = reportUrl
             })
           } catch (error) {
             errorMessage.textContent = 'Unable to build reporting URLs for the selected environment.'
@@ -292,6 +413,11 @@
         }
 
         environmentSelect.addEventListener('change', render)
+
+        reportDomState.forEach(reportState => {
+          reportList.appendChild(createReportCard(reportState))
+        })
+
         render()
       })()
     </script>
