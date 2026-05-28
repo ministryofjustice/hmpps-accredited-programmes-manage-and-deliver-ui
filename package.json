@@ -91,7 +91,7 @@
     "@types/supertest": "^7.2.0",
     "accessible-autocomplete": "^3.0.1",
     "agentkeepalive": "^4.6.0",
-    "applicationinsights": "^3.14.0",
+    "applicationinsights": "2.9.8",
     "body-parser": "^2.2.2",
     "bunyan": "^1.8.15",
     "bunyan-format": "^0.2.1",
