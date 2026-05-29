@@ -8,7 +8,6 @@ import {
 } from 'applicationinsights'
 import { RequestHandler } from 'express'
 import type { ApplicationInfo } from '../applicationInfo'
-import type { EnvelopeTelemetry } from 'applicationinsights/out/Declarations/Contracts'
 
 export function initialiseAppInsights(): void {
   if (process.env.APPLICATIONINSIGHTS_CONNECTION_STRING) {
@@ -26,23 +25,20 @@ export function buildAppInsightsClient(
   if (process.env.APPLICATIONINSIGHTS_CONNECTION_STRING) {
     defaultClient.context.tags['ai.cloud.role'] = overrideName || applicationName
     defaultClient.context.tags['ai.application.ver'] = buildNumber
-    
-    defaultClient.addTelemetryProcessor((envelope: EnvelopeTelemetry, contextObjects?: Record<string, any>) => {
+    defaultClient.addTelemetryProcessor((envelope: Contracts.EnvelopeTelemetry, contextObjects) => {
       const isRequest = envelope?.data?.baseType === Contracts.TelemetryTypeString.Request
       const username = contextObjects?.['http.ServerRequest']?.res?.locals?.user?.username
       if (isRequest && username && envelope.data && envelope.data.baseData) {
-        const props = (envelope.data.baseData as any).properties || {}
-        ;(envelope.data.baseData as any).properties = { username, ...props }
+        const props = envelope.data.baseData.properties || {}
+        // eslint-disable-next-line no-param-reassign
+        envelope.data.baseData.properties = { username, ...props }
       }
-      const { tags, data } = envelope as any
+      const { tags, data } = envelope
       const operationNameOverride = contextObjects?.correlationContext?.customProperties?.getProperty?.('operationName')
-        ?? contextObjects?.correlationContext?.customProperties?.operationName
 
       if (operationNameOverride) {
-        /*  eslint-disable no-param-reassign */
         tags['ai.operation.name'] = operationNameOverride
         data.baseData.name = operationNameOverride
-        /*  eslint-enable no-param-reassign */
       }
       return true
     })
@@ -55,34 +51,12 @@ export function appInsightsMiddleware(): RequestHandler {
   return (req, res, next) => {
     res.prependOnceListener('finish', () => {
       const context = getCorrelationContext()
-      if (context) {
-        const path = req.route?.path || req.originalUrl || req.url
+      if (context && req.route) {
+        const path = req.route?.path
         const pathToReport = Array.isArray(path) ? `"${path.join('" | "')}"` : path
-        const opName = `${req.method} ${pathToReport}`
-        const custom = (context as any).customProperties
-        if (custom) {
-          if (typeof custom.setProperty === 'function') {
-            custom.setProperty('operationName', opName)
-          } else {
-            custom.operationName = opName
-          }
-        } else {
-          ;(context as any).customProperties = { operationName: opName }
-        }
+        context.customProperties.setProperty('operationName', `${req.method} ${pathToReport}`)
       }
     })
     next()
   }
-}
-
-export const addUserDataToRequests = (envelope: EnvelopeTelemetry, contextObjects?: Record<string, any>): boolean => {
-  const isRequest = envelope?.data?.baseType === Contracts.TelemetryTypeString.Request
-  if (!isRequest) return true
-
-  const username = contextObjects?.['http.ServerRequest']?.res?.locals?.user?.username
-  if (username && envelope.data && envelope.data.baseData) {
-    const props = (envelope.data.baseData as any).properties || {}
-    ;(envelope.data.baseData as any).properties = { username, ...props }
-  }
-  return true
 }
