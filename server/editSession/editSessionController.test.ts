@@ -237,6 +237,42 @@ describe('editSessionDateAndTime', () => {
         },
       )
     })
+
+    it('redirects back to the existing edit-session route when the date and time have not changed', async () => {
+      const sessionDetails = editSessionDetailsFactory.build({
+        sessionDate: '3055-12-15 09:00:00.000000',
+        sessionStartTime: {
+          hour: 12,
+          minutes: 59,
+          amOrPm: 'AM',
+        },
+        sessionEndTime: {
+          hour: 2,
+          minutes: 30,
+          amOrPm: 'PM',
+        },
+      })
+      const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'GROUP' })
+      accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
+      accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
+
+      return request(app)
+        .post(`/111/6789/edit-session-date-and-time`)
+        .type('form')
+        .send({
+          'session-details-date': '15/12/3055',
+          'session-details-start-time-hour': '12',
+          'session-details-start-time-minute': '59',
+          'session-details-start-time-part-of-day': 'AM',
+          'session-details-end-time-hour': '2',
+          'session-details-end-time-minute': '30',
+          'session-details-end-time-part-of-day': 'PM',
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain('Redirecting to /111/6789/edit-session')
+        })
+    })
   })
 })
 
