@@ -255,7 +255,7 @@ describe('Edit Group Controller', () => {
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(`Redirecting to /${groupId}/edit-session-date-and-time/reschedule`)
+          expect(res.text).toContain(`Redirecting to /${groupId}/edit-group-days-and-times/reschedule`)
         })
     })
 
@@ -281,7 +281,7 @@ describe('Edit Group Controller', () => {
     })
   })
 
-  describe('GET /:groupId/edit-session-date-and-time/reschedule', () => {
+  describe('GET /:groupId/edit-group-days-and-times/reschedule', () => {
     it('loads the reschedule confirmation page for days and times', async () => {
       const sessionData: Partial<SessionData> = {
         createGroupFormData: {
@@ -307,7 +307,7 @@ describe('Edit Group Controller', () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
       return request(app)
-        .get(`/${groupId}/edit-session-date-and-time/reschedule`)
+        .get(`/${groupId}/edit-group-days-and-times/reschedule`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Rescheduling other sessions')
@@ -317,7 +317,7 @@ describe('Edit Group Controller', () => {
     })
   })
 
-  describe('POST /:groupId/edit-session-date-and-time/reschedule', () => {
+  describe('POST /:groupId/edit-group-days-and-times/reschedule', () => {
     const sessionData: Partial<SessionData> = {
       createGroupFormData: {
         groupCode: 'TEST123',
@@ -347,7 +347,7 @@ describe('Edit Group Controller', () => {
       })
 
       return request(app)
-        .post(`/${groupId}/edit-session-date-and-time/reschedule`)
+        .post(`/${groupId}/edit-group-days-and-times/reschedule`)
         .type('form')
         .send({ 'reschedule-other-sessions': 'true' })
         .expect(302)
@@ -369,7 +369,7 @@ describe('Edit Group Controller', () => {
       })
 
       return request(app)
-        .post(`/${groupId}/edit-session-date-and-time/reschedule`)
+        .post(`/${groupId}/edit-group-days-and-times/reschedule`)
         .type('form')
         .send({ 'reschedule-other-sessions': 'false' })
         .expect(302)
@@ -386,7 +386,7 @@ describe('Edit Group Controller', () => {
     it('returns with errors if reschedule option is not selected', async () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-      return request(app).post(`/${groupId}/edit-session-date-and-time/reschedule`).type('form').send({}).expect(400)
+      return request(app).post(`/${groupId}/edit-group-days-and-times/reschedule`).type('form').send({}).expect(400)
     })
   })
 

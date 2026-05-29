@@ -31,7 +31,7 @@ export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter 
   }
 
   get pageTitle(): string {
-    return "Person's attendance history - Accredited Programmes"
+    return "Person's attendance history"
   }
 
   get tableDescription(): string {

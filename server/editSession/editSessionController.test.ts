@@ -154,7 +154,7 @@ describe('editSessionDateAndTime', () => {
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain(`Redirecting to /111/6789/edit-session-date-and-time/reschedule`)
+          expect(res.text).toContain(`Redirecting to /111/6789/edit-group-days-and-times/reschedule`)
         })
     })
   })
@@ -176,7 +176,7 @@ describe('submitEditSessionDateAndTime', () => {
       },
     },
   }
-  describe('GET /:groupId/:sessionId/edit-session-date-and-time/reschedule', () => {
+  describe('GET /:groupId/:sessionId/edit-group-days-and-times/reschedule', () => {
     it('should fetch session details with correct parameters and load page correctly', async () => {
       const sessionDetails = rescheduleSessionDetailsFactory.build()
       accreditedProgrammesManageAndDeliverService.getRescheduleSessionDetails.mockResolvedValue(sessionDetails)
@@ -184,7 +184,7 @@ describe('submitEditSessionDateAndTime', () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
       await request(app)
-        .get(`/111/6789/edit-session-date-and-time/reschedule`)
+        .get(`/111/6789/edit-group-days-and-times/reschedule`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Rescheduling later sessions')
@@ -196,7 +196,7 @@ describe('submitEditSessionDateAndTime', () => {
     })
   })
 
-  describe('POST /:groupId/:sessionId/edit-session-date-and-time/reschedule', () => {
+  describe('POST /:groupId/:sessionId/edit-group-days-and-times/reschedule', () => {
     it('should submit the edit session details correctly', async () => {
       const sessionDetails = rescheduleSessionDetailsFactory.build()
       accreditedProgrammesManageAndDeliverService.getRescheduleSessionDetails.mockResolvedValue(sessionDetails)
@@ -208,7 +208,7 @@ describe('submitEditSessionDateAndTime', () => {
       })
 
       return request(app)
-        .post(`/111/6789/edit-session-date-and-time/reschedule`)
+        .post(`/111/6789/edit-group-days-and-times/reschedule`)
         .type('form')
         .send({
           'reschedule-other-sessions': 'false',
