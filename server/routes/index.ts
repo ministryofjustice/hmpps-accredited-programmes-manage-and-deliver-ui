@@ -26,6 +26,7 @@ import HomeController from '../home/homeController'
 import SessionNotesController from '../sessionNotes/sessionNotesController'
 import AddAvailabilityController from '../availabilityAndMotivation/addAvailability/addAvailabilityController'
 import EditGroupController from '../createGroup/editGroupController'
+import OnboardingController from '../onboarding/onboardingController'
 
 export default function routes({ accreditedProgrammesManageAndDeliverService }: Services): Router {
   const router = Router()
@@ -61,6 +62,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const addAvailabilityController = new AddAvailabilityController(accreditedProgrammesManageAndDeliverService)
   const editGroupController = new EditGroupController(accreditedProgrammesManageAndDeliverService)
   const reportingController = new ReportingController(accreditedProgrammesManageAndDeliverService)
+  const onboardingController = new OnboardingController(accreditedProgrammesManageAndDeliverService)
 
   const reportingRole = 'ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_REPORTING'
 
@@ -92,6 +94,14 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     authorisationMiddleware([reportingRole]),
     asyncMiddleware(async (req, res) => {
       await reportingController.downloadGroupSizeReport(req, res)
+    }),
+  )
+
+  router.get(
+    '/onboarding/referrals',
+    authorisationMiddleware([reportingRole]),
+    asyncMiddleware(async (req, res) => {
+      await onboardingController.fetchPersonalDetailsForReferrals(req, res)
     }),
   )
 
