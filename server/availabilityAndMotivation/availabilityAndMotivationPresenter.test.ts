@@ -22,7 +22,7 @@ describe('AvailabilityAndMotivationPresenter', () => {
         AvailabilityAndMotivationPageSelection.MotivationBackgroundAndNonAssociationsTab,
       )
 
-      expect(presenter.pageTitle).toBe('Motivation, background and non-associations - Availability and motivation')
+      expect(presenter.pageTitle).toBe('Add motivation, background and non-associations - Availability and motivation')
     })
 
     it('returns the default title for Availability tab', () => {
