@@ -15,7 +15,7 @@ export default class AddMotivationBackgroundAndNonAssociationsNotesPresenter {
   }
 
   get pageTitle(): string {
-    return 'Motivation, background and non-associations - Availability and motivation'
+    return 'Add motivation, background and non-associations - Availability and motivation'
   }
 
   get text() {
