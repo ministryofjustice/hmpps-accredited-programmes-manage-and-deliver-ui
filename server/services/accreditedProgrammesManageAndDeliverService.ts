@@ -98,6 +98,29 @@ export interface IAccreditedProgrammesManageAndDeliverService {
 export default class AccreditedProgrammesManageAndDeliverService implements IAccreditedProgrammesManageAndDeliverService {
   constructor(private readonly hmppsAuthClientBuilder: RestClientBuilderWithoutToken<HmppsAuthClient>) {}
 
+  private async downloadCsvReport(
+    username: ExpressUsername,
+    path: string,
+    query: Record<string, string | undefined>,
+  ): Promise<{
+    csv: string
+    headers: { [key: string]: string }
+  }> {
+    const restClient = await this.createRestClientFromUsername(username)
+    const response = await restClient.get<SuperAgentResponse>({
+      path,
+      headers: { Accept: 'text/csv' },
+      query,
+      responseType: 'text',
+      raw: true,
+    })
+
+    return {
+      csv: response.body,
+      headers: response.headers,
+    }
+  }
+
   async createRestClientFromUsername(username: ExpressUsername): Promise<RestClient> {
     const hmppsAuthClient = this.hmppsAuthClientBuilder()
     const systemToken = await hmppsAuthClient.getSystemClientToken(username)
@@ -160,19 +183,47 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
     csv: string
     headers: { [key: string]: string }
   }> {
-    const restClient = await this.createRestClientFromUsername(username)
-    const response = await restClient.get<SuperAgentResponse>({
-      path: '/reporting/group-size.csv',
-      headers: { Accept: 'text/csv' },
-      query: { groupStartedSince },
-      responseType: 'text',
-      raw: true,
-    })
+    return this.downloadCsvReport(username, '/reporting/group-size.csv', { groupStartedSince })
+  }
 
-    return {
-      csv: response.body,
-      headers: response.headers,
-    }
+  async getDosageReport(
+    username: ExpressUsername,
+    query: {
+      referralsCreatedSince?: string
+      referralsCompletedAfter?: string
+    },
+  ): Promise<{
+    csv: string
+    headers: { [key: string]: string }
+  }> {
+    return this.downloadCsvReport(username, '/reporting/dosage.csv', query)
+  }
+
+  async getSessionRateReport(
+    username: ExpressUsername,
+    query: {
+      groupsFinishedAfter?: string
+      groupsStartedAfter?: string
+    },
+  ): Promise<{
+    csv: string
+    headers: { [key: string]: string }
+  }> {
+    return this.downloadCsvReport(username, '/reporting/session-rate.csv', query)
+  }
+
+  async getFacilitatorContinuityReport(
+    username: ExpressUsername,
+    query: {
+      groupsCreatedSince?: string
+      firstSessionAtOrAfter?: string
+      lastSessionAtOrBefore?: string
+    },
+  ): Promise<{
+    csv: string
+    headers: { [key: string]: string }
+  }> {
+    return this.downloadCsvReport(username, '/reporting/facilitator-continuity.csv', query)
   }
 
   async fetchPersonalDetailsForReferrals(

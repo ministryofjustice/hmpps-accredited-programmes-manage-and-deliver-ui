@@ -662,6 +662,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/reporting/session-rate.csv': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Download session rate reporting data as CSV
+     * @description Returns weekly session rate data where at least one group filter is provided.
+     */
+    get: operations['getSessionRateReport']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/reporting/group-size.csv': {
     parameters: {
       query?: never
@@ -674,6 +694,46 @@ export interface paths {
      * @description Returns group size reporting data where the earliest possible start date is after groupStartedSince.
      */
     get: operations['getGroupSizeReport']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/reporting/facilitator-continuity.csv': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Download facilitator continuity reporting data as CSV
+     * @description Returns facilitator continuity reporting data for happened sessions where at least one filter is provided.
+     */
+    get: operations['getGroupFacilitatorContinuityReport']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/reporting/dosage.csv': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Download dosage reporting data as CSV
+     * @description Returns dosage reporting data for Building Choices referrals filtered by either creation date or completed date.
+     */
+    get: operations['getDosageReport']
     put?: never
     post?: never
     delete?: never
@@ -3058,6 +3118,17 @@ export interface components {
       RiskScore: components['schemas']['RiskScore']
       /** @example ['impulsivity is missing '] */
       validationErrors: string[]
+      /**
+       * @description Whether the LDC (Learning Disabilities and Challenges) threshold is met
+       * @example false
+       */
+      hasLdc: boolean
+      /**
+       * Format: int32
+       * @description The LDC (Learning Disabilities and Challenges) score
+       * @example 2
+       */
+      ldcScore?: number | null
     }
     RelationshipDomainScore: {
       /** @enum {string|null} */
@@ -3171,10 +3242,10 @@ export interface components {
       offset?: number
       sort?: components['schemas']['SortObject']
       /** Format: int32 */
-      pageSize?: number
-      /** Format: int32 */
       pageNumber?: number
       paged?: boolean
+      /** Format: int32 */
+      pageSize?: number
       unpaged?: boolean
     }
     ReferralCaseListItem: {
@@ -6587,6 +6658,55 @@ export interface operations {
       }
     }
   }
+  getSessionRateReport: {
+    parameters: {
+      query?: {
+        /**
+         * @description Only include groups with final session date on or after this date.
+         * @example 2026-05-01
+         */
+        groupsFinishedAfter?: string
+        /**
+         * @description Only include groups with earliest possible start date on or after this date.
+         * @example 2026-05-01
+         */
+        groupsStartedAfter?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description CSV file containing session rate reporting data. */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'text/csv': string
+        }
+      }
+      /** @description Invalid query parameters. At least one of groupsFinishedAfter or groupsStartedAfter must be provided. */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'text/csv': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'text/csv': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getGroupSizeReport: {
     parameters: {
       query: {
@@ -6612,6 +6732,109 @@ export interface operations {
         }
       }
       /** @description Invalid or non-past groupStartedSince query parameter. */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'text/csv': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'text/csv': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getGroupFacilitatorContinuityReport: {
+    parameters: {
+      query?: {
+        /**
+         * @description Only include groups created at or after this date-time.
+         * @example 2026-05-01T00:00:00
+         */
+        groupsCreatedSince?: string
+        /**
+         * @description Only include groups where first happened session is at or after this date-time.
+         * @example 2026-05-01T00:00:00
+         */
+        firstSessionAtOrAfter?: string
+        /**
+         * @description Only include groups where last happened session is at or before this date-time.
+         * @example 2026-06-30T23:59:59
+         */
+        lastSessionAtOrBefore?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description CSV file containing facilitator continuity reporting data. */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'text/csv': string
+        }
+      }
+      /** @description Invalid query parameters, or no query parameters provided. */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'text/csv': string
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'text/csv': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getDosageReport: {
+    parameters: {
+      query?: {
+        /**
+         * @description Only include referrals created after this date.
+         * @example 2026-05-01
+         */
+        referralsCreatedSince?: string
+        /**
+         * @description Only include referrals with completed status set after this date.
+         * @example 2026-05-01
+         */
+        referralsCompletedAfter?: string
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description CSV file containing dosage reporting data. */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'text/csv': string
+        }
+      }
+      /** @description Invalid query parameters. At least one of referralsCreatedSince or referralsCompletedAfter must be provided. */
       400: {
         headers: {
           [name: string]: unknown
