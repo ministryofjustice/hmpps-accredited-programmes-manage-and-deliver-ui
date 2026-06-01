@@ -27,10 +27,11 @@ export function buildAppInsightsClient(
     defaultClient.context.tags['ai.application.ver'] = buildNumber
     defaultClient.addTelemetryProcessor((envelope: Contracts.EnvelopeTelemetry, contextObjects) => {
       const isRequest = envelope?.data?.baseType === Contracts.TelemetryTypeString.Request
-      
+
       if (isRequest && envelope.data && envelope.data.baseData) {
-        const username = contextObjects?.['http.ServerRequest']?.res?.locals?.user?.username || "Unknown"
-        const regionDescription = contextObjects?.['http.ServerRequest']?.res?.locals?.session?.userRegion?.regionDescription || "Unknown"
+        const username = contextObjects?.['http.ServerRequest']?.res?.locals?.user?.username || 'Unknown'
+        const regionDescription =
+          contextObjects?.['http.ServerRequest']?.res?.locals?.session?.userRegion?.regionDescription || 'Unknown'
 
         const props = envelope.data.baseData.properties || {}
         // eslint-disable-next-line no-param-reassign
