@@ -31,7 +31,7 @@ export default class AvailabilityAndMotivationPresenter extends ReferralLayoutPr
       case AvailabilityAndMotivationPageSelection.LocationTab:
         return 'Location - Availability and motivation'
       case AvailabilityAndMotivationPageSelection.MotivationBackgroundAndNonAssociationsTab:
-        return 'Add motivation, background and non-associations - Availability and motivation'
+        return 'Motivation, background and non-associations - Availability and motivation'
       default:
         return 'Availability - Availability and motivation'
     }
