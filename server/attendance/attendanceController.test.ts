@@ -199,6 +199,29 @@ describe('showRecordAttendancePages', () => {
         })
     })
 
+    it('redirects to catch-up session notes URL after POST when single referral ID', async () => {
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      const bffData = recordSessionAttendanceFactory.build({
+        sessionModule: 'Pre-group one-to-one',
+        isCatchup: true,
+      })
+      bffData.people = [bffData.people[0]]
+
+      accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
+
+      const { referralId } = bffData.people[0]
+
+      await request(app)
+        .post('/111/6789/record-attendance')
+        .type('form')
+        .send({
+          [`attendance-${referralId}`]: 'ATTC',
+        })
+        .expect(302)
+        .expect('Location', '/111/6789/referral/referral1/pre-group-one-to-one-catch-up-session-notes')
+    })
+
     it('should fetch session details with correct parameters and load page correctly for a multiple attendees', async () => {
       sessionData = {
         editSessionAttendance: {
