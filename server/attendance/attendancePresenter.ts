@@ -15,11 +15,13 @@ export default class AttendancePresenter {
   }
 
   get text() {
+    const catchupAppend = this.recordAttendanceBffData.isCatchup ? ' catch-up' : ''
+
     return {
       pageHeading:
         this.recordAttendanceBffData.people.length === 1
-          ? `Did ${this.recordAttendanceBffData.people[0].name} attend ${this.recordAttendanceBffData.sessionModule}?`
-          : `Record attendance for ${this.recordAttendanceBffData.sessionModule}`,
+          ? `Did ${this.recordAttendanceBffData.people[0].name} attend ${this.recordAttendanceBffData.sessionModule}${catchupAppend}?`
+          : `Record attendance for ${this.recordAttendanceBffData.sessionModule}${catchupAppend}`,
       headingCaption: `Record attendance and progress`,
     }
   }

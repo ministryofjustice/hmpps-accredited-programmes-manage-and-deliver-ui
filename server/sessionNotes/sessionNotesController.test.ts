@@ -94,6 +94,7 @@ describe('SessionNotesController', () => {
         sessionTitle: 'Introduction to Building Choices',
         sessionModule: 'Getting started 1',
         groupRegionName: 'North East',
+        isCatchup: false,
         people: [
           {
             referralId: 'referral-123',
@@ -158,6 +159,7 @@ describe('SessionNotesController', () => {
         sessionTitle: 'Introduction to Building Choices',
         sessionModule: 'Getting started 1',
         groupRegionName: 'North East',
+        isCatchup: false,
         people: [
           {
             referralId: 'referral-123',
@@ -325,6 +327,7 @@ describe('SessionNotesController', () => {
         sessionTitle: 'Introduction to Building Choices',
         sessionModule: 'Getting started 1',
         groupRegionName: 'North East',
+        isCatchup: false,
         people: [
           {
             referralId: 'referral-123',
@@ -376,6 +379,7 @@ describe('SessionNotesController', () => {
         sessionTitle: 'Introduction to Building Choices',
         sessionModule: 'Getting started 1',
         groupRegionName: 'North East',
+        isCatchup: false,
         people: [
           {
             referralId: 'referral-123',

@@ -47,5 +47,6 @@ export default PniScoreFactory.define(() => ({
     classification: 'MEDIUM_RISK',
   },
   validationErrors: [''],
+  hasLdc: false,
   overallIntensity: 'HIGH' as PniScore['overallIntensity'],
 }))
