@@ -28,7 +28,7 @@ export function buildAppInsightsClient(
     defaultClient.addTelemetryProcessor((envelope: Contracts.EnvelopeTelemetry, contextObjects) => {
       const isRequest = envelope?.data?.baseType === Contracts.TelemetryTypeString.Request
 
-      if (isRequest && envelope.data && envelope.data.baseData) {
+      if (isRequest && envelope?.data?.baseData) {
         const username = contextObjects?.['http.ServerRequest']?.res?.locals?.user?.username || 'Unknown'
         const regionDescription =
           contextObjects?.['http.ServerRequest']?.res?.locals?.session?.userRegion?.regionDescription || 'Unknown'
