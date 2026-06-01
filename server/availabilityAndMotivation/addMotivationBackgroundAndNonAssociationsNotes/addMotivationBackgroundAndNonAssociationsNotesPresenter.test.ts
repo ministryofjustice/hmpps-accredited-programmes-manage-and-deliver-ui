@@ -30,7 +30,7 @@ describe('AddMotivationBackgroundAndNonAssociationsNotesPresenter', () => {
       motivationBackgroundAndNonAssociations,
     )
 
-    expect(presenter.pageTitle).toEqual('Motivation, background and non-associations - Availability and motivation')
+    expect(presenter.pageTitle).toEqual('Add motivation, background and non-associations - Availability and motivation')
   })
 
   it('should return the correct form action link', () => {
