@@ -49,7 +49,7 @@ export default class AttendanceSessionNotesPresenter {
   }
 
   get pageTitle(): string {
-    return `Add ${this.sessionTitle} session notes`
+    return this.isCatchup ? `Add ${this.sessionTitle} catch-up session notes` : `Add ${this.sessionTitle} session notes`
   }
 
   get sessionTitle() {

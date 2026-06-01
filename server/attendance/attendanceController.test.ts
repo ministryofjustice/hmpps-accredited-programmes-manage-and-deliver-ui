@@ -128,6 +128,37 @@ describe('showRecordAttendancePages', () => {
         ['referral2'],
       )
     })
+
+    it('redirects to a catch-up session notes URL when referralId query is present for catch-up sessions', async () => {
+      sessionData = {
+        editSessionAttendance: {
+          referralIds: ['referral1', 'referral2'],
+          attendees: [
+            { referralId: 'referral1', outcomeCode: 'ATTC' },
+            { referralId: 'referral2', outcomeCode: 'ATTC' },
+          ],
+        },
+      }
+
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      const bffData = recordSessionAttendanceFactory.build({
+        sessionModule: 'Pre-group one-to-one',
+        isCatchup: true,
+      })
+      accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
+
+      await request(app)
+        .get('/111/6789/record-attendance?referralId=referral2')
+        .expect(302)
+        .expect('Location', '/111/6789/referral/referral2/pre-group-one-to-one-catch-up-session-notes')
+
+      expect(accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData).toHaveBeenCalledWith(
+        'user1',
+        '6789',
+        ['referral2'],
+      )
+    })
   })
 
   describe('POST /:groupId/:sessionId/record-attendance', () => {

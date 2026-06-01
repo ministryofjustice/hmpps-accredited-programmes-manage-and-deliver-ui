@@ -51,8 +51,8 @@ export default class AttendanceController extends BaseController {
     )
 
     if (req.method === 'GET' && referralIdFromQuery) {
-      const sessionModule = convertToUrlFriendlyKebabCase(recordAttendanceBffData.sessionModule)
-      return res.redirect(this.notesPageUri(groupId, sessionId, referralIdFromQuery, sessionModule))
+      const notesPageGroupTitle = this.notesPageGroupTitle(recordAttendanceBffData)
+      return res.redirect(this.notesPageUri(groupId, sessionId, referralIdFromQuery, notesPageGroupTitle))
     }
 
     const recordAttendanceDataWithSessionSelections: RecordSessionAttendance = {
@@ -96,8 +96,8 @@ export default class AttendanceController extends BaseController {
             sessionNotes: existingPerson?.sessionNotes ?? attendee.sessionNotes,
           }
         })
-        const sessionModule = convertToUrlFriendlyKebabCase(recordAttendanceBffData.sessionModule)
-        return res.redirect(this.notesPageUri(groupId, sessionId, referralIds[0], sessionModule))
+        const notesPageGroupTitle = this.notesPageGroupTitle(recordAttendanceBffData)
+        return res.redirect(this.notesPageUri(groupId, sessionId, referralIds[0], notesPageGroupTitle))
       }
     }
 
@@ -131,7 +131,7 @@ export default class AttendanceController extends BaseController {
       referralIds,
     )
 
-    const theGroupTitle = convertToUrlFriendlyKebabCase(recordAttendanceBffData.sessionModule)
+    const theGroupTitle = this.notesPageGroupTitle(recordAttendanceBffData)
 
     if (!groupTitle && req.method === 'GET') {
       return res.redirect(this.notesPageUri(groupId, sessionId, referralId, theGroupTitle))
@@ -307,6 +307,12 @@ export default class AttendanceController extends BaseController {
 
   private notesPageUri(groupId: string, sessionId: string, referralId: string, groupTitle: string): string {
     return `/${groupId}/${sessionId}/referral/${referralId}/${groupTitle}-session-notes`
+  }
+
+  private notesPageGroupTitle(recordAttendanceBffData: RecordSessionAttendance): string {
+    const sessionModuleSlug = convertToUrlFriendlyKebabCase(recordAttendanceBffData.sessionModule)
+
+    return recordAttendanceBffData.isCatchup ? `${sessionModuleSlug}-catch-up` : sessionModuleSlug
   }
 
   private resolveOutcomeCodeFromPerson(
