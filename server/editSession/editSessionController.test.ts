@@ -110,6 +110,34 @@ describe('editSession', () => {
       .expect(302)
       .expect('Location', `/${groupId}/${sessionId}/getting-started-1-attendance`)
   })
+
+  it('redirects to catch-up attendance route when session is catch-up', async () => {
+    const groupId = '12345'
+    const sessionId = '6789'
+    const sessionDetails = sessionDetailsFactory.build({
+      pageTitle: 'Managing myself 4',
+      isCatchup: true,
+      attendanceAndSessionNotes: [
+        {
+          referralId: 'referral-123',
+          name: 'Alex River',
+          crn: 'S688890821',
+          attendance: 'Attended',
+          sessionNotes: 'Notes recorded',
+        },
+      ],
+    })
+    accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
+
+    await request(app)
+      .post(`/${groupId}/${sessionId}/edit-session`)
+      .type('form')
+      .send({
+        'multi-select-selected': ['referral-123'],
+      })
+      .expect(302)
+      .expect('Location', `/${groupId}/${sessionId}/managing-myself-4-catch-up-attendance`)
+  })
 })
 
 describe('editSessionDateAndTime', () => {

@@ -51,6 +51,8 @@ export default class EditSessionController extends BaseController {
     const moduleName = convertToUrlFriendlyKebabCase(
       getEditSessionRouteTitle(sessionDetails.pageTitle, sessionDetails.sessionType),
     )
+    const attendanceSlug =
+      sessionDetails.isCatchup && !moduleName.endsWith('-catch-up') ? `${moduleName}-catch-up` : moduleName
     req.session.originPage = req.path
 
     const data = await new EditSessionForm(req).attendanceAndSessionNotesData()
@@ -63,7 +65,7 @@ export default class EditSessionController extends BaseController {
           referralIds: data.paramsForUpdate.referralIds,
           source: 'edit-session',
         }
-        return res.redirect(`/${groupId}/${sessionId}/${moduleName}-attendance`)
+        return res.redirect(`/${groupId}/${sessionId}/${attendanceSlug}-attendance`)
       }
     }
 
