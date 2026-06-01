@@ -4,6 +4,7 @@ import { PniScore } from '@manage-and-deliver-api'
 class PniScoreFactory extends Factory<PniScore> {}
 
 export default PniScoreFactory.define(() => ({
+  hasLdc: false,
   domainScores: {
     RelationshipDomainScore: {
       individualRelationshipScores: {

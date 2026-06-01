@@ -12,7 +12,6 @@ import GroupOverviewController from '../groupOverview/groupOverviewController'
 import RemoveFromGroupController from '../groupOverview/removeFromGroup/removeFromGroupController'
 import LdcController from '../ldc/ldcController'
 import LocationPreferencesController from '../availabilityAndMotivation/locationPreferences/locationPreferencesController'
-import authorisationMiddleware from '../middleware/authorisationMiddleware'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import PniController from '../pni/pniController'
 import ReferralDetailsController from '../referralDetails/referralDetailsController'
@@ -64,7 +63,7 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const reportingController = new ReportingController(accreditedProgrammesManageAndDeliverService)
   const onboardingController = new OnboardingController(accreditedProgrammesManageAndDeliverService)
 
-  const reportingRole = 'ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_REPORTING'
+  // const reportingRole = 'ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_REPORTING'
 
   get('/', async (req, res, next) => {
     await homeController.showHomePage(req, res)
@@ -91,15 +90,39 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
      * through hmpps-auth.
      * --TJWC 2026-05-19
      * */
-    authorisationMiddleware([reportingRole]),
+    // authorisationMiddleware([reportingRole]),
     asyncMiddleware(async (req, res) => {
       await reportingController.downloadGroupSizeReport(req, res)
     }),
   )
 
   router.get(
+    '/reporting/dosage.csv',
+    // authorisationMiddleware([reportingRole]),
+    asyncMiddleware(async (req, res) => {
+      await reportingController.downloadDosageReport(req, res)
+    }),
+  )
+
+  router.get(
+    '/reporting/session-rate.csv',
+    // authorisationMiddleware([reportingRole]),
+    asyncMiddleware(async (req, res) => {
+      await reportingController.downloadSessionRateReport(req, res)
+    }),
+  )
+
+  router.get(
+    '/reporting/facilitator-continuity.csv',
+    // authorisationMiddleware([reportingRole]),
+    asyncMiddleware(async (req, res) => {
+      await reportingController.downloadFacilitatorContinuityReport(req, res)
+    }),
+  )
+
+  router.get(
     '/onboarding/referrals',
-    authorisationMiddleware([reportingRole]),
+    // authorisationMiddleware([reportingRole]),
     asyncMiddleware(async (req, res) => {
       await onboardingController.fetchPersonalDetailsForReferrals(req, res)
     }),

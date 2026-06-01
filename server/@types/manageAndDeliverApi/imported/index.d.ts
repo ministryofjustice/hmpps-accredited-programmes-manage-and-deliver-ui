@@ -3247,6 +3247,12 @@ export interface components {
       pageNumber?: number
       /** Format: int32 */
       pageSize?: number
+      /** Format: int32 */
+      pageNumber?: number
+      paged?: boolean
+      /** Format: int32 */
+      pageSize?: number
+      unpaged?: boolean
     }
     ReferralCaseListItem: {
       /** Format: uuid */
