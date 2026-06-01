@@ -28,13 +28,19 @@ export default class AttendanceSessionNotesPresenter {
     return !this.hasExistingNotes
   }
 
+  get isCatchup(): boolean {
+    return this.recordAttendanceBffData?.isCatchup ?? false
+  }
+
   get text() {
     const hintText =
       this.selectedAttendanceCode === 'AFTC' ? 'Include details of why the person attended but failed to comply.' : ''
 
     return {
       headingCaption: 'Record attendance and progress',
-      pageHeading: `${this.personName}: ${this.sessionTitle} session notes`,
+      pageHeading: this.isCatchup
+        ? `${this.personName}: ${this.sessionTitle} catch-up session notes`
+        : `${this.personName}: ${this.sessionTitle} session notes`,
       recordsSessionNotesCharacterCount: {
         label: 'Add session notes',
         hint: hintText,

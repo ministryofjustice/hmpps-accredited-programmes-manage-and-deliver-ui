@@ -8,6 +8,7 @@ describe('AttendanceSessionNotesPresenter', () => {
     notesValue = '',
     backLink = '/back-link',
     isLastReferral = false,
+    isCatchup,
     validationError = null,
     referralId,
     useNullBffData = false,
@@ -16,11 +17,15 @@ describe('AttendanceSessionNotesPresenter', () => {
     notesValue?: string
     backLink?: string
     isLastReferral?: boolean
+    isCatchup?: boolean
     validationError?: FormValidationError | null
     referralId?: string
     useNullBffData?: boolean
   } = {}) => {
     const bffData = recordSessionAttendanceFactory.build()
+    if (typeof isCatchup === 'boolean') {
+      bffData.isCatchup = isCatchup
+    }
     const selectedReferralId = referralId ?? bffData.people[0].referralId
 
     return new AttendanceSessionNotesPresenter(
@@ -122,6 +127,12 @@ describe('AttendanceSessionNotesPresenter', () => {
       const presenter = buildPresenter({ referralId: 'missing-referral-id' })
 
       expect(presenter.personName).toBe('')
+    })
+
+    it('appends catch-up for catch-up sessions', () => {
+      const presenter = buildPresenter({ isCatchup: true })
+
+      expect(presenter.text.pageHeading).toContain('catch-up session notes')
     })
   })
 
