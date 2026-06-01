@@ -239,19 +239,6 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
     })) as FetchPersonalDetailsResponse
   }
 
-  async fetchPersonalDetailsForReferrals(
-    username: ExpressUsername,
-    referralIds: FetchPersonalDetailsRequest['referralIds'],
-  ): Promise<FetchPersonalDetailsResponse> {
-    const restClient = await this.createRestClientFromUsername(username)
-
-    return (await restClient.post({
-      path: '/onboarding/referrals',
-      headers: { Accept: 'application/json' },
-      data: { referralIds },
-    })) as FetchPersonalDetailsResponse
-  }
-
   async getGroupAllocatedMembers(
     username: ExpressUsername,
     groupId: string,
