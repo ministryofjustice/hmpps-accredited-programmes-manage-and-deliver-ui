@@ -240,8 +240,9 @@ export default class EditSessionController extends BaseController {
           sessionEndTime: data.paramsForUpdate.sessionEndTime,
         }
 
-        // GROUP sessions and ONE_TO_ONE catch-ups go to the reschedule page
-        if (sessionAttendees.sessionType === 'GROUP' && !sessionAttendees.isCatchup) {
+        // GROUP sessions that have not yet ended go to the reschedule page.
+        // Ended sessions submit directly so users are not asked to reschedule later sessions.
+        if (sessionAttendees.sessionType === 'GROUP' && !sessionAttendees.isCatchup && !isSessionEnded) {
           return res.redirect(`/${groupId}/${sessionId}/edit-group-days-and-times/reschedule`)
         }
 
