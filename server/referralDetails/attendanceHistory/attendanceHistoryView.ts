@@ -1,5 +1,5 @@
 import AttendanceHistoryPresenter from './attendanceHistoryPresenter'
-import { TableArgs } from '../../utils/govukFrontendTypes'
+import { InsetTextArgs, TableArgs } from '../../utils/govukFrontendTypes'
 
 export default class AttendanceHistoryView {
   constructor(private readonly presenter: AttendanceHistoryPresenter) {}
@@ -48,6 +48,12 @@ export default class AttendanceHistoryView {
     }
   }
 
+  get insetText(): InsetTextArgs {
+    return {
+      text: `${this.presenter.attendanceHistory.popName}’s referral has been transferred from Interventions Manager. For attendance history before the transfer, view NDelius.`,
+    }
+  }
+
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       'attendanceHistory/attendanceHistory',
@@ -59,6 +65,8 @@ export default class AttendanceHistoryView {
         successMessageSummary: this.presenter.successMessageSummary,
         groupTableArgs: this.groupTableArgs,
         showAttendanceHistoryTable: this.presenter.attendanceHistory.attendanceHistory.length > 0,
+        isTransferredFromIM: this.presenter.isTransferredFromIM,
+        insetText: this.insetText,
       },
     ]
   }

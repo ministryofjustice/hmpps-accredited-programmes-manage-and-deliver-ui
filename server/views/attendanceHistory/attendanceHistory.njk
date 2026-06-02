@@ -1,7 +1,7 @@
 {% extends "../partials/layout.njk" %}
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
 {% from "govuk/components/table/macro.njk" import govukTable %}
-
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 {% set pageTitle = pageTitle + " - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -18,6 +18,9 @@
         {% endif %}
           {% if presenter.isLdcUpdated %}
         {{ mojAlert(presenter.ldcUpdatedSuccessMessageArgs) }}
+        {% endif %}
+        {% if isTransferredFromIM %}
+          {{ govukInsetText(insetText) }}
         {% endif %}
       </div>
     </div>

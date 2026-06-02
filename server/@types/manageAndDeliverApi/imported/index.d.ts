@@ -749,6 +749,10 @@ export interface paths {
       path?: never
       cookie?: never
     }
+    /**
+     * Retrieve status change details for a referral
+     * @description Returns details of the most recent status change for a given referral. Secured with a read-only role for use by external services.
+     */
     get: operations['getStatusChangeDetails']
     put?: never
     post?: never
@@ -765,6 +769,10 @@ export interface paths {
       path?: never
       cookie?: never
     }
+    /**
+     * Retrieve completion data for a referral
+     * @description Returns completion data for a given referral. Secured with a read-only role for use by external services.
+     */
     get: operations['getCompletionData']
     put?: never
     post?: never
@@ -2674,8 +2682,12 @@ export interface components {
       /** @example Alcohol dependency affecting employment and relationships */
       alcoholIssuesDetails?: string | null
     }
+    /** @description Details of a referral status change event */
     ReferralStatusInfo: {
-      /** @enum {string} */
+      /**
+       * @description The new status of the referral
+       * @enum {string}
+       */
       newStatus:
         | 'AWAITING_ALLOCATION'
         | 'AWAITING_ASSESSMENT'
@@ -2689,17 +2701,36 @@ export interface components {
         | 'SCHEDULED'
         | 'SUITABLE_BUT_NOT_READY'
         | 'WITHDRAWN'
-      /** @enum {string} */
+      /**
+       * @description The type of entity from which this status change was sourced
+       * @enum {string}
+       */
       sourcedFromEntityType: 'REQUIREMENT' | 'LICENCE_CONDITION'
-      /** Format: int64 */
+      /**
+       * Format: int64
+       * @description The ID of the entity from which this status change was sourced
+       */
       sourcedFromEntityId: number
+      /** @description Optional notes associated with the status change */
       notes?: string | null
+      /** @description A human-readable description of the status change */
       description: string
     }
+    /** @description Completion data for a referral */
     ReferralCompletionData: {
-      requirementId: string
-      /** Format: date-time */
-      requirementCompletedAt: string
+      /** @description The ID of the requirement or licence-condition associated with this referral */
+      licReqId: string
+      /**
+       * Format: date-time
+       * @description The date and time at which the requirement was completed
+       * @example 2025-04-01T09:30:00.000Z
+       */
+      licReqCompletedAt: string
+      /**
+       * @description The type of entity from which this status change was sourced
+       * @enum {string}
+       */
+      sourcedFromEntityType: 'REQUIREMENT' | 'LICENCE_CONDITION'
     }
     ReferralDetails: {
       /**
@@ -3232,9 +3263,9 @@ export interface components {
       first?: boolean
       last?: boolean
       sort?: components['schemas']['SortObject']
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageableObject: {
@@ -3242,10 +3273,10 @@ export interface components {
       offset?: number
       sort?: components['schemas']['SortObject']
       /** Format: int32 */
-      pageSize?: number
-      /** Format: int32 */
       pageNumber?: number
       paged?: boolean
+      /** Format: int32 */
+      pageSize?: number
       unpaged?: boolean
     }
     ReferralCaseListItem: {
@@ -3736,6 +3767,8 @@ export interface components {
        * @example a1b2c3d4-e5f6-7890-abcd-ef1234567890
        */
       currentlyAllocatedGroupId?: string | null
+      /** @description The user that created referral */
+      referralCreatedBy: string
       /** @description List of sessions with attendance information */
       attendanceHistory: components['schemas']['AttendanceHistorySession'][]
     }
@@ -3903,9 +3936,9 @@ export interface components {
       first?: boolean
       last?: boolean
       sort?: components['schemas']['SortObject']
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     GroupItem: {
@@ -3998,9 +4031,9 @@ export interface components {
       first?: boolean
       last?: boolean
       sort?: components['schemas']['SortObject']
+      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
@@ -4621,13 +4654,13 @@ export interface operations {
           'application/json': components['schemas']['EditSessionDateAndTimeResponse']
         }
       }
-      /** @description Bad Request */
+      /** @description Bad request - The session session duration cannot be longer than originally scheduled */
       400: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          '*/*': components['schemas']['ErrorResponse']
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorized */
@@ -6861,13 +6894,14 @@ export interface operations {
       query?: never
       header?: never
       path: {
+        /** @description The id (UUID) of a referral */
         referralId: string
       }
       cookie?: never
     }
     requestBody?: never
     responses: {
-      /** @description OK */
+      /** @description Status change details for the referral */
       200: {
         headers: {
           [name: string]: unknown
@@ -6885,6 +6919,33 @@ export interface operations {
           '*/*': components['schemas']['ErrorResponse']
         }
       }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden. The client is not authorised to access this referral. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The referral does not exist */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
     }
   }
   getCompletionData: {
@@ -6892,13 +6953,14 @@ export interface operations {
       query?: never
       header?: never
       path: {
+        /** @description The id (UUID) of a referral */
         referralId: string
       }
       cookie?: never
     }
     requestBody?: never
     responses: {
-      /** @description OK */
+      /** @description Completion data for the referral */
       200: {
         headers: {
           [name: string]: unknown
@@ -6909,6 +6971,33 @@ export interface operations {
       }
       /** @description Bad Request */
       400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden. The client is not authorised to access this referral. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The referral does not exist */
+      404: {
         headers: {
           [name: string]: unknown
         }
