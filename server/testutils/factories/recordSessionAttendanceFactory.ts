@@ -53,6 +53,7 @@ export default RecordSessionAttendanceFactory.define(({ sequence }) => {
     sessionTitle: `Introduction to Building Choices ${sequence}`,
     sessionModule: `Getting started ${sequence}`,
     groupRegionName: 'North East',
+    isCatchup: false,
     people,
   }
 })

@@ -10,16 +10,24 @@ export default class AttendancePresenter {
     private readonly userInputData: Record<string, unknown> | null = null,
   ) {}
 
+  get isCatchup(): boolean {
+    return this.recordAttendanceBffData?.isCatchup ?? false
+  }
+
   get pageTitle(): string {
-    return `Add ${this.recordAttendanceBffData.sessionModule} attendance`
+    return this.isCatchup
+      ? `Add ${this.recordAttendanceBffData.sessionModule} catch-up attendance`
+      : `Add ${this.recordAttendanceBffData.sessionModule} attendance`
   }
 
   get text() {
+    const catchupAppend = this.recordAttendanceBffData.isCatchup ? ' catch-up' : ''
+
     return {
       pageHeading:
         this.recordAttendanceBffData.people.length === 1
-          ? `Did ${this.recordAttendanceBffData.people[0].name} attend ${this.recordAttendanceBffData.sessionModule}?`
-          : `Record attendance for ${this.recordAttendanceBffData.sessionModule}`,
+          ? `Did ${this.recordAttendanceBffData.people[0].name} attend ${this.recordAttendanceBffData.sessionModule}${catchupAppend}?`
+          : `Record attendance for ${this.recordAttendanceBffData.sessionModule}${catchupAppend}`,
       headingCaption: `Record attendance and progress`,
     }
   }

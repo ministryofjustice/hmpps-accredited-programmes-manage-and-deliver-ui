@@ -30,7 +30,7 @@ beforeEach(() => {
 
 const sessionNotesFactory = (overrides: Partial<SessionNotes> = {}): SessionNotes => ({
   personName: `Alex River`,
-  pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
+  pageTitle: 'Alex River: Getting started Introduction to Building Choices session notes',
   moduleName: 'Getting started',
   sessionName: 'Introduction to Building Choices',
   sessionNumber: 1,
@@ -53,7 +53,7 @@ describe('SessionNotesController', () => {
         .get('/111/6789/getting-started-1-attendance-and-session-notes?referralId=referral-123')
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain('Alex River: Getting started 1 Introduction to Building Choices session notes')
+          expect(res.text).toContain('Alex River: Getting started Introduction to Building Choices session notes')
           expect(res.text).toContain('Participant engaged well.\nSecond paragraph.')
           expect(res.text).toContain('Last updated by John Smith on 19 March 2026')
           expect(res.text).toContain('21 July 2025')
@@ -94,6 +94,7 @@ describe('SessionNotesController', () => {
         sessionTitle: 'Introduction to Building Choices',
         sessionModule: 'Getting started 1',
         groupRegionName: 'North East',
+        isCatchup: false,
         people: [
           {
             referralId: 'referral-123',
@@ -158,6 +159,7 @@ describe('SessionNotesController', () => {
         sessionTitle: 'Introduction to Building Choices',
         sessionModule: 'Getting started 1',
         groupRegionName: 'North East',
+        isCatchup: false,
         people: [
           {
             referralId: 'referral-123',
@@ -325,6 +327,7 @@ describe('SessionNotesController', () => {
         sessionTitle: 'Introduction to Building Choices',
         sessionModule: 'Getting started 1',
         groupRegionName: 'North East',
+        isCatchup: false,
         people: [
           {
             referralId: 'referral-123',
@@ -376,6 +379,7 @@ describe('SessionNotesController', () => {
         sessionTitle: 'Introduction to Building Choices',
         sessionModule: 'Getting started 1',
         groupRegionName: 'North East',
+        isCatchup: false,
         people: [
           {
             referralId: 'referral-123',

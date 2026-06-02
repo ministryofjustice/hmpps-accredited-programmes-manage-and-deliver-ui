@@ -35,6 +35,16 @@ describe('AttendancePresenter', () => {
 
         expect(presenter.text.pageHeading).toBe(`Did ${bffData.people[0].name} attend ${bffData.sessionModule}?`)
       })
+
+      it('should append catch-up when session is catch-up', () => {
+        const bffData = recordSessionAttendanceFactory.build({ isCatchup: true })
+        bffData.people = [bffData.people[0]]
+        const presenter = new AttendancePresenter(bffData, 'backlink', null)
+
+        expect(presenter.text.pageHeading).toBe(
+          `Did ${bffData.people[0].name} attend ${bffData.sessionModule} catch-up?`,
+        )
+      })
     })
     describe('multiple attendees', () => {
       it('should return the correct page heading', () => {
@@ -42,6 +52,13 @@ describe('AttendancePresenter', () => {
         const presenter = new AttendancePresenter(bffData, 'backlink', null)
 
         expect(presenter.text.pageHeading).toBe(`Record attendance for ${bffData.sessionModule}`)
+      })
+
+      it('should append catch-up when session is catch-up', () => {
+        const bffData = recordSessionAttendanceFactory.build({ isCatchup: true })
+        const presenter = new AttendancePresenter(bffData, 'backlink', null)
+
+        expect(presenter.text.pageHeading).toBe(`Record attendance for ${bffData.sessionModule} catch-up`)
       })
     })
   })

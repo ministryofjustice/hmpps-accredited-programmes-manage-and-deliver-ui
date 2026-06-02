@@ -3232,9 +3232,9 @@ export interface components {
       first?: boolean
       last?: boolean
       sort?: components['schemas']['SortObject']
-      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageableObject: {
@@ -3242,10 +3242,10 @@ export interface components {
       offset?: number
       sort?: components['schemas']['SortObject']
       /** Format: int32 */
+      pageSize?: number
+      /** Format: int32 */
       pageNumber?: number
       paged?: boolean
-      /** Format: int32 */
-      pageSize?: number
       unpaged?: boolean
     }
     ReferralCaseListItem: {
@@ -3578,6 +3578,8 @@ export interface components {
       groupRegionName: string
       /** @description List of attendees */
       people: components['schemas']['SessionAttendancePerson'][]
+      /** @description Is it a catch-up session? */
+      isCatchup: boolean
     }
     /** @description Details of an Attendee */
     SessionAttendancePerson: {
@@ -3901,9 +3903,9 @@ export interface components {
       first?: boolean
       last?: boolean
       sort?: components['schemas']['SortObject']
-      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     GroupItem: {
@@ -3996,9 +3998,9 @@ export interface components {
       first?: boolean
       last?: boolean
       sort?: components['schemas']['SortObject']
-      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */

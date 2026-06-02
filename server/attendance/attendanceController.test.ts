@@ -128,6 +128,37 @@ describe('showRecordAttendancePages', () => {
         ['referral2'],
       )
     })
+
+    it('redirects to a catch-up session notes URL when referralId query is present for catch-up sessions', async () => {
+      sessionData = {
+        editSessionAttendance: {
+          referralIds: ['referral1', 'referral2'],
+          attendees: [
+            { referralId: 'referral1', outcomeCode: 'ATTC' },
+            { referralId: 'referral2', outcomeCode: 'ATTC' },
+          ],
+        },
+      }
+
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      const bffData = recordSessionAttendanceFactory.build({
+        sessionModule: 'Pre-group one-to-one',
+        isCatchup: true,
+      })
+      accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
+
+      await request(app)
+        .get('/111/6789/record-attendance?referralId=referral2')
+        .expect(302)
+        .expect('Location', '/111/6789/referral/referral2/pre-group-one-to-one-catch-up-session-notes')
+
+      expect(accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData).toHaveBeenCalledWith(
+        'user1',
+        '6789',
+        ['referral2'],
+      )
+    })
   })
 
   describe('POST /:groupId/:sessionId/record-attendance', () => {
@@ -166,6 +197,29 @@ describe('showRecordAttendancePages', () => {
             `Redirecting to /111/6789/referral/referral1/${convertToUrlFriendlyKebabCase(bffData.sessionModule)}-session-notes`,
           )
         })
+    })
+
+    it('redirects to catch-up session notes URL after POST when single referral ID', async () => {
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      const bffData = recordSessionAttendanceFactory.build({
+        sessionModule: 'Pre-group one-to-one',
+        isCatchup: true,
+      })
+      bffData.people = [bffData.people[0]]
+
+      accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
+
+      const { referralId } = bffData.people[0]
+
+      await request(app)
+        .post('/111/6789/record-attendance')
+        .type('form')
+        .send({
+          [`attendance-${referralId}`]: 'ATTC',
+        })
+        .expect(302)
+        .expect('Location', '/111/6789/referral/referral1/pre-group-one-to-one-catch-up-session-notes')
     })
 
     it('should fetch session details with correct parameters and load page correctly for a multiple attendees', async () => {
