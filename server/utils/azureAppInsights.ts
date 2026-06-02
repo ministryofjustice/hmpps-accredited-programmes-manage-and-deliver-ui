@@ -1,4 +1,5 @@
 import {
+  Contracts,
   defaultClient,
   DistributedTracingModes,
   getCorrelationContext,
@@ -24,18 +25,27 @@ export function buildAppInsightsClient(
   if (process.env.APPLICATIONINSIGHTS_CONNECTION_STRING) {
     defaultClient.context.tags['ai.cloud.role'] = overrideName || applicationName
     defaultClient.context.tags['ai.application.ver'] = buildNumber
+    defaultClient.addTelemetryProcessor((envelope: Contracts.EnvelopeTelemetry, contextObjects) => {
+      const isRequest = envelope?.data?.baseType === Contracts.TelemetryTypeString.Request
 
-    defaultClient.addTelemetryProcessor(({ tags, data }, contextObjects) => {
-      const operationNameOverride = contextObjects.correlationContext?.customProperties?.getProperty('operationName')
+      if (isRequest && envelope?.data?.baseData) {
+        const username = contextObjects?.['http.ServerRequest']?.res?.locals?.user?.username || 'Unknown'
+        const regionDescription =
+          contextObjects?.['http.ServerRequest']?.res?.locals?.session?.userRegion?.regionDescription || 'Unknown'
+
+        const props = envelope.data.baseData.properties || {}
+        // eslint-disable-next-line no-param-reassign
+        envelope.data.baseData.properties = { username, regionDescription, ...props }
+      }
+      const { tags, data } = envelope
+      const operationNameOverride = contextObjects?.correlationContext?.customProperties?.getProperty?.('operationName')
+
       if (operationNameOverride) {
-        /*  eslint-disable no-param-reassign */
         tags['ai.operation.name'] = operationNameOverride
         data.baseData.name = operationNameOverride
-        /*  eslint-enable no-param-reassign */
       }
       return true
     })
-
     return defaultClient
   }
   return null
