@@ -131,3 +131,6 @@ wiremock_mappings/seeded/*.json
 
 # Sentry Config File
 .sentryclirc
+
+# Local helper scripts
+script/add-group-members.sh
