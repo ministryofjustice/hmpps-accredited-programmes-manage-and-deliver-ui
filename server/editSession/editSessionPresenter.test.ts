@@ -380,7 +380,7 @@ describe('EditSessionPresenter', () => {
               { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
               { html: '<span class="govuk-tag govuk-tag--blue">Attended</span>' },
               {
-                html: '<a href="/group-123/session-456/getting-started-1-catch-up/session-notes?referralId=123&source=edit-session">Getting started 1 notes</a>',
+                html: '<a href="/group-123/session-456/getting-started-1-catch-up-attendance-and-session-notes?referralId=123&source=edit-session">Getting started 1 notes</a>',
               },
             ],
           ],
