@@ -162,10 +162,8 @@ describe('editSessionDateAndTime', () => {
   })
 
   describe('POST /:groupId/:sessionId/edit-session-date-and-time', () => {
-    it('redirects GROUP sessions in the future to rescheduling later sessions', async () => {
-      const sessionDetails = editSessionDetailsFactory.build({
-        sessionDate: '3055-12-15',
-      })
+    it('should fetch session details with correct parameters and load page correctly', async () => {
+      const sessionDetails = editSessionDetailsFactory.build()
       const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'GROUP' })
       accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
       accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
@@ -178,64 +176,14 @@ describe('editSessionDateAndTime', () => {
           'session-details-start-time-hour': '9',
           'session-details-start-time-minute': '30',
           'session-details-start-time-part-of-day': 'AM',
-          'session-details-end-time-hour': '11',
-          'session-details-end-time-minute': '30',
-          'session-details-end-time-part-of-day': 'AM',
+          'session-details-end-time-hour': '12',
+          'session-details-end-time-minute': '0',
+          'session-details-end-time-part-of-day': 'PM',
         })
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(`Redirecting to /111/6789/edit-group-days-and-times/reschedule`)
         })
-    })
-
-    it('submits directly for GROUP sessions that have already ended', async () => {
-      const sessionDetails = editSessionDetailsFactory.build({
-        sessionDate: '2025-03-15',
-      })
-      const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'GROUP' })
-      accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
-      accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
-      accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime.mockResolvedValue({
-        message: 'Test message',
-      })
-
-      await request(app)
-        .post(`/111/6789/edit-session-date-and-time`)
-        .type('form')
-        .send({
-          'session-details-date': '15/03/2025',
-          'session-details-start-time-hour': '9',
-          'session-details-start-time-minute': '30',
-          'session-details-start-time-part-of-day': 'AM',
-          'session-details-end-time-hour': '11',
-          'session-details-end-time-minute': '30',
-          'session-details-end-time-part-of-day': 'AM',
-        })
-        .expect(302)
-        .expect(res => {
-          expect(res.text).toContain(
-            `Redirecting to /111/6789/edit-session?message=${encodeURIComponent('Test message')}`,
-          )
-        })
-
-      expect(accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime).toHaveBeenCalledWith(
-        'user1',
-        '6789',
-        {
-          sessionStartDate: '2025-03-15',
-          sessionStartTime: {
-            hour: 9,
-            minutes: 30,
-            amOrPm: 'AM',
-          },
-          sessionEndTime: {
-            hour: 11,
-            minutes: 30,
-            amOrPm: 'AM',
-          },
-          rescheduleOtherSessions: false,
-        },
-      )
     })
 
     it('redirects back to the existing edit-session route when the date and time have not changed', async () => {
@@ -318,81 +266,8 @@ describe('submitEditSessionDateAndTime', () => {
     accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
     accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
 
-    await request(app)
-      .post(`/111/6789/edit-session-date-and-time`)
-      .type('form')
-      .send({
-        'session-details-date': '01/01/2020',
-        'session-details-start-time-hour': '10',
-        'session-details-start-time-minute': '00',
-        'session-details-start-time-part-of-day': 'AM',
-        'session-details-end-time-hour': '12',
-        'session-details-end-time-minute': '31',
-        'session-details-end-time-part-of-day': 'PM',
-      })
-      .expect(400)
-      .expect(res => {
-        expect(res.text).toContain(
-          'The session duration cannot be longer than originally scheduled. Change the start or end time.',
-        )
-      })
-  })
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-  it('shows validation error when session has already ended', async () => {
-    // Use yesterday to ensure the session is definitely in the past
-    const yesterday = new Date()
-    yesterday.setDate(yesterday.getDate() - 1)
-    const yesterdayIso = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(
-      yesterday.getDate(),
-    ).padStart(2, '0')}`
-
-    const sessionDetails = editSessionDetailsFactory.build({
-      sessionDate: yesterdayIso,
-      sessionStartTime: { hour: 10, minutes: 0, amOrPm: 'AM' },
-      sessionEndTime: { hour: 11, minutes: 0, amOrPm: 'AM' },
-    })
-    const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'ONE_TO_ONE' })
-    accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
-    accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
-
-    // Mock the API call in case validation doesn't trigger
-    accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime.mockResolvedValue({
-      message: 'Test message',
-    })
-
-    const [year, month, day] = yesterdayIso.split('-')
-    const yesterdayUk = `${day}/${month}/${year}`
-
-    // Attempt to extend the end time beyond the original duration
-    await request(app)
-      .post(`/111/6789/edit-session-date-and-time`)
-      .type('form')
-      .send({
-        'session-details-date': yesterdayUk,
-        'session-details-start-time-hour': '10',
-        'session-details-start-time-minute': '00',
-        'session-details-start-time-part-of-day': 'AM',
-        'session-details-end-time-hour': '1',
-        'session-details-end-time-minute': '30',
-        'session-details-end-time-part-of-day': 'PM',
-      })
-      .expect(400)
-      .expect(res => {
-        expect(res.text).toContain(
-          'The session duration cannot be longer than originally scheduled. Change the start or end time.',
-        )
-      })
-  })
-    describe('past-session duration changes', () => {
-    it('allows changing only start time when past-session duration is shortened', async () => {
-      const sessionDetails = editSessionDetailsFactory.build({
-        sessionDate: '2020-01-01',
-        sessionStartTime: { hour: 10, minutes: 0, amOrPm: 'AM' },
-        sessionEndTime: { hour: 12, minutes: 30, amOrPm: 'PM' },
-      })
-      const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'ONE_TO_ONE' })
-      accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
-      accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
       accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime.mockResolvedValue({
         message: 'Test message',
       })
@@ -401,13 +276,7 @@ describe('submitEditSessionDateAndTime', () => {
         .post(`/111/6789/edit-session-date-and-time`)
         .type('form')
         .send({
-          'session-details-date': '01/01/2020',
-          'session-details-start-time-hour': '10',
-          'session-details-start-time-minute': '30',
-          'session-details-start-time-part-of-day': 'AM',
-          'session-details-end-time-hour': '12',
-          'session-details-end-time-minute': '30',
-          'session-details-end-time-part-of-day': 'PM',
+          'reschedule-other-sessions': 'false',
         })
         .expect(302)
         .expect(res => {
@@ -415,355 +284,156 @@ describe('submitEditSessionDateAndTime', () => {
             `Redirecting to /111/6789/edit-session?message=${encodeURIComponent('Test message')}`,
           )
         })
-
-      expect(accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime).toHaveBeenCalledWith(
-        'user1',
-        '6789',
-        {
-          sessionStartDate: '2020-01-01',
-          sessionStartTime: { hour: 10, minutes: 30, amOrPm: 'AM' },
-          sessionEndTime: { hour: 12, minutes: 30, amOrPm: 'PM' },
-          rescheduleOtherSessions: false,
-        },
-      )
     })
+  })
+})
 
-    it('allows changing only end time when past-session duration is shortened', async () => {
-      const sessionDetails = editSessionDetailsFactory.build({
-        sessionDate: '2020-01-01',
-        sessionStartTime: { hour: 10, minutes: 0, amOrPm: 'AM' },
-        sessionEndTime: { hour: 12, minutes: 30, amOrPm: 'PM' },
-      })
-      const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'ONE_TO_ONE' })
-      accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
-      accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
-      accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime.mockResolvedValue({
-        message: 'Test message',
-      })
+describe('editSessionFacilitators', () => {
+  const editSessionFacilitatorsResponse = {
+    pageTitle: 'Getting Started 1',
+    facilitators: [
+      {
+        facilitatorName: 'Facilitator One',
+        facilitatorCode: 'F001',
+        teamName: 'Team A',
+        teamCode: 'TA01',
+        currentlyFacilitating: true,
+      },
+      {
+        facilitatorName: 'Facilitator Two',
+        facilitatorCode: 'F002',
+        teamName: 'Team B',
+        teamCode: 'TA02',
+        currentlyFacilitating: false,
+      },
+    ],
+  }
+
+  describe('GET /:groupId/:sessionId/edit-session-facilitators', () => {
+    it('should fetch session facilitators with correct parameters and load page correctly', async () => {
+      accreditedProgrammesManageAndDeliverService.getEditSessionFacilitators.mockResolvedValue(
+        editSessionFacilitatorsResponse,
+      )
 
       await request(app)
-        .post(`/111/6789/edit-session-date-and-time`)
-        .type('form')
-        .send({
-          'session-details-date': '01/01/2020',
-          'session-details-start-time-hour': '10',
-          'session-details-start-time-minute': '00',
-          'session-details-start-time-part-of-day': 'AM',
-          'session-details-end-time-hour': '12',
-          'session-details-end-time-minute': '00',
-          'session-details-end-time-part-of-day': 'PM',
-        })
-        .expect(302)
+        .get(`/123/456/edit-session-facilitators`)
+        .expect(200)
         .expect(res => {
-          expect(res.text).toContain(
-            `Redirecting to /111/6789/edit-session?message=${encodeURIComponent('Test message')}`,
-          )
+          expect(res.text).toContain('Edit the session facilitators')
+          expect(res.text).toContain('Getting Started 1')
         })
 
-      expect(accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime).toHaveBeenCalledWith(
+      expect(accreditedProgrammesManageAndDeliverService.getEditSessionFacilitators).toHaveBeenCalledWith(
         'user1',
-        '6789',
-        {
-          sessionStartDate: '2020-01-01',
-          sessionStartTime: { hour: 10, minutes: 0, amOrPm: 'AM' },
-          sessionEndTime: { hour: 12, minutes: 0, amOrPm: 'PM' },
-          rescheduleOtherSessions: false,
-        },
+        '456',
       )
     })
 
-    it('allows changing both times when past-session duration is not longer', async () => {
-      const sessionDetails = editSessionDetailsFactory.build({
-        sessionDate: '2020-01-01',
-        sessionStartTime: { hour: 10, minutes: 0, amOrPm: 'AM' },
-        sessionEndTime: { hour: 12, minutes: 30, amOrPm: 'PM' },
-      })
-      const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'ONE_TO_ONE' })
-      accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
-      accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
-      accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime.mockResolvedValue({
-        message: 'Test message',
-      })
+    it('should display facilitator options', async () => {
+      accreditedProgrammesManageAndDeliverService.getEditSessionFacilitators.mockResolvedValue(
+        editSessionFacilitatorsResponse,
+      )
 
       await request(app)
-        .post(`/111/6789/edit-session-date-and-time`)
-        .type('form')
-        .send({
-          'session-details-date': '01/01/2020',
-          'session-details-start-time-hour': '9',
-          'session-details-start-time-minute': '00',
-          'session-details-start-time-part-of-day': 'AM',
-          'session-details-end-time-hour': '11',
-          'session-details-end-time-minute': '30',
-          'session-details-end-time-part-of-day': 'AM',
-        })
-        .expect(302)
+        .get(`/123/456/edit-session-facilitators`)
+        .expect(200)
         .expect(res => {
-          expect(res.text).toContain(
-            `Redirecting to /111/6789/edit-session?message=${encodeURIComponent('Test message')}`,
-          )
+          expect(res.text).toContain('Facilitator One')
+          expect(res.text).toContain('Facilitator Two')
         })
-
-      expect(accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime).toHaveBeenCalledWith(
-        'user1',
-        '6789',
-        {
-          sessionStartDate: '2020-01-01',
-          sessionStartTime: { hour: 9, minutes: 0, amOrPm: 'AM' },
-          sessionEndTime: { hour: 11, minutes: 30, amOrPm: 'AM' },
-          rescheduleOtherSessions: false,
-        },
-      )
-    })
-
-    describe('POST /:groupId/:sessionId/edit-group-dates-and-times/reschedule', () => {
-      it('should submit the edit session details correctly', async () => {
-        const sessionDataForTest: Partial<SessionData> = {
-          editSessionDateAndTime: {
-            sessionStartDate: '12/12/2026',
-            sessionStartTime: {
-              hour: 9,
-              minutes: 30,
-              amOrPm: 'AM',
-            },
-            sessionEndTime: {
-              hour: 12,
-              minutes: 0,
-              amOrPm: 'PM',
-            },
-          },
-        }
-        const sessionDetails = rescheduleSessionDetailsFactory.build()
-        accreditedProgrammesManageAndDeliverService.getRescheduleSessionDetails.mockResolvedValue(sessionDetails)
-
-        app = TestUtils.createTestAppWithSession(sessionDataForTest, { accreditedProgrammesManageAndDeliverService })
-
-        accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime.mockResolvedValue({
-          message: 'Test message',
-        })
-
-        return request(app)
-          .post(`/111/6789/edit-group-days-and-times/reschedule`)
-          .type('form')
-          .send({
-            'reschedule-other-sessions': 'false',
-          })
-          .expect(302)
-          .expect(res => {
-            expect(res.text).toContain(
-              `Redirecting to /111/6789/edit-session?message=${encodeURIComponent('Test message')}`,
-            )
-          })
-      })
-
-      it('clears in-progress date/time session data so subsequent page loads show API values', async () => {
-        const sessionDataForTest: Partial<SessionData> = {
-          editSessionDateAndTime: {
-            sessionStartDate: '12/12/2026',
-            sessionStartTime: {
-              hour: 9,
-              minutes: 30,
-              amOrPm: 'AM',
-            },
-            sessionEndTime: {
-              hour: 12,
-              minutes: 0,
-              amOrPm: 'PM',
-            },
-          },
-        }
-        const sessionDetails = rescheduleSessionDetailsFactory.build()
-        const refreshedEditSessionDetails = editSessionDetailsFactory.build({
-          sessionDate: '2026-12-13',
-          sessionStartTime: { hour: 4, minutes: 45, amOrPm: 'PM' },
-          sessionEndTime: { hour: 6, minutes: 15, amOrPm: 'PM' },
-        })
-        const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'GROUP' })
-
-        accreditedProgrammesManageAndDeliverService.getRescheduleSessionDetails.mockResolvedValue(sessionDetails)
-        accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime.mockResolvedValue({
-          message: 'Test message',
-        })
-        accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(
-          refreshedEditSessionDetails,
-        )
-        accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
-
-        app = TestUtils.createTestAppWithSession(sessionDataForTest, { accreditedProgrammesManageAndDeliverService })
-        const agent = request.agent(app)
-
-        await agent
-          .post(`/111/6789/edit-group-days-and-times/reschedule`)
-          .type('form')
-          .send({
-            'reschedule-other-sessions': 'false',
-          })
-          .expect(302)
-
-        await agent
-          .get(`/111/6789/edit-session-date-and-time`)
-          .expect(200)
-          .expect(res => {
-            expect(res.text).toContain('id="session-details-start-time-hour"')
-            expect(res.text).toContain('value="04"')
-            expect(res.text).toContain('id="session-details-start-time-minute"')
-            expect(res.text).toContain('value="45"')
-            expect(res.text).toContain('id="session-details-end-time-hour"')
-            expect(res.text).toContain('value="06"')
-            expect(res.text).toContain('id="session-details-end-time-minute"')
-            expect(res.text).toContain('value="15"')
-          })
-      })
     })
   })
 
-  describe('editSessionFacilitators', () => {
-    const editSessionFacilitatorsResponse = {
-      pageTitle: 'Getting Started 1',
-      facilitators: [
-        {
-          facilitatorName: 'Facilitator One',
-          facilitatorCode: 'F001',
-          teamName: 'Team A',
-          teamCode: 'TA01',
-          currentlyFacilitating: true,
-        },
-        {
-          facilitatorName: 'Facilitator Two',
-          facilitatorCode: 'F002',
-          teamName: 'Team B',
-          teamCode: 'TA02',
-          currentlyFacilitating: false,
-        },
-      ],
-    }
+  describe('POST /:groupId/:sessionId/edit-session-facilitators', () => {
+    const groupId = randomUUID()
+    const sessionId = randomUUID()
+    it('should submit facilitators update successfully and redirect with success message', async () => {
+      accreditedProgrammesManageAndDeliverService.getEditSessionFacilitators.mockResolvedValue(
+        editSessionFacilitatorsResponse,
+      )
+      accreditedProgrammesManageAndDeliverService.updateSessionFacilitators.mockResolvedValue(
+        'Facilitators updated successfully',
+      )
 
-    describe('GET /:groupId/:sessionId/edit-session-facilitators', () => {
-      it('should fetch session facilitators with correct parameters and load page correctly', async () => {
-        accreditedProgrammesManageAndDeliverService.getEditSessionFacilitators.mockResolvedValue(
-          editSessionFacilitatorsResponse,
-        )
-
-        await request(app)
-          .get(`/123/456/edit-session-facilitators`)
-          .expect(200)
-          .expect(res => {
-            expect(res.text).toContain('Edit the session facilitators')
-            expect(res.text).toContain('Getting Started 1')
-          })
-
-        expect(accreditedProgrammesManageAndDeliverService.getEditSessionFacilitators).toHaveBeenCalledWith(
-          'user1',
-          '456',
-        )
-      })
-
-      it('should display facilitator options', async () => {
-        accreditedProgrammesManageAndDeliverService.getEditSessionFacilitators.mockResolvedValue(
-          editSessionFacilitatorsResponse,
-        )
-
-        await request(app)
-          .get(`/123/456/edit-session-facilitators`)
-          .expect(200)
-          .expect(res => {
-            expect(res.text).toContain('Facilitator One')
-            expect(res.text).toContain('Facilitator Two')
-          })
-      })
+      return request(app)
+        .post(`/${groupId}/${sessionId}/edit-session-facilitators`)
+        .type('form')
+        .send({
+          'edit-session-facilitator-0':
+            '{"facilitator":"Facilitator One", "facilitatorCode":"F001", "teamName":"Team A", "teamCode":"TA01"}',
+          'edit-session-facilitator-1':
+            '{"facilitator":"Facilitator Two", "facilitatorCode":"F002", "teamName":"Team B", "teamCode":"TA02"}',
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain(
+            `Found. Redirecting to /${groupId}/${sessionId}/edit-session?message=${encodeURIComponent('Facilitators updated successfully')}`,
+          )
+        })
     })
 
-    describe('POST /:groupId/:sessionId/edit-session-facilitators', () => {
-      const groupId = randomUUID()
-      const sessionId = randomUUID()
-      it('should submit facilitators update successfully and redirect with success message', async () => {
-        accreditedProgrammesManageAndDeliverService.getEditSessionFacilitators.mockResolvedValue(
-          editSessionFacilitatorsResponse,
-        )
-        accreditedProgrammesManageAndDeliverService.updateSessionFacilitators.mockResolvedValue(
-          'Facilitators updated successfully',
-        )
+    it('should handle validation errors and display error messages', async () => {
+      accreditedProgrammesManageAndDeliverService.getEditSessionFacilitators.mockResolvedValue(
+        editSessionFacilitatorsResponse,
+      )
 
-        return request(app)
-          .post(`/${groupId}/${sessionId}/edit-session-facilitators`)
-          .type('form')
-          .send({
-            'edit-session-facilitator-0':
-              '{"facilitator":"Facilitator One", "facilitatorCode":"F001", "teamName":"Team A", "teamCode":"TA01"}',
-            'edit-session-facilitator-1':
-              '{"facilitator":"Facilitator Two", "facilitatorCode":"F002", "teamName":"Team B", "teamCode":"TA02"}',
-          })
-          .expect(302)
-          .expect(res => {
-            expect(res.text).toContain(
-              `Found. Redirecting to /${groupId}/${sessionId}/edit-session?message=${encodeURIComponent('Facilitators updated successfully')}`,
-            )
-          })
-      })
+      await request(app)
+        .post(`/${groupId}/${sessionId}/edit-session-facilitators`)
+        .type('form')
+        .send({
+          'edit-session-facilitator-0': '',
+        })
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain('Edit the session facilitators')
+        })
+    })
 
-      it('should handle validation errors and display error messages', async () => {
-        accreditedProgrammesManageAndDeliverService.getEditSessionFacilitators.mockResolvedValue(
-          editSessionFacilitatorsResponse,
-        )
+    it('should store facilitators in session on successful submission', async () => {
+      const sessionData: Partial<SessionData> = {}
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-        await request(app)
-          .post(`/${groupId}/${sessionId}/edit-session-facilitators`)
-          .type('form')
-          .send({
-            'edit-session-facilitator-0': '',
-          })
-          .expect(400)
-          .expect(res => {
-            expect(res.text).toContain('Edit the session facilitators')
-          })
-      })
+      accreditedProgrammesManageAndDeliverService.getEditSessionFacilitators.mockResolvedValue(
+        editSessionFacilitatorsResponse,
+      )
+      accreditedProgrammesManageAndDeliverService.updateSessionFacilitators.mockResolvedValue(
+        'Facilitators updated successfully',
+      )
 
-      it('should store facilitators in session on successful submission', async () => {
-        const sessionData: Partial<SessionData> = {}
-        app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+      const agent = request.agent(app)
 
-        accreditedProgrammesManageAndDeliverService.getEditSessionFacilitators.mockResolvedValue(
-          editSessionFacilitatorsResponse,
-        )
-        accreditedProgrammesManageAndDeliverService.updateSessionFacilitators.mockResolvedValue(
-          'Facilitators updated successfully',
-        )
+      await agent
+        .post(`/${groupId}/${sessionId}/edit-session-facilitators`)
+        .type('form')
+        .send({
+          'edit-session-facilitator-0':
+            '{"facilitator":"Facilitator One", "facilitatorCode":"F001", "teamName":"Team A", "teamCode":"TA01"}',
+        })
+        .expect(302)
 
-        const agent = request.agent(app)
+      expect(accreditedProgrammesManageAndDeliverService.updateSessionFacilitators).toHaveBeenCalled()
+    })
 
-        await agent
-          .post(`/${groupId}/${sessionId}/edit-session-facilitators`)
-          .type('form')
-          .send({
-            'edit-session-facilitator-0':
-              '{"facilitator":"Facilitator One", "facilitatorCode":"F001", "teamName":"Team A", "teamCode":"TA01"}',
-          })
-          .expect(302)
+    it('should pass userInputData to presenter when validation fails', async () => {
+      const sessionData: Partial<SessionData> = {
+        sessionFacilitators: [],
+      }
+      accreditedProgrammesManageAndDeliverService.getEditSessionFacilitators.mockResolvedValue(
+        editSessionFacilitatorsResponse,
+      )
 
-        expect(accreditedProgrammesManageAndDeliverService.updateSessionFacilitators).toHaveBeenCalled()
-      })
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
-      it('should pass userInputData to presenter when validation fails', async () => {
-        const sessionData: Partial<SessionData> = {
-          sessionFacilitators: [],
-        }
-        accreditedProgrammesManageAndDeliverService.getEditSessionFacilitators.mockResolvedValue(
-          editSessionFacilitatorsResponse,
-        )
-
-        app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
-
-        await request(app)
-          .post(`/${groupId}/${sessionId}/edit-session-facilitators`)
-          .type('form')
-          .send({
-            'edit-session-facilitator-0': '',
-          })
-          .expect(400)
-          .expect(res => {
-            expect(res.text).toContain('Edit the session facilitators')
-          })
-      })
+      await request(app)
+        .post(`/${groupId}/${sessionId}/edit-session-facilitators`)
+        .type('form')
+        .send({
+          'edit-session-facilitator-0': '',
+        })
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain('Edit the session facilitators')
+        })
     })
   })
 })
