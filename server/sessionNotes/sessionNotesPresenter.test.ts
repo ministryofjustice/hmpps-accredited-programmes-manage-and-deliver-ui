@@ -31,7 +31,7 @@ describe('SessionNotesPresenter', () => {
     const presenter = new SessionNotesPresenter(
       buildData({
         sessionName: 'Introduction to Building Choices',
-        pageTitle: 'Alex River: Getting started 1 Introduction to Building Choices session notes',
+        pageTitle: 'Alex River: Getting started Introduction to Building Choices session notes',
       }),
     )
 
