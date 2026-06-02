@@ -162,8 +162,10 @@ describe('editSessionDateAndTime', () => {
   })
 
   describe('POST /:groupId/:sessionId/edit-session-date-and-time', () => {
-    it('should fetch session details with correct parameters and load page correctly', async () => {
-      const sessionDetails = editSessionDetailsFactory.build()
+    it('redirects GROUP sessions in the future to rescheduling later sessions', async () => {
+      const sessionDetails = editSessionDetailsFactory.build({
+        sessionDate: '3055-12-15',
+      })
       const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'GROUP' })
       accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
       accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
@@ -176,9 +178,9 @@ describe('editSessionDateAndTime', () => {
           'session-details-start-time-hour': '9',
           'session-details-start-time-minute': '30',
           'session-details-start-time-part-of-day': 'AM',
-          'session-details-end-time-hour': '12',
-          'session-details-end-time-minute': '0',
-          'session-details-end-time-part-of-day': 'PM',
+          'session-details-end-time-hour': '11',
+          'session-details-end-time-minute': '30',
+          'session-details-end-time-part-of-day': 'AM',
         })
         .expect(302)
         .expect(res => {
@@ -220,6 +222,56 @@ describe('editSessionDateAndTime', () => {
         .expect(res => {
           expect(res.text).toContain('Redirecting to /111/6789/edit-session')
         })
+    })
+
+    it('submits directly for GROUP sessions that have already ended', async () => {
+      const sessionDetails = editSessionDetailsFactory.build({
+        sessionDate: '2025-03-15',
+      })
+      const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'GROUP' })
+      accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
+      accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
+      accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime.mockResolvedValue({
+        message: 'Test message',
+      })
+
+      await request(app)
+        .post(`/111/6789/edit-session-date-and-time`)
+        .type('form')
+        .send({
+          'session-details-date': '15/03/2025',
+          'session-details-start-time-hour': '9',
+          'session-details-start-time-minute': '30',
+          'session-details-start-time-part-of-day': 'AM',
+          'session-details-end-time-hour': '11',
+          'session-details-end-time-minute': '30',
+          'session-details-end-time-part-of-day': 'AM',
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain(
+            `Redirecting to /111/6789/edit-session?message=${encodeURIComponent('Test message')}`,
+          )
+        })
+
+      expect(accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime).toHaveBeenCalledWith(
+        'user1',
+        '6789',
+        {
+          sessionStartDate: '2025-03-15',
+          sessionStartTime: {
+            hour: 9,
+            minutes: 30,
+            amOrPm: 'AM',
+          },
+          sessionEndTime: {
+            hour: 11,
+            minutes: 30,
+            amOrPm: 'AM',
+          },
+          rescheduleOtherSessions: false,
+        },
+      )
     })
   })
 })
