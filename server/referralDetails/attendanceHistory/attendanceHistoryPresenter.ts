@@ -9,6 +9,8 @@ export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter 
 
   public readonly currentStatusDescription: string
 
+  IMPORTED_FROM_IM = 'IMPORTED FROM INTERVENTIONS MANAGER'
+
   constructor(
     readonly referralId: string,
     public readonly attendanceHistory: AttendanceHistoryResponse,
@@ -32,6 +34,10 @@ export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter 
 
   get pageTitle(): string {
     return "Person's attendance history"
+  }
+
+  get isTransferredFromIM(): boolean {
+    return this.attendanceHistory.referralCreatedBy?.toUpperCase() === this.IMPORTED_FROM_IM
   }
 
   get tableDescription(): string {

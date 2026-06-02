@@ -173,4 +173,51 @@ describe('AttendanceHistoryPresenter', () => {
       expect(presenter.pageTitle).toBe("Person's attendance history")
     })
   })
+
+  describe('isTransferredFromIM', () => {
+    it('returns true when createdBy equals "Imported from Interventions Manager"', () => {
+      const attendanceHistory = attendanceHistoryResponseFactory.build({
+        referralCreatedBy: 'Imported from Interventions Manager',
+      })
+      const presenter = new AttendanceHistoryPresenter(referralId, attendanceHistory, referralDetails)
+
+      expect(presenter.isTransferredFromIM).toBe(true)
+    })
+
+    it('returns false when createdBy is a different value', () => {
+      const attendanceHistory = attendanceHistoryResponseFactory.build({
+        referralCreatedBy: 'Not Imported from Interventions Manager',
+      })
+      const presenter = new AttendanceHistoryPresenter(referralId, attendanceHistory, referralDetails)
+
+      expect(presenter.isTransferredFromIM).toBe(false)
+    })
+
+    it('returns false when createdBy is an empty string', () => {
+      const attendanceHistory = attendanceHistoryResponseFactory.build({
+        referralCreatedBy: '',
+      })
+      const presenter = new AttendanceHistoryPresenter(referralId, attendanceHistory, referralDetails)
+
+      expect(presenter.isTransferredFromIM).toBe(false)
+    })
+
+    it('returns false when createdBy is null', () => {
+      const attendanceHistory = attendanceHistoryResponseFactory.build({
+        referralCreatedBy: null as unknown as string,
+      })
+      const presenter = new AttendanceHistoryPresenter(referralId, attendanceHistory, referralDetails)
+
+      expect(presenter.isTransferredFromIM).toBe(false)
+    })
+
+    it('returns false when createdBy is undefined', () => {
+      const attendanceHistory = attendanceHistoryResponseFactory.build({
+        referralCreatedBy: undefined as unknown as string,
+      })
+      const presenter = new AttendanceHistoryPresenter(referralId, attendanceHistory, referralDetails)
+
+      expect(presenter.isTransferredFromIM).toBe(false)
+    })
+  })
 })

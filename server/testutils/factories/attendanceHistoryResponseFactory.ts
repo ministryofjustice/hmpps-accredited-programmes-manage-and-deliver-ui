@@ -28,6 +28,7 @@ export default AttendanceHistoryResponseFactory.define(({ sequence }) => ({
   popName: 'Alex River',
   currentlyAllocatedGroupCode: 'GRP-001',
   currentlyAllocatedGroupId: sequence.toString(),
+  referralCreatedBy: 'Imported from Interventions Manager',
   attendanceHistory: [
     {
       sessionId: 'session-1',
