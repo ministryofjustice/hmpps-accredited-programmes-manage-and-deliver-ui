@@ -645,9 +645,7 @@ describe('generateNoResultsString', () => {
       'test location',
     )
 
-    expect(presenter.generateNoResultsString()).toBe(
-      'No results found. Clear or change the filters.',
-    )
+    expect(presenter.generateNoResultsString()).toBe('No results found. Clear or change the filters.')
   })
 
   it('returns open-referrals message with closed count when on open section', () => {
@@ -692,8 +690,6 @@ describe('generateNoResultsString', () => {
       'test location',
     )
 
-    expect(presenter.generateNoResultsString()).toBe(
-      'No results found. Clear or change the filters.',
-    )
+    expect(presenter.generateNoResultsString()).toBe('No results found. Clear or change the filters.')
   })
 })
