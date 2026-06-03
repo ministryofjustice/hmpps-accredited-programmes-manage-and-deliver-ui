@@ -163,7 +163,9 @@ describe('editSessionDateAndTime', () => {
 
   describe('POST /:groupId/:sessionId/edit-session-date-and-time', () => {
     it('should fetch session details with correct parameters and load page correctly', async () => {
-      const sessionDetails = editSessionDetailsFactory.build()
+      const sessionDetails = editSessionDetailsFactory.build({
+        sessionDate: '3055-12-01',
+      })
       const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'GROUP' })
       accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
       accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
@@ -183,6 +185,156 @@ describe('editSessionDateAndTime', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(`Redirecting to /111/6789/edit-group-days-and-times/reschedule`)
+        })
+    })
+
+    it('should submit directly for a past group session instead of redirecting to reschedule later sessions', async () => {
+      const sessionDetails = editSessionDetailsFactory.build({
+        sessionDate: '2000-01-01',
+        sessionStartTime: { hour: 10, minutes: 0, amOrPm: 'AM' },
+        sessionEndTime: { hour: 12, minutes: 30, amOrPm: 'PM' },
+      })
+      const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'GROUP', isCatchup: false })
+      accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
+      accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
+      accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime.mockResolvedValue({
+        message: 'Test message',
+      })
+
+      await request(app)
+        .post(`/111/6789/edit-session-date-and-time`)
+        .type('form')
+        .send({
+          'session-details-date': '1/1/2000',
+          'session-details-start-time-hour': '9',
+          'session-details-start-time-minute': '0',
+          'session-details-start-time-part-of-day': 'AM',
+          'session-details-end-time-hour': '11',
+          'session-details-end-time-minute': '30',
+          'session-details-end-time-part-of-day': 'AM',
+        })
+        .expect(302)
+        .expect('Location', '/111/6789/edit-session?message=Test%20message')
+
+      expect(accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime).toHaveBeenCalledWith(
+        'user1',
+        '6789',
+        {
+          sessionStartDate: '2000-01-01',
+          sessionStartTime: { hour: 9, minutes: 0, amOrPm: 'AM' },
+          sessionEndTime: { hour: 11, minutes: 30, amOrPm: 'AM' },
+          rescheduleOtherSessions: false,
+        },
+      )
+    })
+
+    it('should return validation error if a past session is made longer than originally scheduled', async () => {
+      const sessionDetails = editSessionDetailsFactory.build({
+        sessionDate: '2000-01-01',
+        sessionStartTime: { hour: 10, minutes: 0, amOrPm: 'AM' },
+        sessionEndTime: { hour: 12, minutes: 30, amOrPm: 'PM' },
+      })
+      const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'GROUP' })
+      accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
+      accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
+
+      await request(app)
+        .post(`/111/6789/edit-session-date-and-time`)
+        .type('form')
+        .send({
+          'session-details-date': '1/1/2000',
+          'session-details-start-time-hour': '10',
+          'session-details-start-time-minute': '0',
+          'session-details-start-time-part-of-day': 'AM',
+          'session-details-end-time-hour': '12',
+          'session-details-end-time-minute': '31',
+          'session-details-end-time-part-of-day': 'PM',
+        })
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain(
+            'The session duration cannot be longer than originally scheduled. Change the start or end time.',
+          )
+        })
+
+      expect(accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime).not.toHaveBeenCalled()
+    })
+
+    it('should map API 400 duration error to a field validation error instead of generic bad request', async () => {
+      const sessionDetails = editSessionDetailsFactory.build({
+        sessionDate: '2000-01-01',
+        sessionStartTime: { hour: 10, minutes: 0, amOrPm: 'AM' },
+        sessionEndTime: { hour: 12, minutes: 30, amOrPm: 'PM' },
+      })
+      const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'GROUP', isCatchup: false })
+      accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
+      accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
+      accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime.mockRejectedValue(
+        Object.assign(new Error('Bad Request'), {
+          status: 400,
+          data: {
+            userMessage:
+              'The session duration cannot be longer than originally scheduled. Change the start or end time.',
+          },
+        }),
+      )
+
+      await request(app)
+        .post(`/111/6789/edit-session-date-and-time`)
+        .type('form')
+        .send({
+          'session-details-date': '1/1/2000',
+          'session-details-start-time-hour': '9',
+          'session-details-start-time-minute': '0',
+          'session-details-start-time-part-of-day': 'AM',
+          'session-details-end-time-hour': '11',
+          'session-details-end-time-minute': '30',
+          'session-details-end-time-part-of-day': 'AM',
+        })
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain(
+            'The session duration cannot be longer than originally scheduled. Change the start or end time.',
+          )
+        })
+    })
+
+    it('should show an explanatory message when submitted duration is shorter than current but still rejected by API', async () => {
+      const sessionDetails = editSessionDetailsFactory.build({
+        sessionDate: '2000-01-01',
+        sessionStartTime: { hour: 3, minutes: 51, amOrPm: 'PM' },
+        sessionEndTime: { hour: 3, minutes: 59, amOrPm: 'PM' },
+      })
+      const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'GROUP', isCatchup: false })
+      accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
+      accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
+      accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime.mockRejectedValue(
+        Object.assign(new Error('Bad Request'), {
+          status: 400,
+          data: {
+            userMessage:
+              'Bad request: The session session duration cannot be longer than originally scheduled. Change the start or end time.',
+          },
+        }),
+      )
+
+      await request(app)
+        .post(`/111/6789/edit-session-date-and-time`)
+        .type('form')
+        .send({
+          'session-details-date': '1/1/2000',
+          'session-details-start-time-hour': '3',
+          'session-details-start-time-minute': '51',
+          'session-details-start-time-part-of-day': 'PM',
+          'session-details-end-time-hour': '3',
+          'session-details-end-time-minute': '58',
+          'session-details-end-time-part-of-day': 'PM',
+        })
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain(
+            'You have shortened this session, but it is still longer than the originally scheduled duration.',
+          )
         })
     })
   })
