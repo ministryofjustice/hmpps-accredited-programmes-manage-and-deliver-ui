@@ -59,7 +59,11 @@
       {% if hasResults %}
         {{ govukTable(groupTableArgs) }}
       {% else %}
-        <p class="govuk-body-l">{{ noResultsText }} {{ primaryNavigationArgs.regionText }}</p>
+        {% if presenter.params %}
+          <p class="govuk-body-l">{{ noResultsString }}</p>
+        {% else %}
+          <p class="govuk-body-l">{{ noResultsText }} {{ primaryNavigationArgs.regionText }}</p>
+        {% endif %}
       {% endif %}
 
       {% include "../partials/pagination.njk" %}
