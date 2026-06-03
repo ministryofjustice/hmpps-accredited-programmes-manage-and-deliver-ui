@@ -115,10 +115,7 @@ export default class EditSessionController extends BaseController {
         {
           errorSummaryLinkedField: 'session-details-end-time-hour',
           formFields: ['session-details-end-time-hour'],
-          message:
-            typeof matchedMessage === 'string'
-              ? matchedMessage
-              : EditSessionController.durationLongerThanOriginallyScheduledErrorMessage,
+          message: EditSessionController.durationLongerThanOriginallyScheduledErrorMessage,
         },
       ],
     }

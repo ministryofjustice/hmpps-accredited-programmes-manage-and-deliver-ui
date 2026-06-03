@@ -313,7 +313,7 @@ describe('editSessionDateAndTime', () => {
           status: 400,
           data: {
             userMessage:
-              'Bad request: The session session duration cannot be longer than originally scheduled. Change the start or end time.',
+              'The session duration cannot be longer than originally scheduled. Change the start or end time.',
           },
         }),
       )
