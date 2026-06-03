@@ -279,4 +279,17 @@ export default class GroupPresenter {
       },
     ]
   }
+
+  generateNoResultsString(): string {
+    const groupCountLabel = this.otherGroupListCountTotal === 1 ? 'group' : 'groups'
+
+    if (this.section === GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS) {
+      return this.otherGroupListCountTotal === 0
+        ? 'No results found. Clear or change the filters.'
+        : `No groups found in 'Not started or in progress'. ${this.otherGroupListCountTotal} ${groupCountLabel} found in 'Completed'.`
+    }
+    return this.otherGroupListCountTotal === 0
+      ? 'No results found. Clear or change the filters.'
+      : `No groups found in 'Completed'. ${this.otherGroupListCountTotal} ${groupCountLabel} found in 'Not started or in progress'.`
+  }
 }
