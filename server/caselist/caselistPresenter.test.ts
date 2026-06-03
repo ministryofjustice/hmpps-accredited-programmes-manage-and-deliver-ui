@@ -629,3 +629,67 @@ describe('pageTitle', () => {
     expect(presenter.pageTitle).toBe('Building Choices closed referrals')
   })
 })
+
+describe('generateNoResultsString', () => {
+  const emptyPage: Page<ReferralCaseListItem> = pageFactory.pageContent([]).build() as Page<ReferralCaseListItem>
+
+  it('returns clear-filters guidance when no results exist in either section', () => {
+    const presenter = new CaselistPresenter(
+      1,
+      emptyPage,
+      {} as CaselistFilter,
+      '',
+      true,
+      TestUtils.createCaseListFilters(),
+      0,
+      'test location',
+    )
+
+    expect(presenter.generateNoResultsString()).toBe('No results found. Clear or change the filters.')
+  })
+
+  it('returns open-referrals message with closed count when on open section', () => {
+    const presenter = new CaselistPresenter(
+      1,
+      emptyPage,
+      {} as CaselistFilter,
+      '',
+      true,
+      TestUtils.createCaseListFilters(),
+      3,
+      'test location',
+    )
+
+    expect(presenter.generateNoResultsString()).toBe('No results in open referrals. 3 results in closed referrals.')
+  })
+
+  it('returns closed-referrals message with open count when on closed section', () => {
+    const presenter = new CaselistPresenter(
+      2,
+      emptyPage,
+      {} as CaselistFilter,
+      '',
+      false,
+      TestUtils.createCaseListFilters(),
+      5,
+      'test location',
+    )
+
+    expect(presenter.generateNoResultsString()).toBe('No results in closed referrals. 5 results in open referrals.')
+  })
+
+  it('returns clear-filters guidance for closed section when other count is zero', () => {
+    const presenter = new CaselistPresenter(
+      2,
+      emptyPage,
+      {} as CaselistFilter,
+      '',
+      false,
+      TestUtils.createCaseListFilters(),
+      0,
+      'test location',
+    )
+
+    expect(presenter.generateNoResultsString()).toBe('No results found. Clear or change the filters.')
+  })
+})

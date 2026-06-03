@@ -725,3 +725,57 @@ describe('noResultsText', () => {
     expect(presenter.noResultsText).toBe('There are currently no completed groups in')
   })
 })
+
+describe('generateNoResultsString', () => {
+  it('returns clear-filters guidance when no results exist in either section', () => {
+    const groupList = groupsByRegionFactory.build({ otherTabTotal: 0 })
+
+    const presenter = new GroupPresenter(
+      groupList.pagedGroupData as Page<Group>,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
+      groupList.otherTabTotal,
+      groupList.regionName,
+      GroupListFilter.empty(),
+      [],
+      [],
+    )
+
+    expect(presenter.generateNoResultsString()).toBe('No results found. Clear or change the filters.')
+  })
+
+  it('returns not-started message with completed count for singular group', () => {
+    const groupList = groupsByRegionFactory.build({ otherTabTotal: 1 })
+
+    const presenter = new GroupPresenter(
+      groupList.pagedGroupData as Page<Group>,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
+      groupList.otherTabTotal,
+      groupList.regionName,
+      GroupListFilter.empty(),
+      [],
+      [],
+    )
+
+    expect(presenter.generateNoResultsString()).toBe(
+      "No groups found in 'Not started or in progress'. 1 group found in 'Completed'.",
+    )
+  })
+
+  it('returns completed message with not-started count for plural groups', () => {
+    const groupList = groupsByRegionFactory.build({ otherTabTotal: 2 })
+
+    const presenter = new GroupPresenter(
+      groupList.pagedGroupData as Page<Group>,
+      GroupListPageSection.COMPLETE,
+      groupList.otherTabTotal,
+      groupList.regionName,
+      GroupListFilter.empty(),
+      [],
+      [],
+    )
+
+    expect(presenter.generateNoResultsString()).toBe(
+      "No groups found in 'Completed'. 2 groups found in 'Not started or in progress'.",
+    )
+  })
+})
