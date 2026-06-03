@@ -103,6 +103,7 @@ export default class GroupView {
         resultsText: this.presenter.resultsText,
         hasResults: this.presenter.groupListItems.content.length > 0,
         noResultsText: this.presenter.noResultsText,
+        noResultsString: this.presenter.generateNoResultsString(),
       },
     ]
   }
