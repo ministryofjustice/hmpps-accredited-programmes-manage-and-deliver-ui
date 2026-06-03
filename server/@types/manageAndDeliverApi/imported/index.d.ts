@@ -281,7 +281,7 @@ export interface paths {
     }
     get?: never
     put?: never
-    /** Fetches the personal details and OASys details for specified Referrals */
+    /** Fetches the personal details and OASys details for specified Referrals. Returns 202 immediately and processes in background. */
     post: operations['fetchPersonalDetailsForReferrals']
     delete?: never
     options?: never
@@ -2022,10 +2022,10 @@ export interface components {
        */
       referralIds: string[]
     }
-    FetchPersonalDetailsResponse: {
-      successIds: string[]
-      notFoundIds: string[]
-      failureIds: string[]
+    FetchPersonalDetailsAcceptedResponse: {
+      message: string
+      /** Format: int32 */
+      referralCount: number
     }
     /** @description Response returned when a programme group is created */
     CreateGroupResponse: {
@@ -3263,9 +3263,9 @@ export interface components {
       first?: boolean
       last?: boolean
       sort?: components['schemas']['SortObject']
-      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageableObject: {
@@ -3273,10 +3273,10 @@ export interface components {
       offset?: number
       sort?: components['schemas']['SortObject']
       /** Format: int32 */
-      pageNumber?: number
+      pageSize?: number
       paged?: boolean
       /** Format: int32 */
-      pageSize?: number
+      pageNumber?: number
       unpaged?: boolean
     }
     ReferralCaseListItem: {
@@ -3936,9 +3936,9 @@ export interface components {
       first?: boolean
       last?: boolean
       sort?: components['schemas']['SortObject']
-      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     GroupItem: {
@@ -4031,9 +4031,9 @@ export interface components {
       first?: boolean
       last?: boolean
       sort?: components['schemas']['SortObject']
-      pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
@@ -4654,7 +4654,7 @@ export interface operations {
           'application/json': components['schemas']['EditSessionDateAndTimeResponse']
         }
       }
-      /** @description Bad request - The session session duration cannot be longer than originally scheduled */
+      /** @description Bad request - For past sessions (end time has passed), the duration cannot be longer than currently scheduled */
       400: {
         headers: {
           [name: string]: unknown
@@ -5519,7 +5519,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          '*/*': components['schemas']['FetchPersonalDetailsResponse']
+          '*/*': components['schemas']['FetchPersonalDetailsAcceptedResponse']
         }
       }
       /** @description Bad Request */
