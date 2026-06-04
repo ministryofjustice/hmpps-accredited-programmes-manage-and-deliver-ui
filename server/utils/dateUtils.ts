@@ -152,6 +152,36 @@ export default class DateUtils {
     return { hour: hour24, minute }
   }
 
+  static durationInMinutes(
+    startHour: number,
+    startMinute: number,
+    startPeriod: 'AM' | 'PM',
+    endHour: number,
+    endMinute: number,
+    endPeriod: 'AM' | 'PM',
+  ): number {
+    const start = DateUtils.convertTo24Hour(startHour, startMinute, startPeriod)
+    const end = DateUtils.convertTo24Hour(endHour, endMinute, endPeriod)
+    return end.hour * 60 + end.minute - (start.hour * 60 + start.minute)
+  }
+
+  static isTimeBefore(
+    startHour: number,
+    startMinute: number,
+    startPeriod: 'AM' | 'PM',
+    endHour: number,
+    endMinute: number,
+    endPeriod: 'AM' | 'PM',
+  ): boolean {
+    const start = DateUtils.convertTo24Hour(startHour, startMinute, startPeriod)
+    const end = DateUtils.convertTo24Hour(endHour, endMinute, endPeriod)
+
+    if (start.hour !== end.hour) {
+      return start.hour < end.hour
+    }
+    return start.minute < end.minute
+  }
+
   /**
    * Converts a date string to DD/MM/YYYY format
    * Handles both YYYY-MM-DD (API format) and DD/MM/YYYY (form format)

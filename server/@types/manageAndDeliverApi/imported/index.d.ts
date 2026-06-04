@@ -281,7 +281,7 @@ export interface paths {
     }
     get?: never
     put?: never
-    /** Fetches the personal details and OASys details for specified Referrals */
+    /** Fetches the personal details and OASys details for specified Referrals. Returns 202 immediately and processes in background. */
     post: operations['fetchPersonalDetailsForReferrals']
     delete?: never
     options?: never
@@ -2022,10 +2022,10 @@ export interface components {
        */
       referralIds: string[]
     }
-    FetchPersonalDetailsResponse: {
-      successIds: string[]
-      notFoundIds: string[]
-      failureIds: string[]
+    FetchPersonalDetailsAcceptedResponse: {
+      message: string
+      /** Format: int32 */
+      referralCount: number
     }
     /** @description Response returned when a programme group is created */
     CreateGroupResponse: {
@@ -3273,10 +3273,10 @@ export interface components {
       offset?: number
       sort?: components['schemas']['SortObject']
       /** Format: int32 */
+      pageSize?: number
+      /** Format: int32 */
       pageNumber?: number
       paged?: boolean
-      /** Format: int32 */
-      pageSize?: number
       unpaged?: boolean
     }
     ReferralCaseListItem: {
@@ -4654,7 +4654,7 @@ export interface operations {
           'application/json': components['schemas']['EditSessionDateAndTimeResponse']
         }
       }
-      /** @description Bad request - The session session duration cannot be longer than originally scheduled */
+      /** @description The session duration cannot be longer than originally scheduled. Change the start or end time. */
       400: {
         headers: {
           [name: string]: unknown
@@ -5519,7 +5519,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          '*/*': components['schemas']['FetchPersonalDetailsResponse']
+          '*/*': components['schemas']['FetchPersonalDetailsAcceptedResponse']
         }
       }
       /** @description Bad Request */

@@ -525,8 +525,8 @@ describe(PresenterUtils, () => {
             'Please enter an hour and select whether the time is in the AM or the PM',
           ])
           expect(value.hour.hasError).toEqual(true)
-          expect(value.minute.hasError).toEqual(false)
-          expect(value.partOfDay.hasError).toEqual(false)
+          expect(value.minute.hasError).toEqual(true)
+          expect(value.partOfDay.hasError).toEqual(true)
         })
 
         it('returns multiple error information', () => {
@@ -551,7 +551,7 @@ describe(PresenterUtils, () => {
             'Please enter an hour and select whether the time is in the AM or the PM',
           ])
           expect(value.hour.hasError).toEqual(true)
-          expect(value.minute.hasError).toEqual(false)
+          expect(value.minute.hasError).toEqual(true)
           expect(value.partOfDay.hasError).toEqual(true)
         })
       })

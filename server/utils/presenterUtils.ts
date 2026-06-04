@@ -143,20 +143,25 @@ export default class PresenterUtils {
       minuteValue = modelValue.minutes !== undefined ? modelValue.minutes.toString().padStart(2, '0') : ''
       partOfDayValue = modelValue.amOrPm ?? null
     }
+    // If any of the three fields has an error, highlight all three
+    const groupHasError =
+      PresenterUtils.hasError(error, hourKey) ||
+      PresenterUtils.hasError(error, minuteKey) ||
+      PresenterUtils.hasError(error, partOfDayKey)
 
     return {
       errorMessages,
       partOfDay: {
         value: partOfDayValue,
-        hasError: PresenterUtils.hasError(error, partOfDayKey),
+        hasError: groupHasError,
       },
       hour: {
         value: hourValue,
-        hasError: PresenterUtils.hasError(error, hourKey),
+        hasError: groupHasError,
       },
       minute: {
         value: minuteValue,
-        hasError: PresenterUtils.hasError(error, minuteKey),
+        hasError: groupHasError,
       },
     }
   }

@@ -134,3 +134,4 @@ wiremock_mappings/seeded/*.json
 
 # Local helper scripts
 script/add-group-members.sh
+script/add-users-to-sessions.sh
