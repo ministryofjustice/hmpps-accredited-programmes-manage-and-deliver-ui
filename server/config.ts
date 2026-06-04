@@ -106,10 +106,10 @@ export default {
       url: get('ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_URL', 'http://localhost:8080', requiredInProduction),
       healthPath: '/health',
       timeout: {
-        response: 10000,
-        deadline: 10000,
+        response: 30000,
+        deadline: 30000,
       },
-      agent: new AgentConfig(),
+      agent: new AgentConfig(30000),
     },
   },
   sqs: {
