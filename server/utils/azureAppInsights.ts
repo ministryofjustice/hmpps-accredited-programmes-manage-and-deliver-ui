@@ -30,12 +30,12 @@ export function buildAppInsightsClient(
 
       if (isRequest && envelope?.data?.baseData) {
         const username = contextObjects?.['http.ServerRequest']?.res?.locals?.user?.username || 'Unknown'
-        const regionDescription =
-          contextObjects?.['http.ServerRequest']?.res?.locals?.session?.userRegion?.regionDescription || 'Unknown'
+        const userRegionDescription =
+          contextObjects?.['http.ServerRequest']?.session?.userRegion?.regionDescription || 'Unknown'
 
         const props = envelope.data.baseData.properties || {}
         // eslint-disable-next-line no-param-reassign
-        envelope.data.baseData.properties = { username, regionDescription, ...props }
+        envelope.data.baseData.properties = { username, userRegionDescription, ...props }
       }
       const { tags, data } = envelope
       const operationNameOverride = contextObjects?.correlationContext?.customProperties?.getProperty?.('operationName')
