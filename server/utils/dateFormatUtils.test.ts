@@ -151,4 +151,26 @@ describe('DateFormatUtils', () => {
       expect(DateFormatUtils.isSessionInPast('6/7/2026', 11, 59, 'PM')).toBe(false)
     })
   })
+
+  describe('isSessionEnded', () => {
+    it('returns true for sessions on past dates', () => {
+      expect(DateFormatUtils.isSessionEnded('5/7/2026', 10, 0, 'AM')).toBe(true)
+    })
+
+    it('returns false for sessions on future dates', () => {
+      expect(DateFormatUtils.isSessionEnded('7/7/2026', 10, 0, 'AM')).toBe(false)
+    })
+
+    it('returns true for sessions today when end time is before now', () => {
+      expect(DateFormatUtils.isSessionEnded('6/7/2026', 11, 59, 'AM')).toBe(true)
+    })
+
+    it('returns false for sessions today when end time is after now', () => {
+      expect(DateFormatUtils.isSessionEnded('6/7/2026', 12, 1, 'PM')).toBe(false)
+    })
+
+    it('returns false for sessions today when end time is exactly now', () => {
+      expect(DateFormatUtils.isSessionEnded('6/7/2026', 12, 0, 'PM')).toBe(false)
+    })
+  })
 })
