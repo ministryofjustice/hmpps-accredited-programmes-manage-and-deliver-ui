@@ -205,6 +205,46 @@ describe('EditSessionDateAndTimeForm', () => {
           ],
         })
       })
+
+      it('returns error when end time is before start time', async () => {
+        request.body['session-details-start-time-hour'] = '10'
+        request.body['session-details-start-time-minute'] = '30'
+        request.body['session-details-start-time-part-of-day'] = 'AM'
+        request.body['session-details-end-time-hour'] = '9'
+        request.body['session-details-end-time-minute'] = '30'
+        request.body['session-details-end-time-part-of-day'] = 'AM'
+
+        const data = await new EditSessionDateAndTimeFormForm(request).rescheduleSessionDetailsData()
+
+        expect(data.error?.errors).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              errorSummaryLinkedField: 'session-details-end-time-hour',
+              message: 'End time must be later than start time',
+            }),
+          ]),
+        )
+      })
+
+      it('returns error when end time is the same as start time', async () => {
+        request.body['session-details-start-time-hour'] = '10'
+        request.body['session-details-start-time-minute'] = '30'
+        request.body['session-details-start-time-part-of-day'] = 'AM'
+        request.body['session-details-end-time-hour'] = '10'
+        request.body['session-details-end-time-minute'] = '30'
+        request.body['session-details-end-time-part-of-day'] = 'AM'
+
+        const data = await new EditSessionDateAndTimeFormForm(request).rescheduleSessionDetailsData()
+
+        expect(data.error?.errors).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              errorSummaryLinkedField: 'session-details-end-time-hour',
+              message: 'End time must be later than start time',
+            }),
+          ]),
+        )
+      })
     })
 
     describe('when session is in the past', () => {
@@ -222,6 +262,46 @@ describe('EditSessionDateAndTimeForm', () => {
           'session-details-end-time-minute': '30',
           'session-details-end-time-part-of-day': 'PM',
         }
+      })
+
+      it('returns error when end time is before start time on a past session', async () => {
+        request.body['session-details-start-time-hour'] = '10'
+        request.body['session-details-start-time-minute'] = '30'
+        request.body['session-details-start-time-part-of-day'] = 'AM'
+        request.body['session-details-end-time-hour'] = '9'
+        request.body['session-details-end-time-minute'] = '30'
+        request.body['session-details-end-time-part-of-day'] = 'AM'
+
+        const data = await new EditSessionDateAndTimeFormForm(request, true).rescheduleSessionDetailsData()
+
+        expect(data.error?.errors).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              errorSummaryLinkedField: 'session-details-end-time-hour',
+              message: 'End time must be later than start time',
+            }),
+          ]),
+        )
+      })
+
+      it('returns error when end time equals start time on a past session', async () => {
+        request.body['session-details-start-time-hour'] = '10'
+        request.body['session-details-start-time-minute'] = '30'
+        request.body['session-details-start-time-part-of-day'] = 'AM'
+        request.body['session-details-end-time-hour'] = '10'
+        request.body['session-details-end-time-minute'] = '30'
+        request.body['session-details-end-time-part-of-day'] = 'AM'
+
+        const data = await new EditSessionDateAndTimeFormForm(request, true).rescheduleSessionDetailsData()
+
+        expect(data.error?.errors).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              errorSummaryLinkedField: 'session-details-end-time-hour',
+              message: 'End time must be later than start time',
+            }),
+          ]),
+        )
       })
 
       it('accepts a past date without error', async () => {

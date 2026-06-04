@@ -21,6 +21,7 @@ import EditSessionFacilitatorsView from './facilitators/editSessionFacilitatorsV
 import BaseController from '../shared/baseController'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import { convertToUrlFriendlyKebabCase, getEditSessionRouteTitle } from '../utils/utils'
+import DateUtils from '../utils/dateUtils'
 import DateFormatUtils from '../utils/dateFormatUtils'
 import errorMessages from '../utils/errorMessages'
 
@@ -121,13 +122,8 @@ export default class EditSessionController extends BaseController {
   }
 
   private static durationInMinutes(time: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' }): number {
-    let hour24: number
-    if (time.amOrPm === 'AM') {
-      hour24 = time.hour === 12 ? 0 : time.hour
-    } else {
-      hour24 = time.hour === 12 ? 12 : time.hour + 12
-    }
-    return hour24 * 60 + time.minutes
+    const convertedTime = DateUtils.convertTo24Hour(time.hour, time.minutes, time.amOrPm)
+    return convertedTime.hour * 60 + convertedTime.minute
   }
 
   private static isSubmittedDurationShorterThanCurrent(

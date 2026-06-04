@@ -218,4 +218,28 @@ describe('DateUtils', () => {
       expect(DateUtils.formatDateToDDMMYYYY('15-03-2021')).toEqual('15-03-2021')
     })
   })
+
+  describe('durationInMinutes', () => {
+    it('calculates duration for AM to PM range', () => {
+      expect(DateUtils.durationInMinutes(11, 30, 'AM', 1, 0, 'PM')).toBe(90)
+    })
+
+    it('handles same-period time ranges', () => {
+      expect(DateUtils.durationInMinutes(9, 15, 'AM', 10, 0, 'AM')).toBe(45)
+    })
+  })
+
+  describe('isTimeBefore', () => {
+    it('returns true when start is before end', () => {
+      expect(DateUtils.isTimeBefore(10, 0, 'AM', 10, 1, 'AM')).toBe(true)
+    })
+
+    it('returns false when start equals end', () => {
+      expect(DateUtils.isTimeBefore(10, 0, 'AM', 10, 0, 'AM')).toBe(false)
+    })
+
+    it('returns false when start is after end', () => {
+      expect(DateUtils.isTimeBefore(1, 0, 'PM', 12, 30, 'PM')).toBe(false)
+    })
+  })
 })

@@ -63,56 +63,23 @@ export default class EditSessionDateAndTimeFormForm {
     }
   }
 
+  private static startOrEndTimeChanged(
+    originalTime: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' } | undefined,
+    submittedHour: number,
+    submittedMinute: number,
+    submittedPeriod: 'AM' | 'PM',
+  ): boolean {
+    if (!originalTime) return true
+
+    const original = DateUtils.convertTo24Hour(originalTime.hour, originalTime.minutes, originalTime.amOrPm)
+    const submitted = DateUtils.convertTo24Hour(submittedHour, submittedMinute, submittedPeriod)
+
+    return original.hour !== submitted.hour || original.minute !== submitted.minute
+  }
+
   private createSessionDetailsValidations(): ValidationChain[] {
     const { isSessionEnded } = this
-    function durationInMinutes(
-      startHour: number,
-      startMinute: number,
-      startPeriod: 'AM' | 'PM',
-      endHour: number,
-      endMinute: number,
-      endPeriod: 'AM' | 'PM',
-    ): number {
-      const start = DateUtils.convertTo24Hour(startHour, startMinute, startPeriod)
-      const end = DateUtils.convertTo24Hour(endHour, endMinute, endPeriod)
-      return end.hour * 60 + end.minute - (start.hour * 60 + start.minute)
-    }
-
-    function isTimeBefore(
-      startHour: number,
-      startMinute: number,
-      startPeriod: 'AM' | 'PM',
-      endHour: number,
-      endMinute: number,
-      endPeriod: 'AM' | 'PM',
-    ): boolean {
-      const start = DateUtils.convertTo24Hour(startHour, startMinute, startPeriod)
-      const end = DateUtils.convertTo24Hour(endHour, endMinute, endPeriod)
-
-      if (start.hour !== end.hour) {
-        return start.hour < end.hour
-      }
-      return start.minute < end.minute
-    }
     const { originalStartTime, originalEndTime } = this
-
-    function startTimeChanged(submittedHour: number, submittedMinute: number, submittedPeriod: 'AM' | 'PM'): boolean {
-      if (!originalStartTime) return true
-      const orig = DateUtils.convertTo24Hour(
-        originalStartTime.hour,
-        originalStartTime.minutes,
-        originalStartTime.amOrPm,
-      )
-      const sub = DateUtils.convertTo24Hour(submittedHour, submittedMinute, submittedPeriod)
-      return orig.hour !== sub.hour || orig.minute !== sub.minute
-    }
-
-    function endTimeChanged(submittedHour: number, submittedMinute: number, submittedPeriod: 'AM' | 'PM'): boolean {
-      if (!originalEndTime) return true
-      const orig = DateUtils.convertTo24Hour(originalEndTime.hour, originalEndTime.minutes, originalEndTime.amOrPm)
-      const sub = DateUtils.convertTo24Hour(submittedHour, submittedMinute, submittedPeriod)
-      return orig.hour !== sub.hour || orig.minute !== sub.minute
-    }
 
     /**
      * Checks if the submitted duration exceeds the original duration for a completed session.
@@ -138,10 +105,10 @@ export default class EditSessionDateAndTimeFormForm {
         return null
       }
 
-      const duration = durationInMinutes(startHour, startMinute, startPeriod, endHour, endMinute, endPeriod)
+      const duration = DateUtils.durationInMinutes(startHour, startMinute, startPeriod, endHour, endMinute, endPeriod)
       const originalDurationMinutes =
         originalStartTime && originalEndTime
-          ? durationInMinutes(
+          ? DateUtils.durationInMinutes(
               originalStartTime.hour,
               originalStartTime.minutes,
               originalStartTime.amOrPm,
@@ -155,8 +122,13 @@ export default class EditSessionDateAndTimeFormForm {
         // Only throw error if the relevant field changed
         const relevantFieldChanged =
           timeFieldThatChanged === 'start'
-            ? startTimeChanged(startHour, startMinute, startPeriod)
-            : endTimeChanged(endHour, endMinute, endPeriod)
+            ? EditSessionDateAndTimeFormForm.startOrEndTimeChanged(
+                originalStartTime,
+                startHour,
+                startMinute,
+                startPeriod,
+              )
+            : EditSessionDateAndTimeFormForm.startOrEndTimeChanged(originalEndTime, endHour, endMinute, endPeriod)
         if (relevantFieldChanged) {
           return errorMessages.sessionSchedule.sessionDetailsDurationLongerThanOriginallyScheduled
         }
@@ -292,7 +264,7 @@ export default class EditSessionDateAndTimeFormForm {
             return true
           }
 
-          if (!isTimeBefore(startHour, startMinute, startPartOfDay, endHour, endMinute, endPartOfDay)) {
+          if (!DateUtils.isTimeBefore(startHour, startMinute, startPartOfDay, endHour, endMinute, endPartOfDay)) {
             throw new Error(errorMessages.sessionSchedule.sessionDetailsEndTimeBeforeStart)
           }
           const durationError = validatePastSessionDuration(
