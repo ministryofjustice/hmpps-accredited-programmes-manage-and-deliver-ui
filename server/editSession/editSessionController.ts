@@ -100,10 +100,9 @@ export default class EditSessionController extends BaseController {
       return null
     }
 
-    const messageCandidates = [data.userMessage, data.developerMessage]
-    const matchedMessage = messageCandidates.find(
-      candidate =>
-        typeof candidate === 'string' && candidate.toLowerCase().includes('cannot be longer than originally scheduled'),
+    const messageUsers = [data.userMessage, data.developerMessage]
+    const matchedMessage = messageUsers.find(
+      user => typeof user === 'string' && user.toLowerCase().includes('cannot be longer than originally scheduled'),
     )
 
     if (!matchedMessage) {
