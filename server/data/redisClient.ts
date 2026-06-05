@@ -22,7 +22,7 @@ export const createRedisClient = (): RedisClient => {
         return nextDelay
       },
     },
-  })
+  }) as RedisClient
 
   client.on('error', (e: Error) => logger.error('Redis client error', e))
 

@@ -1,14 +1,9 @@
 $moj-page-width: 1170px;
-
-// GOV.UK 5.x with config overrides
 @use 'node_modules/govuk-frontend/dist/govuk' with (
   $govuk-global-styles: true,
   $govuk-page-width: $moj-page-width,
   $govuk-assets-path: '/assets/images/'
 );
-
-// MoJ 7.x
-@use 'node_modules/@ministryofjustice/frontend/moj/all';
 
 @use 'node_modules/accessible-autocomplete/src/autocomplete';
 
