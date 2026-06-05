@@ -141,7 +141,7 @@
     "audit-ci": "^7.1.0",
     "aws-sdk-client-mock": "^4.1.0",
     "cheerio": "^1.2.0",
-    "chokidar": "5.0.0",
+    "chokidar": "3.6.0",
     "concurrently": "^10.0.3",
     "cypress": "^15.16.0",
     "cypress-multi-reporters": "^2.0.5",
