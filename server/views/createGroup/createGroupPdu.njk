@@ -24,6 +24,7 @@
         <span class="govuk-caption-l">{{ text.headingHintText }}</span>
         <form method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{csrfToken}}">
+          <h1 class="govuk-heading-l">{{ text.headingText }}</h1>
           {{ govukSelect(createGroupPduArgs) }}
           <script src="/assets/accessible-autocomplete.min.js"></script>
           <script nonce="{{ cspNonce }}">
