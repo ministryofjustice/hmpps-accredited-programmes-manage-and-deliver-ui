@@ -105,12 +105,12 @@ export default class EditSessionPresenter {
     return text.length > 0 && text.toLowerCase() !== 'not added'
   }
 
-  private sessionNotesCell(notes: unknown, referralId: string) {
+  private sessionNotesCell(notes: unknown, referralId: string, personName: string) {
     if (!this.hasSessionNotes(notes)) {
       return { text: 'Not added' }
     }
 
-    const linkText = `${ViewUtils.escape(this.sessionTitle)} notes`
+    const linkText = `${personName}: ${ViewUtils.escape(this.sessionTitle)} notes`
     return { html: `<a href="${this.sessionNotesPagePath(referralId)}">${linkText}</a>` }
   }
 
@@ -145,7 +145,7 @@ export default class EditSessionPresenter {
               html: `<a href="/referral-details/${it.referralId}/personal-details">${it.name}</a> ${it.crn}`,
             },
             { html: this.attendanceOptionText(it.attendance).attendanceState },
-            this.sessionNotesCell(it.sessionNotes, it.referralId),
+            this.sessionNotesCell(it.sessionNotes, it.referralId, it.name),
           ],
         })),
       }
@@ -162,7 +162,11 @@ export default class EditSessionPresenter {
                   html: `<a href="/referral-details/${attendanceData[0].referralId}/personal-details">${attendanceData[0].name}</a> ${attendanceData[0].crn}`,
                 },
                 { html: this.attendanceOptionText(attendanceData[0].attendance).attendanceState },
-                this.sessionNotesCell(attendanceData[0].sessionNotes, attendanceData[0].referralId),
+                this.sessionNotesCell(
+                  attendanceData[0].sessionNotes,
+                  attendanceData[0].referralId,
+                  attendanceData[0].name,
+                ),
               ],
             ]
           : [],
