@@ -16,7 +16,8 @@ generic-service:
     enabled: true
     host: app-hostname.local # override per environment
     tlsSecretName: hmpps-manage-and-deliver-accredited-programmes-ui-cert
-
+    modsecurity_enabled: true
+    modsecurity_github_team: hmpps-accredited-programmes-manage-and-deliver-devs
 
   livenessProbe:
     httpGet:
