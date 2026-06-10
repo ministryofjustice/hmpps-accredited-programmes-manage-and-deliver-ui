@@ -39,7 +39,8 @@ ARG BUILD_NUMBER
 ARG GIT_REF
 ARG GIT_BRANCH
 
-COPY package*.json ./
+# Include allowlist inputs before setup so hmpps-npm-script-run-allowlist can validate environment.
+COPY package*.json .npmrc .allowed-scripts.mjs ./
 RUN CYPRESS_INSTALL_BINARY=0 npm run setup --no-audit
 ENV NODE_ENV='production'
 
