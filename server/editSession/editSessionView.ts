@@ -108,6 +108,19 @@ export default class EditSessionView {
     }
   }
 
+  private get successEditSessionMessageArgs() {
+    if (!this.presenter.editSessionSuccessMessage) {
+      return null
+    }
+
+    return {
+      variant: 'success',
+      title: this.presenter.editSessionSuccessMessage,
+      showTitleAsHeading: true,
+      dismissible: true,
+    }
+  }
+
   get deleteButton(): ButtonArgs {
     return {
       text: 'Delete session',
@@ -142,6 +155,7 @@ export default class EditSessionView {
         backLinkArgs: this.presenter.backLinkArgs,
         editSessionSummary: this.editSessionSummary,
         successMessageArgs: this.successMessageArgs,
+        successEditSessionMessageArgs: this.successEditSessionMessageArgs,
         deleteButton: this.deleteButton,
         canBeDeleted: this.presenter.canBeDeleted,
         attendanceTableArgs: this.presenter.attendanceTableArgs,

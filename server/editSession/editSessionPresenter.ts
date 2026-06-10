@@ -14,6 +14,7 @@ export default class EditSessionPresenter {
     readonly sessionId: string,
     readonly deleteUrl: string,
     readonly successMessage: string | null = null,
+    readonly editSessionSuccessMessage: string | null = null,
     readonly isAttendanceHistory: boolean = false,
     private readonly validationError: FormValidationError | null = null,
     private readonly attendanceHistoryReferralId: string | null = null,

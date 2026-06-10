@@ -496,6 +496,7 @@ describe('EditSessionPresenter', () => {
           mockSessionId,
           mockDeleteUrl,
           null,
+          null,
           true,
           null,
           'abc123',
@@ -515,6 +516,7 @@ describe('EditSessionPresenter', () => {
           sessionDetails,
           mockSessionId,
           mockDeleteUrl,
+          null,
           null,
           false,
         )

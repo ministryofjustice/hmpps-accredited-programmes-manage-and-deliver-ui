@@ -214,7 +214,7 @@ describe('editSessionDateAndTime', () => {
           'session-details-end-time-part-of-day': 'AM',
         })
         .expect(302)
-        .expect('Location', '/111/6789/edit-session?message=Test%20message')
+        .expect('Location', '/111/6789/edit-session?editSessionMessage=Test%20message')
 
       expect(accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime).toHaveBeenCalledWith(
         'user1',
@@ -396,7 +396,7 @@ describe('submitEditSessionDateAndTime', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Redirecting to /111/6789/edit-session?message=${encodeURIComponent('Test message')}`,
+            `Redirecting to /111/6789/edit-session?editSessionMessage=${encodeURIComponent('Test message')}`,
           )
         })
     })
@@ -482,7 +482,7 @@ describe('editSessionFacilitators', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
-            `Found. Redirecting to /${groupId}/${sessionId}/edit-session?message=${encodeURIComponent('Facilitators updated successfully')}`,
+            `Found. Redirecting to /${groupId}/${sessionId}/edit-session?editSessionMessage=${encodeURIComponent('Facilitators updated successfully')}`,
           )
         })
     })
