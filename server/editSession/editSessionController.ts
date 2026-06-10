@@ -149,7 +149,7 @@ export default class EditSessionController extends BaseController {
   async editSession(req: Request, res: Response): Promise<void> {
     const { groupId, sessionId } = req.params as Record<string, string>
     const { username } = req.user
-    const { message, isAttendanceHistory, referralId } = req.query
+    const { message, isAttendanceHistory, referralId, editSessionMessage } = req.query
     let formError: FormValidationError | null = null
 
     req.session.editSessionDateAndTime = {}
@@ -161,6 +161,7 @@ export default class EditSessionController extends BaseController {
     )
 
     const successMessage = message ? String(message) : null
+    const editSessionSuccessMessage = editSessionMessage ? String(editSessionMessage) : null
     const isAttendanceHistoryFlag = isAttendanceHistory === 'true'
     const attendanceHistoryReferralId = referralId ? String(referralId) : null
     const moduleName = convertToUrlFriendlyKebabCase(
@@ -190,6 +191,7 @@ export default class EditSessionController extends BaseController {
       sessionId,
       `/${groupId}/${sessionId}/delete-session`,
       successMessage,
+      editSessionSuccessMessage,
       isAttendanceHistoryFlag,
       formError,
       attendanceHistoryReferralId,
@@ -212,7 +214,7 @@ export default class EditSessionController extends BaseController {
         formError = data.error
       } else if (data.paramsForUpdate?.delete === 'yes') {
         const response = await this.accreditedProgrammesManageAndDeliverService.deleteSession(username, sessionId)
-        return res.redirect(`/group/${groupId}/sessions-and-attendance?successMessage=${response}`)
+        return res.redirect(`/group/${groupId}/sessions-and-attendance?editSessionMessage=${response}`)
       } else {
         return res.redirect(req.session.originPage)
       }
@@ -243,7 +245,7 @@ export default class EditSessionController extends BaseController {
           sessionId,
           data.paramsForUpdate.referralId,
         )
-        return res.redirect(`/${groupId}/${sessionId}/edit-session?message=${message}`)
+        return res.redirect(`/${groupId}/${sessionId}/edit-session?editSessionMessage=${message}`)
       }
     }
 
@@ -363,7 +365,7 @@ export default class EditSessionController extends BaseController {
 
         delete req.session.editSessionDateAndTime
 
-        return res.redirect(`/${groupId}/${sessionId}/edit-session?message=${response.message}`)
+        return res.redirect(`/${groupId}/${sessionId}/edit-session?editSessionMessage=${response.message}`)
       }
     }
     const presenter = new EditSessionDateAndTimePresenter(
@@ -406,7 +408,7 @@ export default class EditSessionController extends BaseController {
           req.session.editSessionDateAndTime as RescheduleSessionRequest,
         )
 
-        return res.redirect(`/${groupId}/${sessionId}/edit-session?message=${message.message}`)
+        return res.redirect(`/${groupId}/${sessionId}/edit-session?editSessionMessage=${message.message}`)
       }
     }
 
@@ -440,7 +442,7 @@ export default class EditSessionController extends BaseController {
           sessionId,
           req.session.sessionFacilitators,
         )
-        return res.redirect(`/${groupId}/${sessionId}/edit-session?message=${message}`)
+        return res.redirect(`/${groupId}/${sessionId}/edit-session?editSessionMessage=${message}`)
       }
     }
     const presenter = new EditSessionFacilitatorsPresenter(

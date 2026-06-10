@@ -15,8 +15,12 @@
       <div class="govuk-grid-column-two-thirds govuk-!-margin-bottom-2">
         {{ govukBackLink(backLinkArgs) }}
       </div>
-
       <div class="govuk-grid-column-two-thirds">
+
+        {% if successEditSessionMessageArgs !== null %}
+        {{ mojAlert(successEditSessionMessageArgs) }}
+        {% endif %}
+        
         <span class="govuk-caption-l">{{text.pageCaption}}</span>
         <h1 class="govuk-heading-l">{{text.pageHeading}}</h1>
       </div>
