@@ -82,7 +82,7 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.1057.0",
+    "@aws-sdk/client-sqs": "^3.1062.0",
     "@ministryofjustice/frontend": "^9.0.0",
     "@ministryofjustice/hmpps-auth-clients": "^2.0.0",
     "@ministryofjustice/hmpps-monitoring": "^2.1.0",
@@ -136,8 +136,8 @@
     "@types/passport-oauth2": "^1.8.0",
     "@types/superagent": "^8.1.10",
     "@types/supertest": "^7.2.0",
-    "@typescript-eslint/eslint-plugin": "^8.60.0",
-    "@typescript-eslint/parser": "^8.60.0",
+    "@typescript-eslint/eslint-plugin": "^8.60.1",
+    "@typescript-eslint/parser": "^8.60.1",
     "audit-ci": "^7.1.0",
     "aws-sdk-client-mock": "^4.1.0",
     "cheerio": "^1.2.0",
@@ -163,7 +163,7 @@
     "jest-html-reporter": "^4.4.0",
     "jest-junit": "17.0.0",
     "jsonwebtoken": "^9.0.3",
-    "lint-staged": "^17.0.6",
+    "lint-staged": "^17.0.7",
     "mocha": "11.7.6",
     "mocha-junit-reporter": "^2.2.1",
     "nock": "^14.0.15",
@@ -175,7 +175,7 @@
     "ts-jest": "^29.4.11",
     "ts-node": "^10.9.2",
     "typescript": "5.9.3",
-    "typescript-eslint": "^8.60.0"
+    "typescript-eslint": "^8.60.1"
   },
   "overrides": {
     "@jgoz/esbuild-plugin-typecheck": {
