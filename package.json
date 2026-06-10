@@ -166,7 +166,7 @@
     "lint-staged": "^17.0.6",
     "mocha": "11.7.6",
     "mocha-junit-reporter": "^2.2.1",
-    "nock": "^15.0.0",
+    "nock": "14.0.15",
     "openapi-typescript": "^7.13.0",
     "prettier": "^3.8.4",
     "prettier-plugin-jinja-template": "^2.2.0",
