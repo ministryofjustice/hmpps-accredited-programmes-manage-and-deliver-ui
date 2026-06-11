@@ -25,6 +25,6 @@ describe('RemoveFromGroupPresenter', () => {
 
   it('should return correct cancelLinkHref', () => {
     const presenter = new RemoveFromGroupPresenter(groupId, groupManagementData, backLink)
-    expect(presenter.cancelLinkHref).toBe('/group/group-1/waitlist')
+    expect(presenter.cancelLinkHref).toBe('/group/group-1/allocations')
   })
 })
