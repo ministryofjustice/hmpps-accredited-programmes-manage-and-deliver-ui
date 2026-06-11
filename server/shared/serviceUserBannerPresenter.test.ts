@@ -22,11 +22,11 @@ describe('ServiceUserBannerPresenter', () => {
   })
 
   describe('name', () => {
-    it('returns a formatted full name', () => {
-      referralDetails.personName = 'Ben jones'
+    it('returns full name with capitals maintained', () => {
+      referralDetails.personName = 'Christopher McLeavey'
 
       const presenter = new ServiceUserBannerPresenter(referralDetails)
-      expect(presenter.name).toEqual('Ben Jones')
+      expect(presenter.name).toEqual('Christopher McLeavey')
     })
   })
 
