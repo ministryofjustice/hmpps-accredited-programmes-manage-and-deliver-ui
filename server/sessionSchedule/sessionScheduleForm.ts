@@ -112,17 +112,7 @@ export default class CreateSessionScheduleForm {
         .bail()
         .matches(/^(0?[1-9]|[12]\d|3[01])\/(0?[1-9]|1[0-2])\/\d{4}$/)
         .withMessage(errorMessages.sessionSchedule.sessionDetailsDateInvalid)
-        .bail()
-        .custom((value: string) => {
-          const [day, month, year] = value.split('/').map(Number)
-          const inputDate = new Date(year, month - 1, day)
-          const today = new Date()
-          today.setHours(0, 0, 0, 0)
-          if (inputDate < today) {
-            throw new Error(errorMessages.sessionSchedule.sessionDetailsDateInPast)
-          }
-          return true
-        }),
+        .bail(),
       body(`session-details-start-time-hour`)
         .notEmpty()
         .withMessage(errorMessages.sessionSchedule.sessionDetailsStartTime)

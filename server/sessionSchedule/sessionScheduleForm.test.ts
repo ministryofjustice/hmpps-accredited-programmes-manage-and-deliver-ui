@@ -109,28 +109,6 @@ describe('CreateSessionScheduleForm', () => {
         })
       })
 
-      it('returns error when date is in the past', async () => {
-        const yesterday = new Date()
-        yesterday.setDate(yesterday.getDate() - 1)
-        request.body['session-details-date'] =
-          `${yesterday.getDate()}/${yesterday.getMonth() + 1}/${yesterday.getFullYear()}`
-        request.body['session-details-who'] = ['X123456']
-        request.body['session-details-facilitator'] =
-          '{"facilitator":"John Doe", "facilitatorCode":"N07B656", "teamName":"GM Manchester N1", "teamCode":"N50CAC"}'
-
-        const data = await new CreateSessionScheduleForm(request).sessionDetailsData()
-
-        expect(data.error).toStrictEqual({
-          errors: [
-            {
-              errorSummaryLinkedField: 'session-details-date',
-              formFields: ['session-details-date'],
-              message: 'Start date must be in the future',
-            },
-          ],
-        })
-      })
-
       it('accepts when multiple facilitators are provided and parses them correctly', async () => {
         request.body['session-details-who'] = 'X123456 + John Doe'
         request.body['session-details-date'] = '10/07/3055'
