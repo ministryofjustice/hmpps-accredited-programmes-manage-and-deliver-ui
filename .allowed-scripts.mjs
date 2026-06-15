@@ -7,6 +7,6 @@ export default configureAllowedScripts({
     'node_modules/unrs-resolver@1.12.2': 'ALLOW',
     'node_modules/@parcel/watcher@2.5.6': 'ALLOW',
     'node_modules/cypress@15.17.0': 'ALLOW',
-    'node_modules/esbuild@0.28.0': 'ALLOW',
+    'node_modules/esbuild@0.28.1': 'ALLOW',
   },
 })
