@@ -82,7 +82,7 @@ describe('EditSessionDateAndTimeForm', () => {
         })
       })
 
-      it('returns error when date is in the past', async () => {
+      it('does not return error when date is in the past', async () => {
         const yesterday = new Date()
         yesterday.setDate(yesterday.getDate() - 1)
         request.body['session-details-date'] =
@@ -90,15 +90,7 @@ describe('EditSessionDateAndTimeForm', () => {
 
         const data = await new EditSessionDateAndTimeFormForm(request).rescheduleSessionDetailsData()
 
-        expect(data.error).toStrictEqual({
-          errors: [
-            {
-              errorSummaryLinkedField: 'session-details-date',
-              formFields: ['session-details-date'],
-              message: 'Start date must be in the future',
-            },
-          ],
-        })
+        expect(data.error).toBeNull()
       })
     })
 
