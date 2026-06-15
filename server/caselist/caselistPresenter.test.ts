@@ -353,6 +353,7 @@ describe('generateTableRows', () => {
       cohort: 'GENERAL_OFFENCE',
       hasLdc: false,
       referralStatus: 'Awaiting allocation',
+      statusLabelColour: 'teal',
     })
     const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
       .pageContent([referralCaseListItem])
@@ -384,7 +385,9 @@ describe('generateTableRows', () => {
       attributes: { 'data-sort-value': sentenceEndDateTimestamp },
     })
     expect(rows[0][4]).toEqual({ html: 'General offence' })
-    expect(rows[0][5]).toEqual({ text: 'Awaiting allocation' })
+    expect(rows[0][5]).toEqual({
+      html: `<strong class="govuk-tag govuk-tag--teal">Awaiting allocation</strong>`,
+    })
   })
 
   it('should generate correct sentence end date with LICENCE_CONDITION source', () => {

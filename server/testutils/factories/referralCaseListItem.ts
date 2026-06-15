@@ -14,4 +14,5 @@ export default ReferralCaseListItemFactory.define(({ sequence }) => ({
   pdu: 'PDU_NAME_1',
   sentenceEndDate: '2024-01-01',
   sentenceEndDateSource: 'LICENCE_CONDITION' as 'LICENCE_CONDITION' | 'REQUIREMENT',
+  statusLabelColour: 'blue',
 }))

@@ -153,7 +153,9 @@ export default class CaselistPresenter {
         {
           html: `${cohortConfigMap[referral.cohort]}${CaselistUtils.hasLdcTagHtml(referral)}`,
         },
-        { text: referral.referralStatus },
+        {
+          html: `<strong class="govuk-tag govuk-tag--${referral.statusLabelColour}">${referral.referralStatus}</strong>`,
+        },
       ])
     })
     return referralData
