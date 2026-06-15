@@ -3260,10 +3260,10 @@ export interface components {
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
-      first?: boolean
-      last?: boolean
       sort?: components['schemas']['SortObject']
       pageable?: components['schemas']['PageableObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       empty?: boolean
@@ -3271,13 +3271,13 @@ export interface components {
     PageableObject: {
       /** Format: int64 */
       offset?: number
+      unpaged?: boolean
       sort?: components['schemas']['SortObject']
-      /** Format: int32 */
-      pageSize?: number
       /** Format: int32 */
       pageNumber?: number
       paged?: boolean
-      unpaged?: boolean
+      /** Format: int32 */
+      pageSize?: number
     }
     ReferralCaseListItem: {
       /** Format: uuid */
@@ -3285,6 +3285,7 @@ export interface components {
       crn: string
       personName: string
       referralStatus: string
+      statusLabelColour: string
       /**
        * @description Offence classification based on assessment
        * @enum {string}
@@ -3300,8 +3301,8 @@ export interface components {
     }
     SortObject: {
       empty?: boolean
-      sorted?: boolean
       unsorted?: boolean
+      sorted?: boolean
     }
     StatusFilterValues: {
       /**
@@ -3933,10 +3934,10 @@ export interface components {
       content?: components['schemas']['Group'][]
       /** Format: int32 */
       number?: number
-      first?: boolean
-      last?: boolean
       sort?: components['schemas']['SortObject']
       pageable?: components['schemas']['PageableObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       empty?: boolean
@@ -4028,10 +4029,10 @@ export interface components {
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
-      first?: boolean
-      last?: boolean
       sort?: components['schemas']['SortObject']
       pageable?: components['schemas']['PageableObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       empty?: boolean
