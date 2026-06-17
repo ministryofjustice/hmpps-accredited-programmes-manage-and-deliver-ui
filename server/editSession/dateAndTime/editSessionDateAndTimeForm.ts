@@ -144,16 +144,6 @@ export default class EditSessionDateAndTimeFormForm {
       .matches(/^(0?[1-9]|[12]\d|3[01])\/(0?[1-9]|1[0-2])\/\d{4}$/)
       .withMessage(errorMessages.sessionSchedule.sessionDetailsDateInvalid)
 
-    // Only prevent past dates if the session hasn't ended
-    if (!isSessionEnded) {
-      dateValidation.bail().custom((value: string) => {
-        if (DateFormatUtils.isDateInPast(value)) {
-          throw new Error(errorMessages.sessionSchedule.sessionDetailsDateInPast)
-        }
-        return true
-      })
-    }
-
     return [
       dateValidation,
 
