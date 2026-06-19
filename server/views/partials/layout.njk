@@ -1,5 +1,6 @@
 {% from "components/custom-primary-navigation/macro.njk" import customPrimaryNavigation %}
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 {% extends "govuk/template.njk" %}
 
 {% block head %}
@@ -53,9 +54,35 @@
 {% endblock %}
 
 {% block bodyStart %}
+<div class="govuk-modal-dialogue-inert-container">
 {% endblock %}
 
 {% block bodyEnd %}
+</div>
+<div class="govuk-modal-dialogue" data-modal-type="inactivity-warning" data-inert-container=".govuk-modal-dialogue-inert-container">
+  <div class="govuk-modal-dialogue__wrapper">
+    <dialog class="govuk-modal-dialogue__box" aria-labelledby="modal-title-inactivity-warning" aria-modal="true" role="modal" tabindex="-1">
+      <div class="govuk-modal-dialogue__header">
+        <button type="button" class="govuk-button govuk-modal-dialogue__close" aria-label="close" data-element="govuk-modal-dialogue-close">x</button>
+      </div>
+      <div class="govuk-modal-dialogue__content">
+        <h2 class="govuk-modal-dialogue__heading govuk-heading-l" id="modal-title-inactivity-warning">You will be signed out soon</h2>
+        <div class="govuk-modal-dialogue__description govuk-body">
+          <p>You have not interacted with the service for the last 50 minutes.</p>
+          <p>We will delete any unsaved information and sign you out if you do not continue in the next 10 minutes. This is to protect your information.</p>
+          {{ govukButton({
+            text: "Continue using Accredited Programmes",
+            type: "button",
+            attributes: {
+              "data-element": "govuk-modal-dialogue-close"
+            }
+          }) }}
+        </div>
+      </div>
+    </dialog>
+  </div>
+  <div class="govuk-modal-dialogue__backdrop"></div>
+</div>
 {% if sentry and sentry.loaderScriptId %}
     <script nonce="{{ cspNonce }}">
       window.sentryOnLoad = function() {
