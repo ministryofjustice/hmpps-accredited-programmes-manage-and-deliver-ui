@@ -1,6 +1,6 @@
 import config from '../../config'
 import ServiceUserBannerView from '../serviceUserBannerView'
-import LayoutPresenter from './layoutPresenter'
+import LayoutPresenter, { PrimaryNavigationTab } from './layoutPresenter'
 import { buildPrimaryNavigationArgs } from './primaryNavigation'
 
 export interface PageContentView {

@@ -29,7 +29,7 @@ const fallbackErrorPageContent: ErrorPageContent = {
   body: 'Try again later.',
 }
 
-const hideDebugDetailsForStatuses = new Set([400, 404, 500, 503])
+const hideDebugDetailsForStatuses = new Set([404, 500, 503])
 
 export default function createErrorHandler(production: boolean) {
   return (error: HTTPError, req: Request, res: Response, next: NextFunction): void => {
