@@ -7,8 +7,8 @@ mojFrontend.initAll()
 
 const $inactivityWarningModal = document.querySelector('[data-modal-type="inactivity-warning"]')
 if ($inactivityWarningModal) {
-  const INACTIVITY_TIMEOUT_MS = 50 * 60 * 1000
-  const MODAL_RESPONSE_TIMEOUT_MS = 10 * 60 * 1000
+  const INACTIVITY_TIMEOUT = 0.1 * 60 * 1000
+  const MODAL_LOGOUT_TIMEOUT = 0.2 * 60 * 1000
   const SIGN_OUT_PATH = '/sign-out'
   const activityEvents = ['click', 'keydown', 'mousemove', 'scroll', 'touchstart']
   let inactivityTimerId
@@ -27,7 +27,7 @@ if ($inactivityWarningModal) {
 
   const startSignOutTimer = () => {
     clearSignOutTimer()
-    signOutTimerId = window.setTimeout(redirectToSignOut, MODAL_RESPONSE_TIMEOUT_MS)
+    signOutTimerId = window.setTimeout(redirectToSignOut, MODAL_LOGOUT_TIMEOUT)
   }
 
   const startInactivityTimer = () => {
@@ -36,7 +36,7 @@ if ($inactivityWarningModal) {
       if (!modalDialog.isOpen()) {
         modalDialog.open()
       }
-    }, INACTIVITY_TIMEOUT_MS)
+    }, INACTIVITY_TIMEOUT)
   }
 
   const handleActivity = () => {
