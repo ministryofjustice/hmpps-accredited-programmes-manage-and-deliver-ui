@@ -72,11 +72,12 @@ describe('Update Referral Status Controller', () => {
 
     describe(`POST /referral/:referralDetails.id/update-status`, () => {
       it('posts to the update status endpoint and redirects successfully to the correct page', async () => {
+        const validId = statusDetails.availableStatuses[0].id
         return request(app)
           .post(`/referral/${referralDetails.id}/update-status`)
           .type('form')
           .send({
-            'updated-status': 'afc0b94c-b983-4a68-a109-0be29a7d3b2f',
+            'updated-status': validId,
             'more-details': 'some details',
           })
           .expect(302)
@@ -210,15 +211,37 @@ describe('Update Referral Status Controller', () => {
             expect(res.text).toContain(referralDetails.personName)
           })
       })
+
+      it('renders the suggested status id as a hidden form field', async () => {
+        const suggestedId = randomUUID()
+        accreditedProgrammesManageAndDeliverService.getStatusTransitionDetails.mockResolvedValue({
+          ...statusDetails,
+          suggestedStatus: { name: 'On programme', statusDescriptionId: suggestedId },
+        })
+        accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue({
+          ...referralDetails,
+          currentStatusDescription: 'Scheduled',
+        })
+        return request(app)
+          .get(`/referral/${referralDetails.id}/update-status-details`)
+          .expect(200)
+          .expect(res => {
+            expect(res.text).toContain(
+              `<input type="hidden" name="referral-status-description-id" value="${suggestedId}">`,
+            )
+          })
+      })
     })
 
     describe(`POST /referral/:referralDetails.id/update-status-details`, () => {
+      const suggestedId = 'b3a4c1f0-1111-2222-3333-444455556666'
+
       beforeEach(() => {
         accreditedProgrammesManageAndDeliverService.getStatusTransitionDetails.mockResolvedValue({
           ...statusDetails,
           suggestedStatus: {
-            name: 'Programme complete',
-            statusDescriptionId: randomUUID(),
+            name: 'On programme',
+            statusDescriptionId: suggestedId,
           },
           currentGroupDetails: {
             currentlyAllocatedGroupCode: 'Building Choices 1',
@@ -226,7 +249,8 @@ describe('Update Referral Status Controller', () => {
           },
         })
       })
-      it('updates status and redirects for On programme', async () => {
+
+      it('updates status using the submitted hidden status id and redirects', async () => {
         accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue({
           ...referralDetails,
           currentStatusDescription: 'On programme',
@@ -234,12 +258,52 @@ describe('Update Referral Status Controller', () => {
         return request(app)
           .post(`/referral/${referralDetails.id}/update-status-details`)
           .type('form')
-          .send({ 'more-details': 'Some details' })
+          .send({ 'referral-status-description-id': suggestedId, 'more-details': 'Some details' })
           .expect(302)
-          .expect(res => {
-            expect(res.text).toContain(
-              `/referral/${referralDetails.id}/status-history?message=Jennifer%20Wilson's%20referral%20status%20is%20now%20Awaiting%20allocation.%20They%20have%20been%20removed%20from%20group%20BCCDD1`,
+          .expect(() => {
+            expect(accreditedProgrammesManageAndDeliverService.updateStatus).toHaveBeenCalledWith(
+              'user1',
+              referralDetails.id,
+              { referralStatusDescriptionId: suggestedId, additionalDetails: 'Some details' },
             )
+          })
+      })
+
+      it('rejects a submission whose hidden status id is no longer a valid transition (race-condition guard)', async () => {
+        // Page was rendered when referral was Scheduled (suggested = On programme = staleId).
+        // While the user was on the page, the referral moved on — current transitions now
+        // suggest Programme complete and no longer include the stale id.
+        const staleId = '00000000-aaaa-bbbb-cccc-deadbeef0001'
+        accreditedProgrammesManageAndDeliverService.getStatusTransitionDetails.mockResolvedValue({
+          ...statusDetails,
+          suggestedStatus: { name: 'Programme complete', statusDescriptionId: randomUUID() },
+          availableStatuses: [], // staleId is not present
+        })
+        return request(app)
+          .post(`/referral/${referralDetails.id}/update-status-details`)
+          .type('form')
+          .send({ 'referral-status-description-id': staleId, 'more-details': '' })
+          .expect(409)
+          .expect(() => {
+            expect(accreditedProgrammesManageAndDeliverService.updateStatus).not.toHaveBeenCalled()
+          })
+      })
+
+      it('renders a friendly inline error when the API returns 400 Invalid referral status transition', async () => {
+        accreditedProgrammesManageAndDeliverService.updateStatus.mockRejectedValue({
+          status: 400,
+          data: {
+            status: 400,
+            userMessage: "Bad request: Invalid referral status transition: 'Scheduled' -> 'Programme complete'",
+          },
+        })
+        return request(app)
+          .post(`/referral/${referralDetails.id}/update-status-details`)
+          .type('form')
+          .send({ 'referral-status-description-id': suggestedId, 'more-details': '' })
+          .expect(409)
+          .expect(res => {
+            expect(res.text).toContain('That referral status change is no longer allowed')
           })
       })
 
@@ -251,12 +315,51 @@ describe('Update Referral Status Controller', () => {
         return request(app)
           .post(`/referral/${referralDetails.id}/update-status-details`)
           .type('form')
-          .send({ 'more-details': faker.string.alpha({ length: 501 }) })
+          .send({ 'referral-status-description-id': suggestedId, 'more-details': faker.string.alpha({ length: 501 }) })
           .expect(400)
           .expect(res => {
             expect(res.text).toContain('Details must be 500 characters or fewer')
           })
       })
+    })
+  })
+
+  describe('Cache-Control no-store', () => {
+    it('sets Cache-Control: no-store on GET /update-status', async () => {
+      const res = await request(app).get(`/referral/${referralDetails.id}/update-status`)
+      expect(res.headers['cache-control']).toBe('no-store')
+    })
+  })
+
+  describe('update-status (radio) race-condition guard', () => {
+    it('rejects a submitted status id that is no longer in availableStatuses', async () => {
+      return request(app)
+        .post(`/referral/${referralDetails.id}/update-status`)
+        .type('form')
+        .send({ 'updated-status': '00000000-0000-0000-0000-000000000000', 'more-details': '' })
+        .expect(409)
+        .expect(() => {
+          expect(accreditedProgrammesManageAndDeliverService.updateStatus).not.toHaveBeenCalled()
+        })
+    })
+
+    it('renders a friendly inline error when the API returns 400 Invalid referral status transition', async () => {
+      const validId = statusDetails.availableStatuses[0].id
+      accreditedProgrammesManageAndDeliverService.updateStatus.mockRejectedValue({
+        status: 400,
+        data: {
+          status: 400,
+          userMessage: "Bad request: Invalid referral status transition: 'Awaiting assessment' -> 'Programme complete'",
+        },
+      })
+      return request(app)
+        .post(`/referral/${referralDetails.id}/update-status`)
+        .type('form')
+        .send({ 'updated-status': validId, 'more-details': '' })
+        .expect(409)
+        .expect(res => {
+          expect(res.text).toContain('That referral status change is no longer allowed')
+        })
     })
   })
 })
