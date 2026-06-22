@@ -32,7 +32,7 @@ export default class ChangeCohortController extends BaseController {
         referralId,
         data.paramsForUpdate.updatedCohort,
       )
-      logger.info({ event: 'OVERRIDE_COHORT', referralId }, 'Updated cohort for referral')
+      logger.info({ event: 'OVERRIDE_COHORT', referralId, userRegion: req.session.userRegion?.regionDescription ?? '' }, 'Updated cohort for referral')
 
       return res.redirect(`${req.session.originPage}?isCohortUpdated=true`)
     }
