@@ -30,6 +30,7 @@ const fallbackErrorPageContent: ErrorPageContent = {
 }
 
 const hideDebugDetailsForStatuses = new Set([400, 404, 500, 503])
+const hideNavigationForStatuses = new Set([503])
 
 export default function createErrorHandler(production: boolean) {
   return (error: HTTPError, req: Request, res: Response, next: NextFunction): void => {
@@ -47,7 +48,9 @@ export default function createErrorHandler(production: boolean) {
     res.locals.pageTitle = pageContent.heading
     res.locals.heading = pageContent.heading
     res.locals.body = pageContent.body
-    res.locals.primaryNavigationArgs = buildPrimaryNavigationArgs(res.locals.userRegion?.regionDescription ?? '')
+    res.locals.primaryNavigationArgs = hideNavigationForStatuses.has(status)
+      ? null
+      : buildPrimaryNavigationArgs(res.locals.userRegion?.regionDescription ?? '')
     res.locals.message = showDebugDetails ? error.message : null
     res.locals.status = status
     res.locals.stack = showDebugDetails ? error.stack : null
