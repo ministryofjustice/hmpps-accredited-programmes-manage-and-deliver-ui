@@ -1,4 +1,5 @@
 @use '../../../node_modules/govuk-frontend/dist/govuk' as *;
+@use 'sass:math';
 
   $govuk-dialogue-width: 640px;
 
@@ -142,7 +143,7 @@
     }
 
     .govuk-modal-dialogue__box {
-      width: percentage($govuk-dialogue-width / map-get($govuk-breakpoints, desktop));
+      width: percentage(math.div($govuk-dialogue-width, map-get($govuk-breakpoints, desktop)));
     }
   }
 

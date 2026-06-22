@@ -53,11 +53,11 @@ if ($inactivityWarningModal) {
     },
   })
 
-  if (!modalDialog) return
+  if (modalDialog) {
+    activityEvents.forEach(eventName => {
+      document.addEventListener(eventName, handleActivity, { passive: true })
+    })
 
-  activityEvents.forEach(eventName => {
-    document.addEventListener(eventName, handleActivity, { passive: true })
-  })
-
-  startInactivityTimer()
+    startInactivityTimer()
+  }
 }
