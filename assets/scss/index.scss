@@ -18,4 +18,5 @@ $moj-page-width: 1170px;
 @use './components/service-user-banner';
 @use './components/card';
 @use './components/custom-primary-navigation';
+@use './components/modalTimeOut';
 @use './overrides/local';
