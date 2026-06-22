@@ -207,7 +207,15 @@ export default class AttendanceController extends BaseController {
           await this.accreditedProgrammesManageAndDeliverService.createSessionAttendance(username, sessionId, {
             attendees: attendeesForSubmission,
           })
-        logger.info({ event: 'RECORD_ATTENDANCE', sessionId, userRegion: req.session.userRegion?.regionDescription ?? '' }, 'Session attendance recorded')
+        logger.info(
+          {
+            event: 'RECORD_ATTENDANCE',
+            sessionId,
+            user: username,
+            userRegion: req.session.userRegion?.regionDescription ?? '',
+          },
+          'Session attendance recorded',
+        )
 
         const attendeeReferralIds = createSessionAttendanceResponse.attendees.map(attendee => attendee.referralId)
         this.clearCachedSessionNotes(req, sessionId, attendeeReferralIds.length ? attendeeReferralIds : referralIds)

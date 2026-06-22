@@ -67,7 +67,16 @@ export default class AddToGroupController extends BaseController {
           data.paramsForUpdate.additionalDetails,
         )
         if (response) {
-          logger.info({ event: 'ASSIGN_REFERRAL_TO_GROUP', referralId, groupId, userRegion: req.session.userRegion?.regionDescription ?? '' }, 'Referral added to group')
+          logger.info(
+            {
+              event: 'ASSIGN_REFERRAL_TO_GROUP',
+              referralId,
+              groupId,
+              user: username,
+              userRegion: req.session.userRegion?.regionDescription ?? '',
+            },
+            'Referral added to group',
+          )
         }
         const { message } = response
         return res.redirect(`/group/${groupId}/allocations?message=${encodeURIComponent(message)}`)

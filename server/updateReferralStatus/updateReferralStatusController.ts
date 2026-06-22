@@ -46,7 +46,15 @@ export default class UpdateReferralStatusController {
           referralId,
           data.paramsForUpdate,
         )
-        logger.info({ event: 'UPDATE_REFERRAL_STATUS', referralId, userRegion: req.session.userRegion?.regionDescription ?? '' }, 'Referral status updated')
+        logger.info(
+          {
+            event: 'UPDATE_REFERRAL_STATUS',
+            referralId,
+            user: username,
+            userRegion: req.session.userRegion?.regionDescription ?? '',
+          },
+          'Referral status updated',
+        )
         return res.redirect(`/referral/${referralId}/status-history?message=${response.message}`)
       }
     }
@@ -142,7 +150,15 @@ export default class UpdateReferralStatusController {
           referralId,
           updateObject,
         )
-        logger.info({ event: 'UPDATE_REFERRAL_STATUS', referralId, userRegion: req.session.userRegion?.regionDescription ?? '' }, 'Referral status updated')
+        logger.info(
+          {
+            event: 'UPDATE_REFERRAL_STATUS',
+            referralId,
+            user: username,
+            userRegion: req.session.userRegion?.regionDescription ?? '',
+          },
+          'Referral status updated',
+        )
 
         return res.redirect(`/referral/${referralId}/status-history?message=${response.message}`)
       }

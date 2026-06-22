@@ -84,8 +84,15 @@ export default class AvailabilityAndMotivationController extends BaseController 
           referralId,
           data.paramsForUpdate,
         )
-        logger.info({ event: 'UPDATE_MOTIVATION', referralId, userRegion: req.session.userRegion?.regionDescription ?? '' }, 'Motivation updated for referral')
-        
+        logger.info(
+          {
+            event: 'UPDATE_MOTIVATION',
+            referralId,
+            user: username,
+            userRegion: req.session.userRegion?.regionDescription ?? '',
+          },
+          'Motivation updated for referral',
+        )
         return res.redirect(
           `/referral/${referralId}/availability-and-motivation/motivation-background-and-non-associations?isMotivationsUpdated=true`,
         )
