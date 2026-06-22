@@ -11,6 +11,7 @@ import AttendanceSessionNotesForm from './attendanceNotes/attendanceSessionNotes
 import { convertToUrlFriendlyKebabCase } from '../utils/utils'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
+import logger from '../../logger'
 
 export default class AttendanceController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups

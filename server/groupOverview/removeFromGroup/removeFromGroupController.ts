@@ -8,6 +8,7 @@ import RemoveFromGroupUpdateStatusPresenter from './removeFromGroupUpdateStatusP
 import RemoveFromGroupUpdateStatusView from './removeFromGroupUpdateStatusView'
 import { PrimaryNavigationTab } from '../../shared/routes/layoutPresenter'
 import BaseController from '../../shared/baseController'
+import logger from '../../../logger'
 
 export default class RemoveFromGroupController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -67,6 +68,7 @@ export default class RemoveFromGroupController extends BaseController {
           groupId,
           data.paramsForUpdate,
         )
+        logger.info({ event: 'REMOVE_REFERRAL_FROM_GROUP', referralId, groupId, userRegion: req.session.userRegion?.regionDescription ?? '' }, 'Referral removed from group')
         const { message } = response
         return res.redirect(`/group/${groupId}/allocations?message=${encodeURIComponent(message)}`)
       }

@@ -7,6 +7,7 @@ import BaseController from '../../shared/baseController'
 import AddAvailabilityForm from './AddAvailabilityForm'
 import AddAvailabilityPresenter from './addAvailabilityPresenter'
 import AddAvailabilityView from './addAvailabilityView'
+import logger from '../../../logger'
 
 export default class AddAvailabilityController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -20,6 +21,7 @@ export default class AddAvailabilityController extends BaseController {
   async updateAvailability(req: Request, res: Response): Promise<void> {
     const { availabilityId } = req.params as Record<string, string>
     await this.showAddAvailabilityPage(req, res, availabilityId)
+    logger.info({ event: 'UPDATE_AVAILABILITY', availabilityId }, 'Availability updated')
   }
 
   async showAddAvailabilityPage(req: Request, res: Response, availabilityId: string = null): Promise<void> {
@@ -45,8 +47,10 @@ export default class AddAvailabilityController extends BaseController {
             ...data.paramsForUpdate,
             availabilityId,
           })
+          logger.info({ event: 'UPDATE_AVAILABILITY', availabilityId, userRegion: req.session.userRegion?.regionDescription ?? '' }, 'Availability updated')
         } else {
           await this.accreditedProgrammesManageAndDeliverService.addAvailability(username, data.paramsForUpdate)
+          logger.info({ event: 'SET_AVAILABILITY', referralId, userRegion: req.session.userRegion?.regionDescription ?? '' }, 'Availability set for referral')
         }
         return res.redirect(`/referral/${referralId}/availability-and-motivation/availability?detailsUpdated=true`)
       }

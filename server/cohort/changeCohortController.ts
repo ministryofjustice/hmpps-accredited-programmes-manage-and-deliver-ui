@@ -5,6 +5,7 @@ import ChangeCohortPresenter from './changeCohortPresenter'
 import ChangeCohortView from './changeCohortView'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
+import logger from '../../logger'
 
 export default class ChangeCohortController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -31,6 +32,8 @@ export default class ChangeCohortController extends BaseController {
         referralId,
         data.paramsForUpdate.updatedCohort,
       )
+      logger.info({ event: 'OVERRIDE_COHORT', referralId }, 'Updated cohort for referral')
+
       return res.redirect(`${req.session.originPage}?isCohortUpdated=true`)
     }
 
