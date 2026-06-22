@@ -1,5 +1,6 @@
 import express, { Express } from 'express'
 import { NotFound } from 'http-errors'
+import type { HTTPError } from 'superagent'
 
 import { randomUUID } from 'crypto'
 import { Session, SessionData } from 'express-session'
@@ -59,6 +60,16 @@ function appSetup(
   })
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
+
+  // Test routes for error handler testing
+  app.get('/route-that-throws-500', (req, res, next) => {
+    next(new Error('Test 500 error'))
+  })
+  app.get('/route-that-returns-503', (req, res, next) => {
+    const error = Object.assign(new Error('Service Unavailable'), { status: 503 }) as HTTPError
+    next(error)
+  })
+
   app.use(routes(services))
   app.use((req, res, next) => next(new NotFound()))
   app.use(errorHandler(production))
