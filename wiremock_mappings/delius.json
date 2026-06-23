@@ -516,8 +516,8 @@
                 "description": "Wiremocked PDU"
               },
               "region": {
-                "code": "wiremocked_region_code",
-                "description": "Wiremocked Region Name"
+                "code": "N54",
+                "description": "Wiremocked N54 Region"
               }
             }
           ]

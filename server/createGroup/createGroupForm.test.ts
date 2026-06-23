@@ -176,12 +176,12 @@ describe('CreateGroupForm', () => {
           expect(data.error.errors[0].message).toBe('Start date must be in the future')
         })
 
-        it('allows past dates for region in allowed list (N53)', async () => {
+        it('allows past dates for region in allowed list (N54)', async () => {
           const request = TestUtils.createRequest({
             'create-group-date': '1/1/2000',
           })
 
-          const data = await new CreateOrEditGroupForm(request, undefined, 'N53').createOrEditGroupDateData()
+          const data = await new CreateOrEditGroupForm(request, undefined, 'N54').createOrEditGroupDateData()
 
           expect(data.paramsForUpdate).toStrictEqual({
             earliestStartDate: '1/1/2000',

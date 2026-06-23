@@ -17,7 +17,7 @@ generic-service:
     ENVIRONMENT_NAME: DEV
     AUDIT_ENABLED: "false"
     SENTRY_ENVIRONMENT: dev
-    ENABLE_PAST_DATE_REGION_RESTRICTION: "false"
+    ENABLE_PAST_DATE_REGION_RESTRICTION: "true"
 
   allowlist:
     accessibility-audit-usr: 5.181.59.114
