@@ -84,10 +84,15 @@ export default class AvailabilityAndMotivationController extends BaseController 
           referralId,
           data.paramsForUpdate,
         )
+        const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
+          referralId,
+          username,
+        )
         logger.info(
           {
             event: 'UPDATE_MOTIVATION',
             referralId,
+            pdu: referralDetails?.pdu,
             user: username,
             userRegion: req.session.userRegion?.regionDescription ?? '',
           },

@@ -30,6 +30,7 @@ export default class LdcController extends BaseController {
         {
           event: 'OVERRIDE_LDC',
           referralId,
+          pdu: referralDetails?.pdu,
           user: username,
           userRegion: req.session.userRegion?.regionDescription ?? '',
         },

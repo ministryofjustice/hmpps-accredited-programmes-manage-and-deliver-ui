@@ -50,6 +50,7 @@ export default class UpdateReferralStatusController {
           {
             event: 'UPDATE_REFERRAL_STATUS',
             referralId,
+            pdu: referralDetails?.pdu,
             user: username,
             userRegion: req.session.userRegion?.regionDescription ?? '',
           },
@@ -154,6 +155,7 @@ export default class UpdateReferralStatusController {
           {
             event: 'UPDATE_REFERRAL_STATUS',
             referralId,
+            pdu: referralDetails?.pdu,
             user: username,
             userRegion: req.session.userRegion?.regionDescription ?? '',
           },

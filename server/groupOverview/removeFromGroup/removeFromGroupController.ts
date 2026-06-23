@@ -68,11 +68,16 @@ export default class RemoveFromGroupController extends BaseController {
           groupId,
           data.paramsForUpdate,
         )
+        const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
+          referralId,
+          username,
+        )
         logger.info(
           {
             event: 'REMOVE_REFERRAL_FROM_GROUP',
             referralId,
             groupId,
+            pdu: referralDetails?.pdu,
             user: username,
             userRegion: req.session.userRegion?.regionDescription ?? '',
           },

@@ -50,6 +50,8 @@ export default class AddAvailabilityController extends BaseController {
             {
               event: 'UPDATE_AVAILABILITY',
               availabilityId,
+              referralId,
+              pdu: referralDetails?.pdu,
               user: username,
               userRegion: req.session.userRegion?.regionDescription ?? '',
             },
@@ -61,6 +63,7 @@ export default class AddAvailabilityController extends BaseController {
             {
               event: 'SET_AVAILABILITY',
               referralId,
+              pdu: referralDetails?.pdu,
               user: username,
               userRegion: req.session.userRegion?.regionDescription ?? '',
             },

@@ -36,6 +36,7 @@ export default class ChangeCohortController extends BaseController {
         {
           event: 'OVERRIDE_COHORT',
           referralId,
+          pdu: referralDetails?.pdu,
           user: username,
           userRegion: req.session.userRegion?.regionDescription ?? '',
         },
