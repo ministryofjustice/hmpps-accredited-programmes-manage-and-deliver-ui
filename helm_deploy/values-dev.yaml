@@ -19,8 +19,5 @@ generic-service:
     SENTRY_ENVIRONMENT: dev
     ENABLE_PAST_DATE_REGION_RESTRICTION: "false"
 
-  allowlist:
-    accessibility-audit-usr: 5.181.59.114
-
 generic-prometheus-alerts:
   alertSeverity: hmpps_accredited_programmes_manage_and_deliver_alerts_nonprod
