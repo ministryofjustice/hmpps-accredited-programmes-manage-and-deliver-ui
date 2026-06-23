@@ -207,10 +207,16 @@ export default class AttendanceController extends BaseController {
           await this.accreditedProgrammesManageAndDeliverService.createSessionAttendance(username, sessionId, {
             attendees: attendeesForSubmission,
           })
+
+        const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
+          referralId,
+          username,
+        )
         logger.info(
           {
             event: 'RECORD_ATTENDANCE',
             sessionId,
+            pdu: referralDetails?.pdu,
             user: username,
             userRegion: req.session.userRegion?.regionDescription ?? '',
           },
