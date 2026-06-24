@@ -44,7 +44,9 @@ describe('HomeController', () => {
     })
 
     it('renders the invalid region page when region is not in session', async () => {
-      const sessionData: Partial<SessionData> = {}
+      const sessionData: Partial<SessionData> = {
+        userRegion: undefined,
+      }
       app = TestUtils.createTestAppWithSession(sessionData, {})
 
       return request(app)
@@ -92,7 +94,9 @@ describe('HomeController', () => {
     })
 
     it('renders the home page if region is not in session', async () => {
-      const sessionData: Partial<SessionData> = {}
+      const sessionData: Partial<SessionData> = {
+        userRegion: undefined,
+      }
       app = TestUtils.createTestAppWithSession(sessionData, {})
 
       return request(app)
