@@ -22,19 +22,13 @@ export default class StatusHistoryView {
     return {
       items: this.presenter.statusHistory.toReversed().map((status: ReferralStatusHistory) => ({
         label: {
-          text: status.referralStatusDescriptionName,
+          text: `Status update by ${status.updatedBy}`,
         },
         html: makeStatusTagHtml(status.tagColour, status.referralStatusDescriptionName, status.additionalDetails),
         datetime: {
           timestamp: DateUtils.removeTimezoneOffset(status.updatedAt),
           type: 'datetime',
         },
-        byline: {
-          text: status.updatedBy,
-        },
-        ...(status.additionalDetails && {
-          html: makeStatusTagHtml(status.tagColour, status.referralStatusDescriptionName, status.additionalDetails),
-        }),
       })),
     }
   }
