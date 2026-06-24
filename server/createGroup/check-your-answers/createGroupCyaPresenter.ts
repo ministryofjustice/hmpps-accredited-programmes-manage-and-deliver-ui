@@ -50,18 +50,18 @@ export default class CreateGroupCyaPresenter {
     const members = this.generateSelectedUsers()
     const summaryList = [
       {
-        key: 'Group Code',
+        key: 'Group code',
         lines: [`${this.createGroupFormData.groupCode}`],
         changeLink: '/create-group-code',
       },
       {
-        key: 'Date',
+        key: 'Start date',
         lines: [`${this.createGroupFormData.earliestStartDate}`],
         changeLink: '/group-start-date',
       },
 
       {
-        key: 'Day and time',
+        key: 'Days and times',
         lines: GroupDaysTimesUtils.formatStartDaysAndTimes(this.createGroupFormData.createGroupSessionSlot),
         changeLink: '/group-days-and-times',
       },
@@ -82,7 +82,7 @@ export default class CreateGroupCyaPresenter {
         changeLink: '/group-probation-delivery-unit',
       },
       {
-        key: 'Delivery Location',
+        key: 'Delivery location',
         lines: [`${this.createGroupFormData.deliveryLocationName}`],
         changeLink: '/group-delivery-location',
       },
