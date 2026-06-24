@@ -1,8 +1,8 @@
-/** 
+/**
  * For info: N53 is the east midlands, N54 is the North East.
  * Full region code mapping can be found at:
  * https://dsdmoj.atlassian.net/wiki/spaces/IC/pages/6027477185/Interventions+Manager+Data+Migration+Strategy#2.-Phased-out-Data-Migration
-*/
+ */
 export const ALLOWED_REGIONS: string[] = ['N53', 'N54']
 
 /**

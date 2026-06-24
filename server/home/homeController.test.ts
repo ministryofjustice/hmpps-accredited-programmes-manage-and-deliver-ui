@@ -20,10 +20,13 @@ describe('HomeController', () => {
       }
       app = TestUtils.createTestAppWithSession(sessionData, {})
 
-      return request(app).get('/').expect(200).expect(res => {
-        expect(res.text).toContain('Accredited Programmes')
-        expect(res.text).not.toContain('You cannot access Accredited Programmes services yet')
-      })
+      return request(app)
+        .get('/')
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Accredited Programmes')
+          expect(res.text).not.toContain('You cannot access Accredited Programmes services yet')
+        })
     })
 
     it('renders the invalid region page when region is not allowed', async () => {
@@ -32,9 +35,12 @@ describe('HomeController', () => {
       }
       app = TestUtils.createTestAppWithSession(sessionData, {})
 
-      return request(app).get('/').expect(401).expect(res => {
-        expect(res.text).toContain('You cannot access Accredited Programmes services yet')
-      })
+      return request(app)
+        .get('/')
+        .expect(401)
+        .expect(res => {
+          expect(res.text).toContain('You cannot access Accredited Programmes services yet')
+        })
     })
   })
 
@@ -49,10 +55,13 @@ describe('HomeController', () => {
       }
       app = TestUtils.createTestAppWithSession(sessionData, {})
 
-      return request(app).get('/').expect(200).expect(res => {
-        expect(res.text).toContain('Accredited Programmes')
-        expect(res.text).not.toContain('You cannot access Accredited Programmes services yet')
-      })
+      return request(app)
+        .get('/')
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Accredited Programmes')
+          expect(res.text).not.toContain('You cannot access Accredited Programmes services yet')
+        })
     })
 
     it('renders the home page when region is allowed (sanity)', async () => {
@@ -61,10 +70,13 @@ describe('HomeController', () => {
       }
       app = TestUtils.createTestAppWithSession(sessionData, {})
 
-      return request(app).get('/').expect(200).expect(res => {
-        expect(res.text).toContain('Accredited Programmes')
-        expect(res.text).not.toContain('You cannot access Accredited Programmes services yet')
-      })
+      return request(app)
+        .get('/')
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Accredited Programmes')
+          expect(res.text).not.toContain('You cannot access Accredited Programmes services yet')
+        })
     })
   })
 })

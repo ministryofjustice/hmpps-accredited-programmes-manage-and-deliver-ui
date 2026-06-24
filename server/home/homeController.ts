@@ -16,7 +16,7 @@ export default class HomeController extends BaseController {
     const presenter = new HomePresenter()
     const view = new HomeView(presenter)
 
-    if(!isRegionAllowed(req.session.userRegion?.regionCode)) {
+    if (!isRegionAllowed(req.session.userRegion?.regionCode)) {
       res.status(401)
       return res.render('invalidregion')
     }
