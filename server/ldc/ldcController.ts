@@ -5,6 +5,7 @@ import UpdateLdcPresenter from './updateLdcPresenter'
 import UpdateLdcView from './updateLdcView'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
+import logger from '../../logger'
 
 export default class LdcController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -25,6 +26,16 @@ export default class LdcController extends BaseController {
 
     if (req.method === 'POST') {
       await this.accreditedProgrammesManageAndDeliverService.updateLdc(username, referralId, req.body.hasLdc)
+      logger.info(
+        {
+          event: 'OVERRIDE_LDC',
+          referralId,
+          pdu: referralDetails?.pdu,
+          user: username,
+          userRegion: req.session.userRegion?.regionDescription ?? '',
+        },
+        'LDC updated',
+      )
       return res.redirect(`${req.session.originPage}?isLdcUpdated=true`)
     }
 

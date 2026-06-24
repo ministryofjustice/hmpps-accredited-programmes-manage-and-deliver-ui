@@ -36,6 +36,13 @@ passport.use(
   ),
 )
 
+export const validatePath = (value: string) => (value.startsWith('/') && !value.startsWith('//') ? value : '')
+
+export const buildSignOutRedirectUri = (ingressUrl: string, returnTo: string) => {
+  const safeReturnTo = validatePath(returnTo)
+  return safeReturnTo ? `${ingressUrl}?returnTo=${encodeURIComponent(safeReturnTo)}` : ingressUrl
+}
+
 export default function setupAuthentication() {
   const router = Router()
   const tokenVerificationClient = new VerificationClient(config.apis.tokenVerification, logger)
@@ -49,20 +56,38 @@ export default function setupAuthentication() {
     return res.render('autherror')
   })
 
-  router.get('/sign-in', passport.authenticate('oauth2'))
+  router.get('/sign-in', (req, res, next) => {
+    const requestedReturnTo = typeof req.query.returnTo === 'string' ? req.query.returnTo : ''
+    const safeReturnTo = validatePath(requestedReturnTo)
 
-  router.get('/sign-in/callback', (req, res, next) =>
-    passport.authenticate('oauth2', {
-      successReturnToOrRedirect: req.session.returnTo || '/',
+    if (safeReturnTo) {
+      req.session.returnTo = safeReturnTo
+    }
+
+    return passport.authenticate('oauth2')(req, res, next)
+  })
+
+  router.get('/sign-in/callback', (req, res, next) => {
+    const returnTo = req.session.returnTo || '/'
+    delete req.session.returnTo
+
+    return passport.authenticate('oauth2', {
+      successRedirect: returnTo,
       failureRedirect: '/autherror',
-    })(req, res, next),
-  )
+    })(req, res, next)
+  })
 
   const authUrl = config.apis.hmppsAuth.externalUrl
-  const authParameters = `client_id=${config.apis.hmppsAuth.authClientId}&redirect_uri=${config.ingressUrl}`
 
   router.use('/sign-out', (req, res, next) => {
-    const authSignOutUrl = `${authUrl}/sign-out?${authParameters}`
+    const requestedReturnTo = typeof req.query.returnTo === 'string' ? req.query.returnTo : ''
+    const redirectUri = buildSignOutRedirectUri(config.ingressUrl, requestedReturnTo)
+    const signOutParams = new URLSearchParams({
+      client_id: config.apis.hmppsAuth.authClientId,
+      redirect_uri: redirectUri,
+    })
+    const authSignOutUrl = `${authUrl}/sign-out?${signOutParams.toString()}`
+
     if (req.user) {
       req.logout(err => {
         if (err) return next(err)
@@ -72,6 +97,7 @@ export default function setupAuthentication() {
   })
 
   router.use('/account-details', (req, res) => {
+    const authParameters = `client_id=${config.apis.hmppsAuth.authClientId}&redirect_uri=${config.ingressUrl}`
     res.redirect(`${authUrl}/account-details?${authParameters}`)
   })
 
@@ -80,7 +106,10 @@ export default function setupAuthentication() {
       setUser({ username: req.user.username })
       return next()
     }
-    req.session.returnTo = req.originalUrl
+    const requestedReturnTo = typeof req.query.returnTo === 'string' ? req.query.returnTo : ''
+    const safeReturnTo = validatePath(requestedReturnTo)
+
+    req.session.returnTo = safeReturnTo || req.originalUrl
     return res.redirect('/sign-in')
   })
 

@@ -1,4 +1,8 @@
-export const ALLOWED_PAST_DATE_REGIONS: string[] = ['N53']
+/** For info: N54 is the North East
+ * CreateGroupFormTest.test.ts also needs to be updated to reflect the change to the region
+ */
+
+export const ALLOWED_PAST_DATE_REGIONS: string[] = ['N54']
 
 /**
  * Checks if the region restriction for past dates is enabled.

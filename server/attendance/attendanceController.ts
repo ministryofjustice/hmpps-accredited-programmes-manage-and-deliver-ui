@@ -11,6 +11,7 @@ import AttendanceSessionNotesForm from './attendanceNotes/attendanceSessionNotes
 import { convertToUrlFriendlyKebabCase } from '../utils/utils'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
+import logger from '../../logger'
 
 export default class AttendanceController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -206,6 +207,23 @@ export default class AttendanceController extends BaseController {
           await this.accreditedProgrammesManageAndDeliverService.createSessionAttendance(username, sessionId, {
             attendees: attendeesForSubmission,
           })
+
+        const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
+          referralId,
+          username,
+        )
+        logger.info(
+          {
+            event: 'RECORD_ATTENDANCE',
+            groupId,
+            sessionId,
+            referralIds,
+            pdu: referralDetails?.pdu,
+            user: username,
+            userRegion: req.session.userRegion?.regionDescription ?? '',
+          },
+          'Session attendance recorded',
+        )
 
         const attendeeReferralIds = createSessionAttendanceResponse.attendees.map(attendee => attendee.referralId)
         this.clearCachedSessionNotes(req, sessionId, attendeeReferralIds.length ? attendeeReferralIds : referralIds)

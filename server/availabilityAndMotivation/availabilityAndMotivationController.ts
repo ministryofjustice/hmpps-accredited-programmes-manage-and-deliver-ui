@@ -12,6 +12,7 @@ import AvailabilityPresenter from './availability/availabilityPresenter'
 import AvailabilityView from './availability/availabilityView'
 import LocationPresenter from './location/locationPresenter'
 import LocationView from './location/locationView'
+import logger from '../../logger'
 
 export default class AvailabilityAndMotivationController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -82,6 +83,20 @@ export default class AvailabilityAndMotivationController extends BaseController 
           username,
           referralId,
           data.paramsForUpdate,
+        )
+        const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
+          referralId,
+          username,
+        )
+        logger.info(
+          {
+            event: 'UPDATE_MOTIVATION',
+            referralId,
+            pdu: referralDetails?.pdu,
+            user: username,
+            userRegion: req.session.userRegion?.regionDescription ?? '',
+          },
+          'Motivation updated for referral',
         )
         return res.redirect(
           `/referral/${referralId}/availability-and-motivation/motivation-background-and-non-associations?isMotivationsUpdated=true`,

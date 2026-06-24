@@ -1,6 +1,7 @@
 import config from '../../config'
 import ServiceUserBannerView from '../serviceUserBannerView'
-import LayoutPresenter, { PrimaryNavigationTab } from './layoutPresenter'
+import LayoutPresenter from './layoutPresenter'
+import { buildPrimaryNavigationArgs } from './primaryNavigation'
 
 export interface PageContentView {
   renderArgs: [string, Record<string, unknown>]
@@ -25,27 +26,7 @@ export default class LayoutView {
   }
 
   private get primaryNavigationArgs() {
-    return {
-      label: 'Primary navigation',
-      items: [
-        {
-          text: 'Home',
-          href: '/',
-          active: this.presenter.primaryNavigationTab === PrimaryNavigationTab.Home,
-        },
-        {
-          text: 'Case list',
-          href: '/region/open-referrals',
-          active: this.presenter.primaryNavigationTab === PrimaryNavigationTab.Caselist,
-        },
-        {
-          text: 'Groups',
-          href: '/groups/not-started-and-in-progress',
-          active: this.presenter.primaryNavigationTab === PrimaryNavigationTab.Groups,
-        },
-      ],
-      regionText: this.userRegion.regionDescription,
-    }
+    return buildPrimaryNavigationArgs(this.userRegion?.regionDescription ?? '', this.presenter.primaryNavigationTab)
   }
 
   get renderArgs(): [string, Record<string, unknown>] {
