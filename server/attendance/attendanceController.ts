@@ -215,7 +215,9 @@ export default class AttendanceController extends BaseController {
         logger.info(
           {
             event: 'RECORD_ATTENDANCE',
+            groupId,
             sessionId,
+            referralIds,
             pdu: referralDetails?.pdu,
             user: username,
             userRegion: req.session.userRegion?.regionDescription ?? '',
