@@ -7,6 +7,7 @@ import BaseController from '../../shared/baseController'
 import AddAvailabilityForm from './AddAvailabilityForm'
 import AddAvailabilityPresenter from './addAvailabilityPresenter'
 import AddAvailabilityView from './addAvailabilityView'
+import logger from '../../../logger'
 
 export default class AddAvailabilityController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -45,8 +46,29 @@ export default class AddAvailabilityController extends BaseController {
             ...data.paramsForUpdate,
             availabilityId,
           })
+          logger.info(
+            {
+              event: 'UPDATE_AVAILABILITY',
+              availabilityId,
+              referralId,
+              pdu: referralDetails?.pdu,
+              user: username,
+              userRegion: req.session.userRegion?.regionDescription ?? '',
+            },
+            'Availability updated',
+          )
         } else {
           await this.accreditedProgrammesManageAndDeliverService.addAvailability(username, data.paramsForUpdate)
+          logger.info(
+            {
+              event: 'SET_AVAILABILITY',
+              referralId,
+              pdu: referralDetails?.pdu,
+              user: username,
+              userRegion: req.session.userRegion?.regionDescription ?? '',
+            },
+            'Availability set for referral',
+          )
         }
         return res.redirect(`/referral/${referralId}/availability-and-motivation/availability?detailsUpdated=true`)
       }

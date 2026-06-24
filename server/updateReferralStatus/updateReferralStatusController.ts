@@ -10,6 +10,7 @@ import UpdateReferralStatusStartedOrCompletedView from './updateReferralStatusSt
 import UpdateReferralStatusFixedPresenter from './updateReferralStatusToOnProgrammeOrCompletedPresenter'
 import UpdateReferralStatusFixedView from './updateReferralStatusToOnProgrammeOrCompletedView'
 import UpdateReferralStatusView from './updateReferralStatusView'
+import logger from '../../logger'
 
 export default class UpdateReferralStatusController {
   constructor(
@@ -44,6 +45,16 @@ export default class UpdateReferralStatusController {
           username,
           referralId,
           data.paramsForUpdate,
+        )
+        logger.info(
+          {
+            event: 'UPDATE_REFERRAL_STATUS',
+            referralId,
+            pdu: referralDetails?.pdu,
+            user: username,
+            userRegion: req.session.userRegion?.regionDescription ?? '',
+          },
+          'Referral status updated',
         )
         return res.redirect(`/referral/${referralId}/status-history?message=${response.message}`)
       }
@@ -139,6 +150,16 @@ export default class UpdateReferralStatusController {
           username,
           referralId,
           updateObject,
+        )
+        logger.info(
+          {
+            event: 'UPDATE_REFERRAL_STATUS',
+            referralId,
+            pdu: referralDetails?.pdu,
+            user: username,
+            userRegion: req.session.userRegion?.regionDescription ?? '',
+          },
+          'Referral status updated',
         )
 
         return res.redirect(`/referral/${referralId}/status-history?message=${response.message}`)

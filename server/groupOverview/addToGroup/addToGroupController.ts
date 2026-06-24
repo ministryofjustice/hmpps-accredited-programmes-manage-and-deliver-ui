@@ -8,6 +8,7 @@ import AddToGroupForm from './addToGroupForm'
 import AccreditedProgrammesManageAndDeliverService from '../../services/accreditedProgrammesManageAndDeliverService'
 import BaseController from '../../shared/baseController'
 import { PrimaryNavigationTab } from '../../shared/routes/layoutPresenter'
+import logger from '../../../logger'
 
 export default class AddToGroupController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -64,6 +65,21 @@ export default class AddToGroupController extends BaseController {
           referralId,
           groupId,
           data.paramsForUpdate.additionalDetails,
+        )
+        const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
+          referralId,
+          username,
+        )
+        logger.info(
+          {
+            event: 'ASSIGN_REFERRAL_TO_GROUP',
+            referralId,
+            groupId,
+            pdu: referralDetails?.pdu,
+            user: username,
+            userRegion: req.session.userRegion?.regionDescription ?? '',
+          },
+          'Referral added to group',
         )
         const { message } = response
         return res.redirect(`/group/${groupId}/allocations?message=${encodeURIComponent(message)}`)
