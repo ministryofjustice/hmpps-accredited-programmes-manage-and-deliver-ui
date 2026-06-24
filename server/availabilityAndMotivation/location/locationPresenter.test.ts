@@ -1,4 +1,4 @@
-import { DeliveryLocationPreferences, ReferralDetails } from '@manage-and-deliver-api'
+import { DeliveryLocationPreferences } from '@manage-and-deliver-api'
 import LocationPresenter from './locationPresenter'
 import referralDetailsFactory from '../../testutils/factories/referralDetailsFactory'
 
