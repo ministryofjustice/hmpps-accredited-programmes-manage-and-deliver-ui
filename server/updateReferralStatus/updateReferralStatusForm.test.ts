@@ -108,13 +108,15 @@ describe(`UpdateReferralStatusForm`, () => {
 
   describe('fixedData', () => {
     describe('when more-details is valid', () => {
-      it('returns params for update', async () => {
+      it('returns params for update including the hidden referralStatusDescriptionId', async () => {
         const request = TestUtils.createRequest({
+          'referral-status-description-id': 'afc0b94c-b983-4a68-a109-0be29a7d3b2f',
           'more-details': 'Some details',
         })
         const data = await new UpdateReferralStatusForm(request).fixedData()
 
         expect(data.paramsForUpdate).toStrictEqual({
+          referralStatusDescriptionId: 'afc0b94c-b983-4a68-a109-0be29a7d3b2f',
           additionalDetails: 'Some details',
         })
       })
