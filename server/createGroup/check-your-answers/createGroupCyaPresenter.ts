@@ -53,49 +53,58 @@ export default class CreateGroupCyaPresenter {
         key: 'Group code',
         lines: [`${this.createGroupFormData.groupCode}`],
         changeLink: '/create-group-code',
+        visuallyHiddenText: 'group code',
       },
       {
         key: 'Start date',
         lines: [`${this.createGroupFormData.earliestStartDate}`],
         changeLink: '/group-start-date',
+        visuallyHiddenText: 'start date',
       },
 
       {
         key: 'Days and times',
         lines: GroupDaysTimesUtils.formatStartDaysAndTimes(this.createGroupFormData.createGroupSessionSlot),
         changeLink: '/group-days-and-times',
+        visuallyHiddenText: 'days and times',
       },
 
       {
         key: 'Cohort',
         lines: [`${this.createGroupUtils.getCohortTextFromEnum(this.createGroupFormData.cohort)}`],
         changeLink: '/group-cohort',
+        visuallyHiddenText: 'cohort',
       },
       {
         key: 'Gender',
         lines: [`${this.createGroupUtils.getSexTextFromEnum(this.createGroupFormData.sex)}`],
         changeLink: '/group-gender',
+        visuallyHiddenText: 'gender',
       },
       {
         key: 'PDU',
         lines: [`${this.createGroupFormData.pduName}`],
         changeLink: '/group-probation-delivery-unit',
+        visuallyHiddenText: 'PDU',
       },
       {
         key: 'Delivery location',
         lines: [`${this.createGroupFormData.deliveryLocationName}`],
         changeLink: '/group-delivery-location',
+        visuallyHiddenText: 'delivery location',
       },
       {
         key: 'Treatment Manager:',
         lines: [members.treatmentManager?.facilitator ?? 'Not assigned'],
         changeLink: '/group-facilitators',
+        visuallyHiddenText: 'treatment manager',
       },
       {
         key: 'Facilitators:',
         lines:
           members.facilitators.length > 0 ? members.facilitators.map(member => member.facilitator) : ['None assigned'],
         changeLink: '/group-facilitators',
+        visuallyHiddenText: 'facilitators',
       },
     ]
     if (members.coverFacilitators.length > 0) {
@@ -106,6 +115,7 @@ export default class CreateGroupCyaPresenter {
             ? members.coverFacilitators.map(member => member.facilitator)
             : ['None assigned'],
         changeLink: '/group-facilitators',
+        visuallyHiddenText: 'cover facilitators',
       })
     }
     return summaryList

@@ -98,7 +98,12 @@ describe('GroupDetailsPresenter', () => {
 
       const summary = presenter.getGroupCodeSummary()
 
-      expect(summary[0].changeLink).toEqual('/group-abc/edit-group-code')
+      expect(summary).toContainEqual({
+        key: 'Group code',
+        lines: [groupDetails.code],
+        changeLink: '/group-abc/edit-group-code',
+        visuallyHiddenText: 'group code',
+      })
     })
   })
 
@@ -112,7 +117,7 @@ describe('GroupDetailsPresenter', () => {
       jest.useRealTimers()
     })
 
-    it('returns the start date change link when start date is in the future', () => {
+    it('returns the start date with change link when date is in the future', () => {
       const groupDetails = GroupDetailsFactory.build({
         id: 'group-abc',
         startDate: 'Friday 10 April 2026',
@@ -121,10 +126,15 @@ describe('GroupDetailsPresenter', () => {
 
       const summary = presenter.getGroupTimingsSummary()
 
-      expect(summary[0].changeLink).toEqual('/group-abc/edit-group-start-date')
+      expect(summary).toContainEqual({
+        key: 'Start date',
+        lines: ['Friday 10 April 2026'],
+        changeLink: '/group-abc/edit-group-start-date',
+        visuallyHiddenText: 'start date',
+      })
     })
 
-    it('returns null start date change link when start date is in the past', () => {
+    it('returns null change link when start date is in the past', () => {
       const groupDetails = GroupDetailsFactory.build({
         id: 'group-abc',
         startDate: 'Wednesday 1 April 2026',
@@ -137,12 +147,20 @@ describe('GroupDetailsPresenter', () => {
     })
 
     it('returns the days and times change link', () => {
-      const groupDetails = GroupDetailsFactory.build({ id: 'group-abc' })
+      const groupDetails = GroupDetailsFactory.build({
+        id: 'group-abc',
+        daysAndTimes: ['Monday 2:00 PM - 4:00 PM'],
+      })
       const presenter = new GroupDetailsPresenter(groupDetails)
 
       const summary = presenter.getGroupTimingsSummary()
 
-      expect(summary[1].changeLink).toEqual('/group-abc/edit-group-days-and-times')
+      expect(summary).toContainEqual({
+        key: 'Days and times',
+        lines: ['Monday 2:00 PM - 4:00 PM'],
+        changeLink: '/group-abc/edit-group-days-and-times',
+        visuallyHiddenText: 'days and times',
+      })
     })
   })
 
@@ -153,7 +171,12 @@ describe('GroupDetailsPresenter', () => {
 
       const summary = presenter.getGroupParticipantsSummary()
 
-      expect(summary[0].changeLink).toEqual('/group-abc/edit-group-cohort')
+      expect(summary).toContainEqual({
+        key: 'Cohort',
+        lines: [groupDetails.cohort],
+        changeLink: '/group-abc/edit-group-cohort',
+        visuallyHiddenText: 'cohort',
+      })
     })
 
     it('returns the gender change link', () => {
@@ -162,7 +185,12 @@ describe('GroupDetailsPresenter', () => {
 
       const summary = presenter.getGroupParticipantsSummary()
 
-      expect(summary[1].changeLink).toEqual('/group-abc/edit-group-gender')
+      expect(summary).toContainEqual({
+        key: 'Gender',
+        lines: [groupDetails.sex],
+        changeLink: '/group-abc/edit-group-gender',
+        visuallyHiddenText: 'gender',
+      })
     })
   })
 
@@ -173,7 +201,12 @@ describe('GroupDetailsPresenter', () => {
 
       const summary = presenter.getGroupLocationSummary()
 
-      expect(summary[0].changeLink).toEqual('/group-abc/edit-group-probation-delivery-unit')
+      expect(summary).toContainEqual({
+        key: 'Probation delivery unit (PDU)',
+        lines: [groupDetails.pduName],
+        changeLink: '/group-abc/edit-group-probation-delivery-unit',
+        visuallyHiddenText: 'PDU',
+      })
     })
 
     it('returns the delivery location change link', () => {
@@ -182,7 +215,12 @@ describe('GroupDetailsPresenter', () => {
 
       const summary = presenter.getGroupLocationSummary()
 
-      expect(summary[1].changeLink).toEqual('/group-abc/edit-group-delivery-location')
+      expect(summary).toContainEqual({
+        key: 'Delivery location',
+        lines: [groupDetails.deliveryLocation],
+        changeLink: '/group-abc/edit-group-delivery-location',
+        visuallyHiddenText: 'delivery location',
+      })
     })
   })
 
@@ -193,7 +231,12 @@ describe('GroupDetailsPresenter', () => {
 
       const summary = presenter.getGroupStaffSummary()
 
-      expect(summary[0].changeLink).toEqual('/group-abc/edit-group-facilitators')
+      expect(summary).toContainEqual({
+        key: 'Treatment Manager',
+        lines: [groupDetails.treatmentManager?.facilitator || 'None added'],
+        changeLink: '/group-abc/edit-group-facilitators',
+        visuallyHiddenText: ' treatment manager',
+      })
     })
 
     it('returns the facilitators change link', () => {
@@ -202,7 +245,13 @@ describe('GroupDetailsPresenter', () => {
 
       const summary = presenter.getGroupStaffSummary()
 
-      expect(summary[1].changeLink).toEqual('/group-abc/edit-group-facilitators')
+      expect(summary).toContainEqual({
+        key: 'Facilitators',
+        lines:
+          groupDetails.facilitators.length > 0 ? groupDetails.facilitators.map(f => f.facilitator) : ['None added'],
+        changeLink: '/group-abc/edit-group-facilitators',
+        visuallyHiddenText: 'facilitators',
+      })
     })
 
     it('returns the cover facilitators change link', () => {
@@ -211,7 +260,12 @@ describe('GroupDetailsPresenter', () => {
 
       const summary = presenter.getGroupStaffSummary()
 
-      expect(summary[2].changeLink).toEqual('/group-abc/edit-group-facilitators')
+      expect(summary).toContainEqual({
+        key: 'Cover facilitators',
+        lines: expect.any(Array),
+        changeLink: '/group-abc/edit-group-facilitators',
+        visuallyHiddenText: 'cover facilitators',
+      })
     })
   })
 })
