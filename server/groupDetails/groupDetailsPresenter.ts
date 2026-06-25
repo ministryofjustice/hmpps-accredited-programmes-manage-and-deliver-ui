@@ -95,7 +95,7 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
         key: 'Probation delivery unit (PDU)',
         lines: [this.group.pduName],
         changeLink: `/${this.groupId}/edit-group-probation-delivery-unit`,
-        visuallyHiddenText: 'probation delivery unit (PDU)',
+        visuallyHiddenText: 'PDU',
       },
       {
         key: 'Delivery location',

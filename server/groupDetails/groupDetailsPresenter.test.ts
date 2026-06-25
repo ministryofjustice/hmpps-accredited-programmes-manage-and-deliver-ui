@@ -205,7 +205,7 @@ describe('GroupDetailsPresenter', () => {
         key: 'Probation delivery unit (PDU)',
         lines: [groupDetails.pduName],
         changeLink: '/group-abc/edit-group-probation-delivery-unit',
-        visuallyHiddenText: 'probation delivery unit (PDU)',
+        visuallyHiddenText: 'PDU',
       })
     })
 
