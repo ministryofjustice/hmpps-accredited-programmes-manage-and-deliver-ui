@@ -52,11 +52,13 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
         key: 'Start date',
         lines: [this.group.startDate],
         changeLink: this.isStartDateInThePast ? null : `/${this.groupId}/edit-group-start-date`,
+        visuallyHiddenText: 'start date',
       },
       {
         key: 'Days and times',
         lines: this.group.daysAndTimes,
         changeLink: `/${this.groupId}/edit-group-days-and-times`,
+        visuallyHiddenText: 'days and times',
       },
     ]
   }
@@ -67,13 +69,13 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
         key: 'Cohort',
         lines: [this.group.cohort],
         changeLink: `/${this.groupId}/edit-group-cohort`,
-        visuallyHiddenText: 'group cohort',
+        visuallyHiddenText: 'cohort',
       },
       {
         key: 'Gender',
         lines: [this.group.sex],
         changeLink: `/${this.groupId}/edit-group-gender`,
-        visuallyHiddenText: 'group gender',
+        visuallyHiddenText: 'gender',
       },
       {
         key: 'Currently allocated',
@@ -93,11 +95,13 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
         key: 'Probation delivery unit (PDU)',
         lines: [this.group.pduName],
         changeLink: `/${this.groupId}/edit-group-probation-delivery-unit`,
+        visuallyHiddenText: 'probation delivery unit (PDU)',
       },
       {
         key: 'Delivery location',
         lines: [this.group.deliveryLocation],
         changeLink: `/${this.groupId}/edit-group-delivery-location`,
+        visuallyHiddenText: 'delivery location',
       },
     ]
   }
@@ -111,19 +115,19 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
         key: 'Treatment Manager',
         lines: [this.group.treatmentManager?.facilitator || 'None added'],
         changeLink: `/${this.groupId}/edit-group-facilitators`,
-        visuallyHiddenText: ' edit group treatment manager',
+        visuallyHiddenText: ' treatment manager',
       },
       {
         key: 'Facilitators',
         lines: this.group.facilitators.length > 0 ? this.group.facilitators.map(f => f.facilitator) : ['None added'],
         changeLink: `/${this.groupId}/edit-group-facilitators`,
-        visuallyHiddenText: 'edit group facilitators',
+        visuallyHiddenText: 'facilitators',
       },
       {
         key: 'Cover facilitators',
         lines: coverFacilitators.length > 0 ? coverFacilitators : ['None added'],
         changeLink: `/${this.groupId}/edit-group-facilitators`,
-        visuallyHiddenText: 'edit group cover facilitators',
+        visuallyHiddenText: 'cover facilitators',
       },
     ]
   }

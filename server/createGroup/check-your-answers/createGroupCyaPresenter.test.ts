@@ -220,46 +220,55 @@ describe('CreateGroupCyaPresenter', () => {
         key: 'Group code',
         lines: ['ABC123'],
         changeLink: '/create-group-code',
+        visuallyHiddenText: 'group code',
       })
       expect(summary).toContainEqual({
         key: 'Start date',
         lines: ['2026-06-01'],
         changeLink: '/group-start-date',
+        visuallyHiddenText: 'start date',
       })
       expect(summary).toContainEqual({
         key: 'Days and times',
         lines: ['Monday 2:00 PM - 4:00 PM'],
         changeLink: '/group-days-and-times',
+        visuallyHiddenText: 'days and times',
       })
       expect(summary).toContainEqual({
         key: 'Cohort',
         lines: ['General offence'],
         changeLink: '/group-cohort',
+        visuallyHiddenText: 'cohort',
       })
       expect(summary).toContainEqual({
         key: 'Gender',
         lines: ['Male'],
         changeLink: '/group-gender',
+        visuallyHiddenText: 'gender',
       })
       expect(summary).toContainEqual({
         key: 'PDU',
         lines: ['PDU North'],
         changeLink: '/group-probation-delivery-unit',
+        visuallyHiddenText: 'PDU',
       })
       expect(summary).toContainEqual({
         key: 'Delivery location',
         lines: ['Prison A'],
         changeLink: '/group-delivery-location',
+        visuallyHiddenText: 'delivery location',
       })
       expect(summary).toContainEqual({
         key: 'Treatment Manager:',
         lines: ['Not assigned'],
         changeLink: '/group-facilitators',
+        visuallyHiddenText: 'treatment manager',
       })
       expect(summary).toContainEqual({
         key: 'Facilitators:',
         lines: ['None assigned'],
         changeLink: '/group-facilitators',
+        visuallyHiddenText: 'facilitators',
       })
     })
 
@@ -289,6 +298,7 @@ describe('CreateGroupCyaPresenter', () => {
         key: 'Treatment Manager:',
         lines: ['John Smith'],
         changeLink: '/group-facilitators',
+        visuallyHiddenText: 'treatment manager',
       })
     })
 
@@ -325,6 +335,7 @@ describe('CreateGroupCyaPresenter', () => {
         key: 'Facilitators:',
         lines: ['Jane Doe', 'Bob Johnson'],
         changeLink: '/group-facilitators',
+        visuallyHiddenText: 'facilitators',
       })
     })
 
@@ -380,6 +391,7 @@ describe('CreateGroupCyaPresenter', () => {
         key: 'Cover facilitators:',
         lines: ['Alice Brown', 'Charlie Wilson'],
         changeLink: '/group-facilitators',
+        visuallyHiddenText: 'cover facilitators',
       })
     })
 
@@ -432,6 +444,7 @@ describe('CreateGroupCyaPresenter', () => {
         key: 'Days and times',
         lines: ['Monday 2:00 PM - 4:00 PM', 'Wednesday 10:00 AM - 12:00 PM'],
         changeLink: '/group-days-and-times',
+        visuallyHiddenText: 'days and times',
       })
     })
 
