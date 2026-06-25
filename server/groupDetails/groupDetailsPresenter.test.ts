@@ -92,7 +92,7 @@ describe('GroupDetailsPresenter', () => {
   })
 
   describe('getGroupCodeSummary', () => {
-    it('returns the group code summary with change link and visually hidden text', () => {
+    it('returns the group code summary', () => {
       const groupDetails = GroupDetailsFactory.build({ id: 'group-abc' })
       const presenter = new GroupDetailsPresenter(groupDetails)
 
@@ -146,7 +146,7 @@ describe('GroupDetailsPresenter', () => {
       expect(summary[0].changeLink).toBeNull()
     })
 
-    it('returns the days and times summary with change link and visually hidden text', () => {
+    it('returns the days and times summary', () => {
       const groupDetails = GroupDetailsFactory.build({
         id: 'group-abc',
         daysAndTimes: ['Monday 2:00 PM - 4:00 PM'],
@@ -165,7 +165,7 @@ describe('GroupDetailsPresenter', () => {
   })
 
   describe('getGroupParticipantsSummary', () => {
-    it('returns the cohort summary with change link and visually hidden text', () => {
+    it('returns the cohort summary', () => {
       const groupDetails = GroupDetailsFactory.build({ id: 'group-abc' })
       const presenter = new GroupDetailsPresenter(groupDetails)
 
@@ -179,7 +179,7 @@ describe('GroupDetailsPresenter', () => {
       })
     })
 
-    it('returns the gender summary with change link and visually hidden text', () => {
+    it('returns the gender summary', () => {
       const groupDetails = GroupDetailsFactory.build({ id: 'group-abc' })
       const presenter = new GroupDetailsPresenter(groupDetails)
 
@@ -195,7 +195,7 @@ describe('GroupDetailsPresenter', () => {
   })
 
   describe('getGroupLocationSummary', () => {
-    it('returns the PDU summary with change link and visually hidden text', () => {
+    it('returns the PDU summary', () => {
       const groupDetails = GroupDetailsFactory.build({ id: 'group-abc' })
       const presenter = new GroupDetailsPresenter(groupDetails)
 
@@ -209,7 +209,7 @@ describe('GroupDetailsPresenter', () => {
       })
     })
 
-    it('returns the delivery location summary with change link and visually hidden text', () => {
+    it('returns the delivery location summary', () => {
       const groupDetails = GroupDetailsFactory.build({ id: 'group-abc' })
       const presenter = new GroupDetailsPresenter(groupDetails)
 
@@ -225,7 +225,7 @@ describe('GroupDetailsPresenter', () => {
   })
 
   describe('getGroupStaffSummary', () => {
-    it('returns the treatment manager summary with change link and visually hidden text', () => {
+    it('returns the treatment manager summary', () => {
       const groupDetails = GroupDetailsFactory.build({ id: 'group-abc' })
       const presenter = new GroupDetailsPresenter(groupDetails)
 
@@ -239,7 +239,7 @@ describe('GroupDetailsPresenter', () => {
       })
     })
 
-    it('returns the facilitators summary with change link and visually hidden text', () => {
+    it('returns the facilitators summary', () => {
       const groupDetails = GroupDetailsFactory.build({ id: 'group-abc' })
       const presenter = new GroupDetailsPresenter(groupDetails)
 
@@ -254,7 +254,7 @@ describe('GroupDetailsPresenter', () => {
       })
     })
 
-    it('returns the cover facilitators summary with change link and visually hidden text', () => {
+    it('returns the cover facilitators summary', () => {
       const groupDetails = GroupDetailsFactory.build({ id: 'group-abc' })
       const presenter = new GroupDetailsPresenter(groupDetails)
 
