@@ -62,6 +62,10 @@ export default class RemoveFromGroupController extends BaseController {
 
     let formError: FormValidationError | null = null
     let userInputData = null
+    const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
+      referralId,
+      username,
+    )
     if (req.method === 'POST') {
       const data = await new RemoveFromGroupForm(req).removeFromGroupUpdateStatusData()
       if (data.error) {
@@ -74,10 +78,6 @@ export default class RemoveFromGroupController extends BaseController {
           referralId,
           groupId,
           data.paramsForUpdate,
-        )
-        const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
-          referralId,
-          username,
         )
         logger.info(
           {
@@ -99,6 +99,8 @@ export default class RemoveFromGroupController extends BaseController {
       referralId,
       username,
     )
+
+    req.session.groupManagementData.personName = referralDetails.personName
 
     const presenter = new RemoveFromGroupUpdateStatusPresenter(
       groupId,
