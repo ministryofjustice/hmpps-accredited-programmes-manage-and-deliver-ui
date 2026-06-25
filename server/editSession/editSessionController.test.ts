@@ -268,6 +268,32 @@ describe('editSessionDateAndTime', () => {
       )
     })
 
+    it('should redirect to reschedule page when a past group session is moved to a future date', async () => {
+      const sessionDetails = editSessionDetailsFactory.build({
+        sessionDate: '2000-01-01',
+        sessionStartTime: { hour: 10, minutes: 0, amOrPm: 'AM' },
+        sessionEndTime: { hour: 12, minutes: 30, amOrPm: 'PM' },
+      })
+      const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'GROUP', isCatchup: false })
+      accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
+      accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
+
+      await request(app)
+        .post(`/111/6789/edit-session-date-and-time`)
+        .type('form')
+        .send({
+          'session-details-date': '1/1/3055',
+          'session-details-start-time-hour': '10',
+          'session-details-start-time-minute': '0',
+          'session-details-start-time-part-of-day': 'AM',
+          'session-details-end-time-hour': '12',
+          'session-details-end-time-minute': '30',
+          'session-details-end-time-part-of-day': 'PM',
+        })
+        .expect(302)
+        .expect('Location', '/111/6789/edit-group-days-and-times/reschedule')
+    })
+
     it('should return validation error if a past session is made longer than originally scheduled', async () => {
       const sessionDetails = editSessionDetailsFactory.build({
         sessionDate: '2000-01-01',
@@ -381,7 +407,7 @@ describe('editSessionDateAndTime', () => {
 })
 
 describe('submitEditSessionDateAndTime', () => {
-  const sessionData: Partial<SessionData> = {
+  const makeSessionData = (): Partial<SessionData> => ({
     editSessionDateAndTime: {
       sessionStartDate: '12/12/2026',
       sessionStartTime: {
@@ -395,13 +421,13 @@ describe('submitEditSessionDateAndTime', () => {
         amOrPm: 'PM',
       },
     },
-  }
+  })
   describe('GET /:groupId/:sessionId/edit-group-days-and-times/reschedule', () => {
     it('should fetch session details with correct parameters and load page correctly', async () => {
       const sessionDetails = rescheduleSessionDetailsFactory.build()
       accreditedProgrammesManageAndDeliverService.getRescheduleSessionDetails.mockResolvedValue(sessionDetails)
 
-      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+      app = TestUtils.createTestAppWithSession(makeSessionData(), { accreditedProgrammesManageAndDeliverService })
 
       await request(app)
         .get(`/111/6789/edit-group-days-and-times/reschedule`)
@@ -417,17 +443,17 @@ describe('submitEditSessionDateAndTime', () => {
   })
 
   describe('POST /:groupId/:sessionId/edit-group-days-and-times/reschedule', () => {
-    it('should submit the edit session details correctly', async () => {
+    it('should submit with rescheduleOtherSessions false when no is selected', async () => {
       const sessionDetails = rescheduleSessionDetailsFactory.build()
       accreditedProgrammesManageAndDeliverService.getRescheduleSessionDetails.mockResolvedValue(sessionDetails)
 
-      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+      app = TestUtils.createTestAppWithSession(makeSessionData(), { accreditedProgrammesManageAndDeliverService })
 
       accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime.mockResolvedValue({
         message: 'Test message',
       })
 
-      return request(app)
+      await request(app)
         .post(`/111/6789/edit-group-days-and-times/reschedule`)
         .type('form')
         .send({
@@ -439,6 +465,42 @@ describe('submitEditSessionDateAndTime', () => {
             `Redirecting to /111/6789/edit-session?editSessionMessage=${encodeURIComponent('Test message')}`,
           )
         })
+
+      expect(accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime).toHaveBeenCalledWith(
+        'user1',
+        sessionDetails.sessionId,
+        expect.objectContaining({ rescheduleOtherSessions: false }),
+      )
+    })
+
+    it('should submit with rescheduleOtherSessions true when yes is selected', async () => {
+      const sessionDetails = rescheduleSessionDetailsFactory.build()
+      accreditedProgrammesManageAndDeliverService.getRescheduleSessionDetails.mockResolvedValue(sessionDetails)
+
+      app = TestUtils.createTestAppWithSession(makeSessionData(), { accreditedProgrammesManageAndDeliverService })
+
+      accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime.mockResolvedValue({
+        message: 'Test message',
+      })
+
+      await request(app)
+        .post(`/111/6789/edit-group-days-and-times/reschedule`)
+        .type('form')
+        .send({
+          'reschedule-other-sessions': 'true',
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain(
+            `Redirecting to /111/6789/edit-session?editSessionMessage=${encodeURIComponent('Test message')}`,
+          )
+        })
+
+      expect(accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime).toHaveBeenCalledWith(
+        'user1',
+        sessionDetails.sessionId,
+        expect.objectContaining({ rescheduleOtherSessions: true }),
+      )
     })
   })
 })

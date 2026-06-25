@@ -160,3 +160,12 @@
   background: white;
   padding-top: 40px;
 }
+
+.hmpps-header__title {
+  padding-right: 10px;
+
+  &__service-name {
+    display: inline-block;
+  }
+}
+

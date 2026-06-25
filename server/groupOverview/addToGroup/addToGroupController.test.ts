@@ -3,8 +3,10 @@ import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import { SessionData } from 'express-session'
 import request from 'supertest'
+import { ReferralDetails } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../../services/accreditedProgrammesManageAndDeliverService'
 import TestUtils from '../../testutils/testUtils'
+import referralDetailsFactory from '../../testutils/factories/referralDetailsFactory'
 
 jest.mock('../../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../../data/hmppsAuthClient')
@@ -16,6 +18,8 @@ const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesMana
 
 let app: Express
 
+const referralDetails: ReferralDetails = referralDetailsFactory.build()
+
 afterEach(() => {
   jest.resetAllMocks()
 })
@@ -23,12 +27,12 @@ beforeEach(() => {
   const sessionData: Partial<SessionData> = {
     groupManagementData: {
       groupCode: 'ABC123',
-      personName: 'Alex River',
     },
     originPage: '/group/123/waitlist?nameOrCRN=&cohort=General+Offence&sex=&pdu=Liverpool',
   }
   app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
   accreditedProgrammesManageAndDeliverService.addToGroup.mockResolvedValue({ message: 'Successfully added to group' })
+  accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
 })
 
 describe('add to group', () => {

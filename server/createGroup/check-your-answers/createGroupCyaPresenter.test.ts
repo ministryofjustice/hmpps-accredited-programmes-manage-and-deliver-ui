@@ -217,44 +217,58 @@ describe('CreateGroupCyaPresenter', () => {
       const summary = presenter.getCreateGroupSummary()
 
       expect(summary).toContainEqual({
-        key: 'Group Code',
+        key: 'Group code',
         lines: ['ABC123'],
         changeLink: '/create-group-code',
+        visuallyHiddenText: 'group code',
       })
       expect(summary).toContainEqual({
-        key: 'Date',
+        key: 'Start date',
         lines: ['2026-06-01'],
         changeLink: '/group-start-date',
+        visuallyHiddenText: 'start date',
+      })
+      expect(summary).toContainEqual({
+        key: 'Days and times',
+        lines: ['Monday 2:00 PM - 4:00 PM'],
+        changeLink: '/group-days-and-times',
+        visuallyHiddenText: 'days and times',
       })
       expect(summary).toContainEqual({
         key: 'Cohort',
         lines: ['General offence'],
         changeLink: '/group-cohort',
+        visuallyHiddenText: 'cohort',
       })
       expect(summary).toContainEqual({
         key: 'Gender',
         lines: ['Male'],
         changeLink: '/group-gender',
+        visuallyHiddenText: 'gender',
       })
       expect(summary).toContainEqual({
         key: 'PDU',
         lines: ['PDU North'],
         changeLink: '/group-probation-delivery-unit',
+        visuallyHiddenText: 'PDU',
       })
       expect(summary).toContainEqual({
-        key: 'Delivery Location',
+        key: 'Delivery location',
         lines: ['Prison A'],
         changeLink: '/group-delivery-location',
+        visuallyHiddenText: 'delivery location',
       })
       expect(summary).toContainEqual({
         key: 'Treatment Manager:',
         lines: ['Not assigned'],
         changeLink: '/group-facilitators',
+        visuallyHiddenText: 'treatment manager',
       })
       expect(summary).toContainEqual({
         key: 'Facilitators:',
         lines: ['None assigned'],
         changeLink: '/group-facilitators',
+        visuallyHiddenText: 'facilitators',
       })
     })
 
@@ -284,6 +298,7 @@ describe('CreateGroupCyaPresenter', () => {
         key: 'Treatment Manager:',
         lines: ['John Smith'],
         changeLink: '/group-facilitators',
+        visuallyHiddenText: 'treatment manager',
       })
     })
 
@@ -320,6 +335,7 @@ describe('CreateGroupCyaPresenter', () => {
         key: 'Facilitators:',
         lines: ['Jane Doe', 'Bob Johnson'],
         changeLink: '/group-facilitators',
+        visuallyHiddenText: 'facilitators',
       })
     })
 
@@ -375,6 +391,7 @@ describe('CreateGroupCyaPresenter', () => {
         key: 'Cover facilitators:',
         lines: ['Alice Brown', 'Charlie Wilson'],
         changeLink: '/group-facilitators',
+        visuallyHiddenText: 'cover facilitators',
       })
     })
 
@@ -424,9 +441,10 @@ describe('CreateGroupCyaPresenter', () => {
       const summary = presenter.getCreateGroupSummary()
 
       expect(summary).toContainEqual({
-        key: 'Day and time',
+        key: 'Days and times',
         lines: ['Monday 2:00 PM - 4:00 PM', 'Wednesday 10:00 AM - 12:00 PM'],
         changeLink: '/group-days-and-times',
+        visuallyHiddenText: 'days and times',
       })
     })
 
@@ -469,13 +487,13 @@ describe('CreateGroupCyaPresenter', () => {
       const summary = presenter.getCreateGroupSummary()
 
       expect(summary.length).toBe(10) // All 10 items including cover facilitators
-      expect(summary[0].key).toBe('Group Code')
-      expect(summary[1].key).toBe('Date')
-      expect(summary[2].key).toBe('Day and time')
+      expect(summary[0].key).toBe('Group code')
+      expect(summary[1].key).toBe('Start date')
+      expect(summary[2].key).toBe('Days and times')
       expect(summary[3].key).toBe('Cohort')
       expect(summary[4].key).toBe('Gender')
       expect(summary[5].key).toBe('PDU')
-      expect(summary[6].key).toBe('Delivery Location')
+      expect(summary[6].key).toBe('Delivery location')
       expect(summary[7].key).toBe('Treatment Manager:')
       expect(summary[8].key).toBe('Facilitators:')
       expect(summary[9].key).toBe('Cover facilitators:')

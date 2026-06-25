@@ -6,12 +6,10 @@ import { FormData } from '../utils/forms/formData'
 
 export type AddToGroupFormData = {
   addToGroup: string
-  personName: string
 }
 
 export type RemoveFromGroupFormData = {
   removeFromGroup: string
-  personName: string
 }
 
 export default class GroupForm {
@@ -30,11 +28,9 @@ export default class GroupForm {
         error,
       }
     }
-    const [name = '', id = ''] = this.request.body['add-to-group'].split('*')
     return {
       paramsForUpdate: {
-        addToGroup: id,
-        personName: name,
+        addToGroup: this.request.body['add-to-group'],
       },
       error: null,
     }
@@ -57,11 +53,9 @@ export default class GroupForm {
         error,
       }
     }
-    const [name = '', id = ''] = this.request.body['remove-from-group'].split('*')
     return {
       paramsForUpdate: {
-        removeFromGroup: id,
-        personName: name,
+        removeFromGroup: this.request.body['remove-from-group'],
       },
       error: null,
     }

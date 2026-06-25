@@ -1,7 +1,13 @@
 import { RescheduleSessionRequest } from '@manage-and-deliver-api'
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import BaseController from '../shared/baseController'
+import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
+import DateFormatUtils from '../utils/dateFormatUtils'
+import DateUtils from '../utils/dateUtils'
+import errorMessages from '../utils/errorMessages'
 import { FormValidationError } from '../utils/formValidationError'
+import { convertToUrlFriendlyKebabCase, getEditSessionRouteTitle } from '../utils/utils'
 import EditSessionDateAndTimeFormForm from './dateAndTime/editSessionDateAndTimeForm'
 import EditSessionDateAndTimePresenter from './dateAndTime/editSessionDateAndTimePresenter'
 import EditSessionDateAndTimeView from './dateAndTime/editSessionDateAndTimeView'
@@ -18,12 +24,6 @@ import EditSessionView from './editSessionView'
 import EditSessionFacilitatorsForm from './facilitators/editSessionFacilitatorsForm'
 import EditSessionFacilitatorsPresenter from './facilitators/editSessionFacilitatorsPresenter'
 import EditSessionFacilitatorsView from './facilitators/editSessionFacilitatorsView'
-import BaseController from '../shared/baseController'
-import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
-import { convertToUrlFriendlyKebabCase, getEditSessionRouteTitle } from '../utils/utils'
-import DateUtils from '../utils/dateUtils'
-import DateFormatUtils from '../utils/dateFormatUtils'
-import errorMessages from '../utils/errorMessages'
 
 export default class EditSessionController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -305,14 +305,9 @@ export default class EditSessionController extends BaseController {
           sessionEndTime: data.paramsForUpdate.sessionEndTime,
         }
 
-        // GROUP sessions that have not yet ended go to the reschedule page.
-        // Ended sessions and sessions moved to a past date submit directly so users are not asked to reschedule later sessions.
-        if (
-          sessionAttendees.sessionType === 'GROUP' &&
-          !sessionAttendees.isCatchup &&
-          !isSessionEnded &&
-          !isSubmittedDateInPast
-        ) {
+        // GROUP sessions scheduled to a future date go to the reschedule page.
+        // Sessions moved to a past date submit directly so users are not asked to reschedule later sessions.
+        if (sessionAttendees.sessionType === 'GROUP' && !sessionAttendees.isCatchup && !isSubmittedDateInPast) {
           return res.redirect(`/${groupId}/${sessionId}/edit-group-days-and-times/reschedule`)
         }
 

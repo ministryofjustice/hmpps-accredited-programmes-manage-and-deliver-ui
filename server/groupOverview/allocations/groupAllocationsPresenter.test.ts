@@ -88,7 +88,7 @@ describe('GroupAllocationsPresenter', () => {
           {
             html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
-                    <input id='39fde7e8-d2e3-472b-8364-5848bf673aa6' value='Edgar Schiller*39fde7e8-d2e3-472b-8364-5848bf673aa6' type="radio" name="add-to-group" class="govuk-radios__input">
+                    <input id='39fde7e8-d2e3-472b-8364-5848bf673aa6' value='39fde7e8-d2e3-472b-8364-5848bf673aa6' type="radio" name="add-to-group" class="govuk-radios__input">
                     <label class="govuk-label govuk-radios__label" for="39fde7e8-d2e3-472b-8364-5848bf673aa6">
                       <span class="govuk-!-display-none">Add Edgar Schiller to the group</span>
                     </label>
@@ -113,7 +113,7 @@ describe('GroupAllocationsPresenter', () => {
           {
             html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
-                    <input id='ae43bc75-b96e-496b-b9da-20ea327d7909' value='Roy Kloss*ae43bc75-b96e-496b-b9da-20ea327d7909' type="radio" name="add-to-group" class="govuk-radios__input">
+                    <input id='ae43bc75-b96e-496b-b9da-20ea327d7909' value='ae43bc75-b96e-496b-b9da-20ea327d7909' type="radio" name="add-to-group" class="govuk-radios__input">
                     <label class="govuk-label govuk-radios__label" for="ae43bc75-b96e-496b-b9da-20ea327d7909">
                       <span class="govuk-!-display-none">Add Roy Kloss to the group</span>
                     </label>
@@ -153,7 +153,7 @@ describe('GroupAllocationsPresenter', () => {
           {
             html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
-                    <input id='X718250' value='Edgar Schiller*39fde7e8-d2e3-472b-8364-5848bf673aa6' type="radio" name="remove-from-group" class="govuk-radios__input">
+                    <input id='X718250' value='39fde7e8-d2e3-472b-8364-5848bf673aa6' type="radio" name="remove-from-group" class="govuk-radios__input">
                     <label class="govuk-label govuk-radios__label" for="X718250">
                       <span class="govuk-!-display-none">Remove Edgar Schiller from the group</span>
                     </label>
@@ -172,7 +172,7 @@ describe('GroupAllocationsPresenter', () => {
           {
             html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
-                    <input id='X718255' value='Roy Kloss*ae43bc75-b96e-496b-b9da-20ea327d7909' type="radio" name="remove-from-group" class="govuk-radios__input">
+                    <input id='X718255' value='ae43bc75-b96e-496b-b9da-20ea327d7909' type="radio" name="remove-from-group" class="govuk-radios__input">
                     <label class="govuk-label govuk-radios__label" for="X718255">
                       <span class="govuk-!-display-none">Remove Roy Kloss from the group</span>
                     </label>

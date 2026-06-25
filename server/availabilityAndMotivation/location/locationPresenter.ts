@@ -27,7 +27,7 @@ export default class LocationPresenter extends AvailabilityAndMotivationPresente
 
     let summaryItems: SummaryListItem[] = [
       {
-        key: 'Preferred programme delivery locations',
+        key: 'Locations the person can attend',
         lines: preferredDeliveryLocations.length !== 0 ? preferredDeliveryLocations : ['No information added'],
       },
       {
