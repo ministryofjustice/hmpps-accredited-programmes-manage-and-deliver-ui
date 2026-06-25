@@ -16,7 +16,7 @@ generic-service:
     AUDIT_ENABLED: "false"
     SENTRY_ENVIRONMENT: prod
     ENABLE_PAST_DATE_REGION_RESTRICTION: "true"
-    ENABLE_REGION_RESTRICTION: "true"
+    ENABLE_REGION_RESTRICTION: "false"
 
 generic-prometheus-alerts:
   alertSeverity: hmpps_accredited_programmes_manage_and_deliver_alerts
