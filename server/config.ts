@@ -58,6 +58,7 @@ export default {
   staticResourceCacheDuration: '1h',
   enable_past_date_region_restriction:
     get('ENABLE_PAST_DATE_REGION_RESTRICTION', 'false', requiredInProduction) === 'true',
+  enable_region_restriction: get('ENABLE_REGION_RESTRICTION', 'false', requiredInProduction) === 'true',
   redis: {
     enabled: get('REDIS_ENABLED', 'false', requiredInProduction) === 'true',
     host: get('REDIS_HOST', 'localhost', requiredInProduction),
