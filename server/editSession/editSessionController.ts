@@ -308,6 +308,7 @@ export default class EditSessionController extends BaseController {
 
         // GROUP sessions scheduled to a future date go to the reschedule page.
         // Sessions moved to a past date submit directly so users are not asked to reschedule later sessions.
+        // Empty groups are allowed to reschedule group sessions freely
         if (
           sessionAttendees.sessionType === 'GROUP' &&
           !sessionAttendees.isCatchup &&
