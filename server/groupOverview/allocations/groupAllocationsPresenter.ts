@@ -128,12 +128,13 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
   generateWaitlistTableArgs() {
     const rows = this.group.pagedGroupData.content
     const out: ({ html: string } | { text: string })[][] = []
+    console.log('member', JSON.stringify(rows, null, 2))
     rows.forEach(member => {
       out.push([
         {
           html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
-                    <input id='${member.referralId}' value='${member.personName}*${member.referralId}' type="radio" name="add-to-group" class="govuk-radios__input">
+                    <input id='${member.referralId}' value='${member.referralId}' type="radio" name="add-to-group" class="govuk-radios__input">
                     <label class="govuk-label govuk-radios__label" for="${member.referralId}">
                       <span class="govuk-!-display-none">Add ${member.personName} to the group</span>
                     </label>
@@ -172,7 +173,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
         {
           html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
-                    <input id='${member.crn}' value='${member.personName}*${member.referralId}' type="radio" name="remove-from-group" class="govuk-radios__input">
+                    <input id='${member.crn}' value='${member.referralId}' type="radio" name="remove-from-group" class="govuk-radios__input">
                     <label class="govuk-label govuk-radios__label" for="${member.crn}">
                       <span class="govuk-!-display-none">Remove ${member.personName} from the group</span>
                     </label>

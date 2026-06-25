@@ -38,6 +38,13 @@ export default class RemoveFromGroupController extends BaseController {
 
     const userInputData = req.session.groupManagementData.removeFromGroup ? { 'remove-from-group': 'yes' } : null
 
+    const referralData = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
+      referralId,
+      req.user.username,
+    )
+
+    req.session.groupManagementData.personName = referralData.personName
+
     const presenter = new RemoveFromGroupPresenter(
       groupId,
       req.session.groupManagementData,
