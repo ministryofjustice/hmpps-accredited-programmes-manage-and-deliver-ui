@@ -1,5 +1,5 @@
 import { fakerEN_GB as faker } from '@faker-js/faker'
-import { ReferralStatusTransitions } from '@manage-and-deliver-api'
+import { ReferralDetails, ReferralStatusTransitions } from '@manage-and-deliver-api'
 import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import { SessionData } from 'express-session'
@@ -7,6 +7,7 @@ import request from 'supertest'
 import AccreditedProgrammesManageAndDeliverService from '../../services/accreditedProgrammesManageAndDeliverService'
 import referralStatusTransitionsFactory from '../../testutils/factories/referralStatusTransitionsFactory'
 import TestUtils from '../../testutils/testUtils'
+import referralDetailsFactory from '../../testutils/factories/referralDetailsFactory'
 
 jest.mock('../../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../../data/hmppsAuthClient')
@@ -19,6 +20,7 @@ const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesMana
 let app: Express
 
 const referralStatusTransitions: ReferralStatusTransitions = referralStatusTransitionsFactory.build()
+const referralDetails: ReferralDetails = referralDetailsFactory.build()
 
 afterEach(() => {
   jest.resetAllMocks()
@@ -27,11 +29,11 @@ beforeEach(() => {
   const sessionData: Partial<SessionData> = {
     groupManagementData: {
       groupCode: '`ABC123`',
-      personName: 'Alex River',
     },
     originPage: '/group/123/allocations?nameOrCRN=dave',
   }
   app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+  accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
 })
 
 describe('remove from group', () => {

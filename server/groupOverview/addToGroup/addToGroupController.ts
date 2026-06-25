@@ -36,6 +36,13 @@ export default class AddToGroupController extends BaseController {
       }
     }
 
+    const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
+      referralId,
+      req.user.username,
+    )
+
+    req.session.groupManagementData.personName = referralDetails.personName
+
     const presenter = new AddToGroupPresenter(
       groupId,
       req.session.groupManagementData,
