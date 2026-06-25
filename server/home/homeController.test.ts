@@ -25,7 +25,7 @@ describe('HomeController', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Accredited Programmes')
-          expect(res.text).not.toContain('You cannot access Accredited Programmes services yet')
+          expect(res.text).not.toContain('You cannot access the Accredited Programmes service yet')
         })
     })
 
@@ -39,7 +39,7 @@ describe('HomeController', () => {
         .get('/')
         .expect(403)
         .expect(res => {
-          expect(res.text).toContain('You cannot access Accredited Programmes services yet')
+          expect(res.text).toContain('You cannot access the Accredited Programmes service yet')
         })
     })
 
@@ -53,7 +53,7 @@ describe('HomeController', () => {
         .get('/')
         .expect(403)
         .expect(res => {
-          expect(res.text).toContain('You cannot access Accredited Programmes services yet')
+          expect(res.text).toContain('You cannot access the Accredited Programmes service yet')
         })
     })
   })
@@ -74,7 +74,7 @@ describe('HomeController', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Accredited Programmes')
-          expect(res.text).not.toContain('You cannot access Accredited Programmes services yet')
+          expect(res.text).not.toContain('You cannot access the Accredited Programmes service yet')
         })
     })
 
@@ -89,7 +89,7 @@ describe('HomeController', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Accredited Programmes')
-          expect(res.text).not.toContain('You cannot access Accredited Programmes services yet')
+          expect(res.text).not.toContain('You cannot access the Accredited Programmes service yet')
         })
     })
 
@@ -104,7 +104,7 @@ describe('HomeController', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Accredited Programmes')
-          expect(res.text).not.toContain('You cannot access Accredited Programmes services yet')
+          expect(res.text).not.toContain('You cannot access the Accredited Programmes service yet')
         })
     })
   })
