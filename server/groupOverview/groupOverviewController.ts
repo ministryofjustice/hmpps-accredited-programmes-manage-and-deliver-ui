@@ -50,7 +50,6 @@ export default class GroupOverviewController extends BaseController {
         formError = data.error
       } else {
         req.session.groupManagementData = {
-          personName: data.paramsForUpdate.personName,
           groupCode: groupOverview.group.code,
         }
         return res.redirect(`/remove-from-group/${groupId}/${data.paramsForUpdate.removeFromGroup}`)
@@ -106,7 +105,6 @@ export default class GroupOverviewController extends BaseController {
         formError = data.error
       } else {
         req.session.groupManagementData = {
-          personName: data.paramsForUpdate.personName,
           groupCode: groupOverview.group.code,
         }
         return res.redirect(`/add-to-group/${groupId}/${data.paramsForUpdate.addToGroup}`)
