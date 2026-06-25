@@ -3,9 +3,9 @@ import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import { SessionData } from 'express-session'
 import request from 'supertest'
+import { ReferralDetails } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../../services/accreditedProgrammesManageAndDeliverService'
 import TestUtils from '../../testutils/testUtils'
-import { ReferralDetails } from '@manage-and-deliver-api'
 import referralDetailsFactory from '../../testutils/factories/referralDetailsFactory'
 
 jest.mock('../../services/accreditedProgrammesManageAndDeliverService')

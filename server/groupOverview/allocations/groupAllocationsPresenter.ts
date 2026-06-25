@@ -128,7 +128,6 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
   generateWaitlistTableArgs() {
     const rows = this.group.pagedGroupData.content
     const out: ({ html: string } | { text: string })[][] = []
-    console.log('member', JSON.stringify(rows, null, 2))
     rows.forEach(member => {
       out.push([
         {
