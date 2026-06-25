@@ -290,6 +290,7 @@ export default class EditSessionController extends BaseController {
       } else {
         const { sessionStartDate, sessionStartTime, sessionEndTime } = data.paramsForUpdate
         const isSubmittedDateInPast = DateFormatUtils.isDateInPast(sessionStartDate)
+
         const hasChanged = EditSessionController.hasSessionDateAndTimeChanged(sessionDetails, {
           sessionStartDate,
           sessionStartTime,
@@ -307,7 +308,11 @@ export default class EditSessionController extends BaseController {
 
         // GROUP sessions scheduled to a future date go to the reschedule page.
         // Sessions moved to a past date submit directly so users are not asked to reschedule later sessions.
-        if (sessionAttendees.sessionType === 'GROUP' && !sessionAttendees.isCatchup && !isSubmittedDateInPast) {
+        if (
+          sessionAttendees.sessionType === 'GROUP' &&
+          !sessionAttendees.isCatchup &&
+          (sessionDetails.isEmptyGroup || !isSubmittedDateInPast)
+        ) {
           return res.redirect(`/${groupId}/${sessionId}/edit-group-days-and-times/reschedule`)
         }
 

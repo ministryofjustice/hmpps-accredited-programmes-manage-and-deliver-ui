@@ -1,4 +1,4 @@
-import { EditSessionDetails, RescheduleSessionRequest, EditSessionAttendeesResponse } from '@manage-and-deliver-api'
+import { EditSessionAttendeesResponse, EditSessionDetails, RescheduleSessionRequest } from '@manage-and-deliver-api'
 import EditSessionDateAndTimePresenter from './editSessionDateAndTimePresenter'
 
 describe('EditSessionDateAndTimePresenter', () => {
@@ -18,6 +18,7 @@ describe('EditSessionDateAndTimePresenter', () => {
       minutes: 0,
       amOrPm: 'PM',
     },
+    isEmptyGroup: true,
   }
   const sessionType: EditSessionAttendeesResponse['sessionType'] = 'GROUP'
 
