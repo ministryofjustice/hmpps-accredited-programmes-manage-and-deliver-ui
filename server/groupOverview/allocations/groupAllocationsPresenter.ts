@@ -110,7 +110,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
 
   generateTableHeadings(): TableArgsHeadElement[] {
     const baseHeadings: TableArgsHeadElement[] = [
-      { text: '' },
+      { text: this.section === GroupAllocationsPageSection.Allocated ? 'Remove from group' : 'Add to group' },
       { text: 'Name and CRN', attributes: { 'aria-sort': 'ascending' } },
       { text: 'Sentence end date', attributes: { 'aria-sort': 'none' } },
     ]

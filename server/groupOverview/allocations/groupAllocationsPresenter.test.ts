@@ -46,7 +46,7 @@ describe('GroupAllocationsPresenter', () => {
         filterObject,
       )
       expect(presenter.generateTableHeadings()).toEqual([
-        { text: '' },
+        { text: 'Remove from group' },
         { text: 'Name and CRN', attributes: { 'aria-sort': 'ascending' } },
         { text: 'Sentence end date', attributes: { 'aria-sort': 'none' } },
         { text: 'Referral status', attributes: { 'aria-sort': 'none' } },
@@ -62,7 +62,7 @@ describe('GroupAllocationsPresenter', () => {
         filterObject,
       )
       expect(presenter.generateTableHeadings()).toEqual([
-        { text: '' },
+        { text: 'Add to group' },
         { text: 'Name and CRN', attributes: { 'aria-sort': 'ascending' } },
         { text: 'Sentence end date', attributes: { 'aria-sort': 'none' } },
         { text: 'Cohort', attributes: { 'aria-sort': 'none' } },
