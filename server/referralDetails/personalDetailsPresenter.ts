@@ -17,7 +17,7 @@ export default class PersonalDetailsPresenter extends ReferralDetailsPresenter {
 
   get importFromDeliusText(): InsetTextArgs {
     return {
-      text: `Imported from NDelius on ${this.personalDetails.dateRetrieved}, last updated on ${this.personalDetails.dateRetrieved}`,
+      text: `Imported from NDelius on ${this.personalDetails.dateRetrieved}.`,
       classes: 'govuk-!-margin-top-0',
     }
   }
