@@ -61,6 +61,8 @@ export default {
     detailsTooLong: 'Details must be 500 characters or fewer',
     startedProgrammeEmpty: `Select whether the person has started the programme or not`,
     completedProgrammeEmpty: `Select whether the person has completed the programme or not`,
+    transitionChanged: `The referral status has changed since this page was loaded. Review the current status and choose again.`,
+    invalidTransition: `That referral status change is no longer allowed. Review the current status and choose again.`,
   },
   addToGroup: {
     selectAPerson: "Select the button next to a person's name to add them to the group",

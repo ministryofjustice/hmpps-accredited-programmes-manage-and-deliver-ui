@@ -25,6 +25,7 @@
       <div class="govuk-grid-column-two-thirds">
         <form method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{csrfToken}}">
+          <input type="hidden" name="referral-status-description-id" value="{{expectedStatusId}}">
           {% if showInsetText %}
             {{ govukInsetText(insetText) }}
           {% endif %}

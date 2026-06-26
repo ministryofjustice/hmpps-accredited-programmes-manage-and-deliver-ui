@@ -46,7 +46,7 @@ describe('GroupAllocationsPresenter', () => {
         filterObject,
       )
       expect(presenter.generateTableHeadings()).toEqual([
-        { text: '' },
+        { text: 'Remove from group' },
         { text: 'Name and CRN', attributes: { 'aria-sort': 'ascending' } },
         { text: 'Sentence end date', attributes: { 'aria-sort': 'none' } },
         { text: 'Referral status', attributes: { 'aria-sort': 'none' } },
@@ -62,7 +62,7 @@ describe('GroupAllocationsPresenter', () => {
         filterObject,
       )
       expect(presenter.generateTableHeadings()).toEqual([
-        { text: '' },
+        { text: 'Add to group' },
         { text: 'Name and CRN', attributes: { 'aria-sort': 'ascending' } },
         { text: 'Sentence end date', attributes: { 'aria-sort': 'none' } },
         { text: 'Cohort', attributes: { 'aria-sort': 'none' } },
@@ -90,7 +90,7 @@ describe('GroupAllocationsPresenter', () => {
                   <div class="govuk-radios__item">
                     <input id='39fde7e8-d2e3-472b-8364-5848bf673aa6' value='39fde7e8-d2e3-472b-8364-5848bf673aa6' type="radio" name="add-to-group" class="govuk-radios__input">
                     <label class="govuk-label govuk-radios__label" for="39fde7e8-d2e3-472b-8364-5848bf673aa6">
-                      <span class="govuk-!-display-none">Add Edgar Schiller to the group</span>
+                      <span class="govuk-visually-hidden">Add Edgar Schiller to the group</span>
                     </label>
                   </div>
                  </div>`,
@@ -115,7 +115,7 @@ describe('GroupAllocationsPresenter', () => {
                   <div class="govuk-radios__item">
                     <input id='ae43bc75-b96e-496b-b9da-20ea327d7909' value='ae43bc75-b96e-496b-b9da-20ea327d7909' type="radio" name="add-to-group" class="govuk-radios__input">
                     <label class="govuk-label govuk-radios__label" for="ae43bc75-b96e-496b-b9da-20ea327d7909">
-                      <span class="govuk-!-display-none">Add Roy Kloss to the group</span>
+                      <span class="govuk-visually-hidden">Add Roy Kloss to the group</span>
                     </label>
                   </div>
                  </div>`,
@@ -155,7 +155,7 @@ describe('GroupAllocationsPresenter', () => {
                   <div class="govuk-radios__item">
                     <input id='X718250' value='39fde7e8-d2e3-472b-8364-5848bf673aa6' type="radio" name="remove-from-group" class="govuk-radios__input">
                     <label class="govuk-label govuk-radios__label" for="X718250">
-                      <span class="govuk-!-display-none">Remove Edgar Schiller from the group</span>
+                      <span class="govuk-visually-hidden">Remove Edgar Schiller from the group</span>
                     </label>
                   </div>
                  </div>`,
@@ -174,7 +174,7 @@ describe('GroupAllocationsPresenter', () => {
                   <div class="govuk-radios__item">
                     <input id='X718255' value='ae43bc75-b96e-496b-b9da-20ea327d7909' type="radio" name="remove-from-group" class="govuk-radios__input">
                     <label class="govuk-label govuk-radios__label" for="X718255">
-                      <span class="govuk-!-display-none">Remove Roy Kloss from the group</span>
+                      <span class="govuk-visually-hidden">Remove Roy Kloss from the group</span>
                     </label>
                   </div>
                  </div>`,
@@ -366,5 +366,29 @@ describe('tableCaption', () => {
     )
 
     expect(presenter.tableCaption).toBe('Waitlist for Building Choices')
+  })
+})
+
+describe('selectionLegendText', () => {
+  it('should return the remove legend for the allocated section', () => {
+    const presenter = new GroupAllocationsPresenter(
+      GroupAllocationsPageSection.Allocated,
+      ProgrammeGroupOverviewFactory.build(),
+      '1234',
+      GroupAllocationsFilter.empty(),
+    )
+
+    expect(presenter.selectionLegendText).toBe('Select one person to remove from the group')
+  })
+
+  it('should return the add legend for the waitlist section', () => {
+    const presenter = new GroupAllocationsPresenter(
+      GroupAllocationsPageSection.Waitlist,
+      ProgrammeGroupOverviewFactory.build(),
+      '1234',
+      GroupAllocationsFilter.empty(),
+    )
+
+    expect(presenter.selectionLegendText).toBe('Select one person to add to the group')
   })
 })

@@ -30,6 +30,10 @@ export default class UpdateReferralStatusFixedPresenter {
     return PresenterUtils.errorSummary(this.validationError)
   }
 
+  get expectedStatusId(): string {
+    return this.statusDetails.suggestedStatus.statusDescriptionId
+  }
+
   get fields() {
     return {
       moreDetailsTextArea: {

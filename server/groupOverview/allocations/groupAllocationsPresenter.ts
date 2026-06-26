@@ -51,6 +51,12 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
     return this.section === GroupAllocationsPageSection.Allocated ? 'Group allocations' : 'Building Choices waitlist'
   }
 
+  get selectionLegendText(): string {
+    return this.section === GroupAllocationsPageSection.Allocated
+      ? 'Select one person to remove from the group'
+      : 'Select one person to add to the group'
+  }
+
   get showReportingTeams(): boolean {
     return !!this.filter?.pdu
   }
@@ -104,7 +110,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
 
   generateTableHeadings(): TableArgsHeadElement[] {
     const baseHeadings: TableArgsHeadElement[] = [
-      { text: '' },
+      { text: this.section === GroupAllocationsPageSection.Allocated ? 'Remove from group' : 'Add to group' },
       { text: 'Name and CRN', attributes: { 'aria-sort': 'ascending' } },
       { text: 'Sentence end date', attributes: { 'aria-sort': 'none' } },
     ]
@@ -135,7 +141,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
                   <div class="govuk-radios__item">
                     <input id='${member.referralId}' value='${member.referralId}' type="radio" name="add-to-group" class="govuk-radios__input">
                     <label class="govuk-label govuk-radios__label" for="${member.referralId}">
-                      <span class="govuk-!-display-none">Add ${member.personName} to the group</span>
+                      <span class="govuk-visually-hidden">Add ${member.personName} to the group</span>
                     </label>
                   </div>
                  </div>`,
@@ -174,7 +180,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
                   <div class="govuk-radios__item">
                     <input id='${member.crn}' value='${member.referralId}' type="radio" name="remove-from-group" class="govuk-radios__input">
                     <label class="govuk-label govuk-radios__label" for="${member.crn}">
-                      <span class="govuk-!-display-none">Remove ${member.personName} from the group</span>
+                      <span class="govuk-visually-hidden">Remove ${member.personName} from the group</span>
                     </label>
                   </div>
                  </div>`,

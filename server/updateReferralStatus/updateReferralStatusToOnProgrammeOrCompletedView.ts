@@ -53,6 +53,7 @@ export default class UpdateReferralStatusFixedView {
         text: this.presenter.text,
         showInsetText: this.showInsetText,
         insetText: this.insetText,
+        expectedStatusId: this.presenter.expectedStatusId,
       },
     ]
   }

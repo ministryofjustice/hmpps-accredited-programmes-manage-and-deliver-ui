@@ -94,6 +94,7 @@ export default class UpdateReferralStatusForm {
 
     return {
       paramsForUpdate: {
+        referralStatusDescriptionId: this.request.body['referral-status-description-id'],
         additionalDetails: this.request.body['more-details'],
       },
       error: null,
