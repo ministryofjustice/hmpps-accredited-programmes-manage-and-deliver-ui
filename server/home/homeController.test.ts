@@ -122,9 +122,7 @@ describe('HomeController', () => {
         })
     })
   })
-})
 
-describe('HomeController with DEV_ALLOWED_REGIONS', () => {
   describe('When ENVIRONMENT_NAME=DEV and region restriction is enabled', () => {
     beforeAll(() => {
       process.env.ENABLE_REGION_RESTRICTION = 'true'
