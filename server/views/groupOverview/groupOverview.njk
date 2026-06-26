@@ -80,8 +80,11 @@
       <input type="hidden" name="_csrf" value="{{ csrfToken }}">
       <div id="add-to-group"></div>
       {% if hasResults %}
-        {{ govukTable(getGroupAllocationsTableArgs) }}
-        {{ govukButton(formButtonArgs) }}
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-visually-hidden">{{ presenter.selectionLegendText }}</legend>
+          {{ govukTable(getGroupAllocationsTableArgs) }}
+          {{ govukButton(formButtonArgs) }}
+        </fieldset>
       {% else %}
         <p class="govuk-body-l">{{ noResultsString }}</p>
       {% endif %}
