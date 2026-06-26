@@ -259,13 +259,13 @@ describe('CreateGroupCyaPresenter', () => {
         visuallyHiddenText: 'delivery location',
       })
       expect(summary).toContainEqual({
-        key: 'Treatment Manager:',
+        key: 'Treatment Manager',
         lines: ['Not assigned'],
         changeLink: '/group-facilitators',
         visuallyHiddenText: 'treatment manager',
       })
       expect(summary).toContainEqual({
-        key: 'Facilitators:',
+        key: 'Facilitators',
         lines: ['None assigned'],
         changeLink: '/group-facilitators',
         visuallyHiddenText: 'facilitators',
@@ -295,7 +295,7 @@ describe('CreateGroupCyaPresenter', () => {
       const summary = presenter.getCreateGroupSummary()
 
       expect(summary).toContainEqual({
-        key: 'Treatment Manager:',
+        key: 'Treatment Manager',
         lines: ['John Smith'],
         changeLink: '/group-facilitators',
         visuallyHiddenText: 'treatment manager',
@@ -332,7 +332,7 @@ describe('CreateGroupCyaPresenter', () => {
       const summary = presenter.getCreateGroupSummary()
 
       expect(summary).toContainEqual({
-        key: 'Facilitators:',
+        key: 'Facilitators',
         lines: ['Jane Doe', 'Bob Johnson'],
         changeLink: '/group-facilitators',
         visuallyHiddenText: 'facilitators',
@@ -354,7 +354,7 @@ describe('CreateGroupCyaPresenter', () => {
 
       const summary = presenter.getCreateGroupSummary()
 
-      const coverFacilitatorItem = summary.find(item => item.key === 'Cover facilitators:')
+      const coverFacilitatorItem = summary.find(item => item.key === 'Cover facilitators')
       expect(coverFacilitatorItem).toBeUndefined()
     })
 
@@ -388,7 +388,7 @@ describe('CreateGroupCyaPresenter', () => {
       const summary = presenter.getCreateGroupSummary()
 
       expect(summary).toContainEqual({
-        key: 'Cover facilitators:',
+        key: 'Cover facilitators',
         lines: ['Alice Brown', 'Charlie Wilson'],
         changeLink: '/group-facilitators',
         visuallyHiddenText: 'cover facilitators',
@@ -494,9 +494,9 @@ describe('CreateGroupCyaPresenter', () => {
       expect(summary[4].key).toBe('Gender')
       expect(summary[5].key).toBe('PDU')
       expect(summary[6].key).toBe('Delivery location')
-      expect(summary[7].key).toBe('Treatment Manager:')
-      expect(summary[8].key).toBe('Facilitators:')
-      expect(summary[9].key).toBe('Cover facilitators:')
+      expect(summary[7].key).toBe('Treatment Manager')
+      expect(summary[8].key).toBe('Facilitators')
+      expect(summary[9].key).toBe('Cover facilitators')
     })
   })
 })

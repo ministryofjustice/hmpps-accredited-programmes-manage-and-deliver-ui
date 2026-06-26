@@ -94,13 +94,13 @@ export default class CreateGroupCyaPresenter {
         visuallyHiddenText: 'delivery location',
       },
       {
-        key: 'Treatment Manager:',
+        key: 'Treatment Manager',
         lines: [members.treatmentManager?.facilitator ?? 'Not assigned'],
         changeLink: '/group-facilitators',
         visuallyHiddenText: 'treatment manager',
       },
       {
-        key: 'Facilitators:',
+        key: 'Facilitators',
         lines:
           members.facilitators.length > 0 ? members.facilitators.map(member => member.facilitator) : ['None assigned'],
         changeLink: '/group-facilitators',
@@ -109,7 +109,7 @@ export default class CreateGroupCyaPresenter {
     ]
     if (members.coverFacilitators.length > 0) {
       summaryList.push({
-        key: 'Cover facilitators:',
+        key: 'Cover facilitators',
         lines:
           members.coverFacilitators.length > 0
             ? members.coverFacilitators.map(member => member.facilitator)
