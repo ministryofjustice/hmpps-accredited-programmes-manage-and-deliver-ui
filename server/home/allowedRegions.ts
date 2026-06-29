@@ -1,3 +1,5 @@
+import config from "../config"
+
 /**
  * For info: N53 is the east midlands, N54 is the North East.
  * Full region code mapping can be found at:
@@ -12,11 +14,11 @@ export const DEV_ALLOWED_REGIONS: string[] = ['N01', 'N07', 'N53', 'N54'] // Dev
  * When set to 'false', all regions can access the service.
  */
 function isRegionRestrictionEnabled(): boolean {
-  return process.env.ENABLE_REGION_RESTRICTION === 'true'
+  return config.enable_region_restriction === true
 }
 
 function getAllowedRegions(): string[] {
-  return process.env.ENVIRONMENT_NAME === 'DEV' ? DEV_ALLOWED_REGIONS : ALLOWED_REGIONS
+  return config.environmentName?.toUpperCase()  === 'DEV' ? DEV_ALLOWED_REGIONS : ALLOWED_REGIONS
 }
 
 export function isRegionAllowed(regionCode: string | undefined): boolean {
