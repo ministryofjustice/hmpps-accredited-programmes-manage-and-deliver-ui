@@ -268,6 +268,35 @@ describe('editSessionDateAndTime', () => {
       )
     })
 
+    it('should redirect to reschedule page for an empty past group session moved to a past date', async () => {
+      const sessionDetails = editSessionDetailsFactory.build({
+        sessionDate: '2000-01-01',
+        sessionStartTime: { hour: 10, minutes: 0, amOrPm: 'AM' },
+        sessionEndTime: { hour: 12, minutes: 30, amOrPm: 'PM' },
+        isEmptyGroup: true,
+      })
+      const sessionAttendees = editSessionAttendeesFactory.build({ sessionType: 'GROUP', isCatchup: false })
+      accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
+      accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
+
+      await request(app)
+        .post(`/111/6789/edit-session-date-and-time`)
+        .type('form')
+        .send({
+          'session-details-date': '2/1/2000',
+          'session-details-start-time-hour': '10',
+          'session-details-start-time-minute': '0',
+          'session-details-start-time-part-of-day': 'AM',
+          'session-details-end-time-hour': '12',
+          'session-details-end-time-minute': '30',
+          'session-details-end-time-part-of-day': 'PM',
+        })
+        .expect(302)
+        .expect('Location', '/111/6789/edit-group-days-and-times/reschedule')
+
+      expect(accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime).not.toHaveBeenCalled()
+    })
+
     it('should redirect to reschedule page when a past group session is moved to a future date', async () => {
       const sessionDetails = editSessionDetailsFactory.build({
         sessionDate: '2000-01-01',

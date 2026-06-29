@@ -18,4 +18,5 @@ export default EditSessionDetailsFactory.define(({ sequence }) => ({
     minutes: 0,
     amOrPm: 'PM' as 'AM' | 'PM',
   },
+  isEmptyGroup: false,
 }))
