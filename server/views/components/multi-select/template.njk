@@ -23,7 +23,7 @@
           <input type="checkbox" class="govuk-checkboxes__input" id="{{ idPrefix }}{{ row.id }}" name="{{ idPrefix }}selected" value="{{ row.id }}">
           {%- endif -%}
           <label class="govuk-label govuk-checkboxes__label" for="{{ idPrefix }}{{ row.id }}">
-            <span class="govuk-visually-hidden">Select {{ row.cells[0] }}</span>
+            <span class="govuk-visually-hidden">Select {{ row.checkBoxLabel }}</span>
           </label>
         </div>
       </td>
