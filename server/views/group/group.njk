@@ -34,7 +34,7 @@
     {{ govukSelect(searchBySexArgs) }}
 
     {% endset -%}
-    <div class="govuk-grid-column-one-quarter">
+    <div class="govuk-grid-column-one-quarter group-filter-column">
       <form id="filter-form" method="get">
         {{ mojFilter({
           heading: {
@@ -50,7 +50,7 @@
         }) }}
       </form>
     </div>
-    <div class="govuk-grid-column-three-quarters">
+    <div class="govuk-grid-column-three-quarters group-results-column">
       {{ mojSubNavigation(subNavArgs) }}
       {% if resultsText %}
         <p class="govuk-body showing-results">{{ resultsText | safe }}</p>
