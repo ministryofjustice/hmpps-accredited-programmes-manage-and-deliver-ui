@@ -89,6 +89,7 @@ describe('EditSessionPresenter', () => {
             {
               id: 'attendance-multi-select-row-0',
               value: '123',
+              checkBoxLabel: 'Alex River',
               cells: [
                 { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
                 { html: '<span class="govuk-tag govuk-tag--blue">Attended</span>' },
@@ -100,6 +101,7 @@ describe('EditSessionPresenter', () => {
             {
               id: 'attendance-multi-select-row-1',
               value: '456',
+              checkBoxLabel: 'Jane Doe',
               cells: [
                 { html: '<a href="/referral-details/456/personal-details">Jane Doe</a> CRN002' },
                 { html: '<span class="govuk-tag govuk-tag--red">Not attended</span>' },

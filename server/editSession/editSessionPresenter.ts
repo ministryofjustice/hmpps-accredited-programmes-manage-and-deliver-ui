@@ -141,6 +141,7 @@ export default class EditSessionPresenter {
         rows: attendanceData.map((it, index) => ({
           id: `attendance-multi-select-row-${index}`,
           value: it.referralId,
+          checkBoxLabel: it.name,
           cells: [
             {
               html: `<a href="/referral-details/${it.referralId}/personal-details">${it.name}</a> ${it.crn}`,
