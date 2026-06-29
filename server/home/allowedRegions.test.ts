@@ -1,4 +1,3 @@
-import { isRegionAllowed, ALLOWED_REGIONS, DEV_ALLOWED_REGIONS } from './allowedRegions'
 import config from '../config'
 
 jest.mock('../config')

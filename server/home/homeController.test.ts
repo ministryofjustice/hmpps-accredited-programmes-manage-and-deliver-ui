@@ -2,16 +2,20 @@ import request from 'supertest'
 import { Express } from 'express'
 import { SessionData } from 'express-session'
 import TestUtils from '../testutils/testUtils'
+import config from '../config'
+
+jest.mock('../config')
 
 let app: Express
 
 describe('HomeController', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
   describe('When region restriction is enabled', () => {
     beforeAll(() => {
-      process.env.ENABLE_REGION_RESTRICTION = 'true'
-    })
-    afterAll(() => {
-      delete process.env.ENABLE_REGION_RESTRICTION
+      ;(config as jest.Mocked<typeof config>).enable_region_restriction = true
     })
 
     it('renders the home page when region is allowed', async () => {
@@ -74,7 +78,7 @@ describe('HomeController', () => {
 
   describe('When region restriction is disabled', () => {
     beforeAll(() => {
-      delete process.env.ENABLE_REGION_RESTRICTION
+      ;(config as jest.Mocked<typeof config>).enable_region_restriction = false
     })
 
     it('renders the home page when region is allowed', async () => {
@@ -125,12 +129,8 @@ describe('HomeController', () => {
 
   describe('When ENVIRONMENT_NAME=DEV and region restriction is enabled', () => {
     beforeAll(() => {
-      process.env.ENABLE_REGION_RESTRICTION = 'true'
-      process.env.ENVIRONMENT_NAME = 'DEV'
-    })
-    afterAll(() => {
-      delete process.env.ENABLE_REGION_RESTRICTION
-      delete process.env.ENVIRONMENT_NAME
+      ;(config as jest.Mocked<typeof config>).enable_region_restriction = true
+      ;(config as jest.Mocked<typeof config>).environmentName = 'DEV'
     })
 
     it('renders home page for DEV only region', async () => {
