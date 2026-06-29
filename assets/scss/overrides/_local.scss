@@ -47,6 +47,39 @@
     width: 100%;
   }
 }
+
+// Responsive filter layout for accessibility
+.moj-filter {
+  max-width: 100%;
+}
+
+.caselist-filter-column,
+.group-filter-column {
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+.caselist-results-column,
+.group-results-column {
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+// Stack filter and results vertically when viewport is narrow
+// Allow users to see full filter options when zoomed in
+@media (max-width: 64em) {
+  .caselist-filter-column,
+  .caselist-results-column,
+  .group-filter-column,
+  .group-results-column{
+    width: 100%;
+  }
+
+  .caselist-filter-column,
+  .group-filter-column {
+    margin-bottom: 30px;
+  }
+}
 .govuk-tag.max-width-none {
   max-width: none;
 }
