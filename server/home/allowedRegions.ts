@@ -1,4 +1,4 @@
-import config from "../config"
+import config from '../config'
 
 /**
  * For info:
@@ -27,7 +27,7 @@ function isRegionRestrictionEnabled(): boolean {
 }
 
 function getAllowedRegions(): string[] {
-  return config.environmentName?.toUpperCase()  === 'DEV' ? DEV_ALLOWED_REGIONS : ALLOWED_REGIONS
+  return config.environmentName?.toUpperCase() === 'DEV' ? DEV_ALLOWED_REGIONS : ALLOWED_REGIONS
 }
 
 export function isRegionAllowed(regionCode: string | undefined): boolean {
