@@ -49,7 +49,7 @@ describe('HomeController', () => {
 
     it('renders the invalid region page when region is only allowed in DEV', async () => {
       const sessionData: Partial<SessionData> = {
-        userRegion: { regionCode: 'N01', regionDescription: 'DEV region' },
+        userRegion: { regionCode: 'N02', regionDescription: 'DEV region' },
       }
       app = TestUtils.createTestAppWithSession(sessionData, {})
 
@@ -135,7 +135,7 @@ describe('HomeController', () => {
 
     it('renders home page for DEV only region', async () => {
       const sessionData: Partial<SessionData> = {
-        userRegion: { regionCode: 'N01', regionDescription: 'DEV region' },
+        userRegion: { regionCode: 'N02', regionDescription: 'DEV region' },
       }
       app = TestUtils.createTestAppWithSession(sessionData, {})
 
