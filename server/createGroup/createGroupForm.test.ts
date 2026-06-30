@@ -236,8 +236,8 @@ describe('CreateGroupForm', () => {
         expect(data.error).toStrictEqual({
           errors: [
             {
-              errorSummaryLinkedField: 'create-group-when',
-              formFields: ['create-group-when'],
+              errorSummaryLinkedField: 'days-of-week',
+              formFields: ['days-of-week'],
               message: 'Select at least one day',
             },
           ],

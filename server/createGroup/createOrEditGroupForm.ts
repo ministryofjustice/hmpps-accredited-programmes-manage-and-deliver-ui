@@ -281,7 +281,7 @@ export default class CreateOrEditGroupForm {
 
   private createGroupWhenValidations(): ValidationChain[] {
     return [
-      body('create-group-when').custom((_, { req }) => {
+      body('days-of-week').custom((_, { req }) => {
         const raw = req.body['days-of-week']
 
         const selected: DayKey[] = []
