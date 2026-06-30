@@ -1,7 +1,6 @@
 import { InsetTextArgs, SummaryListArgs } from '../utils/govukFrontendTypes'
 import ViewUtils from '../utils/viewUtils'
 import OffenceHistoryPresenter from './offenceHistoryPresenter'
-import DateUtils from '../utils/dateUtils'
 
 export default class OffenceHistoryView {
   constructor(private readonly presenter: OffenceHistoryPresenter) {}
