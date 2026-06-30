@@ -39,7 +39,7 @@ describe('allowedRegions', () => {
       })
 
       it('should allow dev allowed region)', () => {
-        expect(isRegionAllowed('N01')).toBe(true)
+        expect(isRegionAllowed('N02')).toBe(true)
       })
 
       it('should not allow unknown region', () => {
@@ -58,7 +58,7 @@ describe('allowedRegions', () => {
       })
 
       it('should allow dev regions when environmentName is lowercase', () => {
-        expect(isRegionAllowed('N01')).toBe(true)
+        expect(isRegionAllowed('N02')).toBe(true)
       })
     })
 

@@ -49,7 +49,7 @@ describe('HomeController', () => {
 
     it('renders the invalid region page when region is only allowed in DEV', async () => {
       const sessionData: Partial<SessionData> = {
-        userRegion: { regionCode: 'N01', regionDescription: 'DEV region' },
+        userRegion: { regionCode: 'N02', regionDescription: 'DEV region' },
       }
       app = TestUtils.createTestAppWithSession(sessionData, {})
 
@@ -135,7 +135,7 @@ describe('HomeController', () => {
 
     it('renders home page for DEV only region', async () => {
       const sessionData: Partial<SessionData> = {
-        userRegion: { regionCode: 'N01', regionDescription: 'DEV region' },
+        userRegion: { regionCode: 'N02', regionDescription: 'DEV region' },
       }
       app = TestUtils.createTestAppWithSession(sessionData, {})
 
@@ -150,7 +150,7 @@ describe('HomeController', () => {
 
     it('renders invalid region page for region not in DEV_ALLOWED_REGIONS', async () => {
       const sessionData: Partial<SessionData> = {
-        userRegion: { regionCode: 'N02', regionDescription: 'Not allowed' },
+        userRegion: { regionCode: 'Y02', regionDescription: 'Not allowed' },
       }
       app = TestUtils.createTestAppWithSession(sessionData, {})
 
