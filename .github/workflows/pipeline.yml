@@ -165,6 +165,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          # Full history so the changelog can run `git log <last-prod-commit>..<current>`
+          fetch-depth: 0
       - name: Get PR information
         id: pr-info
         run: |
