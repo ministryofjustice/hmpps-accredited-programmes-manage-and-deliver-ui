@@ -73,5 +73,32 @@ describe('CreateOrEditGroupWhenPresenter', () => {
       })
       expect(result).toHaveLength(7)
     })
+
+    it('associates start-time hint with hour, minute and am or pm controls', () => {
+      const createGroupFormData = createGroupSessionSlotFactory.build()
+      const presenter = new CreateOrEditGroupWhenPresenter('ABC123', [createGroupFormData])
+
+      const conditionalHtml = presenter.whenWillGroupRunCheckBoxArgs[0].conditional.html
+
+      expect(conditionalHtml).toContain('id="monday-time-hint"')
+      expect(conditionalHtml).toContain('id="monday-hour" name="monday-hour" type="text"')
+      expect(conditionalHtml).toContain('aria-describedby="monday-time-hint"')
+      expect(conditionalHtml).toContain('id="monday-minute" name="monday-minute" type="text"')
+      expect(conditionalHtml).toContain('id="monday-ampm" name="monday-ampm"')
+    })
+
+    it('includes field-level errors in aria-describedby for relevant controls', () => {
+      const createGroupFormData = createGroupSessionSlotFactory.build()
+      const validationError = {
+        errors: [{ formFields: ['monday-hour'], errorSummaryLinkedField: 'monday-hour', message: 'Enter an hour' }],
+      }
+      const presenter = new CreateOrEditGroupWhenPresenter('ABC123', [createGroupFormData], validationError)
+
+      const conditionalHtml = presenter.whenWillGroupRunCheckBoxArgs[0].conditional.html
+
+      expect(conditionalHtml).toContain('aria-describedby="monday-time-hint monday-hour-error"')
+      expect(conditionalHtml).toContain('aria-describedby="monday-time-hint"')
+      expect(conditionalHtml).toContain('id="monday-hour-error"')
+    })
   })
 })
