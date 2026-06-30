@@ -13,7 +13,7 @@ export default class SentenceInformationView {
 
   get importFromDeliusText(): InsetTextArgs {
     return {
-      text: `Imported from NDelius on ${this.presenter.sentenceInformation.dateRetrieved} last updated on ${this.presenter.sentenceInformation.dateRetrieved}`,
+      text: `Imported from NDelius on ${this.presenter.sentenceInformation.dateRetrieved}.`,
       classes: 'govuk-!-margin-top-0',
     }
   }

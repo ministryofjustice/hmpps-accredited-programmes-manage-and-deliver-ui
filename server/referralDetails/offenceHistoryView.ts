@@ -1,14 +1,13 @@
 import { InsetTextArgs, SummaryListArgs } from '../utils/govukFrontendTypes'
 import ViewUtils from '../utils/viewUtils'
 import OffenceHistoryPresenter from './offenceHistoryPresenter'
-import DateUtils from '../utils/dateUtils'
 
 export default class OffenceHistoryView {
   constructor(private readonly presenter: OffenceHistoryPresenter) {}
 
   get importFromDeliusText(): InsetTextArgs {
     return {
-      text: `Imported from NDelius on ${this.presenter.offenceHistory.importedDate}, last updated on ${DateUtils.formattedDate(new Date())}`,
+      text: `Imported from NDelius on ${this.presenter.offenceHistory.importedDate}.`,
       classes: 'govuk-!-margin-top-0',
     }
   }
