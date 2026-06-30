@@ -8,7 +8,7 @@ export default class OffenceHistoryView {
 
   get importFromDeliusText(): InsetTextArgs {
     return {
-      text: `Imported from NDelius on ${this.presenter.offenceHistory.importedDate}, last updated on ${DateUtils.formattedDate(new Date())}`,
+      text: `Imported from NDelius on ${this.presenter.offenceHistory.importedDate}.`,
       classes: 'govuk-!-margin-top-0',
     }
   }
