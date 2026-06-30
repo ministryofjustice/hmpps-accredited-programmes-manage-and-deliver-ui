@@ -71,7 +71,7 @@
   .caselist-filter-column,
   .caselist-results-column,
   .group-filter-column,
-  .group-results-column{
+  .group-results-column {
     width: 100%;
   }
 
@@ -200,5 +200,16 @@
   &__service-name {
     display: inline-block;
   }
+}
+
+// Wrap text instead of horizontal scroll for accessibility
+.prisoner-info {
+  span {
+    text-wrap: auto;
+  }
+}
+
+.moj-side-navigation__list {
+  flex-wrap: wrap;
 }
 
