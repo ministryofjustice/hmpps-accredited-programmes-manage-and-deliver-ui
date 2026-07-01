@@ -173,7 +173,7 @@ export default class AddSessionDetailsView {
       name: 'session-details-who',
       fieldset: {
         legend: {
-          text: 'Who is this session for?',
+          text: 'Who is the session for?',
           isPageHeading: false,
           classes: 'govuk-fieldset__legend--m',
         },
@@ -191,13 +191,13 @@ export default class AddSessionDetailsView {
       name: 'session-details-who',
       fieldset: {
         legend: {
-          text: 'Who is this session for?',
+          text: 'Who is the session for?',
           isPageHeading: false,
           classes: 'govuk-fieldset__legend--m',
         },
       },
       hint: {
-        text: 'Select everyone who should attend this session.',
+        text: 'Select everyone who should attend the session.',
       },
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.who.errorMessage),
       items: this.presenter.generateSessionAttendeesCheckboxOptions(this.presenter.selectedAttendeeValues()),
