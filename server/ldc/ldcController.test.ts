@@ -70,7 +70,7 @@ describe('Update ldc status', () => {
             'CRN',
             {
               referralId,
-              hasLdc: "true",
+              hasLdc: 'true',
             },
           )
         })
