@@ -42,7 +42,7 @@ export default class EditSessionDateAndTimeView {
         },
       },
       hint: {
-        text: 'Use the 12-hour clock, for example 9:30am or 3pm. Enter 12pm for midday.',
+        text: 'Use the 12-hour clock, for example 9:30am or 3:00pm. Enter 12pm for midday.',
       },
       errorMessages: ViewUtils.govukErrorMessages(this.presenter.fields.startTime.errorMessages),
       items: [

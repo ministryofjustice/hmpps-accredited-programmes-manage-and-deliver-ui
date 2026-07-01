@@ -76,7 +76,7 @@ export default class GroupView {
       },
       items: [
         {
-          text: 'Create a group',
+          text: 'Create group',
           classes: 'govuk-button--primary',
           href: '/create-group',
         },
