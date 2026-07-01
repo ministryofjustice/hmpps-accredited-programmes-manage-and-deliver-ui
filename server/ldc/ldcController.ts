@@ -6,6 +6,7 @@ import UpdateLdcView from './updateLdcView'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
 import logger from '../../logger'
+import { sendAuditEvent } from '../services/auditService'
 
 export default class LdcController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -25,6 +26,7 @@ export default class LdcController extends BaseController {
     )
 
     if (req.method === 'POST') {
+      sendAuditEvent('EDIT_REFFERAL_LDC', username, referralDetails?.crn, 'CRN', { referralId: referralId, hasLdc: req.body.hasLdc })
       await this.accreditedProgrammesManageAndDeliverService.updateLdc(username, referralId, req.body.hasLdc)
       logger.info(
         {

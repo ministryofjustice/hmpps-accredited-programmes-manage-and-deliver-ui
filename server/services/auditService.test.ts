@@ -1,57 +1,82 @@
-import AuditService, { Page } from './auditService'
-import HmppsAuditClient from '../data/hmppsAuditClient'
+import { sendAuditEvent } from './auditService'
+import { auditService } from '@ministryofjustice/hmpps-audit-client'
+import logger from '../../logger'
+import config from '../config'
 
-jest.mock('../data/hmppsAuditClient')
+jest.mock('@ministryofjustice/hmpps-audit-client')
+jest.mock('../../logger')
+jest.mock('../config')
 
 describe('Audit service', () => {
-  let hmppsAuditClient: jest.Mocked<HmppsAuditClient>
-  let auditService: AuditService
-
   beforeEach(() => {
-    hmppsAuditClient = new HmppsAuditClient(null) as jest.Mocked<HmppsAuditClient>
-    auditService = new AuditService(hmppsAuditClient)
+    jest.clearAllMocks()
   })
 
-  describe('logAuditEvent', () => {
-    it('sends audit message using audit client', async () => {
-      await auditService.logAuditEvent({
-        what: 'AUDIT_EVENT',
-        who: 'user1',
-        subjectId: 'subject123',
-        subjectType: 'exampleType',
-        correlationId: 'request123',
-        details: { extraDetails: 'example' },
+  describe('sendAuditEvent', () => {
+    it('should skip sending audit event when audit is disabled', async () => {
+      ;(config as jest.Mocked<typeof config>).sqs.audit.enabled = false
+
+      await sendAuditEvent('VIEW_SESSION_SCHEDULE', 'testuser123', 'subject123', 'SEARCH_TERM')
+
+      expect(auditService.sendAuditMessage).not.toHaveBeenCalled()
+    })
+
+    it('should send audit message when audit is enabled', async () => {
+      ;(config as jest.Mocked<typeof config>).sqs.audit.enabled = true
+      ;(auditService.sendAuditMessage as jest.Mock).mockResolvedValue(undefined)
+
+      await sendAuditEvent('VIEW_SESSION_SCHEDULE', 'testuser123', 'subject123', 'SEARCH_TERM', {
+        extra: 'details',
       })
 
-      expect(hmppsAuditClient.sendMessage).toHaveBeenCalledWith({
-        what: 'AUDIT_EVENT',
-        who: 'user1',
+      expect(auditService.sendAuditMessage).toHaveBeenCalledWith({
+        action: 'VIEW_SESSION_SCHEDULE',
+        who: 'testuser123',
         subjectId: 'subject123',
-        subjectType: 'exampleType',
-        correlationId: 'request123',
-        details: { extraDetails: 'example' },
+        subjectType: 'SEARCH_TERM',
+        service: 'hmpps-accredited-programmes-manage-and-deliver-ui',
+        details: JSON.stringify({ extra: 'details' }),
       })
     })
-  })
 
-  describe('logPageView', () => {
-    it('sends page view event audit message using audit client', async () => {
-      await auditService.logPageView(Page.EXAMPLE_PAGE, {
-        who: 'user1',
-        subjectId: 'subject123',
-        subjectType: 'exampleType',
-        correlationId: 'request123',
-        details: { extraDetails: 'example' },
-      })
+    it('should use NOT_APPLICABLE as default subjectType', async () => {
+      ;(config as jest.Mocked<typeof config>).sqs.audit.enabled = true
+      ;(auditService.sendAuditMessage as jest.Mock).mockResolvedValue(undefined)
 
-      expect(hmppsAuditClient.sendMessage).toHaveBeenCalledWith({
-        what: 'PAGE_VIEW_EXAMPLE_PAGE',
-        who: 'user1',
-        subjectId: 'subject123',
-        subjectType: 'exampleType',
-        correlationId: 'request123',
-        details: { extraDetails: 'example' },
+      await sendAuditEvent('CREATE_GROUP', 'testuser123', 'group456')
+
+      expect(auditService.sendAuditMessage).toHaveBeenCalledWith({
+        action: 'CREATE_GROUP',
+        who: 'testuser123',
+        subjectId: 'group456',
+        subjectType: 'NOT_APPLICABLE',
+        service: 'hmpps-accredited-programmes-manage-and-deliver-ui',
+        details: undefined,
       })
+    })
+
+    it('should handle audit message send error', async () => {
+      ;(config as jest.Mocked<typeof config>).sqs.audit.enabled = true
+      const error = new Error('SQS connection failed')
+      ;(auditService.sendAuditMessage as jest.Mock).mockRejectedValue(error)
+
+      await sendAuditEvent('VIEW_SESSION_SCHEDULE', 'testuser123', 'subject123')
+
+      expect(logger.error).toHaveBeenCalledWith('Error sending audit event:', error)
+    })
+
+    it('should stringify details object when provided', async () => {
+      ;(config as jest.Mocked<typeof config>).sqs.audit.enabled = true
+      ;(auditService.sendAuditMessage as jest.Mock).mockResolvedValue(undefined)
+      const details = { groupid: 'group123', timestamp: '2024-01-01' }
+
+      await sendAuditEvent('VIEW_SESSION_SCHEDULE', 'testuser123', 'subject123', 'SEARCH_TERM', details)
+
+      expect(auditService.sendAuditMessage).toHaveBeenCalledWith(
+        expect.objectContaining({
+          details: JSON.stringify(details),
+        }),
+      )
     })
   })
 })
