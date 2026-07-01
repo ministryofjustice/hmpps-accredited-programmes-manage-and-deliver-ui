@@ -1,5 +1,5 @@
-import { sendAuditEvent } from './auditService'
 import { auditService } from '@ministryofjustice/hmpps-audit-client'
+import sendAuditEvent from './auditService'
 import logger from '../../logger'
 import config from '../config'
 
