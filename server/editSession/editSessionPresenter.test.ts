@@ -1,5 +1,6 @@
 import { GroupSessionResponse } from '@manage-and-deliver-api'
 import EditSessionPresenter from './editSessionPresenter'
+import { FormValidationError } from '../utils/formValidationError'
 
 describe('EditSessionPresenter', () => {
   const mockGroupId = 'group-123'
@@ -771,6 +772,89 @@ describe('EditSessionPresenter', () => {
       )
 
       expect(presenter.canBeDeleted).toBe(true)
+    })
+  })
+
+  describe('errorSummary', () => {
+    const buildSessionDetails = (overrides: Partial<GroupSessionResponse> = {}): GroupSessionResponse => ({
+      pageTitle: 'Session 1',
+      code: 'CODE-123',
+      sessionType: 'Group',
+      isCatchup: false,
+      attendanceAndSessionNotes: [
+        { referralId: 'ref-1', name: 'Alex River', crn: 'CRN001', attendance: 'Attended', sessionNotes: '' },
+        { referralId: 'ref-2', name: 'Jane Doe', crn: 'CRN002', attendance: 'Not attended', sessionNotes: '' },
+      ],
+      date: '01 Feb 2026',
+      time: '1:00pm',
+      unformattedEndDate: '2126-05-17T13:00:00',
+      scheduledToAttend: [],
+      facilitators: [],
+      ...overrides,
+    })
+
+    it('returns null when there is no validation error', () => {
+      const presenter = new EditSessionPresenter(mockGroupId, buildSessionDetails(), mockSessionId, mockDeleteUrl)
+
+      expect(presenter.errorSummary).toBeNull()
+    })
+
+    it('remaps multi-select-selected error field to the first row id from attendanceTableArgs', () => {
+      const validationError: FormValidationError = {
+        errors: [
+          {
+            formFields: ['multi-select-selected'],
+            errorSummaryLinkedField: 'multi-select-selected',
+            message: 'Select at least one person',
+          },
+        ],
+      }
+      const presenter = new EditSessionPresenter(
+        mockGroupId,
+        buildSessionDetails(),
+        mockSessionId,
+        mockDeleteUrl,
+        null,
+        null,
+        false,
+        validationError,
+      )
+
+      expect(presenter.errorSummary).toEqual([
+        { field: 'multi-select-attendance-multi-select-row-0', message: 'Select at least one person' },
+      ])
+    })
+
+    it('leaves other error fields untouched when remapping multi-select-selected', () => {
+      const validationError: FormValidationError = {
+        errors: [
+          {
+            formFields: ['some-field'],
+            errorSummaryLinkedField: 'some-field',
+            message: 'Some other error',
+          },
+          {
+            formFields: ['multi-select-selected'],
+            errorSummaryLinkedField: 'multi-select-selected',
+            message: 'Select at least one person',
+          },
+        ],
+      }
+      const presenter = new EditSessionPresenter(
+        mockGroupId,
+        buildSessionDetails(),
+        mockSessionId,
+        mockDeleteUrl,
+        null,
+        null,
+        false,
+        validationError,
+      )
+
+      expect(presenter.errorSummary).toEqual([
+        { field: 'some-field', message: 'Some other error' },
+        { field: 'multi-select-attendance-multi-select-row-0', message: 'Select at least one person' },
+      ])
     })
   })
 })

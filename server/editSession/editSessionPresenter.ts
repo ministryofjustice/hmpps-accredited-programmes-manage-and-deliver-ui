@@ -77,12 +77,14 @@ export default class EditSessionPresenter {
 
     const multiSelectError = summary.find(item => item.field === 'multi-select-selected')
     if (multiSelectError) {
-      // Map to the first checkbox so the error link points to an actual form control
-      return summary.map(item =>
-        item.field === 'multi-select-selected'
-          ? { ...item, field: 'multi-select-attendance-multi-select-row-0' }
-          : item,
-      )
+      const tableArgs = this.attendanceTableArgs as MultiSelectTableArgs
+      const firstRowId = tableArgs.rows?.[0]?.id
+      if (firstRowId) {
+        // Map to the first checkbox so the error link points to an actual form control
+        return summary.map(item =>
+          item.field === 'multi-select-selected' ? { ...item, field: `multi-select-${firstRowId}` } : item,
+        )
+      }
     }
 
     return summary
