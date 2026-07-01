@@ -72,7 +72,22 @@ export default class EditSessionPresenter {
   }
 
   get errorSummary() {
-    return PresenterUtils.errorSummary(this.validationError)
+    const summary = PresenterUtils.errorSummary(this.validationError)
+    if (!summary) return summary
+
+    const multiSelectError = summary.find(item => item.field === 'multi-select-selected')
+    if (multiSelectError) {
+      const tableArgs = this.attendanceTableArgs as MultiSelectTableArgs
+      const firstRowId = tableArgs.rows?.[0]?.id
+      if (firstRowId) {
+        // Map to the first checkbox so the error link points to an actual form control
+        return summary.map(item =>
+          item.field === 'multi-select-selected' ? { ...item, field: `multi-select-${firstRowId}` } : item,
+        )
+      }
+    }
+
+    return summary
   }
 
   get hasMultipleReferrals() {

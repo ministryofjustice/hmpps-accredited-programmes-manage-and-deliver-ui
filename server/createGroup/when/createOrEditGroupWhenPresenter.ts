@@ -83,7 +83,7 @@ export default class CreateOrEditGroupWhenPresenter {
     return {
       slots,
       createGroupWhen: {
-        errorMessage: PresenterUtils.errorMessage(this.validationError, 'create-group-when'),
+        errorMessage: PresenterUtils.errorMessage(this.validationError, 'days-of-week'),
       },
     }
   }
@@ -207,7 +207,12 @@ export default class CreateOrEditGroupWhenPresenter {
   get errorSummary() {
     const summary = PresenterUtils.errorSummary(this.validationError)
     if (!summary) return summary
-    if (summary.find(item => item.field === 'create-group-when')) return summary
+
+    const daysOfWeekError = summary.find(item => item.field === 'days-of-week')
+    if (daysOfWeekError) {
+      // Map to the first checkbox (monday) so the error link points to an actual form control
+      return summary.map(item => (item.field === 'days-of-week' ? { ...item, field: 'monday' } : item))
+    }
 
     const summaryResponse: { field: string; message: string }[] = []
 
