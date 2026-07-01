@@ -4,6 +4,10 @@ import SessionScheduleCyaPresenter from './SessionScheduleCyaPresenter'
 export default class SessionScheduleCyaView {
   constructor(private readonly presenter: SessionScheduleCyaPresenter) {}
 
+  private get isGroupSession(): boolean {
+    return this.presenter.createSessionDetails.groupOrOneToOne?.toUpperCase() === 'GROUP'
+  }
+
   private backLinkArgs() {
     return {
       text: 'Back',
@@ -81,7 +85,7 @@ export default class SessionScheduleCyaView {
         },
         {
           key: {
-            text: 'Participant',
+            text: this.isGroupSession ? 'Participants' : 'Participant',
           },
           value: {
             text: `${sessionDetails.referralName}`,
@@ -91,7 +95,7 @@ export default class SessionScheduleCyaView {
               {
                 href: editSessionDetailsUrl,
                 text: 'Change',
-                visuallyHiddenText: 'participant',
+                visuallyHiddenText: this.isGroupSession ? 'participants' : 'participant',
               },
             ],
           },
