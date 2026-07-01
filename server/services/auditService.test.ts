@@ -16,7 +16,7 @@ describe('Audit service', () => {
     it('should skip sending audit event when audit is disabled', async () => {
       ;(config as jest.Mocked<typeof config>).sqs.audit.enabled = false
 
-      await sendAuditEvent('VIEW_SESSION_SCHEDULE', 'testuser123', 'subject123', 'SEARCH_TERM')
+      await sendAuditEvent('EDIT_REFFERAL_LDC', 'testuser123', 'subject123', 'CRN')
 
       expect(auditService.sendAuditMessage).not.toHaveBeenCalled()
     })
@@ -25,17 +25,18 @@ describe('Audit service', () => {
       ;(config as jest.Mocked<typeof config>).sqs.audit.enabled = true
       ;(auditService.sendAuditMessage as jest.Mock).mockResolvedValue(undefined)
 
-      await sendAuditEvent('VIEW_SESSION_SCHEDULE', 'testuser123', 'subject123', 'SEARCH_TERM', {
-        extra: 'details',
+      await sendAuditEvent('EDIT_REFFERAL_LDC', 'testuser123', 'subject123', 'CRN', {
+        referralId: 'refferalId',
+        hasLdc: true,
       })
 
       expect(auditService.sendAuditMessage).toHaveBeenCalledWith({
-        action: 'VIEW_SESSION_SCHEDULE',
+        action: 'EDIT_REFFERAL_LDC',
         who: 'testuser123',
         subjectId: 'subject123',
-        subjectType: 'SEARCH_TERM',
+        subjectType: 'CRN',
         service: 'hmpps-accredited-programmes-manage-and-deliver-ui',
-        details: JSON.stringify({ extra: 'details' }),
+        details: JSON.stringify({ referralId: 'refferalId', hasLdc: true }),
       })
     })
 
@@ -43,12 +44,12 @@ describe('Audit service', () => {
       ;(config as jest.Mocked<typeof config>).sqs.audit.enabled = true
       ;(auditService.sendAuditMessage as jest.Mock).mockResolvedValue(undefined)
 
-      await sendAuditEvent('CREATE_GROUP', 'testuser123', 'group456')
+      await sendAuditEvent('EDIT_REFFERAL_LDC', 'testuser123')
 
       expect(auditService.sendAuditMessage).toHaveBeenCalledWith({
-        action: 'CREATE_GROUP',
+        action: 'EDIT_REFFERAL_LDC',
         who: 'testuser123',
-        subjectId: 'group456',
+        subjectId: undefined,
         subjectType: 'NOT_APPLICABLE',
         service: 'hmpps-accredited-programmes-manage-and-deliver-ui',
         details: undefined,
@@ -60,23 +61,9 @@ describe('Audit service', () => {
       const error = new Error('SQS connection failed')
       ;(auditService.sendAuditMessage as jest.Mock).mockRejectedValue(error)
 
-      await sendAuditEvent('VIEW_SESSION_SCHEDULE', 'testuser123', 'subject123')
+      await sendAuditEvent('EDIT_REFFERAL_LDC', 'testuser123')
 
       expect(logger.error).toHaveBeenCalledWith('Error sending audit event:', error)
-    })
-
-    it('should stringify details object when provided', async () => {
-      ;(config as jest.Mocked<typeof config>).sqs.audit.enabled = true
-      ;(auditService.sendAuditMessage as jest.Mock).mockResolvedValue(undefined)
-      const details = { groupid: 'group123', timestamp: '2024-01-01' }
-
-      await sendAuditEvent('VIEW_SESSION_SCHEDULE', 'testuser123', 'subject123', 'SEARCH_TERM', details)
-
-      expect(auditService.sendAuditMessage).toHaveBeenCalledWith(
-        expect.objectContaining({
-          details: JSON.stringify(details),
-        }),
-      )
     })
   })
 })
