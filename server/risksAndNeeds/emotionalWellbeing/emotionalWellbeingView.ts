@@ -20,7 +20,7 @@ export default class EmotionalWellbeingView {
     return {
       ...ViewUtils.summaryListArgsWithSummaryCard(
         this.presenter.emotionalWellbeingSummaryList(),
-        '10 - Emotional Wellbeing',
+        '10 - Emotional wellbeing',
       ),
     }
   }
