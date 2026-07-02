@@ -45,15 +45,16 @@ export default class CreateOrEditGroupTreatmentManagerView {
   }
 
   private createExistingGroupFacilitatorArgs(facilitator: CreateGroupTeamMember, index: number): SelectArgs {
+    const fieldName = `create-group-facilitator-existing-${index}`
     return {
-      id: `create-group-facilitator-existing-${index}`,
-      name: `create-group-facilitator-existing-${index}`,
+      id: fieldName,
+      name: fieldName,
       label: {
         text: 'Facilitator',
         classes: 'govuk-label--m',
       },
       classes: 'add-facilitator-select',
-      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createGroupFacilitator.errorMessage),
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.errorMessageForField(fieldName)),
       items: this.presenter.generateSelectOptions('REGULAR_FACILITATOR', facilitator.facilitatorCode),
     }
   }
@@ -78,19 +79,22 @@ export default class CreateOrEditGroupTreatmentManagerView {
         classes: 'govuk-label--m',
       },
       classes: 'add-cover-facilitator-select',
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createGroupCoverFacilitator.errorMessage),
       items: this.presenter.generateSelectOptions('COVER_FACILITATOR'),
     }
   }
 
   private createExistingGroupCoverFacilitatorArgs(facilitator: CreateGroupTeamMember, index: number): SelectArgs {
+    const fieldName = `create-group-cover-facilitator-existing-${index}`
     return {
-      id: `create-group-cover-facilitator-existing-${index}`,
-      name: `create-group-cover-facilitator-existing-${index}`,
+      id: fieldName,
+      name: fieldName,
       label: {
         text: 'Cover facilitator (optional)',
         classes: 'govuk-label--m',
       },
       classes: 'add-cover-facilitator-select',
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.errorMessageForField(fieldName)),
       items: this.presenter.generateSelectOptions('COVER_FACILITATOR', facilitator.facilitatorCode),
     }
   }
