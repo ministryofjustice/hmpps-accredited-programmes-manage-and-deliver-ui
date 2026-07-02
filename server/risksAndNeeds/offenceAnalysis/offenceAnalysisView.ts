@@ -9,7 +9,7 @@ export default class OffenceAnalysisView {
     return {
       ...ViewUtils.summaryListArgsWithSummaryCard(
         this.presenter.briefOffenceDetailsSummaryList(),
-        '2.1 - Brief Offence details',
+        '2.1 - Brief offence details',
         { showBorders: true, showTitle: true, hideKey: true },
       ),
     }

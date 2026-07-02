@@ -22,7 +22,7 @@ describe('OffenceHistoryPresenter', () => {
       const summaries = presenter.offenceHistorySummaryLists()
 
       expect(summaries).toHaveLength(2)
-      expect(summaries[0].title).toBe('Index Offence')
+      expect(summaries[0].title).toBe('Index offence')
       expect(summaries[0].summary[0].key).toBe('Offence')
       expect(summaries[0].summary[0].lines[0]).toContain(offenceHistory.mainOffence.offenceCode)
       expect(summaries[0].summary[1].key).toBe('Category')

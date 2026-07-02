@@ -48,14 +48,14 @@ export default class SentenceInformationPresenter extends ReferralDetailsPresent
         lines: [`${this.sentenceInformation.releaseType ?? 'Data not available'}`],
       },
       {
-        key: 'License conditions',
+        key: 'Licence conditions',
         lines:
           this.sentenceInformation.licenceConditions.length > 0
             ? this.sentenceInformation.licenceConditions.map(condition => condition.description)
             : ['Data not available'],
       },
       {
-        key: 'License end date',
+        key: 'Licence end date',
         lines: [`${this.sentenceInformation.licenceEndDate ?? 'Data not available'}`],
       },
       {
