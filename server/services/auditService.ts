@@ -1,29 +1,31 @@
-import HmppsAuditClient, { AuditEvent } from '../data/hmppsAuditClient'
+import { auditService } from '@ministryofjustice/hmpps-audit-client'
+import config from '../config'
+import logger from '../../logger'
 
-export enum Page {
-  EXAMPLE_PAGE = 'EXAMPLE_PAGE',
-}
-
-export interface PageViewEventDetails {
-  who: string
-  subjectId?: string
-  subjectType?: string
-  correlationId?: string
-  details?: object
-}
-
-export default class AuditService {
-  constructor(private readonly hmppsAuditClient: HmppsAuditClient) {}
-
-  async logAuditEvent(event: AuditEvent) {
-    await this.hmppsAuditClient.sendMessage(event)
+export default async function sendAuditEvent(
+  action: string,
+  username: string,
+  subjectId?: string,
+  subjectType?: string,
+  details?: object,
+) {
+  // Check if audit is enabled for environment
+  if (!config.sqs.audit.enabled) {
+    logger.debug('Audit not enabled, skipping sending audit event')
+    return
   }
 
-  async logPageView(page: Page, eventDetails: PageViewEventDetails) {
-    const event: AuditEvent = {
-      ...eventDetails,
-      what: `PAGE_VIEW_${page}`,
-    }
-    await this.hmppsAuditClient.sendMessage(event)
+  try {
+    await auditService.sendAuditMessage({
+      action,
+      who: username,
+      subjectId,
+      subjectType: subjectType || 'NOT_APPLICABLE',
+      service: 'hmpps-accredited-programmes-manage-and-deliver-ui',
+      details: details ? JSON.stringify(details) : undefined,
+    })
+    logger.info('Audit event sent successfully')
+  } catch (error) {
+    logger.error('Error sending audit event:', error)
   }
 }
