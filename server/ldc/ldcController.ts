@@ -26,7 +26,7 @@ export default class LdcController extends BaseController {
     )
 
     if (req.method === 'POST') {
-      sendAuditEvent('EDIT_REFFERAL_LDC', username, referralDetails?.crn, 'CRN', {
+      await sendAuditEvent('EDIT_REFERRAL_LDC', username, referralDetails?.crn, 'CRN', {
         referralId,
         hasLdc: req.body.hasLdc,
       })

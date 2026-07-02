@@ -9,7 +9,7 @@ export default async function sendAuditEvent(
   subjectType?: string,
   details?: object,
 ) {
-  // Check if audit is enabled for enviroment
+  // Check if audit is enabled for environment
   if (!config.sqs.audit.enabled) {
     logger.debug('Audit not enabled, skipping sending audit event')
     return

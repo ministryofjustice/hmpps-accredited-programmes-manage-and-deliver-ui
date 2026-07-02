@@ -16,7 +16,7 @@ describe('Audit service', () => {
     it('should skip sending audit event when audit is disabled', async () => {
       ;(config as jest.Mocked<typeof config>).sqs.audit.enabled = false
 
-      await sendAuditEvent('EDIT_REFFERAL_LDC', 'testuser123', 'subject123', 'CRN')
+      await sendAuditEvent('EDIT_REFERRAL_LDC', 'testuser123', 'subject123', 'CRN')
 
       expect(auditService.sendAuditMessage).not.toHaveBeenCalled()
     })
@@ -25,13 +25,13 @@ describe('Audit service', () => {
       ;(config as jest.Mocked<typeof config>).sqs.audit.enabled = true
       ;(auditService.sendAuditMessage as jest.Mock).mockResolvedValue(undefined)
 
-      await sendAuditEvent('EDIT_REFFERAL_LDC', 'testuser123', 'subject123', 'CRN', {
+      await sendAuditEvent('EDIT_REFERRAL_LDC', 'testuser123', 'subject123', 'CRN', {
         referralId: 'refferalId',
         hasLdc: true,
       })
 
       expect(auditService.sendAuditMessage).toHaveBeenCalledWith({
-        action: 'EDIT_REFFERAL_LDC',
+        action: 'EDIT_REFERRAL_LDC',
         who: 'testuser123',
         subjectId: 'subject123',
         subjectType: 'CRN',
@@ -44,10 +44,10 @@ describe('Audit service', () => {
       ;(config as jest.Mocked<typeof config>).sqs.audit.enabled = true
       ;(auditService.sendAuditMessage as jest.Mock).mockResolvedValue(undefined)
 
-      await sendAuditEvent('EDIT_REFFERAL_LDC', 'testuser123')
+      await sendAuditEvent('EDIT_REFERRAL_LDC', 'testuser123')
 
       expect(auditService.sendAuditMessage).toHaveBeenCalledWith({
-        action: 'EDIT_REFFERAL_LDC',
+        action: 'EDIT_REFERRAL_LDC',
         who: 'testuser123',
         subjectId: undefined,
         subjectType: 'NOT_APPLICABLE',
@@ -61,7 +61,7 @@ describe('Audit service', () => {
       const error = new Error('SQS connection failed')
       ;(auditService.sendAuditMessage as jest.Mock).mockRejectedValue(error)
 
-      await sendAuditEvent('EDIT_REFFERAL_LDC', 'testuser123')
+      await sendAuditEvent('EDIT_REFERRAL_LDC', 'testuser123')
 
       expect(logger.error).toHaveBeenCalledWith('Error sending audit event:', error)
     })

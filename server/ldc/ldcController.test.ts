@@ -64,7 +64,7 @@ describe('Update ldc status', () => {
         })
         .then(() => {
           expect(sendAuditEvent).toHaveBeenCalledWith(
-            'EDIT_REFFERAL_LDC',
+            'EDIT_REFERRAL_LDC',
             defaultUser.username,
             referralDetails.crn,
             'CRN',
