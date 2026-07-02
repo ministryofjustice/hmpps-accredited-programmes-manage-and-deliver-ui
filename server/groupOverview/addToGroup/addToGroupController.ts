@@ -9,6 +9,7 @@ import AccreditedProgrammesManageAndDeliverService from '../../services/accredit
 import BaseController from '../../shared/baseController'
 import { PrimaryNavigationTab } from '../../shared/routes/layoutPresenter'
 import logger from '../../../logger'
+import sendAuditEvent from '../../services/auditService'
 
 export default class AddToGroupController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -77,6 +78,13 @@ export default class AddToGroupController extends BaseController {
           referralId,
           username,
         )
+        // send audit event for assignment to group
+        await sendAuditEvent('ASSIGN_REFERRAL_TO_GROUP', username, referralDetails?.crn, 'CRN', {
+          referralId,
+          groupId,
+          additionalDetails: data.paramsForUpdate.additionalDetails,
+        })
+        
         logger.info(
           {
             event: 'ASSIGN_REFERRAL_TO_GROUP',
