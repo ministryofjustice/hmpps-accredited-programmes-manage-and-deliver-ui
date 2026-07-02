@@ -122,9 +122,9 @@ describe(`filters`, () => {
       expect(presenter.generateCohortSelectArgs()).toEqual([
         { text: 'Select', value: '' },
         { value: 'General offence', text: 'General offence', selected: false },
-        { value: 'General offence - LDC', text: 'General offence - LDC', selected: false },
+        { value: 'General offence LDC', text: 'General offence LDC', selected: false },
         { value: 'Sexual offence', text: 'Sexual offence', selected: false },
-        { value: 'Sexual offence - LDC', text: 'Sexual offence - LDC', selected: false },
+        { value: 'Sexual offence LDC', text: 'Sexual offence LDC', selected: false },
       ])
     })
 
@@ -150,9 +150,9 @@ describe(`filters`, () => {
       expect(presenter.generateCohortSelectArgs()).toEqual([
         { text: 'Select', value: '' },
         { value: 'General offence', text: 'General offence', selected: true },
-        { value: 'General offence - LDC', text: 'General offence - LDC', selected: false },
+        { value: 'General offence LDC', text: 'General offence LDC', selected: false },
         { value: 'Sexual offence', text: 'Sexual offence', selected: false },
-        { value: 'Sexual offence - LDC', text: 'Sexual offence - LDC', selected: false },
+        { value: 'Sexual offence LDC', text: 'Sexual offence LDC', selected: false },
       ])
     })
   })

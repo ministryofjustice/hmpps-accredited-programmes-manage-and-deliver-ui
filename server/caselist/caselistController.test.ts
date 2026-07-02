@@ -43,8 +43,8 @@ describe(`Caselist controller`, () => {
     [`/region/open-referrals`, undefined, undefined, undefined, undefined],
     ['/region/closed-referrals', undefined, undefined, undefined, undefined],
     [
-      '/region/open-referrals?cohort=General offence - LDC&status=Programme+complete',
-      'General offence - LDC',
+      '/region/open-referrals?cohort=General offence LDC&status=Programme+complete',
+      'General offence LDC',
       'Programme complete',
       undefined,
       undefined,

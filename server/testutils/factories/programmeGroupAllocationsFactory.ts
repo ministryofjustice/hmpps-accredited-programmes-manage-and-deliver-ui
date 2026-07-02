@@ -144,7 +144,7 @@ export default ProgrammeGroupAllocationsFactory.define(() => ({
   },
   filters: {
     sex: ['Male', 'Female'],
-    cohort: ['General Offence', 'General Offence - LDC', 'Sexual Offence', 'Sexual Offence - LDC'],
+    cohort: ['General Offence', 'General Offence LDC', 'Sexual Offence', 'Sexual Offence LDC'],
     locationFilters: [
       {
         pduName: 'Manchester',
