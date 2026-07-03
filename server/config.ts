@@ -36,14 +36,26 @@ export interface ApiConfig {
 
 const auditConfig = () => {
   const auditEnabled = get('AUDIT_ENABLED', 'false') === 'true'
+  const fallbackQueue = 'http://localhost:4566/000000000000/mainQueue'
+
+  // When audits are disabled, use the local/default values and don't attempt
+  // to require production secrets. When audits are enabled, require the
+  // variables in production but accept fallbacks in non-production.
+  if (!auditEnabled) {
+    return {
+      enabled: false,
+      queueUrl: fallbackQueue,
+      serviceName: 'UNASSIGNED',
+      region: get('AUDIT_SQS_REGION', 'eu-west-2'),
+    }
+  }
+
+  const requireFlag = production ? requiredInProduction : undefined
+
   return {
-    enabled: auditEnabled,
-    queueUrl: get(
-      'AUDIT_SQS_QUEUE_URL',
-      'http://localhost:4566/000000000000/mainQueue',
-      auditEnabled && requiredInProduction,
-    ),
-    serviceName: get('AUDIT_SERVICE_NAME', 'UNASSIGNED', auditEnabled && requiredInProduction),
+    enabled: true,
+    queueUrl: get('AUDIT_SQS_QUEUE_URL', fallbackQueue, requireFlag),
+    serviceName: get('AUDIT_SERVICE_NAME', 'UNASSIGNED', requireFlag),
     region: get('AUDIT_SQS_REGION', 'eu-west-2'),
   }
 }
