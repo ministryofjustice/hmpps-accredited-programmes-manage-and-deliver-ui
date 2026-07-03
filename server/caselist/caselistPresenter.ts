@@ -247,13 +247,17 @@ export default class CaselistPresenter {
   }
 
   generateNoResultsString(): string {
+    const count = this.otherCaselistCountTotal
+    const resultsText = `${count} ${count === 1 ? 'result' : 'results'}`
+
     if (this.section === CaselistPageSection.Open) {
-      return this.otherCaselistCountTotal === 0
+      return count === 0
         ? 'No results found. Clear or change the filters.'
-        : `No results in open referrals. ${this.otherCaselistCountTotal} results in closed referrals.`
+        : `No results in open referrals. ${resultsText} in closed referrals.`
     }
-    return this.otherCaselistCountTotal === 0
+
+    return count === 0
       ? 'No results found. Clear or change the filters.'
-      : `No results in closed referrals. ${this.otherCaselistCountTotal} results in open referrals.`
+      : `No results in closed referrals. ${resultsText} in open referrals.`
   }
 }
