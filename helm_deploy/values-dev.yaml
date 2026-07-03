@@ -20,11 +20,14 @@ generic-service:
     ENABLE_PAST_DATE_REGION_RESTRICTION: "false"
     ENABLE_REGION_RESTRICTION: "true"
 
+    # Move to general values once secret set up for prod and preprod
+  
+  namespace_secrets:
+    sqs-hmpps-audit-secret:
+      AUDIT_SQS_QUEUE_URL: 'sqs_queue_url'
+      AUDIT_SQS_QUEUE_NAME: "sqs_queue_name"
+
 generic-prometheus-alerts:
   alertSeverity: hmpps_accredited_programmes_manage_and_deliver_alerts_nonprod
 
-# Move to general values once secret set up for prod and preprod
-namespace_secrets:
-  sqs-hmpps-audit-secret:
-    AUDIT_SQS_QUEUE_URL: 'sqs_queue_url'
-    AUDIT_SQS_QUEUE_NAME: "sqs_queue_name"
+
