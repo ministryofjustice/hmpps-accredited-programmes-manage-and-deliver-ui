@@ -666,6 +666,21 @@ describe('generateNoResultsString', () => {
     expect(presenter.generateNoResultsString()).toBe('No results in open referrals. 3 results in closed referrals.')
   })
 
+  it('returns singular result text when closed count is one on open section', () => {
+    const presenter = new CaselistPresenter(
+      1,
+      emptyPage,
+      {} as CaselistFilter,
+      '',
+      true,
+      TestUtils.createCaseListFilters(),
+      1,
+      'test location',
+    )
+
+    expect(presenter.generateNoResultsString()).toBe('No results in open referrals. 1 result in closed referrals.')
+  })
+
   it('returns closed-referrals message with open count when on closed section', () => {
     const presenter = new CaselistPresenter(
       2,
@@ -679,6 +694,21 @@ describe('generateNoResultsString', () => {
     )
 
     expect(presenter.generateNoResultsString()).toBe('No results in closed referrals. 5 results in open referrals.')
+  })
+
+  it('returns singular result text when open count is one on closed section', () => {
+    const presenter = new CaselistPresenter(
+      2,
+      emptyPage,
+      {} as CaselistFilter,
+      '',
+      false,
+      TestUtils.createCaseListFilters(),
+      1,
+      'test location',
+    )
+
+    expect(presenter.generateNoResultsString()).toBe('No results in closed referrals. 1 result in open referrals.')
   })
 
   it('returns clear-filters guidance for closed section when other count is zero', () => {
