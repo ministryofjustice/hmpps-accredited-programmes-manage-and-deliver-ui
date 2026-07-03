@@ -35,6 +35,14 @@ export default class CreateGroupController extends BaseController {
     super()
   }
 
+  private isReturningFromReview(req: Request): boolean {
+    return req.query.referrer === 'group-review-details'
+  }
+
+  private nextCreateGroupRedirect(req: Request, defaultPath: string): string {
+    return this.isReturningFromReview(req) ? '/group-review-details' : defaultPath
+  }
+
   async showCreateGroupStart(req: Request, res: Response): Promise<void> {
     if (req.method === 'POST') {
       return res.redirect('/create-group-code')
@@ -79,7 +87,7 @@ export default class CreateGroupController extends BaseController {
           ...createGroupFormData,
           groupCode: data.paramsForUpdate.groupCode,
         }
-        return res.redirect(`/group-start-date`)
+        return res.redirect(this.nextCreateGroupRedirect(req, '/group-start-date'))
       }
     }
 
@@ -111,7 +119,7 @@ export default class CreateGroupController extends BaseController {
           ...createGroupFormData,
           earliestStartDate: data.paramsForUpdate.earliestStartDate,
         }
-        return res.redirect(`/group-days-and-times`)
+        return res.redirect(this.nextCreateGroupRedirect(req, '/group-days-and-times'))
       }
     }
 
@@ -143,7 +151,7 @@ export default class CreateGroupController extends BaseController {
         formError = data.error
         userInputData = req.body
       } else {
-        return res.redirect(`/group-cohort`)
+        return res.redirect(this.nextCreateGroupRedirect(req, '/group-cohort'))
       }
     }
 
@@ -172,7 +180,7 @@ export default class CreateGroupController extends BaseController {
           ...createGroupFormData,
           cohort: data.paramsForUpdate.cohort,
         }
-        return res.redirect(`/group-gender`)
+        return res.redirect(this.nextCreateGroupRedirect(req, '/group-gender'))
       }
     }
 
@@ -194,7 +202,7 @@ export default class CreateGroupController extends BaseController {
           ...createGroupFormData,
           sex: data.paramsForUpdate.sex,
         }
-        return res.redirect(`/group-probation-delivery-unit`)
+        return res.redirect(this.nextCreateGroupRedirect(req, '/group-probation-delivery-unit'))
       }
     }
     const presenter = new CreateOrEditGroupGenderPresenter(formError, createGroupFormData)
@@ -220,7 +228,7 @@ export default class CreateGroupController extends BaseController {
           pduName: data.paramsForUpdate.pduName,
           pduCode: data.paramsForUpdate.pduCode,
         }
-        return res.redirect(`/group-delivery-location`)
+        return res.redirect(this.nextCreateGroupRedirect(req, '/group-delivery-location'))
       }
     }
 
@@ -249,7 +257,7 @@ export default class CreateGroupController extends BaseController {
           deliveryLocationName: data.paramsForUpdate.deliveryLocationName,
           deliveryLocationCode: data.paramsForUpdate.deliveryLocationCode,
         }
-        return res.redirect(`/group-facilitators`)
+        return res.redirect(this.nextCreateGroupRedirect(req, '/group-facilitators'))
       }
     }
 
@@ -285,7 +293,7 @@ export default class CreateGroupController extends BaseController {
           ...createGroupFormData,
           teamMembers: data.paramsForUpdate.teamMembers,
         }
-        return res.redirect(`/group-review-details`)
+        return res.redirect(this.nextCreateGroupRedirect(req, '/group-review-details'))
       }
     }
 
