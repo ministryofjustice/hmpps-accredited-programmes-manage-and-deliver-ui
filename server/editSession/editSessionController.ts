@@ -241,7 +241,6 @@ export default class EditSessionController extends BaseController {
         res.status(400)
         formError = data.error
       } else {
-
         await sendAuditEvent('EDIT_SESSION_ATTENDEES', username, null, 'SESSION_ID', {
           referralIds: data.paramsForUpdate.referralId,
         })

@@ -84,11 +84,10 @@ export default class UpdateReferralStatusController {
           userInputData = req.body
         } else {
           try {
-
-              await sendAuditEvent('EDIT_REFERRAL_STATUS', username, referralDetails?.crn, 'CRN', {
-                referralId,
-                updatedStatusId: data.paramsForUpdate.referralStatusDescriptionId,
-              })
+            await sendAuditEvent('EDIT_REFERRAL_STATUS', username, referralDetails?.crn, 'CRN', {
+              referralId,
+              updatedStatusId: data.paramsForUpdate.referralStatusDescriptionId,
+            })
             const response = await this.accreditedProgrammesManageAndDeliverService.updateStatus(
               username,
               referralId,

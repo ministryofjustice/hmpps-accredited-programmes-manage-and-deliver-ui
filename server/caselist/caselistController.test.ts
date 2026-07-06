@@ -6,9 +6,11 @@ import { SessionData } from 'express-session'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import caseListReferralsFactory from '../testutils/factories/caseListReferralsFactory'
 import TestUtils from '../testutils/testUtils'
+import sendAuditEvent from '../services/auditService'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
+jest.mock('../services/auditService')
 
 const hmppsAuthClientBuilder = jest.fn()
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
@@ -67,6 +69,19 @@ describe(`Caselist controller`, () => {
           expect(pduInput).toBe(pduValue)
           const reportingTeamInput = $('input[type="checkbox"][name="reportingTeam"]:checked').val()
           expect(reportingTeamInput).toBe(reportingTeamValue)
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            url.startsWith('/region/open-referrals') ? 'SEARCH_OPEN_CASELIST' : 'SEARCH_CLOSED_CASELIST',
+            'user1',
+            JSON.stringify({
+              pdu: pduValue,
+              reportingTeam: reportingTeamValue ? [reportingTeamValue] : undefined,
+              status: referralStatusValue,
+              cohort: cohortValue,
+            }),
+            'SEARCH_TERM',
+          )
         })
     },
   )

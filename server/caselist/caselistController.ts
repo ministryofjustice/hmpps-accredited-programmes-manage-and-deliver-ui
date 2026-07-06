@@ -7,6 +7,7 @@ import CaselistPresenter, { CaselistPageSection } from './caselistPresenter'
 import CaselistView from './caselistView'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
+import sendAuditEvent from '../services/auditService'
 
 export default class CaselistController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -34,7 +35,7 @@ export default class CaselistController extends BaseController {
     const pageNumber = req.query.page
 
     const requestedFilter = CaselistFilter.fromRequest(req)
-
+    await sendAuditEvent('SEARCH_OPEN_CASELIST', username, JSON.stringify(requestedFilter.params), 'SEARCH_TERM')
     let openCaseList = await this.accreditedProgrammesManageAndDeliverService.getOpenCaselist(
       username,
       {
@@ -82,6 +83,7 @@ export default class CaselistController extends BaseController {
     const pageNumber = req.query.page
 
     const requestedFilter = CaselistFilter.fromRequest(req)
+    await sendAuditEvent('SEARCH_CLOSED_CASELIST', username, JSON.stringify(requestedFilter.params), 'SEARCH_TERM')
 
     let closedCaseList = await this.accreditedProgrammesManageAndDeliverService.getClosedCaselist(
       username,

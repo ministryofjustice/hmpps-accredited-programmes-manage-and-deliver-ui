@@ -84,7 +84,7 @@ export default class AddToGroupController extends BaseController {
           groupId,
           additionalDetails: data.paramsForUpdate.additionalDetails,
         })
-        
+
         logger.info(
           {
             event: 'ASSIGN_REFERRAL_TO_GROUP',

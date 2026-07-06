@@ -209,15 +209,15 @@ export default class AttendanceController extends BaseController {
             attendees: attendeesForSubmission,
           })
 
+        const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
+          referralId,
+          username,
+        )
         await sendAuditEvent('CREATE_SESSION_ATTENDENCE', username, referralDetails?.crn, 'CRN', {
           referralIds,
           groupId,
           sessionId,
         })
-        const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
-          referralId,
-          username,
-        )
         logger.info(
           {
             event: 'RECORD_ATTENDANCE',
