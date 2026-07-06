@@ -45,7 +45,7 @@
     {% endif %}
   {% endif %}
   {% endset -%}
-  <div class="govuk-grid-column-one-quarter">
+  <div class="govuk-grid-column-one-quarter group-filter-column">
     <form id="filter-form" method="get">
       {{ mojFilter({
       heading: {
@@ -63,7 +63,7 @@
       }) }}
     </form>
   </div>
-  <div class="govuk-grid-column-three-quarters">
+  <div class="govuk-grid-column-three-quarters group-results-column">
     {% if errorSummary !== null %}
       {{ govukErrorSummary(errorSummary) }}
     {% endif %}
