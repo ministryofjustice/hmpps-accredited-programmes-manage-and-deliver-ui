@@ -228,8 +228,13 @@ export default class CreateGroupController extends BaseController {
           ...createGroupFormData,
           pduName: data.paramsForUpdate.pduName,
           pduCode: data.paramsForUpdate.pduCode,
+          deliveryLocationName: undefined,
+          deliveryLocationCode: undefined,
         }
-        return res.redirect(this.nextCreateGroupRedirect(req, '/group-delivery-location'))
+        const deliveryLocationPath = this.isReturningFromReview(req)
+          ? '/group-delivery-location?referrer=group-review-details'
+          : '/group-delivery-location'
+        return res.redirect(deliveryLocationPath)
       }
     }
 

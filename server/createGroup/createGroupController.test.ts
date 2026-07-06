@@ -387,7 +387,7 @@ describe('Create Group Controller', () => {
         })
     })
 
-    it('redirects back to review when submitted from the check your answers pdu change link', async () => {
+    it('redirects to delivery location with review referrer when submitted from the check your answers probation delivery unit change link', async () => {
       accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion.mockResolvedValue([
         { code: 'LDN', description: 'London' },
       ])
@@ -399,7 +399,41 @@ describe('Create Group Controller', () => {
         })
         .expect(302)
         .expect(res => {
-          expect(res.text).toContain('Redirecting to /group-review-details')
+          expect(res.text).toContain('Redirecting to /group-delivery-location?referrer=group-review-details')
+        })
+    })
+
+    it('clears any previously selected delivery location when the probation delivery unit changes', async () => {
+      const sessionData: Partial<SessionData> = {
+        createGroupFormData: {
+          pduName: 'Old PDU',
+          pduCode: 'OLD',
+          deliveryLocationName: 'Old Location',
+          deliveryLocationCode: 'OLD-LOC',
+        },
+      }
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+      accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion.mockResolvedValue([
+        { code: 'LDN', description: 'London' },
+      ])
+      accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu.mockResolvedValue([
+        { code: 'WMO', description: 'Westminster Office' },
+      ])
+
+      await request(app)
+        .post('/group-probation-delivery-unit')
+        .type('form')
+        .send({
+          'create-group-pdu': '{"code":"LDN", "name":"London"}',
+        })
+        .expect(302)
+
+      return request(app)
+        .get('/group-delivery-location')
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('Westminster Office')
+          expect(res.text).not.toContain('checked')
         })
     })
 
@@ -456,7 +490,7 @@ describe('Create Group Controller', () => {
   })
 
   describe('POST /group-delivery-location', () => {
-    it('redirects to check your answers page on successful submission', async () => {
+    it('redirects to facilitators page on successful submission', async () => {
       accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu.mockResolvedValue([
         { code: 'LDN', description: 'London' },
       ])
@@ -472,7 +506,7 @@ describe('Create Group Controller', () => {
         })
     })
 
-    it('redirects back to review when submitted from the check your answers delivery location change link', async () => {
+    it('redirects to review when submitted from the check your answers delivery location change link', async () => {
       accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu.mockResolvedValue([
         { code: 'LDN', description: 'London' },
       ])
