@@ -109,7 +109,7 @@ describe('Create Group Controller', () => {
         })
     })
 
-    it('redirects back to review when submitted from a check your answers change link', async () => {
+    it('redirects back to review when submitted from the check your answers group code change link', async () => {
       return request(app)
         .post('/create-group-code?referrer=group-review-details')
         .type('form')
@@ -186,7 +186,7 @@ describe('Create Group Controller', () => {
         })
     })
 
-    it('redirects back to review when submitted from a check your answers change link', async () => {
+    it('redirects back to review when submitted from the check your answers start date change link', async () => {
       return request(app)
         .post('/group-start-date?referrer=group-review-details')
         .type('form')
@@ -387,7 +387,7 @@ describe('Create Group Controller', () => {
         })
     })
 
-    it('redirects back to review when submitted from a check your answers change link', async () => {
+    it('redirects back to review when submitted from the check your answers pdu change link', async () => {
       accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion.mockResolvedValue([
         { code: 'LDN', description: 'London' },
       ])
@@ -472,7 +472,7 @@ describe('Create Group Controller', () => {
         })
     })
 
-    it('redirects back to review when submitted from a check your answers change link', async () => {
+    it('redirects back to review when submitted from the check your answers delivery location change link', async () => {
       accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu.mockResolvedValue([
         { code: 'LDN', description: 'London' },
       ])
