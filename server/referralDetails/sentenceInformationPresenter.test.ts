@@ -19,11 +19,11 @@ describe(`sentenceInformationSummaryList.`, () => {
         lines: [sentenceInformation.releaseType],
       },
       {
-        key: 'License conditions',
+        key: 'Licence conditions',
         lines: [sentenceInformation.licenceConditions[0].description],
       },
       {
-        key: 'License end date',
+        key: 'Licence end date',
         lines: [sentenceInformation.licenceEndDate],
       },
       {
@@ -59,11 +59,11 @@ describe(`sentenceInformationSummaryList.`, () => {
         lines: ['Data not available'],
       },
       {
-        key: 'License conditions',
+        key: 'Licence conditions',
         lines: ['Data not available'],
       },
       {
-        key: 'License end date',
+        key: 'Licence end date',
         lines: ['Data not available'],
       },
       {

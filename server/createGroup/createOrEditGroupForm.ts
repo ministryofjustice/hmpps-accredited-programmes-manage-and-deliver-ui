@@ -4,6 +4,7 @@ import { body, ValidationChain } from 'express-validator'
 import errorMessages from '../utils/errorMessages'
 import { FormData } from '../utils/forms/formData'
 import FormUtils from '../utils/formUtils'
+import { FormValidationError } from '../utils/formValidationError'
 import { DAY_CONFIG, DayKey } from './when/daysOfWeek'
 import { isRegionAllowedPastDates } from './allowedPastDateRegions'
 
@@ -209,11 +210,15 @@ export default class CreateOrEditGroupForm {
       validations: this.createOrEditGroupTreatmentManagerValidations(),
     })
 
-    const error = FormUtils.validationErrorFromResult(validationResult)
-    if (error) {
+    const validationError = FormUtils.validationErrorFromResult(validationResult)
+    const duplicateFacilitatorErrors = this.createDuplicateFacilitatorErrors()
+
+    if (validationError || duplicateFacilitatorErrors.length > 0) {
       return {
         paramsForUpdate: null,
-        error,
+        error: {
+          errors: [...(validationError?.errors || []), ...duplicateFacilitatorErrors],
+        },
       }
     }
     const { _csrf, ...formValues } = this.request.body
@@ -281,7 +286,7 @@ export default class CreateOrEditGroupForm {
 
   private createGroupWhenValidations(): ValidationChain[] {
     return [
-      body('create-group-when').custom((_, { req }) => {
+      body('days-of-week').custom((_, { req }) => {
         const raw = req.body['days-of-week']
 
         const selected: DayKey[] = []
@@ -369,27 +374,98 @@ export default class CreateOrEditGroupForm {
           return hasRegularFacilitator
         })
         .withMessage(errorMessages.createGroup.createGroupFacilitatorEmpty),
-      body('create-group-facilitator').custom((_, { req }) => {
-        const facilitators = Object.entries(req.body)
-          .filter(([k, v]) => k.startsWith('create-group-facilitator') && !k.includes('cover') && v)
-          .map(([, v]) => JSON.parse(v as string)?.facilitatorCode)
-          .filter(Boolean)
-
-        const coverFacilitators = Object.entries(req.body)
-          .filter(([k, v]) => k.startsWith('create-group-cover-facilitator') && v)
-          .map(([, v]) => JSON.parse(v as string)?.facilitatorCode)
-          .filter(Boolean)
-
-        if (facilitators.some(code => coverFacilitators.includes(code))) {
-          throw new Error(errorMessages.createGroup.createGroupFacilitatorDuplicate)
-        }
-        // check for duplicates within regular facilitators
-        if (new Set(facilitators).size !== facilitators.length) {
-          throw new Error(errorMessages.createGroup.createGroupFacilitatorDuplicate)
-        }
-
-        return true
-      }),
     ]
+  }
+
+  private createDuplicateFacilitatorErrors(): FormValidationError['errors'] {
+    const regularSelections = this.getFacilitatorSelections('create-group-facilitator', index => {
+      return `create-group-facilitator-existing-${index + 1}`
+    })
+    const coverSelections = this.getFacilitatorSelections('create-group-cover-facilitator', index => {
+      return `create-group-cover-facilitator-existing-${index + 1}`
+    })
+
+    const regularByCode = this.groupFieldNamesByCode(regularSelections)
+    const coverByCode = this.groupFieldNamesByCode(coverSelections)
+    const duplicateFieldNames = new Set<string>()
+
+    regularByCode.forEach(fieldNames => {
+      if (fieldNames.length > 1) {
+        fieldNames.forEach(fieldName => duplicateFieldNames.add(fieldName))
+      }
+    })
+
+    coverByCode.forEach(fieldNames => {
+      if (fieldNames.length > 1) {
+        fieldNames.forEach(fieldName => duplicateFieldNames.add(fieldName))
+      }
+    })
+
+    regularByCode.forEach((regularFieldNames, facilitatorCode) => {
+      const coverFieldNames = coverByCode.get(facilitatorCode)
+      if (!coverFieldNames) {
+        return
+      }
+
+      regularFieldNames.forEach(fieldName => duplicateFieldNames.add(fieldName))
+      coverFieldNames.forEach(fieldName => duplicateFieldNames.add(fieldName))
+    })
+
+    if (duplicateFieldNames.size === 0) {
+      return []
+    }
+
+    const orderedFieldNames = [...regularSelections, ...coverSelections]
+      .map(selection => selection.fieldName)
+      .filter((fieldName, index, allFieldNames) => {
+        return duplicateFieldNames.has(fieldName) && allFieldNames.indexOf(fieldName) === index
+      })
+
+    return orderedFieldNames.map(fieldName => ({
+      formFields: [fieldName],
+      errorSummaryLinkedField: fieldName,
+      message: errorMessages.createGroup.createGroupFacilitatorDuplicate,
+    }))
+  }
+
+  private getFacilitatorSelections(
+    fieldPrefix: 'create-group-facilitator' | 'create-group-cover-facilitator',
+    toRenderedFieldName: (index: number) => string,
+  ): Array<{ fieldName: string; facilitatorCode: string }> {
+    return Object.entries(this.request.body)
+      .filter(([key, value]) => key.startsWith(fieldPrefix) && value)
+      .map(([, value], index) => ({
+        fieldName: toRenderedFieldName(index),
+        facilitatorCode: this.parseFacilitatorCode(value),
+      }))
+      .filter((selection): selection is { fieldName: string; facilitatorCode: string } =>
+        Boolean(selection.facilitatorCode),
+      )
+  }
+
+  private parseFacilitatorCode(value: unknown): string {
+    if (typeof value !== 'string') {
+      return ''
+    }
+
+    try {
+      return JSON.parse(value)?.facilitatorCode || ''
+    } catch {
+      return ''
+    }
+  }
+
+  private groupFieldNamesByCode(
+    selections: Array<{ fieldName: string; facilitatorCode: string }>,
+  ): Map<string, string[]> {
+    const grouped = new Map<string, string[]>()
+
+    selections.forEach(({ fieldName, facilitatorCode }) => {
+      const existingFieldNames = grouped.get(facilitatorCode) || []
+      existingFieldNames.push(fieldName)
+      grouped.set(facilitatorCode, existingFieldNames)
+    })
+
+    return grouped
   }
 }

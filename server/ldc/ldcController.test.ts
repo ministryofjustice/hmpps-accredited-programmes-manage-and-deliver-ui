@@ -3,7 +3,8 @@ import request from 'supertest'
 
 import { ReferralDetails } from '@manage-and-deliver-api'
 import { Express } from 'express'
-import { appWithAllRoutes } from '../routes/testutils/appSetup'
+import { appWithAllRoutes, user as defaultUser } from '../routes/testutils/appSetup'
+import sendAuditEvent from '../services/auditService'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 
@@ -60,6 +61,18 @@ describe('Update ldc status', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain('?isLdcUpdated=true')
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            'EDIT_REFERRAL_LDC',
+            defaultUser.username,
+            referralDetails.crn,
+            'CRN',
+            {
+              referralId,
+              hasLdc: 'true',
+            },
+          )
         })
     })
   })

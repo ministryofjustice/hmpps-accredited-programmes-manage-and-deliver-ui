@@ -15,10 +15,16 @@ generic-service:
     EXAMPLE_API_URL: 'https://template-kotlin-dev.hmpps.service.justice.gov.uk'
     ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_URL: 'https://accredited-programmes-manage-and-deliver-api-dev.hmpps.service.justice.gov.uk'
     ENVIRONMENT_NAME: DEV
-    AUDIT_ENABLED: "false"
+    AUDIT_ENABLED: "true"
     SENTRY_ENVIRONMENT: dev
     ENABLE_PAST_DATE_REGION_RESTRICTION: "false"
-    ENABLE_REGION_RESTRICTION: "false"
+    ENABLE_REGION_RESTRICTION: "true"
+
+  # Move to general values once secret set up for prod and preprod
+  namespace_secrets:
+    sqs-hmpps-audit-secret:
+      AUDIT_SQS_QUEUE_URL: 'sqs_queue_url'
+      AUDIT_SQS_QUEUE_NAME: "sqs_queue_name"
 
 generic-prometheus-alerts:
   alertSeverity: hmpps_accredited_programmes_manage_and_deliver_alerts_nonprod

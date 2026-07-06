@@ -38,7 +38,7 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
     return {
       items: [
         {
-          text: 'Personal Details',
+          text: 'Personal details',
           href: `/referral-details/${this.referralDetails.id}/personal-details/#personal-details`,
           active: this.subNavValue === ReferralDetailsPageSection.PersonalDetailsTab,
           attributes: {
@@ -46,7 +46,7 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
           },
         },
         {
-          text: 'Offence History',
+          text: 'Offence history',
           href: `/referral-details/${this.referralDetails.id}/offence-history/#offence-history`,
           active: this.subNavValue === ReferralDetailsPageSection.OffenceHistoryTab,
           attributes: {
@@ -54,7 +54,7 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
           },
         },
         {
-          text: 'Sentence Information',
+          text: 'Sentence information',
           href: `/referral-details/${this.referralDetails.id}/sentence-information/#sentence-information`,
           active: this.subNavValue === ReferralDetailsPageSection.SentenceInformationTab,
           attributes: {
@@ -69,11 +69,11 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
   referralSummaryList(): SummaryListItem[] {
     return [
       {
-        key: 'Applicant Name',
+        key: 'Applicant name',
         lines: [`${this.referralDetails.personName}`],
       },
       {
-        key: 'Programme Name',
+        key: 'Programme name',
         lines: [`${this.referralDetails.interventionName}`],
       },
       {

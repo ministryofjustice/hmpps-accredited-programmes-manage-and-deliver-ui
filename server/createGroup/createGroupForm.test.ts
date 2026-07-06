@@ -236,8 +236,8 @@ describe('CreateGroupForm', () => {
         expect(data.error).toStrictEqual({
           errors: [
             {
-              errorSummaryLinkedField: 'create-group-when',
-              formFields: ['create-group-when'],
+              errorSummaryLinkedField: 'days-of-week',
+              formFields: ['days-of-week'],
               message: 'Select at least one day',
             },
           ],
@@ -667,8 +667,13 @@ describe('CreateGroupForm', () => {
           expect(data.error).toStrictEqual({
             errors: [
               {
-                errorSummaryLinkedField: 'create-group-facilitator',
-                formFields: ['create-group-facilitator'],
+                errorSummaryLinkedField: 'create-group-facilitator-existing-1',
+                formFields: ['create-group-facilitator-existing-1'],
+                message: 'You cannot add the same facilitator twice. Select a different facilitator.',
+              },
+              {
+                errorSummaryLinkedField: 'create-group-cover-facilitator-existing-1',
+                formFields: ['create-group-cover-facilitator-existing-1'],
                 message: 'You cannot add the same facilitator twice. Select a different facilitator.',
               },
             ],
@@ -692,9 +697,20 @@ describe('CreateGroupForm', () => {
           const data = await new CreateOrEditGroupForm(request).createOrEditGroupTreatmentManagerData()
 
           expect(data.paramsForUpdate).toBeNull()
-          expect(data.error?.errors[0].message).toBe(
-            'You cannot add the same facilitator twice. Select a different facilitator.',
-          )
+          expect(data.error).toStrictEqual({
+            errors: [
+              {
+                errorSummaryLinkedField: 'create-group-facilitator-existing-1',
+                formFields: ['create-group-facilitator-existing-1'],
+                message: 'You cannot add the same facilitator twice. Select a different facilitator.',
+              },
+              {
+                errorSummaryLinkedField: 'create-group-cover-facilitator-existing-1',
+                formFields: ['create-group-cover-facilitator-existing-1'],
+                message: 'You cannot add the same facilitator twice. Select a different facilitator.',
+              },
+            ],
+          })
         })
       })
 
@@ -712,9 +728,53 @@ describe('CreateGroupForm', () => {
           const data = await new CreateOrEditGroupForm(request).createOrEditGroupTreatmentManagerData()
 
           expect(data.paramsForUpdate).toBeNull()
-          expect(data.error?.errors[0].message).toBe(
-            'You cannot add the same facilitator twice. Select a different facilitator.',
-          )
+          expect(data.error).toStrictEqual({
+            errors: [
+              {
+                errorSummaryLinkedField: 'create-group-facilitator-existing-1',
+                formFields: ['create-group-facilitator-existing-1'],
+                message: 'You cannot add the same facilitator twice. Select a different facilitator.',
+              },
+              {
+                errorSummaryLinkedField: 'create-group-facilitator-existing-2',
+                formFields: ['create-group-facilitator-existing-2'],
+                message: 'You cannot add the same facilitator twice. Select a different facilitator.',
+              },
+            ],
+          })
+        })
+      })
+
+      describe('when same facilitator is added twice as cover facilitator', () => {
+        it('returns an appropriate error', async () => {
+          const request = TestUtils.createRequest({
+            'create-group-treatment-manager':
+              '{"facilitator":"John Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
+            'create-group-facilitator-1':
+              '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
+            'create-group-cover-facilitator-1':
+              '{"facilitator":"Bob Jones","facilitatorCode":"BJ789","teamName":"Team C","teamCode":"TC003","teamMemberType":"COVER_FACILITATOR"}',
+            'create-group-cover-facilitator-2':
+              '{"facilitator":"Bob Jones","facilitatorCode":"BJ789","teamName":"Team C","teamCode":"TC003","teamMemberType":"COVER_FACILITATOR"}',
+          })
+
+          const data = await new CreateOrEditGroupForm(request).createOrEditGroupTreatmentManagerData()
+
+          expect(data.paramsForUpdate).toBeNull()
+          expect(data.error).toStrictEqual({
+            errors: [
+              {
+                errorSummaryLinkedField: 'create-group-cover-facilitator-existing-1',
+                formFields: ['create-group-cover-facilitator-existing-1'],
+                message: 'You cannot add the same facilitator twice. Select a different facilitator.',
+              },
+              {
+                errorSummaryLinkedField: 'create-group-cover-facilitator-existing-2',
+                formFields: ['create-group-cover-facilitator-existing-2'],
+                message: 'You cannot add the same facilitator twice. Select a different facilitator.',
+              },
+            ],
+          })
         })
       })
     })

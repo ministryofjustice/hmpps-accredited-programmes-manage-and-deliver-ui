@@ -202,3 +202,14 @@
   }
 }
 
+// Wrap text instead of horizontal scroll for accessibility
+.prisoner-info {
+  span {
+    text-wrap: auto;
+  }
+}
+
+.moj-side-navigation__list {
+  flex-wrap: wrap;
+}
+

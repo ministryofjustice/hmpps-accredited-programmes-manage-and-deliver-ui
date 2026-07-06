@@ -148,14 +148,20 @@ export default class ViewUtils {
     return {
       card: (() => {
         if (options.showTitle) {
-          return {
+          const card: {
+            title?: { text?: string | null | undefined }
+            actions?: { items?: Array<{ href: string; text?: string | null; visuallyHiddenText?: string | null }> }
+          } = {
             title: {
               text: heading,
             },
-            actions: {
-              items: [actions],
-            },
           }
+          if (actions) {
+            card.actions = {
+              items: [actions],
+            }
+          }
+          return card
         }
         return null
       })(),
