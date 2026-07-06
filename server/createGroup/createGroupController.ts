@@ -36,7 +36,8 @@ export default class CreateGroupController extends BaseController {
   }
 
   private isReturningFromReview(req: Request): boolean {
-    return req.query.referrer === 'group-review-details'
+    const referrer = Array.isArray(req.query.referrer) ? req.query.referrer[0] : req.query.referrer
+    return referrer === 'group-review-details'
   }
 
   private nextCreateGroupRedirect(req: Request, defaultPath: string): string {

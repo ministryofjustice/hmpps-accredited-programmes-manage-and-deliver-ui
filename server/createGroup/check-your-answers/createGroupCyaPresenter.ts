@@ -21,7 +21,9 @@ export default class CreateGroupCyaPresenter {
   }
 
   private changeLinkUri(path: string): string {
-    return `${path}?referrer=group-review-details`
+    // return `${path}?referrer=group-review-details`
+    const separator = path.includes('?') ? '&' : '?'
+    return `${path}${separator}referrer=group-review-details`
   }
 
   generateSelectedUsers(): {
