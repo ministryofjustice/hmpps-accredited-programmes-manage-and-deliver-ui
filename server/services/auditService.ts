@@ -15,7 +15,6 @@ export default async function sendAuditEvent(
     return
   }
 
-  logger.info('Audit event sent successfully with details:', { subjectId, subjectType, details })
   try {
     await auditService.sendAuditMessage({
       action,

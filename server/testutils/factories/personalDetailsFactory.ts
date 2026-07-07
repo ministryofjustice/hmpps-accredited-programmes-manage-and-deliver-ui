@@ -9,6 +9,5 @@ export default PersonalDetailsFactory.define(() => ({
   dateOfBirth: '15 March 1985',
   ethnicity: 'White',
   gender: 'Male',
-  setting: 'Community',
   probationDeliveryUnit: 'East Sussex',
 }))

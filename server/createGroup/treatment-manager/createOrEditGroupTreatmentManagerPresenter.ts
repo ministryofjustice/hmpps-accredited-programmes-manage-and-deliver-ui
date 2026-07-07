@@ -112,6 +112,13 @@ export default class CreateOrEditGroupTreatmentManagerPresenter {
       createGroupFacilitator: {
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'create-group-facilitator'),
       },
+      createGroupCoverFacilitator: {
+        errorMessage: PresenterUtils.errorMessage(this.validationError, 'create-group-cover-facilitator'),
+      },
     }
+  }
+
+  errorMessageForField(field: string): string | null {
+    return PresenterUtils.errorMessage(this.validationError, field)
   }
 }

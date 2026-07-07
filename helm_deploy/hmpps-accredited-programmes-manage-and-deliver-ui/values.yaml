@@ -3,7 +3,7 @@ generic-service:
   productId: 'HMPPS527' # productId for the product that this belongs too, i.e. DPS001, see README.md for details
 
   # the IRSA service account name for accessing AWS resources
-  serviceAccountName: "hmpps-accredited-programmes-manage-and-deliver-ui"
+  serviceAccountName: "hmpps-manage-and-deliver-accredited-programmes-ui"
 
   replicaCount: 4
 
@@ -56,7 +56,6 @@ generic-service:
       REDIS_AUTH_TOKEN: 'auth_token'
     hmpps-accredited-programmes-manage-and-deliver-ui-application-insights:
       APPLICATIONINSIGHTS_CONNECTION_STRING: "APPLICATIONINSIGHTS_CONNECTION_STRING"
-    # This secret will need to be created in your namespace (note it isn't in hmpps-templates-dev)
     # IRSA configuration in your namespace will also be required, and then uncomment serviceAccountName above.
     sqs-hmpps-audit-secret:
       AUDIT_SQS_QUEUE_URL: 'sqs_queue_url'

@@ -21,7 +21,7 @@ export default class OffenceHistoryPresenter extends ReferralDetailsPresenter {
   offenceHistorySummaryLists(): { title: string; summary: SummaryListItem[] }[] {
     const summaries = []
     summaries.push({
-      title: 'Index Offence',
+      title: 'Index offence',
       summary: [
         {
           key: 'Offence',
