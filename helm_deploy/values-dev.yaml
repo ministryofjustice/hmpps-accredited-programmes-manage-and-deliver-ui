@@ -18,7 +18,8 @@ generic-service:
     AUDIT_ENABLED: "true"
     SENTRY_ENVIRONMENT: dev
     ENABLE_PAST_DATE_REGION_RESTRICTION: "false"
-    ENABLE_REGION_RESTRICTION: "true"
+    # Before updating this to true make sure DEV_ALLOWED_REGIONS is up to date.
+    ENABLE_REGION_RESTRICTION: "false"
 
   # Move to general values once secret set up for prod and preprod
   namespace_secrets:
