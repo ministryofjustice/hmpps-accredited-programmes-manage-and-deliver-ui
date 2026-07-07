@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 
 import logger from '../../logger'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import sendAuditEvent from '../services/auditService'
 
 export default class ReportingController {
   constructor(
@@ -67,6 +68,8 @@ export default class ReportingController {
     const { username } = req.user
     ReportingController.logReportRequest(req, 'group-size', { groupStartedSince })
 
+    await sendAuditEvent('VIEW_GROUP_SIZE_REPORT', username, groupStartedSince, 'SEARCH_TERM')
+
     const { csv, headers } = await this.accreditedProgrammesManageAndDeliverService.getGroupSizeReport(
       username,
       groupStartedSince,
@@ -103,6 +106,12 @@ export default class ReportingController {
 
     const { username } = req.user
     ReportingController.logReportRequest(req, 'dosage', query)
+
+    await sendAuditEvent('VIEW_DOSAGE_REPORT', username, JSON.stringify(query), 'SEARCH_TERM', {
+      reportName: 'dosage',
+      query,
+    })
+
     const { csv, headers } = await this.accreditedProgrammesManageAndDeliverService.getDosageReport(username, query)
 
     ReportingController.sendCsv(res, csv, headers)
@@ -136,6 +145,12 @@ export default class ReportingController {
 
     const { username } = req.user
     ReportingController.logReportRequest(req, 'session-rate', query)
+
+    await sendAuditEvent('VIEW_SESSION_RATE_REPORT', username, JSON.stringify(query), 'SEARCH_TERM', {
+      reportName: 'session-rate',
+      query,
+    })
+
     const { csv, headers } = await this.accreditedProgrammesManageAndDeliverService.getSessionRateReport(
       username,
       query,
@@ -185,6 +200,12 @@ export default class ReportingController {
 
     const { username } = req.user
     ReportingController.logReportRequest(req, 'facilitator-continuity', query)
+
+    await sendAuditEvent('VIEW_FACILITATOR_CONTINUITY_REPORT', username, JSON.stringify(query), 'SEARCH_TERM', {
+      reportName: 'facilitator-continuity',
+      query,
+    })
+
     const { csv, headers } = await this.accreditedProgrammesManageAndDeliverService.getFacilitatorContinuityReport(
       username,
       query,

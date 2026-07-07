@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 
 import logger from '../../logger'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import sendAuditEvent from '../services/auditService'
 
 export default class OnboardingController {
   constructor(
@@ -59,6 +60,8 @@ export default class OnboardingController {
       },
       '[OnboardingController] Triggering personal details refresh',
     )
+
+    await sendAuditEvent('VIEW_PERSONAL_DETAILS_FOR_REFERRALS', req.user.username, referralIds.join(','), 'SEARCH_TERM')
 
     const response = await this.accreditedProgrammesManageAndDeliverService.fetchPersonalDetailsForReferrals(
       req.user.username,

@@ -4,11 +4,13 @@ import request from 'supertest'
 import createUserToken from '../testutils/createUserToken'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import { appWithAllRoutes, user as defaultUser } from '../routes/testutils/appSetup'
+import sendAuditEvent from '../services/auditService'
 
 const hmppsAuthClientBuilder = jest.fn()
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
+jest.mock('../services/auditService')
 
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
   hmppsAuthClientBuilder,
@@ -47,6 +49,14 @@ describe('Onboarding controller', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .expect(responsePayload)
+      .then(() => {
+        expect(sendAuditEvent).toHaveBeenCalledWith(
+          'VIEW_PERSONAL_DETAILS_FOR_REFERRALS',
+          'user1',
+          '981421e1-0242-4cde-92a2-44c737077f86,af2e88f7-8a89-4a01-b52a-5d7e6805f605',
+          'SEARCH_TERM',
+        )
+      })
 
     expect(accreditedProgrammesManageAndDeliverService.fetchPersonalDetailsForReferrals).toHaveBeenCalledWith('user1', [
       '981421e1-0242-4cde-92a2-44c737077f86',
