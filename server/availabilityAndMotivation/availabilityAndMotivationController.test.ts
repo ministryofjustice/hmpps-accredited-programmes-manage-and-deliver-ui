@@ -92,13 +92,21 @@ describe('availabilityAndMotivation controller', () => {
           )
         })
         .then(() => {
-          expect(sendAuditEvent).toHaveBeenCalledWith(
-            'EDIT_REFERRAL_MOTIVATION',
-            'user1',
-            referralDetails.crn,
-            'CRN',
-            expect.objectContaining({ referralId }),
-          )
+          expect(sendAuditEvent).toHaveBeenCalledWith('EDIT_REFERRAL_MOTIVATION', 'user1', referralDetails.crn, 'CRN', {
+            referralId,
+            details: {
+              maintainsInnocence: true,
+              motivations: 'They are motivated',
+              otherConsiderations: 'Some considerations',
+              nonAssociations: 'Some non associations',
+            },
+          })
+          const call = (sendAuditEvent as jest.Mock).mock.calls.find(c => c[0] === 'EDIT_REFERRAL_MOTIVATION')
+          expect(call).toBeDefined()
+          const payload = call[4]
+          expect(payload).toBeDefined()
+          expect(payload.details).toBeDefined()
+          expect(JSON.stringify(payload.details)).toContain('They are motivated')
         })
     })
 
