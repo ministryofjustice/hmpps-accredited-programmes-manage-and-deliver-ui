@@ -12,7 +12,6 @@ import { convertToUrlFriendlyKebabCase } from '../utils/utils'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
 import logger from '../../logger'
-import sendAuditEvent from '../services/auditService'
 
 export default class AttendanceController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -213,11 +212,6 @@ export default class AttendanceController extends BaseController {
           referralId,
           username,
         )
-        await sendAuditEvent('CREATE_SESSION_ATTENDENCE', username, referralDetails?.crn, 'CRN', {
-          referralIds,
-          groupId,
-          sessionId,
-        })
         logger.info(
           {
             event: 'RECORD_ATTENDANCE',

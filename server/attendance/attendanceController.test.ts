@@ -2,14 +2,12 @@ import { Express } from 'express'
 import { SessionData } from 'express-session'
 import request from 'supertest'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
-import sendAuditEvent from '../services/auditService'
 import TestUtils from '../testutils/testUtils'
 import recordSessionAttendanceFactory from '../testutils/factories/recordSessionAttendanceFactory'
 import { convertToUrlFriendlyKebabCase } from '../utils/utils'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
-jest.mock('../services/auditService')
 
 const hmppsAuthClientBuilder = jest.fn()
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
@@ -591,8 +589,6 @@ describe('showRecordAttendancePages', () => {
         responseMessage: 'Attendance updated',
       })
 
-      accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue({ crn: 'S123' } as any)
-
       await request(app)
         .post('/111/6789/referral/referral1/getting-started-1-session-notes')
         .type('form')
@@ -613,11 +609,6 @@ describe('showRecordAttendancePages', () => {
           attendees: [{ referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: 'Some notes' }],
         },
       )
-      expect(sendAuditEvent).toHaveBeenCalledWith('CREATE_SESSION_ATTENDENCE', 'user1', 'S123', 'CRN', {
-        referralIds: ['referral1'],
-        groupId: '111',
-        sessionId: '6789',
-      })
     })
 
     it('stages current attendee from BFF and submits successfully when journey starts on notes page', async () => {
