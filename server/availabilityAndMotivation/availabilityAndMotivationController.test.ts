@@ -5,12 +5,14 @@ import request from 'supertest'
 import { fakerEN_GB as faker } from '@faker-js/faker'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import sendAuditEvent from '../services/auditService'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 import ReferralMotivationBackgroundAndNonAssociationsFactory from '../testutils/factories/referralMotivationBackgroundAndNonAssociationsFactory'
 import availabilityFactory from '../testutils/factories/availabilityFactory'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
+jest.mock('../services/auditService')
 
 const hmppsAuthClientBuilder = jest.fn()
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
@@ -87,6 +89,15 @@ describe('availabilityAndMotivation controller', () => {
         .expect(res => {
           expect(res.text).toContain(
             `Redirecting to /referral/${referralId}/availability-and-motivation/motivation-background-and-non-associations?isMotivationsUpdated=true`,
+          )
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            'EDIT_REFERRAL_MOTIVATION',
+            'user1',
+            referralDetails.crn,
+            'CRN',
+            expect.objectContaining({ referralId }),
           )
         })
     })

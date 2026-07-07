@@ -29,7 +29,7 @@ export default class GroupController extends BaseController {
 
     const requestedFilter = GroupListFilter.fromRequest(req)
     await sendAuditEvent(
-      'SEARCH_NOT_STARTED_GROUP_LIST',
+      'SEARCH_NOT_STARTED_OR_IN_PROGRESS_GROUP_LIST',
       username,
       JSON.stringify(requestedFilter.params),
       'SEARCH_TERM',

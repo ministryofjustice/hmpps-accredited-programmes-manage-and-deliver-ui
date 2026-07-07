@@ -74,7 +74,6 @@ export default class RemoveFromGroupController extends BaseController {
         formError = data.error
         userInputData = req.body
       } else {
-        // send audit event before performing the removal
         await sendAuditEvent('EDIT_REMOVE_FROM_GROUP', username, referralDetails?.crn, 'CRN', {
           referralId,
           groupId,

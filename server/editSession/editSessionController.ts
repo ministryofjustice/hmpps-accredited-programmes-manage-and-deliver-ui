@@ -24,7 +24,6 @@ import EditSessionView from './editSessionView'
 import EditSessionFacilitatorsForm from './facilitators/editSessionFacilitatorsForm'
 import EditSessionFacilitatorsPresenter from './facilitators/editSessionFacilitatorsPresenter'
 import EditSessionFacilitatorsView from './facilitators/editSessionFacilitatorsView'
-import sendAuditEvent from '../services/auditService'
 
 export default class EditSessionController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -241,9 +240,6 @@ export default class EditSessionController extends BaseController {
         res.status(400)
         formError = data.error
       } else {
-        await sendAuditEvent('EDIT_SESSION_ATTENDEES', username, null, 'SESSION_ID', {
-          referralIds: data.paramsForUpdate.referralId,
-        })
         const message = await this.accreditedProgrammesManageAndDeliverService.updateSessionAttendees(
           username,
           sessionId,

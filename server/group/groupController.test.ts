@@ -42,7 +42,7 @@ describe('GroupController', () => {
         })
         .then(() => {
           expect(sendAuditEvent).toHaveBeenCalledWith(
-            'SEARCH_NOT_STARTED_GROUP_LIST',
+            'SEARCH_NOT_STARTED_OR_IN_PROGRESS_GROUP_LIST',
             'user1',
             JSON.stringify({}),
             'SEARCH_TERM',

@@ -78,8 +78,7 @@ export default class AddToGroupController extends BaseController {
           referralId,
           username,
         )
-        // send audit event for assignment to group
-        await sendAuditEvent('ASSIGN_REFERRAL_TO_GROUP', username, referralDetails?.crn, 'CRN', {
+        await sendAuditEvent('EDIT_ASSIGN_REFERRAL_TO_GROUP', username, referralDetails?.crn, 'CRN', {
           referralId,
           groupId,
           additionalDetails: data.paramsForUpdate.additionalDetails,
