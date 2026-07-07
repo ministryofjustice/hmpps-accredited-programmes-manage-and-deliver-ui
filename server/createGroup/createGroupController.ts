@@ -277,6 +277,10 @@ export default class CreateGroupController extends BaseController {
       formError,
       createGroupFormData,
       userInputData,
+      null,
+      false,
+      null,
+      this.isReturningFromReview(req),
     )
     const view = new CreateOrEditGroupLocationView(presenter)
     return this.renderPage(res, view)

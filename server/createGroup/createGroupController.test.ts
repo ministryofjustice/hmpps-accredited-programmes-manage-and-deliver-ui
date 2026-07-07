@@ -487,6 +487,19 @@ describe('Create Group Controller', () => {
           expect(res.text).toContain('Whitehall Office')
         })
     })
+
+    it('preserves review referrer on the PDU change link when loaded from check your answers', async () => {
+      accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu.mockResolvedValue([
+        { code: 'WMO', description: 'Westminster Office' },
+      ])
+
+      return request(app)
+        .get('/group-delivery-location?referrer=group-review-details')
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('href="/group-probation-delivery-unit?referrer=group-review-details"')
+        })
+    })
   })
 
   describe('POST /group-delivery-location', () => {
@@ -510,6 +523,55 @@ describe('Create Group Controller', () => {
       accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu.mockResolvedValue([
         { code: 'LDN', description: 'London' },
       ])
+      return request(app)
+        .post('/group-delivery-location?referrer=group-review-details')
+        .type('form')
+        .send({
+          'create-group-location': '{ "code": "WMO", "name": "Westminster Office" }',
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain('Redirecting to /group-review-details')
+        })
+    })
+
+    it('redirects to review after changing PDU from delivery location in a check your answers change journey', async () => {
+      accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion.mockResolvedValue([
+        { code: 'LDN', description: 'London' },
+      ])
+      accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu.mockResolvedValue([
+        { code: 'WMO', description: 'Westminster Office' },
+      ])
+
+      await request(app)
+        .post('/group-probation-delivery-unit?referrer=group-review-details')
+        .type('form')
+        .send({
+          'create-group-pdu': '{"code":"LDN", "name":"London"}',
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain('Redirecting to /group-delivery-location?referrer=group-review-details')
+        })
+
+      await request(app)
+        .get('/group-delivery-location?referrer=group-review-details')
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('href="/group-probation-delivery-unit?referrer=group-review-details"')
+        })
+
+      await request(app)
+        .post('/group-probation-delivery-unit?referrer=group-review-details')
+        .type('form')
+        .send({
+          'create-group-pdu': '{"code":"LDN", "name":"London"}',
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain('Redirecting to /group-delivery-location?referrer=group-review-details')
+        })
+
       return request(app)
         .post('/group-delivery-location?referrer=group-review-details')
         .type('form')
