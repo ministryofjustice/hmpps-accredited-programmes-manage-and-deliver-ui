@@ -21,6 +21,9 @@ generic-service:
     # Before updating this to true make sure DEV_ALLOWED_REGIONS is up to date.
     ENABLE_REGION_RESTRICTION: "false"
 
+  allowlist:
+    accessibility-audit-usr: 5.181.59.114
+
   # Move to general values once secret set up for prod and preprod
   namespace_secrets:
     sqs-hmpps-audit-secret:
