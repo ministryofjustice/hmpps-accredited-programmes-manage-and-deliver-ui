@@ -5,6 +5,7 @@ import { Express } from 'express'
 import { SessionData } from 'express-session'
 import request from 'supertest'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import sendAuditEvent from '../services/auditService'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 import referralStatusFormDataFactory from '../testutils/factories/referralStatusFormDataFactory'
 import statusHistoryFactory from '../testutils/factories/statusHistoryFactory'
@@ -12,6 +13,7 @@ import TestUtils from '../testutils/testUtils'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
+jest.mock('../services/auditService')
 
 const hmppsAuthClientBuilder = jest.fn()
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
@@ -85,6 +87,12 @@ describe('Update Referral Status Controller', () => {
             expect(res.text).toContain(
               `Redirecting to /referral/1/status-history?message=Jennifer%20Wilson's%20referral%20status%20is%20now%20Awaiting%20allocation.%20They%20have%20been%20removed%20from%20group%20BCCDD1`,
             )
+          })
+          .then(() => {
+            expect(sendAuditEvent).toHaveBeenCalledWith('EDIT_REFERRAL_STATUS', 'user1', referralDetails.crn, 'CRN', {
+              referralId: referralDetails.id,
+              updatedStatusId: validId,
+            })
           })
       })
       it('handles form errors correctly and displays the appropriate error message', async () => {

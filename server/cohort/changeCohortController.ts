@@ -6,6 +6,7 @@ import ChangeCohortView from './changeCohortView'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
 import logger from '../../logger'
+import sendAuditEvent from '../services/auditService'
 
 export default class ChangeCohortController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -27,6 +28,10 @@ export default class ChangeCohortController extends BaseController {
 
     if (req.method === 'POST') {
       const data = await new ChangeCohortForm(req, referralId).data()
+      await sendAuditEvent('EDIT_REFERRAL_COHORT', username, referralDetails?.crn, 'CRN', {
+        referralId,
+        cohort: data.paramsForUpdate.updatedCohort,
+      })
       await this.accreditedProgrammesManageAndDeliverService.updateCohort(
         username,
         referralId,

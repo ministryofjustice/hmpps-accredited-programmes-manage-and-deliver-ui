@@ -13,6 +13,7 @@ import AvailabilityView from './availability/availabilityView'
 import LocationPresenter from './location/locationPresenter'
 import LocationView from './location/locationView'
 import logger from '../../logger'
+import sendAuditEvent from '../services/auditService'
 
 export default class AvailabilityAndMotivationController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -79,14 +80,18 @@ export default class AvailabilityAndMotivationController extends BaseController 
           )
         }
 
+        const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
+          referralId,
+          username,
+        )
+        await sendAuditEvent('EDIT_REFERRAL_MOTIVATION', username, referralDetails?.crn, 'CRN', {
+          referralId,
+          details: data.paramsForUpdate,
+        })
         await this.accreditedProgrammesManageAndDeliverService.createOrUpdateReferralMotivationBackgroundAndNonAssociations(
           username,
           referralId,
           data.paramsForUpdate,
-        )
-        const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
-          referralId,
-          username,
         )
         logger.info(
           {

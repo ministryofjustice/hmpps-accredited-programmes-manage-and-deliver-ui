@@ -5,12 +5,14 @@ import request from 'supertest'
 import { fakerEN_GB as faker } from '@faker-js/faker'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import sendAuditEvent from '../services/auditService'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 import ReferralMotivationBackgroundAndNonAssociationsFactory from '../testutils/factories/referralMotivationBackgroundAndNonAssociationsFactory'
 import availabilityFactory from '../testutils/factories/availabilityFactory'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
+jest.mock('../services/auditService')
 
 const hmppsAuthClientBuilder = jest.fn()
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
@@ -88,6 +90,23 @@ describe('availabilityAndMotivation controller', () => {
           expect(res.text).toContain(
             `Redirecting to /referral/${referralId}/availability-and-motivation/motivation-background-and-non-associations?isMotivationsUpdated=true`,
           )
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('EDIT_REFERRAL_MOTIVATION', 'user1', referralDetails.crn, 'CRN', {
+            referralId,
+            details: {
+              maintainsInnocence: true,
+              motivations: 'They are motivated',
+              otherConsiderations: 'Some considerations',
+              nonAssociations: 'Some non associations',
+            },
+          })
+          const call = (sendAuditEvent as jest.Mock).mock.calls.find(c => c[0] === 'EDIT_REFERRAL_MOTIVATION')
+          expect(call).toBeDefined()
+          const payload = call[4]
+          expect(payload).toBeDefined()
+          expect(payload.details).toBeDefined()
+          expect(JSON.stringify(payload.details)).toContain('They are motivated')
         })
     })
 

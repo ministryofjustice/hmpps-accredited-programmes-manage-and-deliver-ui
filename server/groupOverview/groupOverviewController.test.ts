@@ -3,9 +3,11 @@ import request from 'supertest'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import ProgrammeGroupOverviewFactory from '../testutils/factories/programmeGroupAllocationsFactory'
+import sendAuditEvent from '../services/auditService'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
+jest.mock('../services/auditService')
 
 const hmppsAuthClientBuilder = jest.fn()
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
@@ -36,6 +38,15 @@ describe('groupOverview', () => {
         .expect(res => {
           expect(res.text).toContain(`Allocations and waitlist`)
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            'SEARCH_GROUP_WAITLIST',
+            'user1',
+            JSON.stringify({}),
+            'SEARCH_TERM',
+            { groupId: '1234' },
+          )
+        })
     })
   })
 
@@ -48,6 +59,15 @@ describe('groupOverview', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(`Allocations and waitlist`)
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            'SEARCH_GROUP_ALLOCATED',
+            'user1',
+            JSON.stringify({}),
+            'SEARCH_TERM',
+            { groupId: '1234' },
+          )
         })
     })
   })

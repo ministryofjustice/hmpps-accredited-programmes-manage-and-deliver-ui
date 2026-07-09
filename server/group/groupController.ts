@@ -6,6 +6,7 @@ import GroupView from './groupView'
 import { Page } from '../shared/models/pagination'
 import GroupListFilter from '../groupOverview/groupListFilter'
 import BaseController from '../shared/baseController'
+import sendAuditEvent from '../services/auditService'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 
 export default class GroupController extends BaseController {
@@ -27,6 +28,12 @@ export default class GroupController extends BaseController {
     const selectedTab = 'NOT_STARTED_OR_IN_PROGRESS'
 
     const requestedFilter = GroupListFilter.fromRequest(req)
+    await sendAuditEvent(
+      'SEARCH_NOT_STARTED_OR_IN_PROGRESS_GROUP_LIST',
+      username,
+      JSON.stringify(requestedFilter.params),
+      'SEARCH_TERM',
+    )
 
     let notStartedGroupList = await this.accreditedProgrammesManageAndDeliverService.getGroupList(
       username,
@@ -73,6 +80,7 @@ export default class GroupController extends BaseController {
     const selectedTab = 'COMPLETE'
 
     const requestedFilter = GroupListFilter.fromRequest(req)
+    await sendAuditEvent('SEARCH_COMPLETED_GROUP_LIST', username, JSON.stringify(requestedFilter.params), 'SEARCH_TERM')
 
     let completedGroupList = await this.accreditedProgrammesManageAndDeliverService.getGroupList(
       username,

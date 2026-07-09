@@ -4,9 +4,11 @@ import request from 'supertest'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import GroupsByRegionFactory from '../testutils/factories/groupsByRegionFactory'
+import sendAuditEvent from '../services/auditService'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
+jest.mock('../services/auditService')
 
 const hmppsAuthClientBuilder = jest.fn()
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
@@ -37,6 +39,14 @@ describe('GroupController', () => {
         .expect(res => {
           expect(res.text).toContain('Building Choices: moderate intensity')
           expect(res.text).toContain('Groups')
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            'SEARCH_NOT_STARTED_OR_IN_PROGRESS_GROUP_LIST',
+            'user1',
+            JSON.stringify({}),
+            'SEARCH_TERM',
+          )
         })
     })
 
@@ -74,6 +84,14 @@ describe('GroupController', () => {
         .expect(res => {
           expect(res.text).toContain('Building Choices: moderate intensity')
           expect(res.text).toContain('Groups')
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            'SEARCH_COMPLETED_GROUP_LIST',
+            'user1',
+            JSON.stringify({}),
+            'SEARCH_TERM',
+          )
         })
     })
 
