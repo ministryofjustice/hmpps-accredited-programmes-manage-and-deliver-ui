@@ -119,6 +119,11 @@ export default class ReferralDetailsController extends BaseController {
     const subNavValue = 'sentenceInformation'
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
+
+    await sendAuditEvent('VIEW_SENTENCE_INFORMATION', username, sharedReferralDetailsData?.crn ?? id, 'CRN', {
+      referralId: id,
+    })
+
     const sentenceInformation = await this.accreditedProgrammesManageAndDeliverService.getSentenceInformation(
       username,
       id,
@@ -132,10 +137,6 @@ export default class ReferralDetailsController extends BaseController {
       isCohortUpdated === 'true',
     )
     const view = new SentenceInformationView(presenter)
-
-    await sendAuditEvent('VIEW_SENTENCE_INFORMATION', username, sharedReferralDetailsData?.crn ?? id, 'CRN', {
-      referralId: id,
-    })
 
     req.session.originPage = req.path
 
