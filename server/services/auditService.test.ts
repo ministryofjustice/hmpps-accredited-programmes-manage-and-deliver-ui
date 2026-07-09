@@ -36,7 +36,7 @@ describe('Audit service', () => {
         subjectId: 'subject123',
         subjectType: 'CRN',
         service: 'hmpps-accredited-programmes-manage-and-deliver-ui',
-        details: JSON.stringify({ referralId: 'refferalId', hasLdc: true }),
+        details: JSON.stringify({ referralId: 'referralId', hasLdc: true }),
       })
     })
 
