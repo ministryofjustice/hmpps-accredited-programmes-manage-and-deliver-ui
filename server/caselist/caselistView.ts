@@ -50,16 +50,18 @@ export default class CaselistView {
     }))
   }
 
-  private get pduSelectArgs(): SelectArgs {
+  private get pduCheckboxArgs(): CheckboxesArgs {
     return {
-      id: 'pdu',
       name: 'pdu',
-      classes: 'confirm-pdu-select',
-      label: {
-        text: 'PDU',
-        classes: 'govuk-label--s',
+      classes: 'govuk-checkboxes--small',
+      fieldset: {
+        legend: {
+          text: 'PDU',
+          isPageHeading: false,
+          classes: 'govuk-fieldset__legend--s',
+        },
       },
-      items: this.presenter.generatePduSelectArgs(),
+      items: this.presenter.generatePDUCheckboxArgs(),
     }
   }
 
@@ -102,6 +104,10 @@ export default class CaselistView {
     }
   }
 
+  private get applyFilterButtonArgs() {
+    return { text: 'Apply filters', classes: 'govuk-!-margin-top-4' }
+  }
+
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       'caselist/caselist',
@@ -111,10 +117,11 @@ export default class CaselistView {
         subNavArgs: this.presenter.getSubNavArgs(),
         searchByStatusArgs: this.searchByStatusArgs(),
         pagination: this.presenter.pagination.govukPaginationArgs,
-        searchByPduArgs: this.pduSelectArgs,
+        searchByPduArgs: this.pduCheckboxArgs,
         reportingTeamCheckboxArgs: this.reportingTeamCheckboxArgs,
         searchByCrnOrPersonNameArgs: this.searchByCrnOrPersonNameArgs,
         searchByCohortArgs: this.searchByCohortArgs,
+        applyFilterButtonArgs: this.applyFilterButtonArgs,
         noResultsString: this.presenter.generateNoResultsString(),
         resultsText: this.presenter.resultsText,
         text: this.presenter.text,
