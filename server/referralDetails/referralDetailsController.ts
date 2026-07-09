@@ -18,6 +18,7 @@ import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
 import AttendanceHistoryPresenter from './attendanceHistory/attendanceHistoryPresenter'
 import AttendanceHistoryView from './attendanceHistory/attendanceHistoryView'
+import sendAuditEvent from '../services/auditService'
 
 export default class ReferralDetailsController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -39,6 +40,10 @@ export default class ReferralDetailsController extends BaseController {
     const subNavValue = 'personalDetails'
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
+
+    await sendAuditEvent('VIEW_PERSONAL_DETAILS', username, sharedReferralDetailsData?.crn ?? id, 'CRN', {
+      referralId: id,
+    })
     const personalDetails = await this.accreditedProgrammesManageAndDeliverService.getPersonalDetails(id, username)
 
     const presenter = new PersonalDetailsPresenter(
@@ -63,6 +68,9 @@ export default class ReferralDetailsController extends BaseController {
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
 
+    await sendAuditEvent('VIEW_PROGRAMME_HISTORY', username, sharedReferralDetailsData?.crn ?? id, 'CRN', {
+      referralId: id,
+    })
     const presenter = new ProgrammeHistoryPresenter(
       sharedReferralDetailsData,
       subNavValue,
@@ -83,6 +91,11 @@ export default class ReferralDetailsController extends BaseController {
     const subNavValue = 'offenceHistory'
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
+
+    await sendAuditEvent('VIEW_OFFENCE_HISTORY', username, sharedReferralDetailsData?.crn ?? id, 'CRN', {
+      referralId: id,
+    })
+
     const offenceHistory = await this.accreditedProgrammesManageAndDeliverService.getOffenceHistory(username, id)
 
     const presenter = new OffenceHistoryPresenter(
@@ -120,6 +133,10 @@ export default class ReferralDetailsController extends BaseController {
     )
     const view = new SentenceInformationView(presenter)
 
+    await sendAuditEvent('VIEW_SENTENCE_INFORMATION', username, sharedReferralDetailsData?.crn ?? id, 'CRN', {
+      referralId: id,
+    })
+
     req.session.originPage = req.path
 
     return this.renderPage(res, view, sharedReferralDetailsData)
@@ -132,6 +149,10 @@ export default class ReferralDetailsController extends BaseController {
     const subNavValue = 'additionalInformation'
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
+
+    await sendAuditEvent('VIEW_ADDITIONAL_INFORMATION', username, sharedReferralDetailsData?.crn ?? id, 'CRN', {
+      referralId: id,
+    })
 
     const presenter = new AdditionalInformationPresenter(
       sharedReferralDetailsData,
@@ -152,6 +173,9 @@ export default class ReferralDetailsController extends BaseController {
     const { message, isCohortUpdated, isLdcUpdated } = req.query
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(referralId, username)
+    await sendAuditEvent('VIEW_STATUS_HISTORY', username, sharedReferralDetailsData?.crn ?? referralId, 'CRN', {
+      referralId,
+    })
     const statusHistory = await this.accreditedProgrammesManageAndDeliverService.getStatusHistory(username, referralId)
 
     const successMessage = message ? String(message) : null
@@ -178,6 +202,9 @@ export default class ReferralDetailsController extends BaseController {
 
     const sharedReferralDetailsData = await this.showReferralDetailsPage(referralId, username)
 
+    await sendAuditEvent('VIEW_ATTENDANCE_HISTORY', username, sharedReferralDetailsData?.crn ?? referralId, 'CRN', {
+      referralId,
+    })
     const attendanceHistory = await this.accreditedProgrammesManageAndDeliverService.getAttendanceHistory(
       username,
       referralId,
