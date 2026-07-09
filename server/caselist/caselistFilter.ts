@@ -9,7 +9,7 @@ export default class CaselistFilter {
 
   crnOrPersonName: string | undefined
 
-  pdu: string | undefined
+  pdu: string[] | undefined
 
   reportingTeam: string[] | undefined
 
@@ -18,18 +18,22 @@ export default class CaselistFilter {
     filter.status = request.query.status as string | undefined
     filter.cohort = request.query.cohort as string | undefined
     filter.crnOrPersonName = request.query.crnOrPersonName as string | undefined
+    filter.pdu = request.query.pdu as string[] | undefined
     filter.reportingTeam = request.query.reportingTeam as string[] | undefined
-    filter.pdu = request.query.pdu as string | undefined
+
+    if (filter.pdu !== undefined) {
+      filter.pdu = typeof filter.pdu === 'string' ? [filter.pdu] : filter.pdu
+    }
 
     if (filter.reportingTeam !== undefined) {
       filter.reportingTeam = typeof filter.reportingTeam === 'string' ? [filter.reportingTeam] : filter.reportingTeam
 
       // Validate that reporting teams belong to the selected PDU. If not, remove the reporting team filter.
-      if (filter.pdu && locations && locations.length > 0) {
-        const selectedPdu = locations.find(locationPdu => locationPdu.pduName === filter.pdu)
-        const allTeamsValid = selectedPdu
-          ? filter.reportingTeam.every(team => selectedPdu.reportingTeams.includes(team))
-          : false
+      if (filter.pdu && filter.pdu.length > 0 && locations && locations.length > 0) {
+        const selectedPdus = locations.filter(locationPdu => filter.pdu!.includes(locationPdu.pduName))
+        const allTeamsValid =
+          selectedPdus.length > 0 &&
+          filter.reportingTeam.every(team => selectedPdus.some(pdu => pdu.reportingTeams.includes(team)))
 
         if (!allTeamsValid) {
           filter.reportingTeam = undefined

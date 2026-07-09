@@ -67,10 +67,10 @@ describe(`filters`, () => {
     })
   })
 
-  describe('generatePduSelect', () => {
+  describe('generatePduCheckboxArgs', () => {
     it('should generate correct select items based on API data and select the correct PDU', () => {
       const testObject = {
-        filter: { pdu: 'PDU3' } as CaselistFilter,
+        filter: { pdu: ['PDU1', 'PDU3'] } as CaselistFilter,
       }
       const referralCaseListItem = referralCaseListItemFactory.build()
       const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
@@ -87,14 +87,10 @@ describe(`filters`, () => {
         'test location',
       )
 
-      expect(presenter.generatePduSelectArgs()).toEqual([
-        {
-          text: 'Select PDU',
-          value: '',
-        },
-        { text: 'PDU1', value: 'PDU1', selected: false },
-        { text: 'PDU2', value: 'PDU2', selected: false },
-        { text: 'PDU3', value: 'PDU3', selected: true },
+      expect(presenter.generatePDUCheckboxArgs()).toEqual([
+        { text: 'PDU1', value: 'PDU1', checked: true },
+        { text: 'PDU2', value: 'PDU2', checked: false },
+        { text: 'PDU3', value: 'PDU3', checked: true },
       ])
     })
   })
@@ -160,7 +156,7 @@ describe(`filters`, () => {
   describe('generateReportingTeamCheckboxArgs', () => {
     it('should generate correct checkboxes based on API data and select the correct reporting team', () => {
       const testObject = {
-        filter: { pdu: 'PDU1', reportingTeam: ['Team2'] } as CaselistFilter,
+        filter: { pdu: ['PDU1'], reportingTeam: ['Team2'] } as CaselistFilter,
       }
       const referralCaseListItem = referralCaseListItemFactory.build()
       const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
@@ -195,7 +191,7 @@ describe(`filters`, () => {
   describe('getSubNavArgs', () => {
     it('should generate correct sub nav arguments when url params are present', () => {
       const testObject = {
-        filter: { pdu: 'PDU1', reportingTeam: ['Team2'] } as CaselistFilter,
+        filter: { pdu: ['PDU1'], reportingTeam: ['Team2'] } as CaselistFilter,
       }
       const referralCaseListItem = referralCaseListItemFactory.build()
       const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
@@ -229,7 +225,7 @@ describe(`filters`, () => {
     })
     it('should generate correct sub nav arguments when url params undefined', () => {
       const testObject = {
-        filter: { pdu: 'PDU1', reportingTeam: ['Team2'] } as CaselistFilter,
+        filter: { pdu: ['PDU1'], reportingTeam: ['Team2'] } as CaselistFilter,
       }
       const referralCaseListItem = referralCaseListItemFactory.build()
       const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory

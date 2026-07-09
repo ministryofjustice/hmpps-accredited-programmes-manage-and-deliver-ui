@@ -52,7 +52,7 @@ export default class CaselistPresenter {
   }
 
   get showReportingLocations(): boolean {
-    return this.filter.pdu !== undefined && this.filter.pdu !== ''
+    return this.filter.pdu !== undefined && this.filter.pdu.length > 0
   }
 
   get resultsText(): string {
@@ -212,30 +212,24 @@ export default class CaselistPresenter {
     return selectOptions
   }
 
-  generatePduSelectArgs(): SelectArgsItem[] {
-    const checkboxArgs = [
-      {
-        text: 'Select PDU',
-        value: '',
-      },
-    ]
-    const pduCheckboxArgs = this.caseListFilters.locationFilters
+  generatePDUCheckboxArgs(): CheckboxesArgsItem[] {
+    return this.caseListFilters.locationFilters
       .map(pdu => ({
         text: pdu.pduName,
         value: pdu.pduName,
-        selected: this.filter.pdu === pdu.pduName,
+        checked: this.filter.pdu?.includes(pdu.pduName),
       }))
       .sort((a, b) => a.text.localeCompare(b.text))
-    return checkboxArgs.concat(pduCheckboxArgs)
   }
 
   generateReportingTeamCheckboxArgs(): CheckboxesArgsItem[] {
     let checkboxItems: CheckboxesArgsItem[] = []
     if (this.showReportingLocations) {
-      const pduLocationData = this.caseListFilters.locationFilters.find(
-        location => location.pduName === this.filter.pdu,
+      const selectedPdus = this.caseListFilters.locationFilters.filter(location =>
+        this.filter.pdu!.includes(location.pduName),
       )
-      checkboxItems = pduLocationData.reportingTeams
+      const allReportingTeams = Array.from(new Set(selectedPdus.flatMap(pdu => pdu.reportingTeams))).sort()
+      checkboxItems = allReportingTeams
         .map(location => ({
           text: location,
           value: location,

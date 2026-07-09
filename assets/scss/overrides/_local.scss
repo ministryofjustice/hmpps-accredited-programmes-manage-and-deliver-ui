@@ -85,25 +85,14 @@
 }
 .moj-filter__options {
   .clear-filters__link {
-    display: inline-block;
-    padding: 0;
-    @include govuk-responsive-margin(4, 'bottom');
-    @include govuk-media-query($from: mobile) {
-      @include govuk-responsive-margin(6, 'bottom');
-    }
+    display: block;
 
-    @include govuk-media-query($from: desktop) {
-      padding-left: 3px;
-      @include govuk-responsive-padding(1, 'top');
-      white-space: nowrap;
+    &:first-of-type {
+      margin-bottom: 20px;
     }
   }
-
   .govuk-button {
-    @include govuk-responsive-margin(4, 'bottom');
-    @include govuk-media-query($from: desktop) {
-      margin-right: 0.4rem;
-    }
+    margin-bottom: 20px;
   }
 }
 
