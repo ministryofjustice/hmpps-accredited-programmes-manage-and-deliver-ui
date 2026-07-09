@@ -62,7 +62,7 @@ describe('referral-details', () => {
             'user1',
             referralDetails.crn,
             'CRN',
-            expect.objectContaining({ referralId: expect.any(String) }),
+            { referralId: referralDetails.id },
           )
         })
     })
@@ -87,7 +87,7 @@ describe('referral-details', () => {
             'user1',
             referralDetails.crn,
             'CRN',
-            expect.objectContaining({ referralId: expect.any(String) }),
+            { referralId: referralDetails.id },
           )
         })
     })
@@ -112,7 +112,7 @@ describe('referral-details', () => {
             'user1',
             referralDetails.crn,
             'CRN',
-            expect.objectContaining({ referralId: expect.any(String), subNavValue: 'sentenceInformation' }),
+            { referralId: referralDetails.id },
           )
         })
     })
@@ -144,7 +144,7 @@ describe(`/referral`, () => {
             'user1',
             referralDetails.crn,
             'CRN',
-            expect.objectContaining({ referralId: expect.any(String) }),
+            { referralId: referralDetails.id },
           )
         })
     })
@@ -176,7 +176,7 @@ describe(`Attendance History`, () => {
             'user1',
             referralDetails.crn,
             'CRN',
-            expect.objectContaining({ referralId: expect.any(String) }),
+            { referralId: referralDetails.id },
           )
         })
     })
@@ -201,7 +201,7 @@ describe(`Attendance History`, () => {
             'user1',
             referralDetails.crn,
             'CRN',
-            expect.objectContaining({ referralId: expect.any(String) }),
+            { referralId: referralDetails.id },
           )
         })
     })
