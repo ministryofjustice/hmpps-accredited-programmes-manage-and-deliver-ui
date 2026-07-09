@@ -57,13 +57,9 @@ describe('referral-details', () => {
           expect(res.text).toContain(personalDetails.probationDeliveryUnit)
         })
         .then(() => {
-          expect(sendAuditEvent).toHaveBeenCalledWith(
-            'VIEW_PERSONAL_DETAILS',
-            'user1',
-            referralDetails.crn,
-            'CRN',
-            { referralId: referralDetails.id },
-          )
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_PERSONAL_DETAILS', 'user1', referralDetails.crn, 'CRN', {
+            referralId: referralDetails.id,
+          })
         })
     })
   })
@@ -82,13 +78,9 @@ describe('referral-details', () => {
           expect(res.text).toContain('Absconding from lawful custody')
         })
         .then(() => {
-          expect(sendAuditEvent).toHaveBeenCalledWith(
-            'VIEW_OFFENCE_HISTORY',
-            'user1',
-            referralDetails.crn,
-            'CRN',
-            { referralId: referralDetails.id },
-          )
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_OFFENCE_HISTORY', 'user1', referralDetails.crn, 'CRN', {
+            referralId: referralDetails.id,
+          })
         })
     })
   })
@@ -139,13 +131,9 @@ describe(`/referral`, () => {
           expect(res.text).toContain('Awaiting allocation')
         })
         .then(() => {
-          expect(sendAuditEvent).toHaveBeenCalledWith(
-            'VIEW_STATUS_HISTORY',
-            'user1',
-            referralDetails.crn,
-            'CRN',
-            { referralId: referralDetails.id },
-          )
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_STATUS_HISTORY', 'user1', referralDetails.crn, 'CRN', {
+            referralId: referralDetails.id,
+          })
         })
     })
   })
@@ -171,13 +159,9 @@ describe(`Attendance History`, () => {
           expect(res.text).toContain('Attendance history')
         })
         .then(() => {
-          expect(sendAuditEvent).toHaveBeenCalledWith(
-            'VIEW_ATTENDANCE_HISTORY',
-            'user1',
-            referralDetails.crn,
-            'CRN',
-            { referralId: referralDetails.id },
-          )
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_ATTENDANCE_HISTORY', 'user1', referralDetails.crn, 'CRN', {
+            referralId: referralDetails.id,
+          })
         })
     })
 
@@ -196,13 +180,9 @@ describe(`Attendance History`, () => {
           expect(res.text).toContain('Not attended')
         })
         .then(() => {
-          expect(sendAuditEvent).toHaveBeenCalledWith(
-            'VIEW_ATTENDANCE_HISTORY',
-            'user1',
-            referralDetails.crn,
-            'CRN',
-            { referralId: referralDetails.id },
-          )
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_ATTENDANCE_HISTORY', 'user1', referralDetails.crn, 'CRN', {
+            referralId: referralDetails.id,
+          })
         })
     })
   })
