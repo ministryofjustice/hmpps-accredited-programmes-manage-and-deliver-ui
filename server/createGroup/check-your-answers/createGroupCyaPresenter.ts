@@ -20,6 +20,11 @@ export default class CreateGroupCyaPresenter {
     return 'Review your group details'
   }
 
+  private changeLinkUri(path: string): string {
+    const separator = path.includes('?') ? '&' : '?'
+    return `${path}${separator}referrer=group-review-details`
+  }
+
   generateSelectedUsers(): {
     treatmentManager: CreateGroupTeamMember | undefined
     facilitators: CreateGroupTeamMember[] | []
@@ -52,58 +57,58 @@ export default class CreateGroupCyaPresenter {
       {
         key: 'Group code',
         lines: [`${this.createGroupFormData.groupCode}`],
-        changeLink: '/create-group-code',
+        changeLink: this.changeLinkUri('/create-group-code'),
         visuallyHiddenText: 'group code',
       },
       {
         key: 'Start date',
         lines: [`${this.createGroupFormData.earliestStartDate}`],
-        changeLink: '/group-start-date',
+        changeLink: this.changeLinkUri('/group-start-date'),
         visuallyHiddenText: 'start date',
       },
 
       {
         key: 'Days and times',
         lines: GroupDaysTimesUtils.formatStartDaysAndTimes(this.createGroupFormData.createGroupSessionSlot),
-        changeLink: '/group-days-and-times',
+        changeLink: this.changeLinkUri('/group-days-and-times'),
         visuallyHiddenText: 'days and times',
       },
 
       {
         key: 'Cohort',
         lines: [`${this.createGroupUtils.getCohortTextFromEnum(this.createGroupFormData.cohort)}`],
-        changeLink: '/group-cohort',
+        changeLink: this.changeLinkUri('/group-cohort'),
         visuallyHiddenText: 'cohort',
       },
       {
         key: 'Gender',
         lines: [`${this.createGroupUtils.getSexTextFromEnum(this.createGroupFormData.sex)}`],
-        changeLink: '/group-gender',
+        changeLink: this.changeLinkUri('/group-gender'),
         visuallyHiddenText: 'gender',
       },
       {
         key: 'PDU',
         lines: [`${this.createGroupFormData.pduName}`],
-        changeLink: '/group-probation-delivery-unit',
+        changeLink: this.changeLinkUri('/group-probation-delivery-unit'),
         visuallyHiddenText: 'PDU',
       },
       {
         key: 'Delivery location',
         lines: [`${this.createGroupFormData.deliveryLocationName}`],
-        changeLink: '/group-delivery-location',
+        changeLink: this.changeLinkUri('/group-delivery-location'),
         visuallyHiddenText: 'delivery location',
       },
       {
         key: 'Treatment Manager',
         lines: [members.treatmentManager?.facilitator ?? 'Not assigned'],
-        changeLink: '/group-facilitators',
+        changeLink: this.changeLinkUri('/group-facilitators'),
         visuallyHiddenText: 'treatment manager',
       },
       {
         key: 'Facilitators',
         lines:
           members.facilitators.length > 0 ? members.facilitators.map(member => member.facilitator) : ['None assigned'],
-        changeLink: '/group-facilitators',
+        changeLink: this.changeLinkUri('/group-facilitators'),
         visuallyHiddenText: 'facilitators',
       },
     ]
@@ -114,7 +119,7 @@ export default class CreateGroupCyaPresenter {
           members.coverFacilitators.length > 0
             ? members.coverFacilitators.map(member => member.facilitator)
             : ['None assigned'],
-        changeLink: '/group-facilitators',
+        changeLink: this.changeLinkUri('/group-facilitators'),
         visuallyHiddenText: 'cover facilitators',
       })
     }
