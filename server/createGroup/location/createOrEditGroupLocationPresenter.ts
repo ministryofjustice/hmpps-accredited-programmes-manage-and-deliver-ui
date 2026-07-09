@@ -12,6 +12,7 @@ export default class CreateOrEditGroupLocationPresenter {
     private readonly groupId: string | null = null,
     readonly isEditJourney = false,
     private readonly backLink: string | null = null,
+    private readonly includeReviewReferrer = false,
   ) {}
 
   get backLinkUri() {
@@ -23,7 +24,13 @@ export default class CreateOrEditGroupLocationPresenter {
   }
 
   get changeLinkUri() {
-    return this.isEditJourney ? `/${this.groupId}/edit-group-probation-delivery-unit` : `/group-probation-delivery-unit`
+    if (this.isEditJourney) {
+      return `/${this.groupId}/edit-group-probation-delivery-unit`
+    }
+
+    return this.includeReviewReferrer
+      ? '/group-probation-delivery-unit?referrer=group-review-details'
+      : '/group-probation-delivery-unit'
   }
 
   get text() {
