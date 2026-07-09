@@ -67,7 +67,7 @@ describe(`filters`, () => {
     })
   })
 
-  describe('generatePduSelect', () => {
+  describe('generatePduCheckboxArgs', () => {
     it('should generate correct select items based on API data and select the correct PDU', () => {
       const testObject = {
         filter: { pdu: ['PDU1', 'PDU3'] } as CaselistFilter,

@@ -212,23 +212,6 @@ export default class CaselistPresenter {
     return selectOptions
   }
 
-  generatePduSelectArgs(): SelectArgsItem[] {
-    const checkboxArgs = [
-      {
-        text: 'Select PDU',
-        value: '',
-      },
-    ]
-    const pduCheckboxArgs = this.caseListFilters.locationFilters
-      .map(pdu => ({
-        text: pdu.pduName,
-        value: pdu.pduName,
-        selected: this.filter.pdu?.includes(pdu.pduName),
-      }))
-      .sort((a, b) => a.text.localeCompare(b.text))
-    return checkboxArgs.concat(pduCheckboxArgs)
-  }
-
   generatePDUCheckboxArgs(): CheckboxesArgsItem[] {
     return this.caseListFilters.locationFilters
       .map(pdu => ({

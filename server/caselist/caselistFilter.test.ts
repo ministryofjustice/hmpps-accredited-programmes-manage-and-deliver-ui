@@ -91,6 +91,15 @@ describe(CaselistFilter, () => {
         expect(filter.params.reportingTeam).toEqual(['Team1', 'Team2'])
       })
 
+      it('strips reportingTeam when it does not belong to the selected PDU', () => {
+        const query = { pdu: 'PDU1', reportingTeam: 'Team5' } // Team5 belongs to PDU3, not PDU1
+        const filter = CaselistFilter.fromRequest(
+          { query } as unknown as Request,
+          TestUtils.createCaseListFilters().locationFilters,
+        )
+        expect(filter.reportingTeam).toBeUndefined()
+      })
+
       it('correctly sets multiple pdus and reporting team', () => {
         const filter = new CaselistFilter()
         filter.pdu = ['PDU1', 'PDU2']
