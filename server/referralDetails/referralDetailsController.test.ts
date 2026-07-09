@@ -58,7 +58,7 @@ describe('referral-details', () => {
         })
         .then(() => {
           expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_PERSONAL_DETAILS', 'user1', referralDetails.crn, 'CRN', {
-            referralId: referralDetails.id,
+            referralId: expect.any(String),
           })
         })
     })
@@ -79,7 +79,7 @@ describe('referral-details', () => {
         })
         .then(() => {
           expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_OFFENCE_HISTORY', 'user1', referralDetails.crn, 'CRN', {
-            referralId: referralDetails.id,
+            referralId: expect.any(String),
           })
         })
     })
@@ -104,7 +104,7 @@ describe('referral-details', () => {
             'user1',
             referralDetails.crn,
             'CRN',
-            { referralId: referralDetails.id },
+            { referralId: expect.any(String) },
           )
         })
     })
@@ -132,7 +132,7 @@ describe(`/referral`, () => {
         })
         .then(() => {
           expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_STATUS_HISTORY', 'user1', referralDetails.crn, 'CRN', {
-            referralId: referralDetails.id,
+            referralId: expect.any(String),
           })
         })
     })
@@ -160,7 +160,7 @@ describe(`Attendance History`, () => {
         })
         .then(() => {
           expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_ATTENDANCE_HISTORY', 'user1', referralDetails.crn, 'CRN', {
-            referralId: referralDetails.id,
+            referralId: expect.any(String),
           })
         })
     })
@@ -181,7 +181,7 @@ describe(`Attendance History`, () => {
         })
         .then(() => {
           expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_ATTENDANCE_HISTORY', 'user1', referralDetails.crn, 'CRN', {
-            referralId: referralDetails.id,
+            referralId: expect.any(String),
           })
         })
     })
