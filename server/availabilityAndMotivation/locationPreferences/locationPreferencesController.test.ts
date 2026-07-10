@@ -271,7 +271,7 @@ describe('location-preferences', () => {
         deliveryLocationPreferencesFormData,
       )
 
-      return request(app)
+      await request(app)
         .post(`/referral/${referralId}/add-locations-cannot-attend`)
         .type('form')
         .send({
@@ -284,24 +284,23 @@ describe('location-preferences', () => {
             `Redirecting to /referral/${referralId}/availability-and-motivation/location?preferredLocationUpdated=true#location`,
           )
         })
-        .then(() => {
-          expect(sendAuditEvent).toHaveBeenCalledWith(
-            'UPDATE_REFERRAL_LOCATION_PREFERENCES',
-            'user1',
-            referralDetails.crn,
-            'CRN',
-            {
-              referralId,
-              details: JSON.stringify(createDeliveryLocationPreferences),
-            },
-          )
 
-          expect(accreditedProgrammesManageAndDeliverService.updateDeliveryLocationPreferences).toHaveBeenCalledWith(
-            'user1',
-            referralId,
-            createDeliveryLocationPreferences,
-          )
-        })
+      expect(sendAuditEvent).toHaveBeenCalledWith(
+        'UPDATE_REFERRAL_LOCATION_PREFERENCES',
+        'user1',
+        referralDetails.crn,
+        'CRN',
+        {
+          referralId,
+          details: JSON.stringify(createDeliveryLocationPreferences),
+        },
+      )
+
+      expect(accreditedProgrammesManageAndDeliverService.updateDeliveryLocationPreferences).toHaveBeenCalledWith(
+        'user1',
+        referralId,
+        createDeliveryLocationPreferences,
+      )
     })
 
     it('sends an post request to the api with correct data if there was no existing location preferences.', async () => {
@@ -322,7 +321,7 @@ describe('location-preferences', () => {
         deliveryLocationPreferencesFormData,
       )
 
-      return request(app)
+      await request(app)
         .post(`/referral/${referralId}/add-locations-cannot-attend`)
         .type('form')
         .send({
@@ -335,24 +334,23 @@ describe('location-preferences', () => {
             `Redirecting to /referral/${referralId}/availability-and-motivation/location?preferredLocationUpdated=true#location`,
           )
         })
-        .then(() => {
-          expect(sendAuditEvent).toHaveBeenCalledWith(
-            'UPDATE_REFERRAL_LOCATION_PREFERENCES',
-            'user1',
-            referralDetails.crn,
-            'CRN',
-            {
-              referralId,
-              details: JSON.stringify(createDeliveryLocationPreferences),
-            },
-          )
 
-          expect(accreditedProgrammesManageAndDeliverService.createDeliveryLocationPreferences).toHaveBeenCalledWith(
-            'user1',
-            referralId,
-            createDeliveryLocationPreferences,
-          )
-        })
+      expect(sendAuditEvent).toHaveBeenCalledWith(
+        'UPDATE_REFERRAL_LOCATION_PREFERENCES',
+        'user1',
+        referralDetails.crn,
+        'CRN',
+        {
+          referralId,
+          details: JSON.stringify(createDeliveryLocationPreferences),
+        },
+      )
+
+      expect(accreditedProgrammesManageAndDeliverService.createDeliveryLocationPreferences).toHaveBeenCalledWith(
+        'user1',
+        referralId,
+        createDeliveryLocationPreferences,
+      )
     })
   })
 })
