@@ -87,7 +87,7 @@ export default class AvailabilityAndMotivationController extends BaseController 
           referralId,
           username,
         )
-        await sendAuditEvent('EDIT_REFERRAL_MOTIVATION', username, referralDetails?.crn, 'CRN', {
+        await sendAuditEvent('EDIT_REFERRAL_MOTIVATION', username, referralDetails?.crn ?? referralId, 'CRN', {
           referralId,
           details: data.paramsForUpdate,
         })

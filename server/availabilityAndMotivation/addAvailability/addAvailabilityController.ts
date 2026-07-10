@@ -46,7 +46,7 @@ export default class AddAvailabilityController extends BaseController {
           await sendAuditEvent('EDIT_AVAILABILITY', username, referralDetails?.crn ?? referralId, 'CRN', {
             referralId,
             availabilityId,
-            details: JSON.stringify(data.paramsForUpdate),
+            details: data.paramsForUpdate,
           })
           await this.accreditedProgrammesManageAndDeliverService.updateAvailability(username, {
             ...data.paramsForUpdate,
@@ -66,7 +66,7 @@ export default class AddAvailabilityController extends BaseController {
         } else {
           await sendAuditEvent('CREATE_AVAILABILITY', username, referralDetails?.crn ?? referralId, 'CRN', {
             referralId,
-            details: JSON.stringify(data.paramsForUpdate),
+            details: data.paramsForUpdate,
           })
           await this.accreditedProgrammesManageAndDeliverService.addAvailability(username, data.paramsForUpdate)
           logger.info(

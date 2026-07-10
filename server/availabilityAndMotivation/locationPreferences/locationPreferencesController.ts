@@ -32,9 +32,11 @@ export default class LocationPreferencesController extends BaseController {
       username,
     )
 
-    await sendAuditEvent('VIEW_ADD_LOCATION_PREFERENCES', username, referralDetails?.crn ?? referralId, 'CRN', {
-      referralId,
-    })
+    if (req.method === 'GET') {
+      await sendAuditEvent('VIEW_ADD_LOCATION_PREFERENCES', username, referralDetails?.crn ?? referralId, 'CRN', {
+        referralId,
+      })
+    }
 
     const preferredLocationReferenceData =
       await this.accreditedProgrammesManageAndDeliverService.getPossibleDeliveryLocationsForReferral(
@@ -92,15 +94,17 @@ export default class LocationPreferencesController extends BaseController {
       username,
     )
 
-    await sendAuditEvent(
-      'VIEW_ADDITIONAL_PDU_LOCATION_PREFERENCES',
-      username,
-      referralDetails?.crn ?? referralId,
-      'CRN',
-      {
-        referralId,
-      },
-    )
+    if (req.method === 'GET') {
+      await sendAuditEvent(
+        'VIEW_ADDITIONAL_PDU_LOCATION_PREFERENCES',
+        username,
+        referralDetails?.crn ?? referralId,
+        'CRN',
+        {
+          referralId,
+        },
+      )
+    }
 
     const preferredLocationReferenceData: DeliveryLocationPreferencesFormData =
       req.session.locationPreferenceFormData?.preferredLocationReferenceData ??
@@ -153,10 +157,6 @@ export default class LocationPreferencesController extends BaseController {
       username,
     )
 
-    await sendAuditEvent('VIEW_CANNOT_ATTEND_LOCATIONS', username, referralDetails?.crn ?? referralId, 'CRN', {
-      referralId,
-    })
-
     let formError: FormValidationError | null = null
     let userInputData = null
 
@@ -202,6 +202,10 @@ export default class LocationPreferencesController extends BaseController {
         )
       }
     }
+
+    await sendAuditEvent('VIEW_CANNOT_ATTEND_LOCATIONS', username, referralDetails?.crn ?? referralId, 'CRN', {
+      referralId,
+    })
 
     const presenter = new CannotAttendLocationsPresenter(
       referralId,
