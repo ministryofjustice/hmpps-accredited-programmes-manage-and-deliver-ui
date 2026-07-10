@@ -5,6 +5,7 @@ import request from 'supertest'
 import { SessionData } from 'express-session'
 import { appWithAllRoutes } from '../../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../../services/accreditedProgrammesManageAndDeliverService'
+import sendAuditEvent from '../../services/auditService'
 import referralDetailsFactory from '../../testutils/factories/referralDetailsFactory'
 import deliveryLocationPreferencesFormDataFactory from '../../testutils/factories/deliveryLocationPreferences/deliveryLocationPreferencesFormDataFactory'
 import createDeliveryLocationPreferencesFactory from '../../testutils/factories/deliveryLocationPreferences/createDeliveryLocationPreferencesFactory'
@@ -12,6 +13,7 @@ import TestUtils from '../../testutils/testUtils'
 
 jest.mock('../../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../../data/hmppsAuthClient')
+jest.mock('../../services/auditService')
 
 const hmppsAuthClientBuilder = jest.fn()
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
@@ -48,6 +50,15 @@ describe('location-preferences', () => {
           expect(res.text).toContain(referralDetails.crn)
           expect(res.text).toContain(referralDetails.personName)
           expect(res.text).toContain(`Where can ${referralDetails.personName} attend a programme?`)
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            'VIEW_ADD_LOCATION_PREFERENCES',
+            'user1',
+            referralDetails.crn,
+            'CRN',
+            { referralId: expect.any(String) },
+          )
         })
     })
 
@@ -146,6 +157,15 @@ describe('location-preferences', () => {
           expect(res.text).toContain(referralDetails.personName)
           expect(res.text).toContain(`Which other locations can ${referralDetails.personName} attend`)
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            'VIEW_ADDITIONAL_PDU_LOCATION_PREFERENCES',
+            'user1',
+            referralDetails.crn,
+            'CRN',
+            { referralId: expect.any(String) },
+          )
+        })
     })
   })
 
@@ -214,6 +234,15 @@ describe('location-preferences', () => {
           expect(res.text).toContain(referralDetails.personName)
           expect(res.text).toContain(`Are there any locations ${referralDetails.personName} cannot attend?`)
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            'VIEW_CANNOT_ATTEND_LOCATIONS',
+            'user1',
+            referralDetails.crn,
+            'CRN',
+            { referralId: expect.any(String) },
+          )
+        })
     })
   })
 
@@ -242,7 +271,7 @@ describe('location-preferences', () => {
         deliveryLocationPreferencesFormData,
       )
 
-      await request(app)
+      return request(app)
         .post(`/referral/${referralId}/add-locations-cannot-attend`)
         .type('form')
         .send({
@@ -255,12 +284,24 @@ describe('location-preferences', () => {
             `Redirecting to /referral/${referralId}/availability-and-motivation/location?preferredLocationUpdated=true#location`,
           )
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            'UPDATE_REFERRAL_LOCATION_PREFERENCES',
+            'user1',
+            referralDetails.crn,
+            'CRN',
+            {
+              referralId,
+              details: JSON.stringify(createDeliveryLocationPreferences),
+            },
+          )
 
-      expect(accreditedProgrammesManageAndDeliverService.updateDeliveryLocationPreferences).toHaveBeenCalledWith(
-        'user1',
-        referralId,
-        createDeliveryLocationPreferences,
-      )
+          expect(accreditedProgrammesManageAndDeliverService.updateDeliveryLocationPreferences).toHaveBeenCalledWith(
+            'user1',
+            referralId,
+            createDeliveryLocationPreferences,
+          )
+        })
     })
 
     it('sends an post request to the api with correct data if there was no existing location preferences.', async () => {
@@ -281,7 +322,7 @@ describe('location-preferences', () => {
         deliveryLocationPreferencesFormData,
       )
 
-      await request(app)
+      return request(app)
         .post(`/referral/${referralId}/add-locations-cannot-attend`)
         .type('form')
         .send({
@@ -294,12 +335,24 @@ describe('location-preferences', () => {
             `Redirecting to /referral/${referralId}/availability-and-motivation/location?preferredLocationUpdated=true#location`,
           )
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            'UPDATE_REFERRAL_LOCATION_PREFERENCES',
+            'user1',
+            referralDetails.crn,
+            'CRN',
+            {
+              referralId,
+              details: JSON.stringify(createDeliveryLocationPreferences),
+            },
+          )
 
-      expect(accreditedProgrammesManageAndDeliverService.createDeliveryLocationPreferences).toHaveBeenCalledWith(
-        'user1',
-        referralId,
-        createDeliveryLocationPreferences,
-      )
+          expect(accreditedProgrammesManageAndDeliverService.createDeliveryLocationPreferences).toHaveBeenCalledWith(
+            'user1',
+            referralId,
+            createDeliveryLocationPreferences,
+          )
+        })
     })
   })
 })

@@ -50,13 +50,9 @@ describe(`Add Availability`, () => {
           expect(res.text).toContain(`When is ${referralDetails.personName} available to attend a programme`)
         })
         .then(() => {
-          expect(sendAuditEvent).toHaveBeenCalledWith(
-            'VIEW_ADD_AVAILABILITY',
-            'user1',
-            referralDetails.crn,
-            'CRN',
-            { referralId: expect.any(String) },
-          )
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_ADD_AVAILABILITY', 'user1', referralDetails.crn, 'CRN', {
+            referralId: expect.any(String),
+          })
         })
     })
   })
@@ -86,13 +82,10 @@ describe(`Add Availability`, () => {
           )
         })
         .then(() => {
-          expect(sendAuditEvent).toHaveBeenCalledWith(
-            'CREATE_AVAILABILITY',
-            'user1',
-            referralDetails.crn,
-            'CRN',
-            { referralId: expect.any(String), details: expect.any(String) },
-          )
+          expect(sendAuditEvent).toHaveBeenCalledWith('CREATE_AVAILABILITY', 'user1', referralDetails.crn, 'CRN', {
+            referralId: expect.any(String),
+            details: expect.any(String),
+          })
         })
     })
   })
@@ -117,13 +110,11 @@ describe(`Add Availability`, () => {
         })
         .expect(302)
         .then(() => {
-          expect(sendAuditEvent).toHaveBeenCalledWith(
-            'EDIT_AVAILABILITY',
-            'user1',
-            referralDetails.crn,
-            'CRN',
-            { referralId: expect.any(String), availabilityId: expect.any(String), details: expect.any(String) },
-          )
+          expect(sendAuditEvent).toHaveBeenCalledWith('EDIT_AVAILABILITY', 'user1', referralDetails.crn, 'CRN', {
+            referralId: expect.any(String),
+            availabilityId: expect.any(String),
+            details: expect.any(String),
+          })
         })
     })
   })

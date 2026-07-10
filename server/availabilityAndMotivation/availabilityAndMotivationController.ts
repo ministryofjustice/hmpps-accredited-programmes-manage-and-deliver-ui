@@ -34,7 +34,7 @@ export default class AvailabilityAndMotivationController extends BaseController 
       username,
     )
     await sendAuditEvent('VIEW_SHOW_MOTIVATION', username, referralDetailsData?.crn ?? referralId, 'CRN', {
-      referralId: referralId,
+      referralId,
     })
 
     const motivationBackgroundAndNonAssociations =
@@ -118,7 +118,7 @@ export default class AvailabilityAndMotivationController extends BaseController 
     )
 
     await sendAuditEvent('VIEW_ADD_MOTIVATION', username, referralDetails?.crn ?? referralId, 'CRN', {
-      referralId: referralId,
+      referralId,
     })
     const motivationBackgroundAndNonAssociations =
       await this.accreditedProgrammesManageAndDeliverService.getMotivationBackgroundAndNonAssociations(

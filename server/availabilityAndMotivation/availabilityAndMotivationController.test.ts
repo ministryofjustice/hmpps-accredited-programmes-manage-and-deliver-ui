@@ -53,13 +53,9 @@ describe('availabilityAndMotivation controller', () => {
           expect(res.text).toContain(`Motivation, background and non-associations`)
         })
         .then(() => {
-          expect(sendAuditEvent).toHaveBeenCalledWith(
-            'VIEW_SHOW_MOTIVATION',
-            'user1',
-            referralDetails.crn,
-            'CRN',
-            { referralId: expect.any(String) },
-          )
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_SHOW_MOTIVATION', 'user1', referralDetails.crn, 'CRN', {
+            referralId: expect.any(String),
+          })
         })
     })
   })
@@ -80,13 +76,9 @@ describe('availabilityAndMotivation controller', () => {
           expect(res.text).toContain(`Provide information about motivation, background and non-associations`)
         })
         .then(() => {
-          expect(sendAuditEvent).toHaveBeenCalledWith(
-            'VIEW_ADD_MOTIVATION',
-            'user1',
-            referralDetails.crn,
-            'CRN',
-            { referralId: expect.any(String) },
-          )
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_ADD_MOTIVATION', 'user1', referralDetails.crn, 'CRN', {
+            referralId: expect.any(String),
+          })
         })
     })
   })
@@ -171,13 +163,9 @@ describe('availabilityAndMotivation controller', () => {
           expect(res.text).toContain('Location')
         })
         .then(() => {
-          expect(sendAuditEvent).toHaveBeenCalledWith(
-            'VIEW_SHOW_LOCATION',
-            'user1',
-            referralDetails.crn,
-            'CRN',
-            { referralId: expect.any(String) },
-          )
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_SHOW_LOCATION', 'user1', referralDetails.crn, 'CRN', {
+            referralId: expect.any(String),
+          })
         })
     })
 
@@ -222,13 +210,9 @@ describe('availabilityAndMotivation controller', () => {
             expect(res.text).toContain('Add availability')
           })
           .then(() => {
-            expect(sendAuditEvent).toHaveBeenCalledWith(
-              'VIEW_SHOW_AVAILABILITY',
-              'user1',
-              referralDetails.crn,
-              'CRN',
-              { referralId: expect.any(String) },
-            )
+            expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_SHOW_AVAILABILITY', 'user1', referralDetails.crn, 'CRN', {
+              referralId: expect.any(String),
+            })
           })
       })
     })

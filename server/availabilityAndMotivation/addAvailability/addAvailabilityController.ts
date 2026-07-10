@@ -42,12 +42,10 @@ export default class AddAvailabilityController extends BaseController {
         formError = data.error
         userInputData = req.body
       } else {
-        
         if (availabilityId) {
-
           await sendAuditEvent('EDIT_AVAILABILITY', username, referralDetails?.crn ?? referralId, 'CRN', {
-            referralId: referralId,
-            availabilityId: availabilityId,
+            referralId,
+            availabilityId,
             details: JSON.stringify(data.paramsForUpdate),
           })
           await this.accreditedProgrammesManageAndDeliverService.updateAvailability(username, {
@@ -66,9 +64,8 @@ export default class AddAvailabilityController extends BaseController {
             'Availability updated',
           )
         } else {
-
           await sendAuditEvent('CREATE_AVAILABILITY', username, referralDetails?.crn ?? referralId, 'CRN', {
-            referralId: referralId,
+            referralId,
             details: JSON.stringify(data.paramsForUpdate),
           })
           await this.accreditedProgrammesManageAndDeliverService.addAvailability(username, data.paramsForUpdate)
@@ -90,7 +87,7 @@ export default class AddAvailabilityController extends BaseController {
     const availability = await this.accreditedProgrammesManageAndDeliverService.getAvailability(username, referralId)
 
     await sendAuditEvent('VIEW_ADD_AVAILABILITY', username, referralDetails?.crn ?? referralId, 'CRN', {
-      referralId: referralId,
+      referralId,
     })
     const personalDetails = await this.accreditedProgrammesManageAndDeliverService.getPersonalDetails(
       referralId,
