@@ -105,6 +105,15 @@ describe('location-preferences', () => {
         .expect(res => {
           expect(res.text).toContain(`Redirecting to /referral/${referralId}/add-location-preferences/other-pdu`)
         })
+        .expect(() => {
+          expect(sendAuditEvent).not.toHaveBeenCalledWith(
+            'VIEW_ADD_LOCATION_PREFERENCES',
+            'user1',
+            referralDetails.crn,
+            'CRN',
+            { referralId: expect.any(String) },
+          )
+        })
     })
 
     it('posts to the add availability page and redirects successfully to the cannot attend loactions page if add-other-pdu-locations is not selected', async () => {
@@ -124,6 +133,15 @@ describe('location-preferences', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(`Redirecting to /referral/${referralId}/add-locations-cannot-attend`)
+        })
+        .expect(() => {
+          expect(sendAuditEvent).not.toHaveBeenCalledWith(
+            'VIEW_ADDITIONAL_PDU_LOCATION_PREFERENCES',
+            'user1',
+            referralDetails.crn,
+            'CRN',
+            { referralId: expect.any(String) },
+          )
         })
     })
   })
@@ -201,6 +219,15 @@ describe('location-preferences', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(`Redirecting to /referral/${referralId}/add-locations-cannot-attend`)
+        })
+        .expect(() => {
+          expect(sendAuditEvent).not.toHaveBeenCalledWith(
+            'VIEW_ADDITIONAL_PDU_LOCATION_PREFERENCES',
+            'user1',
+            referralDetails.crn,
+            'CRN',
+            { referralId: expect.any(String) },
+          )
         })
     })
   })
@@ -285,21 +312,17 @@ describe('location-preferences', () => {
           )
         })
 
-      expect(sendAuditEvent).toHaveBeenCalledWith(
-        'UPDATE_REFERRAL_LOCATION_PREFERENCES',
-        'user1',
-        referralDetails.crn,
-        'CRN',
-        {
-          referralId,
-          details: JSON.stringify(createDeliveryLocationPreferences),
-        },
-      )
-
       expect(accreditedProgrammesManageAndDeliverService.updateDeliveryLocationPreferences).toHaveBeenCalledWith(
         'user1',
         referralId,
         createDeliveryLocationPreferences,
+      )
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_CANNOT_ATTEND_LOCATIONS',
+        'user1',
+        referralDetails.crn,
+        'CRN',
+        { referralId: expect.any(String) },
       )
     })
 
@@ -335,21 +358,17 @@ describe('location-preferences', () => {
           )
         })
 
-      expect(sendAuditEvent).toHaveBeenCalledWith(
-        'UPDATE_REFERRAL_LOCATION_PREFERENCES',
-        'user1',
-        referralDetails.crn,
-        'CRN',
-        {
-          referralId,
-          details: JSON.stringify(createDeliveryLocationPreferences),
-        },
-      )
-
       expect(accreditedProgrammesManageAndDeliverService.createDeliveryLocationPreferences).toHaveBeenCalledWith(
         'user1',
         referralId,
         createDeliveryLocationPreferences,
+      )
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_CANNOT_ATTEND_LOCATIONS',
+        'user1',
+        referralDetails.crn,
+        'CRN',
+        { referralId: expect.any(String) },
       )
     })
   })
