@@ -2,6 +2,8 @@ import { CreateGroupRequest, CreateGroupTeamMember } from '@manage-and-deliver-a
 import { SummaryListItem } from '../../utils/summaryList'
 import CreateGroupUtils from '../createGroupUtils'
 import GroupDaysTimesUtils from '../../utils/groupDaysTimesUtils'
+import DateFormatUtils from '../../utils/dateFormatUtils'
+import DateUtils from '../../utils/dateUtils'
 
 export default class CreateGroupCyaPresenter {
   constructor(private readonly createGroupFormData: Partial<CreateGroupRequest>) {}
@@ -26,22 +28,12 @@ export default class CreateGroupCyaPresenter {
       return ''
     }
 
-    if (!input.includes('/')) {
+    const parsedDate = DateFormatUtils.parseDate(input)
+    if (!parsedDate) {
       return input
     }
 
-    const [day, month, year] = input.split('/').map(Number)
-    const date = new Date(Date.UTC(year, month - 1, day))
-
-    return date
-      .toLocaleDateString('en-GB', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-        timeZone: 'UTC',
-      })
-      .replace(',', '')
+    return `${DateUtils.formattedDayOfWeek(parsedDate)} ${DateUtils.formattedDate(parsedDate)}`
   }
 
   private changeLinkUri(path: string): string {
