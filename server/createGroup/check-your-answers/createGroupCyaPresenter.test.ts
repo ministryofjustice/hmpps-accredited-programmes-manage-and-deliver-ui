@@ -204,7 +204,7 @@ describe('CreateGroupCyaPresenter', () => {
     it('returns summary list with all group details and no team members', () => {
       const createGroupFormData: Partial<CreateGroupRequest> = {
         groupCode: 'ABC123',
-        earliestStartDate: '2026-06-01',
+        earliestStartDate: 'Monday 30 July 2026',
         createGroupSessionSlot: [],
         cohort: 'GENERAL',
         sex: 'MALE',
@@ -224,7 +224,7 @@ describe('CreateGroupCyaPresenter', () => {
       })
       expect(summary).toContainEqual({
         key: 'Start date',
-        lines: ['2026-06-01'],
+        lines: ['Monday 30 July 2026'],
         changeLink: '/group-start-date?referrer=group-review-details',
         visuallyHiddenText: 'start date',
       })

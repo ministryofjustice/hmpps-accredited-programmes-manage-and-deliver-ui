@@ -20,6 +20,30 @@ export default class CreateGroupCyaPresenter {
     return 'Review your group details'
   }
 
+  private formatCyaDate(): string {
+    const input = this.createGroupFormData.earliestStartDate
+    if (!input) {
+      return ''
+    }
+
+    if (!input.includes('/')) {
+      return input
+    }
+
+    const [day, month, year] = input.split('/').map(Number)
+    const date = new Date(Date.UTC(year, month - 1, day))
+
+    return date
+      .toLocaleDateString('en-GB', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        timeZone: 'UTC',
+      })
+      .replace(',', '')
+  }
+
   private changeLinkUri(path: string): string {
     const separator = path.includes('?') ? '&' : '?'
     return `${path}${separator}referrer=group-review-details`
@@ -62,7 +86,7 @@ export default class CreateGroupCyaPresenter {
       },
       {
         key: 'Start date',
-        lines: [`${this.createGroupFormData.earliestStartDate}`],
+        lines: [this.formatCyaDate()],
         changeLink: this.changeLinkUri('/group-start-date'),
         visuallyHiddenText: 'start date',
       },
