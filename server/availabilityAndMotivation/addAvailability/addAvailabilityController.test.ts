@@ -82,24 +82,18 @@ describe(`Add Availability`, () => {
           )
         })
         .then(() => {
-          expect(sendAuditEvent).toHaveBeenCalledWith(
-            'CREATE_AVAILABILITY',
-            'user1',
-            referralDetails.crn,
-            'CRN',
-            {
-              referralId: expect.any(String),
-              details: expect.objectContaining({
-                otherDetails: 'text',
-                availabilities: expect.arrayContaining([
-                  expect.objectContaining({ label: 'Mondays' }),
-                  expect.objectContaining({ label: 'Sundays' }),
-                ]),
-                endDate: '9225-07-31',
-                startDate: expect.any(String),
-              }),
-            },
-          )
+          expect(sendAuditEvent).toHaveBeenCalledWith('CREATE_AVAILABILITY', 'user1', referralDetails.crn, 'CRN', {
+            referralId: expect.any(String),
+            details: expect.objectContaining({
+              otherDetails: 'text',
+              availabilities: expect.arrayContaining([
+                expect.objectContaining({ label: 'Mondays' }),
+                expect.objectContaining({ label: 'Sundays' }),
+              ]),
+              endDate: '9225-07-31',
+              startDate: expect.any(String),
+            }),
+          })
         })
     })
   })
@@ -124,21 +118,15 @@ describe(`Add Availability`, () => {
         })
         .expect(302)
         .then(() => {
-          expect(sendAuditEvent).toHaveBeenCalledWith(
-            'EDIT_AVAILABILITY',
-            'user1',
-            referralDetails.crn,
-            'CRN',
-            {
-              referralId: expect.any(String),
-              availabilityId: expect.any(String),
-              details: expect.objectContaining({
-                otherDetails: 'text',
-                availabilities: expect.arrayContaining([expect.objectContaining({ label: 'Mondays' })]),
-                startDate: expect.any(String),
-              }),
-            },
-          )
+          expect(sendAuditEvent).toHaveBeenCalledWith('EDIT_AVAILABILITY', 'user1', referralDetails.crn, 'CRN', {
+            referralId: expect.any(String),
+            availabilityId: expect.any(String),
+            details: expect.objectContaining({
+              otherDetails: 'text',
+              availabilities: expect.arrayContaining([expect.objectContaining({ label: 'Mondays' })]),
+              startDate: expect.any(String),
+            }),
+          })
         })
     })
   })
