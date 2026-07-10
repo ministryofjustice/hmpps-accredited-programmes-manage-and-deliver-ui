@@ -8,6 +8,7 @@ import AddAvailabilityForm from './AddAvailabilityForm'
 import AddAvailabilityPresenter from './addAvailabilityPresenter'
 import AddAvailabilityView from './addAvailabilityView'
 import logger from '../../../logger'
+import sendAuditEvent from '../../services/auditService'
 
 export default class AddAvailabilityController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -41,7 +42,14 @@ export default class AddAvailabilityController extends BaseController {
         formError = data.error
         userInputData = req.body
       } else {
+        
         if (availabilityId) {
+
+          await sendAuditEvent('EDIT_AVAILABILITY', username, referralDetails?.crn ?? referralId, 'CRN', {
+            referralId: referralId,
+            availabilityId: availabilityId,
+            details: JSON.stringify(data.paramsForUpdate),
+          })
           await this.accreditedProgrammesManageAndDeliverService.updateAvailability(username, {
             ...data.paramsForUpdate,
             availabilityId,
@@ -58,6 +66,11 @@ export default class AddAvailabilityController extends BaseController {
             'Availability updated',
           )
         } else {
+
+          await sendAuditEvent('CREATE_AVAILABILITY', username, referralDetails?.crn ?? referralId, 'CRN', {
+            referralId: referralId,
+            details: JSON.stringify(data.paramsForUpdate),
+          })
           await this.accreditedProgrammesManageAndDeliverService.addAvailability(username, data.paramsForUpdate)
           logger.info(
             {
@@ -76,6 +89,9 @@ export default class AddAvailabilityController extends BaseController {
 
     const availability = await this.accreditedProgrammesManageAndDeliverService.getAvailability(username, referralId)
 
+    await sendAuditEvent('VIEW_ADD_AVAILABILITY', username, referralDetails?.crn ?? referralId, 'CRN', {
+      referralId: referralId,
+    })
     const personalDetails = await this.accreditedProgrammesManageAndDeliverService.getPersonalDetails(
       referralId,
       username,
