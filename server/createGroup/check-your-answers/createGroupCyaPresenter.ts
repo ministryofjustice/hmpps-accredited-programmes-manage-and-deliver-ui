@@ -2,6 +2,8 @@ import { CreateGroupRequest, CreateGroupTeamMember } from '@manage-and-deliver-a
 import { SummaryListItem } from '../../utils/summaryList'
 import CreateGroupUtils from '../createGroupUtils'
 import GroupDaysTimesUtils from '../../utils/groupDaysTimesUtils'
+import DateFormatUtils from '../../utils/dateFormatUtils'
+import DateUtils from '../../utils/dateUtils'
 
 export default class CreateGroupCyaPresenter {
   constructor(private readonly createGroupFormData: Partial<CreateGroupRequest>) {}
@@ -18,6 +20,20 @@ export default class CreateGroupCyaPresenter {
 
   get pageTitle(): string {
     return 'Review your group details'
+  }
+
+  private formatCyaDate(): string {
+    const input = this.createGroupFormData.earliestStartDate
+    if (!input) {
+      return ''
+    }
+
+    const parsedDate = DateFormatUtils.parseDate(input)
+    if (!parsedDate) {
+      return input
+    }
+
+    return `${DateUtils.formattedDayOfWeek(parsedDate)} ${DateUtils.formattedDate(parsedDate)}`
   }
 
   private changeLinkUri(path: string): string {
@@ -62,7 +78,7 @@ export default class CreateGroupCyaPresenter {
       },
       {
         key: 'Start date',
-        lines: [`${this.createGroupFormData.earliestStartDate}`],
+        lines: [this.formatCyaDate()],
         changeLink: this.changeLinkUri('/group-start-date'),
         visuallyHiddenText: 'start date',
       },
