@@ -13,8 +13,9 @@
 
 {% block main %}
 {% block content %}
-<div class="govuk-width-container">
-  {{ govukBackLink(backLinkArgs) }}
+  <nav aria-label="Back">
+    {{ govukBackLink(backLinkArgs) }}
+  </nav>
   <main class="govuk-main-wrapper" id="main-content">
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
@@ -55,6 +56,5 @@
       </div>
     </div>
   </main>
-</div>
 {% endblock %}
 {% endblock %}
