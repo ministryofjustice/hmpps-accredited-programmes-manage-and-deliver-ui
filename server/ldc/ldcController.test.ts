@@ -10,6 +10,7 @@ import referralDetailsFactory from '../testutils/factories/referralDetailsFactor
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
+jest.mock('../services/auditService')
 const hmppsAuthClientBuilder = jest.fn()
 
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
@@ -44,6 +45,17 @@ describe('Update ldc status', () => {
           expect(res.text).toContain(referralDetails.crn)
           expect(res.text).toContain(referralDetails.personName)
           expect(res.text).toContain(referralDetails.hasLdcDisplayText)
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            'VIEW_UPDATE_LDC',
+            defaultUser.username,
+            referralDetails.crn,
+            'CRN',
+            {
+              referralId: expect.any(String),
+            },
+          )
         })
     })
   })
