@@ -53,7 +53,7 @@ describe('Update ldc status', () => {
             referralDetails.crn,
             'CRN',
             {
-              referralId: expect.any(String),
+              referralId,
             },
           )
         })

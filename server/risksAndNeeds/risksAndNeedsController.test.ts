@@ -245,7 +245,7 @@ describe('Lifestyle and associates section of risks and needs', () => {
             referralDetails.crn,
             'CRN',
             {
-              referralId: expect.any(String),
+              referralId,
             },
           )
         })
@@ -308,7 +308,7 @@ describe('Relationships', () => {
         })
         .then(() => {
           expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_RELATIONSHIPS', 'user1', referralDetails.crn, 'CRN', {
-            referralId: expect.any(String),
+            referralId,
           })
         })
     })
@@ -370,7 +370,7 @@ describe('Alcohol Misuse', () => {
         })
         .then(() => {
           expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_ALCOHOL_MISUSE', 'user1', referralDetails.crn, 'CRN', {
-            referralId: expect.any(String),
+            referralId,
           })
         })
     })
@@ -429,7 +429,7 @@ describe('Drug misuse section of risks and needs', () => {
         })
         .then(() => {
           expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_DRUG_MISUSE', 'user1', referralDetails.crn, 'CRN', {
-            referralId: expect.any(String),
+            referralId,
           })
         })
     })
@@ -488,7 +488,7 @@ describe('Offence Analysis', () => {
         })
         .then(() => {
           expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_OFFENCE_ANALYSIS', 'user1', referralDetails.crn, 'CRN', {
-            referralId: expect.any(String),
+            referralId,
           })
         })
     })
@@ -545,7 +545,7 @@ describe('Emotional wellbeing section of risks and needs', () => {
         })
         .then(() => {
           expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_EMOTIONAL_WELLBEING', 'user1', referralDetails.crn, 'CRN', {
-            referralId: expect.any(String),
+            referralId,
           })
         })
     })
@@ -611,7 +611,7 @@ describe('Thinking and behaviour section of risks and needs', () => {
             referralDetails.crn,
             'CRN',
             {
-              referralId: expect.any(String),
+              referralId,
             },
           )
         })
@@ -676,7 +676,7 @@ describe('Attitudes section of risks and needs', () => {
         })
         .then(() => {
           expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_ATTITUDES', 'user1', referralDetails.crn, 'CRN', {
-            referralId: expect.any(String),
+            referralId,
           })
         })
     })
@@ -733,7 +733,7 @@ describe('Risks and alerts section of risks and needs', () => {
         })
         .then(() => {
           expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_RISKS_AND_ALERTS', 'user1', referralDetails.crn, 'CRN', {
-            referralId: expect.any(String),
+            referralId,
           })
         })
     })
