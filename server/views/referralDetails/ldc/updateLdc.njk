@@ -10,25 +10,24 @@
 {% block main %}
     {% block content %}
 
-        <div class="govuk-width-container">
+        <nav aria-label="Back">
             {{ govukBackLink(backLinkArgs) }}
-            <main class="govuk-main-wrapper" id="main-content">
-                <h1 class="govuk-heading-l" data-testid="cohort-heading">Update learning disabilities and challenges (LDC) status</h1>
-                {{ govukInsetText(currentLdcStatusText) }}
-                <form method="post" novalidate>
-                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        </nav>
+        <main class="govuk-main-wrapper" id="main-content">
+            <h1 class="govuk-heading-l" data-testid="cohort-heading">Update learning disabilities and challenges (LDC) status</h1>
+            {{ govukInsetText(currentLdcStatusText) }}
+            <form method="post" novalidate>
+                <input type="hidden" name="_csrf" value="{{csrfToken}}">
 
-                    {{ govukRadios(radioArgs) }}
+                {{ govukRadios(radioArgs) }}
 
-                    <div class="govuk-button-group">
-                        {{ govukButton({ text: "Submit", preventDoubleClick: true }) }}
-                        <a class="govuk-link" href={{ backlinkUri }}>Cancel</a>
-                    </div>
+                <div class="govuk-button-group">
+                    {{ govukButton({ text: "Submit", preventDoubleClick: true }) }}
+                    <a class="govuk-link" href={{ backlinkUri }}>Cancel</a>
+                </div>
 
-                </form>
-            </main>
-
-        </div>
+            </form>
+        </main>
 
     {% endblock %}
 {% endblock %}

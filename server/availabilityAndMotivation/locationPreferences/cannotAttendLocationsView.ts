@@ -5,7 +5,7 @@ import { RadiosArgs } from '../../utils/govukFrontendTypes'
 export default class CannotAttendLocationsView {
   constructor(private readonly presenter: CannotAttendLocationsPresenter) {}
 
-  private radioArgs(textInputAreaHtml: string): RadiosArgs {
+  private radioArgs(): RadiosArgs {
     return {
       name: 'cannot-attend-locations-radio',
       fieldset: {
@@ -20,9 +20,6 @@ export default class CannotAttendLocationsView {
           value: 'yes',
           text: 'Yes',
           checked: this.presenter.fields.cannotAttendLocationsRadioButton.value === 'yes',
-          conditional: {
-            html: textInputAreaHtml,
-          },
         },
         {
           value: 'no',
@@ -66,7 +63,7 @@ export default class CannotAttendLocationsView {
         pageTitle: this.presenter.pageTitle,
         cancelLink: `/referral/${this.presenter.id}/availability-and-motivation/location/#location`,
         cannotAttendLocationsTextAreaArgs: this.cannotAttendLocationsTextAreaArgs(),
-        radioArgs: this.radioArgs.bind(this),
+        radioArgs: this.radioArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         backLinkArgs: this.backLinkArgs(),
       },

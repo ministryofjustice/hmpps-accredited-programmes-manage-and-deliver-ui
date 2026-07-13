@@ -9,25 +9,36 @@
 
 {% block pageTitle %}{{pageTitle | default(applicationName)}}{% endblock %}
 
-{% block header %}
-  {% include "./header.njk" %}
-  {% include "./betaBanner.njk" %}
-  {{ customPrimaryNavigation(primaryNavigationArgs) }}
+{% block govukSkipLink %}
+  <nav aria-label="Skip links">
+    {{ govukSkipLink({
+      href: '#main-content',
+      text: 'Skip to main content'
+    }) }}
+  </nav>
+{% endblock %}
 
-  {% if serviceUserBannerPresenter %}
-    {% include "./serviceUserBanner.njk" %}
-    {% block referralSubNavigation %}
-      {% if presenter.getHorizontalSubNavArgs %}
-        <div class="govuk-width-container service-user-banner__sub-nav govuk-!-margin-bottom-0">
-          {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
-        </div>
-      {% endif %}
-    {% endblock %}
-  {% endif %}
+{% block header %}
+  <header class="govuk-template__header">
+    {% include "./header.njk" %}
+    {% include "./betaBanner.njk" %}
+    {{ customPrimaryNavigation(primaryNavigationArgs) }}
+
+    {% if serviceUserBannerPresenter %}
+      {% include "./serviceUserBanner.njk" %}
+      {% block referralSubNavigation %}
+        {% if presenter.getHorizontalSubNavArgs %}
+          <div class="govuk-width-container service-user-banner__sub-nav govuk-!-margin-bottom-0">
+            {{ mojSubNavigation(presenter.getHorizontalSubNavArgs()) }}
+          </div>
+        {% endif %}
+      {% endblock %}
+    {% endif %}
+  </header>
 {% endblock %}
 
 {% block footer %}
- <footer class="probation-common-footer govuk-!-display-none-print" role="contentinfo">
+ <footer class="probation-common-footer govuk-!-display-none-print">
       <div class="govuk-width-container">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-full">

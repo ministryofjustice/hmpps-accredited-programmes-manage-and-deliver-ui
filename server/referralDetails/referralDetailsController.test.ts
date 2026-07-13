@@ -55,6 +55,7 @@ describe('referral-details', () => {
           expect(res.text).toContain(referralDetails.crn)
           expect(res.text).toContain(referralDetails.personName)
           expect(res.text).toContain(personalDetails.probationDeliveryUnit)
+          expect(res.text).not.toContain('<div class="govuk-header">')
         })
         .then(() => {
           expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_PERSONAL_DETAILS', 'user1', referralDetails.crn, 'CRN', {
