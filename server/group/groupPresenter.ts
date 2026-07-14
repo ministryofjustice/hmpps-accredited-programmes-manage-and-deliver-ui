@@ -20,7 +20,7 @@ export enum GroupListPageSection {
 export default class GroupPresenter {
   public readonly pagination: Pagination
 
-  public readonly selectedPdu: string[]
+  public readonly selectedPdu: string[] | undefined
 
   public readonly deliveryLocations: string[] = []
 
