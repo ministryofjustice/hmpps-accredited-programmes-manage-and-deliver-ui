@@ -1,5 +1,5 @@
 import GroupPresenter from './groupPresenter'
-import { CheckboxesArgs, InputArgs, SelectArgs } from '../utils/govukFrontendTypes'
+import { ButtonArgs, CheckboxesArgs, InputArgs, SelectArgs } from '../utils/govukFrontendTypes'
 
 export default class GroupView {
   constructor(private readonly presenter: GroupPresenter) {}
@@ -69,18 +69,11 @@ export default class GroupView {
     }
   }
 
-  private get pageHeaderOptions(): Record<string, unknown> {
+  private get createGroupButtonArgs(): ButtonArgs {
     return {
-      heading: {
-        html: this.presenter.text.pageHeading,
-      },
-      items: [
-        {
-          text: 'Create group',
-          classes: 'govuk-button--primary',
-          href: '/create-group',
-        },
-      ],
+      text: 'Create group',
+      classes: 'govuk-button--primary govuk-!-margin-bottom-0',
+      href: '/create-group',
     }
   }
 
@@ -99,7 +92,7 @@ export default class GroupView {
         searchBySexArgs: this.searchBySexArgs,
         searchByCohortArgs: this.searchByCohortArgs,
         deliveryLocationCheckboxArgs: this.deliveryLocationCheckboxArgs,
-        pageHeaderOptions: this.pageHeaderOptions,
+        createGroupButtonArgs: this.createGroupButtonArgs,
         resultsText: this.presenter.resultsText,
         hasResults: this.presenter.groupListItems.content.length > 0,
         noResultsText: this.presenter.noResultsText,
