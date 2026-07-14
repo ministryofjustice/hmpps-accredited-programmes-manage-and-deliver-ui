@@ -17,16 +17,18 @@ export default class GroupView {
     }
   }
 
-  private get searchByPduSelectArgs(): SelectArgs {
+  private get pduCheckboxArgs(): CheckboxesArgs {
     return {
-      id: 'pdu',
       name: 'pdu',
-      classes: 'confirm-pdu-select',
-      label: {
-        text: 'PDU',
-        classes: 'govuk-label--s',
+      classes: 'govuk-checkboxes--small',
+      fieldset: {
+        legend: {
+          text: 'PDU',
+          isPageHeading: false,
+          classes: 'govuk-fieldset__legend--s',
+        },
       },
-      items: this.presenter.generatePduSelectArgs(),
+      items: this.presenter.generatePDUCheckboxArgs(),
     }
   }
 
@@ -84,6 +86,10 @@ export default class GroupView {
     }
   }
 
+  private get applyFilterButtonArgs() {
+    return { text: 'Apply filters', classes: 'govuk-!-margin-top-4' }
+  }
+
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       'group/group',
@@ -95,7 +101,7 @@ export default class GroupView {
         pagination: this.presenter.pagination.govukPaginationArgs,
         text: this.presenter.text,
         searchByGroupCodeArgs: this.searchByGroupCodeArgs,
-        searchByPduSelectArgs: this.searchByPduSelectArgs,
+        searchByPduArgs: this.pduCheckboxArgs,
         searchBySexArgs: this.searchBySexArgs,
         searchByCohortArgs: this.searchByCohortArgs,
         deliveryLocationCheckboxArgs: this.deliveryLocationCheckboxArgs,
@@ -104,6 +110,7 @@ export default class GroupView {
         hasResults: this.presenter.groupListItems.content.length > 0,
         noResultsText: this.presenter.noResultsText,
         noResultsString: this.presenter.generateNoResultsString(),
+        applyFilterButtonArgs: this.applyFilterButtonArgs,
       },
     ]
   }
