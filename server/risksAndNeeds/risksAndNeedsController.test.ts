@@ -19,6 +19,7 @@ import request from 'supertest'
 import * as cheerio from 'cheerio'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import sendAuditEvent from '../services/auditService'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 import alcoholMisuseFactory from '../testutils/factories/risksAndNeeds/alcoholMisuseFactory'
 import learningNeedsFactory from '../testutils/factories/risksAndNeeds/learningNeedsFactory'
@@ -35,6 +36,7 @@ import risksFactory from '../testutils/factories/risksAndNeeds/risksFactory'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
+jest.mock('../services/auditService')
 
 const hmppsAuthClientBuilder = jest.fn()
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
@@ -77,6 +79,11 @@ describe('Rosh Analysis', () => {
           expect(res.text).toContain(roshAnalysis.identifyBehavioursIncidents)
           expect(res.text).toContain(roshAnalysis.analysisBehaviourIncidents)
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_ROSH_ANALYSIS', 'user1', referralDetails.crn, 'CRN', {
+            referralId: expect.any(String),
+          })
+        })
     })
   })
 })
@@ -101,6 +108,11 @@ describe('Learning Needs', () => {
             expect(res.text).toContain(problemArea)
           })
           expect(res.text).toContain('Yes')
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_LEARNING_NEEDS', 'user1', referralDetails.crn, 'CRN', {
+            referralId: expect.any(String),
+          })
         })
     })
 
@@ -173,6 +185,11 @@ describe('Health section of risks and needs', () => {
           const element = $(`span[data-test-id='any-health-condition']`)
           expect(element).not.toBeNull()
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_HEALTH', 'user1', referralDetails.crn, 'CRN', {
+            referralId: expect.any(String),
+          })
+        })
     })
 
     it('handles health info with minimal data', async () => {
@@ -220,6 +237,17 @@ describe('Lifestyle and associates section of risks and needs', () => {
           expect(res.text).toContain('Assessment completed 23 August 2025')
           expect(res.text).toContain(lifestyleAndAssociates.regActivitiesEncourageOffending)
           expect(res.text).toContain(lifestyleAndAssociates.lifestyleIssuesDetails)
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            'VIEW_LIFESTYLE_AND_ASSOCIATES',
+            'user1',
+            referralDetails.crn,
+            'CRN',
+            {
+              referralId,
+            },
+          )
         })
     })
 
@@ -278,6 +306,11 @@ describe('Relationships', () => {
           expect(res.text).toContain('6.7.2.1 - Is the perpetrator a victim of partner or family abuse?')
           expect(res.text).toContain('6.7.2.2 - Are they the perpetrator of partner or family abuse?')
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_RELATIONSHIPS', 'user1', referralDetails.crn, 'CRN', {
+            referralId,
+          })
+        })
     })
 
     it('handles relationships with minimal data', async () => {
@@ -335,6 +368,11 @@ describe('Alcohol Misuse', () => {
           expect(res.text).toContain(alcoholMisuseDetails.frequencyAndLevel)
           expect(res.text).toContain(alcoholMisuseDetails.alcoholIssuesDetails)
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_ALCOHOL_MISUSE', 'user1', referralDetails.crn, 'CRN', {
+            referralId,
+          })
+        })
     })
 
     it('handles alcohol misuse with minimal data', async () => {
@@ -388,6 +426,11 @@ describe('Drug misuse section of risks and needs', () => {
           expect(res.text).toContain('Assessment completed 23 August 2025')
           expect(res.text).toContain('1 - Some problems')
           expect(res.text).toContain(drugDetails.drugsMajorActivity)
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_DRUG_MISUSE', 'user1', referralDetails.crn, 'CRN', {
+            referralId,
+          })
         })
     })
 
@@ -443,6 +486,11 @@ describe('Offence Analysis', () => {
           expect(res.text).toContain(offenceAnalysis.patternOfOffending)
           expect(res.text).toContain(offenceAnalysis.recognisesImpact)
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_OFFENCE_ANALYSIS', 'user1', referralDetails.crn, 'CRN', {
+            referralId,
+          })
+        })
     })
 
     it('handles offence analysis with minimal data', async () => {
@@ -494,6 +542,11 @@ describe('Emotional wellbeing section of risks and needs', () => {
           expect(res.text).toContain('Assessment completed 23 August 2025')
           expect(res.text).toContain('1 - Some problems')
           expect(res.text).toContain('0 - No problems')
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_EMOTIONAL_WELLBEING', 'user1', referralDetails.crn, 'CRN', {
+            referralId,
+          })
         })
     })
 
@@ -550,6 +603,17 @@ describe('Thinking and behaviour section of risks and needs', () => {
           expect(res.text).toContain('2 - Serious problems')
           expect(res.text).toContain('1 - Some problems')
           expect(res.text).toContain('0 - No problems')
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            'VIEW_THINKING_AND_BEHAVING',
+            'user1',
+            referralDetails.crn,
+            'CRN',
+            {
+              referralId,
+            },
+          )
         })
     })
 
@@ -610,6 +674,11 @@ describe('Attitudes section of risks and needs', () => {
           expect(res.text).toContain('1 - Quite motivated')
           expect(res.text).toContain('1 - Some problems')
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_ATTITUDES', 'user1', referralDetails.crn, 'CRN', {
+            referralId,
+          })
+        })
     })
 
     it('attitudes info with minimal data', async () => {
@@ -661,6 +730,11 @@ describe('Risks and alerts section of risks and needs', () => {
         .expect(res => {
           expect(res.text).toContain('Assessment completed')
           expect(res.text).toContain('Offender group reconviction scale')
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_RISKS_AND_ALERTS', 'user1', referralDetails.crn, 'CRN', {
+            referralId,
+          })
         })
     })
 

@@ -45,6 +45,11 @@ describe('Update cohort', () => {
           expect(res.text).toContain(referralDetails.personName)
           expect(res.text).toContain(referralDetails.cohort)
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_UPDATE_COHORT', 'user1', referralDetails.crn, 'CRN', {
+            referralId: referralDetails.id,
+          })
+        })
     })
   })
 

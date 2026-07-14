@@ -51,6 +51,10 @@ export default class ChangeCohortController extends BaseController {
       return res.redirect(`${req.session.originPage}?isCohortUpdated=true`)
     }
 
+    await sendAuditEvent('VIEW_UPDATE_COHORT', username, referralDetails?.crn, 'CRN', {
+      referralId,
+    })
+
     const presenter = new ChangeCohortPresenter(referralId, referralDetails, req.session.originPage)
     const view = new ChangeCohortView(presenter)
 
