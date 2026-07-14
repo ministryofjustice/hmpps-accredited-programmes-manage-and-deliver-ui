@@ -177,6 +177,7 @@ describe('Edit Group Controller', () => {
               automaticallyRescheduleOtherSessions: true,
             }),
           })
+          expect(sendAuditEvent).not.toHaveBeenCalledWith('VIEW_EDIT_GROUP_DATE', 'user1', groupId, 'SEARCH_TERM')
         })
     })
 
@@ -199,6 +200,9 @@ describe('Edit Group Controller', () => {
             earliestStartDate: '15/06/2026',
             automaticallyRescheduleOtherSessions: false,
           })
+        })
+        .then(() => {
+          expect(sendAuditEvent).not.toHaveBeenCalledWith('VIEW_EDIT_GROUP_DATE', 'user1', groupId, 'SEARCH_TERM')
         })
     })
   })
@@ -1299,6 +1303,12 @@ describe('Edit Group Controller', () => {
             {
               details: { teamMembers: expect.any(Array) },
             },
+          )
+          expect(sendAuditEvent).not.toHaveBeenCalledWith(
+            'VIEW_EDIT_GROUP_TREATMENT_FACILITATORS',
+            'user1',
+            groupId,
+            'SEARCH_TERM',
           )
         })
     })
