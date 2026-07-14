@@ -4,11 +4,13 @@ import { SessionData } from 'express-session'
 import request from 'supertest'
 import { EditGroupCohort, EditGroupDaysAndTimes, EditGroupSex, GroupDetailsResponse } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import sendAuditEvent from '../services/auditService'
 import GroupDetailsFactory from '../testutils/factories/groupDetailsFactory'
 import TestUtils from '../testutils/testUtils'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
+jest.mock('../services/auditService')
 
 const hmppsAuthClientBuilder = jest.fn()
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
@@ -47,6 +49,9 @@ describe('Edit Group Controller', () => {
           expect(res.text).toContain('Edit start date for the group')
           expect(res.text).toContain('28/05/2026')
           expect(accreditedProgrammesManageAndDeliverService.getGroupDetailsById).toHaveBeenCalledWith('user1', groupId)
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_EDIT_GROUP_DATE', 'user1', groupId, 'SEARCH_TERM')
         })
     })
 
@@ -162,6 +167,14 @@ describe('Edit Group Controller', () => {
             automaticallyRescheduleOtherSessions: true,
           })
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('EDIT_GROUP_RESCHEDULE_DATE', 'user1', groupId, 'SEARCH_TERM', {
+            details: expect.objectContaining({
+              earliestStartDate: '15/06/2026',
+              automaticallyRescheduleOtherSessions: true,
+            }),
+          })
+        })
     })
 
     it('updates the group and redirects on successful submission with manual rescheduling', async () => {
@@ -221,6 +234,9 @@ describe('Edit Group Controller', () => {
             'user1',
             groupId,
           )
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_EDIT_GROUP_DAYS_AND_TIMES', 'user1', groupId, 'SEARCH_TERM')
         })
     })
   })
@@ -359,6 +375,20 @@ describe('Edit Group Controller', () => {
             createGroupSessionSlot: sessionData.createGroupFormData.createGroupSessionSlot,
             automaticallyRescheduleOtherSessions: true,
           })
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            'EDIT_GROUP_RESCHEDULE_DAYS_AND_TIMES',
+            'user1',
+            groupId,
+            'SEARCH_TERM',
+            {
+              details: expect.objectContaining({
+                createGroupSessionSlot: sessionData.createGroupFormData.createGroupSessionSlot,
+                automaticallyRescheduleOtherSessions: true,
+              }),
+            },
+          )
         })
     })
 
@@ -506,6 +536,11 @@ describe('Edit Group Controller', () => {
           expect(res.text).toContain(`Redirecting to /group/${groupId}/group-details`)
           expect(res.text).toContain(encodeURIComponent('The gender has been updated.'))
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('EDIT_GROUP_GENDER', 'user1', groupId, 'SEARCH_TERM', {
+            details: { sex: 'FEMALE' },
+          })
+        })
     })
 
     it('returns with errors if gender is not selected', async () => {
@@ -567,6 +602,9 @@ describe('Edit Group Controller', () => {
           expect(res.text).toContain('Edit group EXISTING123')
           expect(res.text).toContain('Edit the group cohort')
           expect(res.text).toContain('General offence')
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_EDIT_GROUP_COHORT', 'user1', groupId, 'SEARCH_TERM')
         })
     })
 
@@ -673,6 +711,11 @@ describe('Edit Group Controller', () => {
           expect(res.text).toContain(`Redirecting to /group/${groupId}/group-details`)
           expect(res.text).toContain(encodeURIComponent('The cohort has been updated.'))
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('EDIT_GROUP_COHORT', 'user1', groupId, 'SEARCH_TERM', {
+            details: { cohort: 'GENERAL_LDC' },
+          })
+        })
     })
 
     it('returns with errors if cohort is not selected', async () => {
@@ -740,6 +783,9 @@ describe('Edit Group Controller', () => {
           expect(res.text).toContain('Edit group code')
           expect(res.text).toContain('EXISTING123')
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_EDIT_GROUP_CODE', 'user1', groupId, 'SEARCH_TERM')
+        })
     })
   })
 
@@ -763,6 +809,11 @@ describe('Edit Group Controller', () => {
             groupCode: 'UPDATED123',
           })
           expect(res.text).toContain(`Redirecting to /group/${groupId}/group-details`)
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('EDIT_GROUP_CODE', 'user1', groupId, 'SEARCH_TERM', {
+            details: { groupCode: 'UPDATED123' },
+          })
         })
     })
 
@@ -813,6 +864,11 @@ describe('Edit Group Controller', () => {
           expect(res.text).toContain('Edit the probation delivery unit (PDU) where the group will take place')
           expect(accreditedProgrammesManageAndDeliverService.getGroupDetailsById).toHaveBeenCalledWith('user1', groupId)
           expect(accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion).toHaveBeenCalledWith('user1')
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_EDIT_GROUP_PDU', 'user1', undefined, 'NOT_APPLICABLE', {
+            groupId,
+          })
         })
     })
 
@@ -921,6 +977,9 @@ describe('Edit Group Controller', () => {
             'PDU-NE',
           )
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_EDIT_GROUP_LOCATION', 'user1', groupId, 'SEARCH_TERM')
+        })
     })
 
     it('loads group details when createGroupFormData is undefined', async () => {
@@ -1023,6 +1082,11 @@ describe('Edit Group Controller', () => {
             }),
           )
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('EDIT_GROUP_LOCATION', 'user1', groupId, 'SEARCH_TERM', {
+            details: expect.objectContaining({ deliveryLocationCode: 'LOC-2' }),
+          })
+        })
     })
   })
 
@@ -1091,6 +1155,14 @@ describe('Edit Group Controller', () => {
           expect(res.text).toContain('Alex Brown')
           expect(accreditedProgrammesManageAndDeliverService.getGroupDetailsById).toHaveBeenCalledWith('user1', groupId)
           expect(accreditedProgrammesManageAndDeliverService.getPduMembers).toHaveBeenCalledWith('user1')
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            'VIEW_EDIT_GROUP_TREATMENT_FACILITATORS',
+            'user1',
+            groupId,
+            'SEARCH_TERM',
+          )
         })
     })
   })
@@ -1181,6 +1253,17 @@ describe('Edit Group Controller', () => {
               },
             ],
           })
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            'EDIT_GROUP_TREATMENT_FACILITATORS',
+            'user1',
+            groupId,
+            'SEARCH_TERM',
+            {
+              details: { teamMembers: expect.any(Array) },
+            },
+          )
         })
     })
 
