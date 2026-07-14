@@ -7,7 +7,7 @@ describe(GroupListFilter, () => {
       const query = {
         cohort: 'SEXUAL_OFFENCE',
         groupCode: 'CODE',
-        pdu: 'PDU3',
+        pdu: ['PDU3'],
         deliveryLocations: ['delivery-location-1'],
         sex: 'Male',
       }
@@ -16,20 +16,40 @@ describe(GroupListFilter, () => {
 
       expect(filter.cohort).toEqual('SEXUAL_OFFENCE')
       expect(filter.groupCode).toEqual('CODE')
-      expect(filter.pdu).toEqual('PDU3')
+      expect(filter.pdu).toEqual(['PDU3'])
       expect(filter.deliveryLocations).toEqual(['delivery-location-1'])
       expect(filter.sex).toEqual('Male')
     })
 
+    it('converts single pdu string to array', () => {
+      const query = {
+        pdu: 'PDU1',
+      }
+
+      const filter = GroupListFilter.fromRequest({ query } as unknown as Request)
+
+      expect(filter.pdu).toEqual(['PDU1'])
+    })
+
+    it('handles multiple pdus', () => {
+      const query = {
+        pdu: ['PDU1', 'PDU2'],
+      }
+
+      const filter = GroupListFilter.fromRequest({ query } as unknown as Request)
+
+      expect(filter.pdu).toEqual(['PDU1', 'PDU2'])
+    })
+
     it('removes deliveryLocations when they are not available for the selected PDU', () => {
       const query = {
-        pdu: 'PDU3',
+        pdu: ['PDU3'],
         deliveryLocations: ['delivery-location-1'],
       }
 
       const filter = GroupListFilter.fromRequest({ query } as unknown as Request, ['delivery-location-2'])
 
-      expect(filter.pdu).toEqual('PDU3')
+      expect(filter.pdu).toEqual(['PDU3'])
       expect(filter.deliveryLocations).toBeUndefined()
     })
   })
@@ -63,17 +83,17 @@ describe(GroupListFilter, () => {
     describe('pdu and reporting team', () => {
       it('correctly sets pdu and reporting team ', () => {
         const filter = new GroupListFilter()
-        filter.pdu = 'PDU1'
+        filter.pdu = ['PDU1']
         filter.deliveryLocations = ['location-1', 'location-2']
 
-        expect(filter.params.pdu).toEqual('PDU1')
+        expect(filter.params.pdu).toEqual(['PDU1'])
         expect(filter.params.deliveryLocations).toEqual(['location-1', 'location-2'])
       })
       it('correctly sets pdu', () => {
         const filter = new GroupListFilter()
-        filter.pdu = 'PDU1'
+        filter.pdu = ['PDU1']
 
-        expect(filter.params.pdu).toEqual('PDU1')
+        expect(filter.params.pdu).toEqual(['PDU1'])
         expect(filter.params.deliveryLocations).toEqual(undefined)
       })
     })

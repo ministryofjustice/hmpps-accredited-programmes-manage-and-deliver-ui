@@ -101,7 +101,7 @@ describe(`filter and search query params`, () => {
   it('should show delivery locations when a PDU is selected', () => {
     const groupList = groupsByRegionFactory.build()
     const filter = GroupListFilter.empty()
-    filter.pdu = 'Some PDU'
+    filter.pdu = ['Some PDU']
 
     const presenter = new GroupPresenter(
       groupList.pagedGroupData as Page<Group>,
@@ -777,5 +777,47 @@ describe('generateNoResultsString', () => {
     expect(presenter.generateNoResultsString()).toBe(
       "No groups found in 'Completed'. 2 groups found in 'Not started or in progress'.",
     )
+  })
+})
+
+describe('generatePDUCheckboxArgs', () => {
+  it('should generate correct checkbox items for GroupPresenter with selected PDUs checked', () => {
+    const groupList = groupsByRegionFactory.build()
+    const filter = GroupListFilter.empty()
+    filter.pdu = ['PDU1', 'PDU3']
+
+    const presenter = new GroupPresenter(
+      groupList.pagedGroupData as Page<Group>,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
+      groupList.otherTabTotal,
+      groupList.regionName,
+      filter,
+      ['PDU1', 'PDU2', 'PDU3'],
+    )
+
+    expect(presenter.generatePDUCheckboxArgs()).toEqual([
+      { text: 'PDU1', value: 'PDU1', checked: true },
+      { text: 'PDU2', value: 'PDU2', checked: false },
+      { text: 'PDU3', value: 'PDU3', checked: true },
+    ])
+  })
+
+  it('should return all unchecked when no PDU is selected', () => {
+    const groupList = groupsByRegionFactory.build()
+    const filter = GroupListFilter.empty()
+
+    const presenter = new GroupPresenter(
+      groupList.pagedGroupData as Page<Group>,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
+      groupList.otherTabTotal,
+      groupList.regionName,
+      filter,
+      ['PDU1', 'PDU2'],
+    )
+
+    expect(presenter.generatePDUCheckboxArgs()).toEqual([
+      { text: 'PDU1', value: 'PDU1', checked: undefined },
+      { text: 'PDU2', value: 'PDU2', checked: undefined },
+    ])
   })
 })
