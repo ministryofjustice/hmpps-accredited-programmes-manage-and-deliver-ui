@@ -86,6 +86,9 @@ describe('Edit Group Controller', () => {
         .expect(res => {
           expect(res.text).toContain(`Redirecting to /${groupId}/edit-start-date-rescheduled`)
         })
+        .then(() => {
+          expect(sendAuditEvent).not.toHaveBeenCalledWith('VIEW_EDIT_GROUP_DATE', 'user1', groupId, 'SEARCH_TERM')
+        })
     })
 
     it('returns with errors if date is missing', async () => {
@@ -273,6 +276,14 @@ describe('Edit Group Controller', () => {
         .expect(res => {
           expect(res.text).toContain(`Redirecting to /${groupId}/edit-group-days-and-times/reschedule`)
         })
+        .then(() => {
+          expect(sendAuditEvent).not.toHaveBeenCalledWith(
+            'VIEW_EDIT_GROUP_DAYS_AND_TIMES',
+            'user1',
+            groupId,
+            'SEARCH_TERM',
+          )
+        })
     })
 
     it('returns with errors if schedule data is invalid', async () => {
@@ -389,6 +400,12 @@ describe('Edit Group Controller', () => {
               }),
             },
           )
+          expect(sendAuditEvent).not.toHaveBeenCalledWith(
+            'VIEW_EDIT_GROUP_DAYS_AND_TIMES',
+            'user1',
+            groupId,
+            'SEARCH_TERM',
+          )
         })
     })
 
@@ -410,6 +427,14 @@ describe('Edit Group Controller', () => {
             createGroupSessionSlot: sessionData.createGroupFormData.createGroupSessionSlot,
             automaticallyRescheduleOtherSessions: false,
           })
+        })
+        .then(() => {
+          expect(sendAuditEvent).not.toHaveBeenCalledWith(
+            'VIEW_EDIT_GROUP_DAYS_AND_TIMES',
+            'user1',
+            groupId,
+            'SEARCH_TERM',
+          )
         })
     })
 
@@ -543,6 +568,7 @@ describe('Edit Group Controller', () => {
           expect(sendAuditEvent).toHaveBeenCalledWith('EDIT_GROUP_GENDER', 'user1', groupId, 'SEARCH_TERM', {
             details: { sex: 'FEMALE' },
           })
+          expect(sendAuditEvent).not.toHaveBeenCalledWith('VIEW_EDIT_GROUP_GENDER', 'user1', groupId, 'SEARCH_TERM')
         })
     })
 
@@ -721,6 +747,7 @@ describe('Edit Group Controller', () => {
           expect(sendAuditEvent).toHaveBeenCalledWith('EDIT_GROUP_COHORT', 'user1', groupId, 'SEARCH_TERM', {
             details: { cohort: 'GENERAL_LDC' },
           })
+          expect(sendAuditEvent).not.toHaveBeenCalledWith('VIEW_EDIT_GROUP_COHORT', 'user1', groupId, 'SEARCH_TERM')
         })
     })
 
@@ -820,6 +847,7 @@ describe('Edit Group Controller', () => {
           expect(sendAuditEvent).toHaveBeenCalledWith('EDIT_GROUP_CODE', 'user1', groupId, 'SEARCH_TERM', {
             details: { groupCode: 'UPDATED123' },
           })
+          expect(sendAuditEvent).not.toHaveBeenCalledWith('VIEW_EDIT_GROUP_CODE', 'user1', groupId, 'SEARCH_TERM')
         })
     })
 
@@ -947,6 +975,9 @@ describe('Edit Group Controller', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(`Redirecting to /${groupId}/edit-group-delivery-location`)
+        })
+        .then(() => {
+          expect(sendAuditEvent).not.toHaveBeenCalledWith('VIEW_EDIT_GROUP_PDU', 'user1', groupId, 'NOT_APPLICABLE')
         })
     })
   })
@@ -1090,6 +1121,7 @@ describe('Edit Group Controller', () => {
           expect(sendAuditEvent).toHaveBeenCalledWith('EDIT_GROUP_LOCATION', 'user1', groupId, 'SEARCH_TERM', {
             details: expect.objectContaining({ deliveryLocationCode: 'LOC-2' }),
           })
+          expect(sendAuditEvent).not.toHaveBeenCalledWith('VIEW_EDIT_GROUP_LOCATION', 'user1', groupId, 'SEARCH_TERM')
         })
     })
   })
