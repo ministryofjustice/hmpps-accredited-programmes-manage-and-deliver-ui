@@ -323,9 +323,6 @@ export default class EditGroupController extends BaseController {
       let existingGroup = { code: '' }
 
       if (req.body['create-group-code']) {
-        await sendAuditEvent('VIEW_CHECK_GROUP_CODE', username, groupId, 'SEARCH_TERM', {
-          details: { code: req.body['create-group-code'] },
-        })
         const matchingGroup = await this.accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion(
           username,
           req.body['create-group-code'],
@@ -370,11 +367,13 @@ export default class EditGroupController extends BaseController {
     const { username } = req.user
     let formError: FormValidationError | null = null
     let userInputData = null
+    let viewAuditSent = false
     req.session.originPage = req.path
 
     if (!createGroupFormData?.pduCode) {
       if (req.method === 'GET') {
-        await sendAuditEvent('VIEW_EDIT_GROUP_PDU', username, groupId, 'GROUP')
+        await sendAuditEvent('VIEW_EDIT_GROUP_PDU', username, groupId, 'NOT_APPLICABLE')
+        viewAuditSent = true
       }
       const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
       req.session.createGroupFormData = {
@@ -401,8 +400,8 @@ export default class EditGroupController extends BaseController {
         return res.redirect(`/${groupId}/edit-group-delivery-location`)
       }
     }
-    if (req.method === 'GET') {
-      await sendAuditEvent('VIEW_EDIT_GROUP_PDU', username, undefined, 'NOT_APPLICABLE', { groupId })
+    if (!viewAuditSent) {
+      await sendAuditEvent('VIEW_EDIT_GROUP_PDU', username, groupId, 'NOT_APPLICABLE')
     }
     const pduLocations = await this.accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion(username)
 

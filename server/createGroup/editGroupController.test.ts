@@ -446,6 +446,9 @@ describe('Edit Group Controller', () => {
           expect(res.text).toContain('Edit group gender')
           expect(res.text).toContain('Male')
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_EDIT_GROUP_GENDER', 'user1', groupId, 'SEARCH_TERM')
+        })
     })
 
     it('preselects male radio when MALE sex is returned', async () => {
@@ -670,6 +673,9 @@ describe('Edit Group Controller', () => {
           expect(res.text).toContain('Edit the group cohort')
           expect(res.text).toContain('General offence')
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_EDIT_GROUP_COHORT', 'user1', groupId, 'SEARCH_TERM')
+        })
     })
   })
 
@@ -866,9 +872,7 @@ describe('Edit Group Controller', () => {
           expect(accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion).toHaveBeenCalledWith('user1')
         })
         .then(() => {
-          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_EDIT_GROUP_PDU', 'user1', undefined, 'NOT_APPLICABLE', {
-            groupId,
-          })
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_EDIT_GROUP_PDU', 'user1', groupId, 'NOT_APPLICABLE')
         })
     })
 
