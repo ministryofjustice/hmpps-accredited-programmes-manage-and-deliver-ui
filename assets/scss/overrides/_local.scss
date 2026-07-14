@@ -118,7 +118,8 @@
 
 .govuk-table__header {
   button {
-    align-items: flex-start;
+    align-items: center;
+    transition: none;
     svg {
       flex-shrink: 0;
       min-width: 12px;
