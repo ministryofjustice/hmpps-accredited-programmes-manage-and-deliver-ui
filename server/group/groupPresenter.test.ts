@@ -130,6 +130,23 @@ describe(`filter and search query params`, () => {
 
     expect(presenter.showDeliveryLocations).toBe(false)
   })
+
+  it('serialises multiple PDUs as repeated query params', () => {
+    const groupList = groupsByRegionFactory.build()
+    const filter = GroupListFilter.empty()
+    filter.pdu = ['PDU1', 'PDU2']
+
+    const presenter = new GroupPresenter(
+      groupList.pagedGroupData as Page<Group>,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
+      groupList.otherTabTotal,
+      groupList.regionName,
+      filter,
+      [],
+    )
+
+    expect(presenter.params).toBe('pdu=PDU1&pdu=PDU2')
+  })
 })
 
 describe('groupTableArgs', () => {

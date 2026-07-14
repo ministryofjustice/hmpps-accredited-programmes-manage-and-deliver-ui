@@ -75,7 +75,13 @@ export default class GroupListFilter {
 
   get paramsAsQueryParams(): string {
     const searchParams = new URLSearchParams()
-    Object.entries(this.params).forEach(([key, value]) => searchParams.append(key, value))
+    Object.entries(this.params).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach(v => searchParams.append(key, v))
+      } else {
+        searchParams.append(key, value)
+      }
+    })
     return searchParams.toString()
   }
 }

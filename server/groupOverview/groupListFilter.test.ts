@@ -97,5 +97,21 @@ describe(GroupListFilter, () => {
         expect(filter.params.deliveryLocations).toEqual(undefined)
       })
     })
+
+    describe('paramsAsQueryParams', () => {
+      it('serialises a single pdu correctly', () => {
+        const filter = new GroupListFilter()
+        filter.pdu = ['PDU1']
+
+        expect(filter.paramsAsQueryParams).toBe('pdu=PDU1')
+      })
+
+      it('serialises multiple PDUs as repeated query params', () => {
+        const filter = GroupListFilter.empty()
+        filter.pdu = ['PDU1', 'PDU2']
+
+        expect(filter.paramsAsQueryParams).toBe('pdu=PDU1&pdu=PDU2')
+      })
+    })
   })
 })
