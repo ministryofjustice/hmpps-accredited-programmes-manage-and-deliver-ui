@@ -161,6 +161,30 @@
   text-align: right;
 }
 
+.group-header-container {
+  width: 100%;
+}
+
+.group-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.group-header-title {
+  min-width: 0;
+}
+
+.group-header-action {
+  margin-left: auto;
+
+  .govuk-button {
+    width: auto;
+    white-space: nowrap;
+  }
+}
+
 .risk-changed {
   color: #1d70b8;
 }
