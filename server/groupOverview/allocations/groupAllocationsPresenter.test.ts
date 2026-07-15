@@ -201,7 +201,7 @@ describe('GroupAllocationsPresenter', () => {
         '1234',
         filterObject,
       )
-      expect(presenter.generatePduSelectArgs()).toEqual([
+      expect(presenter.generatePduCheckboxArgs()).toEqual([
         {
           text: 'Select PDU',
           value: '',

@@ -57,7 +57,7 @@ export default class GroupAllocationsView {
         text: 'PDU',
         classes: 'govuk-label--s',
       },
-      items: this.presenter.generatePduSelectArgs(),
+      items: this.presenter.generatePduCheckboxArgs(),
     }
   }
 
