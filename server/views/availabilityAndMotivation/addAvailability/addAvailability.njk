@@ -29,9 +29,11 @@
 
             {{govukCharacterCount(otherDetailsTextAreaArgs) }}
 
-          {{ govukRadios(radioArgs) }}
+          {% set dateHtml %}
+            {{ mojDatePicker(datePickerArgs) }}
+          {% endset -%}
 
-          {{ mojDatePicker(datePickerArgs) }}
+          {{ govukRadios(radioArgs(dateHtml)) }}
 
             <div class="govuk-button-group">
               {{ govukButton({ text: "Submit", preventDoubleClick: true }) }}
@@ -47,13 +49,3 @@
 
 {% endblock %}
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
