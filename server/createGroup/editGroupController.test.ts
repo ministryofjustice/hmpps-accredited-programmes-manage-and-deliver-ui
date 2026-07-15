@@ -904,7 +904,7 @@ describe('Edit Group Controller', () => {
           expect(accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion).toHaveBeenCalledWith('user1')
         })
         .then(() => {
-          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_EDIT_GROUP_PDU', 'user1', groupId, 'NOT_APPLICABLE')
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_EDIT_GROUP_PDU', 'user1', groupId, 'SEARCH_TERM')
         })
     })
 
@@ -981,7 +981,7 @@ describe('Edit Group Controller', () => {
           expect(res.text).toContain(`Redirecting to /${groupId}/edit-group-delivery-location`)
         })
         .then(() => {
-          expect(sendAuditEvent).not.toHaveBeenCalledWith('VIEW_EDIT_GROUP_PDU', 'user1', groupId, 'NOT_APPLICABLE')
+          expect(sendAuditEvent).not.toHaveBeenCalledWith('VIEW_EDIT_GROUP_PDU', 'user1', groupId, 'SEARCH_TERM')
         })
     })
   })
@@ -1123,7 +1123,8 @@ describe('Edit Group Controller', () => {
         })
         .then(() => {
           expect(sendAuditEvent).toHaveBeenCalledWith('EDIT_GROUP_LOCATION', 'user1', groupId, 'SEARCH_TERM', {
-            details: expect.objectContaining({ deliveryLocationCode: 'LOC-2' }),
+            deliveryLocationCode: 'LOC-2',
+            deliveryLocationName: 'HMP Manchester',
           })
           expect(sendAuditEvent).not.toHaveBeenCalledWith('VIEW_EDIT_GROUP_LOCATION', 'user1', groupId, 'SEARCH_TERM')
         })

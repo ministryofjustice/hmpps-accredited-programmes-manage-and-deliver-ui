@@ -372,7 +372,7 @@ export default class EditGroupController extends BaseController {
 
     if (!createGroupFormData?.pduCode) {
       if (req.method === 'GET') {
-        await sendAuditEvent('VIEW_EDIT_GROUP_PDU', username, groupId, 'NOT_APPLICABLE')
+        await sendAuditEvent('VIEW_EDIT_GROUP_PDU', username, groupId, 'SEARCH_TERM')
         viewAuditSent = true
       }
       const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
@@ -400,8 +400,8 @@ export default class EditGroupController extends BaseController {
         return res.redirect(`/${groupId}/edit-group-delivery-location`)
       }
     }
-    if (!viewAuditSent) {
-      await sendAuditEvent('VIEW_EDIT_GROUP_PDU', username, groupId, 'NOT_APPLICABLE')
+    if (!viewAuditSent && req.method === 'GET') {
+      await sendAuditEvent('VIEW_EDIT_GROUP_PDU', username, groupId, 'SEARCH_TERM')
     }
     const pduLocations = await this.accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion(username)
 
@@ -453,7 +453,8 @@ export default class EditGroupController extends BaseController {
           deliveryLocationCode: data.paramsForUpdate.deliveryLocationCode,
         }
         await sendAuditEvent('EDIT_GROUP_LOCATION', username, groupId, 'SEARCH_TERM', {
-          details: req.session.createGroupFormData,
+          deliveryLocationCode: req.session.createGroupFormData.deliveryLocationCode,
+          deliveryLocationName: req.session.createGroupFormData.deliveryLocationName,
         })
         const response = await this.accreditedProgrammesManageAndDeliverService.updateGroup(
           username,
@@ -463,7 +464,7 @@ export default class EditGroupController extends BaseController {
         return res.redirect(`/group/${groupId}/group-details?message=${encodeURIComponent(response.successMessage)}`)
       }
     }
-    if (!viewAuditSent) {
+    if (!viewAuditSent && req.method === 'GET') {
       await sendAuditEvent('VIEW_EDIT_GROUP_LOCATION', username, groupId, 'SEARCH_TERM')
     }
     const officeLocations = await this.accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu(
