@@ -9,11 +9,10 @@
 
 {% block main %}
     {% block content %}
-        <div class="govuk-width-container">
-            <nav aria-label="Back">
-                {{ govukBackLink(backLinkArgs) }}
-            </nav>
-            <main class="govuk-main-wrapper" id="main-content">
+        <nav aria-label="Back">
+            {{ govukBackLink(backLinkArgs) }}
+        </nav>
+        <main class="govuk-main-wrapper" id="main-content">
                 <h1 class="govuk-heading-l" data-testid="cohort-heading">Update learning disabilities and challenges (LDC) status</h1>
                 {{ govukInsetText(currentLdcStatusText) }}
                 <form method="post" novalidate>
@@ -27,8 +26,7 @@
                     </div>
 
                 </form>
-            </main>
-        </div>
+        </main>
 
     {% endblock %}
 {% endblock %}
