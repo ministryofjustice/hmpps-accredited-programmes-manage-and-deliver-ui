@@ -1,6 +1,7 @@
 import { RescheduleSessionRequest } from '@manage-and-deliver-api'
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import sendAuditEvent from '../services/auditService'
 import BaseController from '../shared/baseController'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import DateFormatUtils from '../utils/dateFormatUtils'
@@ -154,6 +155,10 @@ export default class EditSessionController extends BaseController {
 
     req.session.editSessionDateAndTime = {}
 
+    if (req.method === 'GET') {
+      await sendAuditEvent('VIEW_EDIT_SESSION', username, sessionId, 'SEARCH_TERM', { details: { groupId } })
+    }
+
     const sessionDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionDetails(
       username,
       groupId,
@@ -213,12 +218,15 @@ export default class EditSessionController extends BaseController {
         res.status(400)
         formError = data.error
       } else if (data.paramsForUpdate?.delete === 'yes') {
+        await sendAuditEvent('REMOVE_SESSION', username, sessionId, 'SEARCH_TERM', { details: { groupId } })
         const response = await this.accreditedProgrammesManageAndDeliverService.deleteSession(username, sessionId)
         return res.redirect(`/group/${groupId}/sessions-and-attendance?editSessionMessage=${response}`)
       } else {
         return res.redirect(req.session.originPage)
       }
     }
+
+    await sendAuditEvent('VIEW_DELETE_SESSION', username, sessionId, 'SEARCH_TERM', { details: { groupId } })
 
     const sessionDetails = await this.accreditedProgrammesManageAndDeliverService.getSessionDetails(username, sessionId)
 
@@ -240,6 +248,9 @@ export default class EditSessionController extends BaseController {
         res.status(400)
         formError = data.error
       } else {
+        await sendAuditEvent('EDIT_SESSION_ATTENDEES', username, sessionId, 'SEARCH_TERM', {
+          details: { referralId: data.paramsForUpdate.referralId, groupId },
+        })
         const message = await this.accreditedProgrammesManageAndDeliverService.updateSessionAttendees(
           username,
           sessionId,
@@ -248,6 +259,7 @@ export default class EditSessionController extends BaseController {
         return res.redirect(`/${groupId}/${sessionId}/edit-session?editSessionMessage=${message}`)
       }
     }
+    await sendAuditEvent('VIEW_EDIT_SESSION_ATTENDEES', username, sessionId, 'SEARCH_TERM', { details: { groupId } })
 
     const sessionAttendees = await this.accreditedProgrammesManageAndDeliverService.getSessionAttendees(
       username,
@@ -266,6 +278,11 @@ export default class EditSessionController extends BaseController {
     let formError: FormValidationError | null = null
     let userInputData = null
 
+    if (req.method === 'GET') {
+      await sendAuditEvent('VIEW_EDIT_SESSION_DATE_AND_TIME', username, sessionId, 'SEARCH_TERM', {
+        details: { groupId },
+      })
+    }
     const sessionDetails = await this.accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime(
       username,
       sessionId,
@@ -330,6 +347,9 @@ export default class EditSessionController extends BaseController {
 
         let response: { message: string } | null
         try {
+          await sendAuditEvent('EDIT_SESSION_DATE_AND_TIME', username, sessionId, 'SEARCH_TERM', {
+            details: { rescheduleRequest, groupId },
+          })
           response = await this.accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime(
             username,
             sessionId,
@@ -393,6 +413,11 @@ export default class EditSessionController extends BaseController {
     const { username } = req.user
     let formError: FormValidationError | null = null
 
+    if (req.method === 'GET') {
+      await sendAuditEvent('VIEW_SUBMIT_EDIT_SESSION_DATE_AND_TIME', username, sessionId, 'SEARCH_TERM', {
+        details: { groupId },
+      })
+    }
     const sessionDetails = await this.accreditedProgrammesManageAndDeliverService.getRescheduleSessionDetails(
       username,
       sessionId,
@@ -409,6 +434,9 @@ export default class EditSessionController extends BaseController {
           const [day, month, year] = req.session.editSessionDateAndTime.sessionStartDate.split('/')
           return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
         })()
+        await sendAuditEvent('EDIT_SESSION_DATE_AND_TIME', username, sessionDetails.sessionId, 'SEARCH_TERM', {
+          details: { groupId },
+        })
         const message = await this.accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime(
           username,
           sessionDetails.sessionId,
@@ -431,6 +459,9 @@ export default class EditSessionController extends BaseController {
     let formError: FormValidationError | null = null
     let userInputData = null
 
+    if (req.method === 'GET') {
+      await sendAuditEvent('VIEW_EDIT_SESSION_FACILITATORS', username, groupId, 'SEARCH_TERM', { details: { groupId } })
+    }
     const editSessionFacilitators = await this.accreditedProgrammesManageAndDeliverService.getEditSessionFacilitators(
       username,
       sessionId,
@@ -444,6 +475,9 @@ export default class EditSessionController extends BaseController {
         userInputData = req.body
       } else {
         req.session.sessionFacilitators = data.paramsForUpdate
+        await sendAuditEvent('EDIT_SESSION_FACILITATORS', username, sessionId, 'SEARCH_TERM', {
+          details: { sessionFacilitators: req.session.sessionFacilitators, groupId },
+        })
         const message = await this.accreditedProgrammesManageAndDeliverService.updateSessionFacilitators(
           username,
           sessionId,
