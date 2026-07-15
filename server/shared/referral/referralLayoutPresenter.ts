@@ -67,7 +67,7 @@ export default class ReferralLayoutPresenter {
           title: 'LDC status changed',
           showTitleAsHeading: true,
           dismissible: true,
-          text: `${this.referral.personName} ${firstToLowerCase(this.referral.hasLdcDisplayText)}`,
+          text: `${this.referral.personName} ${firstToLowerCase(this.referral.hasLdcSuccessMessageText)}`,
         }
       : null
   }

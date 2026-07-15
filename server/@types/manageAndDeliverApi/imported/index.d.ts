@@ -2836,6 +2836,11 @@ export interface components {
        */
       hasLdcDisplayText: string
       /**
+       * @description The text to display in the UI success banner after updating the LDC status of this referral
+       * @example may need an LDC-adapted programme (Building Choices Plus).
+       */
+      hasLdcSuccessMessageText: string
+      /**
        * @description The display name of the Referral's current Status
        * @example Awaiting assessment
        */
