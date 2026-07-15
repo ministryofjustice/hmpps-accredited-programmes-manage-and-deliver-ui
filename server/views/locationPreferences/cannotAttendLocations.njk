@@ -22,9 +22,10 @@
             {% endif %}
             <form method="post" novalidate>
               <input type="hidden" name="_csrf" value="{{csrfToken}}">
-              {{govukRadios(radioArgs)}}
-
-              {{ govukCharacterCount(cannotAttendLocationsTextAreaArgs) }}
+              {% set cannotAttendLocationsTextAreaHtml %}
+                {{ govukCharacterCount(cannotAttendLocationsTextAreaArgs) }}
+              {% endset %}
+              {{ govukRadios(radioArgs(cannotAttendLocationsTextAreaHtml)) }}
               <div class="govuk-button-group">
                 {{ govukButton({ text: "Submit", preventDoubleClick: true }) }}
                 <a class="govuk-link" href={{ cancelLink }}>Cancel</a>
