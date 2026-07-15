@@ -1,5 +1,5 @@
 {% extends "../partials/layout.njk" %}
-{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {%- from "moj/components/side-navigation/macro.njk" import mojSideNavigation -%}
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
 
@@ -8,6 +8,7 @@
 
 {% block main %}
   {% block content %}
+    <div class="govuk-width-container">
       <main class="govuk-main-wrapper" id="main-content">
         <div class="govuk-grid-row">
           {% include "../partials/headerMenu.njk" %}
@@ -56,5 +57,6 @@
         </div>
       </div>
     </main>
+    </div>
   {% endblock %}
 {% endblock %}

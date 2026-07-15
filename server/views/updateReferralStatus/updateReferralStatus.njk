@@ -13,48 +13,50 @@
 
 {% block main %}
 {% block content %}
-  <nav aria-label="Back">
-    {{ govukBackLink(backLinkArgs) }}
-  </nav>
-  <main class="govuk-main-wrapper" id="main-content">
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
-        {% if errorSummary !== null %}
-          {{ govukErrorSummary(errorSummary) }}
-        {% endif %}
-        <h1 class="govuk-heading-l">Update {{presenter.details.personName}}'s referral status</h1>
-        {%- set confirmationHtml %}
-        {{ govukTag( currentStatusTagOptions ) }}
-        {% endset -%}
-
-        {{ mojTimeline(getCurrentStatusTimelineOptions(confirmationHtml)) }}
-      </div>
-    </div>
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-full">
-        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-      </div>
-    </div>
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
-        <form method="post" novalidate>
-          <input type="hidden" name="_csrf" value="{{csrfToken}}">
-          {% if showTopInsetText %}
-            {{ govukInsetText(topInsetText) }}
+  <div class="govuk-width-container">
+    <nav aria-label="Back">
+      {{ govukBackLink(backLinkArgs) }}
+    </nav>
+    <main class="govuk-main-wrapper" id="main-content">
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+          {% if errorSummary !== null %}
+            {{ govukErrorSummary(errorSummary) }}
           {% endif %}
-          {{ govukRadios(statusUpdateRadioButtons) }}
+          <h1 class="govuk-heading-l">Update {{presenter.details.personName}}'s referral status</h1>
+          {%- set confirmationHtml %}
+          {{ govukTag( currentStatusTagOptions ) }}
+          {% endset -%}
 
-          {{ govukCharacterCount(addDetailsTextboxOptions) }}
-          {% if showBottomInsetText %}
-          {{ govukInsetText(bottomInsetText) }}
-          {% endif %}
-          <div class="govuk-button-group">
-            {{ govukButton({ text: "Submit", preventDoubleClick: true }) }}
-            <a class="govuk-link" href={{ cancelLinkUri }}>Cancel</a>
-          </div>
-        </form>
+          {{ mojTimeline(getCurrentStatusTimelineOptions(confirmationHtml)) }}
+        </div>
       </div>
-    </div>
-  </main>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+          <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+        </div>
+      </div>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+          <form method="post" novalidate>
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            {% if showTopInsetText %}
+              {{ govukInsetText(topInsetText) }}
+            {% endif %}
+            {{ govukRadios(statusUpdateRadioButtons) }}
+
+            {{ govukCharacterCount(addDetailsTextboxOptions) }}
+            {% if showBottomInsetText %}
+            {{ govukInsetText(bottomInsetText) }}
+            {% endif %}
+            <div class="govuk-button-group">
+              {{ govukButton({ text: "Submit", preventDoubleClick: true }) }}
+              <a class="govuk-link" href={{ cancelLinkUri }}>Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
 {% endblock %}
 {% endblock %}
