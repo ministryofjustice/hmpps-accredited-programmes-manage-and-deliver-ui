@@ -1,6 +1,6 @@
 import { ReferralDetails } from '@manage-and-deliver-api'
 import { MojAlertComponentArgs } from '../../interfaces/alertComponentArgs'
-import { firstToLowerCase, formatCohort } from '../../utils/utils'
+import { formatCohort } from '../../utils/utils'
 
 export enum HorizontalNavValues {
   referralDetailsTab = 'referralDetails',
@@ -67,7 +67,7 @@ export default class ReferralLayoutPresenter {
           title: 'LDC status changed',
           showTitleAsHeading: true,
           dismissible: true,
-          text: `${this.referral.personName} ${firstToLowerCase(this.referral.hasLdcSuccessMessageText)}`,
+          text: `${this.referral.personName} ${this.referral.hasLdcSuccessMessageText}`,
         }
       : null
   }
