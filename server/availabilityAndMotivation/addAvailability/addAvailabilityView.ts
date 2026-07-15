@@ -62,7 +62,7 @@ export default class AddAvailabilityView {
     }
   }
 
-  private radioArgs() {
+  private radioArgs(dateHtml: string) {
     return {
       name: 'end-date',
       fieldset: {
@@ -79,6 +79,9 @@ export default class AddAvailabilityView {
         {
           value: 'Yes',
           text: 'Yes',
+          conditional: {
+            html: dateHtml,
+          },
         },
         {
           value: 'No',
@@ -98,7 +101,7 @@ export default class AddAvailabilityView {
         pageTitle: this.presenter.pageTitle,
         checkboxArgs: this.checkboxArgs(),
         otherDetailsTextAreaArgs: this.otherDetailsTextAreaArgs(),
-        radioArgs: this.radioArgs(),
+        radioArgs: this.radioArgs.bind(this),
         datePickerArgs: this.datePickerArgs(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         backLinkArgs: this.backLinkArgs(),
