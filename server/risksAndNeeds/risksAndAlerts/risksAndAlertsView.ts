@@ -6,8 +6,11 @@ export default class RisksAndAlertsView {
   constructor(private readonly presenter: RisksAndAlertsPresenter) {}
 
   get assessmentCompletedText(): InsetTextArgs {
+    console.log('HERE', this.presenter.risks.assessmentCompleted)
     return {
-      text: `Assessment completed ${this.presenter.risks.assessmentCompleted}`,
+      text: this.presenter.risks.assessmentCompleted
+        ? `Assessment completed ${this.presenter.risks.assessmentCompleted}`
+        : `No record found in OASys`,
       classes: 'govuk-!-margin-top-0',
     }
   }
