@@ -293,27 +293,20 @@ Or run tests with the cypress UI:
 
 ## Testing Audits locally 
 
-1. Create the audit queue in LocalStack:
+```sh
 
-```bash
-docker exec hmpps-mandd-localstack awslocal sqs create-queue --queue-name sqs-hmpps-audit
-```
+# Start the services (the -d flag keeps your terminal clear)
+$ docker exec hmpps-mandd-localstack awslocal sqs create-queue --queue-name sqs-hmpps-audit
 
-2. Start the server locally with audit environment variables (runs `npm run start:dev`):
-
-```bash
-AUDIT_ENABLED=true \
+# Starts the server locally on http://localhost:3000 with Audits enabled and pointing at the local queue using
+# Should see "Audit event sent successfully" logged when an audit is triggered
+$ AUDIT_ENABLED=true \
 AUDIT_SQS_QUEUE_URL='http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/sqs-hmpps-audit' \
 AWS_ACCESS_KEY_ID=test AWS_SECRET_ACCESS_KEY=test \
 npm run start:dev
-```
 
-3. Inspect messages on the queue:
-
-```bash
-docker exec hmpps-mandd-localstack awslocal sqs receive-message \
-	--queue-url 'http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/sqs-hmpps-audit' \
-	--max-number-of-messages 10 --attribute-names All --message-attribute-names All
+# You can inspect the audits put onto the queue using
+docker exec hmpps-mandd-localstack awslocal sqs receive-message --queue-url 'http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/sqs-hmpps-audit' --max-number-of-messages 10
 ```
 
 ## Change log
