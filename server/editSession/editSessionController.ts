@@ -460,7 +460,9 @@ export default class EditSessionController extends BaseController {
     let userInputData = null
 
     if (req.method === 'GET') {
-      await sendAuditEvent('VIEW_EDIT_SESSION_FACILITATORS', username, sessionId, 'SEARCH_TERM', { details: { groupId } })
+      await sendAuditEvent('VIEW_EDIT_SESSION_FACILITATORS', username, sessionId, 'SEARCH_TERM', {
+        details: { groupId },
+      })
     }
     const editSessionFacilitators = await this.accreditedProgrammesManageAndDeliverService.getEditSessionFacilitators(
       username,
