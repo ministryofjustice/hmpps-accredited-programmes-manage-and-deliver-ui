@@ -191,9 +191,9 @@ describe('GroupAllocationsPresenter', () => {
     })
   })
 
-  describe('generatePduSelectArgs', () => {
-    it('should return the correct select args for PDU', () => {
-      const filterObject = { pdu: 'Liverpool' } as GroupAllocationsFilter
+  describe('generatePduCheckboxArgs', () => {
+    it('should return the correct checkbox args for PDU', () => {
+      const filterObject = { pdu: ['Liverpool'] } as GroupAllocationsFilter
       const groupOverview = ProgrammeGroupOverviewFactory.build()
       const presenter = new GroupAllocationsPresenter(
         GroupAllocationsPageSection.Waitlist,
@@ -203,21 +203,45 @@ describe('GroupAllocationsPresenter', () => {
       )
       expect(presenter.generatePduCheckboxArgs()).toEqual([
         {
-          text: 'Select PDU',
-          value: '',
-        },
-        {
-          selected: true,
+          checked: true,
           text: 'Liverpool',
           value: 'Liverpool',
         },
         {
-          selected: false,
+          checked: false,
           text: 'London',
           value: 'London',
         },
         {
-          selected: false,
+          checked: false,
+          text: 'Manchester',
+          value: 'Manchester',
+        },
+      ])
+    })
+
+    it('should return multiple checked PDUs when several are selected', () => {
+      const filterObject = { pdu: ['Liverpool', 'Manchester'] } as GroupAllocationsFilter
+      const groupOverview = ProgrammeGroupOverviewFactory.build()
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Waitlist,
+        groupOverview,
+        '1234',
+        filterObject,
+      )
+      expect(presenter.generatePduCheckboxArgs()).toEqual([
+        {
+          checked: true,
+          text: 'Liverpool',
+          value: 'Liverpool',
+        },
+        {
+          checked: false,
+          text: 'London',
+          value: 'London',
+        },
+        {
+          checked: true,
           text: 'Manchester',
           value: 'Manchester',
         },
@@ -228,7 +252,7 @@ describe('GroupAllocationsPresenter', () => {
   describe('generateReportingTeamCheckboxArgs', () => {
     it('should return the correct checkbox args for reporting Team', () => {
       const filterObject = {
-        pdu: 'Manchester',
+        pdu: ['Manchester'],
         reportingTeam: ['Manchester Office 1'],
       } as GroupAllocationsFilter
       const groupOverview = ProgrammeGroupOverviewFactory.build()
@@ -250,6 +274,49 @@ describe('GroupAllocationsPresenter', () => {
           checked: false,
         },
       ])
+    })
+
+    it('should combine reporting teams from multiple selected PDUs', () => {
+      const filterObject = {
+        pdu: ['Manchester', 'Liverpool'],
+        reportingTeam: ['Liverpool Office 1'],
+      } as GroupAllocationsFilter
+      const groupOverview = ProgrammeGroupOverviewFactory.build()
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Waitlist,
+        groupOverview,
+        '1234',
+        filterObject,
+      )
+      expect(presenter.generateReportingTeamCheckboxArgs()).toEqual([
+        {
+          text: 'Liverpool Office 1',
+          value: 'Liverpool Office 1',
+          checked: true,
+        },
+        {
+          text: 'Manchester Office 1',
+          value: 'Manchester Office 1',
+          checked: false,
+        },
+        {
+          text: 'Manchester Office 2',
+          value: 'Manchester Office 2',
+          checked: false,
+        },
+      ])
+    })
+
+    it('should return an empty array when no PDU is selected', () => {
+      const filterObject = { reportingTeam: ['Manchester Office 1'] } as GroupAllocationsFilter
+      const groupOverview = ProgrammeGroupOverviewFactory.build()
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Waitlist,
+        groupOverview,
+        '1234',
+        filterObject,
+      )
+      expect(presenter.generateReportingTeamCheckboxArgs()).toEqual([])
     })
   })
 })

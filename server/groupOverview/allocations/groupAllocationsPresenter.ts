@@ -58,7 +58,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
   }
 
   get showReportingTeams(): boolean {
-    return !!this.filter?.pdu
+    return this.filter.pdu !== undefined && this.filter.pdu.length > 0
   }
 
   get resultsText(): string {
@@ -236,10 +236,11 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
     let checkboxItems: CheckboxesArgsItem[] = []
 
     if (this.showReportingTeams) {
-      const selectedPdus = this.filter.reportingTeam.filter(location => this.filter.pdu!.includes(location))
-      const allReportingTeams = Array.from(new Set(selectedPdus.flatMap(pdu => pdu.reportingTeams))).sort()
+      const selectedPdus = this.group.filters.locationFilters.filter(location =>
+        this.filter.pdu!.includes(location.pduName),
+      )
+      const allReportingTeams = Array.from(new Set(selectedPdus?.flatMap(pdu => pdu.reportingTeams) ?? [])).sort()
       checkboxItems = allReportingTeams
-      checkboxItems = pduLocationData.reportingTeams
         .map(location => ({
           text: location,
           value: location,

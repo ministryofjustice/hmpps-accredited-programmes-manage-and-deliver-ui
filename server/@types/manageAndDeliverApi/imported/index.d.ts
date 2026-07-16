@@ -2836,11 +2836,6 @@ export interface components {
        */
       hasLdcDisplayText: string
       /**
-       * @description The text to display in the UI success banner after updating the LDC status of this referral
-       * @example may need an LDC-adapted programme (Building Choices Plus).
-       */
-      hasLdcSuccessMessageText: string
-      /**
        * @description The display name of the Referral's current Status
        * @example Awaiting assessment
        */
@@ -3299,10 +3294,10 @@ export interface components {
       reportingTeams: string[]
     }
     PageReferralCaseListItem: {
-      /** Format: int32 */
-      totalPages?: number
       /** Format: int64 */
       totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
       pageable?: components['schemas']['PageableObject']
       sort?: components['schemas']['SortObject']
       first?: boolean
@@ -3986,10 +3981,10 @@ export interface components {
       regionName: string
     }
     PageGroup: {
-      /** Format: int32 */
-      totalPages?: number
       /** Format: int64 */
       totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
       pageable?: components['schemas']['PageableObject']
       sort?: components['schemas']['SortObject']
       first?: boolean
@@ -4081,10 +4076,10 @@ export interface components {
       activeProgrammeGroupId: string | null
     }
     PageGroupItem: {
-      /** Format: int32 */
-      totalPages?: number
       /** Format: int64 */
       totalElements?: number
+      /** Format: int32 */
+      totalPages?: number
       pageable?: components['schemas']['PageableObject']
       sort?: components['schemas']['SortObject']
       first?: boolean
@@ -8615,8 +8610,8 @@ export interface operations {
         cohort?: string
         /** @description Search by the name or the CRN of the offender in the referral */
         nameOrCRN?: string
-        /** @description Filter by the human readable pdu of the referral, i.e. 'All London' */
-        pdu?: string
+        /** @description Filter by the human readable pdus of the referral, i.e. 'All London' */
+        pdu?: string[]
         /** @description Filter by one or more reporting teams. Repeat the parameter to include multiple teams. */
         reportingTeam?: string[]
       }

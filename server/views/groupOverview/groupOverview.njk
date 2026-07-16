@@ -26,24 +26,26 @@
 </div>
 
 <div class="govuk-grid-row">
-
   {%- set filterOptionsHtml %}
   <a class="clear-filters__link" href="?">Clear filters</a>
   {{ govukInput(searchByCrnOrPersonNameArgs) }}
   {% if isWaitlist %}
     {{ govukSelect(searchByCohortArgs) }}
     {{ govukSelect(searchBySexArgs) }}
-    {{ govukSelect(searchByPduArgs) }}
+    {{ govukCheckboxes(pduCheckboxArgs) }}
 
-    {% if not presenter.showReportingLocations %}
+    {% if not presenter.showReportingTeams %}
       <h3 class="govuk-heading-s govuk-!-margin-bottom-1 govuk-!-margin-top-6">Reporting team</h3>
       <p class="govuk-body">Select a PDU and apply filters to see reporting teams</p>
     {% endif %}
 
-    {% if presenter.showReportingLocations %}
+    {% if presenter.showReportingTeams %}
       {{ govukCheckboxes(reportingTeamCheckboxArgs) }}
     {% endif %}
   {% endif %}
+
+  {{ govukButton(applyFilterButtonArgs) }}
+    <a class="clear-filters__link" href="?">Clear filters</a>
   {% endset -%}
   <div class="govuk-grid-column-one-quarter group-filter-column">
     <form id="filter-form" method="get">
