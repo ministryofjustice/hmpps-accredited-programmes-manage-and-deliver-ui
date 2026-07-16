@@ -7,6 +7,7 @@ import editSessionDetailsFactory from '../testutils/factories/editSessionDetails
 import rescheduleSessionDetailsFactory from '../testutils/factories/rescheduleSessionDetailsFactory'
 import editSessionAttendeesFactory from '../testutils/factories/editSessionAttendeesFactory'
 import sessionDetailsFactory from '../testutils/factories/risksAndNeeds/sessionDetailsFactory'
+import sessionFactory from '../testutils/factories/risksAndNeeds/sessionFactory'
 import TestUtils from '../testutils/testUtils'
 
 import sendAuditEvent from '../services/auditService'
@@ -187,7 +188,7 @@ describe('deleteSession', () => {
   it('should load delete session page and emit VIEW_DELETE_SESSION', async () => {
     const groupId = '12345'
     const sessionId = '6789'
-    const sessionDetails = sessionDetailsFactory.build()
+    const sessionDetails = sessionFactory.build()
     accreditedProgrammesManageAndDeliverService.getSessionDetails.mockResolvedValue(sessionDetails)
 
     await request(app).get(`/${groupId}/${sessionId}/delete-session`).expect(200)
