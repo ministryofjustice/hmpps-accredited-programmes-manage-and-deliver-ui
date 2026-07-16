@@ -136,6 +136,14 @@ describe('editSession', () => {
       })
       .expect(302)
       .expect('Location', `/${groupId}/${sessionId}/getting-started-1-attendance`)
+
+    expect(sendAuditEvent).not.toHaveBeenCalledWith(
+      'VIEW_EDIT_SESSION',
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+    )
   })
 
   it('redirects to catch-up attendance route when session is catch-up', async () => {
@@ -164,6 +172,14 @@ describe('editSession', () => {
       })
       .expect(302)
       .expect('Location', `/${groupId}/${sessionId}/managing-myself-4-catch-up-attendance`)
+
+    expect(sendAuditEvent).not.toHaveBeenCalledWith(
+      'VIEW_EDIT_SESSION',
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+    )
   })
 })
 
@@ -206,6 +222,13 @@ describe('deleteSession', () => {
       expect.objectContaining({ details: expect.objectContaining({ groupId }) }),
     )
     expect(accreditedProgrammesManageAndDeliverService.deleteSession).toHaveBeenCalledWith('user1', sessionId)
+    expect(sendAuditEvent).not.toHaveBeenCalledWith(
+      'VIEW_DELETE_SESSION',
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+    )
   })
 })
 
@@ -251,6 +274,13 @@ describe('editSessionAttendees', () => {
       'user1',
       sessionId,
       ['referral-123'],
+    )
+    expect(sendAuditEvent).not.toHaveBeenCalledWith(
+      'VIEW_EDIT_SESSION_ATTENDEES',
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
     )
   })
 })
@@ -362,6 +392,13 @@ describe('editSessionDateAndTime', () => {
           rescheduleOtherSessions: false,
         },
       )
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_DATE_AND_TIME',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('should submit directly for a past group session instead of redirecting to reschedule later sessions', async () => {
@@ -409,6 +446,13 @@ describe('editSessionDateAndTime', () => {
           rescheduleOtherSessions: false,
         },
       )
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_DATE_AND_TIME',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('should redirect to reschedule page for an empty past group session moved to a past date', async () => {
@@ -438,6 +482,13 @@ describe('editSessionDateAndTime', () => {
         .expect('Location', '/111/6789/edit-group-days-and-times/reschedule')
 
       expect(accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime).not.toHaveBeenCalled()
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_DATE_AND_TIME',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('should redirect to reschedule page when a past group session is moved to a future date', async () => {
@@ -464,6 +515,13 @@ describe('editSessionDateAndTime', () => {
         })
         .expect(302)
         .expect('Location', '/111/6789/edit-group-days-and-times/reschedule')
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_DATE_AND_TIME',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('should return validation error if a past session is made longer than originally scheduled', async () => {
@@ -496,6 +554,13 @@ describe('editSessionDateAndTime', () => {
         })
 
       expect(accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime).not.toHaveBeenCalled()
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_DATE_AND_TIME',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('should map API 400 duration error to a field validation error instead of generic bad request', async () => {
@@ -535,6 +600,13 @@ describe('editSessionDateAndTime', () => {
             'The session duration cannot be longer than originally scheduled. Change the start or end time.',
           )
         })
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_DATE_AND_TIME',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('should show an explanatory message when submitted duration is shorter than current but still rejected by API', async () => {
@@ -574,6 +646,13 @@ describe('editSessionDateAndTime', () => {
             'You have shortened this session, but it is still longer than the originally scheduled duration.',
           )
         })
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_DATE_AND_TIME',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
   })
 })
@@ -657,6 +736,13 @@ describe('submitEditSessionDateAndTime', () => {
         'SEARCH_TERM',
         expect.objectContaining({ details: expect.objectContaining({ groupId: '111' }) }),
       )
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_SUBMIT_EDIT_SESSION_DATE_AND_TIME',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('should submit with rescheduleOtherSessions true when yes is selected', async () => {
@@ -693,6 +779,13 @@ describe('submitEditSessionDateAndTime', () => {
         sessionDetails.sessionId,
         'SEARCH_TERM',
         expect.objectContaining({ details: expect.objectContaining({ groupId: '111' }) }),
+      )
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_SUBMIT_EDIT_SESSION_DATE_AND_TIME',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
       )
     })
   })
@@ -801,6 +894,13 @@ describe('editSessionFacilitators', () => {
         'SEARCH_TERM',
         expect.objectContaining({ details: expect.objectContaining({ groupId }) }),
       )
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_FACILITATORS',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('should handle validation errors and display error messages', async () => {
@@ -818,6 +918,13 @@ describe('editSessionFacilitators', () => {
         .expect(res => {
           expect(res.text).toContain('Edit the session facilitators')
         })
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_FACILITATORS',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('should store facilitators in session on successful submission', async () => {
@@ -843,6 +950,13 @@ describe('editSessionFacilitators', () => {
         .expect(302)
 
       expect(accreditedProgrammesManageAndDeliverService.updateSessionFacilitators).toHaveBeenCalled()
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_FACILITATORS',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('should pass userInputData to presenter when validation fails', async () => {
@@ -865,6 +979,13 @@ describe('editSessionFacilitators', () => {
         .expect(res => {
           expect(res.text).toContain('Edit the session facilitators')
         })
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_FACILITATORS',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
   })
 })
