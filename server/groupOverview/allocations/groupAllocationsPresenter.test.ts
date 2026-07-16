@@ -193,7 +193,7 @@ describe('GroupAllocationsPresenter', () => {
 
   describe('generatePduCheckboxArgs', () => {
     it('should return the correct checkbox args for PDU', () => {
-      const filterObject = { pdu: ['Liverpool'] } as GroupAllocationsFilter
+      const filterObject = { pdus: ['Liverpool'] } as GroupAllocationsFilter
       const groupOverview = ProgrammeGroupOverviewFactory.build()
       const presenter = new GroupAllocationsPresenter(
         GroupAllocationsPageSection.Waitlist,
@@ -221,7 +221,7 @@ describe('GroupAllocationsPresenter', () => {
     })
 
     it('should return multiple checked PDUs when several are selected', () => {
-      const filterObject = { pdu: ['Liverpool', 'Manchester'] } as GroupAllocationsFilter
+      const filterObject = { pdus: ['Liverpool', 'Manchester'] } as GroupAllocationsFilter
       const groupOverview = ProgrammeGroupOverviewFactory.build()
       const presenter = new GroupAllocationsPresenter(
         GroupAllocationsPageSection.Waitlist,
@@ -252,7 +252,7 @@ describe('GroupAllocationsPresenter', () => {
   describe('generateReportingTeamCheckboxArgs', () => {
     it('should return the correct checkbox args for reporting Team', () => {
       const filterObject = {
-        pdu: ['Manchester'],
+        pdus: ['Manchester'],
         reportingTeam: ['Manchester Office 1'],
       } as GroupAllocationsFilter
       const groupOverview = ProgrammeGroupOverviewFactory.build()
@@ -278,7 +278,7 @@ describe('GroupAllocationsPresenter', () => {
 
     it('should combine reporting teams from multiple selected PDUs', () => {
       const filterObject = {
-        pdu: ['Manchester', 'Liverpool'],
+        pdus: ['Manchester', 'Liverpool'],
         reportingTeam: ['Liverpool Office 1'],
       } as GroupAllocationsFilter
       const groupOverview = ProgrammeGroupOverviewFactory.build()

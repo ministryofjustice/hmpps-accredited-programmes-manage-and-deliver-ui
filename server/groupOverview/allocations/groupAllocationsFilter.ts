@@ -6,7 +6,7 @@ export default class GroupAllocationsFilter {
 
   cohort: string | undefined = undefined
 
-  pdu: string[] | undefined = undefined
+  pdus: string[] | undefined = undefined
 
   sex: string | undefined = undefined
 
@@ -21,14 +21,14 @@ export default class GroupAllocationsFilter {
     filter.cohort = request.query.cohort as string | undefined
     filter.nameOrCRN = request.query.nameOrCRN as string | undefined
     filter.reportingTeam = request.query.reportingTeam as string[] | undefined
-    filter.pdu = request.query.pdu as string[] | undefined
+    filter.pdus = request.query.pdu as string[] | undefined
     filter.sex = request.query.sex as string | undefined
 
     if (filter.reportingTeam !== undefined) {
       filter.reportingTeam = typeof filter.reportingTeam === 'string' ? [filter.reportingTeam] : filter.reportingTeam
     }
-    if (filter.pdu !== undefined) {
-      filter.pdu = typeof filter.pdu === 'string' ? [filter.pdu] : filter.pdu
+    if (filter.pdus !== undefined) {
+      filter.pdus = typeof filter.pdus === 'string' ? [filter.pdus] : filter.pdus
     }
     return filter
   }
@@ -44,8 +44,8 @@ export default class GroupAllocationsFilter {
       params.nameOrCRN = this.nameOrCRN.trim()
     }
 
-    if (this.pdu && this.pdu.length) {
-      params.pdu = this.pdu
+    if (this.pdus && this.pdus.length) {
+      params.pdu = this.pdus
     }
 
     if (this.reportingTeam) {

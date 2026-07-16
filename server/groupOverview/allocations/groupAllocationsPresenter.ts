@@ -58,7 +58,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
   }
 
   get showReportingTeams(): boolean {
-    return this.filter.pdu !== undefined && this.filter.pdu.length > 0
+    return this.filter.pdus !== undefined && this.filter.pdus.length > 0
   }
 
   get resultsText(): string {
@@ -227,7 +227,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
       .map(pdu => ({
         text: pdu.pduName,
         value: pdu.pduName,
-        checked: this.filter.pdu?.includes(pdu.pduName),
+        checked: this.filter.pdus?.includes(pdu.pduName),
       }))
       .sort((a, b) => a.text.localeCompare(b.text))
   }
@@ -237,7 +237,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
 
     if (this.showReportingTeams) {
       const selectedPdus = this.group.filters.locationFilters.filter(location =>
-        this.filter.pdu!.includes(location.pduName),
+        this.filter.pdus!.includes(location.pduName),
       )
       const allReportingTeams = Array.from(new Set(selectedPdus?.flatMap(pdu => pdu.reportingTeams) ?? [])).sort()
       checkboxItems = allReportingTeams

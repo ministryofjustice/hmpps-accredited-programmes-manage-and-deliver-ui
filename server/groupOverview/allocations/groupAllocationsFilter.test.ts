@@ -16,7 +16,7 @@ describe('GroupAllocationsFilter', () => {
 
       expect(filter.cohort).toEqual('SEXUAL_OFFENCE')
       expect(filter.nameOrCRN).toEqual('John Doe')
-      expect(filter.pdu).toEqual(['PDU3'])
+      expect(filter.pdus).toEqual(['PDU3'])
       expect(filter.reportingTeam).toEqual(['Team5'])
       expect(filter.sex).toEqual('Male')
     })
@@ -48,7 +48,7 @@ describe('GroupAllocationsFilter', () => {
 
       const filter = GroupAllocationsFilter.fromRequest({ query } as unknown as Request)
 
-      expect(filter.pdu).toEqual(['PDU1'])
+      expect(filter.pdus).toEqual(['PDU1'])
     })
 
     it('handles multiple pdu values', () => {
@@ -58,7 +58,7 @@ describe('GroupAllocationsFilter', () => {
 
       const filter = GroupAllocationsFilter.fromRequest({ query } as unknown as Request)
 
-      expect(filter.pdu).toEqual(['PDU1', 'PDU2', 'PDU3'])
+      expect(filter.pdus).toEqual(['PDU1', 'PDU2', 'PDU3'])
     })
   })
 
@@ -68,7 +68,7 @@ describe('GroupAllocationsFilter', () => {
         const filter = new GroupAllocationsFilter()
         expect(filter.cohort).toBeUndefined()
         expect(filter.nameOrCRN).toBeUndefined()
-        expect(filter.pdu).toBeUndefined()
+        expect(filter.pdus).toBeUndefined()
         expect(filter.reportingTeam).toBeUndefined()
         expect(filter.sex).toBeUndefined()
       })
@@ -118,7 +118,7 @@ describe('GroupAllocationsFilter', () => {
     describe('pdu and reporting team', () => {
       it('correctly sets pdu and reporting team', () => {
         const filter = new GroupAllocationsFilter()
-        filter.pdu = ['PDU1']
+        filter.pdus = ['PDU1']
         filter.reportingTeam = ['Team1', 'Team2']
 
         expect(filter.params.pdu).toEqual(['PDU1'])
@@ -127,14 +127,14 @@ describe('GroupAllocationsFilter', () => {
 
       it('correctly sets multiple pdus', () => {
         const filter = new GroupAllocationsFilter()
-        filter.pdu = ['PDU1', 'PDU2']
+        filter.pdus = ['PDU1', 'PDU2']
 
         expect(filter.params.pdu).toEqual(['PDU1', 'PDU2'])
       })
 
       it('correctly sets pdu without reporting team', () => {
         const filter = new GroupAllocationsFilter()
-        filter.pdu = ['PDU1']
+        filter.pdus = ['PDU1']
 
         expect(filter.params.pdu).toEqual(['PDU1'])
         expect(filter.params.reportingTeam).toEqual(undefined)
@@ -142,7 +142,7 @@ describe('GroupAllocationsFilter', () => {
 
       it('excludes pdu from params when empty array', () => {
         const filter = new GroupAllocationsFilter()
-        filter.pdu = []
+        filter.pdus = []
 
         expect(filter.params.pdu).toBeUndefined()
       })
@@ -162,7 +162,7 @@ describe('GroupAllocationsFilter', () => {
 
         expect(filter.cohort).toBeUndefined()
         expect(filter.nameOrCRN).toBeUndefined()
-        expect(filter.pdu).toBeUndefined()
+        expect(filter.pdus).toBeUndefined()
         expect(filter.reportingTeam).toBeUndefined()
         expect(filter.sex).toBeUndefined()
       })
