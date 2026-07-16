@@ -7,7 +7,7 @@ export default class RisksAndAlertsView {
 
   get assessmentCompletedText(): InsetTextArgs {
     return {
-      text: `Assessment completed ${this.presenter.risks.assessmentCompleted}`,
+      text: this.presenter.updatedText,
       classes: 'govuk-!-margin-top-0',
     }
   }

@@ -1,6 +1,7 @@
 import risksFactory from '../../testutils/factories/risksAndNeeds/risksFactory'
 import RisksAndAlertsPresenter, { RiskLevel } from './risksAndAlertsPresenter'
 import referralDetailsFactory from '../../testutils/factories/referralDetailsFactory'
+import RisksAndAlertsOgrs4Presenter from './risksAndAlertsOgrs4Presenter'
 
 describe('headingText', () => {
   it('returns the risks and needs heading for the referral person', () => {
@@ -136,4 +137,22 @@ describe(`roshTableCellForLevel.`, () => {
       expect(presenter.roshTableCellForLevel(input as RiskLevel)).toEqual(expectedResult)
     },
   )
+})
+
+describe('updatedText', () => {
+  it('returns the assessment completed date when present', () => {
+    const risks = risksFactory.build({ assessmentCompleted: '1 August 2024' })
+    const referral = referralDetailsFactory.build()
+    const presenter = new RisksAndAlertsOgrs4Presenter('risksAndAlerts', referral, risks)
+
+    expect(presenter.updatedText).toBe('Assessment completed 1 August 2024')
+  })
+
+  it('returns a no record message when assessmentCompleted is absent', () => {
+    const risks = risksFactory.build({ assessmentCompleted: undefined })
+    const referral = referralDetailsFactory.build()
+    const presenter = new RisksAndAlertsOgrs4Presenter('risksAndAlerts', referral, risks)
+
+    expect(presenter.updatedText).toBe('No record found in OASys')
+  })
 })

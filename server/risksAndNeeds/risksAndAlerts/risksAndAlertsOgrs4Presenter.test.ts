@@ -82,4 +82,22 @@ describe('RisksAndAlertsOgrs4Presenter', () => {
       expect(presenter.pageTitle).toBe('Risks and alerts - Risks and needs')
     })
   })
+
+  describe('updatedText', () => {
+    it('returns the assessment completed date when present', () => {
+      const risks = risksFactory.build({ assessmentCompleted: '1 August 2024' })
+      const referral = referralDetailsFactory.build()
+      const presenter = new RisksAndAlertsOgrs4Presenter('risksAndAlerts', referral, risks)
+
+      expect(presenter.updatedText).toBe('Assessment completed 1 August 2024')
+    })
+
+    it('returns a no record message when assessmentCompleted is absent', () => {
+      const risks = risksFactory.build({ assessmentCompleted: undefined })
+      const referral = referralDetailsFactory.build()
+      const presenter = new RisksAndAlertsOgrs4Presenter('risksAndAlerts', referral, risks)
+
+      expect(presenter.updatedText).toBe('No record found in OASys')
+    })
+  })
 })
