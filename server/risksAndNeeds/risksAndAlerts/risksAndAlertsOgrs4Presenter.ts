@@ -34,6 +34,12 @@ export default class RisksAndAlertsOgrs4Presenter extends RisksAndNeedsPresenter
     return text
   }
 
+  get updatedText(): string {
+    return this.risks.assessmentCompleted
+      ? `Assessment completed ${this.risks.assessmentCompleted}`
+      : `No record found in OASys`
+  }
+
   private levelClass(baseClass: string, level: string): string {
     return `${baseClass}--${level.split('_').join('-').toLowerCase()}`
   }

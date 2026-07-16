@@ -44,9 +44,7 @@ export default class RisksAndAlertsOgrs4View {
 
   get assessmentCompletedText(): InsetTextArgs {
     return {
-      text: this.presenter.risks.assessmentCompleted
-        ? `Assessment completed ${this.presenter.risks.assessmentCompleted}`
-        : `No record found in OASys`,
+      text: this.presenter.updatedText,
       classes: 'govuk-!-margin-top-0',
     }
   }
