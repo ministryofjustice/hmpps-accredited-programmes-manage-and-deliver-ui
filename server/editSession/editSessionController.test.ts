@@ -167,6 +167,94 @@ describe('editSession', () => {
   })
 })
 
+describe('deleteSession', () => {
+  it('should load delete session page and emit VIEW_DELETE_SESSION', async () => {
+    const groupId = '12345'
+    const sessionId = '6789'
+    const sessionDetails = sessionDetailsFactory.build()
+    accreditedProgrammesManageAndDeliverService.getSessionDetails.mockResolvedValue(sessionDetails)
+
+    await request(app).get(`/${groupId}/${sessionId}/delete-session`).expect(200)
+
+    expect(sendAuditEvent).toHaveBeenCalledWith(
+      'VIEW_DELETE_SESSION',
+      'user1',
+      sessionId,
+      'SEARCH_TERM',
+      expect.objectContaining({ details: expect.objectContaining({ groupId }) }),
+    )
+    expect(accreditedProgrammesManageAndDeliverService.getSessionDetails).toHaveBeenCalledWith('user1', sessionId)
+  })
+
+  it('should delete session on POST and emit REMOVE_SESSION', async () => {
+    const groupId = '12345'
+    const sessionId = '6789'
+    accreditedProgrammesManageAndDeliverService.deleteSession.mockResolvedValue('Deleted message')
+
+    await request(app)
+      .post(`/${groupId}/${sessionId}/delete-session`)
+      .type('form')
+      .send({ 'delete-session': 'yes' })
+      .expect(302)
+      .expect('Location', `/group/${groupId}/sessions-and-attendance?editSessionMessage=Deleted%20message`)
+
+    expect(sendAuditEvent).toHaveBeenCalledWith(
+      'REMOVE_SESSION',
+      'user1',
+      sessionId,
+      'SEARCH_TERM',
+      expect.objectContaining({ details: expect.objectContaining({ groupId }) }),
+    )
+    expect(accreditedProgrammesManageAndDeliverService.deleteSession).toHaveBeenCalledWith('user1', sessionId)
+  })
+})
+
+describe('editSessionAttendees', () => {
+  it('should load edit-session-attendees page and emit VIEW_EDIT_SESSION_ATTENDEES', async () => {
+    const groupId = '111'
+    const sessionId = '6789'
+    const sessionAttendees = editSessionAttendeesFactory.build()
+    accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
+
+    await request(app).get(`/${groupId}/${sessionId}/edit-session-attendees`).expect(200)
+
+    expect(sendAuditEvent).toHaveBeenCalledWith(
+      'VIEW_EDIT_SESSION_ATTENDEES',
+      'user1',
+      sessionId,
+      'SEARCH_TERM',
+      expect.objectContaining({ details: expect.objectContaining({ groupId }) }),
+    )
+    expect(accreditedProgrammesManageAndDeliverService.getSessionAttendees).toHaveBeenCalledWith('user1', sessionId)
+  })
+
+  it('should submit attendees update and emit EDIT_SESSION_ATTENDEES', async () => {
+    const groupId = '111'
+    const sessionId = '6789'
+    accreditedProgrammesManageAndDeliverService.updateSessionAttendees.mockResolvedValue('Updated')
+
+    await request(app)
+      .post(`/${groupId}/${sessionId}/edit-session-attendees`)
+      .type('form')
+      .send({ 'edit-session-attendees': ['referral-123'] })
+      .expect(302)
+      .expect('Location', `/${groupId}/${sessionId}/edit-session?editSessionMessage=Updated`)
+
+    expect(sendAuditEvent).toHaveBeenCalledWith(
+      'EDIT_SESSION_ATTENDEES',
+      'user1',
+      sessionId,
+      'SEARCH_TERM',
+      expect.objectContaining({ details: { referralId: ['referral-123'], groupId } }),
+    )
+    expect(accreditedProgrammesManageAndDeliverService.updateSessionAttendees).toHaveBeenCalledWith(
+      'user1',
+      sessionId,
+      ['referral-123'],
+    )
+  })
+})
+
 describe('editSessionDateAndTime', () => {
   describe('GET /:groupId/:sessionId/edit-session-date-and-time', () => {
     it('should fetch session details with correct parameters and load page correctly', async () => {
@@ -522,6 +610,13 @@ describe('submitEditSessionDateAndTime', () => {
       expect(accreditedProgrammesManageAndDeliverService.getRescheduleSessionDetails).toHaveBeenCalledWith(
         'user1',
         '6789',
+      )
+      expect(sendAuditEvent).toHaveBeenCalledWith(
+        'VIEW_SUBMIT_EDIT_SESSION_DATE_AND_TIME',
+        'user1',
+        '6789',
+        'SEARCH_TERM',
+        expect.objectContaining({ details: expect.objectContaining({ groupId: '111' }) }),
       )
     })
   })
