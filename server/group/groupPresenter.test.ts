@@ -189,7 +189,7 @@ describe('groupTableArgs', () => {
           },
         },
         {
-          text: 'Delivery location',
+          text: 'Delivery Location',
           attributes: {
             'aria-sort': 'none',
           },
