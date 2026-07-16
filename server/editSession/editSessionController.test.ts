@@ -830,7 +830,7 @@ describe('editSessionFacilitators', () => {
       expect(sendAuditEvent).toHaveBeenCalledWith(
         'VIEW_EDIT_SESSION_FACILITATORS',
         'user1',
-        '123',
+        '456',
         'SEARCH_TERM',
         expect.objectContaining({ details: expect.objectContaining({ groupId: '123' }) }),
       )
@@ -855,7 +855,7 @@ describe('editSessionFacilitators', () => {
       expect(sendAuditEvent).toHaveBeenCalledWith(
         'VIEW_EDIT_SESSION_FACILITATORS',
         'user1',
-        '123',
+        '456',
         'SEARCH_TERM',
         expect.objectContaining({ details: expect.objectContaining({ groupId: '123' }) }),
       )
