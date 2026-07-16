@@ -6,8 +6,11 @@ import request from 'supertest'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import TestUtils from '../testutils/testUtils'
 
+import sendAuditEvent from '../services/auditService'
+
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
+jest.mock('../services/auditService')
 
 const hmppsAuthClientBuilder = jest.fn()
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
@@ -109,6 +112,9 @@ describe('Session Schedule Controller', () => {
             groupId,
             moduleId,
           )
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_SCHEDULE_SESSION_TYPE', 'user1', groupId, 'SEARCH_TERM')
         })
     })
 
@@ -213,6 +219,9 @@ describe('Session Schedule Controller', () => {
             moduleId,
           )
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_SCHEDULE_SESSION_DETAILS', 'user1', groupId, 'SEARCH_TERM')
+        })
     })
   })
 
@@ -312,6 +321,31 @@ describe('Session Schedule Controller', () => {
               startTime: { amOrPm: 'AM', hour: 9, minutes: 0 },
             },
           )
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            'CREATE_SCHEDULE_SESSION',
+            'user1',
+            groupId,
+            'GROUP',
+            expect.objectContaining({ details: expect.objectContaining({ startDate: '3055-01-01' }) }),
+          )
+        })
+    })
+  })
+  describe('GET /group/:groupId/sessions-and-attendance', () => {
+    it('loads sessions and attendance page and emits audit', async () => {
+      return request(app)
+        .get(`/group/${groupId}/sessions-and-attendance`)
+        .expect(200)
+        .expect(res => {
+          expect(accreditedProgrammesManageAndDeliverService.getGroupSessionsAndAttendance).toHaveBeenCalledWith(
+            'user1',
+            groupId,
+          )
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_SESSIONS_AND_ATTENDANCE', 'user1', groupId, 'SEARCH_TERM')
         })
     })
   })
