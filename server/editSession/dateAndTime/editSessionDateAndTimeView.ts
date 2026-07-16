@@ -83,7 +83,7 @@ export default class EditSessionDateAndTimeView {
       namePrefix: 'session-details-end-time',
       fieldset: {
         legend: {
-          text: 'When does the session end?',
+          text: 'End time',
           isPageHeading: false,
           classes: 'govuk-fieldset__legend--m',
         },
