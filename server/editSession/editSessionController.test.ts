@@ -6,8 +6,8 @@ import AccreditedProgrammesManageAndDeliverService from '../services/accreditedP
 import editSessionDetailsFactory from '../testutils/factories/editSessionDetailsFactory'
 import rescheduleSessionDetailsFactory from '../testutils/factories/rescheduleSessionDetailsFactory'
 import editSessionAttendeesFactory from '../testutils/factories/editSessionAttendeesFactory'
-import sessionDetailsFactory from '../testutils/factories/risksAndNeeds/sessionDetailsFactory'
-import sessionFactory from '../testutils/factories/risksAndNeeds/sessionFactory'
+import GroupSessionDetailsFactory from '../testutils/factories/risksAndNeeds/groupSessionDetailsFactory'
+import SessionDetailsFactory from '../testutils/factories/sessionDetailsFactory'
 import TestUtils from '../testutils/testUtils'
 
 import sendAuditEvent from '../services/auditService'
@@ -33,7 +33,7 @@ beforeEach(() => {
 
 describe('editSession', () => {
   it('should fetch session details with correct parameters', async () => {
-    const sessionDetails = sessionDetailsFactory.build()
+    const sessionDetails = GroupSessionDetailsFactory.build()
     accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
 
     await request(app).get(`/12345/6789/edit-session`).expect(200)
@@ -54,7 +54,7 @@ describe('editSession', () => {
   })
 
   it('loads the session details page and displays all related data', async () => {
-    const sessionDetails = sessionDetailsFactory.build()
+    const sessionDetails = GroupSessionDetailsFactory.build()
     accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
 
     await request(app)
@@ -79,7 +79,7 @@ describe('editSession', () => {
   it('normalises one-to-one title and slug on the session-slug route', async () => {
     const groupId = 'd721e8ad-948d-4e48-bff9-9c6fc1c26ece'
     const sessionId = '89180e89-a335-4ce8-bfad-2ea61620a444'
-    const sessionDetails = sessionDetailsFactory.build({
+    const sessionDetails = GroupSessionDetailsFactory.build({
       pageTitle: 'Alex River S688890821: Getting started one-to-one',
       sessionType: 'Individual',
       attendanceAndSessionNotes: [
@@ -115,7 +115,7 @@ describe('editSession', () => {
   it('redirects to module attendance route with slug suffix when updating attendance and notes', async () => {
     const groupId = '12345'
     const sessionId = '6789'
-    const sessionDetails = sessionDetailsFactory.build({
+    const sessionDetails = GroupSessionDetailsFactory.build({
       pageTitle: 'Getting started 1',
       attendanceAndSessionNotes: [
         {
@@ -150,7 +150,7 @@ describe('editSession', () => {
   it('redirects to catch-up attendance route when session is catch-up', async () => {
     const groupId = '12345'
     const sessionId = '6789'
-    const sessionDetails = sessionDetailsFactory.build({
+    const sessionDetails = GroupSessionDetailsFactory.build({
       pageTitle: 'Managing myself 4',
       isCatchup: true,
       attendanceAndSessionNotes: [
@@ -188,7 +188,7 @@ describe('deleteSession', () => {
   it('should load delete session page and emit VIEW_DELETE_SESSION', async () => {
     const groupId = '12345'
     const sessionId = '6789'
-    const sessionDetails = sessionFactory.build()
+    const sessionDetails = SessionDetailsFactory.build()
     accreditedProgrammesManageAndDeliverService.getSessionDetails.mockResolvedValue(sessionDetails)
 
     await request(app).get(`/${groupId}/${sessionId}/delete-session`).expect(200)
