@@ -1,6 +1,8 @@
 import * as Sentry from '@sentry/node'
-import { name as applicationName } from '../package.json'
+import applicationInfo from './applicationInfo'
 import config from './config'
+
+const { applicationName } = applicationInfo()
 
 if (config.sentry.dsn) {
   Sentry.init({
