@@ -93,7 +93,7 @@
           replaysSessionSampleRate: {{ sentry.replaySampleRate }},
           replaysOnErrorSampleRate: {{ sentry.replayOnErrorSampleRate }},
           initialScope: {
-            user: { username: "{{ user.username }}" },
+            user: { id: "{{ sentryUserId }}" },
           },
         });
       };

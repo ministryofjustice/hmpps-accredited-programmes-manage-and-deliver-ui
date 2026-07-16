@@ -8,6 +8,7 @@ import logger from '../../logger'
 import config from '../config'
 import { HmppsUser } from '../interfaces/hmppsUser'
 import generateOauthClientToken from '../utils/clientCredentials'
+import hashUsername from '../utils/sentryUser'
 
 passport.serializeUser((user, done) => {
   // Not used but required for Passport
@@ -103,7 +104,9 @@ export default function setupAuthentication() {
 
   router.use(async (req, res, next) => {
     if (req.isAuthenticated() && (await tokenVerificationClient.verifyToken(req as unknown as AuthenticatedRequest))) {
-      setUser({ username: req.user.username })
+      const sentryUserId = hashUsername(req.user.username)
+      setUser({ id: sentryUserId })
+      res.locals.sentryUserId = sentryUserId
       return next()
     }
     const requestedReturnTo = typeof req.query.returnTo === 'string' ? req.query.returnTo : ''
