@@ -24,7 +24,7 @@ export default SessionDetailsFactory.define(() => ({
   sessionType: 'Group',
   date: '15 March 2025',
   time: '9:30am to midday',
-  scheduledToAttend: [ 'Person 1'],
+  scheduledToAttend: ['Person 1'],
   facilitators: ['Facilitator 1', 'Facilitator 2'],
   attendanceAndSessionNotes: [
     {
