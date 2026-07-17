@@ -195,7 +195,7 @@ describe('showRecordAttendancePages', () => {
 
       const { referralId } = bffData.people[0]
 
-      request(app)
+      await request(app)
         .post(`/111/6789/record-attendance`)
         .type('form')
         .send({
