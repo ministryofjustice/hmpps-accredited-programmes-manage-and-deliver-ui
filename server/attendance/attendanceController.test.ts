@@ -6,11 +6,11 @@ import TestUtils from '../testutils/testUtils'
 import recordSessionAttendanceFactory from '../testutils/factories/recordSessionAttendanceFactory'
 import { convertToUrlFriendlyKebabCase } from '../utils/utils'
 
+import sendAuditEvent from '../services/auditService'
+
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../services/auditService')
-
-import sendAuditEvent from '../services/auditService'
 
 const hmppsAuthClientBuilder = jest.fn()
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
@@ -207,13 +207,13 @@ describe('showRecordAttendancePages', () => {
             `Redirecting to /111/6789/referral/referral1/${convertToUrlFriendlyKebabCase(bffData.sessionModule)}-session-notes`,
           )
         })
-        expect(sendAuditEvent).not.toHaveBeenCalledWith(
-          'VIEW_RECORD_ATTENDANCE',
-          expect.anything(),
-          expect.anything(),
-          expect.anything(),
-          expect.anything(),
-        )
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_RECORD_ATTENDANCE',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('redirects to catch-up session notes URL after POST when single referral ID', async () => {
@@ -237,13 +237,13 @@ describe('showRecordAttendancePages', () => {
         })
         .expect(302)
         .expect('Location', '/111/6789/referral/referral1/pre-group-one-to-one-catch-up-session-notes')
-        expect(sendAuditEvent).not.toHaveBeenCalledWith(
-          'VIEW_RECORD_ATTENDANCE',
-          expect.anything(),
-          expect.anything(),
-          expect.anything(),
-          expect.anything(),
-        )
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_RECORD_ATTENDANCE',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('should fetch session details with correct parameters and load page correctly for a multiple attendees', async () => {
@@ -277,13 +277,13 @@ describe('showRecordAttendancePages', () => {
         '6789',
         ['referral1', 'referral2'],
       )
-        expect(sendAuditEvent).not.toHaveBeenCalledWith(
-          'VIEW_RECORD_ATTENDANCE',
-          expect.anything(),
-          expect.anything(),
-          expect.anything(),
-          expect.anything(),
-        )
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_RECORD_ATTENDANCE',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('preserves staged notes when returning to record-attendance and submitting again', async () => {
@@ -322,13 +322,13 @@ describe('showRecordAttendancePages', () => {
         .expect(res => {
           expect(res.text).toContain('Keep this note')
         })
-        expect(sendAuditEvent).not.toHaveBeenCalledWith(
-          'VIEW_RECORD_ATTENDANCE',
-          expect.anything(),
-          expect.anything(),
-          expect.anything(),
-          expect.anything(),
-        )
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_RECORD_ATTENDANCE',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
   })
 
@@ -1072,12 +1072,12 @@ describe('showRecordAttendancePages', () => {
       .expect(res => {
         expect(res.text).toContain(`Select an attendance status for ${bffData.people[0].name}`)
       })
-      expect(sendAuditEvent).not.toHaveBeenCalledWith(
-        'VIEW_RECORD_ATTENDANCE',
-        expect.anything(),
-        expect.anything(),
-        expect.anything(),
-        expect.anything(),
-      )
+    expect(sendAuditEvent).not.toHaveBeenCalledWith(
+      'VIEW_RECORD_ATTENDANCE',
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+    )
   })
 })

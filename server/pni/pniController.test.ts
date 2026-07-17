@@ -32,9 +32,7 @@ describe('PNI controller', () => {
     accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValueOnce(referralDetails)
     accreditedProgrammesManageAndDeliverService.getPniScore.mockResolvedValueOnce(pniScore)
 
-    await request(app)
-      .get(`/referral/${referralId}/programme-needs-identifier`)
-      .expect(200)
+    await request(app).get(`/referral/${referralId}/programme-needs-identifier`).expect(200)
 
     expect(sendAuditEvent).toHaveBeenCalledWith(
       'VIEW_PNI',

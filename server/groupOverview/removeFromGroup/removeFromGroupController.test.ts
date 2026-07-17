@@ -51,13 +51,10 @@ describe('remove from group', () => {
           expect(res.text).toContain(`Remove Alex River from this group`)
         })
         .then(() => {
-          expect(sendAuditEvent).toHaveBeenCalledWith(
-            'VIEW_REMOVE_FROM_GROUP',
-            'user1',
-            referralDetails.crn,
-            'CRN',
-            { referralId: referralId, groupId: groupId },
-          )
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_REMOVE_FROM_GROUP', 'user1', referralDetails.crn, 'CRN', {
+            referralId,
+            groupId,
+          })
         })
     })
 

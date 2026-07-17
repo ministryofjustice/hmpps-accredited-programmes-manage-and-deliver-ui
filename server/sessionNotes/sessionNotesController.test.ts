@@ -158,7 +158,9 @@ describe('SessionNotesController', () => {
         'user1',
         '6789',
         'SEARCH_TERM',
-        expect.objectContaining({ details: expect.objectContaining({ referralId: 'referral-123', sessionNotes: 'Updated note' }) }),
+        expect.objectContaining({
+          details: expect.objectContaining({ referralId: 'referral-123', sessionNotes: 'Updated note' }),
+        }),
       )
 
       expect(sendAuditEvent).not.toHaveBeenCalledWith(

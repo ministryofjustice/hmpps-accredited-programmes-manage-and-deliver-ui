@@ -5,13 +5,13 @@ import createUserToken from '../testutils/createUserToken'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import { appWithAllRoutes, user as defaultUser } from '../routes/testutils/appSetup'
 
+import sendAuditEvent from '../services/auditService'
+
 const hmppsAuthClientBuilder = jest.fn()
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
 jest.mock('../services/auditService')
-
-import sendAuditEvent from '../services/auditService'
 
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
   hmppsAuthClientBuilder,

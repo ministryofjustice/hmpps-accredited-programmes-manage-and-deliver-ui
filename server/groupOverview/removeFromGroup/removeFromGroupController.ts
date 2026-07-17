@@ -113,7 +113,7 @@ export default class RemoveFromGroupController extends BaseController {
         referralId,
         groupId,
       })
-   }
+    }
     const statusDetails = await this.accreditedProgrammesManageAndDeliverService.removeFromGroupStatusTransitionDetails(
       referralId,
       username,
