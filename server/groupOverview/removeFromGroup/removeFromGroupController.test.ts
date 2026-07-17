@@ -1,6 +1,5 @@
 import { fakerEN_GB as faker } from '@faker-js/faker'
 import { ReferralDetails, ReferralStatusTransitions } from '@manage-and-deliver-api'
-import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import { SessionData } from 'express-session'
 import request from 'supertest'
