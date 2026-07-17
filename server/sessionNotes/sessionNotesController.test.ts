@@ -4,9 +4,11 @@ import { SessionData } from 'express-session'
 import { SessionNotes } from '@manage-and-deliver-api'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import sendAuditEvent from '../services/auditService'
 import TestUtils from '../testutils/testUtils'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
+jest.mock('../services/auditService')
 jest.mock('../data/hmppsAuthClient')
 
 const hmppsAuthClientBuilder = jest.fn()
@@ -64,6 +66,14 @@ describe('SessionNotesController', () => {
         'user1',
         '6789',
         'referral-123',
+      )
+
+      expect(sendAuditEvent).toHaveBeenCalledWith(
+        'VIEW_SESSION_NOTES_DATA',
+        'user1',
+        '6789',
+        'SEARCH_TERM',
+        expect.objectContaining({ referralId: 'referral-123' }),
       )
     })
 
@@ -141,6 +151,22 @@ describe('SessionNotesController', () => {
             },
           ],
         },
+      )
+
+      expect(sendAuditEvent).toHaveBeenCalledWith(
+        'CREATE_SESSION_ATTENDANCE',
+        'user1',
+        '6789',
+        'SEARCH_TERM',
+        expect.objectContaining({ details: expect.objectContaining({ referralId: 'referral-123', sessionNotes: 'Updated note' }) }),
+      )
+
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_SESSION_NOTES_DATA',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
       )
     })
 

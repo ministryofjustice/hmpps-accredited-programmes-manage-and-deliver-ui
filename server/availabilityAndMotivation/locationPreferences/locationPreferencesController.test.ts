@@ -317,6 +317,16 @@ describe('location-preferences', () => {
         referralId,
         createDeliveryLocationPreferences,
       )
+      expect(sendAuditEvent).toHaveBeenCalledWith(
+        'EDIT_REFERRAL_LOCATION_PREFERENCES',
+        'user1',
+        referralDetails.crn,
+        'CRN',
+        {
+          referralId,
+          details: JSON.stringify(createDeliveryLocationPreferences),
+        },
+      )
       expect(sendAuditEvent).not.toHaveBeenCalledWith(
         'VIEW_CANNOT_ATTEND_LOCATIONS',
         'user1',
@@ -362,6 +372,16 @@ describe('location-preferences', () => {
         'user1',
         referralId,
         createDeliveryLocationPreferences,
+      )
+      expect(sendAuditEvent).toHaveBeenCalledWith(
+        'EDIT_REFERRAL_LOCATION_PREFERENCES',
+        'user1',
+        referralDetails.crn,
+        'CRN',
+        {
+          referralId,
+          details: JSON.stringify(createDeliveryLocationPreferences),
+        },
       )
       expect(sendAuditEvent).not.toHaveBeenCalledWith(
         'VIEW_CANNOT_ATTEND_LOCATIONS',

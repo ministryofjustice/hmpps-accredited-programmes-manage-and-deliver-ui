@@ -41,11 +41,23 @@ beforeEach(() => {
 describe('remove from group', () => {
   describe(`GET /remove-from-group/:groupId/:referralId`, () => {
     it('loads the initial page to remove someone from a group', async () => {
+      const groupId = '123'
+      const referralId = '123'
+
       return request(app)
-        .get(`/remove-from-group/${randomUUID()}/${randomUUID()}`)
+        .get(`/remove-from-group/${groupId}/${referralId}`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(`Remove Alex River from this group`)
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            'VIEW_REMOVE_FROM_GROUP',
+            'user1',
+            referralDetails.crn,
+            'CRN',
+            { referralId: referralId, groupId: groupId },
+          )
         })
     })
 
@@ -62,6 +74,15 @@ describe('remove from group', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(`Redirecting to /group/${groupId}/allocations?nameOrCRN=dave`)
+        })
+        .then(() => {
+          expect(sendAuditEvent).not.toHaveBeenCalledWith(
+            'VIEW_REMOVE_FROM_GROUP',
+            expect.anything(),
+            expect.anything(),
+            expect.anything(),
+            expect.anything(),
+          )
         })
     })
 
@@ -85,11 +106,23 @@ describe('remove from group', () => {
       accreditedProgrammesManageAndDeliverService.removeFromGroupStatusTransitionDetails.mockResolvedValue(
         referralStatusTransitions,
       )
+      const groupId = '123'
+      const referralId = '123'
+
       return request(app)
-        .get(`/remove-from-group/${randomUUID()}/${randomUUID()}/update-status`)
+        .get(`/remove-from-group/${groupId}/${referralId}/update-status`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(`Update Alex River&#39;s referral status`)
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            'VIEW_REMOVE_FROM_GROUP_UPDATE_STATUS',
+            'user1',
+            referralDetails.crn,
+            'CRN',
+            expect.objectContaining({ referralId: expect.any(String), groupId: expect.any(String) }),
+          )
         })
     })
   })
@@ -132,6 +165,13 @@ describe('remove from group', () => {
                 additionalDetails: 'Some details',
               }),
             }),
+          )
+          expect(sendAuditEvent).not.toHaveBeenCalledWith(
+            'VIEW_REMOVE_FROM_GROUP_UPDATE_STATUS',
+            expect.anything(),
+            expect.anything(),
+            expect.anything(),
+            expect.anything(),
           )
         })
     })

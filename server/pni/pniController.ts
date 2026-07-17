@@ -4,6 +4,7 @@ import PniPresenter from './pniPresenter'
 import PniView from './pniView'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
+import sendAuditEvent from '../services/auditService'
 
 export default class PniController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -23,6 +24,9 @@ export default class PniController extends BaseController {
       referralId,
       username,
     )
+    await sendAuditEvent('VIEW_PNI', req.user.username, referralDetails?.crn, 'CRN', {
+      referralId,
+    })
     const pniScore = await this.accreditedProgrammesManageAndDeliverService.getPniScore(username, referralDetails.crn)
 
     req.session.originPage = req.path

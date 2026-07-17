@@ -171,7 +171,7 @@ export default class LocationPreferencesController extends BaseController {
           data.paramsForUpdate.cannotAttendLocations
 
         await sendAuditEvent(
-          'UPDATE_REFERRAL_LOCATION_PREFERENCES',
+          'EDIT_REFERRAL_LOCATION_PREFERENCES',
           username,
           referralDetails?.crn ?? referralId,
           'CRN',
