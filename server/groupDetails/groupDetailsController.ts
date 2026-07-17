@@ -4,6 +4,7 @@ import GroupDetailsView from './groupDetailsView'
 import BaseController from '../shared/baseController'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import sendAuditEvent from '../services/auditService'
 
 export default class GroupDetailsController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -24,8 +25,9 @@ export default class GroupDetailsController extends BaseController {
 
     const successMessage = message ? String(message) : null
 
-    const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
+    await sendAuditEvent('VIEW_GROUP_DETAILS', username, groupId, 'SEARCH_TERM')
 
+    const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
     const presenter = new GroupDetailsPresenter(groupDetails, successMessage)
     const view = new GroupDetailsView(presenter)
 

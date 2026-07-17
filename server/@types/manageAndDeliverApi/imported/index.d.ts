@@ -2836,6 +2836,11 @@ export interface components {
        */
       hasLdcDisplayText: string
       /**
+       * @description The text to display in the UI success banner after updating the LDC status of this referral
+       * @example may need an LDC-adapted programme (Building Choices Plus).
+       */
+      hasLdcSuccessMessageText: string
+      /**
        * @description The display name of the Referral's current Status
        * @example Awaiting assessment
        */
@@ -3268,7 +3273,7 @@ export interface components {
        * @description The available cohorts (offence types or programme categories) that can be used for filtering.
        * @example [
        *       "General Offence",
-       *       "General Offence - LDC",
+       *       "General Offence LDC",
        *       "Domestic Violence"
        *     ]
        */
@@ -3294,16 +3299,16 @@ export interface components {
       reportingTeams: string[]
     }
     PageReferralCaseListItem: {
-      /** Format: int64 */
-      totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      /** Format: int32 */
-      numberOfElements?: number
-      first?: boolean
-      last?: boolean
+      /** Format: int64 */
+      totalElements?: number
       pageable?: components['schemas']['PageableObject']
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
@@ -3367,6 +3372,14 @@ export interface components {
       /** Format: int32 */
       size?: number
       sort?: string[]
+    }
+    MultiValueMapStringString: {
+      all?: {
+        [key: string]: string
+      }
+      empty?: boolean
+    } & {
+      [key: string]: string[]
     }
     /** @description Information identifying the group. */
     Group: {
@@ -3705,7 +3718,7 @@ export interface components {
       sessionStartTime: components['schemas']['SessionTime']
       sessionEndTime: components['schemas']['SessionTime']
       /**
-       * @description True when the group has never had any membership. Empty groups may cascade-reschedule past sessions (used when migrating in-flight groups), so the UI can offer that option.
+       * @description True when the group has never had any membership. When true the UI may reschedule even if the submitted date is in the past.
        * @example false
        */
       isEmptyGroup: boolean
@@ -3973,16 +3986,16 @@ export interface components {
       regionName: string
     }
     PageGroup: {
-      /** Format: int64 */
-      totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      /** Format: int32 */
-      numberOfElements?: number
-      first?: boolean
-      last?: boolean
+      /** Format: int64 */
+      totalElements?: number
       pageable?: components['schemas']['PageableObject']
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
@@ -4068,16 +4081,16 @@ export interface components {
       activeProgrammeGroupId: string | null
     }
     PageGroupItem: {
-      /** Format: int64 */
-      totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      /** Format: int32 */
-      numberOfElements?: number
-      first?: boolean
-      last?: boolean
+      /** Format: int64 */
+      totalElements?: number
       pageable?: components['schemas']['PageableObject']
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
@@ -7572,14 +7585,13 @@ export interface operations {
         pageable: components['schemas']['Pageable']
         /** @description CRN or persons name */
         crnOrPersonName?: string
-        /** @description Filter by the cohort of the referral using the human-readable label, e.g. 'General Offence', 'General Offence - LDC', 'Sexual Offence', 'Sexual Offence - LDC' */
+        /** @description Filter by the cohort of the referral using the human-readable label, e.g. 'General Offence', 'General Offence LDC', 'Sexual Offence', 'Sexual Offence LDC' */
         cohort?: string
         /** @description Filter by the status of the referral */
         status?: string
-        /** @description Filter by the pdu of the referral */
-        pdu?: string
         /** @description Filter by the reporting team of the referral */
         reportingTeam?: string[]
+        requestParams: components['schemas']['MultiValueMapStringString']
       }
       header?: never
       path: {
@@ -8532,7 +8544,7 @@ export interface operations {
         pdu?: string
         /** @description Filter by the delivery location name */
         deliveryLocations?: string[]
-        /** @description Filter by the cohort of the group Eg: 'Sexual Offence' or 'General Offence - LDC */
+        /** @description Filter by the cohort of the group Eg: 'Sexual Offence' or 'General Offence LDC */
         cohort?: string
         /** @description Filter by the sex that the group is being run for: 'Male', 'Female' or 'Mixed' */
         sex?: string
@@ -8599,7 +8611,7 @@ export interface operations {
         pageable: components['schemas']['Pageable']
         /** @description Filter by the sex of the person in the referral */
         sex?: string
-        /** @description Filter by the cohort of the referral Eg: 'Sexual Offence' or 'General Offence - LDC */
+        /** @description Filter by the cohort of the referral Eg: 'Sexual Offence' or 'General Offence LDC */
         cohort?: string
         /** @description Search by the name or the CRN of the offender in the referral */
         nameOrCRN?: string

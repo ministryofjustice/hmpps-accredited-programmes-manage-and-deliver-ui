@@ -4,9 +4,11 @@ import request from 'supertest'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import GroupDetailsFactory from '../testutils/factories/groupDetailsFactory'
+import sendAuditEvent from '../services/auditService'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
+jest.mock('../services/auditService')
 
 const hmppsAuthClientBuilder = jest.fn()
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
@@ -42,6 +44,9 @@ describe('GroupDetailsController', () => {
             'user1',
             'GROUP-123',
           )
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_GROUP_DETAILS', 'user1', 'GROUP-123', 'SEARCH_TERM')
         })
     })
 

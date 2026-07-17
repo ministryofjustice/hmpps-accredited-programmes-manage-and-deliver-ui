@@ -12,8 +12,9 @@
 
 {% block main %}
 {% block content %}
-<div class="govuk-width-container">
-  {{ govukBackLink(backLinkArgs) }}
+  <nav aria-label="Back">
+    {{ govukBackLink(backLinkArgs) }}
+  </nav>
  <main class="govuk-main-wrapper" id="main-content">
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
@@ -35,7 +36,7 @@
 
             <div class="govuk-button-group">
               {{ govukButton({ text: "Submit", preventDoubleClick: true }) }}
-              <a class="govuk-link" href={{ backlinkUri }}>Cancel</a>
+              <a class="govuk-link" href="{{ backlinkUri }}">Cancel</a>
             </div>
 
         </form>
@@ -43,17 +44,6 @@
     </div>
 
   </main>
-</div>
 
 {% endblock %}
 {% endblock %}
-
-
-
-
-
-
-
-
-
-

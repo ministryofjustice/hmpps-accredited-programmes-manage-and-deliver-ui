@@ -1,7 +1,4 @@
 @use '../../../node_modules/govuk-frontend/dist/govuk' as *;
-.govuk-main-wrapper {
-  min-height: 600px;
-}
 
 .session-reschedule-table-key-width {
   width: 40%;
@@ -118,7 +115,8 @@
 
 .govuk-table__header {
   button {
-    align-items: flex-start;
+    align-items: center;
+    transition: none;
     svg {
       flex-shrink: 0;
       min-width: 12px;
@@ -160,6 +158,30 @@
   text-align: right;
 }
 
+.group-header-container {
+  width: 100%;
+}
+
+.group-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.group-header-title {
+  min-width: 0;
+}
+
+.group-header-action {
+  margin-left: auto;
+
+  .govuk-button {
+    width: auto;
+    white-space: nowrap;
+  }
+}
+
 .risk-changed {
   color: #1d70b8;
 }
@@ -178,10 +200,6 @@
   padding: 30px 0;
 }
 
-.heading-background {
-  background: white;
-  padding-top: 40px;
-}
 
 .hmpps-header__title {
   padding-right: 10px;

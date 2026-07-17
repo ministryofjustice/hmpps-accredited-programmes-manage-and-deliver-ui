@@ -3,10 +3,12 @@ import { Express } from 'express'
 import { SessionData } from 'express-session'
 import request from 'supertest'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import sendAuditEvent from '../services/auditService'
 import TestUtils from '../testutils/testUtils'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
+jest.mock('../services/auditService')
 
 const hmppsAuthClientBuilder = jest.fn()
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
@@ -799,6 +801,11 @@ describe('Create Group Controller', () => {
             earliestStartDate: 'Monday 30 July 2050',
             cohort: 'GENERAL',
             sex: 'MALE',
+          })
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('CREATE_GROUP', expect.any(String), undefined, 'NOT_APPLICABLE', {
+            details: expect.objectContaining({ groupCode: 'ABC123' }),
           })
         })
     })

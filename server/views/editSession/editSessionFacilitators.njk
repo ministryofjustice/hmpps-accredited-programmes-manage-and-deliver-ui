@@ -62,20 +62,25 @@
 
           const input = node.querySelector('input');
           const label = node.querySelector('label');
-          input.remove();
+          if (input) {
+            input.remove();
+          }
 
           if (select.classList.contains('add-facilitator-select')) {
-            select.id = select.id + selectElementCounter;
-            select.name = select.name + selectElementCounter;
+            const inputId = `edit-session-facilitator-${selectElementCounter}`;
+            select.id = inputId;
+            select.name = inputId;
             select.value = '';
-            label.htmlFor = label.htmlFor + selectElementCounter;
+            if (label) {
+              label.htmlFor = inputId;
+            }
 
             accessibleAutocomplete.enhanceSelectElement({
               defaultValue: '',
               selectElement: document.querySelector(`#${select.id}`)
             });
 
-            clearAccessibleAutocompleteSelectionWhenInputEmpty('edit-session-facilitator-select' + selectElementCounter);
+            clearAccessibleAutocompleteSelectionWhenInputEmpty(inputId);
             selectElementCounter++;
           }
         });
@@ -144,7 +149,7 @@
             {{ govukBackLink(backLinkArgs) }}
           </div>
           <div class="govuk-grid-column-one-third">
-            <a class="return_to_homepage__link" href={{ homePageLink.href }}>{{ homePageLink.text }}</a>
+            <a class="return_to_homepage__link" href="{{ homePageLink.href }}">{{ homePageLink.text }}</a>
           </div>
         </div>
 

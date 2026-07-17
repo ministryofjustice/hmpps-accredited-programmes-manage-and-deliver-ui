@@ -25,6 +25,7 @@ import CreateOrEditGroupTreatmentManagerPresenter from './treatment-manager/crea
 import CreateOrEditGroupTreatmentManagerView from './treatment-manager/createOrEditGroupTreatmentManagerView'
 import CreateOrEditGroupWhenPresenter from './when/createOrEditGroupWhenPresenter'
 import CreateOrEditGroupWhenView from './when/createOrEditGroupWhenView'
+import sendAuditEvent from '../services/auditService'
 
 export default class CreateGroupController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -324,6 +325,9 @@ export default class CreateGroupController extends BaseController {
     const { createGroupFormData } = req.session
     const { username } = req.user
     if (req.method === 'POST') {
+      await sendAuditEvent('CREATE_GROUP', username, undefined, 'NOT_APPLICABLE', {
+        details: createGroupFormData,
+      })
       const response = await this.accreditedProgrammesManageAndDeliverService.createGroup(
         username,
         createGroupFormData as CreateGroupRequest,

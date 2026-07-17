@@ -40,6 +40,9 @@ describe('GET /', () => {
       .expect(200)
       .expect(res => {
         expect(res.text).toContain('Accredited Programmes')
+        expect(res.text).toContain('<nav aria-label="Skip links">')
+        expect(res.text).toContain('class="govuk-template__header')
+        expect(res.text).toContain('<main class="govuk-main-wrapper app-container govuk-body" id="main-content">')
       })
   })
 })

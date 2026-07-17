@@ -66,20 +66,25 @@
 
       const input = node.querySelector('input');
       const label = node.querySelector('label');
-      input.remove();
+      if (input) {
+        input.remove();
+      }
 
       if (select.classList.contains('add-facilitator-select')) {
-        select.id = select.id + selectElementCounter;
-        select.name = select.name + selectElementCounter;
+        const inputId = `session-details-facilitator-${selectElementCounter}`;
+        select.id = inputId;
+        select.name = inputId;
         select.value = '';
-        label.htmlFor = label.htmlFor + selectElementCounter;
+        if (label) {
+          label.htmlFor = inputId;
+        }
 
         accessibleAutocomplete.enhanceSelectElement({
           defaultValue: '',
           selectElement: document.querySelector(`#${select.id}`)
         });
 
-        clearAccessibleAutocompleteSelectionWhenInputEmpty('session-details-facilitator-select' + selectElementCounter);
+        clearAccessibleAutocompleteSelectionWhenInputEmpty(inputId);
         selectElementCounter++;
       }
     });
