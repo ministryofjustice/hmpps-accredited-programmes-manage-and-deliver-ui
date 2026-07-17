@@ -177,7 +177,7 @@ export default class LocationPreferencesController extends BaseController {
           'CRN',
           {
             referralId,
-            details: JSON.stringify(req.session.locationPreferenceFormData.updatePreferredLocationData),
+            details: req.session.locationPreferenceFormData.updatePreferredLocationData,
           },
         )
         // Post if no existing preference data

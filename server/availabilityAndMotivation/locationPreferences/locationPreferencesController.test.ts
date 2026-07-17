@@ -324,7 +324,7 @@ describe('location-preferences', () => {
         'CRN',
         {
           referralId,
-          details: JSON.stringify(createDeliveryLocationPreferences),
+          details: createDeliveryLocationPreferences,
         },
       )
       expect(sendAuditEvent).not.toHaveBeenCalledWith(
@@ -380,7 +380,7 @@ describe('location-preferences', () => {
         'CRN',
         {
           referralId,
-          details: JSON.stringify(createDeliveryLocationPreferences),
+          details: createDeliveryLocationPreferences,
         },
       )
       expect(sendAuditEvent).not.toHaveBeenCalledWith(
