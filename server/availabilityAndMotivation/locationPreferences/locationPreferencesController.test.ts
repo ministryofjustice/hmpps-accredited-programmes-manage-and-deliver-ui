@@ -271,6 +271,40 @@ describe('location-preferences', () => {
           )
         })
     })
+
+    it('redirects to start page when scoped map exists but current referral has no location preference state', async () => {
+      const referralId = randomUUID()
+
+      const deliveryLocationPreferencesFormData = deliveryLocationPreferencesFormDataFactory.build()
+      const createDeliveryLocationPreferences = createDeliveryLocationPreferencesFactory.build({
+        cannotAttendText: null,
+      })
+
+      const sessionData: Partial<SessionData> = {
+        originPage: '',
+        locationPreferenceFormDataByReferral: {
+          [randomUUID()]: {
+            updatePreferredLocationData: createDeliveryLocationPreferences,
+            preferredLocationReferenceData: deliveryLocationPreferencesFormData,
+            hasUpdatedAdditionalLocationData: null,
+          },
+        },
+        locationPreferenceFormData: {
+          updatePreferredLocationData: createDeliveryLocationPreferences,
+          preferredLocationReferenceData: deliveryLocationPreferencesFormData,
+          hasUpdatedAdditionalLocationData: null,
+        },
+      }
+
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      return request(app)
+        .get(`/referral/${referralId}/add-locations-cannot-attend`)
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain(`Redirecting to /referral/${referralId}/add-location-preferences`)
+        })
+    })
   })
 
   describe(`POST /referral/:referralId/add-locations-cannot-attend`, () => {

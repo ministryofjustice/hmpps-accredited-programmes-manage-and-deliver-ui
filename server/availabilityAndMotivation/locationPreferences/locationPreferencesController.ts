@@ -263,10 +263,11 @@ export default class LocationPreferencesController extends BaseController {
   }
 
   private getLocationPreferenceFormData(req: Request, referralId: string) {
-    const scopedData =
-      req.session.locationPreferenceFormDataByReferral?.[referralId] ?? req.session.locationPreferenceFormData
+    const scopedData = req.session.locationPreferenceFormDataByReferral
+      ? req.session.locationPreferenceFormDataByReferral[referralId]
+      : req.session.locationPreferenceFormData
 
-    req.session.locationPreferenceFormData = scopedData
+    req.session.locationPreferenceFormData = scopedData ?? null
 
     return scopedData
   }
