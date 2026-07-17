@@ -30,9 +30,12 @@ export default class AttendanceController extends BaseController {
     let referralIds = this.referralIds(req)
     if (referralIdFromQuery) {
       referralIds = [referralIdFromQuery]
+      const attendeesForSelectedReferral = (req.session.editSessionAttendance?.attendees ?? []).filter(
+        attendee => attendee.referralId === referralIdFromQuery,
+      )
       req.session.editSessionAttendance = {
         ...req.session.editSessionAttendance,
-        attendees: req.session.editSessionAttendance?.attendees ?? [],
+        attendees: attendeesForSelectedReferral,
         referralIds,
       }
     }

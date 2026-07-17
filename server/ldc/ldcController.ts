@@ -7,6 +7,7 @@ import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
 import logger from '../../logger'
 import sendAuditEvent from '../services/auditService'
+import { getReferralOriginPage } from '../utils/referralOriginPage'
 
 export default class LdcController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -20,6 +21,7 @@ export default class LdcController extends BaseController {
   async showChangeLdcPage(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params as Record<string, string>
     const { username } = req.user
+    const originPage = getReferralOriginPage(req, referralId)
     const referralDetails: ReferralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
       referralId,
       username,
@@ -41,14 +43,14 @@ export default class LdcController extends BaseController {
         },
         'LDC updated',
       )
-      return res.redirect(`${req.session.originPage}?isLdcUpdated=true`)
+      return res.redirect(`${originPage}?isLdcUpdated=true`)
     }
 
     await sendAuditEvent('VIEW_UPDATE_LDC', username, referralDetails?.crn, 'CRN', {
       referralId,
     })
 
-    const presenter = new UpdateLdcPresenter(referralId, referralDetails, req.session.originPage)
+    const presenter = new UpdateLdcPresenter(referralId, referralDetails, originPage)
     const view = new UpdateLdcView(presenter)
 
     return this.renderPage(res, view, referralDetails)

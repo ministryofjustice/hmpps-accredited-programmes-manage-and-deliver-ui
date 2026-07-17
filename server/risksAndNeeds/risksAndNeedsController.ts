@@ -31,6 +31,7 @@ import RisksAndAlertsOgrs4View from './risksAndAlerts/risksAndAlertsOgrs4View'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
 import sendAuditEvent from '../services/auditService'
+import { setReferralOriginPage } from '../utils/referralOriginPage'
 
 export default class RisksAndNeedsController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -70,7 +71,7 @@ export default class RisksAndNeedsController extends BaseController {
       )
       const view = new RisksAndAlertsView(presenter)
 
-      req.session.originPage = req.path
+      setReferralOriginPage(req, referralId)
 
       return this.renderPage(res, view, sharedReferralDetailsData)
     }
@@ -84,7 +85,7 @@ export default class RisksAndNeedsController extends BaseController {
     )
     const view = new RisksAndAlertsOgrs4View(presenter)
 
-    req.session.originPage = req.path
+    setReferralOriginPage(req, referralId)
 
     return this.renderPage(res, view, sharedReferralDetailsData)
   }
@@ -112,7 +113,7 @@ export default class RisksAndNeedsController extends BaseController {
     )
     const view = new LearningNeedsView(presenter)
 
-    req.session.originPage = req.path
+    setReferralOriginPage(req, referralId)
 
     return this.renderPage(res, view, sharedReferralDetailsData)
   }
@@ -141,7 +142,7 @@ export default class RisksAndNeedsController extends BaseController {
     )
     const view = new OffenceAnalysisView(presenter)
 
-    req.session.originPage = req.path
+    setReferralOriginPage(req, referralId)
 
     return this.renderPage(res, view, sharedReferralDetailsData)
   }
@@ -170,7 +171,7 @@ export default class RisksAndNeedsController extends BaseController {
     )
     const view = new RelationshipsView(presenter)
 
-    req.session.originPage = req.path
+    setReferralOriginPage(req, referralId)
 
     return this.renderPage(res, view, sharedReferralDetailsData)
   }
@@ -205,7 +206,7 @@ export default class RisksAndNeedsController extends BaseController {
     )
     const view = new LifestyleAndAssociatesView(presenter)
 
-    req.session.originPage = req.path
+    setReferralOriginPage(req, referralId)
 
     return this.renderPage(res, view, sharedReferralDetailsData)
   }
@@ -234,7 +235,7 @@ export default class RisksAndNeedsController extends BaseController {
     )
     const view = new AlcoholMisuseView(presenter)
 
-    req.session.originPage = req.path
+    setReferralOriginPage(req, referralId)
 
     return this.renderPage(res, view, sharedReferralDetailsData)
   }
@@ -263,7 +264,7 @@ export default class RisksAndNeedsController extends BaseController {
     )
     const view = new EmotionalWellbeingView(presenter)
 
-    req.session.originPage = req.path
+    setReferralOriginPage(req, referralId)
 
     return this.renderPage(res, view, sharedReferralDetailsData)
   }
@@ -293,7 +294,7 @@ export default class RisksAndNeedsController extends BaseController {
     )
     const view = new ThinkingAndBehavingView(presenter)
 
-    req.session.originPage = req.path
+    setReferralOriginPage(req, referralId)
 
     return this.renderPage(res, view, sharedReferralDetailsData)
   }
@@ -322,7 +323,7 @@ export default class RisksAndNeedsController extends BaseController {
     )
     const view = new AttitudesView(presenter)
 
-    req.session.originPage = req.path
+    setReferralOriginPage(req, referralId)
 
     return this.renderPage(res, view, sharedReferralDetailsData)
   }
@@ -351,7 +352,7 @@ export default class RisksAndNeedsController extends BaseController {
     )
     const view = new HealthView(presenter)
 
-    req.session.originPage = req.path
+    setReferralOriginPage(req, referralId)
 
     return this.renderPage(res, view, sharedReferralDetailsData)
   }
@@ -380,7 +381,7 @@ export default class RisksAndNeedsController extends BaseController {
     )
     const view = new DrugDetailsView(presenter)
 
-    req.session.originPage = req.path
+    setReferralOriginPage(req, referralId)
 
     return this.renderPage(res, view, sharedReferralDetailsData)
   }
@@ -409,7 +410,7 @@ export default class RisksAndNeedsController extends BaseController {
     )
     const view = new RoshAnalysisView(presenter)
 
-    req.session.originPage = req.path
+    setReferralOriginPage(req, referralId)
 
     return this.renderPage(res, view, sharedReferralDetailsData)
   }

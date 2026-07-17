@@ -7,6 +7,7 @@ import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
 import logger from '../../logger'
 import sendAuditEvent from '../services/auditService'
+import { getReferralOriginPage } from '../utils/referralOriginPage'
 
 export default class ChangeCohortController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -20,6 +21,7 @@ export default class ChangeCohortController extends BaseController {
   async showChangeCohortPage(req: Request, res: Response): Promise<void> {
     const { referralId } = req.params as Record<string, string>
     const { username } = req.user
+    const originPage = getReferralOriginPage(req, referralId)
 
     const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
       referralId,
@@ -48,14 +50,14 @@ export default class ChangeCohortController extends BaseController {
         'Updated cohort for referral',
       )
 
-      return res.redirect(`${req.session.originPage}?isCohortUpdated=true`)
+      return res.redirect(`${originPage}?isCohortUpdated=true`)
     }
 
     await sendAuditEvent('VIEW_UPDATE_COHORT', username, referralDetails?.crn, 'CRN', {
       referralId,
     })
 
-    const presenter = new ChangeCohortPresenter(referralId, referralDetails, req.session.originPage)
+    const presenter = new ChangeCohortPresenter(referralId, referralDetails, originPage)
     const view = new ChangeCohortView(presenter)
 
     return this.renderPage(res, view, referralDetails)
