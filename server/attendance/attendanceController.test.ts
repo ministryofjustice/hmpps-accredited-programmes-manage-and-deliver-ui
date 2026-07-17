@@ -611,6 +611,58 @@ describe('showRecordAttendancePages', () => {
       )
     })
 
+    it('does not submit stale attendees from another tab when launched for a specific referral', async () => {
+      sessionData = {
+        editSessionAttendance: {
+          source: 'session-notes',
+          referralIds: ['referral1'],
+          attendees: [{ referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: 'Old note' }],
+        },
+      }
+
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Getting started 1' })
+      bffData.people = [
+        {
+          ...bffData.people[0],
+          referralId: 'referral2',
+          name: 'Danielle Crist',
+          attendance: { text: 'Attended', code: 'ATTC' },
+          sessionNotes: '',
+        },
+      ]
+
+      accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
+      accreditedProgrammesManageAndDeliverService.createSessionAttendance.mockResolvedValue({
+        attendees: [{ referralId: 'referral2', outcomeCode: 'ATTC', sessionNotes: 'New note' }],
+        responseMessage: 'Attendance updated',
+      })
+
+      const agent = request.agent(app)
+
+      await agent
+        .get('/111/6789/record-attendance?referralId=referral2')
+        .expect(302)
+        .expect('Location', '/111/6789/referral/referral2/getting-started-1-session-notes')
+
+      await agent
+        .post('/111/6789/referral/referral2/getting-started-1-session-notes')
+        .type('form')
+        .send({
+          'record-session-attendance-notes': 'New note',
+        })
+        .expect(302)
+
+      expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).toHaveBeenCalledWith(
+        'user1',
+        '6789',
+        {
+          attendees: [{ referralId: 'referral2', outcomeCode: 'ATTC', sessionNotes: 'New note' }],
+        },
+      )
+    })
+
     it('stages current attendee from BFF and submits successfully when journey starts on notes page', async () => {
       sessionData = {
         editSessionAttendance: {

@@ -70,6 +70,25 @@ describe('Update Referral Status Controller', () => {
         )
         return request(app).get(`/referral/${referralDetails.id}/update-status`).expect(500)
       })
+
+      it('uses referral-specific origin page for back and cancel links when multiple referral tabs are open', async () => {
+        const appWithReferralOriginMap = TestUtils.createTestAppWithSession(
+          {
+            originPage: '/referral-details/another-referral/personal-details',
+            referralOriginPages: {
+              [referralDetails.id]: `/referral/${referralDetails.id}/programme-needs-identifier`,
+            },
+          },
+          { accreditedProgrammesManageAndDeliverService },
+        )
+
+        return request(appWithReferralOriginMap)
+          .get(`/referral/${referralDetails.id}/update-status`)
+          .expect(200)
+          .expect(res => {
+            expect(res.text).toContain(`href="/referral/${referralDetails.id}/programme-needs-identifier"`)
+          })
+      })
     })
 
     describe(`POST /referral/:referralDetails.id/update-status`, () => {

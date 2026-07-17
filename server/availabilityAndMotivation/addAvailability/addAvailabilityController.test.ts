@@ -2,12 +2,14 @@ import { Availability, PersonalDetails, ReferralDetails } from '@manage-and-deli
 import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import request from 'supertest'
+import { SessionData } from 'express-session'
 import { appWithAllRoutes } from '../../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../../services/accreditedProgrammesManageAndDeliverService'
 import sendAuditEvent from '../../services/auditService'
 import availabilityFactory from '../../testutils/factories/availabilityFactory'
 import personalDetailsFactory from '../../testutils/factories/personalDetailsFactory'
 import referralDetailsFactory from '../../testutils/factories/referralDetailsFactory'
+import TestUtils from '../../testutils/testUtils'
 
 jest.mock('../../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../../data/hmppsAuthClient')
@@ -53,6 +55,32 @@ describe(`Add Availability`, () => {
           expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_ADD_AVAILABILITY', 'user1', referralDetails.crn, 'CRN', {
             referralId: expect.any(String),
           })
+        })
+    })
+
+    it('uses referral-specific origin page for back and cancel links when multiple PoP tabs are open', async () => {
+      const referralId = randomUUID()
+      const availability: Availability = availabilityFactory.defaultAvailability().build()
+      const personalDetails: PersonalDetails = personalDetailsFactory.build()
+
+      accreditedProgrammesManageAndDeliverService.getAvailability.mockResolvedValue(availability)
+      accreditedProgrammesManageAndDeliverService.getPersonalDetails.mockResolvedValue(personalDetails)
+
+      const appWithReferralOriginMap = TestUtils.createTestAppWithSession(
+        {
+          originPage: '/referral-details/another-referral/personal-details',
+          referralOriginPages: {
+            [referralId]: `/referral/${referralId}/programme-needs-identifier`,
+          },
+        } as Partial<SessionData>,
+        { accreditedProgrammesManageAndDeliverService },
+      )
+
+      return request(appWithReferralOriginMap)
+        .get(`/referral/${referralId}/add-availability`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain(`href="/referral/${referralId}/programme-needs-identifier"`)
         })
     })
   })

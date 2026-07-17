@@ -79,5 +79,32 @@ describe('Update cohort', () => {
           })
         })
     })
+
+    it('uses referral-specific origin page when session contains multiple referral tabs', async () => {
+      const sessionData: Partial<SessionData> = {
+        originPage: '/referral-details/another-referral/personal-details',
+        referralOriginPages: {
+          [referralDetails.id]: `/referral/${referralDetails.id}/availability-and-motivation/availability`,
+        },
+      }
+      const appWithReferralOriginMap = TestUtils.createTestAppWithSession(sessionData, {
+        accreditedProgrammesManageAndDeliverService,
+      })
+
+      accreditedProgrammesManageAndDeliverService.updateCohort.mockResolvedValue(referralDetails)
+
+      return request(appWithReferralOriginMap)
+        .post(`/referral/${referralDetails.id}/change-cohort`)
+        .type('form')
+        .send({
+          updatedCohort: 'GENERAL_OFFENCE' as CohortEnum,
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain(
+            `Redirecting to /referral/${referralDetails.id}/availability-and-motivation/availability?isCohortUpdated=true`,
+          )
+        })
+    })
   })
 })
