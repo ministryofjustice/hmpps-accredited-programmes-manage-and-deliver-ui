@@ -11,7 +11,5 @@ export const setReferralOriginPage = (req: Request, referralId: string, originPa
 }
 
 export const getReferralOriginPage = (req: Request, referralId: string): string => {
-  return (
-    req.session.referralOriginPages?.[referralId] ?? req.session.originPage ?? defaultReferralOriginPage(referralId)
-  )
+  return req.session.referralOriginPages?.[referralId] ?? defaultReferralOriginPage(referralId)
 }
