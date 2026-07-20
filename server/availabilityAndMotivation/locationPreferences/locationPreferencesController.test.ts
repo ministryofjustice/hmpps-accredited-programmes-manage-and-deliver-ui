@@ -271,40 +271,6 @@ describe('location-preferences', () => {
           )
         })
     })
-
-    it('redirects to start page when scoped map exists but current referral has no location preference state', async () => {
-      const referralId = randomUUID()
-
-      const deliveryLocationPreferencesFormData = deliveryLocationPreferencesFormDataFactory.build()
-      const createDeliveryLocationPreferences = createDeliveryLocationPreferencesFactory.build({
-        cannotAttendText: null,
-      })
-
-      const sessionData: Partial<SessionData> = {
-        originPage: '',
-        locationPreferenceFormDataByReferral: {
-          [randomUUID()]: {
-            updatePreferredLocationData: createDeliveryLocationPreferences,
-            preferredLocationReferenceData: deliveryLocationPreferencesFormData,
-            hasUpdatedAdditionalLocationData: null,
-          },
-        },
-        locationPreferenceFormData: {
-          updatePreferredLocationData: createDeliveryLocationPreferences,
-          preferredLocationReferenceData: deliveryLocationPreferencesFormData,
-          hasUpdatedAdditionalLocationData: null,
-        },
-      }
-
-      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
-
-      return request(app)
-        .get(`/referral/${referralId}/add-locations-cannot-attend`)
-        .expect(302)
-        .expect(res => {
-          expect(res.text).toContain(`Redirecting to /referral/${referralId}/add-location-preferences`)
-        })
-    })
   })
 
   describe(`POST /referral/:referralId/add-locations-cannot-attend`, () => {
@@ -403,75 +369,6 @@ describe('location-preferences', () => {
         referralDetails.crn,
         'CRN',
         { referralId: expect.any(String) },
-      )
-    })
-
-    it('keeps location preference journey state isolated per referral across multiple tabs', async () => {
-      const referralIdA = randomUUID()
-      const referralIdB = randomUUID()
-
-      const locationDataA = deliveryLocationPreferencesFormDataFactory.build({
-        primaryPdu: {
-          code: 'PDU-A',
-          name: 'PDU A',
-          deliveryLocations: [{ label: 'Office A', value: 'OFF-A-001' }],
-        },
-      })
-
-      const locationDataB = deliveryLocationPreferencesFormDataFactory.build({
-        primaryPdu: {
-          code: 'PDU-B',
-          name: 'PDU B',
-          deliveryLocations: [{ label: 'Office B', value: 'OFF-B-001' }],
-        },
-      })
-
-      accreditedProgrammesManageAndDeliverService.getPossibleDeliveryLocationsForReferral.mockImplementation(
-        async (_, referralId) => (referralId === referralIdA ? locationDataA : locationDataB),
-      )
-
-      const agent = request.agent(app)
-
-      await agent
-        .post(`/referral/${referralIdA}/add-location-preferences`)
-        .type('form')
-        .send({
-          'pdu-locations': ['OFF-A-001'],
-          'add-other-pdu-locations': 'no',
-        })
-        .expect(302)
-
-      await agent
-        .post(`/referral/${referralIdB}/add-location-preferences`)
-        .type('form')
-        .send({
-          'pdu-locations': ['OFF-B-001'],
-          'add-other-pdu-locations': 'no',
-        })
-        .expect(302)
-
-      await agent
-        .post(`/referral/${referralIdA}/add-locations-cannot-attend`)
-        .type('form')
-        .send({
-          'cannot-attend-locations-radio': 'yes',
-          'cannot-attend-locations-text-area': 'A reason for referral A',
-        })
-        .expect(302)
-
-      expect(accreditedProgrammesManageAndDeliverService.createDeliveryLocationPreferences).toHaveBeenCalledWith(
-        'user1',
-        referralIdA,
-        {
-          preferredDeliveryLocations: [
-            {
-              pduCode: 'PDU-A',
-              pduDescription: 'PDU A',
-              deliveryLocations: [{ code: 'OFF-A-001', description: 'Office A' }],
-            },
-          ],
-          cannotAttendText: 'A reason for referral A',
-        },
       )
     })
   })

@@ -9,9 +9,8 @@
 
 {% block main %}
 {% block content %}
-  <nav aria-label="Back">
-    {{ govukBackLink(backLinkArgs) }}
-  </nav>
+<div class="govuk-width-container">
+  {{ govukBackLink(backLinkArgs) }}
   <main class="govuk-main-wrapper" id="main-content">
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
@@ -28,11 +27,12 @@
 
           <div class="govuk-button-group">
             {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-            <a class="govuk-link" href="{{ cancelLink }}">Cancel</a>
+            <a class="govuk-link" href={{ cancelLink }}>Cancel</a>
           </div>
         </form>
       </div>
     </div>
   </main>
+</div>
 {% endblock %}
 {% endblock %}

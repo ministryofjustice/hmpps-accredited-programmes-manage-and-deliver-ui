@@ -5,7 +5,7 @@ import { RadiosArgs } from '../../utils/govukFrontendTypes'
 export default class CannotAttendLocationsView {
   constructor(private readonly presenter: CannotAttendLocationsPresenter) {}
 
-  private radioArgs(cannotAttendLocationsTextAreaHtml: string): RadiosArgs {
+  private radioArgs(textInputAreaHtml: string): RadiosArgs {
     return {
       name: 'cannot-attend-locations-radio',
       fieldset: {
@@ -21,7 +21,7 @@ export default class CannotAttendLocationsView {
           text: 'Yes',
           checked: this.presenter.fields.cannotAttendLocationsRadioButton.value === 'yes',
           conditional: {
-            html: cannotAttendLocationsTextAreaHtml,
+            html: textInputAreaHtml,
           },
         },
         {
