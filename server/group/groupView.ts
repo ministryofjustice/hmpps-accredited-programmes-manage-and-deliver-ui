@@ -1,5 +1,5 @@
 import GroupPresenter from './groupPresenter'
-import { CheckboxesArgs, InputArgs, SelectArgs } from '../utils/govukFrontendTypes'
+import { ButtonArgs, CheckboxesArgs, InputArgs, SelectArgs } from '../utils/govukFrontendTypes'
 
 export default class GroupView {
   constructor(private readonly presenter: GroupPresenter) {}
@@ -17,16 +17,18 @@ export default class GroupView {
     }
   }
 
-  private get searchByPduSelectArgs(): SelectArgs {
+  private get pduCheckboxArgs(): CheckboxesArgs {
     return {
-      id: 'pdu',
       name: 'pdu',
-      classes: 'confirm-pdu-select',
-      label: {
-        text: 'PDU',
-        classes: 'govuk-label--s',
+      classes: 'govuk-checkboxes--small',
+      fieldset: {
+        legend: {
+          text: 'PDU',
+          isPageHeading: false,
+          classes: 'govuk-fieldset__legend--s',
+        },
       },
-      items: this.presenter.generatePduSelectArgs(),
+      items: this.presenter.generatePDUCheckboxArgs(),
     }
   }
 
@@ -69,19 +71,16 @@ export default class GroupView {
     }
   }
 
-  private get pageHeaderOptions(): Record<string, unknown> {
+  private get createGroupButtonArgs(): ButtonArgs {
     return {
-      heading: {
-        html: this.presenter.text.pageHeading,
-      },
-      items: [
-        {
-          text: 'Create group',
-          classes: 'govuk-button--primary',
-          href: '/create-group',
-        },
-      ],
+      text: 'Create group',
+      classes: 'govuk-button--primary govuk-!-margin-bottom-0',
+      href: '/create-group',
     }
+  }
+
+  private get applyFilterButtonArgs() {
+    return { text: 'Apply filters', classes: 'govuk-!-margin-top-4' }
   }
 
   get renderArgs(): [string, Record<string, unknown>] {
@@ -95,15 +94,16 @@ export default class GroupView {
         pagination: this.presenter.pagination.govukPaginationArgs,
         text: this.presenter.text,
         searchByGroupCodeArgs: this.searchByGroupCodeArgs,
-        searchByPduSelectArgs: this.searchByPduSelectArgs,
+        searchByPduArgs: this.pduCheckboxArgs,
         searchBySexArgs: this.searchBySexArgs,
         searchByCohortArgs: this.searchByCohortArgs,
         deliveryLocationCheckboxArgs: this.deliveryLocationCheckboxArgs,
-        pageHeaderOptions: this.pageHeaderOptions,
+        createGroupButtonArgs: this.createGroupButtonArgs,
         resultsText: this.presenter.resultsText,
         hasResults: this.presenter.groupListItems.content.length > 0,
         noResultsText: this.presenter.noResultsText,
         noResultsString: this.presenter.generateNoResultsString(),
+        applyFilterButtonArgs: this.applyFilterButtonArgs,
       },
     ]
   }

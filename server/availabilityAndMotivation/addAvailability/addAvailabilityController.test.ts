@@ -4,12 +4,14 @@ import { Express } from 'express'
 import request from 'supertest'
 import { appWithAllRoutes } from '../../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../../services/accreditedProgrammesManageAndDeliverService'
+import sendAuditEvent from '../../services/auditService'
 import availabilityFactory from '../../testutils/factories/availabilityFactory'
 import personalDetailsFactory from '../../testutils/factories/personalDetailsFactory'
 import referralDetailsFactory from '../../testutils/factories/referralDetailsFactory'
 
 jest.mock('../../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../../data/hmppsAuthClient')
+jest.mock('../../services/auditService')
 
 const hmppsAuthClientBuilder = jest.fn()
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
@@ -47,6 +49,11 @@ describe(`Add Availability`, () => {
         .expect(res => {
           expect(res.text).toContain(`When is ${referralDetails.personName} available to attend a programme`)
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_ADD_AVAILABILITY', 'user1', referralDetails.crn, 'CRN', {
+            referralId: expect.any(String),
+          })
+        })
     })
   })
 
@@ -73,6 +80,53 @@ describe(`Add Availability`, () => {
           expect(res.text).toContain(
             `Redirecting to /referral/${referralId}/availability-and-motivation/availability?detailsUpdated=true`,
           )
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('CREATE_AVAILABILITY', 'user1', referralDetails.crn, 'CRN', {
+            referralId: expect.any(String),
+            details: expect.objectContaining({
+              otherDetails: 'text',
+              availabilities: expect.arrayContaining([
+                expect.objectContaining({ label: 'Mondays' }),
+                expect.objectContaining({ label: 'Sundays' }),
+              ]),
+              endDate: '9225-07-31',
+              startDate: expect.any(String),
+            }),
+          })
+        })
+    })
+  })
+
+  describe(`POST /referral/:referralId/update-availability/:availabilityId`, () => {
+    it('posts to update availability and redirects successfully with audit', async () => {
+      const referralId = randomUUID()
+      const availabilityId = randomUUID()
+      const availability: Availability = availabilityFactory.defaultAvailability().build()
+      const personalDetails: PersonalDetails = personalDetailsFactory.build()
+
+      accreditedProgrammesManageAndDeliverService.getAvailability.mockResolvedValue(availability)
+      accreditedProgrammesManageAndDeliverService.getPersonalDetails.mockResolvedValue(personalDetails)
+
+      return request(app)
+        .post(`/referral/${referralId}/update-availability/${availabilityId}`)
+        .type('form')
+        .send({
+          'availability-checkboxes': ['Mondays-daytime'],
+          'other-availability-details-text-area': 'text',
+          'end-date': 'No',
+        })
+        .expect(302)
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('EDIT_AVAILABILITY', 'user1', referralDetails.crn, 'CRN', {
+            referralId: expect.any(String),
+            availabilityId: expect.any(String),
+            details: expect.objectContaining({
+              otherDetails: 'text',
+              availabilities: expect.arrayContaining([expect.objectContaining({ label: 'Mondays' })]),
+              startDate: expect.any(String),
+            }),
+          })
         })
     })
   })

@@ -48,7 +48,7 @@ describe('CreateOrEditGroupCohortPresenter', () => {
       }
       const presenter = new CreateOrEditGroupCohortPresenter(null, createGroupFormData, null, undefined)
 
-      expect(presenter.captionText).toEqual('Create a group NEW-GROUP-001')
+      expect(presenter.captionText).toEqual('Create group NEW-GROUP-001')
     })
   })
 

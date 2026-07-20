@@ -30,6 +30,7 @@ import RisksAndAlertsOgrs4Presenter from './risksAndAlerts/risksAndAlertsOgrs4Pr
 import RisksAndAlertsOgrs4View from './risksAndAlerts/risksAndAlertsOgrs4View'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
+import sendAuditEvent from '../services/auditService'
 
 export default class RisksAndNeedsController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -51,6 +52,9 @@ export default class RisksAndNeedsController extends BaseController {
     const subNavValue = 'risksAndAlerts'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
+    await sendAuditEvent('VIEW_RISKS_AND_ALERTS', username, sharedReferralDetailsData?.crn ?? referralId, 'CRN', {
+      referralId,
+    })
     const risks = await this.accreditedProgrammesManageAndDeliverService.getRisksAndAlerts(
       username,
       sharedReferralDetailsData.crn,
@@ -92,6 +96,9 @@ export default class RisksAndNeedsController extends BaseController {
     const subNavValue = 'learningNeeds'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
+    await sendAuditEvent('VIEW_LEARNING_NEEDS', username, sharedReferralDetailsData?.crn ?? referralId, 'CRN', {
+      referralId,
+    })
     const learningNeeds = await this.accreditedProgrammesManageAndDeliverService.getLearningNeeds(
       username,
       sharedReferralDetailsData.crn,
@@ -117,6 +124,9 @@ export default class RisksAndNeedsController extends BaseController {
     const subNavValue = 'offenceAnalysis'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
+    await sendAuditEvent('VIEW_OFFENCE_ANALYSIS', username, sharedReferralDetailsData?.crn ?? referralId, 'CRN', {
+      referralId,
+    })
     const offenceAnalysis = await this.accreditedProgrammesManageAndDeliverService.getOffenceAnalysis(
       username,
       sharedReferralDetailsData.crn,
@@ -143,6 +153,9 @@ export default class RisksAndNeedsController extends BaseController {
     const subNavValue = 'relationships'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
+    await sendAuditEvent('VIEW_RELATIONSHIPS', username, sharedReferralDetailsData?.crn ?? referralId, 'CRN', {
+      referralId,
+    })
     const relationships = await this.accreditedProgrammesManageAndDeliverService.getRelationships(
       username,
       sharedReferralDetailsData.crn,
@@ -169,6 +182,15 @@ export default class RisksAndNeedsController extends BaseController {
     const subNavValue = 'lifestyleAndAssociates'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
+    await sendAuditEvent(
+      'VIEW_LIFESTYLE_AND_ASSOCIATES',
+      username,
+      sharedReferralDetailsData?.crn ?? referralId,
+      'CRN',
+      {
+        referralId,
+      },
+    )
     const lifestyleAndAssociates = await this.accreditedProgrammesManageAndDeliverService.getLifestyleAndAssociates(
       username,
       sharedReferralDetailsData.crn,
@@ -195,6 +217,9 @@ export default class RisksAndNeedsController extends BaseController {
     const subNavValue = 'alcoholMisuse'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
+    await sendAuditEvent('VIEW_ALCOHOL_MISUSE', username, sharedReferralDetailsData?.crn ?? referralId, 'CRN', {
+      referralId,
+    })
     const alcoholMisuseDetails = await this.accreditedProgrammesManageAndDeliverService.getAlcoholMisuseDetails(
       username,
       sharedReferralDetailsData.crn,
@@ -221,7 +246,9 @@ export default class RisksAndNeedsController extends BaseController {
     const subNavValue = 'emotionalWellbeing'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
-
+    await sendAuditEvent('VIEW_EMOTIONAL_WELLBEING', username, sharedReferralDetailsData?.crn ?? referralId, 'CRN', {
+      referralId,
+    })
     const emotionalWellbeing = await this.accreditedProgrammesManageAndDeliverService.getEmotionalWellbeing(
       username,
       sharedReferralDetailsData.crn,
@@ -248,6 +275,9 @@ export default class RisksAndNeedsController extends BaseController {
     const subNavValue = 'thinkingAndBehaviour'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
+    await sendAuditEvent('VIEW_THINKING_AND_BEHAVING', username, sharedReferralDetailsData?.crn ?? referralId, 'CRN', {
+      referralId,
+    })
 
     const thinkingAndBehaviour = await this.accreditedProgrammesManageAndDeliverService.getThinkingAndBehaviour(
       username,
@@ -275,6 +305,9 @@ export default class RisksAndNeedsController extends BaseController {
     const subNavValue = 'attitudes'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
+    await sendAuditEvent('VIEW_ATTITUDES', username, sharedReferralDetailsData?.crn ?? referralId, 'CRN', {
+      referralId,
+    })
     const attitudes = await this.accreditedProgrammesManageAndDeliverService.getAttitudes(
       username,
       sharedReferralDetailsData.crn,
@@ -301,6 +334,9 @@ export default class RisksAndNeedsController extends BaseController {
     const subNavValue = 'health'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
+    await sendAuditEvent('VIEW_HEALTH', username, sharedReferralDetailsData?.crn ?? referralId, 'CRN', {
+      referralId,
+    })
     const health = await this.accreditedProgrammesManageAndDeliverService.getHealth(
       username,
       sharedReferralDetailsData.crn,
@@ -327,6 +363,9 @@ export default class RisksAndNeedsController extends BaseController {
     const subNavValue = 'drugMisuse'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
+    await sendAuditEvent('VIEW_DRUG_MISUSE', username, sharedReferralDetailsData?.crn ?? referralId, 'CRN', {
+      referralId,
+    })
     const drugDetails = await this.accreditedProgrammesManageAndDeliverService.getDrugDetails(
       username,
       sharedReferralDetailsData.crn,
@@ -353,6 +392,9 @@ export default class RisksAndNeedsController extends BaseController {
     const subNavValue = 'roshAnalysis'
 
     const sharedReferralDetailsData = await this.getSharedPageData(referralId, username)
+    await sendAuditEvent('VIEW_ROSH_ANALYSIS', username, sharedReferralDetailsData?.crn ?? referralId, 'CRN', {
+      referralId,
+    })
     const roshAnalysis = await this.accreditedProgrammesManageAndDeliverService.getRoshAnalysis(
       username,
       sharedReferralDetailsData.crn,

@@ -12,6 +12,7 @@ import CannotAttendLocationsPresenter from './cannotAttendLocationsPresenter'
 import CannotAttendLocationsView from './cannotAttendLocationsView'
 import { PrimaryNavigationTab } from '../../shared/routes/layoutPresenter'
 import BaseController from '../../shared/baseController'
+import sendAuditEvent from '../../services/auditService'
 
 export default class LocationPreferencesController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -30,6 +31,12 @@ export default class LocationPreferencesController extends BaseController {
       referralId,
       username,
     )
+
+    if (req.method === 'GET') {
+      await sendAuditEvent('VIEW_ADD_LOCATION_PREFERENCES', username, referralDetails?.crn ?? referralId, 'CRN', {
+        referralId,
+      })
+    }
 
     const preferredLocationReferenceData =
       await this.accreditedProgrammesManageAndDeliverService.getPossibleDeliveryLocationsForReferral(
@@ -86,6 +93,18 @@ export default class LocationPreferencesController extends BaseController {
       referralId,
       username,
     )
+
+    if (req.method === 'GET') {
+      await sendAuditEvent(
+        'VIEW_ADDITIONAL_PDU_LOCATION_PREFERENCES',
+        username,
+        referralDetails?.crn ?? referralId,
+        'CRN',
+        {
+          referralId,
+        },
+      )
+    }
 
     const preferredLocationReferenceData: DeliveryLocationPreferencesFormData =
       req.session.locationPreferenceFormData?.preferredLocationReferenceData ??
@@ -151,6 +170,16 @@ export default class LocationPreferencesController extends BaseController {
         req.session.locationPreferenceFormData.updatePreferredLocationData.cannotAttendText =
           data.paramsForUpdate.cannotAttendLocations
 
+        await sendAuditEvent(
+          'UPDATE_REFERRAL_LOCATION_PREFERENCES',
+          username,
+          referralDetails?.crn ?? referralId,
+          'CRN',
+          {
+            referralId,
+            details: JSON.stringify(req.session.locationPreferenceFormData.updatePreferredLocationData),
+          },
+        )
         // Post if no existing preference data
         if (req.session.locationPreferenceFormData.preferredLocationReferenceData.existingDeliveryLocationPreferences) {
           await this.accreditedProgrammesManageAndDeliverService.updateDeliveryLocationPreferences(
@@ -173,6 +202,10 @@ export default class LocationPreferencesController extends BaseController {
         )
       }
     }
+
+    await sendAuditEvent('VIEW_CANNOT_ATTEND_LOCATIONS', username, referralDetails?.crn ?? referralId, 'CRN', {
+      referralId,
+    })
 
     const presenter = new CannotAttendLocationsPresenter(
       referralId,

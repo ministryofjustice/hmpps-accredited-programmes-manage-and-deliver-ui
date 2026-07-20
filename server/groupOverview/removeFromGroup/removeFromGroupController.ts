@@ -9,6 +9,7 @@ import RemoveFromGroupUpdateStatusView from './removeFromGroupUpdateStatusView'
 import { PrimaryNavigationTab } from '../../shared/routes/layoutPresenter'
 import BaseController from '../../shared/baseController'
 import logger from '../../../logger'
+import sendAuditEvent from '../../services/auditService'
 
 export default class RemoveFromGroupController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -73,6 +74,11 @@ export default class RemoveFromGroupController extends BaseController {
         formError = data.error
         userInputData = req.body
       } else {
+        await sendAuditEvent('EDIT_REMOVE_FROM_GROUP', username, referralDetails?.crn, 'CRN', {
+          referralId,
+          groupId,
+          details: data.paramsForUpdate,
+        })
         const response = await this.accreditedProgrammesManageAndDeliverService.removeFromGroup(
           username,
           referralId,

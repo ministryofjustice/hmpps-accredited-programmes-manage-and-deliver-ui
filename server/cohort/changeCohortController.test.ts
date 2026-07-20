@@ -4,12 +4,14 @@ import { CohortEnum, PersonalDetails, ReferralDetails } from '@manage-and-delive
 import { Express } from 'express'
 import { SessionData } from 'express-session'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import sendAuditEvent from '../services/auditService'
 import personalDetailsFactory from '../testutils/factories/personalDetailsFactory'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 import TestUtils from '../testutils/testUtils'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
+jest.mock('../services/auditService')
 const hmppsAuthClientBuilder = jest.fn()
 
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
@@ -43,6 +45,11 @@ describe('Update cohort', () => {
           expect(res.text).toContain(referralDetails.personName)
           expect(res.text).toContain(referralDetails.cohort)
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_UPDATE_COHORT', 'user1', referralDetails.crn, 'CRN', {
+            referralId: referralDetails.id,
+          })
+        })
     })
   })
 
@@ -51,18 +58,25 @@ describe('Update cohort', () => {
       const personalDetails: PersonalDetails = personalDetailsFactory.build()
 
       accreditedProgrammesManageAndDeliverService.getPersonalDetails.mockResolvedValue(personalDetails)
+      accreditedProgrammesManageAndDeliverService.updateCohort.mockResolvedValue(referralDetails)
 
       return request(app)
         .post(`/referral/${referralDetails.id}/change-cohort`)
         .type('form')
         .send({
-          cohort: 'GENERAL_OFFENCE' as CohortEnum,
+          updatedCohort: 'GENERAL_OFFENCE' as CohortEnum,
         })
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(
             `Redirecting to /referral-details/${referralDetails.id}/personal-details?isCohortUpdated=true`,
           )
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('EDIT_REFERRAL_COHORT', 'user1', referralDetails.crn, 'CRN', {
+            referralId: referralDetails.id,
+            cohort: 'GENERAL_OFFENCE',
+          })
         })
     })
   })

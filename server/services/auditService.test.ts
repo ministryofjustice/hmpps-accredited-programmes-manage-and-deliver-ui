@@ -26,7 +26,7 @@ describe('Audit service', () => {
       ;(auditService.sendAuditMessage as jest.Mock).mockResolvedValue(undefined)
 
       await sendAuditEvent('EDIT_REFERRAL_LDC', 'testuser123', 'subject123', 'CRN', {
-        referralId: 'refferalId',
+        referralId: 'referralId',
         hasLdc: true,
       })
 
@@ -36,7 +36,7 @@ describe('Audit service', () => {
         subjectId: 'subject123',
         subjectType: 'CRN',
         service: 'hmpps-accredited-programmes-manage-and-deliver-ui',
-        details: JSON.stringify({ referralId: 'refferalId', hasLdc: true }),
+        details: JSON.stringify({ referralId: 'referralId', hasLdc: true }),
       })
     })
 

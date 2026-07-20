@@ -5,12 +5,14 @@ import { Express } from 'express'
 import { SessionData } from 'express-session'
 import request from 'supertest'
 import AccreditedProgrammesManageAndDeliverService from '../../services/accreditedProgrammesManageAndDeliverService'
+import sendAuditEvent from '../../services/auditService'
 import referralStatusTransitionsFactory from '../../testutils/factories/referralStatusTransitionsFactory'
 import TestUtils from '../../testutils/testUtils'
 import referralDetailsFactory from '../../testutils/factories/referralDetailsFactory'
 
 jest.mock('../../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../../data/hmppsAuthClient')
+jest.mock('../../services/auditService')
 
 const hmppsAuthClientBuilder = jest.fn()
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
@@ -114,6 +116,22 @@ describe('remove from group', () => {
         .expect(res => {
           expect(res.text).toContain(
             `Redirecting to /group/${groupId}/allocations?message=John%20Jones%20was%20removed%20from%20this%20group.%20Their%20referral%20status%20is%20now%20Suitable%20but%20not%20ready.`,
+          )
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            'EDIT_REMOVE_FROM_GROUP',
+            'user1',
+            referralDetails.crn,
+            'CRN',
+            expect.objectContaining({
+              referralId,
+              groupId,
+              details: expect.objectContaining({
+                referralStatusDescriptionId: '336b59cd-b467-4305-8547-6a645a8a3f91',
+                additionalDetails: 'Some details',
+              }),
+            }),
           )
         })
     })

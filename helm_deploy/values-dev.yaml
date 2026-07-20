@@ -1,4 +1,3 @@
----
 # Per environment values which override defaults in hmpps-accredited-programmes-manage-and-deliver-ui/values.yaml
 
 generic-service:
@@ -18,7 +17,17 @@ generic-service:
     AUDIT_ENABLED: "true"
     SENTRY_ENVIRONMENT: dev
     ENABLE_PAST_DATE_REGION_RESTRICTION: "false"
+    # Before updating this to true make sure DEV_ALLOWED_REGIONS is up to date.
     ENABLE_REGION_RESTRICTION: "false"
+
+  allowlist:
+    accessibility-audit-usr: 5.181.59.114
+
+  # Move to general values once secret set up for prod and preprod
+  namespace_secrets:
+    sqs-hmpps-audit-secret:
+      AUDIT_SQS_QUEUE_URL: 'sqs_queue_url'
+      AUDIT_SQS_QUEUE_NAME: "sqs_queue_name"
 
 generic-prometheus-alerts:
   alertSeverity: hmpps_accredited_programmes_manage_and_deliver_alerts_nonprod

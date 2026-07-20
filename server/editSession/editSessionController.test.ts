@@ -6,11 +6,15 @@ import AccreditedProgrammesManageAndDeliverService from '../services/accreditedP
 import editSessionDetailsFactory from '../testutils/factories/editSessionDetailsFactory'
 import rescheduleSessionDetailsFactory from '../testutils/factories/rescheduleSessionDetailsFactory'
 import editSessionAttendeesFactory from '../testutils/factories/editSessionAttendeesFactory'
-import sessionDetailsFactory from '../testutils/factories/risksAndNeeds/sessionDetailsFactory'
+import GroupSessionDetailsFactory from '../testutils/factories/risksAndNeeds/groupSessionDetailsFactory'
+import SessionDetailsFactory from '../testutils/factories/sessionDetailsFactory'
 import TestUtils from '../testutils/testUtils'
+
+import sendAuditEvent from '../services/auditService'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
+jest.mock('../services/auditService')
 
 const hmppsAuthClientBuilder = jest.fn()
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
@@ -29,10 +33,18 @@ beforeEach(() => {
 
 describe('editSession', () => {
   it('should fetch session details with correct parameters', async () => {
-    const sessionDetails = sessionDetailsFactory.build()
+    const sessionDetails = GroupSessionDetailsFactory.build()
     accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
 
     await request(app).get(`/12345/6789/edit-session`).expect(200)
+
+    expect(sendAuditEvent).toHaveBeenCalledWith(
+      'VIEW_EDIT_SESSION',
+      'user1',
+      '6789',
+      'SEARCH_TERM',
+      expect.objectContaining({ details: expect.objectContaining({ groupId: '12345' }) }),
+    )
 
     expect(accreditedProgrammesManageAndDeliverService.getGroupSessionDetails).toHaveBeenCalledWith(
       'user1',
@@ -42,7 +54,7 @@ describe('editSession', () => {
   })
 
   it('loads the session details page and displays all related data', async () => {
-    const sessionDetails = sessionDetailsFactory.build()
+    const sessionDetails = GroupSessionDetailsFactory.build()
     accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
 
     await request(app)
@@ -54,12 +66,20 @@ describe('editSession', () => {
         expect(res.text).toContain('15 March 2025')
         expect(res.text).toContain('9:30am to midday')
       })
+
+    expect(sendAuditEvent).toHaveBeenCalledWith(
+      'VIEW_EDIT_SESSION',
+      'user1',
+      '6789',
+      'SEARCH_TERM',
+      expect.objectContaining({ details: expect.objectContaining({ groupId: '12345' }) }),
+    )
   })
 
   it('normalises one-to-one title and slug on the session-slug route', async () => {
     const groupId = 'd721e8ad-948d-4e48-bff9-9c6fc1c26ece'
     const sessionId = '89180e89-a335-4ce8-bfad-2ea61620a444'
-    const sessionDetails = sessionDetailsFactory.build({
+    const sessionDetails = GroupSessionDetailsFactory.build({
       pageTitle: 'Alex River S688890821: Getting started one-to-one',
       sessionType: 'Individual',
       attendanceAndSessionNotes: [
@@ -82,12 +102,20 @@ describe('editSession', () => {
         expect(res.text).toContain('Getting started one-to-one')
         expect(res.text).toContain(`/${groupId}/${sessionId}/getting-started-one-to-one-attendance-and-session-notes`)
       })
+
+    expect(sendAuditEvent).toHaveBeenCalledWith(
+      'VIEW_EDIT_SESSION',
+      'user1',
+      sessionId,
+      'SEARCH_TERM',
+      expect.objectContaining({ details: expect.objectContaining({ groupId }) }),
+    )
   })
 
   it('redirects to module attendance route with slug suffix when updating attendance and notes', async () => {
     const groupId = '12345'
     const sessionId = '6789'
-    const sessionDetails = sessionDetailsFactory.build({
+    const sessionDetails = GroupSessionDetailsFactory.build({
       pageTitle: 'Getting started 1',
       attendanceAndSessionNotes: [
         {
@@ -109,12 +137,20 @@ describe('editSession', () => {
       })
       .expect(302)
       .expect('Location', `/${groupId}/${sessionId}/getting-started-1-attendance`)
+
+    expect(sendAuditEvent).not.toHaveBeenCalledWith(
+      'VIEW_EDIT_SESSION',
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+    )
   })
 
   it('redirects to catch-up attendance route when session is catch-up', async () => {
     const groupId = '12345'
     const sessionId = '6789'
-    const sessionDetails = sessionDetailsFactory.build({
+    const sessionDetails = GroupSessionDetailsFactory.build({
       pageTitle: 'Managing myself 4',
       isCatchup: true,
       attendanceAndSessionNotes: [
@@ -137,6 +173,116 @@ describe('editSession', () => {
       })
       .expect(302)
       .expect('Location', `/${groupId}/${sessionId}/managing-myself-4-catch-up-attendance`)
+
+    expect(sendAuditEvent).not.toHaveBeenCalledWith(
+      'VIEW_EDIT_SESSION',
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+    )
+  })
+})
+
+describe('deleteSession', () => {
+  it('should load delete session page and emit VIEW_DELETE_SESSION', async () => {
+    const groupId = '12345'
+    const sessionId = '6789'
+    const sessionDetails = SessionDetailsFactory.build()
+    accreditedProgrammesManageAndDeliverService.getSessionDetails.mockResolvedValue(sessionDetails)
+
+    await request(app).get(`/${groupId}/${sessionId}/delete-session`).expect(200)
+
+    expect(sendAuditEvent).toHaveBeenCalledWith(
+      'VIEW_DELETE_SESSION',
+      'user1',
+      sessionId,
+      'SEARCH_TERM',
+      expect.objectContaining({ details: expect.objectContaining({ groupId }) }),
+    )
+    expect(accreditedProgrammesManageAndDeliverService.getSessionDetails).toHaveBeenCalledWith('user1', sessionId)
+  })
+
+  it('should delete session on POST and emit REMOVE_SESSION', async () => {
+    const groupId = '12345'
+    const sessionId = '6789'
+    accreditedProgrammesManageAndDeliverService.deleteSession.mockResolvedValue('Deleted message')
+
+    await request(app)
+      .post(`/${groupId}/${sessionId}/delete-session`)
+      .type('form')
+      .send({ 'delete-session': 'yes' })
+      .expect(302)
+      .expect('Location', `/group/${groupId}/sessions-and-attendance?editSessionMessage=Deleted%20message`)
+
+    expect(sendAuditEvent).toHaveBeenCalledWith(
+      'REMOVE_SESSION',
+      'user1',
+      sessionId,
+      'SEARCH_TERM',
+      expect.objectContaining({ details: expect.objectContaining({ groupId }) }),
+    )
+    expect(accreditedProgrammesManageAndDeliverService.deleteSession).toHaveBeenCalledWith('user1', sessionId)
+    expect(sendAuditEvent).not.toHaveBeenCalledWith(
+      'VIEW_DELETE_SESSION',
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+    )
+  })
+})
+
+describe('editSessionAttendees', () => {
+  it('should load edit-session-attendees page and emit VIEW_EDIT_SESSION_ATTENDEES', async () => {
+    const groupId = '111'
+    const sessionId = '6789'
+    const sessionAttendees = editSessionAttendeesFactory.build()
+    accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
+
+    await request(app).get(`/${groupId}/${sessionId}/edit-session-attendees`).expect(200)
+
+    expect(sendAuditEvent).toHaveBeenCalledWith(
+      'VIEW_EDIT_SESSION_ATTENDEES',
+      'user1',
+      sessionId,
+      'SEARCH_TERM',
+      expect.objectContaining({ details: expect.objectContaining({ groupId }) }),
+    )
+    expect(accreditedProgrammesManageAndDeliverService.getSessionAttendees).toHaveBeenCalledWith('user1', sessionId)
+  })
+
+  it('should submit attendees update and emit EDIT_SESSION_ATTENDEES', async () => {
+    const groupId = '111'
+    const sessionId = '6789'
+    accreditedProgrammesManageAndDeliverService.updateSessionAttendees.mockResolvedValue('Updated')
+
+    await request(app)
+      .post(`/${groupId}/${sessionId}/edit-session-attendees`)
+      .type('form')
+      .send({ 'edit-session-attendees': ['referral-123'] })
+      .expect(302)
+      .expect('Location', `/${groupId}/${sessionId}/edit-session?editSessionMessage=Updated`)
+
+    expect(sendAuditEvent).toHaveBeenCalledWith(
+      'EDIT_SESSION_ATTENDEES',
+      'user1',
+      sessionId,
+      'SEARCH_TERM',
+      expect.objectContaining({ details: { referralId: ['referral-123'], groupId } }),
+    )
+    expect(accreditedProgrammesManageAndDeliverService.updateSessionAttendees).toHaveBeenCalledWith(
+      'user1',
+      sessionId,
+      ['referral-123'],
+    )
+    expect(sendAuditEvent).not.toHaveBeenCalledWith(
+      'VIEW_EDIT_SESSION_ATTENDEES',
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+    )
   })
 })
 
@@ -154,6 +300,13 @@ describe('editSessionDateAndTime', () => {
         .expect(res => {
           expect(res.text).toContain('Edit the session date and time')
         })
+      expect(sendAuditEvent).toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_DATE_AND_TIME',
+        'user1',
+        '6789',
+        'SEARCH_TERM',
+        expect.objectContaining({ details: expect.objectContaining({ groupId: '111' }) }),
+      )
       expect(accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime).toHaveBeenCalledWith(
         'user1',
         '6789',
@@ -170,7 +323,7 @@ describe('editSessionDateAndTime', () => {
       accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(sessionDetails)
       accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
 
-      return request(app)
+      await request(app)
         .post(`/111/6789/edit-session-date-and-time`)
         .type('form')
         .send({
@@ -186,6 +339,13 @@ describe('editSessionDateAndTime', () => {
         .expect(res => {
           expect(res.text).toContain(`Redirecting to /111/6789/edit-group-days-and-times/reschedule`)
         })
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_DATE_AND_TIME',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('should submit directly when a future group session is moved to a past date', async () => {
@@ -216,6 +376,13 @@ describe('editSessionDateAndTime', () => {
         .expect(302)
         .expect('Location', '/111/6789/edit-session?editSessionMessage=Test%20message')
 
+      expect(sendAuditEvent).toHaveBeenCalledWith(
+        'EDIT_SESSION_DATE_AND_TIME',
+        'user1',
+        '6789',
+        'SEARCH_TERM',
+        expect.objectContaining({ details: expect.objectContaining({ groupId: '111' }) }),
+      )
       expect(accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime).toHaveBeenCalledWith(
         'user1',
         '6789',
@@ -225,6 +392,13 @@ describe('editSessionDateAndTime', () => {
           sessionEndTime: { hour: 11, minutes: 30, amOrPm: 'AM' },
           rescheduleOtherSessions: false,
         },
+      )
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_DATE_AND_TIME',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
       )
     })
 
@@ -256,6 +430,13 @@ describe('editSessionDateAndTime', () => {
         .expect(302)
         .expect('Location', '/111/6789/edit-session?editSessionMessage=Test%20message')
 
+      expect(sendAuditEvent).toHaveBeenCalledWith(
+        'EDIT_SESSION_DATE_AND_TIME',
+        'user1',
+        '6789',
+        'SEARCH_TERM',
+        expect.objectContaining({ details: expect.objectContaining({ groupId: '111' }) }),
+      )
       expect(accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime).toHaveBeenCalledWith(
         'user1',
         '6789',
@@ -265,6 +446,13 @@ describe('editSessionDateAndTime', () => {
           sessionEndTime: { hour: 11, minutes: 30, amOrPm: 'AM' },
           rescheduleOtherSessions: false,
         },
+      )
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_DATE_AND_TIME',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
       )
     })
 
@@ -295,6 +483,13 @@ describe('editSessionDateAndTime', () => {
         .expect('Location', '/111/6789/edit-group-days-and-times/reschedule')
 
       expect(accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime).not.toHaveBeenCalled()
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_DATE_AND_TIME',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('should redirect to reschedule page when a past group session is moved to a future date', async () => {
@@ -321,6 +516,13 @@ describe('editSessionDateAndTime', () => {
         })
         .expect(302)
         .expect('Location', '/111/6789/edit-group-days-and-times/reschedule')
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_DATE_AND_TIME',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('should return validation error if a past session is made longer than originally scheduled', async () => {
@@ -353,6 +555,13 @@ describe('editSessionDateAndTime', () => {
         })
 
       expect(accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime).not.toHaveBeenCalled()
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_DATE_AND_TIME',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('should map API 400 duration error to a field validation error instead of generic bad request', async () => {
@@ -392,6 +601,13 @@ describe('editSessionDateAndTime', () => {
             'The session duration cannot be longer than originally scheduled. Change the start or end time.',
           )
         })
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_DATE_AND_TIME',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('should show an explanatory message when submitted duration is shorter than current but still rejected by API', async () => {
@@ -431,6 +647,13 @@ describe('editSessionDateAndTime', () => {
             'You have shortened this session, but it is still longer than the originally scheduled duration.',
           )
         })
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_DATE_AND_TIME',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
   })
 })
@@ -468,6 +691,13 @@ describe('submitEditSessionDateAndTime', () => {
         'user1',
         '6789',
       )
+      expect(sendAuditEvent).toHaveBeenCalledWith(
+        'VIEW_SUBMIT_EDIT_SESSION_DATE_AND_TIME',
+        'user1',
+        '6789',
+        'SEARCH_TERM',
+        expect.objectContaining({ details: expect.objectContaining({ groupId: '111' }) }),
+      )
     })
   })
 
@@ -500,6 +730,20 @@ describe('submitEditSessionDateAndTime', () => {
         sessionDetails.sessionId,
         expect.objectContaining({ rescheduleOtherSessions: false }),
       )
+      expect(sendAuditEvent).toHaveBeenCalledWith(
+        'EDIT_SESSION_DATE_AND_TIME',
+        'user1',
+        sessionDetails.sessionId,
+        'SEARCH_TERM',
+        expect.objectContaining({ details: expect.objectContaining({ groupId: '111' }) }),
+      )
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_SUBMIT_EDIT_SESSION_DATE_AND_TIME',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('should submit with rescheduleOtherSessions true when yes is selected', async () => {
@@ -529,6 +773,20 @@ describe('submitEditSessionDateAndTime', () => {
         'user1',
         sessionDetails.sessionId,
         expect.objectContaining({ rescheduleOtherSessions: true }),
+      )
+      expect(sendAuditEvent).toHaveBeenCalledWith(
+        'EDIT_SESSION_DATE_AND_TIME',
+        'user1',
+        sessionDetails.sessionId,
+        'SEARCH_TERM',
+        expect.objectContaining({ details: expect.objectContaining({ groupId: '111' }) }),
+      )
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_SUBMIT_EDIT_SESSION_DATE_AND_TIME',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
       )
     })
   })
@@ -569,6 +827,13 @@ describe('editSessionFacilitators', () => {
           expect(res.text).toContain('Getting Started 1')
         })
 
+      expect(sendAuditEvent).toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_FACILITATORS',
+        'user1',
+        '456',
+        'SEARCH_TERM',
+        expect.objectContaining({ details: expect.objectContaining({ groupId: '123' }) }),
+      )
       expect(accreditedProgrammesManageAndDeliverService.getEditSessionFacilitators).toHaveBeenCalledWith(
         'user1',
         '456',
@@ -587,6 +852,13 @@ describe('editSessionFacilitators', () => {
           expect(res.text).toContain('Facilitator One')
           expect(res.text).toContain('Facilitator Two')
         })
+      expect(sendAuditEvent).toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_FACILITATORS',
+        'user1',
+        '456',
+        'SEARCH_TERM',
+        expect.objectContaining({ details: expect.objectContaining({ groupId: '123' }) }),
+      )
     })
   })
 
@@ -601,7 +873,7 @@ describe('editSessionFacilitators', () => {
         'Facilitators updated successfully',
       )
 
-      return request(app)
+      await request(app)
         .post(`/${groupId}/${sessionId}/edit-session-facilitators`)
         .type('form')
         .send({
@@ -616,6 +888,20 @@ describe('editSessionFacilitators', () => {
             `Found. Redirecting to /${groupId}/${sessionId}/edit-session?editSessionMessage=${encodeURIComponent('Facilitators updated successfully')}`,
           )
         })
+      expect(sendAuditEvent).toHaveBeenCalledWith(
+        'EDIT_SESSION_FACILITATORS',
+        'user1',
+        sessionId,
+        'SEARCH_TERM',
+        expect.objectContaining({ details: expect.objectContaining({ groupId }) }),
+      )
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_FACILITATORS',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('should handle validation errors and display error messages', async () => {
@@ -633,6 +919,13 @@ describe('editSessionFacilitators', () => {
         .expect(res => {
           expect(res.text).toContain('Edit the session facilitators')
         })
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_FACILITATORS',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('should store facilitators in session on successful submission', async () => {
@@ -658,6 +951,13 @@ describe('editSessionFacilitators', () => {
         .expect(302)
 
       expect(accreditedProgrammesManageAndDeliverService.updateSessionFacilitators).toHaveBeenCalled()
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_FACILITATORS',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('should pass userInputData to presenter when validation fails', async () => {
@@ -680,6 +980,13 @@ describe('editSessionFacilitators', () => {
         .expect(res => {
           expect(res.text).toContain('Edit the session facilitators')
         })
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_EDIT_SESSION_FACILITATORS',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
   })
 })

@@ -6,7 +6,7 @@
 {% set mainClasses = "app-container govuk-body" %}
 {% block main %}
   {% block content %}
-     <main class="govuk-main-wrapper" id="main-content">
+    <main class="govuk-main-wrapper" id="main-content">
         <div class="govuk-grid-row">
           {% include "../partials/headerMenu.njk" %}
           <div class="govuk-grid-column-two-thirds">
@@ -25,6 +25,6 @@
           {{ mojTimeline(statusHistoryTimelineOptions) }}
           </div>
         </div>
-      </main>
+    </main>
     {% endblock %}
   {% endblock %}

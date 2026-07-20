@@ -13,9 +13,10 @@ export const ALLOWED_REGIONS: string[] = ['N53', 'N54']
  * For info:
  * N02 Is an alternate region code for the north east used in test Delius accounts, but not used in production.
  * N07 Is the region code for London. Currently used for test accounts but not yet allowed in production.
+ * N50 Is the region code for Greater Manchester. Currently used for test accounts but not yet allowed in production.
  * Other are descibed in ALLOWED_REGIONS above.
  */
-export const DEV_ALLOWED_REGIONS: string[] = ['N02', 'N07', 'N53', 'N54'] // Dev users do not have access to the same regions in delius so extra ones allowed.
+export const DEV_ALLOWED_REGIONS: string[] = ['N02', 'N07', 'N53', 'N54', 'N50'] // Dev users do not have access to the same regions in delius so extra ones allowed.
 
 /**
  * Checks if the region restriction is enabled.

@@ -4,11 +4,13 @@ import request from 'supertest'
 import createUserToken from '../testutils/createUserToken'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import { appWithAllRoutes, user as defaultUser } from '../routes/testutils/appSetup'
+import sendAuditEvent from '../services/auditService'
 
 const hmppsAuthClientBuilder = jest.fn()
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
+jest.mock('../services/auditService')
 
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
   hmppsAuthClientBuilder,
@@ -51,6 +53,7 @@ describe('Reporting controller', () => {
         expect(res.text).toBe(csv)
       })
 
+    expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_GROUP_SIZE_REPORT', 'user1', '2026-05-18T13:30:00', 'SEARCH_TERM')
     expect(accreditedProgrammesManageAndDeliverService.getGroupSizeReport).toHaveBeenCalledWith(
       'user1',
       '2026-05-18T13:30:00',
@@ -85,6 +88,14 @@ describe('Reporting controller', () => {
         expect(res.text).toBe(csv)
       })
 
+    expect(sendAuditEvent).toHaveBeenCalledWith(
+      'VIEW_DOSAGE_REPORT',
+      'user1',
+      JSON.stringify({ referralsCreatedSince: '2026-05-21' }),
+      'SEARCH_TERM',
+      expect.objectContaining({ reportName: 'dosage', query: { referralsCreatedSince: '2026-05-21' } }),
+    )
+
     expect(accreditedProgrammesManageAndDeliverService.getDosageReport).toHaveBeenCalledWith('user1', {
       referralsCreatedSince: '2026-05-21',
     })
@@ -118,6 +129,14 @@ describe('Reporting controller', () => {
         expect(res.text).toBe(csv)
       })
 
+    expect(sendAuditEvent).toHaveBeenCalledWith(
+      'VIEW_SESSION_RATE_REPORT',
+      'user1',
+      JSON.stringify({ groupsStartedAfter: '2026-05-21' }),
+      'SEARCH_TERM',
+      expect.objectContaining({ reportName: 'session-rate', query: { groupsStartedAfter: '2026-05-21' } }),
+    )
+
     expect(accreditedProgrammesManageAndDeliverService.getSessionRateReport).toHaveBeenCalledWith('user1', {
       groupsStartedAfter: '2026-05-21',
     })
@@ -150,6 +169,17 @@ describe('Reporting controller', () => {
       .expect(res => {
         expect(res.text).toBe(csv)
       })
+
+    expect(sendAuditEvent).toHaveBeenCalledWith(
+      'VIEW_FACILITATOR_CONTINUITY_REPORT',
+      'user1',
+      JSON.stringify({ groupsCreatedSince: '2026-05-21T12:00:00' }),
+      'SEARCH_TERM',
+      expect.objectContaining({
+        reportName: 'facilitator-continuity',
+        query: { groupsCreatedSince: '2026-05-21T12:00:00' },
+      }),
+    )
 
     expect(accreditedProgrammesManageAndDeliverService.getFacilitatorContinuityReport).toHaveBeenCalledWith('user1', {
       groupsCreatedSince: '2026-05-21T12:00:00',

@@ -1,7 +1,4 @@
 @use '../../../node_modules/govuk-frontend/dist/govuk' as *;
-.govuk-main-wrapper {
-  min-height: 600px;
-}
 
 .session-reschedule-table-key-width {
   width: 40%;
@@ -71,7 +68,7 @@
   .caselist-filter-column,
   .caselist-results-column,
   .group-filter-column,
-  .group-results-column {
+  .group-results-column{
     width: 100%;
   }
 
@@ -85,25 +82,14 @@
 }
 .moj-filter__options {
   .clear-filters__link {
-    display: inline-block;
-    padding: 0;
-    @include govuk-responsive-margin(4, 'bottom');
-    @include govuk-media-query($from: mobile) {
-      @include govuk-responsive-margin(6, 'bottom');
-    }
+    display: block;
 
-    @include govuk-media-query($from: desktop) {
-      padding-left: 3px;
-      @include govuk-responsive-padding(1, 'top');
-      white-space: nowrap;
+    &:first-of-type {
+      margin-bottom: 20px;
     }
   }
-
   .govuk-button {
-    @include govuk-responsive-margin(4, 'bottom');
-    @include govuk-media-query($from: desktop) {
-      margin-right: 0.4rem;
-    }
+    margin-bottom: 20px;
   }
 }
 
@@ -129,7 +115,8 @@
 
 .govuk-table__header {
   button {
-    align-items: flex-start;
+    align-items: center;
+    transition: none;
     svg {
       flex-shrink: 0;
       min-width: 12px;
@@ -171,6 +158,30 @@
   text-align: right;
 }
 
+.group-header-container {
+  width: 100%;
+}
+
+.group-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.group-header-title {
+  min-width: 0;
+}
+
+.group-header-action {
+  margin-left: auto;
+
+  .govuk-button {
+    width: auto;
+    white-space: nowrap;
+  }
+}
+
 .risk-changed {
   color: #1d70b8;
 }
@@ -189,10 +200,6 @@
   padding: 30px 0;
 }
 
-.heading-background {
-  background: white;
-  padding-top: 40px;
-}
 
 .hmpps-header__title {
   padding-right: 10px;

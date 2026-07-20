@@ -1,6 +1,6 @@
 export interface GroupAllocationsFilterParams {
   nameOrCRN?: string
-  pdu?: string
+  pdu?: string[]
   reportingTeam?: string[]
   cohort?: string
   sex?: string

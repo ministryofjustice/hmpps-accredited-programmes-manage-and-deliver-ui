@@ -44,6 +44,10 @@ export default class LdcController extends BaseController {
       return res.redirect(`${req.session.originPage}?isLdcUpdated=true`)
     }
 
+    await sendAuditEvent('VIEW_UPDATE_LDC', username, referralDetails?.crn, 'CRN', {
+      referralId,
+    })
+
     const presenter = new UpdateLdcPresenter(referralId, referralDetails, req.session.originPage)
     const view = new UpdateLdcView(presenter)
 

@@ -1,6 +1,7 @@
 import { ScheduleSessionRequest } from '@manage-and-deliver-api'
 import { Request, Response } from 'express'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import sendAuditEvent from '../services/auditService'
 import { FormValidationError } from '../utils/formValidationError'
 
 import SessionScheduleAttendancePresenter from './sessionAttendance/sessionScheduleAttendancePresenter'
@@ -30,6 +31,9 @@ export default class SessionScheduleController extends BaseController {
     const { sessionScheduleData } = req.session
     let formError: FormValidationError | null = null
 
+    if (req.method === 'GET') {
+      await sendAuditEvent('VIEW_SCHEDULE_SESSION_TYPE', username, groupId, 'SEARCH_TERM')
+    }
     const scheduleSessionTypeResponse = await this.accreditedProgrammesManageAndDeliverService.getSessionTemplates(
       username,
       groupId,
@@ -113,6 +117,7 @@ export default class SessionScheduleController extends BaseController {
       }
     }
 
+    await sendAuditEvent('VIEW_SCHEDULE_SESSION_DETAILS', username, groupId, 'SEARCH_TERM')
     const sessionDetails = await this.accreditedProgrammesManageAndDeliverService.getIndividualSessionDetails(
       username,
       groupId,
@@ -142,6 +147,9 @@ export default class SessionScheduleController extends BaseController {
         const [day, month, year] = sessionScheduleData.startDate.split('/')
         return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
       })()
+      await sendAuditEvent('CREATE_SCHEDULE_SESSION', username, groupId, 'GROUP', {
+        details: sessionDataForApi,
+      })
       const response = await this.accreditedProgrammesManageAndDeliverService.createSessionSchedule(
         username,
         groupId,
@@ -170,6 +178,7 @@ export default class SessionScheduleController extends BaseController {
 
     // Clear session data before starting journeys
     req.session.sessionScheduleData = {}
+    await sendAuditEvent('VIEW_SESSIONS_AND_ATTENDANCE', username, groupId, 'SEARCH_TERM')
 
     const sessionAttendanceData = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionsAndAttendance(
       username,

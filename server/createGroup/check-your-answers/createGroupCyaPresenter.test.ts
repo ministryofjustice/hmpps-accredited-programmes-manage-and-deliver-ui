@@ -204,7 +204,7 @@ describe('CreateGroupCyaPresenter', () => {
     it('returns summary list with all group details and no team members', () => {
       const createGroupFormData: Partial<CreateGroupRequest> = {
         groupCode: 'ABC123',
-        earliestStartDate: '2026-06-01',
+        earliestStartDate: '30/07/2026',
         createGroupSessionSlot: [],
         cohort: 'GENERAL',
         sex: 'MALE',
@@ -219,55 +219,55 @@ describe('CreateGroupCyaPresenter', () => {
       expect(summary).toContainEqual({
         key: 'Group code',
         lines: ['ABC123'],
-        changeLink: '/create-group-code',
+        changeLink: '/create-group-code?referrer=group-review-details',
         visuallyHiddenText: 'group code',
       })
       expect(summary).toContainEqual({
         key: 'Start date',
-        lines: ['2026-06-01'],
-        changeLink: '/group-start-date',
+        lines: ['Thursday 30 July 2026'],
+        changeLink: '/group-start-date?referrer=group-review-details',
         visuallyHiddenText: 'start date',
       })
       expect(summary).toContainEqual({
         key: 'Days and times',
         lines: ['Monday 2:00 PM - 4:00 PM'],
-        changeLink: '/group-days-and-times',
+        changeLink: '/group-days-and-times?referrer=group-review-details',
         visuallyHiddenText: 'days and times',
       })
       expect(summary).toContainEqual({
         key: 'Cohort',
         lines: ['General offence'],
-        changeLink: '/group-cohort',
+        changeLink: '/group-cohort?referrer=group-review-details',
         visuallyHiddenText: 'cohort',
       })
       expect(summary).toContainEqual({
         key: 'Gender',
         lines: ['Male'],
-        changeLink: '/group-gender',
+        changeLink: '/group-gender?referrer=group-review-details',
         visuallyHiddenText: 'gender',
       })
       expect(summary).toContainEqual({
         key: 'PDU',
         lines: ['PDU North'],
-        changeLink: '/group-probation-delivery-unit',
+        changeLink: '/group-probation-delivery-unit?referrer=group-review-details',
         visuallyHiddenText: 'PDU',
       })
       expect(summary).toContainEqual({
         key: 'Delivery location',
         lines: ['Prison A'],
-        changeLink: '/group-delivery-location',
+        changeLink: '/group-delivery-location?referrer=group-review-details',
         visuallyHiddenText: 'delivery location',
       })
       expect(summary).toContainEqual({
         key: 'Treatment Manager',
         lines: ['Not assigned'],
-        changeLink: '/group-facilitators',
+        changeLink: '/group-facilitators?referrer=group-review-details',
         visuallyHiddenText: 'treatment manager',
       })
       expect(summary).toContainEqual({
         key: 'Facilitators',
         lines: ['None assigned'],
-        changeLink: '/group-facilitators',
+        changeLink: '/group-facilitators?referrer=group-review-details',
         visuallyHiddenText: 'facilitators',
       })
     })
@@ -295,9 +295,16 @@ describe('CreateGroupCyaPresenter', () => {
       const summary = presenter.getCreateGroupSummary()
 
       expect(summary).toContainEqual({
+        key: 'Start date',
+        lines: ['Monday 1 June 2026'],
+        changeLink: '/group-start-date?referrer=group-review-details',
+        visuallyHiddenText: 'start date',
+      })
+
+      expect(summary).toContainEqual({
         key: 'Treatment Manager',
         lines: ['John Smith'],
-        changeLink: '/group-facilitators',
+        changeLink: '/group-facilitators?referrer=group-review-details',
         visuallyHiddenText: 'treatment manager',
       })
     })
@@ -334,7 +341,7 @@ describe('CreateGroupCyaPresenter', () => {
       expect(summary).toContainEqual({
         key: 'Facilitators',
         lines: ['Jane Doe', 'Bob Johnson'],
-        changeLink: '/group-facilitators',
+        changeLink: '/group-facilitators?referrer=group-review-details',
         visuallyHiddenText: 'facilitators',
       })
     })
@@ -390,7 +397,7 @@ describe('CreateGroupCyaPresenter', () => {
       expect(summary).toContainEqual({
         key: 'Cover facilitators',
         lines: ['Alice Brown', 'Charlie Wilson'],
-        changeLink: '/group-facilitators',
+        changeLink: '/group-facilitators?referrer=group-review-details',
         visuallyHiddenText: 'cover facilitators',
       })
     })
@@ -443,8 +450,31 @@ describe('CreateGroupCyaPresenter', () => {
       expect(summary).toContainEqual({
         key: 'Days and times',
         lines: ['Monday 2:00 PM - 4:00 PM', 'Wednesday 10:00 AM - 12:00 PM'],
-        changeLink: '/group-days-and-times',
+        changeLink: '/group-days-and-times?referrer=group-review-details',
         visuallyHiddenText: 'days and times',
+      })
+    })
+
+    it('formats UK date with day of week using shared date utils', () => {
+      const createGroupFormData: Partial<CreateGroupRequest> = {
+        groupCode: 'ABC123',
+        earliestStartDate: '10/07/2026',
+        createGroupSessionSlot: [],
+        cohort: 'GENERAL',
+        sex: 'MALE',
+        pduName: 'PDU North',
+        deliveryLocationName: 'Prison A',
+        teamMembers: [],
+      }
+      const presenter = new CreateGroupCyaPresenter(createGroupFormData)
+
+      const summary = presenter.getCreateGroupSummary()
+
+      expect(summary).toContainEqual({
+        key: 'Start date',
+        lines: ['Friday 10 July 2026'],
+        changeLink: '/group-start-date?referrer=group-review-details',
+        visuallyHiddenText: 'start date',
       })
     })
 

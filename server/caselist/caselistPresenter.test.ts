@@ -67,10 +67,10 @@ describe(`filters`, () => {
     })
   })
 
-  describe('generatePduSelect', () => {
+  describe('generatePduCheckboxArgs', () => {
     it('should generate correct select items based on API data and select the correct PDU', () => {
       const testObject = {
-        filter: { pdu: 'PDU3' } as CaselistFilter,
+        filter: { pdu: ['PDU1', 'PDU3'] } as CaselistFilter,
       }
       const referralCaseListItem = referralCaseListItemFactory.build()
       const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
@@ -87,14 +87,10 @@ describe(`filters`, () => {
         'test location',
       )
 
-      expect(presenter.generatePduSelectArgs()).toEqual([
-        {
-          text: 'Select PDU',
-          value: '',
-        },
-        { text: 'PDU1', value: 'PDU1', selected: false },
-        { text: 'PDU2', value: 'PDU2', selected: false },
-        { text: 'PDU3', value: 'PDU3', selected: true },
+      expect(presenter.generatePDUCheckboxArgs()).toEqual([
+        { text: 'PDU1', value: 'PDU1', checked: true },
+        { text: 'PDU2', value: 'PDU2', checked: false },
+        { text: 'PDU3', value: 'PDU3', checked: true },
       ])
     })
   })
@@ -160,7 +156,7 @@ describe(`filters`, () => {
   describe('generateReportingTeamCheckboxArgs', () => {
     it('should generate correct checkboxes based on API data and select the correct reporting team', () => {
       const testObject = {
-        filter: { pdu: 'PDU1', reportingTeam: ['Team2'] } as CaselistFilter,
+        filter: { pdu: ['PDU1'], reportingTeam: ['Team2'] } as CaselistFilter,
       }
       const referralCaseListItem = referralCaseListItemFactory.build()
       const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
@@ -195,7 +191,7 @@ describe(`filters`, () => {
   describe('getSubNavArgs', () => {
     it('should generate correct sub nav arguments when url params are present', () => {
       const testObject = {
-        filter: { pdu: 'PDU1', reportingTeam: ['Team2'] } as CaselistFilter,
+        filter: { pdu: ['PDU1'], reportingTeam: ['Team2'] } as CaselistFilter,
       }
       const referralCaseListItem = referralCaseListItemFactory.build()
       const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
@@ -229,7 +225,7 @@ describe(`filters`, () => {
     })
     it('should generate correct sub nav arguments when url params undefined', () => {
       const testObject = {
-        filter: { pdu: 'PDU1', reportingTeam: ['Team2'] } as CaselistFilter,
+        filter: { pdu: ['PDU1'], reportingTeam: ['Team2'] } as CaselistFilter,
       }
       const referralCaseListItem = referralCaseListItemFactory.build()
       const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
@@ -666,6 +662,21 @@ describe('generateNoResultsString', () => {
     expect(presenter.generateNoResultsString()).toBe('No results in open referrals. 3 results in closed referrals.')
   })
 
+  it('returns singular result wording when closed count is one on open section', () => {
+    const presenter = new CaselistPresenter(
+      1,
+      emptyPage,
+      {} as CaselistFilter,
+      '',
+      true,
+      TestUtils.createCaseListFilters(),
+      1,
+      'test location',
+    )
+
+    expect(presenter.generateNoResultsString()).toBe('No results in open referrals. 1 result in closed referrals.')
+  })
+
   it('returns closed-referrals message with open count when on closed section', () => {
     const presenter = new CaselistPresenter(
       2,
@@ -679,6 +690,21 @@ describe('generateNoResultsString', () => {
     )
 
     expect(presenter.generateNoResultsString()).toBe('No results in closed referrals. 5 results in open referrals.')
+  })
+
+  it('returns singular result wording when open count is one on closed section', () => {
+    const presenter = new CaselistPresenter(
+      2,
+      emptyPage,
+      {} as CaselistFilter,
+      '',
+      false,
+      TestUtils.createCaseListFilters(),
+      1,
+      'test location',
+    )
+
+    expect(presenter.generateNoResultsString()).toBe('No results in closed referrals. 1 result in open referrals.')
   })
 
   it('returns clear-filters guidance for closed section when other count is zero', () => {

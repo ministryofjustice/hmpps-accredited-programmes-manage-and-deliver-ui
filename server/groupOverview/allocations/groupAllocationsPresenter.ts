@@ -58,7 +58,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
   }
 
   get showReportingTeams(): boolean {
-    return !!this.filter?.pdu
+    return this.filter.pdus !== undefined && this.filter.pdus.length > 0
   }
 
   get resultsText(): string {
@@ -222,29 +222,25 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
     }
   }
 
-  generatePduSelectArgs(): SelectArgsItem[] {
-    const checkboxArgs = [
-      {
-        text: 'Select PDU',
-        value: '',
-      },
-    ]
-    const pduCheckboxArgs = this.group.filters.locationFilters
+  generatePduCheckboxArgs(): CheckboxesArgsItem[] {
+    return this.group.filters.locationFilters
       .map(pdu => ({
         text: pdu.pduName,
         value: pdu.pduName,
-        selected: this.filter.pdu === pdu.pduName,
+        checked: this.filter.pdus?.includes(pdu.pduName),
       }))
       .sort((a, b) => a.text.localeCompare(b.text))
-    return checkboxArgs.concat(pduCheckboxArgs)
   }
 
   generateReportingTeamCheckboxArgs(): CheckboxesArgsItem[] {
     let checkboxItems: CheckboxesArgsItem[] = []
 
     if (this.showReportingTeams) {
-      const pduLocationData = this.group.filters.locationFilters.find(location => location.pduName === this.filter.pdu)
-      checkboxItems = pduLocationData.reportingTeams
+      const selectedPdus = this.group.filters.locationFilters.filter(location =>
+        this.filter.pdus!.includes(location.pduName),
+      )
+      const allReportingTeams = Array.from(new Set(selectedPdus?.flatMap(pdu => pdu.reportingTeams) ?? [])).sort()
+      checkboxItems = allReportingTeams
         .map(location => ({
           text: location,
           value: location,

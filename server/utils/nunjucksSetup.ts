@@ -15,6 +15,7 @@ export default function nunjucksSetup(app: express.Express): void {
   app.locals.applicationName = 'Accredited Programmes'
   app.locals.environmentName = config.environmentName
   app.locals.environmentNameColour = config.environmentName === 'PRE-PRODUCTION' ? 'govuk-tag--green' : ''
+  app.locals.version = config.gitRef
   let assetManifest: Record<string, string> = {}
 
   try {

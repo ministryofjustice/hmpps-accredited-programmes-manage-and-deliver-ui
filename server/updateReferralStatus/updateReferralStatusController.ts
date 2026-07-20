@@ -13,6 +13,7 @@ import UpdateReferralStatusFixedPresenter from './updateReferralStatusToOnProgra
 import UpdateReferralStatusFixedView from './updateReferralStatusToOnProgrammeOrCompletedView'
 import UpdateReferralStatusView from './updateReferralStatusView'
 import logger from '../../logger'
+import sendAuditEvent from '../services/auditService'
 
 /**
  * Build a FormValidationError for a single field. Mirrors the shape produced by
@@ -83,6 +84,10 @@ export default class UpdateReferralStatusController {
           userInputData = req.body
         } else {
           try {
+            await sendAuditEvent('EDIT_REFERRAL_STATUS', username, referralDetails?.crn, 'CRN', {
+              referralId,
+              updatedStatusId: data.paramsForUpdate.referralStatusDescriptionId,
+            })
             const response = await this.accreditedProgrammesManageAndDeliverService.updateStatus(
               username,
               referralId,
@@ -221,6 +226,10 @@ export default class UpdateReferralStatusController {
             additionalDetails: data.paramsForUpdate.additionalDetails,
           }
           try {
+            await sendAuditEvent('EDIT_REFERRAL_STATUS', username, referralDetails?.crn, 'CRN', {
+              referralId,
+              updatedStatusId: submittedStatusId,
+            })
             const response = await this.accreditedProgrammesManageAndDeliverService.updateStatus(
               username,
               referralId,

@@ -4,9 +4,11 @@ import request from 'supertest'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import GroupsByRegionFactory from '../testutils/factories/groupsByRegionFactory'
+import sendAuditEvent from '../services/auditService'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
+jest.mock('../services/auditService')
 
 const hmppsAuthClientBuilder = jest.fn()
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
@@ -38,6 +40,14 @@ describe('GroupController', () => {
           expect(res.text).toContain('Building Choices: moderate intensity')
           expect(res.text).toContain('Groups')
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            'SEARCH_NOT_STARTED_OR_IN_PROGRESS_GROUP_LIST',
+            'user1',
+            JSON.stringify({}),
+            'SEARCH_TERM',
+          )
+        })
     })
 
     it('refetches with reset delivery location filters when requested locations are invalid', async () => {
@@ -53,16 +63,29 @@ describe('GroupController', () => {
         1,
         expect.anything(),
         expect.objectContaining({ page: 0, size: 50 }),
-        expect.objectContaining({ pdu: 'PDU3', deliveryLocations: ['delivery-location-1'] }),
+        expect.objectContaining({ pdu: ['PDU3'], deliveryLocations: ['delivery-location-1'] }),
         'NOT_STARTED_OR_IN_PROGRESS',
       )
       expect(accreditedProgrammesManageAndDeliverService.getGroupList).toHaveBeenNthCalledWith(
         2,
         expect.anything(),
         expect.objectContaining({ page: 0, size: 50 }),
-        expect.objectContaining({ pdu: 'PDU3' }),
+        expect.objectContaining({ pdu: ['PDU3'] }),
         'NOT_STARTED_OR_IN_PROGRESS',
       )
+    })
+    it('filters by multiple PDUs', async () => {
+      return request(app)
+        .get('/groups/not-started-and-in-progress?pdu=PDU1&pdu=PDU2')
+        .expect(200)
+        .then(() => {
+          expect(accreditedProgrammesManageAndDeliverService.getGroupList).toHaveBeenCalledWith(
+            expect.anything(),
+            expect.objectContaining({ page: 0, size: 50 }),
+            expect.objectContaining({ pdu: ['PDU1', 'PDU2'] }),
+            'NOT_STARTED_OR_IN_PROGRESS',
+          )
+        })
     })
   })
 
@@ -74,6 +97,14 @@ describe('GroupController', () => {
         .expect(res => {
           expect(res.text).toContain('Building Choices: moderate intensity')
           expect(res.text).toContain('Groups')
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            'SEARCH_COMPLETED_GROUP_LIST',
+            'user1',
+            JSON.stringify({}),
+            'SEARCH_TERM',
+          )
         })
     })
 
@@ -88,14 +119,14 @@ describe('GroupController', () => {
         1,
         expect.anything(),
         expect.objectContaining({ page: 0, size: 50 }),
-        expect.objectContaining({ pdu: 'PDU3', deliveryLocations: ['delivery-location-1'] }),
+        expect.objectContaining({ pdu: ['PDU3'], deliveryLocations: ['delivery-location-1'] }),
         'COMPLETE',
       )
       expect(accreditedProgrammesManageAndDeliverService.getGroupList).toHaveBeenNthCalledWith(
         2,
         expect.anything(),
         expect.objectContaining({ page: 0, size: 50 }),
-        expect.objectContaining({ pdu: 'PDU3' }),
+        expect.objectContaining({ pdu: ['PDU3'] }),
         'COMPLETE',
       )
     })

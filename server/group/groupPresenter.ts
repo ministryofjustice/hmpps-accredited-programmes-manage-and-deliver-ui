@@ -20,7 +20,7 @@ export enum GroupListPageSection {
 export default class GroupPresenter {
   public readonly pagination: Pagination
 
-  public readonly selectedPdu: string | undefined
+  public readonly selectedPdu: string[] | undefined
 
   public readonly deliveryLocations: string[] = []
 
@@ -94,7 +94,7 @@ export default class GroupPresenter {
           },
         },
         {
-          text: 'Delivery location',
+          text: 'Delivery Location',
           attributes: {
             'aria-sort': 'none',
           },
@@ -213,21 +213,14 @@ export default class GroupPresenter {
       : 'There are currently no completed groups in'
   }
 
-  generatePduSelectArgs(): SelectArgsItem[] {
-    const selectOptions: SelectArgsItem[] = [
-      {
-        text: 'Select PDU',
-        value: '',
-      },
-    ]
-    const pduSelectArgs = this.pduNames
+  generatePDUCheckboxArgs(): CheckboxesArgsItem[] {
+    return this.pduNames
       .map(pdu => ({
         text: pdu,
         value: pdu,
-        selected: this.filter.pdu === pdu,
+        checked: this.filter.pdu?.includes(pdu),
       }))
       .sort((a, b) => a.text.localeCompare(b.text))
-    return selectOptions.concat(pduSelectArgs)
   }
 
   generateDeliveryLocationCheckboxArgs(): CheckboxesArgsItem[] {

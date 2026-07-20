@@ -13,9 +13,13 @@
 
 {% block content %}
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <span class="govuk-caption-xl">{{ text.pageSubHeading }}</span>
-      <h1 class="govuk-heading-xl">{{ text.pageHeading }}</h1>
+    <div class="govuk-grid-column-full group-header-container">
+      <div class="group-header-content">
+        <div class="group-header-title">
+          <span class="govuk-caption-xl">{{ text.pageSubHeading }}</span>
+          <h1 class="govuk-heading-xl">{{ text.pageHeading }}</h1>
+        </div>
+      </div>
     </div>
   </div>
   <div class="govuk-grid-row">
@@ -23,11 +27,11 @@
     {%- set filterOptionsHtml %}
     <a class="clear-filters__link" href="?">Clear filters</a>
     {{ govukInput(searchByCrnOrPersonNameArgs) }}
-    {{ govukSelect(searchByPduArgs) }}
+    {{ govukCheckboxes(searchByPduArgs) }}
 
     {% if not presenter.showReportingLocations %}
       <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Reporting team</h3>
-      <p class="govuk-body">Select a PDU and apply filters to see reporting teams</p>
+      <p class="govuk-body">Select one or more PDUs and apply filters to see reporting teams</p>
     {% endif %}
 
     {% if presenter.showReportingLocations %}
@@ -36,7 +40,8 @@
 
     {{ govukSelect(searchByCohortArgs) }}
     {{ govukSelectWithOptgroup(searchByStatusArgs) }}
-
+    {{ govukButton(applyFilterButtonArgs) }}
+    <a class="clear-filters__link" href="?">Clear filters</a>
     {% endset -%}
     <div class="govuk-grid-column-one-quarter caselist-filter-column">
       <form method="get">

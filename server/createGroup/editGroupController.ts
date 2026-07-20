@@ -2,6 +2,7 @@ import { CreateGroupRequest } from '@manage-and-deliver-api'
 import { Request, Response } from 'express'
 import RescheduleOtherSessionsForm from '../editSession/dateAndTime/rescheduleOtherSessionsForm'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import sendAuditEvent from '../services/auditService'
 import BaseController from '../shared/baseController'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import { FormValidationError } from '../utils/formValidationError'
@@ -39,6 +40,9 @@ export default class EditGroupController extends BaseController {
     const { username } = req.user
     let formError: FormValidationError | null = null
 
+    if (req.method === 'GET') {
+      await sendAuditEvent('VIEW_EDIT_GROUP_DATE', username, groupId, 'SEARCH_TERM')
+    }
     const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
     const groupData: Partial<CreateGroupRequest> = {
       groupCode: groupDetails?.code,
@@ -83,6 +87,12 @@ export default class EditGroupController extends BaseController {
         res.status(400)
         formError = data.error
       } else {
+        await sendAuditEvent('EDIT_GROUP_RESCHEDULE_DATE', username, groupId, 'SEARCH_TERM', {
+          details: {
+            earliestStartDate: updatedGroupDetails.earliestStartDate,
+            automaticallyRescheduleOtherSessions: data.paramsForUpdate.rescheduleOtherSessions,
+          },
+        })
         const response = await this.accreditedProgrammesManageAndDeliverService.updateGroup(username, groupId, {
           earliestStartDate: updatedGroupDetails.earliestStartDate,
           automaticallyRescheduleOtherSessions: data.paramsForUpdate.rescheduleOtherSessions,
@@ -103,6 +113,9 @@ export default class EditGroupController extends BaseController {
     let formError: FormValidationError | null = null
     let userInputData: Record<string, unknown> | null = null
 
+    if (req.method === 'GET') {
+      await sendAuditEvent('VIEW_EDIT_GROUP_DAYS_AND_TIMES', username, groupId, 'SEARCH_TERM')
+    }
     const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getBffEditGroupDaysAndTimes(
       username,
       groupId,
@@ -167,6 +180,12 @@ export default class EditGroupController extends BaseController {
         res.status(400)
         formError = data.error
       } else {
+        await sendAuditEvent('EDIT_GROUP_RESCHEDULE_DAYS_AND_TIMES', username, groupId, 'SEARCH_TERM', {
+          details: {
+            createGroupSessionSlot: updatedGroupDetails.createGroupSessionSlot,
+            automaticallyRescheduleOtherSessions: data.paramsForUpdate.rescheduleOtherSessions,
+          },
+        })
         const response = await this.accreditedProgrammesManageAndDeliverService.updateGroup(username, groupId, {
           createGroupSessionSlot: updatedGroupDetails.createGroupSessionSlot,
           automaticallyRescheduleOtherSessions: data.paramsForUpdate.rescheduleOtherSessions,
@@ -186,6 +205,9 @@ export default class EditGroupController extends BaseController {
     let userInputData = null
     let formError: FormValidationError | null = null
 
+    if (req.method === 'GET') {
+      await sendAuditEvent('VIEW_EDIT_GROUP_GENDER', username, groupId, 'SEARCH_TERM')
+    }
     const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
     const editGroupSexData = await this.accreditedProgrammesManageAndDeliverService.getGroupSexDetails(
       username,
@@ -207,6 +229,9 @@ export default class EditGroupController extends BaseController {
         formError = data.error
         userInputData = req.body
       } else {
+        await sendAuditEvent('EDIT_GROUP_GENDER', username, groupId, 'SEARCH_TERM', {
+          details: { sex: data.paramsForUpdate.sex },
+        })
         const response = await this.accreditedProgrammesManageAndDeliverService.updateGroup(username, groupId, {
           sex: data.paramsForUpdate.sex,
         })
@@ -233,6 +258,9 @@ export default class EditGroupController extends BaseController {
     let userInputData = null
     let formError: FormValidationError | null = null
 
+    if (req.method === 'GET') {
+      await sendAuditEvent('VIEW_EDIT_GROUP_COHORT', username, groupId, 'SEARCH_TERM')
+    }
     const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
     const bffEditGroupCohortData = await this.accreditedProgrammesManageAndDeliverService.getBffEditGroupCohort(
       username,
@@ -254,6 +282,9 @@ export default class EditGroupController extends BaseController {
         formError = data.error
         userInputData = req.body
       } else {
+        await sendAuditEvent('EDIT_GROUP_COHORT', username, groupId, 'SEARCH_TERM', {
+          details: { cohort: data.paramsForUpdate.cohort },
+        })
         const response = await this.accreditedProgrammesManageAndDeliverService.updateGroup(username, groupId, {
           cohort: data.paramsForUpdate.cohort,
         })
@@ -280,6 +311,9 @@ export default class EditGroupController extends BaseController {
     let userInputData = null
     let formError: FormValidationError | null = null
 
+    if (req.method === 'GET') {
+      await sendAuditEvent('VIEW_EDIT_GROUP_CODE', username, groupId, 'SEARCH_TERM')
+    }
     const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
     const createGroupFormData = {
       groupCode: groupDetails?.code,
@@ -304,6 +338,9 @@ export default class EditGroupController extends BaseController {
         formError = data.error
         userInputData = req.body
       } else {
+        await sendAuditEvent('EDIT_GROUP_CODE', username, groupId, 'SEARCH_TERM', {
+          details: { groupCode: data.paramsForUpdate.groupCode },
+        })
         const response = await this.accreditedProgrammesManageAndDeliverService.updateGroup(username, groupId, {
           groupCode: data.paramsForUpdate.groupCode,
         })
@@ -330,9 +367,14 @@ export default class EditGroupController extends BaseController {
     const { username } = req.user
     let formError: FormValidationError | null = null
     let userInputData = null
+    let viewAuditSent = false
     req.session.originPage = req.path
 
     if (!createGroupFormData?.pduCode) {
+      if (req.method === 'GET') {
+        await sendAuditEvent('VIEW_EDIT_GROUP_PDU', username, groupId, 'SEARCH_TERM')
+        viewAuditSent = true
+      }
       const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
       req.session.createGroupFormData = {
         groupCode: groupDetails.code,
@@ -358,6 +400,9 @@ export default class EditGroupController extends BaseController {
         return res.redirect(`/${groupId}/edit-group-delivery-location`)
       }
     }
+    if (!viewAuditSent && req.method === 'GET') {
+      await sendAuditEvent('VIEW_EDIT_GROUP_PDU', username, groupId, 'SEARCH_TERM')
+    }
     const pduLocations = await this.accreditedProgrammesManageAndDeliverService.getLocationsForUserRegion(username)
 
     const presenter = new CreateOrEditGroupPduPresenter(
@@ -378,8 +423,13 @@ export default class EditGroupController extends BaseController {
     const { username } = req.user
     let formError: FormValidationError | null = null
     let userInputData = null
+    let viewAuditSent = false
 
     if (!createGroupFormData?.deliveryLocationCode) {
+      if (req.method === 'GET') {
+        await sendAuditEvent('VIEW_EDIT_GROUP_LOCATION', username, groupId, 'SEARCH_TERM')
+        viewAuditSent = true
+      }
       const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
       req.session.createGroupFormData = {
         groupCode: groupDetails.code,
@@ -402,6 +452,10 @@ export default class EditGroupController extends BaseController {
           deliveryLocationName: data.paramsForUpdate.deliveryLocationName,
           deliveryLocationCode: data.paramsForUpdate.deliveryLocationCode,
         }
+        await sendAuditEvent('EDIT_GROUP_LOCATION', username, groupId, 'SEARCH_TERM', {
+          deliveryLocationCode: req.session.createGroupFormData.deliveryLocationCode,
+          deliveryLocationName: req.session.createGroupFormData.deliveryLocationName,
+        })
         const response = await this.accreditedProgrammesManageAndDeliverService.updateGroup(
           username,
           groupId,
@@ -410,7 +464,9 @@ export default class EditGroupController extends BaseController {
         return res.redirect(`/group/${groupId}/group-details?message=${encodeURIComponent(response.successMessage)}`)
       }
     }
-
+    if (!viewAuditSent && req.method === 'GET') {
+      await sendAuditEvent('VIEW_EDIT_GROUP_LOCATION', username, groupId, 'SEARCH_TERM')
+    }
     const officeLocations = await this.accreditedProgrammesManageAndDeliverService.getOfficeLocationsForPdu(
       username,
       req.session.createGroupFormData.pduCode,
@@ -435,6 +491,9 @@ export default class EditGroupController extends BaseController {
     let userInputData = null
     let formError: FormValidationError | null = null
 
+    if (req.method === 'GET') {
+      await sendAuditEvent('VIEW_EDIT_GROUP_TREATMENT_FACILITATORS', username, groupId, 'SEARCH_TERM')
+    }
     const groupDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
     const pduMembers = await this.accreditedProgrammesManageAndDeliverService.getPduMembers(username)
 
@@ -455,6 +514,9 @@ export default class EditGroupController extends BaseController {
         formError = data.error
         userInputData = req.body
       } else {
+        await sendAuditEvent('EDIT_GROUP_TREATMENT_FACILITATORS', username, groupId, 'SEARCH_TERM', {
+          details: { teamMembers: data.paramsForUpdate.teamMembers },
+        })
         const response = await this.accreditedProgrammesManageAndDeliverService.updateGroup(username, groupId, {
           teamMembers: data.paramsForUpdate.teamMembers,
         })

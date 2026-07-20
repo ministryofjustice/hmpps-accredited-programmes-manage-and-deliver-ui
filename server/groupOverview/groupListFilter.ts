@@ -6,7 +6,7 @@ export default class GroupListFilter {
 
   cohort: string | undefined = undefined
 
-  pdu: string | undefined = undefined
+  pdu: string[] | undefined = undefined
 
   sex: string | undefined = undefined
 
@@ -21,12 +21,16 @@ export default class GroupListFilter {
     filter.cohort = request.query.cohort as string | undefined
     filter.groupCode = request.query.groupCode as string | undefined
 
-    filter.pdu = request.query.pdu as string | undefined
+    filter.pdu = request.query.pdu as string[] | undefined
     filter.sex = request.query.sex as string | undefined
+
+    if (filter.pdu !== undefined) {
+      filter.pdu = typeof filter.pdu === 'string' ? [filter.pdu] : filter.pdu
+    }
 
     if (!filter?.pdu) {
       delete filter.deliveryLocations
-    } else if (filter?.pdu.length) {
+    } else if (filter?.pdu.length > 0 && request.query.deliveryLocations !== undefined) {
       const reportingTeams = request.query.deliveryLocations as string[] | undefined
       filter.deliveryLocations = typeof reportingTeams === 'string' ? [reportingTeams] : reportingTeams
       if (filter.deliveryLocations && availableDeliveryLocations !== undefined) {
@@ -71,7 +75,13 @@ export default class GroupListFilter {
 
   get paramsAsQueryParams(): string {
     const searchParams = new URLSearchParams()
-    Object.entries(this.params).forEach(([key, value]) => searchParams.append(key, value))
+    Object.entries(this.params).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach(v => searchParams.append(key, v))
+      } else {
+        searchParams.append(key, value)
+      }
+    })
     return searchParams.toString()
   }
 }

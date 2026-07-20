@@ -30,6 +30,7 @@ import setUpWebSession from './middleware/setUpWebSession'
 import setUpUserLocation from './middleware/setUpUserLocation'
 
 import config from './config'
+import './sentry'
 import sentryMiddleware from './middleware/sentryMiddleware'
 import routes from './routes'
 import type { Services } from './services'

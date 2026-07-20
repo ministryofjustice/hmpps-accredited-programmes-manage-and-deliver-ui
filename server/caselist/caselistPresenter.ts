@@ -52,7 +52,7 @@ export default class CaselistPresenter {
   }
 
   get showReportingLocations(): boolean {
-    return this.filter.pdu !== undefined && this.filter.pdu !== ''
+    return this.filter.pdu !== undefined && this.filter.pdu.length > 0
   }
 
   get resultsText(): string {
@@ -212,30 +212,24 @@ export default class CaselistPresenter {
     return selectOptions
   }
 
-  generatePduSelectArgs(): SelectArgsItem[] {
-    const checkboxArgs = [
-      {
-        text: 'Select PDU',
-        value: '',
-      },
-    ]
-    const pduCheckboxArgs = this.caseListFilters.locationFilters
+  generatePDUCheckboxArgs(): CheckboxesArgsItem[] {
+    return this.caseListFilters.locationFilters
       .map(pdu => ({
         text: pdu.pduName,
         value: pdu.pduName,
-        selected: this.filter.pdu === pdu.pduName,
+        checked: this.filter.pdu?.includes(pdu.pduName),
       }))
       .sort((a, b) => a.text.localeCompare(b.text))
-    return checkboxArgs.concat(pduCheckboxArgs)
   }
 
   generateReportingTeamCheckboxArgs(): CheckboxesArgsItem[] {
     let checkboxItems: CheckboxesArgsItem[] = []
     if (this.showReportingLocations) {
-      const pduLocationData = this.caseListFilters.locationFilters.find(
-        location => location.pduName === this.filter.pdu,
+      const selectedPdus = this.caseListFilters.locationFilters.filter(location =>
+        this.filter.pdu!.includes(location.pduName),
       )
-      checkboxItems = pduLocationData.reportingTeams
+      const allReportingTeams = Array.from(new Set(selectedPdus.flatMap(pdu => pdu.reportingTeams))).sort()
+      checkboxItems = allReportingTeams
         .map(location => ({
           text: location,
           value: location,
@@ -247,13 +241,17 @@ export default class CaselistPresenter {
   }
 
   generateNoResultsString(): string {
+    const count = this.otherCaselistCountTotal
+    const resultsText = `${count} ${count === 1 ? 'result' : 'results'}`
+
     if (this.section === CaselistPageSection.Open) {
-      return this.otherCaselistCountTotal === 0
+      return count === 0
         ? 'No results found. Clear or change the filters.'
-        : `No results in open referrals. ${this.otherCaselistCountTotal} results in closed referrals.`
+        : `No results in open referrals. ${resultsText} in closed referrals.`
     }
-    return this.otherCaselistCountTotal === 0
+
+    return count === 0
       ? 'No results found. Clear or change the filters.'
-      : `No results in closed referrals. ${this.otherCaselistCountTotal} results in open referrals.`
+      : `No results in closed referrals. ${resultsText} in open referrals.`
   }
 }

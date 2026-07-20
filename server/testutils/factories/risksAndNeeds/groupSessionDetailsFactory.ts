@@ -1,9 +1,9 @@
 import { Factory } from 'fishery'
 import { GroupSessionResponse } from '@manage-and-deliver-api'
 
-class SessionDetailsFactory extends Factory<GroupSessionResponse> {}
+class GroupSessionDetailsFactory extends Factory<GroupSessionResponse> {}
 
-export default SessionDetailsFactory.define(() => ({
+export default GroupSessionDetailsFactory.define(() => ({
   code: 'session-1',
   pageTitle: 'Test Session',
   sessionType: 'Group',

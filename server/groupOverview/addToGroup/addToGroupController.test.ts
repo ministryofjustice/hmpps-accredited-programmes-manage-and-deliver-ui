@@ -8,8 +8,11 @@ import AccreditedProgrammesManageAndDeliverService from '../../services/accredit
 import TestUtils from '../../testutils/testUtils'
 import referralDetailsFactory from '../../testutils/factories/referralDetailsFactory'
 
+import sendAuditEvent from '../../services/auditService'
+
 jest.mock('../../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../../data/hmppsAuthClient')
+jest.mock('../../services/auditService')
 
 const hmppsAuthClientBuilder = jest.fn()
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
@@ -122,6 +125,15 @@ describe('add to group', () => {
         .expect(res => {
           expect(res.text).toContain(
             `Redirecting to /group/${groupId}/allocations?message=Successfully%20added%20to%20group`,
+          )
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            'EDIT_ASSIGN_REFERRAL_TO_GROUP',
+            'user1',
+            referralDetails.crn,
+            'CRN',
+            expect.objectContaining({ referralId, groupId, additionalDetails: 'Some details' }),
           )
         })
     })

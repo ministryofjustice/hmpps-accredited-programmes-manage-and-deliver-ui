@@ -369,22 +369,6 @@ export interface paths {
     patch?: never
     trace?: never
   }
-  '/dev/seed/referrals': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post: operations['seedReferrals']
-    delete: operations['dangerouslyDeleteAllReferrals']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
   '/admin/populate-personal-details': {
     parameters: {
       query?: never
@@ -967,22 +951,6 @@ export interface paths {
      * @description Get group by GroupCode and in User region
      */
     get: operations['getGroupInUserRegion']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/dev/seed/health': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['health']
     put?: never
     post?: never
     delete?: never
@@ -2155,17 +2123,6 @@ export interface components {
        */
       message: string
     }
-    SeededReferralInfo: {
-      referralId: string
-      crn: string
-      personName: string
-      requirementId: string
-    }
-    SeedingResult: {
-      /** Format: int32 */
-      count: number
-      referrals: components['schemas']['SeededReferralInfo'][]
-    }
     CreateAvailability: {
       /**
        * Format: uuid
@@ -2836,6 +2793,11 @@ export interface components {
        */
       hasLdcDisplayText: string
       /**
+       * @description The text to display in the UI success banner after updating the LDC status of this referral
+       * @example may need an LDC-adapted programme (Building Choices Plus).
+       */
+      hasLdcSuccessMessageText: string
+      /**
        * @description The display name of the Referral's current Status
        * @example Awaiting assessment
        */
@@ -3268,7 +3230,7 @@ export interface components {
        * @description The available cohorts (offence types or programme categories) that can be used for filtering.
        * @example [
        *       "General Offence",
-       *       "General Offence - LDC",
+       *       "General Offence LDC",
        *       "Domestic Violence"
        *     ]
        */
@@ -3299,28 +3261,28 @@ export interface components {
       /** Format: int32 */
       totalPages?: number
       /** Format: int32 */
-      numberOfElements?: number
-      first?: boolean
-      last?: boolean
-      pageable?: components['schemas']['PageableObject']
-      sort?: components['schemas']['SortObject']
-      /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
+      first?: boolean
+      last?: boolean
+      sort?: components['schemas']['SortObject']
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageableObject: {
+      /** Format: int64 */
+      offset?: number
+      sort?: components['schemas']['SortObject']
+      /** Format: int32 */
+      pageSize?: number
       paged?: boolean
       /** Format: int32 */
       pageNumber?: number
-      /** Format: int32 */
-      pageSize?: number
-      sort?: components['schemas']['SortObject']
       unpaged?: boolean
-      /** Format: int64 */
-      offset?: number
     }
     ReferralCaseListItem: {
       /** Format: uuid */
@@ -3343,9 +3305,9 @@ export interface components {
       sentenceEndDateSource?: 'REQUIREMENT' | 'LICENCE_CONDITION' | null
     }
     SortObject: {
+      empty?: boolean
       sorted?: boolean
       unsorted?: boolean
-      empty?: boolean
     }
     StatusFilterValues: {
       /**
@@ -3367,6 +3329,14 @@ export interface components {
       /** Format: int32 */
       size?: number
       sort?: string[]
+    }
+    MultiValueMapStringString: {
+      all?: {
+        [key: string]: string
+      }
+      empty?: boolean
+    } & {
+      [key: string]: string[]
     }
     /** @description Information identifying the group. */
     Group: {
@@ -3705,7 +3675,7 @@ export interface components {
       sessionStartTime: components['schemas']['SessionTime']
       sessionEndTime: components['schemas']['SessionTime']
       /**
-       * @description True when the group has never had any membership. Empty groups may cascade-reschedule past sessions (used when migrating in-flight groups), so the UI can offer that option.
+       * @description True when the group has never had any membership. When true the UI may reschedule even if the submitted date is in the past.
        * @example false
        */
       isEmptyGroup: boolean
@@ -3978,16 +3948,16 @@ export interface components {
       /** Format: int32 */
       totalPages?: number
       /** Format: int32 */
-      numberOfElements?: number
-      first?: boolean
-      last?: boolean
-      pageable?: components['schemas']['PageableObject']
-      sort?: components['schemas']['SortObject']
-      /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
       /** Format: int32 */
       number?: number
+      first?: boolean
+      last?: boolean
+      sort?: components['schemas']['SortObject']
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     GroupItem: {
@@ -4073,16 +4043,16 @@ export interface components {
       /** Format: int32 */
       totalPages?: number
       /** Format: int32 */
-      numberOfElements?: number
-      first?: boolean
-      last?: boolean
-      pageable?: components['schemas']['PageableObject']
-      sort?: components['schemas']['SortObject']
-      /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
+      first?: boolean
+      last?: boolean
+      sort?: components['schemas']['SortObject']
+      /** Format: int32 */
+      numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
@@ -4606,10 +4576,6 @@ export interface components {
       facilitators: components['schemas']['CreateGroupTeamMember'][]
       /** @description The list of coverFacilitators for this group. */
       coverFacilitators?: components['schemas']['CreateGroupTeamMember'][] | null
-    }
-    TeardownResult: {
-      /** Format: int32 */
-      deletedCount: number
     }
   }
   responses: never
@@ -5812,66 +5778,6 @@ export interface operations {
       }
       /** @description The group or referral does not exist */
       404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  seedReferrals: {
-    parameters: {
-      query?: {
-        count?: number
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['SeedingResult']
-        }
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  dangerouslyDeleteAllReferrals: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['TeardownResult']
-        }
-      }
-      /** @description Bad Request */
-      400: {
         headers: {
           [name: string]: unknown
         }
@@ -7572,14 +7478,11 @@ export interface operations {
         pageable: components['schemas']['Pageable']
         /** @description CRN or persons name */
         crnOrPersonName?: string
-        /** @description Filter by the cohort of the referral using the human-readable label, e.g. 'General Offence', 'General Offence - LDC', 'Sexual Offence', 'Sexual Offence - LDC' */
+        /** @description Filter by the cohort of the referral using the human-readable label, e.g. 'General Offence', 'General Offence LDC', 'Sexual Offence', 'Sexual Offence LDC' */
         cohort?: string
         /** @description Filter by the status of the referral */
         status?: string
-        /** @description Filter by the pdu of the referral */
-        pdu?: string
-        /** @description Filter by the reporting team of the referral */
-        reportingTeam?: string[]
+        requestParams: components['schemas']['MultiValueMapStringString']
       }
       header?: never
       path: {
@@ -7649,37 +7552,6 @@ export interface operations {
       }
       /** @description Forbidden. The client is not authorised to retrieve group details. */
       403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  health: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': {
-            [key: string]: string
-          }
-        }
-      }
-      /** @description Bad Request */
-      400: {
         headers: {
           [name: string]: unknown
         }
@@ -8528,14 +8400,11 @@ export interface operations {
         pageable: components['schemas']['Pageable']
         /** @description Filter by the unique group code */
         groupCode?: string
-        /** @description Filter by the human readable pdu of the group, i.e. 'All London' */
-        pdu?: string
-        /** @description Filter by the delivery location name */
-        deliveryLocations?: string[]
-        /** @description Filter by the cohort of the group Eg: 'Sexual Offence' or 'General Offence - LDC */
+        /** @description Filter by the cohort of the group Eg: 'Sexual Offence' or 'General Offence LDC */
         cohort?: string
         /** @description Filter by the sex that the group is being run for: 'Male', 'Female' or 'Mixed' */
         sex?: string
+        requestParams: components['schemas']['MultiValueMapStringString']
       }
       header?: never
       path: {
@@ -8599,14 +8468,11 @@ export interface operations {
         pageable: components['schemas']['Pageable']
         /** @description Filter by the sex of the person in the referral */
         sex?: string
-        /** @description Filter by the cohort of the referral Eg: 'Sexual Offence' or 'General Offence - LDC */
+        /** @description Filter by the cohort of the referral Eg: 'Sexual Offence' or 'General Offence LDC */
         cohort?: string
         /** @description Search by the name or the CRN of the offender in the referral */
         nameOrCRN?: string
-        /** @description Filter by the human readable pdu of the referral, i.e. 'All London' */
-        pdu?: string
-        /** @description Filter by one or more reporting teams. Repeat the parameter to include multiple teams. */
-        reportingTeam?: string[]
+        requestParams: components['schemas']['MultiValueMapStringString']
       }
       header?: never
       path: {

@@ -79,6 +79,7 @@ import type { HmppsAuthClient, RestClientBuilderWithoutToken } from '../data'
 import RestClient from '../data/restClient'
 import { GroupListFilterParams } from '../groupOverview/groupListFilterParams'
 import type { ExpressUsername } from '../shared/ExpressUsername'
+import { GroupAllocationsFilterParams } from '../groupOverview/allocations/groupAllocationsFilterParams'
 
 export interface PaginationParams {
   // Page number to retrieve -- starts from 1
@@ -243,7 +244,7 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
     username: ExpressUsername,
     groupId: string,
     paginationParams: PaginationParams,
-    filter: GroupListFilterParams,
+    filter: GroupAllocationsFilterParams,
   ): Promise<ProgrammeGroupAllocations> {
     const restClient = await this.createRestClientFromUsername(username)
     const filterQuery: Record<string, unknown> = { ...filter }
@@ -258,7 +259,7 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
     username: ExpressUsername,
     groupId: string,
     paginationParams: PaginationParams,
-    filter: GroupListFilterParams,
+    filter: GroupAllocationsFilterParams,
   ): Promise<ProgrammeGroupAllocations> {
     const restClient = await this.createRestClientFromUsername(username)
     const filterQuery: Record<string, unknown> = { ...filter }

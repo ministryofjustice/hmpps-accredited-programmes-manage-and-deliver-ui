@@ -13,6 +13,7 @@ import AvailabilityView from './availability/availabilityView'
 import LocationPresenter from './location/locationPresenter'
 import LocationView from './location/locationView'
 import logger from '../../logger'
+import sendAuditEvent from '../services/auditService'
 
 export default class AvailabilityAndMotivationController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -32,6 +33,9 @@ export default class AvailabilityAndMotivationController extends BaseController 
       referralId,
       username,
     )
+    await sendAuditEvent('VIEW_SHOW_MOTIVATION', username, referralDetailsData?.crn ?? referralId, 'CRN', {
+      referralId,
+    })
 
     const motivationBackgroundAndNonAssociations =
       await this.accreditedProgrammesManageAndDeliverService.getMotivationBackgroundAndNonAssociations(
@@ -79,14 +83,18 @@ export default class AvailabilityAndMotivationController extends BaseController 
           )
         }
 
+        const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
+          referralId,
+          username,
+        )
+        await sendAuditEvent('EDIT_REFERRAL_MOTIVATION', username, referralDetails?.crn ?? referralId, 'CRN', {
+          referralId,
+          details: data.paramsForUpdate,
+        })
         await this.accreditedProgrammesManageAndDeliverService.createOrUpdateReferralMotivationBackgroundAndNonAssociations(
           username,
           referralId,
           data.paramsForUpdate,
-        )
-        const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
-          referralId,
-          username,
         )
         logger.info(
           {
@@ -109,6 +117,9 @@ export default class AvailabilityAndMotivationController extends BaseController 
       username,
     )
 
+    await sendAuditEvent('VIEW_ADD_MOTIVATION', username, referralDetails?.crn ?? referralId, 'CRN', {
+      referralId,
+    })
     const motivationBackgroundAndNonAssociations =
       await this.accreditedProgrammesManageAndDeliverService.getMotivationBackgroundAndNonAssociations(
         username,
@@ -133,6 +144,9 @@ export default class AvailabilityAndMotivationController extends BaseController 
 
     const referralDetailsData = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(id, username)
 
+    await sendAuditEvent('VIEW_SHOW_AVAILABILITY', username, referralDetailsData?.crn ?? id, 'CRN', {
+      referralId: id,
+    })
     const availability = await this.accreditedProgrammesManageAndDeliverService.getAvailability(username, id)
 
     const presenter = new AvailabilityPresenter(
@@ -157,7 +171,9 @@ export default class AvailabilityAndMotivationController extends BaseController 
     const subNavValue = 'location'
 
     const referralDetailsData = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(id, username)
-
+    await sendAuditEvent('VIEW_SHOW_LOCATION', username, referralDetailsData?.crn ?? id, 'CRN', {
+      referralId: id,
+    })
     const deliveryLocationPreferences =
       await this.accreditedProgrammesManageAndDeliverService.getDeliveryLocationPreferences(username, id)
 

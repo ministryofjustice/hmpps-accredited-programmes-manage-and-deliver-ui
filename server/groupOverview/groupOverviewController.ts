@@ -9,6 +9,7 @@ import SchedulePresenter from './schedule/schedulePresenter'
 import ScheduleView from './schedule/scheduleView'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
+import sendAuditEvent from '../services/auditService'
 
 export default class GroupOverviewController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -32,6 +33,7 @@ export default class GroupOverviewController extends BaseController {
     }
 
     const filter = GroupAllocationsFilter.fromRequest(req)
+    await sendAuditEvent('SEARCH_GROUP_ALLOCATED', username, JSON.stringify(filter.params), 'SEARCH_TERM', { groupId })
 
     const groupOverview = await this.accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers(
       username,
@@ -86,6 +88,7 @@ export default class GroupOverviewController extends BaseController {
     }
 
     const filter = GroupAllocationsFilter.fromRequest(req)
+    await sendAuditEvent('SEARCH_GROUP_WAITLIST', username, JSON.stringify(filter.params), 'SEARCH_TERM', { groupId })
 
     const groupOverview = await this.accreditedProgrammesManageAndDeliverService.getGroupWaitlistMembers(
       username,

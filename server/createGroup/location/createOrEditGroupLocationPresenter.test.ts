@@ -68,6 +68,21 @@ describe('CreateOrEditGroupLocationPresenter', () => {
 
       expect(presenter.changeLinkUri).toEqual('/group-probation-delivery-unit')
     })
+
+    it('returns create group PDU link with review referrer when configured in create journey', () => {
+      const presenter = new CreateOrEditGroupLocationPresenter(
+        mockLocations,
+        null,
+        { groupCode: 'TEST-GROUP-001' },
+        null,
+        null,
+        false,
+        null,
+        true,
+      )
+
+      expect(presenter.changeLinkUri).toEqual('/group-probation-delivery-unit?referrer=group-review-details')
+    })
   })
 
   describe('pageTitle', () => {

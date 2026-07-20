@@ -291,6 +291,27 @@ Or run tests with the cypress UI:
 
 `npm run int-test-ui`
 
+## Testing Audits locally 
+
+```sh
+
+# Create the audit queue in localstack
+$ docker exec hmpps-mandd-localstack awslocal sqs create-queue --queue-name sqs-hmpps-audit
+
+# Update the .env file with the queue informationx
+AUDIT_ENABLED=true 
+AUDIT_SQS_QUEUE_URL='http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/sqs-hmpps-audit' \
+AWS_ACCESS_KEY_ID=test
+AWS_SECRET_ACCESS_KEY=test
+
+# Starts the server locally on http://localhost:3000 
+# You should see "Audit event sent successfully" logged when an audit is triggered
+npm run start:dev
+
+# You can inspect the audits put onto the queue using
+docker exec hmpps-mandd-localstack awslocal sqs receive-message --queue-url 'http://sqs.us-east-1.localhost.localstack.cloud:4566/000000000000/sqs-hmpps-audit' --max-number-of-messages 10
+```
+
 ## Change log
 
 A changelog for the service is available [here](./CHANGELOG.md)

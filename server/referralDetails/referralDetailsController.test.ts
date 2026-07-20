@@ -10,6 +10,7 @@ import { Express } from 'express'
 import request from 'supertest'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
+import sendAuditEvent from '../services/auditService'
 import attendanceHistoryResponseFactory from '../testutils/factories/attendanceHistoryResponseFactory'
 import offenceHistoryFactory from '../testutils/factories/offenceHistoryFactory'
 import personalDetailsFactory from '../testutils/factories/personalDetailsFactory'
@@ -19,6 +20,7 @@ import statusHistoryFactory from '../testutils/factories/statusHistoryFactory'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
+jest.mock('../services/auditService')
 
 const hmppsAuthClientBuilder = jest.fn()
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
@@ -53,6 +55,12 @@ describe('referral-details', () => {
           expect(res.text).toContain(referralDetails.crn)
           expect(res.text).toContain(referralDetails.personName)
           expect(res.text).toContain(personalDetails.probationDeliveryUnit)
+          expect(res.text).toContain('<div class="hmpps-header">')
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_PERSONAL_DETAILS', 'user1', referralDetails.crn, 'CRN', {
+            referralId: expect.any(String),
+          })
         })
     })
   })
@@ -70,6 +78,11 @@ describe('referral-details', () => {
           expect(res.text).toContain(referralDetails.personName)
           expect(res.text).toContain('Absconding from lawful custody')
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_OFFENCE_HISTORY', 'user1', referralDetails.crn, 'CRN', {
+            referralId: expect.any(String),
+          })
+        })
     })
   })
 
@@ -85,6 +98,15 @@ describe('referral-details', () => {
           expect(res.text).toContain(referralDetails.crn)
           expect(res.text).toContain(referralDetails.personName)
           expect(res.text).toContain('Sentence details')
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith(
+            'VIEW_SENTENCE_INFORMATION',
+            'user1',
+            referralDetails.crn,
+            'CRN',
+            { referralId: expect.any(String) },
+          )
         })
     })
   })
@@ -109,6 +131,11 @@ describe(`/referral`, () => {
 
           expect(res.text).toContain('Awaiting allocation')
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_STATUS_HISTORY', 'user1', referralDetails.crn, 'CRN', {
+            referralId: expect.any(String),
+          })
+        })
     })
   })
 })
@@ -132,6 +159,11 @@ describe(`Attendance History`, () => {
           expect(res.text).toContain(referralDetails.personName)
           expect(res.text).toContain('Attendance history')
         })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_ATTENDANCE_HISTORY', 'user1', referralDetails.crn, 'CRN', {
+            referralId: expect.any(String),
+          })
+        })
     })
 
     it('displays sessions in the attendance history table', async () => {
@@ -147,6 +179,11 @@ describe(`Attendance History`, () => {
           expect(res.text).toContain('18 July 2025')
           expect(res.text).toContain('Attended')
           expect(res.text).toContain('Not attended')
+        })
+        .then(() => {
+          expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_ATTENDANCE_HISTORY', 'user1', referralDetails.crn, 'CRN', {
+            referralId: expect.any(String),
+          })
         })
     })
   })
