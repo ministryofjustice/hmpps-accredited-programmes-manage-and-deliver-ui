@@ -11,18 +11,10 @@
         <div class="govuk-grid-row">
           {% include "../partials/headerMenu.njk" %}
           <div class="govuk-grid-column-three-quarters">
-      
+
             {% if presenter.isCohortUpdated %}
               {{ mojAlert(presenter.cohortUpdatedSuccessMessageArgs) }}
             {% endif %}
-            {{ mojAlert({
-             variant: "warning",
-             title: "The pathway shown here is currently based on OGRS3 risk scores",
-             showTitleAsHeading: true,
-             dismissible: false,
-             html: '<p>The recommended pathway shown here is based on the old risk predictors (OGRS3). If this person’s risk scores use the new predictors (OGRS4), referrers or programme teams should calculate the recommended pathway manually.</p>
-                    <p>Following the instructions in the Needs and Suitability guide, use the PNI scores under ‘How is this calculated?’ and the risk scores in this service or OASys to calculate this.</p>'
-            }) }}
             {% if presenter.isLdcUpdated %}
               {{ mojAlert(presenter.ldcUpdatedSuccessMessageArgs) }}
             {% endif %}
