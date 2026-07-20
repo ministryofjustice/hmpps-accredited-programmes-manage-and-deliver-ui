@@ -12,6 +12,7 @@ import { convertToUrlFriendlyKebabCase } from '../utils/utils'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
 import logger from '../../logger'
+import sendAuditEvent from '../services/auditService'
 
 export default class AttendanceController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -44,6 +45,12 @@ export default class AttendanceController extends BaseController {
     const sessionAttendees = (req.session.editSessionAttendance?.attendees || []) as SessionAttendance['attendees']
     let userInputData = null
     let formError: FormValidationError | null = null
+
+    if (req.method === 'GET') {
+      await sendAuditEvent('VIEW_RECORD_ATTENDANCE', username, sessionId, 'SEARCH_TERM', {
+        details: { groupId, referralIds },
+      })
+    }
 
     const recordAttendanceBffData = await this.accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData(
       username,
@@ -126,6 +133,12 @@ export default class AttendanceController extends BaseController {
       return res.redirect(`/${groupId}/${sessionId}/edit-session`)
     }
 
+    if (req.method === 'GET') {
+      await sendAuditEvent('VIEW_RECORD_ATTENDANCE_NOTES', username, sessionId, 'SEARCH_TERM', {
+        details: { groupId, referralId },
+      })
+    }
+
     const recordAttendanceBffData = await this.accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData(
       username,
       sessionId,
@@ -203,6 +216,9 @@ export default class AttendanceController extends BaseController {
           return res.redirect(`/${groupId}/${sessionId}/edit-session`)
         }
 
+        await sendAuditEvent('CREATE_ATTENDANCE', username, sessionId, 'SEARCH_TERM', {
+          details: { groupId, attendees: attendeesForSubmission },
+        })
         const createSessionAttendanceResponse =
           await this.accreditedProgrammesManageAndDeliverService.createSessionAttendance(username, sessionId, {
             attendees: attendeesForSubmission,

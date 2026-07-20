@@ -6,8 +6,11 @@ import TestUtils from '../testutils/testUtils'
 import recordSessionAttendanceFactory from '../testutils/factories/recordSessionAttendanceFactory'
 import { convertToUrlFriendlyKebabCase } from '../utils/utils'
 
+import sendAuditEvent from '../services/auditService'
+
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
+jest.mock('../services/auditService')
 
 const hmppsAuthClientBuilder = jest.fn()
 const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesManageAndDeliverService(
@@ -69,6 +72,13 @@ describe('showRecordAttendancePages', () => {
         'user1',
         '6789',
         ['referral1'],
+      )
+      expect(sendAuditEvent).toHaveBeenCalledWith(
+        'VIEW_RECORD_ATTENDANCE',
+        'user1',
+        '6789',
+        'SEARCH_TERM',
+        expect.objectContaining({ details: expect.objectContaining({ groupId: '111' }) }),
       )
     })
 
@@ -185,7 +195,7 @@ describe('showRecordAttendancePages', () => {
 
       const { referralId } = bffData.people[0]
 
-      return request(app)
+      await request(app)
         .post(`/111/6789/record-attendance`)
         .type('form')
         .send({
@@ -197,6 +207,13 @@ describe('showRecordAttendancePages', () => {
             `Redirecting to /111/6789/referral/referral1/${convertToUrlFriendlyKebabCase(bffData.sessionModule)}-session-notes`,
           )
         })
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_RECORD_ATTENDANCE',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('redirects to catch-up session notes URL after POST when single referral ID', async () => {
@@ -220,6 +237,13 @@ describe('showRecordAttendancePages', () => {
         })
         .expect(302)
         .expect('Location', '/111/6789/referral/referral1/pre-group-one-to-one-catch-up-session-notes')
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_RECORD_ATTENDANCE',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('should fetch session details with correct parameters and load page correctly for a multiple attendees', async () => {
@@ -252,6 +276,13 @@ describe('showRecordAttendancePages', () => {
         'user1',
         '6789',
         ['referral1', 'referral2'],
+      )
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_RECORD_ATTENDANCE',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
       )
     })
 
@@ -291,6 +322,13 @@ describe('showRecordAttendancePages', () => {
         .expect(res => {
           expect(res.text).toContain('Keep this note')
         })
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_RECORD_ATTENDANCE',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
   })
 
@@ -382,6 +420,13 @@ describe('showRecordAttendancePages', () => {
           expect(res.text).toContain('Existing note from DB')
           expect(res.text).not.toContain('Skip and add later')
         })
+      expect(sendAuditEvent).toHaveBeenCalledWith(
+        'VIEW_RECORD_ATTENDANCE_NOTES',
+        'user1',
+        '6789',
+        'SEARCH_TERM',
+        expect.objectContaining({ details: expect.objectContaining({ groupId: '111', referralId: 'referral1' }) }),
+      )
     })
 
     it('keeps a cleared staged note empty when revisiting, even if BFF has older notes', async () => {
@@ -609,6 +654,20 @@ describe('showRecordAttendancePages', () => {
           attendees: [{ referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: 'Some notes' }],
         },
       )
+      expect(sendAuditEvent).toHaveBeenCalledWith(
+        'CREATE_ATTENDANCE',
+        'user1',
+        '6789',
+        'SEARCH_TERM',
+        expect.objectContaining({ details: expect.objectContaining({ groupId: '111' }) }),
+      )
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_RECORD_ATTENDANCE_NOTES',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('stages current attendee from BFF and submits successfully when journey starts on notes page', async () => {
@@ -653,6 +712,20 @@ describe('showRecordAttendancePages', () => {
           attendees: [{ referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: 'Some notes' }],
         },
       )
+      expect(sendAuditEvent).toHaveBeenCalledWith(
+        'CREATE_ATTENDANCE',
+        'user1',
+        '6789',
+        'SEARCH_TERM',
+        expect.objectContaining({ details: expect.objectContaining({ groupId: '111' }) }),
+      )
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_RECORD_ATTENDANCE_NOTES',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('redirects back to edit session with a success message on the last referral when journey started from edit session', async () => {
@@ -686,6 +759,20 @@ describe('showRecordAttendancePages', () => {
             'Redirecting to /111/6789/edit-session?message=Attendance+recorded+for+Alice+Brown.',
           )
         })
+      expect(sendAuditEvent).toHaveBeenCalledWith(
+        'CREATE_ATTENDANCE',
+        'user1',
+        '6789',
+        'SEARCH_TERM',
+        expect.objectContaining({ details: expect.objectContaining({ groupId: '111' }) }),
+      )
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_RECORD_ATTENDANCE_NOTES',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('redirects back to edit session with all attendee names when journey started from edit session', async () => {
@@ -732,6 +819,20 @@ describe('showRecordAttendancePages', () => {
             'Redirecting to /111/6789/edit-session?message=Attendance+recorded+for+Sham+Booth%2C+Adrian+Poole+and+Hannah+Schinner.',
           )
         })
+      expect(sendAuditEvent).toHaveBeenCalledWith(
+        'CREATE_ATTENDANCE',
+        'user1',
+        '6789',
+        'SEARCH_TERM',
+        expect.objectContaining({ details: expect.objectContaining({ groupId: '111' }) }),
+      )
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_RECORD_ATTENDANCE_NOTES',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('skip and add later submits attendance without changing existing notes', async () => {
@@ -770,6 +871,20 @@ describe('showRecordAttendancePages', () => {
           attendees: [{ referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: 'Existing note' }],
         },
       )
+      expect(sendAuditEvent).toHaveBeenCalledWith(
+        'CREATE_ATTENDANCE',
+        'user1',
+        '6789',
+        'SEARCH_TERM',
+        expect.objectContaining({ details: expect.objectContaining({ groupId: '111' }) }),
+      )
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_RECORD_ATTENDANCE_NOTES',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+      )
     })
 
     it('submits an explicit empty session note when user clears existing notes and submits', async () => {
@@ -806,6 +921,20 @@ describe('showRecordAttendancePages', () => {
         {
           attendees: [{ referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: '' }],
         },
+      )
+      expect(sendAuditEvent).toHaveBeenCalledWith(
+        'CREATE_ATTENDANCE',
+        'user1',
+        '6789',
+        'SEARCH_TERM',
+        expect.objectContaining({ details: expect.objectContaining({ groupId: '111' }) }),
+      )
+      expect(sendAuditEvent).not.toHaveBeenCalledWith(
+        'VIEW_RECORD_ATTENDANCE_NOTES',
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
+        expect.anything(),
       )
     })
 
@@ -935,7 +1064,7 @@ describe('showRecordAttendancePages', () => {
 
     accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
 
-    return request(app)
+    await request(app)
       .post(`/111/6789/record-attendance`)
       .type('form')
       .send({})
@@ -943,5 +1072,12 @@ describe('showRecordAttendancePages', () => {
       .expect(res => {
         expect(res.text).toContain(`Select an attendance status for ${bffData.people[0].name}`)
       })
+    expect(sendAuditEvent).not.toHaveBeenCalledWith(
+      'VIEW_RECORD_ATTENDANCE',
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+      expect.anything(),
+    )
   })
 })

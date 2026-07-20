@@ -44,6 +44,13 @@ export default class RemoveFromGroupController extends BaseController {
       req.user.username,
     )
 
+    if (req.method === 'GET') {
+      await sendAuditEvent('VIEW_REMOVE_FROM_GROUP', req.user.username, referralData?.crn, 'CRN', {
+        referralId,
+        groupId,
+      })
+    }
+
     req.session.groupManagementData.personName = referralData.personName
 
     const presenter = new RemoveFromGroupPresenter(
@@ -101,6 +108,12 @@ export default class RemoveFromGroupController extends BaseController {
       }
     }
 
+    if (req.method === 'GET') {
+      await sendAuditEvent('VIEW_REMOVE_FROM_GROUP_UPDATE_STATUS', username, referralDetails?.crn, 'CRN', {
+        referralId,
+        groupId,
+      })
+    }
     const statusDetails = await this.accreditedProgrammesManageAndDeliverService.removeFromGroupStatusTransitionDetails(
       referralId,
       username,

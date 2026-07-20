@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 
 import logger from '../../logger'
+import sendAuditEvent from '../services/auditService'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 
 export default class OnboardingController {
@@ -60,6 +61,10 @@ export default class OnboardingController {
       '[OnboardingController] Triggering personal details refresh',
     )
 
+    await sendAuditEvent('EDIT_ONBOARDING_REFRESH_REFERRALS', req.user.username, undefined, 'NOT_APPLICABLE', {
+      details: { referralIds },
+    })
+
     const response = await this.accreditedProgrammesManageAndDeliverService.fetchPersonalDetailsForReferrals(
       req.user.username,
       referralIds,
@@ -70,9 +75,6 @@ export default class OnboardingController {
         username: req.user.username,
         requestId: req.id,
         referralIdCount: referralIds.length,
-        successCount: response.successIds.length,
-        notFoundCount: response.notFoundIds.length,
-        failureCount: response.failureIds.length,
       },
       '[OnboardingController] Personal details refresh completed',
     )

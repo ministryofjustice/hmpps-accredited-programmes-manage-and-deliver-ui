@@ -171,13 +171,13 @@ export default class LocationPreferencesController extends BaseController {
           data.paramsForUpdate.cannotAttendLocations
 
         await sendAuditEvent(
-          'UPDATE_REFERRAL_LOCATION_PREFERENCES',
+          'EDIT_REFERRAL_LOCATION_PREFERENCES',
           username,
           referralDetails?.crn ?? referralId,
           'CRN',
           {
             referralId,
-            details: JSON.stringify(req.session.locationPreferenceFormData.updatePreferredLocationData),
+            details: req.session.locationPreferenceFormData.updatePreferredLocationData,
           },
         )
         // Post if no existing preference data
@@ -203,9 +203,11 @@ export default class LocationPreferencesController extends BaseController {
       }
     }
 
-    await sendAuditEvent('VIEW_CANNOT_ATTEND_LOCATIONS', username, referralDetails?.crn ?? referralId, 'CRN', {
-      referralId,
-    })
+    if (req.method === 'GET') {
+      await sendAuditEvent('VIEW_CANNOT_ATTEND_LOCATIONS', username, referralDetails?.crn ?? referralId, 'CRN', {
+        referralId,
+      })
+    }
 
     const presenter = new CannotAttendLocationsPresenter(
       referralId,
