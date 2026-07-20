@@ -144,6 +144,29 @@ describe('location-preferences', () => {
           )
         })
     })
+
+    it('returns 400 when invalid data is posted', async () => {
+      const referralId = randomUUID()
+      const deliveryLocationPreferencesFormData = deliveryLocationPreferencesFormDataFactory.build()
+      accreditedProgrammesManageAndDeliverService.getPossibleDeliveryLocationsForReferral.mockResolvedValue(
+        deliveryLocationPreferencesFormData,
+      )
+
+      return request(app)
+        .post(`/referral/${referralId}/add-location-preferences`)
+        .type('form')
+        .send({})
+        .expect(400)
+        .expect(() => {
+          expect(sendAuditEvent).not.toHaveBeenCalledWith(
+            'VIEW_ADDITIONAL_PDU_LOCATION_PREFERENCES',
+            'user1',
+            referralDetails.crn,
+            'CRN',
+            { referralId: expect.any(String) },
+          )
+        })
+    })
   })
 
   describe(`GET /referral/:referralId/add-location-preferences/other-pdu`, () => {

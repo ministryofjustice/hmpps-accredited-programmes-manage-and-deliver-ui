@@ -1064,7 +1064,7 @@ describe('showRecordAttendancePages', () => {
 
     accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
 
-    return request(app)
+    await request(app)
       .post(`/111/6789/record-attendance`)
       .type('form')
       .send({})

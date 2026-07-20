@@ -24,9 +24,11 @@ export default class PniController extends BaseController {
       referralId,
       username,
     )
-    await sendAuditEvent('VIEW_PNI', req.user.username, referralDetails?.crn, 'CRN', {
-      referralId,
-    })
+    if (req.method === 'GET') {
+      await sendAuditEvent('VIEW_PNI', req.user.username, referralDetails?.crn, 'CRN', {
+        referralId,
+      })
+    }
     const pniScore = await this.accreditedProgrammesManageAndDeliverService.getPniScore(username, referralDetails.crn)
 
     req.session.originPage = req.path

@@ -203,9 +203,11 @@ export default class LocationPreferencesController extends BaseController {
       }
     }
 
-    await sendAuditEvent('VIEW_CANNOT_ATTEND_LOCATIONS', username, referralDetails?.crn ?? referralId, 'CRN', {
-      referralId,
-    })
+    if (req.method === 'GET') {
+      await sendAuditEvent('VIEW_CANNOT_ATTEND_LOCATIONS', username, referralDetails?.crn ?? referralId, 'CRN', {
+        referralId,
+      })
+    }
 
     const presenter = new CannotAttendLocationsPresenter(
       referralId,
