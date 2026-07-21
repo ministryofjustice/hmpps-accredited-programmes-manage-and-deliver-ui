@@ -59,17 +59,6 @@ export default class CreateOrEditGroupTreatmentManagerView {
     }
   }
 
-  private createGroupFacilitatorsFieldSetArgs(): FieldsetArgs {
-    return {
-      classes: 'moj-add-another__item moj-add-another__item__facilitator',
-      legend: {
-        text: 'Facilitator',
-        classes: 'govuk-!-display-none',
-        isPageHeading: false,
-      },
-    }
-  }
-
   private createGroupCoverFacilitatorArgs(): SelectArgs {
     return {
       id: 'create-group-cover-facilitator',
@@ -99,17 +88,6 @@ export default class CreateOrEditGroupTreatmentManagerView {
     }
   }
 
-  private createGroupCoverFacilitatorsFieldSetArgs(): FieldsetArgs {
-    return {
-      classes: 'moj-add-another__item moj-add-another__item__cover-facilitator',
-      legend: {
-        text: 'Facilitator',
-        classes: 'govuk-!-display-none',
-        isPageHeading: false,
-      },
-    }
-  }
-
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       'createGroup/createGroupTreatmentManager',
@@ -117,10 +95,8 @@ export default class CreateOrEditGroupTreatmentManagerView {
         backLinkArgs: this.backLinkArgs(),
         createGroupTreatmentManagerArgs: this.createGroupTreatmentManagerArgs(),
         createGroupFacilitatorArgs: this.createGroupFacilitatorArgs(),
-        createGroupFacilitatorsFieldSetArgs: this.createGroupFacilitatorsFieldSetArgs(),
         createExistingGroupFacilitatorArgs: this.createExistingGroupFacilitatorArgs.bind(this),
         createGroupCoverFacilitatorArgs: this.createGroupCoverFacilitatorArgs(),
-        createGroupCoverFacilitatorsFieldSetArgs: this.createGroupCoverFacilitatorsFieldSetArgs(),
         createExistingGroupCoverFacilitatorArgs: this.createExistingGroupCoverFacilitatorArgs.bind(this),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         pageTitle: this.presenter.pageTitle,
