@@ -6,7 +6,6 @@ import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
 import { setReferralOriginPage } from '../utils/referralOriginPage'
 
-
 export default class PniController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
 
