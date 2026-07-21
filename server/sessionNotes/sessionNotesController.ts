@@ -7,6 +7,7 @@ import { FormValidationError } from '../utils/formValidationError'
 import SessionNotesView from './sessionNotesView'
 import SessionNotesForm from './sessionNotesForm'
 import SessionNotesPresenter, { SessionNotesData } from './sessionNotesPresenter'
+import sendAuditEvent from '../services/auditService'
 
 export default class SessionNotesController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -69,6 +70,10 @@ export default class SessionNotesController extends BaseController {
         return res.redirect(`/${req.params.groupId}/${sessionId}/edit-session`)
       }
 
+      await sendAuditEvent('CREATE_SESSION_ATTENDANCE', username, sessionId, 'SEARCH_TERM', {
+        details: { referralId, sessionNotes: submittedNotes },
+      })
+
       await this.accreditedProgrammesManageAndDeliverService.createSessionAttendance(username, sessionId, {
         attendees: [{ referralId, outcomeCode, sessionNotes: submittedNotes }],
       })
@@ -91,7 +96,11 @@ export default class SessionNotesController extends BaseController {
 
       return res.redirect(`${req.path}?${redirectQuery.toString()}`)
     }
-
+    if (req.method === 'GET') {
+      await sendAuditEvent('VIEW_SESSION_NOTES_DATA', username, sessionId, 'SEARCH_TERM', {
+        referralId,
+      })
+    }
     const sessionNotesBffData = await this.getSessionNotesData(req, username, sessionId, referralId)
 
     const sessionNotesData: SessionNotesData = {
