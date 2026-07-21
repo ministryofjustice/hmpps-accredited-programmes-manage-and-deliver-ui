@@ -32,20 +32,20 @@ export default class CreateOrEditGroupTreatmentManagerView {
 
   private createGroupFacilitatorArgs(): SelectArgs {
     return {
-      id: 'create-group-facilitator',
-      name: 'create-group-facilitator',
+      id: 'create-group-facilitator-0',
+      name: 'create-group-facilitator-0',
       label: {
         text: 'Facilitator',
         classes: 'govuk-label--m',
       },
       classes: 'add-facilitator-select',
-      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createGroupFacilitator.errorMessage),
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.errorMessageForField('create-group-facilitator-0')),
       items: this.presenter.generateSelectOptions('REGULAR_FACILITATOR'),
     }
   }
 
   private createExistingGroupFacilitatorArgs(facilitator: CreateGroupTeamMember, index: number): SelectArgs {
-    const fieldName = `create-group-facilitator-existing-${index}`
+    const fieldName = `create-group-facilitator-${index}`
     return {
       id: fieldName,
       name: fieldName,
@@ -61,20 +61,22 @@ export default class CreateOrEditGroupTreatmentManagerView {
 
   private createGroupCoverFacilitatorArgs(): SelectArgs {
     return {
-      id: 'create-group-cover-facilitator',
-      name: 'create-group-cover-facilitator',
+      id: 'create-group-cover-facilitator-0',
+      name: 'create-group-cover-facilitator-0',
       label: {
         text: 'Cover facilitator (optional)',
         classes: 'govuk-label--m',
       },
       classes: 'add-cover-facilitator-select',
-      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createGroupCoverFacilitator.errorMessage),
+      errorMessage: ViewUtils.govukErrorMessage(
+        this.presenter.errorMessageForField('create-group-cover-facilitator-0'),
+      ),
       items: this.presenter.generateSelectOptions('COVER_FACILITATOR'),
     }
   }
 
   private createExistingGroupCoverFacilitatorArgs(facilitator: CreateGroupTeamMember, index: number): SelectArgs {
-    const fieldName = `create-group-cover-facilitator-existing-${index}`
+    const fieldName = `create-group-cover-facilitator-${index}`
     return {
       id: fieldName,
       name: fieldName,

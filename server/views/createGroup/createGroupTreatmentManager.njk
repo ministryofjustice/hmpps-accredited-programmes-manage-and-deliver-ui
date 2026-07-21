@@ -115,32 +115,16 @@
           {{ govukSelect(createGroupTreatmentManagerArgs) }}
 
           {% set facilitatorItems = [] %}
-          {% if facilitators.length > 0 %}
-            {% for facilitator in facilitators %}
-              {% set baseArgs = createExistingGroupFacilitatorArgs(facilitator, loop.index) %}
-              {% set mergedArgs = {
-                id: baseArgs.id,
-                name: baseArgs.name,
-                label: { text: baseArgs.label.text, classes: "govuk-visually-hidden" },
-                classes: baseArgs.classes,
-                errorMessage: baseArgs.errorMessage,
-                items: baseArgs.items,
-                attributes: {
-                  "data-name": "create-group-facilitator-%index%",
-                  "data-id": "create-group-facilitator-%index%"
-                }
-              } %}
-              {% set selectHtml %}{{ govukSelect(mergedArgs) }}{% endset %}
-              {% set _ = facilitatorItems.push({ fieldset: { legend: {}, html: selectHtml } }) %}
-            {% endfor %}
-          {% else %}
+          {% set facilitatorList = facilitators if facilitators.length > 0 else [null] %}
+          {% for facilitator in facilitatorList %}
+            {% set baseArgs = createExistingGroupFacilitatorArgs(facilitator, loop.index0) if facilitator else createGroupFacilitatorArgs %}
             {% set mergedArgs = {
-              id: createGroupFacilitatorArgs.id,
-              name: createGroupFacilitatorArgs.name,
-              label: { text: createGroupFacilitatorArgs.label.text, classes: "govuk-visually-hidden" },
-              classes: createGroupFacilitatorArgs.classes,
-              errorMessage: createGroupFacilitatorArgs.errorMessage,
-              items: createGroupFacilitatorArgs.items,
+              id: baseArgs.id,
+              name: baseArgs.name,
+              label: { text: baseArgs.label.text, classes: "govuk-visually-hidden" },
+              classes: baseArgs.classes,
+              errorMessage: baseArgs.errorMessage,
+              items: baseArgs.items,
               attributes: {
                 "data-name": "create-group-facilitator-%index%",
                 "data-id": "create-group-facilitator-%index%"
@@ -148,7 +132,7 @@
             } %}
             {% set selectHtml %}{{ govukSelect(mergedArgs) }}{% endset %}
             {% set _ = facilitatorItems.push({ fieldset: { legend: {}, html: selectHtml } }) %}
-          {% endif %}
+          {% endfor %}
           {{ mojAddAnother({
             id: "create-group-facilitator",
             itemLabel: "Facilitator",
@@ -157,32 +141,16 @@
           }) }}
 
           {% set coverFacilitatorItems = [] %}
-          {% if coverFacilitators.length > 0 %}
-            {% for coverFacilitator in coverFacilitators %}
-              {% set baseArgs = createExistingGroupCoverFacilitatorArgs(coverFacilitator, loop.index) %}
-              {% set mergedArgs = {
-                id: baseArgs.id,
-                name: baseArgs.name,
-                label: { text: baseArgs.label.text, classes: "govuk-visually-hidden" },
-                classes: baseArgs.classes,
-                errorMessage: baseArgs.errorMessage,
-                items: baseArgs.items,
-                attributes: {
-                  "data-name": "create-group-cover-facilitator-%index%",
-                  "data-id": "create-group-cover-facilitator-%index%"
-                }
-              } %}
-              {% set selectHtml %}{{ govukSelect(mergedArgs) }}{% endset %}
-              {% set _ = coverFacilitatorItems.push({ fieldset: { legend: {}, html: selectHtml } }) %}
-            {% endfor %}
-          {% else %}
+          {% set coverFacilitatorList = coverFacilitators if coverFacilitators.length > 0 else [null] %}
+          {% for coverFacilitator in coverFacilitatorList %}
+            {% set baseArgs = createExistingGroupCoverFacilitatorArgs(coverFacilitator, loop.index0) if coverFacilitator else createGroupCoverFacilitatorArgs %}
             {% set mergedArgs = {
-              id: createGroupCoverFacilitatorArgs.id,
-              name: createGroupCoverFacilitatorArgs.name,
-              label: { text: createGroupCoverFacilitatorArgs.label.text, classes: "govuk-visually-hidden" },
-              classes: createGroupCoverFacilitatorArgs.classes,
-              errorMessage: createGroupCoverFacilitatorArgs.errorMessage,
-              items: createGroupCoverFacilitatorArgs.items,
+              id: baseArgs.id,
+              name: baseArgs.name,
+              label: { text: baseArgs.label.text, classes: "govuk-visually-hidden" },
+              classes: baseArgs.classes,
+              errorMessage: baseArgs.errorMessage,
+              items: baseArgs.items,
               attributes: {
                 "data-name": "create-group-cover-facilitator-%index%",
                 "data-id": "create-group-cover-facilitator-%index%"
@@ -190,7 +158,7 @@
             } %}
             {% set selectHtml %}{{ govukSelect(mergedArgs) }}{% endset %}
             {% set _ = coverFacilitatorItems.push({ fieldset: { legend: {}, html: selectHtml } }) %}
-          {% endif %}
+          {% endfor %}
           {{ mojAddAnother({
             id: "create-group-cover-facilitator",
             itemLabel: "Cover facilitator (optional)",
