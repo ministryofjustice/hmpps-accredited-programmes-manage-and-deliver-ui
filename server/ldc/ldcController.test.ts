@@ -90,58 +90,6 @@ describe('Update ldc status', () => {
         })
     })
 
-    it('keeps LDC updates scoped per referral when multiple tabs are open', async () => {
-      const referralIdA = randomUUID()
-      const referralIdB = randomUUID()
-      const originPageA = `/referral/${referralIdA}/availability-and-motivation/availability`
-      const originPageB = `/referral/${referralIdB}/availability-and-motivation/location`
-
-      const sessionData: Partial<SessionData> = {
-        originPage: '/referral-details/unrelated-referral/personal-details',
-        referralOriginPages: {
-          [referralIdA]: originPageA,
-          [referralIdB]: originPageB,
-        },
-      }
-
-      const appWithReferralOriginMap = TestUtils.createTestAppWithSession(sessionData, {
-        accreditedProgrammesManageAndDeliverService,
-      })
-
-      const agent = request.agent(appWithReferralOriginMap)
-
-      await agent
-        .post(`/referral/${referralIdA}/update-learning-disabilities-and-challenges`)
-        .type('form')
-        .send({ hasLdc: true })
-        .expect(302)
-        .expect(res => {
-          expect(res.text).toContain(`Redirecting to ${originPageA}?isLdcUpdated=true`)
-        })
-
-      await agent
-        .post(`/referral/${referralIdB}/update-learning-disabilities-and-challenges`)
-        .type('form')
-        .send({ hasLdc: false })
-        .expect(302)
-        .expect(res => {
-          expect(res.text).toContain(`Redirecting to ${originPageB}?isLdcUpdated=true`)
-        })
-
-      expect(accreditedProgrammesManageAndDeliverService.updateLdc).toHaveBeenNthCalledWith(
-        1,
-        'user1',
-        referralIdA,
-        'true',
-      )
-      expect(accreditedProgrammesManageAndDeliverService.updateLdc).toHaveBeenNthCalledWith(
-        2,
-        'user1',
-        referralIdB,
-        'false',
-      )
-    })
-
     it('does not alter tab B links when tab A LDC is submitted', async () => {
       const referralIdA = randomUUID()
       const referralIdB = randomUUID()

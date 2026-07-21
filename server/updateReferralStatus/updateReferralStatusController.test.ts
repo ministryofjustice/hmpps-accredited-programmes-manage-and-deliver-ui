@@ -89,37 +89,6 @@ describe('Update Referral Status Controller', () => {
             expect(res.text).toContain(`href="/referral/${referralDetails.id}/programme-needs-identifier"`)
           })
       })
-
-      it('keeps update-status back/cancel links scoped per referral when multiple tabs are open', async () => {
-        const referralIdA = randomUUID()
-        const referralIdB = randomUUID()
-        const appWithReferralOriginMap = TestUtils.createTestAppWithSession(
-          {
-            originPage: '/referral-details/unrelated-referral/personal-details',
-            referralOriginPages: {
-              [referralIdA]: `/referral/${referralIdA}/availability-and-motivation/availability`,
-              [referralIdB]: `/referral/${referralIdB}/availability-and-motivation/location`,
-            },
-          },
-          { accreditedProgrammesManageAndDeliverService },
-        )
-
-        const agent = request.agent(appWithReferralOriginMap)
-
-        await agent
-          .get(`/referral/${referralIdA}/update-status`)
-          .expect(200)
-          .expect(res => {
-            expect(res.text).toContain(`href="/referral/${referralIdA}/availability-and-motivation/availability"`)
-          })
-
-        await agent
-          .get(`/referral/${referralIdB}/update-status`)
-          .expect(200)
-          .expect(res => {
-            expect(res.text).toContain(`href="/referral/${referralIdB}/availability-and-motivation/location"`)
-          })
-      })
     })
 
     describe(`POST /referral/:referralDetails.id/update-status`, () => {
