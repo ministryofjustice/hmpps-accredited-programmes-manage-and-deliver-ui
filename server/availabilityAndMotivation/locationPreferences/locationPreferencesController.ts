@@ -45,12 +45,10 @@ export default class LocationPreferencesController extends BaseController {
         referralId,
       )
 
-    const locationPreferenceFormData = this.getLocationPreferenceFormData(req, referralId)
-
-    this.setLocationPreferenceFormData(req, referralId, {
-      ...locationPreferenceFormData,
+    req.session.locationPreferenceFormData = {
+      ...req.session.locationPreferenceFormData,
       preferredLocationReferenceData,
-    })
+    }
 
     let formError: FormValidationError | null = null
     let userInputData = null
@@ -63,19 +61,14 @@ export default class LocationPreferencesController extends BaseController {
         formError = data.error
         userInputData = req.body
       } else {
-        const updatedLocationPreferenceFormData = this.getLocationPreferenceFormData(req, referralId)
-
-        this.setLocationPreferenceFormData(req, referralId, {
-          ...updatedLocationPreferenceFormData,
-          updatePreferredLocationData: {
-            preferredDeliveryLocations: data.paramsForUpdate.locations,
-            cannotAttendText: null,
-          },
-        })
+        req.session.locationPreferenceFormData.updatePreferredLocationData = {
+          preferredDeliveryLocations: data.paramsForUpdate.locations,
+          cannotAttendText: null,
+        }
         if (data.paramsForUpdate.addOtherPduLocations.toLowerCase() === 'yes') {
           return res.redirect(`/referral/${referralId}/add-location-preferences/other-pdu`)
         }
-        setReferralOriginPage(req, referralId, req.originalUrl)
+        req.session.originPage = req.originalUrl
         return res.redirect(`/referral/${referralId}/add-locations-cannot-attend`)
       }
     }
@@ -84,7 +77,7 @@ export default class LocationPreferencesController extends BaseController {
       referralId,
       referralDetails,
       preferredLocationReferenceData,
-      this.getLocationPreferenceFormData(req, referralId)?.updatePreferredLocationData,
+      req.session.locationPreferenceFormData.updatePreferredLocationData,
       formError,
       userInputData,
     )
@@ -114,37 +107,30 @@ export default class LocationPreferencesController extends BaseController {
       )
     }
 
-    const locationPreferenceFormData = this.getLocationPreferenceFormData(req, referralId)
-
     const preferredLocationReferenceData: DeliveryLocationPreferencesFormData =
-      locationPreferenceFormData?.preferredLocationReferenceData ??
+      req.session.locationPreferenceFormData?.preferredLocationReferenceData ??
       (await this.accreditedProgrammesManageAndDeliverService.getPossibleDeliveryLocationsForReferral(
         req.user.username,
         referralId,
       ))
 
-    this.setLocationPreferenceFormData(req, referralId, {
-      ...locationPreferenceFormData,
+    req.session.locationPreferenceFormData = {
+      ...req.session.locationPreferenceFormData,
       preferredLocationReferenceData,
-    })
+    }
 
     if (req.method === 'POST') {
       const data = await new AddLocationPreferenceForm(req, referralId).additionalPdusData()
 
-      const currentLocationPreferenceFormData = this.getLocationPreferenceFormData(req, referralId)
-
-      if (!currentLocationPreferenceFormData?.updatePreferredLocationData) {
-        return res.redirect(`/referral/${referralId}/add-location-preferences`)
-      }
-
       // We clear all additional offices out of the session apart from those in the primary pdu.
       // This is required to avoid duplication when adding the offices submitted in the form if you have returned to the
       // page via the back button.
-      const preferredDeliveryLocations =
-        currentLocationPreferenceFormData.updatePreferredLocationData.preferredDeliveryLocations
+      req.session.locationPreferenceFormData.updatePreferredLocationData.preferredDeliveryLocations =
+        req.session.locationPreferenceFormData.updatePreferredLocationData.preferredDeliveryLocations
           .filter(
             location =>
-              location.pduCode === currentLocationPreferenceFormData.preferredLocationReferenceData.primaryPdu.code,
+              location.pduCode ===
+              req.session.locationPreferenceFormData.preferredLocationReferenceData.primaryPdu.code,
           )
           .concat(data.paramsForUpdate.otherPduLocations)
       req.session.locationPreferenceFormData.hasUpdatedAdditionalLocationData = true
@@ -152,14 +138,12 @@ export default class LocationPreferencesController extends BaseController {
       return res.redirect(`/referral/${referralId}/add-locations-cannot-attend`)
     }
 
-    const updatedLocationPreferenceFormData = this.getLocationPreferenceFormData(req, referralId)
-
     const presenter = new AdditionalPdusPresenter(
       referralId,
       referralDetails,
       preferredLocationReferenceData,
-      updatedLocationPreferenceFormData?.updatePreferredLocationData,
-      updatedLocationPreferenceFormData?.hasUpdatedAdditionalLocationData,
+      req.session.locationPreferenceFormData.updatePreferredLocationData,
+      req.session.locationPreferenceFormData.hasUpdatedAdditionalLocationData,
     )
     const view = new AdditionalPdusView(presenter)
     return this.renderPage(res, view, referralDetails)
@@ -174,15 +158,6 @@ export default class LocationPreferencesController extends BaseController {
       username,
     )
 
-    const locationPreferenceFormData = this.getLocationPreferenceFormData(req, referralId)
-
-    if (
-      !locationPreferenceFormData?.preferredLocationReferenceData ||
-      !locationPreferenceFormData.updatePreferredLocationData
-    ) {
-      return res.redirect(`/referral/${referralId}/add-location-preferences`)
-    }
-
     let formError: FormValidationError | null = null
     let userInputData = null
 
@@ -193,15 +168,8 @@ export default class LocationPreferencesController extends BaseController {
         formError = data.error
         userInputData = req.body
       } else {
-        const updatePreferredLocationData = {
-          ...locationPreferenceFormData.updatePreferredLocationData,
-          cannotAttendText: data.paramsForUpdate.cannotAttendLocations,
-        }
-
-        this.setLocationPreferenceFormData(req, referralId, {
-          ...locationPreferenceFormData,
-          updatePreferredLocationData,
-        })
+        req.session.locationPreferenceFormData.updatePreferredLocationData.cannotAttendText =
+          data.paramsForUpdate.cannotAttendLocations
 
         await sendAuditEvent(
           'UPDATE_REFERRAL_LOCATION_PREFERENCES',
@@ -214,22 +182,22 @@ export default class LocationPreferencesController extends BaseController {
           },
         )
         // Post if no existing preference data
-        if (locationPreferenceFormData.preferredLocationReferenceData.existingDeliveryLocationPreferences) {
+        if (req.session.locationPreferenceFormData.preferredLocationReferenceData.existingDeliveryLocationPreferences) {
           await this.accreditedProgrammesManageAndDeliverService.updateDeliveryLocationPreferences(
             username,
             referralId,
-            updatePreferredLocationData,
+            req.session.locationPreferenceFormData.updatePreferredLocationData,
           )
         } else {
           // Put if existing preference data.
           await this.accreditedProgrammesManageAndDeliverService.createDeliveryLocationPreferences(
             username,
             referralId,
-            updatePreferredLocationData,
+            req.session.locationPreferenceFormData.updatePreferredLocationData,
           )
         }
-        // Clear scoped session state at end of journey
-        this.clearLocationPreferenceFormData(req, referralId)
+        // Clear session at end of journey
+        req.session.locationPreferenceFormData = null
         return res.redirect(
           `/referral/${referralId}/availability-and-motivation/location?preferredLocationUpdated=true#location`,
         )
@@ -251,35 +219,5 @@ export default class LocationPreferencesController extends BaseController {
 
     const view = new CannotAttendLocationsView(presenter)
     return this.renderPage(res, view, referralDetails)
-  }
-
-  private getLocationPreferenceFormData(req: Request, referralId: string) {
-    const scopedData =
-      req.session.locationPreferenceFormDataByReferral?.[referralId] ?? req.session.locationPreferenceFormData
-
-    req.session.locationPreferenceFormData = scopedData
-
-    return scopedData
-  }
-
-  private setLocationPreferenceFormData(
-    req: Request,
-    referralId: string,
-    data: Request['session']['locationPreferenceFormData'],
-  ) {
-    req.session.locationPreferenceFormDataByReferral = {
-      ...(req.session.locationPreferenceFormDataByReferral ?? {}),
-      [referralId]: data,
-    }
-
-    req.session.locationPreferenceFormData = data
-  }
-
-  private clearLocationPreferenceFormData(req: Request, referralId: string): void {
-    if (req.session.locationPreferenceFormDataByReferral) {
-      delete req.session.locationPreferenceFormDataByReferral[referralId]
-    }
-
-    req.session.locationPreferenceFormData = null
   }
 }

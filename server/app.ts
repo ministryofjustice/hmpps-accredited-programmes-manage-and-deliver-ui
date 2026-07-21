@@ -48,14 +48,6 @@ declare module 'express-session' {
       preferredLocationReferenceData?: DeliveryLocationPreferencesFormData
       hasUpdatedAdditionalLocationData?: boolean
     }
-    locationPreferenceFormDataByReferral?: Record<
-      string,
-      {
-        updatePreferredLocationData?: CreateDeliveryLocationPreferences
-        preferredLocationReferenceData?: DeliveryLocationPreferencesFormData
-        hasUpdatedAdditionalLocationData?: boolean
-      }
-    >
     groupManagementData?: {
       groupCode?: string
       personName?: string

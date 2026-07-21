@@ -92,7 +92,7 @@ describe('Update cohort', () => {
         referralOriginPages: {
           [referralIdA]: originPageA,
           [referralIdB]: originPageB,
-=======
+        },
       }
       const appWithReferralOriginMap = TestUtils.createTestAppWithSession(sessionData, {
         accreditedProgrammesManageAndDeliverService,
@@ -100,16 +100,18 @@ describe('Update cohort', () => {
 
       accreditedProgrammesManageAndDeliverService.updateCohort.mockResolvedValue(referralDetails)
 
+      const agent = request.agent(appWithReferralOriginMap)
 
       await agent
         .post(`/referral/${referralIdA}/change-cohort`)
-=======
+        .type('form')
+        .send({
           updatedCohort: 'GENERAL_OFFENCE' as CohortEnum,
         })
         .expect(302)
         .expect(res => {
-<<<<<<< HEAD
           expect(res.text).toContain(`Redirecting to ${originPageA}?isCohortUpdated=true`)
+        })
 
       await agent
         .post(`/referral/${referralIdB}/change-cohort`)
