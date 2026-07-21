@@ -141,5 +141,45 @@ describe('Update ldc status', () => {
         'false',
       )
     })
+
+    it('does not alter tab B links when tab A LDC is submitted', async () => {
+      const referralIdA = randomUUID()
+      const referralIdB = randomUUID()
+      const originPageA = `/referral/${referralIdA}/availability-and-motivation/availability`
+      const originPageB = `/referral/${referralIdB}/availability-and-motivation/location`
+
+      const sessionData: Partial<SessionData> = {
+        originPage: '/referral-details/unrelated-referral/personal-details',
+        referralOriginPages: {
+          [referralIdA]: originPageA,
+          [referralIdB]: originPageB,
+        },
+      }
+
+      const appWithReferralOriginMap = TestUtils.createTestAppWithSession(sessionData, {
+        accreditedProgrammesManageAndDeliverService,
+      })
+
+      const agent = request.agent(appWithReferralOriginMap)
+
+      await agent
+        .post(`/referral/${referralIdA}/update-learning-disabilities-and-challenges`)
+        .type('form')
+        .send({ hasLdc: true })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain(`Redirecting to ${originPageA}?isLdcUpdated=true`)
+        })
+
+      await agent
+        .get(`/referral/${referralIdB}/update-learning-disabilities-and-challenges`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain(`href="${originPageB}"`)
+        })
+
+      expect(accreditedProgrammesManageAndDeliverService.updateLdc).toHaveBeenCalledTimes(1)
+      expect(accreditedProgrammesManageAndDeliverService.updateLdc).toHaveBeenCalledWith('user1', referralIdA, 'true')
+    })
   })
 })

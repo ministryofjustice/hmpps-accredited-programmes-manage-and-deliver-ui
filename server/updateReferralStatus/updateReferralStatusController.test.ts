@@ -158,6 +158,52 @@ describe('Update Referral Status Controller', () => {
             expect(res.text).toContain(`Select the referral status you want to move the person to`)
           })
       })
+
+      it('does not alter tab B links when tab A status is submitted', async () => {
+        const referralIdA = randomUUID()
+        const referralIdB = randomUUID()
+        const validId = statusDetails.availableStatuses[0].id
+        const originPageA = `/referral/${referralIdA}/availability-and-motivation/availability`
+        const originPageB = `/referral/${referralIdB}/availability-and-motivation/location`
+
+        const appWithReferralOriginMap = TestUtils.createTestAppWithSession(
+          {
+            originPage: '/referral-details/unrelated-referral/personal-details',
+            referralOriginPages: {
+              [referralIdA]: originPageA,
+              [referralIdB]: originPageB,
+            },
+          },
+          { accreditedProgrammesManageAndDeliverService },
+        )
+
+        const agent = request.agent(appWithReferralOriginMap)
+
+        await agent
+          .post(`/referral/${referralIdA}/update-status`)
+          .type('form')
+          .send({
+            'updated-status': validId,
+            'more-details': 'some details',
+          })
+          .expect(302)
+          .expect(res => {
+            expect(res.text).toContain(`Redirecting to /referral/${referralIdA}/status-history?message=`)
+          })
+
+        await agent
+          .get(`/referral/${referralIdB}/update-status`)
+          .expect(200)
+          .expect(res => {
+            expect(res.text).toContain(`href="${originPageB}"`)
+          })
+
+        expect(accreditedProgrammesManageAndDeliverService.updateStatus).toHaveBeenCalledTimes(1)
+        expect(accreditedProgrammesManageAndDeliverService.updateStatus).toHaveBeenCalledWith('user1', referralIdA, {
+          referralStatusDescriptionId: validId,
+          additionalDetails: 'some details',
+        })
+      })
     })
   })
   describe('update-status-interim', () => {
