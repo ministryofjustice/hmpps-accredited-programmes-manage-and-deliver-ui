@@ -67,6 +67,37 @@
     }
   }
 
+  /**
+   * Numbers the visible govukSelect label of each item within a single
+   * add-another root so labels read "Facilitator 1", "Facilitator 2", etc. The
+   * base label text is captured once per label (in a data attribute) so repeated
+   * calls after add/remove stay stable rather than compounding.
+   * @param {Element | null} root
+   */
+  function numberSelectLabels(root) {
+    if (!root || typeof root.querySelectorAll !== 'function') {
+      return;
+    }
+    const items = root.querySelectorAll('.moj-add-another__item');
+    items.forEach((item, index) => {
+      const label = item.querySelector('.govuk-label');
+      if (!label) {
+        return;
+      }
+      if (label.dataset.baseLabel === undefined) {
+        label.dataset.baseLabel = label.textContent.trim();
+      }
+      const base = label.dataset.baseLabel;
+      const number = index + 1;
+      const parenthetical = base.match(/^(.*?)\s*(\(.*\))\s*$/);
+      if (parenthetical) {
+        label.textContent = parenthetical[1] + ' ' + number + ' ' + parenthetical[2];
+      } else {
+        label.textContent = base + ' ' + number;
+      }
+    });
+  }
+
   // Keep the component's cloning template pristine, regardless of whether the
   // first item was enhanced before the template was captured.
   document.addEventListener('moj-add-another:create-template', function (event) {
@@ -82,6 +113,9 @@
 
     // Enhance any facilitator / cover facilitator selects already on the page.
     document.querySelectorAll('.moj-add-another__items select').forEach(enhanceFacilitatorSelect);
+
+    // Number the visible select labels (Facilitator 1, Facilitator 2, ...).
+    document.querySelectorAll('.moj-add-another').forEach(numberSelectLabels);
   });
 
   // When the MOJ 'add another' component clones a new item, clean any stray
@@ -93,6 +127,16 @@
     }
     stripAccessibleAutocomplete(item);
     enhanceFacilitatorSelect(item.querySelector('select'));
+    numberSelectLabels(item.closest('.moj-add-another'));
+  });
+
+  // After an item is removed the component reindexes the remaining items, so
+  // renumber the visible select labels.
+  document.addEventListener('moj-add-another:remove-item', function (event) {
+    const root = event.target && typeof event.target.closest === 'function'
+      ? event.target.closest('.moj-add-another') || event.target
+      : null;
+    numberSelectLabels(root);
   });
 </script>
 <div class="govuk-width-container">
@@ -113,7 +157,7 @@
         <form method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{csrfToken}}">
           {{ govukSelect(createGroupTreatmentManagerArgs) }}
-
+          <p class="govuk-label govuk-label--m">Facilitator</p>
           {% set facilitatorItems = [] %}
           {% set facilitatorList = facilitators if facilitators.length > 0 else [null] %}
           {% for facilitator in facilitatorList %}
@@ -121,7 +165,7 @@
             {% set mergedArgs = {
               id: baseArgs.id,
               name: baseArgs.name,
-              label: { text: baseArgs.label.text, classes: "govuk-visually-hidden" },
+              label: { text: baseArgs.label.text },
               classes: baseArgs.classes,
               errorMessage: baseArgs.errorMessage,
               items: baseArgs.items,
@@ -137,9 +181,10 @@
             id: "create-group-facilitator",
             itemLabel: "Facilitator",
             classes: "govuk-!-margin-bottom-4",
-            items: facilitatorItems
+            items: facilitatorItems,
+            layout: "inline"
           }) }}
-
+          <p class="govuk-label govuk-label--m">Cover facilitator (optional)</p>
           {% set coverFacilitatorItems = [] %}
           {% set coverFacilitatorList = coverFacilitators if coverFacilitators.length > 0 else [null] %}
           {% for coverFacilitator in coverFacilitatorList %}
@@ -147,7 +192,7 @@
             {% set mergedArgs = {
               id: baseArgs.id,
               name: baseArgs.name,
-              label: { text: baseArgs.label.text, classes: "govuk-visually-hidden" },
+              label: { text: baseArgs.label.text},
               classes: baseArgs.classes,
               errorMessage: baseArgs.errorMessage,
               items: baseArgs.items,
@@ -165,7 +210,8 @@
             addAnotherButtonText: "Add another cover facilitator",
             removeButtonSuffixText: "cover facilitator %{number}",
             classes: "govuk-!-margin-bottom-4",
-            items: coverFacilitatorItems
+            items: coverFacilitatorItems,
+            layout: "inline"
           }) }}
 
           {% if isEditJourney %}

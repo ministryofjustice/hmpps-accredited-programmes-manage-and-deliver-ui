@@ -220,3 +220,13 @@
   flex-wrap: wrap;
 }
 
+.moj-add-another__item-row {
+  width: 100%;
+}
+
+.moj-add-another__item--inline {
+  .moj-add-another__remove-button-container {
+    flex: none;
+  }
+}
+
