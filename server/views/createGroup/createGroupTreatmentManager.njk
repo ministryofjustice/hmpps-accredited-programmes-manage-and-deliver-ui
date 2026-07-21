@@ -87,13 +87,13 @@
       if (label.dataset.baseLabel === undefined) {
         label.dataset.baseLabel = label.textContent.trim();
       }
-      const base = label.dataset.baseLabel;
+      const baseLabel = label.dataset.baseLabel;
       const number = index + 1;
-      const parenthetical = base.match(/^(.*?)\s*(\(.*\))\s*$/);
-      if (parenthetical) {
-        label.textContent = parenthetical[1] + ' ' + number + ' ' + parenthetical[2];
+      const isOptional = baseLabel.match(/^(.*?)\s*(\(optional\))\s*$/);
+      if (isOptional) {
+        label.innerHTML = isOptional[1] + ' ' + number + ' ' + '<span class="govuk-visually-hidden">' + 'optional' + '</span>';
       } else {
-        label.textContent = base + ' ' + number;
+        label.textContent = baseLabel + ' ' + number;
       }
     });
   }
@@ -180,7 +180,7 @@
           {{ mojAddAnother({
             id: "create-group-facilitator",
             itemLabel: "Facilitator",
-            classes: "govuk-!-margin-bottom-4",
+            classes: "govuk-!-margin-bottom-12",
             items: facilitatorItems,
             layout: "inline"
           }) }}
@@ -209,7 +209,7 @@
             itemLabel: "Cover facilitator (optional)",
             addAnotherButtonText: "Add another cover facilitator",
             removeButtonSuffixText: "cover facilitator %{number}",
-            classes: "govuk-!-margin-bottom-4",
+            classes: "govuk-!-margin-bottom-12",
             items: coverFacilitatorItems,
             layout: "inline"
           }) }}
