@@ -14,6 +14,7 @@ import UpdateReferralStatusFixedView from './updateReferralStatusToOnProgrammeOr
 import UpdateReferralStatusView from './updateReferralStatusView'
 import logger from '../../logger'
 import sendAuditEvent from '../services/auditService'
+import { getReferralOriginPage } from '../utils/referralOriginPage'
 
 /**
  * Build a FormValidationError for a single field. Mirrors the shape produced by
@@ -50,6 +51,7 @@ export default class UpdateReferralStatusController {
 
     const { referralId } = req.params as Record<string, string>
     const { username } = req.user
+    const originPage = getReferralOriginPage(req, referralId)
 
     const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
       referralId,
@@ -120,7 +122,7 @@ export default class UpdateReferralStatusController {
     const presenter = new UpdateReferralStatusPresenter(
       referralDetails,
       statusDetails,
-      req.session.originPage,
+      originPage,
       formError,
       userInputData,
     )
@@ -134,6 +136,7 @@ export default class UpdateReferralStatusController {
 
     const { referralId } = req.params as Record<string, string>
     const { username } = req.user
+    const originPage = getReferralOriginPage(req, referralId)
 
     const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
       referralId,
@@ -167,7 +170,7 @@ export default class UpdateReferralStatusController {
     const presenter = new UpdateReferralStatusStartedOrCompletedPresenter(
       referralDetails,
       statusDetails,
-      req.session.originPage,
+      originPage,
       formError,
       userInputData,
       startedOrCompleted,
@@ -181,6 +184,7 @@ export default class UpdateReferralStatusController {
 
     const { referralId } = req.params as Record<string, string>
     const { username } = req.user
+    const originPage = getReferralOriginPage(req, referralId)
 
     const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
       referralId,
@@ -268,7 +272,7 @@ export default class UpdateReferralStatusController {
       referralDetails,
       statusDetails,
       backUri,
-      req.session.originPage,
+      originPage,
       formError,
       userInputData,
     )

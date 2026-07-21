@@ -9,6 +9,7 @@ import AddAvailabilityPresenter from './addAvailabilityPresenter'
 import AddAvailabilityView from './addAvailabilityView'
 import logger from '../../../logger'
 import sendAuditEvent from '../../services/auditService'
+import { getReferralOriginPage } from '../../utils/referralOriginPage'
 
 export default class AddAvailabilityController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -27,6 +28,7 @@ export default class AddAvailabilityController extends BaseController {
   async showAddAvailabilityPage(req: Request, res: Response, availabilityId: string = null): Promise<void> {
     const { referralId } = req.params as Record<string, string>
     const { username } = req.user
+    const originPage = getReferralOriginPage(req, referralId)
     const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
       referralId,
       username,
@@ -96,7 +98,7 @@ export default class AddAvailabilityController extends BaseController {
 
     const presenter = new AddAvailabilityPresenter(
       personalDetails,
-      req.session.originPage,
+      originPage,
       availability,
       formError,
       userInputData,
