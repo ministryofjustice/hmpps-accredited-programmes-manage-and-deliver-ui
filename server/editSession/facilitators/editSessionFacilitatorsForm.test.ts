@@ -6,7 +6,7 @@ describe('EditSessionFacilitatorsForm', () => {
     describe('when validation passes', () => {
       it('returns params for update with parsed values', async () => {
         const request = TestUtils.createRequest({
-          'edit-session-facilitator':
+          'edit-session-facilitator-0':
             '{"facilitator":"John Doe", "facilitatorCode":"N07B656", "teamName":"GM Manchester N1", "teamCode":"N50CAC"}',
         })
         const data = await new EditSessionFacilitatorsForm(request).editSessionFacilitatorsData()
@@ -31,8 +31,8 @@ describe('EditSessionFacilitatorsForm', () => {
         expect(data.error).toStrictEqual({
           errors: [
             {
-              errorSummaryLinkedField: 'edit-session-facilitator',
-              formFields: ['edit-session-facilitator'],
+              errorSummaryLinkedField: 'edit-session-facilitator-0',
+              formFields: ['edit-session-facilitator-0'],
               message: 'Select a Facilitator. Start typing to search.',
             },
           ],
@@ -41,9 +41,9 @@ describe('EditSessionFacilitatorsForm', () => {
 
       it('returns error when same facilitator is entered', async () => {
         const request = TestUtils.createRequest({
-          'edit-session-facilitator':
+          'edit-session-facilitator-0':
             '{"facilitator":"John Doe", "facilitatorCode":"N07B656", "teamName":"GM Manchester N1", "teamCode":"N50CAC"}',
-          'edit-session-facilitator1':
+          'edit-session-facilitator-1':
             '{"facilitator":"John Doe", "facilitatorCode":"N07B656", "teamName":"GM Manchester N1", "teamCode":"N50CAC"}',
         })
         const data = await new EditSessionFacilitatorsForm(request).editSessionFacilitatorsData()
@@ -51,8 +51,13 @@ describe('EditSessionFacilitatorsForm', () => {
         expect(data.error).toStrictEqual({
           errors: [
             {
-              errorSummaryLinkedField: 'edit-session-facilitator',
-              formFields: ['edit-session-facilitator'],
+              errorSummaryLinkedField: 'edit-session-facilitator-0',
+              formFields: ['edit-session-facilitator-0'],
+              message: 'You cannot add the same facilitator twice. Select a different facilitator.',
+            },
+            {
+              errorSummaryLinkedField: 'edit-session-facilitator-1',
+              formFields: ['edit-session-facilitator-1'],
               message: 'You cannot add the same facilitator twice. Select a different facilitator.',
             },
           ],

@@ -158,7 +158,7 @@
             {{ govukRadios(sessionDetailsRadioArgs) }}
           {% endif %}
 
-          <p class="govuk-label govuk-label--m">Facilitator</p>
+          <h2 class="govuk-label govuk-label--m">Facilitator</h2>
           {% set facilitatorItems = [] %}
           {% set facilitatorList = facilitators if facilitators.length > 0 else [null] %}
           {% for facilitator in facilitatorList %}

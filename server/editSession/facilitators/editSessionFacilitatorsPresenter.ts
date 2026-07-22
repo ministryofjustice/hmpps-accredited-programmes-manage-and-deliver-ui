@@ -79,18 +79,15 @@ export default class EditSessionFacilitatorsPresenter {
 
   private getParsedMembers(): EditSessionFacilitatorsRequest[] {
     const { _csrf, ...formValues } = this.userInputData
-    const membersToParse = Object.values(formValues) as string[]
 
-    return membersToParse
+    return Object.entries(formValues)
+      .filter(([key]) => key.startsWith('edit-session-facilitator'))
+      .map(([, value]) => value as string)
       .filter(userAsJsonString => userAsJsonString !== '')
       .map(userAsJsonString => JSON.parse(userAsJsonString))
   }
 
-  get fields() {
-    return {
-      editSessionFacilitator: {
-        errorMessage: PresenterUtils.errorMessage(this.validationError, 'edit-session-facilitator'),
-      },
-    }
+  errorMessageForField(field: string): string | null {
+    return PresenterUtils.errorMessage(this.validationError, field)
   }
 }

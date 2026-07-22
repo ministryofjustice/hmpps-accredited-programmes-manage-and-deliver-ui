@@ -182,9 +182,9 @@ describe('EditSessionFacilitatorsPresenter', () => {
     it('should parse user input data when available', () => {
       const userInputData = {
         _csrf: 'token123',
-        'facilitator-0':
+        'edit-session-facilitator-0':
           '{"facilitatorName":"John Smith", "facilitatorCode":"FAC-001", "teamName":"Team A", "teamCode":"TEAM-A"}',
-        'facilitator-1':
+        'edit-session-facilitator-1':
           '{"facilitatorName":"Jane Doe", "facilitatorCode":"FAC-002", "teamName":"Team B", "teamCode":"TEAM-B"}',
       }
 
@@ -206,9 +206,9 @@ describe('EditSessionFacilitatorsPresenter', () => {
     it('should filter out empty strings from user input', () => {
       const userInputData = {
         _csrf: 'token123',
-        'facilitator-0':
+        'edit-session-facilitator-0':
           '{"facilitatorName":"John Smith", "facilitatorCode":"FAC-001", "teamName":"Team A", "teamCode":"TEAM-A"}',
-        'facilitator-1': '',
+        'edit-session-facilitator-1': '',
       }
 
       const presenter = new EditSessionFacilitatorsPresenter(
@@ -226,22 +226,19 @@ describe('EditSessionFacilitatorsPresenter', () => {
     })
   })
 
-  describe('fields', () => {
-    it('should return fields with no error message when no validation error', () => {
+  describe('errorMessageForField', () => {
+    it('should return null when no validation error', () => {
       const presenter = new EditSessionFacilitatorsPresenter(linkUrl, groupId, editSessionFacilitatorsResponse)
 
-      const { fields } = presenter
-
-      expect(fields.editSessionFacilitator).toBeDefined()
-      expect(fields.editSessionFacilitator.errorMessage).toBeNull()
+      expect(presenter.errorMessageForField('edit-session-facilitator-0')).toBeNull()
     })
 
     it('should return error message when validation error exists', () => {
       const validationError = {
         errors: [
           {
-            errorSummaryLinkedField: 'edit-session-facilitator',
-            formFields: ['edit-session-facilitator'],
+            errorSummaryLinkedField: 'edit-session-facilitator-0',
+            formFields: ['edit-session-facilitator-0'],
             message: 'Select at least one facilitator',
           },
         ],
@@ -253,9 +250,7 @@ describe('EditSessionFacilitatorsPresenter', () => {
         validationError,
       )
 
-      const { fields } = presenter
-
-      expect(fields.editSessionFacilitator.errorMessage).toBe('Select at least one facilitator')
+      expect(presenter.errorMessageForField('edit-session-facilitator-0')).toBe('Select at least one facilitator')
     })
   })
 

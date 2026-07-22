@@ -159,7 +159,7 @@
         <form method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{csrfToken}}">
           {{ govukSelect(createGroupTreatmentManagerArgs) }}
-          <p class="govuk-label govuk-label--m">Facilitator</p>
+          <h2 class="govuk-label govuk-label--m">Facilitator</h2>
           {% set facilitatorItems = [] %}
           {% set facilitatorList = facilitators if facilitators.length > 0 else [null] %}
           {% for facilitator in facilitatorList %}
@@ -186,7 +186,7 @@
             items: facilitatorItems,
             layout: "inline"
           }) }}
-          <p class="govuk-label govuk-label--m">Cover facilitator (optional)</p>
+          <h2 class="govuk-label govuk-label--m">Cover facilitator (optional)</h2>
           {% set coverFacilitatorItems = [] %}
           {% set coverFacilitatorList = coverFacilitators if coverFacilitators.length > 0 else [null] %}
           {% for coverFacilitator in coverFacilitatorList %}
