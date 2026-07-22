@@ -64,8 +64,8 @@ describe('EditSessionFacilitatorsPresenter', () => {
       const validationError: FormValidationError = {
         errors: [
           {
-            formFields: ['edit-session-facilitator'],
-            errorSummaryLinkedField: 'edit-session-facilitator',
+            formFields: ['edit-session-facilitator-0'],
+            errorSummaryLinkedField: 'edit-session-facilitator-0',
             message: 'Select a Facilitator. Start typing to search.',
           },
         ],
@@ -245,18 +245,18 @@ describe('EditSessionFacilitatorsPresenter', () => {
     })
   })
 
-  describe('fields', () => {
-    it('returns empty error message when no validation errors', () => {
+  describe('errorMessageForField', () => {
+    it('returns null error message when no validation errors', () => {
       const presenter = new EditSessionFacilitatorsPresenter(linkUrl, groupId, editSessionFacilitatorsResponse, null)
-      expect(presenter.fields.editSessionFacilitator.errorMessage).toBeNull()
+      expect(presenter.errorMessageForField('edit-session-facilitator-0')).toBeNull()
     })
 
     it('returns error message when validation errors exist', () => {
       const validationError: FormValidationError = {
         errors: [
           {
-            formFields: ['edit-session-facilitator'],
-            errorSummaryLinkedField: 'edit-session-facilitator',
+            formFields: ['edit-session-facilitator-0'],
+            errorSummaryLinkedField: 'edit-session-facilitator-0',
             message: 'Select a Facilitator. Start typing to search.',
           },
         ],
@@ -267,7 +267,7 @@ describe('EditSessionFacilitatorsPresenter', () => {
         editSessionFacilitatorsResponse,
         validationError,
       )
-      expect(presenter.fields.editSessionFacilitator.errorMessage).toBeDefined()
+      expect(presenter.errorMessageForField('edit-session-facilitator-0')).toBeDefined()
     })
   })
 })

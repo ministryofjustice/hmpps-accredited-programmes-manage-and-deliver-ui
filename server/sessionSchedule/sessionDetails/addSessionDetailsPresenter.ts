@@ -141,9 +141,6 @@ export default class AddSessionDetailsPresenter {
       who: {
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'session-details-who'),
       },
-      sessionFacilitator: {
-        errorMessage: PresenterUtils.errorMessage(this.validationError, 'session-details-facilitator'),
-      },
       startTime: this.utils.twelveHourTimeValue(
         {
           hour: this.createSessionDetailsFormData.startTime?.hour,
@@ -169,5 +166,9 @@ export default class AddSessionDetailsPresenter {
         this.validationError,
       ),
     }
+  }
+
+  errorMessageForField(field: string): string | null {
+    return PresenterUtils.errorMessage(this.validationError, field)
   }
 }

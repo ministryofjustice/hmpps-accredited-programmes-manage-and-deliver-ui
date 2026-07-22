@@ -25,8 +25,7 @@ export default class SchedulePresenter extends GroupServiceLayoutPresenter {
 
   get scheduleTableRows() {
     const scheduleRows: (
-      | { text: string; attributes?: undefined }
-      | { text: string; attributes: { 'data-sort-value': number } }
+      { text: string; attributes?: undefined } | { text: string; attributes: { 'data-sort-value': number } }
     )[][] = []
     this.groupScheduleOverview.sessions.forEach((session: GroupScheduleSession) => {
       const date = new Date(session.date).getTime()

@@ -561,8 +561,8 @@ describe('CreateGroupForm', () => {
           expect(data.error).toStrictEqual({
             errors: [
               {
-                errorSummaryLinkedField: 'create-group-facilitator',
-                formFields: ['create-group-facilitator'],
+                errorSummaryLinkedField: 'create-group-facilitator-0',
+                formFields: ['create-group-facilitator-0'],
                 message: 'Select a Facilitator. Start typing to search.',
               },
             ],
@@ -584,8 +584,8 @@ describe('CreateGroupForm', () => {
             message: 'Select a Treatment Manager. Start typing to search.',
           })
           expect(data.error.errors).toContainEqual({
-            errorSummaryLinkedField: 'create-group-facilitator',
-            formFields: ['create-group-facilitator'],
+            errorSummaryLinkedField: 'create-group-facilitator-0',
+            formFields: ['create-group-facilitator-0'],
             message: 'Select a Facilitator. Start typing to search.',
           })
         })
@@ -606,8 +606,8 @@ describe('CreateGroupForm', () => {
           expect(data.error).toStrictEqual({
             errors: [
               {
-                errorSummaryLinkedField: 'create-group-facilitator',
-                formFields: ['create-group-facilitator'],
+                errorSummaryLinkedField: 'create-group-facilitator-0',
+                formFields: ['create-group-facilitator-0'],
                 message: 'Select a Facilitator. Start typing to search.',
               },
             ],
@@ -667,13 +667,13 @@ describe('CreateGroupForm', () => {
           expect(data.error).toStrictEqual({
             errors: [
               {
-                errorSummaryLinkedField: 'create-group-facilitator-existing-1',
-                formFields: ['create-group-facilitator-existing-1'],
+                errorSummaryLinkedField: 'create-group-facilitator-0',
+                formFields: ['create-group-facilitator-0'],
                 message: 'You cannot add the same facilitator twice. Select a different facilitator.',
               },
               {
-                errorSummaryLinkedField: 'create-group-cover-facilitator-existing-1',
-                formFields: ['create-group-cover-facilitator-existing-1'],
+                errorSummaryLinkedField: 'create-group-cover-facilitator-0',
+                formFields: ['create-group-cover-facilitator-0'],
                 message: 'You cannot add the same facilitator twice. Select a different facilitator.',
               },
             ],
@@ -700,13 +700,13 @@ describe('CreateGroupForm', () => {
           expect(data.error).toStrictEqual({
             errors: [
               {
-                errorSummaryLinkedField: 'create-group-facilitator-existing-1',
-                formFields: ['create-group-facilitator-existing-1'],
+                errorSummaryLinkedField: 'create-group-facilitator-0',
+                formFields: ['create-group-facilitator-0'],
                 message: 'You cannot add the same facilitator twice. Select a different facilitator.',
               },
               {
-                errorSummaryLinkedField: 'create-group-cover-facilitator-existing-1',
-                formFields: ['create-group-cover-facilitator-existing-1'],
+                errorSummaryLinkedField: 'create-group-cover-facilitator-0',
+                formFields: ['create-group-cover-facilitator-0'],
                 message: 'You cannot add the same facilitator twice. Select a different facilitator.',
               },
             ],
@@ -731,13 +731,13 @@ describe('CreateGroupForm', () => {
           expect(data.error).toStrictEqual({
             errors: [
               {
-                errorSummaryLinkedField: 'create-group-facilitator-existing-1',
-                formFields: ['create-group-facilitator-existing-1'],
+                errorSummaryLinkedField: 'create-group-facilitator-0',
+                formFields: ['create-group-facilitator-0'],
                 message: 'You cannot add the same facilitator twice. Select a different facilitator.',
               },
               {
-                errorSummaryLinkedField: 'create-group-facilitator-existing-2',
-                formFields: ['create-group-facilitator-existing-2'],
+                errorSummaryLinkedField: 'create-group-facilitator-1',
+                formFields: ['create-group-facilitator-1'],
                 message: 'You cannot add the same facilitator twice. Select a different facilitator.',
               },
             ],
@@ -764,13 +764,13 @@ describe('CreateGroupForm', () => {
           expect(data.error).toStrictEqual({
             errors: [
               {
-                errorSummaryLinkedField: 'create-group-cover-facilitator-existing-1',
-                formFields: ['create-group-cover-facilitator-existing-1'],
+                errorSummaryLinkedField: 'create-group-cover-facilitator-0',
+                formFields: ['create-group-cover-facilitator-0'],
                 message: 'You cannot add the same facilitator twice. Select a different facilitator.',
               },
               {
-                errorSummaryLinkedField: 'create-group-cover-facilitator-existing-2',
-                formFields: ['create-group-cover-facilitator-existing-2'],
+                errorSummaryLinkedField: 'create-group-cover-facilitator-1',
+                formFields: ['create-group-cover-facilitator-1'],
                 message: 'You cannot add the same facilitator twice. Select a different facilitator.',
               },
             ],

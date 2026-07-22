@@ -109,12 +109,6 @@ export default class CreateOrEditGroupTreatmentManagerPresenter {
         value: members.treatmentManager ? members.treatmentManager.facilitatorCode : '',
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'create-group-treatment-manager'),
       },
-      createGroupFacilitator: {
-        errorMessage: PresenterUtils.errorMessage(this.validationError, 'create-group-facilitator'),
-      },
-      createGroupCoverFacilitator: {
-        errorMessage: PresenterUtils.errorMessage(this.validationError, 'create-group-cover-facilitator'),
-      },
     }
   }
 

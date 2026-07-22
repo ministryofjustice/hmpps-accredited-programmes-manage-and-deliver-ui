@@ -9,5 +9,4 @@ interface MojAlertComponentBase {
  * @see https://design-patterns.service.justice.gov.uk/components/alert/#how-to-use-tab
  */
 export type MojAlertComponentArgs =
-  | (MojAlertComponentBase & { html: string })
-  | (MojAlertComponentBase & { text: string })
+  (MojAlertComponentBase & { html: string }) | (MojAlertComponentBase & { text: string })

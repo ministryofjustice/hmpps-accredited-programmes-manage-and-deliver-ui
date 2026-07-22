@@ -1264,7 +1264,7 @@ describe('Edit Group Controller', () => {
             teamCode: 'TA001',
             teamMemberType: 'TREATMENT_MANAGER',
           }),
-          'create-group-facilitator': JSON.stringify({
+          'create-group-facilitator-0': JSON.stringify({
             facilitator: 'Jane Doe',
             facilitatorCode: 'JD456',
             teamName: 'Team A',

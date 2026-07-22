@@ -3,6 +3,7 @@ import { CreateGroupTeamMember, ScheduleSessionRequest } from '@manage-and-deliv
 import { body, ValidationChain } from 'express-validator'
 import { FormData } from '../utils/forms/formData'
 import FormUtils from '../utils/formUtils'
+import { FormValidationError } from '../utils/formValidationError'
 import errorMessages from '../utils/errorMessages'
 
 const fieldOrder = [
@@ -14,7 +15,7 @@ const fieldOrder = [
   'session-details-end-time-minute',
   'session-details-end-time-part-of-day',
   'session-details-who',
-  'session-details-facilitator',
+  'session-details-facilitator-0',
 ]
 
 export default class CreateSessionScheduleForm {
@@ -26,11 +27,16 @@ export default class CreateSessionScheduleForm {
       validations: this.createSessionDetailsValidations(),
     })
 
-    const error = FormUtils.validationErrorFromResult(validationResult)
-    if (error) {
+    const validationError = FormUtils.validationErrorFromResult(validationResult)
+    const duplicateFacilitatorErrors = this.createDuplicateFacilitatorErrors()
+
+    if (validationError || duplicateFacilitatorErrors.length > 0) {
+      const error: FormValidationError = {
+        errors: [...(validationError?.errors || []), ...duplicateFacilitatorErrors],
+      }
       error.errors.sort((a, b) => {
-        const aIndex = fieldOrder.indexOf(a.errorSummaryLinkedField)
-        const bIndex = fieldOrder.indexOf(b.errorSummaryLinkedField)
+        const aIndex = this.fieldOrderIndex(a.errorSummaryLinkedField)
+        const bIndex = this.fieldOrderIndex(b.errorSummaryLinkedField)
         return aIndex - bIndex
       })
       return {
@@ -162,23 +168,82 @@ export default class CreateSessionScheduleForm {
         .notEmpty()
         .withMessage(errorMessages.sessionSchedule.sessionDetailsEndTimeAmPm),
       body('session-details-who').notEmpty().withMessage(errorMessages.sessionSchedule.sessionDetailsWho),
-      body('session-details-facilitator')
+      body('session-details-facilitator-0')
         .custom(() => {
           return hasFacilitator
         })
-        .withMessage(errorMessages.sessionSchedule.sessionDetailsFacilitator)
-        .custom((_value, { req }) => {
-          const facilitatorCodes = Object.entries(req.body)
-            .filter(([key, value]) => key.startsWith('session-details-facilitator') && value !== '')
-            .map(([, value]) => JSON.parse(value as string)?.facilitatorCode)
-            .filter(Boolean)
-
-          if (new Set(facilitatorCodes).size !== facilitatorCodes.length) {
-            throw new Error(errorMessages.editSession.editSessionFacilitatorDuplicate)
-          }
-          return true
-        }),
+        .withMessage(errorMessages.sessionSchedule.sessionDetailsFacilitator),
     ]
+  }
+
+  private fieldOrderIndex(field: string): number {
+    const directIndex = fieldOrder.indexOf(field)
+    if (directIndex !== -1) {
+      return directIndex
+    }
+    const facilitatorMatch = field.match(/^session-details-facilitator-(\d+)$/)
+    if (facilitatorMatch) {
+      const baseIndex = fieldOrder.indexOf('session-details-facilitator-0')
+      return baseIndex + Number(facilitatorMatch[1])
+    }
+    return fieldOrder.length
+  }
+
+  private createDuplicateFacilitatorErrors(): FormValidationError['errors'] {
+    const selections = this.getFacilitatorSelections()
+    const fieldNamesByCode = new Map<string, string[]>()
+
+    selections.forEach(({ fieldName, facilitatorCode }) => {
+      const existing = fieldNamesByCode.get(facilitatorCode) || []
+      existing.push(fieldName)
+      fieldNamesByCode.set(facilitatorCode, existing)
+    })
+
+    const duplicateFieldNames = new Set<string>()
+    fieldNamesByCode.forEach(fieldNames => {
+      if (fieldNames.length > 1) {
+        fieldNames.forEach(fieldName => duplicateFieldNames.add(fieldName))
+      }
+    })
+
+    if (duplicateFieldNames.size === 0) {
+      return []
+    }
+
+    const orderedFieldNames = selections
+      .map(selection => selection.fieldName)
+      .filter((fieldName, index, allFieldNames) => {
+        return duplicateFieldNames.has(fieldName) && allFieldNames.indexOf(fieldName) === index
+      })
+
+    return orderedFieldNames.map(fieldName => ({
+      formFields: [fieldName],
+      errorSummaryLinkedField: fieldName,
+      message: errorMessages.sessionSchedule.sessionDetailsFacilitatorDuplicate,
+    }))
+  }
+
+  private getFacilitatorSelections(): Array<{ fieldName: string; facilitatorCode: string }> {
+    return Object.entries(this.request.body)
+      .filter(([key, value]) => key.startsWith('session-details-facilitator') && value)
+      .map(([key, value]) => ({
+        fieldName: key,
+        facilitatorCode: this.parseFacilitatorCode(value),
+      }))
+      .filter((selection): selection is { fieldName: string; facilitatorCode: string } =>
+        Boolean(selection.facilitatorCode),
+      )
+  }
+
+  private parseFacilitatorCode(value: unknown): string {
+    if (typeof value !== 'string') {
+      return ''
+    }
+    try {
+      return JSON.parse(value)?.facilitatorCode || ''
+    } catch {
+      return ''
+    }
   }
 
   private getFacilitators(): CreateGroupTeamMember[] {

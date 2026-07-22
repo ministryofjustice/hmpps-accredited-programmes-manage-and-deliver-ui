@@ -109,6 +109,7 @@ export default {
     sessionDetailsEndTimeAmPm: 'Select whether the end time is am or pm',
     sessionDetailsWho: 'Select who should attend the session',
     sessionDetailsFacilitator: 'Select a facilitator. Start typing to search',
+    sessionDetailsFacilitatorDuplicate: 'You cannot add the same facilitator twice. Select a different facilitator.',
     sessionDetailsEndTimeBeforeStart: 'End time must be later than start time',
     sessionDetailsDurationLongerThanOriginallyScheduled:
       'The session duration cannot be longer than originally scheduled. Change the start or end time.',

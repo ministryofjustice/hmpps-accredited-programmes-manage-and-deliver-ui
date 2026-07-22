@@ -369,7 +369,7 @@ export default class CreateOrEditGroupForm {
       body('create-group-treatment-manager')
         .notEmpty()
         .withMessage(errorMessages.createGroup.createGroupTreatmentManagerEmpty),
-      body('create-group-facilitator')
+      body('create-group-facilitator-0')
         .custom(() => {
           return hasRegularFacilitator
         })
@@ -379,10 +379,10 @@ export default class CreateOrEditGroupForm {
 
   private createDuplicateFacilitatorErrors(): FormValidationError['errors'] {
     const regularSelections = this.getFacilitatorSelections('create-group-facilitator', index => {
-      return `create-group-facilitator-existing-${index + 1}`
+      return `create-group-facilitator-${index}`
     })
     const coverSelections = this.getFacilitatorSelections('create-group-cover-facilitator', index => {
-      return `create-group-cover-facilitator-existing-${index + 1}`
+      return `create-group-cover-facilitator-${index}`
     })
 
     const regularByCode = this.groupFieldNamesByCode(regularSelections)

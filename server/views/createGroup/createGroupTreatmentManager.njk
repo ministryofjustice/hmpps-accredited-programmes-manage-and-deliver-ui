@@ -3,8 +3,8 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
-{%- from "govuk/components/fieldset/macro.njk" import govukFieldset -%}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "moj/components/add-another/macro.njk" import mojAddAnother %}
 {% set pageTitle = pageTitle + " - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
 
@@ -12,190 +12,133 @@
 {% block content %}
 <script src="/assets/accessible-autocomplete.min.js"></script>
 <script nonce="{{ cspNonce }}">
-  // Counters for dynamically added elements
-  let selectElementCounter = 1;
-  let selectCoverFacilitatorElementCounter = 1;
-  let existingIndex = 1;
-  let existingCoverFacilitatorIndex = 1;
+  /**
+   * Removes any accessible-autocomplete markup that has been cloned into a
+   * container and restores its select to a clean, un-enhanced state. The MOJ
+   * 'add another' component builds its template by cloning the first item, which
+   * may already have been enhanced. Because the generated autocomplete input has
+   * no data-name/data-id, the component's reset logic leaves its value behind,
+   * so we strip it here before (re-)enhancing.
+   * @param {Element} container
+   */
+  function stripAccessibleAutocomplete(container) {
+    if (!container || typeof container.querySelectorAll !== 'function') {
+      return;
+    }
+    container.querySelectorAll('.autocomplete__wrapper').forEach(wrapper => wrapper.remove());
+    container.querySelectorAll('select').forEach(selectElement => {
+      selectElement.style.display = '';
+      delete selectElement.dataset.autocompleteEnhanced;
+      selectElement.selectedIndex = 0;
+      selectElement.value = '';
+    });
+  }
 
   /**
-   * Clears the select element when the autocomplete input is empty
-   * @param {string} inputId - The ID of the autocomplete input element
-   * @returns {boolean} - True if successful, false otherwise
+   * Enhances a select element with an accessible autocomplete, but only
+   * one per element (for example when an item is both present on load and
+   * later re-processed).
+   * @param {HTMLSelectElement | null} selectElement
    */
-  function clearAccessibleAutocompleteSelectionWhenInputEmpty(inputId) {
+  function enhanceFacilitatorSelect(selectElement) {
+    if (!selectElement || selectElement.dataset.autocompleteEnhanced === 'true') {
+      return;
+    }
+    selectElement.dataset.autocompleteEnhanced = 'true';
+    selectElement.style.display = '';
+
+    const inputId = selectElement.id;
+    accessibleAutocomplete.enhanceSelectElement({
+      defaultValue: '',
+      selectElement,
+      id: inputId,
+    });
+
     const autocompleteInput = document.getElementById(inputId);
-    const selectElement = document.getElementById(inputId + '-select');
-
-    if (!autocompleteInput || !selectElement) {
-      return false;
+    if (autocompleteInput) {
+      const clearSelection = () => {
+        if (autocompleteInput.value.trim() === '') {
+          selectElement.value = '';
+          selectElement.selectedIndex = 0;
+        }
+      };
+      autocompleteInput.addEventListener('input', clearSelection);
+      autocompleteInput.addEventListener('keyup', clearSelection);
     }
-
-    const clearSelection = () => {
-      if (autocompleteInput.value.trim() === '') {
-        selectElement.value = '';
-        selectElement.selectedIndex = 0;
-      }
-    };
-
-    autocompleteInput.addEventListener('input', clearSelection);
-    autocompleteInput.addEventListener('keyup', clearSelection);
-    return true;
   }
 
   /**
-   * Sets up autocomplete for newly added facilitator/cover facilitator elements
-   * @param {MutationRecord} mutationRecord - The mutation record from MutationObserver
+   * Numbers the visible govukSelect label of each item within a single
+   * add-another block so labels read "Facilitator 1", "Facilitator 2", etc. The
+   * base label text is captured once per label (in a data attribute) so repeated
+   * calls after add/remove stay in step rather than repeating.
+   * @param {Element | null} root
    */
-  function possiblySetUpAutocompleteForMutation(mutationRecord) {
-    if (mutationRecord.type !== 'childList' || mutationRecord.addedNodes.length === 0) {
+  function numberSelectLabels(root) {
+    if (!root || typeof root.querySelectorAll !== 'function') {
       return;
     }
-
-    mutationRecord.addedNodes.forEach(node => {
-      if (node.nodeType !== Node.ELEMENT_NODE) {
+    const items = root.querySelectorAll('.moj-add-another__item');
+    items.forEach((item, index) => {
+      const label = item.querySelector('.govuk-label');
+      if (!label) {
         return;
       }
-
-      const select = node.querySelector('select');
-      if (!select) {
-        return;
+      if (label.dataset.baseLabel === undefined) {
+        label.dataset.baseLabel = label.textContent.trim();
       }
-
-      const input = node.querySelector('input');
-      const label = node.querySelector('label');
-      if (input) {
-        input.remove();
-      }
-
-      if (select.classList.contains('add-facilitator-select')) {
-        const inputId = `create-group-facilitator-${selectElementCounter}`;
-        select.id = inputId;
-        select.name = inputId;
-        select.value = '';
-        if (label) {
-          label.htmlFor = inputId;
-        }
-
-        accessibleAutocomplete.enhanceSelectElement({
-          defaultValue: '',
-          selectElement: document.querySelector(`#${select.id}`)
-        });
-
-        clearAccessibleAutocompleteSelectionWhenInputEmpty(inputId);
-        selectElementCounter++;
-      }
-
-      if (select.classList.contains('add-cover-facilitator-select')) {
-        const inputId = `create-group-cover-facilitator-${selectCoverFacilitatorElementCounter}`;
-        select.id = inputId;
-        select.name = inputId;
-        select.value = '';
-        if (label) {
-          label.htmlFor = inputId;
-        }
-
-        accessibleAutocomplete.enhanceSelectElement({
-          defaultValue: '',
-          selectElement: document.querySelector(`#${select.id}`)
-        });
-
-        clearAccessibleAutocompleteSelectionWhenInputEmpty(inputId);
-        selectCoverFacilitatorElementCounter++;
+      const baseLabel = label.dataset.baseLabel;
+      const number = index + 1;
+      // If the base label ends with "(optional)" then we want to keep that text but hide it visually,
+      // so we wrap it in a visually hidden span. Otherwise we just append the number to the base label.
+      const isOptional = baseLabel.match(/^(.*?)\s*(\(optional\))\s*$/);
+      if (isOptional) {
+        label.innerHTML = isOptional[1] + ' ' + number + ' ' + '<span class="govuk-visually-hidden">' + 'optional' + '</span>';
+      } else {
+        label.textContent = baseLabel + ' ' + number;
       }
     });
-
-    // Unhide cloned items (they start hidden if existing items are present)
-    const facilitatorItems = document.querySelectorAll('.moj-add-another__item__facilitator');
-    facilitatorItems[facilitatorItems.length - 1]?.classList.remove('govuk-!-display-none');
-
-    const coverItems = document.querySelectorAll('.moj-add-another__item__cover-facilitator');
-    coverItems[coverItems.length - 1]?.classList.remove('govuk-!-display-none');
   }
 
-  /**
-   * Toggles visibility of the original add facilitator input based on existing facilitators
-   */
-  function toggleOriginalAddFacilitatorVisibility() {
-    const item = document.querySelector('.moj-add-another__item__facilitator');
-    if (!item) return;
-
-    const hasRemoveButton = document.querySelector('.remove-existing-facilitator');
-    const hasOnlyOneExistingInput = !hasRemoveButton &&
-      document.querySelectorAll('.existing-facilitator-input').length === 1;
-
-    if (hasRemoveButton || hasOnlyOneExistingInput) {
-      item.classList.add('govuk-!-display-none');
-    } else {
-      item.classList.remove('govuk-!-display-none');
+  // Keep the component's cloning template pristine, regardless of whether the
+  // first item was enhanced before the template was captured.
+  document.addEventListener('moj-add-another:create-template', function (event) {
+    const template = event.target;
+    if (template && template.content) {
+      stripAccessibleAutocomplete(template.content);
     }
-  }
-
-  /**
-   * Toggles visibility of the original add cover facilitator input based on existing cover facilitators
-   */
-  function toggleOriginalAddCoverFacilitatorVisibility() {
-    const item = document.querySelector('.moj-add-another__item__cover-facilitator');
-    if (!item) return;
-
-    const hasRemoveButton = document.querySelector('.remove-existing-cover-facilitator');
-    const hasOnlyOneExistingInput = !hasRemoveButton &&
-      document.querySelectorAll('.existing-cover-facilitator-input').length === 1;
-
-    if (hasRemoveButton || hasOnlyOneExistingInput) {
-      item.classList.add('govuk-!-display-none');
-    } else {
-      item.classList.remove('govuk-!-display-none');
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', function () {
-    // Initialize autocomplete for main select elements
-    accessibleAutocomplete.enhanceSelectElement({
-      defaultValue: '',
-      selectElement: document.getElementById('create-group-facilitator')
-    });
-    clearAccessibleAutocompleteSelectionWhenInputEmpty('create-group-facilitator');
-
-    accessibleAutocomplete.enhanceSelectElement({
-      defaultValue: '',
-      selectElement: document.getElementById('create-group-cover-facilitator')
-    });
-    clearAccessibleAutocompleteSelectionWhenInputEmpty('create-group-cover-facilitator');
-
-    accessibleAutocomplete.enhanceSelectElement({
-      defaultValue: '',
-      selectElement: document.getElementById('create-group-treatment-manager')
-    });
-    clearAccessibleAutocompleteSelectionWhenInputEmpty('create-group-treatment-manager');
-
-    // Set up mutation observer for dynamically added elements
-    const addAnotherForm = document.querySelector('.add-another-form');
-    if (!addAnotherForm) {
-      console.error('Cannot find the .add-another-form element. This is going to cause problems.');
-      return;
-    }
-
-    new MutationObserver((mutations) => {
-      mutations.forEach(possiblySetUpAutocompleteForMutation);
-    }).observe(addAnotherForm, {
-      childList: true,
-      subtree: true
-    });
-
-    // Toggle visibility on page load
-    toggleOriginalAddFacilitatorVisibility();
-    toggleOriginalAddCoverFacilitatorVisibility();
   });
 
-  // Handle remove button clicks
-  document.addEventListener('click', function (e) {
-    if (e.target.classList.contains('remove-existing-facilitator')) {
-      toggleOriginalAddFacilitatorVisibility();
+  document.addEventListener('DOMContentLoaded', function () {
+    // Enhance the standalone treatment manager select.
+    enhanceFacilitatorSelect(document.getElementById('create-group-treatment-manager'));
+
+    // Enhance any facilitator / cover facilitator selects already on the page.
+    document.querySelectorAll('.moj-add-another__items select').forEach(enhanceFacilitatorSelect);
+
+    // Number the visible select labels (Facilitator 1, Facilitator 2, ...).
+    document.querySelectorAll('.moj-add-another').forEach(numberSelectLabels);
+  });
+
+  // When the MOJ 'add another' component clones a new item, clean any stray
+  // autocomplete markup then enhance the new select.
+  document.addEventListener('moj-add-another:add-item', function (event) {
+    const item = event.target;
+    if (!item || typeof item.querySelector !== 'function') {
+      return;
     }
-    if (e.target.classList.contains('remove-existing-cover-facilitator')) {
-      toggleOriginalAddCoverFacilitatorVisibility();
-    }
+    stripAccessibleAutocomplete(item);
+    enhanceFacilitatorSelect(item.querySelector('select'));
+    numberSelectLabels(item.closest('.moj-add-another'));
+  });
+
+  // After an item is removed the component re-indexes the remaining items, so
+  // renumber the visible select labels.
+  document.addEventListener('moj-add-another:remove-item', function (event) {
+    const root = event.target && typeof event.target.closest === 'function'
+      ? event.target.closest('.moj-add-another') || event.target
+      : null;
+    numberSelectLabels(root);
   });
 </script>
 <div class="govuk-width-container">
@@ -206,109 +149,83 @@
       </div>
     </div>
     <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
+      <div class="govuk-grid-column-two-thirds facilitator-form">
         {% if errorSummary !== null %}
         {{ govukErrorSummary(errorSummary) }}
         {% endif %}
          <span class="govuk-caption-l">{{ captionText }}</span>
         <h1 class="govuk-heading-l">{{ pageHeading }}</h1>
-       
-        <form method="post" novalidate class="add-another-form">
+
+        <form method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{csrfToken}}">
           {{ govukSelect(createGroupTreatmentManagerArgs) }}
-
-          <div data-module="moj-add-another">
-          {% call govukFieldset(createGroupFacilitatorsFieldSetArgs) %}
-          {{ govukSelect(createGroupFacilitatorArgs) }}
-          {% endcall %}
-          {% for facilitator in facilitators %}
-          <fieldset class="govuk-fieldset moj-add-another__item moj-add-another__item__facilitator">
-            <div class="govuk-form-group">
-              {{ govukSelect(createExistingGroupFacilitatorArgs(facilitator, loop.index)) }}
-              <!-- Hacky store the current loop index so we can bind the select to an accessible autocomplete -->
-              <span class="existingLoopCountFacilitator" data-index="{{ loop.index }}"></span>
-              <script nonce="{{ cspNonce }}">
-                document.querySelectorAll('.existingLoopCountFacilitator').forEach(element => {
-                  existingIndex = element.dataset.index
-                })
-                accessibleAutocomplete.enhanceSelectElement({
-                  defaultValue: '',
-                  selectElement: document.getElementById(`create-group-facilitator-existing-${existingIndex}`),
-                  inputClasses: 'existing-facilitator-input',
-                })
-                clearAccessibleAutocompleteSelectionWhenInputEmpty(`create-group-facilitator-existing-${existingIndex}`);
-              </script>
-            </div>
-            {% if facilitators.length > 1 %}
-            {{ govukButton({
-            name: "remove",
-            value: loop.index0,
-            text: "Remove",
-            classes: "govuk-button--secondary moj-add-another__remove-button remove-existing-facilitator"
-            }) }}
-            {% endif %}
-          </fieldset>
+          <h2 class="govuk-label govuk-label--m">Facilitator</h2>
+          {% set facilitatorItems = [] %}
+          {% set facilitatorList = facilitators if facilitators.length > 0 else [null] %}
+          {% for facilitator in facilitatorList %}
+            {% set baseArgs = createExistingGroupFacilitatorArgs(facilitator, loop.index0) if facilitator else createGroupFacilitatorArgs %}
+            {% set mergedArgs = {
+              id: baseArgs.id,
+              name: baseArgs.name,
+              label: { text: baseArgs.label.text },
+              classes: baseArgs.classes,
+              errorMessage: baseArgs.errorMessage,
+              items: baseArgs.items,
+              attributes: {
+                "data-name": "create-group-facilitator-%index%",
+                "data-id": "create-group-facilitator-%index%"
+              }
+            } %}
+            {% set selectHtml %}{{ govukSelect(mergedArgs) }}{% endset %}
+            {% set _ = facilitatorItems.push({ fieldset: { legend: {}, html: selectHtml } }) %}
           {% endfor %}
-          <div class="moj-button-action">
-            {{ govukButton({
-            id: "add-another-facilitator",
-            text: "Add another facilitator",
-            classes: "govuk-button--secondary moj-add-another__add-button govuk-!-margin-bottom-4"
-            }) }}
-          </div>
-        </div>
-          <div data-module="moj-add-another">
-            {% call govukFieldset(createGroupCoverFacilitatorsFieldSetArgs) %}
-            {{ govukSelect(createGroupCoverFacilitatorArgs) }}
-            {% endcall %}
-            {% for coverFacilitator in coverFacilitators %}
-            <fieldset class="govuk-fieldset moj-add-another__item moj-add-another__item__cover-facilitator">
-              <div class="govuk-form-group">
-                {{ govukSelect(createExistingGroupCoverFacilitatorArgs(coverFacilitator, loop.index)) }}
-                <!-- Hacky store the current loop index so we can bind the select to an accessible autocomplete -->
-                <span class="existingLoopCountCoverFacilitator" data-index="{{ loop.index }}"></span>
-                <script nonce="{{ cspNonce }}">
-                  document.querySelectorAll('.existingLoopCountCoverFacilitator').forEach(element => {
-                    existingCoverFacilitatorIndex = element.dataset.index
-                  })
-                  accessibleAutocomplete.enhanceSelectElement({
-                    defaultValue: '',
-                    selectElement: document.getElementById(`create-group-cover-facilitator-existing-${existingCoverFacilitatorIndex}`),
-                    inputClasses: 'existing-cover-facilitator-input',
-                  })
-                  clearAccessibleAutocompleteSelectionWhenInputEmpty(`create-group-cover-facilitator-existing-${existingCoverFacilitatorIndex}`);
-                </script>
-              </div>
-              {% if coverFacilitators.length > 1 %}
-              {{ govukButton({
-              name: "remove",
-              value: loop.index0,
-              text: "Remove",
-              classes: "govuk-button--secondary moj-add-another__remove-button remove-existing-cover-facilitator"
-              }) }}
-              {% endif %}
-              
-            </fieldset>
-            {% endfor %}
-            <div class="moj-button-action">
-              {{ govukButton({
-              id: "add-another-cover-facilitator",
-              text: "Add another cover facilitator",
-              classes: "govuk-button--secondary moj-add-another__add-button govuk-!-margin-bottom-4"
-              }) }}
-                {% if  isEditJourney %}
-               {{ govukInsetText({ text: insetText, classes: "govuk-!-margin-top-0" }) }}
-            {% endif %}
-            </div>
-          </div>
+          {{ mojAddAnother({
+            id: "create-group-facilitator",
+            itemLabel: "Facilitator",
+            classes: "govuk-!-margin-bottom-8",
+            items: facilitatorItems,
+            layout: "inline"
+          }) }}
+          <h2 class="govuk-label govuk-label--m">Cover facilitator (optional)</h2>
+          {% set coverFacilitatorItems = [] %}
+          {% set coverFacilitatorList = coverFacilitators if coverFacilitators.length > 0 else [null] %}
+          {% for coverFacilitator in coverFacilitatorList %}
+            {% set baseArgs = createExistingGroupCoverFacilitatorArgs(coverFacilitator, loop.index0) if coverFacilitator else createGroupCoverFacilitatorArgs %}
+            {% set mergedArgs = {
+              id: baseArgs.id,
+              name: baseArgs.name,
+              label: { text: baseArgs.label.text},
+              classes: baseArgs.classes,
+              errorMessage: baseArgs.errorMessage,
+              items: baseArgs.items,
+              attributes: {
+                "data-name": "create-group-cover-facilitator-%index%",
+                "data-id": "create-group-cover-facilitator-%index%"
+              }
+            } %}
+            {% set selectHtml %}{{ govukSelect(mergedArgs) }}{% endset %}
+            {% set _ = coverFacilitatorItems.push({ fieldset: { legend: {}, html: selectHtml } }) %}
+          {% endfor %}
+          {{ mojAddAnother({
+            id: "create-group-cover-facilitator",
+            itemLabel: "Cover facilitator (optional)",
+            addAnotherButtonText: "Add another cover facilitator",
+            removeButtonSuffixText: "cover facilitator %{number}",
+            classes: "govuk-!-margin-bottom-8",
+            items: coverFacilitatorItems,
+            layout: "inline"
+          }) }}
+
+          {% if isEditJourney %}
+            {{ govukInsetText({ text: insetText, classes: "govuk-!-margin-top-0" }) }}
+          {% endif %}
+
           {{ govukButton({ text: submitButtonText, preventDoubleClick: true }) }}
         </form>
-      
+
       </div>
     </div>
   </main>
 </div>
 {% endblock %}
 {% endblock %}
-
- 

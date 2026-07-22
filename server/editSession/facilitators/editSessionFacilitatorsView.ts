@@ -1,5 +1,5 @@
 import { EditSessionFacilitatorsRequest } from '@manage-and-deliver-api'
-import { FieldsetArgs, SelectArgs } from '../../utils/govukFrontendTypes'
+import { SelectArgs } from '../../utils/govukFrontendTypes'
 import ViewUtils from '../../utils/viewUtils'
 import EditSessionFacilitatorsPresenter from './editSessionFacilitatorsPresenter'
 
@@ -15,40 +15,30 @@ export default class EditSessionFacilitatorsView {
 
   private editSessionFacilitatorsArgs(): SelectArgs {
     return {
-      id: 'edit-session-facilitator',
-      name: 'edit-session-facilitator',
+      id: 'edit-session-facilitator-0',
+      name: 'edit-session-facilitator-0',
       label: {
         text: 'Facilitator',
         classes: 'govuk-label--m',
       },
       classes: 'add-facilitator-select',
-      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.editSessionFacilitator.errorMessage),
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.errorMessageForField('edit-session-facilitator-0')),
       items: this.presenter.generateSelectOptions(),
     }
   }
 
   private editExistingSessionFacilitatorArgs(facilitator: EditSessionFacilitatorsRequest, index: number): SelectArgs {
+    const fieldName = `edit-session-facilitator-${index}`
     return {
-      id: `edit-session-facilitator-existing-${index}`,
-      name: `edit-session-facilitator-existing-${index}`,
+      id: fieldName,
+      name: fieldName,
       label: {
         text: 'Facilitator',
         classes: 'govuk-label--m',
       },
       classes: 'add-facilitator-select',
-      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.editSessionFacilitator.errorMessage),
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.errorMessageForField(fieldName)),
       items: this.presenter.generateSelectOptions(facilitator.facilitatorCode),
-    }
-  }
-
-  private editSessionFacilitatorsFieldSetArgs(): FieldsetArgs {
-    return {
-      classes: 'moj-add-another__item moj-add-another__item__facilitator',
-      legend: {
-        text: 'Facilitator',
-        classes: 'govuk-!-display-none',
-        isPageHeading: false,
-      },
     }
   }
 
@@ -60,7 +50,6 @@ export default class EditSessionFacilitatorsView {
         pageTitles: this.presenter.pageTitles,
         homePageLink: this.homePageLink(),
         editSessionFacilitatorsArgs: this.editSessionFacilitatorsArgs(),
-        editSessionFacilitatorsFieldSetArgs: this.editSessionFacilitatorsFieldSetArgs(),
         editExistingSessionFacilitatorsArgs: this.editExistingSessionFacilitatorArgs.bind(this),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         text: this.presenter.text,
