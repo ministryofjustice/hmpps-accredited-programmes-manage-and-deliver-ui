@@ -53,7 +53,13 @@ describe('Reporting controller', () => {
         expect(res.text).toBe(csv)
       })
 
-    expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_GROUP_SIZE_REPORT', 'user1', '2026-05-18T13:30:00', 'SEARCH_TERM')
+    expect(sendAuditEvent).toHaveBeenCalledWith(
+      'VIEW_GROUP_SIZE_REPORT',
+      'user1',
+      undefined,
+      'NOT_APPLICABLE',
+      expect.objectContaining({ groupStartedSince: '2026-05-18T13:30:00' }),
+    )
     expect(accreditedProgrammesManageAndDeliverService.getGroupSizeReport).toHaveBeenCalledWith(
       'user1',
       '2026-05-18T13:30:00',

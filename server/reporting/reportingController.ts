@@ -68,7 +68,7 @@ export default class ReportingController {
     const { username } = req.user
     ReportingController.logReportRequest(req, 'group-size', { groupStartedSince })
 
-    await sendAuditEvent('VIEW_GROUP_SIZE_REPORT', username, groupStartedSince, 'SEARCH_TERM')
+    await sendAuditEvent('VIEW_GROUP_SIZE_REPORT', username, undefined, 'NOT_APPLICABLE', { groupStartedSince })
 
     const { csv, headers } = await this.accreditedProgrammesManageAndDeliverService.getGroupSizeReport(
       username,
