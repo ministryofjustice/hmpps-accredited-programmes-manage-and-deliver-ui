@@ -1,6 +1,7 @@
 import request from 'supertest'
 
 import { CohortEnum, PersonalDetails, ReferralDetails } from '@manage-and-deliver-api'
+import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import { SessionData } from 'express-session'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
@@ -78,6 +79,110 @@ describe('Update cohort', () => {
             cohort: 'GENERAL_OFFENCE',
           })
         })
+    })
+
+    it('keeps cohort updates scoped per referral when multiple tabs are open', async () => {
+      const referralIdA = 'referral-a'
+      const referralIdB = 'referral-b'
+      const originPageA = `/referral/${referralIdA}/availability-and-motivation/availability`
+      const originPageB = `/referral/${referralIdB}/availability-and-motivation/location`
+
+      const sessionData: Partial<SessionData> = {
+        originPage: '/referral-details/unrelated-referral/personal-details',
+        referralOriginPages: {
+          [referralIdA]: originPageA,
+          [referralIdB]: originPageB,
+        },
+      }
+      const appWithReferralOriginMap = TestUtils.createTestAppWithSession(sessionData, {
+        accreditedProgrammesManageAndDeliverService,
+      })
+
+      accreditedProgrammesManageAndDeliverService.updateCohort.mockResolvedValue(referralDetails)
+
+      const agent = request.agent(appWithReferralOriginMap)
+
+      await agent
+        .post(`/referral/${referralIdA}/change-cohort`)
+        .type('form')
+        .send({
+          updatedCohort: 'GENERAL_OFFENCE' as CohortEnum,
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain(`Redirecting to ${originPageA}?isCohortUpdated=true`)
+        })
+
+      await agent
+        .post(`/referral/${referralIdB}/change-cohort`)
+        .type('form')
+        .send({
+          updatedCohort: 'SEXUAL_OFFENCE' as CohortEnum,
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain(`Redirecting to ${originPageB}?isCohortUpdated=true`)
+        })
+
+      expect(accreditedProgrammesManageAndDeliverService.updateCohort).toHaveBeenNthCalledWith(
+        1,
+        'user1',
+        referralIdA,
+        'GENERAL_OFFENCE',
+      )
+      expect(accreditedProgrammesManageAndDeliverService.updateCohort).toHaveBeenNthCalledWith(
+        2,
+        'user1',
+        referralIdB,
+        'SEXUAL_OFFENCE',
+      )
+    })
+
+    it('does not alter tab B links when tab A cohort is submitted', async () => {
+      const referralIdA = randomUUID()
+      const referralIdB = randomUUID()
+      const originPageA = `/referral/${referralIdA}/availability-and-motivation/availability`
+      const originPageB = `/referral/${referralIdB}/availability-and-motivation/location`
+
+      const sessionData: Partial<SessionData> = {
+        originPage: '/referral-details/unrelated-referral/personal-details',
+        referralOriginPages: {
+          [referralIdA]: originPageA,
+          [referralIdB]: originPageB,
+        },
+      }
+      const appWithReferralOriginMap = TestUtils.createTestAppWithSession(sessionData, {
+        accreditedProgrammesManageAndDeliverService,
+      })
+
+      accreditedProgrammesManageAndDeliverService.updateCohort.mockResolvedValue(referralDetails)
+
+      const agent = request.agent(appWithReferralOriginMap)
+
+      await agent
+        .post(`/referral/${referralIdA}/change-cohort`)
+        .type('form')
+        .send({
+          updatedCohort: 'GENERAL_OFFENCE' as CohortEnum,
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain(`Redirecting to ${originPageA}?isCohortUpdated=true`)
+        })
+
+      await agent
+        .get(`/referral/${referralIdB}/change-cohort`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain(`href="${originPageB}"`)
+        })
+
+      expect(accreditedProgrammesManageAndDeliverService.updateCohort).toHaveBeenCalledTimes(1)
+      expect(accreditedProgrammesManageAndDeliverService.updateCohort).toHaveBeenCalledWith(
+        'user1',
+        referralIdA,
+        'GENERAL_OFFENCE',
+      )
     })
   })
 })

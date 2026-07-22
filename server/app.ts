@@ -38,6 +38,7 @@ import type { Services } from './services'
 declare module 'express-session' {
   export interface SessionData {
     originPage: string
+    referralOriginPages?: Record<string, string>
     userRegion?: {
       regionCode: string
       regionDescription: string

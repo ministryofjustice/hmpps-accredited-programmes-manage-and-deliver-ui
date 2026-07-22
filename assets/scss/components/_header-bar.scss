@@ -9,6 +9,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: govuk-spacing(2);
+
+    @include govuk-media-query($until: desktop) {
+      flex-direction: column;
+      align-items: stretch;
+    }
   }
 
   &__logo {
@@ -22,6 +28,13 @@
     @include govuk-responsive-padding(3, 'right');
     display: flex;
     align-items: center;
+    flex: 1 1 0;
+    min-width: 0;
+
+    @include govuk-media-query($until: desktop) {
+      width: 100%;
+      padding-right: 0;
+    }
 
     &__organisation-name {
       @include govuk-responsive-margin(2, 'right');
@@ -80,10 +93,17 @@
     list-style: none;
     margin: 0;
     padding: 0;
+    margin-left: auto;
+    flex: 0 0 auto;
 
     @include govuk-media-query($from: tablet) {
       flex-direction: row;
       align-items: center;
+    }
+
+    @include govuk-media-query($until: desktop) {
+      width: 100%;
+      justify-content: flex-end;
     }
 
     &__item {

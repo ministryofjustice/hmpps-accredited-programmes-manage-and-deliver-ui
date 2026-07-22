@@ -19,6 +19,7 @@ import BaseController from '../shared/baseController'
 import AttendanceHistoryPresenter from './attendanceHistory/attendanceHistoryPresenter'
 import AttendanceHistoryView from './attendanceHistory/attendanceHistoryView'
 import sendAuditEvent from '../services/auditService'
+import { setReferralOriginPage } from '../utils/referralOriginPage'
 
 export default class ReferralDetailsController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -55,7 +56,7 @@ export default class ReferralDetailsController extends BaseController {
     )
     const view = new PersonalDetailsView(presenter)
 
-    req.session.originPage = req.path
+    setReferralOriginPage(req, id)
 
     return this.renderPage(res, view, sharedReferralDetailsData)
   }
@@ -79,7 +80,7 @@ export default class ReferralDetailsController extends BaseController {
     )
     const view = new ProgrammeHistoryView(presenter)
 
-    req.session.originPage = req.path
+    setReferralOriginPage(req, id)
 
     return this.renderPage(res, view, sharedReferralDetailsData)
   }
@@ -107,7 +108,7 @@ export default class ReferralDetailsController extends BaseController {
     )
     const view = new OffenceHistoryView(presenter)
 
-    req.session.originPage = req.path
+    setReferralOriginPage(req, id)
 
     return this.renderPage(res, view, sharedReferralDetailsData)
   }
@@ -138,7 +139,7 @@ export default class ReferralDetailsController extends BaseController {
     )
     const view = new SentenceInformationView(presenter)
 
-    req.session.originPage = req.path
+    setReferralOriginPage(req, id)
 
     return this.renderPage(res, view, sharedReferralDetailsData)
   }
@@ -163,7 +164,7 @@ export default class ReferralDetailsController extends BaseController {
     )
     const view = new AdditionalInformationView(presenter)
 
-    req.session.originPage = req.path
+    setReferralOriginPage(req, id)
 
     return this.renderPage(res, view, sharedReferralDetailsData)
   }
@@ -191,7 +192,7 @@ export default class ReferralDetailsController extends BaseController {
     )
     const view = new StatusHistoryView(presenter)
 
-    req.session.originPage = req.path
+    setReferralOriginPage(req, referralId)
 
     return this.renderPage(res, view, sharedReferralDetailsData)
   }
@@ -223,7 +224,7 @@ export default class ReferralDetailsController extends BaseController {
     )
     const view = new AttendanceHistoryView(presenter)
 
-    req.session.originPage = req.path
+    setReferralOriginPage(req, referralId)
 
     return this.renderPage(res, view, sharedReferralDetailsData)
   }

@@ -14,6 +14,7 @@ import LocationPresenter from './location/locationPresenter'
 import LocationView from './location/locationView'
 import logger from '../../logger'
 import sendAuditEvent from '../services/auditService'
+import { setReferralOriginPage } from '../utils/referralOriginPage'
 
 export default class AvailabilityAndMotivationController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -53,7 +54,7 @@ export default class AvailabilityAndMotivationController extends BaseController 
     )
     const view = new MotivationBackgroundAndNonAssociationsView(presenter)
 
-    req.session.originPage = req.path
+    setReferralOriginPage(req, referralId)
 
     return this.renderPage(res, view, referralDetailsData)
   }
@@ -159,7 +160,7 @@ export default class AvailabilityAndMotivationController extends BaseController 
     )
     const view = new AvailabilityView(presenter)
 
-    req.session.originPage = req.path
+    setReferralOriginPage(req, id)
 
     return this.renderPage(res, view, referralDetailsData)
   }
@@ -187,7 +188,7 @@ export default class AvailabilityAndMotivationController extends BaseController 
     )
     const view = new LocationView(presenter)
 
-    req.session.originPage = req.path
+    setReferralOriginPage(req, id)
 
     return this.renderPage(res, view, referralDetailsData)
   }

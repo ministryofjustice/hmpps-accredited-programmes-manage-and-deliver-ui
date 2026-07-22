@@ -4,6 +4,7 @@ import PniPresenter from './pniPresenter'
 import PniView from './pniView'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
+import { setReferralOriginPage } from '../utils/referralOriginPage'
 import sendAuditEvent from '../services/auditService'
 
 export default class PniController extends BaseController {
@@ -31,7 +32,7 @@ export default class PniController extends BaseController {
     }
     const pniScore = await this.accreditedProgrammesManageAndDeliverService.getPniScore(username, referralDetails.crn)
 
-    req.session.originPage = req.path
+    setReferralOriginPage(req, referralId)
 
     const presenter = new PniPresenter(
       referralId,

@@ -2,12 +2,14 @@ import { Availability, PersonalDetails, ReferralDetails } from '@manage-and-deli
 import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import request from 'supertest'
+import { SessionData } from 'express-session'
 import { appWithAllRoutes } from '../../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../../services/accreditedProgrammesManageAndDeliverService'
 import sendAuditEvent from '../../services/auditService'
 import availabilityFactory from '../../testutils/factories/availabilityFactory'
 import personalDetailsFactory from '../../testutils/factories/personalDetailsFactory'
 import referralDetailsFactory from '../../testutils/factories/referralDetailsFactory'
+import TestUtils from '../../testutils/testUtils'
 
 jest.mock('../../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../../data/hmppsAuthClient')
@@ -55,6 +57,32 @@ describe(`Add Availability`, () => {
           })
         })
     })
+
+    it('uses referral-specific origin page for back and cancel links when multiple PoP tabs are open', async () => {
+      const referralId = randomUUID()
+      const availability: Availability = availabilityFactory.defaultAvailability().build()
+      const personalDetails: PersonalDetails = personalDetailsFactory.build()
+
+      accreditedProgrammesManageAndDeliverService.getAvailability.mockResolvedValue(availability)
+      accreditedProgrammesManageAndDeliverService.getPersonalDetails.mockResolvedValue(personalDetails)
+
+      const appWithReferralOriginMap = TestUtils.createTestAppWithSession(
+        {
+          originPage: '/referral-details/another-referral/personal-details',
+          referralOriginPages: {
+            [referralId]: `/referral/${referralId}/programme-needs-identifier`,
+          },
+        } as Partial<SessionData>,
+        { accreditedProgrammesManageAndDeliverService },
+      )
+
+      return request(appWithReferralOriginMap)
+        .get(`/referral/${referralId}/add-availability`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain(`href="/referral/${referralId}/programme-needs-identifier"`)
+        })
+    })
   })
 
   describe(`POST /referral/:referralId/add-availability`, () => {
@@ -96,6 +124,68 @@ describe(`Add Availability`, () => {
           })
         })
     })
+
+    it('keeps add availability submissions scoped to each referral when multiple tabs are open', async () => {
+      const referralIdA = randomUUID()
+      const referralIdB = randomUUID()
+      const availability: Availability = availabilityFactory.defaultAvailability().build()
+      const personalDetails: PersonalDetails = personalDetailsFactory.build()
+
+      accreditedProgrammesManageAndDeliverService.getAvailability.mockResolvedValue(availability)
+      accreditedProgrammesManageAndDeliverService.getPersonalDetails.mockResolvedValue(personalDetails)
+
+      const agent = request.agent(app)
+
+      await agent
+        .post(`/referral/${referralIdA}/add-availability`)
+        .type('form')
+        .send({
+          'availability-checkboxes': ['Mondays-daytime'],
+          'other-availability-details-text-area': 'Tab A details',
+          'end-date': 'No',
+        })
+        .expect(302)
+
+      await agent
+        .post(`/referral/${referralIdB}/add-availability`)
+        .type('form')
+        .send({
+          'availability-checkboxes': ['Sundays-evening'],
+          'other-availability-details-text-area': 'Tab B details',
+          'end-date': 'No',
+        })
+        .expect(302)
+
+      expect(accreditedProgrammesManageAndDeliverService.addAvailability).toHaveBeenNthCalledWith(
+        1,
+        'user1',
+        expect.objectContaining({
+          referralId: referralIdA,
+          otherDetails: 'Tab A details',
+          availabilities: [
+            {
+              label: 'Mondays',
+              slots: [{ label: 'daytime', value: true }],
+            },
+          ],
+        }),
+      )
+
+      expect(accreditedProgrammesManageAndDeliverService.addAvailability).toHaveBeenNthCalledWith(
+        2,
+        'user1',
+        expect.objectContaining({
+          referralId: referralIdB,
+          otherDetails: 'Tab B details',
+          availabilities: [
+            {
+              label: 'Sundays',
+              slots: [{ label: 'evening', value: true }],
+            },
+          ],
+        }),
+      )
+    })
   })
 
   describe(`POST /referral/:referralId/update-availability/:availabilityId`, () => {
@@ -128,6 +218,72 @@ describe(`Add Availability`, () => {
             }),
           })
         })
+    })
+
+    it('keeps update availability submissions scoped to each referral when multiple tabs are open', async () => {
+      const referralIdA = randomUUID()
+      const referralIdB = randomUUID()
+      const availabilityIdA = randomUUID()
+      const availabilityIdB = randomUUID()
+      const availability: Availability = availabilityFactory.defaultAvailability().build()
+      const personalDetails: PersonalDetails = personalDetailsFactory.build()
+
+      accreditedProgrammesManageAndDeliverService.getAvailability.mockResolvedValue(availability)
+      accreditedProgrammesManageAndDeliverService.getPersonalDetails.mockResolvedValue(personalDetails)
+
+      const agent = request.agent(app)
+
+      await agent
+        .post(`/referral/${referralIdA}/update-availability/${availabilityIdA}`)
+        .type('form')
+        .send({
+          'availability-checkboxes': ['Mondays-daytime'],
+          'other-availability-details-text-area': 'Update A',
+          'end-date': 'No',
+        })
+        .expect(302)
+
+      await agent
+        .post(`/referral/${referralIdB}/update-availability/${availabilityIdB}`)
+        .type('form')
+        .send({
+          'availability-checkboxes': ['Sundays-evening'],
+          'other-availability-details-text-area': 'Update B',
+          'end-date': 'No',
+        })
+        .expect(302)
+
+      expect(accreditedProgrammesManageAndDeliverService.updateAvailability).toHaveBeenNthCalledWith(
+        1,
+        'user1',
+        expect.objectContaining({
+          referralId: referralIdA,
+          availabilityId: availabilityIdA,
+          otherDetails: 'Update A',
+          availabilities: [
+            {
+              label: 'Mondays',
+              slots: [{ label: 'daytime', value: true }],
+            },
+          ],
+        }),
+      )
+
+      expect(accreditedProgrammesManageAndDeliverService.updateAvailability).toHaveBeenNthCalledWith(
+        2,
+        'user1',
+        expect.objectContaining({
+          referralId: referralIdB,
+          availabilityId: availabilityIdB,
+          otherDetails: 'Update B',
+          availabilities: [
+            {
+              label: 'Sundays',
+              slots: [{ label: 'evening', value: true }],
+            },
+          ],
+        }),
+      )
     })
   })
 })

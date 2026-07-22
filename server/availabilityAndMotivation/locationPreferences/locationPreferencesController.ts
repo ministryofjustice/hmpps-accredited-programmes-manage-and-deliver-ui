@@ -13,6 +13,7 @@ import CannotAttendLocationsView from './cannotAttendLocationsView'
 import { PrimaryNavigationTab } from '../../shared/routes/layoutPresenter'
 import BaseController from '../../shared/baseController'
 import sendAuditEvent from '../../services/auditService'
+import { getReferralOriginPage, setReferralOriginPage } from '../../utils/referralOriginPage'
 
 export default class LocationPreferencesController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -133,7 +134,7 @@ export default class LocationPreferencesController extends BaseController {
           )
           .concat(data.paramsForUpdate.otherPduLocations)
       req.session.locationPreferenceFormData.hasUpdatedAdditionalLocationData = true
-      req.session.originPage = req.originalUrl
+      setReferralOriginPage(req, referralId, req.originalUrl)
       return res.redirect(`/referral/${referralId}/add-locations-cannot-attend`)
     }
 
@@ -213,7 +214,7 @@ export default class LocationPreferencesController extends BaseController {
       referralId,
       referralDetails,
       req.session.locationPreferenceFormData.preferredLocationReferenceData,
-      req.session.originPage,
+      getReferralOriginPage(req, referralId),
       formError,
       userInputData,
     )
