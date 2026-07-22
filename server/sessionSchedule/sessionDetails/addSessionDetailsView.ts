@@ -2,7 +2,7 @@ import { CreateGroupTeamMember } from '@manage-and-deliver-api'
 import { TimeInputArgs } from '@manage-and-deliver-ui'
 import AddSessionDetailsPresenter from './addSessionDetailsPresenter'
 import ViewUtils from '../../utils/viewUtils'
-import { CheckboxesArgs, FieldsetArgs, RadiosArgs, SelectArgs } from '../../utils/govukFrontendTypes'
+import { CheckboxesArgs, RadiosArgs, SelectArgs } from '../../utils/govukFrontendTypes'
 
 export default class AddSessionDetailsView {
   constructor(private readonly presenter: AddSessionDetailsPresenter) {}
@@ -131,40 +131,30 @@ export default class AddSessionDetailsView {
 
   private sessionFacilitatorArgs(): SelectArgs {
     return {
-      id: 'session-details-facilitator',
-      name: 'session-details-facilitator',
+      id: 'session-details-facilitator-0',
+      name: 'session-details-facilitator-0',
       label: {
         text: 'Facilitator',
         classes: 'govuk-label--m',
       },
       classes: 'add-facilitator-select',
-      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.sessionFacilitator.errorMessage),
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.errorMessageForField('session-details-facilitator-0')),
       items: this.presenter.generateFacilitatorSelectOptions(),
     }
   }
 
   private sessionExistingFacilitatorArgs(facilitator: CreateGroupTeamMember, index: number): SelectArgs {
+    const fieldName = `session-details-facilitator-${index}`
     return {
-      id: `session-details-facilitator-existing-${index}`,
-      name: `session-details-facilitator-existing-${index}`,
+      id: fieldName,
+      name: fieldName,
       label: {
         text: 'Facilitator',
         classes: 'govuk-label--m',
       },
       classes: 'add-facilitator-select',
-      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.sessionFacilitator.errorMessage),
+      errorMessage: ViewUtils.govukErrorMessage(this.presenter.errorMessageForField(fieldName)),
       items: this.presenter.generateFacilitatorSelectOptions(facilitator.facilitatorCode),
-    }
-  }
-
-  private sessionFacilitatorsFieldSetArgs(): FieldsetArgs {
-    return {
-      classes: 'moj-add-another__item moj-add-another__item__facilitator',
-      legend: {
-        text: 'Facilitator',
-        classes: 'govuk-!-display-none',
-        isPageHeading: false,
-      },
     }
   }
 
@@ -217,7 +207,6 @@ export default class AddSessionDetailsView {
         startTimeInputArgs: this.startTimeInputArgs,
         endTimeInputArgs: this.endTimeInputArgs,
         sessionFacilitatorArgs: this.sessionFacilitatorArgs(),
-        sessionFacilitatorsFieldSetArgs: this.sessionFacilitatorsFieldSetArgs(),
         sessionExistingFacilitatorArgs: this.sessionExistingFacilitatorArgs.bind(this),
         facilitators: this.presenter.generateSelectedFacilitators(),
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
