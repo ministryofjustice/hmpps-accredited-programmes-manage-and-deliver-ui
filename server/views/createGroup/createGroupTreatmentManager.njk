@@ -35,8 +35,8 @@
   }
 
   /**
-   * Enhances a select element with an accessible autocomplete, guarding against
-   * double enhancement (for example when an item is both present on load and
+   * Enhances a select element with an accessible autocomplete, but only
+   * one per element (for example when an item is both present on load and
    * later re-processed).
    * @param {HTMLSelectElement | null} selectElement
    */
@@ -69,9 +69,9 @@
 
   /**
    * Numbers the visible govukSelect label of each item within a single
-   * add-another root so labels read "Facilitator 1", "Facilitator 2", etc. The
+   * add-another block so labels read "Facilitator 1", "Facilitator 2", etc. The
    * base label text is captured once per label (in a data attribute) so repeated
-   * calls after add/remove stay stable rather than compounding.
+   * calls after add/remove stay in step rather than repeating.
    * @param {Element | null} root
    */
   function numberSelectLabels(root) {
@@ -89,6 +89,8 @@
       }
       const baseLabel = label.dataset.baseLabel;
       const number = index + 1;
+      // If the base label ends with "(optional)" then we want to keep that text but hide it from screen readers,
+      // so we wrap it in a visually hidden span. Otherwise we just append the number to the base label.
       const isOptional = baseLabel.match(/^(.*?)\s*(\(optional\))\s*$/);
       if (isOptional) {
         label.innerHTML = isOptional[1] + ' ' + number + ' ' + '<span class="govuk-visually-hidden">' + 'optional' + '</span>';
@@ -119,7 +121,7 @@
   });
 
   // When the MOJ 'add another' component clones a new item, clean any stray
-  // autocomplete markup then enhance the fresh select.
+  // autocomplete markup then enhance the new select.
   document.addEventListener('moj-add-another:add-item', function (event) {
     const item = event.target;
     if (!item || typeof item.querySelector !== 'function') {
@@ -130,7 +132,7 @@
     numberSelectLabels(item.closest('.moj-add-another'));
   });
 
-  // After an item is removed the component reindexes the remaining items, so
+  // After an item is removed the component re-indexes the remaining items, so
   // renumber the visible select labels.
   document.addEventListener('moj-add-another:remove-item', function (event) {
     const root = event.target && typeof event.target.closest === 'function'
