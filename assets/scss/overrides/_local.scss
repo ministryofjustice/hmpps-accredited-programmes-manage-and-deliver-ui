@@ -224,9 +224,14 @@
   width: 100%;
 }
 
-.moj-add-another__item--inline {
-  .moj-add-another__remove-button-container {
-    flex: none;
+.facilitator-form {
+  .moj-add-another__item--inline {
+    .moj-add-another__remove-button-container {
+      flex: none;
+    }
+  }
+
+ form > .govuk-form-group:first-of-type {
+    margin-bottom: 50px;
   }
 }
-
