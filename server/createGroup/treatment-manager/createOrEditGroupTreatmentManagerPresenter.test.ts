@@ -70,17 +70,17 @@ describe('CreateGroupTreatmentManagerPresenter', () => {
     it('parses facilitators and cover facilitators from userInputData', () => {
       const userInputData = {
         _csrf: 'token',
-        'create-group-facilitator1':
+        'create-group-facilitator-0':
           '{"facilitator":"Archibald Queeny", "facilitatorCode":"JS123", "teamName":"Team A", "teamCode":"TA001", "teamMemberType":"REGULAR_FACILITATOR"}',
-        'create-group-cover-facilitator1':
+        'create-group-cover-facilitator-0':
           '{"facilitator":"Chloe Ransom", "facilitatorCode":"JD456", "teamName":"Team B", "teamCode":"TB002", "teamMemberType":"COVER_FACILITATOR"}',
         'create-group-treatment-manager':
           '{"facilitator":"Archibald Queeny", "facilitatorCode":"JS123", "teamName":"Team A", "teamCode":"TA001", "teamMemberType":"TREATMENT_MANAGER"}',
-        'create-group-cover-facilitator2':
+        'create-group-cover-facilitator-1':
           '{"facilitator":"Chloe Ransom", "facilitatorCode":"JD457", "teamName":"Team B", "teamCode":"TB002", "teamMemberType":"COVER_FACILITATOR"}',
-        'create-group-cover-facilitator3':
+        'create-group-cover-facilitator-2':
           '{"facilitator":"Chloe Ransom", "facilitatorCode":"JD458", "teamName":"Team B", "teamCode":"TB002", "teamMemberType":"COVER_FACILITATOR"}',
-        'create-group-cover-facilitator4': '',
+        'create-group-cover-facilitator-3': '',
       }
       const presenter = new CreateGroupTreatmentManagerPresenter('', '', mockMembers, null, null, userInputData)
       const result = presenter.generateSelectedUsers()

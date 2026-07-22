@@ -16,7 +16,6 @@ const fieldOrder = [
   'session-details-end-time-minute',
   'session-details-end-time-part-of-day',
   'session-details-who',
-  'session-details-facilitator',
 ]
 export default class EditSessionDateAndTimeFormForm {
   constructor(

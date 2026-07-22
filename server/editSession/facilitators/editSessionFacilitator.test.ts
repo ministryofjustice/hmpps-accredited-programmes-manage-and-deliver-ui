@@ -64,8 +64,8 @@ describe('EditSessionFacilitatorsPresenter', () => {
       const validationError: FormValidationError = {
         errors: [
           {
-            formFields: ['edit-session-facilitator'],
-            errorSummaryLinkedField: 'edit-session-facilitator',
+            formFields: ['edit-session-facilitator-0'],
+            errorSummaryLinkedField: 'edit-session-facilitator-0',
             message: 'Select a Facilitator. Start typing to search.',
           },
         ],

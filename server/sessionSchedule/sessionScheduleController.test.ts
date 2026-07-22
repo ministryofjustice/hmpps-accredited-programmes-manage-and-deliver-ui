@@ -247,7 +247,7 @@ describe('Session Schedule Controller', () => {
         .post(`/${groupId}/${moduleId}/schedule-session-details`)
         .send({
           'session-details-who': `a9971fd6-a185-43ee-bb23-a0ab23a14f50 + Jane Doe`,
-          'session-details-facilitator': JSON.stringify({
+          'session-details-facilitator-0': JSON.stringify({
             facilitator: 'John Doe',
             facilitatorCode: 'N07B001',
             teamName: 'GM Manchester N1',

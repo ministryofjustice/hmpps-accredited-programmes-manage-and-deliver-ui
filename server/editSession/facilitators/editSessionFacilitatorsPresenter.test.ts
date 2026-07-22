@@ -79,8 +79,8 @@ describe('EditSessionFacilitatorsPresenter', () => {
         const validationError = {
           errors: [
             {
-              errorSummaryLinkedField: 'edit-session-facilitator',
-              formFields: ['edit-session-facilitator'],
+              errorSummaryLinkedField: 'edit-session-facilitator-0',
+              formFields: ['edit-session-facilitator-0'],
               message: 'Select at least one facilitator',
             },
           ],
