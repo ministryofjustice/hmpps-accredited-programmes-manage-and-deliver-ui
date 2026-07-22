@@ -15,7 +15,7 @@ export default class RemoveFromGroupUpdateStatusView {
           html: htmlContent,
           datetime: {
             timestamp: this.presenter.statusDetails.currentStatus.createdAt,
-            type: 'date',
+            type: 'datetime',
           },
           byline: {
             text: this.presenter.statusDetails.currentStatus.updatedByName,
