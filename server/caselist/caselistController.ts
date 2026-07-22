@@ -35,7 +35,9 @@ export default class CaselistController extends BaseController {
     const pageNumber = req.query.page
 
     const requestedFilter = CaselistFilter.fromRequest(req)
-    await sendAuditEvent('SEARCH_OPEN_CASELIST', username, JSON.stringify(requestedFilter.params), 'SEARCH_TERM')
+    await sendAuditEvent('SEARCH_OPEN_CASELIST', username, undefined, 'NOT_APPLICABLE', {
+      filter: requestedFilter.params,
+    })
     let openCaseList = await this.accreditedProgrammesManageAndDeliverService.getOpenCaselist(
       username,
       {
@@ -83,7 +85,9 @@ export default class CaselistController extends BaseController {
     const pageNumber = req.query.page
 
     const requestedFilter = CaselistFilter.fromRequest(req)
-    await sendAuditEvent('SEARCH_CLOSED_CASELIST', username, JSON.stringify(requestedFilter.params), 'SEARCH_TERM')
+    await sendAuditEvent('SEARCH_CLOSED_CASELIST', username, undefined, 'NOT_APPLICABLE', {
+      filter: requestedFilter.params,
+    })
 
     let closedCaseList = await this.accreditedProgrammesManageAndDeliverService.getClosedCaselist(
       username,

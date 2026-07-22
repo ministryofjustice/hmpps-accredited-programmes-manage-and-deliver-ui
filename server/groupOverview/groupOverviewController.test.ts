@@ -39,13 +39,10 @@ describe('groupOverview', () => {
           expect(res.text).toContain(`Allocations and waitlist`)
         })
         .then(() => {
-          expect(sendAuditEvent).toHaveBeenCalledWith(
-            'SEARCH_GROUP_WAITLIST',
-            'user1',
-            JSON.stringify({}),
-            'SEARCH_TERM',
-            { groupId: '1234' },
-          )
+          expect(sendAuditEvent).toHaveBeenCalledWith('SEARCH_GROUP_WAITLIST', 'user1', undefined, 'NOT_APPLICABLE', {
+            groupId: '1234',
+            filter: {},
+          })
         })
     })
   })
@@ -61,13 +58,10 @@ describe('groupOverview', () => {
           expect(res.text).toContain(`Allocations and waitlist`)
         })
         .then(() => {
-          expect(sendAuditEvent).toHaveBeenCalledWith(
-            'SEARCH_GROUP_ALLOCATED',
-            'user1',
-            JSON.stringify({}),
-            'SEARCH_TERM',
-            { groupId: '1234' },
-          )
+          expect(sendAuditEvent).toHaveBeenCalledWith('SEARCH_GROUP_ALLOCATED', 'user1', undefined, 'NOT_APPLICABLE', {
+            groupId: '1234',
+            filter: {},
+          })
         })
     })
   })

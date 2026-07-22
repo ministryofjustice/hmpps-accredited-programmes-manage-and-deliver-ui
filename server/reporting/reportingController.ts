@@ -68,7 +68,7 @@ export default class ReportingController {
     const { username } = req.user
     ReportingController.logReportRequest(req, 'group-size', { groupStartedSince })
 
-    await sendAuditEvent('VIEW_GROUP_SIZE_REPORT', username, groupStartedSince, 'SEARCH_TERM')
+    await sendAuditEvent('VIEW_GROUP_SIZE_REPORT', username, undefined, 'NOT_APPLICABLE', { groupStartedSince })
 
     const { csv, headers } = await this.accreditedProgrammesManageAndDeliverService.getGroupSizeReport(
       username,
@@ -107,7 +107,7 @@ export default class ReportingController {
     const { username } = req.user
     ReportingController.logReportRequest(req, 'dosage', query)
 
-    await sendAuditEvent('VIEW_DOSAGE_REPORT', username, JSON.stringify(query), 'SEARCH_TERM', {
+    await sendAuditEvent('VIEW_DOSAGE_REPORT', username, undefined, 'NOT_APPLICABLE', {
       reportName: 'dosage',
       query,
     })
@@ -146,7 +146,7 @@ export default class ReportingController {
     const { username } = req.user
     ReportingController.logReportRequest(req, 'session-rate', query)
 
-    await sendAuditEvent('VIEW_SESSION_RATE_REPORT', username, JSON.stringify(query), 'SEARCH_TERM', {
+    await sendAuditEvent('VIEW_SESSION_RATE_REPORT', username, undefined, 'NOT_APPLICABLE', {
       reportName: 'session-rate',
       query,
     })
@@ -201,7 +201,7 @@ export default class ReportingController {
     const { username } = req.user
     ReportingController.logReportRequest(req, 'facilitator-continuity', query)
 
-    await sendAuditEvent('VIEW_FACILITATOR_CONTINUITY_REPORT', username, JSON.stringify(query), 'SEARCH_TERM', {
+    await sendAuditEvent('VIEW_FACILITATOR_CONTINUITY_REPORT', username, undefined, 'NOT_APPLICABLE', {
       reportName: 'facilitator-continuity',
       query,
     })
