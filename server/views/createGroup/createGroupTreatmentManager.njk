@@ -89,7 +89,7 @@
       }
       const baseLabel = label.dataset.baseLabel;
       const number = index + 1;
-      // If the base label ends with "(optional)" then we want to keep that text but hide it from screen readers,
+      // If the base label ends with "(optional)" then we want to keep that text but hide it visually,
       // so we wrap it in a visually hidden span. Otherwise we just append the number to the base label.
       const isOptional = baseLabel.match(/^(.*?)\s*(\(optional\))\s*$/);
       if (isOptional) {
