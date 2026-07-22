@@ -118,8 +118,7 @@ export default class GroupPresenter {
 
   private generateTableRows() {
     const groupData: (
-      | { html: string; text?: undefined; attributes?: Record<string, string> }
-      | { text: string; html?: undefined }
+      { html: string; text?: undefined; attributes?: Record<string, string> } | { text: string; html?: undefined }
     )[][] = []
     this.groupListItems.content.forEach(group => {
       groupData.push([
