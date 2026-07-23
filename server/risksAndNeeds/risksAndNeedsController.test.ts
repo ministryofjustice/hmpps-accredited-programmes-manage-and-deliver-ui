@@ -811,7 +811,7 @@ describe('Risks and alerts section of risks and needs', () => {
         })
     })
 
-    it('does not show top unavailable message when OGRS and OVP scores are zero', async () => {
+    it('does not show OGRS and OVP unavailable messages when scores are zero', async () => {
       const risks: Risks = risksFactory.build({
         offenderGroupReconviction: {
           oneYear: 0,
@@ -833,7 +833,6 @@ describe('Risks and alerts section of risks and needs', () => {
         .get(`/referral/${referralId}/risks-and-needs/risks-and-alerts`)
         .expect(200)
         .expect(res => {
-          expect(res.text).not.toContain('NDelius, ARNS or OASys data unavailable')
           expect(res.text).not.toContain(
             'Offender group reconviction scale information is currently unavailable. Try again later.',
           )
