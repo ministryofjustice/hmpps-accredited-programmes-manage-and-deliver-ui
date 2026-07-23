@@ -6,7 +6,9 @@ export default class RisksAndAlertsOgrs4View {
   constructor(private readonly presenter: RisksAndAlertsOgrs4Presenter) {}
 
   get showTopDataUnavailableMessage(): boolean {
-    return !this.presenter.risks.assessmentCompleted
+    const { alerts, ogrS4Risks, riskOfSeriousHarm, sara } = this.presenter.risks
+
+    return alerts == null || ogrS4Risks == null || sara == null || riskOfSeriousHarm == null
   }
 
   get updateWarning(): WarningTextArgs {

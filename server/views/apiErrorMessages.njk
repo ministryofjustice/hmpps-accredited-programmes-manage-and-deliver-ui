@@ -13,7 +13,7 @@
 
 
 {%- if params.inset %}
-  <div class="moj-inset-api-error" {{ govukAttributes(params.attributes) }}>
+  <div class="moj-inset-api-error" {{ govukAttributes(params.attributes or {}) }}>
     {%- if apiErrorMessageHtml %}
       {{- apiErrorMessageHtml | safe -}}
     {%- elif params.text %}
@@ -24,7 +24,7 @@
     {% endif -%}
   </div>
 {%- else %}
-  <div class="moj-api-error" {{ govukAttributes(params.attributes) }}>
+    <div class="moj-api-error" {{ govukAttributes(params.attributes or {}) }}>
     {%- if apiErrorMessageHtml %}
       {{- apiErrorMessageHtml | safe -}}
     {%- elif params.text %}
