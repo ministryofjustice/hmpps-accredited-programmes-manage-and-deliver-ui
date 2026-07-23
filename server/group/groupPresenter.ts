@@ -118,13 +118,15 @@ export default class GroupPresenter {
 
   private generateTableRows() {
     const groupData: (
-      { html: string; text?: undefined; attributes?: Record<string, string> } | { text: string; html?: undefined }
+      | { html: string; text?: undefined; attributes?: Record<string, string>; classes?: string }
+      | { text: string; html?: undefined }
     )[][] = []
     this.groupListItems.content.forEach(group => {
       groupData.push([
         {
           html: `<a href='/group/${group.id}/group-details'>${group.code}</a>`,
           attributes: { 'data-sort-value': group.code },
+          classes: 'govuk-!-font-weight-bold',
         },
         this.getFormattedDateCell(group),
         { text: group.pduName },
