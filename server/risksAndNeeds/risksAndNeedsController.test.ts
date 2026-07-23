@@ -811,6 +811,39 @@ describe('Risks and alerts section of risks and needs', () => {
         })
     })
 
+    it('does not show top unavailable message when OGRS and OVP scores are zero', async () => {
+      const risks: Risks = risksFactory.build({
+        offenderGroupReconviction: {
+          oneYear: 0,
+          twoYears: 0,
+          scoreLevel: undefined,
+        },
+        offenderViolencePredictor: {
+          oneYear: 0,
+          twoYears: 0,
+          scoreLevel: undefined,
+        },
+        isLegacy: true,
+      })
+
+      accreditedProgrammesManageAndDeliverService.getRisksAndAlerts.mockResolvedValue(risks)
+
+      const referralId = randomUUID()
+      return request(app)
+        .get(`/referral/${referralId}/risks-and-needs/risks-and-alerts`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).not.toContain('NDelius, ARNS or OASys data unavailable')
+          expect(res.text).not.toContain(
+            'Offender group reconviction scale information is currently unavailable. Try again later.',
+          )
+          expect(res.text).not.toContain(
+            'Offender violence predictor information is currently unavailable. Try again later.',
+          )
+          expect(res.text).toContain('0%')
+        })
+    })
+
     it('handles risks and alerts with ogrs4 data', async () => {
       const risks: Risks = risksFactory.build({
         ogrS4Risks: {
