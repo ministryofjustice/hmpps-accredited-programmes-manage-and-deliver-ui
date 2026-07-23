@@ -5,33 +5,53 @@ import { InsetTextArgs } from '../../utils/govukFrontendTypes'
 export default class RisksAndAlertsView {
   constructor(private readonly presenter: RisksAndAlertsPresenter) {}
 
-  get showTopDataUnavailableMessage(): boolean {
-    const ogrsUnavailable =
+  get ogrsSectionUnavailable(): boolean {
+    return (
       this.ogrsYear1Box.levelText === 'UNKNOWN' &&
       this.ogrsYear2Box.levelText === 'UNKNOWN' &&
-      !this.ogrsYear1Box.figure &&
-      !this.ogrsYear2Box.figure
+      this.presenter.risks.offenderGroupReconviction.oneYear == null &&
+      this.presenter.risks.offenderGroupReconviction.twoYears == null
+    )
+  }
 
-    const ovpUnavailable =
+  get ovpSectionUnavailable(): boolean {
+    return (
       this.ovpYear1Box.levelText === 'UNKNOWN' &&
       this.ovpYear2Box.levelText === 'UNKNOWN' &&
-      !this.ovpYear1Box.figure &&
-      !this.ovpYear2Box.figure
+      this.presenter.risks.offenderViolencePredictor.oneYear == null &&
+      this.presenter.risks.offenderViolencePredictor.twoYears == null
+    )
+  }
 
-    const saraUnavailable =
-      this.riskTowardsPartnerBox.levelText === 'UNKNOWN' && this.riskTowardsOthersBox.levelText === 'UNKNOWN'
+  get saraSectionUnavailable(): boolean {
+    return this.riskTowardsPartnerBox.levelText === 'UNKNOWN' && this.riskTowardsOthersBox.levelText === 'UNKNOWN'
+  }
 
-    const rsrUnavailable =
+  get rsrSectionUnavailable(): boolean {
+    return (
       this.riskOfSeriousRecidivismBox.levelText === 'UNKNOWN' &&
-      !this.riskOfSeriousRecidivismBox.figure &&
+      this.presenter.risks.riskOfSeriousRecidivism.percentageScore == null &&
       this.ospcBox.levelText === 'UNKNOWN' &&
       this.ospiBox.levelText === 'UNKNOWN'
+    )
+  }
 
-    const roshUnavailable = this.roshRiskBox.levelText === 'UNKNOWN'
-    const alertsUnavailable = this.presenter.risks.alerts == null
+  get roshSectionUnavailable(): boolean {
+    return this.roshRiskBox.levelText === 'UNKNOWN'
+  }
 
+  get alertsSectionUnavailable(): boolean {
+    return this.presenter.risks.alerts == null
+  }
+
+  get showTopDataUnavailableMessage(): boolean {
     return (
-      ogrsUnavailable || ovpUnavailable || saraUnavailable || rsrUnavailable || roshUnavailable || alertsUnavailable
+      this.ogrsSectionUnavailable ||
+      this.ovpSectionUnavailable ||
+      this.saraSectionUnavailable ||
+      this.rsrSectionUnavailable ||
+      this.roshSectionUnavailable ||
+      this.alertsSectionUnavailable
     )
   }
 
@@ -220,16 +240,22 @@ export default class RisksAndAlertsView {
         pageTitle: this.presenter.pageTitle,
         ogrsYear1Box: this.ogrsYear1Box,
         ogrsYear2Box: this.ogrsYear2Box,
+        ogrsSectionUnavailable: this.ogrsSectionUnavailable,
         ovpYear1Box: this.ovpYear1Box,
         ovpYear2Box: this.ovpYear2Box,
+        ovpSectionUnavailable: this.ovpSectionUnavailable,
         riskTowardsPartnerBox: this.riskTowardsPartnerBox,
         riskTowardsOthersBox: this.riskTowardsOthersBox,
+        saraSectionUnavailable: this.saraSectionUnavailable,
         riskOfSeriousRecidivismBox: this.riskOfSeriousRecidivismBox,
         ospcBox: this.ospcBox,
         ospiBox: this.ospiBox,
+        rsrSectionUnavailable: this.rsrSectionUnavailable,
         roshRiskBox: this.roshRiskBox,
         roshTable: this.roshTable,
+        roshSectionUnavailable: this.roshSectionUnavailable,
         activeAlerts: this.activeAlerts,
+        alertsSectionUnavailable: this.alertsSectionUnavailable,
         assessmentCompletedText: this.assessmentCompletedText,
         roshLastupdated: this.presenter.getLastUpdatedStringWithClass(this.presenter.risks.lastUpdated),
         importedFromNdeliusText: this.importedFromNdeliusText,

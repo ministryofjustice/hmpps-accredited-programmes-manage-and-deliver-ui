@@ -18,12 +18,6 @@
 
   <h3 class="govuk-heading-s" data-testid="ogrs-heading">Offender group reconviction scale</h3>
 
-  {% set ogrsSectionUnavailable =
-    ogrsYear1Box.levelText == 'UNKNOWN'
-    and ogrsYear2Box.levelText == 'UNKNOWN'
-    and not ogrsYear1Box.figure
-    and not ogrsYear2Box.figure %}
-
   {% if ogrsSectionUnavailable %}
     {{ unavailableSectionMessage('Offender group reconviction scale') }}
   {% else %}
@@ -35,12 +29,6 @@
 
   <h3 class="govuk-heading-s" data-testid="ovp-heading">Offender violence predictor</h3>
 
-  {% set ovpSectionUnavailable =
-    ovpYear1Box.levelText == 'UNKNOWN'
-    and ovpYear2Box.levelText == 'UNKNOWN'
-    and not ovpYear1Box.figure
-    and not ovpYear2Box.figure %}
-
   {% if ovpSectionUnavailable %}
     {{ unavailableSectionMessage('Offender violence predictor') }}
   {% else %}
@@ -49,10 +37,6 @@
   {% endif %}
 
   <h3 class="govuk-heading-s" data-testid="sara-heading">Spousal assault risk assessment</h3>
-
-  {% set saraSectionUnavailable =
-    riskTowardsPartnerBox.levelText == 'UNKNOWN'
-    and riskTowardsOthersBox.levelText == 'UNKNOWN' %}
 
   {% if saraSectionUnavailable %}
     {{ unavailableSectionMessage('Spousal assault risk assessment') }}
@@ -72,12 +56,6 @@
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
   {% endset %}
 
-  {% set rsrSectionUnavailable =
-    riskOfSeriousRecidivismBox.levelText == 'UNKNOWN'
-    and not riskOfSeriousRecidivismBox.figure
-    and ospcBox.levelText == 'UNKNOWN'
-    and ospiBox.levelText == 'UNKNOWN' %}
-
   {% if rsrSectionUnavailable %}
     {{ unavailableSectionMessage('Risk of serious recidivism') }}
   {% else %}
@@ -94,7 +72,7 @@
     {{ govukTable(roshTable) }}
   {% endset %}
 
-  {% if roshRiskBox.levelText == 'UNKNOWN' %}
+  {% if roshSectionUnavailable %}
     {{ unavailableSectionMessage('Risk of serious harm') }}
   {% else %}
     {{ riskBox(roshRiskBox | objectMerge({ bodyHtml: roshBody })) }}
@@ -103,7 +81,7 @@
   {{ govukInsetText(importedFromNdeliusText) }}
 
   <h3 class="govuk-heading-s" data-testid="alerts-heading">Risk flags</h3>
-  {% if activeAlerts.flags == null %}
+  {% if alertsSectionUnavailable %}
     {{ unavailableSectionMessage('Risk flags') }}
   {% else %}
     {{ riskFlagWidget(activeAlerts) }}
