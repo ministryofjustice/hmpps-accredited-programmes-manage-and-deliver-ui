@@ -23,6 +23,7 @@ class ProgrammeGroupAllocationsFactory extends Factory<ProgrammeGroupAllocations
             status: 'Scheduled',
             statusColour: 'purple',
             activeProgrammeGroupId: null,
+            lao: false,
           },
           {
             referralId: 'ae43bc75-b96e-496b-b9da-20ea327d7909',
@@ -40,6 +41,7 @@ class ProgrammeGroupAllocationsFactory extends Factory<ProgrammeGroupAllocations
             status: 'Scheduled',
             statusColour: 'purple',
             activeProgrammeGroupId: null,
+            lao: false,
           },
         ],
         pageable: {
@@ -91,6 +93,7 @@ class ProgrammeGroupAllocationsFactory extends Factory<ProgrammeGroupAllocations
             status: 'Scheduled',
             statusColour: 'purple',
             activeProgrammeGroupId: '897bee70-d0a5-48ac-b8b8-e4ab5ea7ad1d',
+            lao: false,
           },
           {
             referralId: 'ae43bc75-b96e-496b-b9da-20ea327d7909',
@@ -108,6 +111,7 @@ class ProgrammeGroupAllocationsFactory extends Factory<ProgrammeGroupAllocations
             status: 'Scheduled',
             statusColour: 'purple',
             activeProgrammeGroupId: '897bee70-d0a5-48ac-b8b8-e4ab5ea7ad1d',
+            lao: false,
           },
         ],
         pageable: {
@@ -182,6 +186,7 @@ export default ProgrammeGroupAllocationsFactory.define(() => ({
         status: 'Scheduled',
         statusColour: 'purple',
         activeProgrammeGroupId: '897bee70-d0a5-48ac-b8b8-e4ab5ea7ad1d',
+        lao: false,
       },
       {
         referralId: 'ae43bc75-b96e-496b-b9da-20ea327d7909',
@@ -199,6 +204,7 @@ export default ProgrammeGroupAllocationsFactory.define(() => ({
         status: 'Scheduled',
         statusColour: 'purple',
         activeProgrammeGroupId: '897bee70-d0a5-48ac-b8b8-e4ab5ea7ad1d',
+        lao: false,
       },
     ],
     pageable: {

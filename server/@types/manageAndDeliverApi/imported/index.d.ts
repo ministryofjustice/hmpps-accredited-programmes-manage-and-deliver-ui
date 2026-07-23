@@ -3261,11 +3261,6 @@ export interface components {
        */
       hasLdc: boolean
       /**
-       * @description Whether to display the ineligible warning on the UI
-       * @example false
-       */
-      displayIneligibleWarning: boolean
-      /**
        * Format: int32
        * @description The LDC (Learning Disabilities and Challenges) score
        * @example 2
@@ -3366,6 +3361,12 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      pageable?: components['schemas']['PageableObject']
+      sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
@@ -3412,9 +3413,9 @@ export interface components {
       lao?: boolean | null
     }
     SortObject: {
-      empty?: boolean
-      sorted?: boolean
       unsorted?: boolean
+      sorted?: boolean
+      empty?: boolean
     }
     StatusFilterValues: {
       /**
@@ -4059,6 +4060,12 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      pageable?: components['schemas']['PageableObject']
+      sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
@@ -4159,6 +4166,12 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      pageable?: components['schemas']['PageableObject']
+      sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
