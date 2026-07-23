@@ -863,13 +863,55 @@ describe('Risks and alerts section of risks and needs', () => {
           combinedSeriousReoffendingScore: 0.28,
           combinedSeriousReoffendingBand: 'Low',
         },
+        assessmentCompleted: undefined,
         isLegacy: false,
       })
 
       accreditedProgrammesManageAndDeliverService.getRisksAndAlerts.mockResolvedValue(risks)
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/risks-and-needs/risks-and-alerts`).expect(200)
+      return request(app)
+        .get(`/referral/${referralId}/risks-and-needs/risks-and-alerts`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('No record found in OASys')
+          expect(res.text).not.toContain('NDelius, ARNS or OASys data unavailable')
+        })
+    })
+
+    it('shows top unavailable message for ogrs4 when data is explicitly unavailable', async () => {
+      const risks: Risks = risksFactory.build({
+        alerts: null,
+        ogrS4Risks: {
+          allReoffendingScoreType: 'DYNAMIC',
+          allReoffendingScore: 16.8,
+          allReoffendingBand: 'Low',
+          violentReoffendingScoreType: 'DYNAMIC',
+          violentReoffendingScore: 16.94,
+          violentReoffendingBand: 'Low',
+          seriousViolentReoffendingScoreType: 'DYNAMIC',
+          seriousViolentReoffendingScore: 0.28,
+          seriousViolentReoffendingBand: 'Low',
+          directContactSexualReoffendingScore: 55,
+          directContactSexualReoffendingBand: 'Medium',
+          indirectImageContactSexualReoffendingScore: 75,
+          indirectImageContactSexualReoffendingBand: 'High',
+          combinedSeriousReoffendingScoreType: 'DYNAMIC',
+          combinedSeriousReoffendingScore: 0.28,
+          combinedSeriousReoffendingBand: 'Low',
+        },
+        isLegacy: false,
+      })
+
+      accreditedProgrammesManageAndDeliverService.getRisksAndAlerts.mockResolvedValue(risks)
+
+      const referralId = randomUUID()
+      return request(app)
+        .get(`/referral/${referralId}/risks-and-needs/risks-and-alerts`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('NDelius, ARNS or OASys data unavailable')
+        })
     })
 
     it('calls the service with correct parameters', async () => {
