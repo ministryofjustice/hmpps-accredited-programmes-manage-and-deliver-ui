@@ -17,19 +17,22 @@ export default class EditSessionFacilitatorsForm {
 
     const validationError = FormUtils.validationErrorFromResult(validationResult)
     const duplicateFacilitatorErrors = this.createDuplicateFacilitatorErrors()
+    const invalidFacilitatorErrors = this.createInvalidFacilitatorErrors()
 
-    if (validationError || duplicateFacilitatorErrors.length > 0) {
+    if (validationError || duplicateFacilitatorErrors.length > 0 || invalidFacilitatorErrors.length > 0) {
       return {
         paramsForUpdate: null,
         error: {
-          errors: [...(validationError?.errors || []), ...duplicateFacilitatorErrors],
+          errors: [...(validationError?.errors || []), ...invalidFacilitatorErrors, ...duplicateFacilitatorErrors],
         },
       }
     }
     const { _csrf, ...formValues } = this.request.body
     const facilitators = Object.entries(formValues)
       .filter(([key, value]) => key.startsWith('edit-session-facilitator') && value !== '')
-      .map(([, value]) => JSON.parse(value as string)) as EditSessionFacilitatorsRequest[]
+      .map(([, value]) => this.parseFacilitator(value))
+      .filter((facilitator): facilitator is EditSessionFacilitatorsRequest => Boolean(facilitator))
+
     return {
       paramsForUpdate: facilitators,
       error: null,
@@ -81,6 +84,17 @@ export default class EditSessionFacilitatorsForm {
     }))
   }
 
+  private createInvalidFacilitatorErrors(): FormValidationError['errors'] {
+    return Object.entries(this.request.body)
+      .filter(([key, value]) => key.startsWith('edit-session-facilitator') && value !== '')
+      .filter(([, value]) => !this.parseFacilitator(value))
+      .map(([fieldName]) => ({
+        formFields: [fieldName],
+        errorSummaryLinkedField: fieldName,
+        message: errorMessages.editSession.editSessionFacilitatorEmpty,
+      }))
+  }
+
   private getFacilitatorSelections(): Array<{ fieldName: string; facilitatorCode: string }> {
     return Object.entries(this.request.body)
       .filter(([key, value]) => key.startsWith('edit-session-facilitator') && value)
@@ -94,13 +108,24 @@ export default class EditSessionFacilitatorsForm {
   }
 
   private parseFacilitatorCode(value: unknown): string {
+    return this.parseFacilitator(value)?.facilitatorCode || ''
+  }
+
+  private parseFacilitator(value: unknown): EditSessionFacilitatorsRequest | null {
     if (typeof value !== 'string') {
-      return ''
+      return null
     }
+
     try {
-      return JSON.parse(value)?.facilitatorCode || ''
+      const facilitator = JSON.parse(value)
+
+      if (!facilitator || typeof facilitator !== 'object' || !facilitator.facilitatorCode) {
+        return null
+      }
+
+      return facilitator as EditSessionFacilitatorsRequest
     } catch {
-      return ''
+      return null
     }
   }
 }

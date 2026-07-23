@@ -13,7 +13,7 @@
 
 
 {%- if params.inset %}
-  <p class="moj-inset-api-error" {{ govukAttributes(params.attributes) }}>
+  <div class="moj-inset-api-error" {{ govukAttributes(params.attributes) }}>
     {%- if apiErrorMessageHtml %}
       {{- apiErrorMessageHtml | safe -}}
     {%- elif params.text %}
@@ -22,7 +22,7 @@
     <p>NDelius or OASys data unavailable</p>
     <p>The service cannot retrieve this information at the moment. Try again later.</p>
     {% endif -%}
-  </p>
+  </div>
 {%- else %}
   <div class="moj-api-error" {{ govukAttributes(params.attributes) }}>
     {%- if apiErrorMessageHtml %}
