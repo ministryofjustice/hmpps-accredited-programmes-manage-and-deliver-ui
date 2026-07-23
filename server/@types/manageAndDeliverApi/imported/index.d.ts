@@ -3276,11 +3276,6 @@ export interface components {
        */
       hasLdc: boolean
       /**
-       * @description Whether tto display the ineligible warning on the UI
-       * @example false
-       */
-      displayIneligibleWarning: boolean
-      /**
        * Format: int32
        * @description The LDC (Learning Disabilities and Challenges) score
        * @example 2
@@ -3377,16 +3372,16 @@ export interface components {
       reportingTeams: string[]
     }
     PageReferralCaseListItem: {
-      /** Format: int32 */
-      totalPages?: number
       /** Format: int64 */
       totalElements?: number
       /** Format: int32 */
-      numberOfElements?: number
-      first?: boolean
-      last?: boolean
+      totalPages?: number
       pageable?: components['schemas']['PageableObject']
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
@@ -3424,10 +3419,11 @@ export interface components {
       sentenceEndDate?: string | null
       /** @enum {string|null} */
       sentenceEndDateSource?: 'REQUIREMENT' | 'LICENCE_CONDITION' | null
+      lao?: boolean | null
     }
     SortObject: {
-      sorted?: boolean
       unsorted?: boolean
+      sorted?: boolean
       empty?: boolean
     }
     StatusFilterValues: {
@@ -4064,16 +4060,16 @@ export interface components {
       regionName: string
     }
     PageGroup: {
-      /** Format: int32 */
-      totalPages?: number
       /** Format: int64 */
       totalElements?: number
       /** Format: int32 */
-      numberOfElements?: number
-      first?: boolean
-      last?: boolean
+      totalPages?: number
       pageable?: components['schemas']['PageableObject']
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
@@ -4098,6 +4094,11 @@ export interface components {
        * @example X933590
        */
       crn: string
+      /**
+       * @description Whether the person has Limited Access Offender (LAO) status.
+       * @example false
+       */
+      lao: boolean
       /**
        * @description The name of the person associated with this referral.
        * @example John Doe
@@ -4159,16 +4160,16 @@ export interface components {
       activeProgrammeGroupId: string | null
     }
     PageGroupItem: {
-      /** Format: int32 */
-      totalPages?: number
       /** Format: int64 */
       totalElements?: number
       /** Format: int32 */
-      numberOfElements?: number
-      first?: boolean
-      last?: boolean
+      totalPages?: number
       pageable?: components['schemas']['PageableObject']
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
@@ -4335,6 +4336,7 @@ export interface components {
       /** Format: uuid */
       referralId: string
       crn: string
+      lao: boolean
       attendance: string
       sessionNotes: string
     }
