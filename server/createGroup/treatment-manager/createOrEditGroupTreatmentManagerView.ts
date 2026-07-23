@@ -18,8 +18,6 @@ export default class CreateOrEditGroupTreatmentManagerView {
       id: 'create-group-treatment-manager',
       name: 'create-group-treatment-manager',
       label: {
-        // text: 'Treatment Manager',
-        // classes: 'govuk-label--m',
         isPageHeading: false,
         html: `<h2 class="govuk-label govuk-label--m">Treatment Manager</h2>`,
       },
