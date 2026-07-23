@@ -5,6 +5,10 @@ import { ActiveAlerts, RiskBox, RiskLevel } from './risksAndAlertsPresenter'
 export default class RisksAndAlertsOgrs4View {
   constructor(private readonly presenter: RisksAndAlertsOgrs4Presenter) {}
 
+  get showTopDataUnavailableMessage(): boolean {
+    return !this.presenter.risks.assessmentCompleted
+  }
+
   get updateWarning(): WarningTextArgs {
     return {
       text: 'Risk predictor tools updated',
@@ -189,8 +193,10 @@ export default class RisksAndAlertsOgrs4View {
   }
 
   get activeAlerts(): ActiveAlerts {
+    const { alerts } = this.presenter.risks
+
     return {
-      flags: this.presenter.risks.alerts.map(alert => ({ description: alert })),
+      flags: alerts == null ? null : alerts.map(alert => ({ description: alert })),
       lastUpdated: `<p class="risk-box__body-text govuk-!-margin-bottom-0">Last updated: ${this.presenter.risks.lastUpdated}</p>`,
     }
   }
@@ -215,6 +221,7 @@ export default class RisksAndAlertsOgrs4View {
         roshRiskSummary: this.roshRiskSummary,
         importedFromNdeliusText: this.importedFromNdeliusText,
         activeAlerts: this.activeAlerts,
+        showTopDataUnavailableMessage: this.showTopDataUnavailableMessage,
       },
     ]
   }

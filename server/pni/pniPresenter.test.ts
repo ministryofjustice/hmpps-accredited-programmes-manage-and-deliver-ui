@@ -94,6 +94,22 @@ describe('PniPresenter', () => {
     })
   })
 
+  describe('showTopDataUnavailableMessage', () => {
+    it('returns true when pathway data is unavailable', () => {
+      pniScore.overallIntensity = null
+      const presenter = new PniPresenter('12345', referralDetails, pniScore)
+
+      expect(presenter.showTopDataUnavailableMessage).toBe(true)
+    })
+
+    it('returns false when pathway is missing information', () => {
+      pniScore.overallIntensity = 'MISSING_INFORMATION'
+      const presenter = new PniPresenter('12345', referralDetails, pniScore)
+
+      expect(presenter.showTopDataUnavailableMessage).toBe(false)
+    })
+  })
+
   describe('relationshipsSummaryListRows', () => {
     it('returns the summary list rows for the relationship domain score', () => {
       const presenter = new PniPresenter('12345', referralDetails, pniScore)

@@ -5,6 +5,36 @@ import { InsetTextArgs } from '../../utils/govukFrontendTypes'
 export default class RisksAndAlertsView {
   constructor(private readonly presenter: RisksAndAlertsPresenter) {}
 
+  get showTopDataUnavailableMessage(): boolean {
+    const ogrsUnavailable =
+      this.ogrsYear1Box.levelText === 'UNKNOWN' &&
+      this.ogrsYear2Box.levelText === 'UNKNOWN' &&
+      !this.ogrsYear1Box.figure &&
+      !this.ogrsYear2Box.figure
+
+    const ovpUnavailable =
+      this.ovpYear1Box.levelText === 'UNKNOWN' &&
+      this.ovpYear2Box.levelText === 'UNKNOWN' &&
+      !this.ovpYear1Box.figure &&
+      !this.ovpYear2Box.figure
+
+    const saraUnavailable =
+      this.riskTowardsPartnerBox.levelText === 'UNKNOWN' && this.riskTowardsOthersBox.levelText === 'UNKNOWN'
+
+    const rsrUnavailable =
+      this.riskOfSeriousRecidivismBox.levelText === 'UNKNOWN' &&
+      !this.riskOfSeriousRecidivismBox.figure &&
+      this.ospcBox.levelText === 'UNKNOWN' &&
+      this.ospiBox.levelText === 'UNKNOWN'
+
+    const roshUnavailable = this.roshRiskBox.levelText === 'UNKNOWN'
+    const alertsUnavailable = this.presenter.risks.alerts == null
+
+    return (
+      ogrsUnavailable || ovpUnavailable || saraUnavailable || rsrUnavailable || roshUnavailable || alertsUnavailable
+    )
+  }
+
   get assessmentCompletedText(): InsetTextArgs {
     return {
       text: this.presenter.updatedText,
@@ -174,8 +204,10 @@ export default class RisksAndAlertsView {
   }
 
   get activeAlerts(): ActiveAlerts {
+    const { alerts } = this.presenter.risks
+
     return {
-      flags: this.presenter.risks.alerts.map(alert => ({ description: alert })),
+      flags: alerts == null ? null : alerts.map(alert => ({ description: alert })),
       lastUpdated: this.presenter.getLastUpdatedStringWithClass(this.presenter.risks.lastUpdated),
     }
   }
@@ -202,6 +234,7 @@ export default class RisksAndAlertsView {
         roshLastupdated: this.presenter.getLastUpdatedStringWithClass(this.presenter.risks.lastUpdated),
         importedFromNdeliusText: this.importedFromNdeliusText,
         headingText: this.presenter.headingText,
+        showTopDataUnavailableMessage: this.showTopDataUnavailableMessage,
       },
     ]
   }

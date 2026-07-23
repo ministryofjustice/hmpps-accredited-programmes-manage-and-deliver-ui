@@ -270,4 +270,10 @@ export default class PniPresenter extends ReferralLayoutPresenter {
         }
     }
   }
+
+  get showTopDataUnavailableMessage(): boolean {
+    const pathway = this.pniScore?.overallIntensity
+
+    return !pathway
+  }
 }

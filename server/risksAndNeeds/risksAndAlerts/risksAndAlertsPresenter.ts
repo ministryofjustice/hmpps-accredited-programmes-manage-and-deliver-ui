@@ -24,7 +24,7 @@ export type RiskLevel = 'HIGH' | 'LOW' | 'MEDIUM' | 'VERY_HIGH' | 'Not Applicabl
 export type RiskLevelOrUnknown = RiskLevel | 'UNKNOWN'
 
 export type ActiveAlerts = {
-  flags: { description: string }[]
+  flags: { description: string }[] | null
   lastUpdated?: string
 }
 
