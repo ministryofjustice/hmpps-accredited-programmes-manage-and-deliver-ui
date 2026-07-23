@@ -15,4 +15,5 @@ export default ReferralCaseListItemFactory.define(({ sequence }) => ({
   sentenceEndDate: '2024-01-01',
   sentenceEndDateSource: 'LICENCE_CONDITION' as 'LICENCE_CONDITION' | 'REQUIREMENT',
   statusLabelColour: 'blue',
+  lao: false,
 }))
