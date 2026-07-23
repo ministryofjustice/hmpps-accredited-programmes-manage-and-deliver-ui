@@ -72,13 +72,16 @@ describe(`Caselist controller`, () => {
           expect(sendAuditEvent).toHaveBeenCalledWith(
             url.startsWith('/region/open-referrals') ? 'SEARCH_OPEN_CASELIST' : 'SEARCH_CLOSED_CASELIST',
             'user1',
-            JSON.stringify({
-              pdu: pduValue,
-              reportingTeam: reportingTeamValue ? [reportingTeamValue] : undefined,
-              status: referralStatusValue,
-              cohort: cohortValue,
-            }),
-            'SEARCH_TERM',
+            undefined,
+            'NOT_APPLICABLE',
+            {
+              filter: {
+                pdu: pduValue,
+                reportingTeam: reportingTeamValue ? [reportingTeamValue] : undefined,
+                status: referralStatusValue,
+                cohort: cohortValue,
+              },
+            },
           )
         })
     },

@@ -33,7 +33,10 @@ export default class GroupOverviewController extends BaseController {
     }
 
     const filter = GroupAllocationsFilter.fromRequest(req)
-    await sendAuditEvent('SEARCH_GROUP_ALLOCATED', username, JSON.stringify(filter.params), 'SEARCH_TERM', { groupId })
+    await sendAuditEvent('SEARCH_GROUP_ALLOCATED', username, undefined, 'NOT_APPLICABLE', {
+      groupId,
+      filter: filter.params,
+    })
 
     const groupOverview = await this.accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers(
       username,
@@ -88,7 +91,10 @@ export default class GroupOverviewController extends BaseController {
     }
 
     const filter = GroupAllocationsFilter.fromRequest(req)
-    await sendAuditEvent('SEARCH_GROUP_WAITLIST', username, JSON.stringify(filter.params), 'SEARCH_TERM', { groupId })
+    await sendAuditEvent('SEARCH_GROUP_WAITLIST', username, undefined, 'NOT_APPLICABLE', {
+      groupId,
+      filter: filter.params,
+    })
 
     const groupOverview = await this.accreditedProgrammesManageAndDeliverService.getGroupWaitlistMembers(
       username,

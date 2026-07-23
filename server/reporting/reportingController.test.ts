@@ -53,7 +53,13 @@ describe('Reporting controller', () => {
         expect(res.text).toBe(csv)
       })
 
-    expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_GROUP_SIZE_REPORT', 'user1', '2026-05-18T13:30:00', 'SEARCH_TERM')
+    expect(sendAuditEvent).toHaveBeenCalledWith(
+      'VIEW_GROUP_SIZE_REPORT',
+      'user1',
+      undefined,
+      'NOT_APPLICABLE',
+      expect.objectContaining({ groupStartedSince: '2026-05-18T13:30:00' }),
+    )
     expect(accreditedProgrammesManageAndDeliverService.getGroupSizeReport).toHaveBeenCalledWith(
       'user1',
       '2026-05-18T13:30:00',
@@ -91,8 +97,8 @@ describe('Reporting controller', () => {
     expect(sendAuditEvent).toHaveBeenCalledWith(
       'VIEW_DOSAGE_REPORT',
       'user1',
-      JSON.stringify({ referralsCreatedSince: '2026-05-21' }),
-      'SEARCH_TERM',
+      undefined,
+      'NOT_APPLICABLE',
       expect.objectContaining({ reportName: 'dosage', query: { referralsCreatedSince: '2026-05-21' } }),
     )
 
@@ -132,8 +138,8 @@ describe('Reporting controller', () => {
     expect(sendAuditEvent).toHaveBeenCalledWith(
       'VIEW_SESSION_RATE_REPORT',
       'user1',
-      JSON.stringify({ groupsStartedAfter: '2026-05-21' }),
-      'SEARCH_TERM',
+      undefined,
+      'NOT_APPLICABLE',
       expect.objectContaining({ reportName: 'session-rate', query: { groupsStartedAfter: '2026-05-21' } }),
     )
 
@@ -173,8 +179,8 @@ describe('Reporting controller', () => {
     expect(sendAuditEvent).toHaveBeenCalledWith(
       'VIEW_FACILITATOR_CONTINUITY_REPORT',
       'user1',
-      JSON.stringify({ groupsCreatedSince: '2026-05-21T12:00:00' }),
-      'SEARCH_TERM',
+      undefined,
+      'NOT_APPLICABLE',
       expect.objectContaining({
         reportName: 'facilitator-continuity',
         query: { groupsCreatedSince: '2026-05-21T12:00:00' },

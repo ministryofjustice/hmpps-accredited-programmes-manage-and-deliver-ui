@@ -44,8 +44,9 @@ describe('GroupController', () => {
           expect(sendAuditEvent).toHaveBeenCalledWith(
             'SEARCH_NOT_STARTED_OR_IN_PROGRESS_GROUP_LIST',
             'user1',
-            JSON.stringify({}),
-            'SEARCH_TERM',
+            undefined,
+            'NOT_APPLICABLE',
+            { filter: {} },
           )
         })
     })
@@ -102,8 +103,9 @@ describe('GroupController', () => {
           expect(sendAuditEvent).toHaveBeenCalledWith(
             'SEARCH_COMPLETED_GROUP_LIST',
             'user1',
-            JSON.stringify({}),
-            'SEARCH_TERM',
+            undefined,
+            'NOT_APPLICABLE',
+            { filter: {} },
           )
         })
     })
