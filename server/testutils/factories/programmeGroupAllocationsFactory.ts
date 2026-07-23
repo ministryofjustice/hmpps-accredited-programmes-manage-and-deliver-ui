@@ -107,7 +107,7 @@ class ProgrammeGroupAllocationsFactory extends Factory<ProgrammeGroupAllocations
             status: 'Scheduled',
             statusColour: 'purple',
             activeProgrammeGroupId: '897bee70-d0a5-48ac-b8b8-e4ab5ea7ad1d',
-            lao: false,
+            lao: true,
           },
         ],
         pageable: {
