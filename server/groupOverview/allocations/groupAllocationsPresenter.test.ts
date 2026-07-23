@@ -163,7 +163,8 @@ describe('GroupAllocationsPresenter', () => {
                  </div>`,
           },
           {
-            html: `<a href="/referral-details/39fde7e8-d2e3-472b-8364-5848bf673aa6/personal-details">Edgar Schiller</a><p class="govuk-!-margin-bottom-0">X718250</p>`,
+            html: `<a href="/referral-details/39fde7e8-d2e3-472b-8364-5848bf673aa6/personal-details">Edgar Schiller</a><p class="govuk-!-margin-bottom-0">X718250</p>
+                `,
           },
 
           { html: '28 April 2027<br> Licence end date' },
@@ -182,7 +183,8 @@ describe('GroupAllocationsPresenter', () => {
                  </div>`,
           },
           {
-            html: `<a href="/referral-details/ae43bc75-b96e-496b-b9da-20ea327d7909/personal-details">Roy Kloss</a><p class="govuk-!-margin-bottom-0">X718255</p>`,
+            html: `<a href="/referral-details/ae43bc75-b96e-496b-b9da-20ea327d7909/personal-details">Roy Kloss</a><p class="govuk-!-margin-bottom-0">X718255</p>
+                <span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>`,
           },
 
           { html: '14 April 2028<br> Order end date' },

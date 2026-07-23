@@ -39,7 +39,7 @@ class ProgrammeGroupAllocationsFactory extends Factory<ProgrammeGroupAllocations
             status: 'Scheduled',
             statusColour: 'purple',
             activeProgrammeGroupId: null,
-            lao: false,
+            lao: true,
           },
         ],
         pageable: {
