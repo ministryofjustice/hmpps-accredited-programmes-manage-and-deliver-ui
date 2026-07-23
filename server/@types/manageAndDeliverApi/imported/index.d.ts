@@ -369,6 +369,65 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/dev/seed/referrals': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['seedReferrals']
+    delete: operations['dangerouslyDeleteAllReferrals']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/admin/referral/{referralId}/repoint-sentence-reference': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Repoint referral sentence reference
+     * @description For the specified referral repoint the sentence reference
+     */
+    post: operations['repointReferralSentenceReference']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/admin/referral/{referralId}/force-status': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    /**
+     * Force-update referral status
+     * @description For the specified referral force-update referral status.
+     *           |
+     *           |This is useful if the referral status is out od sync with nDelius, and we wish to update it to match the
+     *           |nDelius status.
+     */
+    post: operations['updateReferralStatus']
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/admin/populate-personal-details': {
     parameters: {
       query?: never
@@ -951,6 +1010,22 @@ export interface paths {
      * @description Get group by GroupCode and in User region
      */
     get: operations['getGroupInUserRegion']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/dev/seed/health': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: operations['health']
     put?: never
     post?: never
     delete?: never
@@ -2123,6 +2198,17 @@ export interface components {
        */
       message: string
     }
+    SeededReferralInfo: {
+      referralId: string
+      crn: string
+      personName: string
+      requirementId: string
+    }
+    SeedingResult: {
+      /** Format: int32 */
+      count: number
+      referrals: components['schemas']['SeededReferralInfo'][]
+    }
     CreateAvailability: {
       /**
        * Format: uuid
@@ -2146,6 +2232,36 @@ export interface components {
        */
       otherDetails?: string | null
       availabilities: components['schemas']['DailyAvailabilityModel'][]
+    }
+    ReferralSentenceReferenceRequest: {
+      /**
+       * @description Source from of the referral
+       * @example REQUIREMENT
+       * @enum {string}
+       */
+      sourcedFrom: 'REQUIREMENT' | 'LICENCE_CONDITION'
+      /**
+       * @description Event ID of the referral
+       * @example 2500828798
+       */
+      eventId: string
+    }
+    /** @description Response returned after updating a referral sentence reference */
+    ReferralSentenceReferenceResponse: {
+      /**
+       * @description The text to show to the user, confirming the referral sentence reference update has taken place
+       * @example Referral with ID: d3f55f38-7c7b-4b6e-9aa1-e7d7f9e3e785 now has the sourceFrom: REQUIREMENT and eventId: 2500828798.
+       */
+      message: string
+    }
+    /** @description Response returned after updating a referral status */
+    StatusUpdateResponse: {
+      referralStatusHistory: components['schemas']['ReferralStatusHistory']
+      /**
+       * @description The text to show to the user, confirming the status update has taken place
+       * @example Alex River's referral status is now Recall. They have been removed from group BCCDD1'.
+       */
+      message: string
     }
     /** @description IDs of the Referrals to process.  Use "*" in the list to process all referrals. */
     PopulatePersonalDetailsRequest: {
@@ -2178,7 +2294,7 @@ export interface components {
        * Format: int32
        * @description The size of the attachment file in bytes
        */
-      filesize: number
+      filesize?: number | null
       /** @description The filename of attachment file */
       filename: string
       /** @description The additional headers to use when calling the url for fetching this attachment */
@@ -3260,29 +3376,29 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      pageable?: components['schemas']['PageableObject']
+      sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
-      first?: boolean
-      last?: boolean
-      sort?: components['schemas']['SortObject']
-      /** Format: int32 */
-      numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageableObject: {
-      /** Format: int64 */
-      offset?: number
-      sort?: components['schemas']['SortObject']
-      /** Format: int32 */
-      pageSize?: number
       paged?: boolean
       /** Format: int32 */
       pageNumber?: number
+      /** Format: int32 */
+      pageSize?: number
+      sort?: components['schemas']['SortObject']
       unpaged?: boolean
+      /** Format: int64 */
+      offset?: number
     }
     ReferralCaseListItem: {
       /** Format: uuid */
@@ -3303,11 +3419,12 @@ export interface components {
       sentenceEndDate?: string | null
       /** @enum {string|null} */
       sentenceEndDateSource?: 'REQUIREMENT' | 'LICENCE_CONDITION' | null
+      lao?: boolean | null
     }
     SortObject: {
-      empty?: boolean
-      sorted?: boolean
       unsorted?: boolean
+      sorted?: boolean
+      empty?: boolean
     }
     StatusFilterValues: {
       /**
@@ -3408,8 +3525,8 @@ export interface components {
       /** @description The name of the person that updated the last status */
       updatedByName: string
       /**
-       * Format: date
-       * @description The date that the status was last updated
+       * Format: date-time
+       * @description The date and time that the status was last updated
        */
       createdAt: string
     }
@@ -3947,17 +4064,17 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      pageable?: components['schemas']['PageableObject']
+      sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
       /** Format: int32 */
       number?: number
-      first?: boolean
-      last?: boolean
-      sort?: components['schemas']['SortObject']
-      /** Format: int32 */
-      numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     GroupItem: {
@@ -3977,6 +4094,11 @@ export interface components {
        * @example X933590
        */
       crn: string
+      /**
+       * @description Whether the person has Limited Access Offender (LAO) status.
+       * @example false
+       */
+      lao: boolean
       /**
        * @description The name of the person associated with this referral.
        * @example John Doe
@@ -4042,17 +4164,17 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      pageable?: components['schemas']['PageableObject']
+      sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
-      first?: boolean
-      last?: boolean
-      sort?: components['schemas']['SortObject']
-      /** Format: int32 */
-      numberOfElements?: number
-      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
@@ -4214,6 +4336,7 @@ export interface components {
       /** Format: uuid */
       referralId: string
       crn: string
+      lao: boolean
       attendance: string
       sessionNotes: string
     }
@@ -4576,6 +4699,10 @@ export interface components {
       facilitators: components['schemas']['CreateGroupTeamMember'][]
       /** @description The list of coverFacilitators for this group. */
       coverFacilitators?: components['schemas']['CreateGroupTeamMember'][] | null
+    }
+    TeardownResult: {
+      /** Format: int32 */
+      deletedCount: number
     }
   }
   responses: never
@@ -5778,6 +5905,156 @@ export interface operations {
       }
       /** @description The group or referral does not exist */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  seedReferrals: {
+    parameters: {
+      query?: {
+        count?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['SeedingResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  dangerouslyDeleteAllReferrals: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['TeardownResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  repointReferralSentenceReference: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id (UUID) of a referral */
+        referralId: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['ReferralSentenceReferenceRequest']
+      }
+    }
+    responses: {
+      /** @description Repointed the referral sentence reference successful */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ReferralSentenceReferenceResponse']
+        }
+      }
+      /** @description Invalid request format or invalid UUID format */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  updateReferralStatus: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id (UUID) of a referral */
+        referralId: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateReferralStatusHistory']
+      }
+    }
+    responses: {
+      /** @description Referral status update successful */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['StatusUpdateResponse']
+        }
+      }
+      /** @description Invalid request format or invalid UUID format */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
         headers: {
           [name: string]: unknown
         }
@@ -7552,6 +7829,37 @@ export interface operations {
       }
       /** @description Forbidden. The client is not authorised to retrieve group details. */
       403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  health: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': {
+            [key: string]: string
+          }
+        }
+      }
+      /** @description Bad Request */
+      400: {
         headers: {
           [name: string]: unknown
         }

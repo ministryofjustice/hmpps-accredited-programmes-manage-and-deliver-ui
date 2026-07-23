@@ -89,6 +89,7 @@ describe('editSession', () => {
           crn: 'S688890821',
           attendance: 'Attended',
           sessionNotes: 'Notes recorded',
+          lao: false,
         },
       ],
     })
@@ -124,6 +125,7 @@ describe('editSession', () => {
           crn: 'S688890821',
           attendance: 'Attended',
           sessionNotes: 'Notes recorded',
+          lao: false,
         },
       ],
     })
@@ -160,6 +162,7 @@ describe('editSession', () => {
           crn: 'S688890821',
           attendance: 'Attended',
           sessionNotes: 'Notes recorded',
+          lao: false,
         },
       ],
     })
