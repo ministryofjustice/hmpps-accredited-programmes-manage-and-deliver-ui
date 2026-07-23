@@ -782,7 +782,33 @@ describe('Risks and alerts section of risks and needs', () => {
       accreditedProgrammesManageAndDeliverService.getRisksAndAlerts.mockResolvedValue(risks)
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/risks-and-needs/risks-and-alerts`).expect(200)
+      return request(app)
+        .get(`/referral/${referralId}/risks-and-needs/risks-and-alerts`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('NDelius, ARNS or OASys data unavailable')
+          expect(res.text).toContain(
+            'Offender group reconviction scale information is currently unavailable. Try again later.',
+          )
+        })
+    })
+
+    it('shows unavailable messages when alerts data is unavailable', async () => {
+      const risks: Risks = risksFactory.build({
+        alerts: null,
+        isLegacy: true,
+      })
+
+      accreditedProgrammesManageAndDeliverService.getRisksAndAlerts.mockResolvedValue(risks)
+
+      const referralId = randomUUID()
+      return request(app)
+        .get(`/referral/${referralId}/risks-and-needs/risks-and-alerts`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('NDelius, ARNS or OASys data unavailable')
+          expect(res.text).toContain('Risk flags information is currently unavailable. Try again later.')
+        })
     })
 
     it('handles risks and alerts with ogrs4 data', async () => {

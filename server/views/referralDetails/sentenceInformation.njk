@@ -2,6 +2,13 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
  <div>
+   {% if showTopDataUnavailableMessage %}
+     {% set params = {
+       inset: true,
+       text: 'Sentence information is currently unavailable. Try again later.'
+     } %}
+     {% include "../apiErrorMessages.njk" %}
+   {% endif %}
    {{ govukInsetText(importFromDeliusText) }}
    {{ govukSummaryList(sentenceDetailsSummary) }}
 </div>

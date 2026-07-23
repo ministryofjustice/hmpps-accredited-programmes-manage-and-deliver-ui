@@ -1,0 +1,37 @@
+
+{%- from "govuk/macros/attributes.njk" import govukAttributes -%}
+
+{% set apiErrorMessageHtmlByKey = {
+  ndeliusOrOasys: '<p>NDelius or OASys data unavailable</p><p>The service cannot retrieve this information at the moment. Try again later.</p>',
+  ndeliusArnsOrOasys: '<p>NDelius, ARNS or OASys data unavailable</p><p>The service cannot retrieve this information at the moment. Try again later.</p>'
+} %}
+
+{% set apiErrorMessageHtml = params.html %}
+{% if not apiErrorMessageHtml and params.apiErrorMessageKey %}
+  {% set apiErrorMessageHtml = apiErrorMessageHtmlByKey[params.apiErrorMessageKey] %}
+{% endif %}
+
+
+{%- if params.inset %}
+  <p class="moj-inset-api-error" {{ govukAttributes(params.attributes) }}>
+    {%- if apiErrorMessageHtml %}
+      {{- apiErrorMessageHtml | safe -}}
+    {%- elif params.text %}
+      {{- params.text -}}
+    {%- else %}
+    <p>NDelius or OASys data unavailable</p>
+    <p>The service cannot retrieve this information at the moment. Try again later.</p>
+    {% endif -%}
+  </p>
+{%- else %}
+  <div class="moj-api-error" {{ govukAttributes(params.attributes) }}>
+    {%- if apiErrorMessageHtml %}
+      {{- apiErrorMessageHtml | safe -}}
+    {%- elif params.text %}
+      {{- params.text -}}
+    {%- else %}
+      <p>NDelius, ARNS or OASys data unavailable</p>
+      <p>The service cannot retrieve this information at the moment. Try again later.</p>
+    {% endif -%}
+  </div>
+{%- endif %}

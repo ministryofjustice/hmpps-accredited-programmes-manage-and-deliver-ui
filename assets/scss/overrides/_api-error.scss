@@ -1,0 +1,26 @@
+
+@use '../../../node_modules/govuk-frontend/dist/govuk' as *;
+
+.moj-api-error {
+  padding: 16px 22px;
+  background-color: govuk-colour('light-grey');
+  border-left: 8px solid govuk-colour('red');
+
+  p {
+    @include govuk-font($size: 19, $weight: 'bold');
+    color: govuk-colour('black');
+    margin: 5px 0;
+  }
+
+  p + p {
+    @include govuk-font($size: 19);
+    margin-top: 0;
+  }
+}
+
+.moj-inset-api-error {
+  @include govuk-font($size: 16);
+  padding: 4px 8px;
+  border-left: $govuk-border-width solid govuk-colour('red');
+  margin-bottom: 4px;
+}
