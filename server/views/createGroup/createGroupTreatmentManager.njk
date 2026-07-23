@@ -158,6 +158,7 @@
 
         <form method="post" novalidate>
           <input type="hidden" name="_csrf" value="{{csrfToken}}">
+          <h2 class="govuk-label govuk-label--m">Treatment Manager</h2>
           {{ govukSelect(createGroupTreatmentManagerArgs) }}
           <h2 class="govuk-label govuk-label--m">Facilitator</h2>
           {% set facilitatorItems = [] %}
