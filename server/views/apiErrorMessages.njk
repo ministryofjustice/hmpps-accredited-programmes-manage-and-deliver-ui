@@ -13,7 +13,12 @@
 
 
 {%- if params.inset %}
-  <div class="moj-inset-api-error" {{ govukAttributes(params.attributes or {}) }}>
+  {% set apiErrorClasses = 'moj-inset-api-error' %}
+  {% if params.attributes and params.attributes.class %}
+    {% set apiErrorClasses = apiErrorClasses + ' ' + params.attributes.class %}
+  {% endif %}
+  {% set apiErrorAttributes = (params.attributes or {}) | objectMerge({ class: apiErrorClasses }) %}
+  <div {{ govukAttributes(apiErrorAttributes) }}>
     {%- if apiErrorMessageHtml %}
       {{- apiErrorMessageHtml | safe -}}
     {%- elif params.text %}
@@ -24,7 +29,12 @@
     {% endif -%}
   </div>
 {%- else %}
-    <div class="moj-api-error" {{ govukAttributes(params.attributes or {}) }}>
+  {% set apiErrorClasses = 'moj-api-error' %}
+  {% if params.attributes and params.attributes.class %}
+    {% set apiErrorClasses = apiErrorClasses + ' ' + params.attributes.class %}
+  {% endif %}
+  {% set apiErrorAttributes = (params.attributes or {}) | objectMerge({ class: apiErrorClasses }) %}
+  <div {{ govukAttributes(apiErrorAttributes) }}>
     {%- if apiErrorMessageHtml %}
       {{- apiErrorMessageHtml | safe -}}
     {%- elif params.text %}
