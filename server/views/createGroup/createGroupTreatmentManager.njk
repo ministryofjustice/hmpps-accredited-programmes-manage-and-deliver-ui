@@ -4,7 +4,7 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
-
+{% from "moj/components/add-another/macro.njk" import mojAddAnother %}
 {% set pageTitle = pageTitle + " - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
 
@@ -12,6 +12,28 @@
 {% block content %}
 <script src="/assets/accessible-autocomplete.min.js"></script>
 <script nonce="{{ cspNonce }}">
+  /**
+   * Removes any accessible-autocomplete markup that has been cloned into a
+   * container and restores its select to a clean, un-enhanced state. The MOJ
+   * 'add another' component builds its template by cloning the first item, which
+   * may already have been enhanced. Because the generated autocomplete input has
+   * no data-name/data-id, the component's reset logic leaves its value behind,
+   * so we strip it here before (re-)enhancing.
+   * @param {Element} container
+   */
+  function stripAccessibleAutocomplete(container) {
+    if (!container || typeof container.querySelectorAll !== 'function') {
+      return;
+    }
+    container.querySelectorAll('.autocomplete__wrapper').forEach(wrapper => wrapper.remove());
+    container.querySelectorAll('select').forEach(selectElement => {
+      selectElement.style.display = '';
+      delete selectElement.dataset.autocompleteEnhanced;
+      selectElement.selectedIndex = 0;
+      selectElement.value = '';
+    });
+  }
+
   /**
    * Enhances a select element with an accessible autocomplete, but only
    * one per element (for example when an item is both present on load and
@@ -45,8 +67,78 @@
     }
   }
 
+  /**
+   * Numbers the visible govukSelect label of each item within a single
+   * add-another block so labels read "Facilitator 1", "Facilitator 2", etc. The
+   * base label text is captured once per label (in a data attribute) so repeated
+   * calls after add/remove stay in step rather than repeating.
+   * @param {Element | null} root
+   */
+  function numberSelectLabels(root) {
+    if (!root || typeof root.querySelectorAll !== 'function') {
+      return;
+    }
+    const items = root.querySelectorAll('.moj-add-another__item');
+    items.forEach((item, index) => {
+      const label = item.querySelector('.govuk-label');
+      if (!label) {
+        return;
+      }
+      if (label.dataset.baseLabel === undefined) {
+        label.dataset.baseLabel = label.textContent.trim();
+      }
+      const baseLabel = label.dataset.baseLabel;
+      const number = index + 1;
+      // If the base label ends with "(optional)" then we want to keep that text but hide it visually,
+      // so we wrap it in a visually hidden span. Otherwise we just append the number to the base label.
+      const isOptional = baseLabel.match(/^(.*?)\s*(\(optional\))\s*$/);
+      if (isOptional) {
+        label.innerHTML = isOptional[1] + ' ' + number + ' ' + '<span class="govuk-visually-hidden">' + 'optional' + '</span>';
+      } else {
+        label.textContent = baseLabel + ' ' + number;
+      }
+    });
+  }
+
+  // Keep the component's cloning template pristine, regardless of whether the
+  // first item was enhanced before the template was captured.
+  document.addEventListener('moj-add-another:create-template', function (event) {
+    const template = event.target;
+    if (template && template.content) {
+      stripAccessibleAutocomplete(template.content);
+    }
+  });
+
   document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.facilitator-form select').forEach(enhanceFacilitatorSelect);
+    // Enhance the standalone treatment manager select.
+    enhanceFacilitatorSelect(document.getElementById('create-group-treatment-manager'));
+
+    // Enhance any facilitator / cover facilitator selects already on the page.
+    document.querySelectorAll('.moj-add-another__items select').forEach(enhanceFacilitatorSelect);
+
+    // Number the visible select labels (Facilitator 1, Facilitator 2, ...).
+    document.querySelectorAll('.moj-add-another').forEach(numberSelectLabels);
+  });
+
+  // When the MOJ 'add another' component clones a new item, clean any stray
+  // autocomplete markup then enhance the new select.
+  document.addEventListener('moj-add-another:add-item', function (event) {
+    const item = event.target;
+    if (!item || typeof item.querySelector !== 'function') {
+      return;
+    }
+    stripAccessibleAutocomplete(item);
+    enhanceFacilitatorSelect(item.querySelector('select'));
+    numberSelectLabels(item.closest('.moj-add-another'));
+  });
+
+  // After an item is removed the component re-indexes the remaining items, so
+  // renumber the visible select labels.
+  document.addEventListener('moj-add-another:remove-item', function (event) {
+    const root = event.target && typeof event.target.closest === 'function'
+      ? event.target.closest('.moj-add-another') || event.target
+      : null;
+    numberSelectLabels(root);
   });
 </script>
 <div class="govuk-width-container">
@@ -68,13 +160,14 @@
           <input type="hidden" name="_csrf" value="{{csrfToken}}">
           {{ govukSelect(createGroupTreatmentManagerArgs) }}
           <h2 class="govuk-label govuk-label--m">Facilitator</h2>
+          {% set facilitatorItems = [] %}
           {% set facilitatorList = facilitators if facilitators.length > 0 else [null] %}
           {% for facilitator in facilitatorList %}
             {% set baseArgs = createExistingGroupFacilitatorArgs(facilitator, loop.index0) if facilitator else createGroupFacilitatorArgs %}
             {% set mergedArgs = {
               id: baseArgs.id,
               name: baseArgs.name,
-              label: { text: baseArgs.label.text ~ ' ' ~ loop.index },
+              label: { text: baseArgs.label.text },
               classes: baseArgs.classes,
               errorMessage: baseArgs.errorMessage,
               items: baseArgs.items,
@@ -83,16 +176,25 @@
                 "data-id": "create-group-facilitator-%index%"
               }
             } %}
-            {{ govukSelect(mergedArgs) }}
+            {% set selectHtml %}{{ govukSelect(mergedArgs) }}{% endset %}
+            {% set _ = facilitatorItems.push({ fieldset: { legend: {}, html: selectHtml } }) %}
           {% endfor %}
+          {{ mojAddAnother({
+            id: "create-group-facilitator",
+            itemLabel: "Facilitator",
+            classes: "govuk-!-margin-bottom-8",
+            items: facilitatorItems,
+            layout: "inline"
+          }) }}
           <h2 class="govuk-label govuk-label--m">Cover facilitator (optional)</h2>
+          {% set coverFacilitatorItems = [] %}
           {% set coverFacilitatorList = coverFacilitators if coverFacilitators.length > 0 else [null] %}
           {% for coverFacilitator in coverFacilitatorList %}
             {% set baseArgs = createExistingGroupCoverFacilitatorArgs(coverFacilitator, loop.index0) if coverFacilitator else createGroupCoverFacilitatorArgs %}
             {% set mergedArgs = {
               id: baseArgs.id,
               name: baseArgs.name,
-              label: { text: baseArgs.label.text ~ ' ' ~ loop.index },
+              label: { text: baseArgs.label.text},
               classes: baseArgs.classes,
               errorMessage: baseArgs.errorMessage,
               items: baseArgs.items,
@@ -101,8 +203,18 @@
                 "data-id": "create-group-cover-facilitator-%index%"
               }
             } %}
-            {{ govukSelect(mergedArgs) }}
+            {% set selectHtml %}{{ govukSelect(mergedArgs) }}{% endset %}
+            {% set _ = coverFacilitatorItems.push({ fieldset: { legend: {}, html: selectHtml } }) %}
           {% endfor %}
+          {{ mojAddAnother({
+            id: "create-group-cover-facilitator",
+            itemLabel: "Cover facilitator (optional)",
+            addAnotherButtonText: "Add another cover facilitator",
+            removeButtonSuffixText: "cover facilitator %{number}",
+            classes: "govuk-!-margin-bottom-8",
+            items: coverFacilitatorItems,
+            layout: "inline"
+          }) }}
 
           {% if isEditJourney %}
             {{ govukInsetText({ text: insetText, classes: "govuk-!-margin-top-0" }) }}
