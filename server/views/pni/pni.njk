@@ -1,6 +1,7 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
+{%- from "govuk/macros/attributes.njk" import govukAttributes -%}
 
 {% set pageTitle = pageTitle + " - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -9,6 +10,15 @@
   {% block content %}
     <main class="govuk-main-wrapper" id="main-content">
         <div class="govuk-grid-row">
+          {% if showTopDataUnavailableMessage %}
+            <div class="govuk-grid-column-full">
+              {% set params = {
+                attributes: { class: 'govuk-!-margin-bottom-4' },
+                apiErrorMessageKey: 'ndeliusOrOasys'
+              } %}
+              {% include "../apiErrorMessages.njk" %}
+            </div>
+          {% endif %}
           {% include "../partials/headerMenu.njk" %}
           <div class="govuk-grid-column-three-quarters">
       
@@ -27,6 +37,13 @@
               {{ mojAlert(presenter.ldcUpdatedSuccessMessageArgs) }}
             {% endif %}
             <p class="govuk-body govuk-!-margin-bottom-6">This is {{ presenter.referral.personName }}'s eligibility for Accredited Programmes, based on their risk and need scores.</p>
+            {% if showTopDataUnavailableMessage %}
+              {% set params = {
+                inset: true,
+                text: 'Programme needs identifier information is currently unavailable. Try again later.'
+              } %}
+              {% include "../apiErrorMessages.njk" %}
+            {% endif %}
           </div>
           <div class="govuk-grid-column-three-quarters">
             <div class="{{pathwayDetails.class}}">
@@ -49,6 +66,13 @@
               </li>
               <li>the programme needs identifier (PNI), which uses the following scores</li>
             </ul>
+            {% if showTopDataUnavailableMessage %}
+              {% set params = {
+                inset: true,
+                text: 'PNI scores are currently unavailable. Try again later.'
+              } %}
+              {% include "../apiErrorMessages.njk" %}
+            {% endif %}
             {{ govukSummaryList(sexSummary) }}
             {{ govukSummaryList(thinkingSummary) }}
             {{ govukSummaryList(relationshipsSummary) }}

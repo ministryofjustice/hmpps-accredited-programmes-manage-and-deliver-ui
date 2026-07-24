@@ -71,6 +71,14 @@ describe(`getLevelText.`, () => {
 })
 
 describe(`formatFigure.`, () => {
+  it('should correctly format zero as 0%', () => {
+    const risks = risksFactory.build()
+    const referral = referralDetailsFactory.build()
+    const presenter = new RisksAndAlertsPresenter('risksAndAlerts', referral, risks)
+
+    expect(presenter.formatFigure(0)).toEqual('0%')
+  })
+
   it('should correctly format the figure with a % symbol', () => {
     const risks = risksFactory.build()
     const referral = referralDetailsFactory.build()

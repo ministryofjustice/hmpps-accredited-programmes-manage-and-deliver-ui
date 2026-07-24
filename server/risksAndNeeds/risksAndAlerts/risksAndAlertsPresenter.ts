@@ -24,7 +24,7 @@ export type RiskLevel = 'HIGH' | 'LOW' | 'MEDIUM' | 'VERY_HIGH' | 'Not Applicabl
 export type RiskLevelOrUnknown = RiskLevel | 'UNKNOWN'
 
 export type ActiveAlerts = {
-  flags: { description: string }[]
+  flags: { description: string }[] | null
   lastUpdated?: string
 }
 
@@ -53,8 +53,8 @@ export default class RisksAndAlertsPresenter extends RisksAndNeedsPresenter {
     return text
   }
 
-  formatFigure(figure?: number): string {
-    return figure ? `${figure}%` : undefined
+  formatFigure(figure?: number): string | undefined {
+    return figure == null ? undefined : `${figure}%`
   }
 
   getBodyHtmlStringWithClass(bodyText: string): string {

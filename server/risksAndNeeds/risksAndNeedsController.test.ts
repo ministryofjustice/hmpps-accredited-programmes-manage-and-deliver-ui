@@ -782,11 +782,106 @@ describe('Risks and alerts section of risks and needs', () => {
       accreditedProgrammesManageAndDeliverService.getRisksAndAlerts.mockResolvedValue(risks)
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/risks-and-needs/risks-and-alerts`).expect(200)
+      return request(app)
+        .get(`/referral/${referralId}/risks-and-needs/risks-and-alerts`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('NDelius, ARNS or OASys data unavailable')
+          expect(res.text).toContain(
+            'Offender group reconviction scale information is currently unavailable. Try again later.',
+          )
+        })
+    })
+
+    it('shows unavailable messages when alerts data is unavailable', async () => {
+      const risks: Risks = risksFactory.build({
+        alerts: null,
+        isLegacy: true,
+      })
+
+      accreditedProgrammesManageAndDeliverService.getRisksAndAlerts.mockResolvedValue(risks)
+
+      const referralId = randomUUID()
+      return request(app)
+        .get(`/referral/${referralId}/risks-and-needs/risks-and-alerts`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('NDelius, ARNS or OASys data unavailable')
+          expect(res.text).toContain('Risk flags information is currently unavailable. Try again later.')
+        })
+    })
+
+    it('does not show OGRS and OVP unavailable messages when scores are zero', async () => {
+      const risks: Risks = risksFactory.build({
+        offenderGroupReconviction: {
+          oneYear: 0,
+          twoYears: 0,
+          scoreLevel: undefined,
+        },
+        offenderViolencePredictor: {
+          oneYear: 0,
+          twoYears: 0,
+          scoreLevel: undefined,
+        },
+        isLegacy: true,
+      })
+
+      accreditedProgrammesManageAndDeliverService.getRisksAndAlerts.mockResolvedValue(risks)
+
+      const referralId = randomUUID()
+      return request(app)
+        .get(`/referral/${referralId}/risks-and-needs/risks-and-alerts`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).not.toContain(
+            'Offender group reconviction scale information is currently unavailable. Try again later.',
+          )
+          expect(res.text).not.toContain(
+            'Offender violence predictor information is currently unavailable. Try again later.',
+          )
+          expect(res.text).toContain('0%')
+        })
     })
 
     it('handles risks and alerts with ogrs4 data', async () => {
       const risks: Risks = risksFactory.build({
+        ogrS4Risks: {
+          allReoffendingScoreType: 'DYNAMIC',
+          allReoffendingScore: 16.8,
+          allReoffendingBand: 'Low',
+          violentReoffendingScoreType: 'DYNAMIC',
+          violentReoffendingScore: 16.94,
+          violentReoffendingBand: 'Low',
+          seriousViolentReoffendingScoreType: 'DYNAMIC',
+          seriousViolentReoffendingScore: 0.28,
+          seriousViolentReoffendingBand: 'Low',
+          directContactSexualReoffendingScore: 55,
+          directContactSexualReoffendingBand: 'Medium',
+          indirectImageContactSexualReoffendingScore: 75,
+          indirectImageContactSexualReoffendingBand: 'High',
+          combinedSeriousReoffendingScoreType: 'DYNAMIC',
+          combinedSeriousReoffendingScore: 0.28,
+          combinedSeriousReoffendingBand: 'Low',
+        },
+        assessmentCompleted: undefined,
+        isLegacy: false,
+      })
+
+      accreditedProgrammesManageAndDeliverService.getRisksAndAlerts.mockResolvedValue(risks)
+
+      const referralId = randomUUID()
+      return request(app)
+        .get(`/referral/${referralId}/risks-and-needs/risks-and-alerts`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('No record found in OASys')
+          expect(res.text).not.toContain('NDelius, ARNS or OASys data unavailable')
+        })
+    })
+
+    it('shows top unavailable message for ogrs4 when data is explicitly unavailable', async () => {
+      const risks: Risks = risksFactory.build({
+        alerts: null,
         ogrS4Risks: {
           allReoffendingScoreType: 'DYNAMIC',
           allReoffendingScore: 16.8,
@@ -811,7 +906,12 @@ describe('Risks and alerts section of risks and needs', () => {
       accreditedProgrammesManageAndDeliverService.getRisksAndAlerts.mockResolvedValue(risks)
 
       const referralId = randomUUID()
-      return request(app).get(`/referral/${referralId}/risks-and-needs/risks-and-alerts`).expect(200)
+      return request(app)
+        .get(`/referral/${referralId}/risks-and-needs/risks-and-alerts`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('NDelius, ARNS or OASys data unavailable')
+        })
     })
 
     it('calls the service with correct parameters', async () => {

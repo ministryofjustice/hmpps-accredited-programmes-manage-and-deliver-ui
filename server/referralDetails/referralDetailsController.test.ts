@@ -109,6 +109,30 @@ describe('referral-details', () => {
           )
         })
     })
+
+    it('shows API error messages when sentence information is unavailable', async () => {
+      const sentenceInformation: SentenceInformation = sentenceInformationFactory.licence().build({
+        sentenceType: null,
+        releaseType: null,
+        licenceConditions: [],
+        licenceEndDate: null,
+        postSentenceSupervisionStartDate: null,
+        postSentenceSupervisionEndDate: null,
+        twoThirdsPoint: null,
+        orderRequirements: [],
+        orderEndDate: null,
+      })
+
+      accreditedProgrammesManageAndDeliverService.getSentenceInformation.mockResolvedValue(sentenceInformation)
+
+      return request(app)
+        .get(`/referral-details/${randomUUID()}/sentence-information`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('NDelius or OASys data unavailable')
+          expect(res.text).toContain('Sentence information is currently unavailable. Try again later.')
+        })
+    })
   })
 })
 

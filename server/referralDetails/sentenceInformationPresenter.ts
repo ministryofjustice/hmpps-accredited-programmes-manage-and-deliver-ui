@@ -71,4 +71,16 @@ export default class SentenceInformationPresenter extends ReferralDetailsPresent
     }
     return this.licenseSummaryList()
   }
+
+  get showTopDataUnavailableMessage(): boolean {
+    return (
+      !this.sentenceInformation.sentenceType &&
+      !this.sentenceInformation.releaseType &&
+      !this.sentenceInformation.orderEndDate &&
+      !this.sentenceInformation.licenceEndDate &&
+      !this.sentenceInformation.twoThirdsPoint &&
+      (this.sentenceInformation.orderRequirements?.length ?? 0) === 0 &&
+      (this.sentenceInformation.licenceConditions?.length ?? 0) === 0
+    )
+  }
 }

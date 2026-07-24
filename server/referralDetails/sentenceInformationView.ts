@@ -26,6 +26,7 @@ export default class SentenceInformationView {
         pageTitle: this.presenter.pageTitle,
         sentenceDetailsSummary: this.sentenceDetailsSummary,
         importFromDeliusText: this.importFromDeliusText,
+        showTopDataUnavailableMessage: this.presenter.showTopDataUnavailableMessage,
       },
     ]
   }

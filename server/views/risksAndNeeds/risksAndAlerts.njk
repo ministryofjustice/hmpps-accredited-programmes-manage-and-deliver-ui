@@ -3,6 +3,14 @@
 {% from "./_ospBox.njk" import ospBox %}
 {% from "components/risk-flag-widget/macro.njk" import riskFlagWidget %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{%- from "govuk/macros/attributes.njk" import govukAttributes -%}
+{% macro unavailableSectionMessage(sectionTitle) %}
+  {% set params = {
+    inset: true,
+    text: sectionTitle ~ ' information is currently unavailable. Try again later.'
+  } %}
+  {% include "../apiErrorMessages.njk" %}
+{% endmacro %}
 
 <div>
 
@@ -10,18 +18,32 @@
 
   <h3 class="govuk-heading-s" data-testid="ogrs-heading">Offender group reconviction scale</h3>
 
-  {{ riskBox(ogrsYear1Box) }}
-  {{ riskBox(ogrsYear2Box) }}
+  {% if ogrsSectionUnavailable %}
+    {{ unavailableSectionMessage('Offender group reconviction scale') }}
+  {% else %}
+    {{ riskBox(ogrsYear1Box) }}
+    {{ riskBox(ogrsYear2Box) }}
+  {% endif %}
+
+ 
 
   <h3 class="govuk-heading-s" data-testid="ovp-heading">Offender violence predictor</h3>
 
-  {{ riskBox(ovpYear1Box) }}
-  {{ riskBox(ovpYear2Box) }}
+  {% if ovpSectionUnavailable %}
+    {{ unavailableSectionMessage('Offender violence predictor') }}
+  {% else %}
+    {{ riskBox(ovpYear1Box) }}
+    {{ riskBox(ovpYear2Box) }}
+  {% endif %}
 
   <h3 class="govuk-heading-s" data-testid="sara-heading">Spousal assault risk assessment</h3>
 
-  {{ riskBox(riskTowardsPartnerBox) }}
-  {{ riskBox(riskTowardsOthersBox) }}
+  {% if saraSectionUnavailable %}
+    {{ unavailableSectionMessage('Spousal assault risk assessment') }}
+  {% else %}
+    {{ riskBox(riskTowardsPartnerBox) }}
+    {{ riskBox(riskTowardsOthersBox) }}
+  {% endif %}
 
   <h3 class="govuk-heading-s" data-testid="rsr-heading">Risk of serious recidivism</h3>
 
@@ -34,7 +56,11 @@
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
   {% endset %}
 
-  {{ riskBox(riskOfSeriousRecidivismBox | objectMerge({ bodyHtml: rsrBody })) }}
+  {% if rsrSectionUnavailable %}
+    {{ unavailableSectionMessage('Risk of serious recidivism') }}
+  {% else %}
+    {{ riskBox(riskOfSeriousRecidivismBox | objectMerge({ bodyHtml: rsrBody })) }}
+  {% endif %}
 
   <h3 class="govuk-heading-s" data-testid="rosh-heading">Risk of serious harm</h3>
 
@@ -46,11 +72,19 @@
     {{ govukTable(roshTable) }}
   {% endset %}
 
-  {{ riskBox(roshRiskBox | objectMerge({ bodyHtml: roshBody })) }}
+  {% if roshSectionUnavailable %}
+    {{ unavailableSectionMessage('Risk of serious harm') }}
+  {% else %}
+    {{ riskBox(roshRiskBox | objectMerge({ bodyHtml: roshBody })) }}
+  {% endif %}
 
   {{ govukInsetText(importedFromNdeliusText) }}
 
   <h3 class="govuk-heading-s" data-testid="alerts-heading">Risk flags</h3>
-  {{ riskFlagWidget(activeAlerts) }}
+  {% if alertsSectionUnavailable %}
+    {{ unavailableSectionMessage('Risk flags') }}
+  {% else %}
+    {{ riskFlagWidget(activeAlerts) }}
+  {% endif %}
 
 </div>

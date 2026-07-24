@@ -1,6 +1,7 @@
 {% extends "../partials/layout.njk" %}
 {%- from "moj/components/side-navigation/macro.njk" import mojSideNavigation -%}
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
+{%- from "govuk/macros/attributes.njk" import govukAttributes -%}
 
 {% set pageTitle = (pageTitle or presenter.pageTitle) + " - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -9,6 +10,19 @@
   {% block content %}
     <main class="govuk-main-wrapper" id="main-content">
         <div class="govuk-grid-row">
+          {% if showTopDataUnavailableMessage %}
+            <div class="govuk-grid-column-full govuk-!-margin-bottom-4">
+              {% set topDataUnavailableApiErrorMessageKey = 'ndeliusOrOasys' %}
+              {% if presenter.subNavValue == 'risksAndAlerts' %}
+                {% set topDataUnavailableApiErrorMessageKey = 'ndeliusArnsOrOasys' %}
+              {% endif %}
+              {% set params = {
+                attributes: {},
+                apiErrorMessageKey: topDataUnavailableApiErrorMessageKey
+              } %}
+              {% include "../apiErrorMessages.njk" %}
+            </div>
+          {% endif %}
           {% include "../partials/headerMenu.njk" %}
           <div class="govuk-grid-column-three-quarters">
             {% if presenter.isCohortUpdated %}
