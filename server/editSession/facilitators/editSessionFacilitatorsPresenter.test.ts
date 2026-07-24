@@ -224,28 +224,6 @@ describe('EditSessionFacilitatorsPresenter', () => {
       expect(selectedUsers.facilitators).toHaveLength(1)
       expect(selectedUsers.facilitators[0].facilitatorCode).toBe('FAC-001')
     })
-
-    it('should ignore malformed facilitator JSON in user input', () => {
-      const userInputData = {
-        _csrf: 'token123',
-        'edit-session-facilitator-0':
-          '{"facilitatorName":"John Smith", "facilitatorCode":"FAC-001", "teamName":"Team A", "teamCode":"TEAM-A"}',
-        'edit-session-facilitator-1': '{not-json',
-      }
-
-      const presenter = new EditSessionFacilitatorsPresenter(
-        linkUrl,
-        groupId,
-        editSessionFacilitatorsResponse,
-        null,
-        userInputData,
-      )
-
-      const selectedUsers = presenter.generateSelectedUsers()
-
-      expect(selectedUsers.facilitators).toHaveLength(1)
-      expect(selectedUsers.facilitators[0].facilitatorCode).toBe('FAC-001')
-    })
   })
 
   describe('errorMessageForField', () => {

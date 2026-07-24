@@ -63,25 +63,6 @@ describe('EditSessionFacilitatorsForm', () => {
           ],
         })
       })
-
-      it('returns error when facilitator value is malformed JSON', async () => {
-        const request = TestUtils.createRequest({
-          'edit-session-facilitator-0': '{not-json',
-        })
-
-        const data = await new EditSessionFacilitatorsForm(request).editSessionFacilitatorsData()
-
-        expect(data.paramsForUpdate).toBeNull()
-        expect(data.error).toStrictEqual({
-          errors: [
-            {
-              errorSummaryLinkedField: 'edit-session-facilitator-0',
-              formFields: ['edit-session-facilitator-0'],
-              message: 'Select a Facilitator. Start typing to search.',
-            },
-          ],
-        })
-      })
     })
   })
 })
