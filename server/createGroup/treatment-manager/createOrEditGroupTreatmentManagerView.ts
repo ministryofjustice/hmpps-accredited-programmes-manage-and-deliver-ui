@@ -18,9 +18,8 @@ export default class CreateOrEditGroupTreatmentManagerView {
       id: 'create-group-treatment-manager',
       name: 'create-group-treatment-manager',
       label: {
-        text: 'Treatment Manager',
-        classes: 'govuk-visually-hidden',
         isPageHeading: false,
+        html: `<h2 class="govuk-label govuk-label--m">Treatment Manager</h2>`,
       },
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.createGroupTreatmentManager.errorMessage),
       items: this.presenter.generateSelectOptions(

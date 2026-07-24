@@ -84,13 +84,7 @@ export default class EditSessionFacilitatorsPresenter {
       .filter(([key]) => key.startsWith('edit-session-facilitator'))
       .map(([, value]) => value as string)
       .filter(userAsJsonString => userAsJsonString !== '')
-      .flatMap(userAsJsonString => {
-        try {
-          return [JSON.parse(userAsJsonString) as EditSessionFacilitatorsRequest]
-        } catch {
-          return []
-        }
-      })
+      .map(userAsJsonString => JSON.parse(userAsJsonString))
   }
 
   errorMessageForField(field: string): string | null {

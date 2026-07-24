@@ -3,7 +3,6 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
-{% from "moj/components/add-another/macro.njk" import mojAddAnother %}
 
 {% set pageTitle = pageTitles + " - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -12,28 +11,6 @@
   {% block content %}
     <script src="/assets/accessible-autocomplete.min.js"></script>
     <script nonce="{{ cspNonce }}">
-      /**
-       * Removes any accessible-autocomplete markup that has been cloned into a
-       * container and restores its select to a clean, un-enhanced state. The MOJ
-       * 'add another' component builds its template by cloning the first item, which
-       * may already have been enhanced. Because the generated autocomplete input has
-       * no data-name/data-id, the component's reset logic leaves its value behind,
-       * so we strip it here before (re-)enhancing.
-       * @param {Element} container
-       */
-      function stripAccessibleAutocomplete(container) {
-        if (!container || typeof container.querySelectorAll !== 'function') {
-          return;
-        }
-        container.querySelectorAll('.autocomplete__wrapper').forEach(wrapper => wrapper.remove());
-        container.querySelectorAll('select').forEach(selectElement => {
-          selectElement.style.display = '';
-          delete selectElement.dataset.autocompleteEnhanced;
-          selectElement.selectedIndex = 0;
-          selectElement.value = '';
-        });
-      }
-
       /**
        * Enhances a select element with an accessible autocomplete, but only
        * one per element (for example when an item is both present on load and
@@ -67,66 +44,8 @@
         }
       }
 
-      /**
-       * Numbers the visible govukSelect label of each item within a single
-       * add-another block so labels read "Facilitator 1", "Facilitator 2", etc. The
-       * base label text is captured once per label (in a data attribute) so repeated
-       * calls after add/remove stay in step rather than repeating.
-       * @param {Element | null} root
-       */
-      function numberSelectLabels(root) {
-        if (!root || typeof root.querySelectorAll !== 'function') {
-          return;
-        }
-        const items = root.querySelectorAll('.moj-add-another__item');
-        items.forEach((item, index) => {
-          const label = item.querySelector('.govuk-label');
-          if (!label) {
-            return;
-          }
-          if (label.dataset.baseLabel === undefined) {
-            label.dataset.baseLabel = label.textContent.trim();
-          }
-          label.textContent = label.dataset.baseLabel + ' ' + (index + 1);
-        });
-      }
-
-      // Keep the component's cloning template pristine, regardless of whether the
-      // first item was enhanced before the template was captured.
-      document.addEventListener('moj-add-another:create-template', function (event) {
-        const template = event.target;
-        if (template && template.content) {
-          stripAccessibleAutocomplete(template.content);
-        }
-      });
-
       document.addEventListener('DOMContentLoaded', function () {
-        // Enhance any facilitator selects already on the page.
-        document.querySelectorAll('.moj-add-another__items select').forEach(enhanceFacilitatorSelect);
-
-        // Number the visible select labels (Facilitator 1, Facilitator 2, ...).
-        document.querySelectorAll('.moj-add-another').forEach(numberSelectLabels);
-      });
-
-      // When the MOJ 'add another' component clones a new item, clean any stray
-      // autocomplete markup then enhance the new select.
-      document.addEventListener('moj-add-another:add-item', function (event) {
-        const item = event.target;
-        if (!item || typeof item.querySelector !== 'function') {
-          return;
-        }
-        stripAccessibleAutocomplete(item);
-        enhanceFacilitatorSelect(item.querySelector('select'));
-        numberSelectLabels(item.closest('.moj-add-another'));
-      });
-
-      // After an item is removed the component re-indexes the remaining items, so
-      // renumber the visible select labels.
-      document.addEventListener('moj-add-another:remove-item', function (event) {
-        const root = event.target && typeof event.target.closest === 'function'
-          ? event.target.closest('.moj-add-another') || event.target
-          : null;
-        numberSelectLabels(root);
+        document.querySelectorAll('.facilitator-form select').forEach(enhanceFacilitatorSelect);
       });
     </script>
 
@@ -155,14 +74,13 @@
             <form method="post" novalidate class="add-another-form facilitator-form">
               <input type="hidden" name="_csrf" value="{{ csrfToken }}">
               <h2 class="govuk-label govuk-label--m">Facilitator</h2>
-              {% set facilitatorItems = [] %}
               {% set facilitatorList = facilitators if facilitators.length > 0 else [null] %}
               {% for facilitator in facilitatorList %}
                 {% set baseArgs = editExistingSessionFacilitatorsArgs(facilitator, loop.index0) if facilitator else editSessionFacilitatorsArgs %}
                 {% set mergedArgs = {
                   id: baseArgs.id,
                   name: baseArgs.name,
-                  label: { text: baseArgs.label.text },
+                  label: { text: baseArgs.label.text ~ ' ' ~ loop.index },
                   classes: baseArgs.classes,
                   errorMessage: baseArgs.errorMessage,
                   items: baseArgs.items,
@@ -171,17 +89,8 @@
                     "data-id": "edit-session-facilitator-%index%"
                   }
                 } %}
-                {% set selectHtml %}{{ govukSelect(mergedArgs) }}{% endset %}
-                {% set _ = facilitatorItems.push({ fieldset: { legend: {}, html: selectHtml } }) %}
+                {{ govukSelect(mergedArgs) }}
               {% endfor %}
-              {{ mojAddAnother({
-                id: "edit-session-facilitator",
-                itemLabel: "Facilitator",
-                addAnotherButtonText: "Add another facilitator",
-                classes: "govuk-!-margin-bottom-4",
-                items: facilitatorItems,
-                layout: "inline"
-              }) }}
 
               {{ govukButton({ text: "Submit", preventDoubleClick: true }) }}
             </form>
