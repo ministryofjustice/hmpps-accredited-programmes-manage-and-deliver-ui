@@ -53,7 +53,7 @@ export default class RisksAndAlertsPresenter extends RisksAndNeedsPresenter {
     return text
   }
 
-  formatFigure(figure?: number): string {
+  formatFigure(figure?: number): string | undefined {
     return figure == null ? undefined : `${figure}%`
   }
 
