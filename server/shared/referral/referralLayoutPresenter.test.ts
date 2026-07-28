@@ -97,6 +97,28 @@ describe('getButtonMenu', () => {
   })
 })
 
+describe('displayLaoBadge', () => {
+  it('returns the restricted access badge when the referral is LAO', () => {
+    const referralDetails = referralDetailsFactory.build({ isLAO: true })
+    const sentenceInformation = sentenceInformationFactory.licence().build()
+
+    const presenter = new SentenceInformationPresenter(referralDetails, 'sentence-information', sentenceInformation)
+
+    expect(presenter.displayLaoBadge()).toEqual(
+      '<span class="moj-badge moj-badge--red govuk-!-margin-bottom-5">RESTRICTED ACCESS</span>',
+    )
+  })
+
+  it('returns an empty string when the referral is not LAO', () => {
+    const referralDetails = referralDetailsFactory.build({ isLAO: false })
+    const sentenceInformation = sentenceInformationFactory.licence().build()
+
+    const presenter = new SentenceInformationPresenter(referralDetails, 'sentence-information', sentenceInformation)
+
+    expect(presenter.displayLaoBadge()).toEqual('')
+  })
+})
+
 describe('pageTitle', () => {
   it('returns the expected page title for sentence information', () => {
     const presenter = buildPresenter()

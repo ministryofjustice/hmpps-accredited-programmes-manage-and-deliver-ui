@@ -2939,6 +2939,11 @@ export interface components {
        * @example Team A
        */
       reportingTeam: string
+      /**
+       * @description Whether the person associated with this referral is a Leave of Absence (LOA) offender.
+       * @example false
+       */
+      isLAO: boolean
     }
     SentenceInformation: {
       /**
@@ -3376,12 +3381,12 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      pageable?: components['schemas']['PageableObject']
-      sort?: components['schemas']['SortObject']
       first?: boolean
       last?: boolean
       /** Format: int32 */
       numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
+      sort?: components['schemas']['SortObject']
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
@@ -3422,8 +3427,8 @@ export interface components {
       lao?: boolean | null
     }
     SortObject: {
-      unsorted?: boolean
       sorted?: boolean
+      unsorted?: boolean
       empty?: boolean
     }
     StatusFilterValues: {
@@ -4064,12 +4069,12 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      pageable?: components['schemas']['PageableObject']
-      sort?: components['schemas']['SortObject']
       first?: boolean
       last?: boolean
       /** Format: int32 */
       numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
+      sort?: components['schemas']['SortObject']
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
@@ -4164,12 +4169,12 @@ export interface components {
       totalElements?: number
       /** Format: int32 */
       totalPages?: number
-      pageable?: components['schemas']['PageableObject']
-      sort?: components['schemas']['SortObject']
       first?: boolean
       last?: boolean
       /** Format: int32 */
       numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
+      sort?: components['schemas']['SortObject']
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]

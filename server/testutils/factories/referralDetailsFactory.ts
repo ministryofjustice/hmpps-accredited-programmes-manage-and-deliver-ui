@@ -22,4 +22,5 @@ export default ReferralDetailsFactory.define(({ sequence }) => ({
   currentlyAllocatedGroupCode: null as string | null,
   pdu: 'London',
   reportingTeam: 'team A',
+  isLAO: false,
 }))

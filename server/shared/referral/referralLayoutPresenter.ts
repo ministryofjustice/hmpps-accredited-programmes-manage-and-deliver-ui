@@ -149,4 +149,8 @@ export default class ReferralLayoutPresenter {
         return this.referral.personName
     }
   }
+
+  displayLaoBadge() {
+    return `${this.referral.isLAO ? '<span class="moj-badge moj-badge--red govuk-!-margin-bottom-5">RESTRICTED ACCESS</span>' : ''}`
+  }
 }

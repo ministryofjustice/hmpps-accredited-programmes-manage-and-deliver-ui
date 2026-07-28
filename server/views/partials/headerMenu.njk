@@ -1,7 +1,8 @@
 {%- from "moj/components/button-menu/macro.njk" import mojButtonMenu -%}
 <div class="govuk-grid-column-three-quarters">
     <span class="govuk-caption-xl">{{ presenter.headerMenu.caption }}</span>
-    <h1 class="govuk-heading-xl">{{ presenter.headerMenu.heading }}</h1>
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">{{ presenter.headerMenu.heading }}</h1>
+    {{ presenter.displayLaoBadge() | safe }}
 </div>
 <div class="govuk-grid-column-one-quarter">
     <div class="moj-button-group moj-button-group--inline header-menu-button">

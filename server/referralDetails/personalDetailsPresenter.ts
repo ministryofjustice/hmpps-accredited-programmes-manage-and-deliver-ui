@@ -1,4 +1,4 @@
-import { PersonalDetails, ReferralDetails } from '@manage-and-deliver-api'
+import { PersonalDetails, ReferralCaseListItem, ReferralDetails } from '@manage-and-deliver-api'
 import DateUtils from '../utils/dateUtils'
 import { InsetTextArgs } from '../utils/govukFrontendTypes'
 import { SummaryListItem } from '../utils/summaryList'
