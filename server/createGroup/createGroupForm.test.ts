@@ -188,6 +188,32 @@ describe('CreateGroupForm', () => {
           })
           expect(data.error).toBeNull()
         })
+
+        it('allows past dates for region in allowed list (N57)', async () => {
+          const request = TestUtils.createRequest({
+            'create-group-date': '1/1/2000',
+          })
+
+          const data = await new CreateOrEditGroupForm(request, undefined, 'N57').createOrEditGroupDateData()
+
+          expect(data.paramsForUpdate).toStrictEqual({
+            earliestStartDate: '1/1/2000',
+          })
+          expect(data.error).toBeNull()
+        })
+
+        it('allows past dates for region in allowed list (N59)', async () => {
+          const request = TestUtils.createRequest({
+            'create-group-date': '1/1/2000',
+          })
+
+          const data = await new CreateOrEditGroupForm(request, undefined, 'N59').createOrEditGroupDateData()
+
+          expect(data.paramsForUpdate).toStrictEqual({
+            earliestStartDate: '1/1/2000',
+          })
+          expect(data.error).toBeNull()
+        })
       })
     })
   })
