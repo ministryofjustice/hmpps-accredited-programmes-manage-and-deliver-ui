@@ -298,7 +298,7 @@ describe('LDC cohort display', () => {
 
     const tableArgs = presenter.groupTableArgs
     expect(tableArgs.rows[0][4]).toEqual({
-      html: 'General offence LDC</br><span class="moj-badge moj-badge--bright-purple">LDC</span>',
+      html: 'General offence</br><span class="moj-badge moj-badge--bright-purple">LDC</span>',
     })
   })
 
@@ -319,7 +319,7 @@ describe('LDC cohort display', () => {
 
     const tableArgs = presenter.groupTableArgs
     expect(tableArgs.rows[0][4]).toEqual({
-      html: 'Sexual offence LDC</br><span class="moj-badge moj-badge--bright-purple">LDC</span>',
+      html: 'Sexual offence</br><span class="moj-badge moj-badge--bright-purple">LDC</span>',
     })
   })
 
@@ -705,7 +705,7 @@ describe('cohort cell generation', () => {
     )
 
     expect(presenter.getCohortCell(group)).toEqual({
-      html: 'General offence LDC</br><span class="moj-badge moj-badge--bright-purple">LDC</span>',
+      html: 'General offence</br><span class="moj-badge moj-badge--bright-purple">LDC</span>',
     })
   })
 })

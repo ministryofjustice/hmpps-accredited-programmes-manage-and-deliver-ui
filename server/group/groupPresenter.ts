@@ -8,8 +8,8 @@ import DateUtils from '../utils/dateUtils'
 const cohortConfigMap: Record<ProgrammeGroupCohortEnum, string> = {
   SEXUAL: 'Sexual offence',
   GENERAL: 'General offence',
-  GENERAL_LDC: 'General offence LDC',
-  SEXUAL_LDC: 'Sexual offence LDC',
+  GENERAL_LDC: 'General offence',
+  SEXUAL_LDC: 'Sexual offence',
 }
 
 export enum GroupListPageSection {
