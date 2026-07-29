@@ -23,35 +23,17 @@ export default class RoshAnalysisPresenter extends RisksAndNeedsPresenter {
 
   roshAnalsysisSummaryList(): SummaryListItem[] {
     return [
-      { key: 'What exactly did they do', lines: [this.roshAnalysis.offenceDetails] },
-      { key: 'Where and when did they do it?', lines: [this.roshAnalysis.whereAndWhen] },
       {
-        key: 'How did they do it (was there any pre planning, use of weapon, tool etc)',
-        lines: [this.roshAnalysis.howDone],
+        key: 'Identify behaviours or incidents that evidence the individuals’s ability to cause serious harm, and when they happened',
+        lines: this.roshAnalysis.identifyBehavioursIncidents
+          ? [this.roshAnalysis.identifyBehavioursIncidents]
+          : ['No information available'],
       },
       {
-        key: 'Who were the victims (were there concerns about targeting, type, age, race or vulnerability of victim)?',
-        lines: [this.roshAnalysis.whoVictims],
-      },
-      {
-        key: 'Was anyone else present / involved?',
-        lines: [this.roshAnalysis.anyoneElsePresent],
-      },
-      {
-        key: 'Why did they do it (motivation and triggers)?',
-        lines: [this.roshAnalysis.whyDone],
-      },
-      {
-        key: 'Source of information',
-        lines: [this.roshAnalysis.sources],
-      },
-      {
-        key: "Identify behaviours / incidents that evidence the individual's ability to cause serious harm and when they happened",
-        lines: [this.roshAnalysis.identifyBehavioursIncidents],
-      },
-      {
-        key: 'Provide an analysis of any patterns related to these behaviours / incidents, for example: victims, triggers, locations, impact',
-        lines: [this.roshAnalysis.analysisBehaviourIncidents],
+        key: 'Provide an analysis of any patterns related to these behaviours or incidents, for example victims, triggers, locations, impact',
+        lines: this.roshAnalysis.analysisBehaviourIncidents
+          ? [this.roshAnalysis.analysisBehaviourIncidents]
+          : ['No information available'],
       },
     ].filter(item => item.lines.every(line => line !== null))
   }
