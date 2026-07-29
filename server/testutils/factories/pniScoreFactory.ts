@@ -49,4 +49,5 @@ export default PniScoreFactory.define(() => ({
   },
   validationErrors: [''],
   overallIntensity: 'HIGH' as PniScore['overallIntensity'],
+  displayIneligibleWarning: false,
 }))
