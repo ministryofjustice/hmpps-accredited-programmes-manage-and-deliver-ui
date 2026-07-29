@@ -68,6 +68,20 @@ describe('PniPresenter', () => {
       })
     })
 
+    it('returns the pathway content for the given person name and ALTERNATIVE_PATHWAY programme pathway with displayIneligibleWarning flag', () => {
+      pniScore.overallIntensity = 'ALTERNATIVE_PATHWAY'
+      pniScore.displayIneligibleWarning = true
+      const presenter = new PniPresenter('12345', referralDetails, pniScore)
+      const pathwayContent = presenter.getPathwayDetails()
+
+      expect(pathwayContent).toEqual({
+        bodyText:
+          'Based on the OASys risk and needs scores, Alex River may not be eligible for Building Choices. If a pre-sentence or pre-release programme needs identifier (PNI) has already been completed in EPF, use that result instead. If EPF says that they are eligible for Building Choices, they are still eligible now.',
+        class: 'rosh-widget rosh-widget--alternative govuk-!-margin-bottom-6',
+        headingText: 'NOT ELIGIBLE',
+      })
+    })
+
     it('returns the pathway content for the given person name and MISSING_INFORMATION programme pathway', () => {
       pniScore.overallIntensity = 'MISSING_INFORMATION'
       const presenter = new PniPresenter('12345', referralDetails, pniScore)
