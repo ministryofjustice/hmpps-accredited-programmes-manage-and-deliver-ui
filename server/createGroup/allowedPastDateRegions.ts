@@ -2,7 +2,7 @@
  * CreateGroupFormTest.test.ts also needs to be updated to reflect the change to the region
  */
 
-export const ALLOWED_PAST_DATE_REGIONS: string[] = ['N54']
+export const ALLOWED_PAST_DATE_REGIONS: string[] = ['N54', 'N57', 'N59']
 
 /**
  * Checks if the region restriction for past dates is enabled.
