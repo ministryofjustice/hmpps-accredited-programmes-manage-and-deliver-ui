@@ -262,7 +262,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
       return ''
     }
     if (hasFilters) {
-      return 'No results found. Clear or change the filters'
+      return 'No results found. Clear or change the filters.'
     }
 
     return this.section === GroupAllocationsPageSection.Allocated
