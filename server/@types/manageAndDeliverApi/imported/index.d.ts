@@ -385,6 +385,22 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/dev/seed/groups': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['seedGroups']
+    delete: operations['dangerouslyDeleteAllGroups']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/admin/referral/{referralId}/repoint-sentence-reference': {
     parameters: {
       query?: never
@@ -2198,16 +2214,26 @@ export interface components {
        */
       message: string
     }
+    ReferralSeedingResult: {
+      /** Format: int32 */
+      count: number
+      referrals: components['schemas']['SeededReferralInfo'][]
+    }
     SeededReferralInfo: {
       referralId: string
       crn: string
       personName: string
       requirementId: string
     }
-    SeedingResult: {
+    GroupSeedingResult: {
       /** Format: int32 */
       count: number
-      referrals: components['schemas']['SeededReferralInfo'][]
+      groups: components['schemas']['SeededGroupInfo'][]
+    }
+    SeededGroupInfo: {
+      groupId: string
+      groupCode: string
+      regionName: string
     }
     CreateAvailability: {
       /**
@@ -2939,6 +2965,11 @@ export interface components {
        * @example Team A
        */
       reportingTeam: string
+      /**
+       * @description Whether the person associated with this referral is a Limited Access Offender (LAO).
+       * @example false
+       */
+      isLAO: boolean
     }
     SentenceInformation: {
       /**
@@ -3275,6 +3306,11 @@ export interface components {
        * @example false
        */
       hasLdc: boolean
+      /**
+       * @description Whether to display the ineligible warning on the UI
+       * @example false
+       */
+      displayIneligibleWarning: boolean
       /**
        * Format: int32
        * @description The LDC (Learning Disabilities and Challenges) score
@@ -5931,7 +5967,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          '*/*': components['schemas']['SeedingResult']
+          '*/*': components['schemas']['ReferralSeedingResult']
         }
       }
       /** @description Bad Request */
@@ -5946,6 +5982,66 @@ export interface operations {
     }
   }
   dangerouslyDeleteAllReferrals: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['TeardownResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  seedGroups: {
+    parameters: {
+      query?: {
+        count?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['GroupSeedingResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  dangerouslyDeleteAllGroups: {
     parameters: {
       query?: never
       header?: never

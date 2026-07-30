@@ -19,6 +19,7 @@ describe(`getAvailabilityTableArgs.`, () => {
       currentStatusDescription: 'Awaiting assessment',
       pdu: 'London',
       reportingTeam: 'team A',
+      isLAO: true,
     }
     const availability: Availability = {
       id: '533f391d-a4dd-4a3f-b53d-e8ff2ab5db86',
@@ -155,6 +156,7 @@ describe('availabilityTableHeading', () => {
       currentStatusDescription: 'Awaiting assessment',
       pdu: 'London',
       reportingTeam: 'team A',
+      isLAO: true,
     }
     const availability: Availability = {
       id: '533f391d-a4dd-4a3f-b53d-e8ff2ab5db86',
@@ -192,6 +194,7 @@ describe('pageTitle', () => {
       currentStatusDescription: 'Awaiting assessment',
       pdu: 'London',
       reportingTeam: 'team A',
+      isLAO: true,
     }
     const availability: Availability = {
       id: '533f391d-a4dd-4a3f-b53d-e8ff2ab5db86',
