@@ -28,6 +28,16 @@ export default class AvailabilityPresenter extends AvailabilityAndMotivationPres
     return 'Availability - Availability and motivation'
   }
 
+  private availabilityStatusTag(dayLabel: string, slotLabel: string, isAvailable: boolean): string {
+    const statusText = isAvailable ? 'available' : 'not available'
+    const screenReaderText = `<span class="govuk-visually-hidden">${slotLabel} ${statusText}</span>`
+    const statusTag = isAvailable
+      ? '<strong aria-hidden="true" class="govuk-tag govuk-tag--green">available</strong>'
+      : '<strong aria-hidden="true" class="govuk-tag govuk-tag--red">not available</strong>'
+
+    return `${screenReaderText}${statusTag}`
+  }
+
   getAvailabilityTableArgs() {
     // Get all the possible headings out of the object e.g. daytime, evening
     const uniqueSlotLabels = [
@@ -47,11 +57,9 @@ export default class AvailabilityPresenter extends AvailabilityAndMotivationPres
       const row: { html?: string; text?: string }[] = [{ text: availability.label }]
       // Get the values for each slot
       uniqueSlotLabels.forEach(label => {
-        const labelValue = availability.slots.find(slot => slot.label === label)?.value
+        const labelValue = availability.slots.find(slot => slot.label === label)?.value ?? false
         row.push({
-          html: labelValue
-            ? '<strong class="govuk-tag govuk-tag--green">available</strong>'
-            : '<strong class="govuk-tag govuk-tag--red">not available</strong>',
+          html: this.availabilityStatusTag(availability.label, label, labelValue),
         })
       })
       // At this point row will look something like [{ text: 'Mondays' }, { html: '<strong class="govuk-tag govuk-tag--green">available</strong>' }, { html: '<strong class="govuk-tag govuk-tag--red">not available</strong>'} ]

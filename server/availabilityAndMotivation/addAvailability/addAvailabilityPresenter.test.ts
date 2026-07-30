@@ -102,12 +102,12 @@ describe(`generateCheckboxItems.`, () => {
       },
       {
         value: 'Mondays-daytime',
-        text: 'daytime',
+        html: '<span class="govuk-visually-hidden">Mondays </span>daytime',
         checked: true,
       },
       {
         value: 'Mondays-evening',
-        text: 'evening',
+        html: '<span class="govuk-visually-hidden">Mondays </span>evening',
         checked: false,
       },
     ])
@@ -163,12 +163,12 @@ describe(`generateCheckboxItems.`, () => {
       },
       {
         value: 'Mondays-daytime',
-        text: 'daytime',
+        html: '<span class="govuk-visually-hidden">Mondays </span>daytime',
         checked: true,
       },
       {
         value: 'Mondays-evening',
-        text: 'evening',
+        html: '<span class="govuk-visually-hidden">Mondays </span>evening',
         checked: false,
       },
       {
@@ -176,12 +176,12 @@ describe(`generateCheckboxItems.`, () => {
       },
       {
         value: 'Tuesdays-daytime',
-        text: 'daytime',
+        html: '<span class="govuk-visually-hidden">Tuesdays </span>daytime',
         checked: false,
       },
       {
         value: 'Tuesdays-evening',
-        text: 'evening',
+        html: '<span class="govuk-visually-hidden">Tuesdays </span>evening',
         checked: true,
       },
       {
@@ -189,12 +189,12 @@ describe(`generateCheckboxItems.`, () => {
       },
       {
         value: 'Wednesdays-daytime',
-        text: 'daytime',
+        html: '<span class="govuk-visually-hidden">Wednesdays </span>daytime',
         checked: true,
       },
       {
         value: 'Wednesdays-evening',
-        text: 'evening',
+        html: '<span class="govuk-visually-hidden">Wednesdays </span>evening',
         checked: true,
       },
     ])
