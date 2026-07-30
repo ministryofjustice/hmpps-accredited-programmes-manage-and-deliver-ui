@@ -32,6 +32,13 @@ export const formatCohort = (cohort?: string): string | null => {
   // Capitalize first letter only
   return formatted.charAt(0).toUpperCase() + formatted.slice(1)
 }
+export const formatCohortSuccessMessage = (cohort?: string): string | null => {
+  const formattedText = cohort
+    .toLowerCase() // convert to lowercase
+    .replace('_', ' ') // replace underscore with space
+
+  return formattedText
+}
 
 export const convertToUrlFriendlyKebabCase = (sentence: string): string =>
   isBlank(sentence)
