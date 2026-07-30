@@ -385,6 +385,22 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/dev/seed/groups': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['seedGroups']
+    delete: operations['dangerouslyDeleteAllGroups']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/admin/referral/{referralId}/repoint-sentence-reference': {
     parameters: {
       query?: never
@@ -2198,16 +2214,26 @@ export interface components {
        */
       message: string
     }
+    ReferralSeedingResult: {
+      /** Format: int32 */
+      count: number
+      referrals: components['schemas']['SeededReferralInfo'][]
+    }
     SeededReferralInfo: {
       referralId: string
       crn: string
       personName: string
       requirementId: string
     }
-    SeedingResult: {
+    GroupSeedingResult: {
       /** Format: int32 */
       count: number
-      referrals: components['schemas']['SeededReferralInfo'][]
+      groups: components['schemas']['SeededGroupInfo'][]
+    }
+    SeededGroupInfo: {
+      groupId: string
+      groupCode: string
+      regionName: string
     }
     CreateAvailability: {
       /**
@@ -2939,6 +2965,11 @@ export interface components {
        * @example Team A
        */
       reportingTeam: string
+      /**
+       * @description Whether the person associated with this referral is a Limited Access Offender (LAO).
+       * @example false
+       */
+      isLAO: boolean
     }
     SentenceInformation: {
       /**
@@ -3276,7 +3307,7 @@ export interface components {
        */
       hasLdc: boolean
       /**
-       * @description Whether tto display the ineligible warning on the UI
+       * @description Whether to display the ineligible warning on the UI
        * @example false
        */
       displayIneligibleWarning: boolean
@@ -3377,16 +3408,16 @@ export interface components {
       reportingTeams: string[]
     }
     PageReferralCaseListItem: {
-      /** Format: int32 */
-      totalPages?: number
       /** Format: int64 */
       totalElements?: number
       /** Format: int32 */
-      numberOfElements?: number
-      first?: boolean
-      last?: boolean
+      totalPages?: number
       pageable?: components['schemas']['PageableObject']
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
@@ -3424,10 +3455,11 @@ export interface components {
       sentenceEndDate?: string | null
       /** @enum {string|null} */
       sentenceEndDateSource?: 'REQUIREMENT' | 'LICENCE_CONDITION' | null
+      lao?: boolean | null
     }
     SortObject: {
-      sorted?: boolean
       unsorted?: boolean
+      sorted?: boolean
       empty?: boolean
     }
     StatusFilterValues: {
@@ -4064,16 +4096,16 @@ export interface components {
       regionName: string
     }
     PageGroup: {
-      /** Format: int32 */
-      totalPages?: number
       /** Format: int64 */
       totalElements?: number
       /** Format: int32 */
-      numberOfElements?: number
-      first?: boolean
-      last?: boolean
+      totalPages?: number
       pageable?: components['schemas']['PageableObject']
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
@@ -4098,6 +4130,11 @@ export interface components {
        * @example X933590
        */
       crn: string
+      /**
+       * @description Whether the person has Limited Access Offender (LAO) status.
+       * @example false
+       */
+      lao: boolean
       /**
        * @description The name of the person associated with this referral.
        * @example John Doe
@@ -4159,16 +4196,16 @@ export interface components {
       activeProgrammeGroupId: string | null
     }
     PageGroupItem: {
-      /** Format: int32 */
-      totalPages?: number
       /** Format: int64 */
       totalElements?: number
       /** Format: int32 */
-      numberOfElements?: number
-      first?: boolean
-      last?: boolean
+      totalPages?: number
       pageable?: components['schemas']['PageableObject']
       sort?: components['schemas']['SortObject']
+      first?: boolean
+      last?: boolean
+      /** Format: int32 */
+      numberOfElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
@@ -4335,6 +4372,7 @@ export interface components {
       /** Format: uuid */
       referralId: string
       crn: string
+      lao: boolean
       attendance: string
       sessionNotes: string
     }
@@ -5929,7 +5967,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          '*/*': components['schemas']['SeedingResult']
+          '*/*': components['schemas']['ReferralSeedingResult']
         }
       }
       /** @description Bad Request */
@@ -5944,6 +5982,66 @@ export interface operations {
     }
   }
   dangerouslyDeleteAllReferrals: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['TeardownResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  seedGroups: {
+    parameters: {
+      query?: {
+        count?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['GroupSeedingResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  dangerouslyDeleteAllGroups: {
     parameters: {
       query?: never
       header?: never

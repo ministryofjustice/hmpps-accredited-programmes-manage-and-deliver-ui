@@ -451,6 +451,64 @@ describe('generateTableRows', () => {
     })
   })
 
+  it('should display RESTRICTED ACCESS badge in the name column when the referral is an LAO case', () => {
+    const laoReferral = referralCaseListItemFactory.build({
+      referralId: 'REF999',
+      personName: 'John Smith',
+      crn: 'X111222',
+      lao: true,
+    })
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+      .pageContent([laoReferral])
+      .build() as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      1,
+      referralCaseListItemPage,
+      {} as CaselistFilter,
+      '',
+      true,
+      caseListFilters,
+      0,
+      'test location',
+    )
+
+    const rows = presenter.generateTableRows()
+
+    expect(rows[0][0]).toEqual({
+      html: `<a href='/referral-details/REF999/personal-details'>John Smith</a><span>X111222</span></br><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>`,
+      attributes: { 'data-sort-value': 'John Smith' },
+    })
+  })
+
+  it('should not display RESTRICTED ACCESS badge in the name column when the referral is not an LAO case', () => {
+    const nonLaoReferral = referralCaseListItemFactory.build({
+      referralId: 'REF888',
+      personName: 'Jane Doe',
+      crn: 'X333444',
+      lao: false,
+    })
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+      .pageContent([nonLaoReferral])
+      .build() as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      1,
+      referralCaseListItemPage,
+      {} as CaselistFilter,
+      '',
+      true,
+      caseListFilters,
+      0,
+      'test location',
+    )
+
+    const rows = presenter.generateTableRows()
+
+    expect(rows[0][0]).toEqual({
+      html: `<a href='/referral-details/REF888/personal-details'>Jane Doe</a><span>X333444</span>`,
+      attributes: { 'data-sort-value': 'Jane Doe' },
+    })
+  })
+
   it('should generate multiple rows with correct sort values', () => {
     const referralCaseListItems = [
       referralCaseListItemFactory.build({

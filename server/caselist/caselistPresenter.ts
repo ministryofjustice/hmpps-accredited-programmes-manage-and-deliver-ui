@@ -141,7 +141,7 @@ export default class CaselistPresenter {
       const sentenceEndDateEpoch = new Date(formattedSentenceEndDate).getTime()
       referralData.push([
         {
-          html: `<a href='/referral-details/${referral.referralId}/personal-details'>${referral.personName}</a><span>${referral.crn}</span>`,
+          html: `<a href='/referral-details/${referral.referralId}/personal-details'>${referral.personName}</a><span>${referral.crn}</span>${CaselistUtils.hasLaoBadgeHtml(referral)}`,
           attributes: { 'data-sort-value': referral.personName },
         },
         { text: referral.pdu },
