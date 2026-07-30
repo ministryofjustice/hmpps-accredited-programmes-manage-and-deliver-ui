@@ -43,7 +43,7 @@ export default class SchedulePresenter extends GroupServiceLayoutPresenter {
           },
         },
         {
-          text: session.time,
+          text: session.time.charAt(0).toUpperCase() + session.time.slice(1),
         },
       ])
     })

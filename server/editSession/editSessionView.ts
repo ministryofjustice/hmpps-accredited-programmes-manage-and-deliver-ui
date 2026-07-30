@@ -39,7 +39,7 @@ export default class EditSessionView {
             text: 'Time',
           },
           value: {
-            text: sessionDetailsObj.time,
+            text: sessionDetailsObj.time.charAt(0).toUpperCase() + sessionDetailsObj.time.slice(1),
           },
           actions: {
             items: [
