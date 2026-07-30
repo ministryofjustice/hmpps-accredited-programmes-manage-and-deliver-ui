@@ -9,7 +9,7 @@ export default class RoshAnalysisView {
     return {
       ...ViewUtils.summaryListArgsWithSummaryCard(
         this.presenter.roshAnalsysisSummaryList(),
-        'R6.2 - Previous behaviour',
+        'Section R6.2 - Current and previous behaviour',
       ),
     }
   }
