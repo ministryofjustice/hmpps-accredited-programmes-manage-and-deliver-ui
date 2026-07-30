@@ -1,6 +1,6 @@
 import { ReferralDetails } from '@manage-and-deliver-api'
 import { MojAlertComponentArgs } from '../../interfaces/alertComponentArgs'
-import { formatCohort } from '../../utils/utils'
+import { formatCohortSuccessMessage } from '../../utils/utils'
 
 export enum HorizontalNavValues {
   referralDetailsTab = 'referralDetails',
@@ -79,7 +79,7 @@ export default class ReferralLayoutPresenter {
           title: 'Cohort changed',
           showTitleAsHeading: true,
           dismissible: true,
-          text: `${this.referral.personName} is in the ${formatCohort(this.referral.cohort)} cohort`,
+          text: `${this.referral.personName} is in the ${formatCohortSuccessMessage(this.referral.cohort)} cohort.`,
         }
       : null
   }
