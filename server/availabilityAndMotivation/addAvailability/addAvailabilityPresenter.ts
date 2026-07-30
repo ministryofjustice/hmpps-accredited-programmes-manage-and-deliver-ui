@@ -68,7 +68,7 @@ export default class AddAvailabilityPresenter {
         }
       })
     }
-    const checkboxes: { divider?: string; value?: string; text?: string; checked?: boolean }[] = []
+    const checkboxes: { divider?: string; value?: string; html?: string; checked?: boolean }[] = []
     this.availability.availabilities.forEach(day => {
       checkboxes.push({
         divider: day.label,
@@ -76,7 +76,7 @@ export default class AddAvailabilityPresenter {
       day.slots.forEach(slot => {
         checkboxes.push({
           value: `${day.label}-${slot.label}`,
-          text: slot.label,
+          html: `<span class="govuk-visually-hidden">${day.label} </span>${slot.label}`,
           checked: slot.value,
         })
       })

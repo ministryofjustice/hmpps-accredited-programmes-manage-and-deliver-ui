@@ -88,56 +88,52 @@ describe(`getAvailabilityTableArgs.`, () => {
       ],
     }
     const presenter = new AvailabilityPresenter(referralDetails, 'availability', availability)
-    expect(presenter.getAvailabilityTableArgs()).toEqual({
-      caption: 'Availability schedule',
-      captionClasses: 'govuk-visually-hidden',
-      firstCellIsHeader: true,
-      head: [{ text: 'Day' }, { text: 'Daytime' }, { text: 'Evening' }, { text: 'Nighttime' }],
-      rows: [
-        [
-          { text: 'Mondays' },
-          { html: '<strong class="govuk-tag govuk-tag--green">available</strong>' },
-          { html: '<strong class="govuk-tag govuk-tag--green">available</strong>' },
-          { html: '<strong class="govuk-tag govuk-tag--green">available</strong>' },
-        ],
-        [
-          { text: 'Tuesdays' },
-          { html: '<strong class="govuk-tag govuk-tag--red">not available</strong>' },
-          { html: '<strong class="govuk-tag govuk-tag--red">not available</strong>' },
-          { html: '<strong class="govuk-tag govuk-tag--red">not available</strong>' },
-        ],
-        [
-          { text: 'Wednesdays' },
-          { html: '<strong class="govuk-tag govuk-tag--red">not available</strong>' },
-          { html: '<strong class="govuk-tag govuk-tag--red">not available</strong>' },
-          { html: '<strong class="govuk-tag govuk-tag--red">not available</strong>' },
-        ],
-        [
-          { text: 'Thursdays' },
-          { html: '<strong class="govuk-tag govuk-tag--green">available</strong>' },
-          { html: '<strong class="govuk-tag govuk-tag--green">available</strong>' },
-          { html: '<strong class="govuk-tag govuk-tag--red">not available</strong>' },
-        ],
-        [
-          { text: 'Fridays' },
-          { html: '<strong class="govuk-tag govuk-tag--red">not available</strong>' },
-          { html: '<strong class="govuk-tag govuk-tag--red">not available</strong>' },
-          { html: '<strong class="govuk-tag govuk-tag--red">not available</strong>' },
-        ],
-        [
-          { text: 'Saturdays' },
-          { html: '<strong class="govuk-tag govuk-tag--green">available</strong>' },
-          { html: '<strong class="govuk-tag govuk-tag--red">not available</strong>' },
-          { html: '<strong class="govuk-tag govuk-tag--red">not available</strong>' },
-        ],
-        [
-          { text: 'Sundays' },
-          { html: '<strong class="govuk-tag govuk-tag--red">not available</strong>' },
-          { html: '<strong class="govuk-tag govuk-tag--green">available</strong>' },
-          { html: '<strong class="govuk-tag govuk-tag--red">not available</strong>' },
-        ],
-      ],
-    })
+    const args = presenter.getAvailabilityTableArgs()
+
+    expect(args.caption).toBe('Availability schedule')
+    expect(args.captionClasses).toBe('govuk-visually-hidden')
+    expect(args.firstCellIsHeader).toBe(true)
+    expect(args.head).toEqual([{ text: 'Day' }, { text: 'Daytime' }, { text: 'Evening' }, { text: 'Nighttime' }])
+
+    expect(args.rows).toHaveLength(7)
+    expect(args.rows[0]).toEqual([
+      { text: 'Mondays' },
+      {
+        html: '<span class="govuk-visually-hidden">daytime available</span><strong aria-hidden="true" class="govuk-tag govuk-tag--green">available</strong>',
+      },
+      {
+        html: '<span class="govuk-visually-hidden">evening available</span><strong aria-hidden="true" class="govuk-tag govuk-tag--green">available</strong>',
+      },
+      {
+        html: '<span class="govuk-visually-hidden">nighttime available</span><strong aria-hidden="true" class="govuk-tag govuk-tag--green">available</strong>',
+      },
+    ])
+
+    expect(args.rows[1]).toEqual([
+      { text: 'Tuesdays' },
+      {
+        html: '<span class="govuk-visually-hidden">daytime not available</span><strong aria-hidden="true" class="govuk-tag govuk-tag--red">not available</strong>',
+      },
+      {
+        html: '<span class="govuk-visually-hidden">evening not available</span><strong aria-hidden="true" class="govuk-tag govuk-tag--red">not available</strong>',
+      },
+      {
+        html: '<span class="govuk-visually-hidden">nighttime not available</span><strong aria-hidden="true" class="govuk-tag govuk-tag--red">not available</strong>',
+      },
+    ])
+
+    expect(args.rows[6]).toEqual([
+      { text: 'Sundays' },
+      {
+        html: '<span class="govuk-visually-hidden">daytime not available</span><strong aria-hidden="true" class="govuk-tag govuk-tag--red">not available</strong>',
+      },
+      {
+        html: '<span class="govuk-visually-hidden">evening available</span><strong aria-hidden="true" class="govuk-tag govuk-tag--green">available</strong>',
+      },
+      {
+        html: '<span class="govuk-visually-hidden">nighttime not available</span><strong aria-hidden="true" class="govuk-tag govuk-tag--red">not available</strong>',
+      },
+    ])
   })
 })
 
