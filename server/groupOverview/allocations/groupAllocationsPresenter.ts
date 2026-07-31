@@ -147,8 +147,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
                  </div>`,
         },
         {
-          html: `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0"> ${member.crn}</p>
-                ${member.lao ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`,
+          html: `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0"> ${member.crn}</p>`,
         },
         {
           html: `${member.sentenceEndDate ?? 'No information'}${
@@ -187,8 +186,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
                  </div>`,
         },
         {
-          html: `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0">${member.crn}</p>
-                ${member.lao ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`,
+          html: `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0">${member.crn}</p>`,
         },
         {
           html: `${member.sentenceEndDate ?? 'No information'}${
