@@ -91,7 +91,9 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
       {
         key: 'Probation practitioner email address',
         lines: [`${this.referralDetails.probationPractitionerEmail}`],
-        valueLink: `<a href="mailto:${this.referralDetails.probationPractitionerEmail}">${this.referralDetails.probationPractitionerEmail}</a>`,
+        valueLink: this.referralDetails.probationPractitionerEmail
+          ? `<a href="mailto:${this.referralDetails.probationPractitionerEmail}">${this.referralDetails.probationPractitionerEmail}</a>`
+          : 'No email available',
       },
     ].filter(item => item.lines.every(line => line !== null))
   }
