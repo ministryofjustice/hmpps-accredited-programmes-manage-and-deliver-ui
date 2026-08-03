@@ -86,7 +86,9 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
       },
       {
         key: 'Probation practitioner',
-        lines: [`${this.referralDetails.probationPractitionerName}`],
+        lines: this.referralDetails.probationPractitionerName
+          ? [this.referralDetails.probationPractitionerName]
+          : ['No information available'],
       },
       {
         key: 'Probation practitioner email address',
