@@ -39,7 +39,7 @@ export default class EditSessionView {
             text: 'Time',
           },
           value: {
-            text: sessionDetailsObj.time,
+            text: sessionDetailsObj.timeWithCapitalisedMidday,
           },
           actions: {
             items: [

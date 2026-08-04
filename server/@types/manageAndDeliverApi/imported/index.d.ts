@@ -212,6 +212,29 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/admin/resolve-referral-event-numbers': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Resolve referral event numbers
+     * @description Find and resolve referrals with invalid event numbers by attempting to fetching the correct event number
+     *           |from the nDelius for the particular CRN associated with the referral.
+     *           |
+     *           |Referrals are left untouched when no specific Building Choices Requirement or Licence condition data is found in nDelius.
+     */
+    put: operations['resolveReferralEventNumbers']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/session/{sessionId}/attendance': {
     parameters: {
       query?: never
@@ -364,22 +387,6 @@ export interface paths {
      */
     post: operations['allocateToProgrammeGroup']
     delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/dev/seed/referrals': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post: operations['seedReferrals']
-    delete: operations['dangerouslyDeleteAllReferrals']
     options?: never
     head?: never
     patch?: never
@@ -1010,22 +1017,6 @@ export interface paths {
      * @description Get group by GroupCode and in User region
      */
     get: operations['getGroupInUserRegion']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/dev/seed/health': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['health']
     put?: never
     post?: never
     delete?: never
@@ -2198,17 +2189,6 @@ export interface components {
        */
       message: string
     }
-    SeededReferralInfo: {
-      referralId: string
-      crn: string
-      personName: string
-      requirementId: string
-    }
-    SeedingResult: {
-      /** Format: int32 */
-      count: number
-      referrals: components['schemas']['SeededReferralInfo'][]
-    }
     CreateAvailability: {
       /**
        * Format: uuid
@@ -2939,6 +2919,11 @@ export interface components {
        * @example Team A
        */
       reportingTeam: string
+      /**
+       * @description Whether the person associated with this referral is a Limited Access Offender (LAO).
+       * @example false
+       */
+      isLAO: boolean
     }
     SentenceInformation: {
       /**
@@ -3276,7 +3261,7 @@ export interface components {
        */
       hasLdc: boolean
       /**
-       * @description Whether tto display the ineligible warning on the UI
+       * @description Whether to display the ineligible warning on the UI
        * @example false
        */
       displayIneligibleWarning: boolean
@@ -3377,33 +3362,33 @@ export interface components {
       reportingTeams: string[]
     }
     PageReferralCaseListItem: {
-      /** Format: int32 */
-      totalPages?: number
       /** Format: int64 */
       totalElements?: number
       /** Format: int32 */
-      numberOfElements?: number
-      first?: boolean
-      last?: boolean
-      pageable?: components['schemas']['PageableObject']
-      sort?: components['schemas']['SortObject']
+      totalPages?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
+      first?: boolean
+      last?: boolean
+      sort?: components['schemas']['SortObject']
+      pageable?: components['schemas']['PageableObject']
+      /** Format: int32 */
+      numberOfElements?: number
       empty?: boolean
     }
     PageableObject: {
-      paged?: boolean
-      /** Format: int32 */
-      pageNumber?: number
-      /** Format: int32 */
-      pageSize?: number
-      sort?: components['schemas']['SortObject']
-      unpaged?: boolean
       /** Format: int64 */
       offset?: number
+      sort?: components['schemas']['SortObject']
+      /** Format: int32 */
+      pageSize?: number
+      /** Format: int32 */
+      pageNumber?: number
+      paged?: boolean
+      unpaged?: boolean
     }
     ReferralCaseListItem: {
       /** Format: uuid */
@@ -3424,11 +3409,12 @@ export interface components {
       sentenceEndDate?: string | null
       /** @enum {string|null} */
       sentenceEndDateSource?: 'REQUIREMENT' | 'LICENCE_CONDITION' | null
+      lao?: boolean | null
     }
     SortObject: {
+      empty?: boolean
       sorted?: boolean
       unsorted?: boolean
-      empty?: boolean
     }
     StatusFilterValues: {
       /**
@@ -3957,6 +3943,11 @@ export interface components {
        */
       time: string
       /**
+       * @description The time range of the session with special times capitalised
+       * @example Midday to 2pm
+       */
+      timeWithCapitalisedMidday: string
+      /**
        * @description The attendance status for the session
        * @example Attended
        */
@@ -4064,21 +4055,21 @@ export interface components {
       regionName: string
     }
     PageGroup: {
-      /** Format: int32 */
-      totalPages?: number
       /** Format: int64 */
       totalElements?: number
       /** Format: int32 */
-      numberOfElements?: number
-      first?: boolean
-      last?: boolean
-      pageable?: components['schemas']['PageableObject']
-      sort?: components['schemas']['SortObject']
+      totalPages?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
       /** Format: int32 */
       number?: number
+      first?: boolean
+      last?: boolean
+      sort?: components['schemas']['SortObject']
+      pageable?: components['schemas']['PageableObject']
+      /** Format: int32 */
+      numberOfElements?: number
       empty?: boolean
     }
     GroupItem: {
@@ -4098,6 +4089,11 @@ export interface components {
        * @example X933590
        */
       crn: string
+      /**
+       * @description Whether the person has Limited Access Offender (LAO) status.
+       * @example false
+       */
+      lao: boolean
       /**
        * @description The name of the person associated with this referral.
        * @example John Doe
@@ -4159,21 +4155,21 @@ export interface components {
       activeProgrammeGroupId: string | null
     }
     PageGroupItem: {
-      /** Format: int32 */
-      totalPages?: number
       /** Format: int64 */
       totalElements?: number
       /** Format: int32 */
-      numberOfElements?: number
-      first?: boolean
-      last?: boolean
-      pageable?: components['schemas']['PageableObject']
-      sort?: components['schemas']['SortObject']
+      totalPages?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
+      first?: boolean
+      last?: boolean
+      sort?: components['schemas']['SortObject']
+      pageable?: components['schemas']['PageableObject']
+      /** Format: int32 */
+      numberOfElements?: number
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
@@ -4302,6 +4298,11 @@ export interface components {
        */
       timeOfSession: string
       /**
+       * @description The time of the session with special times capitalised
+       * @example 11am to Midday
+       */
+      timeWithCapitalisedMidday: string
+      /**
        * @description The names of the participants in the session
        * @example [
        *       "John Doe",
@@ -4335,6 +4336,7 @@ export interface components {
       /** Format: uuid */
       referralId: string
       crn: string
+      lao: boolean
       attendance: string
       sessionNotes: string
     }
@@ -4375,6 +4377,11 @@ export interface components {
        * @example 11am
        */
       time: string
+      /**
+       * @description The time of the session with special times capitalised
+       * @example Midday to 1pm
+       */
+      timeWithCapitalisedMidday: string
       /**
        * @description The list of people scheduled to attend
        * @example [John Smith, Jane Doe]
@@ -4443,6 +4450,11 @@ export interface components {
        * @example Various times
        */
       time: string
+      /**
+       * @description The time(s) of the session with special times capitalised. For example Midday or Midnight
+       * @example Various times
+       */
+      timeWithCapitalisedMidday: string
     }
     /** @description A session template item with basic information */
     ModuleSessionTemplate: {
@@ -4697,10 +4709,6 @@ export interface components {
       facilitators: components['schemas']['CreateGroupTeamMember'][]
       /** @description The list of coverFacilitators for this group. */
       coverFacilitators?: components['schemas']['CreateGroupTeamMember'][] | null
-    }
-    TeardownResult: {
-      /** Format: int32 */
-      deletedCount: number
     }
   }
   responses: never
@@ -5426,6 +5434,42 @@ export interface operations {
       }
     }
   }
+  resolveReferralEventNumbers: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Event number resolution completed successfully */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content?: never
+      }
+      /** @description Invalid request format */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   createAttendance: {
     parameters: {
       query?: never
@@ -5903,66 +5947,6 @@ export interface operations {
       }
       /** @description The group or referral does not exist */
       404: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  seedReferrals: {
-    parameters: {
-      query?: {
-        count?: number
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['SeedingResult']
-        }
-      }
-      /** @description Bad Request */
-      400: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  dangerouslyDeleteAllReferrals: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['TeardownResult']
-        }
-      }
-      /** @description Bad Request */
-      400: {
         headers: {
           [name: string]: unknown
         }
@@ -7827,37 +7811,6 @@ export interface operations {
       }
       /** @description Forbidden. The client is not authorised to retrieve group details. */
       403: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': components['schemas']['ErrorResponse']
-        }
-      }
-    }
-  }
-  health: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      /** @description OK */
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          '*/*': {
-            [key: string]: string
-          }
-        }
-      }
-      /** @description Bad Request */
-      400: {
         headers: {
           [name: string]: unknown
         }

@@ -14,6 +14,7 @@ export default ReferralDetailsFactory.define(({ sequence }) => ({
   probationPractitionerName: 'Prob Officer',
   probationPractitionerEmail: 'prob.officer@example.com',
   cohort: 'SEXUAL_OFFENCE' as CohortEnum,
+  isLAO: false,
   hasLdc: false,
   hasLdcDisplayText: 'Does not need an LDC-adapted programme',
   hasLdcSuccessMessageText: 'does not need an LDC-adapted programme.',
