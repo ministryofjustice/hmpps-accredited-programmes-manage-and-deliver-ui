@@ -16,7 +16,7 @@ describe('SchedulePresenter', () => {
         type: 'Individual',
         date: 'Monday 2 February 2026',
         time: 'Various times',
-        timeWithCapitalisedMidday: 'Midday',
+        timeWithCapitalisedMidday: 'Various times',
       },
       {
         id: 'e1ede808-43c9-46db-bc85-f68632fc6b2b',
@@ -47,7 +47,7 @@ describe('SchedulePresenter', () => {
         { text: 'Pre-group' },
         { text: 'Individual' },
         { text: 'Monday 2 February 2026', attributes: { 'data-sort-value': 1769990400000 } },
-        { text: 'Midday' },
+        { text: 'Various times' },
       ])
       expect(rows[1]).toEqual([
         { text: 'Introduction to building choices' },
