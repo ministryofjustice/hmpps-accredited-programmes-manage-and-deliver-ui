@@ -156,7 +156,7 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
       <td class="govuk-table__cell">${this.isCatchupSession(session) ? 'Catch-up' : session.type || ''}</td>
       <td class="govuk-table__cell">${participants}</td>
       <td class="govuk-table__cell" data-sort-value="${dateSortValue}">${session.dateOfSession || ''}</td>
-      <td class="govuk-table__cell">${session.timeOfSession || ''}</td>
+      <td class="govuk-table__cell">${session.timeWithCapitalisedMidday || ''}</td>
       <td class="govuk-table__cell">${facilitators}</td>
     </tr>
   `

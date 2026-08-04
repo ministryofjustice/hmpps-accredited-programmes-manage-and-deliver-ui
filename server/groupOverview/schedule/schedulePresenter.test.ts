@@ -16,6 +16,7 @@ describe('SchedulePresenter', () => {
         type: 'Individual',
         date: 'Monday 2 February 2026',
         time: 'Various times',
+        timeWithCapitalisedMidday: 'Various times',
       },
       {
         id: 'e1ede808-43c9-46db-bc85-f68632fc6b2b',
@@ -23,6 +24,7 @@ describe('SchedulePresenter', () => {
         type: 'Group',
         date: 'Monday 23 February 2026',
         time: '2pm',
+        timeWithCapitalisedMidday: 'Midday',
       },
     ],
   }
@@ -51,7 +53,7 @@ describe('SchedulePresenter', () => {
         { text: 'Introduction to building choices' },
         { text: 'Group' },
         { text: 'Monday 23 February 2026', attributes: { 'data-sort-value': 1771804800000 } },
-        { text: '2pm' },
+        { text: 'Midday' },
       ])
     })
 
