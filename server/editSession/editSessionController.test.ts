@@ -64,7 +64,7 @@ describe('editSession', () => {
         expect(res.text).toContain('<title>Test Session - Accredited Programmes</title>')
         expect(res.text).toContain('Test Session')
         expect(res.text).toContain('15 March 2025')
-        expect(res.text).toContain('9:30am to midday')
+        expect(res.text).toContain('9:30am to Midday')
       })
 
     expect(sendAuditEvent).toHaveBeenCalledWith(
@@ -87,6 +87,7 @@ describe('editSession', () => {
           referralId: 'referral-123',
           name: 'Alex River',
           crn: 'S688890821',
+          lao: false,
           attendance: 'Attended',
           sessionNotes: 'Notes recorded',
         },
@@ -122,6 +123,7 @@ describe('editSession', () => {
           referralId: 'referral-123',
           name: 'Alex River',
           crn: 'S688890821',
+          lao: false,
           attendance: 'Attended',
           sessionNotes: 'Notes recorded',
         },
@@ -158,6 +160,7 @@ describe('editSession', () => {
           referralId: 'referral-123',
           name: 'Alex River',
           crn: 'S688890821',
+          lao: false,
           attendance: 'Attended',
           sessionNotes: 'Notes recorded',
         },
