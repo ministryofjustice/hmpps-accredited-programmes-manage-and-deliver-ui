@@ -87,7 +87,7 @@ export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter 
       },
       { text: session.groupCode ?? 'N/A' },
       { text: session.date, attributes: { 'data-sort-value': new Date(session.unformattedDate).getTime() } },
-      { text: session.time.charAt(0).toUpperCase() + session.time.slice(1) },
+      { text: session.timeWithCapitalisedMidday },
       { html: attendanceTag(session.attendanceStatus) },
       session.hasNotes
         ? {
