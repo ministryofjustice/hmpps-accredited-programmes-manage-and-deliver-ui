@@ -764,7 +764,7 @@ describe('SessionScheduleAttendancePresenter', () => {
                 participants: ['John Doe', 'Jane Smith', 'Bob Brown'],
                 dateOfSession: '1 June 2025',
                 timeOfSession: '10:00am to 12:00pm',
-                timeWithCapitalisedMidday: '10:00am to 12:00pm',
+                timeWithCapitalisedMidday: '10:00am to Midday',
                 facilitators: ['Facilitator 3'],
               },
             ],
