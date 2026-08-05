@@ -1,6 +1,7 @@
 import { ReferralDetails, ReferralStatusHistory } from '@manage-and-deliver-api'
 import ReferralLayoutPresenter, { HorizontalNavValues } from '../shared/referral/referralLayoutPresenter'
 import { MojAlertComponentArgs } from '../interfaces/alertComponentArgs'
+import withSuccessScreenReaderAnnouncement from '../utils/alertUtils'
 
 export default class StatusHistoryPresenter extends ReferralLayoutPresenter {
   public readonly personOnProbationName: string
@@ -31,12 +32,12 @@ export default class StatusHistoryPresenter extends ReferralLayoutPresenter {
   get successMessageSummary(): MojAlertComponentArgs | null {
     if (!this.successMessage) return null
 
-    return {
+    return withSuccessScreenReaderAnnouncement({
       title: 'Referral status updated',
       text: this.successMessage,
       variant: 'success',
       dismissible: true,
       showTitleAsHeading: true,
-    }
+    })
   }
 }

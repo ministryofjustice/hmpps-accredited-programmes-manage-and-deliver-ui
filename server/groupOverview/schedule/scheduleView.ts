@@ -1,5 +1,6 @@
 import { SummaryListArgs } from '../../utils/govukFrontendTypes'
 import SchedulePresenter from './schedulePresenter'
+import withSuccessScreenReaderAnnouncement from '../../utils/alertUtils'
 
 export default class ScheduleView {
   constructor(private readonly presenter: SchedulePresenter) {}
@@ -71,12 +72,12 @@ export default class ScheduleView {
       return null
     }
 
-    return {
+    return withSuccessScreenReaderAnnouncement({
       variant: 'success',
       title: this.presenter.successMessage,
       showTitleAsHeading: true,
       dismissible: true,
-    }
+    })
   }
 
   get renderArgs(): [string, Record<string, unknown>] {

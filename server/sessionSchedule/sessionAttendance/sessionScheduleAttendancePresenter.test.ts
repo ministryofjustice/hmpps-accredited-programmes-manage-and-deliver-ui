@@ -514,6 +514,11 @@ describe('SessionScheduleAttendancePresenter', () => {
         title: 'Success',
         text: 'Getting started one-to-one for Jane Smith has been added.',
         dismissible: true,
+        role: 'alert',
+        attributes: {
+          'aria-live': 'assertive',
+          'aria-atomic': 'true',
+        },
       })
     })
 
@@ -531,6 +536,11 @@ describe('SessionScheduleAttendancePresenter', () => {
         title: 'Success',
         text: 'Managing emotions has been added.',
         dismissible: true,
+        role: 'alert',
+        attributes: {
+          'aria-live': 'assertive',
+          'aria-atomic': 'true',
+        },
       })
     })
 

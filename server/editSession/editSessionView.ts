@@ -1,6 +1,7 @@
 import { ButtonArgs, SummaryListArgs } from '../utils/govukFrontendTypes'
 import EditSessionPresenter from './editSessionPresenter'
 import ViewUtils from '../utils/viewUtils'
+import withSuccessScreenReaderAnnouncement from '../utils/alertUtils'
 
 export default class EditSessionView {
   constructor(private readonly presenter: EditSessionPresenter) {}
@@ -100,12 +101,12 @@ export default class EditSessionView {
       return null
     }
 
-    return {
+    return withSuccessScreenReaderAnnouncement({
       variant: 'success',
       title: this.presenter.successMessage,
       showTitleAsHeading: true,
       dismissible: true,
-    }
+    })
   }
 
   private get successEditSessionMessageArgs() {
@@ -113,12 +114,12 @@ export default class EditSessionView {
       return null
     }
 
-    return {
+    return withSuccessScreenReaderAnnouncement({
       variant: 'success',
       title: this.presenter.editSessionSuccessMessage,
       showTitleAsHeading: true,
       dismissible: true,
-    }
+    })
   }
 
   get deleteButton(): ButtonArgs {

@@ -1,6 +1,7 @@
 import { CheckboxesArgs, InputArgs, SelectArgs, TableArgs } from '../../utils/govukFrontendTypes'
 import ViewUtils from '../../utils/viewUtils'
 import GroupAllocationsPresenter, { GroupAllocationsPageSection } from './groupAllocationsPresenter'
+import withSuccessScreenReaderAnnouncement from '../../utils/alertUtils'
 
 export default class GroupAllocationsView {
   constructor(private readonly presenter: GroupAllocationsPresenter) {}
@@ -85,12 +86,12 @@ export default class GroupAllocationsView {
       return null
     }
 
-    return {
+    return withSuccessScreenReaderAnnouncement({
       variant: 'success',
       title: this.presenter.successMessage,
       showTitleAsHeading: true,
       dismissible: true,
-    }
+    })
   }
 
   private get reportingTeamCheckboxArgs(): CheckboxesArgs {

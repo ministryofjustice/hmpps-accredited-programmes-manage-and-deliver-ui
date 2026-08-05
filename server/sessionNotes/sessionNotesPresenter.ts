@@ -4,6 +4,7 @@ import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
 import { convertToUrlFriendlyKebabCase, getEditSessionRouteTitle } from '../utils/utils'
 import { MojAlertComponentArgs } from '../interfaces/alertComponentArgs'
+import withSuccessScreenReaderAnnouncement from '../utils/alertUtils'
 
 export type SessionNotesData = SessionNotes & {
   referralId: string
@@ -46,13 +47,13 @@ export default class SessionNotesPresenter {
   get successMessageSummary(): MojAlertComponentArgs | null {
     if (!this.data.isSaved) return null
 
-    return {
+    return withSuccessScreenReaderAnnouncement({
       title: '',
       text: this.text.successMessage,
       variant: 'success',
       dismissible: true,
       showTitleAsHeading: true,
-    }
+    })
   }
 
   get sessionNotesData(): SessionNotesData {

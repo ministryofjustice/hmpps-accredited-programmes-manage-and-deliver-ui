@@ -1,5 +1,6 @@
 import { ReferralDetails } from '@manage-and-deliver-api'
 import { MojAlertComponentArgs } from '../../interfaces/alertComponentArgs'
+import withSuccessScreenReaderAnnouncement from '../../utils/alertUtils'
 import { formatCohortSuccessMessage } from '../../utils/utils'
 
 export enum HorizontalNavValues {
@@ -62,25 +63,25 @@ export default class ReferralLayoutPresenter {
 
   get ldcUpdatedSuccessMessageArgs(): MojAlertComponentArgs | null {
     return this.isLdcUpdated
-      ? {
+      ? withSuccessScreenReaderAnnouncement({
           variant: 'success',
           title: 'LDC status changed',
           showTitleAsHeading: true,
           dismissible: true,
           text: `${this.referral.personName} ${this.referral.hasLdcSuccessMessageText}`,
-        }
+        })
       : null
   }
 
   get cohortUpdatedSuccessMessageArgs(): MojAlertComponentArgs | null {
     return this.isCohortUpdated
-      ? {
+      ? withSuccessScreenReaderAnnouncement({
           variant: 'success',
           title: 'Cohort changed',
           showTitleAsHeading: true,
           dismissible: true,
           text: `${this.referral.personName} is in the ${formatCohortSuccessMessage(this.referral.cohort)} cohort.`,
-        }
+        })
       : null
   }
 

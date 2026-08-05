@@ -40,6 +40,11 @@ describe('StatusHistoryPresenter', () => {
         variant: 'success',
         dismissible: true,
         showTitleAsHeading: true,
+        role: 'alert',
+        attributes: {
+          'aria-live': 'assertive',
+          'aria-atomic': 'true',
+        },
       })
     })
 

@@ -2,6 +2,7 @@ import GroupDetailsPresenter from './groupDetailsPresenter'
 import { SummaryListArgs } from '../utils/govukFrontendTypes'
 import ViewUtils from '../utils/viewUtils'
 import { MojAlertComponentArgs } from '../interfaces/alertComponentArgs'
+import withSuccessScreenReaderAnnouncement from '../utils/alertUtils'
 
 export default class GroupDetailsView {
   constructor(private readonly presenter: GroupDetailsPresenter) {}
@@ -40,21 +41,21 @@ export default class GroupDetailsView {
     if (!this.presenter.message) return null
 
     if (this.presenter.isScheduleUpdated) {
-      return {
+      return withSuccessScreenReaderAnnouncement({
         title: 'Success',
         variant: 'success',
         dismissible: true,
         html: this.presenter.message.includes('The start date ')
           ? `<p>The start date and <a href="/group/${this.presenter.group.id}/schedule-overview">schedule</a> have been updated.</p>`
           : `<p>The days and times and <a href="/group/${this.presenter.group.id}/schedule-overview">schedule</a> have been updated.</p>`,
-      }
+      })
     }
-    return {
+    return withSuccessScreenReaderAnnouncement({
       title: 'Success',
       variant: 'success',
       dismissible: true,
       text: this.presenter.message,
-    }
+    })
   }
 
   get renderArgs(): [string, Record<string, unknown>] {

@@ -2,6 +2,7 @@ import { AttendanceHistoryResponse, ReferralDetails } from '@manage-and-deliver-
 import ReferralLayoutPresenter, { HorizontalNavValues } from '../../shared/referral/referralLayoutPresenter'
 import { MojAlertComponentArgs } from '../../interfaces/alertComponentArgs'
 import { TableArgs } from '../../utils/govukFrontendTypes'
+import withSuccessScreenReaderAnnouncement from '../../utils/alertUtils'
 import { attendanceTag, convertToUrlFriendlyKebabCase, getEditSessionRouteTitle } from '../../utils/utils'
 
 export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter {
@@ -71,13 +72,13 @@ export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter 
   get successMessageSummary(): MojAlertComponentArgs | null {
     if (!this.successMessage) return null
 
-    return {
+    return withSuccessScreenReaderAnnouncement({
       title: 'Referral status updated',
       text: this.successMessage,
       variant: 'success',
       dismissible: true,
       showTitleAsHeading: true,
-    }
+    })
   }
 
   get attendanceHistoryTableArgs(): TableArgs['rows'] {

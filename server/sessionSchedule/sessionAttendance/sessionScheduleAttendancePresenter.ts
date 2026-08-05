@@ -5,6 +5,7 @@ import {
 } from '@manage-and-deliver-api'
 import { AccordionArgsItem } from '../../utils/govukFrontendTypes'
 import { MojAlertComponentArgs } from '../../interfaces/alertComponentArgs'
+import withSuccessScreenReaderAnnouncement from '../../utils/alertUtils'
 import { convertToUrlFriendlyKebabCase, getEditSessionRouteTitle } from '../../utils/utils'
 import GroupServiceLayoutPresenter, {
   GroupServiceNavigationValues,
@@ -41,12 +42,12 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
   get scheduleSessionSuccessMessageArgs(): MojAlertComponentArgs | null {
     if (!this.successMessage) return null
 
-    return {
+    return withSuccessScreenReaderAnnouncement({
       variant: 'success',
       title: 'Success',
       text: this.successMessage,
       dismissible: true,
-    }
+    })
   }
 
   getAccordionItems(): AccordionArgsItem[] {

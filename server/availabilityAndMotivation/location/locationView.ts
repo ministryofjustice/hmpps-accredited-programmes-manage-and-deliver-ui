@@ -1,6 +1,7 @@
 import { SummaryListArgs } from '../../utils/govukFrontendTypes'
 import ViewUtils from '../../utils/viewUtils'
 import LocationPresenter from './locationPresenter'
+import withSuccessScreenReaderAnnouncement from '../../utils/alertUtils'
 
 export default class LocationView {
   constructor(private readonly presenter: LocationPresenter) {}
@@ -31,12 +32,13 @@ export default class LocationView {
   }
 
   private successMessageArgs() {
-    return {
+    return withSuccessScreenReaderAnnouncement({
       variant: 'success',
       title: 'Location details added successfully.',
+      text: '',
       showTitleAsHeading: true,
       dismissible: true,
-    }
+    })
   }
 
   get renderArgs(): [string, Record<string, unknown>] {

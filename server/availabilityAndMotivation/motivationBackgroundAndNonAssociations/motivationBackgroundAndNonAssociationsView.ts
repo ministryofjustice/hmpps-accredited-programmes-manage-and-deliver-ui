@@ -1,6 +1,7 @@
 import MotivationBackgroundAndNonAssociationsPresenter from './motivationBackgroundAndNonAssociationsPresenter'
 import { ButtonArgs, InsetTextArgs, SummaryListArgs } from '../../utils/govukFrontendTypes'
 import ViewUtils from '../../utils/viewUtils'
+import withSuccessScreenReaderAnnouncement from '../../utils/alertUtils'
 
 export default class MotivationBackgroundAndNonAssociationsView {
   constructor(private readonly presenter: MotivationBackgroundAndNonAssociationsPresenter) {}
@@ -30,12 +31,13 @@ export default class MotivationBackgroundAndNonAssociationsView {
   }
 
   private get successMessageArgs() {
-    return {
+    return withSuccessScreenReaderAnnouncement({
       variant: 'success',
       title: 'Motivation, background and non-associations details added.',
+      text: '',
       showTitleAsHeading: true,
       dismissible: true,
-    }
+    })
   }
 
   get renderArgs(): [string, Record<string, unknown>] {
