@@ -136,12 +136,34 @@ export default class CaselistPresenter {
       | { html: string; text?: undefined; attributes?: Record<string, string | number> }
       | { text: string; html?: undefined }
     )[][] = []
-    this.referralCaseListItems.content.forEach(referral => {
+    const sortedReferrals = [
+      ...this.referralCaseListItems.content.filter(referral => !CaselistUtils.isExcludedLAO(referral)),
+      ...this.referralCaseListItems.content.filter(referral => CaselistUtils.isExcludedLAO(referral)),
+    ]
+
+    sortedReferrals.forEach(referral => {
+      if (CaselistUtils.isExcludedLAO(referral)) {
+        referralData.push([
+          {
+            html: `<span>${referral.crn}</span>${CaselistUtils.isLAO(referral)}`,
+            attributes: { 'data-sort-value': 'zzzzzzzzzzzzzzzz' },
+          },
+          { text: 'Restricted' },
+          { text: 'Restricted' },
+          { text: 'Restricted' },
+          { text: 'Restricted' },
+          {
+            html: `<strong class="govuk-tag govuk-tag--${referral.statusLabelColour}">${referral.referralStatus}</strong>`,
+          },
+        ])
+        return
+      }
+
       const formattedSentenceEndDate = DateUtils.formattedDate(referral.sentenceEndDate)
       const sentenceEndDateEpoch = new Date(formattedSentenceEndDate).getTime()
       referralData.push([
         {
-          html: `<a href='/referral-details/${referral.referralId}/personal-details'>${referral.personName}</a><span>${referral.crn}</span>`,
+          html: `<a href='/referral-details/${referral.referralId}/personal-details'>${referral.personName}</a><span>${referral.crn}</span>${CaselistUtils.isLAO(referral)}`,
           attributes: { 'data-sort-value': referral.personName },
         },
         { text: referral.pdu },

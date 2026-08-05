@@ -1,4 +1,4 @@
-import { CohortEnum, GroupItem, ProgrammeGroupAllocations } from '@manage-and-deliver-api'
+import { CohortEnum, ProgrammeGroupAllocations, ReferralCaseListItem } from '@manage-and-deliver-api'
 import GroupServiceLayoutPresenter, {
   GroupServiceNavigationValues,
 } from '../../shared/groups/groupServiceLayoutPresenter'
@@ -9,6 +9,7 @@ import Pagination from '../../utils/pagination/pagination'
 import PresenterUtils from '../../utils/presenterUtils'
 import { convertToTitleCase } from '../../utils/utils'
 import GroupAllocationsFilter from './groupAllocationsFilter'
+import CaselistUtils from '../../caselist/caseListUtils'
 
 export enum GroupAllocationsPageSection {
   Allocated = 1,
@@ -20,10 +21,12 @@ const cohortConfigMap: Record<CohortEnum, string> = {
   GENERAL_OFFENCE: 'General offence',
 }
 
+type GroupMember = NonNullable<ProgrammeGroupAllocations['pagedGroupData']['content']>[number]
+
 export default class GroupAllocationsPresenter extends GroupServiceLayoutPresenter {
   public readonly pagination: Pagination
 
-  readonly groupListItems: Page<GroupItem>
+  readonly groupListItems: Page<GroupMember>
 
   constructor(
     readonly section: GroupAllocationsPageSection,
@@ -36,7 +39,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
     readonly params?: string,
   ) {
     super(GroupServiceNavigationValues.allocationsTab, groupId)
-    this.groupListItems = this.group.pagedGroupData as Page<GroupItem>
+    this.groupListItems = this.group.pagedGroupData as Page<GroupMember>
     this.pagination = new Pagination(this.groupListItems, params)
   }
 
@@ -131,10 +134,50 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
 
   private referralHref = (id: string) => `/referral-details/${encodeURIComponent(id)}/personal-details`
 
+  private isExcludedMember(member: GroupMember): boolean {
+    return CaselistUtils.isExcludedLAO(member as unknown as ReferralCaseListItem)
+  }
+
+  private laoBadge(member: GroupMember): string {
+    return CaselistUtils.isLAO(member as unknown as ReferralCaseListItem)
+  }
+
+  private sortedMembers(): GroupMember[] {
+    return [
+      ...this.group.pagedGroupData.content.filter(member => !this.isExcludedMember(member)),
+      ...this.group.pagedGroupData.content.filter(member => this.isExcludedMember(member)),
+    ]
+  }
+
   generateWaitlistTableArgs() {
-    const rows = this.group.pagedGroupData.content
+    const rows = this.sortedMembers()
     const out: ({ html: string } | { text: string })[][] = []
     rows.forEach(member => {
+      if (this.isExcludedMember(member)) {
+        out.push([
+          {
+            html: `<div class="govuk-radios govuk-radios--small group-details-table">
+                  <div class="govuk-radios__item">
+                    <input id='${member.referralId}' value='${member.referralId}' type="radio" name="add-to-group" class="govuk-radios__input">
+                    <label class="govuk-label govuk-radios__label" for="${member.referralId}">
+                      <span class="govuk-visually-hidden">Add restricted person to the group</span>
+                    </label>
+                  </div>
+                 </div>`,
+          },
+          {
+            html: `<span>${member.crn}</span>${this.laoBadge(member)}`,
+          },
+          { text: 'Restricted' },
+          { text: 'Restricted' },
+          { text: 'Restricted' },
+          { text: 'Restricted' },
+          { text: 'Restricted' },
+          { text: 'Restricted' },
+        ])
+        return
+      }
+
       out.push([
         {
           html: `<div class="govuk-radios govuk-radios--small group-details-table">
@@ -147,7 +190,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
                  </div>`,
         },
         {
-          html: `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0"> ${member.crn}</p>`,
+          html: `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0"> ${member.crn}${this.laoBadge(member)}</p>`,
         },
         {
           html: `${member.sentenceEndDate ?? 'No information'}${
@@ -170,10 +213,31 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
   }
 
   generateAllocatedTableArgs() {
-    const rows = this.group.pagedGroupData.content
+    const rows = this.sortedMembers()
     const out: ({ html: string } | { text: string })[][] = []
 
     rows.forEach(member => {
+      if (this.isExcludedMember(member)) {
+        out.push([
+          {
+            html: `<div class="govuk-radios govuk-radios--small group-details-table">
+                  <div class="govuk-radios__item">
+                    <input id='${member.crn}' value='${member.referralId}' type="radio" name="remove-from-group" class="govuk-radios__input">
+                    <label class="govuk-label govuk-radios__label" for="${member.crn}">
+                      <span class="govuk-visually-hidden">Remove restricted person from the group</span>
+                    </label>
+                  </div>
+                 </div>`,
+          },
+          {
+            html: `<span>${member.crn}</span>${this.laoBadge(member)}`,
+          },
+          { text: 'Restricted' },
+          { html: `<strong class="govuk-tag govuk-tag--${member.statusColour}">${member.status}</strong>` },
+        ])
+        return
+      }
+
       out.push([
         {
           html: `<div class="govuk-radios govuk-radios--small group-details-table">
@@ -186,7 +250,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
                  </div>`,
         },
         {
-          html: `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0">${member.crn}</p>`,
+          html: `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0">${member.crn}${this.laoBadge(member)}</p>`,
         },
         {
           html: `${member.sentenceEndDate ?? 'No information'}${

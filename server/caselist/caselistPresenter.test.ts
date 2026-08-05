@@ -451,6 +451,157 @@ describe('generateTableRows', () => {
     })
   })
 
+  it('should display restricted access badge below name when referral is LAO', () => {
+    const laoReferral = referralCaseListItemFactory.build({
+      referralId: 'REF-LAO',
+      personName: 'Lao Person',
+      crn: 'L123456',
+      lao: true,
+      sentenceEndDate: '2024-06-15',
+      sentenceEndDateSource: 'REQUIREMENT',
+    })
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+      .pageContent([laoReferral])
+      .build() as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      1,
+      referralCaseListItemPage,
+      {} as CaselistFilter,
+      '',
+      true,
+      caseListFilters,
+      0,
+      'test location',
+    )
+
+    const rows = presenter.generateTableRows()
+
+    expect(rows[0][0]).toEqual({
+      html: `<a href='/referral-details/REF-LAO/personal-details'>Lao Person</a><span>L123456</span><br><span class="moj-badge moj-badge--red">Restricted Access</span><br>`,
+      attributes: { 'data-sort-value': 'Lao Person' },
+    })
+  })
+
+  it('should display restricted access badge below name when referral has isLAO true', () => {
+    const laoReferral = referralCaseListItemFactory.build({
+      referralId: 'REF-IS-LAO',
+      personName: 'Is Lao Person',
+      crn: 'L999999',
+      sentenceEndDate: '2024-06-15',
+      sentenceEndDateSource: 'REQUIREMENT',
+    }) as ReferralCaseListItem & { isLAO: boolean }
+    laoReferral.isLAO = true
+
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+      .pageContent([laoReferral])
+      .build() as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      1,
+      referralCaseListItemPage,
+      {} as CaselistFilter,
+      '',
+      true,
+      caseListFilters,
+      0,
+      'test location',
+    )
+
+    const rows = presenter.generateTableRows()
+
+    expect(rows[0][0]).toEqual({
+      html: `<a href='/referral-details/REF-IS-LAO/personal-details'>Is Lao Person</a><span>L999999</span><br><span class="moj-badge moj-badge--red">Restricted Access</span><br>`,
+      attributes: { 'data-sort-value': 'Is Lao Person' },
+    })
+  })
+
+  it('should redact excluded LAO referrals and show restricted values across row', () => {
+    const excludedReferral = referralCaseListItemFactory.build({
+      referralId: 'REF-EXCLUDED',
+      personName: 'Should Not Display',
+      crn: 'E123456',
+      lao: true,
+      referralStatus: 'Recall',
+      statusLabelColour: 'yellow',
+      sentenceEndDate: '2024-06-15',
+      sentenceEndDateSource: 'REQUIREMENT',
+    }) as ReferralCaseListItem & { userExcluded: boolean }
+    excludedReferral.userExcluded = true
+
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+      .pageContent([excludedReferral])
+      .build() as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      1,
+      referralCaseListItemPage,
+      {} as CaselistFilter,
+      '',
+      true,
+      caseListFilters,
+      0,
+      'test location',
+    )
+
+    const rows = presenter.generateTableRows()
+
+    expect(rows[0]).toEqual([
+      {
+        html: `<span>E123456</span><br><span class="moj-badge moj-badge--red">Restricted Access</span><br>`,
+        attributes: { 'data-sort-value': 'zzzzzzzzzzzzzzzz' },
+      },
+      { text: 'Restricted' },
+      { text: 'Restricted' },
+      { text: 'Restricted' },
+      { text: 'Restricted' },
+      { html: `<strong class="govuk-tag govuk-tag--yellow">Recall</strong>` },
+    ])
+  })
+
+  it('should render excluded LAO referrals after non-excluded referrals', () => {
+    const visibleReferral = referralCaseListItemFactory.build({
+      referralId: 'REF-VISIBLE',
+      personName: 'Visible Person',
+      crn: 'V123456',
+      sentenceEndDate: '2024-06-15',
+      sentenceEndDateSource: 'REQUIREMENT',
+    })
+
+    const excludedReferral = referralCaseListItemFactory.build({
+      referralId: 'REF-EXCLUDED-LAST',
+      personName: 'Excluded Person',
+      crn: 'X123456',
+      lao: true,
+      referralStatus: 'Recall',
+      statusLabelColour: 'yellow',
+      sentenceEndDate: '2024-06-15',
+      sentenceEndDateSource: 'REQUIREMENT',
+    }) as ReferralCaseListItem & { userExcluded: boolean }
+    excludedReferral.userExcluded = true
+
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+      .pageContent([excludedReferral, visibleReferral])
+      .build() as Page<ReferralCaseListItem>
+
+    const presenter = new CaselistPresenter(
+      1,
+      referralCaseListItemPage,
+      {} as CaselistFilter,
+      '',
+      true,
+      caseListFilters,
+      0,
+      'test location',
+    )
+
+    const rows = presenter.generateTableRows()
+
+    expect((rows[0][0] as { attributes?: Record<string, string | number> }).attributes?.['data-sort-value']).toBe(
+      'Visible Person',
+    )
+    expect((rows[1][0] as { attributes?: Record<string, string | number> }).attributes?.['data-sort-value']).toBe(
+      'zzzzzzzzzzzzzzzz',
+    )
+  })
+
   it('should generate multiple rows with correct sort values', () => {
     const referralCaseListItems = [
       referralCaseListItemFactory.build({

@@ -136,6 +136,50 @@ describe('GroupAllocationsPresenter', () => {
         ],
       ])
     })
+
+    it('shows restricted access badge after CRN for restricted LAO member in waitlist', () => {
+      const filterObject = GroupAllocationsFilter.empty()
+      const groupOverview = ProgrammeGroupOverviewFactory.waitlist().build()
+      groupOverview.pagedGroupData.content[0].lao = true
+
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Waitlist,
+        groupOverview,
+        '1234',
+        filterObject,
+      )
+
+      const rows = presenter.generateWaitlistTableArgs()
+      expect(rows[0][1]).toEqual({
+        html: `<a href="/referral-details/39fde7e8-d2e3-472b-8364-5848bf673aa6/personal-details">Edgar Schiller</a><p class="govuk-!-margin-bottom-0"> X718250<br><span class="moj-badge moj-badge--red">Restricted Access</span><br></p>`,
+      })
+    })
+
+    it('redacts excluded LAO member in waitlist and keeps row at the end', () => {
+      const filterObject = GroupAllocationsFilter.empty()
+      const groupOverview = ProgrammeGroupOverviewFactory.waitlist().build()
+
+      const excluded = groupOverview.pagedGroupData.content[0] as {
+        userExcluded?: boolean
+        lao?: boolean
+      }
+      excluded.userExcluded = true
+      excluded.lao = true
+
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Waitlist,
+        groupOverview,
+        '1234',
+        filterObject,
+      )
+
+      const rows = presenter.generateWaitlistTableArgs()
+      expect(rows[1][1]).toEqual({
+        html: `<span>X718250</span><br><span class="moj-badge moj-badge--red">Restricted Access</span><br>`,
+      })
+      expect(rows[1][2]).toEqual({ text: 'Restricted' })
+      expect(rows[1][7]).toEqual({ text: 'Restricted' })
+    })
   })
   describe('generateAllocateTableArgs', () => {
     it('should return the correct table args for allocted list', () => {
@@ -188,6 +232,32 @@ describe('GroupAllocationsPresenter', () => {
           { html: '<strong class="govuk-tag govuk-tag--purple">Scheduled</strong>' },
         ],
       ])
+    })
+
+    it('redacts excluded LAO member in allocated list and keeps final status value', () => {
+      const filterObject = GroupAllocationsFilter.empty()
+      const groupOverview = ProgrammeGroupOverviewFactory.allocatedList().build()
+
+      const excluded = groupOverview.pagedGroupData.content[0] as {
+        userExcluded?: boolean
+        lao?: boolean
+      }
+      excluded.userExcluded = true
+      excluded.lao = true
+
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Allocated,
+        groupOverview,
+        '1234',
+        filterObject,
+      )
+
+      const rows = presenter.generateAllocatedTableArgs()
+      expect(rows[1][1]).toEqual({
+        html: `<span>X718250</span><br><span class="moj-badge moj-badge--red">Restricted Access</span><br>`,
+      })
+      expect(rows[1][2]).toEqual({ text: 'Restricted' })
+      expect(rows[1][3]).toEqual({ html: `<strong class="govuk-tag govuk-tag--purple">Scheduled</strong>` })
     })
   })
 
