@@ -17,6 +17,7 @@ generic-service:
     ENVIRONMENT_NAME: DEV
     AUDIT_ENABLED: "true"
     SENTRY_ENVIRONMENT: dev
+    ENABLE_LAO_RESTRICTIONS: "true"
     ENABLE_PAST_DATE_REGION_RESTRICTION: "false"
     # Before updating this to true make sure DEV_ALLOWED_REGIONS is up to date.
     ENABLE_REGION_RESTRICTION: "false"

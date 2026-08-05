@@ -56,6 +56,7 @@ export default {
   production,
   https: process.env.NO_HTTPS === 'true' ? false : production,
   staticResourceCacheDuration: '1h',
+  enable_lao_restrictions: get('ENABLE_LAO_RESTRICTIONS', 'false', requiredInProduction) === 'true',
   enable_past_date_region_restriction:
     get('ENABLE_PAST_DATE_REGION_RESTRICTION', 'false', requiredInProduction) === 'true',
   enable_region_restriction: get('ENABLE_REGION_RESTRICTION', 'false', requiredInProduction) === 'true',

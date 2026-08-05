@@ -29,6 +29,11 @@ describe('GroupAllocationsPresenter', () => {
         groupOverview,
         '1234',
         filterObject,
+        '',
+        null,
+        null,
+        undefined,
+        true,
       )
 
       expect(presenter.pageTitle).toEqual('Building Choices waitlist')
@@ -60,6 +65,11 @@ describe('GroupAllocationsPresenter', () => {
         groupOverview,
         '1234',
         filterObject,
+        '',
+        null,
+        null,
+        undefined,
+        true,
       )
       expect(presenter.generateTableHeadings()).toEqual([
         { text: 'Add to group' },
@@ -82,6 +92,11 @@ describe('GroupAllocationsPresenter', () => {
         groupOverview,
         '1234',
         filterObject,
+        '',
+        null,
+        null,
+        undefined,
+        true,
       )
       expect(presenter.generateWaitlistTableArgs()).toEqual([
         [
@@ -147,6 +162,11 @@ describe('GroupAllocationsPresenter', () => {
         groupOverview,
         '1234',
         filterObject,
+        '',
+        null,
+        null,
+        undefined,
+        true,
       )
 
       const rows = presenter.generateWaitlistTableArgs()
@@ -171,6 +191,11 @@ describe('GroupAllocationsPresenter', () => {
         groupOverview,
         '1234',
         filterObject,
+        '',
+        null,
+        null,
+        undefined,
+        true,
       )
 
       const rows = presenter.generateWaitlistTableArgs()
@@ -250,6 +275,11 @@ describe('GroupAllocationsPresenter', () => {
         groupOverview,
         '1234',
         filterObject,
+        '',
+        null,
+        null,
+        undefined,
+        true,
       )
 
       const rows = presenter.generateAllocatedTableArgs()

@@ -10,6 +10,7 @@ import PresenterUtils from '../../utils/presenterUtils'
 import { convertToTitleCase } from '../../utils/utils'
 import GroupAllocationsFilter from './groupAllocationsFilter'
 import CaselistUtils from '../../caselist/caseListUtils'
+import config from '../../config'
 
 export enum GroupAllocationsPageSection {
   Allocated = 1,
@@ -37,6 +38,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
     readonly validationError: FormValidationError | null = null,
     readonly successMessage: string | null = null,
     readonly params?: string,
+    readonly laoRestrictionsEnabled: boolean = config.enable_lao_restrictions,
   ) {
     super(GroupServiceNavigationValues.allocationsTab, groupId)
     this.groupListItems = this.group.pagedGroupData as Page<GroupMember>
@@ -135,11 +137,11 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
   private referralHref = (id: string) => `/referral-details/${encodeURIComponent(id)}/personal-details`
 
   private isExcludedMember(member: GroupMember): boolean {
-    return CaselistUtils.isExcludedLAO(member)
+    return this.laoRestrictionsEnabled && CaselistUtils.isExcludedLAO(member)
   }
 
   private laoBadge(member: GroupMember): string {
-    return CaselistUtils.laoBadge(member)
+    return this.laoRestrictionsEnabled ? CaselistUtils.laoBadge(member) : ''
   }
 
   private sortedMembers(): GroupMember[] {

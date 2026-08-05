@@ -17,6 +17,7 @@ generic-service:
     ENVIRONMENT_NAME: preprod
     AUDIT_ENABLED: "true"
     SENTRY_ENVIRONMENT: preprod
+    ENABLE_LAO_RESTRICTIONS: "true"
     ENABLE_PAST_DATE_REGION_RESTRICTION: "true"
     ENABLE_REGION_RESTRICTION: "true"
 

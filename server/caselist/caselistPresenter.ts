@@ -5,6 +5,7 @@ import Pagination from '../utils/pagination/pagination'
 import CaselistFilter from './caselistFilter'
 import CaselistUtils from './caseListUtils'
 import DateUtils from '../utils/dateUtils'
+import config from '../config'
 
 export enum CaselistPageSection {
   Open = 1,
@@ -35,6 +36,7 @@ export default class CaselistPresenter {
     readonly caseListFilters: CaseListFilterValues,
     readonly otherCaselistCountTotal: number,
     readonly userLocationDescription: string,
+    readonly laoRestrictionsEnabled: boolean = config.enable_lao_restrictions,
   ) {
     this.pagination = new Pagination(
       this.referralCaseListItems as Required<typeof this.referralCaseListItems>,
@@ -136,16 +138,22 @@ export default class CaselistPresenter {
       | { html: string; text?: undefined; attributes?: Record<string, string | number> }
       | { text: string; html?: undefined }
     )[][] = []
+
+    const isExcludedLao = (referral: ReferralCaseListItem): boolean =>
+      this.laoRestrictionsEnabled && CaselistUtils.isExcludedLAO(referral)
+    const laoBadge = (referral: ReferralCaseListItem): string =>
+      this.laoRestrictionsEnabled ? CaselistUtils.laoBadge(referral) : ''
+
     const sortedReferrals = [
-      ...this.referralCaseListItems.content.filter(referral => !CaselistUtils.isExcludedLAO(referral)),
-      ...this.referralCaseListItems.content.filter(referral => CaselistUtils.isExcludedLAO(referral)),
+      ...this.referralCaseListItems.content.filter(referral => !isExcludedLao(referral)),
+      ...this.referralCaseListItems.content.filter(referral => isExcludedLao(referral)),
     ]
 
     sortedReferrals.forEach(referral => {
-      if (CaselistUtils.isExcludedLAO(referral)) {
+      if (isExcludedLao(referral)) {
         referralData.push([
           {
-            html: `<span>${referral.crn}</span>${CaselistUtils.laoBadge(referral)}`,
+            html: `<span>${referral.crn}</span>${laoBadge(referral)}`,
             attributes: { 'data-sort-value': 'zzzzzzzzzzzzzzzz' },
           },
           { text: 'Restricted' },
@@ -163,7 +171,7 @@ export default class CaselistPresenter {
       const sentenceEndDateEpoch = new Date(formattedSentenceEndDate).getTime()
       referralData.push([
         {
-          html: `<a href='/referral-details/${referral.referralId}/personal-details'>${referral.personName}</a><span>${referral.crn}</span>${CaselistUtils.laoBadge(referral)}`,
+          html: `<a href='/referral-details/${referral.referralId}/personal-details'>${referral.personName}</a><span>${referral.crn}</span>${laoBadge(referral)}`,
           attributes: { 'data-sort-value': referral.personName },
         },
         { text: referral.pdu },

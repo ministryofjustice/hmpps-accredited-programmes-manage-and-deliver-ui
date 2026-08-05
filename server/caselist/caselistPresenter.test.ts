@@ -363,6 +363,7 @@ describe('generateTableRows', () => {
       caseListFilters,
       0,
       'test location',
+      true,
     )
 
     const rows = presenter.generateTableRows()
@@ -403,6 +404,7 @@ describe('generateTableRows', () => {
       caseListFilters,
       0,
       'test location',
+      true,
     )
 
     const rows = presenter.generateTableRows()
@@ -439,6 +441,7 @@ describe('generateTableRows', () => {
       caseListFilters,
       0,
       'test location',
+      true,
     )
 
     const rows = presenter.generateTableRows()
@@ -472,6 +475,7 @@ describe('generateTableRows', () => {
       caseListFilters,
       0,
       'test location',
+      true,
     )
 
     const rows = presenter.generateTableRows()
@@ -504,6 +508,7 @@ describe('generateTableRows', () => {
       caseListFilters,
       0,
       'test location',
+      true,
     )
 
     const rows = presenter.generateTableRows()
@@ -539,6 +544,7 @@ describe('generateTableRows', () => {
       caseListFilters,
       0,
       'test location',
+      true,
     )
 
     const rows = presenter.generateTableRows()
@@ -590,6 +596,7 @@ describe('generateTableRows', () => {
       caseListFilters,
       0,
       'test location',
+      true,
     )
 
     const rows = presenter.generateTableRows()
