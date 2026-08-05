@@ -1,4 +1,4 @@
-import { CohortEnum, ProgrammeGroupAllocations, ReferralCaseListItem } from '@manage-and-deliver-api'
+import { CohortEnum, ProgrammeGroupAllocations } from '@manage-and-deliver-api'
 import GroupServiceLayoutPresenter, {
   GroupServiceNavigationValues,
 } from '../../shared/groups/groupServiceLayoutPresenter'
@@ -135,11 +135,11 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
   private referralHref = (id: string) => `/referral-details/${encodeURIComponent(id)}/personal-details`
 
   private isExcludedMember(member: GroupMember): boolean {
-    return CaselistUtils.isExcludedLAO(member as unknown as ReferralCaseListItem)
+    return CaselistUtils.isExcludedLAO(member)
   }
 
   private laoBadge(member: GroupMember): string {
-    return CaselistUtils.isLAO(member as unknown as ReferralCaseListItem)
+    return CaselistUtils.laoBadge(member)
   }
 
   private sortedMembers(): GroupMember[] {

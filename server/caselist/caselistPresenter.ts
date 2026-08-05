@@ -145,7 +145,7 @@ export default class CaselistPresenter {
       if (CaselistUtils.isExcludedLAO(referral)) {
         referralData.push([
           {
-            html: `<span>${referral.crn}</span>${CaselistUtils.isLAO(referral)}`,
+            html: `<span>${referral.crn}</span>${CaselistUtils.laoBadge(referral)}`,
             attributes: { 'data-sort-value': 'zzzzzzzzzzzzzzzz' },
           },
           { text: 'Restricted' },
@@ -163,7 +163,7 @@ export default class CaselistPresenter {
       const sentenceEndDateEpoch = new Date(formattedSentenceEndDate).getTime()
       referralData.push([
         {
-          html: `<a href='/referral-details/${referral.referralId}/personal-details'>${referral.personName}</a><span>${referral.crn}</span>${CaselistUtils.isLAO(referral)}`,
+          html: `<a href='/referral-details/${referral.referralId}/personal-details'>${referral.personName}</a><span>${referral.crn}</span>${CaselistUtils.laoBadge(referral)}`,
           attributes: { 'data-sort-value': referral.personName },
         },
         { text: referral.pdu },
