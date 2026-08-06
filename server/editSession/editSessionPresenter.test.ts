@@ -821,6 +821,9 @@ describe('EditSessionPresenter', () => {
           attendance: 'Attended',
           sessionNotes: '',
           lao: false,
+          lao: false,
+          attendance: 'Attended',
+          sessionNotes: '',
         },
         {
           referralId: 'ref-2',

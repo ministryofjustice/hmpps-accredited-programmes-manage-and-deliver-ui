@@ -3261,6 +3261,11 @@ export interface components {
        */
       hasLdc: boolean
       /**
+       * @description Whether to display the ineligible warning on the UI
+       * @example false
+       */
+      displayIneligibleWarning: boolean
+      /**
        * Format: int32
        * @description The LDC (Learning Disabilities and Challenges) score
        * @example 2
