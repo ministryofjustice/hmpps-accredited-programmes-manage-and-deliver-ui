@@ -59,6 +59,8 @@ export default {
   enable_past_date_region_restriction:
     get('ENABLE_PAST_DATE_REGION_RESTRICTION', 'false', requiredInProduction) === 'true',
   enable_region_restriction: get('ENABLE_REGION_RESTRICTION', 'false', requiredInProduction) === 'true',
+  enable_caselist_singular_result_text:
+    get('ENABLE_CASELIST_SINGULAR_RESULT_TEXT', 'false', requiredInProduction) === 'true',
   redis: {
     enabled: get('REDIS_ENABLED', 'false', requiredInProduction) === 'true',
     host: get('REDIS_HOST', 'localhost', requiredInProduction),
