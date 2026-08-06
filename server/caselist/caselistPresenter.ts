@@ -63,7 +63,7 @@ export default class CaselistPresenter {
     }
     const start = number * size + 1
     const end = number * size + numberOfElements
-    const resultText = config.enable_caselist_singular_result_text && totalElements === 1 ? 'result' : 'results'
+    const resultText = totalElements === 1 ? 'result' : 'results'
     return `Showing <strong>${start}</strong> to <strong>${end}</strong> of <strong>${totalElements}</strong> ${resultText}`
   }
 
