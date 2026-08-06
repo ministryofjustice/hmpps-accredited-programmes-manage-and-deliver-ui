@@ -97,7 +97,7 @@ describe('CreateGroupForm', () => {
             {
               errorSummaryLinkedField: 'create-group-date',
               formFields: ['create-group-date'],
-              message: 'Enter a date in the format 10/7/2025',
+              message: 'Enter a date in the format 27/7/2025',
             },
           ],
         })

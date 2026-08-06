@@ -18,7 +18,7 @@ export default class EditSessionDateAndTimeView {
       name: 'session-details-date',
 
       hint: {
-        text: 'Enter a date, for example 10/7/2025, or select one from the calendar.',
+        text: 'Enter a date, for example 27/7/2025, or select one from the calendar.',
       },
       label: {
         text: 'Session date',
