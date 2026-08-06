@@ -18,32 +18,39 @@ export default class GroupView {
   }
 
   private get pduCheckboxArgs(): CheckboxesArgs {
+    const pduItems = this.presenter.generatePDUCheckboxArgs()
+    const pduOptionCount = pduItems.length
+    const optionWord = pduOptionCount === 1 ? 'option' : 'options'
+
     return {
       name: 'pdu',
       classes: 'govuk-checkboxes--small',
       fieldset: {
         legend: {
-          text: 'PDU',
+          html: `PDU <span class="govuk-visually-hidden">, ${pduOptionCount} ${optionWord}</span>`,
           isPageHeading: false,
           classes: 'govuk-fieldset__legend--s',
         },
       },
-      items: this.presenter.generatePDUCheckboxArgs(),
+      items: pduItems,
     }
   }
 
   private get deliveryLocationCheckboxArgs(): CheckboxesArgs {
+    const deliveryLocationItems = this.presenter.generateDeliveryLocationCheckboxArgs()
+    const deliveryLocationOptionCount = deliveryLocationItems.length
+    const optionWord = deliveryLocationOptionCount === 1 ? 'option' : 'options'
     return {
       name: 'deliveryLocations',
       classes: 'govuk-checkboxes--small',
       fieldset: {
         legend: {
-          text: 'Delivery Location',
+          html: `Delivery Location <span class="govuk-visually-hidden">, ${deliveryLocationOptionCount} ${optionWord}</span>`,
           isPageHeading: false,
           classes: 'govuk-fieldset__legend--s',
         },
       },
-      items: this.presenter.generateDeliveryLocationCheckboxArgs(),
+      items: deliveryLocationItems,
     }
   }
 

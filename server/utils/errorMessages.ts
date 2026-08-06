@@ -81,7 +81,7 @@ export default {
       `Group code ${code} already exists for a group in this region. Enter a different code.`,
     createGroupCohortSelect: 'Select a cohort',
     createGroupDateSelect: 'Enter or select a date',
-    createGroupDateInvalid: 'Enter a date in the format 10/7/2025',
+    createGroupDateInvalid: 'Enter a date in the format 27/7/2025',
     createGroupDateInPast: 'Start date must be in the future',
     createGroupSexSelect: 'Select a gender',
     createGroupWhenSelect: 'Select at least one day',
@@ -99,7 +99,7 @@ export default {
   sessionSchedule: {
     sessionScheduleWhich: 'Select the session type',
     sessionDetailsDate: 'Enter or select a date',
-    sessionDetailsDateInvalid: 'Enter a date in the format 10/7/2025',
+    sessionDetailsDateInvalid: 'Enter a date in the format 27/7/2025',
     sessionDetailsDateInPast: 'Start date must be in the future',
     sessionDetailsStartTime: 'Enter a complete start time',
     sessionDetailsEndTime: 'Enter a complete end time',
@@ -117,7 +117,7 @@ export default {
   rescheduleSession: {
     editSessionDateAndTime: {
       sessionDetailsDate: 'Enter or select a date',
-      sessionDetailsDateInvalid: 'Enter a date in the format 10/7/2025',
+      sessionDetailsDateInvalid: 'Enter a date in the format 27/7/2025',
       sessionDetailsDateInPast: 'Start date must be in the future',
       sessionDetailsStartTime: 'Enter a complete start time',
       sessionDetailsEndTime: 'Enter a complete end time',

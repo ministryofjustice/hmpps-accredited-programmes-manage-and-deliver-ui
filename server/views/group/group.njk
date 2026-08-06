@@ -63,7 +63,7 @@
     <div class="govuk-grid-column-three-quarters group-results-column">
       {{ mojSubNavigation(subNavArgs) }}
       {% if resultsText %}
-        <p class="govuk-body showing-results">{{ resultsText | safe }}</p>
+        <p class="govuk-body showing-results" role="status" aria-live="polite" aria-atomic="true">{{ resultsText | safe }}</p>
       {% endif %}
 
       {% if hasResults %}
