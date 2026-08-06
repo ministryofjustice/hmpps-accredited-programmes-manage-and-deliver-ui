@@ -2,6 +2,7 @@ import { CaseListFilterValues, CohortEnum, ReferralCaseListItem } from '@manage-
 import { Page } from '../shared/models/pagination'
 import { CheckboxesArgsItem, SelectArgsItem, TableArgs } from '../utils/govukFrontendTypes'
 import Pagination from '../utils/pagination/pagination'
+import config from '../config'
 import CaselistFilter from './caselistFilter'
 import CaselistUtils from './caseListUtils'
 import DateUtils from '../utils/dateUtils'
@@ -62,7 +63,8 @@ export default class CaselistPresenter {
     }
     const start = number * size + 1
     const end = number * size + numberOfElements
-    return `Showing <strong>${start}</strong> to <strong>${end}</strong> of <strong>${totalElements}</strong> results`
+    const resultText = config.enable_caselist_singular_result_text && totalElements === 1 ? 'result' : 'results'
+    return `Showing <strong>${start}</strong> to <strong>${end}</strong> of <strong>${totalElements}</strong> ${resultText}`
   }
 
   get tableCaptionClass(): string {
