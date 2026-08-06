@@ -21,9 +21,10 @@
 {% block header %}
   <header class="govuk-template__header">
     {% include "./header.njk" %}
-    {% include "./betaBanner.njk" %}
+     {% block headerEnd %}
+      {% include "./betaBanner.njk" %}
+    {% endblock %}
     {{ customPrimaryNavigation(primaryNavigationArgs) }}
-
     {% if serviceUserBannerPresenter %}
       {% include "./serviceUserBanner.njk" %}
       {% block referralSubNavigation %}
@@ -100,9 +101,9 @@
         Sentry.init({
           release: "hmpps-accredited-programmes-manage-and-deliver-ui@{{ version }}",
           environment: "{{ sentry.environment }}",
-          tracesSampleRate: {{ sentry.tracesSampleRate }},
-          replaysSessionSampleRate: {{ sentry.replaySampleRate }},
-          replaysOnErrorSampleRate: {{ sentry.replayOnErrorSampleRate }},
+          tracesSampleRate: Number("{{ sentry.tracesSampleRate }}"),
+          replaysSessionSampleRate: Number("{{ sentry.replaySampleRate }}"),
+          replaysOnErrorSampleRate: Number("{{ sentry.replayOnErrorSampleRate }}"),
           initialScope: {
             user: { id: "{{ sentryUserId }}" },
           },

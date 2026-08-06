@@ -17,7 +17,7 @@ export default class CreateOrEditGroupDateView {
       name: 'create-group-date',
 
       hint: {
-        text: 'This is when the pre-group one-to-ones are expected to start. Enter a date, for example, 10/7/2025, or select one from the calendar.',
+        text: 'This is when the pre-group one-to-ones are expected to start. Enter a date, for example, 27/7/2025, or select one from the calendar.',
       },
       label: {
         text: this.presenter.isEditJourney ? 'Edit start date for the group' : 'Add a start date for the group',

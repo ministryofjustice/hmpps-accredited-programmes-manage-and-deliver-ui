@@ -114,7 +114,7 @@ describe('Edit Group Controller', () => {
         .expect(400)
         .expect(res => {
           expect(res.text).toContain('32/13/2026')
-          expect(res.text).toContain('Enter a date in the format 10/7/2025')
+          expect(res.text).toContain('Enter a date in the format 27/7/2025')
         })
     })
   })
