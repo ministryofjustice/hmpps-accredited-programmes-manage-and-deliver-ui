@@ -363,7 +363,7 @@ describe('resultsText', () => {
       'test location',
     )
 
-    expect(presenter.resultsText).toBe('Showing <strong>1</strong> to <strong>1</strong> of <strong>1</strong> results')
+    expect(presenter.resultsText).toBe('Showing <strong>1</strong> to <strong>1</strong> of <strong>1</strong> result')
   })
 })
 
