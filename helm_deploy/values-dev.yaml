@@ -20,6 +20,7 @@ generic-service:
     ENABLE_PAST_DATE_REGION_RESTRICTION: "false"
     # Before updating this to true make sure DEV_ALLOWED_REGIONS is up to date.
     ENABLE_REGION_RESTRICTION: "false"
+    ENABLE_CASELIST_SINGULAR_RESULT_TEXT: "true"
 
   allowlist:
     accessibility-audit-usr: 5.181.59.114

@@ -1,11 +1,14 @@
 import { ReferralCaseListItem } from '@manage-and-deliver-api'
 
 import { Page } from '../shared/models/pagination'
+import config from '../config'
 import pageFactory from '../testutils/factories/pageFactory'
 import referralCaseListItemFactory from '../testutils/factories/referralCaseListItem'
 import TestUtils from '../testutils/testUtils'
 import CaselistFilter from './caselistFilter'
 import CaselistPresenter from './caselistPresenter'
+
+jest.mock('../config')
 
 describe(`filters`, () => {
   const caseListFilters = TestUtils.createCaseListFilters()
@@ -261,6 +264,10 @@ describe(`filters`, () => {
 })
 
 describe('resultsText', () => {
+  beforeEach(() => {
+    ;(config as jest.Mocked<typeof config>).enable_caselist_singular_result_text = false
+  })
+
   it('should return blank when there are no results', () => {
     const filter = { status: undefined, cohort: undefined, crnOrPersonName: undefined } as CaselistFilter
     const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
@@ -307,6 +314,56 @@ describe('resultsText', () => {
     expect(presenter.resultsText).toBe(
       'Showing <strong>21</strong> to <strong>23</strong> of <strong>23</strong> results',
     )
+  })
+
+  it('should use singular wording when there is exactly one result when feature flag is enabled', () => {
+    ;(config as jest.Mocked<typeof config>).enable_caselist_singular_result_text = true
+
+    const filter = { status: undefined, cohort: undefined, crnOrPersonName: undefined } as CaselistFilter
+    const referralCaseListItems = [referralCaseListItemFactory.build()]
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory.pageContent(referralCaseListItems).build({
+      totalElements: 1,
+      number: 0,
+      size: 10,
+      numberOfElements: 1,
+    }) as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      1,
+      referralCaseListItemPage,
+      filter,
+      '',
+      true,
+      TestUtils.createCaseListFilters(),
+      0,
+      'test location',
+    )
+
+    expect(presenter.resultsText).toBe('Showing <strong>1</strong> to <strong>1</strong> of <strong>1</strong> result')
+  })
+
+  it('should use plural wording when there is exactly one result when feature flag is disabled', () => {
+    ;(config as jest.Mocked<typeof config>).enable_caselist_singular_result_text = false
+
+    const filter = { status: undefined, cohort: undefined, crnOrPersonName: undefined } as CaselistFilter
+    const referralCaseListItems = [referralCaseListItemFactory.build()]
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory.pageContent(referralCaseListItems).build({
+      totalElements: 1,
+      number: 0,
+      size: 10,
+      numberOfElements: 1,
+    }) as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      1,
+      referralCaseListItemPage,
+      filter,
+      '',
+      true,
+      TestUtils.createCaseListFilters(),
+      0,
+      'test location',
+    )
+
+    expect(presenter.resultsText).toBe('Showing <strong>1</strong> to <strong>1</strong> of <strong>1</strong> results')
   })
 })
 
