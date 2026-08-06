@@ -64,7 +64,7 @@
     <div class="govuk-grid-column-three-quarters caselist-results-column">
       {{ mojSubNavigation(subNavArgs) }}
       {% if resultsText %}
-        <p class="govuk-body showing-results">{{ resultsText | safe }}</p>
+        <p class="govuk-body showing-results" role="status" aria-live="polite" aria-atomic="true">{{ resultsText | safe }}</p>
       {% endif %}
       {% if presenter.referralCaseListItems.content.length > 0 %}
         {{ govukTable(presenter.getCaseloadTableArgs()) }}

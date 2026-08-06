@@ -51,32 +51,40 @@ export default class CaselistView {
   }
 
   private get pduCheckboxArgs(): CheckboxesArgs {
+    const pduItems = this.presenter.generatePDUCheckboxArgs()
+    const pduOptionCount = pduItems.length
+    const optionWord = pduOptionCount === 1 ? 'option' : 'options'
+
     return {
       name: 'pdu',
       classes: 'govuk-checkboxes--small',
       fieldset: {
         legend: {
-          text: 'PDU',
+          html: `PDU <span class="govuk-visually-hidden">, ${pduOptionCount} ${optionWord}</span>`,
           isPageHeading: false,
           classes: 'govuk-fieldset__legend--s',
         },
       },
-      items: this.presenter.generatePDUCheckboxArgs(),
+      items: pduItems,
     }
   }
 
   private get reportingTeamCheckboxArgs(): CheckboxesArgs {
+    const reportingTeamItems = this.presenter.generateReportingTeamCheckboxArgs()
+    const reportingTeamOptionCount = reportingTeamItems.length
+    const optionWord = reportingTeamOptionCount === 1 ? 'option' : 'options'
+
     return {
       name: 'reportingTeam',
       classes: 'govuk-checkboxes--small',
       fieldset: {
         legend: {
-          text: 'Reporting team',
+          html: `Reporting team <span class="govuk-visually-hidden">, ${reportingTeamOptionCount} ${optionWord}</span>`,
           isPageHeading: false,
           classes: 'govuk-fieldset__legend--s',
         },
       },
-      items: this.presenter.generateReportingTeamCheckboxArgs(),
+      items: reportingTeamItems,
     }
   }
 
