@@ -2,7 +2,6 @@ import { CaseListFilterValues, CohortEnum, ReferralCaseListItem } from '@manage-
 import { Page } from '../shared/models/pagination'
 import { CheckboxesArgsItem, SelectArgsItem, TableArgs } from '../utils/govukFrontendTypes'
 import Pagination from '../utils/pagination/pagination'
-import config from '../config'
 import CaselistFilter from './caselistFilter'
 import CaselistUtils from './caseListUtils'
 import DateUtils from '../utils/dateUtils'
