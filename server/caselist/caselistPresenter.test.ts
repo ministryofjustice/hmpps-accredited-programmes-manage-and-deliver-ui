@@ -44,7 +44,7 @@ describe(`filters`, () => {
       ])
     })
 
-    it('should generate just select value when no values provided', () => {
+    it('should generate only Select value when no values are provided', () => {
       const testObject = {
         filter: { status: undefined, cohort: undefined, crnOrPersonName: undefined } as CaselistFilter,
       }
