@@ -2,6 +2,11 @@ import { GroupSessionResponse } from '@manage-and-deliver-api'
 import EditSessionPresenter from './editSessionPresenter'
 import { FormValidationError } from '../utils/formValidationError'
 
+const laoBadgeHtml = ' <br><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>'
+
+const nameCrnCellHtml = (referralId: string, name: string, crn: string, indent: number, lao = false): string =>
+  `<a href="/referral-details/${referralId}/personal-details">${name}</a> ${crn}\n${' '.repeat(indent)}${lao ? laoBadgeHtml : ''}`
+
 describe('EditSessionPresenter', () => {
   const mockGroupId = 'group-123'
   const mockSessionId = 'session-456'
@@ -65,6 +70,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'Attended',
               sessionNotes: 'Good participation',
+              lao: false,
             },
             {
               referralId: '456',
@@ -73,6 +79,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'Not attended',
               sessionNotes: 'Absent',
+              lao: false,
             },
           ],
           date: '01 Feb 2026',
@@ -97,7 +104,7 @@ describe('EditSessionPresenter', () => {
               value: '123',
               checkBoxLabel: 'Alex River',
               cells: [
-                { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
+                { html: nameCrnCellHtml('123', 'Alex River', 'CRN001', 20) },
                 { html: '<span class="govuk-tag govuk-tag--blue">Attended</span>' },
                 {
                   html: '<a href="/group-123/session-456/session-1-attendance-and-session-notes?referralId=123&source=edit-session">Alex River: Session 1 notes</a>',
@@ -109,7 +116,7 @@ describe('EditSessionPresenter', () => {
               value: '456',
               checkBoxLabel: 'Jane Doe',
               cells: [
-                { html: '<a href="/referral-details/456/personal-details">Jane Doe</a> CRN002' },
+                { html: nameCrnCellHtml('456', 'Jane Doe', 'CRN002', 20) },
                 { html: '<span class="govuk-tag govuk-tag--red">Not attended</span>' },
                 {
                   html: '<a href="/group-123/session-456/session-1-attendance-and-session-notes?referralId=456&source=edit-session">Jane Doe: Session 1 notes</a>',
@@ -136,6 +143,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'Attended - failed to comply',
               sessionNotes: 'Good progress',
+              lao: false,
             },
           ],
           date: '01 Feb 2026',
@@ -155,7 +163,7 @@ describe('EditSessionPresenter', () => {
           captionClasses: 'govuk-visually-hidden',
           rows: [
             [
-              { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
+              { html: nameCrnCellHtml('123', 'Alex River', 'CRN001', 26) },
               { html: '<span class="govuk-tag govuk-tag--yellow">Attended - failed to comply</span>' },
               {
                 html: '<a href="/group-123/session-456/session-1-attendance-and-session-notes?referralId=123&source=edit-session">Alex River: Session 1 notes</a>',
@@ -179,6 +187,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'Attended',
               sessionNotes: '',
+              lao: false,
             },
           ],
           date: '01 Feb 2026',
@@ -198,7 +207,7 @@ describe('EditSessionPresenter', () => {
           captionClasses: 'govuk-visually-hidden',
           rows: [
             [
-              { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
+              { html: nameCrnCellHtml('123', 'Alex River', 'CRN001', 26) },
               { html: '<span class="govuk-tag govuk-tag--blue">Attended</span>' },
               {
                 text: 'Not added',
@@ -222,6 +231,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'Attended',
               sessionNotes: 'Not added',
+              lao: false,
             },
           ],
           date: '01 Feb 2026',
@@ -241,7 +251,7 @@ describe('EditSessionPresenter', () => {
           captionClasses: 'govuk-visually-hidden',
           rows: [
             [
-              { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
+              { html: nameCrnCellHtml('123', 'Alex River', 'CRN001', 26) },
               { html: '<span class="govuk-tag govuk-tag--blue">Attended</span>' },
               {
                 text: 'Not added',
@@ -293,6 +303,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'Attended',
               sessionNotes: 'Notes recorded',
+              lao: false,
             },
           ],
           date: '01 Feb 2026',
@@ -312,7 +323,7 @@ describe('EditSessionPresenter', () => {
           captionClasses: 'govuk-visually-hidden',
           rows: [
             [
-              { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
+              { html: nameCrnCellHtml('123', 'Alex River', 'CRN001', 26) },
               { html: '<span class="govuk-tag govuk-tag--blue">Attended</span>' },
               {
                 html: '<a href="/group-123/session-456/pre-group-one-to-one-attendance-and-session-notes?referralId=123&source=edit-session">Alex River: Pre-group one-to-one notes</a>',
@@ -336,6 +347,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'Attended',
               sessionNotes: 'Notes recorded',
+              lao: false,
             },
           ],
           date: '01 Feb 2026',
@@ -355,7 +367,7 @@ describe('EditSessionPresenter', () => {
           captionClasses: 'govuk-visually-hidden',
           rows: [
             [
-              { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
+              { html: nameCrnCellHtml('123', 'Alex River', 'CRN001', 26) },
               { html: '<span class="govuk-tag govuk-tag--blue">Attended</span>' },
               {
                 html: '<a href="/group-123/session-456/getting-started-1-catch-up-attendance-and-session-notes?referralId=123&source=edit-session">Alex River: Getting started 1 notes</a>',
@@ -382,6 +394,7 @@ describe('EditSessionPresenter', () => {
               attendance: '',
               sessionNotes: 'Good participation',
               outcome_type_code: 'UAAB',
+              lao: false,
             } as GroupSessionResponse['attendanceAndSessionNotes'][number],
           ],
           date: '01 Feb 2026',
@@ -401,7 +414,7 @@ describe('EditSessionPresenter', () => {
           captionClasses: 'govuk-visually-hidden',
           rows: [
             [
-              { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
+              { html: nameCrnCellHtml('123', 'Alex River', 'CRN001', 26) },
               { html: '<span class="govuk-tag govuk-tag--grey">To be confirmed</span>' },
               {
                 html: '<a href="/group-123/session-456/session-1-attendance-and-session-notes?referralId=123&source=edit-session">Alex River: Session 1 notes</a>',
@@ -425,6 +438,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'No - did not attend',
               sessionNotes: 'Absent',
+              lao: false,
             },
           ],
           date: '01 Feb 2026',
@@ -444,7 +458,7 @@ describe('EditSessionPresenter', () => {
           captionClasses: 'govuk-visually-hidden',
           rows: [
             [
-              { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
+              { html: nameCrnCellHtml('123', 'Alex River', 'CRN001', 26) },
               { html: '<span class="govuk-tag govuk-tag--grey">To be confirmed</span>' },
               {
                 html: '<a href="/group-123/session-456/session-1-attendance-and-session-notes?referralId=123&source=edit-session">Alex River: Session 1 notes</a>',
@@ -468,6 +482,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'Did not attend',
               sessionNotes: 'Absent',
+              lao: false,
             },
           ],
           date: '01 Feb 2026',
@@ -487,12 +502,124 @@ describe('EditSessionPresenter', () => {
           captionClasses: 'govuk-visually-hidden',
           rows: [
             [
-              { html: '<a href="/referral-details/123/personal-details">Alex River</a> CRN001' },
+              { html: nameCrnCellHtml('123', 'Alex River', 'CRN001', 26) },
               { html: '<span class="govuk-tag govuk-tag--red">Not attended</span>' },
               {
                 html: '<a href="/group-123/session-456/session-1-attendance-and-session-notes?referralId=123&source=edit-session">Alex River: Session 1 notes</a>',
               },
             ],
+          ],
+        })
+      })
+    })
+
+    describe('when a referral is an LAO case', () => {
+      it('renders the RESTRICTED ACCESS badge in the single-referral name cell', () => {
+        const sessionDetails: GroupSessionResponse = {
+          pageTitle: 'Session 1',
+          code: 'CODE-123',
+          sessionType: 'Individual',
+          isCatchup: false,
+          attendanceAndSessionNotes: [
+            {
+              referralId: '123',
+              name: 'Alex River',
+              crn: 'CRN001',
+              attendance: 'Attended',
+              sessionNotes: 'Good progress',
+              lao: true,
+            },
+          ],
+          date: '01 Feb 2026',
+          time: '1:00pm',
+          unformattedEndDate: '2026-02-01T14:00:00',
+          scheduledToAttend: [],
+          facilitators: [],
+        }
+
+        const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
+        const result = presenter.attendanceTableArgs
+
+        expect(result).toEqual({
+          head: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
+          caption: 'Attendance record and session notes',
+          captionClasses: 'govuk-visually-hidden',
+          rows: [
+            [
+              { html: nameCrnCellHtml('123', 'Alex River', 'CRN001', 26, true) },
+              { html: '<span class="govuk-tag govuk-tag--blue">Attended</span>' },
+              {
+                html: '<a href="/group-123/session-456/session-1-attendance-and-session-notes?referralId=123&source=edit-session">Alex River: Session 1 notes</a>',
+              },
+            ],
+          ],
+        })
+      })
+
+      it('renders the RESTRICTED ACCESS badge only for LAO referrals in the multi-referral name cells', () => {
+        const sessionDetails: GroupSessionResponse = {
+          pageTitle: 'Session 1',
+          code: 'CODE-123',
+          sessionType: 'Group',
+          isCatchup: false,
+          attendanceAndSessionNotes: [
+            {
+              referralId: '123',
+              name: 'Alex River',
+              crn: 'CRN001',
+              attendance: 'Attended',
+              sessionNotes: 'Good participation',
+              lao: false,
+            },
+            {
+              referralId: '456',
+              name: 'Jane Doe',
+              crn: 'CRN002',
+              attendance: 'Not attended',
+              sessionNotes: 'Absent',
+              lao: true,
+            },
+          ],
+          date: '01 Feb 2026',
+          time: '1:00pm',
+          unformattedEndDate: '2026-02-01T14:00:00',
+          scheduledToAttend: [],
+          facilitators: [],
+        }
+
+        const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
+        const result = presenter.attendanceTableArgs
+
+        expect(result).toEqual({
+          idPrefix: 'attendance-multi-select',
+          headers: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
+          caption: 'Attendance record and session notes',
+          captionClasses: 'govuk-visually-hidden',
+          rows: [
+            {
+              id: 'attendance-multi-select-row-0',
+              value: '123',
+              checkBoxLabel: 'Alex River',
+              cells: [
+                { html: nameCrnCellHtml('123', 'Alex River', 'CRN001', 20, false) },
+                { html: '<span class="govuk-tag govuk-tag--blue">Attended</span>' },
+                {
+                  html: '<a href="/group-123/session-456/session-1-attendance-and-session-notes?referralId=123&source=edit-session">Alex River: Session 1 notes</a>',
+                },
+              ],
+            },
+            {
+              id: 'attendance-multi-select-row-1',
+              value: '456',
+              checkBoxLabel: 'Jane Doe',
+              cells: [
+                { html: nameCrnCellHtml('456', 'Jane Doe', 'CRN002', 20, true) },
+                { html: '<span class="govuk-tag govuk-tag--red">Not attended</span>' },
+                {
+                  html: '<a href="/group-123/session-456/session-1-attendance-and-session-notes?referralId=456&source=edit-session">Jane Doe: Session 1 notes</a>',
+                },
+              ],
+            },
           ],
         })
       })
@@ -725,6 +852,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'To be confirmed',
               sessionNotes: '',
+              lao: false,
             },
             {
               name: 'Clarita Hermann',
@@ -733,6 +861,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'To be confirmed',
               sessionNotes: '',
+              lao: false,
             },
             {
               name: 'Daine Lehner',
@@ -741,6 +870,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'To be confirmed',
               sessionNotes: '',
+              lao: false,
             },
           ],
         }),
@@ -765,6 +895,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'To be confirmed',
               sessionNotes: '',
+              lao: false,
             },
             {
               name: 'Clarita Hermann',
@@ -773,6 +904,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'Attended - Failed to Comply',
               sessionNotes: '',
+              lao: false,
             },
             {
               name: 'Daine Lehner',
@@ -781,6 +913,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'To be confirmed',
               sessionNotes: '',
+              lao: false,
             },
           ],
         }),
