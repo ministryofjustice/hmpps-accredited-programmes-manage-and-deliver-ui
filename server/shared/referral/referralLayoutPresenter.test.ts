@@ -104,3 +104,21 @@ describe('pageTitle', () => {
     expect(presenter.pageTitle).toEqual('Sentence information - Referral details')
   })
 })
+
+describe('headerMenu', () => {
+  it('shows restricted access badge when referral is LAO', () => {
+    const referralDetails = referralDetailsFactory.build({ isLAO: true })
+    const sentenceInformation = sentenceInformationFactory.licence().build()
+    const presenter = new SentenceInformationPresenter(referralDetails, 'sentence-information', sentenceInformation)
+
+    expect(presenter.headerMenu.showRestrictedAccessBadge).toBe(true)
+  })
+
+  it('hides restricted access badge when referral is not LAO', () => {
+    const referralDetails = referralDetailsFactory.build({ isLAO: false })
+    const sentenceInformation = sentenceInformationFactory.licence().build()
+    const presenter = new SentenceInformationPresenter(referralDetails, 'sentence-information', sentenceInformation)
+
+    expect(presenter.headerMenu.showRestrictedAccessBadge).toBe(false)
+  })
+})

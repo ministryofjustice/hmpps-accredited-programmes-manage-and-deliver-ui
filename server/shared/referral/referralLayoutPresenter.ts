@@ -88,6 +88,7 @@ export default class ReferralLayoutPresenter {
     return {
       caption: 'Building Choices: moderate intensity',
       heading: this.headingText,
+      showRestrictedAccessBadge: this.referral.isLAO,
       showButtonMenu: this.showButtonMenu(),
       buttonMenu: this.getButtonMenu(),
     }
