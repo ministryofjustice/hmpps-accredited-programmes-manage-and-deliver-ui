@@ -4,8 +4,8 @@ import { FormValidationError } from '../utils/formValidationError'
 
 const laoBadgeHtml = ' <br><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>'
 
-const nameCrnCellHtml = (referralId: string, name: string, crn: string, indent: number, lao = false): string =>
-  `<a href="/referral-details/${referralId}/personal-details">${name}</a> ${crn}\n${' '.repeat(indent)}${lao ? laoBadgeHtml : ''}`
+const nameCrnCellHtml = (referralId: string, name: string, crn: string, _indent: number, lao = false): string =>
+  `<a href="/referral-details/${referralId}/personal-details">${name}</a> ${crn}${lao ? laoBadgeHtml : ''}`
 
 describe('EditSessionPresenter', () => {
   const mockGroupId = 'group-123'
