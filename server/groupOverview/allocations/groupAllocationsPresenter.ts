@@ -9,6 +9,7 @@ import Pagination from '../../utils/pagination/pagination'
 import PresenterUtils from '../../utils/presenterUtils'
 import { convertToTitleCase } from '../../utils/utils'
 import GroupAllocationsFilter from './groupAllocationsFilter'
+import config from '../../config'
 
 export enum GroupAllocationsPageSection {
   Allocated = 1,
@@ -148,7 +149,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
         },
         {
           html: `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0"> ${member.crn}</p>
-                ${member.lao ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`,
+                ${member.lao && config.enable_restricted_access_badge ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`,
         },
         {
           html: `${member.sentenceEndDate ?? 'No information'}${
@@ -188,7 +189,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
         },
         {
           html: `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0">${member.crn}</p>
-                ${member.lao ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`,
+                ${member.lao && config.enable_restricted_access_badge ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`,
         },
         {
           html: `${member.sentenceEndDate ?? 'No information'}${

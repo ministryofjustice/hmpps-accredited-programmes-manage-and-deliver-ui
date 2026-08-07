@@ -1,6 +1,7 @@
 import { ReferralDetails } from '@manage-and-deliver-api'
 import { MojAlertComponentArgs } from '../../interfaces/alertComponentArgs'
 import { formatCohortSuccessMessage } from '../../utils/utils'
+import config from '../../config'
 
 export enum HorizontalNavValues {
   referralDetailsTab = 'referralDetails',
@@ -85,10 +86,12 @@ export default class ReferralLayoutPresenter {
   }
 
   get headerMenu() {
+    const showRestrictedAccessBadge = this.referral.isLAO && config.enable_restricted_access_badge
+
     return {
       caption: 'Building Choices: moderate intensity',
       heading: this.headingText,
-      showRestrictedAccessBadge: this.referral.isLAO,
+      showRestrictedAccessBadge,
       showButtonMenu: this.showButtonMenu(),
       buttonMenu: this.getButtonMenu(),
     }
