@@ -6,6 +6,7 @@ import PresenterUtils from '../utils/presenterUtils'
 import { convertToUrlFriendlyKebabCase, getEditSessionRouteTitle } from '../utils/utils'
 import ViewUtils from '../utils/viewUtils'
 import attendanceOptionText, { attendanceOptionTextTags } from '../utils/attendanceUtils'
+import config from '../config'
 
 export default class EditSessionPresenter {
   constructor(
@@ -159,7 +160,7 @@ export default class EditSessionPresenter {
           checkBoxLabel: it.name,
           cells: [
             {
-              html: `<a href="/referral-details/${it.referralId}/personal-details">${it.name}</a> ${it.crn}`,
+              html: `<a href="/referral-details/${it.referralId}/personal-details">${it.name}</a> ${it.crn}${it.lao && config.enable_restricted_access_badge ? ' <br><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`,
             },
             { html: this.attendanceOptionText(it.attendance).attendanceState },
             this.sessionNotesCell(it.sessionNotes, it.referralId, it.name),
@@ -176,7 +177,7 @@ export default class EditSessionPresenter {
           ? [
               [
                 {
-                  html: `<a href="/referral-details/${attendanceData[0].referralId}/personal-details">${attendanceData[0].name}</a> ${attendanceData[0].crn}`,
+                  html: `<a href="/referral-details/${attendanceData[0].referralId}/personal-details">${attendanceData[0].name}</a> ${attendanceData[0].crn}${attendanceData[0].lao && config.enable_restricted_access_badge ? ' <br><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`,
                 },
                 { html: this.attendanceOptionText(attendanceData[0].attendance).attendanceState },
                 this.sessionNotesCell(
