@@ -501,14 +501,16 @@ describe('generateTableRows', () => {
     const rows = presenter.generateTableRows()
 
     expect(rows[0][4]).toEqual({
-      html: 'General offence</br><span class="moj-badge moj-badge--bright-purple">LDC</span>',
+      html: 'General offence<br/><span class="moj-badge moj-badge--bright-purple">LDC</span>',
     })
     expect(rows[1][4]).toEqual({
-      html: 'Sexual offence</br><span class="moj-badge moj-badge--bright-purple">LDC</span>',
+      html: 'Sexual offence<br/><span class="moj-badge moj-badge--bright-purple">LDC</span>',
     })
   })
 
   it('should display RESTRICTED ACCESS badge in the name column when the referral is an LAO case', () => {
+    ;(config as jest.Mocked<typeof config>).enable_restricted_access_badge = true
+
     const laoReferral = referralCaseListItemFactory.build({
       referralId: 'REF999',
       personName: 'John Smith',
@@ -532,7 +534,7 @@ describe('generateTableRows', () => {
     const rows = presenter.generateTableRows()
 
     expect(rows[0][0]).toEqual({
-      html: `<a href='/referral-details/REF999/personal-details'>John Smith</a><span>X111222</span></br><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>`,
+      html: `<a href='/referral-details/REF999/personal-details'>John Smith</a><span>X111222</span><br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>`,
       attributes: { 'data-sort-value': 'John Smith' },
     })
   })

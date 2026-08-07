@@ -1,12 +1,19 @@
 import ProgrammeGroupOverviewFactory from '../../testutils/factories/programmeGroupAllocationsFactory'
 import GroupAllocationsFilter from './groupAllocationsFilter'
 import GroupAllocationsPresenter, { GroupAllocationsPageSection } from './groupAllocationsPresenter'
+import config from '../../config'
+
+jest.mock('../../config')
 
 afterEach(() => {
   jest.restoreAllMocks()
 })
 
 describe('GroupAllocationsPresenter', () => {
+  beforeEach(() => {
+    ;(config as jest.Mocked<typeof config>).enable_restricted_access_badge = true
+  })
+
   describe('pageTitle', () => {
     it('returns "Group allocations" when section is Allocated', () => {
       const filterObject = GroupAllocationsFilter.empty()
@@ -188,6 +195,24 @@ describe('GroupAllocationsPresenter', () => {
           { html: '<strong class="govuk-tag govuk-tag--purple">Scheduled</strong>' },
         ],
       ])
+    })
+
+    it('does not render RESTRICTED ACCESS badge when feature flag is disabled', () => {
+      ;(config as jest.Mocked<typeof config>).enable_restricted_access_badge = false
+
+      const filterObject = GroupAllocationsFilter.empty()
+      const groupOverview = ProgrammeGroupOverviewFactory.allocatedList().build()
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Waitlist,
+        groupOverview,
+        '1234',
+        filterObject,
+      )
+
+      const rows = presenter.generateAllocatedTableArgs()
+      expect(rows[1][1]).toEqual({
+        html: `<a href="/referral-details/ae43bc75-b96e-496b-b9da-20ea327d7909/personal-details">Roy Kloss</a><p class="govuk-!-margin-bottom-0">X718255</p>`,
+      })
     })
   })
 

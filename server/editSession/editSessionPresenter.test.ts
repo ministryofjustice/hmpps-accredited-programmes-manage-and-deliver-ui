@@ -1,6 +1,9 @@
 import { GroupSessionResponse } from '@manage-and-deliver-api'
 import EditSessionPresenter from './editSessionPresenter'
 import { FormValidationError } from '../utils/formValidationError'
+import config from '../config'
+
+jest.mock('../config')
 
 const laoBadgeHtml = ' <br><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>'
 
@@ -504,6 +507,10 @@ describe('EditSessionPresenter', () => {
     })
 
     describe('when a referral is an LAO case', () => {
+      beforeEach(() => {
+        ;(config as jest.Mocked<typeof config>).enable_restricted_access_badge = true
+      })
+
       it('renders the RESTRICTED ACCESS badge in the single-referral name cell', () => {
         const sessionDetails: GroupSessionResponse = {
           pageTitle: 'Session 1',
@@ -612,6 +619,51 @@ describe('EditSessionPresenter', () => {
                 },
               ],
             },
+          ],
+        })
+      })
+
+      it('does not render the RESTRICTED ACCESS badge when feature flag is disabled', () => {
+        ;(config as jest.Mocked<typeof config>).enable_restricted_access_badge = false
+
+        const sessionDetails: GroupSessionResponse = {
+          pageTitle: 'Session 1',
+          code: 'CODE-123',
+          sessionType: 'Individual',
+          isCatchup: false,
+          attendanceAndSessionNotes: [
+            {
+              referralId: '123',
+              name: 'Alex River',
+              crn: 'CRN001',
+              attendance: 'Attended',
+              sessionNotes: 'Good progress',
+              lao: true,
+            },
+          ],
+          date: '01 Feb 2026',
+          time: '1:00pm',
+          timeWithCapitalisedMidday: '1:00pm',
+          unformattedEndDate: '2026-02-01T14:00:00',
+          scheduledToAttend: [],
+          facilitators: [],
+        }
+
+        const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
+        const result = presenter.attendanceTableArgs
+
+        expect(result).toEqual({
+          head: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
+          caption: 'Attendance record and session notes',
+          captionClasses: 'govuk-visually-hidden',
+          rows: [
+            [
+              { html: nameCrnCellHtml('123', 'Alex River', 'CRN001', 26, false) },
+              { html: '<span class="govuk-tag govuk-tag--blue">Attended</span>' },
+              {
+                html: '<a href="/group-123/session-456/session-1-attendance-and-session-notes?referralId=123&source=edit-session">Alex River: Session 1 notes</a>',
+              },
+            ],
           ],
         })
       })

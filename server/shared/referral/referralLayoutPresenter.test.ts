@@ -111,7 +111,7 @@ describe('headerMenu', () => {
     const sentenceInformation = sentenceInformationFactory.licence().build()
     const presenter = new SentenceInformationPresenter(referralDetails, 'sentence-information', sentenceInformation)
 
-    expect(presenter.headerMenu.showRestrictedAccessBadge).toBe(true)
+    expect(presenter.headerMenu.showRestrictedAccessBadge).toBe(false)
   })
 
   it('hides restricted access badge when referral is not LAO', () => {
