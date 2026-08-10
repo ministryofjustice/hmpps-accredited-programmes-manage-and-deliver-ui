@@ -1,9 +1,9 @@
 {%- from "moj/components/button-menu/macro.njk" import mojButtonMenu -%}
 <div class="govuk-grid-column-three-quarters">
     <span class="govuk-caption-xl">{{ presenter.headerMenu.caption }}</span>
-    <h1 class="govuk-heading-xl">{{ presenter.headerMenu.heading }}
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">{{ presenter.headerMenu.heading }}
     {% if presenter.headerMenu.showRestrictedAccessBadge %}
-    <br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>
+    <br/><span class="moj-badge moj-badge--red moj-badge--large">RESTRICTED ACCESS</span>
     {% endif %}</h1>
        
 </div>
