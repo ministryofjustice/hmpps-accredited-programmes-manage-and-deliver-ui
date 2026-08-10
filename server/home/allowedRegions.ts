@@ -4,11 +4,12 @@ import config from '../config'
  * For info:
  * N53 Is the East Midlands
  * N54 Is the North East
+ * N57 is KSS
  * N59 Is the South Central
  * Full region code mapping can be found at:
  * https://dsdmoj.atlassian.net/wiki/spaces/IC/pages/6027477185/Interventions+Manager+Data+Migration+Strategy#2.-Phased-out-Data-Migration
  */
-export const ALLOWED_REGIONS: string[] = ['N53', 'N54', 'N59']
+export const ALLOWED_REGIONS: string[] = ['N53', 'N54', 'N57', 'N59']
 
 /**
  * For info:
@@ -17,7 +18,7 @@ export const ALLOWED_REGIONS: string[] = ['N53', 'N54', 'N59']
  * N50 Is the region code for Greater Manchester. Currently used for test accounts but not yet allowed in production.
  * Other are descibed in ALLOWED_REGIONS above.
  */
-export const DEV_ALLOWED_REGIONS: string[] = ['N02', 'N07', 'N50', 'N53', 'N54', 'N59'] // Dev users do not have access to the same regions in delius so extra ones allowed.
+export const DEV_ALLOWED_REGIONS: string[] = ['N02', 'N07', 'N50', 'N53', 'N54', 'N57', 'N59'] // Dev users do not have access to the same regions in delius so extra ones allowed.
 
 /**
  * Checks if the region restriction is enabled.
