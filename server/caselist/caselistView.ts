@@ -117,7 +117,7 @@ export default class CaselistView {
       id: 'sex',
       name: 'sex',
       label: {
-        text: 'Select sex',
+        text: 'Sex',
         classes: 'govuk-label--s',
       },
       items: this.presenter.generateSexSelectArgs(),
