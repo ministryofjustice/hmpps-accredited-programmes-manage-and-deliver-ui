@@ -112,6 +112,18 @@ export default class CaselistView {
     }
   }
 
+  private get searchBySexArgs(): SelectArgs {
+    return {
+      id: 'sex',
+      name: 'sex',
+      label: {
+        text: 'Select sex',
+        classes: 'govuk-label--s',
+      },
+      items: this.presenter.generateSexSelectArgs(),
+    }
+  }
+
   private get applyFilterButtonArgs() {
     return { text: 'Apply filters', classes: 'govuk-!-margin-top-4' }
   }
@@ -129,6 +141,7 @@ export default class CaselistView {
         reportingTeamCheckboxArgs: this.reportingTeamCheckboxArgs,
         searchByCrnOrPersonNameArgs: this.searchByCrnOrPersonNameArgs,
         searchByCohortArgs: this.searchByCohortArgs,
+        searchBySexArgs: this.searchBySexArgs,
         applyFilterButtonArgs: this.applyFilterButtonArgs,
         noResultsString: this.presenter.generateNoResultsString(),
         resultsText: this.presenter.resultsText,

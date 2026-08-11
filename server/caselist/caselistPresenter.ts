@@ -213,6 +213,23 @@ export default class CaselistPresenter {
     return selectOptions
   }
 
+  generateSexSelectArgs(): SelectArgsItem[] {
+    const selectOptions: SelectArgsItem[] = [
+      {
+        text: 'Select',
+        value: '',
+      },
+    ]
+    ;['Male', 'Female'].forEach(sex =>
+      selectOptions.push({
+        value: sex,
+        text: sex,
+        selected: this.filter.sex === sex,
+      }),
+    )
+    return selectOptions
+  }
+
   generatePDUCheckboxArgs(): CheckboxesArgsItem[] {
     return this.caseListFilters.locationFilters
       .map(pdu => ({

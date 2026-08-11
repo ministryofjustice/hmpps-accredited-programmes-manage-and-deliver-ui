@@ -7,6 +7,8 @@ export default class CaselistFilter {
 
   cohort: string | undefined
 
+  sex: string | undefined
+
   crnOrPersonName: string | undefined
 
   pdu: string[] | undefined
@@ -17,6 +19,7 @@ export default class CaselistFilter {
     const filter = new CaselistFilter()
     filter.status = request.query.status as string | undefined
     filter.cohort = request.query.cohort as string | undefined
+    filter.sex = request.query.sex as string | undefined
     filter.crnOrPersonName = request.query.crnOrPersonName as string | undefined
     filter.pdu = request.query.pdu as string[] | undefined
     filter.reportingTeam = request.query.reportingTeam as string[] | undefined
@@ -51,6 +54,9 @@ export default class CaselistFilter {
     }
     if (this.cohort) {
       params.cohort = this.cohort
+    }
+    if (this.sex) {
+      params.sex = this.sex
     }
     if (this.crnOrPersonName?.trim()) {
       params.crnOrPersonName = this.crnOrPersonName.trim()
