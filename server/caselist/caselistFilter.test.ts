@@ -8,6 +8,7 @@ describe(CaselistFilter, () => {
       const query = {
         status: 'REFERRAL_SUBMITTED',
         cohort: 'SEXUAL_OFFENCE',
+        sex: 'Male',
         crnOrPersonName: 'Building',
         pdu: ['PDU3'],
         reportingTeam: ['Team5'],
@@ -20,6 +21,7 @@ describe(CaselistFilter, () => {
 
       expect(filter.status).toEqual('REFERRAL_SUBMITTED')
       expect(filter.cohort).toEqual('SEXUAL_OFFENCE')
+      expect(filter.sex).toEqual('Male')
       expect(filter.crnOrPersonName).toEqual('Building')
       expect(filter.pdu).toEqual(['PDU3'])
       expect(filter.reportingTeam).toEqual(['Team5'])
@@ -52,6 +54,7 @@ describe(CaselistFilter, () => {
         const filter = new CaselistFilter()
         expect(filter.status).toBeUndefined()
         expect(filter.cohort).toBeUndefined()
+        expect(filter.sex).toBeUndefined()
         expect(filter.crnOrPersonName).toBeUndefined()
         expect(filter.pdu).toBeUndefined()
         expect(filter.reportingTeam).toBeUndefined()
@@ -69,6 +72,12 @@ describe(CaselistFilter, () => {
         const filter = new CaselistFilter()
         filter.cohort = 'SEXUAL_OFFENCE'
         expect(filter.params.cohort).toEqual('SEXUAL_OFFENCE')
+      })
+
+      it('correctly sets sex if passed', () => {
+        const filter = new CaselistFilter()
+        filter.sex = 'Female'
+        expect(filter.params.sex).toEqual('Female')
       })
     })
 
