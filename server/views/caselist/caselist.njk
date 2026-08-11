@@ -39,6 +39,7 @@
     {% endif %}
 
     {{ govukSelect(searchByCohortArgs) }}
+    {{ govukSelect(searchBySexArgs) }}
     {{ govukSelectWithOptgroup(searchByStatusArgs) }}
     {{ govukButton(applyFilterButtonArgs) }}
     <a class="clear-filters__link" href="?">Clear filters</a>

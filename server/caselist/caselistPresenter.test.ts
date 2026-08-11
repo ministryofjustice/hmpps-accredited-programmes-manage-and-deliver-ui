@@ -156,6 +156,60 @@ describe(`filters`, () => {
     })
   })
 
+  describe('generateSexSelectArgs', () => {
+    it('should generate correct select items for sex', () => {
+      const testObject = {
+        filter: { sex: undefined } as unknown as CaselistFilter,
+      }
+      const referralCaseListItem = referralCaseListItemFactory.build()
+      const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+        .pageContent([referralCaseListItem])
+        .build() as Page<ReferralCaseListItem>
+      const presenter = new CaselistPresenter(
+        1,
+        referralCaseListItemPage,
+        testObject.filter,
+        '',
+        true,
+        caseListFilters,
+        2,
+        'test location',
+      )
+
+      expect(presenter.generateSexSelectArgs()).toEqual([
+        { text: 'Select', value: '' },
+        { value: 'Male', text: 'Male', selected: false },
+        { value: 'Female', text: 'Female', selected: false },
+      ])
+    })
+
+    it('should mark the selected sex based on filter.sex', () => {
+      const testObject = {
+        filter: { sex: 'Female' } as unknown as CaselistFilter,
+      }
+      const referralCaseListItem = referralCaseListItemFactory.build()
+      const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+        .pageContent([referralCaseListItem])
+        .build() as Page<ReferralCaseListItem>
+      const presenter = new CaselistPresenter(
+        1,
+        referralCaseListItemPage,
+        testObject.filter,
+        '',
+        true,
+        caseListFilters,
+        2,
+        'test location',
+      )
+
+      expect(presenter.generateSexSelectArgs()).toEqual([
+        { text: 'Select', value: '' },
+        { value: 'Male', text: 'Male', selected: false },
+        { value: 'Female', text: 'Female', selected: true },
+      ])
+    })
+  })
+
   describe('generateReportingTeamCheckboxArgs', () => {
     it('should generate correct checkboxes based on API data and select the correct reporting team', () => {
       const testObject = {
