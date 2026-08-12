@@ -459,6 +459,7 @@ describe('generateTableRows', () => {
       sentenceEndDateSource: 'REQUIREMENT',
       cohort: 'GENERAL_OFFENCE',
       hasLdc: false,
+      sex: 'Female',
       referralStatus: 'Awaiting allocation',
       statusLabelColour: 'teal',
     })
@@ -480,7 +481,7 @@ describe('generateTableRows', () => {
     const sentenceEndDateTimestamp = new Date('15 June 2024').getTime()
 
     expect(rows).toHaveLength(1)
-    expect(rows[0]).toHaveLength(6)
+    expect(rows[0]).toHaveLength(7)
     expect(rows[0][0]).toEqual({
       html: `<a href='/referral-details/REF123/personal-details'>Jane Doe</a><span>X987654</span>`,
       attributes: { 'data-sort-value': 'Jane Doe' },
@@ -492,7 +493,8 @@ describe('generateTableRows', () => {
       attributes: { 'data-sort-value': sentenceEndDateTimestamp },
     })
     expect(rows[0][4]).toEqual({ html: 'General offence' })
-    expect(rows[0][5]).toEqual({
+    expect(rows[0][5]).toEqual({ text: 'Female' })
+    expect(rows[0][6]).toEqual({
       html: `<strong class="govuk-tag govuk-tag--teal">Awaiting allocation</strong>`,
     })
   })
