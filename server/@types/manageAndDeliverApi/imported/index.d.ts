@@ -2050,8 +2050,8 @@ export interface components {
        */
       additionalDetails: string | null
       /**
-       * @description The name of the User who updated the status.  SYSTEM and UNKNOWN_USER are known non-human values.
-       * @example John Doe
+       * @description The username of the User who updated the status.  SYSTEM and UNKNOWN_USER are known non-human values.
+       * @example johnDoe
        */
       updatedBy: string
       /**
@@ -2062,6 +2062,11 @@ export interface components {
       updatedAt: string
       /** @description The display colour of the status tag */
       tagColour: string
+      /**
+       * @description The full name of the User who updated the status.
+       * @example John Doe
+       */
+      updatedByFullName?: string | null
     }
     /** @description Details of the new Referral Status to assign */
     CreateReferralStatusHistory: {
@@ -3371,10 +3376,10 @@ export interface components {
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
-      first?: boolean
-      last?: boolean
       sort?: components['schemas']['SortObject']
       pageable?: components['schemas']['PageableObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       empty?: boolean
@@ -3383,11 +3388,11 @@ export interface components {
       /** Format: int64 */
       offset?: number
       sort?: components['schemas']['SortObject']
-      /** Format: int32 */
-      pageSize?: number
+      paged?: boolean
       /** Format: int32 */
       pageNumber?: number
-      paged?: boolean
+      /** Format: int32 */
+      pageSize?: number
       unpaged?: boolean
     }
     ReferralCaseListItem: {
@@ -3395,6 +3400,7 @@ export interface components {
       referralId: string
       crn: string
       personName: string
+      sex?: string | null
       referralStatus: string
       statusLabelColour: string
       /**
@@ -3410,6 +3416,7 @@ export interface components {
       /** @enum {string|null} */
       sentenceEndDateSource?: 'REQUIREMENT' | 'LICENCE_CONDITION' | null
       lao?: boolean | null
+      isExcluded?: boolean | null
     }
     SortObject: {
       empty?: boolean
@@ -3692,6 +3699,11 @@ export interface components {
        * @example Participant engaged well.
        */
       sessionNotes?: string | null
+      /**
+       * @description The full name of a person that recorded session notes for the session
+       * @example John Smith
+       */
+      sessionNotesCreatedByFullName?: string | null
     }
     /** @description Details of an Option */
     Option: {
@@ -3759,6 +3771,11 @@ export interface components {
       sessionNotes?: string | null
       /** @description A list of options */
       options?: components['schemas']['Option'][] | null
+      /**
+       * @description The full name of a person that recorded session notes
+       * @example John Smith
+       */
+      sessionNotesCreatedByFullName?: string | null
     }
     /** @description Details of attendance */
     SessionPersonAttendance: {
@@ -4064,10 +4081,10 @@ export interface components {
       content?: components['schemas']['Group'][]
       /** Format: int32 */
       number?: number
-      first?: boolean
-      last?: boolean
       sort?: components['schemas']['SortObject']
       pageable?: components['schemas']['PageableObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       empty?: boolean
@@ -4164,10 +4181,10 @@ export interface components {
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
-      first?: boolean
-      last?: boolean
       sort?: components['schemas']['SortObject']
       pageable?: components['schemas']['PageableObject']
+      first?: boolean
+      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
       empty?: boolean
@@ -7741,6 +7758,8 @@ export interface operations {
         cohort?: string
         /** @description Filter by the status of the referral */
         status?: string
+        /** @description Filter by the sex of the person on probation (Male/Female) */
+        sex?: string
         requestParams: components['schemas']['MultiValueMapStringString']
       }
       header?: never
