@@ -39,6 +39,13 @@
 {% endblock %}
 
 {% block footer %}
+ {% set accessibilityStatementEnvironmentSuffix = '' %}
+ {% if environmentName | lower == 'dev' %}
+   {% set accessibilityStatementEnvironmentSuffix = '-dev' %}
+ {% elif environmentName | lower == 'preprod' %}
+   {% set accessibilityStatementEnvironmentSuffix = '-preprod' %}
+ {% endif %}
+ {% set accessibilityStatementUrl = 'https://probation-frontend-components' ~ accessibilityStatementEnvironmentSuffix ~ '.hmpps.service.justice.gov.uk/accessibility/accredited-programmes' %}
  <footer class="probation-common-footer govuk-!-display-none-print">
       <div class="govuk-width-container">
         <div class="govuk-grid-row">
@@ -47,7 +54,7 @@
               <h2 class="govuk-visually-hidden">Support links</h2>
               <ul class="probation-common-footer__inline-list">
                 <li class="probation-common-footer__inline-list-item"> 
-                  <a class="probation-common-footer__link" href="https://probation-frontend-components.hmpps.service.justice.gov.uk/accessibility/accredited-programmes">Accessibility</a>
+                  <a class="probation-common-footer__link" href="{{ accessibilityStatementUrl }}">Accessibility</a>
                 </li>
                 <li class="probation-common-footer__inline-list-item">
                   <a class="probation-common-footer__link" href="https://probation-frontend-components-dev.hmpps.service.justice.gov.uk/cookies-policy">Cookies policy</a>
