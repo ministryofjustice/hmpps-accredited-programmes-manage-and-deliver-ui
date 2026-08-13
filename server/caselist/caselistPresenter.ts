@@ -173,7 +173,7 @@ export default class CaselistPresenter {
             : 'Restricted',
         },
         {
-          text: `${referral.sex}`,
+          text: !isExcluded ? `${referral.sex}` : 'Restricted',
         },
         {
           html: `<strong class="govuk-tag govuk-tag--${referral.statusLabelColour}">${referral.referralStatus}</strong>`,

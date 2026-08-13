@@ -714,6 +714,7 @@ describe('generateTableRows', () => {
     const rows = presenter.generateTableRows()
 
     expect(rows).toHaveLength(1)
+    expect(rows[0]).toHaveLength(7)
     expect(rows[0][0]).toEqual({
       html: `<span>X111222</span>`,
       attributes: { 'data-sort-value': 'Restricted Person', 'data-excluded': 'true' },
@@ -725,7 +726,8 @@ describe('generateTableRows', () => {
       attributes: { 'data-sort-value': new Date('15 June 2024').getTime() },
     })
     expect(rows[0][4]).toEqual({ html: 'Restricted' })
-    expect(rows[0][5]).toEqual({
+    expect(rows[0][5]).toEqual({ text: 'Restricted' })
+    expect(rows[0][6]).toEqual({
       html: `<strong class="govuk-tag govuk-tag--teal">Awaiting allocation</strong>`,
     })
   })
