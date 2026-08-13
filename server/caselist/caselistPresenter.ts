@@ -5,6 +5,7 @@ import Pagination from '../utils/pagination/pagination'
 import CaselistFilter from './caselistFilter'
 import CaselistUtils from './caseListUtils'
 import DateUtils from '../utils/dateUtils'
+import config from '../config'
 
 export enum CaselistPageSection {
   Open = 1,
@@ -144,13 +145,16 @@ export default class CaselistPresenter {
       | { html: string; text?: undefined; attributes?: Record<string, string | number> }
       | { text: string; html?: undefined }
     )[][] = []
-    const sortedContent = [...this.referralCaseListItems.content].sort(
-      (a, b) => Number(Boolean(a.isExcluded)) - Number(Boolean(b.isExcluded)),
-    )
+    const excludedReferralsEnabled = config.enable_excluded_referrals
+    const sortedContent = excludedReferralsEnabled
+      ? [...this.referralCaseListItems.content].sort(
+          (a, b) => Number(Boolean(a.isExcluded)) - Number(Boolean(b.isExcluded)),
+        )
+      : this.referralCaseListItems.content
     sortedContent.forEach(referral => {
       const formattedSentenceEndDate = DateUtils.formattedDate(referral.sentenceEndDate)
       const sentenceEndDateEpoch = new Date(formattedSentenceEndDate).getTime()
-      const { isExcluded } = referral
+      const isExcluded = excludedReferralsEnabled && Boolean(referral.isExcluded)
       referralData.push([
         {
           html: !isExcluded

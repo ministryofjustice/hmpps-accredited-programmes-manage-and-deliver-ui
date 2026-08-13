@@ -62,6 +62,7 @@ export default {
   enable_caselist_singular_result_text:
     get('ENABLE_CASELIST_SINGULAR_RESULT_TEXT', 'false', requiredInProduction) === 'true',
   enable_restricted_access_badge: get('ENABLE_RESTRICTED_ACCESS_BADGE', 'true', requiredInProduction) === 'true',
+  enable_excluded_referrals: get('ENABLE_EXCLUDED_REFERRALS', 'true', requiredInProduction) === 'true',
   redis: {
     enabled: get('REDIS_ENABLED', 'false', requiredInProduction) === 'true',
     host: get('REDIS_HOST', 'localhost', requiredInProduction),

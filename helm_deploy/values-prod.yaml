@@ -19,6 +19,7 @@ generic-service:
     ENABLE_REGION_RESTRICTION: "true"
     ENABLE_CASELIST_SINGULAR_RESULT_TEXT: "false"
     ENABLE_RESTRICTED_ACCESS_BADGE: "true"
+    ENABLE_EXCLUDED_REFERRALS: "false"
 
 generic-prometheus-alerts:
   alertSeverity: hmpps_accredited_programmes_manage_and_deliver_alerts
