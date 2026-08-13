@@ -89,6 +89,7 @@ export default class CaselistPresenter {
       captionClasses: this.tableCaptionClass,
       attributes: {
         'data-module': 'moj-sortable-table',
+        'data-caselist-table': 'true',
       },
       head: [
         {
