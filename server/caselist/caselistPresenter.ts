@@ -143,22 +143,34 @@ export default class CaselistPresenter {
       | { html: string; text?: undefined; attributes?: Record<string, string | number> }
       | { text: string; html?: undefined }
     )[][] = []
-    this.referralCaseListItems.content.forEach(referral => {
+    const sortedContent = [...this.referralCaseListItems.content].sort(
+      (a, b) => Number(Boolean(a.isExcluded)) - Number(Boolean(b.isExcluded)),
+    )
+    sortedContent.forEach(referral => {
       const formattedSentenceEndDate = DateUtils.formattedDate(referral.sentenceEndDate)
       const sentenceEndDateEpoch = new Date(formattedSentenceEndDate).getTime()
+      const { isExcluded } = referral
       referralData.push([
         {
-          html: `<a href='/referral-details/${referral.referralId}/personal-details'>${referral.personName}</a><span>${referral.crn}</span>${CaselistUtils.hasLaoBadgeHtml(referral)}`,
-          attributes: { 'data-sort-value': referral.personName },
+          html: !isExcluded
+            ? `<a href='/referral-details/${referral.referralId}/personal-details'>${referral.personName}</a><span>${referral.crn}</span>${CaselistUtils.hasLaoBadgeHtml(referral)}`
+            : `<span>${referral.crn}</span>${CaselistUtils.hasLaoBadgeHtml(referral)}`,
+          attributes: isExcluded
+            ? { 'data-sort-value': referral.personName, 'data-excluded': 'true' }
+            : { 'data-sort-value': referral.personName },
         },
-        { text: referral.pdu },
-        { text: referral.reportingTeam },
+        { text: !isExcluded ? referral.pdu : 'Restricted' },
+        { text: !isExcluded ? referral.reportingTeam : 'Restricted' },
         {
-          html: `${formattedSentenceEndDate} <br> ${sentenceEndDateSourceMap[referral.sentenceEndDateSource]}`,
+          html: !isExcluded
+            ? `${formattedSentenceEndDate} <br> ${sentenceEndDateSourceMap[referral.sentenceEndDateSource]}`
+            : 'Restricted',
           attributes: { 'data-sort-value': sentenceEndDateEpoch },
         },
         {
-          html: `${cohortConfigMap[referral.cohort]}${CaselistUtils.hasLdcTagHtml(referral)}`,
+          html: !isExcluded
+            ? `${cohortConfigMap[referral.cohort]}${CaselistUtils.hasLdcTagHtml(referral)}`
+            : 'Restricted',
         },
         {
           text: `${referral.sex}`,

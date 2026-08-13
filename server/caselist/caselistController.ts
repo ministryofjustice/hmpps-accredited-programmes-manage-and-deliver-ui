@@ -63,6 +63,11 @@ export default class CaselistController extends BaseController {
       filter = CaselistFilter.fromRequest(req, openCaseList.filters.locationFilters)
     }
 
+    const firstLaoReferral = openCaseList.pagedReferrals.content?.find(referral => referral.lao === true)
+    if (firstLaoReferral) {
+      firstLaoReferral.isExcluded = true
+    }
+
     const presenter = new CaselistPresenter(
       CaselistPageSection.Open,
       openCaseList.pagedReferrals as Page<ReferralCaseListItem>,

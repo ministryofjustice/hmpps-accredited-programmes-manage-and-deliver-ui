@@ -3376,24 +3376,24 @@ export interface components {
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
-      sort?: components['schemas']['SortObject']
-      pageable?: components['schemas']['PageableObject']
       first?: boolean
       last?: boolean
+      sort?: components['schemas']['SortObject']
       /** Format: int32 */
       numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     PageableObject: {
       /** Format: int64 */
       offset?: number
       sort?: components['schemas']['SortObject']
-      paged?: boolean
-      /** Format: int32 */
-      pageNumber?: number
+      unpaged?: boolean
       /** Format: int32 */
       pageSize?: number
-      unpaged?: boolean
+      /** Format: int32 */
+      pageNumber?: number
+      paged?: boolean
     }
     ReferralCaseListItem: {
       /** Format: uuid */
@@ -4081,12 +4081,12 @@ export interface components {
       content?: components['schemas']['Group'][]
       /** Format: int32 */
       number?: number
-      sort?: components['schemas']['SortObject']
-      pageable?: components['schemas']['PageableObject']
       first?: boolean
       last?: boolean
+      sort?: components['schemas']['SortObject']
       /** Format: int32 */
       numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     GroupItem: {
@@ -4181,12 +4181,12 @@ export interface components {
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
-      sort?: components['schemas']['SortObject']
-      pageable?: components['schemas']['PageableObject']
       first?: boolean
       last?: boolean
+      sort?: components['schemas']['SortObject']
       /** Format: int32 */
       numberOfElements?: number
+      pageable?: components['schemas']['PageableObject']
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
