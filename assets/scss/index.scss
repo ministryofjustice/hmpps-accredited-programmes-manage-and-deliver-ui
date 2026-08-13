@@ -5,6 +5,10 @@ $moj-page-width: 1170px;
   $govuk-assets-path: '/assets/images/'
 );
 
+//HMPPS specific styles
+@use 'node_modules/@ministryofjustice/hmpps-probation-frontend-components/dist/assets/footer';
+@use 'node_modules/@ministryofjustice/hmpps-probation-frontend-components/dist/assets/header';
+
 @use 'node_modules/accessible-autocomplete/src/autocomplete';
 
 // Our custom styles

@@ -1,5 +1,12 @@
 {% from "components/custom-primary-navigation/macro.njk" import customPrimaryNavigation %}
 {%- from "moj/components/sub-navigation/macro.njk" import mojSubNavigation -%}
+{% for js in feComponents.jsIncludes %}
+    <script src="{{ js }}" nonce="{{ cspNonce }}"></script>
+{% endfor %}
+
+{% for css in feComponents.cssIncludes %}
+    <link href="{{ css }}" nonce="{{ cspNonce }}" rel="stylesheet" />
+{% endfor %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% extends "govuk/template.njk" %}
 
@@ -39,16 +46,17 @@
 {% endblock %}
 
 {% block footer %}
- <footer class="probation-common-footer govuk-!-display-none-print">
+{{ feComponents.footer | safe }}
+ {# <footer class="probation-common-footer govuk-!-display-none-print">
       <div class="govuk-width-container">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-full">
             <div class="probation-common-footer__support-links">
               <h2 class="govuk-visually-hidden">Support links</h2>
               <ul class="probation-common-footer__inline-list">
-                {# <li class="probation-common-footer__inline-list-item">
+                <li class="probation-common-footer__inline-list-item">
                   <a class="probation-common-footer__link" href="#/accessibility">Accessibility</a>
-                </li> #}
+                </li>  
                 <li class="probation-common-footer__inline-list-item">
                   <a class="probation-common-footer__link" href="https://probation-frontend-components-dev.hmpps.service.justice.gov.uk/cookies-policy">Cookies policy</a>
                 </li>
@@ -60,7 +68,7 @@
           </div>
         </div>
       </div>
-    </footer>
+    </footer> #}
     
     
 {% endblock %}
