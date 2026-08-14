@@ -1,9 +1,6 @@
 import { GroupSessionResponse } from '@manage-and-deliver-api'
 import EditSessionPresenter from './editSessionPresenter'
 import { FormValidationError } from '../utils/formValidationError'
-import config from '../config'
-
-jest.mock('../config')
 
 const laoBadgeHtml = ' <br><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>'
 
@@ -515,171 +512,120 @@ describe('EditSessionPresenter', () => {
         })
       })
     })
+  })
+  describe('when a referral is an LAO case', () => {
+    it('renders the RESTRICTED ACCESS badge in the single-referral name cell', () => {
+      const sessionDetails: GroupSessionResponse = {
+        pageTitle: 'Session 1',
+        code: 'CODE-123',
+        sessionType: 'Individual',
+        isCatchup: false,
+        attendanceAndSessionNotes: [
+          {
+            referralId: '123',
+            name: 'Alex River',
+            crn: 'CRN001',
+            attendance: 'Attended',
+            sessionNotes: 'Good progress',
+            lao: true,
+            isExcluded: false,
+          },
+        ],
+        date: '01 Feb 2026',
+        time: '1:00pm',
+        timeWithCapitalisedMidday: '1:00pm',
+        unformattedEndDate: '2026-02-01T14:00:00',
+        scheduledToAttend: [],
+        facilitators: [],
+      }
 
-    describe('when a referral is an LAO case', () => {
-      beforeEach(() => {
-        ;(config as jest.Mocked<typeof config>).enable_restricted_access_badge = true
-      })
+      const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
+      const result = presenter.attendanceTableArgs
 
-      it('renders the RESTRICTED ACCESS badge in the single-referral name cell', () => {
-        const sessionDetails: GroupSessionResponse = {
-          pageTitle: 'Session 1',
-          code: 'CODE-123',
-          sessionType: 'Individual',
-          isCatchup: false,
-          attendanceAndSessionNotes: [
+      expect(result).toEqual({
+        head: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
+        caption: 'Attendance record and session notes',
+        captionClasses: 'govuk-visually-hidden',
+        rows: [
+          [
+            { html: nameCrnCellHtml('123', 'Alex River', 'CRN001', 26, true) },
+            { html: '<span class="govuk-tag govuk-tag--blue">Attended</span>' },
             {
-              referralId: '123',
-              name: 'Alex River',
-              crn: 'CRN001',
-              attendance: 'Attended',
-              sessionNotes: 'Good progress',
-              lao: true,
-              isExcluded: false,
+              html: '<a href="/group-123/session-456/session-1-attendance-and-session-notes?referralId=123&source=edit-session">Alex River: Session 1 notes</a>',
             },
           ],
-          date: '01 Feb 2026',
-          time: '1:00pm',
-          timeWithCapitalisedMidday: '1:00pm',
-          unformattedEndDate: '2026-02-01T14:00:00',
-          scheduledToAttend: [],
-          facilitators: [],
-        }
+        ],
+      })
+    })
 
-        const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
-        const result = presenter.attendanceTableArgs
+    it('renders the RESTRICTED ACCESS badge only for LAO referrals in the multi-referral name cells', () => {
+      const sessionDetails: GroupSessionResponse = {
+        pageTitle: 'Session 1',
+        code: 'CODE-123',
+        sessionType: 'Group',
+        isCatchup: false,
+        attendanceAndSessionNotes: [
+          {
+            referralId: '123',
+            name: 'Alex River',
+            crn: 'CRN001',
+            attendance: 'Attended',
+            sessionNotes: 'Good participation',
+            lao: false,
+            isExcluded: false,
+          },
+          {
+            referralId: '456',
+            name: 'Jane Doe',
+            crn: 'CRN002',
+            attendance: 'Not attended',
+            sessionNotes: 'Absent',
+            lao: true,
+            isExcluded: false,
+          },
+        ],
+        date: '01 Feb 2026',
+        time: '1:00pm',
+        timeWithCapitalisedMidday: '1:00pm',
+        unformattedEndDate: '2026-02-01T14:00:00',
+        scheduledToAttend: [],
+        facilitators: [],
+      }
 
-        expect(result).toEqual({
-          head: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
-          caption: 'Attendance record and session notes',
-          captionClasses: 'govuk-visually-hidden',
-          rows: [
-            [
-              { html: nameCrnCellHtml('123', 'Alex River', 'CRN001', 26, true) },
+      const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
+      const result = presenter.attendanceTableArgs
+
+      expect(result).toEqual({
+        idPrefix: 'attendance-multi-select',
+        headers: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
+        caption: 'Attendance record and session notes',
+        captionClasses: 'govuk-visually-hidden',
+        rows: [
+          {
+            id: 'attendance-multi-select-row-0',
+            value: '123',
+            checkBoxLabel: 'Alex River',
+            cells: [
+              { html: nameCrnCellHtml('123', 'Alex River', 'CRN001', 20, false) },
               { html: '<span class="govuk-tag govuk-tag--blue">Attended</span>' },
               {
                 html: '<a href="/group-123/session-456/session-1-attendance-and-session-notes?referralId=123&source=edit-session">Alex River: Session 1 notes</a>',
               },
             ],
-          ],
-        })
-      })
-
-      it('renders the RESTRICTED ACCESS badge only for LAO referrals in the multi-referral name cells', () => {
-        const sessionDetails: GroupSessionResponse = {
-          pageTitle: 'Session 1',
-          code: 'CODE-123',
-          sessionType: 'Group',
-          isCatchup: false,
-          attendanceAndSessionNotes: [
-            {
-              referralId: '123',
-              name: 'Alex River',
-              crn: 'CRN001',
-              attendance: 'Attended',
-              sessionNotes: 'Good participation',
-              lao: false,
-              isExcluded: false,
-            },
-            {
-              referralId: '456',
-              name: 'Jane Doe',
-              crn: 'CRN002',
-              attendance: 'Not attended',
-              sessionNotes: 'Absent',
-              lao: true,
-              isExcluded: false,
-            },
-          ],
-          date: '01 Feb 2026',
-          time: '1:00pm',
-          timeWithCapitalisedMidday: '1:00pm',
-          unformattedEndDate: '2026-02-01T14:00:00',
-          scheduledToAttend: [],
-          facilitators: [],
-        }
-
-        const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
-        const result = presenter.attendanceTableArgs
-
-        expect(result).toEqual({
-          idPrefix: 'attendance-multi-select',
-          headers: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
-          caption: 'Attendance record and session notes',
-          captionClasses: 'govuk-visually-hidden',
-          rows: [
-            {
-              id: 'attendance-multi-select-row-0',
-              value: '123',
-              checkBoxLabel: 'Alex River',
-              cells: [
-                { html: nameCrnCellHtml('123', 'Alex River', 'CRN001', 20, false) },
-                { html: '<span class="govuk-tag govuk-tag--blue">Attended</span>' },
-                {
-                  html: '<a href="/group-123/session-456/session-1-attendance-and-session-notes?referralId=123&source=edit-session">Alex River: Session 1 notes</a>',
-                },
-              ],
-            },
-            {
-              id: 'attendance-multi-select-row-1',
-              value: '456',
-              checkBoxLabel: 'Jane Doe',
-              cells: [
-                { html: nameCrnCellHtml('456', 'Jane Doe', 'CRN002', 20, true) },
-                { html: '<span class="govuk-tag govuk-tag--red">Not attended</span>' },
-                {
-                  html: '<a href="/group-123/session-456/session-1-attendance-and-session-notes?referralId=456&source=edit-session">Jane Doe: Session 1 notes</a>',
-                },
-              ],
-            },
-          ],
-        })
-      })
-
-      it('does not render the RESTRICTED ACCESS badge when feature flag is disabled', () => {
-        ;(config as jest.Mocked<typeof config>).enable_restricted_access_badge = false
-
-        const sessionDetails: GroupSessionResponse = {
-          pageTitle: 'Session 1',
-          code: 'CODE-123',
-          sessionType: 'Individual',
-          isCatchup: false,
-          attendanceAndSessionNotes: [
-            {
-              referralId: '123',
-              name: 'Alex River',
-              crn: 'CRN001',
-              attendance: 'Attended',
-              sessionNotes: 'Good progress',
-              lao: true,
-              isExcluded: false,
-            },
-          ],
-          date: '01 Feb 2026',
-          time: '1:00pm',
-          timeWithCapitalisedMidday: '1:00pm',
-          unformattedEndDate: '2026-02-01T14:00:00',
-          scheduledToAttend: [],
-          facilitators: [],
-        }
-
-        const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
-        const result = presenter.attendanceTableArgs
-
-        expect(result).toEqual({
-          head: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
-          caption: 'Attendance record and session notes',
-          captionClasses: 'govuk-visually-hidden',
-          rows: [
-            [
-              { html: nameCrnCellHtml('123', 'Alex River', 'CRN001', 26, false) },
-              { html: '<span class="govuk-tag govuk-tag--blue">Attended</span>' },
+          },
+          {
+            id: 'attendance-multi-select-row-1',
+            value: '456',
+            checkBoxLabel: 'Jane Doe',
+            cells: [
+              { html: nameCrnCellHtml('456', 'Jane Doe', 'CRN002', 20, true) },
+              { html: '<span class="govuk-tag govuk-tag--red">Not attended</span>' },
               {
-                html: '<a href="/group-123/session-456/session-1-attendance-and-session-notes?referralId=123&source=edit-session">Alex River: Session 1 notes</a>',
+                html: '<a href="/group-123/session-456/session-1-attendance-and-session-notes?referralId=456&source=edit-session">Jane Doe: Session 1 notes</a>',
               },
             ],
-          ],
-        })
+          },
+        ],
       })
     })
   })
