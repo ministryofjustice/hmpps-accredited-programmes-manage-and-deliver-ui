@@ -4,12 +4,16 @@ import config from '../config'
  * For info:
  * N53 Is the East Midlands
  * N54 Is the North East
- * N57 is KSS
+ * N57 Is KSS
  * N59 Is the South Central
+ * N56 Is East of England
+ * N52 Is West Midlands
+ * N50 Is Greater Manchester
+ * N58 Is South West
  * Full region code mapping can be found at:
  * https://dsdmoj.atlassian.net/wiki/spaces/IC/pages/6027477185/Interventions+Manager+Data+Migration+Strategy#2.-Phased-out-Data-Migration
  */
-export const ALLOWED_REGIONS: string[] = ['N53', 'N54', 'N57', 'N59']
+export const ALLOWED_REGIONS: string[] = ['N53', 'N54', 'N57', 'N59', 'N56', 'N52', 'N50', 'N58']
 
 /**
  * For info:
