@@ -681,6 +681,85 @@ describe('generateTableRows', () => {
 
     expect(rows).toHaveLength(0)
   })
+
+  it('should replace restricted fields with "Restricted" when the referral is excluded', () => {
+    const referralCaseListItem = referralCaseListItemFactory.build({
+      referralId: 'REF999',
+      personName: 'Restricted Person',
+      crn: 'X111222',
+      pdu: 'Manchester PDU',
+      reportingTeam: 'Team Bravo',
+      sentenceEndDate: '2024-06-15',
+      sentenceEndDateSource: 'REQUIREMENT',
+      cohort: 'GENERAL_OFFENCE',
+      hasLdc: false,
+      referralStatus: 'Awaiting allocation',
+      statusLabelColour: 'teal',
+      isExcluded: true,
+    })
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+      .pageContent([referralCaseListItem])
+      .build() as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      1,
+      referralCaseListItemPage,
+      {} as CaselistFilter,
+      '',
+      true,
+      caseListFilters,
+      0,
+      'test location',
+    )
+
+    const rows = presenter.generateTableRows()
+
+    expect(rows).toHaveLength(1)
+    expect(rows[0]).toHaveLength(7)
+    expect(rows[0][0]).toEqual({
+      html: `<span>X111222</span>`,
+      attributes: { 'data-sort-value': 'Restricted Person', 'data-excluded': 'true' },
+    })
+    expect(rows[0][1]).toEqual({ text: 'Restricted' })
+    expect(rows[0][2]).toEqual({ text: 'Restricted' })
+    expect(rows[0][3]).toEqual({
+      html: 'Restricted',
+      attributes: { 'data-sort-value': new Date('15 June 2024').getTime() },
+    })
+    expect(rows[0][4]).toEqual({ html: 'Restricted' })
+    expect(rows[0][5]).toEqual({ text: 'Restricted' })
+    expect(rows[0][6]).toEqual({
+      html: `<strong class="govuk-tag govuk-tag--teal">Awaiting allocation</strong>`,
+    })
+  })
+
+  it('should sort excluded referrals to the end of the list', () => {
+    const referralCaseListItems = [
+      referralCaseListItemFactory.build({ personName: 'Excluded One', isExcluded: true }),
+      referralCaseListItemFactory.build({ personName: 'Included One', isExcluded: false }),
+      referralCaseListItemFactory.build({ personName: 'Excluded Two', isExcluded: true }),
+      referralCaseListItemFactory.build({ personName: 'Included Two', isExcluded: false }),
+    ]
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+      .pageContent(referralCaseListItems)
+      .build() as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      1,
+      referralCaseListItemPage,
+      {} as CaselistFilter,
+      '',
+      true,
+      caseListFilters,
+      0,
+      'test location',
+    )
+
+    const rows = presenter.generateTableRows()
+    const sortValues = rows.map(
+      row => (row[0] as { attributes?: Record<string, string | number> }).attributes?.['data-sort-value'],
+    )
+
+    expect(sortValues).toEqual(['Included One', 'Included Two', 'Excluded One', 'Excluded Two'])
+  })
 })
 
 describe('tableCaptionClass', () => {

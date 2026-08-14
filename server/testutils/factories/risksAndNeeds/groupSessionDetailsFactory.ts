@@ -20,6 +20,7 @@ export default GroupSessionDetailsFactory.define(() => ({
       lao: false,
       attendance: 'attended',
       sessionNotes: 'some notes',
+      isExcluded: false,
     },
   ],
 }))

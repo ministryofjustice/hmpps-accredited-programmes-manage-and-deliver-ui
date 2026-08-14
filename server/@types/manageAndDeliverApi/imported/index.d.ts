@@ -1653,6 +1653,7 @@ export interface components {
       sessionStartDate: string
       /** @description The start time of the session */
       sessionStartTime: components['schemas']['SessionTime']
+      /** @description The end time of the session */
       sessionEndTime?: components['schemas']['SessionTime'] | null
       /**
        * @description Whether to reschedule other sessions
@@ -1868,7 +1869,9 @@ export interface components {
     UpdateGroupRequest: {
       /** @description The code for the group */
       groupCode?: string | null
+      /** @description Cohort for the Programme Group. */
       cohort?: components['schemas']['ProgrammeGroupCohort'] | null
+      /** @description Sex that the group is being run for */
       sex?: components['schemas']['ProgrammeGroupSexEnum'] | null
       /**
        * Format: date
@@ -2423,10 +2426,15 @@ export interface components {
     Risks: {
       /** Format: date */
       assessmentCompleted: string | null
+      /** @description Offender Group Reconviction scale */
       offenderGroupReconviction?: components['schemas']['Score'] | null
+      /** @description Offender Violence Predictor */
       offenderViolencePredictor?: components['schemas']['Score'] | null
+      /** @description Spousal Assault Risk Assessment */
       sara?: components['schemas']['OasysSara'] | null
+      /** @description Risk of Serious Recidivism */
       riskOfSeriousRecidivism?: components['schemas']['RiskOfSeriousRecidivism'] | null
+      /** @description Risk of Serious Harm */
       riskOfSeriousHarm?: components['schemas']['RoshSummary'] | null
       /**
        * @description Active alerts for a person
@@ -2450,6 +2458,7 @@ export interface components {
        * @example true
        */
       isLegacy: boolean
+      /** @description The OGRS4 Risk predictors for this person. */
       ogrS4Risks?: components['schemas']['OGRS4Risks'] | null
       legacy?: boolean
     }
@@ -3199,6 +3208,7 @@ export interface components {
        * @example 5
        */
       rsr?: string | null
+      /** @description SARA (Spousal Assault Risk Assessment) related risk score */
       sara?: components['schemas']['Sara'] | null
     }
     IndividualSelfManagementScores: {
@@ -3367,10 +3377,10 @@ export interface components {
       reportingTeams: string[]
     }
     PageReferralCaseListItem: {
-      /** Format: int64 */
-      totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      /** Format: int64 */
+      totalElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
@@ -3378,21 +3388,21 @@ export interface components {
       number?: number
       sort?: components['schemas']['SortObject']
       pageable?: components['schemas']['PageableObject']
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
+      first?: boolean
+      last?: boolean
       empty?: boolean
     }
     PageableObject: {
       /** Format: int64 */
       offset?: number
       sort?: components['schemas']['SortObject']
+      /** Format: int32 */
+      pageSize?: number
       paged?: boolean
       /** Format: int32 */
       pageNumber?: number
-      /** Format: int32 */
-      pageSize?: number
       unpaged?: boolean
     }
     ReferralCaseListItem: {
@@ -3492,7 +3502,9 @@ export interface components {
        * @example County Durham Probation Office
        */
       deliveryLocation?: string | null
+      /** @description Cohort for the Programme Group. */
       cohort?: components['schemas']['ProgrammeGroupCohort'] | null
+      /** @description Sex that the group is being run for. */
       sex?: components['schemas']['ProgrammeGroupSexEnum'] | null
     }
     CurrentGroupDetails: {
@@ -3561,7 +3573,9 @@ export interface components {
       currentStatus: components['schemas']['CurrentStatus']
       /** @description List of transition statuses */
       availableStatuses: components['schemas']['ReferralStatus'][]
+      /** @description Suggested status object for the UI to potentially display */
       suggestedStatus?: components['schemas']['SuggestedStatus'] | null
+      /** @description The details of the group that the user is currently allocated to */
       currentGroupDetails?: components['schemas']['CurrentGroupDetails'] | null
     }
     SuggestedStatus: {
@@ -3763,6 +3777,10 @@ export interface components {
        * @example Alice Brown
        */
       crn: string
+      /**
+       * @description A string an attendance
+       * @example Attended, failed to comply
+       */
       attendance?: components['schemas']['SessionPersonAttendance'] | null
       /**
        * @description The session notes associated with the attendee
@@ -3879,7 +3897,9 @@ export interface components {
       currentStatus: components['schemas']['CurrentStatus']
       /** @description List of transition statuses */
       availableStatuses: components['schemas']['ReferralStatus'][]
+      /** @description Suggested status object for the UI to potentially display */
       suggestedStatus?: components['schemas']['SuggestedStatus'] | null
+      /** @description The details of the group that the user is currently allocated to */
       currentGroupDetails?: components['schemas']['CurrentGroupDetails'] | null
     }
     UserTeamMember: {
@@ -3997,6 +4017,7 @@ export interface components {
     DeliveryLocationPreferencesFormData: {
       /** @description Person on Probation details (sourced freshly from nDelius) */
       personOnProbation: components['schemas']['PersonOnProbationSummary']
+      /** @description Existing Delivery Location Preferences, if any */
       existingDeliveryLocationPreferences?: components['schemas']['ExistingDeliveryLocationPreferences'] | null
       /** @description Primary PDU of the Manager of the Requirement or Licence Condition associated with a Referral */
       primaryPdu: components['schemas']['ProbationDeliveryUnit']
@@ -4072,10 +4093,10 @@ export interface components {
       regionName: string
     }
     PageGroup: {
-      /** Format: int64 */
-      totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      /** Format: int64 */
+      totalElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
@@ -4083,10 +4104,10 @@ export interface components {
       number?: number
       sort?: components['schemas']['SortObject']
       pageable?: components['schemas']['PageableObject']
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
+      first?: boolean
+      last?: boolean
       empty?: boolean
     }
     GroupItem: {
@@ -4172,10 +4193,10 @@ export interface components {
       activeProgrammeGroupId: string | null
     }
     PageGroupItem: {
-      /** Format: int64 */
-      totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      /** Format: int64 */
+      totalElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
@@ -4183,10 +4204,10 @@ export interface components {
       number?: number
       sort?: components['schemas']['SortObject']
       pageable?: components['schemas']['PageableObject']
-      first?: boolean
-      last?: boolean
       /** Format: int32 */
       numberOfElements?: number
+      first?: boolean
+      last?: boolean
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
@@ -4354,6 +4375,11 @@ export interface components {
       referralId: string
       crn: string
       lao: boolean
+      /**
+       * @description True when the current user is not authorised to view this Limited Access Offender.
+       * @example false
+       */
+      isExcluded: boolean
       attendance: string
       sessionNotes: string
     }
