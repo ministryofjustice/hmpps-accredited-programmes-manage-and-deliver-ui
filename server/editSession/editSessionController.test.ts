@@ -90,6 +90,7 @@ describe('editSession', () => {
           lao: false,
           attendance: 'Attended',
           sessionNotes: 'Notes recorded',
+          isExcluded: false,
         },
       ],
     })
@@ -126,6 +127,7 @@ describe('editSession', () => {
           lao: false,
           attendance: 'Attended',
           sessionNotes: 'Notes recorded',
+          isExcluded: false,
         },
       ],
     })
@@ -163,6 +165,7 @@ describe('editSession', () => {
           lao: false,
           attendance: 'Attended',
           sessionNotes: 'Notes recorded',
+          isExcluded: false,
         },
       ],
     })
