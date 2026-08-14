@@ -557,8 +557,6 @@ describe('generateTableRows', () => {
   })
 
   it('should display RESTRICTED ACCESS badge in the name column when the referral is an LAO case', () => {
-    ;(config as jest.Mocked<typeof config>).enable_restricted_access_badge = true
-
     const laoReferral = referralCaseListItemFactory.build({
       referralId: 'REF999',
       personName: 'John Smith',

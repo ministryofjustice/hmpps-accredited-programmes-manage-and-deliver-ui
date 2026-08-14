@@ -7,8 +7,6 @@ export default class CaselistUtils {
   }
 
   static hasLaoBadgeHtml(referral: ReferralCaseListItem): string {
-    return referral.lao && config.enable_restricted_access_badge
-      ? '<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>'
-      : ''
+    return referral.lao ? '<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''
   }
 }
