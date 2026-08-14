@@ -1,7 +1,6 @@
 import { ReferralCaseListItem } from '@manage-and-deliver-api'
 
 import { Page } from '../shared/models/pagination'
-import config from '../config'
 import pageFactory from '../testutils/factories/pageFactory'
 import referralCaseListItemFactory from '../testutils/factories/referralCaseListItem'
 import TestUtils from '../testutils/testUtils'

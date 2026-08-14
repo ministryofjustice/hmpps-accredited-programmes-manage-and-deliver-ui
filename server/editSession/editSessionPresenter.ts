@@ -6,7 +6,6 @@ import PresenterUtils from '../utils/presenterUtils'
 import { convertToUrlFriendlyKebabCase, getEditSessionRouteTitle } from '../utils/utils'
 import ViewUtils from '../utils/viewUtils'
 import attendanceOptionText, { attendanceOptionTextTags } from '../utils/attendanceUtils'
-import config from '../config'
 
 export default class EditSessionPresenter {
   constructor(

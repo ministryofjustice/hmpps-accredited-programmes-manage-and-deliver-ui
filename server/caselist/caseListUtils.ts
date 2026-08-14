@@ -1,5 +1,4 @@
 import { ReferralCaseListItem } from '@manage-and-deliver-api'
-import config from '../config'
 
 export default class CaselistUtils {
   static hasLdcTagHtml(referral: ReferralCaseListItem): string {
