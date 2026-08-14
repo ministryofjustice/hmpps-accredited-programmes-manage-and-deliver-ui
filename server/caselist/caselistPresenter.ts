@@ -5,6 +5,7 @@ import Pagination from '../utils/pagination/pagination'
 import CaselistFilter from './caselistFilter'
 import CaselistUtils from './caseListUtils'
 import DateUtils from '../utils/dateUtils'
+import config from '../config'
 
 export enum CaselistPageSection {
   Open = 1,
@@ -89,6 +90,7 @@ export default class CaselistPresenter {
       captionClasses: this.tableCaptionClass,
       attributes: {
         'data-module': 'moj-sortable-table',
+        'data-caselist-table': 'true',
       },
       head: [
         {
@@ -143,25 +145,40 @@ export default class CaselistPresenter {
       | { html: string; text?: undefined; attributes?: Record<string, string | number> }
       | { text: string; html?: undefined }
     )[][] = []
-    this.referralCaseListItems.content.forEach(referral => {
+    const excludedReferralsEnabled = config.enable_excluded_referrals
+    const sortedContent = excludedReferralsEnabled
+      ? [...this.referralCaseListItems.content].sort(
+          (a, b) => Number(Boolean(a.isExcluded)) - Number(Boolean(b.isExcluded)),
+        )
+      : this.referralCaseListItems.content
+    sortedContent.forEach(referral => {
       const formattedSentenceEndDate = DateUtils.formattedDate(referral.sentenceEndDate)
       const sentenceEndDateEpoch = new Date(formattedSentenceEndDate).getTime()
+      const isExcluded = excludedReferralsEnabled && Boolean(referral.isExcluded)
       referralData.push([
         {
-          html: `<a href='/referral-details/${referral.referralId}/personal-details'>${referral.personName}</a><span>${referral.crn}</span>${CaselistUtils.hasLaoBadgeHtml(referral)}`,
-          attributes: { 'data-sort-value': referral.personName },
+          html: !isExcluded
+            ? `<a href='/referral-details/${referral.referralId}/personal-details'>${referral.personName}</a><span>${referral.crn}</span>${CaselistUtils.hasLaoBadgeHtml(referral)}`
+            : `<span>${referral.crn}</span>${CaselistUtils.hasLaoBadgeHtml(referral)}`,
+          attributes: isExcluded
+            ? { 'data-sort-value': referral.personName, 'data-excluded': 'true' }
+            : { 'data-sort-value': referral.personName },
         },
-        { text: referral.pdu },
-        { text: referral.reportingTeam },
+        { text: !isExcluded ? referral.pdu : 'Restricted' },
+        { text: !isExcluded ? referral.reportingTeam : 'Restricted' },
         {
-          html: `${formattedSentenceEndDate} <br> ${sentenceEndDateSourceMap[referral.sentenceEndDateSource]}`,
+          html: !isExcluded
+            ? `${formattedSentenceEndDate} <br> ${sentenceEndDateSourceMap[referral.sentenceEndDateSource]}`
+            : 'Restricted',
           attributes: { 'data-sort-value': sentenceEndDateEpoch },
         },
         {
-          html: `${cohortConfigMap[referral.cohort]}${CaselistUtils.hasLdcTagHtml(referral)}`,
+          html: !isExcluded
+            ? `${cohortConfigMap[referral.cohort]}${CaselistUtils.hasLdcTagHtml(referral)}`
+            : 'Restricted',
         },
         {
-          text: `${referral.sex}`,
+          text: !isExcluded ? `${referral.sex}` : 'Restricted',
         },
         {
           html: `<strong class="govuk-tag govuk-tag--${referral.statusLabelColour}">${referral.referralStatus}</strong>`,
