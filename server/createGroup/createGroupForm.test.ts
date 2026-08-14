@@ -214,6 +214,54 @@ describe('CreateGroupForm', () => {
           })
           expect(data.error).toBeNull()
         })
+        it('allows past dates for region in allowed list (N56)', async () => {
+          const request = TestUtils.createRequest({
+            'create-group-date': '1/1/2000',
+          })
+
+          const data = await new CreateOrEditGroupForm(request, undefined, 'N56').createOrEditGroupDateData()
+
+          expect(data.paramsForUpdate).toStrictEqual({
+            earliestStartDate: '1/1/2000',
+          })
+          expect(data.error).toBeNull()
+        })
+        it('allows past dates for region in allowed list (N52)', async () => {
+          const request = TestUtils.createRequest({
+            'create-group-date': '1/1/2000',
+          })
+
+          const data = await new CreateOrEditGroupForm(request, undefined, 'N52').createOrEditGroupDateData()
+
+          expect(data.paramsForUpdate).toStrictEqual({
+            earliestStartDate: '1/1/2000',
+          })
+          expect(data.error).toBeNull()
+        })
+        it('allows past dates for region in allowed list (N50)', async () => {
+          const request = TestUtils.createRequest({
+            'create-group-date': '1/1/2000',
+          })
+
+          const data = await new CreateOrEditGroupForm(request, undefined, 'N50').createOrEditGroupDateData()
+
+          expect(data.paramsForUpdate).toStrictEqual({
+            earliestStartDate: '1/1/2000',
+          })
+          expect(data.error).toBeNull()
+        })
+        it('allows past dates for region in allowed list (N58)', async () => {
+          const request = TestUtils.createRequest({
+            'create-group-date': '1/1/2000',
+          })
+
+          const data = await new CreateOrEditGroupForm(request, undefined, 'N58').createOrEditGroupDateData()
+
+          expect(data.paramsForUpdate).toStrictEqual({
+            earliestStartDate: '1/1/2000',
+          })
+          expect(data.error).toBeNull()
+        })
       })
     })
   })
