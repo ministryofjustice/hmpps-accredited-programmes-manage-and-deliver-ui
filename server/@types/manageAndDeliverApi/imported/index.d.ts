@@ -3399,11 +3399,11 @@ export interface components {
       offset?: number
       sort?: components['schemas']['SortObject']
       /** Format: int32 */
-      pageSize?: number
-      paged?: boolean
-      /** Format: int32 */
       pageNumber?: number
       unpaged?: boolean
+      /** Format: int32 */
+      pageSize?: number
+      paged?: boolean
     }
     ReferralCaseListItem: {
       /** Format: uuid */
@@ -4551,6 +4551,12 @@ export interface components {
        * @description The UUID of the referral for this group member
        */
       referralId: string
+      /** @description The boolean value of whether the group member has Limited Access Offender (LAO) status */
+      isLimitedAccessOffender?: boolean | null
+      /** @description The boolean value of whether the group member details are excluded from viewing by the logged-in username */
+      isExcluded?: boolean | null
+      limitedAccessOffender?: boolean
+      excluded?: boolean
     }
     ScheduleIndividualSessionDetailsResponse: {
       /** @description List of facilitators available for the one-to-one appointment (sourced from the Region of the logged-in user) */

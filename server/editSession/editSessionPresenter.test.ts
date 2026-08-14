@@ -1,6 +1,6 @@
 import { GroupSessionResponse } from '@manage-and-deliver-api'
-import EditSessionPresenter from './editSessionPresenter'
 import { FormValidationError } from '../utils/formValidationError'
+import EditSessionPresenter from './editSessionPresenter'
 
 const laoBadgeHtml = ' <br><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>'
 
