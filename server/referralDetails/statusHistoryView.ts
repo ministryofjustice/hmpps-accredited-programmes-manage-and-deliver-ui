@@ -18,11 +18,12 @@ export default class StatusHistoryView {
 
       return text.trim()
     }
-
+    const updatebyName = (status: ReferralStatusHistory): string =>
+      status.updatedByFullName ? `Status update by ${status.updatedByFullName}` : `Status update by ${status.updatedBy}`
     return {
       items: this.presenter.statusHistory.toReversed().map((status: ReferralStatusHistory) => ({
         label: {
-          text: `Status update by ${status.updatedBy}`,
+          text: updatebyName(status),
         },
         html: makeStatusTagHtml(status.tagColour, status.referralStatusDescriptionName, status.additionalDetails),
         datetime: {

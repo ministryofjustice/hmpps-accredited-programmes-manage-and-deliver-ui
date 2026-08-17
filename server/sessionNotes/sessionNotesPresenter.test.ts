@@ -8,7 +8,7 @@ describe('SessionNotesPresenter', () => {
     sessionName: 'Building Motivation',
     sessionNumber: 1,
     referralId: 'referral-123',
-    lastUpdatedBy: 'Berta Tonka',
+    sessionNotesCreatedByFullName: 'Berta Tonka',
     lastUpdatedDate: '2025-09-03',
     groupId: 'b2c3d4e5-f6a7-8901-bcde-f23456789012',
     sessionId: 'c3d4e5f6-a7b8-9012-cdef-345678901234',
