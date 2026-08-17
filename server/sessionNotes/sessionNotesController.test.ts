@@ -36,7 +36,7 @@ const sessionNotesFactory = (overrides: Partial<SessionNotes> = {}): SessionNote
   moduleName: 'Getting started',
   sessionName: 'Introduction to Building Choices',
   sessionNumber: 1,
-  lastUpdatedBy: 'John Smith',
+  sessionNotesCreatedByFullName: 'John Smith',
   lastUpdatedDate: '19 March 2026',
   groupId: 'd193bf89-c98b-4e92-b842-3c1b3e5f5e4a',
   sessionId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',

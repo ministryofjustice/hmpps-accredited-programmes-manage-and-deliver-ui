@@ -27,8 +27,8 @@ export default class SessionNotesPresenter {
     const personOnProbationName = this.data.pageTitle.split(':')[0].trim()
     const successMessageName = this.data.personOnProbationName?.trim() || personOnProbationName
     const lastUpdatedText =
-      this.data.lastUpdatedBy && this.data.lastUpdatedDate
-        ? `Last updated by ${this.data.lastUpdatedBy} on ${this.data.lastUpdatedDate}.`
+      this.data.sessionNotesCreatedByFullName && this.data.lastUpdatedDate
+        ? `Last updated by ${this.data.sessionNotesCreatedByFullName} on ${this.data.lastUpdatedDate}.`
         : 'Last updated details unavailable.'
 
     return {
