@@ -18,13 +18,8 @@ export default class StatusHistoryView {
 
       return text.trim()
     }
-    const updatebyName = (status: ReferralStatusHistory): string => {
-      if (status.updatedByFullName) {
-        return `Status update by ${status.updatedByFullName}`
-      }
-      return `Status update by ${status.updatedBy}`
-    }
-
+    const updatebyName = (status: ReferralStatusHistory): string =>
+      status.updatedByFullName ? `Status update by ${status.updatedByFullName}` : `Status update by ${status.updatedBy}`
     return {
       items: this.presenter.statusHistory.toReversed().map((status: ReferralStatusHistory) => ({
         label: {

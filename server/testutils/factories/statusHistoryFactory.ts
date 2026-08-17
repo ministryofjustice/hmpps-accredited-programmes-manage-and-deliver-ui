@@ -41,6 +41,7 @@ export default StatusHistoryFactory.define(() => ({
   ]),
   additionalDetails: faker.lorem.sentence(),
   updatedBy: faker.person.fullName(),
+  updatedByFullName: faker.person.fullName(),
   updatedAt: faker.date.recent().toISOString(),
   tagColour: faker.helpers.arrayElement(['yellow', 'green', 'blue', 'purple', 'red']),
 }))
