@@ -7,7 +7,7 @@ services:
     ports:
       - '8090:8090'
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:8080/auth/health']
+      test: ['CMD-SHELL', 'bash -c "echo -e \"GET /auth/health HTTP/1.1\r\nHost: localhost\r\n\r\n\" > /dev/tcp/localhost/8090"']
     environment:
       - SERVER_PORT=8090
       - SPRING_PROFILES_ACTIVE=dev
@@ -46,7 +46,7 @@ services:
      - '8080:8080'
      - '5005:5005' # Debug port
    healthcheck:
-     test: ['CMD', 'curl', '-f', 'http://localhost:8080/health/ping']
+     test: ['CMD-SHELL', 'bash -c "echo -e \"GET /health/ping HTTP/1.1\r\nHost: localhost\r\n\r\n\" > /dev/tcp/localhost/8080"']
    environment:
      SERVER_PORT: 8080
      HMPPS_AUTH_URL: http://hmpps-auth:8090/auth
