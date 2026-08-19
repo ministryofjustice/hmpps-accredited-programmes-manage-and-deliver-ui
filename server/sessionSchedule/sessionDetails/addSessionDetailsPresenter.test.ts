@@ -44,14 +44,58 @@ describe('AddSessionDetailsPresenter', () => {
     })
   })
 
-  describe('generateSessionAttendeesCheckboxOptions', () => {
-    it('generates checkbox options without selections', () => {
+  describe('generateSessionAttendeesRadioOptions', () => {
+    it('generates radio options with selections', () => {
       const presenter = new AddSessionDetailsPresenter(sessionDetails, 'backLinkUri')
       const options = presenter.generateSessionAttendeesRadioOptions(['ref1'])
 
       expect(options).toEqual([
         { html: 'John Doe (X12345)', value: 'ref1 + John Doe', checked: true },
         { html: 'Jane Smith (Y67890)', value: 'ref2 + Jane Smith', checked: false },
+      ])
+    })
+
+    it('does not expose the name of a restricted participant', () => {
+      const restrictedSessionDetails = {
+        ...sessionDetails,
+        groupMembers: [{ name: 'Restricted Name', crn: 'X12345', referralId: 'ref1', isExcluded: true }],
+      } as ScheduleIndividualSessionDetailsResponse
+      const presenter = new AddSessionDetailsPresenter(restrictedSessionDetails, 'backLinkUri')
+
+      expect(presenter.generateSessionAttendeesRadioOptions([])).toEqual([
+        {
+          html: 'X12345<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>',
+          value: 'ref1 + X12345',
+          checked: false,
+        },
+      ])
+    })
+  })
+
+  describe('generateSessionAttendeesCheckboxOptions', () => {
+    it('generates checkbox options with selections', () => {
+      const presenter = new AddSessionDetailsPresenter(sessionDetails, 'backLinkUri')
+      const options = presenter.generateSessionAttendeesCheckboxOptions(['ref1'])
+
+      expect(options).toEqual([
+        { html: 'John Doe (X12345)', value: 'ref1 + John Doe', checked: true },
+        { html: 'Jane Smith (Y67890)', value: 'ref2 + Jane Smith', checked: false },
+      ])
+    })
+
+    it('does not expose the name of a restricted participant', () => {
+      const restrictedSessionDetails = {
+        ...sessionDetails,
+        groupMembers: [{ name: 'Restricted Name', crn: 'X12345', referralId: 'ref1', isExcluded: true }],
+      } as ScheduleIndividualSessionDetailsResponse
+      const presenter = new AddSessionDetailsPresenter(restrictedSessionDetails, 'backLinkUri')
+
+      expect(presenter.generateSessionAttendeesCheckboxOptions([])).toEqual([
+        {
+          html: 'X12345<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>',
+          value: 'ref1 + X12345',
+          checked: false,
+        },
       ])
     })
   })

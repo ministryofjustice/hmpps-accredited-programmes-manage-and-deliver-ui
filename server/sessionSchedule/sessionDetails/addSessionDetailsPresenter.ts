@@ -77,7 +77,7 @@ export default class AddSessionDetailsPresenter {
 
     return this.sessionDetails.groupMembers.map(member => ({
       html: `${member.isExcluded ? `${member.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>` : `${member.name} (${member.crn})`}`,
-      value: `${member.referralId} + ${member.name}`,
+      value: `${member.referralId} + ${member.isExcluded ? member.crn : member.name}`,
       checked: hasSelectedValues ? selectedValue.includes(member.referralId) : false,
     }))
   }
@@ -87,7 +87,7 @@ export default class AddSessionDetailsPresenter {
 
     return this.sessionDetails.groupMembers.map(member => ({
       html: `${member.isExcluded ? `${member.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>` : `${member.name} (${member.crn})`}`,
-      value: `${member.referralId} + ${member.name}`,
+      value: `${member.referralId} + ${member.isExcluded ? member.crn : member.name}`,
       checked: hasSelectedValues ? selectedValue.includes(member.referralId) : false,
     }))
   }
