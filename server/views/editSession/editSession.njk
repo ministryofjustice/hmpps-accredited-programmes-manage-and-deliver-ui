@@ -62,7 +62,7 @@
         {{ govukTable(restrictedParticipantsTableArgs) }}
       {% endif %}
 
-      {% if hasAnyAttendees == false %}
+      {% if not hasAnyAttendees %}
         <p class="govuk-body-l">There are currently no people allocated to this group.</p>
       {% endif %}
     </div>
