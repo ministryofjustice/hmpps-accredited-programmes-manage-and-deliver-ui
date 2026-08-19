@@ -76,7 +76,7 @@ export default class AddSessionDetailsPresenter {
     const hasSelectedValues = selectedValue && selectedValue.length > 0
 
     return this.sessionDetails.groupMembers.map(member => ({
-      text: `${member.name} (${member.crn})`,
+      html: `${member.isExcluded ? `${member.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>` : `${member.name} (${member.crn})`}`,
       value: `${member.referralId} + ${member.name}`,
       checked: hasSelectedValues ? selectedValue.includes(member.referralId) : false,
     }))
@@ -86,7 +86,7 @@ export default class AddSessionDetailsPresenter {
     const hasSelectedValues = selectedValue && selectedValue.length > 0
 
     return this.sessionDetails.groupMembers.map(member => ({
-      text: `${member.name} (${member.crn})`,
+      html: `${member.isExcluded ? `${member.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>` : `${member.name} (${member.crn})`}`,
       value: `${member.referralId} + ${member.name}`,
       checked: hasSelectedValues ? selectedValue.includes(member.referralId) : false,
     }))
