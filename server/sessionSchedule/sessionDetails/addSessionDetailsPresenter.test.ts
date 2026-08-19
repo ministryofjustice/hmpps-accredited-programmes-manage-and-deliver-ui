@@ -50,8 +50,8 @@ describe('AddSessionDetailsPresenter', () => {
       const options = presenter.generateSessionAttendeesRadioOptions(['ref1'])
 
       expect(options).toEqual([
-        { text: 'John Doe (X12345)', value: 'ref1 + John Doe', checked: true },
-        { text: 'Jane Smith (Y67890)', value: 'ref2 + Jane Smith', checked: false },
+        { html: 'John Doe (X12345)', value: 'ref1 + John Doe', checked: true },
+        { html: 'Jane Smith (Y67890)', value: 'ref2 + Jane Smith', checked: false },
       ])
     })
   })
