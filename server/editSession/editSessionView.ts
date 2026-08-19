@@ -56,12 +56,14 @@ export default class EditSessionView {
             text: 'Scheduled to attend',
           },
           value: {
-            html: sessionDetailsObj.scheduledToAttend.join(
+            html: this.presenter.scheduledToAttendDisplay.join(
               '<span class="govuk-!-display-block govuk-!-margin-bottom-1"></span>',
             ),
           },
           actions: {
-            items: this.presenter.hasReferral
+            // Uses hasAnyAttendees (not hasReferral) - managing who's scheduled to attend a session should
+            // stay available regardless of whether any of them are currently restricted from view.
+            items: this.presenter.hasAnyAttendees
               ? [
                   {
                     href: `/${this.presenter.groupId}/${this.presenter.sessionId}/edit-session-attendees`,
@@ -140,7 +142,9 @@ export default class EditSessionView {
       },
       id: 'multi-select-selected',
       name: 'multi-select-selected',
-      value: this.presenter.sessionDetails.attendanceAndSessionNotes?.[0]?.referralId,
+      // Must come from authorisedAttendees, not the raw attendee list - a restricted participant could
+      // otherwise end up as the single referral ID if they happened to be first in the raw API response.
+      value: this.presenter.authorisedAttendees?.[0]?.referralId,
       classes: 'govuk-!-display-none',
     }
   }
@@ -162,8 +166,13 @@ export default class EditSessionView {
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
         hasMultipleReferrals: this.presenter.hasMultipleReferrals,
         hasReferral: this.presenter.hasReferral,
+        hasAnyAttendees: this.presenter.hasAnyAttendees,
+        hasRestrictedParticipants: this.presenter.hasRestrictedParticipants,
         singleReferral: this.singleReferral,
         attendanceHeading: this.presenter.attendanceHeading,
+        restrictedParticipantsHeading: this.presenter.restrictedParticipantsHeading,
+        restrictedParticipantsText: this.presenter.restrictedParticipantsText,
+        restrictedParticipantsTableArgs: this.presenter.restrictedParticipantsTableArgs,
       },
     ]
   }
