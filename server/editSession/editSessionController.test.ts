@@ -188,6 +188,151 @@ describe('editSession', () => {
       expect.anything(),
     )
   })
+
+  describe('restricted participants', () => {
+    it('hides a restricted attendee from the standard table and lists them CRN-only in the Restricted participants table', async () => {
+      const sessionDetails = GroupSessionDetailsFactory.build({
+        pageTitle: 'Getting started 1',
+        attendanceAndSessionNotes: [
+          {
+            referralId: 'referral-authorised',
+            name: 'Alex River',
+            crn: 'S688890821',
+            lao: false,
+            attendance: 'Attended',
+            sessionNotes: 'Notes recorded',
+            isExcluded: false,
+          },
+          {
+            referralId: 'referral-restricted',
+            name: 'Secret Person',
+            crn: 'S999999999',
+            lao: true,
+            attendance: 'Attended',
+            sessionNotes: 'Secret notes',
+            isExcluded: true,
+          },
+        ],
+      })
+      accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
+
+      await request(app)
+        .get(`/12345/6789/edit-session`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).not.toContain('Secret Person')
+          expect(res.text).toContain('Alex River')
+          expect(res.text).toContain('S999999999')
+          expect(res.text).toContain('Restricted participants')
+          expect(res.text).toContain('You cannot add attendance or session notes for restricted access participants.')
+          expect(res.text).toContain('RESTRICTED ACCESS')
+        })
+    })
+
+    it('masks a restricted attendee out of the Scheduled to attend summary, leaving only their CRN', async () => {
+      const sessionDetails = GroupSessionDetailsFactory.build({
+        pageTitle: 'Getting started 1',
+        scheduledToAttend: ['Alex River', 'Secret Person'],
+        attendanceAndSessionNotes: [
+          {
+            referralId: 'referral-authorised',
+            name: 'Alex River',
+            crn: 'S688890821',
+            lao: false,
+            attendance: 'Attended',
+            sessionNotes: 'Notes recorded',
+            isExcluded: false,
+          },
+          {
+            referralId: 'referral-restricted',
+            name: 'Secret Person',
+            crn: 'S999999999',
+            lao: true,
+            attendance: 'Attended',
+            sessionNotes: 'Secret notes',
+            isExcluded: true,
+          },
+        ],
+      })
+      accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
+
+      await request(app)
+        .get(`/12345/6789/edit-session`)
+        .expect(200)
+        .expect(res => {
+          const scheduledToAttendValue = res.text.match(
+            /Scheduled to attend[\s\S]*?<dd class="govuk-summary-list__value">([\s\S]*?)<\/dd>/,
+          )?.[1]
+          expect(scheduledToAttendValue).toContain('Alex River')
+          expect(scheduledToAttendValue).toContain('S999999999')
+          expect(scheduledToAttendValue).not.toContain('Secret Person')
+        })
+    })
+
+    it('does not render the Update attendance and notes button or any checkboxes when every attendee is restricted', async () => {
+      const sessionDetails = GroupSessionDetailsFactory.build({
+        pageTitle: 'Getting started 1',
+        scheduledToAttend: ['Secret Person'],
+        attendanceAndSessionNotes: [
+          {
+            referralId: 'referral-restricted',
+            name: 'Secret Person',
+            crn: 'S999999999',
+            lao: true,
+            attendance: 'Attended',
+            sessionNotes: 'Secret notes',
+            isExcluded: true,
+          },
+        ],
+      })
+      accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
+
+      await request(app)
+        .get(`/12345/6789/edit-session`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).not.toContain('Update attendance and notes')
+          expect(res.text).not.toContain('type="checkbox"')
+          expect(res.text).toContain('Restricted participants')
+        })
+    })
+
+    it('uses the authorised attendee as the single-referral hidden form value, even when a restricted attendee sorts first', async () => {
+      const sessionDetails = GroupSessionDetailsFactory.build({
+        pageTitle: 'Getting started 1',
+        sessionType: 'Individual',
+        attendanceAndSessionNotes: [
+          {
+            referralId: 'referral-restricted',
+            name: 'Secret Person',
+            crn: 'S999999999',
+            lao: true,
+            attendance: 'Attended',
+            sessionNotes: 'Secret notes',
+            isExcluded: true,
+          },
+          {
+            referralId: 'referral-authorised',
+            name: 'Alex River',
+            crn: 'S688890821',
+            lao: false,
+            attendance: 'Attended',
+            sessionNotes: 'Notes recorded',
+            isExcluded: false,
+          },
+        ],
+      })
+      accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
+
+      await request(app)
+        .get(`/12345/6789/edit-session`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain('value="referral-authorised"')
+          expect(res.text).not.toContain('value="referral-restricted"')
+        })
+    })
+  })
 })
 
 describe('deleteSession', () => {

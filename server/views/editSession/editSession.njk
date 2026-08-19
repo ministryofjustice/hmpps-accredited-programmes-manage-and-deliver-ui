@@ -42,21 +42,29 @@
        {% if successMessageArgs !== null %}
           {{ mojAlert(successMessageArgs) }}
         {% endif %}
-      <h2 class="{{ attendanceHeading.classes }}">{{ attendanceHeading.text }}</h2>
-      <form method="post" novalidate>
-        <input type="hidden" name="_csrf" value="{{csrfToken}}">
-        {% if hasMultipleReferrals %}
-          {{ multiSelect(attendanceTableArgs) }}
-        {% elif hasMultipleReferrals != true %}
-          {{ govukTable(attendanceTableArgs) }}
-          {{ govukInput(singleReferral) }}
-        {% endif %}
-        {% if hasReferral == false %}
-          <p  class="govuk-body-l">There are currently no people allocated to this group.</p>
-        {% else %}
+      {% if hasReferral %}
+        <h2 class="{{ attendanceHeading.classes }}">{{ attendanceHeading.text }}</h2>
+        <form method="post" novalidate>
+          <input type="hidden" name="_csrf" value="{{csrfToken}}">
+          {% if hasMultipleReferrals %}
+            {{ multiSelect(attendanceTableArgs) }}
+          {% else %}
+            {{ govukTable(attendanceTableArgs) }}
+            {{ govukInput(singleReferral) }}
+          {% endif %}
           {{ govukButton({ text: "Update attendance and notes", preventDoubleClick: true }) }}
-        {% endif %}
-      </form>
+        </form>
+      {% endif %}
+
+      {% if hasRestrictedParticipants %}
+        <h2 class="{{ restrictedParticipantsHeading.classes }}">{{ restrictedParticipantsHeading.text }}</h2>
+        <p class="govuk-body">{{ restrictedParticipantsText }}</p>
+        {{ govukTable(restrictedParticipantsTableArgs) }}
+      {% endif %}
+
+      {% if not hasAnyAttendees %}
+        <p class="govuk-body-l">There are currently no people allocated to this group.</p>
+      {% endif %}
     </div>
   </div>
 {% endblock %}
