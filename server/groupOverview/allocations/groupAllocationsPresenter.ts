@@ -1,4 +1,4 @@
-import { CohortEnum, GroupItem, ProgrammeGroupAllocations } from '@manage-and-deliver-api'
+import { CohortEnum, PageGroupItem, ProgrammeGroupAllocations } from '@manage-and-deliver-api'
 import GroupServiceLayoutPresenter, {
   GroupServiceNavigationValues,
 } from '../../shared/groups/groupServiceLayoutPresenter'
@@ -9,6 +9,8 @@ import Pagination from '../../utils/pagination/pagination'
 import PresenterUtils from '../../utils/presenterUtils'
 import { convertToTitleCase } from '../../utils/utils'
 import GroupAllocationsFilter from './groupAllocationsFilter'
+import config from '../../config'
+import CaselistUtils from '../../caselist/caseListUtils'
 
 export enum GroupAllocationsPageSection {
   Allocated = 1,
@@ -23,7 +25,7 @@ const cohortConfigMap: Record<CohortEnum, string> = {
 export default class GroupAllocationsPresenter extends GroupServiceLayoutPresenter {
   public readonly pagination: Pagination
 
-  readonly groupListItems: Page<GroupItem>
+  readonly groupListItems: Page<PageGroupItem>
 
   constructor(
     readonly section: GroupAllocationsPageSection,
@@ -36,7 +38,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
     readonly params?: string,
   ) {
     super(GroupServiceNavigationValues.allocationsTab, groupId)
-    this.groupListItems = this.group.pagedGroupData as Page<GroupItem>
+    this.groupListItems = this.group.pagedGroupData as Page<PageGroupItem>
     this.pagination = new Pagination(this.groupListItems, params)
   }
 
@@ -134,12 +136,14 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
   generateWaitlistTableArgs() {
     const rows = this.group.pagedGroupData.content
     const out: ({ html: string } | { text: string })[][] = []
+    const excludedReferralsEnabled = config.enable_excluded_referrals
     rows.forEach(member => {
+      const isExcluded = excludedReferralsEnabled && Boolean(member.isExcluded)
       out.push([
         {
           html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
-                    <input id='${member.referralId}' value='${member.referralId}' type="radio" name="add-to-group" class="govuk-radios__input">
+                    <input id='${member.referralId}' value='${member.referralId}' type="radio" name="add-to-group" class="govuk-radios__input"${isExcluded ? ' disabled' : ''}>
                     <label class="govuk-label govuk-radios__label" for="${member.referralId}">
                       <span class="govuk-visually-hidden">Add ${member.personName} to the group</span>
                     </label>
@@ -147,38 +151,53 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
                  </div>`,
         },
         {
-          html: `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0"> ${member.crn}</p>${member.lao ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`,
+          html: !isExcluded
+            ? `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0"> ${member.crn}</p>${member.lao ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`
+            : `<span>${member.crn}</span>${member.lao ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`,
         },
         {
-          html: `${member.sentenceEndDate ?? 'No information'}${
-            member.sourcedFrom && member.sentenceEndDate ? `<br> ${member.sourcedFrom}` : ''
-          }`,
+          html: !isExcluded
+            ? `${member.sentenceEndDate ?? 'No information'}${
+                member.sourcedFrom && member.sentenceEndDate ? `<br> ${member.sourcedFrom}` : ''
+              }`
+            : 'Restricted',
         },
         {
-          html: `${cohortConfigMap[member.cohort as CohortEnum]}${
-            member.hasLdc ? '</br><span class="moj-badge moj-badge--bright-purple">LDC</span>' : ''
-          }`,
+          html: !isExcluded
+            ? `${cohortConfigMap[member.cohort as CohortEnum]}${
+                member.hasLdc ? '</br><span class="moj-badge moj-badge--bright-purple">LDC</span>' : ''
+              }`
+            : 'Restricted',
         },
-        { text: member.age ? String(member.age) : 'No information' },
-        { text: member.sex ? convertToTitleCase(member.sex) : 'No information' },
-        { text: member.pdu },
-        { text: member.reportingTeam },
+        { text: GroupAllocationsPresenter.restrictedText(isExcluded, member.age && String(member.age)) },
+        { text: GroupAllocationsPresenter.restrictedText(isExcluded, member.sex && convertToTitleCase(member.sex)) },
+        { text: !isExcluded ? member.pdu : 'Restricted' },
+        { text: !isExcluded ? member.reportingTeam : 'Restricted' },
       ])
     })
 
     return out
   }
 
+  private static restrictedText(isExcluded: boolean, value: string | false | undefined | null): string {
+    if (isExcluded) {
+      return 'Restricted'
+    }
+    return value || 'No information'
+  }
+
   generateAllocatedTableArgs() {
     const rows = this.group.pagedGroupData.content
     const out: ({ html: string } | { text: string })[][] = []
+    const excludedReferralsEnabled = config.enable_excluded_referrals
 
     rows.forEach(member => {
+      const isExcluded = excludedReferralsEnabled && Boolean(member.isExcluded)
       out.push([
         {
           html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
-                    <input id='${member.crn}' value='${member.referralId}' type="radio" name="remove-from-group" class="govuk-radios__input">
+                    <input id='${member.crn}' value='${member.referralId}' type="radio" name="remove-from-group" class="govuk-radios__input"${isExcluded ? ' disabled' : ''}>
                     <label class="govuk-label govuk-radios__label" for="${member.crn}">
                       <span class="govuk-visually-hidden">Remove ${member.personName} from the group</span>
                     </label>
@@ -186,12 +205,16 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
                  </div>`,
         },
         {
-          html: `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0">${member.crn}</p>${member.lao ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`,
+          html: !isExcluded
+            ? `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0">${member.crn}</p>${member.lao ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`
+            : `<span>${member.crn}</span>${CaselistUtils.hasLaoBadgeHtmlGroupItem(member)}`,
         },
         {
-          html: `${member.sentenceEndDate ?? 'No information'}${
-            member.sourcedFrom && member.sentenceEndDate ? `<br> ${member.sourcedFrom}` : ''
-          }`,
+          html: !isExcluded
+            ? `${member.sentenceEndDate ?? 'No information'}${
+                member.sourcedFrom && member.sentenceEndDate ? `<br> ${member.sourcedFrom}` : ''
+              }`
+            : 'Restricted',
         },
         { html: `<strong class="govuk-tag govuk-tag--${member.statusColour}">${member.status}</strong>` },
       ])
