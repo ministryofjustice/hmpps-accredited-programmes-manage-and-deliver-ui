@@ -10,7 +10,6 @@ import PresenterUtils from '../../utils/presenterUtils'
 import { convertToTitleCase } from '../../utils/utils'
 import GroupAllocationsFilter from './groupAllocationsFilter'
 import config from '../../config'
-import CaselistUtils from '../../caselist/caseListUtils'
 
 export enum GroupAllocationsPageSection {
   Allocated = 1,
