@@ -75,21 +75,30 @@ export default class AddSessionDetailsPresenter {
   generateSessionAttendeesRadioOptions(selectedValue: string[]): RadiosArgsItem[] {
     const hasSelectedValues = selectedValue && selectedValue.length > 0
 
-    return this.sessionDetails.groupMembers.map(member => ({
-      html: `${member.isExcluded ? `${member.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>` : `${member.name} (${member.crn})`}`,
+    return this.sortGroupMembersByExcluded().map(member => ({
+      html: `${member.isExcluded ? `${member.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p>You cannot add a restricted participant to the session.</p>` : `${member.name} (${member.crn})`}`,
       value: `${member.referralId} + ${member.isExcluded ? member.crn : member.name}`,
       checked: hasSelectedValues ? selectedValue.includes(member.referralId) : false,
+      disabled: Boolean(member.isExcluded),
     }))
   }
 
   generateSessionAttendeesCheckboxOptions(selectedValue: string[]): CheckboxesArgsItem[] {
     const hasSelectedValues = selectedValue && selectedValue.length > 0
 
-    return this.sessionDetails.groupMembers.map(member => ({
-      html: `${member.isExcluded ? `${member.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>` : `${member.name} (${member.crn})`}`,
+    return this.sortGroupMembersByExcluded().map(member => ({
+      html: `${member.isExcluded ? `${member.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p>You cannot add a restricted participant to the session.</p>` : `${member.name} (${member.crn})`}`,
       value: `${member.referralId} + ${member.isExcluded ? member.crn : member.name}`,
       checked: hasSelectedValues ? selectedValue.includes(member.referralId) : false,
+      disabled: Boolean(member.isExcluded),
     }))
+  }
+
+  // Keeps excluded/restricted members visible but always last in the list
+  private sortGroupMembersByExcluded() {
+    return [...this.sessionDetails.groupMembers].sort(
+      (a, b) => Number(Boolean(a.isExcluded)) - Number(Boolean(b.isExcluded)),
+    )
   }
 
   selectedAttendeeValues(): string[] {
