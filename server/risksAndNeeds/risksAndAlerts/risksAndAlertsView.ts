@@ -5,6 +5,56 @@ import { InsetTextArgs } from '../../utils/govukFrontendTypes'
 export default class RisksAndAlertsView {
   constructor(private readonly presenter: RisksAndAlertsPresenter) {}
 
+  get ogrsSectionUnavailable(): boolean {
+    return (
+      this.ogrsYear1Box.levelText === 'UNKNOWN' &&
+      this.ogrsYear2Box.levelText === 'UNKNOWN' &&
+      this.presenter.risks.offenderGroupReconviction.oneYear == null &&
+      this.presenter.risks.offenderGroupReconviction.twoYears == null
+    )
+  }
+
+  get ovpSectionUnavailable(): boolean {
+    return (
+      this.ovpYear1Box.levelText === 'UNKNOWN' &&
+      this.ovpYear2Box.levelText === 'UNKNOWN' &&
+      this.presenter.risks.offenderViolencePredictor.oneYear == null &&
+      this.presenter.risks.offenderViolencePredictor.twoYears == null
+    )
+  }
+
+  get saraSectionUnavailable(): boolean {
+    return this.riskTowardsPartnerBox.levelText === 'UNKNOWN' && this.riskTowardsOthersBox.levelText === 'UNKNOWN'
+  }
+
+  get rsrSectionUnavailable(): boolean {
+    return (
+      this.riskOfSeriousRecidivismBox.levelText === 'UNKNOWN' &&
+      this.presenter.risks.riskOfSeriousRecidivism.percentageScore == null &&
+      this.ospcBox.levelText === 'UNKNOWN' &&
+      this.ospiBox.levelText === 'UNKNOWN'
+    )
+  }
+
+  get roshSectionUnavailable(): boolean {
+    return this.roshRiskBox.levelText === 'UNKNOWN'
+  }
+
+  get alertsSectionUnavailable(): boolean {
+    return this.presenter.risks.alerts == null
+  }
+
+  get showTopDataUnavailableMessage(): boolean {
+    return (
+      this.ogrsSectionUnavailable ||
+      this.ovpSectionUnavailable ||
+      this.saraSectionUnavailable ||
+      this.rsrSectionUnavailable ||
+      this.roshSectionUnavailable ||
+      this.alertsSectionUnavailable
+    )
+  }
+
   get assessmentCompletedText(): InsetTextArgs {
     return {
       text: this.presenter.updatedText,
@@ -174,8 +224,10 @@ export default class RisksAndAlertsView {
   }
 
   get activeAlerts(): ActiveAlerts {
+    const { alerts } = this.presenter.risks
+
     return {
-      flags: this.presenter.risks.alerts.map(alert => ({ description: alert })),
+      flags: alerts == null ? null : alerts.map(alert => ({ description: alert })),
       lastUpdated: this.presenter.getLastUpdatedStringWithClass(this.presenter.risks.lastUpdated),
     }
   }
@@ -188,20 +240,27 @@ export default class RisksAndAlertsView {
         pageTitle: this.presenter.pageTitle,
         ogrsYear1Box: this.ogrsYear1Box,
         ogrsYear2Box: this.ogrsYear2Box,
+        ogrsSectionUnavailable: this.ogrsSectionUnavailable,
         ovpYear1Box: this.ovpYear1Box,
         ovpYear2Box: this.ovpYear2Box,
+        ovpSectionUnavailable: this.ovpSectionUnavailable,
         riskTowardsPartnerBox: this.riskTowardsPartnerBox,
         riskTowardsOthersBox: this.riskTowardsOthersBox,
+        saraSectionUnavailable: this.saraSectionUnavailable,
         riskOfSeriousRecidivismBox: this.riskOfSeriousRecidivismBox,
         ospcBox: this.ospcBox,
         ospiBox: this.ospiBox,
+        rsrSectionUnavailable: this.rsrSectionUnavailable,
         roshRiskBox: this.roshRiskBox,
         roshTable: this.roshTable,
+        roshSectionUnavailable: this.roshSectionUnavailable,
         activeAlerts: this.activeAlerts,
+        alertsSectionUnavailable: this.alertsSectionUnavailable,
         assessmentCompletedText: this.assessmentCompletedText,
         roshLastupdated: this.presenter.getLastUpdatedStringWithClass(this.presenter.risks.lastUpdated),
         importedFromNdeliusText: this.importedFromNdeliusText,
         headingText: this.presenter.headingText,
+        showTopDataUnavailableMessage: this.showTopDataUnavailableMessage,
       },
     ]
   }

@@ -42,4 +42,45 @@ describe('PNI controller', () => {
       expect.objectContaining({ referralId: expect.any(String) }),
     )
   })
+
+  it('shows API error messages when PNI data is unavailable', async () => {
+    const referralDetails = referralDetailsFactory.build()
+    const pniScore = pniScoreFactory.build({ overallIntensity: null })
+    const referralId = 'ABC123'
+
+    accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValueOnce(referralDetails)
+    accreditedProgrammesManageAndDeliverService.getPniScore.mockResolvedValueOnce(pniScore)
+
+    await request(app)
+      .get(`/referral/${referralId}/programme-needs-identifier`)
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('NDelius or OASys data unavailable')
+        expect(res.text).toContain('Programme needs identifier information is currently unavailable. Try again later.')
+        expect(res.text).toContain('PNI scores are currently unavailable. Try again later.')
+      })
+  })
+
+  it('does not show API error messages when pathway is missing information', async () => {
+    const referralDetails = referralDetailsFactory.build()
+    const pniScore = pniScoreFactory.build({ overallIntensity: 'MISSING_INFORMATION' })
+    const referralId = 'ABC123'
+
+    accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValueOnce(referralDetails)
+    accreditedProgrammesManageAndDeliverService.getPniScore.mockResolvedValueOnce(pniScore)
+
+    await request(app)
+      .get(`/referral/${referralId}/programme-needs-identifier`)
+      .expect(200)
+      .expect(res => {
+        expect(res.text).not.toContain('NDelius or OASys data unavailable')
+        expect(res.text).not.toContain(
+          'Programme needs identifier information is currently unavailable. Try again later.',
+        )
+        expect(res.text).not.toContain('PNI scores are currently unavailable. Try again later.')
+        expect(res.text).toContain(
+          'There is not enough information in the risk and need assessment to calculate the recommended programme pathway.',
+        )
+      })
+  })
 })
