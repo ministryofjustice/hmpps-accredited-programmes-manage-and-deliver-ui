@@ -2,6 +2,7 @@ import { EditSessionAttendee, EditSessionAttendeesResponse } from '@manage-and-d
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
 import { CheckboxesArgsItem, RadiosArgsItem } from '../../utils/govukFrontendTypes'
+import config from '../../config'
 
 export default class EditSessionAttendeesPresenter {
   constructor(
@@ -38,19 +39,32 @@ export default class EditSessionAttendeesPresenter {
   }
 
   generateAttendeeRadioOptions(): RadiosArgsItem[] {
-    return this.sessionAttendees.attendees.map(attendee => ({
-      text: `${attendee.name} (${attendee.crn})`,
+    return this.sortGroupMembersByExcluded().map(attendee => ({
+      html: `${this.isExcludedMember(attendee) ? `${attendee.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p>You cannot add a restricted participant to the session.</p>` : `${attendee.name} (${attendee.crn})`}`,
       value: attendee.referralId,
       checked: attendee.currentlyAttending === true,
+      disabled: this.isExcludedMember(attendee),
     }))
   }
 
   generateAttendeeCheckboxOptions(): CheckboxesArgsItem[] {
-    return this.sessionAttendees.attendees.map(attendee => ({
-      text: `${attendee.name} (${attendee.crn})`,
-      value: attendee.referralId,
+    return this.sortGroupMembersByExcluded().map(attendee => ({
+      html: `${this.isExcludedMember(attendee) ? `${attendee.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p>You cannot add a restricted participant to the session.</p>` : `${attendee.name} (${attendee.crn})`}`,
+      value: `${attendee.referralId} + ${this.isExcludedMember(attendee) ? attendee.crn : attendee.name}`,
       checked: attendee.currentlyAttending === true,
+      disabled: this.isExcludedMember(attendee),
     }))
+  }
+
+  // Keeps excluded/restricted members visible but always last in the list
+  private sortGroupMembersByExcluded() {
+    return [...this.sessionAttendees.attendees].sort(
+      (a, b) => Number(this.isExcludedMember(a)) - Number(this.isExcludedMember(b)),
+    )
+  }
+
+  private isExcludedMember(member: EditSessionAttendee): boolean {
+    return config.enable_excluded_referrals && member.isExcluded === true
   }
 
   get isGroupSession(): boolean {

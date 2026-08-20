@@ -15,16 +15,21 @@ const buildSessionAttendees = (
       referralId: 'referral-1',
       crn: 'X123456',
       currentlyAttending: true,
+      isExcluded: false,
     },
     {
       name: 'Jane Smith',
       referralId: 'referral-2',
       crn: 'Y654321',
       currentlyAttending: false,
+      isExcluded: false,
     },
   ],
   ...overrides,
 })
+
+const restrictedBadge = (crn: string): string =>
+  `${crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p>You cannot add a restricted participant to the session.</p>`
 
 describe('EditSessionAttendeesPresenter', () => {
   const groupId = 'group-123'
@@ -58,14 +63,16 @@ describe('EditSessionAttendeesPresenter', () => {
 
       expect(presenter.generateAttendeeRadioOptions()).toEqual([
         {
-          text: 'John Doe (X123456)',
+          html: 'John Doe (X123456)',
           value: 'referral-1',
           checked: true,
+          disabled: false,
         },
         {
-          text: 'Jane Smith (Y654321)',
+          html: 'Jane Smith (Y654321)',
           value: 'referral-2',
           checked: false,
+          disabled: false,
         },
       ])
     })
@@ -87,12 +94,14 @@ describe('EditSessionAttendeesPresenter', () => {
               referralId: 'referral-1',
               crn: 'X123456',
               currentlyAttending: true,
+              isExcluded: false,
             },
             {
               name: 'Jane Smith',
               referralId: 'referral-2',
               crn: 'Y654321',
               currentlyAttending: true,
+              isExcluded: false,
             },
           ],
         }),
@@ -100,14 +109,56 @@ describe('EditSessionAttendeesPresenter', () => {
 
       expect(presenter.generateAttendeeRadioOptions()).toEqual([
         {
-          text: 'John Doe (X123456)',
+          html: 'John Doe (X123456)',
           value: 'referral-1',
           checked: true,
+          disabled: false,
         },
         {
-          text: 'Jane Smith (Y654321)',
+          html: 'Jane Smith (Y654321)',
           value: 'referral-2',
           checked: true,
+          disabled: false,
+        },
+      ])
+    })
+
+    it('marks an excluded attendee as disabled, shows the restricted access badge, and sorts them last', () => {
+      const presenter = new EditSessionAttendeesPresenter(
+        groupId,
+        backUrl,
+        buildSessionAttendees({
+          attendees: [
+            {
+              name: 'Jane Smith',
+              referralId: 'referral-2',
+              crn: 'Y654321',
+              currentlyAttending: false,
+              isExcluded: true,
+            },
+            {
+              name: 'John Doe',
+              referralId: 'referral-1',
+              crn: 'X123456',
+              currentlyAttending: true,
+              isExcluded: false,
+            },
+          ],
+        }),
+      )
+
+      expect(presenter.generateAttendeeRadioOptions()).toEqual([
+        {
+          html: 'John Doe (X123456)',
+          value: 'referral-1',
+          checked: true,
+          disabled: false,
+        },
+        {
+          html: restrictedBadge('Y654321'),
+          value: 'referral-2',
+          checked: false,
+          disabled: true,
         },
       ])
     })
@@ -119,14 +170,16 @@ describe('EditSessionAttendeesPresenter', () => {
 
       expect(presenter.generateAttendeeCheckboxOptions()).toEqual([
         {
-          text: 'John Doe (X123456)',
-          value: 'referral-1',
+          html: 'John Doe (X123456)',
+          value: 'referral-1 + John Doe',
           checked: true,
+          disabled: false,
         },
         {
-          text: 'Jane Smith (Y654321)',
-          value: 'referral-2',
+          html: 'Jane Smith (Y654321)',
+          value: 'referral-2 + Jane Smith',
           checked: false,
+          disabled: false,
         },
       ])
     })
@@ -148,12 +201,14 @@ describe('EditSessionAttendeesPresenter', () => {
               referralId: 'referral-1',
               crn: 'X123456',
               currentlyAttending: true,
+              isExcluded: false,
             },
             {
               name: 'Jane Smith',
               referralId: 'referral-2',
               crn: 'Y654321',
               currentlyAttending: true,
+              isExcluded: false,
             },
           ],
         }),
@@ -161,14 +216,56 @@ describe('EditSessionAttendeesPresenter', () => {
 
       expect(presenter.generateAttendeeCheckboxOptions()).toEqual([
         {
-          text: 'John Doe (X123456)',
-          value: 'referral-1',
+          html: 'John Doe (X123456)',
+          value: 'referral-1 + John Doe',
           checked: true,
+          disabled: false,
         },
         {
-          text: 'Jane Smith (Y654321)',
-          value: 'referral-2',
+          html: 'Jane Smith (Y654321)',
+          value: 'referral-2 + Jane Smith',
           checked: true,
+          disabled: false,
+        },
+      ])
+    })
+
+    it('marks an excluded attendee as disabled, shows the restricted access badge, and sorts them last', () => {
+      const presenter = new EditSessionAttendeesPresenter(
+        groupId,
+        backUrl,
+        buildSessionAttendees({
+          attendees: [
+            {
+              name: 'Jane Smith',
+              referralId: 'referral-2',
+              crn: 'Y654321',
+              currentlyAttending: false,
+              isExcluded: true,
+            },
+            {
+              name: 'John Doe',
+              referralId: 'referral-1',
+              crn: 'X123456',
+              currentlyAttending: true,
+              isExcluded: false,
+            },
+          ],
+        }),
+      )
+
+      expect(presenter.generateAttendeeCheckboxOptions()).toEqual([
+        {
+          html: 'John Doe (X123456)',
+          value: 'referral-1 + John Doe',
+          checked: true,
+          disabled: false,
+        },
+        {
+          html: restrictedBadge('Y654321'),
+          value: `referral-2 + Y654321`,
+          checked: false,
+          disabled: true,
         },
       ])
     })
