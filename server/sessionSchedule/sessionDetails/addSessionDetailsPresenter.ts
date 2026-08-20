@@ -103,7 +103,7 @@ export default class AddSessionDetailsPresenter {
   }
 
   private isExcludedMember(member: ScheduleIndividualSessionDetailsResponse['groupMembers'][number]): boolean {
-    return config.enable_excluded_referrals && Boolean(member.isExcluded)
+    return config.enable_excluded_referrals && member.isExcluded === true
   }
 
   selectedAttendeeValues(): string[] {
