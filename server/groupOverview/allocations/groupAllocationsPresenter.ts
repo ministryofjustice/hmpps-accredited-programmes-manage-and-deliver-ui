@@ -143,12 +143,12 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
         {
           html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
-                    <input id='${member.referralId}' value='${member.referralId}' type="radio" name="add-to-group" class="govuk-radios__input"${isExcluded ? ' disabled' : ''}>
+                    <input id='${member.referralId}' value='${member.referralId}' type="radio" name="add-to-group" class="govuk-radios__input"${isExcluded ? ' disabled aria-disabled="true"' : ''}>
                     <label class="govuk-label govuk-radios__label" for="${member.referralId}">
                       <span class="govuk-visually-hidden">Add ${member.personName} to the group</span>
                     </label>
                   </div>
-                 </div>`,
+                 </div>${isExcluded ? '<span class="govuk-visually-hidden">Add to group: restricted access - you cannot add this person to the group</span>' : ''}`,
         },
         {
           html: !isExcluded
@@ -197,12 +197,12 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
         {
           html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
-                    <input id='${member.crn}' value='${member.referralId}' type="radio" name="remove-from-group" class="govuk-radios__input"${isExcluded ? ' disabled' : ''}>
+                    <input id='${member.crn}' value='${member.referralId}' type="radio" name="remove-from-group" class="govuk-radios__input"${isExcluded ? ' disabled aria-disabled="true"' : ''}>
                     <label class="govuk-label govuk-radios__label" for="${member.crn}">
                       <span class="govuk-visually-hidden">Remove ${member.personName} from the group</span>
                     </label>
                   </div>
-                 </div>`,
+                 </div>${isExcluded ? '<span class="govuk-visually-hidden">Remove from group: restricted access - you cannot remove this person from the group</span>' : ''}`,
         },
         {
           html: !isExcluded
