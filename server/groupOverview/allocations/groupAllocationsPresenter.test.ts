@@ -306,7 +306,9 @@ describe('GroupAllocationsPresenter', () => {
         ...baseGroupOverview,
         pagedGroupData: {
           ...baseGroupOverview.pagedGroupData,
-          content: [{ ...baseGroupOverview.pagedGroupData.content[0], isExcluded: true, lao: true }],
+          content: [
+            { ...baseGroupOverview.pagedGroupData.content[0], isExcluded: true, isLimitedAccessOffender: true },
+          ],
         },
       }
       const presenter = new GroupAllocationsPresenter(

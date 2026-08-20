@@ -48,6 +48,11 @@ export default class GroupOverviewController extends BaseController {
       filter.params,
     )
 
+    const firstLao = groupOverview.pagedGroupData.content.find(member => member.isLimitedAccessOffender)
+    if (firstLao) {
+      firstLao.isExcluded = true
+    }
+
     if (req.method === 'POST') {
       const data = await new GroupForm(req).removeFromGroupData()
       if (data.error) {

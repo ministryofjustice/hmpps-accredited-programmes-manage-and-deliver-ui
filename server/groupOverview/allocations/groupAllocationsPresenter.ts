@@ -152,8 +152,8 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
         },
         {
           html: !isExcluded
-            ? `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0"> ${member.crn}</p>${member.lao ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`
-            : `<span>${member.crn}</span>${member.lao ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`,
+            ? `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0"> ${member.crn}</p>${member.isLimitedAccessOffender ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`
+            : `<span>${member.crn}</span>${member.isLimitedAccessOffender ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`,
         },
         {
           html: !isExcluded
@@ -206,7 +206,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
         },
         {
           html: !isExcluded
-            ? `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0">${member.crn}</p>${member.lao ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`
+            ? `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0">${member.crn}</p>${member.isLimitedAccessOffender ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`
             : `<span>${member.crn}</span>${CaselistUtils.hasLaoBadgeHtmlGroupItem(member)}`,
         },
         {
