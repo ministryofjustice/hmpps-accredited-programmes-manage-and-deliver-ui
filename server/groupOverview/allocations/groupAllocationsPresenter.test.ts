@@ -151,7 +151,9 @@ describe('GroupAllocationsPresenter', () => {
         ...baseGroupOverview,
         pagedGroupData: {
           ...baseGroupOverview.pagedGroupData,
-          content: [{ ...baseGroupOverview.pagedGroupData.content[0], isExcluded: true, lao: false }],
+          content: [
+            { ...baseGroupOverview.pagedGroupData.content[0], isExcluded: true, isLimitedAccessOffender: false },
+          ],
         },
       }
       const presenter = new GroupAllocationsPresenter(
@@ -173,7 +175,9 @@ describe('GroupAllocationsPresenter', () => {
                   </div>
                  </div>`,
           },
-          { html: `<span>X718250</span>` },
+          {
+            html: `<a href="/referral-details/39fde7e8-d2e3-472b-8364-5848bf673aa6/personal-details">Edgar Schiller</a><p class="govuk-!-margin-bottom-0"> X718250</p>`,
+          },
           { html: 'Restricted' },
           { html: 'Restricted' },
           { text: 'Restricted' },
@@ -192,7 +196,9 @@ describe('GroupAllocationsPresenter', () => {
         ...baseGroupOverview,
         pagedGroupData: {
           ...baseGroupOverview.pagedGroupData,
-          content: [{ ...baseGroupOverview.pagedGroupData.content[0], isExcluded: true, lao: false }],
+          content: [
+            { ...baseGroupOverview.pagedGroupData.content[0], isExcluded: true, isLimitedAccessOffender: false },
+          ],
         },
       }
       const presenter = new GroupAllocationsPresenter(
@@ -210,12 +216,12 @@ describe('GroupAllocationsPresenter', () => {
     })
   })
 
-  describe('generateAllocateTableArgs', () => {
-    it('should return the correct table args for allocted list', () => {
+  describe('generateAllocatedTableArgs', () => {
+    it('should return the correct table args for allocated list', () => {
       const filterObject = GroupAllocationsFilter.empty()
       const groupOverview = ProgrammeGroupOverviewFactory.allocatedList().build()
       const presenter = new GroupAllocationsPresenter(
-        GroupAllocationsPageSection.Waitlist,
+        GroupAllocationsPageSection.Allocated,
         groupOverview,
         '1234',
         filterObject,
@@ -270,7 +276,9 @@ describe('GroupAllocationsPresenter', () => {
         ...baseGroupOverview,
         pagedGroupData: {
           ...baseGroupOverview.pagedGroupData,
-          content: [{ ...baseGroupOverview.pagedGroupData.content[0], isExcluded: true, lao: false }],
+          content: [
+            { ...baseGroupOverview.pagedGroupData.content[0], isLimitedAccessOffender: false, isExcluded: true },
+          ],
         },
       }
       const presenter = new GroupAllocationsPresenter(
@@ -292,21 +300,25 @@ describe('GroupAllocationsPresenter', () => {
                   </div>
                  </div>`,
           },
-          { html: `<span>X718250</span>` },
+          {
+            html: `<a href="/referral-details/39fde7e8-d2e3-472b-8364-5848bf673aa6/personal-details">Edgar Schiller</a><p class="govuk-!-margin-bottom-0">X718250</p>`,
+          },
           { html: 'Restricted' },
           { html: `<strong class="govuk-tag govuk-tag--purple">Scheduled</strong>` },
         ],
       ])
     })
 
-    it('should show the LAO badge for an excluded allocated member with restricted access', () => {
+    it('should show the Limited Access Offender badge for an excluded allocated member with restricted access', () => {
       const filterObject = GroupAllocationsFilter.empty()
       const baseGroupOverview = ProgrammeGroupOverviewFactory.allocatedList().build()
       const groupOverview = {
         ...baseGroupOverview,
         pagedGroupData: {
           ...baseGroupOverview.pagedGroupData,
-          content: [{ ...baseGroupOverview.pagedGroupData.content[0], isExcluded: true, lao: true }],
+          content: [
+            { ...baseGroupOverview.pagedGroupData.content[0], isExcluded: true, isLimitedAccessOffender: true },
+          ],
         },
       }
       const presenter = new GroupAllocationsPresenter(
@@ -318,7 +330,7 @@ describe('GroupAllocationsPresenter', () => {
 
       const rows = presenter.generateAllocatedTableArgs()
       expect(rows[0][1]).toEqual({
-        html: `<span>X718250</span><br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>`,
+        html: `<a href="/referral-details/39fde7e8-d2e3-472b-8364-5848bf673aa6/personal-details">Edgar Schiller</a><p class="govuk-!-margin-bottom-0">X718250</p><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>`,
       })
     })
   })

@@ -41,7 +41,7 @@ class ProgrammeGroupAllocationsFactory extends Factory<ProgrammeGroupAllocations
             statusColour: 'purple',
             activeProgrammeGroupId: null,
             isLimitedAccessOffender: true,
-            isExcluded: true,
+            isExcluded: false,
           },
         ],
         pageable: {
@@ -111,7 +111,7 @@ class ProgrammeGroupAllocationsFactory extends Factory<ProgrammeGroupAllocations
             statusColour: 'purple',
             activeProgrammeGroupId: '897bee70-d0a5-48ac-b8b8-e4ab5ea7ad1d',
             isLimitedAccessOffender: true,
-            isExcluded: true,
+            isExcluded: false,
           },
         ],
         pageable: {
