@@ -4191,6 +4191,7 @@ export interface components {
        * @example 56470228-3893-450f-b4bc-97b21e18b887
        */
       activeProgrammeGroupId: string | null
+      isExcluded: boolean | null
     }
     PageGroupItem: {
       /** Format: int32 */

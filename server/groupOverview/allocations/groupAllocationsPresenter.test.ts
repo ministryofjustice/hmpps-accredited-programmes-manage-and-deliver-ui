@@ -1,6 +1,13 @@
+import config from '../../config'
 import ProgrammeGroupOverviewFactory from '../../testutils/factories/programmeGroupAllocationsFactory'
 import GroupAllocationsFilter from './groupAllocationsFilter'
 import GroupAllocationsPresenter, { GroupAllocationsPageSection } from './groupAllocationsPresenter'
+
+jest.mock('../../config')
+
+beforeEach(() => {
+  config.enable_excluded_referrals = true
+})
 
 afterEach(() => {
   jest.restoreAllMocks()
@@ -136,6 +143,71 @@ describe('GroupAllocationsPresenter', () => {
         ],
       ])
     })
+
+    it('should replace restricted fields with "Restricted" when a waitlist member is excluded', () => {
+      const filterObject = GroupAllocationsFilter.empty()
+      const baseGroupOverview = ProgrammeGroupOverviewFactory.waitlist().build()
+      const groupOverview = {
+        ...baseGroupOverview,
+        pagedGroupData: {
+          ...baseGroupOverview.pagedGroupData,
+          content: [{ ...baseGroupOverview.pagedGroupData.content[0], isExcluded: true, lao: false }],
+        },
+      }
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Waitlist,
+        groupOverview,
+        '1234',
+        filterObject,
+      )
+
+      expect(presenter.generateWaitlistTableArgs()).toEqual([
+        [
+          {
+            html: `<div class="govuk-radios govuk-radios--small group-details-table">
+                  <div class="govuk-radios__item">
+                    <input id='39fde7e8-d2e3-472b-8364-5848bf673aa6' value='39fde7e8-d2e3-472b-8364-5848bf673aa6' type="radio" name="add-to-group" class="govuk-radios__input" disabled>
+                    <label class="govuk-label govuk-radios__label" for="39fde7e8-d2e3-472b-8364-5848bf673aa6">
+                      <span class="govuk-visually-hidden">Add Edgar Schiller to the group</span>
+                    </label>
+                  </div>
+                 </div>`,
+          },
+          { html: `<span>X718250</span>` },
+          { html: 'Restricted' },
+          { html: 'Restricted' },
+          { text: 'Restricted' },
+          { text: 'Restricted' },
+          { text: 'Restricted' },
+          { text: 'Restricted' },
+        ],
+      ])
+    })
+
+    it('should not restrict fields when a waitlist member is excluded but the feature is disabled', () => {
+      config.enable_excluded_referrals = false
+      const filterObject = GroupAllocationsFilter.empty()
+      const baseGroupOverview = ProgrammeGroupOverviewFactory.waitlist().build()
+      const groupOverview = {
+        ...baseGroupOverview,
+        pagedGroupData: {
+          ...baseGroupOverview.pagedGroupData,
+          content: [{ ...baseGroupOverview.pagedGroupData.content[0], isExcluded: true, lao: false }],
+        },
+      }
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Waitlist,
+        groupOverview,
+        '1234',
+        filterObject,
+      )
+
+      const rows = presenter.generateWaitlistTableArgs()
+      expect(rows[0][1]).toEqual({
+        html: `<a href="/referral-details/39fde7e8-d2e3-472b-8364-5848bf673aa6/personal-details">Edgar Schiller</a><p class="govuk-!-margin-bottom-0"> X718250</p>`,
+      })
+      expect(rows[0][4]).toEqual({ text: '36' })
+    })
   })
 
   describe('generateAllocateTableArgs', () => {
@@ -189,6 +261,65 @@ describe('GroupAllocationsPresenter', () => {
           { html: '<strong class="govuk-tag govuk-tag--purple">Scheduled</strong>' },
         ],
       ])
+    })
+
+    it('should replace restricted fields with "Restricted" when an allocated member is excluded', () => {
+      const filterObject = GroupAllocationsFilter.empty()
+      const baseGroupOverview = ProgrammeGroupOverviewFactory.allocatedList().build()
+      const groupOverview = {
+        ...baseGroupOverview,
+        pagedGroupData: {
+          ...baseGroupOverview.pagedGroupData,
+          content: [{ ...baseGroupOverview.pagedGroupData.content[0], isExcluded: true, lao: false }],
+        },
+      }
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Waitlist,
+        groupOverview,
+        '1234',
+        filterObject,
+      )
+
+      expect(presenter.generateAllocatedTableArgs()).toEqual([
+        [
+          {
+            html: `<div class="govuk-radios govuk-radios--small group-details-table">
+                  <div class="govuk-radios__item">
+                    <input id='X718250' value='39fde7e8-d2e3-472b-8364-5848bf673aa6' type="radio" name="remove-from-group" class="govuk-radios__input" disabled>
+                    <label class="govuk-label govuk-radios__label" for="X718250">
+                      <span class="govuk-visually-hidden">Remove Edgar Schiller from the group</span>
+                    </label>
+                  </div>
+                 </div>`,
+          },
+          { html: `<span>X718250</span>` },
+          { html: 'Restricted' },
+          { html: `<strong class="govuk-tag govuk-tag--purple">Scheduled</strong>` },
+        ],
+      ])
+    })
+
+    it('should show the LAO badge for an excluded allocated member with restricted access', () => {
+      const filterObject = GroupAllocationsFilter.empty()
+      const baseGroupOverview = ProgrammeGroupOverviewFactory.allocatedList().build()
+      const groupOverview = {
+        ...baseGroupOverview,
+        pagedGroupData: {
+          ...baseGroupOverview.pagedGroupData,
+          content: [{ ...baseGroupOverview.pagedGroupData.content[0], isExcluded: true, lao: true }],
+        },
+      }
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Waitlist,
+        groupOverview,
+        '1234',
+        filterObject,
+      )
+
+      const rows = presenter.generateAllocatedTableArgs()
+      expect(rows[0][1]).toEqual({
+        html: `<span>X718250</span><br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>`,
+      })
     })
   })
 
