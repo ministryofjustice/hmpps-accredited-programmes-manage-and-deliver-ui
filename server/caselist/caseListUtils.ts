@@ -10,6 +10,8 @@ export default class CaselistUtils {
   }
 
   static hasLaoBadgeHtmlGroupItem(groupItem: GroupItem): string {
-    return groupItem.lao ? '<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''
+    return groupItem.isLimitedAccessOffender
+      ? '<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>'
+      : ''
   }
 }
