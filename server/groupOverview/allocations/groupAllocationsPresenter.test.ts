@@ -168,12 +168,12 @@ describe('GroupAllocationsPresenter', () => {
           {
             html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
-                    <input id='39fde7e8-d2e3-472b-8364-5848bf673aa6' value='39fde7e8-d2e3-472b-8364-5848bf673aa6' type="radio" name="add-to-group" class="govuk-radios__input" disabled>
+                    <input id='39fde7e8-d2e3-472b-8364-5848bf673aa6' value='39fde7e8-d2e3-472b-8364-5848bf673aa6' type="radio" name="add-to-group" class="govuk-radios__input" disabled aria-disabled="true">
                     <label class="govuk-label govuk-radios__label" for="39fde7e8-d2e3-472b-8364-5848bf673aa6">
                       <span class="govuk-visually-hidden">Add Edgar Schiller to the group</span>
                     </label>
                   </div>
-                 </div>`,
+                 </div><span class="govuk-visually-hidden">Add to group: restricted access - you cannot add this person to the group</span>`,
           },
           {
             html: `<a href="/referral-details/39fde7e8-d2e3-472b-8364-5848bf673aa6/personal-details">Edgar Schiller</a><p class="govuk-!-margin-bottom-0"> X718250</p>`,
@@ -293,12 +293,12 @@ describe('GroupAllocationsPresenter', () => {
           {
             html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
-                    <input id='X718250' value='39fde7e8-d2e3-472b-8364-5848bf673aa6' type="radio" name="remove-from-group" class="govuk-radios__input" disabled>
+                    <input id='X718250' value='39fde7e8-d2e3-472b-8364-5848bf673aa6' type="radio" name="remove-from-group" class="govuk-radios__input" disabled aria-disabled="true">
                     <label class="govuk-label govuk-radios__label" for="X718250">
                       <span class="govuk-visually-hidden">Remove Edgar Schiller from the group</span>
                     </label>
                   </div>
-                 </div>`,
+                 </div><span class="govuk-visually-hidden">Remove from group: restricted access - you cannot remove this person from the group</span>`,
           },
           {
             html: `<a href="/referral-details/39fde7e8-d2e3-472b-8364-5848bf673aa6/personal-details">Edgar Schiller</a><p class="govuk-!-margin-bottom-0">X718250</p>`,
