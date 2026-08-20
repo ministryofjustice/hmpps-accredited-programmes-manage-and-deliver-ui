@@ -1733,6 +1733,12 @@ export interface components {
        * @enum {string}
        */
       cohort: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
+      /** @description The boolean value of whether the group member has Limited Access Offender (LAO) status */
+      isLimitedAccessOffender?: boolean | null
+      /** @description The boolean value of whether the group member details are excluded from viewing by the logged-in username */
+      isExcluded?: boolean | null
+      limitedAccessOffender?: boolean
+      excluded?: boolean
     }
     ReferralMotivationBackgroundAndNonAssociations: {
       /**
@@ -3400,10 +3406,10 @@ export interface components {
       sort?: components['schemas']['SortObject']
       /** Format: int32 */
       pageNumber?: number
-      unpaged?: boolean
+      paged?: boolean
       /** Format: int32 */
       pageSize?: number
-      paged?: boolean
+      unpaged?: boolean
     }
     ReferralCaseListItem: {
       /** Format: uuid */
@@ -3864,6 +3870,12 @@ export interface components {
        * @example true
        */
       currentlyAttending: boolean
+      /** @description The boolean value of whether the group member has Limited Access Offender (LAO) status */
+      isLimitedAccessOffender?: boolean | null
+      /** @description The boolean value of whether the group member details are excluded from viewing by the logged-in username */
+      isExcluded?: boolean | null
+      limitedAccessOffender?: boolean
+      excluded?: boolean
     }
     /** @description Response representing attendees for a specific programme session */
     EditSessionAttendeesResponse: {
@@ -4128,10 +4140,15 @@ export interface components {
        */
       crn: string
       /**
-       * @description Whether the person has Limited Access Offender (LAO) status.
+       * @description Whether the referral is Limited Access Offender (LAO) status.
        * @example false
        */
-      lao: boolean
+      isLimitedAccessOffender: boolean
+      /**
+       * @description Whether the logged-in user is excludded from viewing Limited Access Offenders (LAO) data.
+       * @example false
+       */
+      isExcluded: boolean
       /**
        * @description The name of the person associated with this referral.
        * @example John Doe
@@ -4191,7 +4208,6 @@ export interface components {
        * @example 56470228-3893-450f-b4bc-97b21e18b887
        */
       activeProgrammeGroupId: string | null
-      isExcluded: boolean | null
     }
     PageGroupItem: {
       /** Format: int32 */
@@ -4556,8 +4572,6 @@ export interface components {
       isLimitedAccessOffender?: boolean | null
       /** @description The boolean value of whether the group member details are excluded from viewing by the logged-in username */
       isExcluded?: boolean | null
-      limitedAccessOffender?: boolean
-      excluded?: boolean
     }
     ScheduleIndividualSessionDetailsResponse: {
       /** @description List of facilitators available for the one-to-one appointment (sourced from the Region of the logged-in user) */
