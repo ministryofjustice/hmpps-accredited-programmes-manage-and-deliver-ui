@@ -3431,7 +3431,7 @@ export interface components {
       sentenceEndDate?: string | null
       /** @enum {string|null} */
       sentenceEndDateSource?: 'REQUIREMENT' | 'LICENCE_CONDITION' | null
-      lao?: boolean | null
+      isLimitedAccessOffender?: boolean | null
       isExcluded?: boolean | null
     }
     SortObject: {

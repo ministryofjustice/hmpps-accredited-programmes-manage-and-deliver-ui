@@ -6,7 +6,9 @@ export default class CaselistUtils {
   }
 
   static hasLaoBadgeHtml(referral: ReferralCaseListItem): string {
-    return referral.lao ? '<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''
+    return referral.isLimitedAccessOffender
+      ? '<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>'
+      : ''
   }
 
   static hasLaoBadgeHtmlGroupItem(groupItem: GroupItem): string {
