@@ -150,6 +150,19 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
     const sessionSlug =
       this.isCatchupSession(session) && !baseSlug.endsWith('-catch-up') ? `${baseSlug}-catch-up` : baseSlug
 
+    if (session.isExcluded) {
+      return `
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell">${session.crn}${session.isLimitedAccessOffender ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}</td>
+      <td class="govuk-table__cell">Restricted</td>
+      <td class="govuk-table__cell">${participants.crn}</td>
+      <td class="govuk-table__cell" data-sort-value="${dateSortValue}">Restricted</td>
+      <td class="govuk-table__cell">Restricted</td>
+      <td class="govuk-table__cell">Restricted</td>
+    </tr>
+  `
+    }
+
     return `
     <tr class="govuk-table__row">
       <td class="govuk-table__cell"><a href="/${this.groupId}/${session.id}/${sessionSlug}">${session.name || ''}</a></td>

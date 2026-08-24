@@ -3405,10 +3405,10 @@ export interface components {
       offset?: number
       sort?: components['schemas']['SortObject']
       /** Format: int32 */
+      pageSize?: number
+      /** Format: int32 */
       pageNumber?: number
       paged?: boolean
-      /** Format: int32 */
-      pageSize?: number
       unpaged?: boolean
     }
     ReferralCaseListItem: {
@@ -3780,7 +3780,7 @@ export interface components {
       name: string
       /**
        * @description A string representing a CRN
-       * @example Alice Brown
+       * @example Y006572
        */
       crn: string
       /**
@@ -3800,6 +3800,16 @@ export interface components {
        * @example John Smith
        */
       sessionNotesCreatedByFullName?: string | null
+      /**
+       * @description A flag denoting whether the person is a Limited Access Offender.
+       * @example false
+       */
+      isLao: boolean
+      /**
+       * @description A flag denoting whether the current user is authorised to view this Limited Access Offender.
+       * @example false
+       */
+      isExcluded: boolean
     }
     /** @description Details of attendance */
     SessionPersonAttendance: {
@@ -4365,6 +4375,7 @@ export interface components {
        *     ]
        */
       participants: string[]
+      isExcluded: boolean
       /**
        * @description The names of the facilitators in the session
        * @example [
