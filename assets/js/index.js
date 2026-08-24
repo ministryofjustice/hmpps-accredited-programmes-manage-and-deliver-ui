@@ -5,6 +5,25 @@ import ModalDialog from './modelTimeOutDialog.js'
 govukFrontend.initAll()
 mojFrontend.initAll()
 
+// Keep excluded (restricted) referrals pinned to the bottom of the caselist sortable table,
+// regardless of which column/direction the user sorts by. The MOJ component re-sorts the
+// tbody on load and on every header click, so we re-pin after each sort.
+const pinExcludedRowsToBottom = table => {
+  const tbody = table.querySelector('tbody')
+  if (!tbody) return
+  Array.from(tbody.querySelectorAll('tr'))
+    .filter(row => row.querySelector('[data-excluded="true"]'))
+    .forEach(row => tbody.appendChild(row))
+}
+
+document.querySelectorAll('[data-caselist-table="true"]').forEach(table => {
+  pinExcludedRowsToBottom(table)
+  const thead = table.querySelector('thead')
+  if (thead) {
+    thead.addEventListener('click', () => pinExcludedRowsToBottom(table))
+  }
+})
+
 const $inactivityWarningModal = document.querySelector('[data-modal-type="inactivity-warning"]')
 if ($inactivityWarningModal) {
   const INACTIVITY_TIMEOUT = 50 * 60 * 1000

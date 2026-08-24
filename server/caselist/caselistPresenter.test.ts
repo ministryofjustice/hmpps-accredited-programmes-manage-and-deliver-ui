@@ -1,7 +1,6 @@
 import { ReferralCaseListItem } from '@manage-and-deliver-api'
 
 import { Page } from '../shared/models/pagination'
-import config from '../config'
 import pageFactory from '../testutils/factories/pageFactory'
 import referralCaseListItemFactory from '../testutils/factories/referralCaseListItem'
 import TestUtils from '../testutils/testUtils'
@@ -156,6 +155,60 @@ describe(`filters`, () => {
     })
   })
 
+  describe('generateSexSelectArgs', () => {
+    it('should generate correct select items for sex', () => {
+      const testObject = {
+        filter: { sex: undefined } as unknown as CaselistFilter,
+      }
+      const referralCaseListItem = referralCaseListItemFactory.build()
+      const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+        .pageContent([referralCaseListItem])
+        .build() as Page<ReferralCaseListItem>
+      const presenter = new CaselistPresenter(
+        1,
+        referralCaseListItemPage,
+        testObject.filter,
+        '',
+        true,
+        caseListFilters,
+        2,
+        'test location',
+      )
+
+      expect(presenter.generateSexSelectArgs()).toEqual([
+        { text: 'Select', value: '' },
+        { value: 'Male', text: 'Male', selected: false },
+        { value: 'Female', text: 'Female', selected: false },
+      ])
+    })
+
+    it('should mark the selected sex based on filter.sex', () => {
+      const testObject = {
+        filter: { sex: 'Female' } as unknown as CaselistFilter,
+      }
+      const referralCaseListItem = referralCaseListItemFactory.build()
+      const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+        .pageContent([referralCaseListItem])
+        .build() as Page<ReferralCaseListItem>
+      const presenter = new CaselistPresenter(
+        1,
+        referralCaseListItemPage,
+        testObject.filter,
+        '',
+        true,
+        caseListFilters,
+        2,
+        'test location',
+      )
+
+      expect(presenter.generateSexSelectArgs()).toEqual([
+        { text: 'Select', value: '' },
+        { value: 'Male', text: 'Male', selected: false },
+        { value: 'Female', text: 'Female', selected: true },
+      ])
+    })
+  })
+
   describe('generateReportingTeamCheckboxArgs', () => {
     it('should generate correct checkboxes based on API data and select the correct reporting team', () => {
       const testObject = {
@@ -264,10 +317,6 @@ describe(`filters`, () => {
 })
 
 describe('resultsText', () => {
-  beforeEach(() => {
-    ;(config as jest.Mocked<typeof config>).enable_caselist_singular_result_text = false
-  })
-
   it('should return blank when there are no results', () => {
     const filter = { status: undefined, cohort: undefined, crnOrPersonName: undefined } as CaselistFilter
     const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
@@ -316,9 +365,7 @@ describe('resultsText', () => {
     )
   })
 
-  it('should use singular wording when there is exactly one result when feature flag is enabled', () => {
-    ;(config as jest.Mocked<typeof config>).enable_caselist_singular_result_text = true
-
+  it('should use singular wording when there is exactly one result', () => {
     const filter = { status: undefined, cohort: undefined, crnOrPersonName: undefined } as CaselistFilter
     const referralCaseListItems = [referralCaseListItemFactory.build()]
     const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory.pageContent(referralCaseListItems).build({
@@ -342,8 +389,6 @@ describe('resultsText', () => {
   })
 
   it('should use plural wording when there is exactly one result when feature flag is disabled', () => {
-    ;(config as jest.Mocked<typeof config>).enable_caselist_singular_result_text = false
-
     const filter = { status: undefined, cohort: undefined, crnOrPersonName: undefined } as CaselistFilter
     const referralCaseListItems = [referralCaseListItemFactory.build()]
     const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory.pageContent(referralCaseListItems).build({
@@ -405,6 +450,7 @@ describe('generateTableRows', () => {
       sentenceEndDateSource: 'REQUIREMENT',
       cohort: 'GENERAL_OFFENCE',
       hasLdc: false,
+      sex: 'Female',
       referralStatus: 'Awaiting allocation',
       statusLabelColour: 'teal',
     })
@@ -426,7 +472,7 @@ describe('generateTableRows', () => {
     const sentenceEndDateTimestamp = new Date('15 June 2024').getTime()
 
     expect(rows).toHaveLength(1)
-    expect(rows[0]).toHaveLength(6)
+    expect(rows[0]).toHaveLength(7)
     expect(rows[0][0]).toEqual({
       html: `<a href='/referral-details/REF123/personal-details'>Jane Doe</a><span>X987654</span>`,
       attributes: { 'data-sort-value': 'Jane Doe' },
@@ -438,7 +484,8 @@ describe('generateTableRows', () => {
       attributes: { 'data-sort-value': sentenceEndDateTimestamp },
     })
     expect(rows[0][4]).toEqual({ html: 'General offence' })
-    expect(rows[0][5]).toEqual({
+    expect(rows[0][5]).toEqual({ text: 'Female' })
+    expect(rows[0][6]).toEqual({
       html: `<strong class="govuk-tag govuk-tag--teal">Awaiting allocation</strong>`,
     })
   })
@@ -509,8 +556,6 @@ describe('generateTableRows', () => {
   })
 
   it('should display RESTRICTED ACCESS badge in the name column when the referral is an LAO case', () => {
-    ;(config as jest.Mocked<typeof config>).enable_restricted_access_badge = true
-
     const laoReferral = referralCaseListItemFactory.build({
       referralId: 'REF999',
       personName: 'John Smith',
@@ -624,6 +669,85 @@ describe('generateTableRows', () => {
     const rows = presenter.generateTableRows()
 
     expect(rows).toHaveLength(0)
+  })
+
+  it('should replace restricted fields with "Restricted" when the referral is excluded', () => {
+    const referralCaseListItem = referralCaseListItemFactory.build({
+      referralId: 'REF999',
+      personName: 'Restricted Person',
+      crn: 'X111222',
+      pdu: 'Manchester PDU',
+      reportingTeam: 'Team Bravo',
+      sentenceEndDate: '2024-06-15',
+      sentenceEndDateSource: 'REQUIREMENT',
+      cohort: 'GENERAL_OFFENCE',
+      hasLdc: false,
+      referralStatus: 'Awaiting allocation',
+      statusLabelColour: 'teal',
+      isExcluded: true,
+    })
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+      .pageContent([referralCaseListItem])
+      .build() as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      1,
+      referralCaseListItemPage,
+      {} as CaselistFilter,
+      '',
+      true,
+      caseListFilters,
+      0,
+      'test location',
+    )
+
+    const rows = presenter.generateTableRows()
+
+    expect(rows).toHaveLength(1)
+    expect(rows[0]).toHaveLength(7)
+    expect(rows[0][0]).toEqual({
+      html: `<span>X111222</span>`,
+      attributes: { 'data-sort-value': 'Restricted Person', 'data-excluded': 'true' },
+    })
+    expect(rows[0][1]).toEqual({ text: 'Restricted' })
+    expect(rows[0][2]).toEqual({ text: 'Restricted' })
+    expect(rows[0][3]).toEqual({
+      html: 'Restricted',
+      attributes: { 'data-sort-value': new Date('15 June 2024').getTime() },
+    })
+    expect(rows[0][4]).toEqual({ html: 'Restricted' })
+    expect(rows[0][5]).toEqual({ text: 'Restricted' })
+    expect(rows[0][6]).toEqual({
+      html: `<strong class="govuk-tag govuk-tag--teal">Awaiting allocation</strong>`,
+    })
+  })
+
+  it('should sort excluded referrals to the end of the list', () => {
+    const referralCaseListItems = [
+      referralCaseListItemFactory.build({ personName: 'Excluded One', isExcluded: true }),
+      referralCaseListItemFactory.build({ personName: 'Included One', isExcluded: false }),
+      referralCaseListItemFactory.build({ personName: 'Excluded Two', isExcluded: true }),
+      referralCaseListItemFactory.build({ personName: 'Included Two', isExcluded: false }),
+    ]
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+      .pageContent(referralCaseListItems)
+      .build() as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      1,
+      referralCaseListItemPage,
+      {} as CaselistFilter,
+      '',
+      true,
+      caseListFilters,
+      0,
+      'test location',
+    )
+
+    const rows = presenter.generateTableRows()
+    const sortValues = rows.map(
+      row => (row[0] as { attributes?: Record<string, string | number> }).attributes?.['data-sort-value'],
+    )
+
+    expect(sortValues).toEqual(['Included One', 'Included Two', 'Excluded One', 'Excluded Two'])
   })
 })
 

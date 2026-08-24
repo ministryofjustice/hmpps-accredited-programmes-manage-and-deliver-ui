@@ -1,19 +1,19 @@
+import config from '../../config'
 import ProgrammeGroupOverviewFactory from '../../testutils/factories/programmeGroupAllocationsFactory'
 import GroupAllocationsFilter from './groupAllocationsFilter'
 import GroupAllocationsPresenter, { GroupAllocationsPageSection } from './groupAllocationsPresenter'
-import config from '../../config'
 
 jest.mock('../../config')
+
+beforeEach(() => {
+  config.enable_excluded_referrals = true
+})
 
 afterEach(() => {
   jest.restoreAllMocks()
 })
 
 describe('GroupAllocationsPresenter', () => {
-  beforeEach(() => {
-    ;(config as jest.Mocked<typeof config>).enable_restricted_access_badge = true
-  })
-
   describe('pageTitle', () => {
     it('returns "Group allocations" when section is Allocated', () => {
       const filterObject = GroupAllocationsFilter.empty()
@@ -143,7 +143,73 @@ describe('GroupAllocationsPresenter', () => {
         ],
       ])
     })
+
+    it('should replace restricted fields with "Restricted" when a waitlist member is excluded', () => {
+      const filterObject = GroupAllocationsFilter.empty()
+      const baseGroupOverview = ProgrammeGroupOverviewFactory.waitlist().build()
+      const groupOverview = {
+        ...baseGroupOverview,
+        pagedGroupData: {
+          ...baseGroupOverview.pagedGroupData,
+          content: [{ ...baseGroupOverview.pagedGroupData.content[0], isExcluded: true, lao: false }],
+        },
+      }
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Waitlist,
+        groupOverview,
+        '1234',
+        filterObject,
+      )
+
+      expect(presenter.generateWaitlistTableArgs()).toEqual([
+        [
+          {
+            html: `<div class="govuk-radios govuk-radios--small group-details-table">
+                  <div class="govuk-radios__item">
+                    <input id='39fde7e8-d2e3-472b-8364-5848bf673aa6' value='39fde7e8-d2e3-472b-8364-5848bf673aa6' type="radio" name="add-to-group" class="govuk-radios__input" disabled aria-disabled="true">
+                    <label class="govuk-label govuk-radios__label" for="39fde7e8-d2e3-472b-8364-5848bf673aa6">
+                      <span class="govuk-visually-hidden">Add Edgar Schiller to the group</span>
+                    </label>
+                  </div>
+                 </div><span class="govuk-visually-hidden">Add to group: restricted access - you cannot add this person to the group</span>`,
+          },
+          { html: `<span>X718250</span>` },
+          { html: 'Restricted' },
+          { html: 'Restricted' },
+          { text: 'Restricted' },
+          { text: 'Restricted' },
+          { text: 'Restricted' },
+          { text: 'Restricted' },
+        ],
+      ])
+    })
+
+    it('should not restrict fields when a waitlist member is excluded but the feature is disabled', () => {
+      config.enable_excluded_referrals = false
+      const filterObject = GroupAllocationsFilter.empty()
+      const baseGroupOverview = ProgrammeGroupOverviewFactory.waitlist().build()
+      const groupOverview = {
+        ...baseGroupOverview,
+        pagedGroupData: {
+          ...baseGroupOverview.pagedGroupData,
+          content: [{ ...baseGroupOverview.pagedGroupData.content[0], isExcluded: true, lao: false }],
+        },
+      }
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Waitlist,
+        groupOverview,
+        '1234',
+        filterObject,
+      )
+
+      const rows = presenter.generateWaitlistTableArgs()
+      expect(rows[0][1]).toEqual({
+        html: `<a href="/referral-details/39fde7e8-d2e3-472b-8364-5848bf673aa6/personal-details">Edgar Schiller</a><p class="govuk-!-margin-bottom-0"> X718250</p>`,
+      })
+      expect(rows[0][4]).toEqual({ text: '36' })
+    })
   })
+
   describe('generateAllocateTableArgs', () => {
     it('should return the correct table args for allocted list', () => {
       const filterObject = GroupAllocationsFilter.empty()
@@ -197,11 +263,54 @@ describe('GroupAllocationsPresenter', () => {
       ])
     })
 
-    it('does not render RESTRICTED ACCESS badge when feature flag is disabled', () => {
-      ;(config as jest.Mocked<typeof config>).enable_restricted_access_badge = false
-
+    it('should replace restricted fields with "Restricted" when an allocated member is excluded', () => {
       const filterObject = GroupAllocationsFilter.empty()
-      const groupOverview = ProgrammeGroupOverviewFactory.allocatedList().build()
+      const baseGroupOverview = ProgrammeGroupOverviewFactory.allocatedList().build()
+      const groupOverview = {
+        ...baseGroupOverview,
+        pagedGroupData: {
+          ...baseGroupOverview.pagedGroupData,
+          content: [{ ...baseGroupOverview.pagedGroupData.content[0], isExcluded: true, lao: false }],
+        },
+      }
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Waitlist,
+        groupOverview,
+        '1234',
+        filterObject,
+      )
+
+      expect(presenter.generateAllocatedTableArgs()).toEqual([
+        [
+          {
+            html: `<div class="govuk-radios govuk-radios--small group-details-table">
+                  <div class="govuk-radios__item">
+                    <input id='X718250' value='39fde7e8-d2e3-472b-8364-5848bf673aa6' type="radio" name="remove-from-group" class="govuk-radios__input" disabled aria-disabled="true">
+                    <label class="govuk-label govuk-radios__label" for="X718250">
+                      <span class="govuk-visually-hidden">Remove Edgar Schiller from the group</span>
+                    </label>
+                  </div>
+                 </div><span class="govuk-visually-hidden">Remove from group: restricted access - you cannot remove this person from the group</span>`,
+          },
+          { html: `<span>X718250</span>` },
+          { html: 'Restricted' },
+          { html: `<strong class="govuk-tag govuk-tag--purple">Scheduled</strong>` },
+        ],
+      ])
+    })
+
+    it('should show the LAO badge for an excluded allocated member with restricted access', () => {
+      const filterObject = GroupAllocationsFilter.empty()
+      const baseGroupOverview = ProgrammeGroupOverviewFactory.allocatedList().build()
+      const groupOverview = {
+        ...baseGroupOverview,
+        pagedGroupData: {
+          ...baseGroupOverview.pagedGroupData,
+          content: [
+            { ...baseGroupOverview.pagedGroupData.content[0], isExcluded: true, isLimitedAccessOffender: true },
+          ],
+        },
+      }
       const presenter = new GroupAllocationsPresenter(
         GroupAllocationsPageSection.Waitlist,
         groupOverview,
@@ -210,8 +319,8 @@ describe('GroupAllocationsPresenter', () => {
       )
 
       const rows = presenter.generateAllocatedTableArgs()
-      expect(rows[1][1]).toEqual({
-        html: `<a href="/referral-details/ae43bc75-b96e-496b-b9da-20ea327d7909/personal-details">Roy Kloss</a><p class="govuk-!-margin-bottom-0">X718255</p>`,
+      expect(rows[0][1]).toEqual({
+        html: `<span>X718250</span><br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>`,
       })
     })
   })
@@ -344,143 +453,142 @@ describe('GroupAllocationsPresenter', () => {
       expect(presenter.generateReportingTeamCheckboxArgs()).toEqual([])
     })
   })
-})
+  describe('resultsText', () => {
+    it('should return blank when there are no results', () => {
+      const baseGroupOverview = ProgrammeGroupOverviewFactory.build()
+      const groupOverview = {
+        ...baseGroupOverview,
+        pagedGroupData: {
+          ...baseGroupOverview.pagedGroupData,
+          content: [] as typeof baseGroupOverview.pagedGroupData.content,
+          totalElements: 0,
+          numberOfElements: 0,
+          number: 0,
+          size: 10,
+        },
+      }
 
-describe('resultsText', () => {
-  it('should return blank when there are no results', () => {
-    const baseGroupOverview = ProgrammeGroupOverviewFactory.build()
-    const groupOverview = {
-      ...baseGroupOverview,
-      pagedGroupData: {
-        ...baseGroupOverview.pagedGroupData,
-        content: [] as typeof baseGroupOverview.pagedGroupData.content,
-        totalElements: 0,
-        numberOfElements: 0,
-        number: 0,
-        size: 10,
-      },
-    }
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Allocated,
+        groupOverview,
+        '1234',
+        GroupAllocationsFilter.empty(),
+      )
 
-    const presenter = new GroupAllocationsPresenter(
-      GroupAllocationsPageSection.Allocated,
-      groupOverview,
-      '1234',
-      GroupAllocationsFilter.empty(),
-    )
+      expect(presenter.resultsText).toBe('')
+    })
 
-    expect(presenter.resultsText).toBe('')
+    it('should show the current page range when results exist', () => {
+      const baseGroupOverview = ProgrammeGroupOverviewFactory.build()
+      const groupOverview = {
+        ...baseGroupOverview,
+        pagedGroupData: {
+          ...baseGroupOverview.pagedGroupData,
+          content: baseGroupOverview.pagedGroupData.content,
+          totalElements: 22,
+          numberOfElements: baseGroupOverview.pagedGroupData.content.length,
+          number: 2,
+          size: 10,
+        },
+      }
+
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Allocated,
+        groupOverview,
+        '1234',
+        GroupAllocationsFilter.empty(),
+      )
+
+      expect(presenter.resultsText).toBe(
+        'Showing <strong>21</strong> to <strong>22</strong> of <strong>22</strong> results',
+      )
+    })
   })
 
-  it('should show the current page range when results exist', () => {
-    const baseGroupOverview = ProgrammeGroupOverviewFactory.build()
-    const groupOverview = {
-      ...baseGroupOverview,
-      pagedGroupData: {
-        ...baseGroupOverview.pagedGroupData,
-        content: baseGroupOverview.pagedGroupData.content,
-        totalElements: 22,
-        numberOfElements: baseGroupOverview.pagedGroupData.content.length,
-        number: 2,
-        size: 10,
-      },
-    }
+  describe('tableCaptionClass', () => {
+    it('should return govuk-visually-hidden when there are no rows', () => {
+      const baseGroupOverview = ProgrammeGroupOverviewFactory.build()
+      const groupOverview = {
+        ...baseGroupOverview,
+        pagedGroupData: {
+          ...baseGroupOverview.pagedGroupData,
+          content: [] as typeof baseGroupOverview.pagedGroupData.content,
+        },
+      }
 
-    const presenter = new GroupAllocationsPresenter(
-      GroupAllocationsPageSection.Allocated,
-      groupOverview,
-      '1234',
-      GroupAllocationsFilter.empty(),
-    )
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Allocated,
+        groupOverview,
+        '1234',
+        GroupAllocationsFilter.empty(),
+      )
 
-    expect(presenter.resultsText).toBe(
-      'Showing <strong>21</strong> to <strong>22</strong> of <strong>22</strong> results',
-    )
-  })
-})
+      expect(presenter.tableCaptionClass).toBe('govuk-visually-hidden')
+    })
 
-describe('tableCaptionClass', () => {
-  it('should return govuk-visually-hidden when there are no rows', () => {
-    const baseGroupOverview = ProgrammeGroupOverviewFactory.build()
-    const groupOverview = {
-      ...baseGroupOverview,
-      pagedGroupData: {
-        ...baseGroupOverview.pagedGroupData,
-        content: [] as typeof baseGroupOverview.pagedGroupData.content,
-      },
-    }
+    it('should return govuk-table__caption--m when rows exist', () => {
+      const groupOverview = ProgrammeGroupOverviewFactory.build()
 
-    const presenter = new GroupAllocationsPresenter(
-      GroupAllocationsPageSection.Allocated,
-      groupOverview,
-      '1234',
-      GroupAllocationsFilter.empty(),
-    )
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Allocated,
+        groupOverview,
+        '1234',
+        GroupAllocationsFilter.empty(),
+      )
 
-    expect(presenter.tableCaptionClass).toBe('govuk-visually-hidden')
+      expect(presenter.tableCaptionClass).toBe('govuk-table__caption--m')
+    })
   })
 
-  it('should return govuk-table__caption--m when rows exist', () => {
-    const groupOverview = ProgrammeGroupOverviewFactory.build()
+  describe('tableCaption', () => {
+    it('should return Allocated to <group code> for the allocated section', () => {
+      const groupOverview = ProgrammeGroupOverviewFactory.build()
 
-    const presenter = new GroupAllocationsPresenter(
-      GroupAllocationsPageSection.Allocated,
-      groupOverview,
-      '1234',
-      GroupAllocationsFilter.empty(),
-    )
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Allocated,
+        groupOverview,
+        '1234',
+        GroupAllocationsFilter.empty(),
+      )
 
-    expect(presenter.tableCaptionClass).toBe('govuk-table__caption--m')
-  })
-})
+      expect(presenter.tableCaption).toBe('Allocated to BCCDD1')
+    })
 
-describe('tableCaption', () => {
-  it('should return Allocated to <group code> for the allocated section', () => {
-    const groupOverview = ProgrammeGroupOverviewFactory.build()
+    it('should return Waitlist for Building Choices for the waitlist section', () => {
+      const groupOverview = ProgrammeGroupOverviewFactory.build()
 
-    const presenter = new GroupAllocationsPresenter(
-      GroupAllocationsPageSection.Allocated,
-      groupOverview,
-      '1234',
-      GroupAllocationsFilter.empty(),
-    )
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Waitlist,
+        groupOverview,
+        '1234',
+        GroupAllocationsFilter.empty(),
+      )
 
-    expect(presenter.tableCaption).toBe('Allocated to BCCDD1')
-  })
-
-  it('should return Waitlist for Building Choices for the waitlist section', () => {
-    const groupOverview = ProgrammeGroupOverviewFactory.build()
-
-    const presenter = new GroupAllocationsPresenter(
-      GroupAllocationsPageSection.Waitlist,
-      groupOverview,
-      '1234',
-      GroupAllocationsFilter.empty(),
-    )
-
-    expect(presenter.tableCaption).toBe('Waitlist for Building Choices')
-  })
-})
-
-describe('selectionLegendText', () => {
-  it('should return the remove legend for the allocated section', () => {
-    const presenter = new GroupAllocationsPresenter(
-      GroupAllocationsPageSection.Allocated,
-      ProgrammeGroupOverviewFactory.build(),
-      '1234',
-      GroupAllocationsFilter.empty(),
-    )
-
-    expect(presenter.selectionLegendText).toBe('Select one person to remove from the group')
+      expect(presenter.tableCaption).toBe('Waitlist for Building Choices')
+    })
   })
 
-  it('should return the add legend for the waitlist section', () => {
-    const presenter = new GroupAllocationsPresenter(
-      GroupAllocationsPageSection.Waitlist,
-      ProgrammeGroupOverviewFactory.build(),
-      '1234',
-      GroupAllocationsFilter.empty(),
-    )
+  describe('selectionLegendText', () => {
+    it('should return the remove legend for the allocated section', () => {
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Allocated,
+        ProgrammeGroupOverviewFactory.build(),
+        '1234',
+        GroupAllocationsFilter.empty(),
+      )
 
-    expect(presenter.selectionLegendText).toBe('Select one person to add to the group')
+      expect(presenter.selectionLegendText).toBe('Select one person to remove from the group')
+    })
+
+    it('should return the add legend for the waitlist section', () => {
+      const presenter = new GroupAllocationsPresenter(
+        GroupAllocationsPageSection.Waitlist,
+        ProgrammeGroupOverviewFactory.build(),
+        '1234',
+        GroupAllocationsFilter.empty(),
+      )
+
+      expect(presenter.selectionLegendText).toBe('Select one person to add to the group')
+    })
   })
 })

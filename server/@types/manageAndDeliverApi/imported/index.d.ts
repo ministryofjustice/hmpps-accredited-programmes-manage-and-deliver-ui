@@ -1653,6 +1653,7 @@ export interface components {
       sessionStartDate: string
       /** @description The start time of the session */
       sessionStartTime: components['schemas']['SessionTime']
+      /** @description The end time of the session */
       sessionEndTime?: components['schemas']['SessionTime'] | null
       /**
        * @description Whether to reschedule other sessions
@@ -1732,6 +1733,12 @@ export interface components {
        * @enum {string}
        */
       cohort: 'SEXUAL_OFFENCE' | 'GENERAL_OFFENCE'
+      /** @description The boolean value of whether the group member has Limited Access Offender (LAO) status */
+      isLimitedAccessOffender?: boolean | null
+      /** @description The boolean value of whether the group member details are excluded from viewing by the logged-in username */
+      isExcluded?: boolean | null
+      limitedAccessOffender?: boolean
+      excluded?: boolean
     }
     ReferralMotivationBackgroundAndNonAssociations: {
       /**
@@ -1868,7 +1875,9 @@ export interface components {
     UpdateGroupRequest: {
       /** @description The code for the group */
       groupCode?: string | null
+      /** @description Cohort for the Programme Group. */
       cohort?: components['schemas']['ProgrammeGroupCohort'] | null
+      /** @description Sex that the group is being run for */
       sex?: components['schemas']['ProgrammeGroupSexEnum'] | null
       /**
        * Format: date
@@ -2050,8 +2059,8 @@ export interface components {
        */
       additionalDetails: string | null
       /**
-       * @description The name of the User who updated the status.  SYSTEM and UNKNOWN_USER are known non-human values.
-       * @example John Doe
+       * @description The username of the User who updated the status.  SYSTEM and UNKNOWN_USER are known non-human values.
+       * @example johnDoe
        */
       updatedBy: string
       /**
@@ -2062,6 +2071,11 @@ export interface components {
       updatedAt: string
       /** @description The display colour of the status tag */
       tagColour: string
+      /**
+       * @description The full name of the User who updated the status.
+       * @example John Doe
+       */
+      updatedByFullName?: string | null
     }
     /** @description Details of the new Referral Status to assign */
     CreateReferralStatusHistory: {
@@ -2418,10 +2432,15 @@ export interface components {
     Risks: {
       /** Format: date */
       assessmentCompleted: string | null
+      /** @description Offender Group Reconviction scale */
       offenderGroupReconviction?: components['schemas']['Score'] | null
+      /** @description Offender Violence Predictor */
       offenderViolencePredictor?: components['schemas']['Score'] | null
+      /** @description Spousal Assault Risk Assessment */
       sara?: components['schemas']['OasysSara'] | null
+      /** @description Risk of Serious Recidivism */
       riskOfSeriousRecidivism?: components['schemas']['RiskOfSeriousRecidivism'] | null
+      /** @description Risk of Serious Harm */
       riskOfSeriousHarm?: components['schemas']['RoshSummary'] | null
       /**
        * @description Active alerts for a person
@@ -2445,6 +2464,7 @@ export interface components {
        * @example true
        */
       isLegacy: boolean
+      /** @description The OGRS4 Risk predictors for this person. */
       ogrS4Risks?: components['schemas']['OGRS4Risks'] | null
       legacy?: boolean
     }
@@ -3194,6 +3214,7 @@ export interface components {
        * @example 5
        */
       rsr?: string | null
+      /** @description SARA (Spousal Assault Risk Assessment) related risk score */
       sara?: components['schemas']['Sara'] | null
     }
     IndividualSelfManagementScores: {
@@ -3362,21 +3383,21 @@ export interface components {
       reportingTeams: string[]
     }
     PageReferralCaseListItem: {
-      /** Format: int64 */
-      totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      /** Format: int64 */
+      totalElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['ReferralCaseListItem'][]
       /** Format: int32 */
       number?: number
-      first?: boolean
-      last?: boolean
       sort?: components['schemas']['SortObject']
       pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
+      first?: boolean
+      last?: boolean
       empty?: boolean
     }
     PageableObject: {
@@ -3384,10 +3405,10 @@ export interface components {
       offset?: number
       sort?: components['schemas']['SortObject']
       /** Format: int32 */
-      pageSize?: number
-      /** Format: int32 */
       pageNumber?: number
       paged?: boolean
+      /** Format: int32 */
+      pageSize?: number
       unpaged?: boolean
     }
     ReferralCaseListItem: {
@@ -3395,6 +3416,7 @@ export interface components {
       referralId: string
       crn: string
       personName: string
+      sex?: string | null
       referralStatus: string
       statusLabelColour: string
       /**
@@ -3410,6 +3432,7 @@ export interface components {
       /** @enum {string|null} */
       sentenceEndDateSource?: 'REQUIREMENT' | 'LICENCE_CONDITION' | null
       lao?: boolean | null
+      isExcluded?: boolean | null
     }
     SortObject: {
       empty?: boolean
@@ -3485,7 +3508,9 @@ export interface components {
        * @example County Durham Probation Office
        */
       deliveryLocation?: string | null
+      /** @description Cohort for the Programme Group. */
       cohort?: components['schemas']['ProgrammeGroupCohort'] | null
+      /** @description Sex that the group is being run for. */
       sex?: components['schemas']['ProgrammeGroupSexEnum'] | null
     }
     CurrentGroupDetails: {
@@ -3554,7 +3579,9 @@ export interface components {
       currentStatus: components['schemas']['CurrentStatus']
       /** @description List of transition statuses */
       availableStatuses: components['schemas']['ReferralStatus'][]
+      /** @description Suggested status object for the UI to potentially display */
       suggestedStatus?: components['schemas']['SuggestedStatus'] | null
+      /** @description The details of the group that the user is currently allocated to */
       currentGroupDetails?: components['schemas']['CurrentGroupDetails'] | null
     }
     SuggestedStatus: {
@@ -3692,6 +3719,11 @@ export interface components {
        * @example Participant engaged well.
        */
       sessionNotes?: string | null
+      /**
+       * @description The full name of a person that recorded session notes for the session
+       * @example John Smith
+       */
+      sessionNotesCreatedByFullName?: string | null
     }
     /** @description Details of an Option */
     Option: {
@@ -3751,6 +3783,10 @@ export interface components {
        * @example Alice Brown
        */
       crn: string
+      /**
+       * @description A string an attendance
+       * @example Attended, failed to comply
+       */
       attendance?: components['schemas']['SessionPersonAttendance'] | null
       /**
        * @description The session notes associated with the attendee
@@ -3759,6 +3795,11 @@ export interface components {
       sessionNotes?: string | null
       /** @description A list of options */
       options?: components['schemas']['Option'][] | null
+      /**
+       * @description The full name of a person that recorded session notes
+       * @example John Smith
+       */
+      sessionNotesCreatedByFullName?: string | null
     }
     /** @description Details of attendance */
     SessionPersonAttendance: {
@@ -3829,6 +3870,12 @@ export interface components {
        * @example true
        */
       currentlyAttending: boolean
+      /** @description The boolean value of whether the group member has Limited Access Offender (LAO) status */
+      isLimitedAccessOffender?: boolean | null
+      /** @description The boolean value of whether the group member details are excluded from viewing by the logged-in username */
+      isExcluded?: boolean | null
+      limitedAccessOffender?: boolean
+      excluded?: boolean
     }
     /** @description Response representing attendees for a specific programme session */
     EditSessionAttendeesResponse: {
@@ -3862,7 +3909,9 @@ export interface components {
       currentStatus: components['schemas']['CurrentStatus']
       /** @description List of transition statuses */
       availableStatuses: components['schemas']['ReferralStatus'][]
+      /** @description Suggested status object for the UI to potentially display */
       suggestedStatus?: components['schemas']['SuggestedStatus'] | null
+      /** @description The details of the group that the user is currently allocated to */
       currentGroupDetails?: components['schemas']['CurrentGroupDetails'] | null
     }
     UserTeamMember: {
@@ -3980,6 +4029,7 @@ export interface components {
     DeliveryLocationPreferencesFormData: {
       /** @description Person on Probation details (sourced freshly from nDelius) */
       personOnProbation: components['schemas']['PersonOnProbationSummary']
+      /** @description Existing Delivery Location Preferences, if any */
       existingDeliveryLocationPreferences?: components['schemas']['ExistingDeliveryLocationPreferences'] | null
       /** @description Primary PDU of the Manager of the Requirement or Licence Condition associated with a Referral */
       primaryPdu: components['schemas']['ProbationDeliveryUnit']
@@ -4055,21 +4105,21 @@ export interface components {
       regionName: string
     }
     PageGroup: {
-      /** Format: int64 */
-      totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      /** Format: int64 */
+      totalElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['Group'][]
       /** Format: int32 */
       number?: number
-      first?: boolean
-      last?: boolean
       sort?: components['schemas']['SortObject']
       pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
+      first?: boolean
+      last?: boolean
       empty?: boolean
     }
     GroupItem: {
@@ -4090,10 +4140,15 @@ export interface components {
        */
       crn: string
       /**
-       * @description Whether the person has Limited Access Offender (LAO) status.
+       * @description Whether the referral is Limited Access Offender (LAO) status.
        * @example false
        */
-      lao: boolean
+      isLimitedAccessOffender: boolean
+      /**
+       * @description Whether the logged-in user is excludded from viewing Limited Access Offenders (LAO) data.
+       * @example false
+       */
+      isExcluded: boolean
       /**
        * @description The name of the person associated with this referral.
        * @example John Doe
@@ -4155,21 +4210,21 @@ export interface components {
       activeProgrammeGroupId: string | null
     }
     PageGroupItem: {
-      /** Format: int64 */
-      totalElements?: number
       /** Format: int32 */
       totalPages?: number
+      /** Format: int64 */
+      totalElements?: number
       /** Format: int32 */
       size?: number
       content?: components['schemas']['GroupItem'][]
       /** Format: int32 */
       number?: number
-      first?: boolean
-      last?: boolean
       sort?: components['schemas']['SortObject']
       pageable?: components['schemas']['PageableObject']
       /** Format: int32 */
       numberOfElements?: number
+      first?: boolean
+      last?: boolean
       empty?: boolean
     }
     /** @description Details of a Programme Group including filters and paginated group data. */
@@ -4337,6 +4392,11 @@ export interface components {
       referralId: string
       crn: string
       lao: boolean
+      /**
+       * @description True when the current user is not authorised to view this Limited Access Offender.
+       * @example false
+       */
+      isExcluded: boolean
       attendance: string
       sessionNotes: string
     }
@@ -4508,6 +4568,10 @@ export interface components {
        * @description The UUID of the referral for this group member
        */
       referralId: string
+      /** @description The boolean value of whether the group member has Limited Access Offender (LAO) status */
+      isLimitedAccessOffender?: boolean | null
+      /** @description The boolean value of whether the group member details are excluded from viewing by the logged-in username */
+      isExcluded?: boolean | null
     }
     ScheduleIndividualSessionDetailsResponse: {
       /** @description List of facilitators available for the one-to-one appointment (sourced from the Region of the logged-in user) */
@@ -7741,6 +7805,8 @@ export interface operations {
         cohort?: string
         /** @description Filter by the status of the referral */
         status?: string
+        /** @description Filter by the sex of the person on probation (Male/Female) */
+        sex?: string
         requestParams: components['schemas']['MultiValueMapStringString']
       }
       header?: never

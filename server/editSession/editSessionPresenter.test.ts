@@ -1,7 +1,6 @@
 import { GroupSessionResponse } from '@manage-and-deliver-api'
-import EditSessionPresenter from './editSessionPresenter'
 import { FormValidationError } from '../utils/formValidationError'
-import config from '../config'
+import EditSessionPresenter from './editSessionPresenter'
 
 jest.mock('../config')
 
@@ -73,6 +72,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'Attended',
               sessionNotes: 'Good participation',
+              isExcluded: false,
             },
             {
               referralId: '456',
@@ -81,6 +81,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'Not attended',
               sessionNotes: 'Absent',
+              isExcluded: false,
             },
           ],
           date: '01 Feb 2026',
@@ -144,6 +145,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'Attended - failed to comply',
               sessionNotes: 'Good progress',
+              isExcluded: false,
             },
           ],
           date: '01 Feb 2026',
@@ -187,6 +189,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'Attended',
               sessionNotes: '',
+              isExcluded: false,
             },
           ],
           date: '01 Feb 2026',
@@ -230,6 +233,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'Attended',
               sessionNotes: 'Not added',
+              isExcluded: false,
             },
           ],
           date: '01 Feb 2026',
@@ -301,6 +305,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'Attended',
               sessionNotes: 'Notes recorded',
+              isExcluded: false,
             },
           ],
           date: '01 Feb 2026',
@@ -344,6 +349,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'Attended',
               sessionNotes: 'Notes recorded',
+              isExcluded: false,
             },
           ],
           date: '01 Feb 2026',
@@ -390,6 +396,7 @@ describe('EditSessionPresenter', () => {
               attendance: '',
               sessionNotes: 'Good participation',
               outcome_type_code: 'UAAB',
+              isExcluded: false,
             } as GroupSessionResponse['attendanceAndSessionNotes'][number],
           ],
           date: '01 Feb 2026',
@@ -433,6 +440,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'No - did not attend',
               sessionNotes: 'Absent',
+              isExcluded: false,
             },
           ],
           date: '01 Feb 2026',
@@ -476,6 +484,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'Did not attend',
               sessionNotes: 'Absent',
+              isExcluded: false,
             },
           ],
           date: '01 Feb 2026',
@@ -505,168 +514,278 @@ describe('EditSessionPresenter', () => {
         })
       })
     })
+  })
+  describe('when a referral is an LAO case', () => {
+    it('renders the RESTRICTED ACCESS badge in the single-referral name cell', () => {
+      const sessionDetails: GroupSessionResponse = {
+        pageTitle: 'Session 1',
+        code: 'CODE-123',
+        sessionType: 'Individual',
+        isCatchup: false,
+        attendanceAndSessionNotes: [
+          {
+            referralId: '123',
+            name: 'Alex River',
+            crn: 'CRN001',
+            attendance: 'Attended',
+            sessionNotes: 'Good progress',
+            lao: true,
+            isExcluded: false,
+          },
+        ],
+        date: '01 Feb 2026',
+        time: '1:00pm',
+        timeWithCapitalisedMidday: '1:00pm',
+        unformattedEndDate: '2026-02-01T14:00:00',
+        scheduledToAttend: [],
+        facilitators: [],
+      }
 
-    describe('when a referral is an LAO case', () => {
-      beforeEach(() => {
-        ;(config as jest.Mocked<typeof config>).enable_restricted_access_badge = true
-      })
+      const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
+      const result = presenter.attendanceTableArgs
 
-      it('renders the RESTRICTED ACCESS badge in the single-referral name cell', () => {
-        const sessionDetails: GroupSessionResponse = {
-          pageTitle: 'Session 1',
-          code: 'CODE-123',
-          sessionType: 'Individual',
-          isCatchup: false,
-          attendanceAndSessionNotes: [
+      expect(result).toEqual({
+        head: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
+        caption: 'Attendance record and session notes',
+        captionClasses: 'govuk-visually-hidden',
+        rows: [
+          [
+            { html: nameCrnCellHtml('123', 'Alex River', 'CRN001', 26, true) },
+            { html: '<span class="govuk-tag govuk-tag--blue">Attended</span>' },
             {
-              referralId: '123',
-              name: 'Alex River',
-              crn: 'CRN001',
-              attendance: 'Attended',
-              sessionNotes: 'Good progress',
-              lao: true,
+              html: '<a href="/group-123/session-456/session-1-attendance-and-session-notes?referralId=123&source=edit-session">Alex River: Session 1 notes</a>',
             },
           ],
-          date: '01 Feb 2026',
-          time: '1:00pm',
-          timeWithCapitalisedMidday: '1:00pm',
-          unformattedEndDate: '2026-02-01T14:00:00',
-          scheduledToAttend: [],
-          facilitators: [],
-        }
+        ],
+      })
+    })
 
-        const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
-        const result = presenter.attendanceTableArgs
+    it('renders the RESTRICTED ACCESS badge only for LAO referrals in the multi-referral name cells', () => {
+      const sessionDetails: GroupSessionResponse = {
+        pageTitle: 'Session 1',
+        code: 'CODE-123',
+        sessionType: 'Group',
+        isCatchup: false,
+        attendanceAndSessionNotes: [
+          {
+            referralId: '123',
+            name: 'Alex River',
+            crn: 'CRN001',
+            attendance: 'Attended',
+            sessionNotes: 'Good participation',
+            lao: false,
+            isExcluded: false,
+          },
+          {
+            referralId: '456',
+            name: 'Jane Doe',
+            crn: 'CRN002',
+            attendance: 'Not attended',
+            sessionNotes: 'Absent',
+            lao: true,
+            isExcluded: false,
+          },
+        ],
+        date: '01 Feb 2026',
+        time: '1:00pm',
+        timeWithCapitalisedMidday: '1:00pm',
+        unformattedEndDate: '2026-02-01T14:00:00',
+        scheduledToAttend: [],
+        facilitators: [],
+      }
 
-        expect(result).toEqual({
-          head: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
-          caption: 'Attendance record and session notes',
-          captionClasses: 'govuk-visually-hidden',
-          rows: [
-            [
-              { html: nameCrnCellHtml('123', 'Alex River', 'CRN001', 26, true) },
+      const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
+      const result = presenter.attendanceTableArgs
+
+      expect(result).toEqual({
+        idPrefix: 'attendance-multi-select',
+        headers: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
+        caption: 'Attendance record and session notes',
+        captionClasses: 'govuk-visually-hidden',
+        rows: [
+          {
+            id: 'attendance-multi-select-row-0',
+            value: '123',
+            checkBoxLabel: 'Alex River',
+            cells: [
+              { html: nameCrnCellHtml('123', 'Alex River', 'CRN001', 20, false) },
               { html: '<span class="govuk-tag govuk-tag--blue">Attended</span>' },
               {
                 html: '<a href="/group-123/session-456/session-1-attendance-and-session-notes?referralId=123&source=edit-session">Alex River: Session 1 notes</a>',
               },
             ],
-          ],
-        })
-      })
-
-      it('renders the RESTRICTED ACCESS badge only for LAO referrals in the multi-referral name cells', () => {
-        const sessionDetails: GroupSessionResponse = {
-          pageTitle: 'Session 1',
-          code: 'CODE-123',
-          sessionType: 'Group',
-          isCatchup: false,
-          attendanceAndSessionNotes: [
-            {
-              referralId: '123',
-              name: 'Alex River',
-              crn: 'CRN001',
-              attendance: 'Attended',
-              sessionNotes: 'Good participation',
-              lao: false,
-            },
-            {
-              referralId: '456',
-              name: 'Jane Doe',
-              crn: 'CRN002',
-              attendance: 'Not attended',
-              sessionNotes: 'Absent',
-              lao: true,
-            },
-          ],
-          date: '01 Feb 2026',
-          time: '1:00pm',
-          timeWithCapitalisedMidday: '1:00pm',
-          unformattedEndDate: '2026-02-01T14:00:00',
-          scheduledToAttend: [],
-          facilitators: [],
-        }
-
-        const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
-        const result = presenter.attendanceTableArgs
-
-        expect(result).toEqual({
-          idPrefix: 'attendance-multi-select',
-          headers: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
-          caption: 'Attendance record and session notes',
-          captionClasses: 'govuk-visually-hidden',
-          rows: [
-            {
-              id: 'attendance-multi-select-row-0',
-              value: '123',
-              checkBoxLabel: 'Alex River',
-              cells: [
-                { html: nameCrnCellHtml('123', 'Alex River', 'CRN001', 20, false) },
-                { html: '<span class="govuk-tag govuk-tag--blue">Attended</span>' },
-                {
-                  html: '<a href="/group-123/session-456/session-1-attendance-and-session-notes?referralId=123&source=edit-session">Alex River: Session 1 notes</a>',
-                },
-              ],
-            },
-            {
-              id: 'attendance-multi-select-row-1',
-              value: '456',
-              checkBoxLabel: 'Jane Doe',
-              cells: [
-                { html: nameCrnCellHtml('456', 'Jane Doe', 'CRN002', 20, true) },
-                { html: '<span class="govuk-tag govuk-tag--red">Not attended</span>' },
-                {
-                  html: '<a href="/group-123/session-456/session-1-attendance-and-session-notes?referralId=456&source=edit-session">Jane Doe: Session 1 notes</a>',
-                },
-              ],
-            },
-          ],
-        })
-      })
-
-      it('does not render the RESTRICTED ACCESS badge when feature flag is disabled', () => {
-        ;(config as jest.Mocked<typeof config>).enable_restricted_access_badge = false
-
-        const sessionDetails: GroupSessionResponse = {
-          pageTitle: 'Session 1',
-          code: 'CODE-123',
-          sessionType: 'Individual',
-          isCatchup: false,
-          attendanceAndSessionNotes: [
-            {
-              referralId: '123',
-              name: 'Alex River',
-              crn: 'CRN001',
-              attendance: 'Attended',
-              sessionNotes: 'Good progress',
-              lao: true,
-            },
-          ],
-          date: '01 Feb 2026',
-          time: '1:00pm',
-          timeWithCapitalisedMidday: '1:00pm',
-          unformattedEndDate: '2026-02-01T14:00:00',
-          scheduledToAttend: [],
-          facilitators: [],
-        }
-
-        const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
-        const result = presenter.attendanceTableArgs
-
-        expect(result).toEqual({
-          head: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
-          caption: 'Attendance record and session notes',
-          captionClasses: 'govuk-visually-hidden',
-          rows: [
-            [
-              { html: nameCrnCellHtml('123', 'Alex River', 'CRN001', 26, false) },
-              { html: '<span class="govuk-tag govuk-tag--blue">Attended</span>' },
+          },
+          {
+            id: 'attendance-multi-select-row-1',
+            value: '456',
+            checkBoxLabel: 'Jane Doe',
+            cells: [
+              { html: nameCrnCellHtml('456', 'Jane Doe', 'CRN002', 20, true) },
+              { html: '<span class="govuk-tag govuk-tag--red">Not attended</span>' },
               {
-                html: '<a href="/group-123/session-456/session-1-attendance-and-session-notes?referralId=123&source=edit-session">Alex River: Session 1 notes</a>',
+                html: '<a href="/group-123/session-456/session-1-attendance-and-session-notes?referralId=456&source=edit-session">Jane Doe: Session 1 notes</a>',
               },
             ],
-          ],
-        })
+          },
+        ],
       })
+    })
+  })
+
+  describe('when a referral is excluded', () => {
+    const restrictedOnlySessionDetails: GroupSessionResponse = {
+      pageTitle: 'Session 1',
+      code: 'CODE-123',
+      sessionType: 'Individual',
+      isCatchup: false,
+      attendanceAndSessionNotes: [
+        {
+          referralId: '123',
+          name: 'Alex River',
+          crn: 'CRN001',
+          attendance: 'Attended',
+          sessionNotes: 'Good progress',
+          lao: true,
+          isExcluded: true,
+        },
+      ],
+      date: '01 Feb 2026',
+      time: '1:00pm',
+      timeWithCapitalisedMidday: '1:00pm',
+      unformattedEndDate: '2026-02-01T14:00:00',
+      scheduledToAttend: ['Alex River'],
+      facilitators: [],
+    }
+
+    const mixedSessionDetails: GroupSessionResponse = {
+      pageTitle: 'Session 1',
+      code: 'CODE-123',
+      sessionType: 'Group',
+      isCatchup: false,
+      attendanceAndSessionNotes: [
+        {
+          referralId: '123',
+          name: 'Alex River',
+          crn: 'CRN001',
+          attendance: 'Attended',
+          sessionNotes: 'Good participation',
+          lao: false,
+          isExcluded: false,
+        },
+        {
+          referralId: '456',
+          name: 'Jane Doe',
+          crn: 'CRN002',
+          attendance: 'Not attended',
+          sessionNotes: 'Absent',
+          lao: true,
+          isExcluded: true,
+        },
+      ],
+      date: '01 Feb 2026',
+      time: '1:00pm',
+      timeWithCapitalisedMidday: '1:00pm',
+      unformattedEndDate: '2026-02-01T14:00:00',
+      scheduledToAttend: ['Alex River', 'Jane Doe'],
+      facilitators: [],
+    }
+
+    it('excludes the restricted referral from attendanceTableArgs entirely when it is the only attendee', () => {
+      const presenter = new EditSessionPresenter(
+        mockGroupId,
+        restrictedOnlySessionDetails,
+        mockSessionId,
+        mockDeleteUrl,
+      )
+
+      expect(presenter.hasReferral).toBe(false)
+      expect(presenter.hasMultipleReferrals).toBe(false)
+      expect(presenter.attendanceTableArgs).toEqual({
+        head: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
+        caption: 'Attendance record and session notes',
+        captionClasses: 'govuk-visually-hidden',
+        rows: [],
+      })
+    })
+
+    it('lists the restricted referral, CRN-only with a badge, in restrictedParticipantsTableArgs', () => {
+      const presenter = new EditSessionPresenter(
+        mockGroupId,
+        restrictedOnlySessionDetails,
+        mockSessionId,
+        mockDeleteUrl,
+      )
+
+      expect(presenter.hasRestrictedParticipants).toBe(true)
+      expect(presenter.restrictedParticipantsTableArgs).toEqual({
+        head: [{ text: 'CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
+        caption: 'Restricted participants',
+        captionClasses: 'govuk-visually-hidden',
+        rows: [[{ html: `CRN001${laoBadgeHtml}` }, { text: 'Restricted' }, { text: 'Restricted' }]],
+      })
+    })
+
+    it('masks the restricted referral out of scheduledToAttendDisplay, leaving only their CRN', () => {
+      const presenter = new EditSessionPresenter(
+        mockGroupId,
+        restrictedOnlySessionDetails,
+        mockSessionId,
+        mockDeleteUrl,
+      )
+
+      expect(presenter.scheduledToAttendDisplay).toEqual(['CRN001'])
+    })
+
+    it('splits authorised and restricted referrals into separate tables for a mixed session', () => {
+      const presenter = new EditSessionPresenter(mockGroupId, mixedSessionDetails, mockSessionId, mockDeleteUrl)
+
+      expect(presenter.hasMultipleReferrals).toBe(false)
+      expect(presenter.attendanceTableArgs).toEqual({
+        head: [{ text: 'Name and CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
+        caption: 'Attendance record and session notes',
+        captionClasses: 'govuk-visually-hidden',
+        rows: [
+          [
+            { html: nameCrnCellHtml('123', 'Alex River', 'CRN001', 20) },
+            { html: '<span class="govuk-tag govuk-tag--blue">Attended</span>' },
+            {
+              html: '<a href="/group-123/session-456/session-1-attendance-and-session-notes?referralId=123&source=edit-session">Alex River: Session 1 notes</a>',
+            },
+          ],
+        ],
+      })
+      expect(presenter.restrictedParticipantsTableArgs).toEqual({
+        head: [{ text: 'CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
+        caption: 'Restricted participants',
+        captionClasses: 'govuk-visually-hidden',
+        rows: [[{ html: `CRN002${laoBadgeHtml}` }, { text: 'Restricted' }, { text: 'Restricted' }]],
+      })
+      expect(presenter.scheduledToAttendDisplay).toEqual(['Alex River', 'CRN002'])
+    })
+
+    it('sorts restricted participants by CRN', () => {
+      const sessionDetails: GroupSessionResponse = {
+        ...mixedSessionDetails,
+        attendanceAndSessionNotes: [
+          { ...mixedSessionDetails.attendanceAndSessionNotes[1], crn: 'CRN999' },
+          { ...mixedSessionDetails.attendanceAndSessionNotes[1], referralId: '789', crn: 'CRN001' },
+        ],
+      }
+      const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
+
+      expect(presenter.restrictedAttendees.map(it => it.crn)).toEqual(['CRN001', 'CRN999'])
+    })
+
+    it('ignores exclusion when ENABLE_EXCLUDED_REFERRALS is off', () => {
+      const configModule = jest.requireMock<{ default: { enable_excluded_referrals: boolean } }>('../config')
+      configModule.default.enable_excluded_referrals = false
+
+      const presenter = new EditSessionPresenter(mockGroupId, mixedSessionDetails, mockSessionId, mockDeleteUrl)
+
+      expect(presenter.hasRestrictedParticipants).toBe(false)
+      expect(presenter.hasMultipleReferrals).toBe(true)
+
+      configModule.default.enable_excluded_referrals = true
     })
   })
 
@@ -896,6 +1015,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'To be confirmed',
               sessionNotes: '',
+              isExcluded: false,
             },
             {
               name: 'Clarita Hermann',
@@ -904,6 +1024,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'To be confirmed',
               sessionNotes: '',
+              isExcluded: false,
             },
             {
               name: 'Daine Lehner',
@@ -912,6 +1033,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'To be confirmed',
               sessionNotes: '',
+              isExcluded: false,
             },
           ],
         }),
@@ -936,6 +1058,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'To be confirmed',
               sessionNotes: '',
+              isExcluded: false,
             },
             {
               name: 'Clarita Hermann',
@@ -944,6 +1067,7 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'Attended - Failed to Comply',
               sessionNotes: '',
+              isExcluded: false,
             },
             {
               name: 'Daine Lehner',
@@ -952,6 +1076,32 @@ describe('EditSessionPresenter', () => {
               lao: false,
               attendance: 'To be confirmed',
               sessionNotes: '',
+              isExcluded: false,
+            },
+          ],
+        }),
+        mockSessionId,
+        mockDeleteUrl,
+      )
+
+      expect(presenter.canBeDeleted).toBe(false)
+    })
+
+    it('returns false when a restricted attendee has recorded attendance, even though it is hidden from the UI', () => {
+      const presenter = new EditSessionPresenter(
+        mockGroupId,
+        buildSessionDetails({
+          sessionType: 'Group',
+          isCatchup: true,
+          attendanceAndSessionNotes: [
+            {
+              name: 'Restricted Person',
+              referralId: 'c9cefced-480a-42aa-ac5c-d49ac242b759',
+              crn: 'S347158170',
+              lao: true,
+              attendance: 'Attended',
+              sessionNotes: '',
+              isExcluded: true,
             },
           ],
         }),
@@ -992,6 +1142,7 @@ describe('EditSessionPresenter', () => {
           lao: false,
           attendance: 'Attended',
           sessionNotes: '',
+          isExcluded: false,
         },
         {
           referralId: 'ref-2',
@@ -1000,6 +1151,7 @@ describe('EditSessionPresenter', () => {
           lao: false,
           attendance: 'Not attended',
           sessionNotes: '',
+          isExcluded: false,
         },
       ],
       date: '01 Feb 2026',
@@ -1072,6 +1224,45 @@ describe('EditSessionPresenter', () => {
       expect(presenter.errorSummary).toEqual([
         { field: 'some-field', message: 'Some other error' },
         { field: 'multi-select-attendance-multi-select-row-0', message: 'Select at least one person' },
+      ])
+    })
+
+    it('leaves multi-select-selected unmapped when every attendee is restricted (no rows to link to)', () => {
+      const validationError: FormValidationError = {
+        errors: [
+          {
+            formFields: ['multi-select-selected'],
+            errorSummaryLinkedField: 'multi-select-selected',
+            message: 'Select at least one person',
+          },
+        ],
+      }
+      const sessionDetails = buildSessionDetails({
+        attendanceAndSessionNotes: [
+          {
+            referralId: 'ref-1',
+            name: 'Alex River',
+            crn: 'CRN001',
+            lao: true,
+            attendance: '',
+            sessionNotes: '',
+            isExcluded: true,
+          },
+        ],
+      })
+      const presenter = new EditSessionPresenter(
+        mockGroupId,
+        sessionDetails,
+        mockSessionId,
+        mockDeleteUrl,
+        null,
+        null,
+        false,
+        validationError,
+      )
+
+      expect(presenter.errorSummary).toEqual([
+        { field: 'multi-select-selected', message: 'Select at least one person' },
       ])
     })
   })

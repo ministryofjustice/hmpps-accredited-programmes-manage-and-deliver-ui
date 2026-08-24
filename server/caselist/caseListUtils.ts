@@ -1,5 +1,4 @@
-import { ReferralCaseListItem } from '@manage-and-deliver-api'
-import config from '../config'
+import { GroupItem, ReferralCaseListItem } from '@manage-and-deliver-api'
 
 export default class CaselistUtils {
   static hasLdcTagHtml(referral: ReferralCaseListItem): string {
@@ -7,7 +6,11 @@ export default class CaselistUtils {
   }
 
   static hasLaoBadgeHtml(referral: ReferralCaseListItem): string {
-    return referral.lao && config.enable_restricted_access_badge
+    return referral.lao ? '<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''
+  }
+
+  static hasLaoBadgeHtmlGroupItem(groupItem: GroupItem): string {
+    return groupItem.isLimitedAccessOffender
       ? '<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>'
       : ''
   }

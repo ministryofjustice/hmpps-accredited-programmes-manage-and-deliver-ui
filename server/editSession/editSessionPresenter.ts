@@ -1,12 +1,14 @@
-import { GroupSessionResponse } from '@manage-and-deliver-api'
+import { AttendanceAndSessionNotes, GroupSessionResponse } from '@manage-and-deliver-api'
 import { MultiSelectTableArgs } from '@manage-and-deliver-ui'
-import { TableArgs } from '../utils/govukFrontendTypes'
+import config from '../config'
+import attendanceOptionText, { attendanceOptionTextTags } from '../utils/attendanceUtils'
 import { FormValidationError } from '../utils/formValidationError'
+import { TableArgs } from '../utils/govukFrontendTypes'
 import PresenterUtils from '../utils/presenterUtils'
 import { convertToUrlFriendlyKebabCase, getEditSessionRouteTitle } from '../utils/utils'
 import ViewUtils from '../utils/viewUtils'
-import attendanceOptionText, { attendanceOptionTextTags } from '../utils/attendanceUtils'
-import config from '../config'
+
+const restrictedAccessBadgeHtml = ' <br><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>'
 
 export default class EditSessionPresenter {
   constructor(
@@ -91,12 +93,41 @@ export default class EditSessionPresenter {
     return summary
   }
 
+  private isExcludedAttendee(it: AttendanceAndSessionNotes): boolean {
+    return config.enable_excluded_referrals && Boolean(it.isExcluded)
+  }
+
+  // Attendees the current user is authorised to view - shown in the standard attendance table.
+  get authorisedAttendees(): AttendanceAndSessionNotes[] {
+    return (this.sessionDetails.attendanceAndSessionNotes || []).filter(it => !this.isExcludedAttendee(it))
+  }
+
+  // Attendees the current user is not authorised to view - shown, CRN-only, in the Restricted participants table.
+  get restrictedAttendees(): AttendanceAndSessionNotes[] {
+    return (this.sessionDetails.attendanceAndSessionNotes || [])
+      .filter(it => this.isExcludedAttendee(it))
+      .sort((a, b) => a.crn.localeCompare(b.crn))
+  }
+
+  get hasAnyAttendees(): boolean {
+    return (this.sessionDetails.attendanceAndSessionNotes?.length ?? 0) > 0
+  }
+
+  get hasRestrictedParticipants(): boolean {
+    return this.restrictedAttendees.length > 0
+  }
+
+  // "Scheduled to attend" names, with restricted participants shown as CRN-only
+  get scheduledToAttendDisplay(): string[] {
+    return [...this.authorisedAttendees.map(it => it.name), ...this.restrictedAttendees.map(it => it.crn)]
+  }
+
   get hasMultipleReferrals() {
-    return this.sessionDetails.attendanceAndSessionNotes?.length > 1
+    return this.authorisedAttendees.length > 1
   }
 
   get hasReferral() {
-    return this.sessionDetails.attendanceAndSessionNotes?.length > 0
+    return this.authorisedAttendees.length > 0
   }
 
   get sessionType() {
@@ -135,8 +166,17 @@ export default class EditSessionPresenter {
     return `/${this.groupId}/${this.sessionId}/${this.sessionNotesSlug}-attendance-and-session-notes?referralId=${encodeURIComponent(referralId)}&source=edit-session`
   }
 
+  private attendeeCells(it: AttendanceAndSessionNotes) {
+    const laoBadge = it.lao ? restrictedAccessBadgeHtml : ''
+    return [
+      { html: `<a href="/referral-details/${it.referralId}/personal-details">${it.name}</a> ${it.crn}${laoBadge}` },
+      { html: this.attendanceOptionText(it.attendance).attendanceState },
+      this.sessionNotesCell(it.sessionNotes, it.referralId, it.name),
+    ]
+  }
+
   get attendanceTableArgs(): MultiSelectTableArgs | TableArgs {
-    const attendanceData = this.sessionDetails.attendanceAndSessionNotes || []
+    const attendanceData = this.authorisedAttendees
     const headers = [
       {
         text: 'Name and CRN',
@@ -158,13 +198,7 @@ export default class EditSessionPresenter {
           id: `attendance-multi-select-row-${index}`,
           value: it.referralId,
           checkBoxLabel: it.name,
-          cells: [
-            {
-              html: `<a href="/referral-details/${it.referralId}/personal-details">${it.name}</a> ${it.crn}${it.lao && config.enable_restricted_access_badge ? ' <br><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`,
-            },
-            { html: this.attendanceOptionText(it.attendance).attendanceState },
-            this.sessionNotesCell(it.sessionNotes, it.referralId, it.name),
-          ],
+          cells: this.attendeeCells(it),
         })),
       }
     }
@@ -172,22 +206,7 @@ export default class EditSessionPresenter {
       head: headers,
       caption: 'Attendance record and session notes',
       captionClasses: 'govuk-visually-hidden',
-      rows:
-        attendanceData.length > 0
-          ? [
-              [
-                {
-                  html: `<a href="/referral-details/${attendanceData[0].referralId}/personal-details">${attendanceData[0].name}</a> ${attendanceData[0].crn}${attendanceData[0].lao && config.enable_restricted_access_badge ? ' <br><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`,
-                },
-                { html: this.attendanceOptionText(attendanceData[0].attendance).attendanceState },
-                this.sessionNotesCell(
-                  attendanceData[0].sessionNotes,
-                  attendanceData[0].referralId,
-                  attendanceData[0].name,
-                ),
-              ],
-            ]
-          : [],
+      rows: attendanceData.length > 0 ? [this.attendeeCells(attendanceData[0])] : [],
     }
   }
 
@@ -195,6 +214,30 @@ export default class EditSessionPresenter {
     return {
       text: 'Attendance and session notes',
       classes: 'govuk-heading-m',
+    }
+  }
+
+  get restrictedParticipantsHeading() {
+    return {
+      text: 'Restricted participants',
+      classes: 'govuk-heading-m',
+    }
+  }
+
+  get restrictedParticipantsText(): string {
+    return 'You cannot add attendance or session notes for restricted access participants.'
+  }
+
+  get restrictedParticipantsTableArgs(): TableArgs {
+    return {
+      head: [{ text: 'CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
+      caption: 'Restricted participants',
+      captionClasses: 'govuk-visually-hidden',
+      rows: this.restrictedAttendees.map(it => [
+        { html: `${it.crn}${restrictedAccessBadgeHtml}` },
+        { text: 'Restricted' },
+        { text: 'Restricted' },
+      ]),
     }
   }
 

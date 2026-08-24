@@ -19,8 +19,7 @@ generic-service:
     SENTRY_ENVIRONMENT: preprod
     ENABLE_PAST_DATE_REGION_RESTRICTION: "true"
     ENABLE_REGION_RESTRICTION: "true"
-    ENABLE_CASELIST_SINGULAR_RESULT_TEXT: "true"
-    ENABLE_RESTRICTED_ACCESS_BADGE: "true"
+    ENABLE_EXCLUDED_REFERRALS: "true"
 
 generic-prometheus-alerts:
   alertSeverity: hmpps_accredited_programmes_manage_and_deliver_alerts_nonprod
