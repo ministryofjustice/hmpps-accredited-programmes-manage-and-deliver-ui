@@ -6,6 +6,7 @@ import {
 import { CheckboxesArgsItem, RadiosArgsItem, SelectArgsItem } from '../../utils/govukFrontendTypes'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
+import config from '../../config'
 
 export default class AddSessionDetailsPresenter {
   constructor(
@@ -75,21 +76,34 @@ export default class AddSessionDetailsPresenter {
   generateSessionAttendeesRadioOptions(selectedValue: string[]): RadiosArgsItem[] {
     const hasSelectedValues = selectedValue && selectedValue.length > 0
 
-    return this.sessionDetails.groupMembers.map(member => ({
-      text: `${member.name} (${member.crn})`,
-      value: `${member.referralId} + ${member.name}`,
+    return this.sortGroupMembersByExcluded().map(member => ({
+      html: `${this.isExcludedMember(member) ? `${member.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p>You cannot add a restricted participant to the session.</p>` : `${member.name} (${member.crn})`}`,
+      value: `${member.referralId} + ${this.isExcludedMember(member) ? member.crn : member.name}`,
       checked: hasSelectedValues ? selectedValue.includes(member.referralId) : false,
+      disabled: this.isExcludedMember(member),
     }))
   }
 
   generateSessionAttendeesCheckboxOptions(selectedValue: string[]): CheckboxesArgsItem[] {
     const hasSelectedValues = selectedValue && selectedValue.length > 0
 
-    return this.sessionDetails.groupMembers.map(member => ({
-      text: `${member.name} (${member.crn})`,
-      value: `${member.referralId} + ${member.name}`,
+    return this.sortGroupMembersByExcluded().map(member => ({
+      html: `${this.isExcludedMember(member) ? `${member.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p>You cannot add a restricted participant to the session.</p>` : `${member.name} (${member.crn})`}`,
+      value: `${member.referralId} + ${this.isExcludedMember(member) ? member.crn : member.name}`,
       checked: hasSelectedValues ? selectedValue.includes(member.referralId) : false,
+      disabled: this.isExcludedMember(member),
     }))
+  }
+
+  // Keeps excluded/restricted members visible but always last in the list
+  private sortGroupMembersByExcluded() {
+    return [...this.sessionDetails.groupMembers].sort(
+      (a, b) => Number(this.isExcludedMember(a)) - Number(this.isExcludedMember(b)),
+    )
+  }
+
+  private isExcludedMember(member: ScheduleIndividualSessionDetailsResponse['groupMembers'][number]): boolean {
+    return config.enable_excluded_referrals && member.isExcluded === true
   }
 
   selectedAttendeeValues(): string[] {
