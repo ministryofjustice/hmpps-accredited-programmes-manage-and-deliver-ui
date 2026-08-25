@@ -43,7 +43,7 @@ export default class GroupOverviewController extends BaseController {
       groupId,
       {
         page: pageNumber ? Number(pageNumber) - 1 : 0,
-        size: 10,
+        size: 20,
       },
       filter.params,
     )
@@ -101,7 +101,7 @@ export default class GroupOverviewController extends BaseController {
       groupId,
       {
         page: pageNumber ? Number(pageNumber) - 1 : 0,
-        size: 10,
+        size: 20,
       },
       filter.params,
     )
