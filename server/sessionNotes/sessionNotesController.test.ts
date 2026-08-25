@@ -116,6 +116,8 @@ describe('SessionNotesController', () => {
             },
             sessionNotes: 'Existing note.',
             options: [],
+            isLao: false,
+            isExcluded: false,
           },
         ],
       })
@@ -199,6 +201,8 @@ describe('SessionNotesController', () => {
             },
             sessionNotes: 'Existing note.',
             options: [],
+            isLao: false,
+            isExcluded: false,
           },
         ],
       })
@@ -367,6 +371,8 @@ describe('SessionNotesController', () => {
             },
             sessionNotes: 'Participant engaged well.',
             options: [],
+            isLao: false,
+            isExcluded: false,
           },
         ],
       })
@@ -419,6 +425,8 @@ describe('SessionNotesController', () => {
             },
             sessionNotes: 'Participant engaged well.',
             options: [],
+            isLao: false,
+            isExcluded: false,
           },
           {
             referralId: 'referral-999',
@@ -430,6 +438,8 @@ describe('SessionNotesController', () => {
             },
             sessionNotes: '',
             options: [],
+            isLao: false,
+            isExcluded: false,
           },
         ],
       })

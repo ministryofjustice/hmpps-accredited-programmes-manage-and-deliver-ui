@@ -560,7 +560,7 @@ describe('generateTableRows', () => {
       referralId: 'REF999',
       personName: 'John Smith',
       crn: 'X111222',
-      lao: true,
+      isLimitedAccessOffender: true,
     })
     const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
       .pageContent([laoReferral])
@@ -589,7 +589,7 @@ describe('generateTableRows', () => {
       referralId: 'REF888',
       personName: 'Jane Doe',
       crn: 'X333444',
-      lao: false,
+      isLimitedAccessOffender: false,
     })
     const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
       .pageContent([nonLaoReferral])

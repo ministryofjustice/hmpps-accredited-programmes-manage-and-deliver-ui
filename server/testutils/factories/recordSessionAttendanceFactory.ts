@@ -25,6 +25,8 @@ export default RecordSessionAttendanceFactory.define(({ sequence }) => {
           value: 'UAAB',
         },
       ],
+      isLao: false,
+      isExcluded: false,
     },
     {
       referralId: `${sequence}-1`,
@@ -46,6 +48,8 @@ export default RecordSessionAttendanceFactory.define(({ sequence }) => {
           value: 'UAAB',
         },
       ],
+      isLao: false,
+      isExcluded: false,
     },
   ]
 
