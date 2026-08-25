@@ -45,6 +45,22 @@ describe('groupOverview', () => {
           })
         })
     })
+
+    it('requests 20 records per page', async () => {
+      const programmeGroupOverview = ProgrammeGroupOverviewFactory.build()
+      accreditedProgrammesManageAndDeliverService.getGroupWaitlistMembers.mockResolvedValue(programmeGroupOverview)
+      return request(app)
+        .get(`/group/1234/waitlist`)
+        .expect(200)
+        .then(() => {
+          expect(accreditedProgrammesManageAndDeliverService.getGroupWaitlistMembers).toHaveBeenCalledWith(
+            'user1',
+            '1234',
+            { page: 0, size: 20 },
+            {},
+          )
+        })
+    })
   })
 
   describe(`GET /group/:groupId/allocations`, () => {
@@ -62,6 +78,22 @@ describe('groupOverview', () => {
             groupId: '1234',
             filter: {},
           })
+        })
+    })
+
+    it('requests 20 records per page', async () => {
+      const programmeGroupOverview = ProgrammeGroupOverviewFactory.build()
+      accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers.mockResolvedValue(programmeGroupOverview)
+      return request(app)
+        .get(`/group/1234/allocations`)
+        .expect(200)
+        .then(() => {
+          expect(accreditedProgrammesManageAndDeliverService.getGroupAllocatedMembers).toHaveBeenCalledWith(
+            'user1',
+            '1234',
+            { page: 0, size: 20 },
+            {},
+          )
         })
     })
   })
