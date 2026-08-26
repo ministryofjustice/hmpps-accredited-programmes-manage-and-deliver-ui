@@ -52,10 +52,14 @@ export default class EditSessionForm {
     if (!Array.isArray(editSessionAttendees)) {
       editSessionAttendees = [editSessionAttendees]
     }
+    // Checkbox values are "referralId + name/crn" (see EditSessionAttendeesPresenter), radio values are plain referralIds
+    const referralIds = (editSessionAttendees as string[]).map(value =>
+      value.includes('+') ? value.split('+')[0].trim() : value,
+    )
 
     return {
       paramsForUpdate: {
-        referralId: editSessionAttendees,
+        referralId: referralIds,
       },
       error: null,
     }

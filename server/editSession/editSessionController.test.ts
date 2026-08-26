@@ -406,6 +406,8 @@ describe('editSessionAttendees', () => {
   it('should submit attendees update and emit EDIT_SESSION_ATTENDEES', async () => {
     const groupId = '111'
     const sessionId = '6789'
+    const sessionAttendees = editSessionAttendeesFactory.build()
+    accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
     accreditedProgrammesManageAndDeliverService.updateSessionAttendees.mockResolvedValue('Updated')
 
     await request(app)
@@ -434,6 +436,177 @@ describe('editSessionAttendees', () => {
       expect.anything(),
       expect.anything(),
     )
+  })
+
+  it('preserves the restricted attendee and submits successfully when every remaining attendee is restricted access', async () => {
+    const groupId = '111'
+    const sessionId = '6789'
+    const sessionAttendees = editSessionAttendeesFactory.build({
+      attendees: [
+        {
+          name: 'Secret Person',
+          referralId: 'referral-restricted',
+          crn: 'S999999999',
+          currentlyAttending: true,
+          isExcluded: true,
+        },
+      ],
+    })
+    accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
+    accreditedProgrammesManageAndDeliverService.updateSessionAttendees.mockResolvedValue('Updated')
+
+    await request(app)
+      .post(`/${groupId}/${sessionId}/edit-session-attendees`)
+      .type('form')
+      .send({})
+      .expect(302)
+      .expect('Location', `/${groupId}/${sessionId}/edit-session?editSessionMessage=Updated`)
+
+    expect(accreditedProgrammesManageAndDeliverService.updateSessionAttendees).toHaveBeenCalledWith(
+      'user1',
+      sessionId,
+      ['referral-restricted'],
+    )
+  })
+
+  it('preserves an attending restricted attendee when every editable attendee is unchecked', async () => {
+    const groupId = '111'
+    const sessionId = '6789'
+    const sessionAttendees = editSessionAttendeesFactory.build({
+      attendees: [
+        {
+          name: 'Alex River',
+          referralId: 'referral-authorised',
+          crn: 'S688890821',
+          currentlyAttending: true,
+          isExcluded: false,
+        },
+        {
+          name: 'Secret Person',
+          referralId: 'referral-restricted',
+          crn: 'S999999999',
+          currentlyAttending: true,
+          isExcluded: true,
+        },
+      ],
+    })
+    accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
+    accreditedProgrammesManageAndDeliverService.updateSessionAttendees.mockResolvedValue('Updated')
+
+    // Unchecking the only editable attendee means the browser posts no value for 'edit-session-attendees'
+    await request(app)
+      .post(`/${groupId}/${sessionId}/edit-session-attendees`)
+      .type('form')
+      .send({})
+      .expect(302)
+      .expect('Location', `/${groupId}/${sessionId}/edit-session?editSessionMessage=Updated`)
+
+    expect(accreditedProgrammesManageAndDeliverService.updateSessionAttendees).toHaveBeenCalledWith(
+      'user1',
+      sessionId,
+      ['referral-restricted'],
+    )
+  })
+
+  it('still shows a validation error when no attendee is selected and there is no restricted attendee to preserve', async () => {
+    const groupId = '111'
+    const sessionId = '6789'
+    const sessionAttendees = editSessionAttendeesFactory.build({
+      attendees: [
+        {
+          name: 'Alex River',
+          referralId: 'referral-authorised',
+          crn: 'S688890821',
+          currentlyAttending: true,
+          isExcluded: false,
+        },
+      ],
+    })
+    accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
+
+    await request(app)
+      .post(`/${groupId}/${sessionId}/edit-session-attendees`)
+      .type('form')
+      .send({})
+      .expect(400)
+      .expect(res => {
+        expect(res.text).toContain('Select who should attend the session')
+      })
+
+    expect(accreditedProgrammesManageAndDeliverService.updateSessionAttendees).not.toHaveBeenCalled()
+  })
+
+  it('does not preserve a restricted attendee who is not currently attending', async () => {
+    const groupId = '111'
+    const sessionId = '6789'
+    const sessionAttendees = editSessionAttendeesFactory.build({
+      attendees: [
+        {
+          name: 'Alex River',
+          referralId: 'referral-authorised',
+          crn: 'S688890821',
+          currentlyAttending: true,
+          isExcluded: false,
+        },
+        {
+          name: 'Secret Person',
+          referralId: 'referral-restricted',
+          crn: 'S999999999',
+          currentlyAttending: false,
+          isExcluded: true,
+        },
+      ],
+    })
+    accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
+    accreditedProgrammesManageAndDeliverService.updateSessionAttendees.mockResolvedValue('Updated')
+
+    await request(app)
+      .post(`/${groupId}/${sessionId}/edit-session-attendees`)
+      .type('form')
+      .send({ 'edit-session-attendees': 'referral-authorised + Alex River' })
+      .expect(302)
+      .expect('Location', `/${groupId}/${sessionId}/edit-session?editSessionMessage=Updated`)
+
+    expect(accreditedProgrammesManageAndDeliverService.updateSessionAttendees).toHaveBeenCalledWith(
+      'user1',
+      sessionId,
+      ['referral-authorised'],
+    )
+  })
+
+  it('still shows a validation error when nothing is selected and the only restricted attendee is not currently attending', async () => {
+    const groupId = '111'
+    const sessionId = '6789'
+    const sessionAttendees = editSessionAttendeesFactory.build({
+      attendees: [
+        {
+          name: 'Alex River',
+          referralId: 'referral-authorised',
+          crn: 'S688890821',
+          currentlyAttending: true,
+          isExcluded: false,
+        },
+        {
+          name: 'Secret Person',
+          referralId: 'referral-restricted',
+          crn: 'S999999999',
+          currentlyAttending: false,
+          isExcluded: true,
+        },
+      ],
+    })
+    accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
+
+    await request(app)
+      .post(`/${groupId}/${sessionId}/edit-session-attendees`)
+      .type('form')
+      .send({})
+      .expect(400)
+      .expect(res => {
+        expect(res.text).toContain('Select who should attend the session')
+      })
+
+    expect(accreditedProgrammesManageAndDeliverService.updateSessionAttendees).not.toHaveBeenCalled()
   })
 })
 

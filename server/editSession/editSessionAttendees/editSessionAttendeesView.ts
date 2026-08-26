@@ -52,6 +52,7 @@ export default class EditSessionAttendeesView {
         checkboxArgs: this.checkboxArgs,
         text: this.presenter.text,
         isGroupSession: this.presenter.isGroupSession,
+        hasEditableAttendees: this.presenter.hasEditableAttendees,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
       },
     ]
