@@ -71,11 +71,6 @@ export default class EditSessionAttendeesPresenter {
     return this.sessionAttendees.sessionType.toUpperCase() === 'GROUP'
   }
 
-  // Nothing can be submitted if every remaining attendee is restricted access, since they can't be toggled
-  get hasEditableAttendees(): boolean {
-    return this.sessionAttendees.attendees.some(attendee => !this.isExcludedMember(attendee))
-  }
-
   get fields() {
     return {
       'edit-session-attendees': {

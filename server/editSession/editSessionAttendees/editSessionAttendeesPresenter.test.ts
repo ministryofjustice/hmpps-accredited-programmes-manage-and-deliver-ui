@@ -46,34 +46,6 @@ describe('EditSessionAttendeesPresenter', () => {
     })
   })
 
-  describe('hasEditableAttendees', () => {
-    it('is true when at least one attendee is not excluded', () => {
-      const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees())
-
-      expect(presenter.hasEditableAttendees).toBe(true)
-    })
-
-    it('is false when every attendee is excluded', () => {
-      const presenter = new EditSessionAttendeesPresenter(
-        groupId,
-        backUrl,
-        buildSessionAttendees({
-          attendees: [
-            {
-              name: 'Secret Person',
-              referralId: 'referral-1',
-              crn: 'X123456',
-              currentlyAttending: true,
-              isExcluded: true,
-            },
-          ],
-        }),
-      )
-
-      expect(presenter.hasEditableAttendees).toBe(false)
-    })
-  })
-
   describe('backLinkArgs', () => {
     it('returns correct back link args', () => {
       const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees())
