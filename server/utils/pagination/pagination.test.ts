@@ -69,7 +69,7 @@ describe(Pagination, () => {
       describe('for pagination with less than 6 pages', () => {
         it('should contain all pages', () => {
           const page = pageFactory.pageContent([]).build({
-            totalElements: 50,
+            totalElements: 1000,
             totalPages: 5,
             numberOfElements: 10,
             number: 4, // page=5
@@ -89,7 +89,7 @@ describe(Pagination, () => {
         describe('and the chosen page is within the first 3 pages', () => {
           it('should contain first 4 pages and last page', () => {
             const page = pageFactory.pageContent([]).build({
-              totalElements: 50,
+              totalElements: 1000,
               totalPages: 6,
               numberOfElements: 10,
               number: 2, // page=3
@@ -109,7 +109,7 @@ describe(Pagination, () => {
         describe('and the chosen page is within the last 3 pages', () => {
           it('should contain last 4 pages and first page', () => {
             const page = pageFactory.pageContent([]).build({
-              totalElements: 50,
+              totalElements: 1000,
               totalPages: 6,
               numberOfElements: 10,
               number: 3, // page=4
@@ -129,7 +129,7 @@ describe(Pagination, () => {
         describe('and the chosen page is somewhere within the middle', () => {
           it('should show first and last page, current page and next and previous page', () => {
             const page = pageFactory.pageContent([]).build({
-              totalElements: 50,
+              totalElements: 1000,
               totalPages: 7,
               numberOfElements: 10,
               number: 3, // page=4

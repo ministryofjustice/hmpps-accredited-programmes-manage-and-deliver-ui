@@ -10,6 +10,16 @@ import BaseController from '../shared/baseController'
 import sendAuditEvent from '../services/auditService'
 import RetainedFilters from '../shared/filters/retainedFilters'
 
+const caselistSortFields = new Set([
+  'personName',
+  'pduName',
+  'reportingTeam',
+  'sentenceEndDate',
+  'cohort',
+  'sex',
+  'status',
+])
+
 export default class CaselistController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
 
@@ -32,6 +42,20 @@ export default class CaselistController extends BaseController {
     return JSON.stringify(left.params) !== JSON.stringify(right.params)
   }
 
+  private paginationParams(req: Request) {
+    const pageNumber = req.query.page
+    const sort =
+      typeof req.query.sort === 'string' && caselistSortFields.has(req.query.sort.split(',')[0])
+        ? req.query.sort
+        : 'personName,asc'
+
+    return {
+      page: pageNumber ? Number(pageNumber) - 1 : 0,
+      size: 300,
+      sort: [sort],
+    }
+  }
+
   async showOpenCaselist(req: Request, res: Response): Promise<void> {
     const clearPath = this.retainedFilters.clearRedirectPath(req)
     if (clearPath) {
@@ -44,18 +68,13 @@ export default class CaselistController extends BaseController {
     this.retainedFilters.persist(req)
     this.prepareSessionFilterParams(req)
     const { username } = req.user
-    const pageNumber = req.query.page
-
     const requestedFilter = CaselistFilter.fromRequest(req)
     await sendAuditEvent('SEARCH_OPEN_CASELIST', username, undefined, 'NOT_APPLICABLE', {
       filter: requestedFilter.params,
     })
     let openCaseList = await this.accreditedProgrammesManageAndDeliverService.getOpenCaselist(
       username,
-      {
-        page: pageNumber ? Number(pageNumber) - 1 : 0,
-        size: 50,
-      },
+      this.paginationParams(req),
       requestedFilter.params,
     )
 
@@ -66,10 +85,7 @@ export default class CaselistController extends BaseController {
     if (this.filtersDiffer(requestedFilter, filter)) {
       openCaseList = await this.accreditedProgrammesManageAndDeliverService.getOpenCaselist(
         username,
-        {
-          page: pageNumber ? Number(pageNumber) - 1 : 0,
-          size: 50,
-        },
+        this.paginationParams(req),
         filter.params,
       )
       filter = CaselistFilter.fromRequest(req, openCaseList.filters.locationFilters)
@@ -103,7 +119,6 @@ export default class CaselistController extends BaseController {
     this.retainedFilters.persist(req)
     this.prepareSessionFilterParams(req)
     const { username } = req.user
-    const pageNumber = req.query.page
 
     const requestedFilter = CaselistFilter.fromRequest(req)
     await sendAuditEvent('SEARCH_CLOSED_CASELIST', username, undefined, 'NOT_APPLICABLE', {
@@ -112,10 +127,7 @@ export default class CaselistController extends BaseController {
 
     let closedCaseList = await this.accreditedProgrammesManageAndDeliverService.getClosedCaselist(
       username,
-      {
-        page: pageNumber ? Number(pageNumber) - 1 : 0,
-        size: 50,
-      },
+      this.paginationParams(req),
       requestedFilter.params,
     )
 
@@ -126,10 +138,7 @@ export default class CaselistController extends BaseController {
     if (this.filtersDiffer(requestedFilter, filter)) {
       closedCaseList = await this.accreditedProgrammesManageAndDeliverService.getClosedCaselist(
         username,
-        {
-          page: pageNumber ? Number(pageNumber) - 1 : 0,
-          size: 50,
-        },
+        this.paginationParams(req),
         filter.params,
       )
       filter = CaselistFilter.fromRequest(req, closedCaseList.filters.locationFilters)
