@@ -78,6 +78,19 @@ describe('EditSessionForm', () => {
         expect(data.paramsForUpdate?.referralId[0]).toBe('single-referral')
         expect(data.error).toBeNull()
       })
+
+      it('strips the " + name/crn" suffix used for checkbox values (group sessions)', async () => {
+        const request = TestUtils.createRequest({
+          'edit-session-attendees': ['referral-123 + Alex River', 'referral-456 + S688890821'],
+        })
+
+        const data = await new EditSessionForm(request).attendeesData()
+
+        expect(data.paramsForUpdate).toStrictEqual({
+          referralId: ['referral-123', 'referral-456'],
+        })
+        expect(data.error).toBeNull()
+      })
     })
 
     describe('when mandatory fields are missing', () => {
