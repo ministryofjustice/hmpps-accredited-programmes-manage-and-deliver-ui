@@ -104,14 +104,34 @@ describe(`Caselist controller`, () => {
     expect(accreditedProgrammesManageAndDeliverService.getOpenCaselist).toHaveBeenNthCalledWith(
       1,
       'user1',
-      { page: 0, size: 50 },
+      { page: 0, size: 300, sort: ['personName,asc'] },
       { pdu: ['PDU2'], reportingTeam: ['Team1'] },
     )
     expect(accreditedProgrammesManageAndDeliverService.getOpenCaselist).toHaveBeenNthCalledWith(
       2,
       'user1',
-      { page: 0, size: 50 },
+      { page: 0, size: 300, sort: ['personName,asc'] },
       { pdu: ['PDU2'] },
+    )
+  })
+
+  it('sorts open referrals through the API before pagination', async () => {
+    await request(app).get('/region/open-referrals?sort=sentenceEndDate,desc').expect(200)
+
+    expect(accreditedProgrammesManageAndDeliverService.getOpenCaselist).toHaveBeenCalledWith(
+      'user1',
+      { page: 0, size: 300, sort: ['sentenceEndDate,desc'] },
+      {},
+    )
+  })
+
+  it('uses the default sort when an unsupported sort field is requested', async () => {
+    await request(app).get('/region/open-referrals?sort=unknown,desc').expect(200)
+
+    expect(accreditedProgrammesManageAndDeliverService.getOpenCaselist).toHaveBeenCalledWith(
+      'user1',
+      { page: 0, size: 300, sort: ['personName,asc'] },
+      {},
     )
   })
 })
