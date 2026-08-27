@@ -4,6 +4,7 @@ import AccreditedProgrammesManageAndDeliverService from '../services/accreditedP
 import sendAuditEvent from '../services/auditService'
 import BaseController from '../shared/baseController'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
+import config from '../config'
 import DateFormatUtils from '../utils/dateFormatUtils'
 import DateUtils from '../utils/dateUtils'
 import errorMessages from '../utils/errorMessages'
@@ -242,29 +243,41 @@ export default class EditSessionController extends BaseController {
 
     let formError: FormValidationError | null = null
 
-    if (req.method === 'POST') {
-      const data = await new EditSessionForm(req).attendeesData()
-      if (data.error) {
-        res.status(400)
-        formError = data.error
-      } else {
-        await sendAuditEvent('EDIT_SESSION_ATTENDEES', username, sessionId, 'SEARCH_TERM', {
-          details: { referralId: data.paramsForUpdate.referralId, groupId },
-        })
-        const message = await this.accreditedProgrammesManageAndDeliverService.updateSessionAttendees(
-          username,
-          sessionId,
-          data.paramsForUpdate.referralId,
-        )
-        return res.redirect(`/${groupId}/${sessionId}/edit-session?editSessionMessage=${message}`)
-      }
-    }
-    await sendAuditEvent('VIEW_EDIT_SESSION_ATTENDEES', username, sessionId, 'SEARCH_TERM', { details: { groupId } })
-
     const sessionAttendees = await this.accreditedProgrammesManageAndDeliverService.getSessionAttendees(
       username,
       sessionId,
     )
+    // Restricted attendees are never submitted by the form (their checkbox is disabled), so their
+    // existing attendance must be preserved manually rather than relying on what's posted
+    const restrictedAttendingReferralIds = sessionAttendees.attendees
+      .filter(
+        attendee => config.enable_excluded_referrals && attendee.isExcluded === true && attendee.currentlyAttending,
+      )
+      .map(attendee => attendee.referralId)
+
+    if (req.method === 'POST') {
+      const data = await new EditSessionForm(req).attendeesData()
+      if (data.error && restrictedAttendingReferralIds.length === 0) {
+        res.status(400)
+        formError = data.error
+      } else {
+        const referralIds = Array.from(
+          new Set([...(data.error ? [] : data.paramsForUpdate.referralId), ...restrictedAttendingReferralIds]),
+        )
+        await sendAuditEvent('EDIT_SESSION_ATTENDEES', username, sessionId, 'SEARCH_TERM', {
+          details: { referralId: referralIds, groupId },
+        })
+        const message = await this.accreditedProgrammesManageAndDeliverService.updateSessionAttendees(
+          username,
+          sessionId,
+          referralIds,
+        )
+        return res.redirect(`/${groupId}/${sessionId}/edit-session?editSessionMessage=${message}`)
+      }
+    } else {
+      await sendAuditEvent('VIEW_EDIT_SESSION_ATTENDEES', username, sessionId, 'SEARCH_TERM', { details: { groupId } })
+    }
+
     const backUrl = `/${groupId}/${sessionId}/edit-session`
     const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, sessionAttendees, formError)
     const view = new EditSessionAttendeesView(presenter)
