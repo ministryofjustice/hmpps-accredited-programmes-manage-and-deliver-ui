@@ -141,6 +141,45 @@ describe('SessionScheduleAttendancePresenter', () => {
       )
     })
 
+    it('uses the session start and end times in the sortable date value', () => {
+      const sessionsOnSameDay = {
+        ...mockGroupSessionsData,
+        modules: [
+          {
+            ...mockGroupSessionsData.modules![0],
+            sessions: [
+              {
+                ...mockGroupSessionsData.modules![0].sessions![0],
+                dateOfSession: '15 March 2025',
+                timeOfSession: '9:30am to 11:00am',
+              },
+              {
+                ...mockGroupSessionsData.modules![0].sessions![1],
+                dateOfSession: '15 March 2025',
+                timeOfSession: '9:30am to 12:00pm',
+              },
+              {
+                ...mockGroupSessionsData.modules![0].sessions![1],
+                dateOfSession: '15 March 2025',
+                timeOfSession: '2:00pm to 3:30pm',
+              },
+            ],
+          },
+        ],
+      }
+      const presenter = new SessionScheduleAttendancePresenter(groupId, sessionsOnSameDay)
+      const content = presenter.getAccordionItems()[0].content.html
+      const morningSession = new Date('15 March 2025')
+      const afternoonSession = new Date('15 March 2025')
+
+      morningSession.setHours(9, 30, 0, 0)
+      afternoonSession.setHours(14, 0, 0, 0)
+
+      expect(content).toContain(`data-sort-value="${morningSession.getTime() + 660 / 1440}"`)
+      expect(content).toContain(`data-sort-value="${morningSession.getTime() + 720 / 1440}"`)
+      expect(content).toContain(`data-sort-value="${afternoonSession.getTime() + 930 / 1440}"`)
+    })
+
     it('renders the new scheduled caption with the left-aligned class', () => {
       const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
       const accordionItems = presenter.getAccordionItems()
