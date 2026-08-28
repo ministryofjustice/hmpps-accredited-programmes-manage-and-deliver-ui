@@ -10,7 +10,7 @@ import GroupServiceLayoutPresenter, {
   GroupServiceNavigationValues,
 } from '../../shared/groups/groupServiceLayoutPresenter'
 
-const BRINING_IT_ALL_TOGETHER_MODULE = 'bringing it all together'
+const BRINGING_IT_ALL_TOGETHER_MODULE = 'bringing it all together'
 
 export default class SessionScheduleAttendancePresenter extends GroupServiceLayoutPresenter {
   constructor(
@@ -128,7 +128,7 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
   }
 
   private getStartDateText(moduleSession: ProgrammeGroupModuleSessionsResponseGroupModule): string {
-    const isBringingItAllTogether = moduleSession.name.toLowerCase() === BRINING_IT_ALL_TOGETHER_MODULE
+    const isBringingItAllTogether = moduleSession.name.toLowerCase() === BRINGING_IT_ALL_TOGETHER_MODULE
     const hasStartDateText =
       moduleSession.startDateText?.estimatedStartDateText && moduleSession.startDateText?.sessionStartDate
 
@@ -162,6 +162,7 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
   `
   }
 
+  // End time (total minutes since midnight) is divided by 1440 (mins/day) // to produce a sub-millisecond fractional tie-breaker for sessions sharing // the same date and start time.
   private sortableTableDateIncludingTime(dateString: string | undefined, timeString: string | undefined): string {
     if (!dateString) return ''
     const date = new Date(dateString)
@@ -176,7 +177,7 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
     date.setHours(hoursIn24HourFormat, Number(minutes), 0, 0)
 
     if (!endTime) return date.getTime().toString()
-
+    // End time (total minutes since midnight) is divided by 1440 (mins/day) // to produce a sub-millisecond fractional tie-breaker for sessions sharing // the same date and start time.
     const [, endHours, endMinutes = '0', endMeridiem] = endTime
     const endTimeInMinutes =
       ((Number(endHours) % 12) + (endMeridiem.toLowerCase() === 'pm' ? 12 : 0)) * 60 + Number(endMinutes)
