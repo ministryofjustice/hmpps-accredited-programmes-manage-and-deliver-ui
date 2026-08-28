@@ -144,7 +144,7 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
     const facilitators = session.facilitators?.length
       ? session.facilitators.join('<span class="govuk-!-display-block govuk-!-margin-bottom-1"></span>')
       : ''
-    const dateSortValue = this.sortableTableDate(session.dateOfSession)
+    const dateSortValue = this.sortableTableDateIncludingTime(session.dateOfSession, session.timeOfSession)
     const sessionTitle = getEditSessionRouteTitle(session.name || '', session.type)
     const baseSlug = convertToUrlFriendlyKebabCase(sessionTitle) || 'session'
     const sessionSlug =
@@ -162,10 +162,25 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
   `
   }
 
-  private sortableTableDate(dateString: string | undefined): string {
+  private sortableTableDateIncludingTime(dateString: string | undefined, timeString: string | undefined): string {
     if (!dateString) return ''
     const date = new Date(dateString)
-    return Number.isNaN(date.getTime()) ? dateString : date.getTime().toString()
+    if (Number.isNaN(date.getTime())) return dateString
+
+    const times = [...(timeString?.matchAll(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)\b/gi) ?? [])]
+    const [startTime, endTime] = times
+    if (!startTime) return date.getTime().toString()
+
+    const [, hours, minutes = '0', meridiem] = startTime
+    const hoursIn24HourFormat = (Number(hours) % 12) + (meridiem.toLowerCase() === 'pm' ? 12 : 0)
+    date.setHours(hoursIn24HourFormat, Number(minutes), 0, 0)
+
+    if (!endTime) return date.getTime().toString()
+
+    const [, endHours, endMinutes = '0', endMeridiem] = endTime
+    const endTimeInMinutes =
+      ((Number(endHours) % 12) + (endMeridiem.toLowerCase() === 'pm' ? 12 : 0)) * 60 + Number(endMinutes)
+    return (date.getTime() + endTimeInMinutes / 1440).toString()
   }
 
   private scheduleSessionHref(moduleSession: ProgrammeGroupModuleSessionsResponseGroupModule) {
