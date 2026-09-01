@@ -5,9 +5,9 @@ import ModalDialog from './modelTimeOutDialog.js'
 govukFrontend.initAll()
 mojFrontend.initAll()
 
-// Keep excluded (restricted) referrals pinned to the bottom of the caselist sortable table,
-// regardless of which column/direction the user sorts by. The MOJ component re-sorts the
-// tbody on load and on every header click, so we re-pin after each sort.
+// Keep excluded (restricted) referrals pinned to the bottom of the sortable tables (caselist,
+// group allocations and waitlist), regardless of which column/direction the user sorts by. The MOJ
+// component re-sorts the tbody on load and on every header click, so we re-pin after each sort.
 const pinExcludedRowsToBottom = table => {
   const tbody = table.querySelector('tbody')
   if (!tbody) return
