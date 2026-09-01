@@ -10,10 +10,27 @@ import config from '../config'
  * N52 Is West Midlands
  * N50 Is Greater Manchester
  * N58 Is South West
+ * N07 Is London
+ * N03 Is Wales
+ * N55 Is Yorkshire and the Humber
+ * N51 Is North West
  * Full region code mapping can be found at:
  * https://dsdmoj.atlassian.net/wiki/spaces/IC/pages/6027477185/Interventions+Manager+Data+Migration+Strategy#2.-Phased-out-Data-Migration
  */
-export const ALLOWED_REGIONS: string[] = ['N53', 'N54', 'N57', 'N59', 'N56', 'N52', 'N50', 'N58']
+export const ALLOWED_REGIONS: string[] = [
+  'N53',
+  'N54',
+  'N57',
+  'N59',
+  'N56',
+  'N52',
+  'N50',
+  'N58',
+  'N07',
+  'N03',
+  'N55',
+  'N51',
+]
 
 /**
  * For info:
