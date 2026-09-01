@@ -56,12 +56,14 @@ export default class AddSessionDetailsView {
           name: 'hour',
           value: this.presenter.fields.startTime?.hour.value,
           label: 'Hour',
+          attributes: { maxlength: '2' },
         },
         {
           classes: `govuk-input--width-2${this.presenter.fields.startTime?.minute.hasError ? ' govuk-input--error' : ''}`,
           name: 'minute',
           value: this.presenter.fields.startTime?.minute.value,
           label: 'Minute',
+          attributes: { maxlength: '2' },
         },
       ],
       select: {
@@ -103,12 +105,14 @@ export default class AddSessionDetailsView {
           name: 'hour',
           value: this.presenter.fields.endTime?.hour.value,
           label: 'Hour',
+          attributes: { maxlength: '2' },
         },
         {
           classes: `govuk-input--width-2${this.presenter.fields.endTime?.minute.hasError ? ' govuk-input--error' : ''}`,
           name: 'minute',
           value: this.presenter.fields.endTime?.minute.value,
           label: 'Minute',
+          attributes: { maxlength: '2' },
         },
       ],
       select: {
