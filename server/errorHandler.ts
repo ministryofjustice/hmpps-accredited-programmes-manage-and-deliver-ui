@@ -5,10 +5,16 @@ import { buildPrimaryNavigationArgs } from './shared/routes/primaryNavigation'
 
 type ErrorPageContent = {
   heading: string
+  subheading?: string
   body: string
 }
 
 const errorPageContentByStatus: Record<number, ErrorPageContent> = {
+  401: {
+    heading: 'You cannot access this referral',
+    subheading: '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>',
+    body: '<p>Access to this person’s record is restricted in NDelius. Speak to your Programme Manager for more information.</p>',
+  },
   404: {
     heading: 'Page not found',
     body: '<p>If you typed the web address, check it is correct.</p><p>If you pasted the web address, check you copied the entire address.</p>',
