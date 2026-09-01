@@ -6,10 +6,26 @@
  * N52 Is West Midlands
  * N50 Is Greater Manchester
  * N58 Is South West
+ * London: N07
+ * Wales: N03
+ * Yorkshire and the Humber: N55
+ * North West: N51
  * CreateGroupFormTest.test.ts also needs to be updated to reflect the change to the region
  */
 
-export const ALLOWED_PAST_DATE_REGIONS: string[] = ['N54', 'N57', 'N59', 'N56', 'N52', 'N50', 'N58']
+export const ALLOWED_PAST_DATE_REGIONS: string[] = [
+  'N54',
+  'N57',
+  'N59',
+  'N56',
+  'N52',
+  'N50',
+  'N58',
+  'N07',
+  'N03',
+  'N55',
+  'N51',
+]
 
 /**
  * Checks if the region restriction for past dates is enabled.
