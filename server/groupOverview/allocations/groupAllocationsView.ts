@@ -70,6 +70,7 @@ export default class GroupAllocationsView {
       captionClasses: this.presenter.tableCaptionClass,
       attributes: {
         'data-module': 'moj-sortable-table',
+        'data-caselist-table': 'true',
       },
       classes: this.presenter.section === GroupAllocationsPageSection.Allocated ? 'allocated' : '',
       head: this.presenter.generateTableHeadings(),

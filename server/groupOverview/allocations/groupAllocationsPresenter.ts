@@ -1,4 +1,4 @@
-import { CohortEnum, PageGroupItem, ProgrammeGroupAllocations } from '@manage-and-deliver-api'
+import { CohortEnum, GroupItem, PageGroupItem, ProgrammeGroupAllocations } from '@manage-and-deliver-api'
 import GroupServiceLayoutPresenter, {
   GroupServiceNavigationValues,
 } from '../../shared/groups/groupServiceLayoutPresenter'
@@ -133,9 +133,16 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
 
   private referralHref = (id: string) => `/referral-details/${encodeURIComponent(id)}/personal-details`
 
+  private sortExcludedToBottom(content: GroupItem[]): GroupItem[] {
+    if (!config.enable_excluded_referrals) {
+      return content
+    }
+    return [...content].sort((a, b) => Number(Boolean(a.isExcluded)) - Number(Boolean(b.isExcluded)))
+  }
+
   generateWaitlistTableArgs() {
-    const rows = this.group.pagedGroupData.content
-    const out: ({ html: string } | { text: string })[][] = []
+    const rows = this.sortExcludedToBottom(this.group.pagedGroupData.content)
+    const out: ({ html: string; attributes?: Record<string, string> } | { text: string })[][] = []
     const excludedReferralsEnabled = config.enable_excluded_referrals
     rows.forEach(member => {
       const isExcluded = excludedReferralsEnabled && Boolean(member.isExcluded)
@@ -149,6 +156,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
                     </label>
                   </div>
                  </div>${isExcluded ? '<span class="govuk-visually-hidden">Add to group: restricted access - you cannot add this person to the group</span>' : ''}`,
+          ...(isExcluded ? { attributes: { 'data-excluded': 'true' } } : {}),
         },
         {
           html: !isExcluded
@@ -187,8 +195,8 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
   }
 
   generateAllocatedTableArgs() {
-    const rows = this.group.pagedGroupData.content
-    const out: ({ html: string } | { text: string })[][] = []
+    const rows = this.sortExcludedToBottom(this.group.pagedGroupData.content)
+    const out: ({ html: string; attributes?: Record<string, string> } | { text: string })[][] = []
     const excludedReferralsEnabled = config.enable_excluded_referrals
 
     rows.forEach(member => {
@@ -203,6 +211,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
                     </label>
                   </div>
                  </div>${isExcluded ? '<span class="govuk-visually-hidden">Remove from group: restricted access - you cannot remove this person from the group</span>' : ''}`,
+          ...(isExcluded ? { attributes: { 'data-excluded': 'true' } } : {}),
         },
         {
           html: !isExcluded

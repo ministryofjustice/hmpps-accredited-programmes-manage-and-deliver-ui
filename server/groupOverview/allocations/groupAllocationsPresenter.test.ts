@@ -172,6 +172,7 @@ describe('GroupAllocationsPresenter', () => {
                     </label>
                   </div>
                  </div><span class="govuk-visually-hidden">Add to group: restricted access - you cannot add this person to the group</span>`,
+            attributes: { 'data-excluded': 'true' },
           },
           { html: `<span>X718250</span>` },
           { html: 'Restricted' },
@@ -291,6 +292,7 @@ describe('GroupAllocationsPresenter', () => {
                     </label>
                   </div>
                  </div><span class="govuk-visually-hidden">Remove from group: restricted access - you cannot remove this person from the group</span>`,
+            attributes: { 'data-excluded': 'true' },
           },
           { html: `<span>X718250</span>` },
           { html: 'Restricted' },
