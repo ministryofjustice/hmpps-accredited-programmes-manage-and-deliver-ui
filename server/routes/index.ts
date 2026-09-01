@@ -1,5 +1,6 @@
 import { type RequestHandler, Router } from 'express'
 
+import ForceStatusController from '../admin/forceStatus/forceStatusController'
 import CaselistController from '../caselist/caselistController'
 import ChangeCohortController from '../cohort/changeCohortController'
 import CreateGroupController from '../createGroup/createGroupController'
@@ -13,6 +14,7 @@ import RemoveFromGroupController from '../groupOverview/removeFromGroup/removeFr
 import LdcController from '../ldc/ldcController'
 import LocationPreferencesController from '../availabilityAndMotivation/locationPreferences/locationPreferencesController'
 import asyncMiddleware from '../middleware/asyncMiddleware'
+import authorisationMiddleware from '../middleware/authorisationMiddleware'
 import PniController from '../pni/pniController'
 import ReferralDetailsController from '../referralDetails/referralDetailsController'
 import ReportingController from '../reporting/reportingController'
@@ -62,8 +64,40 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
   const editGroupController = new EditGroupController(accreditedProgrammesManageAndDeliverService)
   const reportingController = new ReportingController(accreditedProgrammesManageAndDeliverService)
   const onboardingController = new OnboardingController(accreditedProgrammesManageAndDeliverService)
+  const forceStatusController = new ForceStatusController(accreditedProgrammesManageAndDeliverService)
 
   // const reportingRole = 'ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_REPORTING'
+  const adminWriteRole = 'ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ADMIN_WR'
+
+  router
+    .route('/admin/force-status')
+    .get(
+      authorisationMiddleware([adminWriteRole]),
+      asyncMiddleware(async (req, res) => {
+        await forceStatusController.showLookupReferralPage(req, res)
+      }),
+    )
+    .post(
+      authorisationMiddleware([adminWriteRole]),
+      asyncMiddleware(async (req, res) => {
+        await forceStatusController.showLookupReferralPage(req, res)
+      }),
+    )
+
+  router
+    .route('/admin/force-status/:referralId')
+    .get(
+      authorisationMiddleware([adminWriteRole]),
+      asyncMiddleware(async (req, res) => {
+        await forceStatusController.showForceStatusPage(req, res)
+      }),
+    )
+    .post(
+      authorisationMiddleware([adminWriteRole]),
+      asyncMiddleware(async (req, res) => {
+        await forceStatusController.showForceStatusPage(req, res)
+      }),
+    )
 
   get('/', async (req, res, next) => {
     await homeController.showHomePage(req, res)

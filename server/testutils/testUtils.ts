@@ -1,7 +1,8 @@
 import { CaseListFilterValues } from '@manage-and-deliver-api'
 import { Request } from 'express'
 import { SessionData } from 'express-session'
-import { appWithAllRoutes } from '../routes/testutils/appSetup'
+import { HmppsUser } from '../interfaces/hmppsUser'
+import { appWithAllRoutes, user } from '../routes/testutils/appSetup'
 import type { Services } from '../services'
 import { SummaryListItem, SummaryListItemContent, SummaryListItemContentWithLdc } from '../utils/summaryList'
 
@@ -23,7 +24,11 @@ export default class TestUtils {
     return { body, session: { ...sessionData } } as Request
   }
 
-  static createTestAppWithSession(sessionData: Partial<SessionData>, services: Partial<Services>) {
+  static createTestAppWithSession(
+    sessionData: Partial<SessionData>,
+    services: Partial<Services>,
+    userSupplier: () => HmppsUser = () => user,
+  ) {
     return appWithAllRoutes({
       services: {
         ...services,
@@ -31,6 +36,7 @@ export default class TestUtils {
       sessionData: {
         ...sessionData,
       } as SessionData,
+      userSupplier,
     })
   }
 

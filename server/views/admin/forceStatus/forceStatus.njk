@@ -1,0 +1,50 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/character-count/macro.njk" import govukCharacterCount %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
+{% set pageTitle = pageTitle + " - " + applicationName %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block main %}
+{% block content %}
+    <nav aria-label="Back">
+        {{ govukBackLink({ text: "Back", href: "/admin/force-status" }) }}
+    </nav>
+    <main class="govuk-main-wrapper" id="main-content">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                {% if successBanner %}
+                    {{ govukNotificationBanner(successBanner) }}
+                {% endif %}
+                {% if errorSummary !== null %}
+                    {{ govukErrorSummary(errorSummary) }}
+                {% endif %}
+                <h1 class="govuk-heading-l">Force-update referral status</h1>
+                <p class="govuk-body">CRN: <strong>{{ formData.crn }}</strong></p>
+                {% if currentStatusTagOptions %}
+                    <p class="govuk-body">Current status: {{ govukTag(currentStatusTagOptions) }}</p>
+                {% endif %}
+                {{ govukWarningText({
+                    text: "This bypasses the normal referral status transition rules. Only use it to correct a referral that is genuinely out of sync, for example with nDelius.",
+                    iconFallbackText: "Warning"
+                }) }}
+                <form method="post" novalidate>
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                    {{ govukRadios(statusRadiosArgs) }}
+                    {{ govukCharacterCount(moreDetailsArgs) }}
+                    <div class="govuk-button-group">
+                        {{ govukButton({ text: "Force-update status", preventDoubleClick: true }) }}
+                        <a class="govuk-link" href="/admin/force-status">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+{% endblock %}

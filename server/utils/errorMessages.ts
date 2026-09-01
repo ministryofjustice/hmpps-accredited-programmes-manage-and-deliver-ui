@@ -64,6 +64,12 @@ export default {
     transitionChanged: `The referral status has changed since this page was loaded. Review the current status and choose again.`,
     invalidTransition: `That referral status change is no longer allowed. Review the current status and choose again.`,
   },
+  forceStatus: {
+    referralIdEmpty: 'Enter a referral ID',
+    referralIdInvalid: 'Enter a referral ID in the correct format',
+    newStatusEmpty: 'Select the new referral status',
+    detailsTooLong: 'Details must be 500 characters or fewer',
+  },
   addToGroup: {
     selectAPerson: "Select the button next to a person's name to add them to the group",
     addToGroupEmpty: `Select whether you want to add the person to the group or not`,

@@ -29,6 +29,7 @@ import {
   EmotionalWellbeing,
   FetchPersonalDetailsRequest,
   FetchPersonalDetailsResponse,
+  ForceStatusFormData,
   Group,
   GroupDetailsResponse,
   GroupsByRegion,
@@ -65,6 +66,7 @@ import {
   SessionAttendance,
   SessionNotes,
   SessionScheduleResponse,
+  StatusUpdateResponse,
   ThinkingAndBehaviour,
   UpdateAvailability,
   UpdateGroupRequest,
@@ -578,6 +580,27 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
       headers: { Accept: 'application/json' },
       data: updatedStatus,
     })) as { referralStatusHistory: ReferralStatusHistory; message: string }
+  }
+
+  async getForceStatusFormData(username: string, referralId: string): Promise<ForceStatusFormData> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.get({
+      path: `/admin/referral/${referralId}/force-status`,
+      headers: { Accept: 'application/json' },
+    })) as ForceStatusFormData
+  }
+
+  async forceUpdateStatus(
+    username: string,
+    referralId: string,
+    updatedStatus: CreateReferralStatusHistory,
+  ): Promise<StatusUpdateResponse> {
+    const restClient = await this.createRestClientFromUsername(username)
+    return (await restClient.post({
+      path: `/admin/referral/${referralId}/force-status`,
+      headers: { Accept: 'application/json' },
+      data: updatedStatus,
+    })) as StatusUpdateResponse
   }
 
   async addToGroup(

@@ -47,6 +47,16 @@ type ReferralStatusTransitions = components['schemas']['ReferralStatusTransition
 type RemoveFromGroupReferralStatusTransitions = components['schemas']['RemoveReferralFromGroupStatusTransitions']
 type CreateReferralStatusHistory = components['schemas']['CreateReferralStatusHistory']
 type ReferralStatus = components['schemas']['ReferralStatus']
+type StatusUpdateResponse = components['schemas']['StatusUpdateResponse']
+// Hand-written: the admin force-status GET endpoint is new and hasn't been regenerated into ./imported/index.d.ts
+// yet. Once the API change is deployed, run `./script/generateApiTypes/manageAndDeliverApiTypes` and replace this
+// with `components['schemas']['ForceStatusFormData']`.
+interface ForceStatusFormData {
+  referralId: string
+  crn: string
+  currentStatus: ReferralStatus | null
+  availableStatuses: ReferralStatus[]
+}
 type CaseListFilterValues = components['schemas']['CaseListFilterValues']
 type ReferralStatusHistory = components['schemas']['ReferralStatusHistory']
 type LocationFilterValues = components['schemas']['LocationFilterValues']
@@ -140,6 +150,7 @@ export type {
   ExistingDeliveryLocationPreferences,
   FetchPersonalDetailsRequest,
   FetchPersonalDetailsResponse,
+  ForceStatusFormData,
   Group,
   GroupDetailsResponse,
   GroupItem,
@@ -196,6 +207,7 @@ export type {
   SessionScheduleResponse,
   SessionScheduleType,
   SessionTime,
+  StatusUpdateResponse,
   ThinkingAndBehaviour,
   UpdateAvailability,
   UpdateGroupRequest,
