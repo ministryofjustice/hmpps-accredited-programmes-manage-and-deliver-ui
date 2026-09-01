@@ -64,6 +64,14 @@ function appSetup(
   app.get('/route-that-throws-500', (req, res, next) => {
     next(new Error('Test 500 error'))
   })
+  app.get('/route-that-returns-401', (req, res, next) => {
+    const error = Object.assign(new Error('Unauthorized'), { status: 401 }) as HTTPError
+    next(error)
+  })
+  app.get('/route-that-returns-403', (req, res, next) => {
+    const error = Object.assign(new Error('Forbidden'), { status: 403 }) as HTTPError
+    next(error)
+  })
   app.get('/route-that-returns-503', (req, res, next) => {
     const error = Object.assign(new Error('Service Unavailable'), { status: 503 }) as HTTPError
     next(error)
