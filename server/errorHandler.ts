@@ -10,7 +10,7 @@ type ErrorPageContent = {
 }
 
 const errorPageContentByStatus: Record<number, ErrorPageContent> = {
-  401: {
+  403: {
     heading: 'You cannot access this referral',
     subheading: '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>',
     body: '<p>Access to this person’s record is restricted in NDelius. Speak to your Programme Manager for more information.</p>',
@@ -35,14 +35,14 @@ const fallbackErrorPageContent: ErrorPageContent = {
   body: 'Try again later.',
 }
 
-const hideDebugDetailsForStatuses = new Set([400, 404, 500, 503])
+const hideDebugDetailsForStatuses = new Set([400, 403, 404, 500, 503])
 const hideNavigationForStatuses = new Set([503])
 
 export default function createErrorHandler(production: boolean) {
   return (error: HTTPError, req: Request, res: Response, next: NextFunction): void => {
     logger.error(`Error handling request for '${req.originalUrl}', user '${res.locals.user?.username}'`, error)
 
-    if (error.status === 401 || error.status === 403) {
+    if (error.status === 401) {
       logger.info('Logging user out')
       return res.redirect('/sign-out')
     }
@@ -53,6 +53,7 @@ export default function createErrorHandler(production: boolean) {
 
     res.locals.pageTitle = pageContent.heading
     res.locals.heading = pageContent.heading
+    res.locals.subheading = pageContent.subheading
     res.locals.body = pageContent.body
     res.locals.primaryNavigationArgs = hideNavigationForStatuses.has(status)
       ? null
