@@ -28,6 +28,28 @@ describe('GET 404', () => {
   })
 })
 
+describe('GET 401', () => {
+  it('should sign the user out', () => {
+    return request(app).get('/route-that-returns-401').expect(302).expect('Location', '/sign-out')
+  })
+})
+
+describe('GET 403', () => {
+  it('should render the restricted referral page with user friendly error message shown', () => {
+    return request(app)
+      .get('/route-that-returns-403')
+      .expect(403)
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain('You cannot access this referral')
+        expect(res.text).toContain('RESTRICTED ACCESS')
+        expect(res.text).toContain('Access to this person’s record is restricted in NDelius.')
+        expect(res.text).not.toContain('Forbidden')
+        expect(res.text).toContain('Case list')
+      })
+  })
+})
+
 describe('GET 500', () => {
   it('should render 500 heading and body without debug details but with navigation', () => {
     return request(app)
