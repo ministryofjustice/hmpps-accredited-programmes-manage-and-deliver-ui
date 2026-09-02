@@ -87,7 +87,9 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
   }
 
   private moduleContent(moduleSession: ProgrammeGroupModuleSessionsResponseGroupModule) {
-    const sessions = Array.isArray(moduleSession.sessions) ? moduleSession.sessions : []
+    const sessions = Array.isArray(moduleSession.sessions)
+      ? [...moduleSession.sessions].sort((a, b) => this.compareSessionsForDisplayOrder(a, b))
+      : []
 
     const sessionsHtml =
       sessions.length > 0
@@ -137,6 +139,30 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
     }
 
     return `<p class="govuk-body"><strong>${moduleSession.startDateText.estimatedStartDateText}:</strong> ${moduleSession.startDateText.sessionStartDate}</p>`
+  }
+
+  // sharing the same date/start/end time keep this order (group, then one-to-one, then
+  // catch-up, then alphabetically) whichever direction the date column is sorted in.
+  private compareSessionsForDisplayOrder(
+    sessionA: ProgrammeGroupModuleSessionsResponseGroupSession,
+    sessionB: ProgrammeGroupModuleSessionsResponseGroupSession,
+  ): number {
+    const dateTimeA = Number(this.sortableTableDateIncludingTime(sessionA.dateOfSession, sessionA.timeOfSession))
+    const dateTimeB = Number(this.sortableTableDateIncludingTime(sessionB.dateOfSession, sessionB.timeOfSession))
+    const dateTimeDifference =
+      (Number.isFinite(dateTimeA) ? dateTimeA : Number.POSITIVE_INFINITY) -
+      (Number.isFinite(dateTimeB) ? dateTimeB : Number.POSITIVE_INFINITY)
+    if (dateTimeDifference !== 0) return dateTimeDifference
+
+    const typeRankDifference = this.sessionTypeRank(sessionA) - this.sessionTypeRank(sessionB)
+    if (typeRankDifference !== 0) return typeRankDifference
+
+    return (sessionA.name || '').localeCompare(sessionB.name || '')
+  }
+
+  private sessionTypeRank(session: ProgrammeGroupModuleSessionsResponseGroupSession): number {
+    if (this.isCatchupSession(session)) return 2
+    return session.type?.toLowerCase().includes('group') ? 0 : 1
   }
 
   private sessionTableRow(session: ProgrammeGroupModuleSessionsResponseGroupSession): string {
