@@ -1,11 +1,12 @@
-import AddSessionDetailsView from './addSessionDetailsView'
+import EditSessionDateAndTimeView from './editSessionDateAndTimeView'
 
 describe('time input fields', () => {
-  it('limits hour and minute values to two digits in session details inputs', () => {
+  it('limits hour and minute values to two digits in edit session inputs', () => {
     const presenter = {
       backLinkUri: '/back',
+      pageTitle: 'Edit the session date and time',
+      text: {},
       isGroupSession: false,
-      isCatchUpSession: false,
       fields: {
         sessionDate: { errorMessage: null, value: '01/01/2026' },
         startTime: {
@@ -21,9 +22,9 @@ describe('time input fields', () => {
           partOfDay: { hasError: false, value: 'PM' },
         },
       },
-    } as unknown as ConstructorParameters<typeof AddSessionDetailsView>[0]
+    } as unknown as ConstructorParameters<typeof EditSessionDateAndTimeView>[0]
 
-    const view = new AddSessionDetailsView(presenter)
+    const view = new EditSessionDateAndTimeView(presenter)
 
     expect(view.startTimeInputArgs.items).toEqual(
       expect.arrayContaining([
