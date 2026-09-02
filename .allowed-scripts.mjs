@@ -6,7 +6,7 @@ export default configureAllowedScripts({
     'node_modules/fsevents@2.3.3': 'ALLOW',
     'node_modules/unrs-resolver@1.12.2': 'ALLOW',
     'node_modules/@parcel/watcher@2.6.0': 'ALLOW',
-    'node_modules/cypress@15.21.0': 'ALLOW',
+    'node_modules/cypress@15.21.1': 'ALLOW',
     'node_modules/esbuild@0.28.2': 'ALLOW',
   },
 })
