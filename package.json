@@ -184,7 +184,7 @@
       "esbuild": "$esbuild"
     },
     "mocha": {
-      "serialize-javascript": "7.1.0"
+      "serialize-javascript": "7.1.1"
     },
     "diff": "9.0.0",
     "uuid": "14.0.2",
