@@ -73,6 +73,7 @@ type ProgrammeGroupModuleSessionsResponseGroupModule =
   components['schemas']['ProgrammeGroupModuleSessionsResponseGroupModule']
 type ProgrammeGroupModuleSessionsResponseGroupSession =
   components['schemas']['ProgrammeGroupModuleSessionsResponse']['ProgrammeGroupModuleSessionsResponseGroupModule']['ProgrammeGroupModuleSessionsResponseGroupSession']
+type Participant = components['schemas']['Participant']
 type ScheduleSessionTypeResponse = components['schemas']['ScheduleSessionTypeResponse']
 type ScheduleIndividualSessionDetailsResponse = components['schemas']['ScheduleIndividualSessionDetailsResponse']
 type ScheduleSessionRequest = components['schemas']['ScheduleSessionRequest']
@@ -155,6 +156,7 @@ export type {
   OffenceAnalysis,
   OffenceHistory,
   PageGroup,
+  Participant,
   PersonalDetails,
   PniScore,
   PreferredDeliveryLocation,
