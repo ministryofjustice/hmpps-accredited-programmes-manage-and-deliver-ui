@@ -40,7 +40,7 @@ export default class EditSessionAttendeesPresenter {
 
   generateAttendeeRadioOptions(): RadiosArgsItem[] {
     return this.sortGroupMembersByExcluded().map(attendee => ({
-      html: `${this.isExcludedMember(attendee) ? `${attendee.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p>You cannot edit whether a restricted participant should attend the session.</p>` : `${attendee.name} (${attendee.crn})`}`,
+      html: `${this.isExcludedMember(attendee) ? `${attendee.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot edit whether a restricted participant should attend the session.</p>` : `${attendee.name} (${attendee.crn})`}`,
       value: attendee.referralId,
       checked: attendee.currentlyAttending === true,
       disabled: this.isExcludedMember(attendee),
@@ -49,7 +49,7 @@ export default class EditSessionAttendeesPresenter {
 
   generateAttendeeCheckboxOptions(): CheckboxesArgsItem[] {
     return this.sortGroupMembersByExcluded().map(attendee => ({
-      html: `${this.isExcludedMember(attendee) ? `${attendee.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p>You cannot edit whether a restricted participant should attend the session.</p>` : `${attendee.name} (${attendee.crn})`}`,
+      html: `${this.isExcludedMember(attendee) ? `${attendee.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot edit whether a restricted participant should attend the session.</p>` : `${attendee.name} (${attendee.crn})`}`,
       value: `${attendee.referralId} + ${this.isExcludedMember(attendee) ? attendee.crn : attendee.name}`,
       checked: attendee.currentlyAttending === true,
       disabled: this.isExcludedMember(attendee),

@@ -77,7 +77,7 @@ export default class AddSessionDetailsPresenter {
     const hasSelectedValues = selectedValue && selectedValue.length > 0
 
     return this.sortGroupMembersByExcluded().map(member => ({
-      html: `${this.isExcludedMember(member) ? `${member.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p>You cannot add a restricted participant to the session.</p>` : `${member.name} (${member.crn})`}`,
+      html: `${this.isExcludedMember(member) ? `${member.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot add a restricted participant to the session.</p>` : `${member.name} (${member.crn})`}`,
       value: `${member.referralId} + ${this.isExcludedMember(member) ? member.crn : member.name}`,
       checked: hasSelectedValues ? selectedValue.includes(member.referralId) : false,
       disabled: this.isExcludedMember(member),
@@ -88,7 +88,7 @@ export default class AddSessionDetailsPresenter {
     const hasSelectedValues = selectedValue && selectedValue.length > 0
 
     return this.sortGroupMembersByExcluded().map(member => ({
-      html: `${this.isExcludedMember(member) ? `${member.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p>You cannot add a restricted participant to the session.</p>` : `${member.name} (${member.crn})`}`,
+      html: `${this.isExcludedMember(member) ? `${member.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot add a restricted participant to the session.</p>` : `${member.name} (${member.crn})`}`,
       value: `${member.referralId} + ${this.isExcludedMember(member) ? member.crn : member.name}`,
       checked: hasSelectedValues ? selectedValue.includes(member.referralId) : false,
       disabled: this.isExcludedMember(member),

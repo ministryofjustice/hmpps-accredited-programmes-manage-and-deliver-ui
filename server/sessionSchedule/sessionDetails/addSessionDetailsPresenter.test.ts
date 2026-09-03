@@ -64,7 +64,7 @@ describe('AddSessionDetailsPresenter', () => {
 
       expect(presenter.generateSessionAttendeesRadioOptions([])).toEqual([
         {
-          html: 'X12345<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p>You cannot add a restricted participant to the session.</p>',
+          html: 'X12345<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot add a restricted participant to the session.</p>',
           value: 'ref1 + X12345',
           checked: false,
           disabled: true,
@@ -109,7 +109,7 @@ describe('AddSessionDetailsPresenter', () => {
 
       expect(presenter.generateSessionAttendeesCheckboxOptions([])).toEqual([
         {
-          html: 'X12345<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p>You cannot add a restricted participant to the session.</p>',
+          html: 'X12345<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot add a restricted participant to the session.</p>',
           value: 'ref1 + X12345',
           checked: false,
           disabled: true,
