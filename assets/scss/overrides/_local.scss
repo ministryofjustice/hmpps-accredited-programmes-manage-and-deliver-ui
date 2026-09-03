@@ -243,3 +243,10 @@
 .group-sub-nav {
   margin-top: -30px;
 }
+
+.govuk-radios__label,
+.govuk-checkboxes__label {
+  &:has(.moj-badge) {
+    padding: 0 15px;
+  }
+}

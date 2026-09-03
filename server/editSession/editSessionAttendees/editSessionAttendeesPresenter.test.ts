@@ -29,7 +29,7 @@ const buildSessionAttendees = (
 })
 
 const restrictedBadge = (crn: string): string =>
-  `${crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p>You cannot edit whether a restricted participant should attend the session.</p>`
+  `${crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot edit whether a restricted participant should attend the session.</p>`
 
 describe('EditSessionAttendeesPresenter', () => {
   const groupId = 'group-123'

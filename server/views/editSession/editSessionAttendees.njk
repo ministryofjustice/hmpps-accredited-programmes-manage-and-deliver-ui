@@ -8,7 +8,8 @@
 {% set pageTitle = pageTitle + " - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
 
-{% block content %}
+{% block main %}
+  {% block content %}
 <div class="govuk-width-container">
   <main class="govuk-main-wrapper" id="main-content">
     <div class="govuk-grid-row">
@@ -39,4 +40,5 @@
   </main>
 </div>
 
+  {% endblock %}
 {% endblock %}
