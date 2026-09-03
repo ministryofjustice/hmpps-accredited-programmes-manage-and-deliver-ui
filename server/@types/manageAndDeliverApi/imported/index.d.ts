@@ -3406,9 +3406,9 @@ export interface components {
       sort?: components['schemas']['SortObject']
       /** Format: int32 */
       pageSize?: number
-      paged?: boolean
       /** Format: int32 */
       pageNumber?: number
+      paged?: boolean
       unpaged?: boolean
     }
     ReferralCaseListItem: {
@@ -4274,6 +4274,28 @@ export interface components {
       /** @description Contains pdu's with a list of their reporting teams */
       locationFilters: components['schemas']['LocationFilterValues'][]
     }
+    Participant: {
+      /**
+       * @description The name of the participant
+       * @example John Doe
+       */
+      name: string
+      /**
+       * @description The CRN of the participant
+       * @example X12345
+       */
+      crn?: string | null
+      /**
+       * @description A flag denoting whether the person is a limited access offender
+       * @example true
+       */
+      isLimitedAccessOffender?: boolean | null
+      /**
+       * @description A flag denoting whether the logged in user is excluded from viewing this person
+       * @example false
+       */
+      isExcluded?: boolean | null
+    }
     ProgrammeGroupModuleSessionsResponse: {
       /** @description group details */
       group: components['schemas']['ProgrammeGroupModuleSessionsResponseGroup']
@@ -4367,14 +4389,8 @@ export interface components {
        * @example 11am to Midday
        */
       timeWithCapitalisedMidday: string
-      /**
-       * @description The names of the participants in the session
-       * @example [
-       *       "John Doe",
-       *       "Jane Smith"
-       *     ]
-       */
-      participants: string[]
+      /** @description The list of participants in the session */
+      participants: components['schemas']['Participant'][]
       /**
        * @description The names of the facilitators in the session
        * @example [

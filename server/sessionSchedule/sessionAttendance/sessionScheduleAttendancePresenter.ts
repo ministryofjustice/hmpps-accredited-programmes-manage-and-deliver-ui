@@ -1,4 +1,5 @@
 import {
+  Participant,
   ProgrammeGroupModuleSessionsResponse,
   ProgrammeGroupModuleSessionsResponseGroupModule,
   ProgrammeGroupModuleSessionsResponseGroupSession,
@@ -140,7 +141,9 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
   }
 
   private sessionTableRow(session: ProgrammeGroupModuleSessionsResponseGroupSession): string {
-    const participants = session.participants?.length ? session.participants.join('<br/> ') : ''
+    const participants = session.participants?.length
+      ? session.participants.map((participant: Participant) => participant.name).join('<br/> ')
+      : ''
     const facilitators = session.facilitators?.length
       ? session.facilitators.join('<span class="govuk-!-display-block govuk-!-margin-bottom-1"></span>')
       : ''
