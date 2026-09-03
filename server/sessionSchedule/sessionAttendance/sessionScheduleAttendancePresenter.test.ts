@@ -180,6 +180,59 @@ describe('SessionScheduleAttendancePresenter', () => {
       expect(content).toContain(`data-sort-value="${afternoonSession.getTime() + 930 / 1440}"`)
     })
 
+    it('orders sessions with identical date/start/end times as group, then one-to-one, then catch-up, then alphabetically', () => {
+      const tiedSessions = {
+        ...mockGroupSessionsData,
+        modules: [
+          {
+            ...mockGroupSessionsData.modules![0],
+            sessions: [
+              {
+                ...mockGroupSessionsData.modules![0].sessions![0],
+                name: 'Zebra catch-up',
+                type: 'One-to-one',
+                isCatchup: true,
+                dateOfSession: '15 March 2025',
+                timeOfSession: '9:30am to 11:00am',
+              },
+              {
+                ...mockGroupSessionsData.modules![0].sessions![0],
+                name: 'Apple catch-up',
+                type: 'One-to-one',
+                isCatchup: true,
+                dateOfSession: '15 March 2025',
+                timeOfSession: '9:30am to 11:00am',
+              },
+              {
+                ...mockGroupSessionsData.modules![0].sessions![0],
+                name: 'One-to-one session',
+                type: 'One-to-one',
+                isCatchup: false,
+                dateOfSession: '15 March 2025',
+                timeOfSession: '9:30am to 11:00am',
+              },
+              {
+                ...mockGroupSessionsData.modules![0].sessions![0],
+                name: 'Group session',
+                type: 'Group',
+                isCatchup: false,
+                dateOfSession: '15 March 2025',
+                timeOfSession: '9:30am to 11:00am',
+              },
+            ],
+          },
+        ],
+      }
+      const presenter = new SessionScheduleAttendancePresenter(groupId, tiedSessions)
+      const content = presenter.getAccordionItems()[0].content.html
+
+      const orderedNames = ['Group session', 'One-to-one session', 'Apple catch-up', 'Zebra catch-up']
+      const positions = orderedNames.map(name => content.indexOf(name))
+
+      expect(positions).toEqual([...positions].sort((a, b) => a - b))
+      expect(positions.every(position => position !== -1)).toBe(true)
+    })
+
     it('renders the new scheduled caption with the left-aligned class', () => {
       const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
       const accordionItems = presenter.getAccordionItems()
@@ -803,7 +856,7 @@ describe('SessionScheduleAttendancePresenter', () => {
                 participants: ['John Doe', 'Jane Smith', 'Bob Brown'],
                 dateOfSession: '1 June 2025',
                 timeOfSession: '10:00am to 12:00pm',
-                timeWithCapitalisedMidday: '10:00am to Midday',
+                timeWithCapitalisedMidday: '10:00am to midday',
                 facilitators: ['Facilitator 3'],
               },
             ],
