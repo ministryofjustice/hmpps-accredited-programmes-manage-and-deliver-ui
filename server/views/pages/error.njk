@@ -4,7 +4,7 @@
 
 {% block content %}
 
-  <h1 class="govuk-heading-l{% if status == 403 %} govuk-!-margin-bottom-2{% endif %}">
+  <h1 class="govuk-heading-l{% if status == 403 %} govuk-!-margin-bottom-2{% endif %}">{{ heading }}</h1>
   {% if subheading %}
     <div class="govuk-body">{{ subheading | safe }}</div>
   {% endif %}
