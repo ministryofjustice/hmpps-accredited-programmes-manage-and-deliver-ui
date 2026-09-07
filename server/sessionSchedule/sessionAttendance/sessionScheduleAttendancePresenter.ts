@@ -208,9 +208,9 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
       const participant = session.participants[0]
       return `
     <tr class="govuk-table__row">
-      <td class="govuk-table__cell" data-excluded="true">${participant.crn}<br><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span></td>
+      <td class="govuk-table__cell" data-excluded="true">${participant.crn ?? ''}<br><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span></td>
       <td class="govuk-table__cell">${this.isCatchupSession(session) ? 'Catch-up' : session.type || ''}</td>
-      <td class="govuk-table__cell">${participant.crn}</td>
+      <td class="govuk-table__cell">${participant.crn ?? ''}</td>
       <td class="govuk-table__cell" data-sort-value="${dateSortValue}">Restricted</td>
       <td class="govuk-table__cell">Restricted</td>
       <td class="govuk-table__cell">Restricted</td>
