@@ -180,6 +180,121 @@ describe('SessionScheduleAttendancePresenter', () => {
       expect(content).toContain(`data-sort-value="${afternoonSession.getTime() + 930 / 1440}"`)
     })
 
+    it('orders sessions with identical date/start/end times as group, then catch-up, then alphabetically', () => {
+      const tiedSessions = {
+        ...mockGroupSessionsData,
+        modules: [
+          {
+            ...mockGroupSessionsData.modules![0],
+            sessions: [
+              {
+                ...mockGroupSessionsData.modules![0].sessions![0],
+                name: 'Zebra catch-up',
+                type: 'Group',
+                isCatchup: true,
+                dateOfSession: '15 March 2025',
+                timeOfSession: '9:30am to 11:00am',
+              },
+              {
+                ...mockGroupSessionsData.modules![0].sessions![0],
+                name: 'Apple catch-up',
+                type: 'Group',
+                isCatchup: true,
+                dateOfSession: '15 March 2025',
+                timeOfSession: '9:30am to 11:00am',
+              },
+              {
+                ...mockGroupSessionsData.modules![0].sessions![0],
+                name: 'One-to-one session',
+                type: 'One-to-one',
+                isCatchup: false,
+                dateOfSession: '15 March 2025',
+                timeOfSession: '9:30am to 11:00am',
+              },
+              {
+                ...mockGroupSessionsData.modules![0].sessions![0],
+                name: 'Group session',
+                type: 'Group',
+                isCatchup: false,
+                dateOfSession: '15 March 2025',
+                timeOfSession: '9:30am to 11:00am',
+              },
+            ],
+          },
+        ],
+      }
+      const presenter = new SessionScheduleAttendancePresenter(groupId, tiedSessions)
+      const content = presenter.getAccordionItems()[0].content.html
+
+      const orderedNames = ['Group session', 'Apple catch-up', 'Zebra catch-up', 'One-to-one session']
+      const positions = orderedNames.map(name => content.indexOf(name))
+
+      expect(positions).toEqual([...positions].sort((a, b) => a - b))
+      expect(positions.every(position => position !== -1)).toBe(true)
+    })
+
+    it('keeps a group session together with its own catch-up, ahead of other groups, with individuals last regardless of date', () => {
+      const mixedFamilySessions = {
+        ...mockGroupSessionsData,
+        modules: [
+          {
+            ...mockGroupSessionsData.modules![0],
+            sessions: [
+              {
+                ...mockGroupSessionsData.modules![0].sessions![0],
+                name: 'Individual session (earliest date)',
+                number: 3,
+                type: 'One-to-one',
+                isCatchup: false,
+                dateOfSession: '1 March 2025',
+                timeOfSession: '9:30am to 11:00am',
+              },
+              {
+                ...mockGroupSessionsData.modules![0].sessions![0],
+                name: 'Group session B',
+                number: 2,
+                type: 'Group',
+                isCatchup: false,
+                dateOfSession: '10 March 2025',
+                timeOfSession: '9:30am to 11:00am',
+              },
+              {
+                ...mockGroupSessionsData.modules![0].sessions![0],
+                name: 'Group session A catch-up',
+                number: 1,
+                type: 'Group',
+                isCatchup: true,
+                dateOfSession: '25 March 2025',
+                timeOfSession: '9:30am to 11:00am',
+              },
+              {
+                ...mockGroupSessionsData.modules![0].sessions![0],
+                name: 'Group session A',
+                number: 1,
+                type: 'Group',
+                isCatchup: false,
+                dateOfSession: '20 March 2025',
+                timeOfSession: '9:30am to 11:00am',
+              },
+            ],
+          },
+        ],
+      }
+      const presenter = new SessionScheduleAttendancePresenter(groupId, mixedFamilySessions)
+      const content = presenter.getAccordionItems()[0].content.html
+
+      const orderedNames = [
+        'Group session A',
+        'Group session A catch-up',
+        'Group session B',
+        'Individual session (earliest date)',
+      ]
+      const positions = orderedNames.map(name => content.indexOf(name))
+
+      expect(positions).toEqual([...positions].sort((a, b) => a - b))
+      expect(positions.every(position => position !== -1)).toBe(true)
+    })
+
     it('renders the new scheduled caption with the left-aligned class', () => {
       const presenter = new SessionScheduleAttendancePresenter(groupId, mockGroupSessionsData)
       const accordionItems = presenter.getAccordionItems()
@@ -803,7 +918,7 @@ describe('SessionScheduleAttendancePresenter', () => {
                 participants: [{ name: 'John Doe' }, { name: 'Jane Smith' }, { name: 'Bob Brown' }],
                 dateOfSession: '1 June 2025',
                 timeOfSession: '10:00am to 12:00pm',
-                timeWithCapitalisedMidday: '10:00am to Midday',
+                timeWithCapitalisedMidday: '10:00am to midday',
                 facilitators: ['Facilitator 3'],
               },
             ],

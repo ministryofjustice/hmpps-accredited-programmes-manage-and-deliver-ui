@@ -88,7 +88,9 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
   }
 
   private moduleContent(moduleSession: ProgrammeGroupModuleSessionsResponseGroupModule) {
-    const sessions = Array.isArray(moduleSession.sessions) ? moduleSession.sessions : []
+    const sessions = Array.isArray(moduleSession.sessions)
+      ? [...moduleSession.sessions].sort((a, b) => this.compareSessionsForDisplayOrder(a, b))
+      : []
 
     const sessionsHtml =
       sessions.length > 0
@@ -138,6 +140,35 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
     }
 
     return `<p class="govuk-body"><strong>${moduleSession.startDateText.estimatedStartDateText}:</strong> ${moduleSession.startDateText.sessionStartDate}</p>`
+  }
+
+  // Group sessions (and their catch-ups, kept together via matching session `number`) are
+  // listed first in sequence order, with individual (one-to-one) sessions at the bottom.
+  private compareSessionsForDisplayOrder(
+    sessionA: ProgrammeGroupModuleSessionsResponseGroupSession,
+    sessionB: ProgrammeGroupModuleSessionsResponseGroupSession,
+  ): number {
+    const sessionTypeDifference = this.sessionTypeRank(sessionA) - this.sessionTypeRank(sessionB)
+    if (sessionTypeDifference !== 0) return sessionTypeDifference
+
+    const numberDifference = (sessionA.number ?? 0) - (sessionB.number ?? 0)
+    if (numberDifference !== 0) return numberDifference
+
+    const catchupDifference = Number(this.isCatchupSession(sessionA)) - Number(this.isCatchupSession(sessionB))
+    if (catchupDifference !== 0) return catchupDifference
+
+    const dateTimeA = Number(this.sortableTableDateIncludingTime(sessionA.dateOfSession, sessionA.timeOfSession))
+    const dateTimeB = Number(this.sortableTableDateIncludingTime(sessionB.dateOfSession, sessionB.timeOfSession))
+    const dateTimeDifference =
+      (Number.isFinite(dateTimeA) ? dateTimeA : Number.POSITIVE_INFINITY) -
+      (Number.isFinite(dateTimeB) ? dateTimeB : Number.POSITIVE_INFINITY)
+    if (dateTimeDifference !== 0) return dateTimeDifference
+
+    return (sessionA.name || '').localeCompare(sessionB.name || '')
+  }
+
+  private sessionTypeRank(session: ProgrammeGroupModuleSessionsResponseGroupSession): number {
+    return session.type?.toLowerCase().includes('group') ? 0 : 1
   }
 
   private sessionTableRow(session: ProgrammeGroupModuleSessionsResponseGroupSession): string {
