@@ -142,12 +142,21 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
     return `<p class="govuk-body"><strong>${moduleSession.startDateText.estimatedStartDateText}:</strong> ${moduleSession.startDateText.sessionStartDate}</p>`
   }
 
-  // sharing the same date/start/end time keep this order (group, then one-to-one, then
-  // catch-up, then alphabetically) whichever direction the date column is sorted in.
+  // Group sessions (and their catch-ups, kept together via matching session `number`) are
+  // listed first in sequence order, with individual (one-to-one) sessions at the bottom.
   private compareSessionsForDisplayOrder(
     sessionA: ProgrammeGroupModuleSessionsResponseGroupSession,
     sessionB: ProgrammeGroupModuleSessionsResponseGroupSession,
   ): number {
+    const familyRankDifference = this.sessionFamilyRank(sessionA) - this.sessionFamilyRank(sessionB)
+    if (familyRankDifference !== 0) return familyRankDifference
+
+    const numberDifference = (sessionA.number ?? 0) - (sessionB.number ?? 0)
+    if (numberDifference !== 0) return numberDifference
+
+    const catchupDifference = Number(this.isCatchupSession(sessionA)) - Number(this.isCatchupSession(sessionB))
+    if (catchupDifference !== 0) return catchupDifference
+
     const dateTimeA = Number(this.sortableTableDateIncludingTime(sessionA.dateOfSession, sessionA.timeOfSession))
     const dateTimeB = Number(this.sortableTableDateIncludingTime(sessionB.dateOfSession, sessionB.timeOfSession))
     const dateTimeDifference =
@@ -155,14 +164,10 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
       (Number.isFinite(dateTimeB) ? dateTimeB : Number.POSITIVE_INFINITY)
     if (dateTimeDifference !== 0) return dateTimeDifference
 
-    const typeRankDifference = this.sessionTypeRank(sessionA) - this.sessionTypeRank(sessionB)
-    if (typeRankDifference !== 0) return typeRankDifference
-
     return (sessionA.name || '').localeCompare(sessionB.name || '')
   }
 
-  private sessionTypeRank(session: ProgrammeGroupModuleSessionsResponseGroupSession): number {
-    if (this.isCatchupSession(session)) return 2
+  private sessionFamilyRank(session: ProgrammeGroupModuleSessionsResponseGroupSession): number {
     return session.type?.toLowerCase().includes('group') ? 0 : 1
   }
 
