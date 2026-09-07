@@ -713,11 +713,12 @@ describe('SessionScheduleAttendancePresenter', () => {
       expect(content).toContain('data-caselist-table="true"')
     })
 
-    it('sorts excluded sessions to the bottom of the table', () => {
+    it('marks the excluded row and table so the client can pin restricted rows to the bottom', () => {
       const presenter = new SessionScheduleAttendancePresenter(groupId, dataWithExcludedSession())
       const content = presenter.getAccordionItems()[0].content.html
 
-      expect(content.indexOf('Included session')).toBeLessThan(content.indexOf('data-excluded="true"'))
+      expect(content).toContain('data-caselist-table="true"')
+      expect(content).toContain('data-excluded="true"')
     })
 
     it('shows the CRN rather than the name for an excluded participant within the participants list', () => {
@@ -745,14 +746,13 @@ describe('SessionScheduleAttendancePresenter', () => {
       expect(content).not.toContain('Restricted Person')
     })
 
-    it('does not restrict rows or sort when the excluded feature is disabled', () => {
+    it('does not restrict rows when the excluded feature is disabled', () => {
       config.enable_excluded_referrals = false
       const presenter = new SessionScheduleAttendancePresenter(groupId, dataWithExcludedSession())
       const content = presenter.getAccordionItems()[0].content.html
 
       expect(content).not.toContain('data-excluded="true"')
       expect(content).toContain('<a href="/group-1/excluded-session/')
-      expect(content.indexOf('Included session')).toBeLessThan(content.indexOf('Excluded session'))
     })
   })
 

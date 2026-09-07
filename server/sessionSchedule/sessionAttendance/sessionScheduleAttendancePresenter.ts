@@ -96,14 +96,14 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
     )
   }
 
-  private sortExcludedToBottom(
-    sessions: ProgrammeGroupModuleSessionsResponseGroupSession[],
-  ): ProgrammeGroupModuleSessionsResponseGroupSession[] {
-    if (!config.enable_excluded_referrals) {
-      return sessions
-    }
-    return [...sessions].sort((a, b) => Number(this.isExcludedSession(a)) - Number(this.isExcludedSession(b)))
-  }
+  // private sortExcludedToBottom(
+  //   sessions: ProgrammeGroupModuleSessionsResponseGroupSession[],
+  // ): ProgrammeGroupModuleSessionsResponseGroupSession[] {
+  //   if (!config.enable_excluded_referrals) {
+  //     return sessions
+  //   }
+  //   return [...sessions].sort((a, b) => Number(this.isExcludedSession(a)) - Number(this.isExcludedSession(b)))
+  // }
 
   private moduleContent(moduleSession: ProgrammeGroupModuleSessionsResponseGroupModule) {
     const sessions = Array.isArray(moduleSession.sessions)
@@ -209,7 +209,7 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
       return `
     <tr class="govuk-table__row">
       <td class="govuk-table__cell" data-excluded="true">${participant.crn}<br><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span></td>
-      <td class="govuk-table__cell">Restricted</td>
+      <td class="govuk-table__cell">${this.isCatchupSession(session) ? 'Catch-up' : session.type || ''}</td>
       <td class="govuk-table__cell">${participant.crn}</td>
       <td class="govuk-table__cell" data-sort-value="${dateSortValue}">Restricted</td>
       <td class="govuk-table__cell">Restricted</td>
