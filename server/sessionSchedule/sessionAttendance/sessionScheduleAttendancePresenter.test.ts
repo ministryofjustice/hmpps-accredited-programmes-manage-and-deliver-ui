@@ -1,8 +1,20 @@
 import { ProgrammeGroupModuleSessionsResponse } from '@manage-and-deliver-api'
+import config from '../../config'
 import SessionScheduleAttendancePresenter from './sessionScheduleAttendancePresenter'
+
+jest.mock('../../config')
 
 describe('SessionScheduleAttendancePresenter', () => {
   const groupId = 'group-1'
+
+  beforeEach(() => {
+    config.enable_excluded_referrals = true
+  })
+
+  afterEach(() => {
+    jest.restoreAllMocks()
+  })
+
   const mockGroupSessionsData: ProgrammeGroupModuleSessionsResponse = {
     group: {
       code: 'GRP-001',
@@ -117,7 +129,9 @@ describe('SessionScheduleAttendancePresenter', () => {
       const accordionItems = presenter.getAccordionItems()
       const firstModuleContent = accordionItems[0].content.html
 
-      expect(firstModuleContent).toContain('<table class="govuk-table" data-module="moj-sortable-table">')
+      expect(firstModuleContent).toContain(
+        '<table class="govuk-table" data-module="moj-sortable-table" data-caselist-table="true">',
+      )
       expect(firstModuleContent).toContain('Session name')
       expect(firstModuleContent).toContain('Session type')
       expect(firstModuleContent).toContain('Participants')
@@ -650,6 +664,95 @@ describe('SessionScheduleAttendancePresenter', () => {
 
       expect(content).toContain('Session 3')
       expect(content).not.toContain('undefined')
+    })
+  })
+
+  describe('restricted (excluded) participants', () => {
+    const dataWithExcludedSession = (): ProgrammeGroupModuleSessionsResponse => ({
+      ...mockGroupSessionsData,
+      modules: [
+        {
+          ...mockGroupSessionsData.modules![0],
+          sessions: [
+            {
+              ...mockGroupSessionsData.modules![0].sessions![0],
+              id: 'included-session',
+              name: 'Included session',
+              dateOfSession: '15 March 2025',
+              participants: [{ name: 'John Doe' }],
+            },
+            {
+              ...mockGroupSessionsData.modules![0].sessions![1],
+              id: 'excluded-session',
+              name: 'Excluded session',
+              dateOfSession: '22 March 2025',
+              participants: [
+                { name: 'Restricted Person', crn: 'X999999', isLimitedAccessOffender: true, isExcluded: true },
+              ],
+            },
+          ],
+        },
+      ],
+    })
+
+    it('renders a restricted row showing the CRN and RESTRICTED ACCESS badge instead of session details', () => {
+      const presenter = new SessionScheduleAttendancePresenter(groupId, dataWithExcludedSession())
+      const content = presenter.getAccordionItems()[0].content.html
+
+      expect(content).toContain(
+        '<td class="govuk-table__cell" data-excluded="true">X999999<br><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span></td>',
+      )
+      expect(content).toContain('<td class="govuk-table__cell">Restricted</td>')
+      expect(content).not.toContain('<a href="/group-1/excluded-session/')
+    })
+
+    it('tags the table so excluded rows can be pinned to the bottom on the client', () => {
+      const presenter = new SessionScheduleAttendancePresenter(groupId, dataWithExcludedSession())
+      const content = presenter.getAccordionItems()[0].content.html
+
+      expect(content).toContain('data-caselist-table="true"')
+    })
+
+    it('marks the excluded row and table so the client can pin restricted rows to the bottom', () => {
+      const presenter = new SessionScheduleAttendancePresenter(groupId, dataWithExcludedSession())
+      const content = presenter.getAccordionItems()[0].content.html
+
+      expect(content).toContain('data-caselist-table="true"')
+      expect(content).toContain('data-excluded="true"')
+    })
+
+    it('shows the CRN rather than the name for an excluded participant within the participants list', () => {
+      const data = {
+        ...mockGroupSessionsData,
+        modules: [
+          {
+            ...mockGroupSessionsData.modules![0],
+            sessions: [
+              {
+                ...mockGroupSessionsData.modules![0].sessions![0],
+                participants: [
+                  { name: 'John Doe' },
+                  { name: 'Restricted Person', crn: 'X999999', isLimitedAccessOffender: true, isExcluded: true },
+                ],
+              },
+            ],
+          },
+        ],
+      }
+      const presenter = new SessionScheduleAttendancePresenter(groupId, data)
+      const content = presenter.getAccordionItems()[0].content.html
+
+      expect(content).toContain('John Doe<br/> X999999')
+      expect(content).not.toContain('Restricted Person')
+    })
+
+    it('does not restrict rows when the excluded feature is disabled', () => {
+      config.enable_excluded_referrals = false
+      const presenter = new SessionScheduleAttendancePresenter(groupId, dataWithExcludedSession())
+      const content = presenter.getAccordionItems()[0].content.html
+
+      expect(content).not.toContain('data-excluded="true"')
+      expect(content).toContain('<a href="/group-1/excluded-session/')
     })
   })
 

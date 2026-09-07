@@ -10,6 +10,7 @@ import { convertToUrlFriendlyKebabCase, getEditSessionRouteTitle } from '../../u
 import GroupServiceLayoutPresenter, {
   GroupServiceNavigationValues,
 } from '../../shared/groups/groupServiceLayoutPresenter'
+import config from '../../config'
 
 const BRINGING_IT_ALL_TOGETHER_MODULE = 'bringing it all together'
 
@@ -87,6 +88,23 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
     return heading === 'Pre-group one-to-ones' || heading === 'Post-programme reviews' ? '' : ' sessions'
   }
 
+  private isExcludedSession(session: ProgrammeGroupModuleSessionsResponseGroupSession): boolean {
+    return (
+      config.enable_excluded_referrals &&
+      session.participants?.length === 1 &&
+      Boolean(session.participants[0].isExcluded)
+    )
+  }
+
+  // private sortExcludedToBottom(
+  //   sessions: ProgrammeGroupModuleSessionsResponseGroupSession[],
+  // ): ProgrammeGroupModuleSessionsResponseGroupSession[] {
+  //   if (!config.enable_excluded_referrals) {
+  //     return sessions
+  //   }
+  //   return [...sessions].sort((a, b) => Number(this.isExcludedSession(a)) - Number(this.isExcludedSession(b)))
+  // }
+
   private moduleContent(moduleSession: ProgrammeGroupModuleSessionsResponseGroupModule) {
     const sessions = Array.isArray(moduleSession.sessions)
       ? [...moduleSession.sessions].sort((a, b) => this.compareSessionsForDisplayOrder(a, b))
@@ -95,7 +113,7 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
     const sessionsHtml =
       sessions.length > 0
         ? `
-      <table class="govuk-table" data-module="moj-sortable-table">
+      <table class="govuk-table" data-module="moj-sortable-table" data-caselist-table="true">
       <caption class="govuk-table__caption--s govuk-!-text-align-left"><strong>Scheduled ${this.moduleHeading(moduleSession)}${this.moduleHeadingAppended(moduleSession)}</strong></caption>
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
@@ -173,7 +191,9 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
 
   private sessionTableRow(session: ProgrammeGroupModuleSessionsResponseGroupSession): string {
     const participants = session.participants?.length
-      ? session.participants.map((participant: Participant) => participant.name).join('<br/> ')
+      ? session.participants
+          .map((participant: Participant) => (participant.isExcluded ? participant.crn : participant.name))
+          .join('<br/> ')
       : ''
     const facilitators = session.facilitators?.length
       ? session.facilitators.join('<span class="govuk-!-display-block govuk-!-margin-bottom-1"></span>')
@@ -183,6 +203,20 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
     const baseSlug = convertToUrlFriendlyKebabCase(sessionTitle) || 'session'
     const sessionSlug =
       this.isCatchupSession(session) && !baseSlug.endsWith('-catch-up') ? `${baseSlug}-catch-up` : baseSlug
+
+    if (this.isExcludedSession(session)) {
+      const participant = session.participants[0]
+      return `
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell" data-excluded="true">${participant.crn ?? ''}<br><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span></td>
+      <td class="govuk-table__cell">${this.isCatchupSession(session) ? 'Catch-up' : session.type || ''}</td>
+      <td class="govuk-table__cell">${participant.crn ?? ''}</td>
+      <td class="govuk-table__cell" data-sort-value="${dateSortValue}">Restricted</td>
+      <td class="govuk-table__cell">Restricted</td>
+      <td class="govuk-table__cell">Restricted</td>
+    </tr>
+  `
+    }
 
     return `
     <tr class="govuk-table__row">

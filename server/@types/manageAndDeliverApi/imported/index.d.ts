@@ -3405,10 +3405,10 @@ export interface components {
       offset?: number
       sort?: components['schemas']['SortObject']
       /** Format: int32 */
-      pageSize?: number
-      /** Format: int32 */
       pageNumber?: number
       paged?: boolean
+      /** Format: int32 */
+      pageSize?: number
       unpaged?: boolean
     }
     ReferralCaseListItem: {
