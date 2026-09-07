@@ -102,6 +102,7 @@ export default class CaselistPresenter {
       captionClasses: this.tableCaptionClass,
       attributes: {
         'data-caselist-table': 'true',
+        'data-module': 'moj-sortable-table',
       },
       head: [
         this.sortableHeader('Name and CRN', 'personName'),
@@ -128,7 +129,10 @@ export default class CaselistPresenter {
 
     return {
       html: `<a href="${this.sortUrl(field, nextDirection)}">${text}</a>`,
-      attributes: { 'aria-sort': sortState },
+      attributes: {
+        'aria-sort': sortState,
+        'data-sort-url': this.sortUrl(field, nextDirection),
+      },
     }
   }
 
