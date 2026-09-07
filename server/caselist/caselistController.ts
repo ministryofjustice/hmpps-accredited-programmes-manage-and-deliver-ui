@@ -48,7 +48,7 @@ export default class CaselistController extends BaseController {
 
     return {
       page: pageNumber ? Number(pageNumber) - 1 : 0,
-      size: 300,
+      size: 50,
       sort: [sort],
     }
   }

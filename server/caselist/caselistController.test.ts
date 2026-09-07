@@ -104,13 +104,13 @@ describe(`Caselist controller`, () => {
     expect(accreditedProgrammesManageAndDeliverService.getOpenCaselist).toHaveBeenNthCalledWith(
       1,
       'user1',
-      { page: 0, size: 300, sort: ['personName,asc'] },
+      { page: 0, size: 50, sort: ['personName,asc'] },
       { pdu: ['PDU2'], reportingTeam: ['Team1'] },
     )
     expect(accreditedProgrammesManageAndDeliverService.getOpenCaselist).toHaveBeenNthCalledWith(
       2,
       'user1',
-      { page: 0, size: 300, sort: ['personName,asc'] },
+      { page: 0, size: 50, sort: ['personName,asc'] },
       { pdu: ['PDU2'] },
     )
   })
@@ -120,7 +120,7 @@ describe(`Caselist controller`, () => {
 
     expect(accreditedProgrammesManageAndDeliverService.getOpenCaselist).toHaveBeenCalledWith(
       'user1',
-      { page: 0, size: 300, sort: ['sentenceEndDate,desc'] },
+      { page: 0, size: 50, sort: ['sentenceEndDate,desc'] },
       {},
     )
   })
@@ -130,7 +130,7 @@ describe(`Caselist controller`, () => {
 
     expect(accreditedProgrammesManageAndDeliverService.getOpenCaselist).toHaveBeenCalledWith(
       'user1',
-      { page: 0, size: 300, sort: ['personName,asc'] },
+      { page: 0, size: 50, sort: ['personName,asc'] },
       {},
     )
   })
