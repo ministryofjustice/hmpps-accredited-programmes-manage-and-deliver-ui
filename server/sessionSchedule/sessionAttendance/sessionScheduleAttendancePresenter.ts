@@ -148,8 +148,8 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
     sessionA: ProgrammeGroupModuleSessionsResponseGroupSession,
     sessionB: ProgrammeGroupModuleSessionsResponseGroupSession,
   ): number {
-    const familyRankDifference = this.sessionFamilyRank(sessionA) - this.sessionFamilyRank(sessionB)
-    if (familyRankDifference !== 0) return familyRankDifference
+    const sessionTypeDifference = this.sessionTypeRank(sessionA) - this.sessionTypeRank(sessionB)
+    if (sessionTypeDifference !== 0) return sessionTypeDifference
 
     const numberDifference = (sessionA.number ?? 0) - (sessionB.number ?? 0)
     if (numberDifference !== 0) return numberDifference
@@ -167,7 +167,7 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
     return (sessionA.name || '').localeCompare(sessionB.name || '')
   }
 
-  private sessionFamilyRank(session: ProgrammeGroupModuleSessionsResponseGroupSession): number {
+  private sessionTypeRank(session: ProgrammeGroupModuleSessionsResponseGroupSession): number {
     return session.type?.toLowerCase().includes('group') ? 0 : 1
   }
 
