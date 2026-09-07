@@ -185,7 +185,6 @@ export default class SessionScheduleController extends BaseController {
       groupId,
     )
 
-
     const presenter = new SessionScheduleAttendancePresenter(groupId, sessionAttendanceData, successMessage)
     const view = new SessionScheduleAttendanceView(presenter)
     return this.renderPage(res, view)
