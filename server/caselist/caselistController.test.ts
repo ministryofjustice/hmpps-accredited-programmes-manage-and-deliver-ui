@@ -134,4 +134,34 @@ describe(`Caselist controller`, () => {
       {},
     )
   })
+
+  it('uses the default sort when an unsupported sort direction is requested', async () => {
+    await request(app).get('/region/open-referrals?sort=personName,not-a-direction').expect(200)
+
+    expect(accreditedProgrammesManageAndDeliverService.getOpenCaselist).toHaveBeenCalledWith(
+      'user1',
+      { page: 0, size: 50, sort: ['personName,asc'] },
+      {},
+    )
+  })
+
+  test.each(['not-a-page', '-1', '0', '1.5'])('uses the first page when page=%s is requested', async page => {
+    await request(app).get(`/region/open-referrals?page=${page}`).expect(200)
+
+    expect(accreditedProgrammesManageAndDeliverService.getOpenCaselist).toHaveBeenCalledWith(
+      'user1',
+      { page: 0, size: 50, sort: ['personName,asc'] },
+      {},
+    )
+  })
+
+  it('uses the requested one-indexed page when a positive integer page is requested', async () => {
+    await request(app).get('/region/open-referrals?page=3').expect(200)
+
+    expect(accreditedProgrammesManageAndDeliverService.getOpenCaselist).toHaveBeenCalledWith(
+      'user1',
+      { page: 2, size: 50, sort: ['personName,asc'] },
+      {},
+    )
+  })
 })
