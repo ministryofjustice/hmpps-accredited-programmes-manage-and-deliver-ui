@@ -5,23 +5,14 @@ import { CollapsibleCheckboxFilterGroup, CollapsibleCheckboxFilterOption } from 
 import Pagination from '../utils/pagination/pagination'
 import CaselistFilter from './caselistFilter'
 import CaselistUtils from './caseListUtils'
+import DateUtils from '../utils/dateUtils'
+import config from '../config'
+import { CaselistSortField, caselistSortFields } from './caselistSort'
 
 export enum CaselistPageSection {
   Open = 1,
   Closed = 2,
 }
-
-type CaselistSortField = 'personName' | 'pduName' | 'reportingTeam' | 'sentenceEndDate' | 'cohort' | 'sex' | 'status'
-
-const caselistSortFields: CaselistSortField[] = [
-  'personName',
-  'pduName',
-  'reportingTeam',
-  'sentenceEndDate',
-  'cohort',
-  'sex',
-  'status',
-]
 
 const cohortConfigMap: Record<CohortEnum, string> = {
   SEXUAL_OFFENCE: 'Sexual offence',
