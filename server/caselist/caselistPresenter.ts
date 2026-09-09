@@ -6,6 +6,7 @@ import CaselistFilter from './caselistFilter'
 import CaselistUtils from './caseListUtils'
 import DateUtils from '../utils/dateUtils'
 import config from '../config'
+import { CaselistSortField, caselistSortFields } from './caselistSort'
 
 export enum CaselistPageSection {
   Open = 1,
@@ -89,55 +90,55 @@ export default class CaselistPresenter {
       caption: this.tableCaption,
       captionClasses: this.tableCaptionClass,
       attributes: {
-        'data-module': 'moj-sortable-table',
         'data-caselist-table': 'true',
+        'data-module': 'moj-sortable-table',
       },
       head: [
-        {
-          text: 'Name and CRN',
-          attributes: {
-            'aria-sort': 'ascending',
-          },
-        },
-        {
-          text: 'PDU',
-          attributes: {
-            'aria-sort': 'none',
-          },
-        },
-        {
-          text: 'Reporting team',
-          attributes: {
-            'aria-sort': 'none',
-          },
-        },
-        {
-          text: 'Sentence end date',
-          attributes: {
-            'aria-sort': 'none',
-          },
-        },
-        {
-          text: 'Cohort',
-          attributes: {
-            'aria-sort': 'none',
-          },
-        },
-        {
-          text: 'Sex',
-          attributes: {
-            'aria-sort': 'none',
-          },
-        },
-        {
-          text: 'Referral status',
-          attributes: {
-            'aria-sort': 'none',
-          },
-        },
+        this.sortableHeader('Name and CRN', 'personName'),
+        this.sortableHeader('PDU', 'pduName'),
+        this.sortableHeader('Reporting team', 'reportingTeam'),
+        this.sortableHeader('Sentence end date', 'sentenceEndDate'),
+        this.sortableHeader('Cohort', 'cohort'),
+        this.sortableHeader('Sex', 'sex'),
+        this.sortableHeader('Referral status', 'status'),
       ],
       rows: this.generateTableRows(),
     }
+  }
+
+  private sortableHeader(text: string, field: CaselistSortField) {
+    const [currentField, currentDirection] = this.sort
+    const isCurrentSort = currentField === field
+    const nextDirection = isCurrentSort && currentDirection === 'asc' ? 'desc' : 'asc'
+    let sortState: 'ascending' | 'descending' | 'none' = 'none'
+
+    if (isCurrentSort) {
+      sortState = currentDirection === 'asc' ? 'ascending' : 'descending'
+    }
+
+    return {
+      html: `<a href="${this.sortUrl(field, nextDirection)}">${text}</a>`,
+      attributes: {
+        'aria-sort': sortState,
+        'data-sort-url': this.sortUrl(field, nextDirection),
+      },
+    }
+  }
+
+  private get sort(): [CaselistSortField, 'asc' | 'desc'] {
+    const searchParams = new URLSearchParams(this.params)
+    const [field, direction] = searchParams.get('sort')?.split(',') ?? []
+
+    return caselistSortFields.includes(field as CaselistSortField) && (direction === 'asc' || direction === 'desc')
+      ? [field as CaselistSortField, direction]
+      : ['personName', 'asc']
+  }
+
+  private sortUrl(field: CaselistSortField, direction: 'asc' | 'desc'): string {
+    const searchParams = new URLSearchParams(this.params)
+    searchParams.delete('page')
+    searchParams.set('sort', `${field},${direction}`)
+    return `?${searchParams.toString()}`
   }
 
   generateTableRows() {
