@@ -23,9 +23,14 @@ document.querySelectorAll('[data-caselist-table="true"]').forEach(table => {
     thead.addEventListener(
       'click',
       event => {
-        const button = event.target.closest('button')
-        const parentElement = button ? button.parentElement : null
-        const sortUrl = parentElement ? parentElement.getAttribute('data-sort-url') : null
+        const target = event.target instanceof Element ? event.target : null
+        if (!target) return
+
+        const clickable = target.closest('a, button')
+        const header = clickable ? clickable.closest('th') : null
+        const sortUrl =
+          (clickable && clickable.tagName === 'A' ? clickable.getAttribute('href') : null) ||
+          (header ? header.getAttribute('data-sort-url') : null)
         if (!sortUrl) return
 
         event.preventDefault()
