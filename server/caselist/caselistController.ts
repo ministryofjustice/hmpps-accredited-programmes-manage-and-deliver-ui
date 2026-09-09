@@ -8,16 +8,11 @@ import CaselistView from './caselistView'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
 import sendAuditEvent from '../services/auditService'
+import { caselistSortFields } from './caselistSort'
 
-const caselistSortFields = new Set([
-  'personName',
-  'pduName',
-  'reportingTeam',
-  'sentenceEndDate',
-  'cohort',
-  'sex',
-  'status',
-])
+const caselistSortFieldSet: ReadonlySet<string> = new Set(caselistSortFields)
+const caselistSortDirections = new Set(['asc', 'desc'])
+const defaultSort = 'personName,asc'
 
 export default class CaselistController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -40,14 +35,16 @@ export default class CaselistController extends BaseController {
   }
 
   private paginationParams(req: Request) {
-    const pageNumber = req.query.page
+    const pageNumber = typeof req.query.page === 'string' ? Number(req.query.page) : NaN
+    const requestedSort = typeof req.query.sort === 'string' ? req.query.sort : undefined
+    const sortParts = requestedSort?.split(',') ?? []
     const sort =
-      typeof req.query.sort === 'string' && caselistSortFields.has(req.query.sort.split(',')[0])
-        ? req.query.sort
-        : 'personName,asc'
+      sortParts.length === 2 && caselistSortFieldSet.has(sortParts[0]) && caselistSortDirections.has(sortParts[1])
+        ? requestedSort
+        : defaultSort
 
     return {
-      page: pageNumber ? Number(pageNumber) - 1 : 0,
+      page: Number.isInteger(pageNumber) && pageNumber > 0 ? pageNumber - 1 : 0,
       size: 50,
       sort: [sort],
     }
