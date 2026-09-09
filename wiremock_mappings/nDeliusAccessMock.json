@@ -1,0 +1,18 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "method": "POST",
+        "urlPathPattern": "/user/.*/access"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": "{\"access\": [{{#each (jsonPath request.body '$[*]') as |crn|}}{{#unless @first}},{{/unless}}{\"crn\": \"{{crn}}\", \"userExcluded\": {{#eq (substring crn 0 2) 'SX'}}true{{else}}false{{/eq}}, \"userRestricted\": false}{{/each}}]}",
+        "transformers": ["response-template"]
+      }
+    }
+  ]
+}
