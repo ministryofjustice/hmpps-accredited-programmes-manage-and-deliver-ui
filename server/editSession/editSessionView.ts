@@ -63,7 +63,7 @@ export default class EditSessionView {
           actions: {
             // Uses hasAnyAttendees (not hasReferral) - managing who's scheduled to attend a session should
             // stay available regardless of whether any of them are currently restricted from view.
-            items: this.presenter.hasAnyAttendees
+            items: this.presenter.canChangeAttendees
               ? [
                   {
                     href: `/${this.presenter.groupId}/${this.presenter.sessionId}/edit-session-attendees`,

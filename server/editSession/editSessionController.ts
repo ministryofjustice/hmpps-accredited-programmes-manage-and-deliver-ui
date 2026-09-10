@@ -92,6 +92,11 @@ export default class EditSessionController extends BaseController {
     )
   }
 
+  private isGroupSessionInPast(sessionDetails?: { unformattedEndDate?: string }): boolean {
+    const endDateEpochTime = new Date(sessionDetails?.unformattedEndDate).getTime()
+    return Number.isFinite(endDateEpochTime) && endDateEpochTime <= Date.now()
+  }
+
   private static toDurationValidationError(error: unknown): FormValidationError | null {
     const status = typeof error === 'object' && error !== null ? (error as { status?: number }).status : undefined
     const data =
@@ -247,6 +252,12 @@ export default class EditSessionController extends BaseController {
       username,
       sessionId,
     )
+    const sessionDetails = await this.accreditedProgrammesManageAndDeliverService.getGroupSessionDetails(
+      username,
+      groupId,
+      sessionId,
+    )
+    const isSessionInPast = this.isGroupSessionInPast(sessionDetails)
     // Restricted attendees are never submitted by the form (their checkbox is disabled), so their
     // existing attendance must be preserved manually rather than relying on what's posted
     const restrictedAttendingReferralIds = sessionAttendees.attendees
@@ -254,15 +265,21 @@ export default class EditSessionController extends BaseController {
         attendee => config.enable_excluded_referrals && attendee.isExcluded === true && attendee.currentlyAttending,
       )
       .map(attendee => attendee.referralId)
+    const existingPastAttendingReferralIds = isSessionInPast
+      ? sessionAttendees.attendees.filter(attendee => attendee.currentlyAttending).map(attendee => attendee.referralId)
+      : []
+    const preservedAttendingReferralIds = Array.from(
+      new Set([...restrictedAttendingReferralIds, ...existingPastAttendingReferralIds]),
+    )
 
     if (req.method === 'POST') {
       const data = await new EditSessionForm(req).attendeesData()
-      if (data.error && restrictedAttendingReferralIds.length === 0) {
+      if (data.error && preservedAttendingReferralIds.length === 0) {
         res.status(400)
         formError = data.error
       } else {
         const referralIds = Array.from(
-          new Set([...(data.error ? [] : data.paramsForUpdate.referralId), ...restrictedAttendingReferralIds]),
+          new Set([...(data.error ? [] : data.paramsForUpdate.referralId), ...preservedAttendingReferralIds]),
         )
         await sendAuditEvent('EDIT_SESSION_ATTENDEES', username, sessionId, 'SEARCH_TERM', {
           details: { referralId: referralIds, groupId },
@@ -279,7 +296,7 @@ export default class EditSessionController extends BaseController {
     }
 
     const backUrl = `/${groupId}/${sessionId}/edit-session`
-    const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, sessionAttendees, formError)
+    const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, sessionAttendees, formError, isSessionInPast)
     const view = new EditSessionAttendeesView(presenter)
 
     return this.renderPage(res, view)

@@ -47,6 +47,15 @@ export default class EditSessionPresenter {
     return sessionType === 'individual' || sessionType === 'one-to-one' || sessionType === 'one_to_one'
   }
 
+  private get isSessionInPast(): boolean {
+    const endDateEpochTime = new Date(this.sessionDetails.unformattedEndDate).getTime()
+    return Number.isFinite(endDateEpochTime) && endDateEpochTime <= Date.now()
+  }
+
+  get canChangeAttendees(): boolean {
+    return this.hasAnyAttendees && !(this.isOneToOneSession && this.isSessionInPast)
+  }
+
   get canBeDeleted(): boolean {
     // Cant be deleted if its a core group session
     if (this.sessionDetails.sessionType.toUpperCase() === 'GROUP' && this.sessionDetails.isCatchup === false) {
@@ -54,7 +63,7 @@ export default class EditSessionPresenter {
     }
     // Cant be deleted if end time has passed
     const endDateEpochTime = new Date(this.sessionDetails.unformattedEndDate).getTime()
-    if (endDateEpochTime === null || endDateEpochTime <= Date.now()) {
+    if (Number.isFinite(endDateEpochTime) && endDateEpochTime <= Date.now()) {
       return false
     }
 
