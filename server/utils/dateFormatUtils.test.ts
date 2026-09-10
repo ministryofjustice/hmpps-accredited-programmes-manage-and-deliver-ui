@@ -110,6 +110,26 @@ describe('DateFormatUtils', () => {
     })
   })
 
+  describe('isDateTimeInPast', () => {
+    it('returns true for datetimes before now', () => {
+      expect(DateFormatUtils.isDateTimeInPast('2026-07-06T11:59:00')).toBe(true)
+    })
+
+    it('returns true for datetimes exactly now', () => {
+      expect(DateFormatUtils.isDateTimeInPast('2026-07-06T12:00:00')).toBe(true)
+    })
+
+    it('returns false for datetimes after now', () => {
+      expect(DateFormatUtils.isDateTimeInPast('2026-07-06T12:01:00')).toBe(false)
+    })
+
+    it('returns false for missing or invalid datetimes', () => {
+      expect(DateFormatUtils.isDateTimeInPast(undefined)).toBe(false)
+      expect(DateFormatUtils.isDateTimeInPast(null)).toBe(false)
+      expect(DateFormatUtils.isDateTimeInPast('not a datetime')).toBe(false)
+    })
+  })
+
   describe('isDateToday', () => {
     it('returns true for today', () => {
       expect(DateFormatUtils.isDateToday('6/7/2026')).toBe(true)

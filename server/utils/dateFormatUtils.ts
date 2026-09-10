@@ -100,6 +100,17 @@ export default class DateFormatUtils {
   }
 
   /**
+   * Checks if a datetime string is at or before now
+   * Returns false for missing or invalid input
+   */
+  static isDateTimeInPast(dateTimeStr: string | null | undefined): boolean {
+    if (!dateTimeStr) return false
+
+    const epochTime = new Date(dateTimeStr).getTime()
+    return Number.isFinite(epochTime) && epochTime <= Date.now()
+  }
+
+  /**
    * Checks if a date is today
    */
   static isDateToday(dateStr: string): boolean {

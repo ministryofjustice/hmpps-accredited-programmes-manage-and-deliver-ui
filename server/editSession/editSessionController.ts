@@ -93,8 +93,7 @@ export default class EditSessionController extends BaseController {
   }
 
   private isGroupSessionInPast(sessionDetails?: { unformattedEndDate?: string }): boolean {
-    const endDateEpochTime = new Date(sessionDetails?.unformattedEndDate).getTime()
-    return Number.isFinite(endDateEpochTime) && endDateEpochTime <= Date.now()
+    return DateFormatUtils.isDateTimeInPast(sessionDetails?.unformattedEndDate)
   }
 
   private static toDurationValidationError(error: unknown): FormValidationError | null {

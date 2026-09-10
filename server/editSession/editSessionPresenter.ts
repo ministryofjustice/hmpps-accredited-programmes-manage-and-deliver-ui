@@ -5,6 +5,7 @@ import attendanceOptionText, { attendanceOptionTextTags } from '../utils/attenda
 import { FormValidationError } from '../utils/formValidationError'
 import { TableArgs } from '../utils/govukFrontendTypes'
 import PresenterUtils from '../utils/presenterUtils'
+import DateFormatUtils from '../utils/dateFormatUtils'
 import { convertToUrlFriendlyKebabCase, getEditSessionRouteTitle } from '../utils/utils'
 import ViewUtils from '../utils/viewUtils'
 
@@ -48,8 +49,7 @@ export default class EditSessionPresenter {
   }
 
   private get isSessionInPast(): boolean {
-    const endDateEpochTime = new Date(this.sessionDetails.unformattedEndDate).getTime()
-    return Number.isFinite(endDateEpochTime) && endDateEpochTime <= Date.now()
+    return DateFormatUtils.isDateTimeInPast(this.sessionDetails.unformattedEndDate)
   }
 
   get canChangeAttendees(): boolean {
@@ -62,8 +62,7 @@ export default class EditSessionPresenter {
       return false
     }
     // Cant be deleted if end time has passed
-    const endDateEpochTime = new Date(this.sessionDetails.unformattedEndDate).getTime()
-    if (Number.isFinite(endDateEpochTime) && endDateEpochTime <= Date.now()) {
+    if (DateFormatUtils.isDateTimeInPast(this.sessionDetails.unformattedEndDate)) {
       return false
     }
 
