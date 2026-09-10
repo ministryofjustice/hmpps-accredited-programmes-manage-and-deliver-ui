@@ -114,6 +114,36 @@ describe('editSession', () => {
     )
   })
 
+  it('does not show the scheduled attendees change link for a past individual session', async () => {
+    const groupId = 'd721e8ad-948d-4e48-bff9-9c6fc1c26ece'
+    const sessionId = '89180e89-a335-4ce8-bfad-2ea61620a444'
+    const sessionDetails = GroupSessionDetailsFactory.build({
+      pageTitle: 'Alex River S688890821: Getting started one-to-one',
+      sessionType: 'Individual',
+      unformattedEndDate: '2024-02-01T14:00:00',
+      attendanceAndSessionNotes: [
+        {
+          referralId: 'referral-123',
+          name: 'Alex River',
+          crn: 'S688890821',
+          lao: false,
+          attendance: 'To be confirmed',
+          sessionNotes: 'Not added',
+          isExcluded: false,
+        },
+      ],
+    })
+    accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
+
+    await request(app)
+      .get(`/${groupId}/${sessionId}/edit-session`)
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain('Scheduled to attend')
+        expect(res.text).not.toContain(`/${groupId}/${sessionId}/edit-session-attendees`)
+      })
+  })
+
   it('redirects to module attendance route with slug suffix when updating attendance and notes', async () => {
     const groupId = '12345'
     const sessionId = '6789'
@@ -571,6 +601,46 @@ describe('editSessionAttendees', () => {
       'user1',
       sessionId,
       ['referral-authorised'],
+    )
+  })
+
+  it('preserves existing attendees while allowing new attendees to be added to a past session', async () => {
+    const groupId = '111'
+    const sessionId = '6789'
+    const sessionAttendees = editSessionAttendeesFactory.build({
+      attendees: [
+        {
+          name: 'Alex River',
+          referralId: 'referral-existing',
+          crn: 'S688890821',
+          currentlyAttending: true,
+          isExcluded: false,
+        },
+        {
+          name: 'Jane Smith',
+          referralId: 'referral-new',
+          crn: 'Y654321',
+          currentlyAttending: false,
+          isExcluded: false,
+        },
+      ],
+    })
+    const sessionDetails = GroupSessionDetailsFactory.build({ unformattedEndDate: '2024-02-01T14:00:00' })
+    accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(sessionAttendees)
+    accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
+    accreditedProgrammesManageAndDeliverService.updateSessionAttendees.mockResolvedValue('Updated')
+
+    await request(app)
+      .post(`/${groupId}/${sessionId}/edit-session-attendees`)
+      .type('form')
+      .send({ 'edit-session-attendees': 'referral-new + Jane Smith' })
+      .expect(302)
+      .expect('Location', `/${groupId}/${sessionId}/edit-session?editSessionMessage=Updated`)
+
+    expect(accreditedProgrammesManageAndDeliverService.updateSessionAttendees).toHaveBeenCalledWith(
+      'user1',
+      sessionId,
+      ['referral-new', 'referral-existing'],
     )
   })
 

@@ -162,6 +162,25 @@ describe('EditSessionAttendeesPresenter', () => {
         },
       ])
     })
+
+    it('disables existing attendees but allows new attendees for a past session', () => {
+      const presenter = new EditSessionAttendeesPresenter(groupId, backUrl, buildSessionAttendees(), null, true)
+
+      expect(presenter.generateAttendeeCheckboxOptions()).toEqual([
+        {
+          html: 'John Doe (X123456)<p class="govuk-!-margin-bottom-0">You cannot remove someone from a session that has already taken place.</p>',
+          value: 'referral-1 + John Doe',
+          checked: true,
+          disabled: true,
+        },
+        {
+          html: 'Jane Smith (Y654321)',
+          value: 'referral-2 + Jane Smith',
+          checked: false,
+          disabled: false,
+        },
+      ])
+    })
   })
 
   describe('generateAttendeeCheckboxOptions', () => {

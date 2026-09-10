@@ -10,6 +10,7 @@ export default class EditSessionAttendeesPresenter {
     readonly backUrl: string,
     readonly sessionAttendees: EditSessionAttendeesResponse,
     private readonly validationError: FormValidationError | null = null,
+    private readonly isSessionInPast: boolean = false,
   ) {}
 
   private get currentlyAttending(): EditSessionAttendee | null {
@@ -40,19 +41,19 @@ export default class EditSessionAttendeesPresenter {
 
   generateAttendeeRadioOptions(): RadiosArgsItem[] {
     return this.sortGroupMembersByExcluded().map(attendee => ({
-      html: `${this.isExcludedMember(attendee) ? `${attendee.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot edit whether a restricted participant should attend the session.</p>` : `${attendee.name} (${attendee.crn})`}`,
+      html: this.attendeeOptionHtml(attendee),
       value: attendee.referralId,
       checked: attendee.currentlyAttending === true,
-      disabled: this.isExcludedMember(attendee),
+      disabled: this.isAttendeeDisabled(attendee),
     }))
   }
 
   generateAttendeeCheckboxOptions(): CheckboxesArgsItem[] {
     return this.sortGroupMembersByExcluded().map(attendee => ({
-      html: `${this.isExcludedMember(attendee) ? `${attendee.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot edit whether a restricted participant should attend the session.</p>` : `${attendee.name} (${attendee.crn})`}`,
+      html: this.attendeeOptionHtml(attendee),
       value: `${attendee.referralId} + ${this.isExcludedMember(attendee) ? attendee.crn : attendee.name}`,
       checked: attendee.currentlyAttending === true,
-      disabled: this.isExcludedMember(attendee),
+      disabled: this.isAttendeeDisabled(attendee),
     }))
   }
 
@@ -65,6 +66,23 @@ export default class EditSessionAttendeesPresenter {
 
   private isExcludedMember(member: EditSessionAttendee): boolean {
     return config.enable_excluded_referrals && member.isExcluded === true
+  }
+
+  private isAttendeeDisabled(attendee: EditSessionAttendee): boolean {
+    return this.isExcludedMember(attendee) || (this.isSessionInPast && attendee.currentlyAttending)
+  }
+
+  private attendeeOptionHtml(attendee: EditSessionAttendee): string {
+    if (this.isExcludedMember(attendee)) {
+      return `${attendee.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot edit whether a restricted participant should attend the session.</p>`
+    }
+
+    const attendeeHtml = `${attendee.name} (${attendee.crn})`
+    if (this.isSessionInPast && attendee.currentlyAttending) {
+      return `${attendeeHtml}<p class="govuk-!-margin-bottom-0">You cannot remove someone from a session that has already taken place.</p>`
+    }
+
+    return attendeeHtml
   }
 
   get isGroupSession(): boolean {

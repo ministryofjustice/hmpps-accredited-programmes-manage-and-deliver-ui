@@ -5,6 +5,7 @@ import attendanceOptionText, { attendanceOptionTextTags } from '../utils/attenda
 import { FormValidationError } from '../utils/formValidationError'
 import { TableArgs } from '../utils/govukFrontendTypes'
 import PresenterUtils from '../utils/presenterUtils'
+import DateFormatUtils from '../utils/dateFormatUtils'
 import { convertToUrlFriendlyKebabCase, getEditSessionRouteTitle } from '../utils/utils'
 import ViewUtils from '../utils/viewUtils'
 
@@ -47,14 +48,21 @@ export default class EditSessionPresenter {
     return sessionType === 'individual' || sessionType === 'one-to-one' || sessionType === 'one_to_one'
   }
 
+  private get isSessionInPast(): boolean {
+    return DateFormatUtils.isDateTimeInPast(this.sessionDetails.unformattedEndDate)
+  }
+
+  get canChangeAttendees(): boolean {
+    return this.hasAnyAttendees && !(this.isOneToOneSession && this.isSessionInPast)
+  }
+
   get canBeDeleted(): boolean {
     // Cant be deleted if its a core group session
     if (this.sessionDetails.sessionType.toUpperCase() === 'GROUP' && this.sessionDetails.isCatchup === false) {
       return false
     }
     // Cant be deleted if end time has passed
-    const endDateEpochTime = new Date(this.sessionDetails.unformattedEndDate).getTime()
-    if (endDateEpochTime === null || endDateEpochTime <= Date.now()) {
+    if (DateFormatUtils.isDateTimeInPast(this.sessionDetails.unformattedEndDate)) {
       return false
     }
 
