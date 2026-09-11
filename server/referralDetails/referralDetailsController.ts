@@ -2,14 +2,10 @@ import { Request, Response } from 'express'
 
 import { ReferralDetails } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
-import AdditionalInformationPresenter from './additionalInformationPresenter'
-import AdditionalInformationView from './additionalInformationView'
 import OffenceHistoryPresenter from './offenceHistoryPresenter'
 import OffenceHistoryView from './offenceHistoryView'
 import PersonalDetailsPresenter from './personalDetailsPresenter'
 import PersonalDetailsView from './personalDetailsView'
-import ProgrammeHistoryPresenter from './programmeHistoryPresenter'
-import ProgrammeHistoryView from './programmeHistoryView'
 import SentenceInformationPresenter from './sentenceInformationPresenter'
 import SentenceInformationView from './sentenceInformationView'
 import StatusHistoryPresenter from './statusHistoryPresenter'
@@ -55,30 +51,6 @@ export default class ReferralDetailsController extends BaseController {
       isCohortUpdated === 'true',
     )
     const view = new PersonalDetailsView(presenter)
-
-    setReferralOriginPage(req, id)
-
-    return this.renderPage(res, view, sharedReferralDetailsData)
-  }
-
-  async showProgrammeHistoryPage(req: Request, res: Response): Promise<void> {
-    const { id } = req.params as Record<string, string>
-    const { username } = req.user
-    const { isCohortUpdated, isLdcUpdated } = req.query
-    const subNavValue = 'programmeHistory'
-
-    const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
-
-    await sendAuditEvent('VIEW_PROGRAMME_HISTORY', username, sharedReferralDetailsData?.crn ?? id, 'CRN', {
-      referralId: id,
-    })
-    const presenter = new ProgrammeHistoryPresenter(
-      sharedReferralDetailsData,
-      subNavValue,
-      isLdcUpdated === 'true',
-      isCohortUpdated === 'true',
-    )
-    const view = new ProgrammeHistoryView(presenter)
 
     setReferralOriginPage(req, id)
 
@@ -138,31 +110,6 @@ export default class ReferralDetailsController extends BaseController {
       isCohortUpdated === 'true',
     )
     const view = new SentenceInformationView(presenter)
-
-    setReferralOriginPage(req, id)
-
-    return this.renderPage(res, view, sharedReferralDetailsData)
-  }
-
-  async showAdditionalInformationPage(req: Request, res: Response): Promise<void> {
-    const { id } = req.params as Record<string, string>
-    const { username } = req.user
-    const { isCohortUpdated, isLdcUpdated } = req.query
-    const subNavValue = 'additionalInformation'
-
-    const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
-
-    await sendAuditEvent('VIEW_ADDITIONAL_INFORMATION', username, sharedReferralDetailsData?.crn ?? id, 'CRN', {
-      referralId: id,
-    })
-
-    const presenter = new AdditionalInformationPresenter(
-      sharedReferralDetailsData,
-      subNavValue,
-      isLdcUpdated === 'true',
-      isCohortUpdated === 'true',
-    )
-    const view = new AdditionalInformationView(presenter)
 
     setReferralOriginPage(req, id)
 

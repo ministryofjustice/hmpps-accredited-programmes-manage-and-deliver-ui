@@ -7,12 +7,10 @@ import ViewUtils from '../utils/viewUtils'
 
 export enum ReferralDetailsPageSection {
   PersonalDetailsTab = 'personalDetails',
-  ProgrammeHistoryTab = 'programmeHistory',
   OffenceHistoryTab = 'offenceHistory',
   SentenceInformationTab = 'sentenceInformation',
   AvailabilityTab = 'availability',
   LocationTab = 'location',
-  AdditionalInformationTab = 'additionalInformation',
 }
 
 export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
