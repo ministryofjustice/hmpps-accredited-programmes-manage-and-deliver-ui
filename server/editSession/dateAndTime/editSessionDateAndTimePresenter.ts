@@ -55,8 +55,10 @@ export default class EditSessionDateAndTimePresenter {
         {
           hour: this.rescheduleSessionStorageData?.sessionStartTime?.hour ?? this.sessionDetails.sessionStartTime.hour,
           minutes:
-            this.rescheduleSessionStorageData?.sessionStartTime?.minutes ??
-            this.sessionDetails.sessionStartTime.minutes,
+            (this.rescheduleSessionStorageData?.sessionStartTime?.minutes ??
+            this.sessionDetails.sessionStartTime.minutes)
+              ? this.sessionDetails.sessionStartTime.minutes
+              : 0,
           amOrPm:
             this.rescheduleSessionStorageData?.sessionStartTime?.amOrPm ?? this.sessionDetails.sessionStartTime.amOrPm,
         },

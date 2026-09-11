@@ -36,6 +36,28 @@ describe('EditSessionDateAndTimeForm', () => {
         })
         expect(data.error).toBeNull()
       })
+
+      it('defaults blank minute inputs to 0 without a validation error', async () => {
+        request.body['session-details-start-time-minute'] = ''
+        request.body['session-details-end-time-minute'] = ''
+
+        const data = await new EditSessionDateAndTimeFormForm(request).rescheduleSessionDetailsData()
+
+        expect(data.paramsForUpdate).toEqual({
+          sessionStartDate: '15/12/3055',
+          sessionStartTime: {
+            hour: 10,
+            minutes: 0,
+            amOrPm: 'AM',
+          },
+          sessionEndTime: {
+            hour: 11,
+            minutes: 0,
+            amOrPm: 'AM',
+          },
+        })
+        expect(data.error).toBeNull()
+      })
     })
 
     describe('validation', () => {
