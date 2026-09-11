@@ -104,6 +104,7 @@ describe('GroupAllocationsPresenter', () => {
           },
           {
             html: `<a href="/referral-details/39fde7e8-d2e3-472b-8364-5848bf673aa6/personal-details">Edgar Schiller</a><p class="govuk-!-margin-bottom-0"> X718250</p>`,
+            attributes: { 'data-sort-value': 'Edgar Schiller' },
           },
 
           { html: '28 April 2027<br> Licence end date' },
@@ -129,6 +130,7 @@ describe('GroupAllocationsPresenter', () => {
           },
           {
             html: `<a href="/referral-details/ae43bc75-b96e-496b-b9da-20ea327d7909/personal-details">Roy Kloss</a><p class="govuk-!-margin-bottom-0"> X718255</p><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>`,
+            attributes: { 'data-sort-value': 'Roy Kloss' },
           },
 
           { html: '14 April 2028<br> Order end date' },
@@ -174,7 +176,10 @@ describe('GroupAllocationsPresenter', () => {
                  </div><span class="govuk-visually-hidden">Add to group: restricted access - you cannot add this person to the group</span>`,
             attributes: { 'data-excluded': 'true' },
           },
-          { html: `<span>X718250</span>` },
+          {
+            html: `<span>X718250</span>`,
+            attributes: { 'data-sort-value': 'Edgar Schiller', 'data-excluded': 'true' },
+          },
           { html: 'Restricted' },
           { html: 'Restricted' },
           { text: 'Restricted' },
@@ -206,6 +211,7 @@ describe('GroupAllocationsPresenter', () => {
       const rows = presenter.generateWaitlistTableArgs()
       expect(rows[0][1]).toEqual({
         html: `<a href="/referral-details/39fde7e8-d2e3-472b-8364-5848bf673aa6/personal-details">Edgar Schiller</a><p class="govuk-!-margin-bottom-0"> X718250</p>`,
+        attributes: { 'data-sort-value': 'Edgar Schiller' },
       })
       expect(rows[0][4]).toEqual({ text: '36' })
     })
@@ -236,6 +242,7 @@ describe('GroupAllocationsPresenter', () => {
           },
           {
             html: `<a href="/referral-details/39fde7e8-d2e3-472b-8364-5848bf673aa6/personal-details">Edgar Schiller</a><p class="govuk-!-margin-bottom-0">X718250</p>`,
+            attributes: { 'data-sort-value': 'Edgar Schiller' },
           },
 
           { html: '28 April 2027<br> Licence end date' },
@@ -255,6 +262,7 @@ describe('GroupAllocationsPresenter', () => {
           },
           {
             html: `<a href="/referral-details/ae43bc75-b96e-496b-b9da-20ea327d7909/personal-details">Roy Kloss</a><p class="govuk-!-margin-bottom-0">X718255</p><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>`,
+            attributes: { 'data-sort-value': 'Roy Kloss' },
           },
 
           { html: '14 April 2028<br> Order end date' },
@@ -294,7 +302,10 @@ describe('GroupAllocationsPresenter', () => {
                  </div><span class="govuk-visually-hidden">Remove from group: restricted access - you cannot remove this person from the group</span>`,
             attributes: { 'data-excluded': 'true' },
           },
-          { html: `<span>X718250</span>` },
+          {
+            html: `<span>X718250</span>`,
+            attributes: { 'data-sort-value': 'Edgar Schiller', 'data-excluded': 'true' },
+          },
           { html: 'Restricted' },
           { html: `<strong class="govuk-tag govuk-tag--purple">Scheduled</strong>` },
         ],
@@ -323,6 +334,7 @@ describe('GroupAllocationsPresenter', () => {
       const rows = presenter.generateAllocatedTableArgs()
       expect(rows[0][1]).toEqual({
         html: `<span>X718250</span><br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>`,
+        attributes: { 'data-sort-value': 'Edgar Schiller', 'data-excluded': 'true' },
       })
     })
   })
