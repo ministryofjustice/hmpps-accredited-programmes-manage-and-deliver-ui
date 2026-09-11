@@ -28,6 +28,20 @@ describe('CreateOrEditGroupLocationPresenter', () => {
       expect(presenter.backLinkUri).toEqual('/group-123/edit-group-probation-delivery-unit')
     })
 
+    it('falls back to group details link when isEdit is true and backLink is missing', () => {
+      const presenter = new CreateOrEditGroupLocationPresenter(
+        mockLocations,
+        null,
+        { groupCode: 'TEST-GROUP-001' },
+        null,
+        groupId,
+        true,
+        null,
+      )
+
+      expect(presenter.backLinkUri).toEqual('/group/group-123/group-details')
+    })
+
     it('returns create group PDU link when isEdit is false', () => {
       const presenter = new CreateOrEditGroupLocationPresenter(
         mockLocations,
