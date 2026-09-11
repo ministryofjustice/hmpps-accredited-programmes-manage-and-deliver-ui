@@ -90,6 +90,8 @@ describe('GroupAllocationsPresenter', () => {
         '1234',
         filterObject,
       )
+      const firstSentenceEndDateTimestamp = new Date('28 April 2027').getTime()
+      const secondSentenceEndDateTimestamp = new Date('14 April 2028').getTime()
       expect(presenter.generateWaitlistTableArgs()).toEqual([
         [
           {
@@ -107,7 +109,10 @@ describe('GroupAllocationsPresenter', () => {
             attributes: { 'data-sort-value': 'Edgar Schiller' },
           },
 
-          { html: '28 April 2027<br> Licence end date', attributes: { 'data-sort-value': 1808866800000 } },
+          {
+            html: '28 April 2027<br> Licence end date',
+            attributes: { 'data-sort-value': firstSentenceEndDateTimestamp },
+          },
 
           {
             html: `Sexual offence`,
@@ -133,7 +138,10 @@ describe('GroupAllocationsPresenter', () => {
             attributes: { 'data-sort-value': 'Roy Kloss' },
           },
 
-          { html: '14 April 2028<br> Order end date', attributes: { 'data-sort-value': 1839279600000 } },
+          {
+            html: '14 April 2028<br> Order end date',
+            attributes: { 'data-sort-value': secondSentenceEndDateTimestamp },
+          },
 
           {
             html: 'General offence</br><span class="moj-badge moj-badge--bright-purple">LDC</span>',
@@ -180,7 +188,7 @@ describe('GroupAllocationsPresenter', () => {
             html: `<span>X718250</span>`,
             attributes: { 'data-sort-value': 'Edgar Schiller', 'data-excluded': 'true' },
           },
-          { html: 'Restricted', attributes: { 'data-sort-value': 1808866800000 } },
+          { html: 'Restricted', attributes: { 'data-sort-value': new Date('28 April 2027').getTime() } },
           { html: 'Restricted' },
           { text: 'Restricted' },
           { text: 'Restricted' },
@@ -227,6 +235,8 @@ describe('GroupAllocationsPresenter', () => {
         '1234',
         filterObject,
       )
+      const firstSentenceEndDateTimestamp = new Date('28 April 2027').getTime()
+      const secondSentenceEndDateTimestamp = new Date('14 April 2028').getTime()
 
       expect(presenter.generateAllocatedTableArgs()).toEqual([
         [
@@ -245,7 +255,10 @@ describe('GroupAllocationsPresenter', () => {
             attributes: { 'data-sort-value': 'Edgar Schiller' },
           },
 
-          { html: '28 April 2027<br> Licence end date', attributes: { 'data-sort-value': 1808866800000 } },
+          {
+            html: '28 April 2027<br> Licence end date',
+            attributes: { 'data-sort-value': firstSentenceEndDateTimestamp },
+          },
 
           { html: `<strong class="govuk-tag govuk-tag--purple">Scheduled</strong>` },
         ],
@@ -265,7 +278,10 @@ describe('GroupAllocationsPresenter', () => {
             attributes: { 'data-sort-value': 'Roy Kloss' },
           },
 
-          { html: '14 April 2028<br> Order end date', attributes: { 'data-sort-value': 1839279600000 } },
+          {
+            html: '14 April 2028<br> Order end date',
+            attributes: { 'data-sort-value': secondSentenceEndDateTimestamp },
+          },
 
           { html: '<strong class="govuk-tag govuk-tag--purple">Scheduled</strong>' },
         ],
@@ -306,7 +322,7 @@ describe('GroupAllocationsPresenter', () => {
             html: `<span>X718250</span>`,
             attributes: { 'data-sort-value': 'Edgar Schiller', 'data-excluded': 'true' },
           },
-          { html: 'Restricted', attributes: { 'data-sort-value': 1808866800000 } },
+          { html: 'Restricted', attributes: { 'data-sort-value': new Date('28 April 2027').getTime() } },
           { html: `<strong class="govuk-tag govuk-tag--purple">Scheduled</strong>` },
         ],
       ])
