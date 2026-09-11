@@ -142,10 +142,11 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
 
   generateWaitlistTableArgs() {
     const rows = this.sortExcludedToBottom(this.group.pagedGroupData.content)
-    const out: ({ html: string; attributes?: Record<string, string> } | { text: string })[][] = []
+    const out: ({ html: string; attributes?: Record<string, string | number> } | { text: string })[][] = []
     const excludedReferralsEnabled = config.enable_excluded_referrals
     rows.forEach(member => {
       const isExcluded = excludedReferralsEnabled && Boolean(member.isExcluded)
+      const sentenceEndDateEpoch = member.sentenceEndDate ? new Date(member.sentenceEndDate).getTime() : 0
       out.push([
         {
           html: `<div class="govuk-radios govuk-radios--small group-details-table">
@@ -172,6 +173,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
                 member.sourcedFrom && member.sentenceEndDate ? `<br> ${member.sourcedFrom}` : ''
               }`
             : 'Restricted',
+          attributes: { 'data-sort-value': sentenceEndDateEpoch },
         },
         {
           html: !isExcluded
@@ -199,11 +201,12 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
 
   generateAllocatedTableArgs() {
     const rows = this.sortExcludedToBottom(this.group.pagedGroupData.content)
-    const out: ({ html: string; attributes?: Record<string, string> } | { text: string })[][] = []
+    const out: ({ html: string; attributes?: Record<string, string | number> } | { text: string })[][] = []
     const excludedReferralsEnabled = config.enable_excluded_referrals
 
     rows.forEach(member => {
       const isExcluded = excludedReferralsEnabled && Boolean(member.isExcluded)
+      const sentenceEndDateEpoch = member.sentenceEndDate ? new Date(member.sentenceEndDate).getTime() : 0
       out.push([
         {
           html: `<div class="govuk-radios govuk-radios--small group-details-table">
@@ -230,6 +233,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
                 member.sourcedFrom && member.sentenceEndDate ? `<br> ${member.sourcedFrom}` : ''
               }`
             : 'Restricted',
+          attributes: { 'data-sort-value': sentenceEndDateEpoch },
         },
         { html: `<strong class="govuk-tag govuk-tag--${member.statusColour}">${member.status}</strong>` },
       ])

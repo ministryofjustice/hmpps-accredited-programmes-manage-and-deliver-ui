@@ -107,7 +107,7 @@ describe('GroupAllocationsPresenter', () => {
             attributes: { 'data-sort-value': 'Edgar Schiller' },
           },
 
-          { html: '28 April 2027<br> Licence end date' },
+          { html: '28 April 2027<br> Licence end date', attributes: { 'data-sort-value': 1808866800000 } },
 
           {
             html: `Sexual offence`,
@@ -133,7 +133,7 @@ describe('GroupAllocationsPresenter', () => {
             attributes: { 'data-sort-value': 'Roy Kloss' },
           },
 
-          { html: '14 April 2028<br> Order end date' },
+          { html: '14 April 2028<br> Order end date', attributes: { 'data-sort-value': 1839279600000 } },
 
           {
             html: 'General offence</br><span class="moj-badge moj-badge--bright-purple">LDC</span>',
@@ -180,7 +180,7 @@ describe('GroupAllocationsPresenter', () => {
             html: `<span>X718250</span>`,
             attributes: { 'data-sort-value': 'Edgar Schiller', 'data-excluded': 'true' },
           },
-          { html: 'Restricted' },
+          { html: 'Restricted', attributes: { 'data-sort-value': 1808866800000 } },
           { html: 'Restricted' },
           { text: 'Restricted' },
           { text: 'Restricted' },
@@ -245,7 +245,7 @@ describe('GroupAllocationsPresenter', () => {
             attributes: { 'data-sort-value': 'Edgar Schiller' },
           },
 
-          { html: '28 April 2027<br> Licence end date' },
+          { html: '28 April 2027<br> Licence end date', attributes: { 'data-sort-value': 1808866800000 } },
 
           { html: `<strong class="govuk-tag govuk-tag--purple">Scheduled</strong>` },
         ],
@@ -265,7 +265,7 @@ describe('GroupAllocationsPresenter', () => {
             attributes: { 'data-sort-value': 'Roy Kloss' },
           },
 
-          { html: '14 April 2028<br> Order end date' },
+          { html: '14 April 2028<br> Order end date', attributes: { 'data-sort-value': 1839279600000 } },
 
           { html: '<strong class="govuk-tag govuk-tag--purple">Scheduled</strong>' },
         ],
@@ -306,7 +306,7 @@ describe('GroupAllocationsPresenter', () => {
             html: `<span>X718250</span>`,
             attributes: { 'data-sort-value': 'Edgar Schiller', 'data-excluded': 'true' },
           },
-          { html: 'Restricted' },
+          { html: 'Restricted', attributes: { 'data-sort-value': 1808866800000 } },
           { html: `<strong class="govuk-tag govuk-tag--purple">Scheduled</strong>` },
         ],
       ])
