@@ -162,7 +162,7 @@
     "glob": "^13.0.6",
     "husky": "^9.1.7",
     "jest": "^30.5.1",
-    "jest-html-reporter": "^4.4.0",
+    "jest-html-reporter": "^4.4.1",
     "jest-junit": "17.0.0",
     "jsonwebtoken": "^9.0.3",
     "lint-staged": "^17.5.0",
