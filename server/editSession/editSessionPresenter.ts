@@ -82,23 +82,34 @@ export default class EditSessionPresenter {
     }
   }
 
-  get errorSummary() {
+  get dateErrorSummary() {
     const summary = PresenterUtils.errorSummary(this.validationError)
-    if (!summary) return summary
+    if (!summary) return null
 
-    const multiSelectError = summary.find(item => item.field === 'multi-select-selected')
+    const dateErrors = summary.filter(item => item.field === 'session-details-date')
+    return dateErrors.length > 0 ? dateErrors : null
+  }
+
+  get attendanceErrorSummary() {
+    const summary = PresenterUtils.errorSummary(this.validationError)
+    if (!summary) return null
+
+    const attendanceErrors = summary.filter(item => item.field !== 'session-details-date')
+    if (attendanceErrors.length === 0) return null
+
+    const multiSelectError = attendanceErrors.find(item => item.field === 'multi-select-selected')
     if (multiSelectError) {
       const tableArgs = this.attendanceTableArgs as MultiSelectTableArgs
       const firstRowId = tableArgs.rows?.[0]?.id
       if (firstRowId) {
         // Map to the first checkbox so the error link points to an actual form control
-        return summary.map(item =>
+        return attendanceErrors.map(item =>
           item.field === 'multi-select-selected' ? { ...item, field: `multi-select-${firstRowId}` } : item,
         )
       }
     }
 
-    return summary
+    return attendanceErrors
   }
 
   private isExcludedAttendee(it: AttendanceAndSessionNotes): boolean {

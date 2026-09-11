@@ -1128,7 +1128,7 @@ describe('EditSessionPresenter', () => {
     })
   })
 
-  describe('errorSummary', () => {
+  describe('dateErrorSummary and attendanceErrorSummary', () => {
     const buildSessionDetails = (overrides: Partial<GroupSessionResponse> = {}): GroupSessionResponse => ({
       pageTitle: 'Session 1',
       code: 'CODE-123',
@@ -1166,7 +1166,8 @@ describe('EditSessionPresenter', () => {
     it('returns null when there is no validation error', () => {
       const presenter = new EditSessionPresenter(mockGroupId, buildSessionDetails(), mockSessionId, mockDeleteUrl)
 
-      expect(presenter.errorSummary).toBeNull()
+      expect(presenter.dateErrorSummary).toBeNull()
+      expect(presenter.attendanceErrorSummary).toBeNull()
     })
 
     it('remaps multi-select-selected error field to the first row id from attendanceTableArgs', () => {
@@ -1190,7 +1191,7 @@ describe('EditSessionPresenter', () => {
         validationError,
       )
 
-      expect(presenter.errorSummary).toEqual([
+      expect(presenter.attendanceErrorSummary).toEqual([
         { field: 'multi-select-attendance-multi-select-row-0', message: 'Select at least one person' },
       ])
     })
@@ -1221,7 +1222,7 @@ describe('EditSessionPresenter', () => {
         validationError,
       )
 
-      expect(presenter.errorSummary).toEqual([
+      expect(presenter.attendanceErrorSummary).toEqual([
         { field: 'some-field', message: 'Some other error' },
         { field: 'multi-select-attendance-multi-select-row-0', message: 'Select at least one person' },
       ])
@@ -1261,9 +1262,36 @@ describe('EditSessionPresenter', () => {
         validationError,
       )
 
-      expect(presenter.errorSummary).toEqual([
+      expect(presenter.attendanceErrorSummary).toEqual([
         { field: 'multi-select-selected', message: 'Select at least one person' },
       ])
+    })
+
+    it('routes the future-session error to dateErrorSummary, separate from attendance errors', () => {
+      const validationError: FormValidationError = {
+        errors: [
+          {
+            formFields: ['session-details-date'],
+            errorSummaryLinkedField: 'session-details-date',
+            message: 'You cannot update attendance or notes for future sessions',
+          },
+        ],
+      }
+      const presenter = new EditSessionPresenter(
+        mockGroupId,
+        buildSessionDetails(),
+        mockSessionId,
+        mockDeleteUrl,
+        null,
+        null,
+        false,
+        validationError,
+      )
+
+      expect(presenter.dateErrorSummary).toEqual([
+        { field: 'session-details-date', message: 'You cannot update attendance or notes for future sessions' },
+      ])
+      expect(presenter.attendanceErrorSummary).toBeNull()
     })
   })
 })

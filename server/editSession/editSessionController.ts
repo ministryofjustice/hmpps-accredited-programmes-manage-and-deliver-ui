@@ -186,6 +186,17 @@ export default class EditSessionController extends BaseController {
       if (data.error) {
         res.status(400)
         formError = data.error
+      } else if (!this.isGroupSessionInPast(sessionDetails)) {
+        res.status(400)
+        formError = {
+          errors: [
+            {
+              errorSummaryLinkedField: 'session-details-date',
+              formFields: ['session-details-date'],
+              message: errorMessages.recordAttendance.attendanceAndSessionNotesFutureError,
+            },
+          ],
+        }
       } else {
         req.session.editSessionAttendance = {
           referralIds: data.paramsForUpdate.referralIds,
