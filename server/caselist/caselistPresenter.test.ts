@@ -436,6 +436,59 @@ describe('text', () => {
   })
 })
 
+describe('getCaseloadTableArgs', () => {
+  it('configures accessible sortable table headers', () => {
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+      .pageContent([])
+      .build() as Page<ReferralCaseListItem>
+    const presenter = new CaselistPresenter(
+      1,
+      referralCaseListItemPage,
+      {} as CaselistFilter,
+      '',
+      true,
+      TestUtils.createCaseListFilters(),
+      0,
+      'test location',
+    )
+
+    expect(presenter.getCaseloadTableArgs().attributes).toEqual({
+      'data-caselist-table': 'true',
+      'data-module': 'moj-sortable-table',
+    })
+    expect(presenter.getCaseloadTableArgs().head).toEqual([
+      {
+        html: '<a href="?sort=personName%2Cdesc">Name and CRN</a>',
+        attributes: { 'aria-sort': 'ascending', 'data-sort-url': '?sort=personName%2Cdesc' },
+      },
+      {
+        html: '<a href="?sort=pduName%2Casc">PDU</a>',
+        attributes: { 'aria-sort': 'none', 'data-sort-url': '?sort=pduName%2Casc' },
+      },
+      {
+        html: '<a href="?sort=reportingTeam%2Casc">Reporting team</a>',
+        attributes: { 'aria-sort': 'none', 'data-sort-url': '?sort=reportingTeam%2Casc' },
+      },
+      {
+        html: '<a href="?sort=sentenceEndDate%2Casc">Sentence end date</a>',
+        attributes: { 'aria-sort': 'none', 'data-sort-url': '?sort=sentenceEndDate%2Casc' },
+      },
+      {
+        html: '<a href="?sort=cohort%2Casc">Cohort</a>',
+        attributes: { 'aria-sort': 'none', 'data-sort-url': '?sort=cohort%2Casc' },
+      },
+      {
+        html: '<a href="?sort=sex%2Casc">Sex</a>',
+        attributes: { 'aria-sort': 'none', 'data-sort-url': '?sort=sex%2Casc' },
+      },
+      {
+        html: '<a href="?sort=status%2Casc">Referral status</a>',
+        attributes: { 'aria-sort': 'none', 'data-sort-url': '?sort=status%2Casc' },
+      },
+    ])
+  })
+})
+
 describe('generateTableRows', () => {
   const caseListFilters = TestUtils.createCaseListFilters()
 

@@ -20,6 +20,25 @@ document.querySelectorAll('[data-caselist-table="true"]').forEach(table => {
   pinExcludedRowsToBottom(table)
   const thead = table.querySelector('thead')
   if (thead) {
+    thead.addEventListener(
+      'click',
+      event => {
+        const target = event.target instanceof Element ? event.target : null
+        if (!target) return
+
+        const clickable = target.closest('a, button')
+        const header = clickable ? clickable.closest('th') : null
+        const sortUrl =
+          (clickable && clickable.tagName === 'A' ? clickable.getAttribute('href') : null) ||
+          (header ? header.getAttribute('data-sort-url') : null)
+        if (!sortUrl) return
+
+        event.preventDefault()
+        event.stopImmediatePropagation()
+        window.location.assign(sortUrl)
+      },
+      { capture: true },
+    )
     thead.addEventListener('click', () => pinExcludedRowsToBottom(table))
   }
 })
