@@ -16,7 +16,11 @@ export default class CreateOrEditGroupLocationPresenter {
   ) {}
 
   get backLinkUri() {
-    return this.isEditJourney ? `${this.backLink}` : `/group-probation-delivery-unit`
+    if (this.isEditJourney) {
+      return this.backLink ?? `/group/${this.groupId}/group-details`
+    }
+
+    return `/group-probation-delivery-unit`
   }
 
   get pageTitle() {
