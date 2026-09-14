@@ -178,7 +178,7 @@ describe('GroupAllocationsPresenter', () => {
                   <div class="govuk-radios__item">
                     <input id='39fde7e8-d2e3-472b-8364-5848bf673aa6' value='39fde7e8-d2e3-472b-8364-5848bf673aa6' type="radio" name="add-to-group" class="govuk-radios__input" disabled aria-disabled="true">
                     <label class="govuk-label govuk-radios__label" for="39fde7e8-d2e3-472b-8364-5848bf673aa6">
-                      <span class="govuk-visually-hidden">Add Edgar Schiller to the group</span>
+                      <span class="govuk-visually-hidden">Add X718250 to the group</span>
                     </label>
                   </div>
                  </div><span class="govuk-visually-hidden">Add to group: restricted access - you cannot add this person to the group</span>`,
@@ -186,9 +186,9 @@ describe('GroupAllocationsPresenter', () => {
           },
           {
             html: `<span>X718250</span>`,
-            attributes: { 'data-sort-value': 'Edgar Schiller', 'data-excluded': 'true' },
+            attributes: { 'data-sort-value': 'X718250', 'data-excluded': 'true' },
           },
-          { html: 'Restricted', attributes: { 'data-sort-value': new Date('28 April 2027').getTime() } },
+          { html: 'Restricted', attributes: { 'data-sort-value': 0 } },
           { html: 'Restricted' },
           { text: 'Restricted' },
           { text: 'Restricted' },
@@ -312,7 +312,7 @@ describe('GroupAllocationsPresenter', () => {
                   <div class="govuk-radios__item">
                     <input id='X718250' value='39fde7e8-d2e3-472b-8364-5848bf673aa6' type="radio" name="remove-from-group" class="govuk-radios__input" disabled aria-disabled="true">
                     <label class="govuk-label govuk-radios__label" for="X718250">
-                      <span class="govuk-visually-hidden">Remove Edgar Schiller from the group</span>
+                      <span class="govuk-visually-hidden">Remove X718250 from the group</span>
                     </label>
                   </div>
                  </div><span class="govuk-visually-hidden">Remove from group: restricted access - you cannot remove this person from the group</span>`,
@@ -320,9 +320,9 @@ describe('GroupAllocationsPresenter', () => {
           },
           {
             html: `<span>X718250</span>`,
-            attributes: { 'data-sort-value': 'Edgar Schiller', 'data-excluded': 'true' },
+            attributes: { 'data-sort-value': 'X718250', 'data-excluded': 'true' },
           },
-          { html: 'Restricted', attributes: { 'data-sort-value': new Date('28 April 2027').getTime() } },
+          { html: 'Restricted', attributes: { 'data-sort-value': 0 } },
           { html: `<strong class="govuk-tag govuk-tag--purple">Scheduled</strong>` },
         ],
       ])
@@ -350,7 +350,7 @@ describe('GroupAllocationsPresenter', () => {
       const rows = presenter.generateAllocatedTableArgs()
       expect(rows[0][1]).toEqual({
         html: `<span>X718250</span><br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>`,
-        attributes: { 'data-sort-value': 'Edgar Schiller', 'data-excluded': 'true' },
+        attributes: { 'data-sort-value': 'X718250', 'data-excluded': 'true' },
       })
     })
   })
