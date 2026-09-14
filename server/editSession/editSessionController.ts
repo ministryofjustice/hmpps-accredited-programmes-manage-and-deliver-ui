@@ -96,6 +96,18 @@ export default class EditSessionController extends BaseController {
     return DateFormatUtils.isDateTimeInPast(sessionDetails?.unformattedEndDate)
   }
 
+  // Attendance/notes recording should be allowed once the session has started.
+  private async hasSessionStarted(username: string, sessionId: string): Promise<boolean> {
+    const { sessionDate, sessionStartTime } =
+      await this.accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime(username, sessionId)
+    return DateFormatUtils.isSessionInPast(
+      sessionDate,
+      sessionStartTime.hour,
+      sessionStartTime.minutes,
+      sessionStartTime.amOrPm,
+    )
+  }
+
   private static toDurationValidationError(error: unknown): FormValidationError | null {
     const status = typeof error === 'object' && error !== null ? (error as { status?: number }).status : undefined
     const data =
@@ -186,7 +198,7 @@ export default class EditSessionController extends BaseController {
       if (data.error) {
         res.status(400)
         formError = data.error
-      } else if (!this.isGroupSessionInPast(sessionDetails)) {
+      } else if (!(await this.hasSessionStarted(username, sessionId))) {
         res.status(400)
         formError = {
           errors: [

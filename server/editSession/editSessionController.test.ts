@@ -163,6 +163,9 @@ describe('editSession', () => {
       ],
     })
     accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
+    accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(
+      editSessionDetailsFactory.build({ sessionDate: '2024-02-01' }),
+    )
 
     await request(app)
       .post(`/${groupId}/${sessionId}/edit-session`)
@@ -202,6 +205,9 @@ describe('editSession', () => {
       ],
     })
     accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
+    accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(
+      editSessionDetailsFactory.build({ sessionDate: '2024-02-01' }),
+    )
 
     await request(app)
       .post(`/${groupId}/${sessionId}/edit-session`)
@@ -240,6 +246,9 @@ describe('editSession', () => {
       ],
     })
     accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
+    accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(
+      editSessionDetailsFactory.build({ sessionDate: '2999-02-01' }),
+    )
 
     await request(app)
       .post(`/${groupId}/${sessionId}/edit-session`)
@@ -251,6 +260,39 @@ describe('editSession', () => {
       .expect(res => {
         expect(res.text).toContain('You cannot update attendance or notes for future sessions')
       })
+  })
+
+  it('allows updating attendance and notes once the session start time has passed, even if the end time has not', async () => {
+    const groupId = '12345'
+    const sessionId = '6789'
+    const sessionDetails = GroupSessionDetailsFactory.build({
+      pageTitle: 'Getting started 1',
+      unformattedEndDate: '2999-02-01T14:00:00',
+      attendanceAndSessionNotes: [
+        {
+          referralId: 'referral-123',
+          name: 'Alex River',
+          crn: 'S688890821',
+          lao: false,
+          attendance: 'To be confirmed',
+          sessionNotes: '',
+          isExcluded: false,
+        },
+      ],
+    })
+    accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
+    accreditedProgrammesManageAndDeliverService.getSessionEditDateAndTime.mockResolvedValue(
+      editSessionDetailsFactory.build({ sessionDate: '2024-02-01' }),
+    )
+
+    await request(app)
+      .post(`/${groupId}/${sessionId}/edit-session`)
+      .type('form')
+      .send({
+        'multi-select-selected': ['referral-123'],
+      })
+      .expect(302)
+      .expect('Location', `/${groupId}/${sessionId}/getting-started-1-attendance`)
   })
 
   describe('restricted participants', () => {
