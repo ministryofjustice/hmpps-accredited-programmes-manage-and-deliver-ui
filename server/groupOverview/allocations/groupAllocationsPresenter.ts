@@ -142,17 +142,18 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
 
   generateWaitlistTableArgs() {
     const rows = this.sortExcludedToBottom(this.group.pagedGroupData.content)
-    const out: ({ html: string; attributes?: Record<string, string> } | { text: string })[][] = []
+    const out: ({ html: string; attributes?: Record<string, string | number> } | { text: string })[][] = []
     const excludedReferralsEnabled = config.enable_excluded_referrals
     rows.forEach(member => {
       const isExcluded = excludedReferralsEnabled && Boolean(member.isExcluded)
+      const sentenceEndDateEpoch = member.sentenceEndDate ? new Date(member.sentenceEndDate).getTime() : 0
       out.push([
         {
           html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
                     <input id='${member.referralId}' value='${member.referralId}' type="radio" name="add-to-group" class="govuk-radios__input"${isExcluded ? ' disabled aria-disabled="true"' : ''}>
                     <label class="govuk-label govuk-radios__label" for="${member.referralId}">
-                      <span class="govuk-visually-hidden">Add ${member.personName} to the group</span>
+                      <span class="govuk-visually-hidden">Add ${isExcluded ? member.crn : member.personName} to the group</span>
                     </label>
                   </div>
                  </div>${isExcluded ? '<span class="govuk-visually-hidden">Add to group: restricted access - you cannot add this person to the group</span>' : ''}`,
@@ -162,6 +163,9 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
           html: !isExcluded
             ? `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0"> ${member.crn}</p>${member.isLimitedAccessOffender ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`
             : `<span>${member.crn}</span>${member.isLimitedAccessOffender ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`,
+          attributes: isExcluded
+            ? { 'data-sort-value': member.crn, 'data-excluded': 'true' }
+            : { 'data-sort-value': member.personName },
         },
         {
           html: !isExcluded
@@ -169,6 +173,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
                 member.sourcedFrom && member.sentenceEndDate ? `<br> ${member.sourcedFrom}` : ''
               }`
             : 'Restricted',
+          attributes: { 'data-sort-value': isExcluded ? 0 : sentenceEndDateEpoch },
         },
         {
           html: !isExcluded
@@ -196,18 +201,19 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
 
   generateAllocatedTableArgs() {
     const rows = this.sortExcludedToBottom(this.group.pagedGroupData.content)
-    const out: ({ html: string; attributes?: Record<string, string> } | { text: string })[][] = []
+    const out: ({ html: string; attributes?: Record<string, string | number> } | { text: string })[][] = []
     const excludedReferralsEnabled = config.enable_excluded_referrals
 
     rows.forEach(member => {
       const isExcluded = excludedReferralsEnabled && Boolean(member.isExcluded)
+      const sentenceEndDateEpoch = member.sentenceEndDate ? new Date(member.sentenceEndDate).getTime() : 0
       out.push([
         {
           html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
                     <input id='${member.crn}' value='${member.referralId}' type="radio" name="remove-from-group" class="govuk-radios__input"${isExcluded ? ' disabled aria-disabled="true"' : ''}>
                     <label class="govuk-label govuk-radios__label" for="${member.crn}">
-                      <span class="govuk-visually-hidden">Remove ${member.personName} from the group</span>
+                      <span class="govuk-visually-hidden">Remove ${isExcluded ? member.crn : member.personName} from the group</span>
                     </label>
                   </div>
                  </div>${isExcluded ? '<span class="govuk-visually-hidden">Remove from group: restricted access - you cannot remove this person from the group</span>' : ''}`,
@@ -217,6 +223,9 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
           html: !isExcluded
             ? `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0">${member.crn}</p>${member.isLimitedAccessOffender ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`
             : `<span>${member.crn}</span>${CaselistUtils.hasLaoBadgeHtmlGroupItem(member)}`,
+          attributes: isExcluded
+            ? { 'data-sort-value': member.crn, 'data-excluded': 'true' }
+            : { 'data-sort-value': member.personName },
         },
         {
           html: !isExcluded
@@ -224,6 +233,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
                 member.sourcedFrom && member.sentenceEndDate ? `<br> ${member.sourcedFrom}` : ''
               }`
             : 'Restricted',
+          attributes: { 'data-sort-value': isExcluded ? 0 : sentenceEndDateEpoch },
         },
         { html: `<strong class="govuk-tag govuk-tag--${member.statusColour}">${member.status}</strong>` },
       ])
