@@ -148,6 +148,7 @@ export default {
   recordAttendance: {
     selectAttendanceOutcome: (name: string) => `Select an attendance status for ${name}`,
     sessionNotesTooLong: 'Session notes must be 10,000 characters or fewer',
+    attendanceAndSessionNotesFutureError: 'You cannot update attendance or notes for future sessions',
   },
 
   returnedError,

@@ -23,6 +23,10 @@
         
         <span class="govuk-caption-l">{{text.pageCaption}}</span>
         <h1 class="govuk-heading-l">{{text.pageHeading}}</h1>
+
+        {% if dateErrorSummary !== null %}
+          {{ govukErrorSummary(dateErrorSummary) }}
+        {% endif %}
       </div>
       <div class="govuk-grid-column-two-thirds">
         {{ govukSummaryList(editSessionSummary) }}
@@ -33,8 +37,8 @@
 
       <div class="govuk-grid-column-two-thirds">
         <hr class="govuk-section-break govuk-section-break--m">
-        {% if errorSummary !== null %}
-          {{ govukErrorSummary(errorSummary) }}
+        {% if attendanceErrorSummary !== null %}
+          {{ govukErrorSummary(attendanceErrorSummary) }}
         {% endif %}
       </div>
 
