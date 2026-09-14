@@ -132,10 +132,6 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await referralDetailsController.showPersonalDetailsPage(req, res)
   })
 
-  get('/referral-details/:id/programme-history', async (req, res, next) => {
-    await referralDetailsController.showProgrammeHistoryPage(req, res)
-  })
-
   get('/referral-details/:id/offence-history', async (req, res, next) => {
     await referralDetailsController.showOffenceHistoryPage(req, res)
   })
@@ -178,10 +174,6 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
 
   get('/referral/:referralId/add-location-preferences', async (req, res, next) => {
     await locationPreferencesController.showLocationPreferencesPage(req, res)
-  })
-
-  get('/referral-details/:id/additional-information', async (req, res, next) => {
-    await referralDetailsController.showAdditionalInformationPage(req, res)
   })
 
   getOrPost('/referral/:referralId/add-availability', async (req, res, next) => {
