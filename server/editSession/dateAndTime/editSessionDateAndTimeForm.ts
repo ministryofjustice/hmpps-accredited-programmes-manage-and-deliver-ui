@@ -49,12 +49,12 @@ export default class EditSessionDateAndTimeFormForm {
         sessionStartDate: this.request.body['session-details-date'],
         sessionStartTime: {
           hour: parseInt(this.request.body['session-details-start-time-hour'], 10),
-          minutes: parseInt(this.request.body['session-details-start-time-minute'], 10),
+          minutes: parseInt(this.request.body['session-details-start-time-minute'] || '0', 10),
           amOrPm: this.request.body['session-details-start-time-part-of-day'] as 'AM' | 'PM',
         },
         sessionEndTime: {
           hour: parseInt(this.request.body['session-details-end-time-hour'], 10),
-          minutes: parseInt(this.request.body['session-details-end-time-minute'], 10),
+          minutes: parseInt(this.request.body['session-details-end-time-minute'] || '0', 10),
           amOrPm: this.request.body['session-details-end-time-part-of-day'] as 'AM' | 'PM',
         },
       },
@@ -156,13 +156,13 @@ export default class EditSessionDateAndTimeFormForm {
         .custom((startHourValue, { req }) => {
           const startHour = parseInt(startHourValue, 10)
           const startMinuteValue = req.body['session-details-start-time-minute']
-          const startMinute = parseInt(startMinuteValue, 10)
+          const startMinute = parseInt(startMinuteValue || '0', 10)
           const startPartOfDay = req.body['session-details-start-time-part-of-day']
 
           const endHourValue = req.body['session-details-end-time-hour']
           const endHour = parseInt(endHourValue, 10)
           const endMinuteValue = req.body['session-details-end-time-minute']
-          const endMinute = parseInt(endMinuteValue, 10)
+          const endMinute = parseInt(endMinuteValue || '0', 10)
           const endPartOfDay = req.body['session-details-end-time-part-of-day']
 
           if (
@@ -202,6 +202,7 @@ export default class EditSessionDateAndTimeFormForm {
         }),
       body(`session-details-start-time-minute`)
         .if(body('session-details-start-time-hour').notEmpty())
+        .optional({ checkFalsy: true })
         .isInt({ min: 0, max: 59 })
         .withMessage(errorMessages.sessionSchedule.sessionDetailsTimeMinute),
       body(`session-details-start-time-part-of-day`)
@@ -219,12 +220,12 @@ export default class EditSessionDateAndTimeFormForm {
           const startHourValue = req.body['session-details-start-time-hour']
           const startHour = parseInt(startHourValue, 10)
           const startMinuteValue = req.body['session-details-start-time-minute']
-          const startMinute = parseInt(startMinuteValue, 10)
+          const startMinute = parseInt(startMinuteValue || '0', 10)
           const startPartOfDay = req.body['session-details-start-time-part-of-day']
 
           const endHour = parseInt(endHourValue, 10)
           const endMinuteValue = req.body['session-details-end-time-minute']
-          const endMinute = parseInt(endMinuteValue, 10)
+          const endMinute = parseInt(endMinuteValue || '0', 10)
           const endPartOfDay = req.body['session-details-end-time-part-of-day']
 
           if (
@@ -273,6 +274,7 @@ export default class EditSessionDateAndTimeFormForm {
         }),
       body(`session-details-end-time-minute`)
         .if(body('session-details-end-time-hour').notEmpty())
+        .optional({ checkFalsy: true })
         .isInt({ min: 0, max: 59 })
         .withMessage(errorMessages.sessionSchedule.sessionDetailsTimeMinute),
       body(`session-details-end-time-part-of-day`)

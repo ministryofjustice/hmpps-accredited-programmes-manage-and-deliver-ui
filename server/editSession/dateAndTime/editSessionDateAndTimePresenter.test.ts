@@ -134,7 +134,9 @@ describe('EditSessionDateAndTimePresenter', () => {
 
       expect(fields.sessionDate).toBeDefined()
       expect(fields.startTime).toBeDefined()
+      expect(fields.startTime.minute.value).toBe('30')
       expect(fields.endTime).toBeDefined()
+      expect(fields.endTime.minute.value).toBe('15')
     })
 
     it('should return error message when validation error exists', () => {
