@@ -1,6 +1,7 @@
 import { ReferralDetails } from '@manage-and-deliver-api'
 import { MojAlertComponentArgs } from '../../interfaces/alertComponentArgs'
 import { formatCohortSuccessMessage } from '../../utils/utils'
+import { ButtonArgs } from '../../utils/govukFrontendTypes'
 
 export enum HorizontalNavValues {
   referralDetailsTab = 'referralDetails',
@@ -27,10 +28,11 @@ export default class ReferralLayoutPresenter {
     )
   }
 
-  getButtonMenu(): {
-    button: { text: string; classes: string }
-    items: { text: string; href?: string }[]
-  } {
+  showChangeStatusOnly() {
+    return this.referral.currentStatusDescription.toLowerCase() === 'withdrawn'
+  }
+
+  private updateStatusHref(): string {
     let updateStatusHref = `/referral/${this.referral.id}/update-status`
     if (this.referral.currentStatusDescription === 'Scheduled') {
       updateStatusHref = `/referral/${this.referral.id}/update-status-scheduled`
@@ -38,6 +40,21 @@ export default class ReferralLayoutPresenter {
     if (this.referral.currentStatusDescription === 'On programme') {
       updateStatusHref = `/referral/${this.referral.id}/update-status-on-programme`
     }
+    return updateStatusHref
+  }
+
+  showUpdateStatusButton(): ButtonArgs {
+    return {
+      text: 'Update status',
+      classes: 'govuk-button--secondary',
+      href: this.updateStatusHref(),
+    }
+  }
+
+  getButtonMenu(): {
+    button: { text: string; classes: string }
+    items: { text: string; href?: string }[]
+  } {
     return {
       button: {
         text: 'Update referral',
@@ -46,7 +63,7 @@ export default class ReferralLayoutPresenter {
       items: [
         {
           text: 'Update status',
-          href: updateStatusHref,
+          href: this.updateStatusHref(),
         },
         {
           text: 'Change LDC status',
@@ -93,6 +110,8 @@ export default class ReferralLayoutPresenter {
       showRestrictedAccessBadge,
       showButtonMenu: this.showButtonMenu(),
       buttonMenu: this.getButtonMenu(),
+      showChangeStatusOnly: this.showChangeStatusOnly(),
+      updateStatusButton: this.showUpdateStatusButton(),
     }
   }
 

@@ -55,19 +55,6 @@ export default class UpdateReferralStatusPresenter {
     return statusRadios
   }
 
-  generateAddDetailsHintText() {
-    switch (this.statusDetails.currentStatus.title) {
-      case 'Awaiting allocation':
-        return 'You can add more information about this update, such as the reason for deprioritising someone.'
-      case 'Scheduled':
-        return 'You can add more information about this update, such as the reason for deprioritising someone.'
-      case 'On programme':
-        return 'You can add more information about this update, such as the reason why this person cannot continue on the group.'
-      default:
-        return 'You can add more information about this update, such as the reason for an assessment decision or for deprioritising someone.'
-    }
-  }
-
   showTopInsetText() {
     return ['Awaiting allocation'].includes(this.statusDetails.currentStatus.title)
   }

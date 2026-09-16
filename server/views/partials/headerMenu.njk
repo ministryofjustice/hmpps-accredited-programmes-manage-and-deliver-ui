@@ -1,16 +1,21 @@
 {%- from "moj/components/button-menu/macro.njk" import mojButtonMenu -%}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
 <div class="govuk-grid-column-three-quarters">
     <span class="govuk-caption-xl">{{ presenter.headerMenu.caption }}</span>
     <h1 class="govuk-heading-xl">{{ presenter.headerMenu.heading }}
     {% if presenter.headerMenu.showRestrictedAccessBadge %}
     <br/><span class="moj-badge moj-badge--red moj-badge--large">RESTRICTED ACCESS</span>
     {% endif %}</h1>
-       
+
 </div>
 <div class="govuk-grid-column-one-quarter">
     <div class="moj-button-group moj-button-group--inline header-menu-button">
         {% if presenter.headerMenu.showButtonMenu %}
           {{ mojButtonMenu(presenter.headerMenu.buttonMenu) }}
         {% endif %}
+      {% if presenter.headerMenu.showChangeStatusOnly %}
+        {{ govukButton(presenter.headerMenu.updateStatusButton) }}
+      {% endif %}
     </div>
 </div>
