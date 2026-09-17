@@ -28,14 +28,6 @@ export default ReferralStatusTransitionsFactory.define(() => ({
       labelColour: 'yellow',
     },
     {
-      id: 'bc8c7024-045b-4a82-bb97-e6b8c0f198cb',
-      status: 'Deprioritised',
-      transitionDescription:
-        'The person is suitable but does not meet the prioritisation criteria. The referral will be paused in case they are re-prioritised.',
-      isClosed: false,
-      labelColour: 'yellow',
-    },
-    {
       id: 'aec91cd3-fba0-40a4-a5c6-7578b596af75',
       status: 'Recall',
       transitionDescription:

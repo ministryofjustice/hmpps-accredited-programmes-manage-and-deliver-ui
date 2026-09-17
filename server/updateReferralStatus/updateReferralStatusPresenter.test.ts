@@ -103,14 +103,6 @@ describe('generateStatusUpdateRadios.', () => {
           isClosed: false,
           labelColour: 'light-blue',
         },
-        {
-          id: 'bc8c7024-045b-4a82-bb97-e6b8c0f198cb',
-          status: 'Deprioritised',
-          transitionDescription:
-            'The person is suitable but does not meet the prioritisation criteria. The referral will be paused in case they are re-prioritised.',
-          isClosed: false,
-          labelColour: 'yellow',
-        },
       ],
     })
 
@@ -119,25 +111,5 @@ describe('generateStatusUpdateRadios.', () => {
 
     expect(radios.find(r => r.text === 'Awaiting allocation')).toBeDefined()
     expect(radios.find(r => r.text === 'Deprioritised')).toBeUndefined()
-  })
-
-  describe('generateAddDetailsHintText', () => {
-    it('returns the correct hint for Awaiting allocation', () => {
-      const details = referralDetailsFactory.build()
-      const statusDetails = referralStatusFormDataFactory.build({ currentStatus: { title: 'Awaiting allocation' } })
-      const presenter = new UpdateReferralStatusPresenter(details, statusDetails, '')
-      expect(presenter.generateAddDetailsHintText()).toBe(
-        'You can add more information about this update, such as the reason for deprioritising someone.',
-      )
-    })
-
-    it('returns the default hint for other statuses', () => {
-      const details = referralDetailsFactory.build()
-      const statusDetails = referralStatusFormDataFactory.build()
-      const presenter = new UpdateReferralStatusPresenter(details, statusDetails, '')
-      expect(presenter.generateAddDetailsHintText()).toBe(
-        'You can add more information about this update, such as the reason for an assessment decision or for deprioritising someone.',
-      )
-    })
   })
 })

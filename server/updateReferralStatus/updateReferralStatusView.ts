@@ -35,7 +35,7 @@ export default class UpdateReferralStatusView {
       },
       maxlength: '500',
       hint: {
-        text: this.presenter.generateAddDetailsHintText(),
+        text: 'Add more information about this update if you need to, such as the reason for an assessment decision.',
       },
       errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.moreDetailsTextArea.errorMessage),
       value: this.presenter.fields.moreDetailsTextArea.value,
