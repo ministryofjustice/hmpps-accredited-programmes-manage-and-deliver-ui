@@ -39,7 +39,7 @@ export default class TestUtils {
       open: [
         'Awaiting allocation',
         'Awaiting assessment',
-        'Breach (non-attendance)',
+        'Breach',
         'On hold',
         'On programme',
         'Recall',
