@@ -935,7 +935,7 @@ describe('SessionScheduleAttendancePresenter', () => {
         'Getting started',
         'Managing myself',
         "Managing life's problems",
-        'Managing people around me',
+        'People around me',
         'Bringing it all together',
         'Post-programme reviews',
       ]
