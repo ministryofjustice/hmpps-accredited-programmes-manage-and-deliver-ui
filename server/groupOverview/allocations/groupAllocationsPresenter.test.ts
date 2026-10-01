@@ -110,7 +110,7 @@ describe('GroupAllocationsPresenter', () => {
           },
 
           {
-            html: '28 April 2027<br> Licence end date',
+            html: '28 April 2027 <br> Licence end date',
             attributes: { 'data-sort-value': firstSentenceEndDateTimestamp },
           },
 
@@ -139,7 +139,7 @@ describe('GroupAllocationsPresenter', () => {
           },
 
           {
-            html: '14 April 2028<br> Order end date',
+            html: '14 April 2028 <br> Order end date',
             attributes: { 'data-sort-value': secondSentenceEndDateTimestamp },
           },
 
@@ -153,6 +153,58 @@ describe('GroupAllocationsPresenter', () => {
         ],
       ])
     })
+
+    it.each([
+      {
+        scenario: 'a licence case with no licence end date',
+        sourcedFrom: 'LICENCE_CONDITION' as const,
+        licenceExpiryDate: null,
+        sentenceEndDate: '10 August 2027',
+        html: '10 August 2027 <br> Calculated expected end date',
+        sortValue: new Date('10 August 2027').getTime(),
+      },
+      {
+        scenario: 'a licence case with no licence or calculated expected end date',
+        sourcedFrom: 'LICENCE_CONDITION' as const,
+        licenceExpiryDate: null,
+        sentenceEndDate: null,
+        html: 'No information available',
+        sortValue: 0,
+      },
+      {
+        scenario: 'an order case with no sentence end date',
+        sourcedFrom: 'REQUIREMENT' as const,
+        licenceExpiryDate: null,
+        sentenceEndDate: null,
+        html: 'No information available',
+        sortValue: 0,
+      },
+    ])(
+      'should show the correct sentence end date for $scenario',
+      ({ sourcedFrom, licenceExpiryDate, sentenceEndDate, html, sortValue }) => {
+        const baseGroupOverview = ProgrammeGroupOverviewFactory.waitlist().build()
+        const groupOverview = {
+          ...baseGroupOverview,
+          pagedGroupData: {
+            ...baseGroupOverview.pagedGroupData,
+            content: [
+              { ...baseGroupOverview.pagedGroupData.content[0], sourcedFrom, licenceExpiryDate, sentenceEndDate },
+            ],
+          },
+        }
+        const presenter = new GroupAllocationsPresenter(
+          GroupAllocationsPageSection.Waitlist,
+          groupOverview,
+          '1234',
+          GroupAllocationsFilter.empty(),
+        )
+
+        expect(presenter.generateWaitlistTableArgs()[0][2]).toEqual({
+          html,
+          attributes: { 'data-sort-value': sortValue },
+        })
+      },
+    )
 
     it('should replace restricted fields with "Restricted" when a waitlist member is excluded', () => {
       const filterObject = GroupAllocationsFilter.empty()
@@ -256,7 +308,7 @@ describe('GroupAllocationsPresenter', () => {
           },
 
           {
-            html: '28 April 2027<br> Licence end date',
+            html: '28 April 2027 <br> Licence end date',
             attributes: { 'data-sort-value': firstSentenceEndDateTimestamp },
           },
 
@@ -279,7 +331,7 @@ describe('GroupAllocationsPresenter', () => {
           },
 
           {
-            html: '14 April 2028<br> Order end date',
+            html: '14 April 2028 <br> Order end date',
             attributes: { 'data-sort-value': secondSentenceEndDateTimestamp },
           },
 

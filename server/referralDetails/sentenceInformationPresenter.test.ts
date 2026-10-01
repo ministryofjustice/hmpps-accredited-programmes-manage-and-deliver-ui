@@ -27,15 +27,15 @@ describe(`sentenceInformationSummaryList.`, () => {
         lines: [sentenceInformation.licenceEndDate],
       },
       {
-        key: 'Two-thirds point',
-        lines: [sentenceInformation.twoThirdsPoint],
+        key: 'Calculated expected end date',
+        lines: [sentenceInformation.orderEndDate],
       },
     ]
 
     expect(presenter.sentenceInformationSummaryList()).toEqual(expectedResult)
   })
 
-  it(`a licence referral will show 'Data not available' for null rows`, () => {
+  it(`a licence referral will show 'Data not available' or 'No information available' for null rows`, () => {
     const referralDetails = referralDetailsFactory.build()
     const sentenceInformation = sentenceInformationFactory.licence().build({
       sentenceType: null,
@@ -44,7 +44,7 @@ describe(`sentenceInformationSummaryList.`, () => {
       licenceEndDate: null,
       postSentenceSupervisionStartDate: null,
       postSentenceSupervisionEndDate: null,
-      twoThirdsPoint: null,
+      orderEndDate: null,
     })
 
     const presenter = new SentenceInformationPresenter(referralDetails, 'sentence-information', sentenceInformation)
@@ -64,11 +64,11 @@ describe(`sentenceInformationSummaryList.`, () => {
       },
       {
         key: 'Licence end date',
-        lines: ['Data not available'],
+        lines: ['No information available'],
       },
       {
-        key: 'Two-thirds point',
-        lines: ['Data not available'],
+        key: 'Calculated expected end date',
+        lines: ['No information available'],
       },
     ]
 

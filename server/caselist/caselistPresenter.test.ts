@@ -490,33 +490,69 @@ describe('generateTableRows', () => {
     })
   })
 
-  it('should generate correct sentence end date with LICENCE_CONDITION source', () => {
-    const referralCaseListItem = referralCaseListItemFactory.build({
-      sentenceEndDate: '2024-09-20',
-      sentenceEndDateSource: 'LICENCE_CONDITION',
-    })
-    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
-      .pageContent([referralCaseListItem])
-      .build() as Page<ReferralCaseListItem>
-    const presenter = new CaselistPresenter(
-      1,
-      referralCaseListItemPage,
-      {} as CaselistFilter,
-      '',
-      true,
-      caseListFilters,
-      0,
-      'test location',
-    )
+  it.each([
+    {
+      scenario: 'a licence case with a licence end date',
+      sentenceEndDateSource: 'LICENCE_CONDITION' as const,
+      licenceExpiryDate: '2024-09-20',
+      sentenceEndDate: '2024-08-10',
+      html: '20 September 2024 <br> Licence end date',
+      sortValue: new Date('20 September 2024').getTime(),
+    },
+    {
+      scenario: 'a licence case with no licence end date',
+      sentenceEndDateSource: 'LICENCE_CONDITION' as const,
+      licenceExpiryDate: null,
+      sentenceEndDate: '2024-08-10',
+      html: '10 August 2024 <br> Calculated expected end date',
+      sortValue: new Date('10 August 2024').getTime(),
+    },
+    {
+      scenario: 'a licence case with no licence or calculated expected end date',
+      sentenceEndDateSource: 'LICENCE_CONDITION' as const,
+      licenceExpiryDate: null,
+      sentenceEndDate: null,
+      html: 'No information available',
+      sortValue: 0,
+    },
+    {
+      scenario: 'a requirement case with no sentence end date',
+      sentenceEndDateSource: 'REQUIREMENT' as const,
+      licenceExpiryDate: null,
+      sentenceEndDate: null,
+      html: 'No information available',
+      sortValue: 0,
+    },
+  ])(
+    'should generate the correct sentence end date for $scenario',
+    ({ sentenceEndDateSource, licenceExpiryDate, sentenceEndDate, html, sortValue }) => {
+      const referralCaseListItem = referralCaseListItemFactory.build({
+        sentenceEndDate,
+        licenceExpiryDate,
+        sentenceEndDateSource,
+      })
+      const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+        .pageContent([referralCaseListItem])
+        .build() as Page<ReferralCaseListItem>
+      const presenter = new CaselistPresenter(
+        1,
+        referralCaseListItemPage,
+        {} as CaselistFilter,
+        '',
+        true,
+        caseListFilters,
+        0,
+        'test location',
+      )
 
-    const rows = presenter.generateTableRows()
-    const sentenceEndDateTimestamp = new Date('20 September 2024').getTime()
+      const rows = presenter.generateTableRows()
 
-    expect(rows[0][3]).toEqual({
-      html: `20 September 2024 <br> Licence end date`,
-      attributes: { 'data-sort-value': sentenceEndDateTimestamp },
-    })
-  })
+      expect(rows[0][3]).toEqual({
+        html,
+        attributes: { 'data-sort-value': sortValue },
+      })
+    },
+  )
 
   it('should display LDC badge for cohorts with LDC', () => {
     const generalLdc = referralCaseListItemFactory.build({

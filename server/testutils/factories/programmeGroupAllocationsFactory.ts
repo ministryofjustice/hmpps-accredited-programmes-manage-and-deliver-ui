@@ -9,10 +9,11 @@ class ProgrammeGroupAllocationsFactory extends Factory<ProgrammeGroupAllocations
         content: [
           {
             referralId: '39fde7e8-d2e3-472b-8364-5848bf673aa6',
-            sourcedFrom: 'Licence end date',
+            sourcedFrom: 'LICENCE_CONDITION',
             crn: 'X718250',
             personName: 'Edgar Schiller',
             sentenceEndDate: '28 April 2027',
+            licenceExpiryDate: '28 April 2027',
             cohort: 'SEXUAL_OFFENCE' as CohortEnum,
             hasLdc: false,
             age: 36,
@@ -27,7 +28,7 @@ class ProgrammeGroupAllocationsFactory extends Factory<ProgrammeGroupAllocations
           },
           {
             referralId: 'ae43bc75-b96e-496b-b9da-20ea327d7909',
-            sourcedFrom: 'Order end date',
+            sourcedFrom: 'REQUIREMENT',
             crn: 'X718255',
             personName: 'Roy Kloss',
             sentenceEndDate: '14 April 2028',
@@ -79,10 +80,11 @@ class ProgrammeGroupAllocationsFactory extends Factory<ProgrammeGroupAllocations
         content: [
           {
             referralId: '39fde7e8-d2e3-472b-8364-5848bf673aa6',
-            sourcedFrom: 'Licence end date',
+            sourcedFrom: 'LICENCE_CONDITION',
             crn: 'X718250',
             personName: 'Edgar Schiller',
             sentenceEndDate: '28 April 2027',
+            licenceExpiryDate: '28 April 2027',
             cohort: 'SEXUAL_OFFENCE' as CohortEnum,
             hasLdc: false,
             age: 36,
@@ -97,7 +99,7 @@ class ProgrammeGroupAllocationsFactory extends Factory<ProgrammeGroupAllocations
           },
           {
             referralId: 'ae43bc75-b96e-496b-b9da-20ea327d7909',
-            sourcedFrom: 'Order end date',
+            sourcedFrom: 'REQUIREMENT',
             crn: 'X718255',
             personName: 'Roy Kloss',
             sentenceEndDate: '14 April 2028',
@@ -172,10 +174,11 @@ export default ProgrammeGroupAllocationsFactory.define(() => ({
     content: [
       {
         referralId: '39fde7e8-d2e3-472b-8364-5848bf673aa6',
-        sourcedFrom: 'Licence end date',
+        sourcedFrom: 'LICENCE_CONDITION' as const,
         crn: 'X718250',
         personName: 'Edgar Schiller',
         sentenceEndDate: '28 April 2027',
+        licenceExpiryDate: '28 April 2027',
         cohort: 'SEXUAL_OFFENCE' as CohortEnum,
         hasLdc: false,
         age: 36,
@@ -190,7 +193,7 @@ export default ProgrammeGroupAllocationsFactory.define(() => ({
       },
       {
         referralId: 'ae43bc75-b96e-496b-b9da-20ea327d7909',
-        sourcedFrom: 'Order end date',
+        sourcedFrom: 'REQUIREMENT' as const,
         crn: 'X718255',
         personName: 'Roy Kloss',
         sentenceEndDate: '14 April 2028',

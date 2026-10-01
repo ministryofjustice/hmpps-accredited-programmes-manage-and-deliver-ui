@@ -146,7 +146,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
     const excludedReferralsEnabled = config.enable_excluded_referrals
     rows.forEach(member => {
       const isExcluded = excludedReferralsEnabled && Boolean(member.isExcluded)
-      const sentenceEndDateEpoch = member.sentenceEndDate ? new Date(member.sentenceEndDate).getTime() : 0
+      const sentenceEndDate = CaselistUtils.sentenceEndDateCellGroupItem(member)
       out.push([
         {
           html: `<div class="govuk-radios govuk-radios--small group-details-table">
@@ -168,12 +168,8 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
             : { 'data-sort-value': member.personName },
         },
         {
-          html: !isExcluded
-            ? `${member.sentenceEndDate ?? 'No information'}${
-                member.sourcedFrom && member.sentenceEndDate ? `<br> ${member.sourcedFrom}` : ''
-              }`
-            : 'Restricted',
-          attributes: { 'data-sort-value': isExcluded ? 0 : sentenceEndDateEpoch },
+          html: !isExcluded ? sentenceEndDate.html : 'Restricted',
+          attributes: { 'data-sort-value': isExcluded ? 0 : sentenceEndDate.sortValue },
         },
         {
           html: !isExcluded
@@ -206,7 +202,7 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
 
     rows.forEach(member => {
       const isExcluded = excludedReferralsEnabled && Boolean(member.isExcluded)
-      const sentenceEndDateEpoch = member.sentenceEndDate ? new Date(member.sentenceEndDate).getTime() : 0
+      const sentenceEndDate = CaselistUtils.sentenceEndDateCellGroupItem(member)
       out.push([
         {
           html: `<div class="govuk-radios govuk-radios--small group-details-table">
@@ -228,12 +224,8 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
             : { 'data-sort-value': member.personName },
         },
         {
-          html: !isExcluded
-            ? `${member.sentenceEndDate ?? 'No information'}${
-                member.sourcedFrom && member.sentenceEndDate ? `<br> ${member.sourcedFrom}` : ''
-              }`
-            : 'Restricted',
-          attributes: { 'data-sort-value': isExcluded ? 0 : sentenceEndDateEpoch },
+          html: !isExcluded ? sentenceEndDate.html : 'Restricted',
+          attributes: { 'data-sort-value': isExcluded ? 0 : sentenceEndDate.sortValue },
         },
         { html: `<strong class="govuk-tag govuk-tag--${member.statusColour}">${member.status}</strong>` },
       ])
