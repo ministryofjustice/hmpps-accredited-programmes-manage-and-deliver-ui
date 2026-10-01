@@ -5,14 +5,6 @@ export default [
   ...hmppsConfig(),
 
   {
-    ignores: [
-      'node_modules/**',
-      'dist/**',
-      'coverage/**',
-      'public/**',
-      'assets/**',
-      'test_results/**',
-      'reporter-config.json',
-    ],
+    ignores: ['node_modules/**', 'dist/**', 'coverage/**', 'public/**', 'assets/**', 'test_results/**'],
   },
 ]

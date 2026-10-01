@@ -120,8 +120,6 @@ dist
 .vscode
 dist/
 test_results/
-integration_tests/videos/
-integration_tests/screenshots/
 */*.iml
 **/Chart.lock
 **/.DS_Store

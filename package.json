@@ -11,16 +11,12 @@
     "generate-frontend-types": "ts-node script/generateGovukFrontendTypes/runner.ts && prettier --write server/utils/govukFrontendTypes.ts",
     "start": "node $NODE_OPTIONS dist/server.js | bunyan -o short",
     "start:dev": "concurrently -k -p \"[{name}]\" -n \"ESBuild,Node\" -c \"yellow.bold,cyan.bold\" \"node esbuild/esbuild.config.js --build --watch\" \"node esbuild/esbuild.config.js --dev-server\"",
-    "start-feature": " node $NODE_DEBUG_OPTION --env-file=feature.env dist/server.js | bunyan -o short",
-    "start-feature:dev": "concurrently -k -p \"[{name}]\" -n \"ESBuild,Node\" -c \"yellow.bold,cyan.bold\" \"node esbuild/esbuild.config.js  --build --watch \" \"node esbuild/esbuild.config.js --dev-test-server\"",
     "lint": "eslint . --cache --max-warnings 0",
     "lint-fix": "eslint . --cache --max-warnings 0 --fix",
-    "typecheck": "tsc && tsc -p integration_tests",
+    "typecheck": "tsc",
     "test": "jest",
     "test:ci": "jest --runInBand",
     "security_audit": "npx audit-ci --config audit-ci.json",
-    "int-test": "cypress run --config video=false",
-    "int-test-ui": "cypress open --e2e --browser chrome",
     "clean": "rm -rf dist test_results",
     "rebuild": "npm run clean && npm i && npm run build",
     "setup": "npm ci && hmpps-npm-script-run-allowlist"
@@ -46,7 +42,7 @@
       "server/**/*.{ts,js,jsx,mjs}"
     ],
     "testMatch": [
-      "<rootDir>/(server|job)/**/?(*.)(cy|test).{ts,js,jsx,mjs}"
+      "<rootDir>/(server|job)/**/?(*.)test.{ts,js,jsx,mjs}"
     ],
     "testEnvironment": "node",
     "reporters": [
@@ -145,8 +141,6 @@
     "cheerio": "^1.2.0",
     "chokidar": "5.0.0",
     "concurrently": "^10.0.5",
-    "cypress": "^16.0.0",
-    "cypress-multi-reporters": "^2.0.5",
     "esbuild": "^0.28.2",
     "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-copy": "^2.1.1",
@@ -166,8 +160,6 @@
     "jest-junit": "17.0.0",
     "jsonwebtoken": "^9.0.3",
     "lint-staged": "^17.5.0",
-    "mocha": "12.0.0",
-    "mocha-junit-reporter": "^2.2.1",
     "nock": "14.0.17",
     "openapi-typescript": "^7.13.0",
     "prettier": "^3.9.6",
@@ -182,9 +174,6 @@
   "overrides": {
     "@jgoz/esbuild-plugin-typecheck": {
       "esbuild": "$esbuild"
-    },
-    "mocha": {
-      "serialize-javascript": "7.1.1"
     },
     "diff": "9.0.0",
     "uuid": "14.0.2",
