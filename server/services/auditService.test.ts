@@ -1,4 +1,4 @@
-import { auditService } from '@ministryofjustice/hmpps-audit-client'
+import { AuditServiceFactory } from '@ministryofjustice/hmpps-audit-client'
 import sendAuditEvent from './auditService'
 import logger from '../../logger'
 import config from '../config'
@@ -7,9 +7,13 @@ jest.mock('@ministryofjustice/hmpps-audit-client')
 jest.mock('../../logger')
 jest.mock('../config')
 
+const logAuditEvent = jest.fn()
+;(AuditServiceFactory.createInstance as jest.Mock).mockReturnValue({ logAuditEvent })
+
 describe('Audit service', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
+    logAuditEvent.mockReset()
+    ;(logger.error as jest.Mock).mockClear()
   })
 
   describe('sendAuditEvent', () => {
@@ -18,40 +22,42 @@ describe('Audit service', () => {
 
       await sendAuditEvent('EDIT_REFERRAL_LDC', 'testuser123', 'subject123', 'CRN')
 
-      expect(auditService.sendAuditMessage).not.toHaveBeenCalled()
+      expect(logAuditEvent).not.toHaveBeenCalled()
     })
 
     it('should send audit message when audit is enabled', async () => {
       ;(config as jest.Mocked<typeof config>).sqs.audit.enabled = true
-      ;(auditService.sendAuditMessage as jest.Mock).mockResolvedValue(undefined)
+      logAuditEvent.mockResolvedValue(undefined)
 
       await sendAuditEvent('EDIT_REFERRAL_LDC', 'testuser123', 'subject123', 'CRN', {
         referralId: 'referralId',
         hasLdc: true,
       })
 
-      expect(auditService.sendAuditMessage).toHaveBeenCalledWith({
-        action: 'EDIT_REFERRAL_LDC',
+      expect(AuditServiceFactory.createInstance).toHaveBeenCalledWith(
+        expect.objectContaining({ serviceName: 'hmpps-accredited-programmes-manage-and-deliver-ui' }),
+        logger,
+      )
+      expect(logAuditEvent).toHaveBeenCalledWith({
+        what: 'EDIT_REFERRAL_LDC',
         who: 'testuser123',
         subjectId: 'subject123',
         subjectType: 'CRN',
-        service: 'hmpps-accredited-programmes-manage-and-deliver-ui',
-        details: JSON.stringify({ referralId: 'referralId', hasLdc: true }),
+        details: { referralId: 'referralId', hasLdc: true },
       })
     })
 
     it('should use NOT_APPLICABLE as default subjectType', async () => {
       ;(config as jest.Mocked<typeof config>).sqs.audit.enabled = true
-      ;(auditService.sendAuditMessage as jest.Mock).mockResolvedValue(undefined)
+      logAuditEvent.mockResolvedValue(undefined)
 
       await sendAuditEvent('EDIT_REFERRAL_LDC', 'testuser123')
 
-      expect(auditService.sendAuditMessage).toHaveBeenCalledWith({
-        action: 'EDIT_REFERRAL_LDC',
+      expect(logAuditEvent).toHaveBeenCalledWith({
+        what: 'EDIT_REFERRAL_LDC',
         who: 'testuser123',
         subjectId: undefined,
         subjectType: 'NOT_APPLICABLE',
-        service: 'hmpps-accredited-programmes-manage-and-deliver-ui',
         details: undefined,
       })
     })
@@ -59,7 +65,7 @@ describe('Audit service', () => {
     it('should handle audit message send error', async () => {
       ;(config as jest.Mocked<typeof config>).sqs.audit.enabled = true
       const error = new Error('SQS connection failed')
-      ;(auditService.sendAuditMessage as jest.Mock).mockRejectedValue(error)
+      logAuditEvent.mockRejectedValue(error)
 
       await sendAuditEvent('EDIT_REFERRAL_LDC', 'testuser123')
 

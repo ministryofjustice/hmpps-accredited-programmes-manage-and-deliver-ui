@@ -1,13 +1,30 @@
-import { auditService } from '@ministryofjustice/hmpps-audit-client'
-import config from '../config'
+import { AuditService, AuditServiceFactory, SubjectType } from '@ministryofjustice/hmpps-audit-client'
 import logger from '../../logger'
+import config from '../config'
+
+type AuditSubjectType = SubjectType | 'GROUP'
+
+let auditService: AuditService<string, AuditSubjectType> | undefined
+
+const getAuditService = (): AuditService<string, AuditSubjectType> => {
+  if (!auditService) {
+    auditService = AuditServiceFactory.createInstance<string, AuditSubjectType>(
+      {
+        ...config.sqs.audit,
+        serviceName: 'hmpps-accredited-programmes-manage-and-deliver-ui',
+      },
+      logger,
+    )
+  }
+  return auditService
+}
 
 export default async function sendAuditEvent(
   action: string,
   username: string,
   subjectId?: string,
-  subjectType?: string,
-  details?: object,
+  subjectType?: AuditSubjectType,
+  details?: Record<string, unknown>,
 ) {
   // Check if audit is enabled for environment
   if (!config.sqs.audit.enabled) {
@@ -16,13 +33,12 @@ export default async function sendAuditEvent(
   }
 
   try {
-    await auditService.sendAuditMessage({
-      action,
+    await getAuditService().logAuditEvent({
+      what: action,
       who: username,
       subjectId,
       subjectType: subjectType || 'NOT_APPLICABLE',
-      service: 'hmpps-accredited-programmes-manage-and-deliver-ui',
-      details: details ? JSON.stringify(details) : undefined,
+      details,
     })
     logger.info('Audit event sent successfully')
   } catch (error) {
