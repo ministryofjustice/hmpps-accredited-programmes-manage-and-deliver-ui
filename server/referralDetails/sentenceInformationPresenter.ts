@@ -56,11 +56,12 @@ export default class SentenceInformationPresenter extends ReferralDetailsPresent
       },
       {
         key: 'Licence end date',
-        lines: [`${this.sentenceInformation.licenceEndDate ?? 'Data not available'}`],
+        lines: [`${this.sentenceInformation.licenceEndDate ?? 'No information available'}`],
       },
       {
-        key: 'Two-thirds point',
-        lines: [`${this.sentenceInformation.twoThirdsPoint ?? 'Data not available'}`],
+        // The API populates orderEndDate with the NDelius expected end date for both licence and order cases
+        key: 'Calculated expected end date',
+        lines: [`${this.sentenceInformation.orderEndDate ?? 'No information available'}`],
       },
     ]
   }

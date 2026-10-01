@@ -392,6 +392,38 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/dev/seed/referrals': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['seedReferrals']
+    delete: operations['dangerouslyDeleteAllReferrals']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/dev/seed/groups': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put?: never
+    post: operations['seedGroups']
+    delete: operations['dangerouslyDeleteAllGroups']
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/admin/referral/{referralId}/repoint-sentence-reference': {
     parameters: {
       query?: never
@@ -1025,6 +1057,22 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/dev/seed/health': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: operations['health']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/current-user/region': {
     parameters: {
       query?: never
@@ -1391,8 +1439,8 @@ export interface paths {
       cookie?: never
     }
     /**
-     * bff endpoint to retrieve group sessions page data
-     * @description Retrieve group sessions
+     * BFF endpoint to retrieve group session page data
+     * @description Retrieve group session
      */
     get: operations['getGroupSessionPage']
     put?: never
@@ -1737,8 +1785,8 @@ export interface components {
       isLimitedAccessOffender?: boolean | null
       /** @description The boolean value of whether the group member details are excluded from viewing by the logged-in username */
       isExcluded?: boolean | null
-      limitedAccessOffender?: boolean
       excluded?: boolean
+      limitedAccessOffender?: boolean
     }
     ReferralMotivationBackgroundAndNonAssociations: {
       /**
@@ -1826,6 +1874,11 @@ export interface components {
       /** @description A message describing what was updated on the group */
       successMessage: string
     }
+    /**
+     * @description AM/PM time indicator
+     * @enum {string}
+     */
+    AmOrPm: 'AM' | 'PM'
     /** @description Session slot details for a programme group */
     CreateGroupSessionSlot: {
       /**
@@ -2202,6 +2255,27 @@ export interface components {
        * @example Alex River was added to this group. Their referral status is now Scheduled.
        */
       message: string
+    }
+    ReferralSeedingResult: {
+      /** Format: int32 */
+      count: number
+      referrals: components['schemas']['SeededReferralInfo'][]
+    }
+    SeededReferralInfo: {
+      referralId: string
+      crn: string
+      personName: string
+      requirementId: string
+    }
+    GroupSeedingResult: {
+      /** Format: int32 */
+      count: number
+      groups: components['schemas']['SeededGroupInfo'][]
+    }
+    SeededGroupInfo: {
+      groupId: string
+      groupCode: string
+      regionName: string
     }
     CreateAvailability: {
       /**
@@ -2808,8 +2882,7 @@ export interface components {
         | 'AWAITING_ALLOCATION'
         | 'AWAITING_ASSESSMENT'
         | 'BREACH'
-        | 'DEPRIORITISED'
-        | 'DEFERRED'
+        | 'ON_HOLD'
         | 'ON_PROGRAMME'
         | 'PROGRAMME_COMPLETE'
         | 'RECALL'
@@ -2831,6 +2904,8 @@ export interface components {
       notes?: string | null
       /** @description A human-readable description of the status change */
       description: string
+      /** @description Username of the person who made the status update */
+      username: string
     }
     /** @description Completion data for a referral */
     ReferralCompletionData: {
@@ -3403,12 +3478,12 @@ export interface components {
     PageableObject: {
       /** Format: int64 */
       offset?: number
-      sort?: components['schemas']['SortObject']
-      /** Format: int32 */
-      pageNumber?: number
       paged?: boolean
       /** Format: int32 */
+      pageNumber?: number
+      /** Format: int32 */
       pageSize?: number
+      sort?: components['schemas']['SortObject']
       unpaged?: boolean
     }
     ReferralCaseListItem: {
@@ -3429,6 +3504,8 @@ export interface components {
       reportingTeam: string
       /** Format: date */
       sentenceEndDate?: string | null
+      /** Format: date */
+      licenceExpiryDate?: string | null
       /** @enum {string|null} */
       sentenceEndDateSource?: 'REQUIREMENT' | 'LICENCE_CONDITION' | null
       isLimitedAccessOffender?: boolean | null
@@ -3884,8 +3961,8 @@ export interface components {
       isLimitedAccessOffender?: boolean | null
       /** @description The boolean value of whether the group member details are excluded from viewing by the logged-in username */
       isExcluded?: boolean | null
-      limitedAccessOffender?: boolean
       excluded?: boolean
+      limitedAccessOffender?: boolean
     }
     /** @description Response representing attendees for a specific programme session */
     EditSessionAttendeesResponse: {
@@ -4140,10 +4217,11 @@ export interface components {
        */
       referralId: string
       /**
-       * @description A human-readable string describing the entity (Licence Condition or Requirement) that caused the Referral to be created in our system
-       * @example Order end date
+       * @description The type of entity (Licence Condition or Requirement) that caused the Referral to be created in our system
+       * @example REQUIREMENT
+       * @enum {string|null}
        */
-      sourcedFrom: string | null
+      sourcedFrom: 'REQUIREMENT' | 'LICENCE_CONDITION' | null
       /**
        * @description The crn associated with this referral.
        * @example X933590
@@ -4170,6 +4248,12 @@ export interface components {
        * @example 1 January 2030
        */
       sentenceEndDate: string | null
+      /**
+       * Format: date
+       * @description The licence expiry date. Populated for licence cases and null for requirement cases.
+       * @example 1 January 2030
+       */
+      licenceExpiryDate?: string | null
       /**
        * @description The offence cohort this referral is classified as.
        * @example SEXUAL_OFFENCE
@@ -4683,11 +4767,6 @@ export interface components {
        */
       selected: boolean
     }
-    /**
-     * @description AM/PM time indicator
-     * @enum {string}
-     */
-    AmOrPm: 'AM' | 'PM'
     /** @description Response model for the edit cohort page */
     EditGroupDaysAndTimes: {
       /**
@@ -4799,6 +4878,10 @@ export interface components {
       facilitators: components['schemas']['CreateGroupTeamMember'][]
       /** @description The list of coverFacilitators for this group. */
       coverFacilitators?: components['schemas']['CreateGroupTeamMember'][] | null
+    }
+    TeardownResult: {
+      /** Format: int32 */
+      deletedCount: number
     }
   }
   responses: never
@@ -6037,6 +6120,126 @@ export interface operations {
       }
       /** @description The group or referral does not exist */
       404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  seedReferrals: {
+    parameters: {
+      query?: {
+        count?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ReferralSeedingResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  dangerouslyDeleteAllReferrals: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['TeardownResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  seedGroups: {
+    parameters: {
+      query?: {
+        count?: number
+      }
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['GroupSeedingResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  dangerouslyDeleteAllGroups: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['TeardownResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
         headers: {
           [name: string]: unknown
         }
@@ -7912,6 +8115,37 @@ export interface operations {
       }
     }
   }
+  health: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': {
+            [key: string]: string
+          }
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getCurrentUserRegion: {
     parameters: {
       query?: never
@@ -8963,7 +9197,7 @@ export interface operations {
     }
     requestBody?: never
     responses: {
-      /** @description Successfully retrieved group sessions */
+      /** @description Successfully retrieved group session */
       200: {
         headers: {
           [name: string]: unknown

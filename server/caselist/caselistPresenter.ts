@@ -4,7 +4,6 @@ import { CheckboxesArgsItem, SelectArgsItem, TableArgs } from '../utils/govukFro
 import Pagination from '../utils/pagination/pagination'
 import CaselistFilter from './caselistFilter'
 import CaselistUtils from './caseListUtils'
-import DateUtils from '../utils/dateUtils'
 import config from '../config'
 
 export enum CaselistPageSection {
@@ -15,11 +14,6 @@ export enum CaselistPageSection {
 const cohortConfigMap: Record<CohortEnum, string> = {
   SEXUAL_OFFENCE: 'Sexual offence',
   GENERAL_OFFENCE: 'General offence',
-}
-
-const sentenceEndDateSourceMap: Record<string, string> = {
-  REQUIREMENT: 'Order end date',
-  LICENCE_CONDITION: 'Licence end date',
 }
 
 export default class CaselistPresenter {
@@ -152,8 +146,7 @@ export default class CaselistPresenter {
         )
       : this.referralCaseListItems.content
     sortedContent.forEach(referral => {
-      const formattedSentenceEndDate = DateUtils.formattedDate(referral.sentenceEndDate)
-      const sentenceEndDateEpoch = new Date(formattedSentenceEndDate).getTime()
+      const sentenceEndDate = CaselistUtils.sentenceEndDateCell(referral)
       const isExcluded = excludedReferralsEnabled && Boolean(referral.isExcluded)
       referralData.push([
         {
@@ -161,16 +154,14 @@ export default class CaselistPresenter {
             ? `<a href='/referral-details/${referral.referralId}/personal-details'>${referral.personName}</a><span>${referral.crn}</span>${CaselistUtils.hasLaoBadgeHtml(referral)}`
             : `<span>${referral.crn}</span>${CaselistUtils.hasLaoBadgeHtml(referral)}`,
           attributes: isExcluded
-            ? { 'data-sort-value': referral.personName, 'data-excluded': 'true' }
+            ? { 'data-sort-value': referral.crn, 'data-excluded': 'true' }
             : { 'data-sort-value': referral.personName },
         },
         { text: !isExcluded ? referral.pdu : 'Restricted' },
         { text: !isExcluded ? referral.reportingTeam : 'Restricted' },
         {
-          html: !isExcluded
-            ? `${formattedSentenceEndDate} <br> ${sentenceEndDateSourceMap[referral.sentenceEndDateSource]}`
-            : 'Restricted',
-          attributes: { 'data-sort-value': sentenceEndDateEpoch },
+          html: !isExcluded ? sentenceEndDate.html : 'Restricted',
+          attributes: { 'data-sort-value': isExcluded ? 0 : sentenceEndDate.sortValue },
         },
         {
           html: !isExcluded

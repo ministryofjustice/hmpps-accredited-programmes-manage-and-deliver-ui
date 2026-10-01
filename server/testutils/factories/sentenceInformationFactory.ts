@@ -11,9 +11,8 @@ class SentenceInformationFactory extends Factory<SentenceInformation> {
       licenceEndDate: faker.date.future().toString(),
       postSentenceSupervisionStartDate: faker.date.future().toString(),
       postSentenceSupervisionEndDate: faker.date.future().toString(),
-      twoThirdsPoint: faker.date.future().toString(),
       orderRequirements: [],
-      orderEndDate: null,
+      orderEndDate: faker.date.future().toString(),
       dateRetrieved: faker.date.recent().toString(),
     })
   }
@@ -26,7 +25,6 @@ class SentenceInformationFactory extends Factory<SentenceInformation> {
       licenceEndDate: null,
       postSentenceSupervisionStartDate: faker.date.future().toString(),
       postSentenceSupervisionEndDate: faker.date.future().toString(),
-      twoThirdsPoint: faker.date.future().toString(),
       orderRequirements: [{ code: faker.string.alpha(), description: faker.string.alpha() }],
       orderEndDate: faker.date.future().toString(),
       dateRetrieved: faker.date.recent().toString(),
@@ -41,7 +39,6 @@ export default SentenceInformationFactory.define(() => ({
   licenceEndDate: faker.date.future().toString(),
   postSentenceSupervisionStartDate: faker.date.future().toString(),
   postSentenceSupervisionEndDate: faker.date.future().toString(),
-  twoThirdsPoint: faker.date.future().toString(),
   orderRequirements: [{ code: faker.string.alpha(), description: faker.string.alpha() }],
   orderEndDate: faker.date.future().toString(),
   dateRetrieved: faker.date.recent().toString(),
