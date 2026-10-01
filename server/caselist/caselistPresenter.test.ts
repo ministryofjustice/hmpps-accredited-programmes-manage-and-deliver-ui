@@ -742,13 +742,13 @@ describe('generateTableRows', () => {
     expect(rows[0]).toHaveLength(7)
     expect(rows[0][0]).toEqual({
       html: `<span>X111222</span>`,
-      attributes: { 'data-sort-value': 'Restricted Person', 'data-excluded': 'true' },
+      attributes: { 'data-sort-value': 'X111222', 'data-excluded': 'true' },
     })
     expect(rows[0][1]).toEqual({ text: 'Restricted' })
     expect(rows[0][2]).toEqual({ text: 'Restricted' })
     expect(rows[0][3]).toEqual({
       html: 'Restricted',
-      attributes: { 'data-sort-value': new Date('15 June 2024').getTime() },
+      attributes: { 'data-sort-value': 0 },
     })
     expect(rows[0][4]).toEqual({ html: 'Restricted' })
     expect(rows[0][5]).toEqual({ text: 'Restricted' })
@@ -759,9 +759,9 @@ describe('generateTableRows', () => {
 
   it('should sort excluded referrals to the end of the list', () => {
     const referralCaseListItems = [
-      referralCaseListItemFactory.build({ personName: 'Excluded One', isExcluded: true }),
+      referralCaseListItemFactory.build({ personName: 'Excluded One', crn: 'X000001', isExcluded: true }),
       referralCaseListItemFactory.build({ personName: 'Included One', isExcluded: false }),
-      referralCaseListItemFactory.build({ personName: 'Excluded Two', isExcluded: true }),
+      referralCaseListItemFactory.build({ personName: 'Excluded Two', crn: 'X000002', isExcluded: true }),
       referralCaseListItemFactory.build({ personName: 'Included Two', isExcluded: false }),
     ]
     const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
@@ -783,7 +783,7 @@ describe('generateTableRows', () => {
       row => (row[0] as { attributes?: Record<string, string | number> }).attributes?.['data-sort-value'],
     )
 
-    expect(sortValues).toEqual(['Included One', 'Included Two', 'Excluded One', 'Excluded Two'])
+    expect(sortValues).toEqual(['Included One', 'Included Two', 'X000001', 'X000002'])
   })
 })
 

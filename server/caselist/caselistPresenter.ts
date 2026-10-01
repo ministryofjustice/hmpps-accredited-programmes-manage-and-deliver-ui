@@ -154,14 +154,14 @@ export default class CaselistPresenter {
             ? `<a href='/referral-details/${referral.referralId}/personal-details'>${referral.personName}</a><span>${referral.crn}</span>${CaselistUtils.hasLaoBadgeHtml(referral)}`
             : `<span>${referral.crn}</span>${CaselistUtils.hasLaoBadgeHtml(referral)}`,
           attributes: isExcluded
-            ? { 'data-sort-value': referral.personName, 'data-excluded': 'true' }
+            ? { 'data-sort-value': referral.crn, 'data-excluded': 'true' }
             : { 'data-sort-value': referral.personName },
         },
         { text: !isExcluded ? referral.pdu : 'Restricted' },
         { text: !isExcluded ? referral.reportingTeam : 'Restricted' },
         {
           html: !isExcluded ? sentenceEndDate.html : 'Restricted',
-          attributes: { 'data-sort-value': sentenceEndDate.sortValue },
+          attributes: { 'data-sort-value': isExcluded ? 0 : sentenceEndDate.sortValue },
         },
         {
           html: !isExcluded
