@@ -19,12 +19,40 @@ describe(CaselistFilter, () => {
         TestUtils.createCaseListFilters().locationFilters,
       )
 
-      expect(filter.status).toEqual('REFERRAL_SUBMITTED')
-      expect(filter.cohort).toEqual('SEXUAL_OFFENCE')
-      expect(filter.sex).toEqual('Male')
+      expect(filter.status).toEqual(['REFERRAL_SUBMITTED'])
+      expect(filter.cohort).toEqual(['SEXUAL_OFFENCE'])
+      expect(filter.sex).toEqual(['Male'])
       expect(filter.crnOrPersonName).toEqual('Building')
       expect(filter.pdu).toEqual(['PDU3'])
       expect(filter.reportingTeam).toEqual(['Team5'])
+    })
+
+    it('converts single status, cohort and sex strings to arrays', () => {
+      const query = {
+        status: 'REFERRAL_SUBMITTED',
+        cohort: 'SEXUAL_OFFENCE',
+        sex: 'Male',
+      }
+
+      const filter = CaselistFilter.fromRequest({ query } as unknown as Request)
+
+      expect(filter.status).toEqual(['REFERRAL_SUBMITTED'])
+      expect(filter.cohort).toEqual(['SEXUAL_OFFENCE'])
+      expect(filter.sex).toEqual(['Male'])
+    })
+
+    it('handles multiple statuses, cohorts and sexes', () => {
+      const query = {
+        status: ['REFERRAL_SUBMITTED', 'ON_HOLD_REFERRAL_SUBMITTED'],
+        cohort: ['SEXUAL_OFFENCE', 'GENERAL_OFFENCE'],
+        sex: ['Male', 'Female'],
+      }
+
+      const filter = CaselistFilter.fromRequest({ query } as unknown as Request)
+
+      expect(filter.status).toEqual(['REFERRAL_SUBMITTED', 'ON_HOLD_REFERRAL_SUBMITTED'])
+      expect(filter.cohort).toEqual(['SEXUAL_OFFENCE', 'GENERAL_OFFENCE'])
+      expect(filter.sex).toEqual(['Male', 'Female'])
     })
 
     it('converts single pdu string to array', () => {
@@ -64,20 +92,20 @@ describe(CaselistFilter, () => {
     describe('referralStatus', () => {
       it('correctly sets referralStatus if only one type is passed', () => {
         const filter = new CaselistFilter()
-        filter.status = 'ON_HOLD_REFERRAL_SUBMITTED'
-        expect(filter.params.status).toEqual('ON_HOLD_REFERRAL_SUBMITTED')
+        filter.status = ['ON_HOLD_REFERRAL_SUBMITTED']
+        expect(filter.params.status).toEqual(['ON_HOLD_REFERRAL_SUBMITTED'])
       })
 
       it('correctly sets cohort if only one type is passed', () => {
         const filter = new CaselistFilter()
-        filter.cohort = 'SEXUAL_OFFENCE'
-        expect(filter.params.cohort).toEqual('SEXUAL_OFFENCE')
+        filter.cohort = ['SEXUAL_OFFENCE']
+        expect(filter.params.cohort).toEqual(['SEXUAL_OFFENCE'])
       })
 
       it('correctly sets sex if passed', () => {
         const filter = new CaselistFilter()
-        filter.sex = 'Female'
-        expect(filter.params.sex).toEqual('Female')
+        filter.sex = ['Female']
+        expect(filter.params.sex).toEqual(['Female'])
       })
     })
 

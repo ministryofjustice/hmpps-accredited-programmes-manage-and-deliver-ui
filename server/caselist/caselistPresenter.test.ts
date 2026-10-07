@@ -12,60 +12,84 @@ jest.mock('../config')
 describe(`filters`, () => {
   const caseListFilters = TestUtils.createCaseListFilters()
 
-  describe('generateSelectValues', () => {
-    it('should generate the correct select values', () => {
-      const testObject = {
-        filter: { status: undefined, cohort: undefined, crnOrPersonName: undefined } as CaselistFilter,
-      }
-      const referralCaseListItem = referralCaseListItemFactory.build()
-      const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
-        .pageContent([referralCaseListItem])
-        .build() as Page<ReferralCaseListItem>
-      const presenter = new CaselistPresenter(
-        1,
-        referralCaseListItemPage,
-        testObject.filter,
-        '',
-        true,
-        caseListFilters,
-        2,
-        'test location',
-      )
+  const buildPresenter = (filter: CaselistFilter): CaselistPresenter => {
+    const referralCaseListItem = referralCaseListItemFactory.build()
+    const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
+      .pageContent([referralCaseListItem])
+      .build() as Page<ReferralCaseListItem>
+    return new CaselistPresenter(1, referralCaseListItemPage, filter, '', true, caseListFilters, 2, 'test location')
+  }
 
-      const valuesToAddToSelect = [
-        { value: 'GENERAL_OFFENCE', text: 'General offence' },
-        { value: 'SEXUAL_OFFENCE', text: 'Sexual offence' },
-      ]
-      expect(presenter.generateSelectValues(valuesToAddToSelect, testObject.filter.status)).toEqual([
-        { text: 'Select', value: '' },
-        { selected: false, text: 'General offence', value: 'GENERAL_OFFENCE' },
-        { selected: false, text: 'Sexual offence', value: 'SEXUAL_OFFENCE' },
+  describe('generateCohortCheckboxOptions', () => {
+    it('should generate checkbox options for cohorts based on API data', () => {
+      const presenter = buildPresenter({ cohort: undefined } as unknown as CaselistFilter)
+
+      expect(presenter.generateCohortCheckboxOptions()).toEqual([
+        { value: 'General offence', label: 'General offence', checked: false },
+        { value: 'General offence LDC', label: 'General offence LDC', checked: false },
+        { value: 'Sexual offence', label: 'Sexual offence', checked: false },
+        { value: 'Sexual offence LDC', label: 'Sexual offence LDC', checked: false },
       ])
     })
 
-    it('should generate just select value when no values provided', () => {
-      const testObject = {
-        filter: { status: undefined, cohort: undefined, crnOrPersonName: undefined } as CaselistFilter,
-      }
-      const referralCaseListItem = referralCaseListItemFactory.build()
-      const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
-        .pageContent([referralCaseListItem])
-        .build() as Page<ReferralCaseListItem>
-      const presenter = new CaselistPresenter(
-        1,
-        referralCaseListItemPage,
-        testObject.filter,
-        '',
-        true,
-        caseListFilters,
-        2,
-        'test location',
-      )
+    it('should mark the selected cohorts based on filter.cohort', () => {
+      const presenter = buildPresenter({
+        cohort: ['General offence', 'Sexual offence'],
+      } as unknown as CaselistFilter)
 
-      const valuesToAddToSelect: { value: string; text: string }[] = []
-      expect(presenter.generateSelectValues(valuesToAddToSelect, testObject.filter.status)).toEqual([
-        { text: 'Select', value: '' },
+      expect(presenter.generateCohortCheckboxOptions()).toEqual([
+        { value: 'General offence', label: 'General offence', checked: true },
+        { value: 'General offence LDC', label: 'General offence LDC', checked: false },
+        { value: 'Sexual offence', label: 'Sexual offence', checked: true },
+        { value: 'Sexual offence LDC', label: 'Sexual offence LDC', checked: false },
       ])
+    })
+  })
+
+  describe('generateSexCheckboxOptions', () => {
+    it('should generate checkbox options for sex', () => {
+      const presenter = buildPresenter({ sex: undefined } as unknown as CaselistFilter)
+
+      expect(presenter.generateSexCheckboxOptions()).toEqual([
+        { value: 'Male', label: 'Male', checked: false },
+        { value: 'Female', label: 'Female', checked: false },
+      ])
+    })
+
+    it('should mark the selected sexes based on filter.sex', () => {
+      const presenter = buildPresenter({ sex: ['Female'] } as unknown as CaselistFilter)
+
+      expect(presenter.generateSexCheckboxOptions()).toEqual([
+        { value: 'Male', label: 'Male', checked: false },
+        { value: 'Female', label: 'Female', checked: true },
+      ])
+    })
+  })
+
+  describe('generateStatusCheckboxGroups', () => {
+    it('should generate open and closed status groups based on API data', () => {
+      const presenter = buildPresenter({ status: undefined } as unknown as CaselistFilter)
+
+      const groups = presenter.generateStatusCheckboxGroups()
+
+      expect(groups.map(group => group.label)).toEqual(['Open referrals', 'Closed referrals'])
+      expect(groups[1].options).toEqual([
+        { value: 'Programme complete', label: 'Programme complete', checked: false },
+        { value: 'Withdrawn', label: 'Withdrawn', checked: false },
+      ])
+    })
+
+    it('should mark the selected statuses based on filter.status', () => {
+      const presenter = buildPresenter({
+        status: ['Awaiting allocation', 'Withdrawn'],
+      } as unknown as CaselistFilter)
+
+      const groups = presenter.generateStatusCheckboxGroups()
+
+      const openAwaitingAllocation = groups[0].options.find(option => option.value === 'Awaiting allocation')
+      const closedWithdrawn = groups[1].options.find(option => option.value === 'Withdrawn')
+      expect(openAwaitingAllocation?.checked).toBe(true)
+      expect(closedWithdrawn?.checked).toBe(true)
     })
   })
 
@@ -93,118 +117,6 @@ describe(`filters`, () => {
         { text: 'PDU1', value: 'PDU1', checked: true },
         { text: 'PDU2', value: 'PDU2', checked: false },
         { text: 'PDU3', value: 'PDU3', checked: true },
-      ])
-    })
-  })
-
-  describe('generateCohortSelectArgs', () => {
-    it('should generate correct select items for cohorts based on API data', () => {
-      const testObject = {
-        filter: { cohort: undefined } as unknown as CaselistFilter,
-      }
-      const referralCaseListItem = referralCaseListItemFactory.build()
-      const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
-        .pageContent([referralCaseListItem])
-        .build() as Page<ReferralCaseListItem>
-      const presenter = new CaselistPresenter(
-        1,
-        referralCaseListItemPage,
-        testObject.filter,
-        '',
-        true,
-        caseListFilters,
-        2,
-        'test location',
-      )
-
-      expect(presenter.generateCohortSelectArgs()).toEqual([
-        { text: 'Select', value: '' },
-        { value: 'General offence', text: 'General offence', selected: false },
-        { value: 'General offence LDC', text: 'General offence LDC', selected: false },
-        { value: 'Sexual offence', text: 'Sexual offence', selected: false },
-        { value: 'Sexual offence LDC', text: 'Sexual offence LDC', selected: false },
-      ])
-    })
-
-    it('should mark the selected cohort based on filter.cohort', () => {
-      const testObject = {
-        filter: { cohort: 'General offence' } as unknown as CaselistFilter,
-      }
-      const referralCaseListItem = referralCaseListItemFactory.build()
-      const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
-        .pageContent([referralCaseListItem])
-        .build() as Page<ReferralCaseListItem>
-      const presenter = new CaselistPresenter(
-        1,
-        referralCaseListItemPage,
-        testObject.filter,
-        '',
-        true,
-        caseListFilters,
-        2,
-        'test location',
-      )
-
-      expect(presenter.generateCohortSelectArgs()).toEqual([
-        { text: 'Select', value: '' },
-        { value: 'General offence', text: 'General offence', selected: true },
-        { value: 'General offence LDC', text: 'General offence LDC', selected: false },
-        { value: 'Sexual offence', text: 'Sexual offence', selected: false },
-        { value: 'Sexual offence LDC', text: 'Sexual offence LDC', selected: false },
-      ])
-    })
-  })
-
-  describe('generateSexSelectArgs', () => {
-    it('should generate correct select items for sex', () => {
-      const testObject = {
-        filter: { sex: undefined } as unknown as CaselistFilter,
-      }
-      const referralCaseListItem = referralCaseListItemFactory.build()
-      const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
-        .pageContent([referralCaseListItem])
-        .build() as Page<ReferralCaseListItem>
-      const presenter = new CaselistPresenter(
-        1,
-        referralCaseListItemPage,
-        testObject.filter,
-        '',
-        true,
-        caseListFilters,
-        2,
-        'test location',
-      )
-
-      expect(presenter.generateSexSelectArgs()).toEqual([
-        { text: 'Select', value: '' },
-        { value: 'Male', text: 'Male', selected: false },
-        { value: 'Female', text: 'Female', selected: false },
-      ])
-    })
-
-    it('should mark the selected sex based on filter.sex', () => {
-      const testObject = {
-        filter: { sex: 'Female' } as unknown as CaselistFilter,
-      }
-      const referralCaseListItem = referralCaseListItemFactory.build()
-      const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
-        .pageContent([referralCaseListItem])
-        .build() as Page<ReferralCaseListItem>
-      const presenter = new CaselistPresenter(
-        1,
-        referralCaseListItemPage,
-        testObject.filter,
-        '',
-        true,
-        caseListFilters,
-        2,
-        'test location',
-      )
-
-      expect(presenter.generateSexSelectArgs()).toEqual([
-        { text: 'Select', value: '' },
-        { value: 'Male', text: 'Male', selected: false },
-        { value: 'Female', text: 'Female', selected: true },
       ])
     })
   })

@@ -1,6 +1,7 @@
 import { CaseListFilterValues, CohortEnum, ReferralCaseListItem } from '@manage-and-deliver-api'
 import { Page } from '../shared/models/pagination'
-import { CheckboxesArgsItem, SelectArgsItem, TableArgs } from '../utils/govukFrontendTypes'
+import { CheckboxesArgsItem, TableArgs } from '../utils/govukFrontendTypes'
+import { CollapsibleCheckboxFilterGroup, CollapsibleCheckboxFilterOption } from '../utils/collapsibleCheckboxFilterArgs'
 import Pagination from '../utils/pagination/pagination'
 import CaselistFilter from './caselistFilter'
 import CaselistUtils from './caseListUtils'
@@ -205,55 +206,34 @@ export default class CaselistPresenter {
     }
   }
 
-  generateSelectValues(options: { value: string; text: string }[], caseListFilter: string): SelectArgsItem[] {
-    const selectOptions: SelectArgsItem[] = [
-      {
-        text: 'Select',
-        value: '',
-      },
-    ]
-    options.map(option =>
-      selectOptions.push({
-        value: option.value,
-        text: option.text,
-        selected: caseListFilter?.includes(`${option.value}`) ?? false,
-      }),
-    )
-    return selectOptions
+  generateCohortCheckboxOptions(): CollapsibleCheckboxFilterOption[] {
+    return this.caseListFilters.cohort.map(cohort => ({
+      value: cohort,
+      label: cohort,
+      checked: this.filter.cohort?.includes(cohort) ?? false,
+    }))
   }
 
-  generateCohortSelectArgs(): SelectArgsItem[] {
-    const selectOptions: SelectArgsItem[] = [
-      {
-        text: 'Select',
-        value: '',
-      },
+  generateStatusCheckboxGroups(): CollapsibleCheckboxFilterGroup[] {
+    const toOptions = (statuses: string[]): CollapsibleCheckboxFilterOption[] =>
+      statuses.map(status => ({
+        value: status,
+        label: status,
+        checked: this.filter.status?.includes(status) ?? false,
+      }))
+
+    return [
+      { label: 'Open referrals', options: toOptions(this.caseListFilters.statusFilters.open) },
+      { label: 'Closed referrals', options: toOptions(this.caseListFilters.statusFilters.closed) },
     ]
-    this.caseListFilters.cohort.map(cohort =>
-      selectOptions.push({
-        value: cohort,
-        text: cohort,
-        selected: this.filter.cohort === cohort,
-      }),
-    )
-    return selectOptions
   }
 
-  generateSexSelectArgs(): SelectArgsItem[] {
-    const selectOptions: SelectArgsItem[] = [
-      {
-        text: 'Select',
-        value: '',
-      },
-    ]
-    ;['Male', 'Female'].forEach(sex =>
-      selectOptions.push({
-        value: sex,
-        text: sex,
-        selected: this.filter.sex === sex,
-      }),
-    )
-    return selectOptions
+  generateSexCheckboxOptions(): CollapsibleCheckboxFilterOption[] {
+    return ['Male', 'Female'].map(sex => ({
+      value: sex,
+      label: sex,
+      checked: this.filter.sex?.includes(sex) ?? false,
+    }))
   }
 
   generatePDUCheckboxArgs(): CheckboxesArgsItem[] {

@@ -61,12 +61,10 @@ describe(`Caselist controller`, () => {
         .expect(res => {
           expect(res.ok)
           const $ = cheerio.load(res.text)
-          const cohortInput = $('#cohort option[selected]').val()
-          expect(cohortInput).toBe(cohortValue)
-          const referralStatusInput = $('#status optgroup option[selected]').val()
-          expect(referralStatusInput).toBe(referralStatusValue)
-          // With checkbox selection, we can't easily check the selected value from the DOM
-          // The test checks that the page loads successfully which implicitly validates the filter parsing
+          const checkedCohort = $('input[name="cohort"]:checked').attr('value')
+          expect(checkedCohort).toBe(cohortValue)
+          const checkedStatus = $('input[name="status"]:checked').attr('value')
+          expect(checkedStatus).toBe(referralStatusValue)
         })
         .then(() => {
           expect(sendAuditEvent).toHaveBeenCalledWith(
@@ -78,8 +76,8 @@ describe(`Caselist controller`, () => {
               filter: {
                 pdu: pduValue,
                 reportingTeam: reportingTeamValue ? [reportingTeamValue] : undefined,
-                status: referralStatusValue,
-                cohort: cohortValue,
+                status: referralStatusValue ? [referralStatusValue] : undefined,
+                cohort: cohortValue ? [cohortValue] : undefined,
               },
             },
           )

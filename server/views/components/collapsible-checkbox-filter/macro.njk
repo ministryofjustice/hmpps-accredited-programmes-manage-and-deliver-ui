@@ -1,0 +1,11 @@
+{% macro collapsibleCheckboxFilter(params) %}
+  {% set title = params.title %}
+  {% set name = params.name %}
+  {% set options = params.options %}
+  {% set groups = params.groups %}
+  {% set selectedCount = params.selectedCount %}
+  {% set dataQa = params.dataQa %}
+  {% set searchable = params.searchable %}
+  {% set searchLabel = params.searchLabel %}
+  {%- include "./template.njk" -%}
+{% endmacro %}

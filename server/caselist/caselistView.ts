@@ -1,90 +1,56 @@
-import { CheckboxesArgs, InputArgs, SelectArgs, SelectArgsItem } from '../utils/govukFrontendTypes'
+import { InputArgs } from '../utils/govukFrontendTypes'
+import { CollapsibleCheckboxFilterArgs } from '../utils/collapsibleCheckboxFilterArgs'
 import CaselistPresenter from './caselistPresenter'
 
 export default class CaselistView {
   constructor(private readonly presenter: CaselistPresenter) {}
 
-  searchByStatusArgs(): {
-    id: string
-    name: string
-    prompt: string
-    label: { text: string; classes: string }
-    items: { label: string; items: SelectArgsItem[] }[]
-    attributes: { 'data-testid': string }
-    classes: string
-  } {
+  searchByStatusArgs(): CollapsibleCheckboxFilterArgs {
+    const groups = this.presenter.generateStatusCheckboxGroups()
+    const selectedCount = groups.reduce(
+      (count, group) => count + group.options.filter(option => option.checked).length,
+      0,
+    )
     return {
-      id: 'status',
+      title: 'Referral status',
       name: 'status',
-      prompt: 'Select',
-      label: {
-        text: 'Referral status',
-        classes: 'govuk-label--s',
-      },
-      items: [
-        {
-          label: 'Open referrals',
-          items: this.generateStatusSelectOpts(
-            this.presenter.caseListFilters.statusFilters.open,
-            this.presenter.filter.status,
-          ),
-        },
-        {
-          label: 'Closed referrals',
-          items: this.generateStatusSelectOpts(
-            this.presenter.caseListFilters.statusFilters.closed,
-            this.presenter.filter.status,
-          ),
-        },
-      ],
-      attributes: { 'data-testid': 'referral-status-select' },
-      classes: 'govuk-select--restrict-width',
+      dataQa: 'referral-status',
+      selectedCount,
+      groups,
     }
   }
 
-  generateStatusSelectOpts(options: string[], caseListFilter: string): SelectArgsItem[] {
-    return options.map(option => ({
-      value: option,
-      text: option,
-      selected: caseListFilter?.includes(`${option}`) ?? false,
+  private get searchByPduArgs(): CollapsibleCheckboxFilterArgs {
+    const options = this.presenter.generatePDUCheckboxArgs().map(item => ({
+      value: `${item.value}`,
+      label: item.text,
+      checked: item.checked ?? false,
     }))
-  }
-
-  private get pduCheckboxArgs(): CheckboxesArgs {
-    const pduItems = this.presenter.generatePDUCheckboxArgs()
-    const pduOptionCount = pduItems.length
-    const optionWord = pduOptionCount === 1 ? 'option' : 'options'
-
     return {
+      title: 'PDU',
       name: 'pdu',
-      classes: 'govuk-checkboxes--small',
-      fieldset: {
-        legend: {
-          html: `PDU <span class="govuk-visually-hidden">, ${pduOptionCount} ${optionWord}</span>`,
-          isPageHeading: false,
-          classes: 'govuk-fieldset__legend--s',
-        },
-      },
-      items: pduItems,
+      dataQa: 'pdu',
+      searchable: true,
+      // searchLabel: 'Search PDUs',
+      selectedCount: options.filter(option => option.checked).length,
+      options,
     }
   }
 
-  private get reportingTeamCheckboxArgs(): CheckboxesArgs {
-    const reportingTeamItems = this.presenter.generateReportingTeamCheckboxArgs()
-    const reportingTeamOptionCount = reportingTeamItems.length
-    const optionWord = reportingTeamOptionCount === 1 ? 'option' : 'options'
-
+  private get reportingTeamCheckboxArgs(): CollapsibleCheckboxFilterArgs {
+    const options = this.presenter.generateReportingTeamCheckboxArgs().map(item => ({
+      value: `${item.value}`,
+      label: item.text,
+      checked: item.checked ?? false,
+    }))
     return {
+      title: 'Reporting team',
       name: 'reportingTeam',
-      classes: 'govuk-checkboxes--small',
-      fieldset: {
-        legend: {
-          html: `Reporting team <span class="govuk-visually-hidden">, ${reportingTeamOptionCount} ${optionWord}</span>`,
-          isPageHeading: false,
-          classes: 'govuk-fieldset__legend--s',
-        },
-      },
-      items: reportingTeamItems,
+      dataQa: 'reporting-team',
+      searchable: true,
+      // searchLabel: 'Search reporting teams',
+      selectedCount: options.filter(option => option.checked).length,
+      options,
     }
   }
 
@@ -100,27 +66,25 @@ export default class CaselistView {
     }
   }
 
-  private get searchByCohortArgs(): SelectArgs {
+  private get searchByCohortArgs(): CollapsibleCheckboxFilterArgs {
+    const options = this.presenter.generateCohortCheckboxOptions()
     return {
-      id: 'cohort',
+      title: 'Cohort',
       name: 'cohort',
-      label: {
-        text: 'Cohort',
-        classes: 'govuk-label--s',
-      },
-      items: this.presenter.generateCohortSelectArgs(),
+      dataQa: 'cohort',
+      selectedCount: options.filter(option => option.checked).length,
+      options,
     }
   }
 
-  private get searchBySexArgs(): SelectArgs {
+  private get searchBySexArgs(): CollapsibleCheckboxFilterArgs {
+    const options = this.presenter.generateSexCheckboxOptions()
     return {
-      id: 'sex',
+      title: 'Sex',
       name: 'sex',
-      label: {
-        text: 'Sex',
-        classes: 'govuk-label--s',
-      },
-      items: this.presenter.generateSexSelectArgs(),
+      dataQa: 'sex',
+      selectedCount: options.filter(option => option.checked).length,
+      options,
     }
   }
 
@@ -137,7 +101,7 @@ export default class CaselistView {
         subNavArgs: this.presenter.getSubNavArgs(),
         searchByStatusArgs: this.searchByStatusArgs(),
         pagination: this.presenter.pagination.govukPaginationArgs,
-        searchByPduArgs: this.pduCheckboxArgs,
+        searchByPduArgs: this.searchByPduArgs,
         reportingTeamCheckboxArgs: this.reportingTeamCheckboxArgs,
         searchByCrnOrPersonNameArgs: this.searchByCrnOrPersonNameArgs,
         searchByCohortArgs: this.searchByCohortArgs,
