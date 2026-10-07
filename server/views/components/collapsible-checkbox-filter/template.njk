@@ -1,0 +1,92 @@
+<!-- Reusable collapsible checkbox filter section, based on the GOV.UK details component. -->
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+
+{% set searchIconHtml %}
+  <svg width="18" height="17" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.4444 15.3333L13.2222 11.1111C14 10 14.4444 8.66667 14.4444 7.22222C14.4444 3.22222 11.2222 0 7.22222 0C3.22222 0 0 3.22222 0 7.22222C0 11.2222 3.22222 14.4444 7.22222 14.4444C9 14.4444 10.5556 13.7778 11.7778 12.7778L15.8889 16.8889L17.4444 15.3333ZM2.22222 7.22222C2.22222 4.44444 4.44444 2.22222 7.22222 2.22222C10 2.22222 12.2222 4.44444 12.2222 7.22222C12.2222 10 10 12.2222 7.22222 12.2222C4.44444 12.2222 2.22222 10 2.22222 7.22222Z" fill="black"/>
+  </svg>
+{% endset %}
+
+<details class="govuk-details govuk-!-margin-bottom-4 govuk-!-margin-top-4" data-qa="{{ dataQa }}-filter-section"{% if selectedCount and selectedCount > 0 %} open{% endif %}>
+  <summary class="govuk-details__summary">
+    <b class="govuk-details__summary-text govuk-link--no-underline" data-qa="{{ dataQa }}-filter-section-toggle">
+      {{ title }}
+    </b>
+    <span id="{{ dataQa }}-filter-hint" class="govuk-hint govuk-!-font-size-16 greyed-text govuk-!-margin-top-2 govuk-!-margin-bottom-0">
+      {% if selectedCount and selectedCount > 1 %}
+        {{ selectedCount }} filters selected
+      {% elif selectedCount and selectedCount == 1 %}
+        1 filter selected
+      {% else %}
+        No filters selected
+      {% endif %}
+    </span>
+  </summary>
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s govuk-!-margin-bottom-0">
+      <h3 class="govuk-visually-hidden">
+        {{ title }}
+      </h3>
+    </legend>
+    <div class="govuk-details__text no-border-left">
+      <div class="govuk-form-group" data-module="checkbox-filter" data-checkbox-filter="{{ dataQa }}">
+        {% if searchable %}
+          {{ govukInput({
+            id: dataQa + "-search",
+            name: dataQa + "-search",
+            type: "search",
+            autocomplete: "off",
+            prefix: {
+              classes: "checkbox-filter__search-icon",
+              html: searchIconHtml
+            },
+            label: {
+              text: searchLabel,
+              classes: "govuk-visually-hidden"
+            },
+            formGroup: {
+              classes: "govuk-!-margin-bottom-2"
+            },
+            attributes: {
+              placeholder: searchLabel,
+              "data-checkbox-filter-search": dataQa,
+              "aria-controls": dataQa + "-checkboxes"
+            }
+          }) }}
+          <p class="govuk-body govuk-!-font-size-16 greyed-text govuk-!-margin-top-1 govuk-!-margin-bottom-2 govuk-visually-hidden" data-checkbox-filter-no-results="{{ dataQa }}" role="status" aria-live="polite">No matching options</p>
+        {% endif %}
+
+        {% if groups %}
+          {% for group in groups %}
+            {% set groupItems = [] %}
+            {% for option in group.options %}
+              {% set _ = groupItems.push({ value: option.value, text: option.label, checked: option.checked }) %}
+            {% endfor %}
+            <h4 class="govuk-heading-s govuk-!-margin-bottom-1 govuk-!-margin-top-2">{{ group.label }}</h4>
+            {{ govukCheckboxes({
+              idPrefix: name + "-" + loop.index,
+              name: name,
+              classes: "govuk-checkboxes--small",
+              formGroup: { classes: "govuk-!-margin-bottom-0" },
+              items: groupItems
+            }) }}
+          {% endfor %}
+        {% else %}
+          {% set checkboxItems = [] %}
+          {% for option in options %}
+            {% set _ = checkboxItems.push({ value: option.value, text: option.label, checked: option.checked }) %}
+          {% endfor %}
+          {{ govukCheckboxes({
+            idPrefix: name,
+            name: name,
+            classes: "govuk-checkboxes--small" + (" checkbox-filter__scrollable" if searchable),
+            formGroup: { classes: "govuk-!-margin-bottom-0" },
+            attributes: { id: dataQa + "-checkboxes" },
+            items: checkboxItems
+          }) }}
+        {% endif %}
+      </div>
+    </div>
+  </fieldset>
+</details>

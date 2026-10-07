@@ -1,12 +1,10 @@
 {% extends "../partials/layout.njk" %}
 
 {%- from "moj/components/filter/macro.njk" import mojFilter -%}
-{%- from "govuk/components/checkboxes/macro.njk" import govukCheckboxes -%}
 {%- from "govuk/components/input/macro.njk" import govukInput -%}
 {%- from "govuk/components/table/macro.njk" import govukTable -%}
 {% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
-{% from "govuk/components/select/macro.njk" import govukSelect %}
-{% from "../components/selectWithOptGroup.njk" import govukSelectWithOptgroup %}
+{% from "../components/collapsible-checkbox-filter/macro.njk" import collapsibleCheckboxFilter %}
 
 {% set pageTitle = pageTitle + " - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -27,7 +25,10 @@
     {%- set filterOptionsHtml %}
     <a class="clear-filters__link" href="?">Clear filters</a>
     {{ govukInput(searchByCrnOrPersonNameArgs) }}
-    {{ govukCheckboxes(searchByPduArgs) }}
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+
+    {{ collapsibleCheckboxFilter(searchByPduArgs) }}
 
     {% if not presenter.showReportingLocations %}
       <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Reporting team</h3>
@@ -35,12 +36,20 @@
     {% endif %}
 
     {% if presenter.showReportingLocations %}
-      {{ govukCheckboxes(reportingTeamCheckboxArgs) }}
+      {{ collapsibleCheckboxFilter(reportingTeamCheckboxArgs) }}
     {% endif %}
 
-    {{ govukSelect(searchByCohortArgs) }}
-    {{ govukSelect(searchBySexArgs) }}
-    {{ govukSelectWithOptgroup(searchByStatusArgs) }}
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+    {{ collapsibleCheckboxFilter(searchByCohortArgs) }}
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+    {{ collapsibleCheckboxFilter(searchBySexArgs) }}
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+    {{ collapsibleCheckboxFilter(searchByStatusArgs) }}
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
     {{ govukButton(applyFilterButtonArgs) }}
     <a class="clear-filters__link" href="?">Clear filters</a>
     {% endset -%}

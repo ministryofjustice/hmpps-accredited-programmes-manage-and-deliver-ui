@@ -1,0 +1,56 @@
+.no-border-left {
+  border-left: 0;
+  padding-left: 0;
+}
+
+// The selected-count hint sits inside <summary>, which only permits phrasing
+// content, so it is a <span>. Force it onto its own line below the title.
+[id$='-filter-hint'] {
+  display: block;
+}
+
+// Replace the default GOV.UK triangle marker with a chevron, scoped to this
+// component so other govuk-details elements keep the standard arrow.
+.govuk-details[data-qa$='-filter-section'] > .govuk-details__summary::before {
+  width: 6px;
+  height: 6px;
+  border-style: solid;
+  border-color: #0b0c0c;
+  border-width: 2px 2px 0 0;
+  -webkit-clip-path: none;
+  clip-path: none;
+  transform: rotate(45deg);
+  transform-origin: center;
+  transition: transform 0.2s ease;
+}
+
+.govuk-details[data-qa$='-filter-section'][open] > .govuk-details__summary::before {
+  border-width: 2px 2px 0 0;
+  transform: rotate(135deg);
+}
+
+// Render the search icon prefix as a plain icon rather than the default grey,
+// bordered GOV.UK prefix box so it blends into the white search bar.
+[data-checkbox-filter] {
+  .checkbox-filter__search-icon {
+    background-color: #ffffff;
+    border-right: 0;
+
+    + .govuk-input {
+      border-left: 0;
+    }
+  }
+
+  // Constrain long checkbox lists (e.g. PDU, reporting team) to a scrollable
+  // area so the filter panel stays a manageable height.
+  .checkbox-filter__scrollable {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 10px;
+    // overflow-y: auto also clips horizontal overflow, which would cut off the
+    // checkbox hover highlight on the left. Add left padding for the highlight
+    // and pull it back with a negative margin so the checkboxes stay aligned.
+    padding-left: 10px;
+    margin-left: -10px;
+  }
+}

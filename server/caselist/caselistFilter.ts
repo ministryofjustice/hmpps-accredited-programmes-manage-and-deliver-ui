@@ -3,11 +3,11 @@ import { LocationFilterValues } from '@manage-and-deliver-api'
 import { CaselistFilterParams } from './CaseListFilterParams'
 
 export default class CaselistFilter {
-  status: string | undefined
+  status: string[] | undefined
 
-  cohort: string | undefined
+  cohort: string[] | undefined
 
-  sex: string | undefined
+  sex: string[] | undefined
 
   crnOrPersonName: string | undefined
 
@@ -17,12 +17,24 @@ export default class CaselistFilter {
 
   static fromRequest(request: Request, locations?: LocationFilterValues[]): CaselistFilter {
     const filter = new CaselistFilter()
-    filter.status = request.query.status as string | undefined
-    filter.cohort = request.query.cohort as string | undefined
-    filter.sex = request.query.sex as string | undefined
+    filter.status = request.query.status as string[] | undefined
+    filter.cohort = request.query.cohort as string[] | undefined
+    filter.sex = request.query.sex as string[] | undefined
     filter.crnOrPersonName = request.query.crnOrPersonName as string | undefined
     filter.pdu = request.query.pdu as string[] | undefined
     filter.reportingTeam = request.query.reportingTeam as string[] | undefined
+
+    if (filter.status !== undefined) {
+      filter.status = typeof filter.status === 'string' ? [filter.status] : filter.status
+    }
+
+    if (filter.cohort !== undefined) {
+      filter.cohort = typeof filter.cohort === 'string' ? [filter.cohort] : filter.cohort
+    }
+
+    if (filter.sex !== undefined) {
+      filter.sex = typeof filter.sex === 'string' ? [filter.sex] : filter.sex
+    }
 
     if (filter.pdu !== undefined) {
       filter.pdu = typeof filter.pdu === 'string' ? [filter.pdu] : filter.pdu
@@ -49,13 +61,13 @@ export default class CaselistFilter {
   get params(): CaselistFilterParams {
     const params: CaselistFilterParams = {}
 
-    if (this.status) {
+    if (this.status && this.status.length > 0) {
       params.status = this.status
     }
-    if (this.cohort) {
+    if (this.cohort && this.cohort.length > 0) {
       params.cohort = this.cohort
     }
-    if (this.sex) {
+    if (this.sex && this.sex.length > 0) {
       params.sex = this.sex
     }
     if (this.crnOrPersonName?.trim()) {

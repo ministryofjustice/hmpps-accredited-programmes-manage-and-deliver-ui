@@ -24,6 +24,39 @@ document.querySelectorAll('[data-caselist-table="true"]').forEach(table => {
   }
 })
 
+// Progressive enhancement for the collapsible checkbox filter: filter the list of
+// checkboxes as the user types into the search box. Checked options always remain
+// visible so a current selection is never hidden.
+document.querySelectorAll('[data-checkbox-filter-search]').forEach(searchInput => {
+  const container = searchInput.closest('[data-checkbox-filter]')
+  if (!container) return
+
+  const items = Array.from(container.querySelectorAll('.govuk-checkboxes__item'))
+  const noResults = container.querySelector('[data-checkbox-filter-no-results]')
+
+  const filterItems = () => {
+    const query = searchInput.value.trim().toLowerCase()
+    let visibleCount = 0
+
+    items.forEach(item => {
+      const label = item.querySelector('.govuk-checkboxes__label')
+      const checkbox = item.querySelector('.govuk-checkboxes__input')
+      const labelText = label ? label.textContent.trim().toLowerCase() : ''
+      const isChecked = checkbox ? checkbox.checked : false
+      const matches = query === '' || labelText.includes(query) || isChecked
+      item.hidden = !matches
+      item.style.display = matches ? '' : 'none'
+      if (matches) visibleCount += 1
+    })
+
+    if (noResults) {
+      noResults.classList.toggle('govuk-visually-hidden', visibleCount !== 0)
+    }
+  }
+
+  searchInput.addEventListener('input', filterItems)
+})
+
 const $inactivityWarningModal = document.querySelector('[data-modal-type="inactivity-warning"]')
 if ($inactivityWarningModal) {
   const INACTIVITY_TIMEOUT = 50 * 60 * 1000
