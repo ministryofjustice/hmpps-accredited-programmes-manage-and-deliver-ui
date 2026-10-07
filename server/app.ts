@@ -14,9 +14,9 @@ import {
   CreateGroupSessionSlot,
 } from '@manage-and-deliver-api'
 import { setupExpressErrorHandler } from '@sentry/node'
+import { telemetryMiddleware } from '@ministryofjustice/hmpps-azure-telemetry'
 import errorHandler from './errorHandler'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
-import { appInsightsMiddleware } from './utils/azureAppInsights'
 import nunjucksSetup from './utils/nunjucksSetup'
 
 import setUpAuthentication from './middleware/setUpAuthentication'
@@ -86,7 +86,6 @@ export default function createApp(services: Services): express.Application {
   app.set('port', process.env.PORT || 3000)
 
   app.use(sentryMiddleware())
-  app.use(appInsightsMiddleware())
   app.use(setUpHealthChecks(services.applicationInfo))
   app.use(setUpWebSecurity())
   app.use(setUpWebSession())
@@ -98,6 +97,15 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
   app.use(setUpUserLocation(services))
+  // Registered after setUpUserLocation so the region is available. userId and userUuid are added by default.
+  app.use(
+    telemetryMiddleware.addUserMetadataToTelemetry({
+      getAttributes: (req: express.Request, res: express.Response) => ({
+        username: res.locals.user?.username || 'Unknown',
+        userRegionDescription: req.session?.userRegion?.regionDescription || 'Unknown',
+      }),
+    }),
+  )
 
   app.use(routes(services))
 
