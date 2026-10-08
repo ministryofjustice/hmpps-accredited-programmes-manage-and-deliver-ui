@@ -7,10 +7,10 @@
   "scripts": {
     "prepare": "husky",
     "watch-ts": "tsc -w",
-    "build": "node esbuild/esbuild.config.js --build",
+    "build": "node esbuild/esbuild",
     "generate-frontend-types": "ts-node script/generateGovukFrontendTypes/runner.ts && prettier --write server/utils/govukFrontendTypes.ts",
     "start": "node $NODE_OPTIONS dist/server.js | bunyan -o short",
-    "start:dev": "concurrently -k -p \"[{name}]\" -n \"ESBuild,Node\" -c \"yellow.bold,cyan.bold\" \"node esbuild/esbuild.config.js --build --watch\" \"node esbuild/esbuild.config.js --dev-server\"",
+    "start:dev": "node esbuild/esbuild --watch",
     "lint": "eslint . --cache --max-warnings 0",
     "lint-fix": "eslint . --cache --max-warnings 0 --fix",
     "typecheck": "tsc",
@@ -22,8 +22,8 @@
     "setup": "npm ci && hmpps-npm-script-run-allowlist"
   },
   "engines": {
-    "node": "^22",
-    "npm": "^10"
+    "node": "^24",
+    "npm": "^11"
   },
   "jest": {
     "transform": {
@@ -117,7 +117,7 @@
     "@jgoz/esbuild-plugin-typecheck": "^5.0.0",
     "@ministryofjustice/eslint-config-hmpps": "^1.0.3",
     "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.6",
-    "@tsconfig/node22": "^22.0.6",
+    "@tsconfig/node24": "^24.0.5",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
     "@types/compression": "^1.8.1",
@@ -127,7 +127,7 @@
     "@types/http-errors": "^2.0.5",
     "@types/jest": "^30.0.0",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^25.9.8",
+    "@types/node": "^24.13.6",
     "@types/nunjucks": "^3.2.6",
     "@types/passport": "^1.0.17",
     "@types/passport-oauth2": "^1.8.0",
@@ -139,10 +139,8 @@
     "audit-ci": "^7.1.0",
     "aws-sdk-client-mock": "^4.1.0",
     "cheerio": "^1.2.0",
-    "chokidar": "5.0.0",
-    "concurrently": "^10.0.5",
+    "del": "8.0.1",
     "esbuild": "^0.28.2",
-    "esbuild-plugin-clean": "^1.0.1",
     "esbuild-plugin-copy": "^2.1.1",
     "esbuild-plugin-manifest": "^1.0.5",
     "esbuild-sass-plugin": "^3.7.0",
@@ -153,7 +151,6 @@
     "eslint-plugin-no-only-tests": "^3.4.0",
     "eslint-plugin-prettier": "^5.5.6",
     "fishery": "^2.4.0",
-    "glob": "^13.0.6",
     "husky": "^9.1.7",
     "jest": "^30.5.2",
     "jest-html-reporter": "^4.4.2",
@@ -164,7 +161,6 @@
     "openapi-typescript": "^7.13.0",
     "prettier": "^3.9.9",
     "prettier-plugin-jinja-template": "^2.2.0",
-    "sass-embedded": "1.105.0",
     "supertest": "^7.3.0",
     "ts-jest": "^29.4.14",
     "ts-node": "^10.9.2",
@@ -177,9 +173,6 @@
     },
     "@opentelemetry/core": "2.11.0",
     "diff": "9.0.0",
-    "nunjucks": {
-      "chokidar": "$chokidar"
-    },
     "openapi-typescript": {
       "typescript": "$typescript"
     },
