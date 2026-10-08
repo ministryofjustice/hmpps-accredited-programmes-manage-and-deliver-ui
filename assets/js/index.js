@@ -57,6 +57,66 @@ document.querySelectorAll('[data-checkbox-filter-search]').forEach(searchInput =
   searchInput.addEventListener('input', filterItems)
 })
 
+// Persist the open/closed state of each collapsible filter panel, but only across an
+// "Apply filters" submission - not plain refreshes or returning to the page. On submit
+// we snapshot which panels are open; on the next load we restore them once and then clear
+// the snapshot, so a subsequent refresh starts from the default (collapsed) state.
+;(() => {
+  const panels = Array.from(document.querySelectorAll('.govuk-details[data-qa$="-filter-section"]'))
+  if (panels.length === 0) return
+
+  // Share the snapshot across the open/closed referral tabs by normalising the tab
+  // segment of the path, so applying filters on one tab keeps the same panels open
+  // when switching to the other.
+  const normalisedPath = window.location.pathname.replace(/(open|closed)-referrals/, 'referrals')
+  const storageKey = `filter-panels-open:${normalisedPath}`
+
+  const readOpenPanels = () => {
+    try {
+      return JSON.parse(window.sessionStorage.getItem(storageKey)) || []
+    } catch (error) {
+      return []
+    }
+  }
+
+  const saveOpenPanels = () => {
+    const openPanels = panels.filter(panel => panel.open).map(panel => panel.getAttribute('data-qa'))
+    try {
+      window.sessionStorage.setItem(storageKey, JSON.stringify(openPanels))
+    } catch (error) {
+      // Ignore storage write errors (e.g. disabled cookies/private mode).
+    }
+  }
+
+  // Restore the panels saved by the last intentional navigation (applying filters or
+  // switching referral tabs), then immediately clear the snapshot. This "consume once"
+  // approach means any other navigation - refreshing, or leaving and returning to the
+  // page - finds no snapshot and starts from the default collapsed state.
+  const openOnLoad = readOpenPanels()
+  if (openOnLoad.length > 0) {
+    panels.forEach(panel => {
+      if (openOnLoad.includes(panel.getAttribute('data-qa'))) {
+        panel.open = true
+      }
+    })
+  }
+  try {
+    window.sessionStorage.removeItem(storageKey)
+  } catch (error) {
+    // Ignore storage access errors (e.g. disabled cookies/private mode).
+  }
+
+  // Snapshot open panels when applying filters or switching referral tabs so the
+  // state carries across those navigations only.
+  const filterForm = document.querySelector('[data-filter-form]')
+  if (filterForm) {
+    filterForm.addEventListener('submit', saveOpenPanels)
+  }
+  document.querySelectorAll('.moj-sub-navigation__link').forEach(tabLink => {
+    tabLink.addEventListener('click', saveOpenPanels)
+  })
+})()
+
 const $inactivityWarningModal = document.querySelector('[data-modal-type="inactivity-warning"]')
 if ($inactivityWarningModal) {
   const INACTIVITY_TIMEOUT = 50 * 60 * 1000
