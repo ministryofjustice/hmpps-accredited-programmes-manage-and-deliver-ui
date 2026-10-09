@@ -52,7 +52,7 @@ export default class EditSessionPresenter {
   }
 
   get canChangeAttendees(): boolean {
-    return this.hasAnyAttendees && !(this.isOneToOneSession && this.isSessionInPast)
+    return !this.isOneToOneSession
   }
 
   get canBeDeleted(): boolean {
