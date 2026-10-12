@@ -10,7 +10,6 @@ import { convertToUrlFriendlyKebabCase, getEditSessionRouteTitle } from '../../u
 import GroupServiceLayoutPresenter, {
   GroupServiceNavigationValues,
 } from '../../shared/groups/groupServiceLayoutPresenter'
-import config from '../../config'
 
 const BRINGING_IT_ALL_TOGETHER_MODULE = 'bringing it all together'
 
@@ -89,21 +88,8 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
   }
 
   private isExcludedSession(session: ProgrammeGroupModuleSessionsResponseGroupSession): boolean {
-    return (
-      config.enable_excluded_referrals &&
-      session.participants?.length === 1 &&
-      Boolean(session.participants[0].isExcluded)
-    )
+    return session.participants?.length === 1 && Boolean(session.participants[0].isExcluded)
   }
-
-  // private sortExcludedToBottom(
-  //   sessions: ProgrammeGroupModuleSessionsResponseGroupSession[],
-  // ): ProgrammeGroupModuleSessionsResponseGroupSession[] {
-  //   if (!config.enable_excluded_referrals) {
-  //     return sessions
-  //   }
-  //   return [...sessions].sort((a, b) => Number(this.isExcludedSession(a)) - Number(this.isExcludedSession(b)))
-  // }
 
   private moduleContent(moduleSession: ProgrammeGroupModuleSessionsResponseGroupModule) {
     const sessions = Array.isArray(moduleSession.sessions)

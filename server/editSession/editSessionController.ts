@@ -4,7 +4,6 @@ import AccreditedProgrammesManageAndDeliverService from '../services/accreditedP
 import sendAuditEvent from '../services/auditService'
 import BaseController from '../shared/baseController'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
-import config from '../config'
 import DateFormatUtils from '../utils/dateFormatUtils'
 import DateUtils from '../utils/dateUtils'
 import errorMessages from '../utils/errorMessages'
@@ -283,9 +282,7 @@ export default class EditSessionController extends BaseController {
     // Restricted attendees are never submitted by the form (their checkbox is disabled), so their
     // existing attendance must be preserved manually rather than relying on what's posted
     const restrictedAttendingReferralIds = sessionAttendees.attendees
-      .filter(
-        attendee => config.enable_excluded_referrals && attendee.isExcluded === true && attendee.currentlyAttending,
-      )
+      .filter(attendee => attendee.isExcluded === true && attendee.currentlyAttending)
       .map(attendee => attendee.referralId)
     const existingPastAttendingReferralIds = isSessionInPast
       ? sessionAttendees.attendees.filter(attendee => attendee.currentlyAttending).map(attendee => attendee.referralId)

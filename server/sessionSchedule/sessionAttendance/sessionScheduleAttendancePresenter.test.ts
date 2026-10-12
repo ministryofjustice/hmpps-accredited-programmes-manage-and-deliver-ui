@@ -1,15 +1,8 @@
 import { ProgrammeGroupModuleSessionsResponse } from '@manage-and-deliver-api'
-import config from '../../config'
 import SessionScheduleAttendancePresenter from './sessionScheduleAttendancePresenter'
-
-jest.mock('../../config')
 
 describe('SessionScheduleAttendancePresenter', () => {
   const groupId = 'group-1'
-
-  beforeEach(() => {
-    config.enable_excluded_referrals = true
-  })
 
   afterEach(() => {
     jest.restoreAllMocks()
@@ -744,15 +737,6 @@ describe('SessionScheduleAttendancePresenter', () => {
 
       expect(content).toContain('John Doe<br/> X999999')
       expect(content).not.toContain('Restricted Person')
-    })
-
-    it('does not restrict rows when the excluded feature is disabled', () => {
-      config.enable_excluded_referrals = false
-      const presenter = new SessionScheduleAttendancePresenter(groupId, dataWithExcludedSession())
-      const content = presenter.getAccordionItems()[0].content.html
-
-      expect(content).not.toContain('data-excluded="true"')
-      expect(content).toContain('<a href="/group-1/excluded-session/')
     })
   })
 

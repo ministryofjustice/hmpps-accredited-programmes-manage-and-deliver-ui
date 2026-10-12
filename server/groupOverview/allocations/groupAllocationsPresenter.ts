@@ -9,7 +9,6 @@ import Pagination from '../../utils/pagination/pagination'
 import PresenterUtils from '../../utils/presenterUtils'
 import { convertToTitleCase } from '../../utils/utils'
 import GroupAllocationsFilter from './groupAllocationsFilter'
-import config from '../../config'
 import CaselistUtils from '../../caselist/caseListUtils'
 
 export enum GroupAllocationsPageSection {
@@ -134,18 +133,14 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
   private referralHref = (id: string) => `/referral-details/${encodeURIComponent(id)}/personal-details`
 
   private sortExcludedToBottom(content: GroupItem[]): GroupItem[] {
-    if (!config.enable_excluded_referrals) {
-      return content
-    }
     return [...content].sort((a, b) => Number(Boolean(a.isExcluded)) - Number(Boolean(b.isExcluded)))
   }
 
   generateWaitlistTableArgs() {
     const rows = this.sortExcludedToBottom(this.group.pagedGroupData.content)
     const out: ({ html: string; attributes?: Record<string, string | number> } | { text: string })[][] = []
-    const excludedReferralsEnabled = config.enable_excluded_referrals
     rows.forEach(member => {
-      const isExcluded = excludedReferralsEnabled && Boolean(member.isExcluded)
+      const isExcluded = Boolean(member.isExcluded)
       const sentenceEndDate = CaselistUtils.sentenceEndDateCellGroupItem(member)
       out.push([
         {
@@ -198,10 +193,9 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
   generateAllocatedTableArgs() {
     const rows = this.sortExcludedToBottom(this.group.pagedGroupData.content)
     const out: ({ html: string; attributes?: Record<string, string | number> } | { text: string })[][] = []
-    const excludedReferralsEnabled = config.enable_excluded_referrals
 
     rows.forEach(member => {
-      const isExcluded = excludedReferralsEnabled && Boolean(member.isExcluded)
+      const isExcluded = Boolean(member.isExcluded)
       const sentenceEndDate = CaselistUtils.sentenceEndDateCellGroupItem(member)
       out.push([
         {

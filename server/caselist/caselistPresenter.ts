@@ -5,7 +5,6 @@ import { CollapsibleCheckboxFilterGroup, CollapsibleCheckboxFilterOption } from 
 import Pagination from '../utils/pagination/pagination'
 import CaselistFilter from './caselistFilter'
 import CaselistUtils from './caseListUtils'
-import config from '../config'
 
 export enum CaselistPageSection {
   Open = 1,
@@ -140,15 +139,12 @@ export default class CaselistPresenter {
       | { html: string; text?: undefined; attributes?: Record<string, string | number> }
       | { text: string; html?: undefined }
     )[][] = []
-    const excludedReferralsEnabled = config.enable_excluded_referrals
-    const sortedContent = excludedReferralsEnabled
-      ? [...this.referralCaseListItems.content].sort(
-          (a, b) => Number(Boolean(a.isExcluded)) - Number(Boolean(b.isExcluded)),
-        )
-      : this.referralCaseListItems.content
+    const sortedContent = [...this.referralCaseListItems.content].sort(
+      (a, b) => Number(Boolean(a.isExcluded)) - Number(Boolean(b.isExcluded)),
+    )
     sortedContent.forEach(referral => {
       const sentenceEndDate = CaselistUtils.sentenceEndDateCell(referral)
-      const isExcluded = excludedReferralsEnabled && Boolean(referral.isExcluded)
+      const isExcluded = Boolean(referral.isExcluded)
       referralData.push([
         {
           html: !isExcluded
