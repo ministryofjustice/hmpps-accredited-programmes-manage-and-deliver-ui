@@ -82,7 +82,6 @@ export default {
     createGroupCohortSelect: 'Select a cohort',
     createGroupDateSelect: 'Enter or select a date',
     createGroupDateInvalid: 'Enter a date in the format 27/7/2025',
-    createGroupDateInPast: 'Start date must be in the future',
     createGroupSexSelect: 'Select a gender',
     createGroupWhenSelect: 'Select at least one day',
     createGroupWhenHourRequired: 'Enter a complete start time',

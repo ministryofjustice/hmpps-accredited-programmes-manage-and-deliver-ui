@@ -6,7 +6,6 @@ import { FormData } from '../utils/forms/formData'
 import FormUtils from '../utils/formUtils'
 import { FormValidationError } from '../utils/formValidationError'
 import { DAY_CONFIG, DayKey } from './when/daysOfWeek'
-import { isRegionAllowedPastDates } from './allowedPastDateRegions'
 
 export default class CreateOrEditGroupForm {
   constructor(
@@ -263,20 +262,7 @@ export default class CreateOrEditGroupForm {
         .bail()
         .matches(/^(0?[1-9]|[12]\d|3[01])\/(0?[1-9]|1[0-2])\/\d{4}$/)
         .withMessage(errorMessages.createGroup.createGroupDateInvalid)
-        .bail()
-        .custom((value: string) => {
-          const [day, month, year] = value.split('/').map(Number)
-          const inputDate = new Date(year, month - 1, day)
-          const today = new Date()
-          today.setHours(0, 0, 0, 0)
-
-          // Allow past dates for regions in the allowed list
-          if (inputDate < today && !isRegionAllowedPastDates(this.userRegionCode)) {
-            throw new Error(errorMessages.createGroup.createGroupDateInPast)
-          }
-
-          return true
-        }),
+        .bail(),
     ]
   }
 
