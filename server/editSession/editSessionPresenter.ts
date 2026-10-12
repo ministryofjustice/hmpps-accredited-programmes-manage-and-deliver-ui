@@ -47,12 +47,8 @@ export default class EditSessionPresenter {
     return sessionType === 'individual' || sessionType === 'one-to-one' || sessionType === 'one_to_one'
   }
 
-  private get isSessionInPast(): boolean {
-    return DateFormatUtils.isDateTimeInPast(this.sessionDetails.unformattedEndDate)
-  }
-
   get canChangeAttendees(): boolean {
-    return !this.isOneToOneSession
+    return this.hasGroupAttendees && !this.isOneToOneSession
   }
 
   get canBeDeleted(): boolean {
@@ -129,6 +125,10 @@ export default class EditSessionPresenter {
 
   get hasAnyAttendees(): boolean {
     return (this.sessionDetails.attendanceAndSessionNotes?.length ?? 0) > 0
+  }
+
+  get hasGroupAttendees(): boolean {
+    return this.sessionDetails.scheduledToAttend.length > 0
   }
 
   get hasRestrictedParticipants(): boolean {
