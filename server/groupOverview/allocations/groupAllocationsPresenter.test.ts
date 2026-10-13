@@ -1,13 +1,6 @@
-import config from '../../config'
 import ProgrammeGroupOverviewFactory from '../../testutils/factories/programmeGroupAllocationsFactory'
 import GroupAllocationsFilter from './groupAllocationsFilter'
 import GroupAllocationsPresenter, { GroupAllocationsPageSection } from './groupAllocationsPresenter'
-
-jest.mock('../../config')
-
-beforeEach(() => {
-  config.enable_excluded_referrals = true
-})
 
 afterEach(() => {
   jest.restoreAllMocks()
@@ -248,32 +241,6 @@ describe('GroupAllocationsPresenter', () => {
           { text: 'Restricted' },
         ],
       ])
-    })
-
-    it('should not restrict fields when a waitlist member is excluded but the feature is disabled', () => {
-      config.enable_excluded_referrals = false
-      const filterObject = GroupAllocationsFilter.empty()
-      const baseGroupOverview = ProgrammeGroupOverviewFactory.waitlist().build()
-      const groupOverview = {
-        ...baseGroupOverview,
-        pagedGroupData: {
-          ...baseGroupOverview.pagedGroupData,
-          content: [{ ...baseGroupOverview.pagedGroupData.content[0], isExcluded: true, lao: false }],
-        },
-      }
-      const presenter = new GroupAllocationsPresenter(
-        GroupAllocationsPageSection.Waitlist,
-        groupOverview,
-        '1234',
-        filterObject,
-      )
-
-      const rows = presenter.generateWaitlistTableArgs()
-      expect(rows[0][1]).toEqual({
-        html: `<a href="/referral-details/39fde7e8-d2e3-472b-8364-5848bf673aa6/personal-details">Edgar Schiller</a><p class="govuk-!-margin-bottom-0"> X718250</p>`,
-        attributes: { 'data-sort-value': 'Edgar Schiller' },
-      })
-      expect(rows[0][4]).toEqual({ text: '36' })
     })
   })
 

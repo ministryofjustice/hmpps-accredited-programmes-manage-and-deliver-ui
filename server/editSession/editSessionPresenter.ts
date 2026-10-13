@@ -1,6 +1,5 @@
 import { AttendanceAndSessionNotes, GroupSessionResponse } from '@manage-and-deliver-api'
 import { MultiSelectTableArgs } from '@manage-and-deliver-ui'
-import config from '../config'
 import attendanceOptionText, { attendanceOptionTextTags } from '../utils/attendanceUtils'
 import { FormValidationError } from '../utils/formValidationError'
 import { TableArgs } from '../utils/govukFrontendTypes'
@@ -113,7 +112,7 @@ export default class EditSessionPresenter {
   }
 
   private isExcludedAttendee(it: AttendanceAndSessionNotes): boolean {
-    return config.enable_excluded_referrals && Boolean(it.isExcluded)
+    return Boolean(it.isExcluded)
   }
 
   // Attendees the current user is authorised to view - shown in the standard attendance table.

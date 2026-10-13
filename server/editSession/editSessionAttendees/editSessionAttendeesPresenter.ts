@@ -2,7 +2,6 @@ import { EditSessionAttendee, EditSessionAttendeesResponse } from '@manage-and-d
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
 import { CheckboxesArgsItem, RadiosArgsItem } from '../../utils/govukFrontendTypes'
-import config from '../../config'
 
 export default class EditSessionAttendeesPresenter {
   constructor(
@@ -65,7 +64,7 @@ export default class EditSessionAttendeesPresenter {
   }
 
   private isExcludedMember(member: EditSessionAttendee): boolean {
-    return config.enable_excluded_referrals && member.isExcluded === true
+    return member.isExcluded === true
   }
 
   private isAttendeeDisabled(attendee: EditSessionAttendee): boolean {

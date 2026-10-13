@@ -2,8 +2,6 @@ import { GroupSessionResponse } from '@manage-and-deliver-api'
 import { FormValidationError } from '../utils/formValidationError'
 import EditSessionPresenter from './editSessionPresenter'
 
-jest.mock('../config')
-
 const laoBadgeHtml = ' <br><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>'
 
 const nameCrnCellHtml = (referralId: string, name: string, crn: string, _indent: number, lao = false): string =>
@@ -774,18 +772,6 @@ describe('EditSessionPresenter', () => {
       const presenter = new EditSessionPresenter(mockGroupId, sessionDetails, mockSessionId, mockDeleteUrl)
 
       expect(presenter.restrictedAttendees.map(it => it.crn)).toEqual(['CRN001', 'CRN999'])
-    })
-
-    it('ignores exclusion when ENABLE_EXCLUDED_REFERRALS is off', () => {
-      const configModule = jest.requireMock<{ default: { enable_excluded_referrals: boolean } }>('../config')
-      configModule.default.enable_excluded_referrals = false
-
-      const presenter = new EditSessionPresenter(mockGroupId, mixedSessionDetails, mockSessionId, mockDeleteUrl)
-
-      expect(presenter.hasRestrictedParticipants).toBe(false)
-      expect(presenter.hasMultipleReferrals).toBe(true)
-
-      configModule.default.enable_excluded_referrals = true
     })
   })
 

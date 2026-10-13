@@ -18,7 +18,6 @@ generic-service:
     AUDIT_ENABLED: "true"
     SENTRY_ENVIRONMENT: preprod
     ENABLE_REGION_RESTRICTION: "true"
-    ENABLE_EXCLUDED_REFERRALS: "true"
 
 generic-prometheus-alerts:
   alertSeverityOverride: hmpps_accredited_programmes_manage_and_deliver_alerts_nonprod

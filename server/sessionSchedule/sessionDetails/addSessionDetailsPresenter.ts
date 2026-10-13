@@ -6,7 +6,6 @@ import {
 import { CheckboxesArgsItem, RadiosArgsItem, SelectArgsItem } from '../../utils/govukFrontendTypes'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
-import config from '../../config'
 
 export default class AddSessionDetailsPresenter {
   constructor(
@@ -103,7 +102,7 @@ export default class AddSessionDetailsPresenter {
   }
 
   private isExcludedMember(member: ScheduleIndividualSessionDetailsResponse['groupMembers'][number]): boolean {
-    return config.enable_excluded_referrals && member.isExcluded === true
+    return member.isExcluded === true
   }
 
   selectedAttendeeValues(): string[] {
