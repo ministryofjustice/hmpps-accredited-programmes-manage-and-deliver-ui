@@ -21,6 +21,7 @@ export default class EditSessionPresenter {
     readonly isAttendanceHistory: boolean = false,
     private readonly validationError: FormValidationError | null = null,
     private readonly attendanceHistoryReferralId: string | null = null,
+    private readonly hasGroupMembers: boolean = false,
   ) {}
 
   get pageTitle(): string {
@@ -48,7 +49,7 @@ export default class EditSessionPresenter {
   }
 
   get canChangeAttendees(): boolean {
-    return this.hasGroupAttendees && !this.isOneToOneSession
+    return this.hasGroupMembers && !this.isOneToOneSession
   }
 
   get canBeDeleted(): boolean {
@@ -125,10 +126,6 @@ export default class EditSessionPresenter {
 
   get hasAnyAttendees(): boolean {
     return (this.sessionDetails.attendanceAndSessionNotes?.length ?? 0) > 0
-  }
-
-  get hasGroupAttendees(): boolean {
-    return this.sessionDetails.scheduledToAttend.length > 0
   }
 
   get hasRestrictedParticipants(): boolean {

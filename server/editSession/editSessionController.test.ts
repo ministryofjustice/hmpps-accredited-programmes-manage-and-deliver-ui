@@ -29,6 +29,19 @@ afterEach(() => {
 beforeEach(() => {
   const sessionData: Partial<SessionData> = {}
   app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+  accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(
+    editSessionAttendeesFactory.build({
+      attendees: [
+        {
+          name: 'Alex River',
+          referralId: 'referral-123',
+          crn: 'S688890821',
+          currentlyAttending: false,
+          isExcluded: false,
+        },
+      ],
+    }),
+  )
 })
 
 describe('editSession', () => {
@@ -140,6 +153,43 @@ describe('editSession', () => {
       .expect(200)
       .expect(res => {
         expect(res.text).toContain('Scheduled to attend')
+        expect(res.text).not.toContain(`/${groupId}/${sessionId}/edit-session-attendees`)
+      })
+  })
+
+  it('shows the scheduled attendees change link when group members are not scheduled', async () => {
+    const groupId = 'd721e8ad-948d-4e48-bff9-9c6fc1c26ece'
+    const sessionId = '89180e89-a335-4ce8-bfad-2ea61620a444'
+    const sessionDetails = GroupSessionDetailsFactory.build({
+      scheduledToAttend: [],
+      attendanceAndSessionNotes: [],
+    })
+    accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
+
+    await request(app)
+      .get(`/${groupId}/${sessionId}/edit-session`)
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain(`/${groupId}/${sessionId}/edit-session-attendees`)
+      })
+  })
+
+  it('does not show the scheduled attendees change link when the group has no members', async () => {
+    const groupId = 'd721e8ad-948d-4e48-bff9-9c6fc1c26ece'
+    const sessionId = '89180e89-a335-4ce8-bfad-2ea61620a444'
+    const sessionDetails = GroupSessionDetailsFactory.build({
+      scheduledToAttend: [],
+      attendanceAndSessionNotes: [],
+    })
+    accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
+    accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(
+      editSessionAttendeesFactory.build({ attendees: [] }),
+    )
+
+    await request(app)
+      .get(`/${groupId}/${sessionId}/edit-session`)
+      .expect(200)
+      .expect(res => {
         expect(res.text).not.toContain(`/${groupId}/${sessionId}/edit-session-attendees`)
       })
   })
