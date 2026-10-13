@@ -56,7 +56,6 @@ export default {
   production,
   https: process.env.NO_HTTPS === 'true' ? false : production,
   staticResourceCacheDuration: '1h',
-  enable_region_restriction: get('ENABLE_REGION_RESTRICTION', 'false', requiredInProduction) === 'true',
   redis: {
     enabled: get('REDIS_ENABLED', 'false', requiredInProduction) === 'true',
     host: get('REDIS_HOST', 'localhost', requiredInProduction),

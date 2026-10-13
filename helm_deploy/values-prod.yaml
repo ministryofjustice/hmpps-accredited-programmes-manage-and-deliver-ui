@@ -15,7 +15,6 @@ generic-service:
     ENVIRONMENT_NAME: prod
     AUDIT_ENABLED: "true"
     SENTRY_ENVIRONMENT: prod
-    ENABLE_REGION_RESTRICTION: "true"
 
 generic-prometheus-alerts:
   alertSeverityOverride: hmpps_accredited_programmes_manage_and_deliver_alerts
