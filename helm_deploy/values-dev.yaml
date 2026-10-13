@@ -31,4 +31,4 @@ generic-service:
       AUDIT_SQS_QUEUE_NAME: "sqs_queue_name"
 
 generic-prometheus-alerts:
-  alertSeverity: hmpps_accredited_programmes_manage_and_deliver_alerts_nonprod
+  alertSeverityOverride: hmpps_accredited_programmes_manage_and_deliver_alerts_nonprod
