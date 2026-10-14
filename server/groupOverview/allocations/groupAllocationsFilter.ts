@@ -4,11 +4,11 @@ import { GroupAllocationsFilterParams } from './groupAllocationsFilterParams'
 export default class GroupAllocationsFilter {
   nameOrCRN: string | undefined = undefined
 
-  cohort: string | undefined = undefined
+  cohort: string[] | undefined = undefined
 
   pdus: string[] | undefined = undefined
 
-  sex: string | undefined = undefined
+  sex: string[] | undefined = undefined
 
   reportingTeam: string[] | undefined = undefined
 
@@ -18,11 +18,11 @@ export default class GroupAllocationsFilter {
 
   static fromRequest(request: Request): GroupAllocationsFilter {
     const filter = new GroupAllocationsFilter()
-    filter.cohort = request.query.cohort as string | undefined
+    filter.cohort = request.query.cohort as string[] | undefined
     filter.nameOrCRN = request.query.nameOrCRN as string | undefined
     filter.reportingTeam = request.query.reportingTeam as string[] | undefined
     filter.pdus = request.query.pdu as string[] | undefined
-    filter.sex = request.query.sex as string | undefined
+    filter.sex = request.query.sex as string[] | undefined
 
     if (filter.reportingTeam !== undefined) {
       filter.reportingTeam = typeof filter.reportingTeam === 'string' ? [filter.reportingTeam] : filter.reportingTeam
@@ -30,13 +30,19 @@ export default class GroupAllocationsFilter {
     if (filter.pdus !== undefined) {
       filter.pdus = typeof filter.pdus === 'string' ? [filter.pdus] : filter.pdus
     }
+    if (filter.cohort !== undefined) {
+      filter.cohort = typeof filter.cohort === 'string' ? [filter.cohort] : filter.cohort
+    }
+    if (filter.sex !== undefined) {
+      filter.sex = typeof filter.sex === 'string' ? [filter.sex] : filter.sex
+    }
     return filter
   }
 
   get params(): GroupAllocationsFilterParams {
     const params: GroupAllocationsFilterParams = {}
 
-    if (this.cohort) {
+    if (this.cohort && this.cohort.length) {
       params.cohort = this.cohort
     }
 
@@ -52,7 +58,7 @@ export default class GroupAllocationsFilter {
       params.reportingTeam = this.reportingTeam
     }
 
-    if (this.sex) {
+    if (this.sex && this.sex.length) {
       params.sex = this.sex
     }
 

@@ -4,10 +4,11 @@ import GroupServiceLayoutPresenter, {
 } from '../../shared/groups/groupServiceLayoutPresenter'
 import { Page } from '../../shared/models/pagination'
 import { FormValidationError } from '../../utils/formValidationError'
-import { ButtonArgs, CheckboxesArgsItem, SelectArgsItem, TableArgsHeadElement } from '../../utils/govukFrontendTypes'
+import { ButtonArgs, CheckboxesArgsItem, TableArgsHeadElement } from '../../utils/govukFrontendTypes'
 import Pagination from '../../utils/pagination/pagination'
 import PresenterUtils from '../../utils/presenterUtils'
 import { convertToTitleCase } from '../../utils/utils'
+import { CollapsibleCheckboxFilterOption } from '../../utils/collapsibleCheckboxFilterArgs'
 import GroupAllocationsFilter from './groupAllocationsFilter'
 import CaselistUtils from '../../caselist/caseListUtils'
 
@@ -228,16 +229,20 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
     return out
   }
 
-  generateSelectValues(options: string[], groupListFilter: string, defaultValue: string): SelectArgsItem[] {
-    const selectOptions: SelectArgsItem[] = [{ text: defaultValue, value: '' }]
-    options.forEach(option =>
-      selectOptions.push({
-        value: option,
-        text: option,
-        selected: groupListFilter?.includes(String(option)) ?? false,
-      }),
-    )
-    return selectOptions
+  generateCohortCheckboxOptions(): CollapsibleCheckboxFilterOption[] {
+    return this.group.filters.cohort.map(cohort => ({
+      value: cohort,
+      label: cohort,
+      checked: this.filter.cohort?.includes(cohort) ?? false,
+    }))
+  }
+
+  generateSexCheckboxOptions(): CollapsibleCheckboxFilterOption[] {
+    return this.group.filters.sex.map(sex => ({
+      value: sex,
+      label: sex,
+      checked: this.filter.sex?.includes(sex) ?? false,
+    }))
   }
 
   get errorSummary() {
