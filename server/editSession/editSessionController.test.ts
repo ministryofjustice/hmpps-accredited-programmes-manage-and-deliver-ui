@@ -159,7 +159,30 @@ describe('editSession', () => {
       })
   })
 
-  it('shows the scheduled attendees change link when the group has members but none attend this session', async () => {
+  it('shows the scheduled attendees change link when group members are not yet scheduled for this session', async () => {
+    const groupId = 'd721e8ad-948d-4e48-bff9-9c6fc1c26ece'
+    const sessionId = '89180e89-a335-4ce8-bfad-2ea61620a444'
+    const sessionDetails = GroupSessionDetailsFactory.build({
+      scheduledToAttend: [],
+      attendanceAndSessionNotes: [],
+    })
+    accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
+    accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue(
+      GroupDetailsFactory.build({ currentlyAllocatedNumber: 3 }),
+    )
+
+    await request(app)
+      .get(`/${groupId}/${sessionId}/edit-session`)
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain(`/${groupId}/${sessionId}/edit-session-attendees`)
+      })
+
+    expect(accreditedProgrammesManageAndDeliverService.getGroupDetailsById).toHaveBeenCalledWith('user1', groupId)
+    expect(accreditedProgrammesManageAndDeliverService.getSessionAttendees).not.toHaveBeenCalled()
+  })
+
+  it('does not show the scheduled attendees change link when the group has no members', async () => {
     const groupId = 'd721e8ad-948d-4e48-bff9-9c6fc1c26ece'
     const sessionId = '89180e89-a335-4ce8-bfad-2ea61620a444'
     const sessionDetails = GroupSessionDetailsFactory.build({
@@ -170,23 +193,6 @@ describe('editSession', () => {
     accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(
       editSessionAttendeesFactory.build({ attendees: [] }),
     )
-
-    await request(app)
-      .get(`/${groupId}/${sessionId}/edit-session`)
-      .expect(200)
-      .expect(res => {
-        expect(res.text).toContain(`/${groupId}/${sessionId}/edit-session-attendees`)
-      })
-  })
-
-  it('does not show the scheduled attendees change link when the group has no members even if session attendees are returned', async () => {
-    const groupId = 'd721e8ad-948d-4e48-bff9-9c6fc1c26ece'
-    const sessionId = '89180e89-a335-4ce8-bfad-2ea61620a444'
-    const sessionDetails = GroupSessionDetailsFactory.build({
-      scheduledToAttend: [],
-      attendanceAndSessionNotes: [],
-    })
-    accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
     accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue(
       GroupDetailsFactory.build({ currentlyAllocatedNumber: 0 }),
     )
