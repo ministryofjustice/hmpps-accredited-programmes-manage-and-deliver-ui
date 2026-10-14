@@ -21,6 +21,7 @@ export default class EditSessionPresenter {
     readonly isAttendanceHistory: boolean = false,
     private readonly validationError: FormValidationError | null = null,
     private readonly attendanceHistoryReferralId: string | null = null,
+    private readonly hasGroupMembers: boolean = false,
   ) {}
 
   get pageTitle(): string {
@@ -47,12 +48,8 @@ export default class EditSessionPresenter {
     return sessionType === 'individual' || sessionType === 'one-to-one' || sessionType === 'one_to_one'
   }
 
-  private get isSessionInPast(): boolean {
-    return DateFormatUtils.isDateTimeInPast(this.sessionDetails.unformattedEndDate)
-  }
-
   get canChangeAttendees(): boolean {
-    return this.hasAnyAttendees && !(this.isOneToOneSession && this.isSessionInPast)
+    return this.hasGroupMembers && !this.isOneToOneSession
   }
 
   get canBeDeleted(): boolean {

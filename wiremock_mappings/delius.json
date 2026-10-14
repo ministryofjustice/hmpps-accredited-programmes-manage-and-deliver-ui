@@ -602,6 +602,50 @@
     },
     {
       "request": {
+        "urlPathPattern": "/regions/[^/]+/local-admin-units/accredited-programmes/members",
+        "method": "GET"
+      },
+      "priority": 1,
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "teams": [
+            {
+              "code": "TEAM01",
+              "description": "Wiremocked Team",
+              "members": [
+                {
+                  "code": "N54TM01",
+                  "name": {
+                    "forename": "Alex",
+                    "surname": "Morgan"
+                  }
+                },
+                {
+                  "code": "N54FAC01",
+                  "name": {
+                    "forename": "Sam",
+                    "surname": "Taylor"
+                  }
+                },
+                {
+                  "code": "N54FAC02",
+                  "name": {
+                    "forename": "Jordan",
+                    "surname": "Patel"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "request": {
         "urlPattern": "/regions/.*/members",
         "method": "GET"
       },

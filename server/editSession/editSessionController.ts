@@ -180,6 +180,10 @@ export default class EditSessionController extends BaseController {
       groupId,
       sessionId,
     )
+    const groupDetails =
+      sessionDetails.sessionType.toLowerCase() === 'group'
+        ? await this.accreditedProgrammesManageAndDeliverService.getGroupDetailsById(username, groupId)
+        : null
 
     const successMessage = message ? String(message) : null
     const editSessionSuccessMessage = editSessionMessage ? String(editSessionMessage) : null
@@ -227,6 +231,7 @@ export default class EditSessionController extends BaseController {
       isAttendanceHistoryFlag,
       formError,
       attendanceHistoryReferralId,
+      (groupDetails?.currentlyAllocatedNumber ?? 0) > 0,
     )
     const view = new EditSessionView(presenter)
 
