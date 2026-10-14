@@ -62,7 +62,6 @@ export default class EditSessionView {
             ),
           },
           actions: {
-            // Keep attendee management available when group members are unscheduled or restricted from view.
             items: this.presenter.canChangeAttendees
               ? [
                   {
