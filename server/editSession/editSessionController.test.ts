@@ -5,6 +5,7 @@ import request from 'supertest'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import editSessionAttendeesFactory from '../testutils/factories/editSessionAttendeesFactory'
 import editSessionDetailsFactory from '../testutils/factories/editSessionDetailsFactory'
+import GroupDetailsFactory from '../testutils/factories/groupDetailsFactory'
 import rescheduleSessionDetailsFactory from '../testutils/factories/rescheduleSessionDetailsFactory'
 import GroupSessionDetailsFactory from '../testutils/factories/risksAndNeeds/groupSessionDetailsFactory'
 import SessionDetailsFactory from '../testutils/factories/sessionDetailsFactory'
@@ -29,6 +30,7 @@ afterEach(() => {
 beforeEach(() => {
   const sessionData: Partial<SessionData> = {}
   app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+  accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue(GroupDetailsFactory.build())
   accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(
     editSessionAttendeesFactory.build({
       attendees: [
@@ -157,24 +159,7 @@ describe('editSession', () => {
       })
   })
 
-  it('shows the scheduled attendees change link when group members are not scheduled', async () => {
-    const groupId = 'd721e8ad-948d-4e48-bff9-9c6fc1c26ece'
-    const sessionId = '89180e89-a335-4ce8-bfad-2ea61620a444'
-    const sessionDetails = GroupSessionDetailsFactory.build({
-      scheduledToAttend: [],
-      attendanceAndSessionNotes: [],
-    })
-    accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
-
-    await request(app)
-      .get(`/${groupId}/${sessionId}/edit-session`)
-      .expect(200)
-      .expect(res => {
-        expect(res.text).toContain(`/${groupId}/${sessionId}/edit-session-attendees`)
-      })
-  })
-
-  it('does not show the scheduled attendees change link when the group has no members', async () => {
+  it('shows the scheduled attendees change link when the group has members but none attend this session', async () => {
     const groupId = 'd721e8ad-948d-4e48-bff9-9c6fc1c26ece'
     const sessionId = '89180e89-a335-4ce8-bfad-2ea61620a444'
     const sessionDetails = GroupSessionDetailsFactory.build({
@@ -184,6 +169,26 @@ describe('editSession', () => {
     accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
     accreditedProgrammesManageAndDeliverService.getSessionAttendees.mockResolvedValue(
       editSessionAttendeesFactory.build({ attendees: [] }),
+    )
+
+    await request(app)
+      .get(`/${groupId}/${sessionId}/edit-session`)
+      .expect(200)
+      .expect(res => {
+        expect(res.text).toContain(`/${groupId}/${sessionId}/edit-session-attendees`)
+      })
+  })
+
+  it('does not show the scheduled attendees change link when the group has no members even if session attendees are returned', async () => {
+    const groupId = 'd721e8ad-948d-4e48-bff9-9c6fc1c26ece'
+    const sessionId = '89180e89-a335-4ce8-bfad-2ea61620a444'
+    const sessionDetails = GroupSessionDetailsFactory.build({
+      scheduledToAttend: [],
+      attendanceAndSessionNotes: [],
+    })
+    accreditedProgrammesManageAndDeliverService.getGroupSessionDetails.mockResolvedValue(sessionDetails)
+    accreditedProgrammesManageAndDeliverService.getGroupDetailsById.mockResolvedValue(
+      GroupDetailsFactory.build({ currentlyAllocatedNumber: 0 }),
     )
 
     await request(app)
