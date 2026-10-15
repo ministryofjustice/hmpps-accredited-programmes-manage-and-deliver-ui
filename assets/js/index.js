@@ -54,7 +54,7 @@ document.querySelectorAll('[data-checkbox-filter-search]').forEach(searchInput =
     })
 
     if (noResults) {
-      const message = visibleCount === 0 ? 'No matching options' : ''
+      const message = visibleCount === 0 ? 'No results found. Clear or change the filters.' : ''
       if (noResults.textContent !== message) {
         noResults.textContent = message
       }
