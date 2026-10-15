@@ -1,4 +1,5 @@
-import { CheckboxesArgs, InputArgs, SelectArgs, TableArgs } from '../../utils/govukFrontendTypes'
+import { InputArgs, TableArgs } from '../../utils/govukFrontendTypes'
+import { CollapsibleCheckboxFilterArgs } from '../../utils/collapsibleCheckboxFilterArgs'
 import ViewUtils from '../../utils/viewUtils'
 import GroupAllocationsPresenter, { GroupAllocationsPageSection } from './groupAllocationsPresenter'
 
@@ -17,50 +18,41 @@ export default class GroupAllocationsView {
     }
   }
 
-  private get searchByCohortArgs(): SelectArgs {
+  private get searchByCohortArgs(): CollapsibleCheckboxFilterArgs {
+    const options = this.presenter.generateCohortCheckboxOptions()
     return {
-      id: 'cohort',
+      title: 'Cohort',
       name: 'cohort',
-      label: {
-        text: 'Cohort',
-        classes: 'govuk-label--s',
-      },
-      items: this.presenter.generateSelectValues(
-        this.presenter.group.filters.cohort,
-        this.presenter.filter.cohort,
-        'Select cohort',
-      ),
+      dataQa: 'cohort',
+      selectedCount: options.filter(option => option.checked).length,
+      options,
     }
   }
 
-  private get searchBySexArgs(): SelectArgs {
+  private get searchBySexArgs(): CollapsibleCheckboxFilterArgs {
+    const options = this.presenter.generateSexCheckboxOptions()
     return {
-      id: 'sex',
+      title: 'Sex',
       name: 'sex',
-      label: {
-        text: 'Sex',
-        classes: 'govuk-label--s',
-      },
-      items: this.presenter.generateSelectValues(
-        this.presenter.group.filters.sex,
-        this.presenter.filter.sex,
-        'Select sex',
-      ),
+      dataQa: 'sex',
+      selectedCount: options.filter(option => option.checked).length,
+      options,
     }
   }
 
-  private get pduCheckboxArgs(): CheckboxesArgs {
+  private get pduCheckboxArgs(): CollapsibleCheckboxFilterArgs {
+    const options = this.presenter.generatePduCheckboxArgs().map(item => ({
+      value: `${item.value}`,
+      label: item.text,
+      checked: item.checked ?? false,
+    }))
     return {
+      title: 'PDU',
       name: 'pdu',
-      classes: 'govuk-checkboxes--small',
-      fieldset: {
-        legend: {
-          text: 'PDU',
-          isPageHeading: false,
-          classes: 'govuk-fieldset__legend--s',
-        },
-      },
-      items: this.presenter.generatePduCheckboxArgs(),
+      dataQa: 'pdu',
+      searchable: true,
+      selectedCount: options.filter(option => option.checked).length,
+      options,
     }
   }
 
@@ -94,18 +86,19 @@ export default class GroupAllocationsView {
     }
   }
 
-  private get reportingTeamCheckboxArgs(): CheckboxesArgs {
+  private get reportingTeamCheckboxArgs(): CollapsibleCheckboxFilterArgs {
+    const options = this.presenter.generateReportingTeamCheckboxArgs().map(item => ({
+      value: `${item.value}`,
+      label: item.text,
+      checked: item.checked ?? false,
+    }))
     return {
+      title: 'Reporting team',
       name: 'reportingTeam',
-      classes: 'govuk-checkboxes--small',
-      fieldset: {
-        legend: {
-          text: 'Reporting team',
-          isPageHeading: false,
-          classes: 'govuk-fieldset__legend--s',
-        },
-      },
-      items: this.presenter.generateReportingTeamCheckboxArgs(),
+      dataQa: 'reporting-team',
+      searchable: true,
+      selectedCount: options.filter(option => option.checked).length,
+      options,
     }
   }
 

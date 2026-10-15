@@ -14,11 +14,11 @@ describe('GroupAllocationsFilter', () => {
 
       const filter = GroupAllocationsFilter.fromRequest({ query } as unknown as Request)
 
-      expect(filter.cohort).toEqual('SEXUAL_OFFENCE')
+      expect(filter.cohort).toEqual(['SEXUAL_OFFENCE'])
       expect(filter.nameOrCRN).toEqual('John Doe')
       expect(filter.pdus).toEqual(['PDU3'])
       expect(filter.reportingTeam).toEqual(['Team5'])
-      expect(filter.sex).toEqual('Male')
+      expect(filter.sex).toEqual(['Male'])
     })
 
     it('converts a single reportingTeam string to an array', () => {
@@ -82,22 +82,46 @@ describe('GroupAllocationsFilter', () => {
     describe('sex', () => {
       it('correctly sets sex if only one type is passed', () => {
         const filter = new GroupAllocationsFilter()
-        filter.sex = 'Male'
-        expect(filter.params.sex).toEqual('Male')
+        filter.sex = ['Male']
+        expect(filter.params.sex).toEqual(['Male'])
       })
 
       it('correctly sets sex to Female', () => {
         const filter = new GroupAllocationsFilter()
-        filter.sex = 'Female'
-        expect(filter.params.sex).toEqual('Female')
+        filter.sex = ['Female']
+        expect(filter.params.sex).toEqual(['Female'])
+      })
+
+      it('correctly sets multiple sex values', () => {
+        const filter = new GroupAllocationsFilter()
+        filter.sex = ['Male', 'Female']
+        expect(filter.params.sex).toEqual(['Male', 'Female'])
+      })
+
+      it('excludes sex from params when empty array', () => {
+        const filter = new GroupAllocationsFilter()
+        filter.sex = []
+        expect(filter.params.sex).toBeUndefined()
       })
     })
 
     describe('cohort', () => {
       it('correctly sets cohort', () => {
         const filter = new GroupAllocationsFilter()
-        filter.cohort = 'Sexual offence'
-        expect(filter.params.cohort).toEqual('Sexual offence')
+        filter.cohort = ['Sexual offence']
+        expect(filter.params.cohort).toEqual(['Sexual offence'])
+      })
+
+      it('correctly sets multiple cohorts', () => {
+        const filter = new GroupAllocationsFilter()
+        filter.cohort = ['Sexual offence', 'General offence']
+        expect(filter.params.cohort).toEqual(['Sexual offence', 'General offence'])
+      })
+
+      it('excludes cohort from params when empty array', () => {
+        const filter = new GroupAllocationsFilter()
+        filter.cohort = []
+        expect(filter.params.cohort).toBeUndefined()
       })
     })
 

@@ -4,11 +4,10 @@
 {%- from "govuk/components/input/macro.njk" import govukInput -%}
 {%- from "govuk/components/table/macro.njk" import govukTable -%}
 {% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
-{% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {%- from "moj/components/alert/macro.njk" import mojAlert -%}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{%- from "govuk/components/checkboxes/macro.njk" import govukCheckboxes -%}
+{% from "../components/collapsible-checkbox-filter/macro.njk" import collapsibleCheckboxFilter %}
 
 
 {% set pageTitle = pageTitle + " - " + applicationName %}
@@ -30,9 +29,12 @@
   <a class="clear-filters__link" href="?">Clear filters</a>
   {{ govukInput(searchByCrnOrPersonNameArgs) }}
   {% if isWaitlist %}
-    {{ govukSelect(searchByCohortArgs) }}
-    {{ govukSelect(searchBySexArgs) }}
-    {{ govukCheckboxes(pduCheckboxArgs) }}
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    {{ collapsibleCheckboxFilter(searchByCohortArgs) }}
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    {{ collapsibleCheckboxFilter(searchBySexArgs) }}
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    {{ collapsibleCheckboxFilter(pduCheckboxArgs) }}
 
     {% if not presenter.showReportingTeams %}
       <h3 class="govuk-heading-s govuk-!-margin-bottom-1 govuk-!-margin-top-6">Reporting team</h3>
@@ -40,15 +42,16 @@
     {% endif %}
 
     {% if presenter.showReportingTeams %}
-      {{ govukCheckboxes(reportingTeamCheckboxArgs) }}
+      {{ collapsibleCheckboxFilter(reportingTeamCheckboxArgs) }}
     {% endif %}
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
   {% endif %}
 
   {{ govukButton(applyFilterButtonArgs) }}
     <a class="clear-filters__link" href="?">Clear filters</a>
   {% endset -%}
   <div class="govuk-grid-column-one-quarter group-filter-column">
-    <form id="filter-form" method="get">
+    <form id="filter-form" method="get" data-filter-form>
       {{ mojFilter({
       heading: {
       text: "Filter"
