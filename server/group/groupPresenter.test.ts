@@ -345,7 +345,7 @@ describe('LDC cohort display', () => {
   })
 })
 
-describe('cohort filter select args', () => {
+describe('generateCohortCheckboxArgs', () => {
   it('should include all cohort options including LDC variants', () => {
     const groupList = groupsByRegionFactory.build()
     const presenter = new GroupPresenter(
@@ -358,21 +358,20 @@ describe('cohort filter select args', () => {
       [],
     )
 
-    const cohortSelectArgs = presenter.generateCohortSelectArgs()
+    const cohortCheckboxArgs = presenter.generateCohortCheckboxArgs()
 
-    expect(cohortSelectArgs).toEqual([
-      { text: 'Select', value: '' },
-      { value: 'General offence', text: 'General offence', selected: false },
-      { value: 'General offence LDC', text: 'General offence LDC', selected: false },
-      { value: 'Sexual offence', text: 'Sexual offence', selected: false },
-      { value: 'Sexual offence LDC', text: 'Sexual offence LDC', selected: false },
+    expect(cohortCheckboxArgs).toEqual([
+      { value: 'General offence', text: 'General offence', checked: false },
+      { value: 'General offence LDC', text: 'General offence LDC', checked: false },
+      { value: 'Sexual offence', text: 'Sexual offence', checked: false },
+      { value: 'Sexual offence LDC', text: 'Sexual offence LDC', checked: false },
     ])
   })
 
-  it('should mark the selected cohort option as selected', () => {
+  it('should check only the selected cohort options', () => {
     const groupList = groupsByRegionFactory.build()
     const filter = GroupListFilter.empty()
-    filter.cohort = 'General offence LDC'
+    filter.cohort = ['General offence LDC', 'Sexual offence']
 
     const presenter = new GroupPresenter(
       groupList.pagedGroupData as Page<Group>,
@@ -384,13 +383,14 @@ describe('cohort filter select args', () => {
       [],
     )
 
-    const cohortSelectArgs = presenter.generateCohortSelectArgs()
+    const cohortCheckboxArgs = presenter.generateCohortCheckboxArgs()
 
-    expect(cohortSelectArgs[2]).toEqual({
-      value: 'General offence LDC',
-      text: 'General offence LDC',
-      selected: true,
-    })
+    expect(cohortCheckboxArgs).toEqual([
+      { value: 'General offence', text: 'General offence', checked: false },
+      { value: 'General offence LDC', text: 'General offence LDC', checked: true },
+      { value: 'Sexual offence', text: 'Sexual offence', checked: true },
+      { value: 'Sexual offence LDC', text: 'Sexual offence LDC', checked: false },
+    ])
   })
 })
 
@@ -795,6 +795,38 @@ describe('generateNoResultsString', () => {
     expect(presenter.generateNoResultsString()).toBe(
       "No groups found in 'Completed'. 2 groups found in 'Not started or in progress'.",
     )
+  })
+})
+
+describe('generateSexCheckboxArgs', () => {
+  it.each([
+    { sex: undefined, checked: [false, false, false] },
+    { sex: ['MALE'], checked: [true, false, false] },
+    { sex: ['FEMALE'], checked: [false, true, false] },
+    { sex: ['MIXED'], checked: [false, false, true] },
+    { sex: ['MALE', 'FEMALE'], checked: [true, true, false] },
+    { sex: ['MALE', 'MIXED'], checked: [true, false, true] },
+    { sex: ['FEMALE', 'MIXED'], checked: [false, true, true] },
+    { sex: ['MALE', 'FEMALE', 'MIXED'], checked: [true, true, true] },
+  ])('sets checked states for $sex', ({ sex, checked }) => {
+    const groupList = groupsByRegionFactory.build()
+    const filter = GroupListFilter.empty()
+    filter.sex = sex
+
+    const presenter = new GroupPresenter(
+      groupList.pagedGroupData as Page<Group>,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
+      groupList.otherTabTotal,
+      groupList.regionName,
+      filter,
+      [],
+    )
+
+    expect(presenter.generateSexCheckboxArgs()).toEqual([
+      { text: 'Male', value: 'MALE', checked: checked[0] },
+      { text: 'Female', value: 'FEMALE', checked: checked[1] },
+      { text: 'Mixed', value: 'MIXED', checked: checked[2] },
+    ])
   })
 })
 

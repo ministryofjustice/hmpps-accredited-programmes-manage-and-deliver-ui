@@ -1,7 +1,7 @@
 import { Group, ProgrammeGroupCohortEnum } from '@manage-and-deliver-api'
 import { Page } from '../shared/models/pagination'
 import Pagination from '../utils/pagination/pagination'
-import { CheckboxesArgsItem, SelectArgsItem, TableArgs } from '../utils/govukFrontendTypes'
+import { CheckboxesArgsItem, TableArgs } from '../utils/govukFrontendTypes'
 import GroupListFilter from '../groupOverview/groupListFilter'
 import DateUtils from '../utils/dateUtils'
 
@@ -233,44 +233,31 @@ export default class GroupPresenter {
     }))
   }
 
-  generateCohortSelectArgs(): SelectArgsItem[] {
+  generateCohortCheckboxArgs(): CheckboxesArgsItem[] {
     const cohortOptions = ['General offence', 'General offence LDC', 'Sexual offence', 'Sexual offence LDC']
-    const selectOptions: SelectArgsItem[] = [
-      {
-        text: 'Select',
-        value: '',
-      },
-    ]
-    cohortOptions.forEach(cohort => {
-      selectOptions.push({
-        value: cohort,
-        text: cohort,
-        selected: this.filter.cohort === cohort,
-      })
-    })
-    return selectOptions
+    return cohortOptions.map(cohort => ({
+      text: cohort,
+      value: cohort,
+      checked: this.filter.cohort?.includes(cohort) ?? false,
+    }))
   }
 
-  generateSexSelectArgs(): SelectArgsItem[] {
+  generateSexCheckboxArgs(): CheckboxesArgsItem[] {
     return [
-      {
-        text: 'Select',
-        value: '',
-      },
       {
         value: 'MALE',
         text: 'Male',
-        selected: this.filter.sex === 'MALE',
+        checked: this.filter.sex?.includes('MALE') ?? false,
       },
       {
         value: 'FEMALE',
         text: 'Female',
-        selected: this.filter.sex === 'FEMALE',
+        checked: this.filter.sex?.includes('FEMALE') ?? false,
       },
       {
         value: 'MIXED',
         text: 'Mixed',
-        selected: this.filter.sex === 'MIXED',
+        checked: this.filter.sex?.includes('MIXED') ?? false,
       },
     ]
   }

@@ -4,6 +4,10 @@ import ModalDialog from './modelTimeOutDialog.js'
 
 govukFrontend.initAll()
 mojFrontend.initAll()
+//This gives screen readers a focused message to announce and lets keyboard users continue tabbing from the results, rather than starting at the top of the page.
+if (window.location.hash === '#filter-results') {
+  document.getElementById('filter-results')?.focus()
+}
 
 // Keep excluded (restricted) referrals pinned to the bottom of the sortable tables (caselist,
 // group allocations and waitlist), regardless of which column/direction the user sorts by. The MOJ
@@ -50,6 +54,10 @@ document.querySelectorAll('[data-checkbox-filter-search]').forEach(searchInput =
     })
 
     if (noResults) {
+      const message = visibleCount === 0 ? 'No results found. Clear or change the filters.' : ''
+      if (noResults.textContent !== message) {
+        noResults.textContent = message
+      }
       noResults.classList.toggle('govuk-visually-hidden', visibleCount !== 0)
     }
   }

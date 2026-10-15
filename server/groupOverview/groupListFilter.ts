@@ -4,11 +4,11 @@ import { GroupListFilterParams } from './groupListFilterParams'
 export default class GroupListFilter {
   groupCode: string | undefined = undefined
 
-  cohort: string | undefined = undefined
+  cohort: string[] | undefined = undefined
 
   pdu: string[] | undefined = undefined
 
-  sex: string | undefined = undefined
+  sex: string[] | undefined = undefined
 
   deliveryLocations: string[] | undefined = undefined
 
@@ -18,11 +18,13 @@ export default class GroupListFilter {
 
   static fromRequest(request: Request, availableDeliveryLocations?: string[] | null): GroupListFilter {
     const filter = new GroupListFilter()
-    filter.cohort = request.query.cohort as string | undefined
+    const cohort = request.query.cohort as string | string[] | undefined
+    filter.cohort = typeof cohort === 'string' ? [cohort] : cohort
     filter.groupCode = request.query.groupCode as string | undefined
 
     filter.pdu = request.query.pdu as string[] | undefined
-    filter.sex = request.query.sex as string | undefined
+    const sex = request.query.sex as string | string[] | undefined
+    filter.sex = typeof sex === 'string' ? [sex] : sex
 
     if (filter.pdu !== undefined) {
       filter.pdu = typeof filter.pdu === 'string' ? [filter.pdu] : filter.pdu
@@ -77,7 +79,7 @@ export default class GroupListFilter {
     const searchParams = new URLSearchParams()
     Object.entries(this.params).forEach(([key, value]) => {
       if (Array.isArray(value)) {
-        value.forEach(v => searchParams.append(key, v))
+        value.forEach(item => searchParams.append(key, item))
       } else {
         searchParams.append(key, value)
       }
