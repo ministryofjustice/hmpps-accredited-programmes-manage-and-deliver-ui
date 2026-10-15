@@ -62,8 +62,6 @@ export default class GroupView {
       title: 'Sex',
       name: 'sex',
       filterId: 'sex',
-      searchable: true,
-      searchLabel: 'Search sex',
       selectedCount: options.filter(option => option.checked).length,
       options,
     }
@@ -79,8 +77,6 @@ export default class GroupView {
       title: 'Cohort',
       name: 'cohort',
       filterId: 'cohort',
-      searchable: true,
-      searchLabel: 'Search cohorts',
       selectedCount: options.filter(option => option.checked).length,
       options,
     }
