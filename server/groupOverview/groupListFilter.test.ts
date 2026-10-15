@@ -14,11 +14,11 @@ describe(GroupListFilter, () => {
 
       const filter = GroupListFilter.fromRequest({ query } as unknown as Request)
 
-      expect(filter.cohort).toEqual('SEXUAL_OFFENCE')
+      expect(filter.cohort).toEqual(['SEXUAL_OFFENCE'])
       expect(filter.groupCode).toEqual('CODE')
       expect(filter.pdu).toEqual(['PDU3'])
       expect(filter.deliveryLocations).toEqual(['delivery-location-1'])
-      expect(filter.sex).toEqual('Male')
+      expect(filter.sex).toEqual(['Male'])
     })
 
     it('converts single pdu string to array', () => {
@@ -69,14 +69,14 @@ describe(GroupListFilter, () => {
     describe('sex', () => {
       it('correctly sets sex if only one type is passed', () => {
         const filter = new GroupListFilter()
-        filter.sex = 'Male'
-        expect(filter.params.sex).toEqual('Male')
+        filter.sex = ['Male']
+        expect(filter.params.sex).toEqual(['Male'])
       })
 
       it('correctly sets cohort if only one type is passed', () => {
         const filter = new GroupListFilter()
-        filter.sex = 'Female'
-        expect(filter.params.sex).toEqual('Female')
+        filter.sex = ['Female']
+        expect(filter.params.sex).toEqual(['Female'])
       })
     })
 
@@ -99,6 +99,18 @@ describe(GroupListFilter, () => {
     })
 
     describe('paramsAsQueryParams', () => {
+      it('preserves multiple cohort and sex selections as repeated query params', () => {
+        const query = {
+          cohort: ['General offence', 'Sexual offence'],
+          sex: ['MALE', 'FEMALE'],
+        }
+        const filter = GroupListFilter.fromRequest({ query } as unknown as Request)
+
+        expect(filter.params.cohort).toEqual(query.cohort)
+        expect(filter.params.sex).toEqual(query.sex)
+        expect(filter.paramsAsQueryParams).toBe('cohort=General+offence&cohort=Sexual+offence&sex=MALE&sex=FEMALE')
+      })
+
       it('serialises a single pdu correctly', () => {
         const filter = new GroupListFilter()
         filter.pdu = ['PDU1']

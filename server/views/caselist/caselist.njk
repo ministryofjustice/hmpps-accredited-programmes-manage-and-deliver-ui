@@ -54,7 +54,7 @@
     <a class="clear-filters__link" href="?">Clear filters</a>
     {% endset -%}
     <div class="govuk-grid-column-one-quarter caselist-filter-column">
-      <form method="get" data-filter-form>
+      <form method="get" action="#filter-results" data-filter-form>
         {{ mojFilter({
           heading: {
             text: "Filter"
@@ -73,13 +73,15 @@
     </div>
     <div class="govuk-grid-column-three-quarters caselist-results-column">
       {{ mojSubNavigation(subNavArgs) }}
-      {% if resultsText %}
-        <p class="govuk-body showing-results" role="status" aria-live="polite" aria-atomic="true">{{ resultsText | safe }}</p>
-      {% endif %}
+      <p id="filter-results" tabindex="-1" class="{{ 'govuk-body showing-results' if resultsText else 'govuk-body-l' }}">
+        {% if resultsText %}
+          {{ resultsText | safe }}
+        {% else %}
+          {{ noResultsString }}
+        {% endif %}
+      </p>
       {% if presenter.referralCaseListItems.content.length > 0 %}
         {{ govukTable(presenter.getCaseloadTableArgs()) }}
-      {% else %}
-        <p class="govuk-body-l">{{ noResultsString }}</p>
       {% endif %}
 
       {% include "../partials/pagination.njk" %}

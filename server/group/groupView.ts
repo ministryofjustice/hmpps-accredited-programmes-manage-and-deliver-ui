@@ -1,5 +1,6 @@
 import GroupPresenter from './groupPresenter'
 import { ButtonArgs, CheckboxesArgs, InputArgs, SelectArgs } from '../utils/govukFrontendTypes'
+import { CollapsibleCheckboxFilterArgs } from '../utils/collapsibleCheckboxFilterArgs'
 
 export default class GroupView {
   constructor(private readonly presenter: GroupPresenter) {}
@@ -17,64 +18,71 @@ export default class GroupView {
     }
   }
 
-  private get pduCheckboxArgs(): CheckboxesArgs {
-    const pduItems = this.presenter.generatePDUCheckboxArgs()
-    const pduOptionCount = pduItems.length
-    const optionWord = pduOptionCount === 1 ? 'option' : 'options'
-
+  private get pduCheckboxArgs(): CollapsibleCheckboxFilterArgs {
+    const options = this.presenter.generatePDUCheckboxArgs().map(item => ({
+      value: `${item.value}`,
+      label: item.text,
+      checked: item.checked ?? false,
+    }))
     return {
+      title: 'PDU',
       name: 'pdu',
-      classes: 'govuk-checkboxes--small',
-      fieldset: {
-        legend: {
-          html: `PDU <span class="govuk-visually-hidden">, ${pduOptionCount} ${optionWord}</span>`,
-          isPageHeading: false,
-          classes: 'govuk-fieldset__legend--s',
-        },
-      },
-      items: pduItems,
+      filterId: 'pdu',
+      searchable: true,
+      searchLabel: 'Search PDUs',
+      selectedCount: options.filter(option => option.checked).length,
+      options,
     }
   }
 
-  private get deliveryLocationCheckboxArgs(): CheckboxesArgs {
-    const deliveryLocationItems = this.presenter.generateDeliveryLocationCheckboxArgs()
-    const deliveryLocationOptionCount = deliveryLocationItems.length
-    const optionWord = deliveryLocationOptionCount === 1 ? 'option' : 'options'
+  private get deliveryLocationCheckboxArgs(): CollapsibleCheckboxFilterArgs {
+    const options = this.presenter.generateDeliveryLocationCheckboxArgs().map(item => ({
+      value: `${item.value}`,
+      label: item.text,
+      checked: item.checked ?? false,
+    }))
     return {
+      title: 'Delivery Location',
       name: 'deliveryLocations',
-      classes: 'govuk-checkboxes--small',
-      fieldset: {
-        legend: {
-          html: `Delivery Location <span class="govuk-visually-hidden">, ${deliveryLocationOptionCount} ${optionWord}</span>`,
-          isPageHeading: false,
-          classes: 'govuk-fieldset__legend--s',
-        },
-      },
-      items: deliveryLocationItems,
+      filterId: 'deliveryLocations',
+      searchable: true,
+      searchLabel: 'Search delivery locations',
+      selectedCount: options.filter(option => option.checked).length,
+      options,
     }
   }
 
-  private get searchBySexArgs(): SelectArgs {
+  private get searchBySexArgs(): CollapsibleCheckboxFilterArgs {
+    const options = this.presenter.generateSexCheckboxArgs().map(item => ({
+      value: `${item.value}`,
+      label: item.text,
+      checked: item.checked ?? false,
+    }))
     return {
-      id: 'sex',
+      title: 'Sex',
       name: 'sex',
-      label: {
-        text: 'Sex',
-        classes: 'govuk-label--s',
-      },
-      items: this.presenter.generateSexSelectArgs(),
+      filterId: 'sex',
+      searchable: true,
+      searchLabel: 'Search sex',
+      selectedCount: options.filter(option => option.checked).length,
+      options,
     }
   }
 
-  private get searchByCohortArgs(): SelectArgs {
+  private get searchByCohortArgs(): CollapsibleCheckboxFilterArgs {
+    const options = this.presenter.generateCohortCheckboxArgs().map(item => ({
+      value: `${item.value}`,
+      label: item.text,
+      checked: item.checked ?? false,
+    }))
     return {
-      id: 'cohort',
+      title: 'Cohort',
       name: 'cohort',
-      label: {
-        text: 'Cohort',
-        classes: 'govuk-label--s',
-      },
-      items: this.presenter.generateCohortSelectArgs(),
+      filterId: 'cohort',
+      searchable: true,
+      searchLabel: 'Search cohorts',
+      selectedCount: options.filter(option => option.checked).length,
+      options,
     }
   }
 

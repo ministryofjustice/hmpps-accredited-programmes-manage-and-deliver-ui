@@ -7,6 +7,7 @@
 {% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "../components/collapsible-checkbox-filter/macro.njk" import collapsibleCheckboxFilter %}
 {% set pageTitle = pageTitle + " - " + applicationName %}
 {% set mainClasses = "app-container govuk-body" %}
 
@@ -28,7 +29,7 @@
     {%- set filterOptionsHtml %}
     <a class="clear-filters__link" href="?">Clear filters</a>
     {{ govukInput(searchByGroupCodeArgs) }}
-    {{ govukCheckboxes(searchByPduArgs) }}
+      {{ collapsibleCheckboxFilter(searchByPduArgs) }}
 
     {% if not presenter.showDeliveryLocations %}
       <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Delivery Location</h3>
@@ -36,16 +37,19 @@
     {% endif %}
 
     {% if presenter.showDeliveryLocations %}
-      {{ govukCheckboxes(deliveryLocationCheckboxArgs) }}
+      {{ collapsibleCheckboxFilter(deliveryLocationCheckboxArgs) }}
     {% endif %}
+     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
-    {{ govukSelect(searchByCohortArgs) }}
-    {{ govukSelect(searchBySexArgs) }}
+      {{ collapsibleCheckboxFilter(searchByCohortArgs) }}
+
+    {{ collapsibleCheckboxFilter(searchBySexArgs) }}
+     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
     {{ govukButton(applyFilterButtonArgs) }}
     <a class="clear-filters__link" href="?">Clear filters</a>
     {% endset -%}
     <div class="govuk-grid-column-one-quarter group-filter-column">
-      <form id="filter-form" method="get">
+      <form id="filter-form" method="get" action="#filter-results" data-filter-form>
         {{ mojFilter({
           heading: {
             text: "Filter"
@@ -62,18 +66,18 @@
     </div>
     <div class="govuk-grid-column-three-quarters group-results-column">
       {{ mojSubNavigation(subNavArgs) }}
-      {% if resultsText %}
-        <p class="govuk-body showing-results" role="status" aria-live="polite" aria-atomic="true">{{ resultsText | safe }}</p>
-      {% endif %}
+      <p id="filter-results" tabindex="-1" class="{{ 'govuk-body showing-results' if resultsText else 'govuk-body-l' }}">
+        {% if resultsText %}
+          {{ resultsText | safe }}
+        {% elif presenter.params %}
+          {{ noResultsString }}
+        {% else %}
+          {{ noResultsText }} {{ primaryNavigationArgs.regionText }}
+        {% endif %}
+      </p>
 
       {% if hasResults %}
         {{ govukTable(groupTableArgs) }}
-      {% else %}
-        {% if presenter.params %}
-          <p class="govuk-body-l">{{ noResultsString }}</p>
-        {% else %}
-          <p class="govuk-body-l">{{ noResultsText }} {{ primaryNavigationArgs.regionText }}</p>
-        {% endif %}
       {% endif %}
 
       {% include "../partials/pagination.njk" %}

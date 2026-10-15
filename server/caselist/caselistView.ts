@@ -14,7 +14,7 @@ export default class CaselistView {
     return {
       title: 'Referral status',
       name: 'status',
-      dataQa: 'referral-status',
+      filterId: 'referral-status',
       selectedCount,
       groups,
     }
@@ -29,9 +29,9 @@ export default class CaselistView {
     return {
       title: 'PDU',
       name: 'pdu',
-      dataQa: 'pdu',
+      filterId: 'pdu',
       searchable: true,
-      // searchLabel: 'Search PDUs',
+      searchLabel: 'Search PDUs',
       selectedCount: options.filter(option => option.checked).length,
       options,
     }
@@ -46,9 +46,9 @@ export default class CaselistView {
     return {
       title: 'Reporting team',
       name: 'reportingTeam',
-      dataQa: 'reporting-team',
+      filterId: 'reporting-team',
       searchable: true,
-      // searchLabel: 'Search reporting teams',
+      searchLabel: 'Search reporting teams',
       selectedCount: options.filter(option => option.checked).length,
       options,
     }
@@ -71,7 +71,7 @@ export default class CaselistView {
     return {
       title: 'Cohort',
       name: 'cohort',
-      dataQa: 'cohort',
+      filterId: 'cohort',
       selectedCount: options.filter(option => option.checked).length,
       options,
     }
@@ -82,7 +82,7 @@ export default class CaselistView {
     return {
       title: 'Sex',
       name: 'sex',
-      dataQa: 'sex',
+      filterId: 'sex',
       selectedCount: options.filter(option => option.checked).length,
       options,
     }
