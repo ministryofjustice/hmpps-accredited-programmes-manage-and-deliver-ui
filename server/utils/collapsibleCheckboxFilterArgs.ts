@@ -12,7 +12,7 @@ export interface CollapsibleCheckboxFilterGroup {
 export interface CollapsibleCheckboxFilterArgs {
   title: string
   name: string
-  filterId: string
+  dataQa: string
   selectedCount?: number
   options?: CollapsibleCheckboxFilterOption[]
   groups?: CollapsibleCheckboxFilterGroup[]

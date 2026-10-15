@@ -27,7 +27,7 @@ export default class GroupView {
     return {
       title: 'PDU',
       name: 'pdu',
-      filterId: 'pdu',
+      dataQa: 'pdu',
       searchable: true,
       searchLabel: 'Search PDUs',
       selectedCount: options.filter(option => option.checked).length,
@@ -44,7 +44,7 @@ export default class GroupView {
     return {
       title: 'Delivery Location',
       name: 'deliveryLocations',
-      filterId: 'deliveryLocations',
+      dataQa: 'deliveryLocations',
       searchable: true,
       searchLabel: 'Search delivery locations',
       selectedCount: options.filter(option => option.checked).length,
@@ -61,7 +61,7 @@ export default class GroupView {
     return {
       title: 'Sex',
       name: 'sex',
-      filterId: 'sex',
+      dataQa: 'sex',
       selectedCount: options.filter(option => option.checked).length,
       options,
     }
@@ -76,7 +76,7 @@ export default class GroupView {
     return {
       title: 'Cohort',
       name: 'cohort',
-      filterId: 'cohort',
+      dataQa: 'cohort',
       selectedCount: options.filter(option => option.checked).length,
       options,
     }
