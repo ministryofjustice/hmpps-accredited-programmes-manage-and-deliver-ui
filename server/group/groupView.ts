@@ -1,5 +1,5 @@
 import GroupPresenter from './groupPresenter'
-import { ButtonArgs, CheckboxesArgs, InputArgs, SelectArgs } from '../utils/govukFrontendTypes'
+import { ButtonArgs, InputArgs } from '../utils/govukFrontendTypes'
 import { CollapsibleCheckboxFilterArgs } from '../utils/collapsibleCheckboxFilterArgs'
 
 export default class GroupView {

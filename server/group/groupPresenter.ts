@@ -1,7 +1,7 @@
 import { Group, ProgrammeGroupCohortEnum } from '@manage-and-deliver-api'
 import { Page } from '../shared/models/pagination'
 import Pagination from '../utils/pagination/pagination'
-import { CheckboxesArgsItem, SelectArgsItem, TableArgs } from '../utils/govukFrontendTypes'
+import { CheckboxesArgsItem, TableArgs } from '../utils/govukFrontendTypes'
 import GroupListFilter from '../groupOverview/groupListFilter'
 import DateUtils from '../utils/dateUtils'
 
