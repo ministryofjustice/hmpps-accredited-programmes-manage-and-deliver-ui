@@ -10,9 +10,12 @@ import ScheduleView from './schedule/scheduleView'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
 import sendAuditEvent from '../services/auditService'
+import RetainedFilters from '../shared/filters/retainedFilters'
 
 export default class GroupOverviewController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
+
+  private readonly waitlistRetainedFilters = new RetainedFilters('waitlist')
 
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
@@ -80,6 +83,16 @@ export default class GroupOverviewController extends BaseController {
   }
 
   async showGroupOverviewWaitlist(req: Request, res: Response): Promise<void> {
+    const clearPath = this.waitlistRetainedFilters.clearRedirectPath(req)
+    if (clearPath) {
+      return res.redirect(clearPath)
+    }
+    const restoredUrl = this.waitlistRetainedFilters.restoreRedirectUrl(req)
+    if (restoredUrl) {
+      return res.redirect(restoredUrl)
+    }
+    this.waitlistRetainedFilters.persist(req)
+
     const { username } = req.user
     const { groupId } = req.params as Record<string, string>
     let formError: FormValidationError | null = null

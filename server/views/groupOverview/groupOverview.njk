@@ -26,7 +26,7 @@
 
 <div class="govuk-grid-row">
   {%- set filterOptionsHtml %}
-  <a class="clear-filters__link" href="?">Clear filters</a>
+  <a class="clear-filters__link" href="{{ '?clearFilters=true' if isWaitlist else '?' }}">Clear filters</a>
   {{ govukInput(searchByCrnOrPersonNameArgs) }}
   {% if isWaitlist %}
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
@@ -48,7 +48,7 @@
   {% endif %}
 
   {{ govukButton(applyFilterButtonArgs) }}
-    <a class="clear-filters__link" href="?">Clear filters</a>
+    <a class="clear-filters__link" href="{{ '?clearFilters=true' if isWaitlist else '?' }}">Clear filters</a>
   {% endset -%}
   <div class="govuk-grid-column-one-quarter group-filter-column">
     <form id="filter-form" method="get" data-filter-form>

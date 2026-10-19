@@ -8,9 +8,12 @@ import GroupListFilter from '../groupOverview/groupListFilter'
 import BaseController from '../shared/baseController'
 import sendAuditEvent from '../services/auditService'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
+import RetainedFilters from '../shared/filters/retainedFilters'
 
 export default class GroupController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
+
+  private readonly retainedFilters = new RetainedFilters('groups')
 
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
@@ -23,6 +26,16 @@ export default class GroupController extends BaseController {
   }
 
   async showNotStartedGroupListPage(req: Request, res: Response): Promise<void> {
+    const clearPath = this.retainedFilters.clearRedirectPath(req)
+    if (clearPath) {
+      return res.redirect(clearPath)
+    }
+    const restoredUrl = this.retainedFilters.restoreRedirectUrl(req)
+    if (restoredUrl) {
+      return res.redirect(restoredUrl)
+    }
+    this.retainedFilters.persist(req)
+
     const { username } = req.user
     const pageNumber = req.query.page
     const selectedTab = 'NOT_STARTED_OR_IN_PROGRESS'
@@ -72,6 +85,16 @@ export default class GroupController extends BaseController {
   }
 
   async showCompletedGroupListPage(req: Request, res: Response): Promise<void> {
+    const clearPath = this.retainedFilters.clearRedirectPath(req)
+    if (clearPath) {
+      return res.redirect(clearPath)
+    }
+    const restoredUrl = this.retainedFilters.restoreRedirectUrl(req)
+    if (restoredUrl) {
+      return res.redirect(restoredUrl)
+    }
+    this.retainedFilters.persist(req)
+
     const { username } = req.user
     const pageNumber = req.query.page
     const selectedTab = 'COMPLETE'

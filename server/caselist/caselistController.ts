@@ -8,9 +8,12 @@ import CaselistView from './caselistView'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
 import sendAuditEvent from '../services/auditService'
+import RetainedFilters from '../shared/filters/retainedFilters'
 
 export default class CaselistController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
+
+  private readonly retainedFilters = new RetainedFilters('caselist')
 
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
@@ -30,6 +33,15 @@ export default class CaselistController extends BaseController {
   }
 
   async showOpenCaselist(req: Request, res: Response): Promise<void> {
+    const clearPath = this.retainedFilters.clearRedirectPath(req)
+    if (clearPath) {
+      return res.redirect(clearPath)
+    }
+    const restoredUrl = this.retainedFilters.restoreRedirectUrl(req)
+    if (restoredUrl) {
+      return res.redirect(restoredUrl)
+    }
+    this.retainedFilters.persist(req)
     this.prepareSessionFilterParams(req)
     const { username } = req.user
     const pageNumber = req.query.page
@@ -80,6 +92,15 @@ export default class CaselistController extends BaseController {
   }
 
   async showClosedCaselist(req: Request, res: Response): Promise<void> {
+    const clearPath = this.retainedFilters.clearRedirectPath(req)
+    if (clearPath) {
+      return res.redirect(clearPath)
+    }
+    const restoredUrl = this.retainedFilters.restoreRedirectUrl(req)
+    if (restoredUrl) {
+      return res.redirect(restoredUrl)
+    }
+    this.retainedFilters.persist(req)
     this.prepareSessionFilterParams(req)
     const { username } = req.user
     const pageNumber = req.query.page
