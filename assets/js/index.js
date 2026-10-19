@@ -65,23 +65,29 @@ document.querySelectorAll('[data-checkbox-filter-search]').forEach(searchInput =
   searchInput.addEventListener('input', filterItems)
 })
 
-// Persist the open/closed state of each collapsible filter panel, but only across an
-// "Apply filters" submission - not plain refreshes or returning to the page. On submit
-// we snapshot which panels are open; on the next load we restore them once and then clear
-// the snapshot, so a subsequent refresh starts from the default (collapsed) state.
+// Persist the open/closed state of each collapsible filter panel so it is retained for the rest of
+// the working day - including when the user leaves the case list and returns. The snapshot is kept
+// in sessionStorage, date-stamped so that a new calendar day starts from the default (collapsed)
+// state.
 ;(() => {
   const panels = Array.from(document.querySelectorAll('.govuk-details[data-qa$="-filter-section"]'))
   if (panels.length === 0) return
 
   // Share the snapshot across the open/closed referral tabs by normalising the tab
-  // segment of the path, so applying filters on one tab keeps the same panels open
-  // when switching to the other.
+  // segment of the path, so the expanded/collapsed state is the same when switching tabs.
   const normalisedPath = window.location.pathname.replace(/(open|closed)-referrals/, 'referrals')
   const storageKey = `filter-panels-open:${normalisedPath}`
 
+  // Local calendar day (YYYY-MM-DD) used to scope the retained state to the working day.
+  const today = new Date().toLocaleDateString('en-CA')
+
   const readOpenPanels = () => {
     try {
-      return JSON.parse(window.sessionStorage.getItem(storageKey)) || []
+      const stored = JSON.parse(window.sessionStorage.getItem(storageKey))
+      if (!stored || stored.date !== today || !Array.isArray(stored.openPanels)) {
+        return []
+      }
+      return stored.openPanels
     } catch (error) {
       return []
     }
@@ -90,32 +96,22 @@ document.querySelectorAll('[data-checkbox-filter-search]').forEach(searchInput =
   const saveOpenPanels = () => {
     const openPanels = panels.filter(panel => panel.open).map(panel => panel.getAttribute('data-qa'))
     try {
-      window.sessionStorage.setItem(storageKey, JSON.stringify(openPanels))
+      window.sessionStorage.setItem(storageKey, JSON.stringify({ date: today, openPanels }))
     } catch (error) {
       // Ignore storage write errors (e.g. disabled cookies/private mode).
     }
   }
 
-  // Restore the panels saved by the last intentional navigation (applying filters or
-  // switching referral tabs), then immediately clear the snapshot. This "consume once"
-  // approach means any other navigation - refreshing, or leaving and returning to the
-  // page - finds no snapshot and starts from the default collapsed state.
+  // Restore the panels that were open earlier in the day, then keep the snapshot so leaving and
+  // returning to the case list retains the state.
   const openOnLoad = readOpenPanels()
-  if (openOnLoad.length > 0) {
-    panels.forEach(panel => {
-      if (openOnLoad.includes(panel.getAttribute('data-qa'))) {
-        panel.open = true
-      }
-    })
-  }
-  try {
-    window.sessionStorage.removeItem(storageKey)
-  } catch (error) {
-    // Ignore storage access errors (e.g. disabled cookies/private mode).
-  }
+  panels.forEach(panel => {
+    panel.open = openOnLoad.includes(panel.getAttribute('data-qa'))
+  })
 
-  // Snapshot open panels when applying filters or switching referral tabs so the
-  // state carries across those navigations only.
+  // Keep the snapshot in step with the latest state: whenever a panel is toggled, and on the
+  // navigations that reload the page (applying filters or switching referral tabs).
+  panels.forEach(panel => panel.addEventListener('toggle', saveOpenPanels))
   const filterForm = document.querySelector('[data-filter-form]')
   if (filterForm) {
     filterForm.addEventListener('submit', saveOpenPanels)

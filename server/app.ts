@@ -34,6 +34,7 @@ import './sentry'
 import sentryMiddleware from './middleware/sentryMiddleware'
 import routes from './routes'
 import type { Services } from './services'
+import type { RetainedFilterPage, RetainedFilterState } from './shared/filters/retainedFilters'
 
 declare module 'express-session' {
   export interface SessionData {
@@ -75,6 +76,9 @@ declare module 'express-session' {
       referralId: string
       data: SessionNotes
     }
+    // Retained list-page filter selections, kept for the rest of the working day and keyed by page
+    // so each list (caselist, groups, waitlist) retains its own selections independently.
+    retainedFilters?: Partial<Record<RetainedFilterPage, RetainedFilterState>>
   }
 }
 
