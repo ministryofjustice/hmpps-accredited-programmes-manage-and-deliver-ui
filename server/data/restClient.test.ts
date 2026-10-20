@@ -5,7 +5,10 @@ import RestClient from './restClient'
 
 let restClient: RestClient
 
-beforeAll(() => nock.disableNetConnect())
+beforeAll(() => {
+  if (!nock.isActive()) nock.activate()
+  nock.disableNetConnect()
+})
 
 beforeEach(() => {
   restClient = new RestClient(
@@ -27,7 +30,10 @@ afterEach(() => {
   nock.cleanAll()
 })
 
-afterAll(() => nock.enableNetConnect())
+afterAll(() => {
+  nock.enableNetConnect()
+  nock.restore()
+})
 
 describe.each(['get', 'patch', 'post', 'put', 'delete'] as const)('Method: %s', method => {
   it('should return response body', async () => {
