@@ -53,10 +53,6 @@ export default class EditSessionPresenter {
   }
 
   get canBeDeleted(): boolean {
-    // Cant be deleted if its a core group session
-    if (this.sessionDetails.sessionType.toUpperCase() === 'GROUP' && this.sessionDetails.isCatchup === false) {
-      return false
-    }
     // Cant be deleted if end time has passed
     if (DateFormatUtils.isDateTimeInPast(this.sessionDetails.unformattedEndDate)) {
       return false
