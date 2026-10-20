@@ -15,6 +15,11 @@ describe('hmppsAuthClient', () => {
   let fakeHmppsAuthApi: nock.Scope
   let hmppsAuthClient: HmppsAuthClient
 
+  beforeAll(() => {
+    if (!nock.isActive()) nock.activate()
+    nock.disableNetConnect()
+  })
+
   beforeEach(() => {
     fakeHmppsAuthApi = nock(config.apis.hmppsAuth.url)
     hmppsAuthClient = new HmppsAuthClient(tokenStore)
@@ -23,6 +28,11 @@ describe('hmppsAuthClient', () => {
   afterEach(() => {
     jest.resetAllMocks()
     nock.cleanAll()
+  })
+
+  afterAll(() => {
+    nock.enableNetConnect()
+    nock.restore()
   })
 
   describe('getSystemClientToken', () => {
