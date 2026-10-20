@@ -273,6 +273,10 @@ for the in-memory DB used by Auth
 
 `npm run test`
 
+Tests require Node.js 24.9 or later within the supported Node.js 24 range.
+The test scripts enable Jest's experimental VM-module support to load ESM-only
+dependencies such as nock 15. Node.js emits an experimental warning when tests run.
+
 ## Testing Audits locally 
 
 ```sh
