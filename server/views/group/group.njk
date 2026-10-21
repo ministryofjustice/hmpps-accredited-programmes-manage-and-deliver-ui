@@ -1,5 +1,4 @@
 {% extends "../partials/layout.njk" %}
-
 {%- from "moj/components/filter/macro.njk" import mojFilter -%}
 {%- from "govuk/components/checkboxes/macro.njk" import govukCheckboxes -%}
 {%- from "govuk/components/input/macro.njk" import govukInput -%}
@@ -19,70 +18,73 @@
           <span class="govuk-caption-xl">{{ text.pageSubHeading }}</span>
           <h1 class="govuk-heading-xl">{{ text.pageHeading }}</h1>
         </div>
-        <div class="group-header-action">
-          {{ govukButton(createGroupButtonArgs) }}
-        </div>
+        <div class="group-header-action">{{ govukButton(createGroupButtonArgs) }}</div>
       </div>
     </div>
   </div>
   <div class="govuk-grid-row">
     {%- set filterOptionsHtml %}
-    <a class="clear-filters__link" href="?clearFilters=true">Clear filters</a>
-    {{ govukInput(searchByGroupCodeArgs) }}
+      <a class="clear-filters__link" href="?clearFilters=true">Clear filters</a>
+      {{ govukInput(searchByGroupCodeArgs) }}
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
       {{ collapsibleCheckboxFilter(searchByPduArgs) }}
 
-    {% if not presenter.showDeliveryLocations %}
-      <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Delivery location</h3>
-      <p class="govuk-body">Select one or more PDUs and apply filters to see delivery locations</p>
-    {% endif %}
+      {% if not presenter.showDeliveryLocations %}
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Delivery location</h3>
+        <p class="govuk-body">Select one or more PDUs and apply filters to see delivery locations</p>
+      {% endif %}
 
-    {% if presenter.showDeliveryLocations %}
-      {{ collapsibleCheckboxFilter(deliveryLocationCheckboxArgs) }}
-    {% endif %}
-     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+      {% if presenter.showDeliveryLocations %}
+        {{ collapsibleCheckboxFilter(deliveryLocationCheckboxArgs) }}
+      {% endif %}
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
       {{ collapsibleCheckboxFilter(searchByCohortArgs) }}
-<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-    {{ collapsibleCheckboxFilter(searchBySexArgs) }}
-     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-    {{ govukButton(applyFilterButtonArgs) }}
-    <a class="clear-filters__link" href="?clearFilters=true">Clear filters</a>
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+      {{ collapsibleCheckboxFilter(searchBySexArgs) }}
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+      {{ govukButton(applyFilterButtonArgs) }}
+      <a class="clear-filters__link" href="?clearFilters=true">Clear filters</a>
     {% endset -%}
     <div class="govuk-grid-column-one-quarter group-filter-column">
       <form id="filter-form" method="get" action="#filter-results" data-filter-form>
-        {{ mojFilter({
-          heading: {
-            text: "Filter"
-          },
+        {{
+          mojFilter({
+            heading: {
+              text: "Filter"
+            },
 
-        submit: {
-          attributes: {
-            "data-test-id": "submit-button"
-          }
-        },
-        optionsHtml: filterOptionsHtml
-        }) }}
+          submit: {
+            attributes: {
+              "data-test-id": "submit-button"
+            }
+          },
+          optionsHtml: filterOptionsHtml
+          })
+        }}
       </form>
     </div>
     <div class="govuk-grid-column-three-quarters group-results-column">
       {{ mojSubNavigation(subNavArgs) }}
-      <p id="filter-results" tabindex="-1" class="{{ 'govuk-body showing-results' if resultsText else 'govuk-body-l' }}">
+      <p
+        id="filter-results"
+        tabindex="-1"
+        class="{{ 'govuk-body showing-results' if resultsText else 'govuk-body-l' }}"
+      >
         {% if resultsText %}
           {{ resultsText | safe }}
         {% elif presenter.params %}
           {{ noResultsString }}
         {% else %}
-          {{ noResultsText }} {{ primaryNavigationArgs.regionText }}
+          {{ noResultsText }}
+          {{ primaryNavigationArgs.regionText }}
         {% endif %}
       </p>
 
       {% if hasResults %}
         {{ govukTable(groupTableArgs) }}
       {% endif %}
-
       {% include "../partials/pagination.njk" %}
     </div>
-
   </div>
-
 {% endblock %}
