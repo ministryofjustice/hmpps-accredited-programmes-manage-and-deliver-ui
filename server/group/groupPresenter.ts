@@ -94,7 +94,7 @@ export default class GroupPresenter {
           },
         },
         {
-          text: 'Delivery Location',
+          text: 'Delivery location',
           attributes: {
             'aria-sort': 'none',
           },
