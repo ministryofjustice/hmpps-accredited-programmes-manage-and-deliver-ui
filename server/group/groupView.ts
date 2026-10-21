@@ -42,7 +42,7 @@ export default class GroupView {
       checked: item.checked ?? false,
     }))
     return {
-      title: 'Delivery Location',
+      title: 'Delivery location',
       name: 'deliveryLocations',
       dataQa: 'deliveryLocations',
       searchable: true,

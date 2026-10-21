@@ -158,6 +158,10 @@
   text-align: right;
 }
 
+.group-results-column #filter-results:focus {
+  outline: none;
+}
+
 .group-header-container {
   width: 100%;
 }
