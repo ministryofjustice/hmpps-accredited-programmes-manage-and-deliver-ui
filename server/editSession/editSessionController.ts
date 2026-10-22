@@ -5,7 +5,6 @@ import sendAuditEvent from '../services/auditService'
 import BaseController from '../shared/baseController'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import DateFormatUtils from '../utils/dateFormatUtils'
-import DateUtils from '../utils/dateUtils'
 import errorMessages from '../utils/errorMessages'
 import { FormValidationError } from '../utils/formValidationError'
 import { convertToUrlFriendlyKebabCase, getEditSessionRouteTitle } from '../utils/utils'
@@ -28,9 +27,6 @@ import EditSessionFacilitatorsView from './facilitators/editSessionFacilitatorsV
 
 export default class EditSessionController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
-
-  private static readonly durationLongerThanOriginallyScheduledErrorMessage =
-    errorMessages.sessionSchedule.sessionDetailsDurationLongerThanOriginallyScheduled
 
   constructor(
     private readonly accreditedProgrammesManageAndDeliverService: AccreditedProgrammesManageAndDeliverService,
@@ -79,18 +75,6 @@ export default class EditSessionController extends BaseController {
     return false
   }
 
-  private isSessionEnded(sessionDetails: {
-    sessionDate: string
-    sessionEndTime: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' }
-  }): boolean {
-    return DateFormatUtils.isSessionEnded(
-      sessionDetails.sessionDate,
-      sessionDetails.sessionEndTime.hour,
-      sessionDetails.sessionEndTime.minutes,
-      sessionDetails.sessionEndTime.amOrPm,
-    )
-  }
-
   private isGroupSessionInPast(sessionDetails?: { unformattedEndDate?: string }): boolean {
     return DateFormatUtils.isDateTimeInPast(sessionDetails?.unformattedEndDate)
   }
@@ -105,62 +89,6 @@ export default class EditSessionController extends BaseController {
       sessionStartTime.minutes,
       sessionStartTime.amOrPm,
     )
-  }
-
-  private static toDurationValidationError(error: unknown): FormValidationError | null {
-    const status = typeof error === 'object' && error !== null ? (error as { status?: number }).status : undefined
-    const data =
-      typeof error === 'object' && error !== null
-        ? (error as { data?: { userMessage?: unknown; developerMessage?: unknown } }).data
-        : undefined
-
-    if (status !== 400 || !data) {
-      return null
-    }
-
-    const messageUsers = [data.userMessage, data.developerMessage]
-    const matchedMessage = messageUsers.find(
-      user => typeof user === 'string' && user.toLowerCase().includes('cannot be longer than originally scheduled'),
-    )
-
-    if (!matchedMessage) {
-      return null
-    }
-
-    return {
-      errors: [
-        {
-          errorSummaryLinkedField: 'session-details-end-time-hour',
-          formFields: ['session-details-end-time-hour'],
-          message: EditSessionController.durationLongerThanOriginallyScheduledErrorMessage,
-        },
-      ],
-    }
-  }
-
-  private static durationInMinutes(time: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' }): number {
-    const convertedTime = DateUtils.convertTo24Hour(time.hour, time.minutes, time.amOrPm)
-    return convertedTime.hour * 60 + convertedTime.minute
-  }
-
-  private static isSubmittedDurationShorterThanCurrent(
-    sessionDetails: {
-      sessionStartTime: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' }
-      sessionEndTime: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' }
-    },
-    submitted: {
-      sessionStartTime: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' }
-      sessionEndTime: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' }
-    },
-  ): boolean {
-    const currentDuration =
-      EditSessionController.durationInMinutes(sessionDetails.sessionEndTime) -
-      EditSessionController.durationInMinutes(sessionDetails.sessionStartTime)
-    const submittedDuration =
-      EditSessionController.durationInMinutes(submitted.sessionEndTime) -
-      EditSessionController.durationInMinutes(submitted.sessionStartTime)
-
-    return submittedDuration < currentDuration
   }
 
   async editSession(req: Request, res: Response): Promise<void> {
@@ -341,19 +269,13 @@ export default class EditSessionController extends BaseController {
       username,
       sessionId,
     )
-    const isSessionEnded = this.isSessionEnded(sessionDetails)
     const sessionAttendees = await this.accreditedProgrammesManageAndDeliverService.getSessionAttendees(
       username,
       sessionId,
     )
 
     if (req.method === 'POST') {
-      const data = await new EditSessionDateAndTimeFormForm(
-        req,
-        isSessionEnded,
-        sessionDetails.sessionStartTime,
-        sessionDetails.sessionEndTime,
-      ).rescheduleSessionDetailsData()
+      const data = await new EditSessionDateAndTimeFormForm(req).rescheduleSessionDetailsData()
       if (data.error) {
         res.status(400)
         formError = data.error
@@ -399,50 +321,14 @@ export default class EditSessionController extends BaseController {
           rescheduleOtherSessions: false,
         }
 
-        let response: { message: string } | null
-        try {
-          await sendAuditEvent('EDIT_SESSION_DATE_AND_TIME', username, sessionId, 'SEARCH_TERM', {
-            details: { rescheduleRequest, groupId },
-          })
-          response = await this.accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime(
-            username,
-            sessionId,
-            rescheduleRequest,
-          )
-        } catch (error) {
-          const durationValidationError = EditSessionController.toDurationValidationError(error)
-          if (!durationValidationError) {
-            throw error
-          }
-
-          if (
-            EditSessionController.isSubmittedDurationShorterThanCurrent(sessionDetails, {
-              sessionStartTime: rescheduleRequest.sessionStartTime,
-              sessionEndTime: rescheduleRequest.sessionEndTime,
-            })
-          ) {
-            durationValidationError.errors[0].message = `${durationValidationError.errors[0].message} You have shortened this session, but it is still longer than the originally scheduled duration.`
-          }
-
-          res.status(400)
-          formError = durationValidationError
-          userInputData = req.body
-          response = null
-        }
-
-        if (!response) {
-          const presenter = new EditSessionDateAndTimePresenter(
-            groupId,
-            sessionDetails,
-            sessionAttendees.sessionType,
-            req.session.editSessionDateAndTime,
-            formError,
-            userInputData,
-          )
-          const view = new EditSessionDateAndTimeView(presenter)
-
-          return this.renderPage(res, view)
-        }
+        await sendAuditEvent('EDIT_SESSION_DATE_AND_TIME', username, sessionId, 'SEARCH_TERM', {
+          details: { rescheduleRequest, groupId },
+        })
+        const response = await this.accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime(
+          username,
+          sessionId,
+          rescheduleRequest,
+        )
 
         delete req.session.editSessionDateAndTime
 
