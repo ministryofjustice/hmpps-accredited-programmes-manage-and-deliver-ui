@@ -1,4 +1,5 @@
 import { ButtonArgs, SummaryListArgs } from '../utils/govukFrontendTypes'
+import { MojAlertComponentArgs } from '../interfaces/alertComponentArgs'
 import EditSessionPresenter from './editSessionPresenter'
 import ViewUtils from '../utils/viewUtils'
 
@@ -122,6 +123,18 @@ export default class EditSessionView {
     }
   }
 
+  private get dateErrorSummaryArgs(): MojAlertComponentArgs | null {
+    const errors = this.presenter.dateErrorSummary
+    if (!errors) return null
+
+    return {
+      variant: 'error',
+      title: 'There is a problem',
+      text: errors.map(error => error.message).join(' '),
+      showTitleAsHeading: true,
+    }
+  }
+
   get deleteButton(): ButtonArgs {
     return {
       text: 'Delete session',
@@ -162,7 +175,7 @@ export default class EditSessionView {
         deleteButton: this.deleteButton,
         canBeDeleted: this.presenter.canBeDeleted,
         attendanceTableArgs: this.presenter.attendanceTableArgs,
-        dateErrorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.dateErrorSummary),
+        dateErrorSummary: this.dateErrorSummaryArgs,
         attendanceErrorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.attendanceErrorSummary),
         hasMultipleReferrals: this.presenter.hasMultipleReferrals,
         hasReferral: this.presenter.hasReferral,

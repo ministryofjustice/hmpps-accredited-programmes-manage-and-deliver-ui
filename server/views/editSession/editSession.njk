@@ -25,7 +25,7 @@
         <h1 class="govuk-heading-l">{{text.pageHeading}}</h1>
 
         {% if dateErrorSummary !== null %}
-          {{ govukErrorSummary(dateErrorSummary) }}
+          {{ mojAlert(dateErrorSummary) }}
         {% endif %}
       </div>
       <div class="govuk-grid-column-two-thirds">
