@@ -5,7 +5,6 @@ import FormUtils from '../../utils/formUtils'
 import { FormData } from '../../utils/forms/formData'
 import errorMessages from '../../utils/errorMessages'
 import DateUtils from '../../utils/dateUtils'
-import DateFormatUtils from '../../utils/dateFormatUtils'
 
 const fieldOrder = [
   'session-details-date',
@@ -18,12 +17,7 @@ const fieldOrder = [
   'session-details-who',
 ]
 export default class EditSessionDateAndTimeFormForm {
-  constructor(
-    private readonly request: Request,
-    private readonly isSessionEnded: boolean = false,
-    private readonly originalStartTime?: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' },
-    private readonly originalEndTime?: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' },
-  ) {}
+  constructor(private readonly request: Request) {}
 
   async rescheduleSessionDetailsData(): Promise<FormData<Partial<RescheduleSessionRequest>>> {
     const validationResult = await FormUtils.runValidations({
@@ -62,80 +56,7 @@ export default class EditSessionDateAndTimeFormForm {
     }
   }
 
-  private static startOrEndTimeChanged(
-    originalTime: { hour: number; minutes: number; amOrPm: 'AM' | 'PM' } | undefined,
-    submittedHour: number,
-    submittedMinute: number,
-    submittedPeriod: 'AM' | 'PM',
-  ): boolean {
-    if (!originalTime) return true
-
-    const original = DateUtils.convertTo24Hour(originalTime.hour, originalTime.minutes, originalTime.amOrPm)
-    const submitted = DateUtils.convertTo24Hour(submittedHour, submittedMinute, submittedPeriod)
-
-    return original.hour !== submitted.hour || original.minute !== submitted.minute
-  }
-
   private createSessionDetailsValidations(): ValidationChain[] {
-    const { isSessionEnded } = this
-    const { originalStartTime, originalEndTime } = this
-
-    /**
-     * Checks if the submitted duration exceeds the original duration for a completed session.
-     * Returns error message if validation should throw, or null if valid.
-     */
-    function validatePastSessionDuration(
-      dateStr: string,
-      startHour: number,
-      startMinute: number,
-      startPeriod: 'AM' | 'PM',
-      endHour: number,
-      endMinute: number,
-      endPeriod: 'AM' | 'PM',
-      timeFieldThatChanged: 'start' | 'end',
-    ): string | null {
-      // Check if the session has ended (using end time)
-      const shouldValidatePastDuration =
-        isSessionEnded ||
-        DateFormatUtils.isDateInPast(dateStr) ||
-        DateFormatUtils.isSessionEnded(dateStr, endHour, endMinute, endPeriod)
-
-      if (!shouldValidatePastDuration) {
-        return null
-      }
-
-      const duration = DateUtils.durationInMinutes(startHour, startMinute, startPeriod, endHour, endMinute, endPeriod)
-      const originalDurationMinutes =
-        originalStartTime && originalEndTime
-          ? DateUtils.durationInMinutes(
-              originalStartTime.hour,
-              originalStartTime.minutes,
-              originalStartTime.amOrPm,
-              originalEndTime.hour,
-              originalEndTime.minutes,
-              originalEndTime.amOrPm,
-            )
-          : null
-
-      if (originalDurationMinutes !== null && duration > originalDurationMinutes) {
-        // Only throw error if the relevant field changed
-        const relevantFieldChanged =
-          timeFieldThatChanged === 'start'
-            ? EditSessionDateAndTimeFormForm.startOrEndTimeChanged(
-                originalStartTime,
-                startHour,
-                startMinute,
-                startPeriod,
-              )
-            : EditSessionDateAndTimeFormForm.startOrEndTimeChanged(originalEndTime, endHour, endMinute, endPeriod)
-        if (relevantFieldChanged) {
-          return errorMessages.sessionSchedule.sessionDetailsDurationLongerThanOriginallyScheduled
-        }
-      }
-
-      return null
-    }
-
     const dateValidation = body('session-details-date')
       .notEmpty()
       .withMessage(errorMessages.sessionSchedule.sessionDetailsDate)
@@ -151,55 +72,7 @@ export default class EditSessionDateAndTimeFormForm {
         .withMessage(errorMessages.sessionSchedule.sessionDetailsStartTime)
         .bail()
         .isInt({ min: 1, max: 12 })
-        .withMessage(errorMessages.sessionSchedule.sessionDetailsTimeHour)
-        .if(body('session-details-end-time-hour').notEmpty())
-        .custom((startHourValue, { req }) => {
-          const startHour = parseInt(startHourValue, 10)
-          const startMinuteValue = req.body['session-details-start-time-minute']
-          const startMinute = parseInt(startMinuteValue || '0', 10)
-          const startPartOfDay = req.body['session-details-start-time-part-of-day']
-
-          const endHourValue = req.body['session-details-end-time-hour']
-          const endHour = parseInt(endHourValue, 10)
-          const endMinuteValue = req.body['session-details-end-time-minute']
-          const endMinute = parseInt(endMinuteValue || '0', 10)
-          const endPartOfDay = req.body['session-details-end-time-part-of-day']
-
-          if (
-            Number.isNaN(startHour) ||
-            startHour < 1 ||
-            startHour > 12 ||
-            !startPartOfDay ||
-            Number.isNaN(startMinute) ||
-            startMinute < 0 ||
-            startMinute > 59 ||
-            Number.isNaN(endHour) ||
-            endHour < 1 ||
-            endHour > 12 ||
-            !endPartOfDay ||
-            Number.isNaN(endMinute) ||
-            endMinute < 0 ||
-            endMinute > 59
-          ) {
-            return true
-          }
-
-          const durationError = validatePastSessionDuration(
-            req.body['session-details-date'],
-            startHour,
-            startMinute,
-            startPartOfDay,
-            endHour,
-            endMinute,
-            endPartOfDay,
-            'start',
-          )
-          if (durationError) {
-            throw new Error(durationError)
-          }
-
-          return true
-        }),
+        .withMessage(errorMessages.sessionSchedule.sessionDetailsTimeHour),
       body(`session-details-start-time-minute`)
         .if(body('session-details-start-time-hour').notEmpty())
         .optional({ checkFalsy: true })
@@ -256,19 +129,6 @@ export default class EditSessionDateAndTimeFormForm {
 
           if (!DateUtils.isTimeBefore(startHour, startMinute, startPartOfDay, endHour, endMinute, endPartOfDay)) {
             throw new Error(errorMessages.sessionSchedule.sessionDetailsEndTimeBeforeStart)
-          }
-          const durationError = validatePastSessionDuration(
-            req.body['session-details-date'],
-            startHour,
-            startMinute,
-            startPartOfDay,
-            endHour,
-            endMinute,
-            endPartOfDay,
-            'end',
-          )
-          if (durationError) {
-            throw new Error(durationError)
           }
           return true
         }),
