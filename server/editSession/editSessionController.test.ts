@@ -319,7 +319,7 @@ describe('editSession', () => {
       })
       .expect(400)
       .expect(res => {
-        expect(res.text).toContain('You cannot update attendance or notes for future sessions.')
+        expect(res.text).toContain('You cannot update attendance or notes for future sessions')
       })
   })
 
