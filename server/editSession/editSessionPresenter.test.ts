@@ -1259,7 +1259,7 @@ describe('EditSessionPresenter', () => {
           {
             formFields: ['session-details-date'],
             errorSummaryLinkedField: 'session-details-date',
-            message: 'You cannot update attendance or notes for future sessions',
+            message: 'You cannot update attendance or notes for future sessions.',
           },
         ],
       }
@@ -1275,7 +1275,7 @@ describe('EditSessionPresenter', () => {
       )
 
       expect(presenter.dateErrorSummary).toEqual([
-        { field: 'session-details-date', message: 'You cannot update attendance or notes for future sessions' },
+        { field: 'session-details-date', message: 'You cannot update attendance or notes for future sessions.' },
       ])
       expect(presenter.attendanceErrorSummary).toBeNull()
     })
