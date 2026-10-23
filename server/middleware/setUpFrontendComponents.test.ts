@@ -37,6 +37,10 @@ function createApp(authenticated = true) {
 }
 
 describe('setUpFrontendComponents', () => {
+  beforeAll(() => {
+    if (!nock.isActive()) nock.activate()
+  })
+
   beforeEach(() => {
     jest.clearAllMocks()
     nock.disableNetConnect()
@@ -46,6 +50,10 @@ describe('setUpFrontendComponents', () => {
   afterEach(() => {
     nock.cleanAll()
     nock.enableNetConnect()
+  })
+
+  afterAll(() => {
+    nock.restore()
   })
 
   it.each([
