@@ -5,6 +5,9 @@
 
 {% block head %}
   <link href="{{ '/assets/css/index.css' | assetMap }}" rel="stylesheet"/>
+  {% for css in feComponents.cssIncludes %}
+    <link href="{{ css }}" nonce="{{ cspNonce }}" rel="stylesheet"/>
+  {% endfor %}
 {% endblock %}
 
 {% block pageTitle %}{{pageTitle | default(applicationName)}}{% endblock %}
@@ -39,37 +42,7 @@
 {% endblock %}
 
 {% block footer %}
- {% set accessibilityStatementEnvironmentSuffix = '' %}
- {% if environmentName | lower == 'dev' %}
-   {% set accessibilityStatementEnvironmentSuffix = '-dev' %}
- {% elif environmentName | lower == 'preprod' %}
-   {% set accessibilityStatementEnvironmentSuffix = '-preprod' %}
- {% endif %}
- {% set accessibilityStatementUrl = 'https://probation-frontend-components' ~ accessibilityStatementEnvironmentSuffix ~ '.hmpps.service.justice.gov.uk/accessibility/accredited-programmes' %}
- <footer class="probation-common-footer govuk-!-display-none-print">
-      <div class="govuk-width-container">
-        <div class="govuk-grid-row">
-          <div class="govuk-grid-column-full">
-            <div class="probation-common-footer__support-links">
-              <h2 class="govuk-visually-hidden">Support links</h2>
-              <ul class="probation-common-footer__inline-list">
-                <li class="probation-common-footer__inline-list-item"> 
-                  <a class="probation-common-footer__link" href="{{ accessibilityStatementUrl }}">Accessibility</a>
-                </li>
-                <li class="probation-common-footer__inline-list-item">
-                  <a class="probation-common-footer__link" href="https://probation-frontend-components-dev.hmpps.service.justice.gov.uk/cookies-policy">Cookies policy</a>
-                </li>
-                <li class="probation-common-footer__inline-list-item">
-                  <a class="probation-common-footer__link" href="https://probation-frontend-components-dev.hmpps.service.justice.gov.uk/privacy-policy">Privacy policy</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
-    
-    
+  {{ feComponents.footer | safe }}
 {% endblock %}
 
 {% block bodyStart %}
@@ -120,4 +93,7 @@
     <script src="https://js.sentry-cdn.com/{{ sentry.loaderScriptId }}.min.js" nonce="{{ cspNonce }}" crossorigin="anonymous"></script>
   {% endif %}
   <script type="module" src="{{ '/assets/js/index.js' | assetMap }}"></script>
+  {% for js in feComponents.jsIncludes %}
+    <script src="{{ js }}" nonce="{{ cspNonce }}"></script>
+  {% endfor %}
 {% endblock %}

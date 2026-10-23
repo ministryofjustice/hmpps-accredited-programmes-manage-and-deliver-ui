@@ -22,6 +22,7 @@ import nunjucksSetup from './utils/nunjucksSetup'
 import setUpAuthentication from './middleware/setUpAuthentication'
 import setUpCsrf from './middleware/setUpCsrf'
 import setUpCurrentUser from './middleware/setUpCurrentUser'
+import setUpFrontendComponents from './middleware/setUpFrontendComponents'
 import setUpHealthChecks from './middleware/setUpHealthChecks'
 import setUpWebRequestParsing from './middleware/setupRequestParsing'
 import setUpStaticResources from './middleware/setUpStaticResources'
@@ -100,6 +101,7 @@ export default function createApp(services: Services): express.Application {
   app.use(authorisationMiddleware(config.allowedRoles))
   app.use(setUpCsrf())
   app.use(setUpCurrentUser())
+  app.use(setUpFrontendComponents())
   app.use(setUpUserLocation(services))
   // Registered after setUpUserLocation so the region is available. userId and userUuid are added by default.
   app.use(

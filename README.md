@@ -32,6 +32,31 @@ $ npm run start:dev
 ```
 
 
+## PDS footer
+
+The shared footer is fetched using the
+[@ministryofjustice/hmpps-probation-frontend-components](https://github.com/ministryofjustice/hmpps-probation-frontend-components/blob/main/USAGE.md)
+middleware on authenticated requests, including POST requests that re-render forms
+with validation errors. The service's existing header is unchanged.
+The API supplies the footer HTML, policy links and asset URLs; its CSS and JavaScript
+are loaded by the layout with the CSP nonce.
+
+Set `COMPONENT_API_URL` in your `.env` before starting locally, for example:
+
+```sh
+COMPONENT_API_URL=https://probation-frontend-components-dev.hmpps.service.justice.gov.uk
+```
+
+Use `http://localhost:3001` instead if running the component API locally with the same
+HMPPS Auth instance as this service. Local Auth tokens are not accepted by the deployed
+dev component API. Without this variable, the client defaults to `http://fe-components`.
+Deployment values configure the matching dev, preprod or production URL.
+
+The middleware must run after Helmet and authentication so it can update the CSP
+and forward the user's token. If the API fails, the client logs the failure and renders
+its fallback footer, which has no policy links. Authentication error pages also use
+the fallback because no authenticated user is available.
+
 ## Data Seeding
 
 The API for this codebase has a built in mechanism for seeding data, which can be accessed with the `seed.sh` script.
