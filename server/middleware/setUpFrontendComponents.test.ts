@@ -6,6 +6,7 @@ import config from '../config'
 import nunjucksSetup from '../utils/nunjucksSetup'
 import setUpFrontendComponents from './setUpFrontendComponents'
 import setUpWebSecurity from './setUpWebSecurity'
+import frontendComponents from '../../wiremock_mappings/frontendComponents.json'
 
 jest.mock('../../logger')
 
@@ -89,6 +90,23 @@ describe('setUpFrontendComponents', () => {
     expect(response.body.footer).toContain('probation-common-fallback-footer')
     expect(response.body.cssIncludes).toEqual([])
     expect(response.body.jsIncludes).toEqual([])
+  })
+
+  it('renders the local WireMock footer without requiring dev Auth tokens', async () => {
+    const api = nock(config.apis.probationApi.url)
+      .get('/api/components')
+      .query({ component: ['header', 'footer'] })
+      .reply(200, frontendComponents.mappings[0].response.jsonBody)
+
+    const response = await request(createApp()).get('/').expect(200)
+
+    expect(api.isDone()).toBe(true)
+    expect(response.body.footer).toContain('probation-common-footer')
+    expect(response.body.footer).toContain('Accessibility</a>')
+    expect(response.body.footer).toContain('Cookies policy</a>')
+    expect(response.body.footer).toContain('Privacy policy</a>')
+    expect(response.body.footer).not.toContain('probation-common-fallback-footer')
+    expect(logger.error).not.toHaveBeenCalled()
   })
 
   it('uses the package fallback without making API calls when no user is available', async () => {
