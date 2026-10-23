@@ -41,16 +41,23 @@ with validation errors. The service's existing header is unchanged.
 The API supplies the footer HTML, policy links and asset URLs; its CSS and JavaScript
 are loaded by the layout with the CSP nonce.
 
-Set `COMPONENT_API_URL` in your `.env` before starting locally, for example:
+For local development, set `COMPONENT_API_URL=http://localhost:9095` in `.env`
+(as shown in `.env.example`) to use the existing WireMock service.
+Its component response provides a sample PDS footer, with links to the dev policy pages,
+without requiring a token accepted by the deployed component API. Start the dependencies
+with `docker compose up -d`; if WireMock is already running when mappings change, reload
+them with:
 
 ```sh
-COMPONENT_API_URL=https://probation-frontend-components-dev.hmpps.service.justice.gov.uk
+curl -X POST http://localhost:9095/__admin/mappings/reset
 ```
 
-Use `http://localhost:3001` instead if running the component API locally with the same
+Restart the UI after changing `COMPONENT_API_URL`. To use the real component API locally,
+set `COMPONENT_API_URL=http://localhost:3001` in `.env` and run that API with the same
 HMPPS Auth instance as this service. Local Auth tokens are not accepted by the deployed
-dev component API. Without this variable, the client defaults to `http://fe-components`.
-Deployment values configure the matching dev, preprod or production URL.
+dev component API. Deployment values configure the matching dev, preprod or production
+URL; production requires an explicit `COMPONENT_API_URL` and never defaults to WireMock.
+Without the environment variable, the client defaults to `http://fe-components`.
 
 The middleware must run after Helmet and authentication so it can update the CSP
 and forward the user's token. If the API fails, the client logs the failure and renders
