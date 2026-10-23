@@ -64,6 +64,15 @@ and forward the user's token. If the API fails, the client logs the failure and 
 its fallback footer, which has no policy links. Authentication error pages also use
 the fallback because no authenticated user is available.
 
+Accessibility links in deployed environments are owned by the PDS API, not constructed
+from this UI's `ENVIRONMENT_NAME`. The PDS footer macro links to `/accessibility`, the
+landing page for service statements. The Accredited Programmes statement is available
+at `/accessibility/accredited-programmes` on each environment's component API host.
+The local WireMock sample links directly to that dev statement.
+The layout tests check each deployment's `COMPONENT_API_URL` and preservation of the
+API-provided footer links. These checks do not verify authenticated content on the
+deployed PDS service; that needs a signed-in browser check in each environment.
+
 ## Data Seeding
 
 The API for this codebase has a built in mechanism for seeding data, which can be accessed with the `seed.sh` script.
