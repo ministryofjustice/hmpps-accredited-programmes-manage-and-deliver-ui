@@ -24,7 +24,7 @@ describe('layout footer', () => {
       new RegExp(`^\\s+COMPONENT_API_URL: "${componentApiUrl.replace(/\./g, '\\.')}"\\s*$`, 'm'),
     )
 
-    const footer = `<footer class="probation-common-footer"><a href="${componentApiUrl}/accessibility">Accessibility</a><a href="${componentApiUrl}/cookies-policy">Cookies policy</a><a href="${componentApiUrl}/privacy-policy">Privacy policy</a></footer>`
+    const footer = `<footer class="probation-common-footer"><a href="${componentApiUrl}/accessibility-statement">Accessibility</a><a href="${componentApiUrl}/cookies-policy">Cookies policy</a><a href="${componentApiUrl}/privacy-policy">Privacy policy</a></footer>`
     const html = environment.render('partials/layout.njk', {
       applicationName: 'Accredited Programmes',
       environmentName,
@@ -49,7 +49,7 @@ describe('layout footer', () => {
         .map((_index, element) => $(element).attr('href'))
         .get(),
     ).toEqual([
-      `${componentApiUrl}/accessibility`,
+      `${componentApiUrl}/accessibility-statement`,
       `${componentApiUrl}/cookies-policy`,
       `${componentApiUrl}/privacy-policy`,
     ])
