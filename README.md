@@ -32,6 +32,47 @@ $ npm run start:dev
 ```
 
 
+## PDS footer
+
+The shared footer is fetched using the
+[@ministryofjustice/hmpps-probation-frontend-components](https://github.com/ministryofjustice/hmpps-probation-frontend-components/blob/main/USAGE.md)
+middleware on authenticated requests, including POST requests that re-render forms
+with validation errors. The service's existing header is unchanged.
+The API supplies the footer HTML, policy links and asset URLs; its CSS and JavaScript
+are loaded by the layout with the CSP nonce.
+
+For local development, set `COMPONENT_API_URL=http://localhost:9095` in `.env`
+(as shown in `.env.example`) to use the existing WireMock service.
+Its component response provides a sample PDS footer, with links to the dev policy pages,
+without requiring a token accepted by the deployed component API. Start the dependencies
+with `docker compose up -d`; if WireMock is already running when mappings change, reload
+them with:
+
+```sh
+curl -X POST http://localhost:9095/__admin/mappings/reset
+```
+
+Restart the UI after changing `COMPONENT_API_URL`. To use the real component API locally,
+set `COMPONENT_API_URL=http://localhost:3001` in `.env` and run that API with the same
+HMPPS Auth instance as this service. Local Auth tokens are not accepted by the deployed
+dev component API. Deployment values configure the matching dev, preprod or production
+URL; production requires an explicit `COMPONENT_API_URL` and never defaults to WireMock.
+Without the environment variable, the client defaults to `http://fe-components`.
+
+The middleware must run after Helmet and authentication so it can update the CSP
+and forward the user's token. If the API fails, the client logs the failure and renders
+its fallback footer, which has no policy links. Authentication error pages also use
+the fallback because no authenticated user is available.
+
+Accessibility links in deployed environments are owned by the PDS API, not constructed
+from this UI's `ENVIRONMENT_NAME`. The PDS footer macro links to `/accessibility`, the
+landing page for service statements. The Accredited Programmes statement is available
+at `/accessibility/accredited-programmes` on each environment's component API host.
+The local WireMock sample links directly to that dev statement.
+The layout tests check each deployment's `COMPONENT_API_URL` and preservation of the
+API-provided footer links. These checks do not verify authenticated content on the
+deployed PDS service; that needs a signed-in browser check in each environment.
+
 ## Data Seeding
 
 The API for this codebase has a built in mechanism for seeding data, which can be accessed with the `seed.sh` script.
