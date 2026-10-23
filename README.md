@@ -65,8 +65,8 @@ its fallback footer, which has no policy links. Authentication error pages also 
 the fallback because no authenticated user is available.
 
 Accessibility links in deployed environments are owned by the PDS API, not constructed
-from this UI's `ENVIRONMENT_NAME`. The PDS footer macro links to `/accessibility-statement`.
-The Accredited Programmes statement is available
+from this UI's `ENVIRONMENT_NAME`. The PDS footer macro links to `/accessibility`, the
+landing page for service statements. The Accredited Programmes statement is available
 at `/accessibility/accredited-programmes` on each environment's component API host.
 The local WireMock sample links directly to that dev statement.
 The layout tests check each deployment's `COMPONENT_API_URL` and preservation of the
