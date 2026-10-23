@@ -1,4 +1,5 @@
 import path from 'path'
+import fs from 'fs'
 import nunjucks from 'nunjucks'
 import { load } from 'cheerio'
 
@@ -15,7 +16,15 @@ describe('layout footer', () => {
     ['preprod', 'https://probation-frontend-components-preprod.hmpps.service.justice.gov.uk'],
     ['prod', 'https://probation-frontend-components.hmpps.service.justice.gov.uk'],
   ])('renders the %s PDS footer and its assets', (environmentName, componentApiUrl) => {
-    const footer = `<footer class="probation-common-footer"><a href="${componentApiUrl}/accessibility-statement">Accessibility</a><a href="${componentApiUrl}/cookies-policy">Cookies policy</a><a href="${componentApiUrl}/privacy-policy">Privacy policy</a></footer>`
+    const deploymentValues = fs.readFileSync(
+      path.join(__dirname, '../../../helm_deploy', `values-${environmentName.toLowerCase()}.yaml`),
+      'utf8',
+    )
+    expect(deploymentValues).toMatch(
+      new RegExp(`^\\s+COMPONENT_API_URL: "${componentApiUrl.replace(/\./g, '\\.')}"\\s*$`, 'm'),
+    )
+
+    const footer = `<footer class="probation-common-footer"><a href="${componentApiUrl}/accessibility">Accessibility</a><a href="${componentApiUrl}/cookies-policy">Cookies policy</a><a href="${componentApiUrl}/privacy-policy">Privacy policy</a></footer>`
     const html = environment.render('partials/layout.njk', {
       applicationName: 'Accredited Programmes',
       environmentName,
@@ -35,6 +44,15 @@ describe('layout footer', () => {
 
     expect(html).toContain(footer)
     expect($('footer')).toHaveLength(1)
+    expect(
+      $('footer a')
+        .map((_index, element) => $(element).attr('href'))
+        .get(),
+    ).toEqual([
+      `${componentApiUrl}/accessibility`,
+      `${componentApiUrl}/cookies-policy`,
+      `${componentApiUrl}/privacy-policy`,
+    ])
     expect($('#pds-header')).toHaveLength(0)
     expect($('.govuk-template__header')).toHaveLength(1)
     expect($(`head link[href="${componentApiUrl}/assets/css/footer.css"]`).attr('nonce')).toBe('test-nonce')
