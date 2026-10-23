@@ -1,0 +1,101 @@
+import express from 'express'
+import nock from 'nock'
+import request from 'supertest'
+import logger from '../../logger'
+import config from '../config'
+import nunjucksSetup from '../utils/nunjucksSetup'
+import setUpFrontendComponents from './setUpFrontendComponents'
+import setUpWebSecurity from './setUpWebSecurity'
+
+jest.mock('../../logger')
+
+function createApp(authenticated = true) {
+  const app = express()
+  nunjucksSetup(app)
+  app.use(setUpWebSecurity())
+  app.use((_req, res, next) => {
+    if (authenticated) {
+      res.locals.user = {
+        token: 'user-token',
+        displayName: 'Test User',
+        name: 'Test User',
+        username: 'TEST_USER',
+        userId: '123',
+        userUuid: undefined,
+        userRoles: ['PROBATION'],
+        authSource: 'delius',
+      }
+    }
+    next()
+  })
+  app.use(setUpFrontendComponents())
+  app.all('/{*path}', (_req, res) => {
+    res.json(res.locals.feComponents || {})
+  })
+  return app
+}
+
+describe('setUpFrontendComponents', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+    nock.disableNetConnect()
+    nock.enableNetConnect('127.0.0.1')
+  })
+
+  afterEach(() => {
+    nock.cleanAll()
+    nock.enableNetConnect()
+  })
+
+  it.each([
+    ['get', '/'],
+    ['get', '/referral/123'],
+    ['post', '/referral/123'],
+  ] as const)('fetches components with the user token for %s %s', async (method, url) => {
+    const apiUrl = config.apis.probationApi.url
+    const api = nock(apiUrl)
+      .get('/api/components')
+      .query({ component: ['header', 'footer'] })
+      .matchHeader('x-user-token', 'user-token')
+      .reply(200, {
+        header: { html: '<header>PDS header</header>', css: [], javascript: [] },
+        footer: {
+          html: '<footer><a href="/cookies-policy">Cookies policy</a></footer>',
+          css: [`${apiUrl}/assets/css/footer.css`],
+          javascript: [],
+        },
+      })
+
+    const response = await request(createApp())[method](url).expect(200)
+
+    expect(api.isDone()).toBe(true)
+    expect(response.body.footer).toBe('<footer><a href="/cookies-policy">Cookies policy</a></footer>')
+    expect(response.body.cssIncludes).toEqual([`${apiUrl}/assets/css/footer.css`])
+    expect(response.headers['content-security-policy']).toContain(`style-src 'self' 'nonce-`)
+    expect(response.headers['content-security-policy']).toContain(apiUrl)
+    expect(response.headers['content-security-policy']).toContain(`font-src 'self' ${apiUrl}`)
+  })
+
+  it('logs API failures and renders the package fallback', async () => {
+    const api = nock(config.apis.probationApi.url).get('/api/components').query(true).twice().reply(503)
+
+    const response = await request(createApp()).get('/').expect(200)
+
+    expect(api.isDone()).toBe(true)
+    expect(logger.error).toHaveBeenCalledWith(
+      expect.any(Error),
+      'Failed to retrieve front end components, using fallbacks',
+    )
+    expect(response.body.footer).toContain('probation-common-fallback-footer')
+    expect(response.body.cssIncludes).toEqual([])
+    expect(response.body.jsIncludes).toEqual([])
+  })
+
+  it('uses the package fallback without making API calls when no user is available', async () => {
+    const response = await request(createApp(false)).get('/').expect(200)
+
+    expect(logger.info).toHaveBeenCalledWith('Using fallback frontend components when no user in context')
+    expect(logger.error).not.toHaveBeenCalled()
+    expect(response.body.footer).toContain('probation-common-fallback-footer')
+  })
+})

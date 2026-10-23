@@ -15,6 +15,7 @@ generic-service:
     EXAMPLE_API_URL: 'https://template-kotlin-preprod.hmpps.service.justice.gov.uk'
     ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_URL: 'https://accredited-programmes-manage-and-deliver-api-preprod.hmpps.service.justice.gov.uk'
     ENVIRONMENT_NAME: preprod
+    COMPONENT_API_URL: "https://probation-frontend-components-preprod.hmpps.service.justice.gov.uk"
     AUDIT_ENABLED: "true"
     SENTRY_ENVIRONMENT: preprod
 
