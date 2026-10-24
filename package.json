@@ -78,14 +78,14 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.1152.0",
+    "@aws-sdk/client-sqs": "^3.1153.0",
     "@ministryofjustice/frontend": "^11.1.0",
     "@ministryofjustice/hmpps-audit-client": "2.0.0",
     "@ministryofjustice/hmpps-auth-clients": "^3.0.0",
     "@ministryofjustice/hmpps-azure-telemetry": "1.1.0",
     "@ministryofjustice/hmpps-monitoring": "^2.1.0",
     "@ministryofjustice/hmpps-rest-client": "^2.2.0",
-    "@sentry/node": "11.7.0",
+    "@sentry/node": "11.8.0",
     "@types/supertest": "^7.2.1",
     "accessible-autocomplete": "^3.0.2",
     "agentkeepalive": "^4.6.0",
@@ -133,8 +133,8 @@
     "@types/passport-oauth2": "^1.8.0",
     "@types/superagent": "^8.1.11",
     "@types/supertest": "^7.2.1",
-    "@typescript-eslint/eslint-plugin": "^8.71.2",
-    "@typescript-eslint/parser": "^8.71.2",
+    "@typescript-eslint/eslint-plugin": "^8.72.0",
+    "@typescript-eslint/parser": "^8.72.0",
     "@typescript/native": "npm:typescript@^7.0.2",
     "audit-ci": "^7.1.0",
     "aws-sdk-client-mock": "^4.1.0",
@@ -157,7 +157,7 @@
     "jest-junit": "17.0.0",
     "jsonwebtoken": "^9.0.3",
     "lint-staged": "^17.6.0",
-    "nock": "15.0.1",
+    "nock": "15.0.4",
     "openapi-typescript": "^7.13.0",
     "prettier": "^3.9.10",
     "prettier-plugin-jinja-template": "^2.2.0",
@@ -165,7 +165,7 @@
     "ts-jest": "^29.4.15",
     "ts-node": "^10.9.2",
     "typescript": "npm:@typescript/typescript6@^6.0.2",
-    "typescript-eslint": "^8.71.2"
+    "typescript-eslint": "^8.72.0"
   },
   "overrides": {
     "@jgoz/esbuild-plugin-typecheck": {
