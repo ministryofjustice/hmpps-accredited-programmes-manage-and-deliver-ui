@@ -30,6 +30,7 @@ export default class SessionScheduleController extends BaseController {
     const { username } = req.user
     const { sessionScheduleData } = req.session
     let formError: FormValidationError | null = null
+    let selectedSessionScheduleType: string | undefined
 
     if (req.method === 'GET') {
       await sendAuditEvent('VIEW_SCHEDULE_SESSION_TYPE', username, groupId, 'SEARCH_TERM')
@@ -42,8 +43,12 @@ export default class SessionScheduleController extends BaseController {
 
     if (req.method === 'POST') {
       const selectedSession = req.body['session-template']
+      const selectedSessionTemplateId = typeof selectedSession === 'string' ? selectedSession.split('+')[0] : undefined
+      selectedSessionScheduleType = selectedSessionTemplateId
+        ? req.body[`session-schedule-type-${selectedSessionTemplateId}`]
+        : undefined
 
-      if (!selectedSession) {
+      if (typeof selectedSession !== 'string' || !selectedSession) {
         res.status(400)
         formError = {
           errors: [
@@ -54,14 +59,27 @@ export default class SessionScheduleController extends BaseController {
             },
           ],
         }
+      } else if (
+        typeof selectedSessionScheduleType !== 'string' ||
+        (selectedSessionScheduleType !== 'SCHEDULED' && selectedSessionScheduleType !== 'CATCH_UP')
+      ) {
+        res.status(400)
+        formError = {
+          errors: [
+            {
+              formFields: ['session-schedule-type'],
+              errorSummaryLinkedField: `session-schedule-type-main-${selectedSessionTemplateId}`,
+              message: 'Select a session type',
+            },
+          ],
+        }
       } else {
-        const [selectedSessionTemplateId, selectedSessionTemplateType, sessionName, groupOrOneToOne] =
-          selectedSession.split('+')
+        const [, , sessionName, groupOrOneToOne] = selectedSession.split('+')
         req.session.sessionScheduleData = {
           ...sessionScheduleData,
           sessionTemplateId: selectedSessionTemplateId,
           headingText: scheduleSessionTypeResponse.pageHeading,
-          sessionScheduleType: selectedSessionTemplateType,
+          sessionScheduleType: selectedSessionScheduleType,
           sessionName,
           selectedSession,
           groupOrOneToOne,
@@ -73,7 +91,8 @@ export default class SessionScheduleController extends BaseController {
       groupId,
       scheduleSessionTypeResponse,
       formError,
-      req.session.sessionScheduleData?.selectedSession,
+      req.method === 'POST' ? req.body['session-template'] : req.session.sessionScheduleData?.selectedSession,
+      req.method === 'POST' ? selectedSessionScheduleType : req.session.sessionScheduleData?.sessionScheduleType,
     )
     const view = new SessionScheduleWhichView(presenter)
     return this.renderPage(res, view)

@@ -1,4 +1,3 @@
-import { RadiosArgs } from '../../utils/govukFrontendTypes'
 import ViewUtils from '../../utils/viewUtils'
 import SessionScheduleWhichPresenter from './sessionScheduleWhichPresenter'
 
@@ -12,36 +11,17 @@ export default class SessionScheduleWhichView {
     }
   }
 
-  private radioArgs(): RadiosArgs {
-    const { sessionTemplates } = this.presenter
-
-    return {
-      name: 'session-template',
-      fieldset: {
-        legend: {
-          text: 'Which session are you scheduling?',
-          isPageHeading: true,
-          classes: 'govuk-fieldset__legend--l',
-        },
-      },
-      items: sessionTemplates.map(template => ({
-        value: `${template.id}+${template.sessionScheduleType}+${template.name}+${template.sessionType}`,
-        text: template.name,
-        checked:
-          this.presenter.fields.sessionTemplate.value ===
-          `${template.id}+${template.sessionScheduleType}+${template.name}+${template.sessionType}`,
-      })),
-      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.sessionTemplate.errorMessage),
-    }
-  }
-
   get renderArgs(): [string, Record<string, unknown>] {
     return [
       'sessionSchedule/sessionScheduleWhich',
       {
         backLinkArgs: this.backLinkArgs(),
         pageTitle: this.presenter.pageTitle,
-        radioArgs: this.radioArgs(),
+        sessionTemplates: this.presenter.sessionTemplates,
+        selectedSession: this.presenter.fields.sessionTemplate.value,
+        selectedSessionScheduleType: this.presenter.fields.sessionScheduleType.value,
+        sessionTemplateErrorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.sessionTemplate.errorMessage),
+        sessionScheduleTypeErrorMessage: this.presenter.fields.sessionScheduleType.errorMessage,
         text: this.presenter.text,
         errorSummary: ViewUtils.govukErrorSummaryArgs(this.presenter.errorSummary),
       },

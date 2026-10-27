@@ -3,6 +3,7 @@ import { randomUUID } from 'crypto'
 import { Express } from 'express'
 import { SessionData } from 'express-session'
 import request from 'supertest'
+import { load } from 'cheerio'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import TestUtils from '../testutils/testUtils'
 
@@ -35,7 +36,7 @@ const mockScheduleSessionTypeResponse: ScheduleSessionTypeResponse = {
       id: randomUUID(),
       number: 2,
       name: 'Session 2',
-      sessionScheduleType: 'CATCH_UP',
+      sessionScheduleType: 'SCHEDULED',
       sessionType: 'ONE_TO_ONE',
     },
   ],
@@ -107,6 +108,11 @@ describe('Session Schedule Controller', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Schedule a Getting started one-to-one')
+          expect(res.text).toContain('Session type')
+          expect(res.text).toContain('Main group session')
+          expect(res.text).toContain('Catch-up')
+          expect(res.text).not.toContain('value="SCHEDULED" checked')
+          expect(res.text).not.toContain('value="CATCH_UP" checked')
           expect(accreditedProgrammesManageAndDeliverService.getSessionTemplates).toHaveBeenCalledWith(
             'user1',
             groupId,
@@ -126,6 +132,63 @@ describe('Session Schedule Controller', () => {
           expect(res.text).toContain('Getting started one-to-one')
           expect(res.text).toContain('Session 2')
         })
+    })
+
+    it('only displays parent sessions with nested main and catch-up choices', async () => {
+      const templates = [
+        { ...mockScheduleSessionTypeResponse.sessionTemplates[0], name: 'Getting started 1' },
+        {
+          ...mockScheduleSessionTypeResponse.sessionTemplates[0],
+          id: randomUUID(),
+          number: 2,
+          name: 'Getting started 2',
+        },
+        { ...mockScheduleSessionTypeResponse.sessionTemplates[1], name: 'Getting started one-to-one' },
+      ]
+      accreditedProgrammesManageAndDeliverService.getSessionTemplates.mockResolvedValue({
+        ...mockScheduleSessionTypeResponse,
+        sessionTemplates: templates.flatMap(template => [
+          template,
+          { ...template, name: `${template.name} catch-up`, sessionScheduleType: 'CATCH_UP' },
+        ]),
+      })
+
+      const response = await request(app).get(`/${groupId}/${moduleId}/schedule-session-type`).expect(200)
+      const $ = load(response.text)
+      const parentOptions = $('input[name="session-template"]')
+      expect(parentOptions).toHaveLength(3)
+      expect(parentOptions.map((_, element) => $(element).val()).get()).toEqual(
+        templates.map(template => `${template.id}+SCHEDULED+${template.name}+${template.sessionType}`),
+      )
+      templates.forEach(template => {
+        const parentInput = parentOptions.filter(
+          (_, element) => $(element).val() === `${template.id}+SCHEDULED+${template.name}+${template.sessionType}`,
+        )
+        const parentId = parentInput.attr('id')
+        expect(parentId).toBeDefined()
+        expect(parentInput.attr('data-aria-controls')).toBe(`conditional-${parentId}`)
+        expect($(`#conditional-${parentId}`)).toHaveLength(1)
+
+        const sessionTypeOptions = $(`input[name="session-schedule-type-${template.id}"]`)
+        expect(sessionTypeOptions).toHaveLength(2)
+        expect(sessionTypeOptions.map((_, element) => $(element).val()).get()).toEqual(['SCHEDULED', 'CATCH_UP'])
+        sessionTypeOptions.each((_, element) => {
+          const inputId = $(element).attr('id')
+          expect(inputId).toBeDefined()
+          expect($(`label[for="${inputId}"]`)).toHaveLength(1)
+        })
+      })
+      templates.forEach(template => {
+        expect($(`label[for="session-schedule-type-main-${template.id}"]`).text().trim()).toBe(
+          template.sessionType === 'GROUP' ? 'Main group session' : 'One-to-one',
+        )
+        expect($(`label[for="session-schedule-type-catch-up-${template.id}"]`).text().trim()).toBe(
+          template.sessionType === 'GROUP' ? 'Catch-up' : 'One-to-one catch-up',
+        )
+      })
+      templates.forEach(template => {
+        expect(response.text).not.toContain(`${template.name} catch-up`)
+      })
     })
 
     it('displays previously selected session template from session', async () => {
@@ -150,11 +213,12 @@ describe('Session Schedule Controller', () => {
 
   describe('POST /:groupId/:moduleId/schedule-session-type', () => {
     it('redirects to session details page on successful submission', async () => {
-      const selectedTemplateId = mockScheduleSessionTypeResponse.sessionTemplates[0].id
+      const selectedTemplate = mockScheduleSessionTypeResponse.sessionTemplates[0]
+      const selectedSession = `${selectedTemplate.id}+${selectedTemplate.sessionScheduleType}+${selectedTemplate.name}+${selectedTemplate.sessionType}`
 
       return request(app)
         .post(`/${groupId}/${moduleId}/schedule-session-type`)
-        .send({ 'session-template': selectedTemplateId })
+        .send({ 'session-template': selectedSession, [`session-schedule-type-${selectedTemplate.id}`]: 'SCHEDULED' })
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(`Redirecting to /${groupId}/${moduleId}/schedule-session-details`)
@@ -206,6 +270,39 @@ describe('Session Schedule Controller', () => {
         ],
         suggestedDate: '01/01/2026',
       })
+    })
+
+    it('requires a session type when a group template is selected', async () => {
+      const selectedTemplate = mockScheduleSessionTypeResponse.sessionTemplates[0]
+      const selectedSession = `${selectedTemplate.id}+${selectedTemplate.sessionScheduleType}+${selectedTemplate.name}+${selectedTemplate.sessionType}`
+
+      return request(app)
+        .post(`/${groupId}/${moduleId}/schedule-session-type`)
+        .send({ 'session-template': selectedSession })
+        .expect(400)
+        .expect(res => {
+          const $ = load(res.text)
+          expect($('#conditional-session-template .govuk-error-message')).toHaveLength(1)
+          expect($('#conditional-session-template-2 .govuk-error-message')).toHaveLength(0)
+          expect(res.text).toContain(`value="${selectedSession}" checked`)
+          expect(res.text).toContain('Select a session type')
+          expect(res.text).toContain('Main group session')
+          expect(res.text).toContain(`id="session-schedule-type-main-${selectedTemplate.id}"`)
+        })
+    })
+
+    it('requires a session type for one-to-one templates', async () => {
+      const selectedTemplate = mockScheduleSessionTypeResponse.sessionTemplates[1]
+      const selectedSession = `${selectedTemplate.id}+${selectedTemplate.sessionScheduleType}+${selectedTemplate.name}+${selectedTemplate.sessionType}`
+
+      return request(app)
+        .post(`/${groupId}/${moduleId}/schedule-session-type`)
+        .send({ 'session-template': selectedSession })
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain('Select a session type')
+          expect(res.text).toContain('One-to-one catch-up')
+        })
     })
 
     it('loads the session details page', async () => {
@@ -333,6 +430,65 @@ describe('Session Schedule Controller', () => {
             expect.objectContaining({ details: expect.objectContaining({ startDate: '3055-01-01' }) }),
           )
         })
+    })
+
+    it.each([
+      [0, 'SCHEDULED'],
+      [0, 'CATCH_UP'],
+      [1, 'SCHEDULED'],
+      [1, 'CATCH_UP'],
+    ])('creates template %i with the selected %s session type', async (templateIndex, sessionScheduleType) => {
+      const selectedTemplate = mockScheduleSessionTypeResponse.sessionTemplates[templateIndex]
+      const selectedSession = `${selectedTemplate.id}+${selectedTemplate.sessionScheduleType}+${selectedTemplate.name}+${selectedTemplate.sessionType}`
+      const sessionAgent = request.agent(app)
+      accreditedProgrammesManageAndDeliverService.getIndividualSessionDetails.mockResolvedValue({
+        facilitators: [
+          { personName: 'John Doe', personCode: 'N07B001', teamName: 'GM Manchester N1', teamCode: 'N50CAC' },
+        ],
+        groupMembers: [{ name: 'Jane Smith', crn: 'JS123', referralId: 'referral-123', isExcluded: false }],
+        suggestedDate: '01/01/2026',
+      })
+      accreditedProgrammesManageAndDeliverService.createSessionSchedule.mockResolvedValue('Session has been added.')
+
+      await sessionAgent
+        .post(`/${groupId}/${moduleId}/schedule-session-type`)
+        .send({
+          'session-template': selectedSession,
+          [`session-schedule-type-${selectedTemplate.id}`]: sessionScheduleType,
+        })
+        .expect(302)
+
+      await sessionAgent
+        .post(`/${groupId}/${moduleId}/schedule-session-details`)
+        .send({
+          'session-details-who': 'referral-123 + Jane Smith',
+          'session-details-facilitator-0': JSON.stringify({
+            facilitator: 'John Doe',
+            facilitatorCode: 'N07B001',
+            teamName: 'GM Manchester N1',
+            teamCode: 'N50CAC',
+          }),
+          'session-details-date': '01/01/3055',
+          'session-details-start-time-hour': '9',
+          'session-details-start-time-minute': '0',
+          'session-details-start-time-part-of-day': 'am',
+          'session-details-end-time-hour': '10',
+          'session-details-end-time-minute': '30',
+          'session-details-end-time-part-of-day': 'am',
+        })
+        .expect(302)
+
+      await sessionAgent.post(`/${groupId}/${moduleId}/session-review-details`).expect(302)
+
+      expect(accreditedProgrammesManageAndDeliverService.createSessionSchedule).toHaveBeenCalledWith(
+        'user1',
+        groupId,
+        expect.objectContaining({
+          sessionTemplateId: selectedTemplate.id,
+          sessionScheduleType,
+          referralIds: ['referral-123'],
+        }),
+      )
     })
   })
   describe('GET /group/:groupId/sessions-and-attendance', () => {

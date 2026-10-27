@@ -100,6 +100,18 @@ describe('AddSessionDetailsPresenter', () => {
       ])
     })
 
+    it('sorts scheduled group session participants alphabetically', () => {
+      const presenter = new AddSessionDetailsPresenter(sessionDetails, 'backLinkUri', null, {
+        groupOrOneToOne: 'GROUP',
+        sessionScheduleType: 'SCHEDULED',
+      })
+
+      expect(presenter.generateSessionAttendeesCheckboxOptions([]).map(option => option.value)).toEqual([
+        'ref2 + Jane Smith',
+        'ref1 + John Doe',
+      ])
+    })
+
     it('does not expose the name of a restricted participant and disables their option', () => {
       const restrictedSessionDetails = {
         ...sessionDetails,

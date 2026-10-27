@@ -8,6 +8,7 @@ export default class SessionScheduleWhichPresenter {
     private readonly scheduleSessionTypeResponse: ScheduleSessionTypeResponse,
     private readonly validationError: FormValidationError | null = null,
     private readonly selectedSession: string | undefined = undefined,
+    private readonly selectedSessionScheduleType: string | undefined = undefined,
   ) {}
 
   get pageTitle(): string {
@@ -32,10 +33,16 @@ export default class SessionScheduleWhichPresenter {
         value: this.selectedSession,
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'session-template'),
       },
+      sessionScheduleType: {
+        value: this.selectedSessionScheduleType,
+        errorMessage: PresenterUtils.errorMessage(this.validationError, 'session-schedule-type'),
+      },
     }
   }
 
   get sessionTemplates() {
-    return this.scheduleSessionTypeResponse.sessionTemplates
+    return this.scheduleSessionTypeResponse.sessionTemplates.filter(
+      template => template.sessionScheduleType === 'SCHEDULED',
+    )
   }
 }

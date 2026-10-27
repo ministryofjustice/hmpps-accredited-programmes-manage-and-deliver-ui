@@ -96,9 +96,13 @@ export default class AddSessionDetailsPresenter {
 
   // Keeps excluded/restricted members visible but always last in the list
   private sortGroupMembersByExcluded() {
-    return [...this.sessionDetails.groupMembers].sort(
-      (a, b) => Number(this.isExcludedMember(a)) - Number(this.isExcludedMember(b)),
-    )
+    return [...this.sessionDetails.groupMembers].sort((a, b) => {
+      const excludedOrder = Number(this.isExcludedMember(a)) - Number(this.isExcludedMember(b))
+      const isScheduledGroupSession =
+        this.createSessionDetailsFormData?.groupOrOneToOne?.toUpperCase() === 'GROUP' &&
+        this.createSessionDetailsFormData?.sessionScheduleType?.toUpperCase() === 'SCHEDULED'
+      return excludedOrder || (isScheduledGroupSession ? a.name.localeCompare(b.name) : 0)
+    })
   }
 
   private isExcludedMember(member: ScheduleIndividualSessionDetailsResponse['groupMembers'][number]): boolean {

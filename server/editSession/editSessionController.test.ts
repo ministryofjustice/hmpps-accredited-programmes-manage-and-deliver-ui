@@ -1189,6 +1189,73 @@ describe('submitEditSessionDateAndTime', () => {
         expect.anything(),
       )
     })
+
+    it('should accept an already-normalised session date when retrying', async () => {
+      const sessionDetails = rescheduleSessionDetailsFactory.build()
+      accreditedProgrammesManageAndDeliverService.getRescheduleSessionDetails.mockResolvedValue(sessionDetails)
+      const sessionData = makeSessionData()
+      sessionData.editSessionDateAndTime.sessionStartDate = '2026-12-12'
+
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+      accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime.mockResolvedValue({
+        message: 'Test message',
+      })
+
+      await request(app)
+        .post(`/111/6789/edit-group-days-and-times/reschedule`)
+        .type('form')
+        .send({
+          'reschedule-other-sessions': 'true',
+        })
+        .expect(302)
+
+      expect(accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime).toHaveBeenCalledWith(
+        'user1',
+        sessionDetails.sessionId,
+        expect.objectContaining({
+          sessionStartDate: '2026-12-12',
+          rescheduleOtherSessions: true,
+        }),
+      )
+    })
+
+    it('should preserve the form date if the API update fails so the user can retry', async () => {
+      const sessionDetails = rescheduleSessionDetailsFactory.build()
+      const sessionData = makeSessionData()
+      accreditedProgrammesManageAndDeliverService.getRescheduleSessionDetails.mockResolvedValue(sessionDetails)
+      accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime
+        .mockRejectedValueOnce(Object.assign(new Error('Temporary API failure'), { status: 503 }))
+        .mockResolvedValueOnce({ message: 'Test message' })
+
+      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+
+      await request(app)
+        .post(`/111/6789/edit-group-days-and-times/reschedule`)
+        .type('form')
+        .send({
+          'reschedule-other-sessions': 'true',
+        })
+        .expect(503)
+
+      expect(sessionData.editSessionDateAndTime?.sessionStartDate).toBe('12/12/2026')
+
+      await request(app)
+        .post(`/111/6789/edit-group-days-and-times/reschedule`)
+        .type('form')
+        .send({
+          'reschedule-other-sessions': 'true',
+        })
+        .expect(302)
+
+      expect(accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime).toHaveBeenLastCalledWith(
+        'user1',
+        sessionDetails.sessionId,
+        expect.objectContaining({
+          sessionStartDate: '2026-12-12',
+          rescheduleOtherSessions: true,
+        }),
+      )
+    })
   })
 })
 

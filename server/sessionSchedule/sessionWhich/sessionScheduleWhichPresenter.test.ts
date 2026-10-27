@@ -19,7 +19,7 @@ describe('SessionScheduleWhichPresenter', () => {
         id: randomUUID(),
         number: 2,
         name: 'Session 2',
-        sessionScheduleType: 'CATCH_UP',
+        sessionScheduleType: 'SCHEDULED',
         sessionType: 'ONE_TO_ONE',
       },
     ],
@@ -61,6 +61,19 @@ describe('SessionScheduleWhichPresenter', () => {
 
       expect(presenter.sessionTemplates).toEqual(mockScheduleSessionTypeResponse.sessionTemplates)
     })
+
+    it('excludes separate catch-up entries for group and one-to-one templates', () => {
+      const { sessionTemplates } = mockScheduleSessionTypeResponse
+      const presenter = new SessionScheduleWhichPresenter(groupId, {
+        ...mockScheduleSessionTypeResponse,
+        sessionTemplates: sessionTemplates.flatMap(template => [
+          template,
+          { ...template, name: `${template.name} catch-up`, sessionScheduleType: 'CATCH_UP' },
+        ]),
+      })
+
+      expect(presenter.sessionTemplates).toEqual(sessionTemplates)
+    })
   })
 
   describe('fields', () => {
@@ -78,6 +91,10 @@ describe('SessionScheduleWhichPresenter', () => {
           value: selectedTemplateId,
           errorMessage: null,
         },
+        sessionScheduleType: {
+          value: undefined,
+          errorMessage: null,
+        },
       })
     })
 
@@ -86,6 +103,10 @@ describe('SessionScheduleWhichPresenter', () => {
 
       expect(presenter.fields).toEqual({
         sessionTemplate: {
+          value: undefined,
+          errorMessage: null,
+        },
+        sessionScheduleType: {
           value: undefined,
           errorMessage: null,
         },
