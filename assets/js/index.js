@@ -75,7 +75,11 @@ document.querySelectorAll('[data-checkbox-filter-search]').forEach(searchInput =
 
   // Share the snapshot across the open/closed referral tabs by normalising the tab
   // segment of the path, so the expanded/collapsed state is the same when switching tabs.
-  const normalisedPath = window.location.pathname.replace(/(open|closed)-referrals/, 'referrals')
+  // Also normalise the group id out of the waitlist path, so the expanded/collapsed state is
+  // retained across groups - matching how the selected waitlist filters are retained across groups.
+  const normalisedPath = window.location.pathname
+    .replace(/(open|closed)-referrals/, 'referrals')
+    .replace(/\/group\/[^/]+\/waitlist/, '/group/waitlist')
   const storageKey = `filter-panels-open:${normalisedPath}`
 
   // Local calendar day (YYYY-MM-DD) used to scope the retained state to the working day.
