@@ -1,5 +1,5 @@
 # Stage: base image
-FROM ghcr.io/ministryofjustice/hmpps-node:24-alpine AS base
+FROM ghcr.io/ministryofjustice/hmpps-node:26-alpine AS base
 
 ARG BUILD_NUMBER=1_0_0
 ARG GIT_REF=not-available
