@@ -5,8 +5,6 @@ import { CollapsibleCheckboxFilterGroup, CollapsibleCheckboxFilterOption } from 
 import Pagination from '../utils/pagination/pagination'
 import CaselistFilter from './caselistFilter'
 import CaselistUtils from './caseListUtils'
-import DateUtils from '../utils/dateUtils'
-import config from '../config'
 import { CaselistSortField, caselistSortFields } from './caselistSort'
 
 export enum CaselistPageSection {
