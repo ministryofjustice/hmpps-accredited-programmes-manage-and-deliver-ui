@@ -69,7 +69,7 @@ describe('setUpFrontendComponents', () => {
       .reply(200, {
         header: { html: '<header>PDS header</header>', css: [], javascript: [] },
         footer: {
-          html: '<footer><a href="/cookies-policy">Cookies policy</a></footer>',
+          html: '<footer><a href="/accessibility/">Accessibility</a><a href="/cookies-policy">Cookies policy</a></footer>',
           css: [`${apiUrl}/assets/css/footer.css`],
           javascript: [],
         },
@@ -78,7 +78,9 @@ describe('setUpFrontendComponents', () => {
     const response = await request(createApp())[method](url).expect(200)
 
     expect(api.isDone()).toBe(true)
-    expect(response.body.footer).toBe('<footer><a href="/cookies-policy">Cookies policy</a></footer>')
+    expect(response.body.footer).toBe(
+      '<footer><a href="/accessibility/accredited-programmes">Accessibility</a><a href="/cookies-policy">Cookies policy</a></footer>',
+    )
     expect(response.body.cssIncludes).toEqual([`${apiUrl}/assets/css/footer.css`])
     expect(response.headers['content-security-policy']).toContain(`style-src 'self' 'nonce-`)
     expect(response.headers['content-security-policy']).toContain(apiUrl)
@@ -110,6 +112,9 @@ describe('setUpFrontendComponents', () => {
 
     expect(api.isDone()).toBe(true)
     expect(response.body.footer).toContain('probation-common-footer')
+    expect(response.body.footer).toContain(
+      'https://probation-frontend-components-dev.hmpps.service.justice.gov.uk/accessibility/accredited-programmes',
+    )
     expect(response.body.footer).toContain('Accessibility</a>')
     expect(response.body.footer).toContain('Cookies policy</a>')
     expect(response.body.footer).toContain('Privacy policy</a>')
