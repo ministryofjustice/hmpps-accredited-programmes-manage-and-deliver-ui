@@ -943,7 +943,7 @@ describe('EditSessionPresenter', () => {
       expect(presenter.canBeDeleted).toBe(false)
     })
 
-    it('returns false when session type is core group (e.g. Getting started 1)', () => {
+    it('returns true when session type is core group (e.g. Getting started 1)', () => {
       const presenter = new EditSessionPresenter(
         mockGroupId,
         buildSessionDetails({ sessionType: 'Group', isCatchup: false }),
@@ -951,7 +951,7 @@ describe('EditSessionPresenter', () => {
         mockDeleteUrl,
       )
 
-      expect(presenter.canBeDeleted).toBe(false)
+      expect(presenter.canBeDeleted).toBe(true)
     })
 
     it('returns true when session type is group catch up (e.g. Getting started 1 catch-up)', () => {
