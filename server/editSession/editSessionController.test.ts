@@ -1190,7 +1190,7 @@ describe('submitEditSessionDateAndTime', () => {
       )
     })
 
-    it('should accept an already-normalised session date when retrying', async () => {
+    it('should submit an already-formatted session date unchanged', async () => {
       const sessionDetails = rescheduleSessionDetailsFactory.build()
       accreditedProgrammesManageAndDeliverService.getRescheduleSessionDetails.mockResolvedValue(sessionDetails)
       const sessionData = makeSessionData()
