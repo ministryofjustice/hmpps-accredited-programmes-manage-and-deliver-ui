@@ -425,13 +425,31 @@ describe('Session Schedule Controller', () => {
     })
 
     it('loads the session review details page and shows data', async () => {
+      app = TestUtils.createTestAppWithSession(
+        {
+          ...completeSessionData,
+          sessionScheduleData: {
+            ...completeSessionData.sessionScheduleData,
+            referralName: 'Daysi Cole, Antione Breitenberg, Carey Pagac',
+          },
+        },
+        { accreditedProgrammesManageAndDeliverService },
+      )
+
       return request(app)
         .get(`/${groupId}/${moduleId}/session-review-details`)
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Review your session details')
           expect(res.text).toContain('Schedule a Getting started one-to-one')
-          expect(res.text).toContain('John Doe')
+          const $ = load(res.text)
+          const participants = $('.govuk-summary-list__row')
+            .filter((_, row) => $(row).find('.govuk-summary-list__key').text().trim() === 'Participants')
+            .find('dd ul.govuk-list li')
+            .map((_, participant) => $(participant).text())
+            .get()
+
+          expect(participants).toEqual(['Antione Breitenberg', 'Carey Pagac', 'Daysi Cole'])
         })
     })
   })
