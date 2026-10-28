@@ -146,6 +146,35 @@ describe('Create Group Controller', () => {
           expect(res.text).toContain('Enter a code for your group')
         })
     })
+
+    it('returns with errors if group code is only whitespace', async () => {
+      return request(app)
+        .post('/create-group-code')
+        .type('form')
+        .send({ 'create-group-code': '   ' })
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toContain('Enter a code for your group')
+        })
+    })
+
+    it('trims and collapses whitespace in the group code before looking it up and saving it', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockRejectedValue({ status: 404 })
+
+      await request(app)
+        .post('/create-group-code')
+        .type('form')
+        .send({ 'create-group-code': '  ABC   123  ' })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain('Redirecting to /group-start-date')
+        })
+
+      expect(accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion).toHaveBeenCalledWith(
+        'user1',
+        'ABC 123',
+      )
+    })
   })
 
   describe('GET /group-start-date', () => {

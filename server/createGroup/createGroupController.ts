@@ -64,6 +64,7 @@ export default class CreateGroupController extends BaseController {
     let userInputData = null
     let formError: FormValidationError | null = null
     if (req.method === 'POST') {
+      req.body['create-group-code'] = CreateOrEditGroupForm.normaliseGroupCode(req.body['create-group-code'])
       let existingGroupCode = ''
       if (req.body['create-group-code']) {
         try {
