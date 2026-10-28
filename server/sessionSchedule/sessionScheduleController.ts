@@ -64,11 +64,14 @@ export default class SessionScheduleController extends BaseController {
         (selectedSessionScheduleType !== 'SCHEDULED' && selectedSessionScheduleType !== 'CATCH_UP')
       ) {
         res.status(400)
+        const hasScheduledOption = scheduleSessionTypeResponse.sessionTemplates.some(
+          template => template.id === selectedSessionTemplateId && template.sessionScheduleType === 'SCHEDULED',
+        )
         formError = {
           errors: [
             {
               formFields: ['session-schedule-type'],
-              errorSummaryLinkedField: `session-schedule-type-main-${selectedSessionTemplateId}`,
+              errorSummaryLinkedField: `session-schedule-type-${hasScheduledOption ? 'main' : 'catch-up'}-${selectedSessionTemplateId}`,
               message: 'Select a session type',
             },
           ],

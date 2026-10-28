@@ -27,6 +27,25 @@
                                                         {% set sessionTemplateItems = [] %}
                                                         {% for template in sessionTemplates %}
                                                             {% set sessionTemplateValue = template.id + "+" + template.sessionScheduleType + "+" + template.name + "+" + template.sessionType %}
+                                                                {% set sessionScheduleTypeItems = [] %}
+                                                                {% for scheduleType in template.sessionScheduleTypes %}
+                                                                    {% if scheduleType == "SCHEDULED" and template.sessionType == "GROUP" %}
+                                                                        {% set scheduleTypeLabel = "Main group session" %}
+                                                                    {% elif scheduleType == "SCHEDULED" %}
+                                                                        {% set scheduleTypeLabel = "One-to-one" %}
+                                                                    {% elif template.sessionType == "GROUP" %}
+                                                                        {% set scheduleTypeLabel = "Catch-up" %}
+                                                                    {% else %}
+                                                                        {% set scheduleTypeLabel = "One-to-one catch-up" %}
+                                                                    {% endif %}
+                                                                    {% set scheduleTypeId = "main" if scheduleType == "SCHEDULED" else "catch-up" %}
+                                                                    {% set _ = sessionScheduleTypeItems.push({
+                                                                        id: "session-schedule-type-" + scheduleTypeId + "-" + template.id,
+                                                                        value: scheduleType,
+                                                                        text: scheduleTypeLabel,
+                                                                        checked: selectedSessionTemplateId == template.id and selectedSessionScheduleType == scheduleType
+                                                                    }) %}
+                                                                {% endfor %}
                                                                 {% set sessionTypeHtml %}
                                                                     {{ govukRadios({
                                                                         name: "session-schedule-type-" + template.id,
@@ -36,27 +55,14 @@
                                                                                 classes: "govuk-fieldset__legend--s"
                                                                             }
                                                                         },
-                                                                        errorMessage: { text: sessionScheduleTypeErrorMessage } if sessionScheduleTypeErrorMessage and selectedSession == sessionTemplateValue,
-                                                                        items: [
-                                                                            {
-                                                                                id: "session-schedule-type-main-" + template.id,
-                                                                                value: "SCHEDULED",
-                                                                                text: "Main group session" if template.sessionType == "GROUP" else "One-to-one",
-                                                                                checked: selectedSession == sessionTemplateValue and selectedSessionScheduleType == "SCHEDULED"
-                                                                            },
-                                                                            {
-                                                                                id: "session-schedule-type-catch-up-" + template.id,
-                                                                                value: "CATCH_UP",
-                                                                                text: "Catch-up" if template.sessionType == "GROUP" else "One-to-one catch-up",
-                                                                                checked: selectedSession == sessionTemplateValue and selectedSessionScheduleType == "CATCH_UP"
-                                                                            }
-                                                                        ]
+                                                                        errorMessage: { text: sessionScheduleTypeErrorMessage } if sessionScheduleTypeErrorMessage and selectedSessionTemplateId == template.id,
+                                                                        items: sessionScheduleTypeItems
                                                                     }) }}
                                                                 {% endset -%}
                                                                 {% set _ = sessionTemplateItems.push({
                                                                     value: sessionTemplateValue,
                                                                     text: template.name,
-                                                                    checked: selectedSession == sessionTemplateValue,
+                                                                    checked: selectedSessionTemplateId == template.id,
                                                                     conditional: { html: sessionTypeHtml }
                                                                 }) %}
                                                         {% endfor %}

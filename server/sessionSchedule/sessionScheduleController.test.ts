@@ -291,6 +291,58 @@ describe('Session Schedule Controller', () => {
         })
     })
 
+    it('shows the session type error under the currently selected parent template', async () => {
+      const [firstTemplate, secondTemplate] = mockScheduleSessionTypeResponse.sessionTemplates
+      const agent = request.agent(app)
+      const selectedSession = (template: (typeof mockScheduleSessionTypeResponse.sessionTemplates)[number]) =>
+        `${template.id}+${template.sessionScheduleType}+${template.name}+${template.sessionType}`
+      const updatedSecondTemplate = { ...secondTemplate, name: `${secondTemplate.name} updated` }
+      accreditedProgrammesManageAndDeliverService.getSessionTemplates
+        .mockResolvedValueOnce(mockScheduleSessionTypeResponse)
+        .mockResolvedValueOnce({
+          ...mockScheduleSessionTypeResponse,
+          sessionTemplates: [firstTemplate, updatedSecondTemplate],
+        })
+
+      await agent
+        .post(`/${groupId}/${moduleId}/schedule-session-type`)
+        .send({ 'session-template': selectedSession(firstTemplate) })
+        .expect(400)
+
+      const response = await agent
+        .post(`/${groupId}/${moduleId}/schedule-session-type`)
+        .send({ 'session-template': selectedSession(secondTemplate) })
+        .expect(400)
+      const $ = load(response.text)
+
+      expect($('#conditional-session-template .govuk-error-message')).toHaveLength(0)
+      expect($('#conditional-session-template-2 .govuk-error-message')).toHaveLength(1)
+      expect($(`input[name="session-template"][value^="${secondTemplate.id}+"]`).attr('checked')).toBeDefined()
+    })
+
+    it('links session type errors to the catch-up option for catch-up-only templates', async () => {
+      const selectedTemplate = {
+        ...mockScheduleSessionTypeResponse.sessionTemplates[0],
+        sessionScheduleType: 'CATCH_UP' as const,
+      }
+      const selectedSession = `${selectedTemplate.id}+${selectedTemplate.sessionScheduleType}+${selectedTemplate.name}+${selectedTemplate.sessionType}`
+      accreditedProgrammesManageAndDeliverService.getSessionTemplates.mockResolvedValue({
+        ...mockScheduleSessionTypeResponse,
+        sessionTemplates: [selectedTemplate],
+      })
+
+      return request(app)
+        .post(`/${groupId}/${moduleId}/schedule-session-type`)
+        .send({ 'session-template': selectedSession })
+        .expect(400)
+        .expect(res => {
+          const $ = load(res.text)
+          const catchUpOptionId = `session-schedule-type-catch-up-${selectedTemplate.id}`
+          expect($('.govuk-error-summary__list a').attr('href')).toBe(`#${catchUpOptionId}`)
+          expect($(`#${catchUpOptionId}`)).toHaveLength(1)
+        })
+    })
+
     it('requires a session type for one-to-one templates', async () => {
       const selectedTemplate = mockScheduleSessionTypeResponse.sessionTemplates[1]
       const selectedSession = `${selectedTemplate.id}+${selectedTemplate.sessionScheduleType}+${selectedTemplate.name}+${selectedTemplate.sessionType}`
@@ -301,6 +353,7 @@ describe('Session Schedule Controller', () => {
         .expect(400)
         .expect(res => {
           expect(res.text).toContain('Select a session type')
+          expect(res.text).toContain('One-to-one')
           expect(res.text).toContain('One-to-one catch-up')
         })
     })

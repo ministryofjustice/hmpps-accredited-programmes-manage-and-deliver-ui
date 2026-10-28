@@ -40,9 +40,34 @@ export default class SessionScheduleWhichPresenter {
     }
   }
 
+  get selectedSessionTemplateId(): string | undefined {
+    return this.selectedSession?.split('+')[0]
+  }
+
   get sessionTemplates() {
-    return this.scheduleSessionTypeResponse.sessionTemplates.filter(
-      template => template.sessionScheduleType === 'SCHEDULED',
-    )
+    const templates = new Map<
+      string,
+      (typeof this.scheduleSessionTypeResponse.sessionTemplates)[number] & {
+        sessionScheduleTypes: string[]
+      }
+    >()
+
+    this.scheduleSessionTypeResponse.sessionTemplates.forEach(template => {
+      const existingTemplate = templates.get(template.id)
+      if (existingTemplate) {
+        existingTemplate.sessionScheduleTypes.push(template.sessionScheduleType)
+      } else {
+        templates.set(template.id, { ...template, sessionScheduleTypes: [template.sessionScheduleType] })
+      }
+    })
+
+    return Array.from(templates.values()).map(template => {
+      const sessionScheduleTypes = [...new Set(template.sessionScheduleTypes)]
+      if (sessionScheduleTypes.includes('SCHEDULED') && !sessionScheduleTypes.includes('CATCH_UP')) {
+        sessionScheduleTypes.push('CATCH_UP')
+      }
+
+      return { ...template, sessionScheduleTypes }
+    })
   }
 }

@@ -18,6 +18,7 @@ export default class SessionScheduleWhichView {
         backLinkArgs: this.backLinkArgs(),
         pageTitle: this.presenter.pageTitle,
         sessionTemplates: this.presenter.sessionTemplates,
+        selectedSessionTemplateId: this.presenter.selectedSessionTemplateId,
         selectedSession: this.presenter.fields.sessionTemplate.value,
         selectedSessionScheduleType: this.presenter.fields.sessionScheduleType.value,
         sessionTemplateErrorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.sessionTemplate.errorMessage),

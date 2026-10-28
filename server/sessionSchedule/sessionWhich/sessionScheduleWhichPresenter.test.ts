@@ -59,20 +59,43 @@ describe('SessionScheduleWhichPresenter', () => {
     it('should return the available session templates', () => {
       const presenter = new SessionScheduleWhichPresenter(groupId, mockScheduleSessionTypeResponse, null)
 
-      expect(presenter.sessionTemplates).toEqual(mockScheduleSessionTypeResponse.sessionTemplates)
+      expect(presenter.sessionTemplates).toEqual(
+        mockScheduleSessionTypeResponse.sessionTemplates.map(template => ({
+          ...template,
+          sessionScheduleTypes: ['SCHEDULED', 'CATCH_UP'],
+        })),
+      )
     })
 
-    it('excludes separate catch-up entries for group and one-to-one templates', () => {
+    it('deduplicates templates while retaining their available schedule types', () => {
       const { sessionTemplates } = mockScheduleSessionTypeResponse
       const presenter = new SessionScheduleWhichPresenter(groupId, {
         ...mockScheduleSessionTypeResponse,
         sessionTemplates: sessionTemplates.flatMap(template => [
           template,
-          { ...template, name: `${template.name} catch-up`, sessionScheduleType: 'CATCH_UP' },
+          { ...template, sessionScheduleType: 'CATCH_UP' },
         ]),
       })
 
-      expect(presenter.sessionTemplates).toEqual(sessionTemplates)
+      expect(presenter.sessionTemplates).toEqual(
+        sessionTemplates.map(template => ({
+          ...template,
+          sessionScheduleTypes: ['SCHEDULED', 'CATCH_UP'],
+        })),
+      )
+    })
+
+    it('retains a catch-up-only template', () => {
+      const catchUpTemplate = {
+        ...mockScheduleSessionTypeResponse.sessionTemplates[0],
+        sessionScheduleType: 'CATCH_UP' as const,
+      }
+      const presenter = new SessionScheduleWhichPresenter(groupId, {
+        ...mockScheduleSessionTypeResponse,
+        sessionTemplates: [catchUpTemplate],
+      })
+
+      expect(presenter.sessionTemplates).toEqual([{ ...catchUpTemplate, sessionScheduleTypes: ['CATCH_UP'] }])
     })
   })
 
