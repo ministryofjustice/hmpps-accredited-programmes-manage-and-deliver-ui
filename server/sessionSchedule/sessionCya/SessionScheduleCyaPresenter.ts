@@ -70,6 +70,9 @@ export default class SessionScheduleCyaPresenter {
   }
 
   get sessionType() {
+    if (this.createSessionDetails.groupOrOneToOne?.toUpperCase() === 'GROUP') {
+      return this.createSessionDetails.sessionScheduleType === 'CATCH_UP' ? 'Catch-up' : 'Group'
+    }
     return this.createSessionDetails.sessionScheduleType === 'CATCH_UP' ? 'Catch-up' : 'Individual'
   }
 }

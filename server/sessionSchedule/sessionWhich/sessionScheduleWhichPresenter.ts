@@ -8,6 +8,7 @@ export default class SessionScheduleWhichPresenter {
     private readonly scheduleSessionTypeResponse: ScheduleSessionTypeResponse,
     private readonly validationError: FormValidationError | null = null,
     private readonly selectedSession: string | undefined = undefined,
+    private readonly selectedSessionScheduleType: string | undefined = undefined,
   ) {}
 
   get pageTitle(): string {
@@ -32,10 +33,41 @@ export default class SessionScheduleWhichPresenter {
         value: this.selectedSession,
         errorMessage: PresenterUtils.errorMessage(this.validationError, 'session-template'),
       },
+      sessionScheduleType: {
+        value: this.selectedSessionScheduleType,
+        errorMessage: PresenterUtils.errorMessage(this.validationError, 'session-schedule-type'),
+      },
     }
   }
 
+  get selectedSessionTemplateId(): string | undefined {
+    return this.selectedSession?.split('+')[0]
+  }
+
   get sessionTemplates() {
-    return this.scheduleSessionTypeResponse.sessionTemplates
+    const templates = new Map<
+      string,
+      (typeof this.scheduleSessionTypeResponse.sessionTemplates)[number] & {
+        sessionScheduleTypes: string[]
+      }
+    >()
+
+    this.scheduleSessionTypeResponse.sessionTemplates.forEach(template => {
+      const existingTemplate = templates.get(template.id)
+      if (existingTemplate) {
+        existingTemplate.sessionScheduleTypes.push(template.sessionScheduleType)
+      } else {
+        templates.set(template.id, { ...template, sessionScheduleTypes: [template.sessionScheduleType] })
+      }
+    })
+
+    return Array.from(templates.values()).map(template => {
+      const sessionScheduleTypes = [...new Set(template.sessionScheduleTypes)]
+      if (sessionScheduleTypes.includes('SCHEDULED') && !sessionScheduleTypes.includes('CATCH_UP')) {
+        sessionScheduleTypes.push('CATCH_UP')
+      }
+
+      return { ...template, sessionScheduleTypes }
+    })
   }
 }

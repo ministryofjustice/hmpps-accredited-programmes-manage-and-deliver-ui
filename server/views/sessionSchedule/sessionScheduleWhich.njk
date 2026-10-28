@@ -24,7 +24,60 @@
                         <span class="govuk-caption-l">{{ text.headingHintText }}</span>
                         <form method="post" novalidate>
                             <input type="hidden" name="_csrf" value="{{csrfToken}}">
-                            {{ govukRadios(radioArgs) }}
+                                                        {% set sessionTemplateItems = [] %}
+                                                        {% for template in sessionTemplates %}
+                                                            {% set sessionTemplateValue = template.id + "+" + template.sessionScheduleType + "+" + template.name + "+" + template.sessionType %}
+                                                                {% set sessionScheduleTypeItems = [] %}
+                                                                {% for scheduleType in template.sessionScheduleTypes %}
+                                                                    {% if scheduleType == "SCHEDULED" and template.sessionType == "GROUP" %}
+                                                                        {% set scheduleTypeLabel = "Main group session" %}
+                                                                    {% elif scheduleType == "SCHEDULED" %}
+                                                                        {% set scheduleTypeLabel = "One-to-one" %}
+                                                                    {% elif template.sessionType == "GROUP" %}
+                                                                        {% set scheduleTypeLabel = "Catch-up" %}
+                                                                    {% else %}
+                                                                        {% set scheduleTypeLabel = "One-to-one catch-up" %}
+                                                                    {% endif %}
+                                                                    {% set scheduleTypeId = "main" if scheduleType == "SCHEDULED" else "catch-up" %}
+                                                                    {% set _ = sessionScheduleTypeItems.push({
+                                                                        id: "session-schedule-type-" + scheduleTypeId + "-" + template.id,
+                                                                        value: scheduleType,
+                                                                        text: scheduleTypeLabel,
+                                                                        checked: selectedSessionTemplateId == template.id and selectedSessionScheduleType == scheduleType
+                                                                    }) %}
+                                                                {% endfor %}
+                                                                {% set sessionTypeHtml %}
+                                                                    {{ govukRadios({
+                                                                        name: "session-schedule-type-" + template.id,
+                                                                        fieldset: {
+                                                                            legend: {
+                                                                                text: "Session type",
+                                                                                classes: "govuk-fieldset__legend--s"
+                                                                            }
+                                                                        },
+                                                                        errorMessage: { text: sessionScheduleTypeErrorMessage } if sessionScheduleTypeErrorMessage and selectedSessionTemplateId == template.id,
+                                                                        items: sessionScheduleTypeItems
+                                                                    }) }}
+                                                                {% endset -%}
+                                                                {% set _ = sessionTemplateItems.push({
+                                                                    value: sessionTemplateValue,
+                                                                    text: template.name,
+                                                                    checked: selectedSessionTemplateId == template.id,
+                                                                    conditional: { html: sessionTypeHtml }
+                                                                }) %}
+                                                        {% endfor %}
+                                                        {{ govukRadios({
+                                                            name: "session-template",
+                                                            fieldset: {
+                                                                legend: {
+                                                                    text: "Which session are you scheduling?",
+                                                                    isPageHeading: true,
+                                                                    classes: "govuk-fieldset__legend--l"
+                                                                }
+                                                            },
+                                                            items: sessionTemplateItems,
+                                                            errorMessage: sessionTemplateErrorMessage
+                                                        }) }}
                             {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
                         </form>
                     </div>

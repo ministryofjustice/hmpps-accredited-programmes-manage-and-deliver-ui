@@ -19,7 +19,7 @@ describe('SessionScheduleWhichPresenter', () => {
         id: randomUUID(),
         number: 2,
         name: 'Session 2',
-        sessionScheduleType: 'CATCH_UP',
+        sessionScheduleType: 'SCHEDULED',
         sessionType: 'ONE_TO_ONE',
       },
     ],
@@ -59,7 +59,43 @@ describe('SessionScheduleWhichPresenter', () => {
     it('should return the available session templates', () => {
       const presenter = new SessionScheduleWhichPresenter(groupId, mockScheduleSessionTypeResponse, null)
 
-      expect(presenter.sessionTemplates).toEqual(mockScheduleSessionTypeResponse.sessionTemplates)
+      expect(presenter.sessionTemplates).toEqual(
+        mockScheduleSessionTypeResponse.sessionTemplates.map(template => ({
+          ...template,
+          sessionScheduleTypes: ['SCHEDULED', 'CATCH_UP'],
+        })),
+      )
+    })
+
+    it('deduplicates templates while retaining their available schedule types', () => {
+      const { sessionTemplates } = mockScheduleSessionTypeResponse
+      const presenter = new SessionScheduleWhichPresenter(groupId, {
+        ...mockScheduleSessionTypeResponse,
+        sessionTemplates: sessionTemplates.flatMap(template => [
+          template,
+          { ...template, sessionScheduleType: 'CATCH_UP' },
+        ]),
+      })
+
+      expect(presenter.sessionTemplates).toEqual(
+        sessionTemplates.map(template => ({
+          ...template,
+          sessionScheduleTypes: ['SCHEDULED', 'CATCH_UP'],
+        })),
+      )
+    })
+
+    it('retains a catch-up-only template', () => {
+      const catchUpTemplate = {
+        ...mockScheduleSessionTypeResponse.sessionTemplates[0],
+        sessionScheduleType: 'CATCH_UP' as const,
+      }
+      const presenter = new SessionScheduleWhichPresenter(groupId, {
+        ...mockScheduleSessionTypeResponse,
+        sessionTemplates: [catchUpTemplate],
+      })
+
+      expect(presenter.sessionTemplates).toEqual([{ ...catchUpTemplate, sessionScheduleTypes: ['CATCH_UP'] }])
     })
   })
 
@@ -78,6 +114,10 @@ describe('SessionScheduleWhichPresenter', () => {
           value: selectedTemplateId,
           errorMessage: null,
         },
+        sessionScheduleType: {
+          value: undefined,
+          errorMessage: null,
+        },
       })
     })
 
@@ -86,6 +126,10 @@ describe('SessionScheduleWhichPresenter', () => {
 
       expect(presenter.fields).toEqual({
         sessionTemplate: {
+          value: undefined,
+          errorMessage: null,
+        },
+        sessionScheduleType: {
           value: undefined,
           errorMessage: null,
         },
