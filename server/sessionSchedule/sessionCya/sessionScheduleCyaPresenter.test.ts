@@ -3,7 +3,11 @@ import SessionScheduleCyaPresenter from './SessionScheduleCyaPresenter'
 
 describe('SessionScheduleCyaPresenter', () => {
   const linkUrl = '/group-123/module-456'
-  const mockSessionDetails: Partial<ScheduleSessionRequest> & { sessionName?: string; referralName?: string } = {
+  const mockSessionDetails: Partial<ScheduleSessionRequest> & {
+    sessionName?: string
+    referralName?: string
+    groupOrOneToOne?: string
+  } = {
     sessionTemplateId: 'template-123',
     sessionName: 'Getting started one-to-one',
     referralName: 'John Doe',
@@ -21,6 +25,38 @@ describe('SessionScheduleCyaPresenter', () => {
     startTime: { hour: 9, minutes: 30, amOrPm: 'AM' },
     endTime: { hour: 11, minutes: 0, amOrPm: 'AM' },
   }
+
+  describe('sessionType', () => {
+    it('labels a scheduled group session as Group', () => {
+      const presenter = new SessionScheduleCyaPresenter(linkUrl, {
+        ...mockSessionDetails,
+        groupOrOneToOne: 'GROUP',
+        sessionScheduleType: 'SCHEDULED',
+      })
+
+      expect(presenter.sessionType).toBe('Group')
+    })
+
+    it('labels a group catch-up as Catch-up', () => {
+      const presenter = new SessionScheduleCyaPresenter(linkUrl, {
+        ...mockSessionDetails,
+        groupOrOneToOne: 'GROUP',
+        sessionScheduleType: 'CATCH_UP',
+      })
+
+      expect(presenter.sessionType).toBe('Catch-up')
+    })
+
+    it('keeps one-to-one session labels unchanged', () => {
+      const presenter = new SessionScheduleCyaPresenter(linkUrl, {
+        ...mockSessionDetails,
+        groupOrOneToOne: 'ONE_TO_ONE',
+        sessionScheduleType: 'SCHEDULED',
+      })
+
+      expect(presenter.sessionType).toBe('Individual')
+    })
+  })
 
   describe('pageTitle', () => {
     it('returns the correct page title', () => {

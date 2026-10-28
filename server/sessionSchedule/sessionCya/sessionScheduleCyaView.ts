@@ -1,4 +1,5 @@
 import { SummaryListArgs } from '../../utils/govukFrontendTypes'
+import ViewUtils from '../../utils/viewUtils'
 import SessionScheduleCyaPresenter from './SessionScheduleCyaPresenter'
 
 export default class SessionScheduleCyaView {
@@ -19,6 +20,9 @@ export default class SessionScheduleCyaView {
     const sessionDetails = this.presenter.createSessionDetails
     const editSessionTypeUrl = `${this.presenter.linkUrl}/schedule-session-type`
     const editSessionDetailsUrl = `${this.presenter.linkUrl}/schedule-session-details`
+    const participants = (sessionDetails.referralName?.split(', ') ?? []).sort((first, second) =>
+      first.localeCompare(second),
+    )
     return {
       rows: [
         {
@@ -87,9 +91,13 @@ export default class SessionScheduleCyaView {
           key: {
             text: this.isGroupSession ? 'Participants' : 'Participant',
           },
-          value: {
-            text: `${sessionDetails.referralName}`,
-          },
+          value: this.isGroupSession
+            ? {
+                html: `<ul class="govuk-list">${participants
+                  .map(participant => `<li>${ViewUtils.escape(participant)}</li>`)
+                  .join('')}</ul>`,
+              }
+            : { text: `${sessionDetails.referralName}` },
           actions: {
             items: [
               {

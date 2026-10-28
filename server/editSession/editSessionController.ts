@@ -369,18 +369,27 @@ export default class EditSessionController extends BaseController {
         res.status(400)
         formError = data.error
       } else {
-        req.session.editSessionDateAndTime.rescheduleOtherSessions = data.paramsForUpdate.rescheduleOtherSessions
-        req.session.editSessionDateAndTime.sessionStartDate = (() => {
-          const [day, month, year] = req.session.editSessionDateAndTime.sessionStartDate.split('/')
-          return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-        })()
+        const sessionDateAndTime = req.session.editSessionDateAndTime
+        const sessionStartDate = sessionDateAndTime?.sessionStartDate
+          ? EditSessionController.toDateOnlyString(sessionDateAndTime.sessionStartDate)
+          : null
+
+        if (!sessionDateAndTime?.sessionStartTime || !sessionStartDate) {
+          return res.redirect(`/${groupId}/${sessionId}/edit-session-date-and-time`)
+        }
+
         await sendAuditEvent('EDIT_SESSION_DATE_AND_TIME', username, sessionDetails.sessionId, 'SEARCH_TERM', {
           details: { groupId },
         })
         const message = await this.accreditedProgrammesManageAndDeliverService.updateSessionDateAndTime(
           username,
           sessionDetails.sessionId,
-          req.session.editSessionDateAndTime as RescheduleSessionRequest,
+          {
+            sessionStartDate,
+            sessionStartTime: sessionDateAndTime.sessionStartTime,
+            sessionEndTime: sessionDateAndTime.sessionEndTime,
+            rescheduleOtherSessions: data.paramsForUpdate.rescheduleOtherSessions,
+          },
         )
 
         return res.redirect(`/${groupId}/${sessionId}/edit-session?editSessionMessage=${message.message}`)
