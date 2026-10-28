@@ -855,6 +855,31 @@ describe('Edit Group Controller', () => {
         })
     })
 
+    it('trims and collapses whitespace in the group code before looking it up and saving it', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue({
+        id: groupId,
+        code: 'EXISTING123',
+        regionName: 'Test Region',
+      })
+      accreditedProgrammesManageAndDeliverService.updateGroup.mockResolvedValue({
+        successMessage: 'The group code has been updated.',
+      })
+
+      await request(app)
+        .post(`/${groupId}/edit-group-code`)
+        .type('form')
+        .send({ 'create-group-code': '  UPDATED   123  ' })
+        .expect(302)
+
+      expect(accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion).toHaveBeenCalledWith(
+        'user1',
+        'UPDATED 123',
+      )
+      expect(accreditedProgrammesManageAndDeliverService.updateGroup).toHaveBeenCalledWith('user1', groupId, {
+        groupCode: 'UPDATED 123',
+      })
+    })
+
     it('returns with errors if updated group code already exists for another group', async () => {
       accreditedProgrammesManageAndDeliverService.getGroupByCodeInRegion.mockResolvedValue({
         id: randomUUID(),

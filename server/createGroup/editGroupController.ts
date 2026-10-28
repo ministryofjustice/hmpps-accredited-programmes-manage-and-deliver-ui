@@ -320,6 +320,7 @@ export default class EditGroupController extends BaseController {
     }
 
     if (req.method === 'POST') {
+      req.body['create-group-code'] = CreateOrEditGroupForm.normaliseGroupCode(req.body['create-group-code'])
       let existingGroup = { code: '' }
 
       if (req.body['create-group-code']) {

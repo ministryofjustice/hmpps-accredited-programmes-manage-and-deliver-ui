@@ -2,6 +2,23 @@ import TestUtils from '../testutils/testUtils'
 import CreateOrEditGroupForm from './createOrEditGroupForm'
 
 describe('CreateGroupForm', () => {
+  describe('normaliseGroupCode', () => {
+    it.each([
+      ['GROUP123', 'GROUP123'],
+      ['  GROUP123  ', 'GROUP123'],
+      ['GROUP  123', 'GROUP 123'],
+      ['  GROUP   1  2 3  ', 'GROUP 1 2 3'],
+      ['GROUP\t\t123', 'GROUP 123'],
+      ['   ', ''],
+    ])('normalises %p to %p', (input, expected) => {
+      expect(CreateOrEditGroupForm.normaliseGroupCode(input)).toEqual(expected)
+    })
+
+    it('returns undefined when no group code is given', () => {
+      expect(CreateOrEditGroupForm.normaliseGroupCode(undefined)).toBeUndefined()
+    })
+  })
+
   describe('createGroupCodeData', () => {
     describe('when all mandatory fields are passed', () => {
       it('returns params for update', async () => {

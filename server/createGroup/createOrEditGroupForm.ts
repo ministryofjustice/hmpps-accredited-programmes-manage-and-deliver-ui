@@ -14,6 +14,11 @@ export default class CreateOrEditGroupForm {
     private readonly userRegionCode?: string,
   ) {}
 
+  // Trims leading/trailing whitespace and remove any double/multiple spaces in the middle of the string
+  static normaliseGroupCode(groupCode?: string): string | undefined {
+    return groupCode?.trim().replace(/\s+/g, ' ')
+  }
+
   async createGroupCodeData(): Promise<FormData<Partial<CreateGroupRequest>>> {
     const validationResult = await FormUtils.runValidations({
       request: this.request,
