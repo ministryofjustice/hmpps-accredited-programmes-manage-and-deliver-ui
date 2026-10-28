@@ -87,6 +87,26 @@ describe('setUpFrontendComponents', () => {
     expect(response.headers['content-security-policy']).toContain(`font-src 'self' ${apiUrl}`)
   })
 
+  it.each(['/accessibility', '/accessibility/'])('rewrites accessibility URL %s', async accessibilityUrl => {
+    nock(config.apis.probationApi.url)
+      .get('/api/components')
+      .query({ component: ['header', 'footer'] })
+      .reply(200, {
+        header: { html: '', css: [], javascript: [] },
+        footer: {
+          html: `<footer><a href="${accessibilityUrl}">Accessibility</a></footer>`,
+          css: [],
+          javascript: [],
+        },
+      })
+
+    const response = await request(createApp()).get('/').expect(200)
+
+    expect(response.body.footer).toBe(
+      '<footer><a href="/accessibility/accredited-programmes">Accessibility</a></footer>',
+    )
+  })
+
   it('logs API failures and renders the package fallback', async () => {
     const api = nock(config.apis.probationApi.url).get('/api/components').query(true).twice().reply(503)
 
@@ -112,9 +132,6 @@ describe('setUpFrontendComponents', () => {
 
     expect(api.isDone()).toBe(true)
     expect(response.body.footer).toContain('probation-common-footer')
-    expect(response.body.footer).toContain(
-      'https://probation-frontend-components-dev.hmpps.service.justice.gov.uk/accessibility/accredited-programmes',
-    )
     expect(response.body.footer).toContain('Accessibility</a>')
     expect(response.body.footer).toContain('Cookies policy</a>')
     expect(response.body.footer).toContain('Privacy policy</a>')

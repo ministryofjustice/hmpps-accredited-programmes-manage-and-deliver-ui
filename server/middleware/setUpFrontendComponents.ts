@@ -15,7 +15,10 @@ export default function setUpFrontendComponents(): RequestHandler {
 
       const footer = res.locals.feComponents?.footer
       if (footer) {
-        res.locals.feComponents.footer = footer.replace('/accessibility/', '/accessibility/accredited-programmes')
+        res.locals.feComponents.footer = footer.replace(
+          /\/accessibility\/?(?=["'])/g,
+          '/accessibility/accredited-programmes',
+        )
       }
 
       return next()
