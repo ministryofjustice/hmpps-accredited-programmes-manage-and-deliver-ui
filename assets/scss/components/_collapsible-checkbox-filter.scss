@@ -3,6 +3,12 @@
   padding-left: 0;
 }
 
+@supports not (-ms-ime-align: auto) {
+  .govuk-details__text.no-border-left {
+    border-left: 0;
+  }
+}
+
 // The selected-count hint sits inside <summary>, which only permits phrasing
 // content, so it is a <span>. Force it onto its own line below the title.
 [id$='-filter-hint'] {
