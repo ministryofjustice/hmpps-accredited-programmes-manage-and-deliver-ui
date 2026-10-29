@@ -2,6 +2,7 @@ import { PersonalDetails, ReferralDetails } from '@manage-and-deliver-api'
 import DateUtils from '../utils/dateUtils'
 import { InsetTextArgs } from '../utils/govukFrontendTypes'
 import { SummaryListItem } from '../utils/summaryList'
+import ViewUtils from '../utils/viewUtils'
 import ReferralDetailsPresenter from './referralDetailsPresenter'
 
 export default class PersonalDetailsPresenter extends ReferralDetailsPresenter {
@@ -35,6 +36,7 @@ export default class PersonalDetailsPresenter extends ReferralDetailsPresenter {
       {
         key: 'CRN',
         lines: [this.personalDetails.crn],
+        html: ViewUtils.crnHtml(this.personalDetails.crn),
       },
       {
         key: 'Date of birth',

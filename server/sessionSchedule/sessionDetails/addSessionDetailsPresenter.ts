@@ -6,6 +6,7 @@ import {
 import { CheckboxesArgsItem, RadiosArgsItem, SelectArgsItem } from '../../utils/govukFrontendTypes'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
+import ViewUtils from '../../utils/viewUtils'
 
 export default class AddSessionDetailsPresenter {
   constructor(
@@ -76,7 +77,7 @@ export default class AddSessionDetailsPresenter {
     const hasSelectedValues = selectedValue && selectedValue.length > 0
 
     return this.sortGroupMembersByExcluded().map(member => ({
-      html: `${this.isExcludedMember(member) ? `${member.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot add a restricted participant to the session.</p>` : `${member.name} (${member.crn})`}`,
+      html: `${this.isExcludedMember(member) ? `${ViewUtils.crnHtml(member.crn)}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot add a restricted participant to the session.</p>` : `${ViewUtils.escape(member.name)} (${ViewUtils.crnHtml(member.crn)})`}`,
       value: `${member.referralId} + ${this.isExcludedMember(member) ? member.crn : member.name}`,
       checked: hasSelectedValues ? selectedValue.includes(member.referralId) : false,
       disabled: this.isExcludedMember(member),
@@ -87,7 +88,7 @@ export default class AddSessionDetailsPresenter {
     const hasSelectedValues = selectedValue && selectedValue.length > 0
 
     return this.sortGroupMembersByExcluded().map(member => ({
-      html: `${this.isExcludedMember(member) ? `${member.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot add a restricted participant to the session.</p>` : `${member.name} (${member.crn})`}`,
+      html: `${this.isExcludedMember(member) ? `${ViewUtils.crnHtml(member.crn)}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot add a restricted participant to the session.</p>` : `${ViewUtils.escape(member.name)} (${ViewUtils.crnHtml(member.crn)})`}`,
       value: `${member.referralId} + ${this.isExcludedMember(member) ? member.crn : member.name}`,
       checked: hasSelectedValues ? selectedValue.includes(member.referralId) : false,
       disabled: this.isExcludedMember(member),

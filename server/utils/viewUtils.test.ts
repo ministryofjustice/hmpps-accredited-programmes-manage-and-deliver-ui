@@ -4,6 +4,20 @@ import ViewUtils from './viewUtils'
 // import hmppsAuthUserFactory from '../../testutils/factories/hmppsAuthUser'
 
 describe('ViewUtils', () => {
+  describe('crnHtml', () => {
+    it('keeps the displayed CRN and provides individual characters for screen readers', () => {
+      expect(ViewUtils.crnHtml('S276739')).toBe(
+        '<span aria-hidden="true">S276739</span><span class="govuk-visually-hidden">S 2 7 6 7 3 9</span>',
+      )
+    })
+
+    it('escapes both versions of the CRN', () => {
+      expect(ViewUtils.crnHtml('<&')).toBe(
+        '<span aria-hidden="true">&lt;&amp;</span><span class="govuk-visually-hidden">&lt; &amp;</span>',
+      )
+    })
+  })
+
   describe('escape', () => {
     it('escapes HTML tags', () => {
       expect(ViewUtils.escape('<ul class="foo">')).toBe('&lt;ul class=&quot;foo&quot;&gt;')

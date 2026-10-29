@@ -98,7 +98,7 @@ describe('GroupAllocationsPresenter', () => {
                  </div>`,
           },
           {
-            html: `<a href="/referral-details/39fde7e8-d2e3-472b-8364-5848bf673aa6/personal-details">Edgar Schiller</a><p class="govuk-!-margin-bottom-0"> X718250</p>`,
+            html: `<a href="/referral-details/39fde7e8-d2e3-472b-8364-5848bf673aa6/personal-details">Edgar Schiller</a><p class="govuk-!-margin-bottom-0"> <span aria-hidden="true">X718250</span><span class="govuk-visually-hidden">X 7 1 8 2 5 0</span></p>`,
             attributes: { 'data-sort-value': 'Edgar Schiller' },
           },
 
@@ -127,7 +127,7 @@ describe('GroupAllocationsPresenter', () => {
                  </div>`,
           },
           {
-            html: `<a href="/referral-details/ae43bc75-b96e-496b-b9da-20ea327d7909/personal-details">Roy Kloss</a><p class="govuk-!-margin-bottom-0"> X718255</p><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>`,
+            html: `<a href="/referral-details/ae43bc75-b96e-496b-b9da-20ea327d7909/personal-details">Roy Kloss</a><p class="govuk-!-margin-bottom-0"> <span aria-hidden="true">X718255</span><span class="govuk-visually-hidden">X 7 1 8 2 5 5</span></p><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>`,
             attributes: { 'data-sort-value': 'Roy Kloss' },
           },
 
@@ -223,14 +223,14 @@ describe('GroupAllocationsPresenter', () => {
                   <div class="govuk-radios__item">
                     <input id='39fde7e8-d2e3-472b-8364-5848bf673aa6' value='39fde7e8-d2e3-472b-8364-5848bf673aa6' type="radio" name="add-to-group" class="govuk-radios__input" disabled aria-disabled="true">
                     <label class="govuk-label govuk-radios__label" for="39fde7e8-d2e3-472b-8364-5848bf673aa6">
-                      <span class="govuk-visually-hidden">Add X718250 to the group</span>
+                      <span class="govuk-visually-hidden">Add X 7 1 8 2 5 0 to the group</span>
                     </label>
                   </div>
                  </div><span class="govuk-visually-hidden">Add to group: restricted access - you cannot add this person to the group</span>`,
             attributes: { 'data-excluded': 'true' },
           },
           {
-            html: `<span>X718250</span>`,
+            html: `<span aria-hidden="true">X718250</span><span class="govuk-visually-hidden">X 7 1 8 2 5 0</span>`,
             attributes: { 'data-sort-value': 'X718250', 'data-excluded': 'true' },
           },
           { html: 'Restricted', attributes: { 'data-sort-value': 0 } },
@@ -270,7 +270,7 @@ describe('GroupAllocationsPresenter', () => {
                  </div>`,
           },
           {
-            html: `<a href="/referral-details/39fde7e8-d2e3-472b-8364-5848bf673aa6/personal-details">Edgar Schiller</a><p class="govuk-!-margin-bottom-0">X718250</p>`,
+            html: `<a href="/referral-details/39fde7e8-d2e3-472b-8364-5848bf673aa6/personal-details">Edgar Schiller</a><p class="govuk-!-margin-bottom-0"><span aria-hidden="true">X718250</span><span class="govuk-visually-hidden">X 7 1 8 2 5 0</span></p>`,
             attributes: { 'data-sort-value': 'Edgar Schiller' },
           },
 
@@ -293,7 +293,7 @@ describe('GroupAllocationsPresenter', () => {
                  </div>`,
           },
           {
-            html: `<a href="/referral-details/ae43bc75-b96e-496b-b9da-20ea327d7909/personal-details">Roy Kloss</a><p class="govuk-!-margin-bottom-0">X718255</p><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>`,
+            html: `<a href="/referral-details/ae43bc75-b96e-496b-b9da-20ea327d7909/personal-details">Roy Kloss</a><p class="govuk-!-margin-bottom-0"><span aria-hidden="true">X718255</span><span class="govuk-visually-hidden">X 7 1 8 2 5 5</span></p><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>`,
             attributes: { 'data-sort-value': 'Roy Kloss' },
           },
 
@@ -331,14 +331,14 @@ describe('GroupAllocationsPresenter', () => {
                   <div class="govuk-radios__item">
                     <input id='X718250' value='39fde7e8-d2e3-472b-8364-5848bf673aa6' type="radio" name="remove-from-group" class="govuk-radios__input" disabled aria-disabled="true">
                     <label class="govuk-label govuk-radios__label" for="X718250">
-                      <span class="govuk-visually-hidden">Remove X718250 from the group</span>
+                      <span class="govuk-visually-hidden">Remove X 7 1 8 2 5 0 from the group</span>
                     </label>
                   </div>
                  </div><span class="govuk-visually-hidden">Remove from group: restricted access - you cannot remove this person from the group</span>`,
             attributes: { 'data-excluded': 'true' },
           },
           {
-            html: `<span>X718250</span>`,
+            html: `<span aria-hidden="true">X718250</span><span class="govuk-visually-hidden">X 7 1 8 2 5 0</span>`,
             attributes: { 'data-sort-value': 'X718250', 'data-excluded': 'true' },
           },
           { html: 'Restricted', attributes: { 'data-sort-value': 0 } },
@@ -368,7 +368,7 @@ describe('GroupAllocationsPresenter', () => {
 
       const rows = presenter.generateAllocatedTableArgs()
       expect(rows[0][1]).toEqual({
-        html: `<span>X718250</span><br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>`,
+        html: `<span aria-hidden="true">X718250</span><span class="govuk-visually-hidden">X 7 1 8 2 5 0</span><br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>`,
         attributes: { 'data-sort-value': 'X718250', 'data-excluded': 'true' },
       })
     })

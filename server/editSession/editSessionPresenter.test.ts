@@ -5,7 +5,7 @@ import EditSessionPresenter from './editSessionPresenter'
 const laoBadgeHtml = ' <br><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>'
 
 const nameCrnCellHtml = (referralId: string, name: string, crn: string, _indent: number, lao = false): string =>
-  `<a href="/referral-details/${referralId}/personal-details">${name}</a> ${crn}${lao ? laoBadgeHtml : ''}`
+  `<a href="/referral-details/${referralId}/personal-details">${name}</a> <span aria-hidden="true">${crn}</span><span class="govuk-visually-hidden">${crn.split('').join(' ')}</span>${lao ? laoBadgeHtml : ''}`
 
 describe('EditSessionPresenter', () => {
   const mockGroupId = 'group-123'
@@ -719,7 +719,15 @@ describe('EditSessionPresenter', () => {
         head: [{ text: 'CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
         caption: 'Restricted participants',
         captionClasses: 'govuk-visually-hidden',
-        rows: [[{ html: `CRN001${laoBadgeHtml}` }, { text: 'Restricted' }, { text: 'Restricted' }]],
+        rows: [
+          [
+            {
+              html: `<span aria-hidden="true">CRN001</span><span class="govuk-visually-hidden">C R N 0 0 1</span>${laoBadgeHtml}`,
+            },
+            { text: 'Restricted' },
+            { text: 'Restricted' },
+          ],
+        ],
       })
     })
 
@@ -731,7 +739,9 @@ describe('EditSessionPresenter', () => {
         mockDeleteUrl,
       )
 
-      expect(presenter.scheduledToAttendDisplay).toEqual(['CRN001'])
+      expect(presenter.scheduledToAttendDisplay).toEqual([
+        '<span aria-hidden="true">CRN001</span><span class="govuk-visually-hidden">C R N 0 0 1</span>',
+      ])
     })
 
     it('splits authorised and restricted referrals into separate tables for a mixed session', () => {
@@ -756,9 +766,20 @@ describe('EditSessionPresenter', () => {
         head: [{ text: 'CRN' }, { text: 'Attendance' }, { text: 'Session notes' }],
         caption: 'Restricted participants',
         captionClasses: 'govuk-visually-hidden',
-        rows: [[{ html: `CRN002${laoBadgeHtml}` }, { text: 'Restricted' }, { text: 'Restricted' }]],
+        rows: [
+          [
+            {
+              html: `<span aria-hidden="true">CRN002</span><span class="govuk-visually-hidden">C R N 0 0 2</span>${laoBadgeHtml}`,
+            },
+            { text: 'Restricted' },
+            { text: 'Restricted' },
+          ],
+        ],
       })
-      expect(presenter.scheduledToAttendDisplay).toEqual(['Alex River', 'CRN002'])
+      expect(presenter.scheduledToAttendDisplay).toEqual([
+        'Alex River',
+        '<span aria-hidden="true">CRN002</span><span class="govuk-visually-hidden">C R N 0 0 2</span>',
+      ])
     })
 
     it('sorts restricted participants by CRN', () => {

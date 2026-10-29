@@ -130,7 +130,10 @@ export default class EditSessionPresenter {
 
   // "Scheduled to attend" names, with restricted participants shown as CRN-only
   get scheduledToAttendDisplay(): string[] {
-    return [...this.authorisedAttendees.map(it => it.name), ...this.restrictedAttendees.map(it => it.crn)]
+    return [
+      ...this.authorisedAttendees.map(it => ViewUtils.escape(it.name)),
+      ...this.restrictedAttendees.map(it => ViewUtils.crnHtml(it.crn)),
+    ]
   }
 
   get hasMultipleReferrals() {
@@ -180,7 +183,9 @@ export default class EditSessionPresenter {
   private attendeeCells(it: AttendanceAndSessionNotes) {
     const laoBadge = it.lao ? restrictedAccessBadgeHtml : ''
     return [
-      { html: `<a href="/referral-details/${it.referralId}/personal-details">${it.name}</a> ${it.crn}${laoBadge}` },
+      {
+        html: `<a href="/referral-details/${it.referralId}/personal-details">${it.name}</a> ${ViewUtils.crnHtml(it.crn)}${laoBadge}`,
+      },
       { html: this.attendanceOptionText(it.attendance).attendanceState },
       this.sessionNotesCell(it.sessionNotes, it.referralId, it.name),
     ]
@@ -245,7 +250,7 @@ export default class EditSessionPresenter {
       caption: 'Restricted participants',
       captionClasses: 'govuk-visually-hidden',
       rows: this.restrictedAttendees.map(it => [
-        { html: `${it.crn}${restrictedAccessBadgeHtml}` },
+        { html: `${ViewUtils.crnHtml(it.crn)}${restrictedAccessBadgeHtml}` },
         { text: 'Restricted' },
         { text: 'Restricted' },
       ]),

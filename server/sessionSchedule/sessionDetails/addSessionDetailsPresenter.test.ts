@@ -50,8 +50,18 @@ describe('AddSessionDetailsPresenter', () => {
       const options = presenter.generateSessionAttendeesRadioOptions(['ref1'])
 
       expect(options).toEqual([
-        { html: 'John Doe (X12345)', value: 'ref1 + John Doe', checked: true, disabled: false },
-        { html: 'Jane Smith (Y67890)', value: 'ref2 + Jane Smith', checked: false, disabled: false },
+        {
+          html: 'John Doe (<span aria-hidden="true">X12345</span><span class="govuk-visually-hidden">X 1 2 3 4 5</span>)',
+          value: 'ref1 + John Doe',
+          checked: true,
+          disabled: false,
+        },
+        {
+          html: 'Jane Smith (<span aria-hidden="true">Y67890</span><span class="govuk-visually-hidden">Y 6 7 8 9 0</span>)',
+          value: 'ref2 + Jane Smith',
+          checked: false,
+          disabled: false,
+        },
       ])
     })
 
@@ -64,7 +74,7 @@ describe('AddSessionDetailsPresenter', () => {
 
       expect(presenter.generateSessionAttendeesRadioOptions([])).toEqual([
         {
-          html: 'X12345<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot add a restricted participant to the session.</p>',
+          html: '<span aria-hidden="true">X12345</span><span class="govuk-visually-hidden">X 1 2 3 4 5</span><br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot add a restricted participant to the session.</p>',
           value: 'ref1 + X12345',
           checked: false,
           disabled: true,
@@ -95,8 +105,18 @@ describe('AddSessionDetailsPresenter', () => {
       const options = presenter.generateSessionAttendeesCheckboxOptions(['ref1'])
 
       expect(options).toEqual([
-        { html: 'John Doe (X12345)', value: 'ref1 + John Doe', checked: true, disabled: false },
-        { html: 'Jane Smith (Y67890)', value: 'ref2 + Jane Smith', checked: false, disabled: false },
+        {
+          html: 'John Doe (<span aria-hidden="true">X12345</span><span class="govuk-visually-hidden">X 1 2 3 4 5</span>)',
+          value: 'ref1 + John Doe',
+          checked: true,
+          disabled: false,
+        },
+        {
+          html: 'Jane Smith (<span aria-hidden="true">Y67890</span><span class="govuk-visually-hidden">Y 6 7 8 9 0</span>)',
+          value: 'ref2 + Jane Smith',
+          checked: false,
+          disabled: false,
+        },
       ])
     })
 
@@ -121,7 +141,7 @@ describe('AddSessionDetailsPresenter', () => {
 
       expect(presenter.generateSessionAttendeesCheckboxOptions([])).toEqual([
         {
-          html: 'X12345<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot add a restricted participant to the session.</p>',
+          html: '<span aria-hidden="true">X12345</span><span class="govuk-visually-hidden">X 1 2 3 4 5</span><br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot add a restricted participant to the session.</p>',
           value: 'ref1 + X12345',
           checked: false,
           disabled: true,

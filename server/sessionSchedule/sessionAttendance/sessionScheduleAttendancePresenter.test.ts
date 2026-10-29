@@ -693,7 +693,10 @@ describe('SessionScheduleAttendancePresenter', () => {
       const content = presenter.getAccordionItems()[0].content.html
 
       expect(content).toContain(
-        '<td class="govuk-table__cell" data-excluded="true">X999999<br><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span></td>',
+        '<td class="govuk-table__cell" data-excluded="true"><span aria-hidden="true">X999999</span><span class="govuk-visually-hidden">X 9 9 9 9 9 9</span><br><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span></td>',
+      )
+      expect(content).toContain(
+        '<td class="govuk-table__cell"><span aria-hidden="true">X999999</span><span class="govuk-visually-hidden">X 9 9 9 9 9 9</span></td>',
       )
       expect(content).toContain('<td class="govuk-table__cell">Restricted</td>')
       expect(content).not.toContain('<a href="/group-1/excluded-session/')
@@ -735,7 +738,9 @@ describe('SessionScheduleAttendancePresenter', () => {
       const presenter = new SessionScheduleAttendancePresenter(groupId, data)
       const content = presenter.getAccordionItems()[0].content.html
 
-      expect(content).toContain('John Doe<br/> X999999')
+      expect(content).toContain(
+        'John Doe<br/> <span aria-hidden="true">X999999</span><span class="govuk-visually-hidden">X 9 9 9 9 9 9</span>',
+      )
       expect(content).not.toContain('Restricted Person')
     })
   })

@@ -2,6 +2,7 @@ import { EditSessionAttendee, EditSessionAttendeesResponse } from '@manage-and-d
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
 import { CheckboxesArgsItem, RadiosArgsItem } from '../../utils/govukFrontendTypes'
+import ViewUtils from '../../utils/viewUtils'
 
 export default class EditSessionAttendeesPresenter {
   constructor(
@@ -73,10 +74,10 @@ export default class EditSessionAttendeesPresenter {
 
   private attendeeOptionHtml(attendee: EditSessionAttendee): string {
     if (this.isExcludedMember(attendee)) {
-      return `${attendee.crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot edit whether a restricted participant should attend the session.</p>`
+      return `${ViewUtils.crnHtml(attendee.crn)}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot edit whether a restricted participant should attend the session.</p>`
     }
 
-    const attendeeHtml = `${attendee.name} (${attendee.crn})`
+    const attendeeHtml = `${ViewUtils.escape(attendee.name)} (${ViewUtils.crnHtml(attendee.crn)})`
     if (this.isSessionInPast && attendee.currentlyAttending) {
       return `${attendeeHtml}<p class="govuk-!-margin-bottom-0">You cannot remove someone from a session that has already taken place.</p>`
     }

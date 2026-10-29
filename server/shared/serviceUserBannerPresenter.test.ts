@@ -36,5 +36,11 @@ describe('ServiceUserBannerPresenter', () => {
 
       expect(presenter.crn).toEqual('X123456')
     })
+
+    it('returns the service user crn with characters separated for screen readers', () => {
+      const presenter = new ServiceUserBannerPresenter(referralDetails)
+
+      expect(presenter.crnForScreenReader).toEqual('X 1 2 3 4 5 6')
+    })
   })
 })
