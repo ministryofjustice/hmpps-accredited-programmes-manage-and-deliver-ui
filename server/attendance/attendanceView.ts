@@ -17,7 +17,10 @@ export default class AttendanceView {
       name: `attendance-${person.referralId}`,
       fieldset: {
         legend: {
-          text: this.presenter.recordAttendanceBffData.people.length > 1 ? `${person.name} (${person.crn})` : null,
+          html:
+            this.presenter.recordAttendanceBffData.people.length > 1
+              ? `${ViewUtils.escape(person.name)} (${ViewUtils.crnHtml(person.crn)})`
+              : null,
           isPageHeading: false,
           classes: 'govuk-fieldset__legend--m',
         },

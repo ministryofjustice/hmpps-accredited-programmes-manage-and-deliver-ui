@@ -9,7 +9,10 @@
       </div>
       <div class="key-details-bar__bottom-block">
         <span class="govuk-body govuk-!-margin-right-2">
-          <strong>CRN: </strong>{{ serviceUserBannerPresenter.crn }}</span> |
+          <strong>CRN: </strong>
+          <span aria-hidden="true">{{ serviceUserBannerPresenter.crn }}</span>
+          <span class="govuk-visually-hidden">{{ serviceUserBannerPresenter.crnForScreenReader }}</span>
+        </span> |
         <span class="govuk-body govuk-!-margin-right-2 govuk-!-margin-left-2">
           <strong>Date of birth: </strong>{{ serviceUserBannerPresenter.dateOfBirth }}</span>
       </div>

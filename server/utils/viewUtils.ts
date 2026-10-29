@@ -16,6 +16,10 @@ export type SortableTableRow = {
 }[]
 
 export default class ViewUtils {
+  static crnHtml(crn: string): string {
+    return `<span aria-hidden="true">${ViewUtils.escape(crn)}</span><span class="govuk-visually-hidden">${ViewUtils.escape(crn.split('').join(' '))}</span>`
+  }
+
   static escape(val: string): string {
     const escape = new nunjucks.Environment().getFilter('escape')
     return escape(val).val
@@ -82,6 +86,9 @@ export default class ViewUtils {
             classes: item.keyClass,
           },
           value: (() => {
+            if (item.html !== undefined) {
+              return { html: item.html }
+            }
             if (item.listStyle !== undefined) {
               const itemClass = `govuk-list${item.listStyle === ListStyle.bulleted ? ' govuk-list--bullet' : ''}`
               const html = `<ul class="${itemClass}">${item.lines
@@ -174,6 +181,9 @@ export default class ViewUtils {
           },
           value: (() => {
             const fillRowWithValue = options.hideKey ? 'govuk-!-width-full' : undefined
+            if (item.html !== undefined) {
+              return { html: item.html, classes: fillRowWithValue }
+            }
             if (item.listStyle !== undefined) {
               const itemClass = `govuk-list${item.listStyle === ListStyle.bulleted ? ' govuk-list--bullet' : ''}`
               const html = `<ul class="${itemClass}">${item.lines
