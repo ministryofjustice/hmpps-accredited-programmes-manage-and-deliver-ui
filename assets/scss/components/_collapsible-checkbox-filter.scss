@@ -1,6 +1,15 @@
+// Remove the left border from .govuk-details__text when it has the .no-border-left class.
+// GOV.UK adds a border-left inside @supports not (-ms-ime-align: auto), so we need to
+// override it there too with the same specificity to ensure it's removed.
 .no-border-left {
   border-left: 0;
   padding-left: 0;
+}
+
+@supports not (-ms-ime-align: auto) {
+  .govuk-details__text.no-border-left {
+    border-left: 0;
+  }
 }
 
 // The selected-count hint sits inside <summary>, which only permits phrasing
