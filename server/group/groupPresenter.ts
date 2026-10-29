@@ -126,7 +126,7 @@ export default class GroupPresenter {
         {
           html: `<a href='/group/${group.id}/group-details'>${group.code}</a>`,
           attributes: { 'data-sort-value': group.code },
-          classes: 'govuk-!-font-weight-bold',
+          classes: 'govuk-!-font-weight-bold group-code-column',
         },
         this.getFormattedDateCell(group),
         { text: group.pduName },
