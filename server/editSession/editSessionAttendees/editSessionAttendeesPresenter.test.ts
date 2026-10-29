@@ -29,7 +29,7 @@ const buildSessionAttendees = (
 })
 
 const restrictedBadge = (crn: string): string =>
-  `${crn}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot edit whether a restricted participant should attend the session.</p>`
+  `<span aria-hidden="true">${crn}</span><span class="govuk-visually-hidden">${crn.split('').join(' ')}</span><br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot edit whether a restricted participant should attend the session.</p>`
 
 describe('EditSessionAttendeesPresenter', () => {
   const groupId = 'group-123'
@@ -63,13 +63,13 @@ describe('EditSessionAttendeesPresenter', () => {
 
       expect(presenter.generateAttendeeRadioOptions()).toEqual([
         {
-          html: 'John Doe (X123456)',
+          html: 'John Doe (<span aria-hidden="true">X123456</span><span class="govuk-visually-hidden">X 1 2 3 4 5 6</span>)',
           value: 'referral-1',
           checked: true,
           disabled: false,
         },
         {
-          html: 'Jane Smith (Y654321)',
+          html: 'Jane Smith (<span aria-hidden="true">Y654321</span><span class="govuk-visually-hidden">Y 6 5 4 3 2 1</span>)',
           value: 'referral-2',
           checked: false,
           disabled: false,
@@ -109,13 +109,13 @@ describe('EditSessionAttendeesPresenter', () => {
 
       expect(presenter.generateAttendeeRadioOptions()).toEqual([
         {
-          html: 'John Doe (X123456)',
+          html: 'John Doe (<span aria-hidden="true">X123456</span><span class="govuk-visually-hidden">X 1 2 3 4 5 6</span>)',
           value: 'referral-1',
           checked: true,
           disabled: false,
         },
         {
-          html: 'Jane Smith (Y654321)',
+          html: 'Jane Smith (<span aria-hidden="true">Y654321</span><span class="govuk-visually-hidden">Y 6 5 4 3 2 1</span>)',
           value: 'referral-2',
           checked: true,
           disabled: false,
@@ -149,7 +149,7 @@ describe('EditSessionAttendeesPresenter', () => {
 
       expect(presenter.generateAttendeeRadioOptions()).toEqual([
         {
-          html: 'John Doe (X123456)',
+          html: 'John Doe (<span aria-hidden="true">X123456</span><span class="govuk-visually-hidden">X 1 2 3 4 5 6</span>)',
           value: 'referral-1',
           checked: true,
           disabled: false,
@@ -168,13 +168,13 @@ describe('EditSessionAttendeesPresenter', () => {
 
       expect(presenter.generateAttendeeCheckboxOptions()).toEqual([
         {
-          html: 'John Doe (X123456)<p class="govuk-!-margin-bottom-0">You cannot remove someone from a session that has already taken place.</p>',
+          html: 'John Doe (<span aria-hidden="true">X123456</span><span class="govuk-visually-hidden">X 1 2 3 4 5 6</span>)<p class="govuk-!-margin-bottom-0">You cannot remove someone from a session that has already taken place.</p>',
           value: 'referral-1 + John Doe',
           checked: true,
           disabled: true,
         },
         {
-          html: 'Jane Smith (Y654321)',
+          html: 'Jane Smith (<span aria-hidden="true">Y654321</span><span class="govuk-visually-hidden">Y 6 5 4 3 2 1</span>)',
           value: 'referral-2 + Jane Smith',
           checked: false,
           disabled: false,
@@ -189,13 +189,13 @@ describe('EditSessionAttendeesPresenter', () => {
 
       expect(presenter.generateAttendeeCheckboxOptions()).toEqual([
         {
-          html: 'John Doe (X123456)',
+          html: 'John Doe (<span aria-hidden="true">X123456</span><span class="govuk-visually-hidden">X 1 2 3 4 5 6</span>)',
           value: 'referral-1 + John Doe',
           checked: true,
           disabled: false,
         },
         {
-          html: 'Jane Smith (Y654321)',
+          html: 'Jane Smith (<span aria-hidden="true">Y654321</span><span class="govuk-visually-hidden">Y 6 5 4 3 2 1</span>)',
           value: 'referral-2 + Jane Smith',
           checked: false,
           disabled: false,
@@ -235,13 +235,13 @@ describe('EditSessionAttendeesPresenter', () => {
 
       expect(presenter.generateAttendeeCheckboxOptions()).toEqual([
         {
-          html: 'John Doe (X123456)',
+          html: 'John Doe (<span aria-hidden="true">X123456</span><span class="govuk-visually-hidden">X 1 2 3 4 5 6</span>)',
           value: 'referral-1 + John Doe',
           checked: true,
           disabled: false,
         },
         {
-          html: 'Jane Smith (Y654321)',
+          html: 'Jane Smith (<span aria-hidden="true">Y654321</span><span class="govuk-visually-hidden">Y 6 5 4 3 2 1</span>)',
           value: 'referral-2 + Jane Smith',
           checked: true,
           disabled: false,
@@ -275,7 +275,7 @@ describe('EditSessionAttendeesPresenter', () => {
 
       expect(presenter.generateAttendeeCheckboxOptions()).toEqual([
         {
-          html: 'John Doe (X123456)',
+          html: 'John Doe (<span aria-hidden="true">X123456</span><span class="govuk-visually-hidden">X 1 2 3 4 5 6</span>)',
           value: 'referral-1 + John Doe',
           checked: true,
           disabled: false,

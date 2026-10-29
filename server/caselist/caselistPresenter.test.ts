@@ -386,7 +386,7 @@ describe('generateTableRows', () => {
     expect(rows).toHaveLength(1)
     expect(rows[0]).toHaveLength(7)
     expect(rows[0][0]).toEqual({
-      html: `<a href='/referral-details/REF123/personal-details'>Jane Doe</a><span>X987654</span>`,
+      html: `<a href='/referral-details/REF123/personal-details'>Jane Doe</a><span aria-hidden="true">X987654</span><span class="govuk-visually-hidden">X 9 8 7 6 5 4</span>`,
       attributes: { 'data-sort-value': 'Jane Doe' },
     })
     expect(rows[0][1]).toEqual({ text: 'Manchester PDU' })
@@ -527,7 +527,7 @@ describe('generateTableRows', () => {
     const rows = presenter.generateTableRows()
 
     expect(rows[0][0]).toEqual({
-      html: `<a href='/referral-details/REF999/personal-details'>John Smith</a><span>X111222</span><br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>`,
+      html: `<a href='/referral-details/REF999/personal-details'>John Smith</a><span aria-hidden="true">X111222</span><span class="govuk-visually-hidden">X 1 1 1 2 2 2</span><br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>`,
       attributes: { 'data-sort-value': 'John Smith' },
     })
   })
@@ -556,7 +556,7 @@ describe('generateTableRows', () => {
     const rows = presenter.generateTableRows()
 
     expect(rows[0][0]).toEqual({
-      html: `<a href='/referral-details/REF888/personal-details'>Jane Doe</a><span>X333444</span>`,
+      html: `<a href='/referral-details/REF888/personal-details'>Jane Doe</a><span aria-hidden="true">X333444</span><span class="govuk-visually-hidden">X 3 3 3 4 4 4</span>`,
       attributes: { 'data-sort-value': 'Jane Doe' },
     })
   })
@@ -653,7 +653,7 @@ describe('generateTableRows', () => {
     expect(rows).toHaveLength(1)
     expect(rows[0]).toHaveLength(7)
     expect(rows[0][0]).toEqual({
-      html: `<span>X111222</span>`,
+      html: `<span aria-hidden="true">X111222</span><span class="govuk-visually-hidden">X 1 1 1 2 2 2</span>`,
       attributes: { 'data-sort-value': 'X111222', 'data-excluded': 'true' },
     })
     expect(rows[0][1]).toEqual({ text: 'Restricted' })

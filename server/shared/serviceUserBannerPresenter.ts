@@ -19,4 +19,8 @@ export default class ServiceUserBannerPresenter {
   get crn(): string {
     return this.referralDetails.crn
   }
+
+  get crnForScreenReader(): string {
+    return this.crn.split('').join(' ')
+  }
 }

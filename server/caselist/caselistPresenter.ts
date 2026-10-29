@@ -145,11 +145,12 @@ export default class CaselistPresenter {
     sortedContent.forEach(referral => {
       const sentenceEndDate = CaselistUtils.sentenceEndDateCell(referral)
       const isExcluded = Boolean(referral.isExcluded)
+      const crnHtml = `<span aria-hidden="true">${referral.crn}</span><span class="govuk-visually-hidden">${referral.crn.split('').join(' ')}</span>`
       referralData.push([
         {
           html: !isExcluded
-            ? `<a href='/referral-details/${referral.referralId}/personal-details'>${referral.personName}</a><span>${referral.crn}</span>${CaselistUtils.hasLaoBadgeHtml(referral)}`
-            : `<span>${referral.crn}</span>${CaselistUtils.hasLaoBadgeHtml(referral)}`,
+            ? `<a href='/referral-details/${referral.referralId}/personal-details'>${referral.personName}</a>${crnHtml}${CaselistUtils.hasLaoBadgeHtml(referral)}`
+            : `${crnHtml}${CaselistUtils.hasLaoBadgeHtml(referral)}`,
           attributes: isExcluded
             ? { 'data-sort-value': referral.crn, 'data-excluded': 'true' }
             : { 'data-sort-value': referral.personName },
