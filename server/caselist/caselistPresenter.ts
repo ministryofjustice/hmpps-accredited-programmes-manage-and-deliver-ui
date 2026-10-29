@@ -3,6 +3,7 @@ import { Page } from '../shared/models/pagination'
 import { CheckboxesArgsItem, TableArgs } from '../utils/govukFrontendTypes'
 import { CollapsibleCheckboxFilterGroup, CollapsibleCheckboxFilterOption } from '../utils/collapsibleCheckboxFilterArgs'
 import Pagination from '../utils/pagination/pagination'
+import ViewUtils from '../utils/viewUtils'
 import CaselistFilter from './caselistFilter'
 import CaselistUtils from './caseListUtils'
 
@@ -145,7 +146,7 @@ export default class CaselistPresenter {
     sortedContent.forEach(referral => {
       const sentenceEndDate = CaselistUtils.sentenceEndDateCell(referral)
       const isExcluded = Boolean(referral.isExcluded)
-      const crnHtml = `<span aria-hidden="true">${referral.crn}</span><span class="govuk-visually-hidden">${referral.crn.split('').join(' ')}</span>`
+      const crnHtml = ViewUtils.crnHtml(referral.crn)
       referralData.push([
         {
           html: !isExcluded
