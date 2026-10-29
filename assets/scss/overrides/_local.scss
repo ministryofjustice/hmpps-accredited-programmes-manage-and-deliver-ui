@@ -109,6 +109,11 @@
   }
 }
 
+.group-code-column {
+  max-width: 200px;
+  overflow-wrap: anywhere;
+}
+
 .govuk-radios--small.group-details-table {
   margin-top: 15px;
 }
