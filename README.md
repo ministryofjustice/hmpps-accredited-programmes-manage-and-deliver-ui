@@ -44,8 +44,15 @@ are loaded by the layout with the CSP nonce.
 For local development, set `COMPONENT_API_URL=http://localhost:9095` in `.env`
 (as shown in `.env.example`) to use the existing WireMock service.
 Its component response provides a sample PDS footer, with links to the dev policy pages,
-without requiring a token accepted by the deployed component API. Start the dependencies
-with `docker compose up -d`; if WireMock is already running when mappings change, reload
+without requiring a token accepted by the deployed component API. It also loads the real
+dev header and footer stylesheets, in the same order as dev, so shared GOV.UK styles
+and their interactions with application overrides are visible locally. WireMock proxies
+the public assets through `http://localhost:9095/assets/`, keeping them on the configured
+component API origin allowed by the content security policy. This needs network access
+from WireMock to the dev component host, but no dev login. The footer HTML is still a
+sample, not the live dev response, and the shared header JavaScript is omitted because
+this service uses its own header. Start the dependencies with `docker compose up -d`;
+if WireMock is already running when mappings change, reload
 them with:
 
 ```sh

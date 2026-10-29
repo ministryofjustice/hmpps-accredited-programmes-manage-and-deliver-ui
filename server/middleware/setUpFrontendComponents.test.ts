@@ -136,6 +136,11 @@ describe('setUpFrontendComponents', () => {
     expect(response.body.footer).toContain('Cookies policy</a>')
     expect(response.body.footer).toContain('Privacy policy</a>')
     expect(response.body.footer).not.toContain('probation-common-fallback-footer')
+    expect(response.body.cssIncludes).toEqual([
+      'http://localhost:9095/assets/css/header.css',
+      'http://localhost:9095/assets/css/footer.css',
+    ])
+    expect(response.headers['content-security-policy']).toContain(config.apis.probationApi.url)
     expect(logger.error).not.toHaveBeenCalled()
   })
 
