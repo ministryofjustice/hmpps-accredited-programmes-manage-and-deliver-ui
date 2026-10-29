@@ -1,12 +1,6 @@
-.no-border-left {
+.govuk-details__text.no-border-left {
   border-left: 0;
   padding-left: 0;
-}
-
-@supports not (-ms-ime-align: auto) {
-  .govuk-details__text.no-border-left {
-    border-left: 0;
-  }
 }
 
 // The selected-count hint sits inside <summary>, which only permits phrasing
@@ -17,7 +11,8 @@
 
 // Replace the default GOV.UK triangle marker with a chevron, scoped to this
 // component so other govuk-details elements keep the standard arrow.
-.govuk-details[data-qa$='-filter-section'] > .govuk-details__summary::before {
+.govuk-details[data-qa$='-filter-section'] > .govuk-details__summary::before,
+.govuk-details[data-qa$='-filter-section'][open] > .govuk-details__summary::before {
   width: 6px;
   height: 6px;
   border-style: solid;
@@ -31,7 +26,6 @@
 }
 
 .govuk-details[data-qa$='-filter-section'][open] > .govuk-details__summary::before {
-  border-width: 2px 2px 0 0;
   transform: rotate(135deg);
 }
 

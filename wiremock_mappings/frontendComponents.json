@@ -13,15 +13,24 @@
         "jsonBody": {
           "header": {
             "html": "",
-            "css": [],
+            "css": ["http://localhost:9095/assets/css/header.css"],
             "javascript": []
           },
           "footer": {
             "html": "<footer class=\"probation-common-footer govuk-!-display-none-print\" role=\"contentinfo\"><div class=\"govuk-width-container\"><h2 class=\"govuk-visually-hidden\">Support links</h2><ul class=\"probation-common-footer__inline-list\"><li class=\"probation-common-footer__inline-list-item\"><a class=\"probation-common-footer__link\" href=\"https://probation-frontend-components-dev.hmpps.service.justice.gov.uk/accessibility/accredited-programmes\">Accessibility</a></li><li class=\"probation-common-footer__inline-list-item\"><a class=\"probation-common-footer__link\" href=\"https://probation-frontend-components-dev.hmpps.service.justice.gov.uk/cookies-policy\">Cookies policy</a></li><li class=\"probation-common-footer__inline-list-item\"><a class=\"probation-common-footer__link\" href=\"https://probation-frontend-components-dev.hmpps.service.justice.gov.uk/privacy-policy\">Privacy policy</a></li></ul></div></footer>",
-            "css": [],
+            "css": ["http://localhost:9095/assets/css/footer.css"],
             "javascript": []
           }
         }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "urlPathPattern": "/assets/.*"
+      },
+      "response": {
+        "proxyBaseUrl": "https://probation-frontend-components-dev.hmpps.service.justice.gov.uk"
       }
     }
   ]
