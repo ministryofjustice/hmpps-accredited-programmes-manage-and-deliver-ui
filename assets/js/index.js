@@ -75,10 +75,12 @@ document.querySelectorAll('[data-checkbox-filter-search]').forEach(searchInput =
 
   // Share the snapshot across the open/closed referral tabs by normalising the tab
   // segment of the path, so the expanded/collapsed state is the same when switching tabs.
+  // Do the same for the groups "not started and in progress" and "completed" tabs.
   // Also normalise the group id out of the waitlist path, so the expanded/collapsed state is
   // retained across groups - matching how the selected waitlist filters are retained across groups.
   const normalisedPath = window.location.pathname
     .replace(/(open|closed)-referrals/, 'referrals')
+    .replace(/\/groups\/(not-started-and-in-progress|completed)/, '/groups')
     .replace(/\/group\/[^/]+\/waitlist/, '/group/waitlist')
   const storageKey = `filter-panels-open:${normalisedPath}`
 
