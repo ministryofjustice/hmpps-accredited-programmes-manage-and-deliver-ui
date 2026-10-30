@@ -172,7 +172,7 @@
     "@jgoz/esbuild-plugin-typecheck": {
       "esbuild": "$esbuild"
     },
-    "@opentelemetry/core": "2.12.0",
+    "@opentelemetry/core": "3.0.0",
     "diff": "9.0.0",
     "openapi-typescript": {
       "typescript": "$typescript"
