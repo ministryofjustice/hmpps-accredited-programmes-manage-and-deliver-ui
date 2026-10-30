@@ -22,6 +22,7 @@
       </div>
     </div>
   </div>
+  <div id="filter-top" tabindex="-1"></div>
   <div class="govuk-grid-row">
     {%- set filterOptionsHtml %}
       <a class="clear-filters__link" href="?clearFilters=true">Clear filters</a>
@@ -47,7 +48,7 @@
       <a class="clear-filters__link" href="?clearFilters=true">Clear filters</a>
     {% endset -%}
     <div class="govuk-grid-column-one-quarter group-filter-column">
-      <form id="filter-form" method="get" action="#filter-results" data-filter-form>
+      <form id="filter-form" method="get" action="#filter-top" data-filter-form>
         {{
           mojFilter({
             heading: {
