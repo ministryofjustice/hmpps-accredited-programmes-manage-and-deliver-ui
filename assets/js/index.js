@@ -4,9 +4,9 @@ import ModalDialog from './modelTimeOutDialog.js'
 
 govukFrontend.initAll()
 mojFrontend.initAll()
-//This gives screen readers a focused message to announce and lets keyboard users continue tabbing from the results, rather than starting at the top of the page.
-if (window.location.hash === '#filter-results') {
-  document.getElementById('filter-results')?.focus()
+//This gives screen readers a focused element to continue from and lets keyboard users continue tabbing from the filters, rather than starting at the top of the page.
+if (window.location.hash === '#filter-top') {
+  document.getElementById('filter-top')?.focus()
 }
 
 // Keep excluded (restricted) referrals pinned to the bottom of the sortable tables (caselist,
