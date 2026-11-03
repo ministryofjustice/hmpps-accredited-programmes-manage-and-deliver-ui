@@ -1,6 +1,7 @@
 import { ScheduleSessionTypeResponse } from '@manage-and-deliver-api'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
+import hasSessionTypeChoice from '../hasSessionTypeChoice'
 
 type SessionTemplate = ScheduleSessionTypeResponse['sessionTemplates'][number]
 type SessionTemplateOption = SessionTemplate & { sessionScheduleTypes: SessionTemplate['sessionScheduleType'][] }
@@ -51,6 +52,11 @@ export default class SessionScheduleWhichPresenter {
     const templates = new Map<string, SessionTemplateOption>()
 
     this.scheduleSessionTypeResponse.sessionTemplates.forEach(template => {
+      if (!hasSessionTypeChoice(template)) {
+        templates.set(`${template.id}+${template.sessionScheduleType}`, { ...template, sessionScheduleTypes: [] })
+        return
+      }
+
       const existingTemplate = templates.get(template.id)
       if (existingTemplate) {
         existingTemplate.sessionScheduleTypes.push(template.sessionScheduleType)
@@ -59,23 +65,17 @@ export default class SessionScheduleWhichPresenter {
       }
     })
 
-    return Array.from(templates.values()).flatMap<SessionTemplateOption>(template => {
+    return Array.from(templates.values()).map(template => {
+      if (template.sessionScheduleTypes.length === 0) {
+        return template
+      }
+
       const sessionScheduleTypes = [...new Set(template.sessionScheduleTypes)]
       if (sessionScheduleTypes.includes('SCHEDULED') && !sessionScheduleTypes.includes('CATCH_UP')) {
         sessionScheduleTypes.push('CATCH_UP')
       }
 
-      const sessionName = template.name.replace(/ catch-up$/, '')
-      if (sessionName === 'Pre-group one-to-one' || sessionName === 'Post-programme review') {
-        return sessionScheduleTypes.map((sessionScheduleType): SessionTemplateOption => ({
-          ...template,
-          name: sessionScheduleType === 'CATCH_UP' ? `${sessionName} catch-up` : sessionName,
-          sessionScheduleType,
-          sessionScheduleTypes: [],
-        }))
-      }
-
-      return [{ ...template, sessionScheduleTypes }]
+      return { ...template, sessionScheduleTypes }
     })
   }
 }

@@ -15,6 +15,7 @@ import SessionScheduleWhichPresenter from './sessionWhich/sessionScheduleWhichPr
 import SessionScheduleWhichView from './sessionWhich/sessionScheduleWhichView'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
+import hasSessionTypeChoice from './hasSessionTypeChoice'
 
 export default class SessionScheduleController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -43,16 +44,13 @@ export default class SessionScheduleController extends BaseController {
 
     if (req.method === 'POST') {
       const selectedSession = req.body['session-template']
-      const selectedSessionTemplateId = typeof selectedSession === 'string' ? selectedSession.split('+')[0] : undefined
-      const selectedTemplate = new SessionScheduleWhichPresenter(
-        groupId,
-        scheduleSessionTypeResponse,
-      ).sessionTemplates.find(
+      const [selectedSessionTemplateId, selectedSessionTemplateType] =
+        typeof selectedSession === 'string' ? selectedSession.split('+') : []
+      const selectedTemplate = scheduleSessionTypeResponse.sessionTemplates.find(
         template =>
-          template.id === selectedSessionTemplateId &&
-          (template.sessionScheduleTypes.length > 0 || template.sessionScheduleType === selectedSession.split('+')[1]),
+          template.id === selectedSessionTemplateId && template.sessionScheduleType === selectedSessionTemplateType,
       )
-      if (selectedTemplate?.sessionScheduleTypes.length === 0) {
+      if (selectedTemplate && !hasSessionTypeChoice(selectedTemplate)) {
         selectedSessionScheduleType = selectedTemplate.sessionScheduleType
       } else {
         selectedSessionScheduleType = selectedSessionTemplateId

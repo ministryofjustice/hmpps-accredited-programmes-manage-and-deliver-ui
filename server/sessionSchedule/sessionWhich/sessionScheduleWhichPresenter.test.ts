@@ -56,17 +56,14 @@ describe('SessionScheduleWhichPresenter', () => {
   })
 
   describe('sessionTemplates', () => {
-    it.each(['Pre-group one-to-one', 'Post-programme review'])('offers two top-level choices for %s', name => {
+    it.each(['Pre-group one-to-one', 'Post-programme review'])('preserves the original option for %s', name => {
       const template = { ...mockScheduleSessionTypeResponse.sessionTemplates[1], name }
       const presenter = new SessionScheduleWhichPresenter(groupId, {
         ...mockScheduleSessionTypeResponse,
         sessionTemplates: [template],
       })
 
-      expect(presenter.sessionTemplates).toEqual([
-        { ...template, sessionScheduleTypes: [] },
-        { ...template, name: `${name} catch-up`, sessionScheduleType: 'CATCH_UP', sessionScheduleTypes: [] },
-      ])
+      expect(presenter.sessionTemplates).toEqual([{ ...template, sessionScheduleTypes: [] }])
     })
 
     it.each(['Pre-group one-to-one', 'Post-programme review'])('retains the API catch-up choice for %s', name => {
