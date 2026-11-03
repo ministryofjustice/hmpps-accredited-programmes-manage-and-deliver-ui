@@ -4,9 +4,9 @@
 {% extends "govuk/template.njk" %}
 
 {% block head %}
-  <link href="{{ '/assets/css/index.css' | assetMap }}" rel="stylesheet"/>
+  <link href="{{ '/assets/css/index.css' | assetMap }}" rel="stylesheet">
   {% for css in feComponents.cssIncludes %}
-    <link href="{{ css }}" nonce="{{ cspNonce }}" rel="stylesheet"/>
+    <link href="{{ css }}" nonce="{{ cspNonce }}" rel="stylesheet">
   {% endfor %}
 {% endblock %}
 
@@ -28,6 +28,11 @@
       {% include "./betaBanner.njk" %}
     {% endblock %}
     {{ customPrimaryNavigation(primaryNavigationArgs) }}
+  </header>
+{% endblock %}
+
+{% block container %}
+  <main id="main-content" {% if mainLang %}lang="{{ mainLang }}"{% endif %} {{ govukAttributes(mainAttributes) }}>
     {% if serviceUserBannerPresenter %}
       {% include "./serviceUserBanner.njk" %}
       {% block referralSubNavigation %}
@@ -38,7 +43,16 @@
         {% endif %}
       {% endblock %}
     {% endif %}
-  </header>
+    <div class="govuk-width-container{% if containerClasses %} {{ containerClasses }}{% endif %}" {{ govukAttributes(containerAttributes) }}>
+      {% block containerStart %}{% block beforeContent %}{% endblock %}{% endblock %}
+      {% block main %}
+        <div class="govuk-main-wrapper{% if mainClasses %} {{ mainClasses }}{% endif %}">
+          {% block content %}{% endblock %}
+        </div>
+      {% endblock %}
+      {% block containerEnd %}{% endblock %}
+    </div>
+  </main>
 {% endblock %}
 
 {% block footer %}

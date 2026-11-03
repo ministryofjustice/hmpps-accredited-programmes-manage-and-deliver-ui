@@ -8,7 +8,7 @@
 
 {% block main %}
   {% block content %}
-    <main class="govuk-main-wrapper" id="main-content">
+    <div class="govuk-main-wrapper">
         <div class="govuk-grid-row">
           {% include "../partials/headerMenu.njk" %}
           <div class="govuk-grid-column-three-quarters">
@@ -55,6 +55,6 @@
           {% endif %}
         </div>
       </div>
-    </main>
+    </div>
   {% endblock %}
 {% endblock %}
