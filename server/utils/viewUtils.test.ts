@@ -132,6 +132,18 @@ describe('ViewUtils', () => {
   })
 
   describe('summaryListArgs', () => {
+    it('prefixes action IDs when a page contains multiple summary lists', () => {
+      const args = ViewUtils.summaryListArgs(
+        [{ key: 'Group code', lines: ['ABC123'], changeLink: '/edit', deleteLink: '/delete' }],
+        { showBorders: true, idPrefix: 'group-code' },
+      )
+
+      expect(args.rows[0].actions.items).toEqual([
+        { href: '/delete', text: 'Delete', attributes: { id: 'group-code-delete-link-0' } },
+        { href: '/edit', text: 'Change', attributes: { id: 'group-code-change-link-0' } },
+      ])
+    })
+
     it('returns a summary list args object for passing to the govukSummaryList macro', () => {
       expect(
         ViewUtils.summaryListArgs([
