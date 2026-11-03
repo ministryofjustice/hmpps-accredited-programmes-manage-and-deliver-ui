@@ -8,31 +8,43 @@ export default class GroupDetailsView {
 
   get groupCodeSummary(): SummaryListArgs {
     return {
-      ...ViewUtils.summaryListArgs(this.presenter.getGroupCodeSummary()),
+      ...ViewUtils.summaryListArgs(this.presenter.getGroupCodeSummary(), { showBorders: true, idPrefix: 'group-code' }),
     }
   }
 
   get groupTimingsSummary(): SummaryListArgs {
     return {
-      ...ViewUtils.summaryListArgs(this.presenter.getGroupTimingsSummary()),
+      ...ViewUtils.summaryListArgs(this.presenter.getGroupTimingsSummary(), {
+        showBorders: true,
+        idPrefix: 'group-timings',
+      }),
     }
   }
 
   get groupParticipantsSummary(): SummaryListArgs {
     return {
-      ...ViewUtils.summaryListArgs(this.presenter.getGroupParticipantsSummary()),
+      ...ViewUtils.summaryListArgs(this.presenter.getGroupParticipantsSummary(), {
+        showBorders: true,
+        idPrefix: 'group-participants',
+      }),
     }
   }
 
   get groupLocationSummary(): SummaryListArgs {
     return {
-      ...ViewUtils.summaryListArgs(this.presenter.getGroupLocationSummary()),
+      ...ViewUtils.summaryListArgs(this.presenter.getGroupLocationSummary(), {
+        showBorders: true,
+        idPrefix: 'group-location',
+      }),
     }
   }
 
   get groupStaffSummary(): SummaryListArgs {
     return {
-      ...ViewUtils.summaryListArgs(this.presenter.getGroupStaffSummary()),
+      ...ViewUtils.summaryListArgs(this.presenter.getGroupStaffSummary(), {
+        showBorders: true,
+        idPrefix: 'group-staff',
+      }),
     }
   }
 
