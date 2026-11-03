@@ -2,6 +2,9 @@ import { ScheduleSessionTypeResponse } from '@manage-and-deliver-api'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
 
+type SessionTemplate = ScheduleSessionTypeResponse['sessionTemplates'][number]
+type SessionTemplateOption = SessionTemplate & { sessionScheduleTypes: SessionTemplate['sessionScheduleType'][] }
+
 export default class SessionScheduleWhichPresenter {
   constructor(
     private readonly groupId: string,
@@ -45,12 +48,7 @@ export default class SessionScheduleWhichPresenter {
   }
 
   get sessionTemplates() {
-    const templates = new Map<
-      string,
-      (typeof this.scheduleSessionTypeResponse.sessionTemplates)[number] & {
-        sessionScheduleTypes: string[]
-      }
-    >()
+    const templates = new Map<string, SessionTemplateOption>()
 
     this.scheduleSessionTypeResponse.sessionTemplates.forEach(template => {
       const existingTemplate = templates.get(template.id)
@@ -61,13 +59,23 @@ export default class SessionScheduleWhichPresenter {
       }
     })
 
-    return Array.from(templates.values()).map(template => {
+    return Array.from(templates.values()).flatMap<SessionTemplateOption>(template => {
       const sessionScheduleTypes = [...new Set(template.sessionScheduleTypes)]
       if (sessionScheduleTypes.includes('SCHEDULED') && !sessionScheduleTypes.includes('CATCH_UP')) {
         sessionScheduleTypes.push('CATCH_UP')
       }
 
-      return { ...template, sessionScheduleTypes }
+      const sessionName = template.name.replace(/ catch-up$/, '')
+      if (sessionName === 'Pre-group one-to-one' || sessionName === 'Post-programme review') {
+        return sessionScheduleTypes.map((sessionScheduleType): SessionTemplateOption => ({
+          ...template,
+          name: sessionScheduleType === 'CATCH_UP' ? `${sessionName} catch-up` : sessionName,
+          sessionScheduleType,
+          sessionScheduleTypes: [],
+        }))
+      }
+
+      return [{ ...template, sessionScheduleTypes }]
     })
   }
 }

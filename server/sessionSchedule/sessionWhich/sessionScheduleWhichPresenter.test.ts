@@ -56,6 +56,33 @@ describe('SessionScheduleWhichPresenter', () => {
   })
 
   describe('sessionTemplates', () => {
+    it.each(['Pre-group one-to-one', 'Post-programme review'])('offers two top-level choices for %s', name => {
+      const template = { ...mockScheduleSessionTypeResponse.sessionTemplates[1], name }
+      const presenter = new SessionScheduleWhichPresenter(groupId, {
+        ...mockScheduleSessionTypeResponse,
+        sessionTemplates: [template],
+      })
+
+      expect(presenter.sessionTemplates).toEqual([
+        { ...template, sessionScheduleTypes: [] },
+        { ...template, name: `${name} catch-up`, sessionScheduleType: 'CATCH_UP', sessionScheduleTypes: [] },
+      ])
+    })
+
+    it.each(['Pre-group one-to-one', 'Post-programme review'])('retains the API catch-up choice for %s', name => {
+      const template = { ...mockScheduleSessionTypeResponse.sessionTemplates[1], name }
+      const catchUpTemplate = { ...template, name: `${name} catch-up`, sessionScheduleType: 'CATCH_UP' as const }
+      const presenter = new SessionScheduleWhichPresenter(groupId, {
+        ...mockScheduleSessionTypeResponse,
+        sessionTemplates: [template, catchUpTemplate],
+      })
+
+      expect(presenter.sessionTemplates).toEqual([
+        { ...template, sessionScheduleTypes: [] },
+        { ...catchUpTemplate, sessionScheduleTypes: [] },
+      ])
+    })
+
     it('should return the available session templates', () => {
       const presenter = new SessionScheduleWhichPresenter(groupId, mockScheduleSessionTypeResponse, null)
 

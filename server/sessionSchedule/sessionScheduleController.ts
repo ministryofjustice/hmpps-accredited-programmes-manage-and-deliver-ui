@@ -44,9 +44,21 @@ export default class SessionScheduleController extends BaseController {
     if (req.method === 'POST') {
       const selectedSession = req.body['session-template']
       const selectedSessionTemplateId = typeof selectedSession === 'string' ? selectedSession.split('+')[0] : undefined
-      selectedSessionScheduleType = selectedSessionTemplateId
-        ? req.body[`session-schedule-type-${selectedSessionTemplateId}`]
-        : undefined
+      const selectedTemplate = new SessionScheduleWhichPresenter(
+        groupId,
+        scheduleSessionTypeResponse,
+      ).sessionTemplates.find(
+        template =>
+          template.id === selectedSessionTemplateId &&
+          (template.sessionScheduleTypes.length > 0 || template.sessionScheduleType === selectedSession.split('+')[1]),
+      )
+      if (selectedTemplate?.sessionScheduleTypes.length === 0) {
+        selectedSessionScheduleType = selectedTemplate.sessionScheduleType
+      } else {
+        selectedSessionScheduleType = selectedSessionTemplateId
+          ? req.body[`session-schedule-type-${selectedSessionTemplateId}`]
+          : undefined
+      }
 
       if (typeof selectedSession !== 'string' || !selectedSession) {
         res.status(400)
