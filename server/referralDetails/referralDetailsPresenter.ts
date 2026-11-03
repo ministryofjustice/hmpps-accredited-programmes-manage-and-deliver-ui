@@ -6,6 +6,7 @@ import { formatCohort } from '../utils/utils'
 import ViewUtils from '../utils/viewUtils'
 
 export enum ReferralDetailsPageSection {
+  ReferralSummaryTab = 'referralSummary',
   PersonalDetailsTab = 'personalDetails',
   OffenceHistoryTab = 'offenceHistory',
   SentenceInformationTab = 'sentenceInformation',
@@ -36,8 +37,16 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
     return {
       items: [
         {
+          text: 'Referral summary',
+          href: `/referral-details/${this.referralDetails.id}/referral-summary`,
+          active: this.subNavValue === ReferralDetailsPageSection.ReferralSummaryTab,
+          attributes: {
+            id: 'referral-summary',
+          },
+        },
+        {
           text: 'Personal details',
-          href: `/referral-details/${this.referralDetails.id}/personal-details/#personal-details`,
+          href: `/referral-details/${this.referralDetails.id}/personal-details`,
           active: this.subNavValue === ReferralDetailsPageSection.PersonalDetailsTab,
           attributes: {
             id: 'personal-details',
@@ -45,7 +54,7 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
         },
         {
           text: 'Offence history',
-          href: `/referral-details/${this.referralDetails.id}/offence-history/#offence-history`,
+          href: `/referral-details/${this.referralDetails.id}/offence-history`,
           active: this.subNavValue === ReferralDetailsPageSection.OffenceHistoryTab,
           attributes: {
             id: 'offence-history',
@@ -53,7 +62,7 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
         },
         {
           text: 'Sentence information',
-          href: `/referral-details/${this.referralDetails.id}/sentence-information/#sentence-information`,
+          href: `/referral-details/${this.referralDetails.id}/sentence-information`,
           active: this.subNavValue === ReferralDetailsPageSection.SentenceInformationTab,
           attributes: {
             id: 'sentence-information',

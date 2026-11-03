@@ -6,6 +6,9 @@ import OffenceHistoryPresenter from './offenceHistoryPresenter'
 import OffenceHistoryView from './offenceHistoryView'
 import PersonalDetailsPresenter from './personalDetailsPresenter'
 import PersonalDetailsView from './personalDetailsView'
+import { ReferralDetailsPageSection } from './referralDetailsPresenter'
+import ReferralSummaryPresenter from './referralSummaryPresenter'
+import ReferralSummaryView from './referralSummaryView'
 import SentenceInformationPresenter from './sentenceInformationPresenter'
 import SentenceInformationView from './sentenceInformationView'
 import StatusHistoryPresenter from './statusHistoryPresenter'
@@ -172,6 +175,31 @@ export default class ReferralDetailsController extends BaseController {
     const view = new AttendanceHistoryView(presenter)
 
     setReferralOriginPage(req, referralId)
+
+    return this.renderPage(res, view, sharedReferralDetailsData)
+  }
+
+  async showReferralSummaryPage(req: Request, res: Response): Promise<void> {
+    const { id } = req.params as Record<string, string>
+    const { isCohortUpdated, isLdcUpdated } = req.query
+    const { username } = req.user
+    const subNavValue = ReferralDetailsPageSection.ReferralSummaryTab
+
+    const sharedReferralDetailsData = await this.showReferralDetailsPage(id, username)
+
+    await sendAuditEvent('VIEW_REFERRAL_SUMMARY', username, sharedReferralDetailsData?.crn ?? id, 'CRN', {
+      referralId: id,
+    })
+
+    const presenter = new ReferralSummaryPresenter(
+      sharedReferralDetailsData,
+      subNavValue,
+      isLdcUpdated === 'true',
+      isCohortUpdated === 'true',
+    )
+    const view = new ReferralSummaryView(presenter)
+
+    setReferralOriginPage(req, id)
 
     return this.renderPage(res, view, sharedReferralDetailsData)
   }
