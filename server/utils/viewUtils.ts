@@ -74,7 +74,7 @@ export default class ViewUtils {
 
   static summaryListArgs(
     summaryListItems: SummaryListItem[],
-    options: { showBorders: boolean } = { showBorders: true },
+    options: { showBorders: boolean; idPrefix?: string } = { showBorders: true },
     classes: string = '',
   ): SummaryListArgs {
     return {
@@ -122,7 +122,7 @@ export default class ViewUtils {
                 items.push({
                   href: item.deleteLink,
                   text: 'Delete',
-                  attributes: { id: `delete-link-${index}` },
+                  attributes: { id: `${options.idPrefix ? `${options.idPrefix}-` : ''}delete-link-${index}` },
                 })
               }
               if (item.changeLink) {
@@ -130,7 +130,7 @@ export default class ViewUtils {
                   href: item.changeLink,
                   text: 'Change',
                   visuallyHiddenText: item.visuallyHiddenText,
-                  attributes: { id: `change-link-${index}` },
+                  attributes: { id: `${options.idPrefix ? `${options.idPrefix}-` : ''}change-link-${index}` },
                 })
               }
               return items
