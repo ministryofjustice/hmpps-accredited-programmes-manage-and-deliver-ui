@@ -56,15 +56,18 @@ describe('SessionScheduleWhichPresenter', () => {
   })
 
   describe('sessionTemplates', () => {
-    it.each(['Pre-group one-to-one', 'Post-programme review'])('preserves the original option for %s', name => {
-      const template = { ...mockScheduleSessionTypeResponse.sessionTemplates[1], name }
-      const presenter = new SessionScheduleWhichPresenter(groupId, {
-        ...mockScheduleSessionTypeResponse,
-        sessionTemplates: [template],
-      })
+    it.each(['Pre-group one-to-one', 'Post-programme review'])(
+      'returns %s without nested session type choices',
+      name => {
+        const template = { ...mockScheduleSessionTypeResponse.sessionTemplates[1], name }
+        const presenter = new SessionScheduleWhichPresenter(groupId, {
+          ...mockScheduleSessionTypeResponse,
+          sessionTemplates: [template],
+        })
 
-      expect(presenter.sessionTemplates).toEqual([{ ...template, sessionScheduleTypes: [] }])
-    })
+        expect(presenter.sessionTemplates).toEqual([{ ...template, sessionScheduleTypes: [] }])
+      },
+    )
 
     it.each(['Pre-group one-to-one', 'Post-programme review'])('retains the API catch-up choice for %s', name => {
       const template = { ...mockScheduleSessionTypeResponse.sessionTemplates[1], name }
