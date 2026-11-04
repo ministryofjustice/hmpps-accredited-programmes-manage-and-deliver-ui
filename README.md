@@ -109,6 +109,24 @@ $ script/seed.sh seed
 
 For more complete information, view the relevant documentation in the API codebase ([github link](https://github.com/ministryofjustice/hmpps-accredited-programmes-manage-and-deliver-api))
 
+### Excluded people for local testing
+
+The access-control WireMock mappings exclude CRNs ending in `1` or `2` for
+`REFER_MONITOR_PP` and `AUTH_ADM`. This includes seeded `S...` CRNs, so existing
+seeded referrals can appear with `isExcluded: true` without reseeding. The existing
+`SX...` exclusion examples are also preserved.
+
+After changing the mappings, reload them:
+
+```sh
+curl --fail -X POST http://localhost:9095/__admin/mappings/reset
+```
+
+Refresh `/region/open-referrals?sort=personName%2Casc`. With the API's
+exclusion-first pagination, excluded people appear at the end of the entire result
+set, with their CRN instead of a linked name and `Restricted` details. Both bulk
+and individual access checks use the same examples.
+
 ## Reporting CSV URL generator
 
 For manual reporting CSV downloads, use:
