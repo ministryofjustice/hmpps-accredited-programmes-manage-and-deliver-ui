@@ -34,67 +34,8 @@ export default class SessionNotesController extends BaseController {
     }
 
     if (req.method === 'POST') {
-      const form = new SessionNotesForm()
-      const submittedNotes = ((req.body.sessionNotes as string | undefined) || '').trim()
-      const validationError = form.validateSessionNotes(submittedNotes)
-
-      if (validationError) {
-        res.status(400)
-        const sessionNotesBffData = await this.getSessionNotesData(req, username, sessionId, referralId)
-
-        return this.renderSessionNotesPage(
-          res,
-          {
-            ...sessionNotesBffData,
-            referralId,
-            isAttendanceHistory,
-            source,
-            isSaved: req.query.saved === 'true',
-            personOnProbationName: (req.query.personOnProbationName as string | undefined) || undefined,
-            sessionNotes: submittedNotes,
-          },
-          validationError,
-        )
-      }
-
-      const attendanceBffData = await this.accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData(
-        username,
-        sessionId,
-        [referralId],
-      )
-
-      const attendee = attendanceBffData.people.find(person => person.referralId === referralId)
-      const outcomeCode = attendee?.attendance?.code as SessionAttendanceOutcomeCode | undefined
-
-      if (!outcomeCode) {
-        return res.redirect(`/${req.params.groupId}/${sessionId}/edit-session`)
-      }
-
-      await sendAuditEvent('CREATE_SESSION_ATTENDANCE', username, sessionId, 'SEARCH_TERM', {
-        details: { referralId, sessionNotes: submittedNotes },
-      })
-
-      await this.accreditedProgrammesManageAndDeliverService.createSessionAttendance(username, sessionId, {
-        attendees: [{ referralId, outcomeCode, sessionNotes: submittedNotes }],
-      })
-
-      this.clearCachedSessionNotes(req, sessionId, referralId)
-
-      const redirectQuery = new URLSearchParams({
-        referralId,
-        saved: 'true',
-        personOnProbationName: attendee?.name ?? '',
-      })
-
-      if (source === 'edit-session') {
-        redirectQuery.set('source', source)
-      }
-
-      if (isAttendanceHistory) {
-        redirectQuery.set('isAttendanceHistory', 'true')
-      }
-
-      return res.redirect(`${req.path}?${redirectQuery.toString()}`)
+      this.seedAttendanceSelection(req, referralId)
+      return res.redirect(`/${req.params.groupId}/${sessionId}/record-attendance`)
     }
     if (req.method === 'GET') {
       await sendAuditEvent('VIEW_SESSION_NOTES_DATA', username, sessionId, 'SEARCH_TERM', {

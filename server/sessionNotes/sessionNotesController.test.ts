@@ -56,10 +56,9 @@ describe('SessionNotesController', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('Alex River: Getting started Introduction to Building Choices session notes')
-          expect(res.text).toContain('Participant engaged well.\nSecond paragraph.')
+          expect(res.text).toContain('Participant engaged well.<br/>Second paragraph.')
           expect(res.text).toContain('Last updated by John Smith on 19 March 2026')
           expect(res.text).toContain('21 July 2025')
-          expect(res.text).toContain('name="sessionNotes"')
         })
 
       expect(accreditedProgrammesManageAndDeliverService.getSessionNotes).toHaveBeenCalledWith(
@@ -97,94 +96,17 @@ describe('SessionNotesController', () => {
         .expect(404)
     })
 
-    it('saves edited notes and redirects back to page', async () => {
-      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue(sessionNotesFactory())
-
-      accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue({
-        sessionTitle: 'Introduction to Building Choices',
-        sessionModule: 'Getting started 1',
-        groupRegionName: 'North East',
-        isCatchup: false,
-        people: [
-          {
-            referralId: 'referral-123',
-            name: 'Alex River',
-            crn: 'X12345',
-            attendance: {
-              code: 'AFTC',
-              text: 'Attended, failed to comply',
-            },
-            sessionNotes: 'Existing note.',
-            options: [],
-            isLao: false,
-            isExcluded: false,
-          },
-        ],
-      })
-
-      accreditedProgrammesManageAndDeliverService.createSessionAttendance.mockResolvedValue({
-        attendees: [
-          {
-            referralId: 'referral-123',
-            outcomeCode: 'AFTC',
-            sessionNotes: 'Updated note',
-          },
-        ],
-      })
-
+    it('seeds attendance selection and redirects to record attendance on POST', async () => {
       await request(app)
         .post('/111/6789/getting-started-1-attendance-and-session-notes?referralId=referral-123&source=edit-session')
         .send({ sessionNotes: 'Updated note' })
         .expect(302)
-        .expect(
-          'Location',
-          '/111/6789/getting-started-1-attendance-and-session-notes?referralId=referral-123&saved=true&personOnProbationName=Alex+River&source=edit-session',
-        )
+        .expect('Location', '/111/6789/record-attendance')
 
-      expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).toHaveBeenCalledWith(
-        'user1',
-        '6789',
-        {
-          attendees: [
-            {
-              referralId: 'referral-123',
-              outcomeCode: 'AFTC',
-              sessionNotes: 'Updated note',
-            },
-          ],
-        },
-      )
-
-      expect(sendAuditEvent).toHaveBeenCalledWith(
-        'CREATE_SESSION_ATTENDANCE',
-        'user1',
-        '6789',
-        'SEARCH_TERM',
-        expect.objectContaining({
-          details: expect.objectContaining({ referralId: 'referral-123', sessionNotes: 'Updated note' }),
-        }),
-      )
-
-      expect(sendAuditEvent).not.toHaveBeenCalledWith(
-        'VIEW_SESSION_NOTES_DATA',
-        expect.anything(),
-        expect.anything(),
-        expect.anything(),
-        expect.anything(),
-      )
+      expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).not.toHaveBeenCalled()
     })
 
-    it('clears cached session notes after saving so redirected page reloads fresh data', async () => {
-      const sessionData: Partial<SessionData> = {
-        sessionNotesCache: {
-          sessionId: '6789',
-          referralId: 'referral-123',
-          data: sessionNotesFactory({}),
-        },
-      }
-
-      app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
-
+    it('scopes seeded selection to the posted referral so record attendance opens for that person', async () => {
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue({
         sessionTitle: 'Introduction to Building Choices',
         sessionModule: 'Getting started 1',
@@ -206,18 +128,6 @@ describe('SessionNotesController', () => {
           },
         ],
       })
-
-      accreditedProgrammesManageAndDeliverService.createSessionAttendance.mockResolvedValue({
-        attendees: [
-          {
-            referralId: 'referral-123',
-            outcomeCode: 'AFTC',
-            sessionNotes: 'Updated note',
-          },
-        ],
-      })
-
-      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue(sessionNotesFactory())
 
       const agent = request.agent(app)
 
@@ -225,13 +135,14 @@ describe('SessionNotesController', () => {
         .post('/111/6789/getting-started-1-attendance-and-session-notes?referralId=referral-123')
         .send({ sessionNotes: 'Updated note' })
         .expect(302)
+        .expect('Location', '/111/6789/record-attendance')
 
-      await agent.get('/111/6789/getting-started-1-attendance-and-session-notes?referralId=referral-123').expect(200)
+      await agent.get('/111/6789/record-attendance').expect(200)
 
-      expect(accreditedProgrammesManageAndDeliverService.getSessionNotes).toHaveBeenCalledWith(
+      expect(accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData).toHaveBeenCalledWith(
         'user1',
         '6789',
-        'referral-123',
+        ['referral-123'],
       )
     })
 
@@ -249,7 +160,7 @@ describe('SessionNotesController', () => {
         })
     })
 
-    it('renders textarea when session notes are blank', async () => {
+    it('shows no notes added message when session notes are blank', async () => {
       accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue(
         sessionNotesFactory({
           sessionNotes: null,
@@ -261,47 +172,9 @@ describe('SessionNotesController', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain('No notes added')
-          expect(res.text).toContain('id="sessionNotes"')
-          expect(res.text).toContain('name="sessionNotes"')
+          expect(res.text).not.toContain('id="sessionNotes"')
+          expect(res.text).not.toContain('name="sessionNotes"')
         })
-    })
-
-    it('shows validation error when session notes exceed 10000 characters', async () => {
-      accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue(sessionNotesFactory())
-
-      await request(app)
-        .post('/111/6789/getting-started-1-attendance-and-session-notes?referralId=referral-123')
-        .send({ sessionNotes: 'a'.repeat(10001) })
-        .expect(400)
-        .expect(res => {
-          expect(res.text).toContain('Session notes must be 10,000 characters or fewer')
-        })
-
-      expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).not.toHaveBeenCalled()
-    })
-
-    it('reuses cached session notes data on validation error', async () => {
-      app = TestUtils.createTestAppWithSession(
-        {
-          sessionNotesCache: {
-            sessionId: '6789',
-            referralId: 'referral-123',
-            data: sessionNotesFactory(),
-          },
-        },
-        { accreditedProgrammesManageAndDeliverService },
-      )
-
-      await request(app)
-        .post('/111/6789/getting-started-1-attendance-and-session-notes?referralId=referral-123')
-        .send({ sessionNotes: 'a'.repeat(10001) })
-        .expect(400)
-        .expect(res => {
-          expect(res.text).toContain('Session notes must be 10,000 characters or fewer')
-        })
-
-      expect(accreditedProgrammesManageAndDeliverService.getSessionNotes).not.toHaveBeenCalled()
-      expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).not.toHaveBeenCalled()
     })
 
     it('uses attendance history backlink when opened from PoP attendance history', async () => {
