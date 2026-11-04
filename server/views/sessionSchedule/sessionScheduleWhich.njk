@@ -63,7 +63,7 @@
                                                                     value: sessionTemplateValue,
                                                                     text: template.name,
                                                                     checked: selectedSessionTemplateId == template.id if template.sessionScheduleTypes.length else selectedSession == sessionTemplateValue,
-                                                                    conditional: { html: sessionTypeHtml } if template.sessionScheduleTypes.length
+                                                                    conditional: { html: sessionTypeHtml } if template.sessionScheduleTypes.length else null
                                                                 }) %}
                                                         {% endfor %}
                                                         {{ govukRadios({
