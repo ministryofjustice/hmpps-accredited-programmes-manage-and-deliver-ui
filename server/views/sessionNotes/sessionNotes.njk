@@ -68,13 +68,13 @@
             {% if showNoNotesAddedMessage %}
               <p class="govuk-body-l">No notes added</p>
             {% else %}
-              <p class="govuk-body-m">{{ textareaArgs.value | escape | replace('\n', '<br/>') | safe }}</p>
+              <p class="govuk-body-m">{{ sessionNotesText | escape | replace('\n', '<br/>') | safe }}</p>
             {% endif %}
           {% else %}
             {% if showNoNotesAddedMessage %}
               <p class="govuk-body-l">No notes added</p>
             {% endif %}
-            {{ govukTextarea(textareaArgs) }}
+            <p class="govuk-body-m">{{ sessionNotesText | escape | replace('\n', '<br/>') | safe }}</p>
           {% endif %}
         </section>
       </form>
