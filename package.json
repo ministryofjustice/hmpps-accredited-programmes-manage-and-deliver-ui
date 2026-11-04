@@ -116,7 +116,7 @@
   "devDependencies": {
     "@faker-js/faker": "^10.6.0",
     "@jgoz/esbuild-plugin-typecheck": "^5.0.0",
-    "@ministryofjustice/eslint-config-hmpps": "^1.0.3",
+    "@ministryofjustice/eslint-config-hmpps": "^1.0.4",
     "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.6",
     "@tsconfig/node24": "^24.0.5",
     "@types/bunyan": "^1.8.11",
