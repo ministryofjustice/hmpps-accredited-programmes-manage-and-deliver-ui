@@ -20,7 +20,7 @@ describe(`getHorizontalSubNavArgs.`, () => {
     expect(presenter.getHorizontalSubNavArgs().items).toStrictEqual([
       {
         text: 'Referral details',
-        href: `/referral-details/${referralDetails.id}/personal-details`,
+        href: `/referral-details/${referralDetails.id}/referral-summary`,
         active: true,
       },
       {
