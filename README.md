@@ -40,8 +40,10 @@ v3. Forcing core v3 causes the process to crash when HTTP instrumentation create
 a span, including on Kubernetes probes.
 
 Run `npm test -- --runInBand server/packageDependencies.test.ts` after telemetry
-dependency updates. This exercises an HTTP probe with telemetry enabled in a
-separate process, without Azure credentials or external network access.
+dependency updates. This checks that the manifest pins core v2 and the lockfile
+resolves the same version. It reads JSON only; it does not start a subprocess,
+load telemetry modules or make network requests. It is a dependency guard, not
+an end-to-end probe test; verify `/ping` after deployment as well.
 
 ## PDS footer
 
