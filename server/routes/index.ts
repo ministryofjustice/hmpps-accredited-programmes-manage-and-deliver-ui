@@ -140,6 +140,10 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await referralDetailsController.showSentenceInformationPage(req, res)
   })
 
+  get('/referral-details/:id/referral-summary', async (req, res, next) => {
+    await referralDetailsController.showReferralSummaryPage(req, res)
+  })
+
   get('/referral/:id/availability-and-motivation/availability', async (req, res, next) => {
     await availabilityAndMotivationController.showAvailabilityPage(req, res)
   })

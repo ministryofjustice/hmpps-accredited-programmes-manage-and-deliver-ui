@@ -121,7 +121,7 @@ export default class ReferralLayoutPresenter {
       items: [
         {
           text: 'Referral details',
-          href: `/referral-details/${this.referral.id}/personal-details`,
+          href: `/referral-details/${this.referral.id}/referral-summary`,
           active: this.horizontalNavValue === HorizontalNavValues.referralDetailsTab,
         },
         {
