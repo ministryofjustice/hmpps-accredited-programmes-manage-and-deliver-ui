@@ -32,6 +32,19 @@ $ npm run start:dev
 ```
 
 
+## Telemetry dependency compatibility
+
+The OpenTelemetry SDK used by Azure telemetry requires core v2. Keep the
+`@opentelemetry/core` override on the compatible v2 release until the SDK supports
+v3. Forcing core v3 causes the process to crash when HTTP instrumentation creates
+a span, including on Kubernetes probes.
+
+Run `npm test -- --runInBand server/packageDependencies.test.ts` after telemetry
+dependency updates. This checks that the manifest pins core v2 and the lockfile
+resolves the same version. It reads JSON only; it does not start a subprocess,
+load telemetry modules or make network requests. It is a dependency guard, not
+an end-to-end probe test; verify `/ping` after deployment as well.
+
 ## PDS footer
 
 The shared footer is fetched using the
