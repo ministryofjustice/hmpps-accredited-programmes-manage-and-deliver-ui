@@ -150,7 +150,7 @@ export default class CaselistPresenter {
       referralData.push([
         {
           html: !isExcluded
-            ? `<a href='/referral-details/${referral.referralId}/personal-details'>${referral.personName}</a>${crnHtml}${CaselistUtils.hasLaoBadgeHtml(referral)}`
+            ? `<a href='/referral-details/${referral.referralId}/referral-summary'>${referral.personName}</a>${crnHtml}${CaselistUtils.hasLaoBadgeHtml(referral)}`
             : `${crnHtml}${CaselistUtils.hasLaoBadgeHtml(referral)}`,
           attributes: isExcluded
             ? { 'data-sort-value': referral.crn, 'data-excluded': 'true' }
