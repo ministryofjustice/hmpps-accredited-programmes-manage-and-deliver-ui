@@ -1,11 +1,10 @@
 import { Request, Response } from 'express'
-import { SessionAttendanceOutcomeCode, SessionNotes } from '@manage-and-deliver-api'
+import { SessionNotes } from '@manage-and-deliver-api'
 import BaseController from '../shared/baseController'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import { FormValidationError } from '../utils/formValidationError'
 import SessionNotesView from './sessionNotesView'
-import SessionNotesForm from './sessionNotesForm'
 import SessionNotesPresenter, { SessionNotesData } from './sessionNotesPresenter'
 import sendAuditEvent from '../services/auditService'
 
