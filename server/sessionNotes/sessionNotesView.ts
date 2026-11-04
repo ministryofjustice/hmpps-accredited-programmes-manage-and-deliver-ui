@@ -30,22 +30,6 @@ export default class SessionNotesView {
     ]
   }
 
-  private get textareaArgs() {
-    const { value } = this.presenter.fields.sessionNotes
-
-    return {
-      id: 'sessionNotes',
-      name: 'sessionNotes',
-      value,
-      rows: this.presenter.getNotesRows(value),
-      errorMessage: ViewUtils.govukErrorMessage(this.presenter.fields.sessionNotes.errorMessage),
-      label: {
-        text: this.presenter.text.sessionNotesTitle,
-        classes: 'govuk-visually-hidden',
-      },
-    }
-  }
-
   private get showNoNotesAddedMessage(): boolean {
     const { value } = this.presenter.fields.sessionNotes
     return value.trim().length === 0
@@ -62,7 +46,7 @@ export default class SessionNotesView {
         notesBodyArgs: this.notesBodyArgs,
         pageHeaderActionsArgs: this.presenter.pageHeaderActionsArgs,
         showNoNotesAddedMessage: this.showNoNotesAddedMessage,
-        textareaArgs: this.textareaArgs,
+        sessionNotesText: this.presenter.fields.sessionNotes.value,
         text: this.presenter.text,
         successMessageSummary: this.presenter.successMessageSummary,
       },
