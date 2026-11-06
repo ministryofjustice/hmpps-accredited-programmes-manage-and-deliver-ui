@@ -102,14 +102,95 @@ describe(`Caselist controller`, () => {
     expect(accreditedProgrammesManageAndDeliverService.getOpenCaselist).toHaveBeenNthCalledWith(
       1,
       'user1',
-      { page: 0, size: 50 },
+      { page: 0, size: 50, sort: ['personName,asc'] },
       { pdu: ['PDU2'], reportingTeam: ['Team1'] },
     )
     expect(accreditedProgrammesManageAndDeliverService.getOpenCaselist).toHaveBeenNthCalledWith(
       2,
       'user1',
-      { page: 0, size: 50 },
+      { page: 0, size: 50, sort: ['personName,asc'] },
       { pdu: ['PDU2'] },
     )
   })
+
+  it('sorts open referrals through the API before pagination', async () => {
+    await request(app).get('/region/open-referrals?sort=sentenceEndDate,desc').expect(200)
+
+    expect(accreditedProgrammesManageAndDeliverService.getOpenCaselist).toHaveBeenCalledWith(
+      'user1',
+      { page: 0, size: 50, sort: ['sentenceEndDate,desc'] },
+      {},
+    )
+  })
+
+  it('uses the default sort when an unsupported sort field is requested', async () => {
+    await request(app).get('/region/open-referrals?sort=unknown,desc').expect(200)
+
+    expect(accreditedProgrammesManageAndDeliverService.getOpenCaselist).toHaveBeenCalledWith(
+      'user1',
+      { page: 0, size: 50, sort: ['personName,asc'] },
+      {},
+    )
+  })
+
+  it('uses the default sort when an unsupported sort direction is requested', async () => {
+    await request(app).get('/region/open-referrals?sort=personName,not-a-direction').expect(200)
+
+    expect(accreditedProgrammesManageAndDeliverService.getOpenCaselist).toHaveBeenCalledWith(
+      'user1',
+      { page: 0, size: 50, sort: ['personName,asc'] },
+      {},
+    )
+  })
+
+  test.each(['not-a-page', '-1', '0', '1.5'])('uses the first page when page=%s is requested', async page => {
+    await request(app).get(`/region/open-referrals?page=${page}`).expect(200)
+
+    expect(accreditedProgrammesManageAndDeliverService.getOpenCaselist).toHaveBeenCalledWith(
+      'user1',
+      { page: 0, size: 50, sort: ['personName,asc'] },
+      {},
+    )
+  })
+
+  it('uses the requested one-indexed page when a positive integer page is requested', async () => {
+    await request(app).get('/region/open-referrals?page=3').expect(200)
+
+    expect(accreditedProgrammesManageAndDeliverService.getOpenCaselist).toHaveBeenCalledWith(
+      'user1',
+      { page: 2, size: 50, sort: ['personName,asc'] },
+      {},
+    )
+  })
+
+  test.each(['/region/open-referrals', '/region/closed-referrals'])(
+    'keeps the requested sort in headers and pagination for %s',
+    async url => {
+      const response = await request(app).get(`${url}?page=2&sort=sex,desc`).expect(200)
+      const $ = cheerio.load(response.text)
+
+      expect($('thead th').eq(5).attr('aria-sort')).toBe('descending')
+      expect(
+        $('.govuk-pagination a')
+          .toArray()
+          .some(link => $(link).attr('href')?.includes('sort=sex%2Cdesc')),
+      ).toBe(true)
+    },
+  )
+
+  test.each(['/region/open-referrals?sort=sex,desc,extra', '/region/open-referrals?sort=sex,desc&sort=status,asc'])(
+    'uses the default sort for malformed sort parameters: %s',
+    async url => {
+      const response = await request(app).get(url).expect(200)
+      const $ = cheerio.load(response.text)
+
+      expect(accreditedProgrammesManageAndDeliverService.getOpenCaselist).toHaveBeenCalledWith(
+        'user1',
+        { page: 0, size: 50, sort: ['personName,asc'] },
+        {},
+      )
+      expect($('thead th').eq(0).attr('aria-sort')).toBe('ascending')
+      expect($('thead th').eq(5).attr('aria-sort')).toBe('none')
+    },
+  )
 })

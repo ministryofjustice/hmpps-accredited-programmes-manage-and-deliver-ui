@@ -20,13 +20,86 @@ const pinExcludedRowsToBottom = table => {
     .forEach(row => tbody.appendChild(row))
 }
 
-document.querySelectorAll('[data-caselist-table="true"]').forEach(table => {
+// Server-side sorting reloads the page, which would otherwise drop focus back to the top of the document
+// and lose the MOJ component's "Sort by ..." announcement. Remember which column was sorted so that,
+// after the reload, focus can be returned to that header and the new sort order announced.
+const SORTED_HEADER_STORAGE_KEY = 'sortable-table:last-sorted-header'
+const sortableTables = Array.from(document.querySelectorAll('[data-caselist-table="true"]'))
+
+sortableTables.forEach((table, tableIndex) => {
   pinExcludedRowsToBottom(table)
   const thead = table.querySelector('thead')
   if (thead) {
+    thead.addEventListener(
+      'click',
+      event => {
+        const target = event.target instanceof Element ? event.target : null
+        if (!target) return
+
+        const clickable = target.closest('a, button')
+        const header = clickable ? clickable.closest('th') : null
+        const sortUrl =
+          (clickable && clickable.tagName === 'A' ? clickable.getAttribute('href') : null) ||
+          (header ? header.getAttribute('data-sort-url') : null)
+        if (!sortUrl) return
+
+        event.preventDefault()
+        event.stopImmediatePropagation()
+
+        try {
+          window.sessionStorage.setItem(
+            SORTED_HEADER_STORAGE_KEY,
+            JSON.stringify({
+              path: window.location.pathname,
+              tableIndex,
+              columnIndex: Array.from(header.parentElement.children).indexOf(header),
+              scrollX: window.scrollX,
+              scrollY: window.scrollY,
+            }),
+          )
+        } catch (error) {
+          // Ignore storage write errors (e.g. disabled cookies/private mode).
+        }
+        window.location.assign(sortUrl)
+      },
+      { capture: true },
+    )
     thead.addEventListener('click', () => pinExcludedRowsToBottom(table))
   }
 })
+
+;(() => {
+  let stored
+  try {
+    stored = JSON.parse(window.sessionStorage.getItem(SORTED_HEADER_STORAGE_KEY))
+    window.sessionStorage.removeItem(SORTED_HEADER_STORAGE_KEY)
+  } catch (error) {
+    return
+  }
+  if (!stored || stored.path !== window.location.pathname) return
+
+  const table = sortableTables[stored.tableIndex]
+  const header = table?.querySelectorAll('thead th')[stored.columnIndex]
+  const button = header?.querySelector('button, a')
+  if (!button) return
+
+  // Keep the page where the user left it rather than letting focus() scroll the header into view.
+  if (typeof stored.scrollY === 'number') {
+    window.scrollTo(stored.scrollX || 0, stored.scrollY)
+    button.focus({ preventScroll: true })
+  } else {
+    button.focus()
+  }
+
+  const direction = header.getAttribute('aria-sort')
+  const status = table.nextElementSibling
+  if (direction && direction !== 'none' && status?.getAttribute('role') === 'status') {
+    // Delay so screen readers register the (already present) live region before its content changes.
+    window.setTimeout(() => {
+      status.textContent = `Sort by ${button.textContent.trim()} (${direction})`
+    }, 500)
+  }
+})()
 
 // Progressive enhancement for the collapsible checkbox filter: filter the list of
 // checkboxes as the user types into the search box. Checked options always remain
