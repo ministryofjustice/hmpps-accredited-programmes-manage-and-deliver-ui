@@ -1,6 +1,7 @@
 {
   "mappings": [
     {
+      "priority": 1,
       "request": {
         "method": "POST",
         "urlPathPattern": "/user/.*/access"
@@ -10,7 +11,7 @@
         "headers": {
           "Content-Type": "application/json"
         },
-        "body": "{\"access\": [{{#each (jsonPath request.body '$[*]') as |crn|}}{{#unless @first}},{{/unless}}{\"crn\": \"{{crn}}\", \"userExcluded\": {{#eq (substring crn 0 2) 'SX'}}true{{else}}{{#if (matches crn '.*[12]')}}{{#if (matches request.pathSegments.[1] 'AUTH_ADM|REFER_MONITOR_PP')}}true{{else}}false{{/if}}{{else}}false{{/if}}{{/eq}}, \"userRestricted\": false}{{/each}}]}",
+        "body": "{\"access\": [{{#each (jsonPath request.body '$[*]') as |crn|}}{{#unless @first}},{{/unless}}{\"crn\": \"{{crn}}\", \"userExcluded\": {{#if (matches request.pathSegments.[1] 'AUTH_ADM|REFER_MONITOR_PP')}}{{#if (matches crn 'SX.*|.*[12]')}}true{{else}}false{{/if}}{{else}}false{{/if}}, \"userRestricted\": false}{{/each}}]}",
         "transformers": ["response-template"]
       }
     }

@@ -162,4 +162,35 @@ describe(`Caselist controller`, () => {
       {},
     )
   })
+
+  test.each(['/region/open-referrals', '/region/closed-referrals'])(
+    'keeps the requested sort in headers and pagination for %s',
+    async url => {
+      const response = await request(app).get(`${url}?page=2&sort=sex,desc`).expect(200)
+      const $ = cheerio.load(response.text)
+
+      expect($('thead th').eq(5).attr('aria-sort')).toBe('descending')
+      expect(
+        $('.govuk-pagination a')
+          .toArray()
+          .some(link => $(link).attr('href')?.includes('sort=sex%2Cdesc')),
+      ).toBe(true)
+    },
+  )
+
+  test.each(['/region/open-referrals?sort=sex,desc,extra', '/region/open-referrals?sort=sex,desc&sort=status,asc'])(
+    'uses the default sort for malformed sort parameters: %s',
+    async url => {
+      const response = await request(app).get(url).expect(200)
+      const $ = cheerio.load(response.text)
+
+      expect(accreditedProgrammesManageAndDeliverService.getOpenCaselist).toHaveBeenCalledWith(
+        'user1',
+        { page: 0, size: 50, sort: ['personName,asc'] },
+        {},
+      )
+      expect($('thead th').eq(0).attr('aria-sort')).toBe('ascending')
+      expect($('thead th').eq(5).attr('aria-sort')).toBe('none')
+    },
+  )
 })

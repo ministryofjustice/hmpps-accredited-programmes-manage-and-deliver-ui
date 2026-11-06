@@ -6,7 +6,7 @@ import Pagination from '../utils/pagination/pagination'
 import ViewUtils from '../utils/viewUtils'
 import CaselistFilter from './caselistFilter'
 import CaselistUtils from './caseListUtils'
-import { CaselistSortField, caselistSortFields } from './caselistSort'
+import { CaselistSort, CaselistSortField, parseCaselistSort } from './caselistSort'
 
 export enum CaselistPageSection {
   Open = 1,
@@ -120,13 +120,9 @@ export default class CaselistPresenter {
     }
   }
 
-  private get sort(): [CaselistSortField, 'asc' | 'desc'] {
+  private get sort(): CaselistSort {
     const searchParams = new URLSearchParams(this.params)
-    const [field, direction] = searchParams.get('sort')?.split(',') ?? []
-
-    return caselistSortFields.includes(field as CaselistSortField) && (direction === 'asc' || direction === 'desc')
-      ? [field as CaselistSortField, direction]
-      : ['personName', 'asc']
+    return parseCaselistSort(searchParams.getAll('sort'))
   }
 
   private sortUrl(field: CaselistSortField, direction: 'asc' | 'desc'): string {

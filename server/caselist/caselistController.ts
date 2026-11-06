@@ -9,11 +9,7 @@ import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
 import sendAuditEvent from '../services/auditService'
 import RetainedFilters from '../shared/filters/retainedFilters'
-import { caselistSortFields } from './caselistSort'
-
-const caselistSortFieldSet: ReadonlySet<string> = new Set(caselistSortFields)
-const caselistSortDirections = new Set(['asc', 'desc'])
-const defaultSort = 'personName,asc'
+import { parseCaselistSort } from './caselistSort'
 
 export default class CaselistController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Caselist
@@ -27,10 +23,9 @@ export default class CaselistController extends BaseController {
   }
 
   private prepareSessionFilterParams(req: Request) {
-    const pageNumber = req.query.page
-    if (pageNumber === undefined) {
-      req.session.filterParams = req.originalUrl.includes('?') ? req.originalUrl.split('?').pop() : undefined
-    }
+    const filterParams = new URLSearchParams(req.originalUrl.split('?')[1] ?? '')
+    filterParams.delete('page')
+    req.session.filterParams = filterParams.toString() || undefined
   }
 
   private filtersDiffer(left: CaselistFilter, right: CaselistFilter): boolean {
@@ -39,17 +34,13 @@ export default class CaselistController extends BaseController {
 
   private paginationParams(req: Request) {
     const pageNumber = typeof req.query.page === 'string' ? Number(req.query.page) : NaN
-    const requestedSort = typeof req.query.sort === 'string' ? req.query.sort : undefined
-    const sortParts = requestedSort?.split(',') ?? []
-    const sort =
-      sortParts.length === 2 && caselistSortFieldSet.has(sortParts[0]) && caselistSortDirections.has(sortParts[1])
-        ? requestedSort
-        : defaultSort
+    const sortValues = typeof req.query.sort === 'string' ? [req.query.sort] : []
+    const [sortField, sortDirection] = parseCaselistSort(sortValues)
 
     return {
       page: Number.isInteger(pageNumber) && pageNumber > 0 ? pageNumber - 1 : 0,
       size: 50,
-      sort: [sort],
+      sort: [`${sortField},${sortDirection}`],
     }
   }
 
