@@ -83,6 +83,7 @@
       </p>
       {% if presenter.referralCaseListItems.content.length > 0 %}
         {{ govukTable(presenter.getCaseloadTableArgs()) }}
+        <p role="status" aria-live="polite" aria-atomic="true" class="govuk-visually-hidden"></p>
       {% endif %}
 
       {% include "../partials/pagination.njk" %}
