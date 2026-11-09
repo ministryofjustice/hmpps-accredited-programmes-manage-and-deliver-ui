@@ -6,7 +6,7 @@ ARG GIT_REF=not-available
 
 LABEL maintainer="HMPPS Digital Studio <info@digital.justice.gov.uk>"
 
-RUN npm install --global --no-audit --no-fund npm@11.21.1
+RUN npm install --global --no-audit --no-fund npm@11.21.2
 
 RUN apk --update-cache upgrade --available \
   && apk --no-cache add tzdata \
