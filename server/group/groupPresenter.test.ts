@@ -201,7 +201,7 @@ describe('groupTableArgs', () => {
           },
         },
         {
-          text: 'Sex',
+          text: 'Gender',
           attributes: {
             'aria-sort': 'none',
           },

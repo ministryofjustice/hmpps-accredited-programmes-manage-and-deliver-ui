@@ -59,7 +59,7 @@ export default class GroupView {
       checked: item.checked ?? false,
     }))
     return {
-      title: 'Sex',
+      title: 'Gender',
       name: 'sex',
       dataQa: 'sex',
       selectedCount: options.filter(option => option.checked).length,
