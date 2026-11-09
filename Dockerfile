@@ -11,6 +11,9 @@ RUN npm install --global --no-audit --no-fund npm@11.21.2
 # Remove vulnerable global packages from base image
 RUN npm remove --global http-cache-semantics 2>/dev/null || true
 
+# Remove vulnerable global packages from base image
+RUN npm remove --global http-cache-semantics 2>/dev/null || true
+
 RUN apk --update-cache upgrade --available \
   && apk --no-cache add tzdata \
   && rm -rf /var/cache/apk/*
