@@ -6,7 +6,7 @@ ARG GIT_REF=not-available
 
 LABEL maintainer="HMPPS Digital Studio <info@digital.justice.gov.uk>"
 
-RUN npm install --global --no-audit --no-fund npm@11.21.1
+RUN npm install --global --no-audit --no-fund npm@11.21.2
 
 # Remove vulnerable global packages from base image
 RUN npm remove --global http-cache-semantics 2>/dev/null || true
