@@ -46,6 +46,7 @@ ARG GIT_BRANCH
 
 COPY package*.json .npmrc .allowed-scripts.mjs ./
 RUN npm run setup --no-audit
+RUN npm audit fix --omit=dev --omit=peer --force || true
 ENV NODE_ENV='production'
 
 COPY . .
