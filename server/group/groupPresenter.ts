@@ -106,7 +106,7 @@ export default class GroupPresenter {
           },
         },
         {
-          text: 'Sex',
+          text: 'Gender',
           attributes: {
             'aria-sort': 'none',
           },
