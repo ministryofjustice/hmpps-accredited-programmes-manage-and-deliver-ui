@@ -8,6 +8,9 @@ LABEL maintainer="HMPPS Digital Studio <info@digital.justice.gov.uk>"
 
 RUN npm install --global --no-audit --no-fund npm@11.21.2
 
+# Remove vulnerable global packages from base image
+RUN npm remove --global http-cache-semantics 2>/dev/null || true
+
 RUN apk --update-cache upgrade --available \
   && apk --no-cache add tzdata \
   && rm -rf /var/cache/apk/*
@@ -43,6 +46,7 @@ ARG GIT_BRANCH
 
 COPY package*.json .npmrc .allowed-scripts.mjs ./
 RUN npm run setup --no-audit
+RUN npm audit fix --omit=dev --omit=peer --force || true
 ENV NODE_ENV='production'
 
 COPY . .
