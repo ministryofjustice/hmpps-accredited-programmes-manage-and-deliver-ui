@@ -47,6 +47,8 @@ ARG BUILD_NUMBER
 ARG GIT_REF
 ARG GIT_BRANCH
 
+RUN apk --no-cache add python3 make g++
+
 COPY package*.json .npmrc .allowed-scripts.mjs ./
 RUN npm run setup --no-audit
 RUN npm audit fix --omit=dev --omit=peer --force || true
