@@ -165,45 +165,58 @@ describe('groupTableArgs', () => {
 
     expect(presenter.groupTableArgs).toEqual({
       attributes: {
+        'data-caselist-table': 'true',
         'data-module': 'moj-sortable-table',
       },
       caption: 'Not started or in progress groups',
       captionClasses: 'govuk-table__caption--m',
       head: [
         {
-          text: 'Group code',
+          html: '<a href="?sort=code%2Cdesc">Group code</a>',
           attributes: {
             'aria-sort': 'ascending',
+            'aria-label': 'Group code: currently sorted ascending, activate to sort descending',
+            'data-sort-url': '?sort=code%2Cdesc',
           },
         },
         {
-          text: 'Start date',
+          html: '<a href="?sort=startedAtDate%2Casc">Start date</a>',
           attributes: {
             'aria-sort': 'none',
+            'aria-label': 'Start date: activate to sort ascending',
+            'data-sort-url': '?sort=startedAtDate%2Casc',
           },
         },
         {
-          text: 'PDU',
+          html: '<a href="?sort=probationDeliveryUnitName%2Casc">PDU</a>',
           attributes: {
             'aria-sort': 'none',
+            'aria-label': 'PDU: activate to sort ascending',
+            'data-sort-url': '?sort=probationDeliveryUnitName%2Casc',
           },
         },
         {
-          text: 'Delivery location',
+          html: '<a href="?sort=deliveryLocationName%2Casc">Delivery location</a>',
           attributes: {
             'aria-sort': 'none',
+            'aria-label': 'Delivery location: activate to sort ascending',
+            'data-sort-url': '?sort=deliveryLocationName%2Casc',
           },
         },
         {
-          text: 'Cohort',
+          html: '<a href="?sort=cohort%2Casc">Cohort</a>',
           attributes: {
             'aria-sort': 'none',
+            'aria-label': 'Cohort: activate to sort ascending',
+            'data-sort-url': '?sort=cohort%2Casc',
           },
         },
         {
-          text: 'Gender',
+          html: '<a href="?sort=sex%2Casc">Gender</a>',
           attributes: {
             'aria-sort': 'none',
+            'aria-label': 'Gender: activate to sort ascending',
+            'data-sort-url': '?sort=sex%2Casc',
           },
         },
       ],

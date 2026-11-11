@@ -9,6 +9,7 @@ import BaseController from '../shared/baseController'
 import sendAuditEvent from '../services/auditService'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import RetainedFilters from '../shared/filters/retainedFilters'
+import { parseGroupSort } from './groupSort'
 
 export default class GroupController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -25,6 +26,24 @@ export default class GroupController extends BaseController {
     return JSON.stringify(left.params) !== JSON.stringify(right.params)
   }
 
+  private prepareSessionFilterParams(req: Request) {
+    const filterParams = new URLSearchParams(req.originalUrl.split('?')[1] ?? '')
+    filterParams.delete('page')
+    req.session.filterParams = filterParams.toString() || undefined
+  }
+
+  private paginationParams(req: Request) {
+    const pageNumber = typeof req.query.page === 'string' ? Number(req.query.page) : NaN
+    const sortValues = typeof req.query.sort === 'string' ? [req.query.sort] : []
+    const [sortField, sortDirection] = parseGroupSort(sortValues)
+
+    return {
+      page: Number.isInteger(pageNumber) && pageNumber > 0 ? pageNumber - 1 : 0,
+      size: 50,
+      sort: [`${sortField},${sortDirection}`],
+    }
+  }
+
   async showNotStartedGroupListPage(req: Request, res: Response): Promise<void> {
     const clearPath = this.retainedFilters.clearRedirectPath(req)
     if (clearPath) {
@@ -35,9 +54,9 @@ export default class GroupController extends BaseController {
       return res.redirect(restoredUrl)
     }
     this.retainedFilters.persist(req)
+    this.prepareSessionFilterParams(req)
 
     const { username } = req.user
-    const pageNumber = req.query.page
     const selectedTab = 'NOT_STARTED_OR_IN_PROGRESS'
 
     const requestedFilter = GroupListFilter.fromRequest(req)
@@ -47,10 +66,7 @@ export default class GroupController extends BaseController {
 
     let notStartedGroupList = await this.accreditedProgrammesManageAndDeliverService.getGroupList(
       username,
-      {
-        page: pageNumber ? Number(pageNumber) - 1 : 0,
-        size: 50,
-      },
+      this.paginationParams(req),
       requestedFilter.params,
       selectedTab,
     )
@@ -60,10 +76,7 @@ export default class GroupController extends BaseController {
     if (this.filtersDiffer(requestedFilter, filters)) {
       notStartedGroupList = await this.accreditedProgrammesManageAndDeliverService.getGroupList(
         username,
-        {
-          page: pageNumber ? Number(pageNumber) - 1 : 0,
-          size: 50,
-        },
+        this.paginationParams(req),
         filters.params,
         selectedTab,
       )
@@ -78,6 +91,8 @@ export default class GroupController extends BaseController {
       filters,
       notStartedGroupList.probationDeliveryUnitNames,
       notStartedGroupList.deliveryLocationNames,
+      undefined,
+      req.session.filterParams,
     )
     const view = new GroupView(presenter)
 
@@ -94,9 +109,9 @@ export default class GroupController extends BaseController {
       return res.redirect(restoredUrl)
     }
     this.retainedFilters.persist(req)
+    this.prepareSessionFilterParams(req)
 
     const { username } = req.user
-    const pageNumber = req.query.page
     const selectedTab = 'COMPLETE'
 
     const requestedFilter = GroupListFilter.fromRequest(req)
@@ -106,10 +121,7 @@ export default class GroupController extends BaseController {
 
     let completedGroupList = await this.accreditedProgrammesManageAndDeliverService.getGroupList(
       username,
-      {
-        page: pageNumber ? Number(pageNumber) - 1 : 0,
-        size: 50,
-      },
+      this.paginationParams(req),
       requestedFilter.params,
       selectedTab,
     )
@@ -119,10 +131,7 @@ export default class GroupController extends BaseController {
     if (this.filtersDiffer(requestedFilter, filters)) {
       completedGroupList = await this.accreditedProgrammesManageAndDeliverService.getGroupList(
         username,
-        {
-          page: pageNumber ? Number(pageNumber) - 1 : 0,
-          size: 50,
-        },
+        this.paginationParams(req),
         filters.params,
         selectedTab,
       )
@@ -137,6 +146,8 @@ export default class GroupController extends BaseController {
       filters,
       completedGroupList.probationDeliveryUnitNames,
       completedGroupList.deliveryLocationNames,
+      undefined,
+      req.session.filterParams,
     )
     const view = new GroupView(presenter)
 
