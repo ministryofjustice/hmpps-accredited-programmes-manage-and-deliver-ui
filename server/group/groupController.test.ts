@@ -63,14 +63,14 @@ describe('GroupController', () => {
       expect(accreditedProgrammesManageAndDeliverService.getGroupList).toHaveBeenNthCalledWith(
         1,
         expect.anything(),
-        expect.objectContaining({ page: 0, size: 2 }),
+        expect.objectContaining({ page: 0, size: 50 }),
         expect.objectContaining({ pdu: ['PDU3'], deliveryLocations: ['delivery-location-1'] }),
         'NOT_STARTED_OR_IN_PROGRESS',
       )
       expect(accreditedProgrammesManageAndDeliverService.getGroupList).toHaveBeenNthCalledWith(
         2,
         expect.anything(),
-        expect.objectContaining({ page: 0, size: 2 }),
+        expect.objectContaining({ page: 0, size: 50 }),
         expect.objectContaining({ pdu: ['PDU3'] }),
         'NOT_STARTED_OR_IN_PROGRESS',
       )
@@ -82,7 +82,7 @@ describe('GroupController', () => {
         .then(() => {
           expect(accreditedProgrammesManageAndDeliverService.getGroupList).toHaveBeenCalledWith(
             expect.anything(),
-            expect.objectContaining({ page: 0, size: 2 }),
+            expect.objectContaining({ page: 0, size: 50 }),
             expect.objectContaining({ pdu: ['PDU1', 'PDU2'] }),
             'NOT_STARTED_OR_IN_PROGRESS',
           )
@@ -120,14 +120,14 @@ describe('GroupController', () => {
       expect(accreditedProgrammesManageAndDeliverService.getGroupList).toHaveBeenNthCalledWith(
         1,
         expect.anything(),
-        expect.objectContaining({ page: 0, size: 2 }),
+        expect.objectContaining({ page: 0, size: 50 }),
         expect.objectContaining({ pdu: ['PDU3'], deliveryLocations: ['delivery-location-1'] }),
         'COMPLETE',
       )
       expect(accreditedProgrammesManageAndDeliverService.getGroupList).toHaveBeenNthCalledWith(
         2,
         expect.anything(),
-        expect.objectContaining({ page: 0, size: 2 }),
+        expect.objectContaining({ page: 0, size: 50 }),
         expect.objectContaining({ pdu: ['PDU3'] }),
         'COMPLETE',
       )

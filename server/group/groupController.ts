@@ -39,7 +39,7 @@ export default class GroupController extends BaseController {
 
     return {
       page: Number.isInteger(pageNumber) && pageNumber > 0 ? pageNumber - 1 : 0,
-      size: 2,
+      size: 50,
       sort: [`${sortField},${sortDirection}`],
     }
   }
