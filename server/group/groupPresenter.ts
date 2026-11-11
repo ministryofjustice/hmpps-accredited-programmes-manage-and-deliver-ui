@@ -4,6 +4,7 @@ import Pagination from '../utils/pagination/pagination'
 import { CheckboxesArgsItem, TableArgs } from '../utils/govukFrontendTypes'
 import GroupListFilter from '../groupOverview/groupListFilter'
 import DateUtils from '../utils/dateUtils'
+import { parseGroupSort, GroupSortField } from './groupSort'
 
 const cohortConfigMap: Record<ProgrammeGroupCohortEnum, string> = {
   SEXUAL: 'Sexual offence',
@@ -35,8 +36,9 @@ export default class GroupPresenter {
     readonly pduNames: string[],
     deliveryLocations?: string[],
     readonly caption?: string[],
+    filterParams?: string,
   ) {
-    this.params = filter.paramsAsQueryParams
+    this.params = filterParams || filter.paramsAsQueryParams
     this.groupListItems = groupListItems
     this.pagination = new Pagination(this.groupListItems as Required<typeof this.groupListItems>, this.params || null)
     this.selectedPdu = this.filter.pdu ?? undefined
@@ -72,48 +74,50 @@ export default class GroupPresenter {
       caption: this.tableCaption,
       captionClasses: this.tableCaptionClass,
       attributes: {
+        'data-caselist-table': 'true',
         'data-module': 'moj-sortable-table',
       },
       head: [
-        {
-          text: 'Group code',
-          attributes: {
-            'aria-sort': 'ascending',
-          },
-        },
-        {
-          text: 'Start date',
-          attributes: {
-            'aria-sort': 'none',
-          },
-        },
-        {
-          text: 'PDU',
-          attributes: {
-            'aria-sort': 'none',
-          },
-        },
-        {
-          text: 'Delivery location',
-          attributes: {
-            'aria-sort': 'none',
-          },
-        },
-        {
-          text: 'Cohort',
-          attributes: {
-            'aria-sort': 'none',
-          },
-        },
-        {
-          text: 'Gender',
-          attributes: {
-            'aria-sort': 'none',
-          },
-        },
+        this.sortableHeader('Group code', 'code'),
+        this.sortableHeader('Start date', 'start_date'),
+        this.sortableHeader('PDU', 'pdu_name'),
+        this.sortableHeader('Delivery location', 'delivery_location'),
+        this.sortableHeader('Cohort', 'cohort'),
+        this.sortableHeader('Gender', 'sex'),
       ],
       rows: this.generateTableRows(),
     }
+  }
+
+  private sortableHeader(text: string, field: GroupSortField) {
+    const [currentField, currentDirection] = this.sort
+    const isCurrentSort = currentField === field
+    const nextDirection = isCurrentSort && currentDirection === 'asc' ? 'desc' : 'asc'
+    let sortState: 'ascending' | 'descending' | 'none' = 'none'
+
+    if (isCurrentSort) {
+      sortState = currentDirection === 'asc' ? 'ascending' : 'descending'
+    }
+
+    return {
+      html: `<a href="${this.sortUrl(field, nextDirection)}">${text}</a>`,
+      attributes: {
+        'aria-sort': sortState,
+        'data-sort-url': this.sortUrl(field, nextDirection),
+      },
+    }
+  }
+
+  private get sort() {
+    const searchParams = new URLSearchParams(this.params)
+    return parseGroupSort(searchParams.getAll('sort'))
+  }
+
+  private sortUrl(field: GroupSortField, direction: 'asc' | 'desc'): string {
+    const searchParams = new URLSearchParams(this.params)
+    searchParams.delete('page')
+    searchParams.set('sort', `${field},${direction}`)
+    return `?${searchParams.toString()}`
   }
 
   private generateTableRows() {
