@@ -179,24 +179,24 @@ describe('groupTableArgs', () => {
           },
         },
         {
-          html: '<a href="?sort=start_date%2Casc">Start date</a>',
+          html: '<a href="?sort=startedAtDate%2Casc">Start date</a>',
           attributes: {
             'aria-sort': 'none',
-            'data-sort-url': '?sort=start_date%2Casc',
+            'data-sort-url': '?sort=startedAtDate%2Casc',
           },
         },
         {
-          html: '<a href="?sort=pdu_name%2Casc">PDU</a>',
+          html: '<a href="?sort=probationDeliveryUnitName%2Casc">PDU</a>',
           attributes: {
             'aria-sort': 'none',
-            'data-sort-url': '?sort=pdu_name%2Casc',
+            'data-sort-url': '?sort=probationDeliveryUnitName%2Casc',
           },
         },
         {
-          html: '<a href="?sort=delivery_location%2Casc">Delivery location</a>',
+          html: '<a href="?sort=deliveryLocationName%2Casc">Delivery location</a>',
           attributes: {
             'aria-sort': 'none',
-            'data-sort-url': '?sort=delivery_location%2Casc',
+            'data-sort-url': '?sort=deliveryLocationName%2Casc',
           },
         },
         {

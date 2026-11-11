@@ -79,9 +79,9 @@ export default class GroupPresenter {
       },
       head: [
         this.sortableHeader('Group code', 'code'),
-        this.sortableHeader('Start date', 'start_date'),
-        this.sortableHeader('PDU', 'pdu_name'),
-        this.sortableHeader('Delivery location', 'delivery_location'),
+        this.sortableHeader('Start date', 'startedAtDate'),
+        this.sortableHeader('PDU', 'probationDeliveryUnitName'),
+        this.sortableHeader('Delivery location', 'deliveryLocationName'),
         this.sortableHeader('Cohort', 'cohort'),
         this.sortableHeader('Gender', 'sex'),
       ],

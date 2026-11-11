@@ -1,4 +1,11 @@
-export const groupSortFields = ['code', 'start_date', 'pdu_name', 'delivery_location', 'cohort', 'sex'] as const
+export const groupSortFields = [
+  'code',
+  'startedAtDate',
+  'probationDeliveryUnitName',
+  'deliveryLocationName',
+  'cohort',
+  'sex',
+] as const
 
 export type GroupSortField = (typeof groupSortFields)[number]
 
