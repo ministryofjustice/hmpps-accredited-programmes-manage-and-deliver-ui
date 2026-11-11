@@ -94,15 +94,21 @@ export default class GroupPresenter {
     const isCurrentSort = currentField === field
     const nextDirection = isCurrentSort && currentDirection === 'asc' ? 'desc' : 'asc'
     let sortState: 'ascending' | 'descending' | 'none' = 'none'
+    let ariaLabel = `${text}: activate to sort ascending`
 
     if (isCurrentSort) {
       sortState = currentDirection === 'asc' ? 'ascending' : 'descending'
+      ariaLabel = `${text}: currently sorted ascending, activate to sort descending`
+      if (currentDirection === 'desc') {
+        ariaLabel = `${text}: currently sorted descending, activate to sort ascending`
+      }
     }
 
     return {
       html: `<a href="${this.sortUrl(field, nextDirection)}">${text}</a>`,
       attributes: {
         'aria-sort': sortState,
+        'aria-label': ariaLabel,
         'data-sort-url': this.sortUrl(field, nextDirection),
       },
     }
