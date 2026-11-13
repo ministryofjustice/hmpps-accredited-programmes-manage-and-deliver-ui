@@ -9,7 +9,7 @@ import BaseController from '../shared/baseController'
 import sendAuditEvent from '../services/auditService'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import RetainedFilters from '../shared/filters/retainedFilters'
-import { parseGroupSort } from './groupSort'
+import { GroupDateSortField, parseGroupSort } from './groupSort'
 
 export default class GroupController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -26,16 +26,19 @@ export default class GroupController extends BaseController {
     return JSON.stringify(left.params) !== JSON.stringify(right.params)
   }
 
-  private prepareSessionFilterParams(req: Request) {
+  private prepareSessionFilterParams(req: Request, sort: string) {
     const filterParams = new URLSearchParams(req.originalUrl.split('?')[1] ?? '')
     filterParams.delete('page')
+    if (req.query.sort !== undefined) {
+      filterParams.set('sort', sort)
+    }
     req.session.filterParams = filterParams.toString() || undefined
   }
 
-  private paginationParams(req: Request) {
+  private paginationParams(req: Request, dateField: GroupDateSortField = 'startedAtDate') {
     const pageNumber = typeof req.query.page === 'string' ? Number(req.query.page) : NaN
     const sortValues = typeof req.query.sort === 'string' ? [req.query.sort] : []
-    const [sortField, sortDirection] = parseGroupSort(sortValues)
+    const [sortField, sortDirection] = parseGroupSort(sortValues, dateField)
 
     return {
       page: Number.isInteger(pageNumber) && pageNumber > 0 ? pageNumber - 1 : 0,
@@ -54,19 +57,20 @@ export default class GroupController extends BaseController {
       return res.redirect(restoredUrl)
     }
     this.retainedFilters.persist(req)
-    this.prepareSessionFilterParams(req)
 
     const { username } = req.user
     const selectedTab = 'NOT_STARTED_OR_IN_PROGRESS'
 
     const requestedFilter = GroupListFilter.fromRequest(req)
+    const paginationParams = this.paginationParams(req, 'earliestPossibleStartDate')
+    this.prepareSessionFilterParams(req, paginationParams.sort[0])
     await sendAuditEvent('SEARCH_NOT_STARTED_OR_IN_PROGRESS_GROUP_LIST', username, undefined, 'NOT_APPLICABLE', {
       filter: requestedFilter.params,
     })
 
     let notStartedGroupList = await this.accreditedProgrammesManageAndDeliverService.getGroupList(
       username,
-      this.paginationParams(req),
+      paginationParams,
       requestedFilter.params,
       selectedTab,
     )
@@ -76,7 +80,7 @@ export default class GroupController extends BaseController {
     if (this.filtersDiffer(requestedFilter, filters)) {
       notStartedGroupList = await this.accreditedProgrammesManageAndDeliverService.getGroupList(
         username,
-        this.paginationParams(req),
+        paginationParams,
         filters.params,
         selectedTab,
       )
@@ -109,19 +113,20 @@ export default class GroupController extends BaseController {
       return res.redirect(restoredUrl)
     }
     this.retainedFilters.persist(req)
-    this.prepareSessionFilterParams(req)
 
     const { username } = req.user
     const selectedTab = 'COMPLETE'
 
     const requestedFilter = GroupListFilter.fromRequest(req)
+    const paginationParams = this.paginationParams(req)
+    this.prepareSessionFilterParams(req, paginationParams.sort[0])
     await sendAuditEvent('SEARCH_COMPLETED_GROUP_LIST', username, undefined, 'NOT_APPLICABLE', {
       filter: requestedFilter.params,
     })
 
     let completedGroupList = await this.accreditedProgrammesManageAndDeliverService.getGroupList(
       username,
-      this.paginationParams(req),
+      paginationParams,
       requestedFilter.params,
       selectedTab,
     )
@@ -131,7 +136,7 @@ export default class GroupController extends BaseController {
     if (this.filtersDiffer(requestedFilter, filters)) {
       completedGroupList = await this.accreditedProgrammesManageAndDeliverService.getGroupList(
         username,
-        this.paginationParams(req),
+        paginationParams,
         filters.params,
         selectedTab,
       )

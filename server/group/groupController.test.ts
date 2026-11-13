@@ -1,6 +1,7 @@
 import { GroupsByRegion } from '@manage-and-deliver-api'
 import { Express } from 'express'
 import request from 'supertest'
+import * as cheerio from 'cheerio'
 import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import GroupsByRegionFactory from '../testutils/factories/groupsByRegionFactory'
@@ -31,6 +32,104 @@ beforeEach(() => {
 })
 
 describe('GroupController', () => {
+  describe.each([
+    {
+      path: 'not-started-and-in-progress',
+      tab: 'NOT_STARTED_OR_IN_PROGRESS',
+      dateField: 'earliestPossibleStartDate',
+    },
+    { path: 'completed', tab: 'COMPLETE', dateField: 'startedAtDate' },
+  ])('sorting /groups/$path', ({ path, tab, dateField }) => {
+    it.each(
+      ['code', 'date', 'probationDeliveryUnitName', 'deliveryLocationName', 'cohort', 'sex'].flatMap(column =>
+        ['asc', 'desc'].map(direction => ({ column, direction })),
+      ),
+    )('preserves $column,$direction sorting in API requests and pagination', async ({ column, direction }) => {
+      const field = column === 'date' ? dateField : column
+      accreditedProgrammesManageAndDeliverService.getGroupList.mockResolvedValue(
+        GroupsByRegionFactory.build({ pagedGroupData: { number: 1 } }),
+      )
+      const sort = `${field},${direction}`
+      const response = await request(app).get(`/groups/${path}`).query({ sort, page: 2, pdu: 'PDU1' }).expect(200)
+
+      expect(accreditedProgrammesManageAndDeliverService.getGroupList).toHaveBeenLastCalledWith(
+        'user1',
+        { page: 1, size: 50, sort: [sort] },
+        { pdu: ['PDU1'] },
+        tab,
+      )
+      const $ = cheerio.load(response.text)
+      const pages = $('.govuk-pagination a')
+        .map((_, link) => {
+          const params = new URLSearchParams(($(link).attr('href') ?? '').replace(/^\?/, ''))
+          expect(params.getAll('sort')).toEqual([sort])
+          expect(params.getAll('pdu')).toEqual(['PDU1'])
+          return params.get('page')
+        })
+        .get()
+      expect(pages).toEqual(expect.arrayContaining(['1', '3']))
+    })
+
+    it.each([
+      ['startDate', 'date'],
+      ['pdu', 'probationDeliveryUnitName'],
+      ['deliveryLocation', 'deliveryLocationName'],
+    ])('repairs retained sort links using %s before calling the API', async (oldField, column) => {
+      const field = column === 'date' ? dateField : column
+      const response = await request(app).get(`/groups/${path}?sort=${oldField},desc`).expect(200)
+
+      expect(accreditedProgrammesManageAndDeliverService.getGroupList).toHaveBeenCalledWith(
+        'user1',
+        { page: 0, size: 50, sort: [`${field},desc`] },
+        {},
+        tab,
+      )
+      expect(response.text).toContain(`?sort=${field}%2Cdesc&amp;page=2`)
+    })
+
+    it.each(['invalid,asc', 'code,invalid', 'code,asc&sort=sex,desc'])(
+      'does not forward unsupported sort input %s',
+      async sort => {
+        await request(app).get(`/groups/${path}?sort=${sort}`).expect(200)
+
+        expect(accreditedProgrammesManageAndDeliverService.getGroupList).toHaveBeenCalledWith(
+          'user1',
+          { page: 0, size: 50, sort: ['code,asc'] },
+          {},
+          tab,
+        )
+      },
+    )
+
+    it('preserves normalised sorting when invalid delivery locations trigger a refetch', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupList.mockResolvedValue(
+        GroupsByRegionFactory.build({ deliveryLocationNames: ['valid-location'] }),
+      )
+
+      await request(app)
+        .get(`/groups/${path}`)
+        .query({ page: 2, sort: 'startDate,desc', pdu: 'PDU1', deliveryLocations: 'invalid-location' })
+        .expect(200)
+
+      const pagination = { page: 1, size: 50, sort: [`${dateField},desc`] }
+      expect(accreditedProgrammesManageAndDeliverService.getGroupList).toHaveBeenCalledTimes(2)
+      expect(accreditedProgrammesManageAndDeliverService.getGroupList).toHaveBeenNthCalledWith(
+        1,
+        'user1',
+        pagination,
+        { pdu: ['PDU1'], deliveryLocations: ['invalid-location'] },
+        tab,
+      )
+      expect(accreditedProgrammesManageAndDeliverService.getGroupList).toHaveBeenNthCalledWith(
+        2,
+        'user1',
+        pagination,
+        { pdu: ['PDU1'] },
+        tab,
+      )
+    })
+  })
+
   describe('GET /groups/not-started-and-in-progress', () => {
     it('should render the not started group list page', async () => {
       return request(app)
