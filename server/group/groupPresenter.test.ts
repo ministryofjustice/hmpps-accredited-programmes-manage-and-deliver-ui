@@ -180,11 +180,11 @@ describe('groupTableArgs', () => {
           },
         },
         {
-          html: '<a href="?sort=startedAtDate%2Casc">Start date</a>',
+          html: '<a href="?sort=earliestPossibleStartDate%2Casc">Start date</a>',
           attributes: {
             'aria-sort': 'none',
             'aria-label': 'Start date: activate to sort ascending',
-            'data-sort-url': '?sort=startedAtDate%2Casc',
+            'data-sort-url': '?sort=earliestPossibleStartDate%2Casc',
           },
         },
         {
@@ -239,6 +239,71 @@ describe('groupTableArgs', () => {
     })
   })
 
+  it('should update sort headers based on current sort parameter', () => {
+    const groupList = groupsByRegionFactory.build()
+    const filter = GroupListFilter.empty()
+    filter.sort = 'earliestPossibleStartDate,desc'
+
+    const presenter = new GroupPresenter(
+      groupList.pagedGroupData as Page<Group>,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
+      groupList.otherTabTotal,
+      groupList.regionName,
+      filter,
+      [],
+      [],
+    )
+
+    const { head } = presenter.groupTableArgs
+    expect(head[1].attributes['aria-sort']).toBe('descending')
+    expect(head[0].attributes['data-sort-url']).toBe('?sort=code%2Casc')
+    expect(head[1].attributes['data-sort-url']).toBe('?sort=earliestPossibleStartDate%2Casc')
+  })
+
+  it.each([
+    [GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS, 'earliestPossibleStartDate'],
+    [GroupListPageSection.COMPLETE, 'startedAtDate'],
+  ] as const)('uses the destination tab date field in navigation from section %s', (section, field) => {
+    const groupList = groupsByRegionFactory.build()
+    const filter = GroupListFilter.empty()
+    filter.sort = `${field},desc`
+    filter.pdu = ['PDU1']
+    const presenter = new GroupPresenter(
+      groupList.pagedGroupData as Page<Group>,
+      section,
+      groupList.otherTabTotal,
+      groupList.regionName,
+      filter,
+      [],
+    )
+
+    expect(presenter.getSubNavArgs().items.map(item => item.href)).toEqual([
+      '/groups/not-started-and-in-progress?pdu=PDU1&sort=earliestPossibleStartDate%2Cdesc',
+      '/groups/completed?pdu=PDU1&sort=startedAtDate%2Cdesc',
+    ])
+  })
+
+  it('should preserve other filter params in sort URLs', () => {
+    const groupList = groupsByRegionFactory.build()
+    const filter = GroupListFilter.empty()
+    filter.pdu = ['PDU1']
+    filter.sort = 'code,asc'
+
+    const presenter = new GroupPresenter(
+      groupList.pagedGroupData as Page<Group>,
+      GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
+      groupList.otherTabTotal,
+      groupList.regionName,
+      filter,
+      [],
+      [],
+    )
+
+    const { head } = presenter.groupTableArgs
+    expect(head[0].attributes['data-sort-url']).toContain('pdu')
+    expect(head[0].attributes['data-sort-url']).toContain('sort=code%2Cdesc')
+  })
+
   it('should use the closed referrals caption for the completed tab', () => {
     const groupList = groupsByRegionFactory.build()
 
@@ -253,6 +318,11 @@ describe('groupTableArgs', () => {
     )
 
     expect(presenter.groupTableArgs.caption).toBe('Completed groups')
+    expect(presenter.groupTableArgs.head[1].attributes).toEqual({
+      'aria-sort': 'none',
+      'aria-label': 'Start date: activate to sort ascending',
+      'data-sort-url': '?sort=startedAtDate%2Casc',
+    })
   })
 })
 

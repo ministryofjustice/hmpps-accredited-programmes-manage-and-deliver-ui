@@ -4,7 +4,7 @@ import Pagination from '../utils/pagination/pagination'
 import { CheckboxesArgsItem, TableArgs } from '../utils/govukFrontendTypes'
 import GroupListFilter from '../groupOverview/groupListFilter'
 import DateUtils from '../utils/dateUtils'
-import { parseGroupSort, GroupSortField } from './groupSort'
+import { GroupDateSortField, GroupSort, GroupSortField, parseGroupSort } from './groupSort'
 
 const cohortConfigMap: Record<ProgrammeGroupCohortEnum, string> = {
   SEXUAL: 'Sexual offence',
@@ -79,7 +79,7 @@ export default class GroupPresenter {
       },
       head: [
         this.sortableHeader('Group code', 'code'),
-        this.sortableHeader('Start date', 'startedAtDate'),
+        this.sortableHeader('Start date', this.dateSortField),
         this.sortableHeader('PDU', 'probationDeliveryUnitName'),
         this.sortableHeader('Delivery location', 'deliveryLocationName'),
         this.sortableHeader('Cohort', 'cohort'),
@@ -114,13 +114,17 @@ export default class GroupPresenter {
     }
   }
 
-  private get sort() {
-    const searchParams = new URLSearchParams(this.params)
-    return parseGroupSort(searchParams.getAll('sort'))
+  private get sort(): GroupSort {
+    const searchParams = new URLSearchParams(this.params || '')
+    return parseGroupSort(searchParams.getAll('sort'), this.dateSortField)
+  }
+
+  private get dateSortField(): GroupDateSortField {
+    return this.section === GroupListPageSection.COMPLETE ? 'startedAtDate' : 'earliestPossibleStartDate'
   }
 
   private sortUrl(field: GroupSortField, direction: 'asc' | 'desc'): string {
-    const searchParams = new URLSearchParams(this.params)
+    const searchParams = new URLSearchParams(this.params || '')
     searchParams.delete('page')
     searchParams.set('sort', `${field},${direction}`)
     return `?${searchParams.toString()}`
@@ -184,20 +188,25 @@ export default class GroupPresenter {
   }
 
   getSubNavArgs(): { items: { text: string; href: string; active: boolean }[] } {
-    const possiblyAppendParams = (url: string, params?: string) => {
-      if (!params) return url
-      return `${url}?${params}`
+    const possiblyAppendParams = (url: string, dateField: GroupDateSortField) => {
+      if (!this.params) return url
+      const params = new URLSearchParams(this.params)
+      const [field, direction] = this.sort
+      if (params.has('sort') && (field === 'startedAtDate' || field === 'earliestPossibleStartDate')) {
+        params.set('sort', `${dateField},${direction}`)
+      }
+      return `${url}?${params.toString()}`
     }
     return {
       items: [
         {
           text: `Not started or in progress (${this.section === GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS ? this.groupListItems.totalElements : this.otherGroupListCountTotal})`,
-          href: possiblyAppendParams(`/groups/not-started-and-in-progress`, this.params),
+          href: possiblyAppendParams(`/groups/not-started-and-in-progress`, 'earliestPossibleStartDate'),
           active: this.section === GroupListPageSection.NOT_STARTED_OR_IN_PROGRESS,
         },
         {
           text: `Completed (${this.section === GroupListPageSection.COMPLETE ? this.groupListItems.totalElements : this.otherGroupListCountTotal})`,
-          href: possiblyAppendParams(`/groups/completed`, this.params),
+          href: possiblyAppendParams(`/groups/completed`, 'startedAtDate'),
           active: this.section === GroupListPageSection.COMPLETE,
         },
       ],
