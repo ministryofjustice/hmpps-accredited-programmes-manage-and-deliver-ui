@@ -4,5 +4,4 @@ export interface GroupListFilterParams {
   deliveryLocations?: string[]
   cohort?: string[]
   sex?: string[]
-  sort?: string
 }

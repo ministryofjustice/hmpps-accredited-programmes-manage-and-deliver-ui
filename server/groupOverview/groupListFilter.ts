@@ -1,6 +1,5 @@
 import { Request } from 'express'
 import { GroupListFilterParams } from './groupListFilterParams'
-import { GroupDateSortField, parseGroupSort } from '../group/groupSort'
 
 export default class GroupListFilter {
   groupCode: string | undefined = undefined
@@ -13,17 +12,11 @@ export default class GroupListFilter {
 
   deliveryLocations: string[] | undefined = undefined
 
-  sort: string | undefined = undefined
-
   static empty(): GroupListFilter {
     return new GroupListFilter()
   }
 
-  static fromRequest(
-    request: Request,
-    availableDeliveryLocations?: string[] | null,
-    dateSortField: GroupDateSortField = 'startedAtDate',
-  ): GroupListFilter {
+  static fromRequest(request: Request, availableDeliveryLocations?: string[] | null): GroupListFilter {
     const filter = new GroupListFilter()
     const cohort = request.query.cohort as string | string[] | undefined
     filter.cohort = typeof cohort === 'string' ? [cohort] : cohort
@@ -32,14 +25,6 @@ export default class GroupListFilter {
     filter.pdu = request.query.pdu as string[] | undefined
     const sex = request.query.sex as string | string[] | undefined
     filter.sex = typeof sex === 'string' ? [sex] : sex
-
-    if (request.query.sort !== undefined) {
-      const sortValues = Array.isArray(request.query.sort) ? request.query.sort : [request.query.sort]
-      filter.sort = parseGroupSort(
-        sortValues.filter((value): value is string => typeof value === 'string'),
-        dateSortField,
-      ).join(',')
-    }
 
     if (filter.pdu !== undefined) {
       filter.pdu = typeof filter.pdu === 'string' ? [filter.pdu] : filter.pdu
@@ -85,10 +70,6 @@ export default class GroupListFilter {
 
     if (this.sex) {
       params.sex = this.sex
-    }
-
-    if (this.sort) {
-      params.sort = this.sort
     }
 
     return params

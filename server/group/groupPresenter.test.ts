@@ -242,7 +242,6 @@ describe('groupTableArgs', () => {
   it('should update sort headers based on current sort parameter', () => {
     const groupList = groupsByRegionFactory.build()
     const filter = GroupListFilter.empty()
-    filter.sort = 'earliestPossibleStartDate,desc'
 
     const presenter = new GroupPresenter(
       groupList.pagedGroupData as Page<Group>,
@@ -252,6 +251,8 @@ describe('groupTableArgs', () => {
       filter,
       [],
       [],
+      undefined,
+      'sort=earliestPossibleStartDate%2Cdesc',
     )
 
     const { head } = presenter.groupTableArgs
@@ -266,7 +267,6 @@ describe('groupTableArgs', () => {
   ] as const)('uses the destination tab date field in navigation from section %s', (section, field) => {
     const groupList = groupsByRegionFactory.build()
     const filter = GroupListFilter.empty()
-    filter.sort = `${field},desc`
     filter.pdu = ['PDU1']
     const presenter = new GroupPresenter(
       groupList.pagedGroupData as Page<Group>,
@@ -275,6 +275,9 @@ describe('groupTableArgs', () => {
       groupList.regionName,
       filter,
       [],
+      undefined,
+      undefined,
+      `pdu=PDU1&sort=${field}%2Cdesc`,
     )
 
     expect(presenter.getSubNavArgs().items.map(item => item.href)).toEqual([
@@ -287,7 +290,6 @@ describe('groupTableArgs', () => {
     const groupList = groupsByRegionFactory.build()
     const filter = GroupListFilter.empty()
     filter.pdu = ['PDU1']
-    filter.sort = 'code,asc'
 
     const presenter = new GroupPresenter(
       groupList.pagedGroupData as Page<Group>,
@@ -297,6 +299,8 @@ describe('groupTableArgs', () => {
       filter,
       [],
       [],
+      undefined,
+      'pdu=PDU1&sort=code%2Casc',
     )
 
     const { head } = presenter.groupTableArgs

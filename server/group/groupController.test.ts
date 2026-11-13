@@ -55,7 +55,7 @@ describe('GroupController', () => {
       expect(accreditedProgrammesManageAndDeliverService.getGroupList).toHaveBeenLastCalledWith(
         'user1',
         { page: 1, size: 50, sort: [sort] },
-        { sort, pdu: ['PDU1'] },
+        { pdu: ['PDU1'] },
         tab,
       )
       const $ = cheerio.load(response.text)
@@ -81,7 +81,7 @@ describe('GroupController', () => {
       expect(accreditedProgrammesManageAndDeliverService.getGroupList).toHaveBeenCalledWith(
         'user1',
         { page: 0, size: 50, sort: [`${field},desc`] },
-        { sort: `${field},desc` },
+        {},
         tab,
       )
       expect(response.text).toContain(`?sort=${field}%2Cdesc&amp;page=2`)
@@ -95,11 +95,39 @@ describe('GroupController', () => {
         expect(accreditedProgrammesManageAndDeliverService.getGroupList).toHaveBeenCalledWith(
           'user1',
           { page: 0, size: 50, sort: ['code,asc'] },
-          { sort: 'code,asc' },
+          {},
           tab,
         )
       },
     )
+
+    it('preserves normalised sorting when invalid delivery locations trigger a refetch', async () => {
+      accreditedProgrammesManageAndDeliverService.getGroupList.mockResolvedValue(
+        GroupsByRegionFactory.build({ deliveryLocationNames: ['valid-location'] }),
+      )
+
+      await request(app)
+        .get(`/groups/${path}`)
+        .query({ page: 2, sort: 'startDate,desc', pdu: 'PDU1', deliveryLocations: 'invalid-location' })
+        .expect(200)
+
+      const pagination = { page: 1, size: 50, sort: [`${dateField},desc`] }
+      expect(accreditedProgrammesManageAndDeliverService.getGroupList).toHaveBeenCalledTimes(2)
+      expect(accreditedProgrammesManageAndDeliverService.getGroupList).toHaveBeenNthCalledWith(
+        1,
+        'user1',
+        pagination,
+        { pdu: ['PDU1'], deliveryLocations: ['invalid-location'] },
+        tab,
+      )
+      expect(accreditedProgrammesManageAndDeliverService.getGroupList).toHaveBeenNthCalledWith(
+        2,
+        'user1',
+        pagination,
+        { pdu: ['PDU1'] },
+        tab,
+      )
+    })
   })
 
   describe('GET /groups/not-started-and-in-progress', () => {
