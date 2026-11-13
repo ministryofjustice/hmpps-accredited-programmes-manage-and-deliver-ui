@@ -169,6 +169,7 @@ export default class CaselistPresenter {
         },
         {
           html: `<strong class="govuk-tag govuk-tag--${referral.statusLabelColour}">${referral.referralStatus}</strong>`,
+          attributes: { 'data-sort-value': referral.referralStatus },
         },
       ])
     })
