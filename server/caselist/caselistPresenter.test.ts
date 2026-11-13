@@ -452,6 +452,7 @@ describe('generateTableRows', () => {
     expect(rows[0][5]).toEqual({ text: 'Female' })
     expect(rows[0][6]).toEqual({
       html: `<strong class="govuk-tag govuk-tag--teal">Awaiting allocation</strong>`,
+      attributes: { 'data-sort-value': 'Awaiting allocation' },
     })
   })
 
@@ -719,6 +720,7 @@ describe('generateTableRows', () => {
     expect(rows[0][5]).toEqual({ text: 'Restricted' })
     expect(rows[0][6]).toEqual({
       html: `<strong class="govuk-tag govuk-tag--teal">Awaiting allocation</strong>`,
+      attributes: { 'data-sort-value': 'Awaiting allocation' },
     })
   })
 
