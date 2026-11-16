@@ -173,6 +173,7 @@
       "esbuild": "$esbuild"
     },
     "@opentelemetry/core": "2.12.1",
+    "@opentelemetry/instrumentation-http": "0.222.0",
     "diff": "9.0.0",
     "openapi-typescript": {
       "typescript": "$typescript"
