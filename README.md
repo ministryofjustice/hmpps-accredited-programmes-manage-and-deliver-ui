@@ -31,6 +31,19 @@ $ npm run start:dev
 # Login with REFER_MONITOR_PP:R8Mpassword
 ```
 
+## Branch naming
+
+The branch-name check runs when a pull request is opened. Branch names must start
+with one of these prefixes:
+
+- `no-ticket/` (for example, `no-ticket/update-styling`)
+- `renovate/` or `renovate-` (for example, `renovate/update-dependency`)
+- `hotfix/` (for example, `hotfix/fix-login`)
+- `FRI-<number>/` (for example, `FRI-123/update-workflow`)
+- `APG-<number>/` (for example, `APG-456/fix-validation`)
+
+The check is defined in
+[`.github/workflows/branch-name-validator.yml`](.github/workflows/branch-name-validator.yml).
 
 ## Telemetry dependency compatibility
 
