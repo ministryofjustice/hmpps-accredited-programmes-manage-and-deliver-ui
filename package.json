@@ -78,7 +78,7 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.1164.0",
+    "@aws-sdk/client-sqs": "^3.1166.0",
     "@ministryofjustice/frontend": "^12.0.0",
     "@ministryofjustice/hmpps-audit-client": "2.0.0",
     "@ministryofjustice/hmpps-auth-clients": "^3.0.0",
@@ -86,7 +86,7 @@
     "@ministryofjustice/hmpps-monitoring": "^2.1.0",
     "@ministryofjustice/hmpps-probation-frontend-components": "^1.2.2",
     "@ministryofjustice/hmpps-rest-client": "^2.2.0",
-    "@sentry/node": "11.11.0",
+    "@sentry/node": "11.12.0",
     "@types/supertest": "^7.2.1",
     "accessible-autocomplete": "^3.0.2",
     "agentkeepalive": "^4.6.0",
@@ -134,8 +134,8 @@
     "@types/passport-oauth2": "^1.8.0",
     "@types/superagent": "^8.1.11",
     "@types/supertest": "^7.2.1",
-    "@typescript-eslint/eslint-plugin": "^8.72.1",
-    "@typescript-eslint/parser": "^8.72.1",
+    "@typescript-eslint/eslint-plugin": "^8.72.2",
+    "@typescript-eslint/parser": "^8.72.2",
     "@typescript/native": "npm:typescript@^7.0.2",
     "audit-ci": "^7.1.0",
     "aws-sdk-client-mock": "^4.1.0",
@@ -166,13 +166,13 @@
     "ts-jest": "^29.4.15",
     "ts-node": "^10.9.2",
     "typescript": "npm:@typescript/typescript6@^6.0.2",
-    "typescript-eslint": "^8.72.1"
+    "typescript-eslint": "^8.72.2"
   },
   "overrides": {
     "@jgoz/esbuild-plugin-typecheck": {
       "esbuild": "$esbuild"
     },
-    "@opentelemetry/core": "2.12.0",
+    "@opentelemetry/core": "2.12.1",
     "diff": "9.0.0",
     "openapi-typescript": {
       "typescript": "$typescript"
