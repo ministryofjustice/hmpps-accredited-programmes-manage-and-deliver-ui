@@ -387,3 +387,21 @@ A changelog for the service is available [here](./CHANGELOG.md)
 ## Data Info
 
 Referral with ID a51c9c18-1e93-425e-b674-bd597ae9680d and CRN X970644 will have OGRS4 data when running locally with the wiremock server.
+
+
+## Branch name validation
+
+#Examples:
+
+no-ticket/NAME — for work without a ticket
+renovate/NAME or renovate-NAME — for Renovate dependency updates
+hotfix/NAME — for hotfix branches
+FRI-[NUMBER]/NAME — for FRI (Future Rework Initiative?) Jira tickets (e.g., FRI-123/feature-name)
+APG-[NUMBER]/NAME — for APG (Accredited Programmes Group?) Jira tickets (e.g., APG-456/bugfix-name)
+Examples of valid branch names:
+
+no-ticket/update-styling
+renovate/node-dependencies
+hotfix/critical-bug
+FRI-123/new-feature
+APG-789/fix-validation
