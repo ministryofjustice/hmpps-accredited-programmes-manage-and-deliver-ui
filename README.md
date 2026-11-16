@@ -34,13 +34,13 @@ $ npm run start:dev
 ## Branch naming
 
 The branch-name check runs when a pull request is opened. Branch names must start
-with one of these prefixes:
+with one of these prefixes examples:
 
-- `no-ticket/` (for example, `no-ticket/update-styling`)
-- `renovate/` or `renovate-` (for example, `renovate/update-dependency`)
-- `hotfix/` (for example, `hotfix/fix-login`)
-- `FRI-<number>/` (for example, `FRI-123/update-workflow`)
-- `APG-<number>/` (for example, `APG-456/fix-validation`)
+1. no-ticket/NAME — for work without a ticket (for example, `no-ticket/update-styling`)
+2. renovate/NAME or renovate-NAME — for Renovate dependency updates (for example: renovate/` or `renovate-` (for example, `renovate/update-dependency`))
+3. hotfix/NAME — for hotfix branches (for example, `hotfix/fix-login`)
+4. FRI-[NUMBER]/NAME — for FRI (Future Rework Initiative?) Jira tickets (e.g., FRI-123/feature-name) `FRI-<number>/` (for example, `FRI-123/update-workflow`)
+5. APG-[NUMBER]/NAME — for APG (Accredited Programmes Group?) Jira tickets (e.g., APG-456/bugfix-name) `APG-<number>/` (for example, `APG-456/fix-validation`)
 
 The check is defined in
 [`.github/workflows/branch-name-validator.yml`](.github/workflows/branch-name-validator.yml).
