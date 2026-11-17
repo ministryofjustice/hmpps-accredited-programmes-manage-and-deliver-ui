@@ -78,7 +78,7 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.1166.0",
+    "@aws-sdk/client-sqs": "^3.1167.0",
     "@ministryofjustice/frontend": "^12.0.0",
     "@ministryofjustice/hmpps-audit-client": "2.0.0",
     "@ministryofjustice/hmpps-auth-clients": "^3.0.0",
@@ -118,7 +118,7 @@
     "@jgoz/esbuild-plugin-typecheck": "^5.0.0",
     "@ministryofjustice/eslint-config-hmpps": "^1.0.4",
     "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.6",
-    "@tsconfig/node24": "^24.0.5",
+    "@tsconfig/node24": "^24.0.6",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
     "@types/compression": "^1.8.1",
@@ -173,7 +173,7 @@
       "esbuild": "$esbuild"
     },
     "@opentelemetry/core": "2.12.1",
-    "@opentelemetry/instrumentation-http": "0.222.0",
+    "@opentelemetry/instrumentation-http": "0.301.1",
     "diff": "9.0.0",
     "openapi-typescript": {
       "typescript": "$typescript"
@@ -181,6 +181,6 @@
     "uuid": "14.0.3",
     "qs": "^6.17.1",
     "http-cache-semantics": "^4.3.0",
-    "deepmerge": "4.1.2"
+    "deepmerge": "4.3.1"
   }
 }
