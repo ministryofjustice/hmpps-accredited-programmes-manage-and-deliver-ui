@@ -14,10 +14,15 @@ export default class AttendanceSessionNotesPresenter {
     private readonly referralId: string,
     private readonly notesValue: string,
     private readonly backLink: string,
+    private readonly isPreGroupOneToOne: boolean = false,
   ) {}
 
   get lastReferral() {
     return this.isLastReferral
+  }
+
+  get submitButtonText(): string {
+    return this.isPreGroupOneToOne && this.selectedAttendanceCode === 'ATTC' ? 'Continue' : 'Submit'
   }
 
   get hasExistingNotes() {

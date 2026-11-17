@@ -20,7 +20,7 @@ export default class SessionScheduleCyaView {
     const sessionDetails = this.presenter.createSessionDetails
     const editSessionTypeUrl = `${this.presenter.linkUrl}/schedule-session-type`
     const editSessionDetailsUrl = `${this.presenter.linkUrl}/schedule-session-details`
-    const participants = (sessionDetails.referralName?.split(', ') ?? []).sort((first, second) =>
+    const participants = (sessionDetails.referralName?.split(', ') ?? []).sort((first: string, second: string) =>
       first.localeCompare(second),
     )
     return {
@@ -94,7 +94,7 @@ export default class SessionScheduleCyaView {
           value: this.isGroupSession
             ? {
                 html: `<ul class="govuk-list">${participants
-                  .map(participant => `<li>${ViewUtils.escape(participant)}</li>`)
+                  .map((participant: string) => `<li>${ViewUtils.escape(participant)}</li>`)
                   .join('')}</ul>`,
               }
             : { text: `${sessionDetails.referralName}` },
@@ -113,7 +113,9 @@ export default class SessionScheduleCyaView {
             text: 'Facilitators',
           },
           value: {
-            html: sessionDetails.facilitators.map(facilitator => facilitator.facilitator).join('<br>'),
+            html: sessionDetails.facilitators
+              .map((facilitator: { facilitator: string }) => facilitator.facilitator)
+              .join('<br>'),
           },
           actions: {
             items: [

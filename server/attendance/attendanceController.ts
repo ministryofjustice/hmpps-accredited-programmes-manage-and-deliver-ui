@@ -204,6 +204,7 @@ export default class AttendanceController extends BaseController {
             referralId,
             submittedNotes,
             backLinkUri,
+            this.isPreGroupOneToOneSession(recordAttendanceBffData),
           )
           const view = new AttendanceSessionNotesView(presenter)
           return this.renderPage(res, view)
@@ -217,6 +218,15 @@ export default class AttendanceController extends BaseController {
 
         if (!attendeesForSubmission.length) {
           return res.redirect(`/${groupId}/${sessionId}/edit-session`)
+        }
+
+        if (this.isPreGroupOneToOneSession(recordAttendanceBffData)) {
+          // There should only be one attendee for a pre-group one-to-one session
+          if (attendeesForSubmission.length === 1 && attendeesForSubmission[0].outcomeCode === 'ATTC') {
+            req.session.editSessionAttendance.attendees = attendeesForSubmission
+            req.session.editSessionAttendance.sessionId = sessionId
+            return res.redirect(`/referral/${referralId}/group/${groupId}/attendance/update-status-on-programme`)
+          }
         }
 
         await sendAuditEvent('CREATE_ATTENDANCE', username, sessionId, 'SEARCH_TERM', {
@@ -299,6 +309,7 @@ export default class AttendanceController extends BaseController {
       referralId,
       notesValue,
       backLinkUri,
+      this.isPreGroupOneToOneSession(recordAttendanceBffData),
     )
     const view = new AttendanceSessionNotesView(presenter)
 
@@ -350,6 +361,13 @@ export default class AttendanceController extends BaseController {
     const sessionModuleSlug = convertToUrlFriendlyKebabCase(recordAttendanceBffData.sessionModule)
 
     return recordAttendanceBffData.isCatchup ? `${sessionModuleSlug}-catch-up` : sessionModuleSlug
+  }
+
+  private isPreGroupOneToOneSession(recordAttendanceBffData: RecordSessionAttendance): boolean {
+    const normalise = (value: string | undefined): string => (value ?? '').toLowerCase().replace(/[-\s]+/g, ' ')
+    const haystack = `${normalise(recordAttendanceBffData.sessionModule)} ${normalise(recordAttendanceBffData.sessionTitle)}`
+
+    return haystack.includes('pre group one to one')
   }
 
   private resolveOutcomeCodeFromPerson(

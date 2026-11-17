@@ -186,6 +186,7 @@ describe('Update Referral Status Controller', () => {
         currentGroupDetails: {
           currentlyAllocatedGroupCode: 'Building Choices 1',
           currentlyAllocatedGroupId: randomUUID(),
+          attendanceHistories: [],
         },
       })
     })
@@ -247,6 +248,7 @@ describe('Update Referral Status Controller', () => {
           currentGroupDetails: {
             currentlyAllocatedGroupCode: 'Building Choices 1',
             currentlyAllocatedGroupId: randomUUID(),
+            attendanceHistories: [],
           },
         })
       })
@@ -319,6 +321,7 @@ describe('Update Referral Status Controller', () => {
           currentGroupDetails: {
             currentlyAllocatedGroupCode: 'Building Choices 1',
             currentlyAllocatedGroupId: randomUUID(),
+            attendanceHistories: [],
           },
         })
       })
@@ -392,6 +395,124 @@ describe('Update Referral Status Controller', () => {
           .expect(400)
           .expect(res => {
             expect(res.text).toContain('Details must be 500 characters or fewer')
+          })
+      })
+    })
+  })
+
+  describe('pre-group-status-change', () => {
+    const groupId = randomUUID()
+    const sessionId = randomUUID()
+    const attendee = { referralId: referralDetails.id, outcomeCode: 'ATTC' as const }
+
+    describe(`POST /referral/:referralId/group/:groupId/attendance/update-status-on-programme`, () => {
+      it('passes the submitted additional details through to createSessionAttendance', async () => {
+        const sessionData: Partial<SessionData> = {
+          editSessionAttendance: { sessionId, attendees: [attendee] },
+        }
+        app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+        accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
+        accreditedProgrammesManageAndDeliverService.createSessionAttendance.mockResolvedValue({
+          attendees: [attendee],
+        })
+
+        return request(app)
+          .post(`/referral/${referralDetails.id}/group/${groupId}/attendance/update-status-on-programme`)
+          .type('form')
+          .send({ 'add-details': 'Some additional details' })
+          .expect(302)
+          .expect(() => {
+            expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).toHaveBeenCalledWith(
+              'user1',
+              sessionId,
+              { attendees: [{ ...attendee, additionalDetails: 'Some additional details' }] },
+            )
+          })
+      })
+
+      it('returns 400 and displays an error when add-details is too long', async () => {
+        const sessionData: Partial<SessionData> = {
+          editSessionAttendance: { sessionId, attendees: [attendee] },
+        }
+        app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+        accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
+
+        return request(app)
+          .post(`/referral/${referralDetails.id}/group/${groupId}/attendance/update-status-on-programme`)
+          .type('form')
+          .send({ 'add-details': faker.string.alpha({ length: 501 }) })
+          .expect(400)
+          .expect(res => {
+            expect(res.text).toContain('Details must be 500 characters or fewer')
+            expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).not.toHaveBeenCalled()
+          })
+      })
+    })
+
+    describe('add to group journey (referral previously On programme)', () => {
+      beforeEach(() => {
+        const sessionData: Partial<SessionData> = {
+          groupManagementData: { addToGroupOnProgramme: true },
+        }
+        app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+        accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
+      })
+
+      it('GET displays the On programme confirmation with add-to-group copy and a Save button', async () => {
+        return request(app)
+          .get(`/referral/${referralDetails.id}/group/${groupId}/attendance/update-status-on-programme`)
+          .expect(200)
+          .expect(res => {
+            expect(res.text).toContain(`${referralDetails.personName}’s referral status will change to On programme`)
+            expect(res.text).toContain('has previously started the programme')
+            expect(res.text).toContain('Save')
+          })
+      })
+
+      it('POST adds the referral to the group and redirects to allocations with the API message', async () => {
+        accreditedProgrammesManageAndDeliverService.addToGroup.mockResolvedValue({
+          message: `${referralDetails.personName} was added to this group. Their referral status is now On programme.`,
+        })
+
+        return request(app)
+          .post(`/referral/${referralDetails.id}/group/${groupId}/attendance/update-status-on-programme`)
+          .type('form')
+          .send({ 'add-details': 'Returning to programme' })
+          .expect(302)
+          .expect(res => {
+            expect(res.text).toContain(
+              `Redirecting to /group/${groupId}/allocations?message=${encodeURIComponent(
+                `${referralDetails.personName} was added to this group. Their referral status is now On programme.`,
+              )}`,
+            )
+          })
+          .then(() => {
+            expect(accreditedProgrammesManageAndDeliverService.addToGroup).toHaveBeenCalledWith(
+              'user1',
+              referralDetails.id,
+              groupId,
+              'Returning to programme',
+            )
+            expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).not.toHaveBeenCalled()
+            expect(sendAuditEvent).toHaveBeenCalledWith(
+              'EDIT_ASSIGN_REFERRAL_TO_GROUP',
+              'user1',
+              referralDetails.crn,
+              'CRN',
+              expect.objectContaining({ referralId: referralDetails.id, groupId }),
+            )
+          })
+      })
+
+      it('returns 400 and does not add to group when add-details is too long', async () => {
+        return request(app)
+          .post(`/referral/${referralDetails.id}/group/${groupId}/attendance/update-status-on-programme`)
+          .type('form')
+          .send({ 'add-details': faker.string.alpha({ length: 501 }) })
+          .expect(400)
+          .expect(res => {
+            expect(res.text).toContain('Details must be 500 characters or fewer')
+            expect(accreditedProgrammesManageAndDeliverService.addToGroup).not.toHaveBeenCalled()
           })
       })
     })
