@@ -176,6 +176,17 @@ export default class AttendanceController extends BaseController {
     }
 
     const selectedAttendanceCode = currentAttendee?.outcomeCode
+    const previousAttendanceCode = referralPerson?.attendance?.code
+    const isSwitchBetweenNonCompliantOutcomes =
+      (previousAttendanceCode === 'AFTC' && selectedAttendanceCode === 'UAAB') ||
+      (previousAttendanceCode === 'UAAB' && selectedAttendanceCode === 'AFTC')
+    const shouldConfirmStatusChange =
+      isLastReferral &&
+      attendees.length === 1 &&
+      this.isPreGroupOneToOneSession(recordAttendanceBffData) &&
+      !isSwitchBetweenNonCompliantOutcomes &&
+      (selectedAttendanceCode === 'ATTC' ||
+        (!!previousAttendanceCode && (selectedAttendanceCode === 'AFTC' || selectedAttendanceCode === 'UAAB')))
 
     const backLinkUri =
       currentReferralIndex > 0
@@ -204,7 +215,7 @@ export default class AttendanceController extends BaseController {
             referralId,
             submittedNotes,
             backLinkUri,
-            this.isPreGroupOneToOneSession(recordAttendanceBffData),
+            shouldConfirmStatusChange,
           )
           const view = new AttendanceSessionNotesView(presenter)
           return this.renderPage(res, view)
@@ -220,21 +231,13 @@ export default class AttendanceController extends BaseController {
           return res.redirect(`/${groupId}/${sessionId}/edit-session`)
         }
 
-        if (this.isPreGroupOneToOneSession(recordAttendanceBffData)) {
-          // There should only be one attendee for a pre-group one-to-one session
-          if (
-            attendeesForSubmission.length === 1 &&
-            (attendeesForSubmission[0].outcomeCode === 'ATTC' ||
-              attendeesForSubmission[0].outcomeCode === 'AFTC' ||
-              attendeesForSubmission[0].outcomeCode === 'UAAB')
-          ) {
-            req.session.editSessionAttendance.attendees = attendeesForSubmission
-            req.session.editSessionAttendance.sessionId = sessionId
-            req.session.editSessionAttendance.referralIds = [referralId]
-            const sessionWithGroupTitle = req.session.editSessionAttendance as Record<string, unknown>
-            sessionWithGroupTitle.groupTitle = this.notesPageGroupTitle(recordAttendanceBffData)
-            return res.redirect(`/referral/${referralId}/group/${groupId}/attendance/update-status-on-programme`)
-          }
+        if (shouldConfirmStatusChange) {
+          req.session.editSessionAttendance.attendees = attendeesForSubmission
+          req.session.editSessionAttendance.sessionId = sessionId
+          req.session.editSessionAttendance.referralIds = [referralId]
+          const sessionWithGroupTitle = req.session.editSessionAttendance as Record<string, unknown>
+          sessionWithGroupTitle.groupTitle = theGroupTitle
+          return res.redirect(`/referral/${referralId}/group/${groupId}/attendance/update-status-on-programme`)
         }
 
         await sendAuditEvent('CREATE_ATTENDANCE', username, sessionId, 'SEARCH_TERM', {
@@ -317,7 +320,7 @@ export default class AttendanceController extends BaseController {
       referralId,
       notesValue,
       backLinkUri,
-      this.isPreGroupOneToOneSession(recordAttendanceBffData),
+      shouldConfirmStatusChange,
     )
     const view = new AttendanceSessionNotesView(presenter)
 

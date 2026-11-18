@@ -406,7 +406,14 @@ describe('Update Referral Status Controller', () => {
     const attendee = { referralId: referralDetails.id, outcomeCode: 'ATTC' as const }
 
     describe(`POST /referral/:referralId/group/:groupId/attendance/update-status-on-programme`, () => {
-      it('passes the submitted additional details through to createSessionAttendance', async () => {
+      it.each([
+        ['plain text', 'Some additional details', 'Some additional details'],
+        [
+          '500 characters with a paragraph break',
+          `${'a'.repeat(249)}\r\n\r\n${'b'.repeat(249)}`,
+          `${'a'.repeat(249)}\n\n${'b'.repeat(249)}`,
+        ],
+      ])('passes %s through to createSessionAttendance', async (_label, submittedDetails, expectedDetails) => {
         const sessionData: Partial<SessionData> = {
           editSessionAttendance: { sessionId, attendees: [attendee] },
         }
@@ -419,18 +426,21 @@ describe('Update Referral Status Controller', () => {
         return request(app)
           .post(`/referral/${referralDetails.id}/group/${groupId}/attendance/update-status-on-programme`)
           .type('form')
-          .send({ 'add-details': 'Some additional details' })
+          .send({ 'add-details': submittedDetails })
           .expect(302)
           .expect(() => {
             expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).toHaveBeenCalledWith(
               'user1',
               sessionId,
-              { attendees: [{ ...attendee, additionalDetails: 'Some additional details' }] },
+              { attendees: [{ ...attendee, additionalDetails: expectedDetails }] },
             )
           })
       })
 
-      it('returns 400 and displays an error when add-details is too long', async () => {
+      it.each([
+        ['without line breaks', 'a'.repeat(501)],
+        ['with a paragraph break', `${'a'.repeat(249)}\r\n\r\n${'b'.repeat(250)}`],
+      ])('returns 400 and displays an error for 501 characters %s', async (_label, submittedDetails) => {
         const sessionData: Partial<SessionData> = {
           editSessionAttendance: { sessionId, attendees: [attendee] },
         }
@@ -440,7 +450,7 @@ describe('Update Referral Status Controller', () => {
         return request(app)
           .post(`/referral/${referralDetails.id}/group/${groupId}/attendance/update-status-on-programme`)
           .type('form')
-          .send({ 'add-details': faker.string.alpha({ length: 501 }) })
+          .send({ 'add-details': submittedDetails })
           .expect(400)
           .expect(res => {
             expect(res.text).toContain('Details must be 500 characters or fewer')

@@ -1,3 +1,4 @@
+import { load } from 'cheerio'
 import { Express } from 'express'
 import { SessionData } from 'express-session'
 import request from 'supertest'
@@ -584,6 +585,66 @@ describe('showRecordAttendancePages', () => {
           expect(res.text).toContain('/111/6789/referral/referral1/pre-group-one-to-one-session-notes')
           expect(res.text).toContain('/111/6789/record-attendance')
         })
+    })
+  })
+
+  describe('recording pre-group one-to-one attendance', () => {
+    it.each([
+      [null, 'AFTC', 'Submit'],
+      [null, 'UAAB', 'Submit'],
+      [null, 'ATTC', 'Continue'],
+      ['AFTC', 'UAAB', 'Submit'],
+      ['UAAB', 'AFTC', 'Submit'],
+      ['AFTC', 'ATTC', 'Continue'],
+    ] as const)('shows %s to %s as %s on the notes page', async (previousCode, selectedCode, buttonText) => {
+      app = TestUtils.createTestAppWithSession(
+        { editSessionAttendance: { referralIds: ['referral1'], source: 'edit-session' } },
+        { accreditedProgrammesManageAndDeliverService },
+      )
+      const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Pre-group one-to-one' })
+      const [person] = bffData.people
+      bffData.people = [
+        {
+          ...person,
+          referralId: 'referral1',
+          attendance: previousCode ? { ...person.attendance, code: previousCode } : null,
+        },
+      ]
+      accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
+
+      const attendee = { referralId: 'referral1', outcomeCode: selectedCode, sessionNotes: 'Updated notes' }
+      accreditedProgrammesManageAndDeliverService.createSessionAttendance.mockResolvedValue({ attendees: [attendee] })
+
+      const agent = request.agent(app)
+      const notesUrl = '/111/6789/referral/referral1/pre-group-one-to-one-session-notes'
+      await agent
+        .post('/111/6789/pre-group-one-to-one-attendance')
+        .type('form')
+        .send({ 'attendance-referral1': selectedCode })
+        .expect(302)
+        .expect('Location', notesUrl)
+
+      const notesPage = await agent.get(notesUrl).expect(200)
+      const $ = load(notesPage.text)
+      expect($('main form button[type="submit"]').first().text().trim()).toBe(buttonText)
+
+      const submission = await agent
+        .post(notesUrl)
+        .type('form')
+        .send({ 'record-session-attendance-notes': attendee.sessionNotes })
+        .expect(302)
+
+      if (buttonText === 'Continue') {
+        expect(submission.headers.location).toBe('/referral/referral1/group/111/attendance/update-status-on-programme')
+        expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).not.toHaveBeenCalled()
+      } else {
+        expect(submission.headers.location).toBe('/111/6789/edit-session?message=Attendance+recorded+for+Alice+Brown.')
+        expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).toHaveBeenCalledWith(
+          'user1',
+          '6789',
+          { attendees: [attendee] },
+        )
+      }
     })
   })
 

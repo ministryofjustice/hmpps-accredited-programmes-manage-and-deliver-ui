@@ -5,6 +5,11 @@ import { FormData } from '../utils/forms/formData'
 import FormUtils from '../utils/formUtils'
 import errorMessages from '../utils/errorMessages'
 
+function normaliseLineBreaks(value: string): string {
+  // Match the textarea value: browsers count LF but submit CRLF.
+  return value.replace(/\r\n?/g, '\n')
+}
+
 export default class UpdateReferralStatusForm {
   constructor(private readonly request: Request) {}
 
@@ -119,15 +124,22 @@ export default class UpdateReferralStatusForm {
       }
     }
 
+    const additionalDetails: unknown = this.request.body['add-details']
     return {
       paramsForUpdate: {
-        additionalDetails: (this.request.body['add-details'] as string)?.trim() || null,
+        additionalDetails:
+          typeof additionalDetails === 'string' ? normaliseLineBreaks(additionalDetails).trim() || null : null,
       },
       error: null,
     }
   }
 
   static get preGroupStatusChangeValidations(): ValidationChain[] {
-    return [body('add-details').isLength({ max: 500 }).withMessage(errorMessages.updateStatus.detailsTooLong)]
+    return [
+      body('add-details')
+        .optional()
+        .custom((value: unknown) => typeof value === 'string' && normaliseLineBreaks(value).length <= 500)
+        .withMessage(errorMessages.updateStatus.detailsTooLong),
+    ]
   }
 }

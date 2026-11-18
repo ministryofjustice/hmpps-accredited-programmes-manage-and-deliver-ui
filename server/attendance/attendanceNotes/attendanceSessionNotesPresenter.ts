@@ -14,7 +14,7 @@ export default class AttendanceSessionNotesPresenter {
     private readonly referralId: string,
     private readonly notesValue: string,
     private readonly backLink: string,
-    private readonly isPreGroupOneToOne: boolean = false,
+    private readonly shouldConfirmStatusChange: boolean = false,
   ) {}
 
   get lastReferral() {
@@ -22,12 +22,7 @@ export default class AttendanceSessionNotesPresenter {
   }
 
   get submitButtonText(): string {
-    return this.isPreGroupOneToOne &&
-      (this.selectedAttendanceCode === 'ATTC' ||
-        this.selectedAttendanceCode === 'AFTC' ||
-        this.selectedAttendanceCode === 'UAAB')
-      ? 'Continue'
-      : 'Submit'
+    return this.shouldConfirmStatusChange ? 'Continue' : 'Submit'
   }
 
   get hasExistingNotes() {
