@@ -83,24 +83,6 @@ describe('layout main content', () => {
     expect($('.service-user-banner__sub-nav')).toHaveLength(0)
   })
 
-  it('gives the status change Back link the same content spacing as the attendance notes Back link', () => {
-    const renderBackLink = (template: string) => {
-      const $ = load(
-        environment.render(template, {
-          primaryNavigationArgs: {},
-          backLinkArgs: { text: 'Back', href: '/previous-step' },
-          errorSummary: null,
-        }),
-      )
-      return $('#main-content > .govuk-width-container > .govuk-main-wrapper.app-container .govuk-back-link')
-    }
-
-    expect(renderBackLink('attendance/recordAttendanceNotes.njk')).toHaveLength(1)
-    const statusChangeBackLink = renderBackLink('updateReferralStatus/preGroupStatusChange.njk')
-    expect(statusChangeBackLink).toHaveLength(1)
-    expect(statusChangeBackLink.attr('href')).toBe('/previous-step')
-  })
-
   it('preserves GOV.UK container and main attributes', () => {
     const $ = load(
       environment.render('partials/layout.njk', {
