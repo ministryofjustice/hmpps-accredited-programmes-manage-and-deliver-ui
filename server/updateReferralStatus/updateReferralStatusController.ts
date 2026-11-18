@@ -5,6 +5,8 @@ import ControllerUtils from '../utils/controllerUtils'
 import errorMessages from '../utils/errorMessages'
 import { FormValidationError } from '../utils/formValidationError'
 import { SanitisedError } from '../sanitisedError'
+import PreGroupStatusChangePresenter from './preGroupStatusChangePresenter'
+import PreGroupStatusChangeView from './preGroupStatusChangeView'
 import UpdateReferralStatusForm from './updateReferralStatusForm'
 import UpdateReferralStatusPresenter from './updateReferralStatusPresenter'
 import UpdateReferralStatusStartedOrCompletedPresenter from './updateReferralStatusStartedOrCompletedPresenter'
@@ -278,6 +280,131 @@ export default class UpdateReferralStatusController {
     )
 
     const view = new UpdateReferralStatusFixedView(presenter)
+    return ControllerUtils.renderWithLayout(res, view, referralDetails)
+  }
+
+  async preGroupStatusChange(req: Request, res: Response): Promise<void> {
+    res.set('Cache-Control', 'no-store')
+
+    const { referralId, groupId } = req.params as Record<string, string>
+    const { username } = req.user
+    const originPage = getReferralOriginPage(req, referralId)
+    const isAddToGroupJourney = req.session.groupManagementData?.addToGroupOnProgramme === true
+
+    // Extract the attendance outcome code from the session
+    const attendanceOutcomeCode = req.session.editSessionAttendance?.attendees?.[0]?.outcomeCode
+
+    // Construct back link for attendance flow (goes back to last notes page)
+    const stagedAttendance = req.session.editSessionAttendance
+    const sessionId = stagedAttendance?.sessionId
+    const referralIds = stagedAttendance?.referralIds as string[] | undefined
+    const groupTitle = (stagedAttendance as Record<string, unknown>)?.groupTitle as string | undefined
+    let backLinkUri = originPage
+
+    if (sessionId && referralIds && referralIds.length > 0 && groupTitle) {
+      // If coming from attendance flow, go back to the last attendance notes page
+      const lastReferralId = referralIds[referralIds.length - 1]
+      backLinkUri = `/${groupId}/${sessionId}/referral/${lastReferralId}/${groupTitle}-session-notes`
+    }
+
+    const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
+      referralId,
+      username,
+    )
+
+    if (req.method === 'POST') {
+      const form = new UpdateReferralStatusForm(req)
+      const data = await form.preGroupStatusChangeData()
+
+      if (data.error) {
+        res.status(400)
+        const presenter = new PreGroupStatusChangePresenter(
+          referralDetails,
+          backLinkUri,
+          isAddToGroupJourney,
+          data.error,
+          req.body,
+          attendanceOutcomeCode,
+        )
+        const view = new PreGroupStatusChangeView(presenter)
+        return ControllerUtils.renderWithLayout(res, view, referralDetails)
+      }
+
+      const { additionalDetails } = data.paramsForUpdate
+
+      if (isAddToGroupJourney) {
+        const response = await this.accreditedProgrammesManageAndDeliverService.addToGroup(
+          username,
+          referralId,
+          groupId,
+          additionalDetails ?? undefined,
+        )
+        await sendAuditEvent('EDIT_ASSIGN_REFERRAL_TO_GROUP', username, referralDetails?.crn, 'CRN', {
+          referralId,
+          groupId,
+          additionalDetails,
+        })
+        logger.info(
+          {
+            event: 'ASSIGN_REFERRAL_TO_GROUP',
+            referralId,
+            groupId,
+            pdu: referralDetails?.pdu,
+            user: username,
+            userRegion: req.session.userRegion?.regionDescription ?? '',
+          },
+          'Referral added to group and status changed to On programme',
+        )
+
+        if (req.session.groupManagementData) {
+          delete req.session.groupManagementData.addToGroupOnProgramme
+        }
+        return res.redirect(`/group/${groupId}/allocations?message=${encodeURIComponent(response.message)}`)
+      }
+
+      const attendees = (stagedAttendance?.attendees ?? []).map(attendee => ({
+        ...attendee,
+        additionalDetails,
+      }))
+
+      if (sessionId && attendees.length) {
+        await sendAuditEvent('CREATE_ATTENDANCE', username, sessionId, 'SEARCH_TERM', {
+          details: { attendees },
+        })
+        await this.accreditedProgrammesManageAndDeliverService.createSessionAttendance(username, sessionId, {
+          attendees,
+        })
+        logger.info(
+          {
+            event: 'RECORD_ATTENDANCE',
+            sessionId,
+            referralId,
+            pdu: referralDetails?.pdu,
+            user: username,
+            userRegion: req.session.userRegion?.regionDescription ?? '',
+          },
+          'Pre-group one-to-one session attendance recorded',
+        )
+
+        delete req.session.editSessionAttendance
+        const statusText = attendanceOutcomeCode === 'ATTC' ? 'On programme' : 'Scheduled'
+        const message = `Attendance recorded for ${referralDetails.personName}. Their referral status is now '${statusText}'.`
+        return res.redirect(`/${groupId}/${sessionId}/edit-session?message=${message}`)
+      }
+
+      delete req.session.editSessionAttendance
+    }
+
+    const presenter = new PreGroupStatusChangePresenter(
+      referralDetails,
+      backLinkUri,
+      isAddToGroupJourney,
+      null,
+      null,
+      attendanceOutcomeCode,
+    )
+
+    const view = new PreGroupStatusChangeView(presenter)
     return ControllerUtils.renderWithLayout(res, view, referralDetails)
   }
 }

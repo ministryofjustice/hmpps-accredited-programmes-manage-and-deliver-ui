@@ -380,7 +380,7 @@ describe('showRecordAttendancePages', () => {
         .get('/111/6789/referral/referral1/pre-group-one-to-one-session-notes')
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain('Submit')
+          expect(res.text).toContain('Continue')
           expect(res.text).toContain('Attendance')
           expect(res.text).toContain('Attended')
         })
@@ -515,7 +515,7 @@ describe('showRecordAttendancePages', () => {
         .get('/111/6789/referral/referral2/pre-group-one-to-one-session-notes')
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain('Submit')
+          expect(res.text).toContain('Continue')
           expect(res.text).toContain('Skip and add later')
         })
     })
@@ -544,7 +544,7 @@ describe('showRecordAttendancePages', () => {
         .get('/111/6789/referral/referral1/pre-group-one-to-one-session-notes')
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain('Submit')
+          expect(res.text).toContain('Continue')
           expect(res.text).toContain('Skip and add later')
         })
     })

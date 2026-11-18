@@ -32,7 +32,7 @@
           {{ govukCharacterCount(characterCountArgs) }}
        
           {% if isLastReferral %}
-            {{ govukButton({ text: "Submit", preventDoubleClick: true }) }}
+            {{ govukButton({ text: submitButtonText, preventDoubleClick: true }) }}
           {% else %}
             {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
           {% endif %}

@@ -31,6 +31,24 @@ export default class AddToGroupController extends BaseController {
         res.status(400)
         formError = data.error
       } else if (data.paramsForUpdate.addToGroup.toLowerCase() === 'yes') {
+        const statusHistory = await this.accreditedProgrammesManageAndDeliverService.getStatusHistory(
+          req.user.username,
+          referralId,
+        )
+        const hasPreviouslyBeenOnProgramme = (statusHistory ?? []).some(
+          status => status.referralStatusDescriptionName === 'On programme',
+        )
+        if (hasPreviouslyBeenOnProgramme) {
+          req.session.groupManagementData = {
+            ...req.session.groupManagementData,
+            addToGroupOnProgramme: true,
+          }
+          return res.redirect(`/referral/${referralId}/group/${groupId}/attendance/update-status-on-programme`)
+        }
+        req.session.groupManagementData = {
+          ...req.session.groupManagementData,
+          addToGroupOnProgramme: false,
+        }
         return res.redirect(`/${groupId}/${referralId}/scheduled-status-details`)
       } else {
         return res.redirect(req.session.originPage)

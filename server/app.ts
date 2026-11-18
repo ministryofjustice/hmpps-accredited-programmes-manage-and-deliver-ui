@@ -54,6 +54,7 @@ declare module 'express-session' {
       groupCode?: string
       personName?: string
       removeFromGroup?: boolean
+      addToGroupOnProgramme?: boolean
     }
     createGroupFormData?: Partial<CreateGroupRequest> & {
       previousDate?: string
@@ -71,6 +72,7 @@ declare module 'express-session' {
     editSessionAttendance?: Partial<SessionAttendance> & {
       referralIds?: string[]
       source?: 'edit-session' | 'session-notes'
+      sessionId?: string
     }
     sessionNotesCache?: {
       sessionId: string

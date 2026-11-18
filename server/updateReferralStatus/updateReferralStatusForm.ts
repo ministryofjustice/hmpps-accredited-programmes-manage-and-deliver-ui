@@ -104,4 +104,30 @@ export default class UpdateReferralStatusForm {
   static get fixedValidations(): ValidationChain[] {
     return [body('more-details').isLength({ max: 500 }).withMessage(errorMessages.updateStatus.detailsTooLong)]
   }
+
+  async preGroupStatusChangeData(): Promise<FormData<{ additionalDetails: string | null }>> {
+    const validationResult = await FormUtils.runValidations({
+      request: this.request,
+      validations: UpdateReferralStatusForm.preGroupStatusChangeValidations,
+    })
+
+    const error = FormUtils.validationErrorFromResult(validationResult)
+    if (error) {
+      return {
+        paramsForUpdate: null,
+        error,
+      }
+    }
+
+    return {
+      paramsForUpdate: {
+        additionalDetails: (this.request.body['add-details'] as string)?.trim() || null,
+      },
+      error: null,
+    }
+  }
+
+  static get preGroupStatusChangeValidations(): ValidationChain[] {
+    return [body('add-details').isLength({ max: 500 }).withMessage(errorMessages.updateStatus.detailsTooLong)]
+  }
 }
