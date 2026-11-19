@@ -115,7 +115,7 @@ export default class SessionScheduleCyaView {
           value: {
             html: sessionDetails.facilitators
               .map((facilitator: { facilitator: string }) => facilitator.facilitator)
-              .join('<br>'),
+              .join('<br/>'),
           },
           actions: {
             items: [
