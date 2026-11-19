@@ -180,6 +180,7 @@ export default class EditSessionView {
         hasMultipleReferrals: this.presenter.hasMultipleReferrals,
         hasReferral: this.presenter.hasReferral,
         hasAnyAttendees: this.presenter.hasAnyAttendees,
+        noAttendeesMessage: this.presenter.noAttendeesMessage,
         hasRestrictedParticipants: this.presenter.hasRestrictedParticipants,
         singleReferral: this.singleReferral,
         attendanceHeading: this.presenter.attendanceHeading,

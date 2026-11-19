@@ -67,7 +67,7 @@
       {% endif %}
 
       {% if not hasAnyAttendees %}
-        <p class="govuk-body-l">There are currently no people allocated to this group.</p>
+        <p class="govuk-body-l">{{ noAttendeesMessage }}</p>
       {% endif %}
     </div>
   </div>
