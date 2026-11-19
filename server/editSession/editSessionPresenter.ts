@@ -128,6 +128,12 @@ export default class EditSessionPresenter {
     return this.restrictedAttendees.length > 0
   }
 
+  get noAttendeesMessage(): string {
+    return this.hasGroupMembers
+      ? 'There are currently no people allocated to this session.'
+      : 'There are currently no people allocated to this group.'
+  }
+
   // "Scheduled to attend" names, with restricted participants shown as CRN-only
   get scheduledToAttendDisplay(): string[] {
     return [

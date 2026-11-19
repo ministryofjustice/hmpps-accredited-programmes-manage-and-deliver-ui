@@ -172,10 +172,12 @@ describe('editSession', () => {
     )
 
     await request(app)
-      .get(`/${groupId}/${sessionId}/edit-session`)
+      .get(`/${groupId}/${sessionId}/getting-started-1`)
       .expect(200)
       .expect(res => {
         expect(res.text).toContain(`/${groupId}/${sessionId}/edit-session-attendees`)
+        expect(res.text).toContain('There are currently no people allocated to this session.')
+        expect(res.text).not.toContain('There are currently no people allocated to this group.')
       })
 
     expect(accreditedProgrammesManageAndDeliverService.getGroupDetailsById).toHaveBeenCalledWith('user1', groupId)
@@ -202,6 +204,8 @@ describe('editSession', () => {
       .expect(200)
       .expect(res => {
         expect(res.text).not.toContain(`/${groupId}/${sessionId}/edit-session-attendees`)
+        expect(res.text).toContain('There are currently no people allocated to this group.')
+        expect(res.text).not.toContain('There are currently no people allocated to this session.')
       })
   })
 
@@ -461,6 +465,7 @@ describe('editSession', () => {
           expect(res.text).not.toContain('Update attendance and notes')
           expect(res.text).not.toContain('type="checkbox"')
           expect(res.text).toContain('Restricted participants')
+          expect(res.text).not.toContain('There are currently no people allocated')
         })
     })
 

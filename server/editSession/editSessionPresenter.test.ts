@@ -1301,4 +1301,68 @@ describe('EditSessionPresenter', () => {
       expect(presenter.attendanceErrorSummary).toBeNull()
     })
   })
+
+  describe('noAttendeesMessage', () => {
+    it('returns "no people allocated to this session" when there are no attendees but group has members', () => {
+      const sessionDetails: GroupSessionResponse = {
+        pageTitle: 'Session 1',
+        code: 'CODE-123',
+        sessionType: 'Group',
+        isCatchup: false,
+        attendanceAndSessionNotes: [],
+        date: '01 Feb 2026',
+        time: '1:00pm',
+        timeWithCapitalisedMidday: '1:00pm',
+        unformattedEndDate: '2026-02-01T14:00:00',
+        scheduledToAttend: [],
+        facilitators: [],
+      }
+
+      const presenter = new EditSessionPresenter(
+        mockGroupId,
+        sessionDetails,
+        mockSessionId,
+        mockDeleteUrl,
+        null,
+        null,
+        false,
+        null,
+        null,
+        true,
+      )
+
+      expect(presenter.noAttendeesMessage).toBe('There are currently no people allocated to this session.')
+    })
+
+    it('returns "no people allocated to this group" when there are no attendees and no group members', () => {
+      const sessionDetails: GroupSessionResponse = {
+        pageTitle: 'Session 1',
+        code: 'CODE-123',
+        sessionType: 'Group',
+        isCatchup: false,
+        attendanceAndSessionNotes: [],
+        date: '01 Feb 2026',
+        time: '1:00pm',
+        timeWithCapitalisedMidday: '1:00pm',
+        unformattedEndDate: '2026-02-01T14:00:00',
+        scheduledToAttend: [],
+        facilitators: [],
+      }
+
+      const presenter = new EditSessionPresenter(
+        mockGroupId,
+        sessionDetails,
+        mockSessionId,
+        mockDeleteUrl,
+        null,
+        null,
+        false,
+        null,
+        null,
+        false,
+      )
+
+      expect(presenter.noAttendeesMessage).toBe('There are currently no people allocated to this group.')
+    })
+  })
 })
