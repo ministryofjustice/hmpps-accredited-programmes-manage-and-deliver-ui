@@ -280,6 +280,10 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await updateReferralController.updateStatusToOnProgrammeOrCompleted(req, res)
   })
 
+  getOrPost('/referral/:referralId/group/:groupId/attendance/update-status-on-programme', async (req, res, next) => {
+    await updateReferralController.preGroupStatusChange(req, res)
+  })
+
   getOrPost('/create-group', async (req, res) => {
     await createGroupController.showCreateGroupStart(req, res)
   })

@@ -7,6 +7,7 @@ import { ReferralDetails } from '@manage-and-deliver-api'
 import AccreditedProgrammesManageAndDeliverService from '../../services/accreditedProgrammesManageAndDeliverService'
 import TestUtils from '../../testutils/testUtils'
 import referralDetailsFactory from '../../testutils/factories/referralDetailsFactory'
+import statusHistoryFactory from '../../testutils/factories/statusHistoryFactory'
 
 import sendAuditEvent from '../../services/auditService'
 
@@ -51,9 +52,12 @@ describe('add to group', () => {
   })
 
   describe(`POST /add-to-group/:groupId/:referralId`, () => {
-    it('posts to the add to group page and redirects successfully to the more details page if Yes is selected', async () => {
+    it('posts to the add to group page and redirects successfully to the more details page if Yes is selected and the referral has not previously been On programme', async () => {
       const groupId = '123'
       const referralId = '123'
+      accreditedProgrammesManageAndDeliverService.getStatusHistory.mockResolvedValue([
+        statusHistoryFactory.awaitingAllocation().build(),
+      ])
       return request(app)
         .post(`/add-to-group/${groupId}/${referralId}`)
         .type('form')
@@ -63,6 +67,27 @@ describe('add to group', () => {
         .expect(302)
         .expect(res => {
           expect(res.text).toContain(`Redirecting to /${groupId}/${referralId}/scheduled-status-details`)
+        })
+    })
+
+    it('redirects to the On programme status change confirmation page if Yes is selected and the referral has previously been On programme', async () => {
+      const groupId = '123'
+      const referralId = '123'
+      accreditedProgrammesManageAndDeliverService.getStatusHistory.mockResolvedValue([
+        statusHistoryFactory.awaitingAllocation().build(),
+        statusHistoryFactory.build({ referralStatusDescriptionName: 'On programme' }),
+      ])
+      return request(app)
+        .post(`/add-to-group/${groupId}/${referralId}`)
+        .type('form')
+        .send({
+          'add-to-group': 'Yes',
+        })
+        .expect(302)
+        .expect(res => {
+          expect(res.text).toContain(
+            `Redirecting to /referral/${referralId}/group/${groupId}/attendance/update-status-on-programme`,
+          )
         })
     })
 

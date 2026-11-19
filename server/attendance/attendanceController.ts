@@ -176,6 +176,17 @@ export default class AttendanceController extends BaseController {
     }
 
     const selectedAttendanceCode = currentAttendee?.outcomeCode
+    const previousAttendanceCode = referralPerson?.attendance?.code
+    const isSwitchBetweenNonCompliantOutcomes =
+      (previousAttendanceCode === 'AFTC' && selectedAttendanceCode === 'UAAB') ||
+      (previousAttendanceCode === 'UAAB' && selectedAttendanceCode === 'AFTC')
+    const shouldConfirmStatusChange =
+      isLastReferral &&
+      attendees.length === 1 &&
+      this.isPreGroupOneToOneSession(recordAttendanceBffData) &&
+      !isSwitchBetweenNonCompliantOutcomes &&
+      (selectedAttendanceCode === 'ATTC' ||
+        (!!previousAttendanceCode && (selectedAttendanceCode === 'AFTC' || selectedAttendanceCode === 'UAAB')))
 
     const backLinkUri =
       currentReferralIndex > 0
@@ -204,6 +215,7 @@ export default class AttendanceController extends BaseController {
             referralId,
             submittedNotes,
             backLinkUri,
+            shouldConfirmStatusChange,
           )
           const view = new AttendanceSessionNotesView(presenter)
           return this.renderPage(res, view)
@@ -217,6 +229,15 @@ export default class AttendanceController extends BaseController {
 
         if (!attendeesForSubmission.length) {
           return res.redirect(`/${groupId}/${sessionId}/edit-session`)
+        }
+
+        if (shouldConfirmStatusChange) {
+          req.session.editSessionAttendance.attendees = attendeesForSubmission
+          req.session.editSessionAttendance.sessionId = sessionId
+          req.session.editSessionAttendance.referralIds = [referralId]
+          const sessionWithGroupTitle = req.session.editSessionAttendance as Record<string, unknown>
+          sessionWithGroupTitle.groupTitle = theGroupTitle
+          return res.redirect(`/referral/${referralId}/group/${groupId}/attendance/update-status-on-programme`)
         }
 
         await sendAuditEvent('CREATE_ATTENDANCE', username, sessionId, 'SEARCH_TERM', {
@@ -299,6 +320,7 @@ export default class AttendanceController extends BaseController {
       referralId,
       notesValue,
       backLinkUri,
+      shouldConfirmStatusChange,
     )
     const view = new AttendanceSessionNotesView(presenter)
 
@@ -350,6 +372,13 @@ export default class AttendanceController extends BaseController {
     const sessionModuleSlug = convertToUrlFriendlyKebabCase(recordAttendanceBffData.sessionModule)
 
     return recordAttendanceBffData.isCatchup ? `${sessionModuleSlug}-catch-up` : sessionModuleSlug
+  }
+
+  private isPreGroupOneToOneSession(recordAttendanceBffData: RecordSessionAttendance): boolean {
+    const normalise = (value: string | undefined): string => (value ?? '').toLowerCase().replace(/[-\s]+/g, ' ')
+    const haystack = `${normalise(recordAttendanceBffData.sessionModule)} ${normalise(recordAttendanceBffData.sessionTitle)}`
+
+    return haystack.includes('pre group one to one')
   }
 
   private resolveOutcomeCodeFromPerson(

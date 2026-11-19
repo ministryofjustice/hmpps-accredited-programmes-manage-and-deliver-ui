@@ -186,6 +186,7 @@ describe('Update Referral Status Controller', () => {
         currentGroupDetails: {
           currentlyAllocatedGroupCode: 'Building Choices 1',
           currentlyAllocatedGroupId: randomUUID(),
+          attendanceHistories: [],
         },
       })
     })
@@ -247,6 +248,7 @@ describe('Update Referral Status Controller', () => {
           currentGroupDetails: {
             currentlyAllocatedGroupCode: 'Building Choices 1',
             currentlyAllocatedGroupId: randomUUID(),
+            attendanceHistories: [],
           },
         })
       })
@@ -319,6 +321,7 @@ describe('Update Referral Status Controller', () => {
           currentGroupDetails: {
             currentlyAllocatedGroupCode: 'Building Choices 1',
             currentlyAllocatedGroupId: randomUUID(),
+            attendanceHistories: [],
           },
         })
       })
@@ -392,6 +395,304 @@ describe('Update Referral Status Controller', () => {
           .expect(400)
           .expect(res => {
             expect(res.text).toContain('Details must be 500 characters or fewer')
+          })
+      })
+    })
+  })
+
+  describe('pre-group-status-change', () => {
+    const groupId = randomUUID()
+    const sessionId = randomUUID()
+    const attendee = { referralId: referralDetails.id, outcomeCode: 'ATTC' as const }
+
+    describe(`POST /referral/:referralId/group/:groupId/attendance/update-status-on-programme`, () => {
+      it.each([
+        ['plain text', 'Some additional details', 'Some additional details'],
+        [
+          '500 characters with a paragraph break',
+          `${'a'.repeat(249)}\r\n\r\n${'b'.repeat(249)}`,
+          `${'a'.repeat(249)}\n\n${'b'.repeat(249)}`,
+        ],
+      ])('passes %s through to createSessionAttendance', async (_label, submittedDetails, expectedDetails) => {
+        const sessionData: Partial<SessionData> = {
+          editSessionAttendance: { sessionId, attendees: [attendee] },
+        }
+        app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+        accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
+        accreditedProgrammesManageAndDeliverService.createSessionAttendance.mockResolvedValue({
+          attendees: [attendee],
+        })
+
+        return request(app)
+          .post(`/referral/${referralDetails.id}/group/${groupId}/attendance/update-status-on-programme`)
+          .type('form')
+          .send({ 'add-details': submittedDetails })
+          .expect(302)
+          .expect(() => {
+            expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).toHaveBeenCalledWith(
+              'user1',
+              sessionId,
+              { attendees: [{ ...attendee, additionalDetails: expectedDetails }] },
+            )
+          })
+      })
+
+      it.each([
+        ['without line breaks', 'a'.repeat(501)],
+        ['with a paragraph break', `${'a'.repeat(249)}\r\n\r\n${'b'.repeat(250)}`],
+      ])('returns 400 and displays an error for 501 characters %s', async (_label, submittedDetails) => {
+        const sessionData: Partial<SessionData> = {
+          editSessionAttendance: { sessionId, attendees: [attendee] },
+        }
+        app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+        accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
+
+        return request(app)
+          .post(`/referral/${referralDetails.id}/group/${groupId}/attendance/update-status-on-programme`)
+          .type('form')
+          .send({ 'add-details': submittedDetails })
+          .expect(400)
+          .expect(res => {
+            expect(res.text).toContain('Details must be 500 characters or fewer')
+            expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).not.toHaveBeenCalled()
+          })
+      })
+    })
+
+    describe('add to group journey (referral previously On programme)', () => {
+      beforeEach(() => {
+        const sessionData: Partial<SessionData> = {
+          groupManagementData: { addToGroupOnProgramme: true },
+        }
+        app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+        accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
+      })
+
+      it('GET displays the On programme confirmation with add-to-group copy and a Save button', async () => {
+        return request(app)
+          .get(`/referral/${referralDetails.id}/group/${groupId}/attendance/update-status-on-programme`)
+          .expect(200)
+          .expect(res => {
+            expect(res.text).toContain('referral status will change to On programme')
+            expect(res.text).toContain('has previously started the programme')
+            expect(res.text).toContain('Save')
+          })
+      })
+
+      it('POST adds the referral to the group and redirects to allocations with the API message', async () => {
+        accreditedProgrammesManageAndDeliverService.addToGroup.mockResolvedValue({
+          message: `${referralDetails.personName} was added to this group. Their referral status is now On programme.`,
+        })
+
+        return request(app)
+          .post(`/referral/${referralDetails.id}/group/${groupId}/attendance/update-status-on-programme`)
+          .type('form')
+          .send({ 'add-details': 'Returning to programme' })
+          .expect(302)
+          .expect(res => {
+            expect(res.text).toContain(
+              `Redirecting to /group/${groupId}/allocations?message=${encodeURIComponent(
+                `${referralDetails.personName} was added to this group. Their referral status is now On programme.`,
+              )}`,
+            )
+          })
+          .then(() => {
+            expect(accreditedProgrammesManageAndDeliverService.addToGroup).toHaveBeenCalledWith(
+              'user1',
+              referralDetails.id,
+              groupId,
+              'Returning to programme',
+            )
+            expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).not.toHaveBeenCalled()
+            expect(sendAuditEvent).toHaveBeenCalledWith(
+              'EDIT_ASSIGN_REFERRAL_TO_GROUP',
+              'user1',
+              referralDetails.crn,
+              'CRN',
+              expect.objectContaining({ referralId: referralDetails.id, groupId }),
+            )
+          })
+      })
+
+      it('returns 400 and does not add to group when add-details is too long', async () => {
+        return request(app)
+          .post(`/referral/${referralDetails.id}/group/${groupId}/attendance/update-status-on-programme`)
+          .type('form')
+          .send({ 'add-details': faker.string.alpha({ length: 501 }) })
+          .expect(400)
+          .expect(res => {
+            expect(res.text).toContain('Details must be 500 characters or fewer')
+            expect(accreditedProgrammesManageAndDeliverService.addToGroup).not.toHaveBeenCalled()
+          })
+      })
+    })
+
+    describe('AFTC (Attended - did not comply) attendance code', () => {
+      beforeEach(() => {
+        const groupTitle = 'pre-group-one-to-one'
+        const editSessionAttendance = {
+          sessionId,
+          attendees: [{ referralId: referralDetails.id, outcomeCode: 'AFTC' }],
+          referralIds: [referralDetails.id],
+        } as Record<string, unknown>
+        editSessionAttendance.groupTitle = groupTitle
+        const sessionData: Partial<SessionData> = {
+          editSessionAttendance: editSessionAttendance as unknown as typeof editSessionAttendance,
+        }
+        app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+        accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
+        accreditedProgrammesManageAndDeliverService.createSessionAttendance.mockResolvedValue({
+          attendees: [{ referralId: referralDetails.id, outcomeCode: 'AFTC' }],
+        })
+      })
+
+      it('GET displays the Scheduled status confirmation with AFTC-specific inset text', async () => {
+        return request(app)
+          .get(`/referral/${referralDetails.id}/group/${groupId}/attendance/update-status-on-programme`)
+          .expect(200)
+          .expect(res => {
+            expect(res.text).toContain('referral status will change to Scheduled')
+            expect(res.text).toContain('attended their pre-group one-to-one but did not comply')
+            expect(res.text).toContain('referral status will change back to')
+            expect(res.text).not.toContain('Save')
+            expect(res.text).toContain('Submit attendance and update status')
+          })
+      })
+
+      it('page title reflects Scheduled status', async () => {
+        return request(app)
+          .get(`/referral/${referralDetails.id}/group/${groupId}/attendance/update-status-on-programme`)
+          .expect(200)
+          .expect(res => {
+            expect(res.text).toContain('Scheduled referral status change')
+          })
+      })
+
+      it('POST creates session attendance and redirects with Scheduled status message', async () => {
+        return request(app)
+          .post(`/referral/${referralDetails.id}/group/${groupId}/attendance/update-status-on-programme`)
+          .type('form')
+          .send({ 'add-details': 'Did not comply with group rules' })
+          .expect(302)
+          .expect(res => {
+            expect(res.text).toContain(
+              `Redirecting to /${groupId}/${sessionId}/edit-session?message=${encodeURIComponent(
+                `Attendance recorded for ${referralDetails.personName}. Their referral status is now 'Scheduled'.`,
+              )}`,
+            )
+          })
+          .then(() => {
+            expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).toHaveBeenCalledWith(
+              'user1',
+              sessionId,
+              {
+                attendees: [
+                  {
+                    referralId: referralDetails.id,
+                    outcomeCode: 'AFTC',
+                    additionalDetails: 'Did not comply with group rules',
+                  },
+                ],
+              },
+            )
+          })
+      })
+    })
+
+    describe('UAAB (Did not attend) attendance code', () => {
+      beforeEach(() => {
+        const groupTitle = 'pre-group-one-to-one'
+        const editSessionAttendance = {
+          sessionId,
+          attendees: [{ referralId: referralDetails.id, outcomeCode: 'UAAB' }],
+          referralIds: [referralDetails.id],
+        } as Record<string, unknown>
+        editSessionAttendance.groupTitle = groupTitle
+        const sessionData: Partial<SessionData> = {
+          editSessionAttendance: editSessionAttendance as unknown as typeof editSessionAttendance,
+        }
+        app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+        accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
+        accreditedProgrammesManageAndDeliverService.createSessionAttendance.mockResolvedValue({
+          attendees: [{ referralId: referralDetails.id, outcomeCode: 'UAAB' }],
+        })
+      })
+
+      it('GET displays the Scheduled status confirmation with UAAB-specific inset text', async () => {
+        return request(app)
+          .get(`/referral/${referralDetails.id}/group/${groupId}/attendance/update-status-on-programme`)
+          .expect(200)
+          .expect(res => {
+            expect(res.text).toContain('referral status will change to Scheduled')
+            expect(res.text).toContain('did not attend their pre-group one-to-one')
+            expect(res.text).toContain('referral status will change back to')
+            expect(res.text).not.toContain('Save')
+            expect(res.text).toContain('Submit attendance and update status')
+          })
+      })
+
+      it('page title reflects Scheduled status', async () => {
+        return request(app)
+          .get(`/referral/${referralDetails.id}/group/${groupId}/attendance/update-status-on-programme`)
+          .expect(200)
+          .expect(res => {
+            expect(res.text).toContain('Scheduled referral status change')
+          })
+      })
+
+      it('POST creates session attendance and redirects with Scheduled status message', async () => {
+        return request(app)
+          .post(`/referral/${referralDetails.id}/group/${groupId}/attendance/update-status-on-programme`)
+          .type('form')
+          .send({ 'add-details': 'Person did not attend session' })
+          .expect(302)
+          .expect(res => {
+            expect(res.text).toContain(
+              `Redirecting to /${groupId}/${sessionId}/edit-session?message=${encodeURIComponent(
+                `Attendance recorded for ${referralDetails.personName}. Their referral status is now 'Scheduled'.`,
+              )}`,
+            )
+          })
+          .then(() => {
+            expect(accreditedProgrammesManageAndDeliverService.createSessionAttendance).toHaveBeenCalledWith(
+              'user1',
+              sessionId,
+              {
+                attendees: [
+                  {
+                    referralId: referralDetails.id,
+                    outcomeCode: 'UAAB',
+                    additionalDetails: 'Person did not attend session',
+                  },
+                ],
+              },
+            )
+          })
+      })
+    })
+
+    describe('back link navigation', () => {
+      it('constructs correct back link URI from session data', async () => {
+        const groupTitle = 'pre-group-one-to-one'
+        const editSessionAttendance = {
+          sessionId,
+          attendees: [{ referralId: referralDetails.id, outcomeCode: 'AFTC' }],
+          referralIds: [referralDetails.id],
+        } as Record<string, unknown>
+        editSessionAttendance.groupTitle = groupTitle
+        const sessionData: Partial<SessionData> = {
+          editSessionAttendance: editSessionAttendance as unknown as typeof editSessionAttendance,
+        }
+        app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
+        accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue(referralDetails)
+
+        return request(app)
+          .get(`/referral/${referralDetails.id}/group/${groupId}/attendance/update-status-on-programme`)
+          .expect(200)
+          .expect(res => {
+            expect(res.text).toContain(
+              `href="/${groupId}/${sessionId}/referral/${referralDetails.id}/${groupTitle}-session-notes"`,
+            )
           })
       })
     })

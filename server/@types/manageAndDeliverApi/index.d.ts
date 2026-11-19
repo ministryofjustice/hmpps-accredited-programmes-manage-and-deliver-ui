@@ -51,14 +51,25 @@ type CaseListFilterValues = components['schemas']['CaseListFilterValues']
 type ReferralStatusHistory = components['schemas']['ReferralStatusHistory']
 type LocationFilterValues = components['schemas']['LocationFilterValues']
 type CaseListReferrals = components['schemas']['CaseListReferrals']
-type CreateGroupRequest = components['schemas']['CreateGroupRequest']
+type CreateGroupRequest = {
+  groupCode: string
+  cohort: components['schemas']['ProgrammeGroupCohort']
+  sex: components['schemas']['ProgrammeGroupSexEnum']
+  earliestStartDate: string
+  createGroupSessionSlot: CreateGroupSessionSlot[]
+  pduName: string
+  pduCode: string
+  deliveryLocationName: string
+  deliveryLocationCode: string
+  teamMembers: CreateGroupTeamMember[]
+}
 type CreateGroupResponse = components['schemas']['CreateGroupResponse']
 type CreateGroupSessionSlot = components['schemas']['CreateGroupSessionSlot']
 type Group = components['schemas']['Group']
-type ProgrammeGroupCohortEnum = components['schemas']['CreateGroup']['ProgrammeGroupCohort']
-type ProgrammeGroupDate = components['schemas']['CreateGroup']['startedAtDate']
-type ProgrammeGroupSexEnum = components['schemas']['CreateGroup']['sex']
-type ProgrammeGroupWhen = components['schemas']['CreateGroup']['createGroupSessionSlot']
+type ProgrammeGroupCohortEnum = components['schemas']['ProgrammeGroupCohort']
+type ProgrammeGroupDate = string
+type ProgrammeGroupSexEnum = components['schemas']['ProgrammeGroupSexEnum']
+type ProgrammeGroupWhen = CreateGroupSessionSlot[]
 type ProgrammeGroupEntity = components['schemas']['ProgrammeGroupEntity']
 type AllocateToGroupRequest = components['schemas']['AllocateToGroupRequest']
 type AllocateToGroupResponse = components['schemas']['AllocateToGroupResponse']
@@ -66,7 +77,13 @@ type GroupsByRegion = components['schemas']['GroupsByRegion']
 type PageGroup = components['schemas']['PageGroup']
 type CodeDescription = components['schemas']['CodeDescription']
 type UserTeamMember = components['schemas']['UserTeamMember']
-type CreateGroupTeamMember = components['schemas']['CreateGroupTeamMember']
+type CreateGroupTeamMember = {
+  facilitator: string
+  facilitatorCode: string
+  teamName: string
+  teamCode: string
+  teamMemberType: 'TREATMENT_MANAGER' | 'REGULAR_FACILITATOR' | 'COVER_FACILITATOR'
+}
 type SessionScheduleResponse = components['schemas']['ScheduleSessionTypeResponse']
 type ProgrammeGroupModuleSessionsResponse = components['schemas']['ProgrammeGroupModuleSessionsResponse']
 type ProgrammeGroupModuleSessionsResponseGroupModule =
@@ -76,7 +93,15 @@ type ProgrammeGroupModuleSessionsResponseGroupSession =
 type Participant = components['schemas']['Participant']
 type ScheduleSessionTypeResponse = components['schemas']['ScheduleSessionTypeResponse']
 type ScheduleIndividualSessionDetailsResponse = components['schemas']['ScheduleIndividualSessionDetailsResponse']
-type ScheduleSessionRequest = components['schemas']['ScheduleSessionRequest']
+type ScheduleSessionRequest = {
+  sessionTemplateId: string
+  referralIds: string[]
+  facilitators: CreateGroupTeamMember[]
+  startDate: string
+  startTime: components['schemas']['SessionTime']
+  endTime: components['schemas']['SessionTime']
+  sessionScheduleType: 'SCHEDULED' | 'CATCH_UP'
+}
 type SessionScheduleType = components['schemas']['ModuleSessionTemplate']['sessionScheduleType']
 type GroupSessionResponse = components['schemas']['GroupSessionResponse']
 type EditSessionDetails = components['schemas']['EditSessionDetails']
@@ -91,15 +116,48 @@ type Session = components['schemas']['Session']
 type SessionNotes = components['schemas']['SessionNotes']
 type EditSessionFacilitatorsResponse = components['schemas']['EditSessionFacilitatorsResponse']
 type EditSessionFacilitatorResponse = components['schemas']['EditSessionFacilitatorsResponse']['facilitators']
-type EditSessionFacilitatorsRequest = components['schemas']['EditSessionFacilitatorRequest']
+type EditSessionFacilitatorsRequest = {
+  facilitatorName: string
+  facilitatorCode: string
+  teamName: string
+  teamCode: string
+}
 type RecordSessionAttendance = components['schemas']['RecordSessionAttendance']
 type SessionAttendance = components['schemas']['SessionAttendance']
 type SessionAttendanceOutcomeCode = SessionAttendee['outcomeCode']
 type AttendanceHistoryResponse = components['schemas']['AttendanceHistoryResponse']
 type EditGroupCohort = components['schemas']['EditGroupCohort']
 type EditGroupSex = components['schemas']['EditGroupSex']
-type GroupDetailsResponse = components['schemas']['GroupDetailsResponse']
-type UpdateGroupRequest = components['schemas']['UpdateGroupRequest']
+type GroupDetailsResponse = {
+  id: string
+  code: string
+  regionName: string
+  startDate?: string | null
+  pduName: string
+  pduCode: string
+  deliveryLocation: string
+  deliveryLocationCode: string
+  cohort: components['schemas']['ProgrammeGroupCohort']
+  sex: components['schemas']['ProgrammeGroupSexEnum']
+  daysAndTimes: string[]
+  currentlyAllocatedNumber: number
+  treatmentManager: CreateGroupTeamMember
+  facilitators: CreateGroupTeamMember[]
+  coverFacilitators?: CreateGroupTeamMember[] | null
+}
+type UpdateGroupRequest = {
+  groupCode?: string | null
+  cohort?: components['schemas']['ProgrammeGroupCohort'] | null
+  sex?: components['schemas']['ProgrammeGroupSexEnum'] | null
+  earliestStartDate?: string | null
+  createGroupSessionSlot?: CreateGroupSessionSlot[] | null
+  automaticallyRescheduleOtherSessions?: boolean | null
+  pduName?: string | null
+  pduCode?: string | null
+  deliveryLocationName?: string | null
+  deliveryLocationCode?: string | null
+  teamMembers?: CreateGroupTeamMember[] | null
+}
 type UpdateGroupResponse = components['schemas']['UpdateGroupResponse']
 type EditGroupDaysAndTimes = components['schemas']['EditGroupDaysAndTimes']
 
