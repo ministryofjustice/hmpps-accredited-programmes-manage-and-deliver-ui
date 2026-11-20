@@ -18,7 +18,7 @@ services:
       - DELIUS_CLIENT_CLIENT-SECRET=delius-auth-api-client
 
   postgresql:
-    image: postgres:18
+    image: postgres:19
     container_name: postgresql
     networks:
       - hmpps
