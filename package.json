@@ -157,7 +157,7 @@
     "jest-html-reporter": "^4.4.3",
     "jest-junit": "17.0.0",
     "jsonwebtoken": "^9.0.3",
-    "lint-staged": "^17.6.0",
+    "lint-staged": "^17.6.1",
     "nock": "15.0.6",
     "openapi-typescript": "^7.13.0",
     "prettier": "^3.10.1",
@@ -173,7 +173,7 @@
       "esbuild": "$esbuild"
     },
     "@opentelemetry/core": "2.12.1",
-    "@opentelemetry/instrumentation-http": "0.222.0",
+    "@opentelemetry/instrumentation-http": "0.301.2",
     "diff": "9.0.0",
     "openapi-typescript": {
       "typescript": "$typescript"
