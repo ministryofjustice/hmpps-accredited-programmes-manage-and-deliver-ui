@@ -36,11 +36,14 @@
       "enabled": false
     },
     {
+      "description": "hmpps-azure-telemetry 1.x pins @opentelemetry/api 1.9.0, but instrumentation-http 0.301+ needs api 1.10 and core 3. Remove once on hmpps-azure-telemetry 2.x",
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["@opentelemetry/instrumentation-http"],
+      "allowedVersions": "<0.300.0"
+    },
+    {
       "matchManagers": ["github-actions"],
-      "matchFileNames": [
-        "**/.github/workflows/**/*.ya?ml",
-        "**/.github/actions/**/*.ya?ml"
-        ]
+      "matchFileNames": ["**/.github/workflows/**/*.ya?ml", "**/.github/actions/**/*.ya?ml"]
     }
   ],
   "vulnerabilityAlerts": {
