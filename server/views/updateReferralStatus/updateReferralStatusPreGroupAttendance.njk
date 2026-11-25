@@ -1,0 +1,26 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+{% set pageTitle = pageTitle + " - " + applicationName %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block main %}
+  <nav aria-label="Back">
+    {{ govukBackLink(backLinkArgs) }}
+  </nav>
+  <div class="govuk-main-wrapper">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">{{ heading }}</h1>
+        {{ govukInsetText(insetText) }}
+
+        <div class="govuk-button-group">
+          {{ govukButton({ text: "Go to group", href: groupSessionsAndAttendanceUri, preventDoubleClick: true }) }}
+          <a class="govuk-link" href="{{ cancelLinkUri }}">Cancel</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -15,12 +15,12 @@ describe('UpdateReferralStatusStartedOrCompletedPresenter', () => {
 
   it('should return allocated to a group text when current status is Scheduled', () => {
     const personName = 'Alex River'
-    const details = referralDetailsFactory.build({ personName })
+    const details = referralDetailsFactory.build({ personName, currentlyAllocatedGroupCode: 'BC001' })
     const statusDetails = referralStatusTransitionsFactory.build({ currentStatus: { title: 'Scheduled' } })
 
     const presenter = new UpdateReferralStatusStartedOrCompletedPresenter(details, statusDetails, '/back-link')
 
-    expect(presenter.text.title).toEqual(`${personName} is allocated to a group`)
+    expect(presenter.text.title).toEqual(`${personName} is allocated to a group BC001`)
   })
 
   it('should return started Building Choices text when current status is not Scheduled', () => {

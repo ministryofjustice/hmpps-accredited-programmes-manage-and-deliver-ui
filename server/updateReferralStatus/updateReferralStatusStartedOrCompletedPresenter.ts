@@ -24,7 +24,7 @@ export default class UpdateReferralStatusStartedOrCompletedPresenter {
     return {
       title:
         this.statusDetails.currentStatus.title === 'Scheduled'
-          ? `${this.details.personName} is allocated to a group`
+          ? `${this.details.personName} is allocated to a group ${this.details.currentlyAllocatedGroupCode}`
           : `${this.details.personName} has started Building Choices`,
     }
   }
