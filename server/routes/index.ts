@@ -272,6 +272,10 @@ export default function routes({ accreditedProgrammesManageAndDeliverService }: 
     await updateReferralController.updateStatusStartedOrCompleted(req, res)
   })
 
+  get('/referral/:referralId/update-status-pre-group-attendance', async (req, res, next) => {
+    await updateReferralController.showPreGroupAttendanceInformation(req, res)
+  })
+
   getOrPost('/referral/:referralId/update-status-on-programme', async (req, res, next) => {
     await updateReferralController.updateStatusStartedOrCompleted(req, res)
   })

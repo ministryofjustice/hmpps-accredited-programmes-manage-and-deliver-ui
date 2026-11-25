@@ -189,6 +189,128 @@ describe('Update Referral Status Controller', () => {
         },
       })
     })
+
+    it('sends Scheduled referrals that have started to the pre-group attendance information page', async () => {
+      accreditedProgrammesManageAndDeliverService.getStatusTransitionDetails.mockResolvedValue({
+        ...statusDetails,
+        currentStatus: { ...statusDetails.currentStatus, title: 'Scheduled' },
+      })
+
+      await request(app)
+        .post(`/referral/${referralDetails.id}/update-status-scheduled`)
+        .type('form')
+        .send({ 'started-or-completed': 'true' })
+        .expect(302)
+        .expect('Location', `/referral/${referralDetails.id}/update-status-pre-group-attendance`)
+
+      expect(accreditedProgrammesManageAndDeliverService.updateStatus).not.toHaveBeenCalled()
+    })
+
+    it('shows the pre-group attendance requirement and links to the allocated group sessions and attendance page', async () => {
+      const groupId = randomUUID()
+      accreditedProgrammesManageAndDeliverService.getReferralDetails.mockResolvedValue({
+        ...referralDetails,
+        currentlyAllocatedGroupCode: 'Building Choices 1',
+      })
+      accreditedProgrammesManageAndDeliverService.getStatusTransitionDetails.mockResolvedValue({
+        ...statusDetails,
+        currentStatus: { ...statusDetails.currentStatus, title: 'Scheduled' },
+        currentGroupDetails: {
+          currentlyAllocatedGroupCode: 'Building Choices 1',
+          currentlyAllocatedGroupId: groupId,
+        },
+      })
+
+      await request(app)
+        .get(`/referral/${referralDetails.id}/update-status-pre-group-attendance`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain(
+            `${referralDetails.personName} must attend their pre-group one-to-one to be On programme`,
+          )
+          expect(res.text).toContain(
+            'Go to group Building Choices 1 to schedule a pre-group one-to-one or record attendance.',
+          )
+          expect(res.text).toContain(`href="/group/${groupId}/sessions-and-attendance"`)
+          expect(res.text).toContain('Go to group')
+        })
+
+      expect(accreditedProgrammesManageAndDeliverService.updateStatus).not.toHaveBeenCalled()
+    })
+
+    it('returns an error when the referral has no allocated group', async () => {
+      accreditedProgrammesManageAndDeliverService.getStatusTransitionDetails.mockResolvedValue({
+        ...statusDetails,
+        currentStatus: { ...statusDetails.currentStatus, title: 'Scheduled' },
+        currentGroupDetails: null,
+      })
+
+      await request(app).get(`/referral/${referralDetails.id}/update-status-pre-group-attendance`).expect(500)
+      expect(accreditedProgrammesManageAndDeliverService.updateStatus).not.toHaveBeenCalled()
+    })
+
+    it('cancels the journey to the status history page it was opened from without saving', async () => {
+      const originPage = `/referral/${referralDetails.id}/status-history`
+      accreditedProgrammesManageAndDeliverService.getStatusHistory.mockResolvedValue([statusHistory])
+      accreditedProgrammesManageAndDeliverService.getStatusTransitionDetails.mockResolvedValue({
+        ...statusDetails,
+        currentStatus: { ...statusDetails.currentStatus, title: 'Scheduled' },
+        currentGroupDetails: {
+          currentlyAllocatedGroupCode: 'Building Choices 1',
+          currentlyAllocatedGroupId: randomUUID(),
+        },
+      })
+
+      const agent = request.agent(app)
+      await agent.get(originPage).expect(200)
+      await agent
+        .post(`/referral/${referralDetails.id}/update-status-scheduled`)
+        .type('form')
+        .send({ 'started-or-completed': 'true' })
+        .expect(302)
+
+      await agent
+        .get(`/referral/${referralDetails.id}/update-status-pre-group-attendance`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain(`href="${originPage}">Cancel</a>`)
+          expect(res.text).toContain(
+            `href="/referral/${referralDetails.id}/update-status-scheduled?startedOrCompleted=true"`,
+          )
+        })
+      await agent.get(originPage).expect(200)
+      expect(accreditedProgrammesManageAndDeliverService.updateStatus).not.toHaveBeenCalled()
+    })
+
+    it('cancels to the referral-specific origin rather than another referral’s origin', async () => {
+      const originPage = `/referral/${referralDetails.id}/programme-needs-identifier`
+      const appWithReferralOriginMap = TestUtils.createTestAppWithSession(
+        {
+          originPage: '/referral/another-referral/status-history',
+          referralOriginPages: { [referralDetails.id]: originPage },
+        },
+        { accreditedProgrammesManageAndDeliverService },
+      )
+
+      await request(appWithReferralOriginMap)
+        .get(`/referral/${referralDetails.id}/update-status-pre-group-attendance`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain(`href="${originPage}">Cancel</a>`)
+        })
+      expect(accreditedProgrammesManageAndDeliverService.updateStatus).not.toHaveBeenCalled()
+    })
+
+    it('cancels to personal details if no referral origin is recorded', async () => {
+      await request(app)
+        .get(`/referral/${referralDetails.id}/update-status-pre-group-attendance`)
+        .expect(200)
+        .expect(res => {
+          expect(res.text).toContain(`href="/referral-details/${referralDetails.id}/personal-details">Cancel</a>`)
+        })
+      expect(accreditedProgrammesManageAndDeliverService.updateStatus).not.toHaveBeenCalled()
+    })
+
     describe(`GET /referral/:referralDetails.id/update-status-interim`, () => {
       it('loads the update status interim page', async () => {
         return request(app)

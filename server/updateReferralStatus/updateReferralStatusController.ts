@@ -9,6 +9,8 @@ import UpdateReferralStatusForm from './updateReferralStatusForm'
 import UpdateReferralStatusPresenter from './updateReferralStatusPresenter'
 import UpdateReferralStatusStartedOrCompletedPresenter from './updateReferralStatusStartedOrCompletedPresenter'
 import UpdateReferralStatusStartedOrCompletedView from './updateReferralStatusStartedOrCompletedView'
+import UpdateReferralStatusPreGroupAttendancePresenter from './updateReferralStatusPreGroupAttendancePresenter'
+import UpdateReferralStatusPreGroupAttendanceView from './updateReferralStatusPreGroupAttendanceView'
 import UpdateReferralStatusFixedPresenter from './updateReferralStatusToOnProgrammeOrCompletedPresenter'
 import UpdateReferralStatusFixedView from './updateReferralStatusToOnProgrammeOrCompletedView'
 import UpdateReferralStatusView from './updateReferralStatusView'
@@ -159,6 +161,9 @@ export default class UpdateReferralStatusController {
         userInputData = req.body
       } else {
         if (data.paramsForUpdate.hasStartedOrCompleted.toLowerCase() === 'true') {
+          if (statusDetails.currentStatus.title === 'Scheduled') {
+            return res.redirect(`/referral/${referralId}/update-status-pre-group-attendance`)
+          }
           return res.redirect(`/referral/${referralId}/update-status-details`)
         }
         return res.redirect(`/referral/${referralId}/update-status`)
@@ -176,6 +181,34 @@ export default class UpdateReferralStatusController {
       startedOrCompleted,
     )
     const view = new UpdateReferralStatusStartedOrCompletedView(presenter)
+    return ControllerUtils.renderWithLayout(res, view, referralDetails)
+  }
+
+  async showPreGroupAttendanceInformation(req: Request, res: Response): Promise<void> {
+    res.set('Cache-Control', 'no-store')
+
+    const { referralId } = req.params as Record<string, string>
+    const { username } = req.user
+    const referralDetails = await this.accreditedProgrammesManageAndDeliverService.getReferralDetails(
+      referralId,
+      username,
+    )
+    const statusDetails = await this.accreditedProgrammesManageAndDeliverService.getStatusTransitionDetails(
+      referralId,
+      username,
+    )
+    const groupId = statusDetails.currentGroupDetails?.currentlyAllocatedGroupId
+    if (!groupId) {
+      throw new Error(`No allocated group found for referral ${referralId}`)
+    }
+
+    const presenter = new UpdateReferralStatusPreGroupAttendancePresenter(
+      referralDetails,
+      groupId,
+      `/referral/${referralId}/update-status-scheduled?startedOrCompleted=true`,
+      getReferralOriginPage(req, referralId),
+    )
+    const view = new UpdateReferralStatusPreGroupAttendanceView(presenter)
     return ControllerUtils.renderWithLayout(res, view, referralDetails)
   }
 
