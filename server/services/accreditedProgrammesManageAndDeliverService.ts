@@ -90,6 +90,19 @@ export interface PaginationParams {
   sort?: string[]
 }
 
+export type ReportQuery = {
+  // Dates are YYYY-MM-DD and inclusive
+  startDate: string
+  endDate: string
+  // Leave out for all regions (national)
+  region?: string
+}
+
+export type CsvReport = {
+  csv: string
+  headers: { [key: string]: string }
+}
+
 export interface IAccreditedProgrammesManageAndDeliverService {
   getPossibleDeliveryLocationsForReferral(
     username: ExpressUsername,
@@ -99,14 +112,7 @@ export interface IAccreditedProgrammesManageAndDeliverService {
 export default class AccreditedProgrammesManageAndDeliverService implements IAccreditedProgrammesManageAndDeliverService {
   constructor(private readonly hmppsAuthClientBuilder: RestClientBuilderWithoutToken<HmppsAuthClient>) {}
 
-  private async downloadCsvReport(
-    username: ExpressUsername,
-    path: string,
-    query: Record<string, string | undefined>,
-  ): Promise<{
-    csv: string
-    headers: { [key: string]: string }
-  }> {
+  private async downloadCsvReport(username: ExpressUsername, path: string, query: ReportQuery): Promise<CsvReport> {
     const restClient = await this.createRestClientFromUsername(username)
     const response = await restClient.get<SuperAgentResponse>({
       path,
@@ -177,53 +183,19 @@ export default class AccreditedProgrammesManageAndDeliverService implements IAcc
     })) as CaseListReferrals
   }
 
-  async getGroupSizeReport(
-    username: ExpressUsername,
-    groupStartedSince: string,
-  ): Promise<{
-    csv: string
-    headers: { [key: string]: string }
-  }> {
-    return this.downloadCsvReport(username, '/reporting/group-size.csv', { groupStartedSince })
+  async getGroupSizeReport(username: ExpressUsername, query: ReportQuery): Promise<CsvReport> {
+    return this.downloadCsvReport(username, '/reporting/group-size.csv', query)
   }
 
-  async getDosageReport(
-    username: ExpressUsername,
-    query: {
-      referralsCreatedSince?: string
-      referralsCompletedAfter?: string
-    },
-  ): Promise<{
-    csv: string
-    headers: { [key: string]: string }
-  }> {
+  async getDosageReport(username: ExpressUsername, query: ReportQuery): Promise<CsvReport> {
     return this.downloadCsvReport(username, '/reporting/dosage.csv', query)
   }
 
-  async getSessionRateReport(
-    username: ExpressUsername,
-    query: {
-      groupsFinishedAfter?: string
-      groupsStartedAfter?: string
-    },
-  ): Promise<{
-    csv: string
-    headers: { [key: string]: string }
-  }> {
+  async getSessionRateReport(username: ExpressUsername, query: ReportQuery): Promise<CsvReport> {
     return this.downloadCsvReport(username, '/reporting/session-rate.csv', query)
   }
 
-  async getFacilitatorContinuityReport(
-    username: ExpressUsername,
-    query: {
-      groupsCreatedSince?: string
-      firstSessionAtOrAfter?: string
-      lastSessionAtOrBefore?: string
-    },
-  ): Promise<{
-    csv: string
-    headers: { [key: string]: string }
-  }> {
+  async getFacilitatorContinuityReport(username: ExpressUsername, query: ReportQuery): Promise<CsvReport> {
     return this.downloadCsvReport(username, '/reporting/facilitator-continuity.csv', query)
   }
 

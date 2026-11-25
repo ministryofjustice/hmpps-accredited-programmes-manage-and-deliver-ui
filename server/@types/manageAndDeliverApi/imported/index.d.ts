@@ -769,7 +769,7 @@ export interface paths {
     }
     /**
      * Download session rate reporting data as CSV
-     * @description Returns weekly session rate data where at least one group filter is provided.
+     * @description Returns how many of the sessions held between two dates each PoP was scheduled for and attended in each week.
      */
     get: operations['getSessionRateReport']
     put?: never
@@ -789,7 +789,7 @@ export interface paths {
     }
     /**
      * Download group size reporting data as CSV
-     * @description Returns group size reporting data where the earliest possible start date is after groupStartedSince.
+     * @description Returns the size of each group, and the number of PoPs scheduled to attend each main session it has held.
      */
     get: operations['getGroupSizeReport']
     put?: never
@@ -809,7 +809,7 @@ export interface paths {
     }
     /**
      * Download facilitator continuity reporting data as CSV
-     * @description Returns facilitator continuity reporting data for happened sessions where at least one filter is provided.
+     * @description Returns the facilitators for each session held between two dates.
      */
     get: operations['getGroupFacilitatorContinuityReport']
     put?: never
@@ -829,7 +829,7 @@ export interface paths {
     }
     /**
      * Download dosage reporting data as CSV
-     * @description Returns dosage reporting data for Building Choices referrals filtered by either creation date or completed date.
+     * @description Returns every session attended by each PoP who is, or has been, in one of the selected groups. This includes sessions they attended with other groups. PoPs who have not attended any sessions are left out.
      */
     get: operations['getDosageReport']
     put?: never
@@ -7266,17 +7266,22 @@ export interface operations {
   }
   getSessionRateReport: {
     parameters: {
-      query?: {
+      query: {
         /**
-         * @description Only include groups with final session date on or after this date.
-         * @example 2026-05-01
+         * @description Only include sessions held on or after this date.
+         * @example 2026-04-01
          */
-        groupsFinishedAfter?: string
+        startDate: string
         /**
-         * @description Only include groups with earliest possible start date on or after this date.
-         * @example 2026-05-01
+         * @description Only include sessions held on or before this date.
+         * @example 2026-06-30
          */
-        groupsStartedAfter?: string
+        endDate: string
+        /**
+         * @description Only include groups in this region, named as in nDelius. Leave out for all regions (national).
+         * @example North East Region
+         */
+        region?: string
       }
       header?: never
       path?: never
@@ -7293,13 +7298,13 @@ export interface operations {
           'text/csv': string
         }
       }
-      /** @description Invalid query parameters. At least one of groupsFinishedAfter or groupsStartedAfter must be provided. */
+      /** @description startDate or endDate is missing, endDate is before startDate, or the region is not recognised. */
       400: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          'text/csv': components['schemas']['ErrorResponse']
+          'text/csv': string
         }
       }
       /** @description Unauthorized */
@@ -7317,10 +7322,20 @@ export interface operations {
     parameters: {
       query: {
         /**
-         * @description Only include groups that started after this date-time (must be in the past).
-         * @example 2026-05-18T13:30:00
+         * @description Only include groups with a first Getting started 1 session on or after this date.
+         * @example 2026-04-01
          */
-        groupStartedSince: string
+        startDate: string
+        /**
+         * @description Only include groups with a first Getting started 1 session on or before this date.
+         * @example 2026-06-30
+         */
+        endDate: string
+        /**
+         * @description Only include groups in this region, named as in nDelius. Leave out for all regions (national).
+         * @example North East Region
+         */
+        region?: string
       }
       header?: never
       path?: never
@@ -7337,13 +7352,13 @@ export interface operations {
           'text/csv': string
         }
       }
-      /** @description Invalid or non-past groupStartedSince query parameter. */
+      /** @description startDate or endDate is missing, endDate is before startDate, or the region is not recognised. */
       400: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          'text/csv': components['schemas']['ErrorResponse']
+          'text/csv': string
         }
       }
       /** @description Unauthorized */
@@ -7359,22 +7374,22 @@ export interface operations {
   }
   getGroupFacilitatorContinuityReport: {
     parameters: {
-      query?: {
+      query: {
         /**
-         * @description Only include groups created at or after this date-time.
-         * @example 2026-05-01T00:00:00
+         * @description Only include sessions held on or after this date.
+         * @example 2026-04-01
          */
-        groupsCreatedSince?: string
+        startDate: string
         /**
-         * @description Only include groups where first happened session is at or after this date-time.
-         * @example 2026-05-01T00:00:00
+         * @description Only include sessions held on or before this date.
+         * @example 2026-06-30
          */
-        firstSessionAtOrAfter?: string
+        endDate: string
         /**
-         * @description Only include groups where last happened session is at or before this date-time.
-         * @example 2026-06-30T23:59:59
+         * @description Only include groups in this region, named as in nDelius. Leave out for all regions (national).
+         * @example North East Region
          */
-        lastSessionAtOrBefore?: string
+        region?: string
       }
       header?: never
       path?: never
@@ -7391,7 +7406,7 @@ export interface operations {
           'text/csv': string
         }
       }
-      /** @description Invalid query parameters, or no query parameters provided. */
+      /** @description startDate or endDate is missing, endDate is before startDate, or the region is not recognised. */
       400: {
         headers: {
           [name: string]: unknown
@@ -7413,17 +7428,22 @@ export interface operations {
   }
   getDosageReport: {
     parameters: {
-      query?: {
+      query: {
         /**
-         * @description Only include referrals created after this date.
-         * @example 2026-05-01
+         * @description Only include groups with a first Getting started 1 session on or after this date.
+         * @example 2026-04-01
          */
-        referralsCreatedSince?: string
+        startDate: string
         /**
-         * @description Only include referrals with completed status set after this date.
-         * @example 2026-05-01
+         * @description Only include groups with a first Getting started 1 session on or before this date.
+         * @example 2026-06-30
          */
-        referralsCompletedAfter?: string
+        endDate: string
+        /**
+         * @description Only include groups in this region, named as in nDelius. Leave out for all regions (national).
+         * @example North East Region
+         */
+        region?: string
       }
       header?: never
       path?: never
@@ -7440,13 +7460,13 @@ export interface operations {
           'text/csv': string
         }
       }
-      /** @description Invalid query parameters. At least one of referralsCreatedSince or referralsCompletedAfter must be provided. */
+      /** @description startDate or endDate is missing, endDate is before startDate, or the region is not recognised. */
       400: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          'text/csv': components['schemas']['ErrorResponse']
+          'text/csv': string
         }
       }
       /** @description Unauthorized */
