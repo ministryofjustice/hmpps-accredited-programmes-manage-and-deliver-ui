@@ -70,6 +70,7 @@ export default {
   apis: {
     probationApi: {
       url: get('COMPONENT_API_URL', 'http://fe-components', requiredInProduction),
+      healthPath: '/ping',
     },
     hmppsAuth: {
       url: get('HMPPS_AUTH_URL', 'http://localhost:8090/auth', requiredInProduction),
