@@ -118,6 +118,22 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/queue-admin/retry-dlq-messages/{dlqName}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put: operations['retryDlqMessages']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/queue-admin/retry-all-dlqs': {
     parameters: {
       query?: never
@@ -143,6 +159,22 @@ export interface paths {
     }
     get?: never
     put: operations['purgeQueue']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/queue-admin/delete-dlq-messages/{dlqName}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    put: operations['deleteDlqMessages']
     post?: never
     delete?: never
     options?: never
@@ -342,8 +374,8 @@ export interface paths {
     get?: never
     put?: never
     /**
-     * Schedule a session (one-to-one, or catch ups) for group members
-     * @description Schedule a session for members of a programme group. This endpoint allows facilitators to schedule individual sessions that must be coordinated across multiple group members.
+     * Schedule a session (one-to-one, group, or catch ups) for group members
+     * @description Schedule a session for members of a programme group. This endpoint allows facilitators to schedule individual or group sessions that must be coordinated across multiple group members.
      */
     post: operations['scheduleSession']
     delete?: never
@@ -860,6 +892,26 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/referral/{referralId}/start-data': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Retrieve start data for a referral
+     * @description Returns the actual start date for a given referral, derived from the first attended pre-group one-to-one session. Secured with a read-only role for use by external services.
+     */
+    get: operations['getStartData']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/referral/{referralId}/completion-data': {
     parameters: {
       query?: never
@@ -872,6 +924,23 @@ export interface paths {
      * @description Returns completion data for a given referral. Secured with a read-only role for use by external services.
      */
     get: operations['getCompletionData']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/referral/{crn}/latest-status': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /** Retrieve the latest on-programme status for a referral */
+    get: operations['getOnProgrammeStatusForReferral']
     put?: never
     post?: never
     delete?: never
@@ -979,6 +1048,22 @@ export interface paths {
     }
     /** Retrieve preferred delivery locations for a referral */
     get: operations['getPreferredDeliveryLocationsByReferralId']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/queue-admin/search-dlq-messages/{dlqName}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: operations['searchDlqMessages']
     put?: never
     post?: never
     delete?: never
@@ -1681,17 +1766,6 @@ export interface components {
        */
       moreInfo?: string | null
     }
-    /** @description Request to edit the facilitators for a session */
-    EditSessionFacilitatorRequest: {
-      /** @description The full name of the facilitator for the group */
-      facilitatorName: string
-      /** @description The code of the facilitator for the group */
-      facilitatorCode: string
-      /** @description The name of the team that the member belongs to */
-      teamName: string
-      /** @description The code of the team that the member belongs to */
-      teamCode: string
-    }
     RescheduleSessionRequest: {
       /**
        * Format: date
@@ -1704,7 +1778,7 @@ export interface components {
       /** @description The end time of the session */
       sessionEndTime?: components['schemas']['SessionTime'] | null
       /**
-       * @description Whether to reschedule other sessions
+       * @description Whether to reschedule the sessions after this one. Only applies to main group sessions.
        * @example true
        */
       rescheduleOtherSessions: boolean
@@ -1865,9 +1939,32 @@ export interface components {
       /** Format: int32 */
       messagesFoundCount: number
     }
+    RetryDlqMessagesBody: {
+      messageIds: string[]
+    }
+    RetryDlqMessagesResult: {
+      /** Format: int32 */
+      messagesFoundCount: number
+      /** Format: int32 */
+      messagesRetriedCount: number
+      retriedMessageIds: string[]
+      notFoundMessageIds: string[]
+    }
     PurgeQueueResult: {
       /** Format: int32 */
       messagesFoundCount: number
+    }
+    DeleteDlqMessagesBody: {
+      messageIds: string[]
+    }
+    DeleteDlqMessagesResult: {
+      /** Format: int32 */
+      messagesFoundCount: number
+      /** Format: int32 */
+      messagesDeletedCount: number
+      deletedMessageIds: string[]
+      notFoundMessageIds: string[]
+      failedMessageIds: string[]
     }
     /** @description Response returned when a programme group is updated */
     UpdateGroupResponse: {
@@ -1905,53 +2002,10 @@ export interface components {
        */
       amOrPm: components['schemas']['AmOrPm']
     }
-    CreateGroupTeamMember: {
-      /** @description The full name of the facilitator for the group */
-      facilitator: string
-      /** @description The code of the facilitator for the group */
-      facilitatorCode: string
-      /** @description The name of the team that the member belongs to */
-      teamName: string
-      /** @description The code of the team that the member belongs to */
-      teamCode: string
-      /**
-       * @description The type of the facilitator for the group
-       * @enum {string}
-       */
-      teamMemberType: 'TREATMENT_MANAGER' | 'REGULAR_FACILITATOR' | 'COVER_FACILITATOR'
-    }
     /** @enum {string} */
     ProgrammeGroupCohort: 'GENERAL' | 'GENERAL_LDC' | 'SEXUAL' | 'SEXUAL_LDC'
     /** @enum {string} */
     ProgrammeGroupSexEnum: 'MALE' | 'FEMALE' | 'MIXED'
-    /** @description The delivery location preferences for a referral */
-    UpdateGroupRequest: {
-      /** @description The code for the group */
-      groupCode?: string | null
-      /** @description Cohort for the Programme Group. */
-      cohort?: components['schemas']['ProgrammeGroupCohort'] | null
-      /** @description Sex that the group is being run for */
-      sex?: components['schemas']['ProgrammeGroupSexEnum'] | null
-      /**
-       * Format: date
-       * @description The earliest date the group can start
-       */
-      earliestStartDate?: string | null
-      /** @description A list of session slots for the group */
-      createGroupSessionSlot?: components['schemas']['CreateGroupSessionSlot'][] | null
-      /** @description Boolean value to determine */
-      automaticallyRescheduleOtherSessions?: boolean | null
-      /** @description The name of the PDU that the group will take place in */
-      pduName?: string | null
-      /** @description The code of the PDU that the group will take place in */
-      pduCode?: string | null
-      /** @description The name of the location that the group will be delivered at */
-      deliveryLocationName?: string | null
-      /** @description The code of the location that the group will be delivered at */
-      deliveryLocationCode?: string | null
-      /** @description The person code and name and type of the teamMembers of the group */
-      teamMembers?: components['schemas']['CreateGroupTeamMember'][] | null
-    }
     CodeDescription: {
       code: string
       description: string
@@ -2169,58 +2223,6 @@ export interface components {
       id: string
       /** @description Success message for creating a group */
       successMessage: string
-    }
-    CreateGroupRequest: {
-      /** @description The code for the group */
-      groupCode: string
-      /** @description Cohort for the Programme Group. */
-      cohort: components['schemas']['ProgrammeGroupCohort']
-      /** @description Sex that the group is being run for */
-      sex: components['schemas']['ProgrammeGroupSexEnum']
-      /**
-       * Format: date
-       * @description The earliest date the group can start
-       */
-      earliestStartDate: string
-      /** @description A list of session slots for the group */
-      createGroupSessionSlot: components['schemas']['CreateGroupSessionSlot'][]
-      /** @description The name of the PDU that the group will take place in */
-      pduName: string
-      /** @description The code of the PDU that the group will take place in */
-      pduCode: string
-      /** @description The name of the location that the group will be delivered at */
-      deliveryLocationName: string
-      /** @description The code of the location that the group will be delivered at */
-      deliveryLocationCode: string
-      /** @description The person code and name and type of the teamMembers of the group */
-      teamMembers: components['schemas']['CreateGroupTeamMember'][]
-    }
-    ScheduleSessionRequest: {
-      /**
-       * Format: uuid
-       * @description The UUID of the ModuleSessionTemplate that defines the session blueprint
-       */
-      sessionTemplateId: string
-      /** @description An array of Referral IDs representing the group members to schedule */
-      referralIds: string[]
-      /** @description The facilitator(s) who will conduct the session */
-      facilitators: components['schemas']['CreateGroupTeamMember'][]
-      /**
-       * Format: date
-       * @description The start date of the session in YYYY-MM-DD format
-       * @example 2025-12-17
-       */
-      startDate: string
-      /** @description The start time of the one-to-one session */
-      startTime: components['schemas']['SessionTime']
-      /** @description The end time of the one-to-one session */
-      endTime: components['schemas']['SessionTime']
-      /**
-       * @description The type of session schedule
-       * @example SCHEDULED, or CATCH_UP
-       * @enum {string}
-       */
-      sessionScheduleType: 'SCHEDULED' | 'CATCH_UP'
     }
     RemoveFromGroupRequest: {
       /**
@@ -2496,12 +2498,12 @@ export interface components {
        * @description Other person(s) at risk - Children
        * @example Low
        */
-      ospcScore?: string
+      ospcScore?: string | null
       /**
        * @description Other person(s) at risk - Intimate
        * @example High
        */
-      ospiScore?: string
+      ospiScore?: string | null
     }
     Risks: {
       /** Format: date */
@@ -2548,61 +2550,61 @@ export interface components {
        * @example Medium
        * @enum {string|null}
        */
-      riskPrisonersCustody?: 'Low' | 'Medium' | 'High' | null
+      riskPrisonersCustody?: 'Low' | 'Medium' | 'High' | 'Very High' | 'Not Applicable' | null
       /**
        * @description Risk towards staff in Custody
        * @example Medium
        * @enum {string|null}
        */
-      riskStaffCustody?: 'Low' | 'Medium' | 'High' | null
+      riskStaffCustody?: 'Low' | 'Medium' | 'High' | 'Very High' | 'Not Applicable' | null
       /**
        * @description Risk towards known adult in Custody
        * @example Medium
        * @enum {string|null}
        */
-      riskKnownAdultCustody?: 'Low' | 'Medium' | 'High' | null
+      riskKnownAdultCustody?: 'Low' | 'Medium' | 'High' | 'Very High' | 'Not Applicable' | null
       /**
        * @description Risk towards public in Custody
        * @example Medium
        * @enum {string|null}
        */
-      riskPublicCustody?: 'Low' | 'Medium' | 'High' | null
+      riskPublicCustody?: 'Low' | 'Medium' | 'High' | 'Very High' | 'Not Applicable' | null
       /**
        * @description Risk towards children in Custody
        * @example Medium
        * @enum {string|null}
        */
-      riskChildrenCustody?: 'Low' | 'Medium' | 'High' | null
+      riskChildrenCustody?: 'Low' | 'Medium' | 'High' | 'Very High' | 'Not Applicable' | null
       /**
        * @description Risk towards staff in Community
        * @example Medium
        * @enum {string|null}
        */
-      riskStaffCommunity?: 'Low' | 'Medium' | 'High' | null
+      riskStaffCommunity?: 'Low' | 'Medium' | 'High' | 'Very High' | 'Not Applicable' | null
       /**
        * @description Risk towards known adults in Community
        * @example Medium
        * @enum {string|null}
        */
-      riskKnownAdultCommunity?: 'Low' | 'Medium' | 'High' | null
+      riskKnownAdultCommunity?: 'Low' | 'Medium' | 'High' | 'Very High' | 'Not Applicable' | null
       /**
        * @description Risk towards the public in Community
        * @example Medium
        * @enum {string|null}
        */
-      riskPublicCommunity?: 'Low' | 'Medium' | 'High' | null
+      riskPublicCommunity?: 'Low' | 'Medium' | 'High' | 'Very High' | 'Not Applicable' | null
       /**
        * @description Risk towards children in Community
        * @example Medium
        * @enum {string|null}
        */
-      riskChildrenCommunity?: 'Low' | 'Medium' | 'High' | null
+      riskChildrenCommunity?: 'Low' | 'Medium' | 'High' | 'Very High' | 'Not Applicable' | null
       /**
        * @description Risk of Serious Harm level
        * @example Low
        * @enum {string|null}
        */
-      overallRoshLevel?: 'Low' | 'Medium' | 'High' | null
+      overallRoshLevel?: 'Low' | 'Medium' | 'High' | 'Very High' | 'Not Applicable' | null
     }
     Score: {
       /**
@@ -2900,12 +2902,33 @@ export interface components {
        * @description The ID of the entity from which this status change was sourced
        */
       sourcedFromEntityId: number
+      /**
+       * Format: int32
+       * @description The event number associated with the requirement/licence condition for this referral
+       */
+      eventNumber: number
       /** @description Optional notes associated with the status change */
       notes?: string | null
       /** @description A human-readable description of the status change */
       description: string
       /** @description Username of the person who made the status update */
       username: string
+    }
+    /** @description Start data for a referral */
+    ReferralStartData: {
+      /** @description The ID of the requirement or licence-condition associated with this referral */
+      licReqId: string
+      /**
+       * Format: date-time
+       * @description The date and time of the first attended pre-group one-to-one session. This should be used as the 'Actual Start Date' for the requirement/licence condition
+       * @example 2025-04-01T09:30:00.000Z
+       */
+      licReqStartedAt: string
+      /**
+       * @description The type of entity from which this status change was sourced
+       * @enum {string}
+       */
+      sourcedFromEntityType: 'REQUIREMENT' | 'LICENCE_CONDITION'
     }
     /** @description Completion data for a referral */
     ReferralCompletionData: {
@@ -2922,6 +2945,45 @@ export interface components {
        * @enum {string}
        */
       sourcedFromEntityType: 'REQUIREMENT' | 'LICENCE_CONDITION'
+    }
+    ReferralOnProgrammeStatus: {
+      /**
+       * Format: uuid
+       * @description The unique id of this referral.
+       * @example c98151f4-4081-4c65-9f98-54e63a328c8d
+       */
+      referralId: string
+      /**
+       * @description The crn associated with this referral.
+       * @example X933590
+       */
+      crn: string
+      /**
+       * @description The type of sentence.
+       * @example ORA community order
+       * @enum {string|null}
+       */
+      sentenceType?: 'REQUIREMENT' | 'LICENCE_CONDITION' | null
+      /**
+       * @description Event ID of the referral
+       * @example 2500828798
+       */
+      eventId: string | null
+      /**
+       * Format: int32
+       * @description The event number from the source system, starts at 1.
+       */
+      eventNumber: number | null
+      /**
+       * @description The display name of the Referral's current Status
+       * @example Awaiting assessment
+       */
+      currentStatus: string
+      /**
+       * @description Indicates if the referral is currently on a programme
+       * @example true
+       */
+      isOnProgramme: boolean
     }
     ReferralDetails: {
       /**
@@ -2940,6 +3002,21 @@ export interface components {
        * @example John Doe
        */
       personName: string
+      /**
+       * @description The forename of the person being referred.
+       * @example John
+       */
+      personForename?: string | null
+      /**
+       * @description The surname of the person being referred.
+       * @example Smith
+       */
+      personSurname?: string | null
+      /**
+       * @description The middle names of the person being referred.
+       * @example William
+       */
+      personMiddleNames?: string | null
       /**
        * @description The name of the Intervention for this referral.
        * @example Building Choices
@@ -3019,6 +3096,11 @@ export interface components {
        * @example false
        */
       isLAO: boolean
+      /**
+       * @description The name of the person associated with this referral.
+       * @example John Doe
+       */
+      personName: string
     }
     SentenceInformation: {
       /**
@@ -3088,7 +3170,22 @@ export interface components {
        * @description The full name of the person being referred.
        * @example John Smith
        */
-      name: string
+      _name: string
+      /**
+       * @description The forename of the person being referred.
+       * @example John
+       */
+      personForename?: string | null
+      /**
+       * @description The surname of the person being referred.
+       * @example Smith
+       */
+      personSurname?: string | null
+      /**
+       * @description The middle names of the person being referred.
+       * @example William
+       */
+      personMiddleNames?: string | null
       /**
        * Format: date
        * @description The date of birth of the person being referred.
@@ -3127,6 +3224,11 @@ export interface components {
        * @example 1 August 2025
        */
       dateRetrieved: string
+      /**
+       * @description The full name of the person being referred.
+       * @example John Smith
+       */
+      name: string
     }
     /** @description Details of an offence committed by an offender */
     Offence: {
@@ -3191,14 +3293,14 @@ export interface components {
     }
     DeliveryLocationPreferences: {
       /** @description List of preferred delivery locations where the person can attend the programme */
-      preferredDeliveryLocations?: string[]
+      preferredDeliveryLocations?: string[] | null
       /**
        * @description Text describing locations or circumstances where the person cannot attend
        * @example Cannot attend evening sessions due to caring responsibilities
        */
       cannotAttendLocations?: string | null
       /** @description The user that last created the delivery location preferences */
-      lastUpdatedBy?: string
+      lastUpdatedBy?: string | null
       /**
        * Format: date
        * @description The time and date of the last update to the delivery location preferences
@@ -3210,6 +3312,15 @@ export interface components {
         [key: string]: unknown
       }
       messageId: string
+      /** Format: int32 */
+      approximateReceiveCount?: number | null
+    }
+    SearchDlqResult: {
+      /** Format: int32 */
+      messagesFoundCount: number
+      /** Format: int32 */
+      messagesReturnedCount: number
+      messages: components['schemas']['DlqMessage'][]
     }
     GetDlqResult: {
       /** Format: int32 */
@@ -4417,10 +4528,10 @@ export interface components {
        */
       name: string
       /**
-       * @description Object containing the start date text
+       * @description Object containing the start date text, or null when the group has no sessions to estimate it from
        * @example Estimated date of Getting started one-to-ones: Thursday 21 May 2026
        */
-      startDateText: components['schemas']['StartDateText']
+      startDateText?: components['schemas']['StartDateText'] | null
       /**
        * @description The text to display on the schedule button
        * @example Schedule a Getting started session
@@ -4690,9 +4801,9 @@ export interface components {
       groupMembers: components['schemas']['GroupMember'][]
       /**
        * Format: date
-       * @description Suggested date for the next one to one session
+       * @description Suggested date for the next one to one session, or null when the group has no sessions to suggest it from
        */
-      suggestedDate: string
+      suggestedDate?: string | null
     }
     /** @description Response model for the edit treatment managers and facilitators page */
     GroupTreatmentManagerAndFacilitatorDetails: {
@@ -4813,72 +4924,6 @@ export interface components {
       /** @description List of radio button options for cohort selection */
       radios: components['schemas']['RadioOptions'][]
     }
-    /** @description Information identifying the group. */
-    GroupDetailsResponse: {
-      /**
-       * Format: uuid
-       * @description A unique id identifying the programme group.
-       * @example 1ff57cea-352c-4a99-8f66-3e626aac3265
-       */
-      id: string
-      /**
-       * @description A unique code identifying the programme group.
-       * @example AP_BIRMINGHAM_NORTH
-       */
-      code: string
-      /**
-       * @description The region name the group belongs to.
-       * @example West Midlands
-       */
-      regionName: string
-      /**
-       * Format: date
-       * @description The actual start date initiated by the facilitator
-       * @example Thursday 23 April 2026
-       */
-      startDate?: string | null
-      /**
-       * @description The Probation Delivery Unit (PDU) name.
-       * @example County Durham and Darlington
-       */
-      pduName: string
-      /**
-       * @description The Probation Delivery Unit (PDU) code.
-       * @example N02CLE
-       */
-      pduCode: string
-      /**
-       * @description The location description where the group programme will be delivered.
-       * @example County Durham Probation Office
-       */
-      deliveryLocation: string
-      /**
-       * @description The location code for where the group programme will be delivered.
-       * @example DTVBOR1
-       */
-      deliveryLocationCode: string
-      /** @description Cohort for the Programme Group. */
-      cohort: components['schemas']['ProgrammeGroupCohort']
-      /** @description Sex that the group is being run for. */
-      sex: components['schemas']['ProgrammeGroupSexEnum']
-      /**
-       * @description The days and times that group sessions will be delivered.
-       * @example [Mondays, 11am to 1:30pm, Thursdays, 11am to 1:30pm]
-       */
-      daysAndTimes: string[]
-      /**
-       * Format: int32
-       * @description The number of referrals currently allocated to this group.
-       * @example 9
-       */
-      currentlyAllocatedNumber: number
-      /** @description The treatment manager for this group. */
-      treatmentManager: components['schemas']['CreateGroupTeamMember']
-      /** @description The list of facilitators for this group. */
-      facilitators: components['schemas']['CreateGroupTeamMember'][]
-      /** @description The list of coverFacilitators for this group. */
-      coverFacilitators?: components['schemas']['CreateGroupTeamMember'][] | null
-    }
     TeardownResult: {
       /** Format: int32 */
       deletedCount: number
@@ -4903,7 +4948,7 @@ export interface operations {
     }
     requestBody: {
       content: {
-        'application/json': components['schemas']['EditSessionFacilitatorRequest'][]
+        'application/json': unknown
       }
     }
     responses: {
@@ -4979,13 +5024,13 @@ export interface operations {
           'application/json': components['schemas']['EditSessionDateAndTimeResponse']
         }
       }
-      /** @description The session duration cannot be longer than originally scheduled. Change the start or end time. */
+      /** @description Bad Request */
       400: {
         headers: {
           [name: string]: unknown
         }
         content: {
-          'application/json': components['schemas']['ErrorResponse']
+          '*/*': components['schemas']['ErrorResponse']
         }
       }
       /** @description Unauthorized */
@@ -5296,6 +5341,41 @@ export interface operations {
       }
     }
   }
+  retryDlqMessages: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        dlqName: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['RetryDlqMessagesBody']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['RetryDlqMessagesResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   retryAllDlqs: {
     parameters: {
       query?: never
@@ -5356,6 +5436,41 @@ export interface operations {
       }
     }
   }
+  deleteDlqMessages: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        dlqName: string
+      }
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['DeleteDlqMessagesBody']
+      }
+    }
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['DeleteDlqMessagesResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   updateProgrammeGroup: {
     parameters: {
       query?: never
@@ -5368,7 +5483,7 @@ export interface operations {
     }
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateGroupRequest']
+        'application/json': unknown
       }
     }
     responses: {
@@ -5903,7 +6018,7 @@ export interface operations {
     }
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateGroupRequest']
+        'application/json': unknown
       }
     }
     responses: {
@@ -5957,7 +6072,7 @@ export interface operations {
     }
     requestBody: {
       content: {
-        'application/json': components['schemas']['ScheduleSessionRequest']
+        'application/json': unknown
       }
     }
     responses: {
@@ -7539,6 +7654,65 @@ export interface operations {
       }
     }
   }
+  getStartData: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The id (UUID) of a referral */
+        referralId: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Start data for the referral */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ReferralStartData']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The request was unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden. The client is not authorised to access this referral. */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The referral does not exist, or has no recorded actual start date */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getCompletionData: {
     parameters: {
       query?: never
@@ -7594,6 +7768,65 @@ export interface operations {
         }
         content: {
           '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  getOnProgrammeStatusForReferral: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        /** @description The crn of a referral */
+        crn: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description The referral on-programme status */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ReferralOnProgrammeStatus']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorised */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Forbidden */
+      403: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description The referral does not exist */
+      404: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': components['schemas']['ErrorResponse']
         }
       }
     }
@@ -7952,6 +8185,40 @@ export interface operations {
       }
     }
   }
+  searchDlqMessages: {
+    parameters: {
+      query?: {
+        filter?: string
+        maxMessages?: number
+      }
+      header?: never
+      path: {
+        dlqName: string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['SearchDlqResult']
+        }
+      }
+      /** @description Bad Request */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
   getDlqMessages: {
     parameters: {
       query?: {
@@ -8050,12 +8317,6 @@ export interface operations {
         pageable: components['schemas']['Pageable']
         /** @description CRN or persons name */
         crnOrPersonName?: string
-        /** @description Filter by the cohort of the referral using the human-readable label, e.g. 'General Offence', 'General Offence LDC', 'Sexual Offence', 'Sexual Offence LDC' */
-        cohort?: string
-        /** @description Filter by the status of the referral */
-        status?: string
-        /** @description Filter by the sex of the person on probation (Male/Female) */
-        sex?: string
         requestParams: components['schemas']['MultiValueMapStringString']
       }
       header?: never
@@ -9005,10 +9266,10 @@ export interface operations {
         pageable: components['schemas']['Pageable']
         /** @description Filter by the unique group code */
         groupCode?: string
-        /** @description Filter by the cohort of the group Eg: 'Sexual Offence' or 'General Offence LDC */
-        cohort?: string
-        /** @description Filter by the sex that the group is being run for: 'Male', 'Female' or 'Mixed' */
-        sex?: string
+        /** @description Filter by any selected cohort of the group, e.g. 'Sexual offence' or 'General offence LDC' */
+        cohort?: string[]
+        /** @description Filter by any selected sex that the group is being run for: 'MALE', 'FEMALE' or 'MIXED' */
+        sex?: string[]
         requestParams: components['schemas']['MultiValueMapStringString']
       }
       header?: never
@@ -9072,9 +9333,9 @@ export interface operations {
       query: {
         pageable: components['schemas']['Pageable']
         /** @description Filter by the sex of the person in the referral */
-        sex?: string
+        sex?: string[]
         /** @description Filter by the cohort of the referral Eg: 'Sexual Offence' or 'General Offence LDC */
-        cohort?: string
+        cohort?: string[]
         /** @description Search by the name or the CRN of the offender in the referral */
         nameOrCRN?: string
         requestParams: components['schemas']['MultiValueMapStringString']
@@ -9685,7 +9946,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          '*/*': components['schemas']['GroupDetailsResponse']
+          '*/*': string
         }
       }
       /** @description Invalid request body */
