@@ -9,6 +9,8 @@ export default function setUpHealthChecks(applicationInfo: ApplicationInfo): Rou
   const router = express.Router()
 
   const apiConfig = Object.entries(config.apis)
+    // Filter out APIs without health check endpoints
+    .filter(([, options]) => 'healthPath' in options)
 
   const middleware = monitoringMiddleware({
     applicationInfo,
