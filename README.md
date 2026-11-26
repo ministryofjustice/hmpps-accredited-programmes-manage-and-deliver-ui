@@ -120,6 +120,13 @@ tl;dr:
 $ script/seed.sh seed
 ```
 
+The local OASys WireMock returns different PNI results based on the last digit of
+the CRN: `0` or `6` is moderate, `4` or `8` is high, `3` or `7` is missing
+information, and other endings are an alternative pathway. Open a seeded
+referral's Programme needs identifier tab to see the mix. For alternative
+pathways, requirement-sourced referrals display the Building Choices warning;
+licence-condition referrals display the standard not-eligible message.
+
 For more complete information, view the relevant documentation in the API codebase ([github link](https://github.com/ministryofjustice/hmpps-accredited-programmes-manage-and-deliver-api))
 
 ### Excluded people for local testing
