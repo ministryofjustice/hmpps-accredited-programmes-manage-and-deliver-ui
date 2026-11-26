@@ -1,9 +1,9 @@
 $low-score-colour: #485b10;
 $low-score-border-colour: #85994b;
 $medium-score-colour: #a34e00;
-$medium-score-border-colour: #f47738;
-$high-score-colour: #942514;
-$high-score-border-colour: #d4351c;
+$medium-score-border-colour: $medium-score-colour;
+$high-score-colour: govuk-colour('red');
+$high-score-border-colour: $high-score-colour;
 $very-high-score-colour: #711a0d;
 $very-high-score-border-colour: #942514;
 $unknown-score-border-colour: #fd0;

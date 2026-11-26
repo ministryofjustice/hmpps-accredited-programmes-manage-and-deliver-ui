@@ -2,16 +2,16 @@
 $low-score-colour: #485b10;
 $low-score-border-colour: #85994b;
 $medium-score-colour: #a34e00;
-$medium-score-border-colour: #f47738;
-$high-score-colour: #942514;
-$high-score-border-colour: #d4351c;
+$medium-score-border-colour: $medium-score-colour;
+$high-score-colour: govuk-colour('red');
+$high-score-border-colour: $high-score-colour;
 $very-high-score-colour: #711a0d;
 $very-high-score-border-colour: #942514;
 $unknown-score-border-colour: #fd0;
-$alternative-score-colour: #505a5f;
-$alternative-score-border-colour: #b3b4b6;
-$missing-score-colour: #1d70b8;
-$missing-score-border-colour: #1d70b8;
+$alternative-score-colour: govuk-colour('black', $variant: 'tint-25');
+$alternative-score-border-colour: $alternative-score-colour;
+$missing-score-colour: govuk-colour('blue');
+$missing-score-border-colour: $missing-score-colour;
 
 .rosh-widget {
   border: 2px solid govuk-colour('black');
@@ -28,8 +28,8 @@ $missing-score-border-colour: #1d70b8;
   border: 2px solid $unknown-score-border-colour;
 }
 
-.rosh-widget--missing,
-.rosh-widget--error {
+.rosh-widget.rosh-widget--missing,
+.rosh-widget.rosh-widget--error {
   border: 2px solid $missing-score-border-colour;
 
   & h3 {
@@ -37,7 +37,7 @@ $missing-score-border-colour: #1d70b8;
   }
 }
 
-.rosh-widget--alternative {
+.rosh-widget.rosh-widget--alternative {
   border: 2px solid $alternative-score-border-colour;
 
   & h3 {

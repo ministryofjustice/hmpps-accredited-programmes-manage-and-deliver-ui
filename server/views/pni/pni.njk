@@ -27,7 +27,13 @@
                   <strong>{{pathwayDetails.headingText}}</strong>
                 </span>
               </h3>
-              <p class="govuk-body govuk-!-margin-bottom-1">{{pathwayDetails.bodyText}}</p>
+              {% if pathwayDetails.bodyParagraphs %}
+                {% for paragraph in pathwayDetails.bodyParagraphs %}
+                  <p class="govuk-body govuk-!-margin-bottom-1">{{ paragraph }}</p>
+                {% endfor %}
+              {% else %}
+                <p class="govuk-body govuk-!-margin-bottom-1">{{pathwayDetails.bodyText}}</p>
+              {% endif %}
             </div>
             <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
           </div>
