@@ -14,10 +14,15 @@ export default class AttendanceSessionNotesPresenter {
     private readonly referralId: string,
     private readonly notesValue: string,
     private readonly backLink: string,
+    private readonly shouldConfirmStatusChange: boolean = false,
   ) {}
 
   get lastReferral() {
     return this.isLastReferral
+  }
+
+  get submitButtonText(): string {
+    return this.shouldConfirmStatusChange ? 'Continue' : 'Submit'
   }
 
   get hasExistingNotes() {
@@ -33,8 +38,12 @@ export default class AttendanceSessionNotesPresenter {
   }
 
   get text() {
-    const hintText =
-      this.selectedAttendanceCode === 'AFTC' ? 'Include details of why the person attended but failed to comply.' : ''
+    let hintText = ''
+    if (this.selectedAttendanceCode === 'AFTC') {
+      hintText = 'Include details of why the person attended but failed to comply.'
+    } else if (this.selectedAttendanceCode === 'UAAB') {
+      hintText = 'Include details of why the person did not attend.'
+    }
 
     return {
       headingCaption: 'Record attendance and progress',
