@@ -16,179 +16,122 @@ const accreditedProgrammesManageAndDeliverService = new AccreditedProgrammesMana
   hmppsAuthClientBuilder,
 ) as jest.Mocked<AccreditedProgrammesManageAndDeliverService>
 
+const reportingRole = ['ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_REPORTING']
+
+const reports = [
+  { reportName: 'group-size', method: 'getGroupSizeReport', auditAction: 'VIEW_GROUP_SIZE_REPORT' },
+  { reportName: 'dosage', method: 'getDosageReport', auditAction: 'VIEW_DOSAGE_REPORT' },
+  { reportName: 'session-rate', method: 'getSessionRateReport', auditAction: 'VIEW_SESSION_RATE_REPORT' },
+  {
+    reportName: 'facilitator-continuity',
+    method: 'getFacilitatorContinuityReport',
+    auditAction: 'VIEW_FACILITATOR_CONTINUITY_REPORT',
+  },
+] as const
+
 let app: Express
+
+const createApp = (roles: string[]) =>
+  appWithAllRoutes({
+    services: { accreditedProgrammesManageAndDeliverService },
+    userSupplier: () => ({ ...defaultUser, token: createUserToken(roles) }),
+  })
+
+beforeEach(() => {
+  app = createApp(reportingRole)
+})
 
 afterEach(() => {
   jest.resetAllMocks()
 })
 
 describe('Reporting controller', () => {
-  const reportingRole = ['ROLE_ACCREDITED_PROGRAMMES_MANAGE_AND_DELIVER_API__ACPMAD_UI_REPORTING']
-
-  it('returns CSV for group size report when user has reporting role', async () => {
-    const csv = 'groupCode,size\\nGRP-001,12\\n'
-    accreditedProgrammesManageAndDeliverService.getGroupSizeReport.mockResolvedValue({
-      csv,
-      headers: {
-        'Content-Disposition': 'attachment; filename="group-size-report.csv"',
-      },
-    })
-
-    app = appWithAllRoutes({
-      services: {
-        accreditedProgrammesManageAndDeliverService,
-      },
-      userSupplier: () => ({
-        ...defaultUser,
-        token: createUserToken(reportingRole),
-      }),
-    })
-
-    await request(app)
-      .get('/reporting/group-size.csv?groupStartedSince=2026-05-18T13:30:00')
-      .expect(200)
-      .expect('Content-Type', /text\/csv/)
-      .expect('Content-Disposition', 'attachment; filename="group-size-report.csv"')
-      .expect(res => {
-        expect(res.text).toBe(csv)
+  describe.each(reports)('$reportName', ({ reportName, method, auditAction }) => {
+    it('returns the CSV for the dates and region', async () => {
+      const csv = 'groupCode,size\nGRP-001,12\n'
+      accreditedProgrammesManageAndDeliverService[method].mockResolvedValue({
+        csv,
+        headers: { 'Content-Disposition': `attachment; filename="${reportName}-2026-07-01-09-00.csv"` },
       })
 
-    expect(sendAuditEvent).toHaveBeenCalledWith(
-      'VIEW_GROUP_SIZE_REPORT',
-      'user1',
-      undefined,
-      'NOT_APPLICABLE',
-      expect.objectContaining({ groupStartedSince: '2026-05-18T13:30:00' }),
-    )
-    expect(accreditedProgrammesManageAndDeliverService.getGroupSizeReport).toHaveBeenCalledWith(
-      'user1',
-      '2026-05-18T13:30:00',
-    )
-  })
+      await request(app)
+        .get(`/reporting/${reportName}.csv?startDate=2026-04-01&endDate=2026-06-30&region=North+East+Region`)
+        .expect(200)
+        .expect('Content-Type', /text\/csv/)
+        .expect('Content-Disposition', `attachment; filename="${reportName}-2026-07-01-09-00.csv"`)
+        .expect(res => {
+          expect(res.text).toBe(csv)
+        })
 
-  it('returns CSV for dosage report when user has reporting role', async () => {
-    const csv = 'referralId,dosage\\nREF-001,87\\n'
-    accreditedProgrammesManageAndDeliverService.getDosageReport.mockResolvedValue({
-      csv,
-      headers: {
-        'Content-Disposition': 'attachment; filename="dosage-report.csv"',
-      },
-    })
-
-    app = appWithAllRoutes({
-      services: {
-        accreditedProgrammesManageAndDeliverService,
-      },
-      userSupplier: () => ({
-        ...defaultUser,
-        token: createUserToken(reportingRole),
-      }),
-    })
-
-    await request(app)
-      .get('/reporting/dosage.csv?referralsCreatedSince=2026-05-21')
-      .expect(200)
-      .expect('Content-Type', /text\/csv/)
-      .expect('Content-Disposition', 'attachment; filename="dosage-report.csv"')
-      .expect(res => {
-        expect(res.text).toBe(csv)
+      const query = { startDate: '2026-04-01', endDate: '2026-06-30', region: 'North East Region' }
+      expect(accreditedProgrammesManageAndDeliverService[method]).toHaveBeenCalledWith('user1', query)
+      expect(sendAuditEvent).toHaveBeenCalledWith(auditAction, 'user1', undefined, 'NOT_APPLICABLE', {
+        reportName,
+        query,
       })
-
-    expect(sendAuditEvent).toHaveBeenCalledWith(
-      'VIEW_DOSAGE_REPORT',
-      'user1',
-      undefined,
-      'NOT_APPLICABLE',
-      expect.objectContaining({ reportName: 'dosage', query: { referralsCreatedSince: '2026-05-21' } }),
-    )
-
-    expect(accreditedProgrammesManageAndDeliverService.getDosageReport).toHaveBeenCalledWith('user1', {
-      referralsCreatedSince: '2026-05-21',
-    })
-  })
-
-  it('returns CSV for session rate report when user has reporting role', async () => {
-    const csv = 'weekEnding,sessionRate\\n2026-05-24,0.92\\n'
-    accreditedProgrammesManageAndDeliverService.getSessionRateReport.mockResolvedValue({
-      csv,
-      headers: {
-        'Content-Disposition': 'attachment; filename="session-rate-report.csv"',
-      },
     })
 
-    app = appWithAllRoutes({
-      services: {
-        accreditedProgrammesManageAndDeliverService,
-      },
-      userSupplier: () => ({
-        ...defaultUser,
-        token: createUserToken(reportingRole),
-      }),
-    })
+    it.each([
+      ['not provided', ''],
+      ['blank', '&region='],
+    ])('requests national data when the region is %s', async (_description, regionParam) => {
+      accreditedProgrammesManageAndDeliverService[method].mockResolvedValue({ csv: '', headers: {} })
 
-    await request(app)
-      .get('/reporting/session-rate.csv?groupsStartedAfter=2026-05-21')
-      .expect(200)
-      .expect('Content-Type', /text\/csv/)
-      .expect('Content-Disposition', 'attachment; filename="session-rate-report.csv"')
-      .expect(res => {
-        expect(res.text).toBe(csv)
+      await request(app)
+        .get(`/reporting/${reportName}.csv?startDate=2026-04-01&endDate=2026-06-30${regionParam}`)
+        .expect(200)
+
+      expect(accreditedProgrammesManageAndDeliverService[method]).toHaveBeenCalledWith('user1', {
+        startDate: '2026-04-01',
+        endDate: '2026-06-30',
       })
-
-    expect(sendAuditEvent).toHaveBeenCalledWith(
-      'VIEW_SESSION_RATE_REPORT',
-      'user1',
-      undefined,
-      'NOT_APPLICABLE',
-      expect.objectContaining({ reportName: 'session-rate', query: { groupsStartedAfter: '2026-05-21' } }),
-    )
-
-    expect(accreditedProgrammesManageAndDeliverService.getSessionRateReport).toHaveBeenCalledWith('user1', {
-      groupsStartedAfter: '2026-05-21',
-    })
-  })
-
-  it('returns CSV for facilitator continuity report when user has reporting role', async () => {
-    const csv = 'groupCode,continuity\\nGRP-001,0.8\\n'
-    accreditedProgrammesManageAndDeliverService.getFacilitatorContinuityReport.mockResolvedValue({
-      csv,
-      headers: {
-        'Content-Disposition': 'attachment; filename="facilitator-continuity-report.csv"',
-      },
     })
 
-    app = appWithAllRoutes({
-      services: {
-        accreditedProgrammesManageAndDeliverService,
-      },
-      userSupplier: () => ({
-        ...defaultUser,
-        token: createUserToken(reportingRole),
-      }),
+    it('allows the start and end dates to be the same', async () => {
+      accreditedProgrammesManageAndDeliverService[method].mockResolvedValue({ csv: '', headers: {} })
+
+      await request(app).get(`/reporting/${reportName}.csv?startDate=2026-04-01&endDate=2026-04-01`).expect(200)
     })
 
-    await request(app)
-      .get('/reporting/facilitator-continuity.csv?groupsCreatedSince=2026-05-21T12:00:00')
-      .expect(200)
-      .expect('Content-Type', /text\/csv/)
-      .expect('Content-Disposition', 'attachment; filename="facilitator-continuity-report.csv"')
-      .expect(res => {
-        expect(res.text).toBe(csv)
-      })
+    it.each([
+      ['both dates are missing', '', /startDate and endDate must both be valid dates/],
+      ['the start date is missing', '?endDate=2026-06-30', /startDate and endDate must both be valid dates/],
+      ['the end date is missing', '?startDate=2026-04-01', /startDate and endDate must both be valid dates/],
+      [
+        'a date does not exist',
+        '?startDate=2026-02-30&endDate=2026-06-30',
+        /startDate and endDate must both be valid dates/,
+      ],
+      [
+        'a date has a time',
+        '?startDate=2026-04-01T09:00:00&endDate=2026-06-30',
+        /startDate and endDate must both be valid dates/,
+      ],
+      [
+        'the link is from an older generator',
+        '?groupStartedSince=2026-05-18T13:30:00.000Z',
+        /get a new link from the latest version/,
+      ],
+      [
+        'the end date is before the start date',
+        '?startDate=2026-06-30&endDate=2026-04-01',
+        /endDate must be the same as or after startDate/,
+      ],
+      [
+        'there is more than one region',
+        '?startDate=2026-04-01&endDate=2026-06-30&region=Wales&region=London',
+        /Only one region can be provided/,
+      ],
+    ])('returns 400 when %s', async (_description, queryString, message) => {
+      await request(app)
+        .get(`/reporting/${reportName}.csv${queryString}`)
+        .expect(400)
+        .expect(res => {
+          expect(res.text).toMatch(message)
+        })
 
-    expect(sendAuditEvent).toHaveBeenCalledWith(
-      'VIEW_FACILITATOR_CONTINUITY_REPORT',
-      'user1',
-      undefined,
-      'NOT_APPLICABLE',
-      expect.objectContaining({
-        reportName: 'facilitator-continuity',
-        query: { groupsCreatedSince: '2026-05-21T12:00:00' },
-      }),
-    )
-
-    expect(accreditedProgrammesManageAndDeliverService.getFacilitatorContinuityReport).toHaveBeenCalledWith('user1', {
-      groupsCreatedSince: '2026-05-21T12:00:00',
+      expect(accreditedProgrammesManageAndDeliverService[method]).not.toHaveBeenCalled()
+      expect(sendAuditEvent).not.toHaveBeenCalled()
     })
   })
 
@@ -197,41 +140,12 @@ describe('Reporting controller', () => {
    * to protect/prevent access
    */
   it.skip('redirects to auth error when user does not have reporting role', async () => {
-    app = appWithAllRoutes({
-      services: {
-        accreditedProgrammesManageAndDeliverService,
-      },
-      userSupplier: () => ({
-        ...defaultUser,
-        token: createUserToken(['ROLE_PROBATION']),
-      }),
-    })
+    app = createApp(['ROLE_PROBATION'])
 
     await request(app)
-      .get('/reporting/group-size.csv?groupStartedSince=2026-05-18T13:30:00')
+      .get('/reporting/group-size.csv?startDate=2026-04-01&endDate=2026-06-30')
       .expect(302)
       .expect('Location', '/authError')
-
-    expect(accreditedProgrammesManageAndDeliverService.getGroupSizeReport).not.toHaveBeenCalled()
-  })
-
-  it('returns 400 when groupStartedSince is not a valid date-time', async () => {
-    app = appWithAllRoutes({
-      services: {
-        accreditedProgrammesManageAndDeliverService,
-      },
-      userSupplier: () => ({
-        ...defaultUser,
-        token: createUserToken(reportingRole),
-      }),
-    })
-
-    await request(app)
-      .get('/reporting/group-size.csv?groupStartedSince=not-a-date')
-      .expect(400)
-      .expect(res => {
-        expect(res.text).toBe('groupStartedSince must be a valid date-time string')
-      })
 
     expect(accreditedProgrammesManageAndDeliverService.getGroupSizeReport).not.toHaveBeenCalled()
   })

@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Accredited Programmes reports</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --text: #0b0c0c;
+        --secondary-text: #484949;
+        --border: #cecece;
+        --input-border: #0b0c0c;
+        --link: #1a65a6;
+        --button: #0f7a52;
+        --button-hover: #0b5c3e;
+        --button-disabled: #858686;
+        --error: #ca3535;
+        --focus: #ffdd00;
+        --page: #f3f3f3;
+        --panel: #ffffff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 1.1875rem;
+        line-height: 1.4;
+        color: var(--text);
+        background: var(--page);
+      }
+
+      header {
+        background: var(--text);
+        color: #ffffff;
+        padding: 0.75rem 0;
+        font-weight: 700;
+      }
+
+      header div,
+      main {
+        max-width: 960px;
+        margin: 0 auto;
+      }
+
+      header div {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem 0.75rem;
+        padding: 0 1rem;
+      }
+
+      /* Copied from the GOV.UK Frontend tag component */
+      .tag {
+        display: inline-block;
+        max-width: 160px;
+        margin-top: -2px;
+        margin-bottom: -3px;
+        padding: 2px 8px 3px;
+        border-radius: 1px;
+        background-color: #d2e2f1;
+        color: #0f385c;
+        font-weight: 400;
+        line-height: 1.3157894737;
+        overflow-wrap: break-word;
+      }
+
+      main {
+        padding: 1.5rem 1rem 3rem;
+      }
+
+      h1 {
+        margin: 0 0 1rem;
+        font-size: 2rem;
+        line-height: 1.15;
+      }
+
+      h2 {
+        margin: 0 0 0.5rem;
+        font-size: 1.5rem;
+        line-height: 1.25;
+      }
+
+      p {
+        margin: 0 0 1rem;
+      }
+
+      section {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        padding: 1.25rem;
+        margin-bottom: 1.5rem;
+      }
+
+      fieldset {
+        border: 0;
+        margin: 0;
+        padding: 0;
+      }
+
+      legend {
+        padding: 0;
+      }
+
+      label,
+      legend {
+        display: block;
+        font-weight: 700;
+        margin-bottom: 0.3rem;
+      }
+
+      .field {
+        margin-bottom: 1.25rem;
+      }
+
+      .dates {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0 1.5rem;
+        margin-top: 0.75rem;
+      }
+
+      .hint {
+        color: var(--secondary-text);
+        font-size: 1rem;
+        margin-bottom: 0.4rem;
+      }
+
+      input,
+      select {
+        max-width: 100%;
+        min-width: 14rem;
+        height: 2.5rem;
+        border: 2px solid var(--input-border);
+        border-radius: 0;
+        background: #ffffff;
+        color: var(--text);
+        padding: 0.3rem;
+        font: inherit;
+      }
+
+      .error {
+        color: var(--error);
+        font-weight: 700;
+        margin: 0 0 0.4rem;
+      }
+
+      .error:empty {
+        display: none;
+      }
+
+      [aria-invalid='true'] {
+        border-color: var(--error);
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.75rem 1.25rem;
+      }
+
+      .download {
+        display: inline-block;
+        background: var(--button);
+        color: #ffffff;
+        padding: 0.5rem 0.9rem;
+        text-decoration: none;
+        box-shadow: 0 2px 0 #052d1e;
+      }
+
+      .download[href]:hover {
+        background: var(--button-hover);
+      }
+
+      .download:not([href]) {
+        background: var(--button-disabled);
+        box-shadow: none;
+        cursor: not-allowed;
+      }
+
+      .copy {
+        border: 0;
+        background: none;
+        color: var(--link);
+        padding: 0.25rem 0;
+        font: inherit;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+
+      .copy:disabled {
+        color: var(--secondary-text);
+        text-decoration: none;
+        cursor: not-allowed;
+      }
+
+      summary {
+        color: var(--link);
+        cursor: pointer;
+        margin-bottom: 0.75rem;
+      }
+
+      a:focus-visible,
+      button:focus-visible,
+      input:focus-visible,
+      select:focus-visible,
+      summary:focus-visible {
+        outline: 3px solid var(--focus);
+        outline-offset: 0;
+        box-shadow: inset 0 0 0 2px var(--text);
+      }
+
+      .copy:focus-visible,
+      summary:focus-visible {
+        background: var(--focus);
+        color: var(--text);
+        box-shadow: 0 2px 0 var(--text);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        Accredited Programmes in Community
+        <span class="tag" id="version"></span>
+      </div>
+    </header>
+    <main>
+      <h1>Download reports</h1>
+
+      <section>
+        <label for="region">Region</label>
+        <div class="hint" id="region-hint">This applies to all of the reports.</div>
+        <select id="region" aria-describedby="region-hint">
+          <option value="">All (National)</option>
+        </select>
+      </section>
+
+      <div id="reports"></div>
+
+      <details>
+        <summary>Environment: <span id="environment-name"></span></summary>
+        <div class="field">
+          <label for="environment">Environment</label>
+          <div class="hint" id="environment-hint">Only change this if you are testing reports.</div>
+          <select id="environment" aria-describedby="environment-hint">
+            <option value="https://accredited-programmes-manage-and-deliver.hmpps.service.justice.gov.uk">
+              Production
+            </option>
+            <option value="https://accredited-programmes-manage-and-deliver-preprod.hmpps.service.justice.gov.uk">
+              Preprod
+            </option>
+            <option value="https://accredited-programmes-manage-and-deliver-dev.hmpps.service.justice.gov.uk">
+              Dev
+            </option>
+            <option value="http://localhost:3000">Local</option>
+          </select>
+        </div>
+      </details>
+    </main>
+
+    <script>
+      ;(() => {
+        const GENERATOR_VERSION = 'v2.0.0'
+
+        // Region names as held in nDelius. The API rejects any others, so keep in step with ReportingRegions there.
+        const REGIONS = [
+          'East Midlands Region',
+          'East of England',
+          'Greater Manchester',
+          'Kent Surrey Sussex Region',
+          'London',
+          'North East Region',
+          'North West Region',
+          'South Central',
+          'South West',
+          'Wales',
+          'West Midlands Region',
+          'Yorkshire and The Humber',
+        ]
+
+        const GROUPS_STARTED = {
+          label: 'Groups that started between',
+          hint: 'A group starts on the date of its first Getting started 1 session. The report covers all of its sessions so far, not only those between these dates.',
+        }
+
+        const SESSIONS_HELD = {
+          label: 'Sessions held between',
+          hint: 'This includes sessions for all groups, whenever the group started.',
+        }
+
+        const REPORTS = [
+          {
+            id: 'dosage',
+            title: 'Dosage',
+            dateFilter: GROUPS_STARTED,
+            description:
+              'One row for each person who has attended a session, with every group they have been assigned to and every session they have attended. Main sessions are group sessions, so a group catch-up counts as both a main session and a catch-up.',
+          },
+          {
+            id: 'group-size',
+            title: 'Group size',
+            dateFilter: GROUPS_STARTED,
+            description:
+              'One row for each group, with its current size and how many people were scheduled to attend each main session held so far. One-to-ones are not included.',
+          },
+          {
+            id: 'session-rate',
+            title: 'Session rate',
+            dateFilter: SESSIONS_HELD,
+            description:
+              'One row for each person for each week, with how many of the sessions held they were scheduled for and attended.',
+          },
+          {
+            id: 'facilitator-continuity',
+            title: 'Facilitator continuity',
+            dateFilter: SESSIONS_HELD,
+            description:
+              'One row for each session held, with its facilitators and how many people were scheduled to attend.',
+          },
+        ]
+
+        const DEFAULT_PERIOD_DAYS = 28
+
+        // Dates are built from the local year, month and day. Going through UTC can give the wrong day during BST.
+        const toInputValue = date =>
+          [date.getFullYear(), date.getMonth() + 1, date.getDate()].map(part => String(part).padStart(2, '0')).join('-')
+
+        const today = new Date()
+        const defaultEndDate = toInputValue(today)
+        const defaultStartDate = toInputValue(
+          new Date(today.getFullYear(), today.getMonth(), today.getDate() - DEFAULT_PERIOD_DAYS),
+        )
+
+        const element = id => document.getElementById(id)
+        const regionSelect = element('region')
+        const environmentSelect = element('environment')
+
+        const create = (tag, properties, children = []) => {
+          const node = Object.assign(document.createElement(tag), properties)
+          node.append(...children)
+          return node
+        }
+
+        const createDateField = (id, label, value) => {
+          const error = create('p', { className: 'error', id: `${id}-error` })
+          error.setAttribute('role', 'alert')
+
+          const input = create('input', { id, type: 'date', min: '2000-01-01', max: '2099-12-31', value })
+          input.setAttribute('aria-describedby', error.id)
+
+          return {
+            input,
+            field: create('div', { className: 'field' }, [
+              create('label', { htmlFor: id, textContent: label }),
+              error,
+              input,
+            ]),
+            isValid: () => Boolean(input.value) && input.validity.valid,
+            setError: message => {
+              error.textContent = message
+              input.setAttribute('aria-invalid', String(Boolean(message)))
+            },
+          }
+        }
+
+        // Adds a report to the page and returns a function that updates its errors and links
+        const createReport = ({ id, title, description, dateFilter }) => {
+          const name = title.toLowerCase()
+          const startDate = createDateField(`${id}-start-date`, 'Start date', defaultStartDate)
+          const endDate = createDateField(`${id}-end-date`, 'End date', defaultEndDate)
+
+          const hint = create('div', {
+            className: 'hint',
+            id: `${id}-dates-hint`,
+            textContent: dateFilter.hint,
+          })
+          const dates = create('fieldset', {}, [
+            create('legend', { textContent: dateFilter.label }),
+            hint,
+            create('div', { className: 'dates' }, [startDate.field, endDate.field]),
+          ])
+          dates.setAttribute('aria-describedby', hint.id)
+
+          const download = create('a', {
+            className: 'download',
+            target: '_blank',
+            rel: 'noopener noreferrer',
+            textContent: `Download ${name} report`,
+          })
+          const copy = create('button', { className: 'copy', type: 'button', textContent: 'Copy link' })
+          copy.setAttribute('aria-label', `Copy link to ${name} report`)
+          const copyStatus = create('span', { className: 'hint' })
+          copyStatus.setAttribute('role', 'status')
+
+          copy.addEventListener('click', async () => {
+            try {
+              await navigator.clipboard.writeText(download.href)
+              copyStatus.textContent = 'Link copied'
+            } catch {
+              copyStatus.textContent = 'Could not copy the link. Right-click the download button to copy it instead.'
+            }
+          })
+
+          const heading = create('h2', { id: `${id}-heading`, textContent: title })
+          const section = create('section', { id }, [
+            heading,
+            create('p', { textContent: description }),
+            dates,
+            create('div', { className: 'actions' }, [download, copy, copyStatus]),
+          ])
+          section.setAttribute('aria-labelledby', heading.id)
+          element('reports').appendChild(section)
+
+          const validate = () => {
+            const inOrder = !startDate.isValid() || !endDate.isValid() || startDate.input.value <= endDate.input.value
+
+            startDate.setError(startDate.isValid() ? '' : 'Enter a start date')
+            if (!endDate.isValid()) {
+              endDate.setError('Enter an end date')
+            } else {
+              endDate.setError(inOrder ? '' : 'End date must be the same as or after the start date')
+            }
+
+            return startDate.isValid() && endDate.isValid() && inOrder
+          }
+
+          const buildUrl = () => {
+            const url = new URL(`/reporting/${id}.csv`, environmentSelect.value)
+            url.searchParams.set('startDate', startDate.input.value)
+            url.searchParams.set('endDate', endDate.input.value)
+            if (regionSelect.value) {
+              url.searchParams.set('region', regionSelect.value)
+            }
+            return url.toString()
+          }
+
+          const render = () => {
+            const valid = validate()
+            if (valid) {
+              download.href = buildUrl()
+              download.removeAttribute('aria-disabled')
+            } else {
+              download.removeAttribute('href')
+              download.setAttribute('aria-disabled', 'true')
+            }
+            copy.disabled = !valid
+            copyStatus.textContent = ''
+          }
+
+          startDate.input.addEventListener('input', render)
+          endDate.input.addEventListener('input', render)
+
+          return render
+        }
+
+        REGIONS.forEach(region => regionSelect.append(create('option', { value: region, textContent: region })))
+        element('version').textContent = `Version ${GENERATOR_VERSION}`
+
+        const reportRenders = REPORTS.map(createReport)
+
+        const renderAll = () => {
+          reportRenders.forEach(render => render())
+          element('environment-name').textContent = environmentSelect.selectedOptions[0].textContent.trim()
+        }
+
+        regionSelect.addEventListener('change', renderAll)
+        environmentSelect.addEventListener('change', renderAll)
+
+        renderAll()
+      })()
+    </script>
+  </body>
+</html>
