@@ -75,8 +75,11 @@ describe('PniPresenter', () => {
       const pathwayContent = presenter.getPathwayDetails()
 
       expect(pathwayContent).toEqual({
-        bodyText:
-          'Based on the OASys risk and needs scores, Alex River may not be eligible for Building Choices. If a pre-sentence or pre-release programme needs identifier (PNI) has already been completed in EPF, use that result instead. If EPF says that they are eligible for Building Choices, they are still eligible now.',
+        bodyParagraphs: [
+          'Based on the risk and need scores, Alex River may not be eligible for Building Choices. Discuss this with their probation practitioner.',
+          'For court-imposed requirements, the pre-sentence eligibility assessment is valid for the duration of the order unless exceptional circumstances apply.',
+          'For people under licence supervision, if eligibility has changed since the original assessment, check with the probation practitioner whether Building Choices is still appropriate.',
+        ],
         class: 'rosh-widget rosh-widget--alternative govuk-!-margin-bottom-6',
         headingText: 'NOT ELIGIBLE',
       })
