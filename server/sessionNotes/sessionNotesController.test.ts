@@ -31,7 +31,7 @@ beforeEach(() => {
 })
 
 const sessionNotesFactory = (overrides: Partial<SessionNotes> = {}): SessionNotes => ({
-  personName: `Alex River`,
+  personName: { forename: 'Alex', surname: 'River' },
   pageTitle: 'Alex River: Getting started Introduction to Building Choices session notes',
   moduleName: 'Getting started',
   sessionName: 'Introduction to Building Choices',
@@ -115,7 +115,7 @@ describe('SessionNotesController', () => {
         people: [
           {
             referralId: 'referral-123',
-            name: 'Alex River',
+            name: { forename: 'Alex', surname: 'River' },
             crn: 'X12345',
             attendance: {
               code: 'AFTC',
@@ -236,7 +236,7 @@ describe('SessionNotesController', () => {
         people: [
           {
             referralId: 'referral-123',
-            name: 'Alex River',
+            name: { forename: 'Alex', surname: 'River' },
             crn: 'X12345',
             attendance: {
               code: 'AFTC',
@@ -290,7 +290,7 @@ describe('SessionNotesController', () => {
         people: [
           {
             referralId: 'referral-123',
-            name: 'Alex River',
+            name: { forename: 'Alex', surname: 'River' },
             crn: 'X12345',
             attendance: {
               code: 'AFTC',
@@ -303,7 +303,7 @@ describe('SessionNotesController', () => {
           },
           {
             referralId: 'referral-999',
-            name: 'Taylor Smith',
+            name: { forename: 'Taylor', surname: 'Smith' },
             crn: 'X67890',
             attendance: {
               code: 'ATTC',

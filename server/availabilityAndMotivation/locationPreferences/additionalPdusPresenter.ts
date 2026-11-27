@@ -3,6 +3,7 @@ import {
   DeliveryLocationPreferencesFormData,
   ReferralDetails,
 } from '@manage-and-deliver-api'
+import { formatPersonName } from '../../utils/utils'
 
 export default class AdditionalPdusPresenter {
   public readonly pdus: {
@@ -27,6 +28,10 @@ export default class AdditionalPdusPresenter {
 
   get backLinkUri() {
     return `/referral/${this.referralId}/add-location-preferences`
+  }
+
+  get personName(): string {
+    return formatPersonName(this.details.personName)
   }
 
   get pageTitle(): string {

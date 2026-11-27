@@ -14,23 +14,25 @@ describe('UpdateReferralStatusStartedOrCompletedPresenter', () => {
   })
 
   it('should return allocated to a group text when current status is Scheduled', () => {
-    const personName = 'Alex River'
+    const personName = { forename: 'Alex', surname: 'River' }
+    const fullName = 'Alex River'
     const details = referralDetailsFactory.build({ personName })
     const statusDetails = referralStatusTransitionsFactory.build({ currentStatus: { title: 'Scheduled' } })
 
     const presenter = new UpdateReferralStatusStartedOrCompletedPresenter(details, statusDetails, '/back-link')
 
-    expect(presenter.text.title).toEqual(`${personName} is allocated to a group`)
+    expect(presenter.text.title).toEqual(`${fullName} is allocated to a group`)
   })
 
   it('should return started Building Choices text when current status is not Scheduled', () => {
-    const personName = 'Jane Smith'
+    const personName = { forename: 'Jane', surname: 'Smith' }
+    const fullName = 'Jane Smith'
     const details = referralDetailsFactory.build({ personName })
     const statusDetails = referralStatusTransitionsFactory.build({ currentStatus: { title: 'Started' } })
 
     const presenter = new UpdateReferralStatusStartedOrCompletedPresenter(details, statusDetails, '/back-link')
 
-    expect(presenter.text.title).toEqual(`${personName} has started Building Choices`)
+    expect(presenter.text.title).toEqual(`${fullName} has started Building Choices`)
   })
 
   it('should return null error summary when there is no validation error', () => {

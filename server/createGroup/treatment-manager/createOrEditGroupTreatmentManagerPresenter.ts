@@ -2,6 +2,7 @@ import { CreateGroupRequest, CreateGroupTeamMember, UserTeamMember } from '@mana
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
 import { SelectArgsItem } from '../../utils/govukFrontendTypes'
+import { formatPersonName } from '../../utils/utils'
 
 export default class CreateOrEditGroupTreatmentManagerPresenter {
   constructor(
@@ -52,8 +53,16 @@ export default class CreateOrEditGroupTreatmentManagerPresenter {
     selectedValue: string = '',
   ): SelectArgsItem[] {
     const pduItems: SelectArgsItem[] = this.members.map(member => ({
-      text: member.personName,
-      value: `{"facilitator":"${member.personName}", "facilitatorCode":"${member.personCode}", "teamName":"${member.teamName}", "teamCode":"${member.teamCode}", "teamMemberType":"${memberType}"}`,
+      text: formatPersonName(member.personName),
+      value: JSON.stringify({
+        facilitatorForename: member.personName.forename,
+        facilitatorSurname: member.personName.surname,
+        ...(member.personName.middleNames ? { facilitatorMiddleNames: member.personName.middleNames } : {}),
+        facilitatorCode: member.personCode,
+        teamName: member.teamName,
+        teamCode: member.teamCode,
+        teamMemberType: memberType,
+      }),
       selected: selectedValue === member.personCode,
     }))
 

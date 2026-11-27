@@ -1,6 +1,7 @@
 import CannotAttendLocationsPresenter from './cannotAttendLocationsPresenter'
 import ViewUtils from '../../utils/viewUtils'
 import { RadiosArgs } from '../../utils/govukFrontendTypes'
+import { formatPersonName } from '../../utils/utils'
 
 export default class CannotAttendLocationsView {
   constructor(private readonly presenter: CannotAttendLocationsPresenter) {}
@@ -10,7 +11,7 @@ export default class CannotAttendLocationsView {
       name: 'cannot-attend-locations-radio',
       fieldset: {
         legend: {
-          text: `Are there any locations ${this.presenter.details.personName} cannot attend?`,
+          text: `Are there any locations ${formatPersonName(this.presenter.details.personName)} cannot attend?`,
           isPageHeading: true,
           classes: 'govuk-fieldset__legend--l',
         },

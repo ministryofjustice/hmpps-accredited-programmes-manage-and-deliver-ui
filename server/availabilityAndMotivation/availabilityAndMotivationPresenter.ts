@@ -1,6 +1,7 @@
 import { ReferralDetails } from '@manage-and-deliver-api'
 import ReferralLayoutPresenter, { HorizontalNavValues } from '../shared/referral/referralLayoutPresenter'
 import { InsetTextArgs } from '../utils/govukFrontendTypes'
+import { formatPersonName } from '../utils/utils'
 
 export enum AvailabilityAndMotivationPageSelection {
   AvailabilityTab = 'availability',
@@ -20,7 +21,7 @@ export default class AvailabilityAndMotivationPresenter extends ReferralLayoutPr
 
   get groupAllocationTextArgs(): InsetTextArgs {
     return {
-      html: `<p> ${this.referral.personName} is allocated to <a href="/group/${this.referral.currentlyAllocatedGroupId}/waitlist">
+      html: `<p> ${formatPersonName(this.referral.personName)} is allocated to <a href="/group/${this.referral.currentlyAllocatedGroupId}/waitlist">
             ${this.referral.currentlyAllocatedGroupCode}</a>.</p>`,
       classes: 'govuk-!-margin-top-0 govuk-!-margin-bottom-0',
     }

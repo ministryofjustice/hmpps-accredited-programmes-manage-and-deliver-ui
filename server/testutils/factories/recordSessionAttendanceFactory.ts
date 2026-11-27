@@ -7,7 +7,7 @@ export default RecordSessionAttendanceFactory.define(({ sequence }) => {
   const people = [
     {
       referralId: `${sequence}-0`,
-      name: 'Alice Brown',
+      name: { forename: 'Alice', surname: 'Brown' },
       crn: 'X123456',
       attendance: { text: 'Attended', code: 'ATTC' },
       options: [
@@ -30,7 +30,7 @@ export default RecordSessionAttendanceFactory.define(({ sequence }) => {
     },
     {
       referralId: `${sequence}-1`,
-      name: 'Bob Smith',
+      name: { forename: 'Bob', surname: 'Smith' },
       crn: 'X933591',
       attendance: { text: 'Absent - not notified', code: 'UAAB' },
       options: [

@@ -5,7 +5,7 @@ describe('ServiceUserBannerPresenter', () => {
   const referralDetails = {
     id: 'aabbadf7-a427-436e-b1a4-f27dd5893c24',
     crn: 'X123456',
-    personName: 'David Alex Clarke',
+    personName: { forename: 'David Alex', surname: 'Clarke' },
     interventionName: 'Building Choices',
     createdAt: '2025-07-28T11:17:47',
     dateOfBirth: '15 April 1981',
@@ -23,7 +23,7 @@ describe('ServiceUserBannerPresenter', () => {
 
   describe('name', () => {
     it('returns full name with capitals maintained', () => {
-      referralDetails.personName = 'Christopher McLeavey'
+      referralDetails.personName = { forename: 'Christopher', surname: 'McLeavey' }
 
       const presenter = new ServiceUserBannerPresenter(referralDetails)
       expect(presenter.name).toEqual('Christopher McLeavey')

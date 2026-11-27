@@ -10,6 +10,7 @@ import referralDetailsFactory from '../../testutils/factories/referralDetailsFac
 import deliveryLocationPreferencesFormDataFactory from '../../testutils/factories/deliveryLocationPreferences/deliveryLocationPreferencesFormDataFactory'
 import createDeliveryLocationPreferencesFactory from '../../testutils/factories/deliveryLocationPreferences/createDeliveryLocationPreferencesFactory'
 import TestUtils from '../../testutils/testUtils'
+import { formatPersonName } from '../../utils/utils'
 
 jest.mock('../../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../../data/hmppsAuthClient')
@@ -48,8 +49,8 @@ describe('location-preferences', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(referralDetails.crn)
-          expect(res.text).toContain(referralDetails.personName)
-          expect(res.text).toContain(`Where can ${referralDetails.personName} attend a programme?`)
+          expect(res.text).toContain(formatPersonName(referralDetails.personName))
+          expect(res.text).toContain(`Where can ${formatPersonName(referralDetails.personName)} attend a programme?`)
         })
         .then(() => {
           expect(sendAuditEvent).toHaveBeenCalledWith(
@@ -195,8 +196,8 @@ describe('location-preferences', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(referralDetails.crn)
-          expect(res.text).toContain(referralDetails.personName)
-          expect(res.text).toContain(`Which other locations can ${referralDetails.personName} attend`)
+          expect(res.text).toContain(formatPersonName(referralDetails.personName))
+          expect(res.text).toContain(`Which other locations can ${formatPersonName(referralDetails.personName)} attend`)
         })
         .then(() => {
           expect(sendAuditEvent).toHaveBeenCalledWith(
@@ -281,8 +282,10 @@ describe('location-preferences', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(referralDetails.crn)
-          expect(res.text).toContain(referralDetails.personName)
-          expect(res.text).toContain(`Are there any locations ${referralDetails.personName} cannot attend?`)
+          expect(res.text).toContain(formatPersonName(referralDetails.personName))
+          expect(res.text).toContain(
+            `Are there any locations ${formatPersonName(referralDetails.personName)} cannot attend?`,
+          )
         })
         .then(() => {
           expect(sendAuditEvent).toHaveBeenCalledWith(

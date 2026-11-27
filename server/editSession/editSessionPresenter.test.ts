@@ -65,7 +65,7 @@ describe('EditSessionPresenter', () => {
           attendanceAndSessionNotes: [
             {
               referralId: '123',
-              name: 'Alex River',
+              name: { forename: 'Alex', surname: 'River' },
               crn: 'CRN001',
               lao: false,
               attendance: 'Attended',
@@ -74,7 +74,7 @@ describe('EditSessionPresenter', () => {
             },
             {
               referralId: '456',
-              name: 'Jane Doe',
+              name: { forename: 'Jane', surname: 'Doe' },
               crn: 'CRN002',
               lao: false,
               attendance: 'Not attended',
@@ -138,7 +138,7 @@ describe('EditSessionPresenter', () => {
           attendanceAndSessionNotes: [
             {
               referralId: '123',
-              name: 'Alex River',
+              name: { forename: 'Alex', surname: 'River' },
               crn: 'CRN001',
               lao: false,
               attendance: 'Attended - failed to comply',
@@ -182,7 +182,7 @@ describe('EditSessionPresenter', () => {
           attendanceAndSessionNotes: [
             {
               referralId: '123',
-              name: 'Alex River',
+              name: { forename: 'Alex', surname: 'River' },
               crn: 'CRN001',
               lao: false,
               attendance: 'Attended',
@@ -226,7 +226,7 @@ describe('EditSessionPresenter', () => {
           attendanceAndSessionNotes: [
             {
               referralId: '123',
-              name: 'Alex River',
+              name: { forename: 'Alex', surname: 'River' },
               crn: 'CRN001',
               lao: false,
               attendance: 'Attended',
@@ -298,7 +298,7 @@ describe('EditSessionPresenter', () => {
           attendanceAndSessionNotes: [
             {
               referralId: '123',
-              name: 'Alex River',
+              name: { forename: 'Alex', surname: 'River' },
               crn: 'CRN001',
               lao: false,
               attendance: 'Attended',
@@ -342,7 +342,7 @@ describe('EditSessionPresenter', () => {
           attendanceAndSessionNotes: [
             {
               referralId: '123',
-              name: 'Alex River',
+              name: { forename: 'Alex', surname: 'River' },
               crn: 'CRN001',
               lao: false,
               attendance: 'Attended',
@@ -388,7 +388,7 @@ describe('EditSessionPresenter', () => {
           attendanceAndSessionNotes: [
             {
               referralId: '123',
-              name: 'Alex River',
+              name: { forename: 'Alex', surname: 'River' },
               crn: 'CRN001',
               lao: false,
               attendance: '',
@@ -433,7 +433,7 @@ describe('EditSessionPresenter', () => {
           attendanceAndSessionNotes: [
             {
               referralId: '123',
-              name: 'Alex River',
+              name: { forename: 'Alex', surname: 'River' },
               crn: 'CRN001',
               lao: false,
               attendance: 'No - did not attend',
@@ -477,7 +477,7 @@ describe('EditSessionPresenter', () => {
           attendanceAndSessionNotes: [
             {
               referralId: '123',
-              name: 'Alex River',
+              name: { forename: 'Alex', surname: 'River' },
               crn: 'CRN001',
               lao: false,
               attendance: 'Did not attend',
@@ -523,7 +523,7 @@ describe('EditSessionPresenter', () => {
         attendanceAndSessionNotes: [
           {
             referralId: '123',
-            name: 'Alex River',
+            name: { forename: 'Alex', surname: 'River' },
             crn: 'CRN001',
             attendance: 'Attended',
             sessionNotes: 'Good progress',
@@ -567,7 +567,7 @@ describe('EditSessionPresenter', () => {
         attendanceAndSessionNotes: [
           {
             referralId: '123',
-            name: 'Alex River',
+            name: { forename: 'Alex', surname: 'River' },
             crn: 'CRN001',
             attendance: 'Attended',
             sessionNotes: 'Good participation',
@@ -576,7 +576,7 @@ describe('EditSessionPresenter', () => {
           },
           {
             referralId: '456',
-            name: 'Jane Doe',
+            name: { forename: 'Jane', surname: 'Doe' },
             crn: 'CRN002',
             attendance: 'Not attended',
             sessionNotes: 'Absent',
@@ -639,7 +639,7 @@ describe('EditSessionPresenter', () => {
       attendanceAndSessionNotes: [
         {
           referralId: '123',
-          name: 'Alex River',
+          name: { forename: 'Alex', surname: 'River' },
           crn: 'CRN001',
           attendance: 'Attended',
           sessionNotes: 'Good progress',
@@ -651,7 +651,7 @@ describe('EditSessionPresenter', () => {
       time: '1:00pm',
       timeWithCapitalisedMidday: '1:00pm',
       unformattedEndDate: '2026-02-01T14:00:00',
-      scheduledToAttend: ['Alex River'],
+      scheduledToAttend: [{ forename: 'Alex', surname: 'River' }],
       facilitators: [],
     }
 
@@ -663,7 +663,7 @@ describe('EditSessionPresenter', () => {
       attendanceAndSessionNotes: [
         {
           referralId: '123',
-          name: 'Alex River',
+          name: { forename: 'Alex', surname: 'River' },
           crn: 'CRN001',
           attendance: 'Attended',
           sessionNotes: 'Good participation',
@@ -672,7 +672,7 @@ describe('EditSessionPresenter', () => {
         },
         {
           referralId: '456',
-          name: 'Jane Doe',
+          name: { forename: 'Jane', surname: 'Doe' },
           crn: 'CRN002',
           attendance: 'Not attended',
           sessionNotes: 'Absent',
@@ -684,7 +684,10 @@ describe('EditSessionPresenter', () => {
       time: '1:00pm',
       timeWithCapitalisedMidday: '1:00pm',
       unformattedEndDate: '2026-02-01T14:00:00',
-      scheduledToAttend: ['Alex River', 'Jane Doe'],
+      scheduledToAttend: [
+        { forename: 'Alex', surname: 'River' },
+        { forename: 'Jane', surname: 'Doe' },
+      ],
       facilitators: [],
     }
 
@@ -1016,7 +1019,7 @@ describe('EditSessionPresenter', () => {
           isCatchup: true,
           attendanceAndSessionNotes: [
             {
-              name: 'Chase Gottlieb',
+              name: { forename: 'Chase', surname: 'Gottlieb' },
               referralId: 'c9cefced-480a-42aa-ac5c-d49ac242b759',
               crn: 'S347158170',
               lao: false,
@@ -1025,7 +1028,7 @@ describe('EditSessionPresenter', () => {
               isExcluded: false,
             },
             {
-              name: 'Clarita Hermann',
+              name: { forename: 'Clarita', surname: 'Hermann' },
               referralId: '3c039300-380f-4aab-9196-5a48a9f0a933',
               crn: 'S512196735',
               lao: false,
@@ -1034,7 +1037,7 @@ describe('EditSessionPresenter', () => {
               isExcluded: false,
             },
             {
-              name: 'Daine Lehner',
+              name: { forename: 'Daine', surname: 'Lehner' },
               referralId: '69342294-7b88-47ac-b1fc-a55d2b6733b2',
               crn: 'S085511223',
               lao: false,
@@ -1059,7 +1062,7 @@ describe('EditSessionPresenter', () => {
           isCatchup: true,
           attendanceAndSessionNotes: [
             {
-              name: 'Chase Gottlieb',
+              name: { forename: 'Chase', surname: 'Gottlieb' },
               referralId: 'c9cefced-480a-42aa-ac5c-d49ac242b759',
               crn: 'S347158170',
               lao: false,
@@ -1068,7 +1071,7 @@ describe('EditSessionPresenter', () => {
               isExcluded: false,
             },
             {
-              name: 'Clarita Hermann',
+              name: { forename: 'Clarita', surname: 'Hermann' },
               referralId: '3c039300-380f-4aab-9196-5a48a9f0a933',
               crn: 'S512196735',
               lao: false,
@@ -1077,7 +1080,7 @@ describe('EditSessionPresenter', () => {
               isExcluded: false,
             },
             {
-              name: 'Daine Lehner',
+              name: { forename: 'Daine', surname: 'Lehner' },
               referralId: '69342294-7b88-47ac-b1fc-a55d2b6733b2',
               crn: 'S085511223',
               lao: false,
@@ -1102,7 +1105,7 @@ describe('EditSessionPresenter', () => {
           isCatchup: true,
           attendanceAndSessionNotes: [
             {
-              name: 'Restricted Person',
+              name: { forename: 'Restricted', surname: 'Person' },
               referralId: 'c9cefced-480a-42aa-ac5c-d49ac242b759',
               crn: 'S347158170',
               lao: true,
@@ -1144,7 +1147,7 @@ describe('EditSessionPresenter', () => {
       attendanceAndSessionNotes: [
         {
           referralId: 'ref-1',
-          name: 'Alex River',
+          name: { forename: 'Alex', surname: 'River' },
           crn: 'CRN001',
           lao: false,
           attendance: 'Attended',
@@ -1153,7 +1156,7 @@ describe('EditSessionPresenter', () => {
         },
         {
           referralId: 'ref-2',
-          name: 'Jane Doe',
+          name: { forename: 'Jane', surname: 'Doe' },
           crn: 'CRN002',
           lao: false,
           attendance: 'Not attended',
@@ -1249,7 +1252,7 @@ describe('EditSessionPresenter', () => {
         attendanceAndSessionNotes: [
           {
             referralId: 'ref-1',
-            name: 'Alex River',
+            name: { forename: 'Alex', surname: 'River' },
             crn: 'CRN001',
             lao: true,
             attendance: '',

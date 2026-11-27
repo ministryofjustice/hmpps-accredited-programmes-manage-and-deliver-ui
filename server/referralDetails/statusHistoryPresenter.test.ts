@@ -1,26 +1,27 @@
 import StatusHistoryPresenter from './statusHistoryPresenter'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 import statusHistoryFactory from '../testutils/factories/statusHistoryFactory'
+import { formatPersonName } from '../utils/utils'
 
 describe('StatusHistoryPresenter', () => {
   describe('headingText', () => {
     it('returns the status history heading for the referral person', () => {
       const referralDetails = referralDetailsFactory.build({
-        personName: 'John Doe',
+        personName: { forename: 'John', surname: 'Doe' },
         currentStatusDescription: 'Assessment complete',
       })
       const statusHistory = [statusHistoryFactory.awaitingAssessment().build()]
 
       const presenter = new StatusHistoryPresenter('referral-id', statusHistory, referralDetails)
 
-      expect(presenter.headingText).toBe(`Status history: ${referralDetails.personName}`)
+      expect(presenter.headingText).toBe(`Status history: ${formatPersonName(referralDetails.personName)}`)
     })
   })
 
   describe('successMessageSummary', () => {
     it('returns success message when a success message is returned from the API', () => {
       const referralDetails = referralDetailsFactory.build({
-        personName: 'John Doe',
+        personName: { forename: 'John', surname: 'Doe' },
         currentStatusDescription: 'Assessment complete',
       })
       const statusHistory = [statusHistoryFactory.awaitingAssessment().build()]
@@ -45,7 +46,7 @@ describe('StatusHistoryPresenter', () => {
 
     it('returns null when no success message is returned', () => {
       const referralDetails = referralDetailsFactory.build({
-        personName: 'John Doe',
+        personName: { forename: 'John', surname: 'Doe' },
         currentStatusDescription: 'Assessment complete',
       })
       const statusHistory = [statusHistoryFactory.awaitingAssessment().build()]
@@ -66,7 +67,7 @@ describe('StatusHistoryPresenter', () => {
   describe('pageTitle', () => {
     it('returns the correct page title', () => {
       const referralDetails = referralDetailsFactory.build({
-        personName: 'Alex River',
+        personName: { forename: 'Alex', surname: 'River' },
         currentStatusDescription: 'Assessment complete',
       })
       const statusHistory = [statusHistoryFactory.awaitingAssessment().build()]

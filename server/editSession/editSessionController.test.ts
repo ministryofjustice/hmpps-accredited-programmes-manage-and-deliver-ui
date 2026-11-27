@@ -35,7 +35,7 @@ beforeEach(() => {
     editSessionAttendeesFactory.build({
       attendees: [
         {
-          name: 'Alex River',
+          name: { forename: 'Alex', surname: 'River' },
           referralId: 'referral-123',
           crn: 'S688890821',
           currentlyAttending: false,
@@ -100,7 +100,7 @@ describe('editSession', () => {
       attendanceAndSessionNotes: [
         {
           referralId: 'referral-123',
-          name: 'Alex River',
+          name: { forename: 'Alex', surname: 'River' },
           crn: 'S688890821',
           lao: false,
           attendance: 'Attended',
@@ -139,7 +139,7 @@ describe('editSession', () => {
       attendanceAndSessionNotes: [
         {
           referralId: 'referral-123',
-          name: 'Alex River',
+          name: { forename: 'Alex', surname: 'River' },
           crn: 'S688890821',
           lao: false,
           attendance: 'To be confirmed',
@@ -218,7 +218,7 @@ describe('editSession', () => {
       attendanceAndSessionNotes: [
         {
           referralId: 'referral-123',
-          name: 'Alex River',
+          name: { forename: 'Alex', surname: 'River' },
           crn: 'S688890821',
           lao: false,
           attendance: 'Attended',
@@ -260,7 +260,7 @@ describe('editSession', () => {
       attendanceAndSessionNotes: [
         {
           referralId: 'referral-123',
-          name: 'Alex River',
+          name: { forename: 'Alex', surname: 'River' },
           crn: 'S688890821',
           lao: false,
           attendance: 'Attended',
@@ -301,7 +301,7 @@ describe('editSession', () => {
       attendanceAndSessionNotes: [
         {
           referralId: 'referral-123',
-          name: 'Alex River',
+          name: { forename: 'Alex', surname: 'River' },
           crn: 'S688890821',
           lao: false,
           attendance: 'To be confirmed',
@@ -336,7 +336,7 @@ describe('editSession', () => {
       attendanceAndSessionNotes: [
         {
           referralId: 'referral-123',
-          name: 'Alex River',
+          name: { forename: 'Alex', surname: 'River' },
           crn: 'S688890821',
           lao: false,
           attendance: 'To be confirmed',
@@ -367,7 +367,7 @@ describe('editSession', () => {
         attendanceAndSessionNotes: [
           {
             referralId: 'referral-authorised',
-            name: 'Alex River',
+            name: { forename: 'Alex', surname: 'River' },
             crn: 'S688890821',
             lao: false,
             attendance: 'Attended',
@@ -376,7 +376,7 @@ describe('editSession', () => {
           },
           {
             referralId: 'referral-restricted',
-            name: 'Secret Person',
+            name: { forename: 'Secret', surname: 'Person' },
             crn: 'S999999999',
             lao: true,
             attendance: 'Attended',
@@ -403,11 +403,14 @@ describe('editSession', () => {
     it('masks a restricted attendee out of the Scheduled to attend summary, leaving only their CRN', async () => {
       const sessionDetails = GroupSessionDetailsFactory.build({
         pageTitle: 'Getting started 1',
-        scheduledToAttend: ['Alex River', 'Secret Person'],
+        scheduledToAttend: [
+          { forename: 'Alex', surname: 'River' },
+          { forename: 'Secret', surname: 'Person' },
+        ],
         attendanceAndSessionNotes: [
           {
             referralId: 'referral-authorised',
-            name: 'Alex River',
+            name: { forename: 'Alex', surname: 'River' },
             crn: 'S688890821',
             lao: false,
             attendance: 'Attended',
@@ -416,7 +419,7 @@ describe('editSession', () => {
           },
           {
             referralId: 'referral-restricted',
-            name: 'Secret Person',
+            name: { forename: 'Secret', surname: 'Person' },
             crn: 'S999999999',
             lao: true,
             attendance: 'Attended',
@@ -443,11 +446,11 @@ describe('editSession', () => {
     it('does not render the Update attendance and notes button or any checkboxes when every attendee is restricted', async () => {
       const sessionDetails = GroupSessionDetailsFactory.build({
         pageTitle: 'Getting started 1',
-        scheduledToAttend: ['Secret Person'],
+        scheduledToAttend: [{ forename: 'Secret', surname: 'Person' }],
         attendanceAndSessionNotes: [
           {
             referralId: 'referral-restricted',
-            name: 'Secret Person',
+            name: { forename: 'Secret', surname: 'Person' },
             crn: 'S999999999',
             lao: true,
             attendance: 'Attended',
@@ -476,7 +479,7 @@ describe('editSession', () => {
         attendanceAndSessionNotes: [
           {
             referralId: 'referral-restricted',
-            name: 'Secret Person',
+            name: { forename: 'Secret', surname: 'Person' },
             crn: 'S999999999',
             lao: true,
             attendance: 'Attended',
@@ -485,7 +488,7 @@ describe('editSession', () => {
           },
           {
             referralId: 'referral-authorised',
-            name: 'Alex River',
+            name: { forename: 'Alex', surname: 'River' },
             crn: 'S688890821',
             lao: false,
             attendance: 'Attended',
@@ -616,7 +619,7 @@ describe('editSessionAttendees', () => {
     const sessionAttendees = editSessionAttendeesFactory.build({
       attendees: [
         {
-          name: 'Secret Person',
+          name: { forename: 'Secret', surname: 'Person' },
           referralId: 'referral-restricted',
           crn: 'S999999999',
           currentlyAttending: true,
@@ -647,14 +650,14 @@ describe('editSessionAttendees', () => {
     const sessionAttendees = editSessionAttendeesFactory.build({
       attendees: [
         {
-          name: 'Alex River',
+          name: { forename: 'Alex', surname: 'River' },
           referralId: 'referral-authorised',
           crn: 'S688890821',
           currentlyAttending: true,
           isExcluded: false,
         },
         {
-          name: 'Secret Person',
+          name: { forename: 'Secret', surname: 'Person' },
           referralId: 'referral-restricted',
           crn: 'S999999999',
           currentlyAttending: true,
@@ -686,7 +689,7 @@ describe('editSessionAttendees', () => {
     const sessionAttendees = editSessionAttendeesFactory.build({
       attendees: [
         {
-          name: 'Alex River',
+          name: { forename: 'Alex', surname: 'River' },
           referralId: 'referral-authorised',
           crn: 'S688890821',
           currentlyAttending: true,
@@ -714,14 +717,14 @@ describe('editSessionAttendees', () => {
     const sessionAttendees = editSessionAttendeesFactory.build({
       attendees: [
         {
-          name: 'Alex River',
+          name: { forename: 'Alex', surname: 'River' },
           referralId: 'referral-authorised',
           crn: 'S688890821',
           currentlyAttending: true,
           isExcluded: false,
         },
         {
-          name: 'Secret Person',
+          name: { forename: 'Secret', surname: 'Person' },
           referralId: 'referral-restricted',
           crn: 'S999999999',
           currentlyAttending: false,
@@ -752,14 +755,14 @@ describe('editSessionAttendees', () => {
     const sessionAttendees = editSessionAttendeesFactory.build({
       attendees: [
         {
-          name: 'Alex River',
+          name: { forename: 'Alex', surname: 'River' },
           referralId: 'referral-existing',
           crn: 'S688890821',
           currentlyAttending: true,
           isExcluded: false,
         },
         {
-          name: 'Jane Smith',
+          name: { forename: 'Jane', surname: 'Smith' },
           referralId: 'referral-new',
           crn: 'Y654321',
           currentlyAttending: false,
@@ -792,14 +795,14 @@ describe('editSessionAttendees', () => {
     const sessionAttendees = editSessionAttendeesFactory.build({
       attendees: [
         {
-          name: 'Alex River',
+          name: { forename: 'Alex', surname: 'River' },
           referralId: 'referral-authorised',
           crn: 'S688890821',
           currentlyAttending: true,
           isExcluded: false,
         },
         {
-          name: 'Secret Person',
+          name: { forename: 'Secret', surname: 'Person' },
           referralId: 'referral-restricted',
           crn: 'S999999999',
           currentlyAttending: false,
@@ -1269,14 +1272,14 @@ describe('editSessionFacilitators', () => {
     pageTitle: 'Getting Started 1',
     facilitators: [
       {
-        facilitatorName: 'Facilitator One',
+        facilitatorName: { forename: 'Facilitator', surname: 'One' },
         facilitatorCode: 'F001',
         teamName: 'Team A',
         teamCode: 'TA01',
         currentlyFacilitating: true,
       },
       {
-        facilitatorName: 'Facilitator Two',
+        facilitatorName: { forename: 'Facilitator', surname: 'Two' },
         facilitatorCode: 'F002',
         teamName: 'Team B',
         teamCode: 'TA02',
@@ -1350,9 +1353,9 @@ describe('editSessionFacilitators', () => {
         .type('form')
         .send({
           'edit-session-facilitator-0':
-            '{"facilitator":"Facilitator One", "facilitatorCode":"F001", "teamName":"Team A", "teamCode":"TA01"}',
+            '{"facilitatorForename":"Facilitator","facilitatorSurname":"One", "facilitatorCode":"F001", "teamName":"Team A", "teamCode":"TA01"}',
           'edit-session-facilitator-1':
-            '{"facilitator":"Facilitator Two", "facilitatorCode":"F002", "teamName":"Team B", "teamCode":"TA02"}',
+            '{"facilitatorForename":"Facilitator","facilitatorSurname":"Two", "facilitatorCode":"F002", "teamName":"Team B", "teamCode":"TA02"}',
         })
         .expect(302)
         .expect(res => {
@@ -1418,7 +1421,7 @@ describe('editSessionFacilitators', () => {
         .type('form')
         .send({
           'edit-session-facilitator-0':
-            '{"facilitator":"Facilitator One", "facilitatorCode":"F001", "teamName":"Team A", "teamCode":"TA01"}',
+            '{"facilitatorForename":"Facilitator","facilitatorSurname":"One", "facilitatorCode":"F001", "teamName":"Team A", "teamCode":"TA01"}',
         })
         .expect(302)
 

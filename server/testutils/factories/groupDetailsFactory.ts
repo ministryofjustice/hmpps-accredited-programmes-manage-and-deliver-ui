@@ -17,7 +17,8 @@ export default GroupDetailsFactory.define(({ sequence }) => ({
   daysAndTimes: ['Mondays 10am to 12:30pm, Fridays 11am to 1:30pm'],
   currentlyAllocatedNumber: 3,
   treatmentManager: {
-    facilitator: 'Treatment Manager',
+    facilitatorForename: 'Treatment',
+    facilitatorSurname: 'Manager',
     facilitatorCode: '1234',
     teamName: 'Team A',
     teamCode: '9876',
@@ -25,14 +26,16 @@ export default GroupDetailsFactory.define(({ sequence }) => ({
   },
   facilitators: [
     {
-      facilitator: 'Facilitator 1',
+      facilitatorForename: 'Facilitator',
+      facilitatorSurname: '1',
       facilitatorCode: '1111',
       teamName: 'Team A',
       teamCode: '9876',
       teamMemberType: 'REGULAR_FACILITATOR' as 'TREATMENT_MANAGER' | 'REGULAR_FACILITATOR' | 'COVER_FACILITATOR',
     },
     {
-      facilitator: 'Facilitator 2',
+      facilitatorForename: 'Facilitator',
+      facilitatorSurname: '2',
       facilitatorCode: '2222',
       teamName: 'Team A',
       teamCode: '9876',
@@ -41,7 +44,8 @@ export default GroupDetailsFactory.define(({ sequence }) => ({
   ],
   coverFacilitators: [
     {
-      facilitator: 'Cover Facilitator',
+      facilitatorForename: 'Cover',
+      facilitatorSurname: 'Facilitator',
       facilitatorCode: '9876',
       teamName: 'Team A',
       teamCode: '9876',

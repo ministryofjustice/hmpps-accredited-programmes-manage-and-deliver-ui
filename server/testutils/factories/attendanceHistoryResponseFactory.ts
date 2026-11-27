@@ -25,7 +25,7 @@ class AttendanceHistoryResponseFactory extends Factory<AttendanceHistoryResponse
 }
 
 export default AttendanceHistoryResponseFactory.define(({ sequence }) => ({
-  popName: 'Alex River',
+  popName: { forename: 'Alex', surname: 'River' },
   currentlyAllocatedGroupCode: 'GRP-001',
   currentlyAllocatedGroupId: sequence.toString(),
   referralCreatedBy: 'Imported from Interventions Manager',
@@ -40,7 +40,7 @@ export default AttendanceHistoryResponseFactory.define(({ sequence }) => ({
       timeWithCapitalisedMidday: 'Midday to 1pm',
       attendanceStatus: 'Attended - Complied',
       hasNotes: true,
-      popName: '',
+      popName: { forename: '', surname: '' },
       isCatchup: false,
       unformattedDate: '2025-07-11 10:30:00',
     },
@@ -54,7 +54,7 @@ export default AttendanceHistoryResponseFactory.define(({ sequence }) => ({
       timeWithCapitalisedMidday: '2pm to 3pm',
       attendanceStatus: 'Did not attend',
       hasNotes: false,
-      popName: '',
+      popName: { forename: '', surname: '' },
       isCatchup: false,
       unformattedDate: '2025-07-18 14:00:00',
     },

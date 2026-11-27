@@ -3,6 +3,7 @@ import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
 import { CheckboxesArgsItem, RadiosArgsItem } from '../../utils/govukFrontendTypes'
 import ViewUtils from '../../utils/viewUtils'
+import { formatPersonName } from '../../utils/utils'
 
 export default class EditSessionAttendeesPresenter {
   constructor(
@@ -51,7 +52,7 @@ export default class EditSessionAttendeesPresenter {
   generateAttendeeCheckboxOptions(): CheckboxesArgsItem[] {
     return this.sortGroupMembersByExcluded().map(attendee => ({
       html: this.attendeeOptionHtml(attendee),
-      value: `${attendee.referralId} + ${this.isExcludedMember(attendee) ? attendee.crn : attendee.name}`,
+      value: `${attendee.referralId} + ${this.isExcludedMember(attendee) ? attendee.crn : formatPersonName(attendee.name)}`,
       checked: attendee.currentlyAttending === true,
       disabled: this.isAttendeeDisabled(attendee),
     }))
@@ -77,7 +78,7 @@ export default class EditSessionAttendeesPresenter {
       return `${ViewUtils.crnHtml(attendee.crn)}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot edit whether a restricted participant should attend the session.</p>`
     }
 
-    const attendeeHtml = `${ViewUtils.escape(attendee.name)} (${ViewUtils.crnHtml(attendee.crn)})`
+    const attendeeHtml = `${ViewUtils.escape(formatPersonName(attendee.name))} (${ViewUtils.crnHtml(attendee.crn)})`
     if (this.isSessionInPast && attendee.currentlyAttending) {
       return `${attendeeHtml}<p class="govuk-!-margin-bottom-0">You cannot remove someone from a session that has already taken place.</p>`
     }

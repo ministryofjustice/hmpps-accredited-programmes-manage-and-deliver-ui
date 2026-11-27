@@ -6,7 +6,7 @@ describe(`getAvailabilityTableArgs.`, () => {
     const referralDetails: ReferralDetails = {
       id: '1234',
       crn: '1234',
-      personName: 'Steve Sticks',
+      personName: { forename: 'Steve', surname: 'Sticks' },
       interventionName: 'An Intervention',
       createdAt: '2025-01-01',
       dateOfBirth: '1990-02-02',
@@ -143,7 +143,7 @@ describe('availabilityTableHeading', () => {
     const referralDetails: ReferralDetails = {
       id: '1234',
       crn: '1234',
-      personName: 'Emma Smith',
+      personName: { forename: 'Emma', surname: 'Smith' },
       interventionName: 'An Intervention',
       createdAt: '2025-01-01',
       dateOfBirth: '1990-02-02',
@@ -181,7 +181,7 @@ describe('pageTitle', () => {
     const referralDetails: ReferralDetails = {
       id: '1234',
       crn: '1234',
-      personName: 'Alex River',
+      personName: { forename: 'Alex', surname: 'River' },
       interventionName: 'An Intervention',
       createdAt: '2025-01-01',
       dateOfBirth: '1990-02-02',

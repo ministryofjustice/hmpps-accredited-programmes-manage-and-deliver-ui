@@ -14,7 +14,8 @@ describe('SessionScheduleCyaPresenter', () => {
     referralIds: ['ref-123'],
     facilitators: [
       {
-        facilitator: 'Jane Smith',
+        facilitatorForename: 'Jane',
+        facilitatorSurname: 'Smith',
         facilitatorCode: 'N07B001',
         teamName: 'Team A',
         teamCode: 'N50CAC',

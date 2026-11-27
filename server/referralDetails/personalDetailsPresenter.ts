@@ -3,6 +3,7 @@ import DateUtils from '../utils/dateUtils'
 import { InsetTextArgs } from '../utils/govukFrontendTypes'
 import { SummaryListItem } from '../utils/summaryList'
 import ViewUtils from '../utils/viewUtils'
+import { formatPersonName } from '../utils/utils'
 import ReferralDetailsPresenter from './referralDetailsPresenter'
 
 export default class PersonalDetailsPresenter extends ReferralDetailsPresenter {
@@ -31,7 +32,7 @@ export default class PersonalDetailsPresenter extends ReferralDetailsPresenter {
     return [
       {
         key: 'Name',
-        lines: [`${this.personalDetails.name}`],
+        lines: [formatPersonName(this.personalDetails.personName)],
       },
       {
         key: 'CRN',

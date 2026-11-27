@@ -6,7 +6,7 @@ import {
 } from '@manage-and-deliver-api'
 import { AccordionArgsItem } from '../../utils/govukFrontendTypes'
 import { MojAlertComponentArgs } from '../../interfaces/alertComponentArgs'
-import { convertToUrlFriendlyKebabCase, getEditSessionRouteTitle } from '../../utils/utils'
+import { convertToUrlFriendlyKebabCase, getEditSessionRouteTitle, formatPersonName } from '../../utils/utils'
 import ViewUtils from '../../utils/viewUtils'
 import GroupServiceLayoutPresenter, {
   GroupServiceNavigationValues,
@@ -180,7 +180,7 @@ export default class SessionScheduleAttendancePresenter extends GroupServiceLayo
     const participants = session.participants?.length
       ? session.participants
           .map((participant: Participant) =>
-            participant.isExcluded ? ViewUtils.crnHtml(participant.crn ?? '') : participant.name,
+            participant.isExcluded ? ViewUtils.crnHtml(participant.crn ?? '') : formatPersonName(participant.name),
           )
           .join('<br/> ')
       : ''

@@ -79,7 +79,7 @@ export default class EditSessionView {
             text: 'Facilitators',
           },
           value: {
-            html: sessionDetailsObj.facilitators.join(
+            html: this.presenter.facilitatorsDisplay.join(
               '<span class="govuk-!-display-block govuk-!-margin-bottom-1"></span>',
             ),
           },

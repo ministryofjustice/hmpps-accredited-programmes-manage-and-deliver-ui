@@ -85,7 +85,8 @@ describe('CreateGroupCyaPresenter', () => {
 
     it('returns treatment manager when team members include one', () => {
       const treatmentManager: CreateGroupTeamMember = {
-        facilitator: 'Alex River',
+        facilitatorForename: 'Alex',
+        facilitatorSurname: 'River',
         facilitatorCode: 'JS001',
         teamName: 'Team A',
         teamCode: 'TA001',
@@ -105,14 +106,16 @@ describe('CreateGroupCyaPresenter', () => {
 
     it('returns regular facilitators when team members include them', () => {
       const facilitator1: CreateGroupTeamMember = {
-        facilitator: 'Jane Doe',
+        facilitatorForename: 'Jane',
+        facilitatorSurname: 'Doe',
         facilitatorCode: 'JD001',
         teamName: 'Team B',
         teamCode: 'TB001',
         teamMemberType: 'REGULAR_FACILITATOR',
       }
       const facilitator2: CreateGroupTeamMember = {
-        facilitator: 'Bob Johnson',
+        facilitatorForename: 'Bob',
+        facilitatorSurname: 'Johnson',
         facilitatorCode: 'BJ001',
         teamName: 'Team C',
         teamCode: 'TC001',
@@ -133,14 +136,16 @@ describe('CreateGroupCyaPresenter', () => {
 
     it('returns cover facilitators when team members include them', () => {
       const coverFacilitator1: CreateGroupTeamMember = {
-        facilitator: 'Alice Brown',
+        facilitatorForename: 'Alice',
+        facilitatorSurname: 'Brown',
         facilitatorCode: 'AB001',
         teamName: 'Team D',
         teamCode: 'TD001',
         teamMemberType: 'COVER_FACILITATOR',
       }
       const coverFacilitator2: CreateGroupTeamMember = {
-        facilitator: 'Charlie Wilson',
+        facilitatorForename: 'Charlie',
+        facilitatorSurname: 'Wilson',
         facilitatorCode: 'CW001',
         teamName: 'Team E',
         teamCode: 'TE001',
@@ -161,21 +166,24 @@ describe('CreateGroupCyaPresenter', () => {
 
     it('returns all types of team members when all are present', () => {
       const treatmentManager: CreateGroupTeamMember = {
-        facilitator: 'John Smith',
+        facilitatorForename: 'John',
+        facilitatorSurname: 'Smith',
         facilitatorCode: 'JS001',
         teamName: 'Team A',
         teamCode: 'TA001',
         teamMemberType: 'TREATMENT_MANAGER',
       }
       const facilitator: CreateGroupTeamMember = {
-        facilitator: 'Jane Doe',
+        facilitatorForename: 'Jane',
+        facilitatorSurname: 'Doe',
         facilitatorCode: 'JD001',
         teamName: 'Team B',
         teamCode: 'TB001',
         teamMemberType: 'REGULAR_FACILITATOR',
       }
       const coverFacilitator: CreateGroupTeamMember = {
-        facilitator: 'Alice Brown',
+        facilitatorForename: 'Alice',
+        facilitatorSurname: 'Brown',
         facilitatorCode: 'AB001',
         teamName: 'Team D',
         teamCode: 'TD001',
@@ -274,7 +282,8 @@ describe('CreateGroupCyaPresenter', () => {
 
     it('returns summary list with assigned treatment manager', () => {
       const treatmentManager: CreateGroupTeamMember = {
-        facilitator: 'John Smith',
+        facilitatorForename: 'John',
+        facilitatorSurname: 'Smith',
         facilitatorCode: 'JS001',
         teamName: 'Team A',
         teamCode: 'TA001',
@@ -311,14 +320,16 @@ describe('CreateGroupCyaPresenter', () => {
 
     it('returns summary list with assigned facilitators', () => {
       const facilitator1: CreateGroupTeamMember = {
-        facilitator: 'Jane Doe',
+        facilitatorForename: 'Jane',
+        facilitatorSurname: 'Doe',
         facilitatorCode: 'JD001',
         teamName: 'Team B',
         teamCode: 'TB001',
         teamMemberType: 'REGULAR_FACILITATOR',
       }
       const facilitator2: CreateGroupTeamMember = {
-        facilitator: 'Bob Johnson',
+        facilitatorForename: 'Bob',
+        facilitatorSurname: 'Johnson',
         facilitatorCode: 'BJ001',
         teamName: 'Team C',
         teamCode: 'TC001',
@@ -367,14 +378,16 @@ describe('CreateGroupCyaPresenter', () => {
 
     it('includes cover facilitators section when they are assigned', () => {
       const coverFacilitator1: CreateGroupTeamMember = {
-        facilitator: 'Alice Brown',
+        facilitatorForename: 'Alice',
+        facilitatorSurname: 'Brown',
         facilitatorCode: 'AB001',
         teamName: 'Team D',
         teamCode: 'TD001',
         teamMemberType: 'COVER_FACILITATOR',
       }
       const coverFacilitator2: CreateGroupTeamMember = {
-        facilitator: 'Charlie Wilson',
+        facilitatorForename: 'Charlie',
+        facilitatorSurname: 'Wilson',
         facilitatorCode: 'CW001',
         teamName: 'Team E',
         teamCode: 'TE001',
@@ -480,21 +493,24 @@ describe('CreateGroupCyaPresenter', () => {
 
     it('returns summary with all details correctly formatted', () => {
       const treatmentManager: CreateGroupTeamMember = {
-        facilitator: 'John Smith',
+        facilitatorForename: 'John',
+        facilitatorSurname: 'Smith',
         facilitatorCode: 'JS001',
         teamName: 'Team A',
         teamCode: 'TA001',
         teamMemberType: 'TREATMENT_MANAGER',
       }
       const facilitator: CreateGroupTeamMember = {
-        facilitator: 'Jane Doe',
+        facilitatorForename: 'Jane',
+        facilitatorSurname: 'Doe',
         facilitatorCode: 'JD001',
         teamName: 'Team B',
         teamCode: 'TB001',
         teamMemberType: 'REGULAR_FACILITATOR',
       }
       const coverFacilitator: CreateGroupTeamMember = {
-        facilitator: 'Alice Brown',
+        facilitatorForename: 'Alice',
+        facilitatorSurname: 'Brown',
         facilitatorCode: 'AB001',
         teamName: 'Team D',
         teamCode: 'TD001',

@@ -113,7 +113,9 @@ export default class SessionScheduleCyaView {
             text: 'Facilitators',
           },
           value: {
-            html: sessionDetails.facilitators.map(facilitator => facilitator.facilitator).join('<br>'),
+            html: sessionDetails.facilitators
+              .map(facilitator => `${facilitator.facilitatorForename} ${facilitator.facilitatorSurname}`)
+              .join('<br>'),
           },
           actions: {
             items: [

@@ -4,7 +4,7 @@ import request from 'supertest'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import TestUtils from '../testutils/testUtils'
 import recordSessionAttendanceFactory from '../testutils/factories/recordSessionAttendanceFactory'
-import { convertToUrlFriendlyKebabCase } from '../utils/utils'
+import { convertToUrlFriendlyKebabCase, formatPersonName } from '../utils/utils'
 
 import sendAuditEvent from '../services/auditService'
 
@@ -66,7 +66,7 @@ describe('showRecordAttendancePages', () => {
         .get(`/111/6789/record-attendance`)
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain(`Did ${bffData.people[0].name} attend Getting started 1?`)
+          expect(res.text).toContain(`Did ${formatPersonName(bffData.people[0].name)} attend Getting started 1?`)
         })
       expect(accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData).toHaveBeenCalledWith(
         'user1',
@@ -599,7 +599,9 @@ describe('showRecordAttendancePages', () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
       const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Getting started 1' })
-      bffData.people = [{ ...bffData.people[0], referralId: 'referral1', name: 'Alice Brown' }]
+      bffData.people = [
+        { ...bffData.people[0], referralId: 'referral1', name: { forename: 'Alice', surname: 'Brown' } },
+      ]
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
 
       await request(app)
@@ -627,7 +629,9 @@ describe('showRecordAttendancePages', () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
       const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Getting started 1' })
-      bffData.people = [{ ...bffData.people[0], referralId: 'referral1', name: 'Alice Brown' }]
+      bffData.people = [
+        { ...bffData.people[0], referralId: 'referral1', name: { forename: 'Alice', surname: 'Brown' } },
+      ]
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
       accreditedProgrammesManageAndDeliverService.createSessionAttendance.mockResolvedValue({
         attendees: [{ referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: 'Some notes' }],
@@ -686,7 +690,7 @@ describe('showRecordAttendancePages', () => {
         {
           ...bffData.people[0],
           referralId: 'referral2',
-          name: 'Danielle Crist',
+          name: { forename: 'Danielle', surname: 'Crist' },
           attendance: { text: 'Attended', code: 'ATTC' },
           sessionNotes: '',
         },
@@ -738,7 +742,7 @@ describe('showRecordAttendancePages', () => {
         {
           ...bffData.people[0],
           referralId: 'referral1',
-          name: 'Hannah Schinner',
+          name: { forename: 'Hannah', surname: 'Schinner' },
           attendance: { text: 'Attended', code: 'ATTC' },
         },
       ]
@@ -792,7 +796,9 @@ describe('showRecordAttendancePages', () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
 
       const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Getting started 1' })
-      bffData.people = [{ ...bffData.people[0], referralId: 'referral1', name: 'Alice Brown' }]
+      bffData.people = [
+        { ...bffData.people[0], referralId: 'referral1', name: { forename: 'Alice', surname: 'Brown' } },
+      ]
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
       accreditedProgrammesManageAndDeliverService.createSessionAttendance.mockResolvedValue({
         attendees: [{ referralId: 'referral1', outcomeCode: 'ATTC', sessionNotes: 'Some notes' }],
@@ -844,9 +850,9 @@ describe('showRecordAttendancePages', () => {
 
       const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Getting started 1' })
       bffData.people = [
-        { ...bffData.people[0], referralId: 'referral1', name: 'Sham Booth' },
-        { ...bffData.people[1], referralId: 'referral2', name: 'Adrian Poole' },
-        { ...bffData.people[0], referralId: 'referral3', name: 'Hannah Schinner' },
+        { ...bffData.people[0], referralId: 'referral1', name: { forename: 'Sham', surname: 'Booth' } },
+        { ...bffData.people[1], referralId: 'referral2', name: { forename: 'Adrian', surname: 'Poole' } },
+        { ...bffData.people[0], referralId: 'referral3', name: { forename: 'Hannah', surname: 'Schinner' } },
       ]
 
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
@@ -899,7 +905,12 @@ describe('showRecordAttendancePages', () => {
 
       const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Getting started 1' })
       bffData.people = [
-        { ...bffData.people[0], referralId: 'referral1', name: 'Alice Brown', sessionNotes: 'Existing note' },
+        {
+          ...bffData.people[0],
+          referralId: 'referral1',
+          name: { forename: 'Alice', surname: 'Brown' },
+          sessionNotes: 'Existing note',
+        },
       ]
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
       accreditedProgrammesManageAndDeliverService.createSessionAttendance.mockResolvedValue({
@@ -951,7 +962,12 @@ describe('showRecordAttendancePages', () => {
 
       const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Getting started 1' })
       bffData.people = [
-        { ...bffData.people[0], referralId: 'referral1', name: 'Alice Brown', sessionNotes: 'Existing note' },
+        {
+          ...bffData.people[0],
+          referralId: 'referral1',
+          name: { forename: 'Alice', surname: 'Brown' },
+          sessionNotes: 'Existing note',
+        },
       ]
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
       accreditedProgrammesManageAndDeliverService.createSessionAttendance.mockResolvedValue({
@@ -1006,9 +1022,9 @@ describe('showRecordAttendancePages', () => {
 
       const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Getting started 1' })
       bffData.people = [
-        { ...bffData.people[0], referralId: 'referral1', name: 'Sham Booth' },
-        { ...bffData.people[1], referralId: 'referral2', name: 'Adrian Poole' },
-        { ...bffData.people[0], referralId: 'referral3', name: 'Alex River' },
+        { ...bffData.people[0], referralId: 'referral1', name: { forename: 'Sham', surname: 'Booth' } },
+        { ...bffData.people[1], referralId: 'referral2', name: { forename: 'Adrian', surname: 'Poole' } },
+        { ...bffData.people[0], referralId: 'referral3', name: { forename: 'Alex', surname: 'River' } },
       ]
 
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
@@ -1041,7 +1057,7 @@ describe('showRecordAttendancePages', () => {
           sessionId: '6789',
           referralId: 'referral1',
           data: {
-            personName: 'Alex River',
+            personName: { forename: 'Alex', surname: 'River' },
             pageTitle: 'Alex River: Getting started 1 session notes',
             moduleName: 'Getting started',
             sessionName: 'Getting started 1',
@@ -1065,7 +1081,12 @@ describe('showRecordAttendancePages', () => {
 
       const bffData = recordSessionAttendanceFactory.build({ sessionModule: 'Getting started 1' })
       bffData.people = [
-        { ...bffData.people[0], referralId: 'referral1', name: 'Alex River', sessionNotes: 'Existing note.' },
+        {
+          ...bffData.people[0],
+          referralId: 'referral1',
+          name: { forename: 'Alex', surname: 'River' },
+          sessionNotes: 'Existing note.',
+        },
       ]
 
       accreditedProgrammesManageAndDeliverService.getRecordAttendanceBffData.mockResolvedValue(bffData)
@@ -1074,7 +1095,7 @@ describe('showRecordAttendancePages', () => {
         responseMessage: 'Attendance updated',
       })
       accreditedProgrammesManageAndDeliverService.getSessionNotes.mockResolvedValue({
-        personName: 'Alex River',
+        personName: { forename: 'Alex', surname: 'River' },
         pageTitle: 'Alex River: Getting started 1 session notes',
         moduleName: 'Getting started',
         sessionName: 'Getting started 1',
@@ -1122,7 +1143,7 @@ describe('showRecordAttendancePages', () => {
       .send({})
       .expect(400)
       .expect(res => {
-        expect(res.text).toContain(`Select an attendance status for ${bffData.people[0].name}`)
+        expect(res.text).toContain(`Select an attendance status for ${formatPersonName(bffData.people[0].name)}`)
       })
     expect(sendAuditEvent).not.toHaveBeenCalledWith(
       'VIEW_RECORD_ATTENDANCE',

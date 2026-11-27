@@ -5,7 +5,7 @@ import { FormValidationError } from '../utils/formValidationError'
 import { TableArgs } from '../utils/govukFrontendTypes'
 import PresenterUtils from '../utils/presenterUtils'
 import DateFormatUtils from '../utils/dateFormatUtils'
-import { convertToUrlFriendlyKebabCase, getEditSessionRouteTitle } from '../utils/utils'
+import { convertToUrlFriendlyKebabCase, formatPersonName, getEditSessionRouteTitle } from '../utils/utils'
 import ViewUtils from '../utils/viewUtils'
 
 const restrictedAccessBadgeHtml = ' <br><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>'
@@ -137,9 +137,13 @@ export default class EditSessionPresenter {
   // "Scheduled to attend" names, with restricted participants shown as CRN-only
   get scheduledToAttendDisplay(): string[] {
     return [
-      ...this.authorisedAttendees.map(it => ViewUtils.escape(it.name)),
+      ...this.authorisedAttendees.map(it => ViewUtils.escape(formatPersonName(it.name))),
       ...this.restrictedAttendees.map(it => ViewUtils.crnHtml(it.crn)),
     ]
+  }
+
+  get facilitatorsDisplay(): string[] {
+    return this.sessionDetails.facilitators.map(formatPersonName)
   }
 
   get hasMultipleReferrals() {
@@ -190,10 +194,10 @@ export default class EditSessionPresenter {
     const laoBadge = it.lao ? restrictedAccessBadgeHtml : ''
     return [
       {
-        html: `<a href="/referral-details/${it.referralId}/personal-details">${it.name}</a> ${ViewUtils.crnHtml(it.crn)}${laoBadge}`,
+        html: `<a href="/referral-details/${it.referralId}/personal-details">${formatPersonName(it.name)}</a> ${ViewUtils.crnHtml(it.crn)}${laoBadge}`,
       },
       { html: this.attendanceOptionText(it.attendance).attendanceState },
-      this.sessionNotesCell(it.sessionNotes, it.referralId, it.name),
+      this.sessionNotesCell(it.sessionNotes, it.referralId, formatPersonName(it.name)),
     ]
   }
 
@@ -219,7 +223,7 @@ export default class EditSessionPresenter {
         rows: attendanceData.map((it, index) => ({
           id: `attendance-multi-select-row-${index}`,
           value: it.referralId,
-          checkBoxLabel: it.name,
+          checkBoxLabel: formatPersonName(it.name),
           cells: this.attendeeCells(it),
         })),
       }

@@ -5,7 +5,7 @@ export default class ServiceUserBannerPresenter {
   constructor(private readonly referralDetails: ReferralDetails) {}
 
   get name(): string {
-    return this.referralDetails.personName
+    return `${this.referralDetails.personName.forename} ${this.referralDetails.personName.surname}`
   }
 
   get dateOfBirth(): string {

@@ -1,6 +1,7 @@
 import { RecordSessionAttendance } from '@manage-and-deliver-api'
 import PresenterUtils from '../utils/presenterUtils'
 import { FormValidationError } from '../utils/formValidationError'
+import { formatPersonName } from '../utils/utils'
 
 export default class AttendancePresenter {
   constructor(
@@ -26,7 +27,7 @@ export default class AttendancePresenter {
     return {
       pageHeading:
         this.recordAttendanceBffData.people.length === 1
-          ? `Did ${this.recordAttendanceBffData.people[0].name} attend ${this.recordAttendanceBffData.sessionModule}${catchupAppend}?`
+          ? `Did ${formatPersonName(this.recordAttendanceBffData.people[0].name)} attend ${this.recordAttendanceBffData.sessionModule}${catchupAppend}?`
           : `Record attendance for ${this.recordAttendanceBffData.sessionModule}${catchupAppend}`,
       headingCaption: `Record attendance and progress`,
     }

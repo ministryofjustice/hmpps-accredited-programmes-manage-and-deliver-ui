@@ -3,6 +3,7 @@ import PniPresenter from './pniPresenter'
 import PresenterUtils from '../utils/presenterUtils'
 import pniScoreFactory from '../testutils/factories/pniScoreFactory'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
+import { formatPersonName } from '../utils/utils'
 
 describe('PniPresenter', () => {
   const pniScore: PniScore = pniScoreFactory.build()
@@ -13,7 +14,7 @@ describe('PniPresenter', () => {
     it('returns the programme needs identifier heading for the referral person', () => {
       const presenter = new PniPresenter('12345', referralDetails, pniScore)
 
-      expect(presenter.headingText).toBe(`Programme needs identifier: ${referralDetails.personName}`)
+      expect(presenter.headingText).toBe(`Programme needs identifier: ${formatPersonName(referralDetails.personName)}`)
     })
   })
 

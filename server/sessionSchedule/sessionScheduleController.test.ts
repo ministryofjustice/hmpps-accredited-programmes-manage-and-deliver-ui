@@ -70,7 +70,8 @@ const completeSessionData: Partial<SessionData> = {
     referralName: 'John Doe',
     facilitators: [
       {
-        facilitator: 'John Doe',
+        facilitatorForename: 'John',
+        facilitatorSurname: 'Doe',
         facilitatorCode: 'N07B001',
         teamName: 'GM Manchester N1',
         teamCode: 'N50CAC',
@@ -336,11 +337,16 @@ describe('Session Schedule Controller', () => {
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
       accreditedProgrammesManageAndDeliverService.getIndividualSessionDetails.mockResolvedValue({
         facilitators: [
-          { personName: 'John Doe', personCode: 'N07B001', teamName: 'GM Manchester N1', teamCode: 'N50CAC' },
+          {
+            personName: { forename: 'John', surname: 'Doe' },
+            personCode: 'N07B001',
+            teamName: 'GM Manchester N1',
+            teamCode: 'N50CAC',
+          },
         ],
         groupMembers: [
           {
-            name: 'John Smith',
+            name: { forename: 'John', surname: 'Smith' },
             crn: 'JS123',
             referralId: 'Team A',
             isExcluded: true,
@@ -458,11 +464,16 @@ describe('Session Schedule Controller', () => {
     beforeEach(() => {
       accreditedProgrammesManageAndDeliverService.getIndividualSessionDetails.mockResolvedValue({
         facilitators: [
-          { personName: 'John Doe', personCode: 'N07B001', teamName: 'GM Manchester N1', teamCode: 'N50CAC' },
+          {
+            personName: { forename: 'John', surname: 'Doe' },
+            personCode: 'N07B001',
+            teamName: 'GM Manchester N1',
+            teamCode: 'N50CAC',
+          },
         ],
         groupMembers: [
           {
-            name: 'John Smith',
+            name: { forename: 'John', surname: 'Smith' },
             crn: 'JS123',
             referralId: 'Team A',
             isExcluded: true,
@@ -478,7 +489,8 @@ describe('Session Schedule Controller', () => {
         .send({
           'session-details-who': `a9971fd6-a185-43ee-bb23-a0ab23a14f50 + Jane Doe`,
           'session-details-facilitator-0': JSON.stringify({
-            facilitator: 'John Doe',
+            facilitatorForename: 'John',
+            facilitatorSurname: 'Doe',
             facilitatorCode: 'N07B001',
             teamName: 'GM Manchester N1',
             teamCode: 'N50CAC',
@@ -555,7 +567,8 @@ describe('Session Schedule Controller', () => {
               endTime: { amOrPm: 'AM', hour: 10, minutes: 30 },
               facilitators: [
                 {
-                  facilitator: 'John Doe',
+                  facilitatorForename: 'John',
+                  facilitatorSurname: 'Doe',
                   facilitatorCode: 'N07B001',
                   teamCode: 'N50CAC',
                   teamMemberType: 'REGULAR_FACILITATOR',
@@ -616,9 +629,21 @@ describe('Session Schedule Controller', () => {
         const sessionAgent = request.agent(app)
         accreditedProgrammesManageAndDeliverService.getIndividualSessionDetails.mockResolvedValue({
           facilitators: [
-            { personName: 'John Doe', personCode: 'N07B001', teamName: 'GM Manchester N1', teamCode: 'N50CAC' },
+            {
+              personName: { forename: 'John', surname: 'Doe' },
+              personCode: 'N07B001',
+              teamName: 'GM Manchester N1',
+              teamCode: 'N50CAC',
+            },
           ],
-          groupMembers: [{ name: 'Jane Smith', crn: 'JS123', referralId: 'referral-123', isExcluded: false }],
+          groupMembers: [
+            {
+              name: { forename: 'Jane', surname: 'Smith' },
+              crn: 'JS123',
+              referralId: 'referral-123',
+              isExcluded: false,
+            },
+          ],
           suggestedDate: '01/01/2026',
         })
         accreditedProgrammesManageAndDeliverService.createSessionSchedule.mockResolvedValue('Session has been added.')
@@ -636,7 +661,8 @@ describe('Session Schedule Controller', () => {
           .send({
             'session-details-who': 'referral-123 + Jane Smith',
             'session-details-facilitator-0': JSON.stringify({
-              facilitator: 'John Doe',
+              facilitatorForename: 'John',
+              facilitatorSurname: 'Doe',
               facilitatorCode: 'N07B001',
               teamName: 'GM Manchester N1',
               teamCode: 'N50CAC',

@@ -1,6 +1,7 @@
 import { Availability, PersonalDetails } from '@manage-and-deliver-api'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
+import { formatPersonName } from '../../utils/utils'
 
 export default class AddAvailabilityPresenter {
   constructor(
@@ -35,7 +36,7 @@ export default class AddAvailabilityPresenter {
   get text() {
     return {
       checkboxes: {
-        pageTitle: `When is ${this.personalDetails.name} available to attend a programme?`,
+        pageTitle: `When is ${formatPersonName(this.personalDetails.personName)} available to attend a programme?`,
       },
       otherDetailsTextArea: {
         label: 'Other availability details (optional)',

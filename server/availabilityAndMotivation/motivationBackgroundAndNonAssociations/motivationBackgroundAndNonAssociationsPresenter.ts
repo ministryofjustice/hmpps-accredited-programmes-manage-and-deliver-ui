@@ -2,6 +2,7 @@ import { ReferralDetails, ReferralMotivationBackgroundAndNonAssociations } from 
 import AvailabilityAndMotivationPresenter from '../availabilityAndMotivationPresenter'
 import { SummaryListItem } from '../../utils/summaryList'
 import DateUtils from '../../utils/dateUtils'
+import { formatPersonName } from '../../utils/utils'
 
 export default class MotivationBackgroundAndNonAssociationsPresenter extends AvailabilityAndMotivationPresenter {
   constructor(
@@ -72,7 +73,7 @@ export default class MotivationBackgroundAndNonAssociationsPresenter extends Ava
 
   get text() {
     return {
-      noMotivationText: `No motivation, background and non-associations added for ${this.referral.personName}.`,
+      noMotivationText: `No motivation, background and non-associations added for ${formatPersonName(this.referral.personName)}.`,
     }
   }
 }

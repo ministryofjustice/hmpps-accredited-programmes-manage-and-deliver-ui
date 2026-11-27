@@ -57,7 +57,9 @@ export default class AttendanceSessionNotesPresenter {
   }
 
   get personName() {
-    return this.recordAttendanceBffData?.people.find(person => person.referralId === this.referralId)?.name || ''
+    const person = this.recordAttendanceBffData?.people.find(attendee => attendee.referralId === this.referralId)
+
+    return person ? `${person.name.forename} ${person.name.surname}` : ''
   }
 
   get attendanceOptionText() {

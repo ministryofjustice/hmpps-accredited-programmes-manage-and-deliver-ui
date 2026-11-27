@@ -1,4 +1,5 @@
 import recordSessionAttendanceFactory from '../testutils/factories/recordSessionAttendanceFactory'
+import { formatPersonName } from '../utils/utils'
 import AttendancePresenter from './attendancePresenter'
 
 describe('AttendancePresenter', () => {
@@ -33,7 +34,9 @@ describe('AttendancePresenter', () => {
         bffData.people = [bffData.people[0]]
         const presenter = new AttendancePresenter(bffData, 'backlink', null)
 
-        expect(presenter.text.pageHeading).toBe(`Did ${bffData.people[0].name} attend ${bffData.sessionModule}?`)
+        expect(presenter.text.pageHeading).toBe(
+          `Did ${formatPersonName(bffData.people[0].name)} attend ${bffData.sessionModule}?`,
+        )
       })
 
       it('should append catch-up when session is catch-up', () => {
@@ -42,7 +45,7 @@ describe('AttendancePresenter', () => {
         const presenter = new AttendancePresenter(bffData, 'backlink', null)
 
         expect(presenter.text.pageHeading).toBe(
-          `Did ${bffData.people[0].name} attend ${bffData.sessionModule} catch-up?`,
+          `Did ${formatPersonName(bffData.people[0].name)} attend ${bffData.sessionModule} catch-up?`,
         )
       })
     })

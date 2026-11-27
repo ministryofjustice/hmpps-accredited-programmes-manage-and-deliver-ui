@@ -25,7 +25,7 @@ describe('DeleteSessionPresenter', () => {
       const sessionDetails: Session = {
         type: 'Individual',
         name: 'Post programme review',
-        referrals: [{ personName: 'Alex River' }],
+        referrals: [{ personName: { forename: 'Alex', surname: 'River' } }],
         pageTitle: 'Delete Alex River: Post-programme review',
       } as Session
 
@@ -39,7 +39,7 @@ describe('DeleteSessionPresenter', () => {
         type: 'Individual',
         name: 'Getting started',
         isCatchup: true,
-        referrals: [{ personName: 'Alex River' }],
+        referrals: [{ personName: { forename: 'Alex', surname: 'River' } }],
         pageTitle: 'Delete Alex River: Getting started one-to-one catch-up',
       } as Session
 
@@ -53,7 +53,7 @@ describe('DeleteSessionPresenter', () => {
         type: 'Individual',
         name: 'Getting started',
         isCatchup: false,
-        referrals: [{ personName: 'Alex River' }],
+        referrals: [{ personName: { forename: 'Alex', surname: 'River' } }],
         pageTitle: 'Delete Alex River: Getting started one-to-one',
       } as Session
 

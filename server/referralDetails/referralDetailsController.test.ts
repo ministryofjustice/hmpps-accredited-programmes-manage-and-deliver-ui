@@ -17,6 +17,7 @@ import personalDetailsFactory from '../testutils/factories/personalDetailsFactor
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 import sentenceInformationFactory from '../testutils/factories/sentenceInformationFactory'
 import statusHistoryFactory from '../testutils/factories/statusHistoryFactory'
+import { formatPersonName } from '../utils/utils'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
@@ -53,7 +54,7 @@ describe('referral-details', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(referralDetails.crn)
-          expect(res.text).toContain(referralDetails.personName)
+          expect(res.text).toContain(formatPersonName(referralDetails.personName))
           expect(res.text).toContain(personalDetails.probationDeliveryUnit)
           expect(res.text).toContain('<div class="hmpps-header">')
         })
@@ -75,7 +76,7 @@ describe('referral-details', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(referralDetails.crn)
-          expect(res.text).toContain(referralDetails.personName)
+          expect(res.text).toContain(formatPersonName(referralDetails.personName))
           expect(res.text).toContain('Absconding from lawful custody')
         })
         .then(() => {
@@ -94,9 +95,9 @@ describe('referral-details', () => {
         .get(`/referral-details/${randomUUID()}/sentence-information`)
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain(`Referral details: ${referralDetails.personName}`)
+          expect(res.text).toContain(`Referral details: ${formatPersonName(referralDetails.personName)}`)
           expect(res.text).toContain(referralDetails.crn)
-          expect(res.text).toContain(referralDetails.personName)
+          expect(res.text).toContain(formatPersonName(referralDetails.personName))
           expect(res.text).toContain('Sentence details')
         })
         .then(() => {
@@ -156,7 +157,7 @@ describe(`Attendance History`, () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(referralDetails.crn)
-          expect(res.text).toContain(referralDetails.personName)
+          expect(res.text).toContain(formatPersonName(referralDetails.personName))
           expect(res.text).toContain('Attendance history')
         })
         .then(() => {

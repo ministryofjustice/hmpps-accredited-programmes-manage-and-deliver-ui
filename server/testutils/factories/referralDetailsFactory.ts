@@ -7,7 +7,7 @@ class ReferralDetailsFactory extends Factory<ReferralDetails> {}
 export default ReferralDetailsFactory.define(({ sequence }) => ({
   id: sequence.toString(),
   crn: 'X933590',
-  personName: 'Alex River',
+  personName: { forename: 'Alex', surname: 'River' },
   interventionName: 'Building Choices',
   createdAt: now().toString(),
   dateOfBirth: '15 March 1985',

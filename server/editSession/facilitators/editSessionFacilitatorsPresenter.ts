@@ -2,6 +2,7 @@ import { EditSessionFacilitatorsRequest, EditSessionFacilitatorsResponse } from 
 import { FormValidationError } from '../../utils/formValidationError'
 import { SelectArgsItem } from '../../utils/govukFrontendTypes'
 import PresenterUtils from '../../utils/presenterUtils'
+import { formatPersonName } from '../../utils/utils'
 
 export default class EditSessionFacilitatorsPresenter {
   constructor(
@@ -40,8 +41,16 @@ export default class EditSessionFacilitatorsPresenter {
 
   generateSelectOptions(selectedValue: string = ''): SelectArgsItem[] {
     const facilitatorItems: SelectArgsItem[] = this.editSessionFacilitatorsResponse.facilitators.map(facilitator => ({
-      text: facilitator.facilitatorName,
-      value: `{"facilitatorName":"${facilitator.facilitatorName}", "facilitatorCode":"${facilitator.facilitatorCode}", "teamName":"${facilitator.teamName}", "teamCode":"${facilitator.teamCode}"}`,
+      text: formatPersonName(facilitator.facilitatorName),
+      value: JSON.stringify({
+        facilitatorName: {
+          forename: facilitator.facilitatorName.forename,
+          surname: facilitator.facilitatorName.surname,
+        },
+        facilitatorCode: facilitator.facilitatorCode,
+        teamName: facilitator.teamName,
+        teamCode: facilitator.teamCode,
+      }),
       selected: selectedValue === facilitator.facilitatorCode,
     }))
 

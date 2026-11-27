@@ -116,14 +116,20 @@ export default class CreateGroupCyaPresenter {
       },
       {
         key: 'Treatment Manager',
-        lines: [members.treatmentManager?.facilitator ?? 'Not assigned'],
+        lines: [
+          members.treatmentManager
+            ? `${members.treatmentManager.facilitatorForename} ${members.treatmentManager.facilitatorSurname}`
+            : 'Not assigned',
+        ],
         changeLink: this.changeLinkUri('/group-facilitators'),
         visuallyHiddenText: 'treatment manager',
       },
       {
         key: 'Facilitators',
         lines:
-          members.facilitators.length > 0 ? members.facilitators.map(member => member.facilitator) : ['None assigned'],
+          members.facilitators.length > 0
+            ? members.facilitators.map(member => `${member.facilitatorForename} ${member.facilitatorSurname}`)
+            : ['None assigned'],
         changeLink: this.changeLinkUri('/group-facilitators'),
         visuallyHiddenText: 'facilitators',
       },
@@ -133,7 +139,7 @@ export default class CreateGroupCyaPresenter {
         key: 'Cover facilitators',
         lines:
           members.coverFacilitators.length > 0
-            ? members.coverFacilitators.map(member => member.facilitator)
+            ? members.coverFacilitators.map(member => `${member.facilitatorForename} ${member.facilitatorSurname}`)
             : ['None assigned'],
         changeLink: this.changeLinkUri('/group-facilitators'),
         visuallyHiddenText: 'cover facilitators',

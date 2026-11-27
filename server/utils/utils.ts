@@ -24,6 +24,9 @@ export const initialiseName = (fullName?: string): string | null => {
   return `${array[0][0]}. ${array.reverse()[0]}`
 }
 
+export const formatPersonName = (personName: { forename: string; surname: string }): string =>
+  `${personName.forename} ${personName.surname}`.trim()
+
 export const formatCohort = (cohort?: string): string | null => {
   const formatted = cohort
     .toLowerCase() // convert to lowercase

@@ -1,5 +1,6 @@
 import ViewUtils from '../utils/viewUtils'
 import UpdateReferralStatusStartedOrCompletedPresenter from './updateReferralStatusStartedOrCompletedPresenter'
+import { formatPersonName } from '../utils/utils'
 
 export default class UpdateReferralStatusStartedOrCompletedView {
   constructor(private readonly presenter: UpdateReferralStatusStartedOrCompletedPresenter) {}
@@ -18,8 +19,8 @@ export default class UpdateReferralStatusStartedOrCompletedView {
         legend: {
           text:
             this.presenter.statusDetails.currentStatus.title === 'Scheduled'
-              ? `Has ${this.presenter.details.personName} started the programme? `
-              : `Has ${this.presenter.details.personName} completed the programme?`,
+              ? `Has ${formatPersonName(this.presenter.details.personName)} started the programme? `
+              : `Has ${formatPersonName(this.presenter.details.personName)} completed the programme?`,
           isPageHeading: false,
           classes: 'govuk-fieldset__legend--m',
         },
@@ -49,7 +50,7 @@ export default class UpdateReferralStatusStartedOrCompletedView {
   get insetText() {
     return {
       classes: 'govuk-!-margin-top-0',
-      html: `${this.presenter.details.personName} is allocated to <a target="_blank" rel="noopener noreferrer" href='/group/${this.presenter.statusDetails.currentGroupDetails.currentlyAllocatedGroupId}/allocations'>${this.presenter.statusDetails.currentGroupDetails.currentlyAllocatedGroupCode} (opens in a new tab)</a>.`,
+      html: `${formatPersonName(this.presenter.details.personName)} is allocated to <a target="_blank" rel="noopener noreferrer" href='/group/${this.presenter.statusDetails.currentGroupDetails.currentlyAllocatedGroupId}/allocations'>${this.presenter.statusDetails.currentGroupDetails.currentlyAllocatedGroupCode} (opens in a new tab)</a>.`,
     }
   }
 

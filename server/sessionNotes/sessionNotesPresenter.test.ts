@@ -2,7 +2,7 @@ import SessionNotesPresenter, { SessionNotesData } from './sessionNotesPresenter
 
 describe('SessionNotesPresenter', () => {
   const buildData = (overrides: Partial<SessionNotesData> = {}): SessionNotesData => ({
-    personName: `Jane Doe`,
+    personName: { forename: 'Jane', surname: 'Doe' },
     pageTitle: 'Jane Doe: Building Motivation session notes',
     moduleName: 'Getting started',
     sessionName: 'Building Motivation',

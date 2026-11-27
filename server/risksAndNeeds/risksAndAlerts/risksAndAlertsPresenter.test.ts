@@ -2,14 +2,15 @@ import risksFactory from '../../testutils/factories/risksAndNeeds/risksFactory'
 import RisksAndAlertsPresenter, { RiskLevel } from './risksAndAlertsPresenter'
 import referralDetailsFactory from '../../testutils/factories/referralDetailsFactory'
 import RisksAndAlertsOgrs4Presenter from './risksAndAlertsOgrs4Presenter'
+import { formatPersonName } from '../../utils/utils'
 
 describe('headingText', () => {
   it('returns the risks and needs heading for the referral person', () => {
     const risks = risksFactory.build()
-    const referral = referralDetailsFactory.build({ personName: 'Alex River' })
+    const referral = referralDetailsFactory.build({ personName: { forename: 'Alex', surname: 'River' } })
     const presenter = new RisksAndAlertsPresenter('risksAndAlerts', referral, risks)
 
-    expect(presenter.headingText).toBe(`Risks and needs: ${referral.personName}`)
+    expect(presenter.headingText).toBe(`Risks and needs: ${formatPersonName(referral.personName)}`)
   })
 })
 

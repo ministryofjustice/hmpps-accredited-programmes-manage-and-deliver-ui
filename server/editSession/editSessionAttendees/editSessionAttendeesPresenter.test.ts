@@ -11,14 +11,14 @@ const buildSessionAttendees = (
   isCatchup: false,
   attendees: [
     {
-      name: 'John Doe',
+      name: { forename: 'John', surname: 'Doe' },
       referralId: 'referral-1',
       crn: 'X123456',
       currentlyAttending: true,
       isExcluded: false,
     },
     {
-      name: 'Jane Smith',
+      name: { forename: 'Jane', surname: 'Smith' },
       referralId: 'referral-2',
       crn: 'Y654321',
       currentlyAttending: false,
@@ -90,14 +90,14 @@ describe('EditSessionAttendeesPresenter', () => {
         buildSessionAttendees({
           attendees: [
             {
-              name: 'John Doe',
+              name: { forename: 'John', surname: 'Doe' },
               referralId: 'referral-1',
               crn: 'X123456',
               currentlyAttending: true,
               isExcluded: false,
             },
             {
-              name: 'Jane Smith',
+              name: { forename: 'Jane', surname: 'Smith' },
               referralId: 'referral-2',
               crn: 'Y654321',
               currentlyAttending: true,
@@ -130,14 +130,14 @@ describe('EditSessionAttendeesPresenter', () => {
         buildSessionAttendees({
           attendees: [
             {
-              name: 'Jane Smith',
+              name: { forename: 'Jane', surname: 'Smith' },
               referralId: 'referral-2',
               crn: 'Y654321',
               currentlyAttending: false,
               isExcluded: true,
             },
             {
-              name: 'John Doe',
+              name: { forename: 'John', surname: 'Doe' },
               referralId: 'referral-1',
               crn: 'X123456',
               currentlyAttending: true,
@@ -216,14 +216,14 @@ describe('EditSessionAttendeesPresenter', () => {
         buildSessionAttendees({
           attendees: [
             {
-              name: 'John Doe',
+              name: { forename: 'John', surname: 'Doe' },
               referralId: 'referral-1',
               crn: 'X123456',
               currentlyAttending: true,
               isExcluded: false,
             },
             {
-              name: 'Jane Smith',
+              name: { forename: 'Jane', surname: 'Smith' },
               referralId: 'referral-2',
               crn: 'Y654321',
               currentlyAttending: true,
@@ -256,14 +256,14 @@ describe('EditSessionAttendeesPresenter', () => {
         buildSessionAttendees({
           attendees: [
             {
-              name: 'Jane Smith',
+              name: { forename: 'Jane', surname: 'Smith' },
               referralId: 'referral-2',
               crn: 'Y654321',
               currentlyAttending: false,
               isExcluded: true,
             },
             {
-              name: 'John Doe',
+              name: { forename: 'John', surname: 'Doe' },
               referralId: 'referral-1',
               crn: 'X123456',
               currentlyAttending: true,

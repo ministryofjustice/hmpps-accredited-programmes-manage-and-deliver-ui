@@ -8,7 +8,7 @@ import { FormValidationError } from '../utils/formValidationError'
 import AttendanceSessionNotesPresenter from './attendanceNotes/attendanceSessionNotesPresenter'
 import AttendanceSessionNotesView from './attendanceNotes/attendanceSessionNotesView'
 import AttendanceSessionNotesForm from './attendanceNotes/attendanceSessionNotesForm'
-import { convertToUrlFriendlyKebabCase } from '../utils/utils'
+import { convertToUrlFriendlyKebabCase, formatPersonName } from '../utils/utils'
 import { PrimaryNavigationTab } from '../shared/routes/layoutPresenter'
 import BaseController from '../shared/baseController'
 import logger from '../../logger'
@@ -88,7 +88,7 @@ export default class AttendanceController extends BaseController {
 
     const data = await new RecordAttendanceForm(
       req,
-      recordAttendanceBffData.people.map(it => ({ referralId: it.referralId, name: it.name })),
+      recordAttendanceBffData.people.map(it => ({ referralId: it.referralId, name: formatPersonName(it.name) })),
     ).recordAttendanceData()
 
     if (req.method === 'POST') {
@@ -247,15 +247,15 @@ export default class AttendanceController extends BaseController {
         const attendeeReferralIds = createSessionAttendanceResponse.attendees.map(attendee => attendee.referralId)
         this.clearCachedSessionNotes(req, sessionId, attendeeReferralIds.length ? attendeeReferralIds : referralIds)
 
-        const currentPersonName =
-          recordAttendanceBffData.people.find(person => person.referralId === referralId)?.name || ''
+        const currentPerson = recordAttendanceBffData.people.find(person => person.referralId === referralId)
+        const currentPersonName = currentPerson ? formatPersonName(currentPerson.name) : ''
         const recordedReferralIds = attendeeReferralIds.length ? attendeeReferralIds : referralIds
         const recordedNames = recordedReferralIds
-          .map(
-            recordedReferralId =>
-              recordAttendanceBffData.people.find(person => person.referralId === recordedReferralId)?.name,
+          .map(recordedReferralId =>
+            recordAttendanceBffData.people.find(person => person.referralId === recordedReferralId),
           )
-          .filter((name): name is string => Boolean(name))
+          .filter(person => person !== undefined)
+          .map(person => formatPersonName(person.name))
         const journeySource = req.session.editSessionAttendance?.source
 
         if (journeySource === 'edit-session') {
