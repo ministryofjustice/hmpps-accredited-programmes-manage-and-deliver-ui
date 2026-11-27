@@ -8,12 +8,22 @@ import AddSessionDetailsPresenter from './addSessionDetailsPresenter'
 describe('AddSessionDetailsPresenter', () => {
   const sessionDetails = {
     facilitators: [
-      { personName: 'Facilitator One', personCode: 'F001', teamName: 'Team A', teamCode: 'TA01' },
-      { personName: 'Facilitator Two', personCode: 'F002', teamName: 'Team B', teamCode: 'TA02' },
+      {
+        personName: { forename: 'Facilitator', surname: 'One' },
+        personCode: 'F001',
+        teamName: 'Team A',
+        teamCode: 'TA01',
+      },
+      {
+        personName: { forename: 'Facilitator', surname: 'Two' },
+        personCode: 'F002',
+        teamName: 'Team B',
+        teamCode: 'TA02',
+      },
     ],
     groupMembers: [
-      { name: 'John Doe', crn: 'X12345', referralId: 'ref1' },
-      { name: 'Jane Smith', crn: 'Y67890', referralId: 'ref2' },
+      { name: { forename: 'John', surname: 'Doe' }, crn: 'X12345', referralId: 'ref1' },
+      { name: { forename: 'Jane', surname: 'Smith' }, crn: 'Y67890', referralId: 'ref2' },
     ],
   } as ScheduleIndividualSessionDetailsResponse
 
@@ -33,12 +43,14 @@ describe('AddSessionDetailsPresenter', () => {
       expect(options[0]).toEqual({ text: '', value: '' })
       expect(options[1]).toEqual({
         text: 'Facilitator One',
-        value: '{"facilitator":"Facilitator One", "facilitatorCode":"F001", "teamName":"Team A", "teamCode":"TA01"}',
+        value:
+          '{"facilitatorForename":"Facilitator","facilitatorSurname":"One","facilitatorCode":"F001","teamName":"Team A","teamCode":"TA01","teamMemberType":"REGULAR_FACILITATOR"}',
         selected: true,
       })
       expect(options[2]).toEqual({
         text: 'Facilitator Two',
-        value: '{"facilitator":"Facilitator Two", "facilitatorCode":"F002", "teamName":"Team B", "teamCode":"TA02"}',
+        value:
+          '{"facilitatorForename":"Facilitator","facilitatorSurname":"Two","facilitatorCode":"F002","teamName":"Team B","teamCode":"TA02","teamMemberType":"REGULAR_FACILITATOR"}',
         selected: false,
       })
     })
@@ -68,7 +80,9 @@ describe('AddSessionDetailsPresenter', () => {
     it('does not expose the name of a restricted participant and disables their option', () => {
       const restrictedSessionDetails = {
         ...sessionDetails,
-        groupMembers: [{ name: 'Restricted Name', crn: 'X12345', referralId: 'ref1', isExcluded: true }],
+        groupMembers: [
+          { name: { forename: 'Restricted', surname: 'Name' }, crn: 'X12345', referralId: 'ref1', isExcluded: true },
+        ],
       } as ScheduleIndividualSessionDetailsResponse
       const presenter = new AddSessionDetailsPresenter(restrictedSessionDetails, 'backLinkUri')
 
@@ -86,9 +100,9 @@ describe('AddSessionDetailsPresenter', () => {
       const mixedSessionDetails = {
         ...sessionDetails,
         groupMembers: [
-          { name: 'Restricted Name', crn: 'X12345', referralId: 'ref1', isExcluded: true },
-          { name: 'John Doe', crn: 'Y67890', referralId: 'ref2', isExcluded: false },
-          { name: 'Jane Smith', crn: 'Z11111', referralId: 'ref3', isExcluded: false },
+          { name: { forename: 'Restricted', surname: 'Name' }, crn: 'X12345', referralId: 'ref1', isExcluded: true },
+          { name: { forename: 'John', surname: 'Doe' }, crn: 'Y67890', referralId: 'ref2', isExcluded: false },
+          { name: { forename: 'Jane', surname: 'Smith' }, crn: 'Z11111', referralId: 'ref3', isExcluded: false },
         ],
       } as ScheduleIndividualSessionDetailsResponse
       const presenter = new AddSessionDetailsPresenter(mixedSessionDetails, 'backLinkUri')
@@ -135,7 +149,9 @@ describe('AddSessionDetailsPresenter', () => {
     it('does not expose the name of a restricted participant and disables their option', () => {
       const restrictedSessionDetails = {
         ...sessionDetails,
-        groupMembers: [{ name: 'Restricted Name', crn: 'X12345', referralId: 'ref1', isExcluded: true }],
+        groupMembers: [
+          { name: { forename: 'Restricted', surname: 'Name' }, crn: 'X12345', referralId: 'ref1', isExcluded: true },
+        ],
       } as ScheduleIndividualSessionDetailsResponse
       const presenter = new AddSessionDetailsPresenter(restrictedSessionDetails, 'backLinkUri')
 
@@ -153,9 +169,9 @@ describe('AddSessionDetailsPresenter', () => {
       const mixedSessionDetails = {
         ...sessionDetails,
         groupMembers: [
-          { name: 'Restricted Name', crn: 'X12345', referralId: 'ref1', isExcluded: true },
-          { name: 'John Doe', crn: 'Y67890', referralId: 'ref2', isExcluded: false },
-          { name: 'Jane Smith', crn: 'Z11111', referralId: 'ref3', isExcluded: false },
+          { name: { forename: 'Restricted', surname: 'Name' }, crn: 'X12345', referralId: 'ref1', isExcluded: true },
+          { name: { forename: 'John', surname: 'Doe' }, crn: 'Y67890', referralId: 'ref2', isExcluded: false },
+          { name: { forename: 'Jane', surname: 'Smith' }, crn: 'Z11111', referralId: 'ref3', isExcluded: false },
         ],
       } as ScheduleIndividualSessionDetailsResponse
       const presenter = new AddSessionDetailsPresenter(mixedSessionDetails, 'backLinkUri')
@@ -184,14 +200,15 @@ describe('AddSessionDetailsPresenter', () => {
     it('parses facilitators from userInputData', () => {
       const userInputData = {
         'session-details-facilitator-0':
-          '{"facilitator":"John Doe", "facilitatorCode":"F001", "teamName":"Team A", "teamCode":"TA01"}',
+          '{"facilitatorForename":"John","facilitatorSurname":"Doe", "facilitatorCode":"F001", "teamName":"Team A", "teamCode":"TA01"}',
       }
       const presenter = new AddSessionDetailsPresenter(sessionDetails, 'backLinkUri', null, null, userInputData)
       const facilitators = presenter.generateSelectedFacilitators()
 
       expect(facilitators).toHaveLength(1)
       expect(facilitators[0]).toEqual({
-        facilitator: 'John Doe',
+        facilitatorForename: 'John',
+        facilitatorSurname: 'Doe',
         facilitatorCode: 'F001',
         teamName: 'Team A',
         teamCode: 'TA01',
@@ -201,9 +218,9 @@ describe('AddSessionDetailsPresenter', () => {
     it('handles multiple facilitators from userInputData', () => {
       const userInputData = {
         'session-details-facilitator-0':
-          '{"facilitator":"John Doe", "facilitatorCode":"F001", "teamName":"Team A", "teamCode":"TA01"}',
+          '{"facilitatorForename":"John","facilitatorSurname":"Doe", "facilitatorCode":"F001", "teamName":"Team A", "teamCode":"TA01"}',
         'session-details-facilitator-1':
-          '{"facilitator":"Jane Smith", "facilitatorCode":"F002", "teamName":"Team B", "teamCode":"TB02"}',
+          '{"facilitatorForename":"Jane","facilitatorSurname":"Smith", "facilitatorCode":"F002", "teamName":"Team B", "teamCode":"TB02"}',
       }
       const presenter = new AddSessionDetailsPresenter(sessionDetails, 'backLinkUri', null, null, userInputData)
       const facilitators = presenter.generateSelectedFacilitators()
@@ -214,7 +231,8 @@ describe('AddSessionDetailsPresenter', () => {
     it('returns facilitators from formData when userInputData not available', () => {
       const mockFacilitators: CreateGroupTeamMember[] = [
         {
-          facilitator: 'John Doe',
+          facilitatorForename: 'John',
+          facilitatorSurname: 'Doe',
           facilitatorCode: 'F001',
           teamName: 'Team A',
           teamCode: 'TA01',
@@ -229,7 +247,7 @@ describe('AddSessionDetailsPresenter', () => {
     it('filters out non-facilitator keys from userInputData', () => {
       const userInputData = {
         'session-details-facilitator-0':
-          '{"facilitator":"John Doe", "facilitatorCode":"F001", "teamName":"Team A", "teamCode":"TA01"}',
+          '{"facilitatorForename":"John","facilitatorSurname":"Doe", "facilitatorCode":"F001", "teamName":"Team A", "teamCode":"TA01"}',
         'session-details-other': 'some value',
       }
       const presenter = new AddSessionDetailsPresenter(sessionDetails, 'backLinkUri', null, null, userInputData)

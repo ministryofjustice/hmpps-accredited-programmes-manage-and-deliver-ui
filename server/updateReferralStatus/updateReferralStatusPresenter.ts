@@ -2,6 +2,7 @@ import { ReferralDetails, ReferralStatus, ReferralStatusTransitions } from '@man
 import { FormValidationError } from '../utils/formValidationError'
 import { RadiosArgsItem } from '../utils/govukFrontendTypes'
 import PresenterUtils from '../utils/presenterUtils'
+import { formatPersonName } from '../utils/utils'
 
 export default class UpdateReferralStatusPresenter {
   constructor(
@@ -22,6 +23,10 @@ export default class UpdateReferralStatusPresenter {
 
   get pageTitle(): string {
     return 'Update status'
+  }
+
+  get personName(): string {
+    return formatPersonName(this.details.personName)
   }
 
   get backLinkArgs() {

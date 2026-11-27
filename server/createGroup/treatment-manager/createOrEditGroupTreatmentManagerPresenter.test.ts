@@ -4,13 +4,13 @@ import CreateGroupTreatmentManagerPresenter from './createOrEditGroupTreatmentMa
 describe('CreateGroupTreatmentManagerPresenter', () => {
   const mockMembers: UserTeamMember[] = [
     {
-      personName: 'Archibald Queeny',
+      personName: { forename: 'Archibald', surname: 'Queeny' },
       personCode: 'JS123',
       teamName: 'Team A',
       teamCode: 'TA001',
     },
     {
-      personName: 'Chloe Ransom',
+      personName: { forename: 'Chloe', surname: 'Ransom' },
       personCode: 'JD456',
       teamName: 'Team B',
       teamCode: 'TB002',
@@ -35,13 +35,13 @@ describe('CreateGroupTreatmentManagerPresenter', () => {
       expect(options[1]).toEqual({
         text: 'Archibald Queeny',
         value:
-          '{"facilitator":"Archibald Queeny", "facilitatorCode":"JS123", "teamName":"Team A", "teamCode":"TA001", "teamMemberType":"REGULAR_FACILITATOR"}',
+          '{"facilitatorForename":"Archibald","facilitatorSurname":"Queeny","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"REGULAR_FACILITATOR"}',
         selected: false,
       })
       expect(options[2]).toEqual({
         text: 'Chloe Ransom',
         value:
-          '{"facilitator":"Chloe Ransom", "facilitatorCode":"JD456", "teamName":"Team B", "teamCode":"TB002", "teamMemberType":"REGULAR_FACILITATOR"}',
+          '{"facilitatorForename":"Chloe","facilitatorSurname":"Ransom","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
         selected: false,
       })
     })
@@ -71,15 +71,15 @@ describe('CreateGroupTreatmentManagerPresenter', () => {
       const userInputData = {
         _csrf: 'token',
         'create-group-facilitator-0':
-          '{"facilitator":"Archibald Queeny", "facilitatorCode":"JS123", "teamName":"Team A", "teamCode":"TA001", "teamMemberType":"REGULAR_FACILITATOR"}',
+          '{"facilitatorForename":"Archibald","facilitatorSurname":"Queeny", "facilitatorCode":"JS123", "teamName":"Team A", "teamCode":"TA001", "teamMemberType":"REGULAR_FACILITATOR"}',
         'create-group-cover-facilitator-0':
-          '{"facilitator":"Chloe Ransom", "facilitatorCode":"JD456", "teamName":"Team B", "teamCode":"TB002", "teamMemberType":"COVER_FACILITATOR"}',
+          '{"facilitatorForename":"Chloe","facilitatorSurname":"Ransom", "facilitatorCode":"JD456", "teamName":"Team B", "teamCode":"TB002", "teamMemberType":"COVER_FACILITATOR"}',
         'create-group-treatment-manager':
-          '{"facilitator":"Archibald Queeny", "facilitatorCode":"JS123", "teamName":"Team A", "teamCode":"TA001", "teamMemberType":"TREATMENT_MANAGER"}',
+          '{"facilitatorForename":"Archibald","facilitatorSurname":"Queeny", "facilitatorCode":"JS123", "teamName":"Team A", "teamCode":"TA001", "teamMemberType":"TREATMENT_MANAGER"}',
         'create-group-cover-facilitator-1':
-          '{"facilitator":"Chloe Ransom", "facilitatorCode":"JD457", "teamName":"Team B", "teamCode":"TB002", "teamMemberType":"COVER_FACILITATOR"}',
+          '{"facilitatorForename":"Chloe","facilitatorSurname":"Ransom", "facilitatorCode":"JD457", "teamName":"Team B", "teamCode":"TB002", "teamMemberType":"COVER_FACILITATOR"}',
         'create-group-cover-facilitator-2':
-          '{"facilitator":"Chloe Ransom", "facilitatorCode":"JD458", "teamName":"Team B", "teamCode":"TB002", "teamMemberType":"COVER_FACILITATOR"}',
+          '{"facilitatorForename":"Chloe","facilitatorSurname":"Ransom", "facilitatorCode":"JD458", "teamName":"Team B", "teamCode":"TB002", "teamMemberType":"COVER_FACILITATOR"}',
         'create-group-cover-facilitator-3': '',
       }
       const presenter = new CreateGroupTreatmentManagerPresenter('', '', mockMembers, null, null, userInputData)
@@ -90,7 +90,8 @@ describe('CreateGroupTreatmentManagerPresenter', () => {
       expect(result.coverFacilitators).toHaveLength(3)
       expect(result.coverFacilitators[0].facilitatorCode).toBe('JD456')
       expect(result.treatmentManager).toEqual({
-        facilitator: 'Archibald Queeny',
+        facilitatorForename: 'Archibald',
+        facilitatorSurname: 'Queeny',
         facilitatorCode: 'JS123',
         teamName: 'Team A',
         teamCode: 'TA001',
@@ -102,14 +103,16 @@ describe('CreateGroupTreatmentManagerPresenter', () => {
       const createGroupFormData = {
         teamMembers: [
           {
-            facilitator: 'Archibald Queeny',
+            facilitatorForename: 'Archibald',
+            facilitatorSurname: 'Queeny',
             facilitatorCode: 'JS123',
             teamName: 'Team A',
             teamCode: 'TA001',
             teamMemberType: 'TREATMENT_MANAGER',
           },
           {
-            facilitator: 'Chloe Ransom',
+            facilitatorForename: 'Chloe',
+            facilitatorSurname: 'Ransom',
             facilitatorCode: 'JD456',
             teamName: 'Team B',
             teamCode: 'TB002',

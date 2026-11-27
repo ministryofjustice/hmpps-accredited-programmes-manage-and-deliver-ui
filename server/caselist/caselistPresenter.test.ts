@@ -407,7 +407,7 @@ describe('generateTableRows', () => {
   it('should generate complete table rows with all columns for a single referral', () => {
     const referralCaseListItem = referralCaseListItemFactory.build({
       referralId: 'REF123',
-      personName: 'Jane Doe',
+      personName: { forename: 'Jane', surname: 'Doe' },
       crn: 'X987654',
       pdu: 'Manchester PDU',
       reportingTeam: 'Team Bravo',
@@ -560,7 +560,7 @@ describe('generateTableRows', () => {
   it('should display RESTRICTED ACCESS badge in the name column when the referral is an LAO case', () => {
     const laoReferral = referralCaseListItemFactory.build({
       referralId: 'REF999',
-      personName: 'John Smith',
+      personName: { forename: 'John', surname: 'Smith' },
       crn: 'X111222',
       isLimitedAccessOffender: true,
     })
@@ -589,7 +589,7 @@ describe('generateTableRows', () => {
   it('should not display RESTRICTED ACCESS badge in the name column when the referral is not an LAO case', () => {
     const nonLaoReferral = referralCaseListItemFactory.build({
       referralId: 'REF888',
-      personName: 'Jane Doe',
+      personName: { forename: 'Jane', surname: 'Doe' },
       crn: 'X333444',
       isLimitedAccessOffender: false,
     })
@@ -618,12 +618,12 @@ describe('generateTableRows', () => {
   it('should generate multiple rows with correct sort values', () => {
     const referralCaseListItems = [
       referralCaseListItemFactory.build({
-        personName: 'Alice Johnson',
+        personName: { forename: 'Alice', surname: 'Johnson' },
         sentenceEndDate: '2024-06-15',
         sentenceEndDateSource: 'REQUIREMENT',
       }),
       referralCaseListItemFactory.build({
-        personName: 'Bob Williams',
+        personName: { forename: 'Bob', surname: 'Williams' },
         sentenceEndDate: '2024-07-20',
         sentenceEndDateSource: 'LICENCE_CONDITION',
       }),
@@ -676,7 +676,7 @@ describe('generateTableRows', () => {
   it('should replace restricted fields with "Restricted" when the referral is excluded', () => {
     const referralCaseListItem = referralCaseListItemFactory.build({
       referralId: 'REF999',
-      personName: 'Restricted Person',
+      personName: { forename: 'Restricted', surname: 'Person' },
       crn: 'X111222',
       pdu: 'Manchester PDU',
       reportingTeam: 'Team Bravo',
@@ -726,10 +726,18 @@ describe('generateTableRows', () => {
 
   it('should sort excluded referrals to the end of the list', () => {
     const referralCaseListItems = [
-      referralCaseListItemFactory.build({ personName: 'Excluded One', crn: 'X000001', isExcluded: true }),
-      referralCaseListItemFactory.build({ personName: 'Included One', isExcluded: false }),
-      referralCaseListItemFactory.build({ personName: 'Excluded Two', crn: 'X000002', isExcluded: true }),
-      referralCaseListItemFactory.build({ personName: 'Included Two', isExcluded: false }),
+      referralCaseListItemFactory.build({
+        personName: { forename: 'Excluded', surname: 'One' },
+        crn: 'X000001',
+        isExcluded: true,
+      }),
+      referralCaseListItemFactory.build({ personName: { forename: 'Included', surname: 'One' }, isExcluded: false }),
+      referralCaseListItemFactory.build({
+        personName: { forename: 'Excluded', surname: 'Two' },
+        crn: 'X000002',
+        isExcluded: true,
+      }),
+      referralCaseListItemFactory.build({ personName: { forename: 'Included', surname: 'Two' }, isExcluded: false }),
     ]
     const referralCaseListItemPage: Page<ReferralCaseListItem> = pageFactory
       .pageContent(referralCaseListItems)

@@ -7,6 +7,7 @@ import { CheckboxesArgsItem, RadiosArgsItem, SelectArgsItem } from '../../utils/
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
 import ViewUtils from '../../utils/viewUtils'
+import { formatPersonName } from '../../utils/utils'
 
 export default class AddSessionDetailsPresenter {
   constructor(
@@ -57,8 +58,16 @@ export default class AddSessionDetailsPresenter {
 
   generateFacilitatorSelectOptions(selectedValue: string = ''): SelectArgsItem[] {
     const pduItems: SelectArgsItem[] = this.sessionDetails.facilitators.map(member => ({
-      text: member.personName,
-      value: `{"facilitator":"${member.personName}", "facilitatorCode":"${member.personCode}", "teamName":"${member.teamName}", "teamCode":"${member.teamCode}"}`,
+      text: formatPersonName(member.personName),
+      value: JSON.stringify({
+        facilitatorForename: member.personName.forename,
+        facilitatorSurname: member.personName.surname,
+        ...(member.personName.middleNames ? { facilitatorMiddleNames: member.personName.middleNames } : {}),
+        facilitatorCode: member.personCode,
+        teamName: member.teamName,
+        teamCode: member.teamCode,
+        teamMemberType: 'REGULAR_FACILITATOR',
+      }),
       selected: selectedValue === member.personCode,
     }))
 
@@ -77,8 +86,8 @@ export default class AddSessionDetailsPresenter {
     const hasSelectedValues = selectedValue && selectedValue.length > 0
 
     return this.sortGroupMembersByExcluded().map(member => ({
-      html: `${this.isExcludedMember(member) ? `${ViewUtils.crnHtml(member.crn)}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot add a restricted participant to the session.</p>` : `${ViewUtils.escape(member.name)} (${ViewUtils.crnHtml(member.crn)})`}`,
-      value: `${member.referralId} + ${this.isExcludedMember(member) ? member.crn : member.name}`,
+      html: `${this.isExcludedMember(member) ? `${ViewUtils.crnHtml(member.crn)}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot add a restricted participant to the session.</p>` : `${ViewUtils.escape(formatPersonName(member.name))} (${ViewUtils.crnHtml(member.crn)})`}`,
+      value: `${member.referralId} + ${this.isExcludedMember(member) ? member.crn : formatPersonName(member.name)}`,
       checked: hasSelectedValues ? selectedValue.includes(member.referralId) : false,
       disabled: this.isExcludedMember(member),
     }))
@@ -88,8 +97,8 @@ export default class AddSessionDetailsPresenter {
     const hasSelectedValues = selectedValue && selectedValue.length > 0
 
     return this.sortGroupMembersByExcluded().map(member => ({
-      html: `${this.isExcludedMember(member) ? `${ViewUtils.crnHtml(member.crn)}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot add a restricted participant to the session.</p>` : `${ViewUtils.escape(member.name)} (${ViewUtils.crnHtml(member.crn)})`}`,
-      value: `${member.referralId} + ${this.isExcludedMember(member) ? member.crn : member.name}`,
+      html: `${this.isExcludedMember(member) ? `${ViewUtils.crnHtml(member.crn)}<br/><span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span><p class="govuk-!-margin-bottom-0">You cannot add a restricted participant to the session.</p>` : `${ViewUtils.escape(formatPersonName(member.name))} (${ViewUtils.crnHtml(member.crn)})`}`,
+      value: `${member.referralId} + ${this.isExcludedMember(member) ? member.crn : formatPersonName(member.name)}`,
       checked: hasSelectedValues ? selectedValue.includes(member.referralId) : false,
       disabled: this.isExcludedMember(member),
     }))
@@ -102,7 +111,10 @@ export default class AddSessionDetailsPresenter {
       const isScheduledGroupSession =
         this.createSessionDetailsFormData?.groupOrOneToOne?.toUpperCase() === 'GROUP' &&
         this.createSessionDetailsFormData?.sessionScheduleType?.toUpperCase() === 'SCHEDULED'
-      return excludedOrder || (isScheduledGroupSession ? a.name.localeCompare(b.name) : 0)
+      return (
+        excludedOrder ||
+        (isScheduledGroupSession ? formatPersonName(a.name).localeCompare(formatPersonName(b.name)) : 0)
+      )
     })
   }
 

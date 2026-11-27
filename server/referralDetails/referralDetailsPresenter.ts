@@ -2,7 +2,7 @@ import { ReferralDetails } from '@manage-and-deliver-api'
 import ReferralLayoutPresenter, { HorizontalNavValues } from '../shared/referral/referralLayoutPresenter'
 import { SummaryListArgs } from '../utils/govukFrontendTypes'
 import { SummaryListItem } from '../utils/summaryList'
-import { formatCohort } from '../utils/utils'
+import { formatCohort, formatPersonName } from '../utils/utils'
 import ViewUtils from '../utils/viewUtils'
 
 export enum ReferralDetailsPageSection {
@@ -77,7 +77,7 @@ export default class ReferralDetailsPresenter extends ReferralLayoutPresenter {
     return [
       {
         key: 'Applicant name',
-        lines: [`${this.referralDetails.personName}`],
+        lines: [formatPersonName(this.referralDetails.personName)],
       },
       {
         key: 'Programme name',

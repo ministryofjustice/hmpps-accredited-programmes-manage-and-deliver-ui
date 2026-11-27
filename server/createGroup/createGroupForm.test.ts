@@ -450,11 +450,11 @@ describe('CreateGroupForm', () => {
         it('returns params for update', async () => {
           const request = TestUtils.createRequest({
             'create-group-treatment-manager':
-              '{"facilitator":"John Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
+              '{"facilitatorForename":"John","facilitatorSurname":"Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
             'create-group-facilitator-1':
-              '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
+              '{"facilitatorForename":"Jane","facilitatorSurname":"Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
             'create-group-facilitator-2':
-              '{"facilitator":"Bob Jones","facilitatorCode":"BJ789","teamName":"Team C","teamCode":"TC003","teamMemberType":"COVER_FACILITATOR"}',
+              '{"facilitatorForename":"Bob","facilitatorSurname":"Jones","facilitatorCode":"BJ789","teamName":"Team C","teamCode":"TC003","teamMemberType":"COVER_FACILITATOR"}',
           })
 
           const data = await new CreateOrEditGroupForm(request).createOrEditGroupTreatmentManagerData()
@@ -462,21 +462,24 @@ describe('CreateGroupForm', () => {
           expect(data.paramsForUpdate).toStrictEqual({
             teamMembers: [
               {
-                facilitator: 'John Smith',
+                facilitatorForename: 'John',
+                facilitatorSurname: 'Smith',
                 facilitatorCode: 'JS123',
                 teamName: 'Team A',
                 teamCode: 'TA001',
                 teamMemberType: 'TREATMENT_MANAGER',
               },
               {
-                facilitator: 'Jane Doe',
+                facilitatorForename: 'Jane',
+                facilitatorSurname: 'Doe',
                 facilitatorCode: 'JD456',
                 teamName: 'Team B',
                 teamCode: 'TB002',
                 teamMemberType: 'REGULAR_FACILITATOR',
               },
               {
-                facilitator: 'Bob Jones',
+                facilitatorForename: 'Bob',
+                facilitatorSurname: 'Jones',
                 facilitatorCode: 'BJ789',
                 teamName: 'Team C',
                 teamCode: 'TC003',
@@ -492,7 +495,7 @@ describe('CreateGroupForm', () => {
         it('returns an appropriate error', async () => {
           const request = TestUtils.createRequest({
             'create-group-facilitator-1':
-              '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
+              '{"facilitatorForename":"Jane","facilitatorSurname":"Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
           })
 
           const data = await new CreateOrEditGroupForm(request).createOrEditGroupTreatmentManagerData()
@@ -514,7 +517,7 @@ describe('CreateGroupForm', () => {
         it('returns an appropriate error', async () => {
           const request = TestUtils.createRequest({
             'create-group-treatment-manager':
-              '{"facilitator":"John Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
+              '{"facilitatorForename":"John","facilitatorSurname":"Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
           })
 
           const data = await new CreateOrEditGroupForm(request).createOrEditGroupTreatmentManagerData()
@@ -557,9 +560,9 @@ describe('CreateGroupForm', () => {
         it('returns an appropriate error', async () => {
           const request = TestUtils.createRequest({
             'create-group-treatment-manager':
-              '{"facilitator":"John Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
+              '{"facilitatorForename":"John","facilitatorSurname":"Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
             'create-group-cover-facilitator-1':
-              '{"facilitator":"Alex Brown","facilitatorCode":"AB789","teamName":"Team C","teamCode":"TC003","teamMemberType":"COVER_FACILITATOR"}',
+              '{"facilitatorForename":"Alex","facilitatorSurname":"Brown","facilitatorCode":"AB789","teamName":"Team C","teamCode":"TC003","teamMemberType":"COVER_FACILITATOR"}',
           })
 
           const data = await new CreateOrEditGroupForm(request).createOrEditGroupTreatmentManagerData()
@@ -581,9 +584,9 @@ describe('CreateGroupForm', () => {
         it('filters out empty values and returns params for update', async () => {
           const request = TestUtils.createRequest({
             'create-group-treatment-manager':
-              '{"facilitator":"John Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
+              '{"facilitatorForename":"John","facilitatorSurname":"Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
             'create-group-facilitator-1':
-              '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
+              '{"facilitatorForename":"Jane","facilitatorSurname":"Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
             'create-group-facilitator-2': '',
             'create-group-facilitator-3': '',
           })
@@ -593,14 +596,16 @@ describe('CreateGroupForm', () => {
           expect(data.paramsForUpdate).toStrictEqual({
             teamMembers: [
               {
-                facilitator: 'John Smith',
+                facilitatorForename: 'John',
+                facilitatorSurname: 'Smith',
                 facilitatorCode: 'JS123',
                 teamName: 'Team A',
                 teamCode: 'TA001',
                 teamMemberType: 'TREATMENT_MANAGER',
               },
               {
-                facilitator: 'Jane Doe',
+                facilitatorForename: 'Jane',
+                facilitatorSurname: 'Doe',
                 facilitatorCode: 'JD456',
                 teamName: 'Team B',
                 teamCode: 'TB002',
@@ -616,11 +621,11 @@ describe('CreateGroupForm', () => {
         it('returns an appropriate error', async () => {
           const request = TestUtils.createRequest({
             'create-group-treatment-manager':
-              '{"facilitator":"John Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
+              '{"facilitatorForename":"John","facilitatorSurname":"Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
             'create-group-facilitator-1':
-              '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
+              '{"facilitatorForename":"Jane","facilitatorSurname":"Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
             'create-group-cover-facilitator-1':
-              '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"COVER_FACILITATOR"}',
+              '{"facilitatorForename":"Jane","facilitatorSurname":"Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"COVER_FACILITATOR"}',
           })
 
           const data = await new CreateOrEditGroupForm(request).createOrEditGroupTreatmentManagerData()
@@ -647,13 +652,13 @@ describe('CreateGroupForm', () => {
         it('returns an appropriate error', async () => {
           const request = TestUtils.createRequest({
             'create-group-treatment-manager':
-              '{"facilitator":"John Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
+              '{"facilitatorForename":"John","facilitatorSurname":"Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
             'create-group-facilitator-1':
-              '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
+              '{"facilitatorForename":"Jane","facilitatorSurname":"Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
             'create-group-facilitator-2':
-              '{"facilitator":"Bob Jones","facilitatorCode":"BJ789","teamName":"Team C","teamCode":"TC003","teamMemberType":"REGULAR_FACILITATOR"}',
+              '{"facilitatorForename":"Bob","facilitatorSurname":"Jones","facilitatorCode":"BJ789","teamName":"Team C","teamCode":"TC003","teamMemberType":"REGULAR_FACILITATOR"}',
             'create-group-cover-facilitator-1':
-              '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"COVER_FACILITATOR"}',
+              '{"facilitatorForename":"Jane","facilitatorSurname":"Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"COVER_FACILITATOR"}',
           })
 
           const data = await new CreateOrEditGroupForm(request).createOrEditGroupTreatmentManagerData()
@@ -680,11 +685,11 @@ describe('CreateGroupForm', () => {
         it('returns an appropriate error', async () => {
           const request = TestUtils.createRequest({
             'create-group-treatment-manager':
-              '{"facilitator":"John Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
+              '{"facilitatorForename":"John","facilitatorSurname":"Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
             'create-group-facilitator-1':
-              '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
+              '{"facilitatorForename":"Jane","facilitatorSurname":"Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
             'create-group-facilitator-2':
-              '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
+              '{"facilitatorForename":"Jane","facilitatorSurname":"Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
           })
 
           const data = await new CreateOrEditGroupForm(request).createOrEditGroupTreatmentManagerData()
@@ -711,13 +716,13 @@ describe('CreateGroupForm', () => {
         it('returns an appropriate error', async () => {
           const request = TestUtils.createRequest({
             'create-group-treatment-manager':
-              '{"facilitator":"John Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
+              '{"facilitatorForename":"John","facilitatorSurname":"Smith","facilitatorCode":"JS123","teamName":"Team A","teamCode":"TA001","teamMemberType":"TREATMENT_MANAGER"}',
             'create-group-facilitator-1':
-              '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
+              '{"facilitatorForename":"Jane","facilitatorSurname":"Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
             'create-group-cover-facilitator-1':
-              '{"facilitator":"Bob Jones","facilitatorCode":"BJ789","teamName":"Team C","teamCode":"TC003","teamMemberType":"COVER_FACILITATOR"}',
+              '{"facilitatorForename":"Bob","facilitatorSurname":"Jones","facilitatorCode":"BJ789","teamName":"Team C","teamCode":"TC003","teamMemberType":"COVER_FACILITATOR"}',
             'create-group-cover-facilitator-2':
-              '{"facilitator":"Bob Jones","facilitatorCode":"BJ789","teamName":"Team C","teamCode":"TC003","teamMemberType":"COVER_FACILITATOR"}',
+              '{"facilitatorForename":"Bob","facilitatorSurname":"Jones","facilitatorCode":"BJ789","teamName":"Team C","teamCode":"TC003","teamMemberType":"COVER_FACILITATOR"}',
           })
 
           const data = await new CreateOrEditGroupForm(request).createOrEditGroupTreatmentManagerData()

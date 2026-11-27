@@ -22,7 +22,7 @@ export default class UpdateReferralStatusFixedPresenter {
 
   get text() {
     return {
-      title: `${this.details.personName}'s referral status will change to ${this.statusDetails.suggestedStatus.name}`,
+      title: `${this.details.personName.forename} ${this.details.personName.surname}'s referral status will change to ${this.statusDetails.suggestedStatus.name}`,
     }
   }
 

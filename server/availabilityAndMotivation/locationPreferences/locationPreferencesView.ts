@@ -1,6 +1,7 @@
 import LocationPreferencesPresenter from './locationPreferencesPresenter'
 import ViewUtils from '../../utils/viewUtils'
 import { RadiosArgs } from '../../utils/govukFrontendTypes'
+import { formatPersonName } from '../../utils/utils'
 
 export default class LocationPreferencesView {
   private primaryPduName = `No Primary Probation Delivery Unit Found`
@@ -44,7 +45,7 @@ export default class LocationPreferencesView {
         },
       },
       hint: {
-        text: `Select any locations ${this.presenter.details.personName} can attend. You can skip this question if you do not know.`,
+        text: `Select any locations ${formatPersonName(this.presenter.details.personName)} can attend. You can skip this question if you do not know.`,
       },
       items: this.deliveryLocations,
     }

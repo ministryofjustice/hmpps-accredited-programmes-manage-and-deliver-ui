@@ -7,7 +7,7 @@ import { FormValidationError } from '../../utils/formValidationError'
 import { ButtonArgs, CheckboxesArgsItem, TableArgsHeadElement } from '../../utils/govukFrontendTypes'
 import Pagination from '../../utils/pagination/pagination'
 import PresenterUtils from '../../utils/presenterUtils'
-import { convertToTitleCase } from '../../utils/utils'
+import { convertToTitleCase, formatPersonName } from '../../utils/utils'
 import { CollapsibleCheckboxFilterOption } from '../../utils/collapsibleCheckboxFilterArgs'
 import GroupAllocationsFilter from './groupAllocationsFilter'
 import CaselistUtils from '../../caselist/caseListUtils'
@@ -144,13 +144,14 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
     rows.forEach(member => {
       const isExcluded = Boolean(member.isExcluded)
       const sentenceEndDate = CaselistUtils.sentenceEndDateCellGroupItem(member)
+      const personName = formatPersonName(member.personName)
       out.push([
         {
           html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
                     <input id='${member.referralId}' value='${member.referralId}' type="radio" name="add-to-group" class="govuk-radios__input"${isExcluded ? ' disabled aria-disabled="true"' : ''}>
                     <label class="govuk-label govuk-radios__label" for="${member.referralId}">
-                      <span class="govuk-visually-hidden">Add ${isExcluded ? ViewUtils.escape(member.crn.split('').join(' ')) : member.personName} to the group</span>
+                      <span class="govuk-visually-hidden">Add ${isExcluded ? ViewUtils.escape(member.crn.split('').join(' ')) : personName} to the group</span>
                     </label>
                   </div>
                  </div>${isExcluded ? '<span class="govuk-visually-hidden">Add to group: restricted access - you cannot add this person to the group</span>' : ''}`,
@@ -158,11 +159,11 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
         },
         {
           html: !isExcluded
-            ? `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0"> ${ViewUtils.crnHtml(member.crn)}</p>${member.isLimitedAccessOffender ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`
+            ? `<a href="${this.referralHref(member.referralId)}">${personName}</a><p class="govuk-!-margin-bottom-0"> ${ViewUtils.crnHtml(member.crn)}</p>${member.isLimitedAccessOffender ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`
             : `${ViewUtils.crnHtml(member.crn)}${member.isLimitedAccessOffender ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`,
           attributes: isExcluded
             ? { 'data-sort-value': member.crn, 'data-excluded': 'true' }
-            : { 'data-sort-value': member.personName },
+            : { 'data-sort-value': personName },
         },
         {
           html: !isExcluded ? sentenceEndDate.html : 'Restricted',
@@ -199,13 +200,14 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
     rows.forEach(member => {
       const isExcluded = Boolean(member.isExcluded)
       const sentenceEndDate = CaselistUtils.sentenceEndDateCellGroupItem(member)
+      const personName = formatPersonName(member.personName)
       out.push([
         {
           html: `<div class="govuk-radios govuk-radios--small group-details-table">
                   <div class="govuk-radios__item">
                     <input id='${member.crn}' value='${member.referralId}' type="radio" name="remove-from-group" class="govuk-radios__input"${isExcluded ? ' disabled aria-disabled="true"' : ''}>
                     <label class="govuk-label govuk-radios__label" for="${member.crn}">
-                      <span class="govuk-visually-hidden">Remove ${isExcluded ? ViewUtils.escape(member.crn.split('').join(' ')) : member.personName} from the group</span>
+                      <span class="govuk-visually-hidden">Remove ${isExcluded ? ViewUtils.escape(member.crn.split('').join(' ')) : personName} from the group</span>
                     </label>
                   </div>
                  </div>${isExcluded ? '<span class="govuk-visually-hidden">Remove from group: restricted access - you cannot remove this person from the group</span>' : ''}`,
@@ -213,11 +215,11 @@ export default class GroupAllocationsPresenter extends GroupServiceLayoutPresent
         },
         {
           html: !isExcluded
-            ? `<a href="${this.referralHref(member.referralId)}">${member.personName}</a><p class="govuk-!-margin-bottom-0">${ViewUtils.crnHtml(member.crn)}</p>${member.isLimitedAccessOffender ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`
+            ? `<a href="${this.referralHref(member.referralId)}">${personName}</a><p class="govuk-!-margin-bottom-0">${ViewUtils.crnHtml(member.crn)}</p>${member.isLimitedAccessOffender ? '<span class="moj-badge moj-badge--red">RESTRICTED ACCESS</span>' : ''}`
             : `${ViewUtils.crnHtml(member.crn)}${CaselistUtils.hasLaoBadgeHtmlGroupItem(member)}`,
           attributes: isExcluded
             ? { 'data-sort-value': member.crn, 'data-excluded': 'true' }
-            : { 'data-sort-value': member.personName },
+            : { 'data-sort-value': personName },
         },
         {
           html: !isExcluded ? sentenceEndDate.html : 'Restricted',

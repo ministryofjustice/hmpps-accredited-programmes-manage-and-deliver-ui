@@ -10,6 +10,7 @@ import BaseController from '../../shared/baseController'
 import { PrimaryNavigationTab } from '../../shared/routes/layoutPresenter'
 import logger from '../../../logger'
 import sendAuditEvent from '../../services/auditService'
+import { formatPersonName } from '../../utils/utils'
 
 export default class AddToGroupController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -42,7 +43,7 @@ export default class AddToGroupController extends BaseController {
       req.user.username,
     )
 
-    req.session.groupManagementData.personName = referralDetails.personName
+    req.session.groupManagementData.personName = formatPersonName(referralDetails.personName)
 
     const presenter = new AddToGroupPresenter(
       groupId,

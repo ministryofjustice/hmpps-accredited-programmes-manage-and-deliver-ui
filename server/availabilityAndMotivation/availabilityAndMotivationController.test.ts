@@ -9,6 +9,7 @@ import sendAuditEvent from '../services/auditService'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 import ReferralMotivationBackgroundAndNonAssociationsFactory from '../testutils/factories/referralMotivationBackgroundAndNonAssociationsFactory'
 import availabilityFactory from '../testutils/factories/availabilityFactory'
+import { formatPersonName } from '../utils/utils'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
@@ -49,7 +50,7 @@ describe('availabilityAndMotivation controller', () => {
         .get(`/referral/${randomUUID()}/availability-and-motivation/motivation-background-and-non-associations`)
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain(`Availability and motivation: ${referralDetails.personName}`)
+          expect(res.text).toContain(`Availability and motivation: ${formatPersonName(referralDetails.personName)}`)
           expect(res.text).toContain(`Motivation, background and non-associations`)
         })
         .then(() => {
@@ -159,7 +160,7 @@ describe('availabilityAndMotivation controller', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(referralDetails.crn)
-          expect(res.text).toContain(referralDetails.personName)
+          expect(res.text).toContain(formatPersonName(referralDetails.personName))
           expect(res.text).toContain('Location')
         })
         .then(() => {
@@ -187,7 +188,7 @@ describe('availabilityAndMotivation controller', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(referralDetails.crn)
-          expect(res.text).toContain(referralDetails.personName)
+          expect(res.text).toContain(formatPersonName(referralDetails.personName))
           expect(res.text).toContain('Location')
           expect(res.text).toContain('Cannot attend locations in NE1')
           expect(res.text).toContain('25th September 2025')
@@ -205,7 +206,7 @@ describe('availabilityAndMotivation controller', () => {
           .expect(200)
           .expect(res => {
             expect(res.text).toContain(referralDetails.crn)
-            expect(res.text).toContain(referralDetails.personName)
+            expect(res.text).toContain(formatPersonName(referralDetails.personName))
             expect(res.text).toContain('No availability details added for')
             expect(res.text).toContain('Add availability')
           })

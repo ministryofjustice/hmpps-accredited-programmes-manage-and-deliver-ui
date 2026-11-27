@@ -634,7 +634,7 @@ describe('Create Group Controller', () => {
     it('loads the treatment manager selection page', async () => {
       accreditedProgrammesManageAndDeliverService.getPduMembers.mockResolvedValue([
         {
-          personName: 'John Smith',
+          personName: { forename: 'John', surname: 'Smith' },
           personCode: 'JS123',
           teamName: 'Team A',
           teamCode: 'TA001',
@@ -657,21 +657,21 @@ describe('Create Group Controller', () => {
       const sessionData: Partial<SessionData> = {
         createGroupFormData: {
           teamMembers: [
-            '{"facilitator":"John Smith", "facilitatorCode":"JS123", "teamName":"Team A", "teamCode":"TA001", "teamMemberType":"TREATMENT_MANAGER"}',
-            '{"facilitator":"Jane Doe", "facilitatorCode":"JD456", "teamName":"Team B", "teamCode":"TB002", "teamMemberType":"REGULAR_FACILITATOR"}',
+            '{"facilitatorForename":"John","facilitatorSurname":"Smith", "facilitatorCode":"JS123", "teamName":"Team A", "teamCode":"TA001", "teamMemberType":"TREATMENT_MANAGER"}',
+            '{"facilitatorForename":"Jane","facilitatorSurname":"Doe", "facilitatorCode":"JD456", "teamName":"Team B", "teamCode":"TB002", "teamMemberType":"REGULAR_FACILITATOR"}',
           ],
         } as unknown as Partial<CreateGroupRequest>,
       }
       app = TestUtils.createTestAppWithSession(sessionData, { accreditedProgrammesManageAndDeliverService })
       accreditedProgrammesManageAndDeliverService.getPduMembers.mockResolvedValue([
         {
-          personName: 'John Smith',
+          personName: { forename: 'John', surname: 'Smith' },
           personCode: 'JS123',
           teamName: 'Team A',
           teamCode: 'TA001',
         },
         {
-          personName: 'Jane Doe',
+          personName: { forename: 'Jane', surname: 'Doe' },
           personCode: 'JD456',
           teamName: 'Team B',
           teamCode: 'TB002',
@@ -691,7 +691,7 @@ describe('Create Group Controller', () => {
     it('redirects to check your answers page on successful submission', async () => {
       accreditedProgrammesManageAndDeliverService.getPduMembers.mockResolvedValue([
         {
-          personName: 'John Smith',
+          personName: { forename: 'John', surname: 'Smith' },
           personCode: 'JS123',
           teamName: 'Team A',
           teamCode: 'TA001',
@@ -702,9 +702,9 @@ describe('Create Group Controller', () => {
         .type('form')
         .send({
           'create-group-treatment-manager':
-            '{"facilitator":"John Smith", "facilitatorCode":"JS123", "teamName":"Team A", "teamCode":"TA001", "teamMemberType":"TREATMENT_MANAGER"}',
+            '{"facilitatorForename":"John","facilitatorSurname":"Smith", "facilitatorCode":"JS123", "teamName":"Team A", "teamCode":"TA001", "teamMemberType":"TREATMENT_MANAGER"}',
           'create-group-facilitator-1':
-            '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
+            '{"facilitatorForename":"Jane","facilitatorSurname":"Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
         })
         .expect(302)
         .expect(res => {
@@ -715,7 +715,7 @@ describe('Create Group Controller', () => {
     it('returns with errors if treatment manager and facilitator is not selected', async () => {
       accreditedProgrammesManageAndDeliverService.getPduMembers.mockResolvedValue([
         {
-          personName: 'John Smith',
+          personName: { forename: 'John', surname: 'Smith' },
           personCode: 'JS123',
           teamName: 'Team A',
           teamCode: 'TA001',
@@ -735,7 +735,7 @@ describe('Create Group Controller', () => {
     it('saves team members to session on successful submission', async () => {
       accreditedProgrammesManageAndDeliverService.getPduMembers.mockResolvedValue([
         {
-          personName: 'John Smith',
+          personName: { forename: 'John', surname: 'Smith' },
           personCode: 'JS123',
           teamName: 'Team A',
           teamCode: 'TA001',
@@ -753,9 +753,9 @@ describe('Create Group Controller', () => {
         .type('form')
         .send({
           'create-group-treatment-manager':
-            '{"facilitator":"John Smith", "facilitatorCode":"JS123", "teamName":"Team A", "teamCode":"TA001", "teamMemberType":"TREATMENT_MANAGER"}',
+            '{"facilitatorForename":"John","facilitatorSurname":"Smith", "facilitatorCode":"JS123", "teamName":"Team A", "teamCode":"TA001", "teamMemberType":"TREATMENT_MANAGER"}',
           'create-group-facilitator-1':
-            '{"facilitator":"Jane Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
+            '{"facilitatorForename":"Jane","facilitatorSurname":"Doe","facilitatorCode":"JD456","teamName":"Team B","teamCode":"TB002","teamMemberType":"REGULAR_FACILITATOR"}',
         })
         .expect(302)
 
@@ -778,7 +778,8 @@ describe('Create Group Controller', () => {
           sex: 'MALE',
           teamMembers: [
             {
-              facilitator: 'John Smith',
+              facilitatorForename: 'John',
+              facilitatorSurname: 'Smith',
               facilitatorCode: 'JS123',
               teamName: 'Team A',
               teamCode: 'TA001',

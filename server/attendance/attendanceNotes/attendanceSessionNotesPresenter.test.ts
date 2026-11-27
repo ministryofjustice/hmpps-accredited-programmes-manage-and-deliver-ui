@@ -23,6 +23,7 @@ describe('AttendanceSessionNotesPresenter', () => {
     useNullBffData?: boolean
   } = {}) => {
     const bffData = recordSessionAttendanceFactory.build()
+    bffData.people[0].name = { forename: 'Alice', surname: 'Brown' }
     if (typeof isCatchup === 'boolean') {
       bffData.isCatchup = isCatchup
     }
@@ -111,7 +112,8 @@ describe('AttendanceSessionNotesPresenter', () => {
     it('builds heading from person name and session title', () => {
       const presenter = buildPresenter()
 
-      expect(presenter.text.pageHeading).toContain(':')
+      expect(presenter.personName).toBe('Alice Brown')
+      expect(presenter.text.pageHeading).toContain('Alice Brown:')
       expect(presenter.text.pageHeading).toContain('session notes')
     })
 

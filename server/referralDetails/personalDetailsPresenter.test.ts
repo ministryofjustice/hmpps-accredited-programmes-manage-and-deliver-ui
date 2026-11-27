@@ -2,6 +2,7 @@ import PersonalDetailsPresenter from './personalDetailsPresenter'
 import personalDetailsFactory from '../testutils/factories/personalDetailsFactory'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 import PersonalDetailsView from './personalDetailsView'
+import { formatPersonName } from '../utils/utils'
 
 describe('PersonalDetailsPresenter', () => {
   it('renders the summary CRN as individual characters for screen readers', () => {
@@ -19,11 +20,11 @@ describe('PersonalDetailsPresenter', () => {
 
   describe('headingText', () => {
     it('returns the referral details heading for the referral person', () => {
-      const referralDetails = referralDetailsFactory.build({ personName: 'Alex River' })
+      const referralDetails = referralDetailsFactory.build({ personName: { forename: 'Alex', surname: 'River' } })
       const personalDetails = personalDetailsFactory.build()
       const presenter = new PersonalDetailsPresenter(referralDetails, 'personal-details', personalDetails)
 
-      expect(presenter.headingText).toBe(`Referral details: ${referralDetails.personName}`)
+      expect(presenter.headingText).toBe(`Referral details: ${formatPersonName(referralDetails.personName)}`)
     })
   })
 

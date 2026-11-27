@@ -2,7 +2,12 @@ import { AttendanceHistoryResponse, ReferralDetails } from '@manage-and-deliver-
 import ReferralLayoutPresenter, { HorizontalNavValues } from '../../shared/referral/referralLayoutPresenter'
 import { MojAlertComponentArgs } from '../../interfaces/alertComponentArgs'
 import { TableArgs } from '../../utils/govukFrontendTypes'
-import { attendanceTag, convertToUrlFriendlyKebabCase, getEditSessionRouteTitle } from '../../utils/utils'
+import {
+  attendanceTag,
+  convertToUrlFriendlyKebabCase,
+  formatPersonName,
+  getEditSessionRouteTitle,
+} from '../../utils/utils'
 
 export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter {
   public readonly personOnProbationName: string
@@ -20,7 +25,7 @@ export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter 
     readonly isCohortUpdated: boolean | null = null,
   ) {
     super(HorizontalNavValues.attendanceHistoryTab, referralDetails, isLdcUpdated, isCohortUpdated)
-    this.personOnProbationName = referralDetails.personName
+    this.personOnProbationName = formatPersonName(referralDetails.personName)
     this.currentStatusDescription = referralDetails.currentStatusDescription
   }
 
@@ -42,6 +47,7 @@ export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter 
 
   get tableDescription(): string {
     const { popName, currentlyAllocatedGroupCode, attendanceHistory } = this.attendanceHistory
+    const personName = formatPersonName(popName)
     const hasGroupCode = Boolean(currentlyAllocatedGroupCode)
     const hasSessions = attendanceHistory.length > 0
 
@@ -50,18 +56,18 @@ export default class AttendanceHistoryPresenter extends ReferralLayoutPresenter 
       : ''
 
     if (hasGroupCode && hasSessions) {
-      return `This is ${popName}'s attendance record and session notes. To see sessions that haven't taken place yet, view ${groupLink}.`
+      return `This is ${personName}'s attendance record and session notes. To see sessions that haven't taken place yet, view ${groupLink}.`
     }
 
     if (hasGroupCode && !hasSessions) {
-      return `${popName} currently has no attendance history. To see sessions that haven't taken place yet, view ${groupLink}.`
+      return `${personName} currently has no attendance history. To see sessions that haven't taken place yet, view ${groupLink}.`
     }
 
     if (!hasGroupCode && hasSessions) {
-      return `${popName} is not currently allocated to a group. This is the attendance history for groups they were previously allocated to as part of this referral.`
+      return `${personName} is not currently allocated to a group. This is the attendance history for groups they were previously allocated to as part of this referral.`
     }
 
-    return `${popName} is not allocated to a group and has no attendance history connected to this referral.`
+    return `${personName} is not allocated to a group and has no attendance history connected to this referral.`
   }
 
   get errorMessageSummary(): MojAlertComponentArgs | null {

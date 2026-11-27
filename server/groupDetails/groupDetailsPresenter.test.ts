@@ -233,7 +233,11 @@ describe('GroupDetailsPresenter', () => {
 
       expect(summary).toContainEqual({
         key: 'Treatment Manager',
-        lines: [groupDetails.treatmentManager?.facilitator || 'None added'],
+        lines: [
+          groupDetails.treatmentManager
+            ? `${groupDetails.treatmentManager.facilitatorForename} ${groupDetails.treatmentManager.facilitatorSurname}`
+            : 'None added',
+        ],
         changeLink: '/group-abc/edit-group-facilitators',
         visuallyHiddenText: ' treatment manager',
       })
@@ -248,7 +252,9 @@ describe('GroupDetailsPresenter', () => {
       expect(summary).toContainEqual({
         key: 'Facilitators',
         lines:
-          groupDetails.facilitators.length > 0 ? groupDetails.facilitators.map(f => f.facilitator) : ['None added'],
+          groupDetails.facilitators.length > 0
+            ? groupDetails.facilitators.map(f => `${f.facilitatorForename} ${f.facilitatorSurname}`)
+            : ['None added'],
         changeLink: '/group-abc/edit-group-facilitators',
         visuallyHiddenText: 'facilitators',
       })

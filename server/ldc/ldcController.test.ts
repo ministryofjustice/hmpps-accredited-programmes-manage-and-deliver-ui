@@ -9,6 +9,7 @@ import sendAuditEvent from '../services/auditService'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 import TestUtils from '../testutils/testUtils'
+import { formatPersonName } from '../utils/utils'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
@@ -45,7 +46,7 @@ describe('Update ldc status', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(referralDetails.crn)
-          expect(res.text).toContain(referralDetails.personName)
+          expect(res.text).toContain(formatPersonName(referralDetails.personName))
           expect(res.text).toContain(referralDetails.hasLdcDisplayText)
         })
         .then(() => {

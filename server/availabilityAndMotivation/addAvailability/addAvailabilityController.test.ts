@@ -10,6 +10,7 @@ import availabilityFactory from '../../testutils/factories/availabilityFactory'
 import personalDetailsFactory from '../../testutils/factories/personalDetailsFactory'
 import referralDetailsFactory from '../../testutils/factories/referralDetailsFactory'
 import TestUtils from '../../testutils/testUtils'
+import { formatPersonName } from '../../utils/utils'
 
 jest.mock('../../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../../data/hmppsAuthClient')
@@ -49,7 +50,9 @@ describe(`Add Availability`, () => {
         .get(`/referral/${randomUUID()}/add-availability`)
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain(`When is ${referralDetails.personName} available to attend a programme`)
+          expect(res.text).toContain(
+            `When is ${formatPersonName(referralDetails.personName)} available to attend a programme`,
+          )
         })
         .then(() => {
           expect(sendAuditEvent).toHaveBeenCalledWith('VIEW_ADD_AVAILABILITY', 'user1', referralDetails.crn, 'CRN', {

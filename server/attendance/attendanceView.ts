@@ -1,6 +1,7 @@
 import AttendancePresenter from './attendancePresenter'
 import { RadiosArgs } from '../utils/govukFrontendTypes'
 import ViewUtils from '../utils/viewUtils'
+import { formatPersonName } from '../utils/utils'
 
 export default class AttendanceView {
   constructor(private readonly presenter: AttendancePresenter) {}
@@ -19,7 +20,7 @@ export default class AttendanceView {
         legend: {
           html:
             this.presenter.recordAttendanceBffData.people.length > 1
-              ? `${ViewUtils.escape(person.name)} (${ViewUtils.crnHtml(person.crn)})`
+              ? `${ViewUtils.escape(formatPersonName(person.name))} (${ViewUtils.crnHtml(person.crn)})`
               : null,
           isPageHeading: false,
           classes: 'govuk-fieldset__legend--m',

@@ -1,6 +1,7 @@
 import { ReferralDetails, ReferralStatusHistory } from '@manage-and-deliver-api'
 import ReferralLayoutPresenter, { HorizontalNavValues } from '../shared/referral/referralLayoutPresenter'
 import { MojAlertComponentArgs } from '../interfaces/alertComponentArgs'
+import { formatPersonName } from '../utils/utils'
 
 export default class StatusHistoryPresenter extends ReferralLayoutPresenter {
   public readonly personOnProbationName: string
@@ -16,7 +17,7 @@ export default class StatusHistoryPresenter extends ReferralLayoutPresenter {
     readonly isCohortUpdated: boolean | null = null,
   ) {
     super(HorizontalNavValues.statusHistoryTab, referralDetails, isLdcUpdated, isCohortUpdated)
-    this.personOnProbationName = referralDetails.personName
+    this.personOnProbationName = formatPersonName(referralDetails.personName)
     this.currentStatusDescription = referralDetails.currentStatusDescription
   }
 

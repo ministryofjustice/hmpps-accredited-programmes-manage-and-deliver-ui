@@ -235,6 +235,54 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/admin/referrals/person-names': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Updates the structured personal names for referrals
+     * @description For the specified Referrals, re-fetch the
+     *           |structured personal names from nDelius.
+     *           |
+     *           |If ID list in the request is empty or not specified,
+     *           |all referrals with missing structured personal names will be updated.
+     */
+    put: operations['updateReferralStructuredName']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/admin/facilitators/person-names': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get?: never
+    /**
+     * Updates the structured personal names for facilitators
+     * @description For the specified Facilitators, re-fetch the
+     *           |structured personal names from nDelius.
+     *           |
+     *           |If ID list in the request is empty or not specified,
+     *           |all facilitators with missing structured personal names will be updated.
+     */
+    put: operations['updateFacilitatorStructuredName']
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/session/{sessionId}/attendance': {
     parameters: {
       query?: never
@@ -1684,13 +1732,31 @@ export interface components {
     /** @description Request to edit the facilitators for a session */
     EditSessionFacilitatorRequest: {
       /** @description The full name of the facilitator for the group */
-      facilitatorName: string
+      facilitatorName: components['schemas']['PersonName']
       /** @description The code of the facilitator for the group */
       facilitatorCode: string
       /** @description The name of the team that the member belongs to */
       teamName: string
       /** @description The code of the team that the member belongs to */
       teamCode: string
+    }
+    /** @description Details of a person's name that has been referred by a referral */
+    PersonName: {
+      /**
+       * @description The first name of a person
+       * @example John
+       */
+      forename: string
+      /**
+       * @description The middle names of a person
+       * @example Oliver
+       */
+      middleNames?: string | null
+      /**
+       * @description The surname of a person
+       * @example Smith
+       */
+      surname: string
     }
     RescheduleSessionRequest: {
       /**
@@ -1754,11 +1820,8 @@ export interface components {
        * @example c98151f4-4081-4c65-9f98-54e63a328c8d
        */
       id: string
-      /**
-       * @description The name of the person associated with this referral.
-       * @example John Doe
-       */
-      personName: string
+      /** @description The name of the person associated with this referral. */
+      personName: components['schemas']['PersonName']
       /**
        * @description The CRN identifier of the person associated with this referral.
        * @example X12345
@@ -1906,8 +1969,21 @@ export interface components {
       amOrPm: components['schemas']['AmOrPm']
     }
     CreateGroupTeamMember: {
-      /** @description The full name of the facilitator for the group */
-      facilitator: string
+      /**
+       * @description The forename of the facilitator for the group.
+       * @example John
+       */
+      facilitatorForename: string
+      /**
+       * @description The surname of the facilitator for the group.
+       * @example Smith
+       */
+      facilitatorSurname: string
+      /**
+       * @description The middle names of the facilitator for the group.
+       * @example William
+       */
+      facilitatorMiddleNames?: string | null
       /** @description The code of the facilitator for the group */
       facilitatorCode: string
       /** @description The name of the team that the member belongs to */
@@ -2056,6 +2132,23 @@ export interface components {
        */
       otherDetails?: string | null
       availabilities: components['schemas']['DailyAvailabilityModel'][]
+    }
+    /**
+     * @description IDs of the Facilitators to update.
+     *             |If IDs empty or not specified, all facilitators with missing structured personal names will be updated.
+     */
+    UpdatePersonNameRequest: {
+      /**
+       * @description List of IDs to update structured person names for.
+       *           |If empty, will trigger re-updating for all objects in the database that have blank structured person names.
+       * @example [981421e1-0242-4cde-92a2-44c737077f86, af2e88f7-8a89-4a01-b52a-5d7e6805f605]
+       */
+      ids: string[]
+    }
+    RefreshPersonalDetailsResult: {
+      successIds: string[]
+      notFoundIds: string[]
+      failureIds: string[]
     }
     /** @description Attendance for a session */
     SessionAttendance: {
@@ -2264,7 +2357,8 @@ export interface components {
     SeededReferralInfo: {
       referralId: string
       crn: string
-      personName: string
+      personForename: string
+      personSurname: string
       requirementId: string
     }
     GroupSeedingResult: {
@@ -2935,11 +3029,8 @@ export interface components {
        * @example X933590
        */
       crn: string
-      /**
-       * @description The name of the person associated with this referral.
-       * @example John Doe
-       */
-      personName: string
+      /** @description The name of the person associated with this referral. */
+      personName: components['schemas']['PersonName']
       /**
        * @description The name of the Intervention for this referral.
        * @example Building Choices
@@ -3084,11 +3175,8 @@ export interface components {
        * @example X933590
        */
       crn: string
-      /**
-       * @description The full name of the person being referred.
-       * @example John Smith
-       */
-      name: string
+      /** @description The name of the person associated with this referral. */
+      personName: components['schemas']['PersonName']
       /**
        * Format: date
        * @description The date of birth of the person being referred.
@@ -3490,7 +3578,7 @@ export interface components {
       /** Format: uuid */
       referralId: string
       crn: string
-      personName: string
+      personName: components['schemas']['PersonName']
       sex?: string | null
       referralStatus: string
       statusLabelColour: string
@@ -3709,7 +3797,7 @@ export interface components {
     }
     EditSessionFacilitator: {
       /** @description The full name of the facilitator for the group */
-      facilitatorName: string
+      facilitatorName: components['schemas']['PersonName']
       /** @description The code of the facilitator for the group */
       facilitatorCode: string
       /** @description The name of the team that the member belongs to */
@@ -3736,11 +3824,8 @@ export interface components {
        * @example Alex River: Getting started 1 Introduction to Building Choices session notes
        */
       pageTitle: string
-      /**
-       * @description The person on probation's name
-       * @example Alex River
-       */
-      personName: string
+      /** @description The person on probation's name */
+      personName: components['schemas']['PersonName']
       /**
        * @description The name of the module the session belongs to
        * @example Getting started
@@ -3854,7 +3939,7 @@ export interface components {
        * @description A string representing a full name of an attendee
        * @example Alice Brown
        */
-      name: string
+      name: components['schemas']['PersonName']
       /**
        * @description A string representing a CRN
        * @example Y006572
@@ -3936,11 +4021,8 @@ export interface components {
     }
     /** @description Details about an attendee for a session */
     EditSessionAttendee: {
-      /**
-       * @description Full name of the attendee
-       * @example John Smith
-       */
-      name: string
+      /** @description Full name of the attendee */
+      name: components['schemas']['PersonName']
       /**
        * Format: uuid
        * @description Referral identifier associated with the attendee
@@ -4005,7 +4087,7 @@ export interface components {
       /** @description The code for the team member */
       personCode: string
       /** @description The full name of the team member */
-      personName: string
+      personName: components['schemas']['PersonName']
       /** @description The name of the team that the member belongs to */
       teamName: string
       /** @description The code of the team that the member belongs to */
@@ -4013,11 +4095,8 @@ export interface components {
     }
     /** @description Response containing attendance history for a referral */
     AttendanceHistoryResponse: {
-      /**
-       * @description The full name of the person
-       * @example Alex River
-       */
-      popName: string
+      /** @description The full name of the person */
+      popName: components['schemas']['PersonName']
       /**
        * @description The group code of the group the person is currently allocated to
        * @example abc123
@@ -4052,11 +4131,8 @@ export interface components {
        * @example abc123
        */
       groupCode: string
-      /**
-       * @description The name of the person
-       * @example Alex River
-       */
-      popName: string
+      /** @description The name of the person */
+      popName: components['schemas']['PersonName']
       /**
        * Format: uuid
        * @description The group id for the session
@@ -4237,11 +4313,8 @@ export interface components {
        * @example false
        */
       isExcluded: boolean
-      /**
-       * @description The name of the person associated with this referral.
-       * @example John Doe
-       */
-      personName: string
+      /** @description The name of the person associated with this referral. */
+      personName: components['schemas']['PersonName']
       /**
        * Format: date
        * @description The end date of the person's sentence.
@@ -4359,11 +4432,8 @@ export interface components {
       locationFilters: components['schemas']['LocationFilterValues'][]
     }
     Participant: {
-      /**
-       * @description The name of the participant
-       * @example John Doe
-       */
-      name: string
+      /** @description The name of the participant */
+      name: components['schemas']['PersonName']
       /**
        * @description The CRN of the participant
        * @example X12345
@@ -4497,7 +4567,8 @@ export interface components {
       sessionStartDate: string
     }
     AttendanceAndSessionNotes: {
-      name: string
+      /** @description The name of the person that attended a session */
+      name: components['schemas']['PersonName']
       /** Format: uuid */
       referralId: string
       crn: string
@@ -4552,16 +4623,10 @@ export interface components {
        * @example Midday to 1pm
        */
       timeWithCapitalisedMidday: string
-      /**
-       * @description The list of people scheduled to attend
-       * @example [John Smith, Jane Doe]
-       */
-      scheduledToAttend: string[]
-      /**
-       * @description The names of the facilitators in the session
-       * @example [John Doe, Jane Smith]
-       */
-      facilitators: string[]
+      /** @description The list of people scheduled to attend */
+      scheduledToAttend: components['schemas']['PersonName'][]
+      /** @description The names of the facilitators in the session */
+      facilitators: components['schemas']['PersonName'][]
       /** @description The attendance and session notes for each attendee */
       attendanceAndSessionNotes: components['schemas']['AttendanceAndSessionNotes'][]
     }
@@ -4666,11 +4731,8 @@ export interface components {
       sessionTemplates: components['schemas']['ModuleSessionTemplate'][]
     }
     GroupMember: {
-      /**
-       * @description The full name of the group member as 'firstname lastname'
-       * @example John Doe
-       */
-      name: string
+      /** @description The full name of the group member */
+      name: components['schemas']['PersonName']
       /** @description The Case Reference Number of the group member */
       crn: string
       /**
@@ -5624,6 +5686,90 @@ export interface operations {
         content?: never
       }
       /** @description Invalid request format */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  updateReferralStructuredName: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdatePersonNameRequest']
+      }
+    }
+    responses: {
+      /** @description Update started (not completed, process is async) */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['RefreshPersonalDetailsResult']
+        }
+      }
+      /** @description Invalid request format or invalid UUID format */
+      400: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+      /** @description Unauthorized */
+      401: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['ErrorResponse']
+        }
+      }
+    }
+  }
+  updateFacilitatorStructuredName: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdatePersonNameRequest']
+      }
+    }
+    responses: {
+      /** @description Update started (not completed, process is async) */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          '*/*': components['schemas']['RefreshPersonalDetailsResult']
+        }
+      }
+      /** @description Invalid request format or invalid UUID format */
       400: {
         headers: {
           [name: string]: unknown
@@ -8030,12 +8176,6 @@ export interface operations {
         pageable: components['schemas']['Pageable']
         /** @description CRN or persons name */
         crnOrPersonName?: string
-        /** @description Filter by the cohort of the referral using the human-readable label, e.g. 'General Offence', 'General Offence LDC', 'Sexual Offence', 'Sexual Offence LDC' */
-        cohort?: string
-        /** @description Filter by the status of the referral */
-        status?: string
-        /** @description Filter by the sex of the person on probation (Male/Female) */
-        sex?: string
         requestParams: components['schemas']['MultiValueMapStringString']
       }
       header?: never

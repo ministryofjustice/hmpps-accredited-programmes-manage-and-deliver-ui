@@ -1,6 +1,7 @@
 import { PniScore, ReferralDetails } from '@manage-and-deliver-api'
 import ReferralLayoutPresenter, { HorizontalNavValues } from '../shared/referral/referralLayoutPresenter'
 import PresenterUtils from '../utils/presenterUtils'
+import { formatPersonName } from '../utils/utils'
 
 export default class PniPresenter extends ReferralLayoutPresenter {
   constructor(
@@ -234,7 +235,8 @@ export default class PniPresenter extends ReferralLayoutPresenter {
   }
 
   getPathwayDetails() {
-    const bodyTextPrefix = `Based on the risk and need scores, ${this.referral.personName} may`
+    const personName = formatPersonName(this.referral.personName)
+    const bodyTextPrefix = `Based on the risk and need scores, ${personName} may`
     const programmePathway = this.pniScore.overallIntensity
     switch (programmePathway) {
       case 'HIGH':
@@ -252,7 +254,7 @@ export default class PniPresenter extends ReferralLayoutPresenter {
       case 'ALTERNATIVE_PATHWAY':
         if (this.pniScore.displayIneligibleWarning)
           return {
-            bodyText: `Based on the OASys risk and needs scores, ${this.referral.personName} may not be eligible for Building Choices. If a pre-sentence or pre-release programme needs identifier (PNI) has already been completed in EPF, use that result instead. If EPF says that they are eligible for Building Choices, they are still eligible now.`,
+            bodyText: `Based on the OASys risk and needs scores, ${personName} may not be eligible for Building Choices. If a pre-sentence or pre-release programme needs identifier (PNI) has already been completed in EPF, use that result instead. If EPF says that they are eligible for Building Choices, they are still eligible now.`,
             class: 'rosh-widget rosh-widget--alternative govuk-!-margin-bottom-6',
             headingText: 'NOT ELIGIBLE',
           }

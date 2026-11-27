@@ -1,6 +1,6 @@
 import ChangeCohortPresenter from './changeCohortPresenter'
 import { InsetTextArgs } from '../utils/govukFrontendTypes'
-import { formatCohort } from '../utils/utils'
+import { formatCohort, formatPersonName } from '../utils/utils'
 
 export default class ChangeCohortView {
   constructor(private readonly presenter: ChangeCohortPresenter) {}
@@ -21,7 +21,7 @@ export default class ChangeCohortView {
 
   get currentCohortText(): InsetTextArgs {
     return {
-      html: `<p> ${this.presenter.details.personName}'s current cohort: </p>
+      html: `<p> ${formatPersonName(this.presenter.details.personName)}'s current cohort: </p>
         <p class="govuk-!-font-weight-bold">${formatCohort(this.presenter.details.cohort)}</p>`,
 
       classes: 'govuk-!-margin-top-0',

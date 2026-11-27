@@ -7,6 +7,7 @@ import ViewUtils from '../utils/viewUtils'
 import CaselistFilter from './caselistFilter'
 import CaselistUtils from './caseListUtils'
 import { CaselistSort, CaselistSortField, parseCaselistSort } from './caselistSort'
+import { formatPersonName } from '../utils/utils'
 
 export enum CaselistPageSection {
   Open = 1,
@@ -144,14 +145,15 @@ export default class CaselistPresenter {
       const sentenceEndDate = CaselistUtils.sentenceEndDateCell(referral)
       const isExcluded = Boolean(referral.isExcluded)
       const crnHtml = ViewUtils.crnHtml(referral.crn)
+      const personName = formatPersonName(referral.personName)
       referralData.push([
         {
           html: !isExcluded
-            ? `<a href='/referral-details/${referral.referralId}/referral-summary'>${referral.personName}</a>${crnHtml}${CaselistUtils.hasLaoBadgeHtml(referral)}`
+            ? `<a href='/referral-details/${referral.referralId}/referral-summary'>${personName}</a>${crnHtml}${CaselistUtils.hasLaoBadgeHtml(referral)}`
             : `${crnHtml}${CaselistUtils.hasLaoBadgeHtml(referral)}`,
           attributes: isExcluded
             ? { 'data-sort-value': referral.crn, 'data-excluded': 'true' }
-            : { 'data-sort-value': referral.personName },
+            : { 'data-sort-value': personName },
         },
         { text: !isExcluded ? referral.pdu : 'Restricted' },
         { text: !isExcluded ? referral.reportingTeam : 'Restricted' },

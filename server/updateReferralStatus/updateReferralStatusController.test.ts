@@ -10,6 +10,7 @@ import referralDetailsFactory from '../testutils/factories/referralDetailsFactor
 import referralStatusFormDataFactory from '../testutils/factories/referralStatusFormDataFactory'
 import statusHistoryFactory from '../testutils/factories/statusHistoryFactory'
 import TestUtils from '../testutils/testUtils'
+import { formatPersonName } from '../utils/utils'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
@@ -50,9 +51,9 @@ describe('Update Referral Status Controller', () => {
           .expect(200)
           .expect(res => {
             expect(res.text).toContain(referralDetails.crn)
-            expect(res.text).toContain(referralDetails.personName)
+            expect(res.text).toContain(formatPersonName(referralDetails.personName))
             expect(res.text).toContain(statusDetails.currentStatus.title)
-            expect(res.text).toContain(`Update ${referralDetails.personName}'s referral status`)
+            expect(res.text).toContain(`Update ${formatPersonName(referralDetails.personName)}'s referral status`)
           })
       })
 
@@ -196,7 +197,7 @@ describe('Update Referral Status Controller', () => {
           .expect(200)
           .expect(res => {
             expect(res.text).toContain(referralDetails.crn)
-            expect(res.text).toContain(referralDetails.personName)
+            expect(res.text).toContain(formatPersonName(referralDetails.personName))
           })
       })
     })
@@ -260,7 +261,7 @@ describe('Update Referral Status Controller', () => {
           .expect(200)
           .expect(res => {
             expect(res.text).toContain(referralDetails.crn)
-            expect(res.text).toContain(referralDetails.personName)
+            expect(res.text).toContain(formatPersonName(referralDetails.personName))
           })
       })
 
@@ -281,7 +282,7 @@ describe('Update Referral Status Controller', () => {
           .expect(200)
           .expect(res => {
             expect(res.text).toContain(referralDetails.crn)
-            expect(res.text).toContain(referralDetails.personName)
+            expect(res.text).toContain(formatPersonName(referralDetails.personName))
           })
       })
 

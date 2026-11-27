@@ -108,18 +108,27 @@ export default class GroupDetailsPresenter extends GroupServiceLayoutPresenter {
 
   getGroupStaffSummary(): SummaryListItem[] {
     const coverFacilitators =
-      this.group.coverFacilitators.length > 0 ? this.group.coverFacilitators.map(f => f.facilitator) : ['None added']
+      this.group.coverFacilitators.length > 0
+        ? this.group.coverFacilitators.map(f => `${f.facilitatorForename} ${f.facilitatorSurname}`)
+        : ['None added']
 
     return [
       {
         key: 'Treatment Manager',
-        lines: [this.group.treatmentManager?.facilitator || 'None added'],
+        lines: [
+          this.group.treatmentManager
+            ? `${this.group.treatmentManager.facilitatorForename} ${this.group.treatmentManager.facilitatorSurname}`
+            : 'None added',
+        ],
         changeLink: `/${this.groupId}/edit-group-facilitators`,
         visuallyHiddenText: ' treatment manager',
       },
       {
         key: 'Facilitators',
-        lines: this.group.facilitators.length > 0 ? this.group.facilitators.map(f => f.facilitator) : ['None added'],
+        lines:
+          this.group.facilitators.length > 0
+            ? this.group.facilitators.map(f => `${f.facilitatorForename} ${f.facilitatorSurname}`)
+            : ['None added'],
         changeLink: `/${this.groupId}/edit-group-facilitators`,
         visuallyHiddenText: 'facilitators',
       },

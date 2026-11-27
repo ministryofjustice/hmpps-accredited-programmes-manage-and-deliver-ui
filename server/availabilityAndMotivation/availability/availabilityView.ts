@@ -2,6 +2,7 @@ import { ButtonArgs, InsetTextArgs } from '../../utils/govukFrontendTypes'
 import AvailabilityPresenter from './availabilityPresenter'
 import DateUtils from '../../utils/dateUtils'
 import { MojAlertComponentArgs } from '../../interfaces/alertComponentArgs'
+import { formatPersonName } from '../../utils/utils'
 
 export default class AvailabilityView {
   constructor(private readonly presenter: AvailabilityPresenter) {}
@@ -15,8 +16,8 @@ export default class AvailabilityView {
 
   get generalAvailabilityText(): string {
     return this.presenter.availability.endDate
-      ? `This is ${this.presenter.details.personName}'s general availability until ${DateUtils.formattedDate(this.presenter.availability.endDate)}.`
-      : `This is ${this.presenter.details.personName}'s general availability to attend an Accredited Programme.`
+      ? `This is ${formatPersonName(this.presenter.details.personName)}'s general availability until ${DateUtils.formattedDate(this.presenter.availability.endDate)}.`
+      : `This is ${formatPersonName(this.presenter.details.personName)}'s general availability to attend an Accredited Programme.`
   }
 
   get availabilityButtonArgs(): ButtonArgs {

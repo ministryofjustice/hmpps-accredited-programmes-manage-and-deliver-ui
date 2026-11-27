@@ -6,7 +6,7 @@ import AttendanceHistoryPresenter from './attendanceHistoryPresenter'
 describe('AttendanceHistoryPresenter', () => {
   const referralId = randomUUID()
   const referralDetails = referralDetailsFactory.build({
-    personName: 'Alex River',
+    personName: { forename: 'Alex', surname: 'River' },
     currentStatusDescription: 'Awaiting assessment',
   })
 
@@ -118,7 +118,7 @@ describe('AttendanceHistoryPresenter', () => {
             unformattedDate: '2025-07-11 12:00:00.00',
             attendanceStatus: 'Attended',
             hasNotes: false,
-            popName: 'Alex River',
+            popName: { forename: 'Alex', surname: 'River' },
             isCatchup: false,
           },
         ],
@@ -145,7 +145,7 @@ describe('AttendanceHistoryPresenter', () => {
             unformattedDate: '2025-07-11 10:30:00.00',
             attendanceStatus: 'Attended',
             hasNotes: false,
-            popName: '',
+            popName: { forename: '', surname: '' },
             isCatchup: false,
           },
         ],

@@ -1,5 +1,6 @@
 import { InsetTextArgs, RadiosArgs } from '../utils/govukFrontendTypes'
 import UpdateLdcPresenter from './updateLdcPresenter'
+import { formatPersonName } from '../utils/utils'
 
 export default class UpdateLdcView {
   constructor(private readonly presenter: UpdateLdcPresenter) {}
@@ -20,7 +21,7 @@ export default class UpdateLdcView {
 
   get currentLdcStatusText(): InsetTextArgs {
     return {
-      html: `<p> ${this.presenter.details.personName}'s current LDC status:</p>
+      html: `<p> ${formatPersonName(this.presenter.details.personName)}'s current LDC status:</p>
         <p class="govuk-!-font-weight-bold">${this.presenter.details.hasLdcDisplayText}</p>`,
 
       classes: 'govuk-!-margin-top-0',

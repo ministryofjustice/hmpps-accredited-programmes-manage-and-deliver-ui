@@ -8,21 +8,21 @@ describe('EditSessionFacilitatorsPresenter', () => {
     pageTitle: 'Edit Getting started',
     facilitators: [
       {
-        facilitatorName: 'John Smith',
+        facilitatorName: { forename: 'John', surname: 'Smith' },
         facilitatorCode: 'FAC-001',
         teamName: 'Team A',
         teamCode: 'TEAM-A',
         currentlyFacilitating: true,
       },
       {
-        facilitatorName: 'Jane Doe',
+        facilitatorName: { forename: 'Jane', surname: 'Doe' },
         facilitatorCode: 'FAC-002',
         teamName: 'Team B',
         teamCode: 'TEAM-B',
         currentlyFacilitating: false,
       },
       {
-        facilitatorName: 'Bob Wilson',
+        facilitatorName: { forename: 'Bob', surname: 'Wilson' },
         facilitatorCode: 'FAC-003',
         teamName: 'Team A',
         teamCode: 'TEAM-A',
@@ -139,7 +139,7 @@ describe('EditSessionFacilitatorsPresenter', () => {
       const parsedValue = JSON.parse(firstFacilitatorOption.value as string)
 
       expect(parsedValue).toEqual({
-        facilitatorName: 'John Smith',
+        facilitatorName: { forename: 'John', surname: 'Smith' },
         facilitatorCode: 'FAC-001',
         teamName: 'Team A',
         teamCode: 'TEAM-A',
@@ -163,7 +163,7 @@ describe('EditSessionFacilitatorsPresenter', () => {
         pageTitle: 'Edit Getting started',
         facilitators: [
           {
-            facilitatorName: 'Jane Doe',
+            facilitatorName: { forename: 'Jane', surname: 'Doe' },
             facilitatorCode: 'FAC-002',
             teamName: 'Team B',
             teamCode: 'TEAM-B',
@@ -183,9 +183,9 @@ describe('EditSessionFacilitatorsPresenter', () => {
       const userInputData = {
         _csrf: 'token123',
         'edit-session-facilitator-0':
-          '{"facilitatorName":"John Smith", "facilitatorCode":"FAC-001", "teamName":"Team A", "teamCode":"TEAM-A"}',
+          '{"facilitatorName":{"forename":"John","surname":"Smith"}, "facilitatorCode":"FAC-001", "teamName":"Team A", "teamCode":"TEAM-A"}',
         'edit-session-facilitator-1':
-          '{"facilitatorName":"Jane Doe", "facilitatorCode":"FAC-002", "teamName":"Team B", "teamCode":"TEAM-B"}',
+          '{"facilitatorName":{"forename":"Jane","surname":"Doe"}, "facilitatorCode":"FAC-002", "teamName":"Team B", "teamCode":"TEAM-B"}',
       }
 
       const presenter = new EditSessionFacilitatorsPresenter(
@@ -207,7 +207,7 @@ describe('EditSessionFacilitatorsPresenter', () => {
       const userInputData = {
         _csrf: 'token123',
         'edit-session-facilitator-0':
-          '{"facilitatorName":"John Smith", "facilitatorCode":"FAC-001", "teamName":"Team A", "teamCode":"TEAM-A"}',
+          '{"facilitatorName":{"forename":"John","surname":"Smith"}, "facilitatorCode":"FAC-001", "teamName":"Team A", "teamCode":"TEAM-A"}',
         'edit-session-facilitator-1': '',
       }
 

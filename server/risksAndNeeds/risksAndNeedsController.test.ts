@@ -21,6 +21,7 @@ import { appWithAllRoutes } from '../routes/testutils/appSetup'
 import AccreditedProgrammesManageAndDeliverService from '../services/accreditedProgrammesManageAndDeliverService'
 import sendAuditEvent from '../services/auditService'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
+import { formatPersonName } from '../utils/utils'
 import alcoholMisuseFactory from '../testutils/factories/risksAndNeeds/alcoholMisuseFactory'
 import learningNeedsFactory from '../testutils/factories/risksAndNeeds/learningNeedsFactory'
 import roshAnalysisFactory from '../testutils/factories/risksAndNeeds/roshAnalysisFactory'
@@ -353,7 +354,7 @@ describe('Alcohol Misuse', () => {
         .get(`/referral/${referralId}/risks-and-needs/section-9-alcohol-misuse`)
         .expect(200)
         .expect(res => {
-          expect(res.text).toContain(`Risks and needs: ${referralDetails.personName}`)
+          expect(res.text).toContain(`Risks and needs: ${formatPersonName(referralDetails.personName)}`)
           expect(res.text).toContain('Assessment completed 23 August 2025')
           expect(res.text).toContain(alcoholMisuseDetails.currentUse)
           expect(res.text).toContain(alcoholMisuseDetails.bingeDrinking)

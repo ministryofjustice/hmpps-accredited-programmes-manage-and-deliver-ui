@@ -1,6 +1,7 @@
 import { ReferralDetails, ReferralStatusTransitions } from '@manage-and-deliver-api'
 import { FormValidationError } from '../utils/formValidationError'
 import PresenterUtils from '../utils/presenterUtils'
+import { formatPersonName } from '../utils/utils'
 
 export default class UpdateReferralStatusStartedOrCompletedPresenter {
   constructor(
@@ -24,8 +25,8 @@ export default class UpdateReferralStatusStartedOrCompletedPresenter {
     return {
       title:
         this.statusDetails.currentStatus.title === 'Scheduled'
-          ? `${this.details.personName} is allocated to a group`
-          : `${this.details.personName} has started Building Choices`,
+          ? `${formatPersonName(this.details.personName)} is allocated to a group`
+          : `${formatPersonName(this.details.personName)} has started Building Choices`,
     }
   }
 

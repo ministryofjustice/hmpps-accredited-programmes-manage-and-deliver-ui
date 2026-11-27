@@ -10,6 +10,7 @@ import { PrimaryNavigationTab } from '../../shared/routes/layoutPresenter'
 import BaseController from '../../shared/baseController'
 import logger from '../../../logger'
 import sendAuditEvent from '../../services/auditService'
+import { formatPersonName } from '../../utils/utils'
 
 export default class RemoveFromGroupController extends BaseController {
   protected readonly primaryNavigationTab = PrimaryNavigationTab.Groups
@@ -51,7 +52,7 @@ export default class RemoveFromGroupController extends BaseController {
       })
     }
 
-    req.session.groupManagementData.personName = referralData.personName
+    req.session.groupManagementData.personName = formatPersonName(referralData.personName)
 
     const presenter = new RemoveFromGroupPresenter(
       groupId,
@@ -119,7 +120,7 @@ export default class RemoveFromGroupController extends BaseController {
       username,
     )
 
-    req.session.groupManagementData.personName = referralDetails.personName
+    req.session.groupManagementData.personName = formatPersonName(referralDetails.personName)
 
     const presenter = new RemoveFromGroupUpdateStatusPresenter(
       groupId,

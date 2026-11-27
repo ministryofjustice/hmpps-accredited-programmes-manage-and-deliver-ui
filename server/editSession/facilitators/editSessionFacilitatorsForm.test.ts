@@ -7,13 +7,14 @@ describe('EditSessionFacilitatorsForm', () => {
       it('returns params for update with parsed values', async () => {
         const request = TestUtils.createRequest({
           'edit-session-facilitator-0':
-            '{"facilitator":"John Doe", "facilitatorCode":"N07B656", "teamName":"GM Manchester N1", "teamCode":"N50CAC"}',
+            '{"facilitatorForename":"John","facilitatorSurname":"Doe", "facilitatorCode":"N07B656", "teamName":"GM Manchester N1", "teamCode":"N50CAC"}',
         })
         const data = await new EditSessionFacilitatorsForm(request).editSessionFacilitatorsData()
 
         expect(data.paramsForUpdate).toEqual([
           {
-            facilitator: 'John Doe',
+            facilitatorForename: 'John',
+            facilitatorSurname: 'Doe',
             facilitatorCode: 'N07B656',
             teamCode: 'N50CAC',
             teamName: 'GM Manchester N1',
@@ -42,9 +43,9 @@ describe('EditSessionFacilitatorsForm', () => {
       it('returns error when same facilitator is entered', async () => {
         const request = TestUtils.createRequest({
           'edit-session-facilitator-0':
-            '{"facilitator":"John Doe", "facilitatorCode":"N07B656", "teamName":"GM Manchester N1", "teamCode":"N50CAC"}',
+            '{"facilitatorForename":"John","facilitatorSurname":"Doe", "facilitatorCode":"N07B656", "teamName":"GM Manchester N1", "teamCode":"N50CAC"}',
           'edit-session-facilitator-1':
-            '{"facilitator":"John Doe", "facilitatorCode":"N07B656", "teamName":"GM Manchester N1", "teamCode":"N50CAC"}',
+            '{"facilitatorForename":"John","facilitatorSurname":"Doe", "facilitatorCode":"N07B656", "teamName":"GM Manchester N1", "teamCode":"N50CAC"}',
         })
         const data = await new EditSessionFacilitatorsForm(request).editSessionFacilitatorsData()
         expect(data.paramsForUpdate).toBeNull()

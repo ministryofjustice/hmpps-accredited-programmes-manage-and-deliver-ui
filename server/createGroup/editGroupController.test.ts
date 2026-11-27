@@ -1163,7 +1163,8 @@ describe('Edit Group Controller', () => {
           id: groupId,
           code: 'TEST123',
           treatmentManager: {
-            facilitator: 'Archibald Queeny',
+            facilitatorForename: 'Archibald',
+            facilitatorSurname: 'Queeny',
             facilitatorCode: 'JS001',
             teamName: 'Team A',
             teamCode: 'TEAM001',
@@ -1171,7 +1172,8 @@ describe('Edit Group Controller', () => {
           },
           facilitators: [
             {
-              facilitator: 'Jane Doe',
+              facilitatorForename: 'Jane',
+              facilitatorSurname: 'Doe',
               facilitatorCode: 'JD001',
               teamName: 'Team A',
               teamCode: 'TEAM001',
@@ -1180,7 +1182,8 @@ describe('Edit Group Controller', () => {
           ],
           coverFacilitators: [
             {
-              facilitator: 'Alex River',
+              facilitatorForename: 'Alex',
+              facilitatorSurname: 'River',
               facilitatorCode: 'AB001',
               teamName: 'Team B',
               teamCode: 'TEAM002',
@@ -1192,19 +1195,19 @@ describe('Edit Group Controller', () => {
 
       accreditedProgrammesManageAndDeliverService.getPduMembers.mockResolvedValue([
         {
-          personName: 'John Smith',
+          personName: { forename: 'John', surname: 'Smith' },
           personCode: 'JS123',
           teamName: 'Team A',
           teamCode: 'TA001',
         },
         {
-          personName: 'Jane Doe',
+          personName: { forename: 'Jane', surname: 'Doe' },
           personCode: 'JD456',
           teamName: 'Team A',
           teamCode: 'TA001',
         },
         {
-          personName: 'Alex Brown',
+          personName: { forename: 'Alex', surname: 'Brown' },
           personCode: 'AB789',
           teamName: 'Team B',
           teamCode: 'TB001',
@@ -1240,7 +1243,8 @@ describe('Edit Group Controller', () => {
           id: groupId,
           code: 'TEST123',
           treatmentManager: {
-            facilitator: 'John Smith',
+            facilitatorForename: 'John',
+            facilitatorSurname: 'Smith',
             facilitatorCode: 'JS001',
             teamName: 'Team A',
             teamCode: 'TEAM001',
@@ -1248,7 +1252,8 @@ describe('Edit Group Controller', () => {
           },
           facilitators: [
             {
-              facilitator: 'Jane Doe',
+              facilitatorForename: 'Jane',
+              facilitatorSurname: 'Doe',
               facilitatorCode: 'JD001',
               teamName: 'Team A',
               teamCode: 'TEAM001',
@@ -1261,13 +1266,13 @@ describe('Edit Group Controller', () => {
 
       accreditedProgrammesManageAndDeliverService.getPduMembers.mockResolvedValue([
         {
-          personName: 'John Smith',
+          personName: { forename: 'John', surname: 'Smith' },
           personCode: 'JS123',
           teamName: 'Team A',
           teamCode: 'TA001',
         },
         {
-          personName: 'Jane Doe',
+          personName: { forename: 'Jane', surname: 'Doe' },
           personCode: 'JD456',
           teamName: 'Team A',
           teamCode: 'TA001',
@@ -1283,14 +1288,16 @@ describe('Edit Group Controller', () => {
         .type('form')
         .send({
           'create-group-treatment-manager': JSON.stringify({
-            facilitator: 'John Smith',
+            facilitatorForename: 'John',
+            facilitatorSurname: 'Smith',
             facilitatorCode: 'JS123',
             teamName: 'Team A',
             teamCode: 'TA001',
             teamMemberType: 'TREATMENT_MANAGER',
           }),
           'create-group-facilitator-0': JSON.stringify({
-            facilitator: 'Jane Doe',
+            facilitatorForename: 'Jane',
+            facilitatorSurname: 'Doe',
             facilitatorCode: 'JD456',
             teamName: 'Team A',
             teamCode: 'TA001',
@@ -1304,14 +1311,16 @@ describe('Edit Group Controller', () => {
           expect(accreditedProgrammesManageAndDeliverService.updateGroup).toHaveBeenCalledWith('user1', groupId, {
             teamMembers: [
               {
-                facilitator: 'John Smith',
+                facilitatorForename: 'John',
+                facilitatorSurname: 'Smith',
                 facilitatorCode: 'JS123',
                 teamName: 'Team A',
                 teamCode: 'TA001',
                 teamMemberType: 'TREATMENT_MANAGER',
               },
               {
-                facilitator: 'Jane Doe',
+                facilitatorForename: 'Jane',
+                facilitatorSurname: 'Doe',
                 facilitatorCode: 'JD456',
                 teamName: 'Team A',
                 teamCode: 'TA001',
@@ -1345,7 +1354,8 @@ describe('Edit Group Controller', () => {
           id: groupId,
           code: 'TEST123',
           treatmentManager: {
-            facilitator: 'John Smith',
+            facilitatorForename: 'John',
+            facilitatorSurname: 'Smith',
             facilitatorCode: 'JS001',
             teamName: 'Team A',
             teamCode: 'TEAM001',
@@ -1353,7 +1363,8 @@ describe('Edit Group Controller', () => {
           },
           facilitators: [
             {
-              facilitator: 'Jane Doe',
+              facilitatorForename: 'Jane',
+              facilitatorSurname: 'Doe',
               facilitatorCode: 'JD001',
               teamName: 'Team A',
               teamCode: 'TEAM001',
@@ -1366,7 +1377,7 @@ describe('Edit Group Controller', () => {
 
       accreditedProgrammesManageAndDeliverService.getPduMembers.mockResolvedValue([
         {
-          personName: 'John Smith',
+          personName: { forename: 'John', surname: 'Smith' },
           personCode: 'JS123',
           teamName: 'Team A',
           teamCode: 'TA001',

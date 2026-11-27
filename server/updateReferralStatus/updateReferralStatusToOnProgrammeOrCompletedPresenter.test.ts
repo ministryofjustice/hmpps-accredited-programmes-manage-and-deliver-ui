@@ -16,7 +16,8 @@ describe('UpdateReferralStatusFixedPresenter', () => {
   })
 
   it('should return the correct text with person name and suggested status', () => {
-    const personName = 'Alex River'
+    const personName = { forename: 'Alex', surname: 'River' }
+    const fullName = 'Alex River'
     const suggestedStatusName = 'On programme'
     const details = referralDetailsFactory.build({ personName })
     const statusDetails = referralStatusTransitionsFactory.build({
@@ -25,7 +26,7 @@ describe('UpdateReferralStatusFixedPresenter', () => {
 
     const presenter = new UpdateReferralStatusFixedPresenter(details, statusDetails, '/back-link', '/cancel-link')
 
-    expect(presenter.text.title).toEqual(`${personName}'s referral status will change to ${suggestedStatusName}`)
+    expect(presenter.text.title).toEqual(`${fullName}'s referral status will change to ${suggestedStatusName}`)
   })
 
   it('should return null error summary when there is no validation error', () => {

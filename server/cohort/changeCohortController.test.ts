@@ -9,6 +9,7 @@ import sendAuditEvent from '../services/auditService'
 import personalDetailsFactory from '../testutils/factories/personalDetailsFactory'
 import referralDetailsFactory from '../testutils/factories/referralDetailsFactory'
 import TestUtils from '../testutils/testUtils'
+import { formatPersonName } from '../utils/utils'
 
 jest.mock('../services/accreditedProgrammesManageAndDeliverService')
 jest.mock('../data/hmppsAuthClient')
@@ -43,7 +44,7 @@ describe('Update cohort', () => {
         .expect(200)
         .expect(res => {
           expect(res.text).toContain(referralDetails.crn)
-          expect(res.text).toContain(referralDetails.personName)
+          expect(res.text).toContain(formatPersonName(referralDetails.personName))
           expect(res.text).toContain(referralDetails.cohort)
         })
         .then(() => {

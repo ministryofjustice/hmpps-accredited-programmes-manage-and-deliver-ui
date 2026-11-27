@@ -5,6 +5,7 @@ import {
 } from '@manage-and-deliver-api'
 import { FormValidationError } from '../../utils/formValidationError'
 import PresenterUtils from '../../utils/presenterUtils'
+import { formatPersonName } from '../../utils/utils'
 
 export interface DeliveryLocationOptions {
   pdu: {
@@ -20,6 +21,10 @@ export interface DeliveryLocationOptions {
 
 export default class LocationPreferencesPresenter {
   public readonly deliveryLocationOptions: DeliveryLocationOptions[] = []
+
+  get personName(): string {
+    return formatPersonName(this.details.personName)
+  }
 
   constructor(
     readonly referralId: string,

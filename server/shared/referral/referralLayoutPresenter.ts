@@ -1,6 +1,6 @@
 import { ReferralDetails } from '@manage-and-deliver-api'
 import { MojAlertComponentArgs } from '../../interfaces/alertComponentArgs'
-import { formatCohortSuccessMessage } from '../../utils/utils'
+import { formatCohortSuccessMessage, formatPersonName } from '../../utils/utils'
 import { ButtonArgs } from '../../utils/govukFrontendTypes'
 
 export enum HorizontalNavValues {
@@ -20,6 +20,10 @@ export default class ReferralLayoutPresenter {
     readonly isLdcUpdated: boolean | null = null,
     readonly isCohortUpdated: boolean | null = null,
   ) {}
+
+  protected get personName(): string {
+    return formatPersonName(this.referral.personName)
+  }
 
   showButtonMenu() {
     return (
@@ -84,7 +88,7 @@ export default class ReferralLayoutPresenter {
           title: 'LDC status changed',
           showTitleAsHeading: true,
           dismissible: true,
-          text: `${this.referral.personName} ${this.referral.hasLdcSuccessMessageText}`,
+          text: `${this.personName} ${this.referral.hasLdcSuccessMessageText}`,
         }
       : null
   }
@@ -96,7 +100,7 @@ export default class ReferralLayoutPresenter {
           title: 'Cohort changed',
           showTitleAsHeading: true,
           dismissible: true,
-          text: `${this.referral.personName} is in the ${formatCohortSuccessMessage(this.referral.cohort)} cohort.`,
+          text: `${this.personName} is in the ${formatCohortSuccessMessage(this.referral.cohort)} cohort.`,
         }
       : null
   }
@@ -156,19 +160,19 @@ export default class ReferralLayoutPresenter {
   get headingText(): string {
     switch (this.horizontalNavValue) {
       case HorizontalNavValues.referralDetailsTab:
-        return `Referral details: ${this.referral.personName}`
+        return `Referral details: ${this.personName}`
       case HorizontalNavValues.risksAndNeedsTab:
-        return `Risks and needs: ${this.referral.personName}`
+        return `Risks and needs: ${this.personName}`
       case HorizontalNavValues.programmeNeedsIdentifierTab:
-        return `Programme needs identifier: ${this.referral.personName}`
+        return `Programme needs identifier: ${this.personName}`
       case HorizontalNavValues.availabilityAndMotivationTab:
-        return `Availability and motivation: ${this.referral.personName}`
+        return `Availability and motivation: ${this.personName}`
       case HorizontalNavValues.attendanceHistoryTab:
-        return `Attendance history: ${this.referral.personName}`
+        return `Attendance history: ${this.personName}`
       case HorizontalNavValues.statusHistoryTab:
-        return `Status history: ${this.referral.personName}`
+        return `Status history: ${this.personName}`
       default:
-        return this.referral.personName
+        return this.personName
     }
   }
 }
